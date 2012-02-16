@@ -97,13 +97,6 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider DISABLED = DefaultCSSClassProvider.create ("disabled");
   public static final ICSSClassProvider ICON = DefaultCSSClassProvider.create ("icon");
   public static final ICSSClassProvider BTN = DefaultCSSClassProvider.create ("btn");
-  public static final ICSSClassProvider BTN_LARGE = DefaultCSSClassProvider.create ("btn-large");
-  public static final ICSSClassProvider BTN_SMALL = DefaultCSSClassProvider.create ("btn-small");
-  public static final ICSSClassProvider BTN_PRIMARY = DefaultCSSClassProvider.create ("btn-primary");
-  public static final ICSSClassProvider BTN_WARNING = DefaultCSSClassProvider.create ("btn-warning");
-  public static final ICSSClassProvider BTN_DANGER = DefaultCSSClassProvider.create ("btn-danger");
-  public static final ICSSClassProvider BTN_SUCCESS = DefaultCSSClassProvider.create ("btn-success");
-  public static final ICSSClassProvider BTN_INFO = DefaultCSSClassProvider.create ("btn-info");
   public static final ICSSClassProvider LARGE = DefaultCSSClassProvider.create ("large");
   public static final ICSSClassProvider SMALL = DefaultCSSClassProvider.create ("small");
   public static final ICSSClassProvider BTN_GROUP = DefaultCSSClassProvider.create ("btn-group");

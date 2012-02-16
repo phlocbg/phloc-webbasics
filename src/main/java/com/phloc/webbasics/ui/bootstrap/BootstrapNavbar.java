@@ -53,8 +53,8 @@ public class BootstrapNavbar extends AbstractWrappedHCNode
 
     // Responsive toggle
     {
-      final HCA aToggle = m_aContainer.addAndReturnChild (new HCA ());
-      aToggle.addClasses (CBootstrapCSS.BTN, CBootstrapCSS.BTN_NAVBAR);
+      final BootstrapButton aToggle = m_aContainer.addAndReturnChild (new BootstrapButton ());
+      aToggle.addClass (CBootstrapCSS.BTN_NAVBAR);
       aToggle.setCustomAttr ("data-toggle", "collapse");
       aToggle.setCustomAttr ("data-target", "." + CBootstrapCSS.NAV_COLLAPSE.getCSSClass ());
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
