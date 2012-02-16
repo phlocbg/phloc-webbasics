@@ -160,10 +160,6 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider THUMBNAILS = DefaultCSSClassProvider.create ("thumbnails");
   public static final ICSSClassProvider THUMBNAIL = DefaultCSSClassProvider.create ("thumbnail");
   public static final ICSSClassProvider LABEL = DefaultCSSClassProvider.create ("label");
-  public static final ICSSClassProvider LABEL_IMPORTANT = DefaultCSSClassProvider.create ("label-important");
-  public static final ICSSClassProvider LABEL_WARNING = DefaultCSSClassProvider.create ("label-warning");
-  public static final ICSSClassProvider LABEL_SUCCESS = DefaultCSSClassProvider.create ("label-success");
-  public static final ICSSClassProvider LABEL_INFO = DefaultCSSClassProvider.create ("label-info");
   public static final ICSSClassProvider PROGRESS = DefaultCSSClassProvider.create ("progress");
   public static final ICSSClassProvider PROGRESS_STRIPED = DefaultCSSClassProvider.create ("progress-striped");
   public static final ICSSClassProvider PROGRESS_DANGER = DefaultCSSClassProvider.create ("progress-danger");
