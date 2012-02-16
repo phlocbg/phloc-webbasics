@@ -54,8 +54,8 @@ public final class HTMLResponseHelper
   {}
 
   @Nonnull
-  private static OutputStream _createOS (@Nonnull final HttpServletRequest aHttpRequest,
-                                         @Nonnull final HttpServletResponse aHttpResponse) throws IOException
+  public static OutputStream getBestSuitableOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
+                                                          @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     final String sAcceptEncoding = aHttpRequest.getHeader ("Accept-Encoding");
     if (sAcceptEncoding.contains ("gzip"))
@@ -96,7 +96,7 @@ public final class HTMLResponseHelper
       aHttpResponse.setCharacterEncoding (sCharset);
 
       // Faster than using a PrintWriter!
-      final OutputStream aOS = _createOS (aHttpRequest, aHttpResponse);
+      final OutputStream aOS = getBestSuitableOutputStream (aHttpRequest, aHttpResponse);
       aOS.write (sXMLCode.getBytes (sCharset));
       aOS.flush ();
       aOS.close ();

@@ -163,7 +163,7 @@ public final class RequestManager
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = LocaleManager.getDefaultLocale ();
+    final Locale aDefaultLocale = WebLocaleManager.getDefaultLocale ();
     if (aDefaultLocale == null)
       throw new IllegalStateException ("No application default locale is specified!");
     return aDefaultLocale;

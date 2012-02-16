@@ -30,6 +30,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.EURLProtocol;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.webbasics.app.scope.ScopeManager;
 
@@ -135,5 +136,20 @@ public final class LinkUtils
 
     // Full server and context path + URL
     return ScopeManager.getRequestScope ().getFullContextPath () + sURL;
+  }
+
+  /**
+   * Get a link to the specified menu item.
+   * 
+   * @param sMenuItemID
+   *        The ID of the menu item to link to. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public static SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
+  {
+    if (sMenuItemID == null)
+      throw new NullPointerException ("menu item id");
+    return new SimpleURL ().add (RequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
 }

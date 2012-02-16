@@ -85,11 +85,6 @@ public final class WebAppListener implements ServletContextListener
     if (eJVMVendor.isSun () && eJVMVendor != EJVMVendor.SUN_SERVER)
       s_aLogger.warn ("Consider using the Sun Server Runtime by specifiying '-server' on the commandline!");
 
-    // We're having problems running with a security manager!
-    final SecurityManager aSecurityManager = System.getSecurityManager ();
-    if (aSecurityManager != null)
-      s_aLogger.warn ("A security manager is present and we don't support it: " + aSecurityManager);
-
     // set global debug/trace mode
     final boolean bTraceMode = Boolean.parseBoolean (aSC.getInitParameter (INIT_PARAMETER_TRACE));
     final boolean bDebugMode = Boolean.parseBoolean (aSC.getInitParameter (INIT_PARAMETER_DEBUG));

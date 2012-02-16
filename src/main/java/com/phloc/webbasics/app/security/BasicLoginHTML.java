@@ -43,7 +43,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
 
-public class LoginHTML extends HTMLCreationManager
+public class BasicLoginHTML extends HTMLCreationManager
 {
   public static final String REQUEST_ATTR_USERID = "userid";
   public static final String REQUEST_ATTR_PASSWORD = "password";
@@ -53,9 +53,14 @@ public class LoginHTML extends HTMLCreationManager
 
   private final boolean m_bLoginError;
 
-  public LoginHTML (final boolean bLoginError)
+  public BasicLoginHTML (final boolean bLoginError)
   {
     m_bLoginError = bLoginError;
+  }
+
+  public final boolean showLoginError ()
+  {
+    return m_bLoginError;
   }
 
   @OverrideOnDemand

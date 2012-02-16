@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
@@ -58,12 +59,30 @@ public class HTMLCreationManager implements IHTMLProvider
   {}
 
   /**
+   * @param aHtml
+   *        HTML element
+   */
+  @OverrideOnDemand
+  protected void prepareBodyBeforeAreas (@Nonnull final HCHtml aHtml)
+  {}
+
+  /**
+   * @param aHtml
+   *        HTML element
+   */
+  @OverrideOnDemand
+  protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
+  {}
+
+  /**
    * Fill the HTML HEAD element.
    * 
    * @param aHtml
    *        The HTML object to be filled.
    */
-  private static void _createHead (@Nonnull final HCHtml aHtml)
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void fillHead (@Nonnull final HCHtml aHtml)
   {
     final HCHead aHead = aHtml.getHead ();
     // Special meta tag
@@ -112,6 +131,9 @@ public class HTMLCreationManager implements IHTMLProvider
 
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
+
+    prepareBodyBeforeAreas (aHtml);
+
     for (final String sAreaID : getAllAreaIDs ())
     {
       final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID));
@@ -126,8 +148,10 @@ public class HTMLCreationManager implements IHTMLProvider
       }
     }
 
+    prepareBodyAfterAreas (aHtml);
+
     // build HTML header (after body for per-request stuff)
-    _createHead (aHtml);
+    fillHead (aHtml);
 
     return aHtml;
   }

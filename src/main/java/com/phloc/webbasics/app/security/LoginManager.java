@@ -46,7 +46,7 @@ public class LoginManager
   @OverrideOnDemand
   protected IHTMLProvider createLoginScreen (final boolean bLoginError)
   {
-    return new LoginHTML (bLoginError);
+    return new BasicLoginHTML (bLoginError);
   }
 
   @Nonnull
@@ -63,8 +63,8 @@ public class LoginManager
       {
         // Login screen was already shown
         // -> Check request parameters
-        final String sUserID = aHttpRequest.getParameter (LoginHTML.REQUEST_ATTR_USERID);
-        final String sPassword = aHttpRequest.getParameter (LoginHTML.REQUEST_ATTR_PASSWORD);
+        final String sUserID = aHttpRequest.getParameter (BasicLoginHTML.REQUEST_ATTR_USERID);
+        final String sPassword = aHttpRequest.getParameter (BasicLoginHTML.REQUEST_ATTR_PASSWORD);
         if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword))
         {
           // Credentials are valid
