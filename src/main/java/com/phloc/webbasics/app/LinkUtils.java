@@ -33,6 +33,11 @@ import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.webbasics.app.scope.ScopeManager;
 
+/**
+ * Misc utilities to create link URLs.
+ * 
+ * @author philip
+ */
 @Immutable
 public final class LinkUtils {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LinkUtils.class);

@@ -26,9 +26,13 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 
+/**
+ * Contains some global texts.
+ * 
+ * @author philip
+ */
 @Translatable
-public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
-{
+public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs {
   // Boolean representation
   BOOLEAN_TRUE ("Ja", "Yes"),
   BOOLEAN_FALSE ("Nein", "No"),
@@ -44,18 +48,15 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
 
   private final ITextProvider m_aTP;
 
-  private EWebBasicsText (final String sDE, final String sEN)
-  {
+  private EWebBasicsText (final String sDE, final String sEN) {
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }
 
-  public String getDisplayText (final Locale aContentLocale)
-  {
+  public String getDisplayText (final Locale aContentLocale) {
     return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
   }
 
-  public String getDisplayTextWithArgs (final Locale aContentLocale, final Object... aArgs)
-  {
+  public String getDisplayTextWithArgs (final Locale aContentLocale, final Object... aArgs) {
     return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
   }
 }

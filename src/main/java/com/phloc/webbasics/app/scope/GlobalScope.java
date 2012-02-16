@@ -24,10 +24,17 @@ import javax.servlet.ServletContext;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
-public final class GlobalScope extends AbstractScope implements IGlobalScope {
+/**
+ * Default implementation of the {@link IGlobalScope} interface.
+ * 
+ * @author philip
+ */
+public class GlobalScope extends AbstractScope implements IGlobalScope {
   private final ServletContext m_aSC;
 
   public GlobalScope (@Nonnull final ServletContext aSC) {
+    if (aSC == null)
+      throw new NullPointerException ("servletContext");
     m_aSC = aSC;
   }
 

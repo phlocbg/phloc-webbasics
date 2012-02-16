@@ -37,11 +37,11 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author philip
  */
-public final class SimpleWebLayoutManager {
+public final class LayoutManager {
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final Map <String, IAreaContentProvider> s_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
 
-  private SimpleWebLayoutManager () {}
+  private LayoutManager () {}
 
   public static void registerAreaContentProvider (@Nonnull final String sAreaID,
                                                   @Nonnull final IAreaContentProvider aContentProvider) {

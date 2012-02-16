@@ -100,10 +100,9 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   /*
    * This method is required to ensure that the HTTP response is correctly
-   * encoded. Normally this is done via the charset filter, but if an illegal
-   * URL is accesses (e.g. www.phloc.com/x.php then the error redirect to page
-   * "__notfound" happens without the charset filter ever called. See Jira issue
-   * PDAFIII-715
+   * encoded. Normally this is done via the charset filter, but if a
+   * non-existing URL is accesses then the error redirect happens without the
+   * charset filter ever called.
    */
   private static void _ensureResponseCharset (@Nonnull final HttpServletResponse aHttpResponse) {
     if (aHttpResponse.getCharacterEncoding () == null) {

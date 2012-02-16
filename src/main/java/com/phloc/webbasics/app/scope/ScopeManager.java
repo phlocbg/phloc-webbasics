@@ -24,6 +24,11 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Manage the available scopes.
+ * 
+ * @author philip
+ */
 public final class ScopeManager {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ScopeManager.class);
 

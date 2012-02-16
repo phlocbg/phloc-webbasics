@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
-import com.phloc.webbasics.app.html.SimpleWebHTMLManager;
+import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 
 public final class ApplicationServlet extends AbstractScopeAwareHttpServlet {
@@ -52,7 +52,7 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet {
       }
 
     try {
-      SimpleWebHTMLManager.createHTMLResponse (aHttpRequest, aHttpResponse, new HTMLCreationManager ());
+      HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, new HTMLCreationManager ());
     }
     finally {
       // Invoke all "request end" listener

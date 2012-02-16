@@ -29,7 +29,7 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
-import com.phloc.webbasics.app.html.SimpleWebHTMLManager;
+import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.scope.ISessionScope;
 import com.phloc.webbasics.app.scope.ScopeManager;
 
@@ -77,7 +77,7 @@ public class SimpleWebLogin {
       if (sSessionUserID == null) {
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
-        SimpleWebHTMLManager.createHTMLResponse (aHttpRequest, aHttpResponse, createLoginScreen (bLoginError));
+        HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, createLoginScreen (bLoginError));
       }
     }
 

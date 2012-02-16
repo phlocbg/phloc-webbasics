@@ -42,14 +42,14 @@ import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.html.hc.html.HCHtml;
 
-public final class SimpleWebHTMLManager {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (SimpleWebHTMLManager.class);
+public final class HTMLResponseHelper {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLResponseHelper.class);
 
   // Avoid creating per request :)
   private static final IXMLWriterSettings XML_WRITER_SETTINGS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
                                                                                         .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING);
 
-  private SimpleWebHTMLManager () {}
+  private HTMLResponseHelper () {}
 
   @Nonnull
   private static OutputStream _createOS (@Nonnull final HttpServletRequest aHttpRequest,

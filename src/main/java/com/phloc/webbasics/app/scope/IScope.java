@@ -22,6 +22,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.state.EChange;
 
+/**
+ * Base interface for all scopes.
+ * 
+ * @author philip
+ */
 public interface IScope {
   @Nullable
   Object getAttributeObject (@Nullable String sName);

@@ -25,11 +25,20 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
-public final class RequestScope extends AbstractScope implements IRequestScope {
+/**
+ * Default implementation of the {@link IRequestScope}.
+ * 
+ * @author philip
+ */
+public class RequestScope extends AbstractScope implements IRequestScope {
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
 
   public RequestScope (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+    if (aHttpResponse == null)
+      throw new NullPointerException ("httpResponse");
     m_aHttpRequest = aHttpRequest;
     m_aHttpResponse = aHttpResponse;
   }

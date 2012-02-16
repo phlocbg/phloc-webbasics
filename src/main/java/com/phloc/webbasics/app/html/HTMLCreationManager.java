@@ -43,7 +43,7 @@ import com.phloc.html.meta.MetaElement;
 import com.phloc.html.resource.css.CSSExternal;
 import com.phloc.html.resource.js.JSExternal;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.SimpleWebRequestManager;
+import com.phloc.webbasics.app.RequestManager;
 
 /**
  * Main class for creating HTML output
@@ -66,44 +66,44 @@ public class HTMLCreationManager {
     // Special meta tag
     aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (CMimeType.TEXT_XML.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
     // Add all configured meta element
-    for (final Map.Entry <String, String> aEntry : SimpleWebHTMLConfigManager.getInstance ()
+    for (final Map.Entry <String, String> aEntry : HTMLConfigManager.getInstance ()
                                                                              .getAllMetaTags ()
                                                                              .entrySet ())
       aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
     // Add configured CSS
-    for (final String sCSSFile : SimpleWebHTMLConfigManager.getInstance ().getAllCSSFiles ())
+    for (final String sCSSFile : HTMLConfigManager.getInstance ().getAllCSSFiles ())
       aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSFile)));
     // Add configured print-only CSS
-    for (final String sCSSPrintFile : SimpleWebHTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
+    for (final String sCSSPrintFile : HTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
       aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSPrintFile),
                                      new CSSMediaList (ContainerHelper.newList (ECSSMedium.PRINT)),
                                      null));
     // Add configured IE-only CSS
-    for (final String sCSSIEFile : SimpleWebHTMLConfigManager.getInstance ().getAllCSSIEFiles ())
+    for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
       aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSIEFile),
                                      null,
                                      ConditionalComment.createForIE ()));
     // Add all configured JS
-    for (final String sJSFile : SimpleWebHTMLConfigManager.getInstance ().getAllJSFiles ())
+    for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
       aHead.addJS (new JSExternal (LinkUtils.makeAbsoluteSimpleURL (sJSFile)));
   }
 
   @OverrideOnDemand
   @Nonnull
   protected List <String> getAllAreaIDs () {
-    return SimpleWebLayoutManager.getAllAreaIDs ();
+    return LayoutManager.getAllAreaIDs ();
   }
 
   @OverrideOnDemand
   @Nullable
   protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale) {
-    return SimpleWebLayoutManager.getContentOfArea (sAreaID, aDisplayLocale);
+    return LayoutManager.getContentOfArea (sAreaID, aDisplayLocale);
   }
 
   @Nonnull
   public final HCHtml createPageHTML () {
     final HCHtml aHtml = new HCHtml ();
-    final Locale aDisplayLocale = SimpleWebRequestManager.getRequestDisplayLocale ();
+    final Locale aDisplayLocale = RequestManager.getRequestDisplayLocale ();
 
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();

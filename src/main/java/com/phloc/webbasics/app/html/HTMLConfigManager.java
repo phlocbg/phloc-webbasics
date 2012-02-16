@@ -45,9 +45,9 @@ import com.phloc.webbasics.servlet.WebFileIO;
  * 
  * @author philip
  */
-public final class SimpleWebHTMLConfigManager {
-  private static final SimpleWebHTMLConfigManager s_aInstance = new SimpleWebHTMLConfigManager ();
-  private static final Logger s_aLogger = LoggerFactory.getLogger (SimpleWebHTMLConfigManager.class);
+public final class HTMLConfigManager {
+  private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
+  private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
   private final List <String> m_aAllCSSFiles = new ArrayList <String> ();
   private final List <String> m_aAllCSSPrintFiles = new ArrayList <String> ();
   private final List <String> m_aAllCSSIEFiles = new ArrayList <String> ();
@@ -57,7 +57,7 @@ public final class SimpleWebHTMLConfigManager {
   /**
    * Do not call manually! Use {@link #getInstance()} instead.
    */
-  private SimpleWebHTMLConfigManager () {
+  private HTMLConfigManager () {
     // read all CSS files
     InputStream aIS = WebFileIO.getRegistryInputStream ("css.xml");
     if (aIS != null)
@@ -90,7 +90,7 @@ public final class SimpleWebHTMLConfigManager {
   }
 
   @Nonnull
-  public static SimpleWebHTMLConfigManager getInstance () {
+  public static HTMLConfigManager getInstance () {
     return s_aInstance;
   }
 

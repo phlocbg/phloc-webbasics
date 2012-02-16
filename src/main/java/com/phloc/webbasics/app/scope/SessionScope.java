@@ -24,10 +24,17 @@ import javax.servlet.http.HttpSession;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
-final class SessionScope extends AbstractScope implements ISessionScope {
+/**
+ * Default implementation of the {@link ISessionScope} interface.
+ * 
+ * @author philip
+ */
+public class SessionScope extends AbstractScope implements ISessionScope {
   private final HttpSession m_aHttpSession;
 
   public SessionScope (@Nonnull final HttpSession aHttpSession) {
+    if (aHttpSession == null)
+      throw new NullPointerException ("httpSession");
     m_aHttpSession = aHttpSession;
   }
 

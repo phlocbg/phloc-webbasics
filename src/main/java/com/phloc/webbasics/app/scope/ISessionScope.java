@@ -20,6 +20,11 @@ package com.phloc.webbasics.app.scope;
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Session scope
+ * 
+ * @author philip
+ */
 public interface ISessionScope extends IScope {
   @Nonnull
   HttpSession getSession ();

@@ -45,7 +45,7 @@ import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
  * @author philip
  */
 @IsSPIImplementation
-public final class SimpleWebRequestManager implements IApplicationRequestListenerSPI {
+public final class RequestManager implements IApplicationRequestListenerSPI {
   public static final String REQUEST_PARAMETER_MENUITEM = "item";
   private static final String REQUEST_VALUE_MENUITEM = "$item";
 
@@ -53,7 +53,7 @@ public final class SimpleWebRequestManager implements IApplicationRequestListene
   private static final String REQUEST_VALUE_DISPLAY_LOCALE = "$displaylocale";
 
   @UsedViaReflection
-  public SimpleWebRequestManager () {}
+  public RequestManager () {}
 
   /**
    * To be called upon the beginning of each request. Checks for the content of
@@ -160,7 +160,7 @@ public final class SimpleWebRequestManager implements IApplicationRequestListene
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = SimpleWebLocaleManager.getDefaultLocale ();
+    final Locale aDefaultLocale = LocaleManager.getDefaultLocale ();
     if (aDefaultLocale == null)
       throw new IllegalStateException ("No application default locale is specified!");
     return aDefaultLocale;

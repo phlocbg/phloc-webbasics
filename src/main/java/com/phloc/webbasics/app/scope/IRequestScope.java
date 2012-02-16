@@ -24,6 +24,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.annotations.Nonempty;
 
+/**
+ * Request scope.
+ * 
+ * @author philip
+ */
 public interface IRequestScope extends IScope {
   @Nonnull
   HttpServletRequest getRequest ();

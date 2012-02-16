@@ -34,6 +34,11 @@ import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.htmlext.HCUtils;
 
+/**
+ * Handle internal errors.
+ * 
+ * @author philip
+ */
 @ThreadSafe
 public final class InternalErrorHandler {
   private static final Logger s_aLogger = LoggerFactory.getLogger (InternalErrorHandler.class);

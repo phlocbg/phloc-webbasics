@@ -22,6 +22,11 @@ import javax.annotation.Nullable;
 import com.phloc.commons.lang.GenericReflection;
 import com.phloc.commons.string.StringHelper;
 
+/**
+ * Abstract scope implementation
+ * 
+ * @author philip
+ */
 abstract class AbstractScope implements IScope {
   @Nullable
   public final <T> T getCastedAttribute (@Nullable final String sName) {

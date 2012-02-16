@@ -20,6 +20,11 @@ package com.phloc.webbasics.app.scope;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 
+/**
+ * Global scope existing only once per application.
+ * 
+ * @author philip
+ */
 public interface IGlobalScope extends IScope {
   @Nonnull
   ServletContext getServletContext ();
