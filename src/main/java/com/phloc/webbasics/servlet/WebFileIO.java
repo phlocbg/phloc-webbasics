@@ -26,6 +26,11 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 
+/**
+ * Abstract for accessing files inside the web application
+ * 
+ * @author philip
+ */
 @Immutable
 public final class WebFileIO
 {

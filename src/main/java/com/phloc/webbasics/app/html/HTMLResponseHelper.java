@@ -42,24 +42,29 @@ import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.html.hc.html.HCHtml;
 
-public final class HTMLResponseHelper {
+public final class HTMLResponseHelper
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLResponseHelper.class);
 
   // Avoid creating per request :)
   private static final IXMLWriterSettings XML_WRITER_SETTINGS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
                                                                                         .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING);
 
-  private HTMLResponseHelper () {}
+  private HTMLResponseHelper ()
+  {}
 
   @Nonnull
   private static OutputStream _createOS (@Nonnull final HttpServletRequest aHttpRequest,
-                                         @Nonnull final HttpServletResponse aHttpResponse) throws IOException {
+                                         @Nonnull final HttpServletResponse aHttpResponse) throws IOException
+  {
     final String sAcceptEncoding = aHttpRequest.getHeader ("Accept-Encoding");
-    if (sAcceptEncoding.contains ("gzip")) {
+    if (sAcceptEncoding.contains ("gzip"))
+    {
       aHttpResponse.setHeader ("Content-Encoding", "gzip");
       return new GZIPOutputStream (aHttpResponse.getOutputStream ());
     }
-    if (sAcceptEncoding.contains ("deflate")) {
+    if (sAcceptEncoding.contains ("deflate"))
+    {
       aHttpResponse.setHeader ("Content-Encoding", "deflate");
       final ZipOutputStream aOS = new ZipOutputStream (aHttpResponse.getOutputStream ());
       aOS.putNextEntry (new ZipEntry ("dummy name"));
@@ -70,7 +75,8 @@ public final class HTMLResponseHelper {
 
   public static void createHTMLResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                          @Nonnull final HttpServletResponse aHttpResponse,
-                                         @Nonnull final IHTMLProvider aHTMLCreationMgr) throws ServletException {
+                                         @Nonnull final IHTMLProvider aHTMLCreationMgr) throws ServletException
+  {
     final HCHtml aHtml = aHTMLCreationMgr.createPageHTML ();
     final IMicroDocument aDoc = aHtml.getAsNode ();
     createResponse (aHttpRequest, aHttpResponse, aDoc, CMimeType.TEXT_HTML);
@@ -79,8 +85,10 @@ public final class HTMLResponseHelper {
   public static void createResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                      @Nonnull final HttpServletResponse aHttpResponse,
                                      @Nonnull final IMicroDocument aDoc,
-                                     @Nonnull final IMimeType aMimeType) throws ServletException {
-    try {
+                                     @Nonnull final IMimeType aMimeType) throws ServletException
+  {
+    try
+    {
       final String sXMLCode = MicroWriter.getNodeAsString (aDoc, XML_WRITER_SETTINGS);
       final String sCharset = XML_WRITER_SETTINGS.getCharset ();
 
@@ -93,9 +101,11 @@ public final class HTMLResponseHelper {
       aOS.flush ();
       aOS.close ();
     }
-    catch (final Throwable t) {
+    catch (final Throwable t)
+    {
       // Do not show the exceptions that occur, when client cancels a request.
-      if (!StreamUtils.isKnownEOFException (t)) {
+      if (!StreamUtils.isKnownEOFException (t))
+      {
         s_aLogger.error ("Error running application", t);
         // Catch Exception and re-throw
         if (t instanceof ServletException)

@@ -38,35 +38,42 @@ import com.phloc.webbasics.app.scope.ScopeManager;
  * 
  * @author philip
  */
-public class LoginManager {
+public class LoginManager
+{
   private static final String SESSION_ATTR_USERID = "$userid";
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
   @OverrideOnDemand
-  protected IHTMLProvider createLoginScreen (final boolean bLoginError) {
+  protected IHTMLProvider createLoginScreen (final boolean bLoginError)
+  {
     return new LoginHTML (bLoginError);
   }
 
   @Nonnull
   public final EContinue checkUserAndShowLogin (@Nonnull final HttpServletRequest aHttpRequest,
-                                                @Nonnull final HttpServletResponse aHttpResponse) throws ServletException {
+                                                @Nonnull final HttpServletResponse aHttpResponse) throws ServletException
+  {
     final HttpSession aSessionScope = aHttpRequest.getSession ();
     String sSessionUserID = (String) aSessionScope.getAttribute (SESSION_ATTR_USERID);
-    if (sSessionUserID == null) {
+    if (sSessionUserID == null)
+    {
       // Start login
       boolean bLoginError = false;
-      if (Boolean.TRUE.equals (aSessionScope.getAttribute (SESSION_ATTR_AUTHINPROGRESS))) {
+      if (Boolean.TRUE.equals (aSessionScope.getAttribute (SESSION_ATTR_AUTHINPROGRESS)))
+      {
         // Login screen was already shown
         // -> Check request parameters
         final String sUserID = aHttpRequest.getParameter (LoginHTML.REQUEST_ATTR_USERID);
         final String sPassword = aHttpRequest.getParameter (LoginHTML.REQUEST_ATTR_PASSWORD);
-        if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword)) {
+        if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword))
+        {
           // Credentials are valid
           aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
           aSessionScope.setAttribute (SESSION_ATTR_USERID, sUserID);
           sSessionUserID = sUserID;
         }
-        else {
+        else
+        {
           // Credentials are invalid
           // Anyway show the error message only if at least some credential
           // values are passed
@@ -74,7 +81,8 @@ public class LoginManager {
         }
       }
 
-      if (sSessionUserID == null) {
+      if (sSessionUserID == null)
+      {
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
         HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, createLoginScreen (bLoginError));
@@ -90,7 +98,8 @@ public class LoginManager {
    *         no user is logged in.
    */
   @Nullable
-  public static String getCurrentUserID () {
+  public static String getCurrentUserID ()
+  {
     final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
     return aSessionScope == null ? null : aSessionScope.getAttributeAsString (SESSION_ATTR_USERID);
   }
@@ -102,7 +111,8 @@ public class LoginManager {
    *         {@link EChange#UNCHANGED} if no user was logged in!
    */
   @Nonnull
-  public static EChange logout () {
+  public static EChange logout ()
+  {
     final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
     return aSessionScope == null ? EChange.UNCHANGED : aSessionScope.removeAttribute (SESSION_ATTR_USERID);
   }

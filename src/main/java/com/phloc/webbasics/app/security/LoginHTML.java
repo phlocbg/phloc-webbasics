@@ -43,7 +43,8 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
 
-public class LoginHTML extends HTMLCreationManager {
+public class LoginHTML extends HTMLCreationManager
+{
   public static final String REQUEST_ATTR_USERID = "userid";
   public static final String REQUEST_ATTR_PASSWORD = "password";
   protected static final ICSSClassProvider CSS_CLASS_LOGIN_APPLOGO = DefaultCSSClassProvider.create ("login_applogo");
@@ -52,17 +53,20 @@ public class LoginHTML extends HTMLCreationManager {
 
   private final boolean m_bLoginError;
 
-  public LoginHTML (final boolean bLoginError) {
+  public LoginHTML (final boolean bLoginError)
+  {
     m_bLoginError = bLoginError;
   }
 
   @OverrideOnDemand
-  protected boolean showHeaderText () {
+  protected boolean showHeaderText ()
+  {
     return false;
   }
 
   @OverrideOnDemand
-  protected IHCNode getLoginScreen (final Locale aDisplayLocale) {
+  protected IHCNode getLoginScreen (final Locale aDisplayLocale)
+  {
     final HCNodeList ret = new HCNodeList ();
     final HCCenter aCenter = ret.addAndReturnChild (new HCCenter ());
     final HCForm aForm = aCenter.addAndReturnChild (new HCForm (new SimpleURL ()));
@@ -91,14 +95,16 @@ public class LoginHTML extends HTMLCreationManager {
 
   @Override
   @Nonnull
-  protected final List <String> getAllAreaIDs () {
+  protected final List <String> getAllAreaIDs ()
+  {
     // Name of the area ID is used in CSS!
     return ContainerHelper.newList ("login");
   }
 
   @Override
   @Nullable
-  protected final IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale) {
+  protected final IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale)
+  {
     return getLoginScreen (aDisplayLocale);
   }
 }

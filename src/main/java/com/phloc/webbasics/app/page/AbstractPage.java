@@ -39,12 +39,14 @@ import com.phloc.webbasics.app.scope.ScopeManager;
  * 
  * @author philip
  */
-public abstract class AbstractPage implements IPage {
+public abstract class AbstractPage implements IPage
+{
   private static final Map <String, IPage> ALL_IDS = new HashMap <String, IPage> ();
   private final String m_sID;
   private IHasDisplayText m_aName;
 
-  public AbstractPage (@Nonnull @Nonempty final String sID) {
+  public AbstractPage (@Nonnull @Nonempty final String sID)
+  {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
     final IPage aOldPage = ALL_IDS.put (sID, this);
@@ -53,29 +55,34 @@ public abstract class AbstractPage implements IPage {
     m_sID = sID;
   }
 
-  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName) {
+  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  {
     this (sID, new ConstantTextProvider (sName));
   }
 
-  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName) {
+  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  {
     this (sID);
     setName (aName);
   }
 
   @Nonnull
   @Nonempty
-  public final String getID () {
+  public final String getID ()
+  {
     return m_sID;
   }
 
-  public final void setName (@Nonnull final IHasDisplayText aName) {
+  public final void setName (@Nonnull final IHasDisplayText aName)
+  {
     if (aName == null)
       throw new NullPointerException ("name");
     m_aName = aName;
   }
 
   @Nullable
-  public final String getDisplayText (@Nonnull final Locale aContentLocale) {
+  public final String getDisplayText (@Nonnull final Locale aContentLocale)
+  {
     return m_aName.getDisplayText (aContentLocale);
   }
 
@@ -87,26 +94,31 @@ public abstract class AbstractPage implements IPage {
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected final String getAttr (final String sName) {
+  protected final String getAttr (final String sName)
+  {
     return ScopeManager.getRequestScope ().getAttributeAsString (sName);
   }
 
-  protected final int getIntAttr (final String sName, final int nDefault) {
+  protected final int getIntAttr (final String sName, final int nDefault)
+  {
     return ScopeManager.getRequestScope ().getAttributeAsInt (sName, nDefault);
   }
 
-  protected final boolean hasAttr (final String sName, final String sValue) {
+  protected final boolean hasAttr (final String sName, final String sValue)
+  {
     return EqualsUtils.nullSafeEquals (sValue, getAttr (sName));
   }
 
   @Override
-  public String toString () {
+  public String toString ()
+  {
     return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_aName).toString ();
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public static Map <String, IPage> getAllPages () {
+  public static Map <String, IPage> getAllPages ()
+  {
     return ContainerHelper.makeUnmodifiable (ALL_IDS);
   }
 }

@@ -48,7 +48,8 @@ import com.phloc.webbasics.app.scope.ScopeManager;
  * 
  * @author philip
  */
-public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
+public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractScopeAwareHttpServlet.class);
   private static final IStatisticsHandlerCounter s_aCounterRequests = StatisticsManager.getCounterHandler (AbstractScopeAwareHttpServlet.class.getName () +
                                                                                                            "$requests");
@@ -74,12 +75,14 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
    *         to conform to the outer specifications
    */
   @OverrideOnDemand
-  protected void onInit () throws ServletException {
+  protected void onInit () throws ServletException
+  {
     /* empty */
   }
 
   @Override
-  public final void init () throws ServletException {
+  public final void init () throws ServletException
+  {
     super.init ();
     onInit ();
   }
@@ -88,12 +91,14 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
    * Add custom destruction code in overridden implementations of this method.
    */
   @OverrideOnDemand
-  protected void onDestroy () {
+  protected void onDestroy ()
+  {
     /* empty */
   }
 
   @Override
-  public final void destroy () {
+  public final void destroy ()
+  {
     onDestroy ();
     super.destroy ();
   }
@@ -104,8 +109,10 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
    * non-existing URL is accesses then the error redirect happens without the
    * charset filter ever called.
    */
-  private static void _ensureResponseCharset (@Nonnull final HttpServletResponse aHttpResponse) {
-    if (aHttpResponse.getCharacterEncoding () == null) {
+  private static void _ensureResponseCharset (@Nonnull final HttpServletResponse aHttpResponse)
+  {
+    if (aHttpResponse.getCharacterEncoding () == null)
+    {
       s_aLogger.info ("Setting response charset to " + AbstractXMLWriterSettings.DEFAULT_XML_CHARSET);
       aHttpResponse.setCharacterEncoding (AbstractXMLWriterSettings.DEFAULT_XML_CHARSET);
     }
@@ -120,7 +127,8 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
    *        The HTTP servlet response
    */
   private void _beforeRequest (@Nonnull final HttpServletRequest aHttpRequest,
-                               @Nonnull final HttpServletResponse aHttpResponse) {
+                               @Nonnull final HttpServletResponse aHttpResponse)
+  {
     ScopeManager.onRequestBegin (new RequestScope (aHttpRequest, aHttpResponse));
     _ensureResponseCharset (aHttpResponse);
     s_aCounterRequests.increment ();
@@ -128,19 +136,23 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onDelete (@Nonnull final HttpServletRequest aHttpRequest,
-                           @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                           @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     super.doDelete (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doDelete (@Nonnull final HttpServletRequest aHttpRequest,
-                                 @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                                 @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onDelete (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlDelete.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }
@@ -148,19 +160,23 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onGet (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                                                         IOException {
+                                                                                                                         IOException
+  {
     super.doGet (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doGet (@Nonnull final HttpServletRequest aHttpRequest,
-                              @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                              @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onGet (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlGet.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }
@@ -168,19 +184,23 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onHead (@Nonnull final HttpServletRequest aHttpRequest,
-                         @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                         @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     super.doHead (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doHead (@Nonnull final HttpServletRequest aHttpRequest,
-                               @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                               @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onHead (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlHead.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }
@@ -188,20 +208,24 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onOptions (@Nonnull final HttpServletRequest aHttpRequest,
-                            @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                            @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     super.doOptions (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doOptions (@Nonnull final HttpServletRequest aHttpRequest,
                                   @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                   IOException {
+                                                                                   IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onOptions (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlOptions.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }
@@ -209,19 +233,23 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onPost (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                                        IOException {
+                                                                                                        IOException
+  {
     super.doPost (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doPost (@Nonnull final HttpServletRequest aHttpRequest,
-                               @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                               @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onPost (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlPost.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }
@@ -229,19 +257,23 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onPut (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                                                         IOException {
+                                                                                                                         IOException
+  {
     super.doPut (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doPut (@Nonnull final HttpServletRequest aHttpRequest,
-                              @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                              @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onPut (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlPut.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }
@@ -249,19 +281,23 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet {
 
   @OverrideOnDemand
   protected void onTrace (@Nonnull final HttpServletRequest aHttpRequest,
-                          @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                          @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     super.doTrace (aHttpRequest, aHttpResponse);
   }
 
   @Override
   protected final void doTrace (@Nonnull final HttpServletRequest aHttpRequest,
-                                @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
+                                @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException
+  {
     _beforeRequest (aHttpRequest, aHttpResponse);
     final StopWatch aSW = new StopWatch (true);
-    try {
+    try
+    {
       onTrace (aHttpRequest, aHttpResponse);
     }
-    finally {
+    finally
+    {
       s_aTimerHdlTrace.addTime (aSW.stopAndGetMillis ());
       ScopeManager.onRequestEnd ();
     }

@@ -39,10 +39,12 @@ import com.phloc.webbasics.app.scope.ScopeManager;
  * @author philip
  */
 @Immutable
-public final class LinkUtils {
+public final class LinkUtils
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (LinkUtils.class);
 
-  private LinkUtils () {}
+  private LinkUtils ()
+  {}
 
   /**
    * Get the path to the passed servlet by prepending the context path.
@@ -53,13 +55,15 @@ public final class LinkUtils {
    *         <code>/context/<i>servletpath</i></code>
    */
   @Nonnull
-  public static ISimpleURL getServletURL (@Nonnull final String sServletPath) {
+  public static ISimpleURL getServletURL (@Nonnull final String sServletPath)
+  {
     return getServletURL (sServletPath, null);
   }
 
   @Nonnull
   public static ISimpleURL getServletURL (@Nonnull final String sServletPath,
-                                          @Nullable final Map <String, String> aParams) {
+                                          @Nullable final Map <String, String> aParams)
+  {
     final String sURL = URLUtils.getURLString (getContextAwareURI (sServletPath), aParams, null, null);
     return new ReadonlySimpleURL (sURL);
   }
@@ -74,13 +78,15 @@ public final class LinkUtils {
    *         <code>/webapp-context/sHRef</code> otherwise.
    */
   @Nonnull
-  public static String getContextAwareURI (@Nonnull final String sHRef) {
+  public static String getContextAwareURI (@Nonnull final String sHRef)
+  {
     // If known protocol, keep it
     if (EURLProtocol.hasKnownProtocol (sHRef))
       return sHRef;
 
     final String sContextPath = ScopeManager.getGlobalScope ().getServletContext ().getContextPath ();
-    if (StringHelper.hasText (sContextPath) && sHRef.startsWith (sContextPath)) {
+    if (StringHelper.hasText (sContextPath) && sHRef.startsWith (sContextPath))
+    {
       s_aLogger.warn ("The passed href '" + sHRef + "' already contains the context path '" + sContextPath + "'!");
       return sHRef;
     }
@@ -102,7 +108,8 @@ public final class LinkUtils {
    *         <code>http://servername:8123/webapp-context/sHRef</code> otherwise.
    */
   @Nonnull
-  public static StringBuilder getFullyQualifiedExternalURI (@Nonnull final CharSequence aHRef) {
+  public static StringBuilder getFullyQualifiedExternalURI (@Nonnull final CharSequence aHRef)
+  {
     // If known protocol, keep it
     if (EURLProtocol.hasKnownProtocol (aHRef))
       return new StringBuilder (aHRef);
@@ -115,12 +122,14 @@ public final class LinkUtils {
   }
 
   @Nonnull
-  public static ISimpleURL makeAbsoluteSimpleURL (@Nonnull final String sURL) {
+  public static ISimpleURL makeAbsoluteSimpleURL (@Nonnull final String sURL)
+  {
     return new ReadonlySimpleURL (makeAbsoluteURL (sURL));
   }
 
   @Nonnull
-  public static String makeAbsoluteURL (@Nullable final String sURL) {
+  public static String makeAbsoluteURL (@Nullable final String sURL)
+  {
     if (EURLProtocol.hasKnownProtocol (sURL))
       return sURL;
 

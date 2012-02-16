@@ -34,13 +34,15 @@ import com.phloc.webbasics.servlet.WebFileIO;
  * 
  * @author philip
  */
-public final class UserManager implements ICredentialValidator {
+public final class UserManager implements ICredentialValidator
+{
   private static final ICredentialValidator s_aInstance = new UserManager ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (UserManager.class);
 
   private final Map <String, String> m_aUsers = new HashMap <String, String> ();
 
-  private UserManager () {
+  private UserManager ()
+  {
     final InputStream aIS = WebFileIO.getRegistryInputStream ("users.xml");
     if (aIS == null)
       throw new IllegalStateException ("No users.xml file found in registry!");
@@ -49,11 +51,13 @@ public final class UserManager implements ICredentialValidator {
   }
 
   @Nonnull
-  public static ICredentialValidator getInstance () {
+  public static ICredentialValidator getInstance ()
+  {
     return s_aInstance;
   }
 
-  public boolean areLoginCredentialsValid (final String sUserName, final String sPassword) {
+  public boolean areLoginCredentialsValid (final String sUserName, final String sPassword)
+  {
     final String sStoredPassword = m_aUsers.get (sUserName);
     return sStoredPassword != null && sStoredPassword.equals (sPassword);
   }

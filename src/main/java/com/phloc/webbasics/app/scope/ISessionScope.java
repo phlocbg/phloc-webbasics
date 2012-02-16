@@ -25,7 +25,8 @@ import javax.servlet.http.HttpSession;
  * 
  * @author philip
  */
-public interface ISessionScope extends IScope {
+public interface ISessionScope extends IScope
+{
   @Nonnull
   HttpSession getSession ();
 }

@@ -50,10 +50,12 @@ import com.phloc.webbasics.app.RequestManager;
  * 
  * @author philip
  */
-public class HTMLCreationManager implements IHTMLProvider {
+public class HTMLCreationManager implements IHTMLProvider
+{
   private static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
-  public HTMLCreationManager () {}
+  public HTMLCreationManager ()
+  {}
 
   /**
    * Fill the HTML HEAD element.
@@ -61,7 +63,8 @@ public class HTMLCreationManager implements IHTMLProvider {
    * @param aHtml
    *        The HTML object to be filled.
    */
-  private static void _createHead (@Nonnull final HCHtml aHtml) {
+  private static void _createHead (@Nonnull final HCHtml aHtml)
+  {
     final HCHead aHead = aHtml.getHead ();
     // Special meta tag
     aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (CMimeType.TEXT_XML.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
@@ -88,30 +91,36 @@ public class HTMLCreationManager implements IHTMLProvider {
 
   @OverrideOnDemand
   @Nonnull
-  protected List <String> getAllAreaIDs () {
+  protected List <String> getAllAreaIDs ()
+  {
     return LayoutManager.getAllAreaIDs ();
   }
 
   @OverrideOnDemand
   @Nullable
-  protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale) {
+  protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale)
+  {
     // By default the layout manager is used
     return LayoutManager.getContentOfArea (sAreaID, aDisplayLocale);
   }
 
   @Nonnull
-  public final HCHtml createPageHTML () {
+  public final HCHtml createPageHTML ()
+  {
     final HCHtml aHtml = new HCHtml ();
     final Locale aDisplayLocale = RequestManager.getRequestDisplayLocale ();
 
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
-    for (final String sAreaID : getAllAreaIDs ()) {
+    for (final String sAreaID : getAllAreaIDs ())
+    {
       final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID));
-      try {
+      try
+      {
         aSpan.addChild (getContentOfArea (sAreaID, aDisplayLocale));
       }
-      catch (final Throwable t) {
+      catch (final Throwable t)
+      {
         // send internal error mail here
         InternalErrorHandler.handleInternalError (aSpan, t);
       }

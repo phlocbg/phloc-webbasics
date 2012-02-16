@@ -46,7 +46,8 @@ import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
  * 
  * @author philip
  */
-public final class WebAppListener implements ServletContextListener {
+public final class WebAppListener implements ServletContextListener
+{
   public static final String INIT_PARAMETER_TRACE = "trace";
   public static final String INIT_PARAMETER_DEBUG = "debug";
   public static final String INIT_PARAMETER_PRODUCTION = "production";
@@ -56,11 +57,13 @@ public final class WebAppListener implements ServletContextListener {
 
   private final List <IApplicationStartupListenerSPI> m_aStartupListeners;
 
-  public WebAppListener () {
+  public WebAppListener ()
+  {
     m_aStartupListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationStartupListenerSPI.class));
   }
 
-  public void contextInitialized (@Nonnull final ServletContextEvent aSCE) {
+  public void contextInitialized (@Nonnull final ServletContextEvent aSCE)
+  {
     final ServletContext aSC = aSCE.getServletContext ();
 
     // Print Java and Server (e.g. Tomcat) info
@@ -106,12 +109,14 @@ public final class WebAppListener implements ServletContextListener {
 
     // Invoke all startup listeners
     for (final IApplicationStartupListenerSPI aStartupListener : m_aStartupListeners)
-      try {
+      try
+      {
         aStartupListener.onStartup ();
         if (s_aLogger.isDebugEnabled ())
           s_aLogger.debug ("Successfully invoked startup listener " + aStartupListener);
       }
-      catch (final Throwable t) {
+      catch (final Throwable t)
+      {
         s_aLogger.error ("Failed to invoke onStartup on " + aStartupListener, t);
         throw new IllegalStateException ("Failed to invoke onStartup on " + aStartupListener, t);
       }
@@ -120,5 +125,6 @@ public final class WebAppListener implements ServletContextListener {
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
   }
 
-  public void contextDestroyed (@Nonnull final ServletContextEvent aSCE) {}
+  public void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
+  {}
 }

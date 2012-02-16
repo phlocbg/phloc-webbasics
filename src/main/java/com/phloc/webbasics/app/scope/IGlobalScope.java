@@ -25,7 +25,8 @@ import javax.servlet.ServletContext;
  * 
  * @author philip
  */
-public interface IGlobalScope extends IScope {
+public interface IGlobalScope extends IScope
+{
   @Nonnull
   ServletContext getServletContext ();
 }

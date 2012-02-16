@@ -29,7 +29,8 @@ import com.phloc.commons.annotations.Nonempty;
  * 
  * @author philip
  */
-public interface IRequestScope extends IScope {
+public interface IRequestScope extends IScope
+{
   @Nonnull
   HttpServletRequest getRequest ();
 

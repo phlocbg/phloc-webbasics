@@ -28,12 +28,15 @@ import org.slf4j.LoggerFactory;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.security.LoginManager;
 
-public final class LogoutServlet extends AbstractScopeAwareHttpServlet {
+public final class LogoutServlet extends AbstractScopeAwareHttpServlet
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (LogoutServlet.class);
 
-  public LogoutServlet () {}
+  public LogoutServlet ()
+  {}
 
-  private void _run (final HttpServletResponse aHttpResponse) throws IOException {
+  private void _run (final HttpServletResponse aHttpResponse) throws IOException
+  {
     // Remember the current user ID
     final String sUserID = LoginManager.getCurrentUserID ();
 
@@ -46,12 +49,14 @@ public final class LogoutServlet extends AbstractScopeAwareHttpServlet {
   }
 
   @Override
-  protected void onGet (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws IOException {
+  protected void onGet (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws IOException
+  {
     _run (aResponse);
   }
 
   @Override
-  protected void onPost (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws IOException {
+  protected void onPost (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws IOException
+  {
     _run (aResponse);
   }
 }

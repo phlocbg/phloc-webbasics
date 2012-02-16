@@ -37,49 +37,58 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author philip
  */
-public final class LayoutManager {
+public final class LayoutManager
+{
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final Map <String, IAreaContentProvider> s_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
 
-  private LayoutManager () {}
+  private LayoutManager ()
+  {}
 
   public static void registerAreaContentProvider (@Nonnull final String sAreaID,
-                                                  @Nonnull final IAreaContentProvider aContentProvider) {
+                                                  @Nonnull final IAreaContentProvider aContentProvider)
+  {
     if (StringHelper.hasNoText (sAreaID))
       throw new IllegalArgumentException ("areaID");
     if (aContentProvider == null)
       throw new NullPointerException ("contentProvider");
 
     s_aRWLock.writeLock ().lock ();
-    try {
+    try
+    {
       if (s_aContentProviders.containsKey (sAreaID))
         throw new IllegalArgumentException ("A content provider for the area ID '" +
                                             sAreaID +
                                             "' is already registered!");
       s_aContentProviders.put (sAreaID, aContentProvider);
     }
-    finally {
+    finally
+    {
       s_aRWLock.writeLock ().unlock ();
     }
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public static List <String> getAllAreaIDs () {
+  public static List <String> getAllAreaIDs ()
+  {
     return ContainerHelper.newList (s_aContentProviders.keySet ());
   }
 
   @Nullable
-  public static IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale) {
+  public static IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale)
+  {
     if (sAreaID == null)
       throw new NullPointerException ("areaID");
 
     s_aRWLock.readLock ().lock ();
-    try {
+    try
+    {
       final IAreaContentProvider aContentProvider = s_aContentProviders.get (sAreaID);
       return aContentProvider == null ? null : aContentProvider.getContent (aDisplayLocale);
     }
-    finally {
+    finally
+    {
       s_aRWLock.readLock ().unlock ();
     }
   }

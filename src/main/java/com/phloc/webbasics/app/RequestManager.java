@@ -45,7 +45,8 @@ import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
  * @author philip
  */
 @IsSPIImplementation
-public final class RequestManager implements IApplicationRequestListenerSPI {
+public final class RequestManager implements IApplicationRequestListenerSPI
+{
   public static final String REQUEST_PARAMETER_MENUITEM = "item";
   private static final String REQUEST_VALUE_MENUITEM = "$item";
 
@@ -53,7 +54,8 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
   private static final String REQUEST_VALUE_DISPLAY_LOCALE = "$displaylocale";
 
   @UsedViaReflection
-  public RequestManager () {}
+  public RequestManager ()
+  {}
 
   /**
    * To be called upon the beginning of each request. Checks for the content of
@@ -62,7 +64,8 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
    * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
    * display locale.
    */
-  public void onRequestBegin () {
+  public void onRequestBegin ()
+  {
     final IRequestScope aRequestScope = ScopeManager.getRequestScope ();
     final ISessionScope aSessionScope = ScopeManager.getSessionScope ();
 
@@ -72,7 +75,8 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
 
     // determine locale from request and store in session
     final String sDisplayLocale = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_DISPLAY_LOCALE);
-    if (sDisplayLocale != null) {
+    if (sDisplayLocale != null)
+    {
       final Locale aDisplayLocale = LocaleCache.get (sDisplayLocale);
       if (aDisplayLocale != null)
         aSessionScope.setAttribute (REQUEST_VALUE_DISPLAY_LOCALE, aDisplayLocale);
@@ -82,14 +86,16 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
   /**
    * Called upon the end of a request.
    */
-  public void onRequestEnd () {}
+  public void onRequestEnd ()
+  {}
 
   /**
    * @return The ID of the requested menu item, or <code>null</code> if the
    *         corresponding request parameter is not present.
    */
   @Nullable
-  public static String getRequestMenuItemID () {
+  public static String getRequestMenuItemID ()
+  {
     return ScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
   }
 
@@ -101,29 +107,34 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
    *         <code>null</code> if resolving the parameter failed.
    */
   @Nullable
-  public static IMenuItem getRequestMenuItem () {
+  public static IMenuItem getRequestMenuItem ()
+  {
     IMenuItem aDisplayMenuItem = null;
 
     final String sSelectedMenuItemID = getRequestMenuItemID ();
-    if (sSelectedMenuItemID != null) {
+    if (sSelectedMenuItemID != null)
+    {
       // Request parameter present
       final DefaultTreeItemWithID <String, IMenuObject> aSelectedMenuItem = MenuTree.getInstance ()
                                                                                     .getItemWithID (sSelectedMenuItemID);
       if (aSelectedMenuItem != null && aSelectedMenuItem.getData () instanceof IMenuItem)
         aDisplayMenuItem = (IMenuItem) aSelectedMenuItem.getData ();
     }
-    else {
+    else
+    {
       // No request parameter
 
       // 1. use default menu item
       aDisplayMenuItem = MenuTree.getInstance ().getDefaultMenuItem ();
 
-      if (aDisplayMenuItem == null) {
+      if (aDisplayMenuItem == null)
+      {
         // 2. no default menu item is present - get the very first menu item
         final DefaultTreeItemWithID <String, IMenuObject> aRootItem = MenuTree.getInstance ().getRootItem ();
         if (aRootItem != null && aRootItem.hasChildren ())
           for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
-            if (aItem.getData () instanceof IMenuItem) {
+            if (aItem.getData () instanceof IMenuItem)
+            {
               aDisplayMenuItem = (IMenuItem) aItem.getData ();
               break;
             }
@@ -138,7 +149,8 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
    *         could be resolved!
    */
   @Nullable
-  public static String getResolvedRequestMenuItemID () {
+  public static String getResolvedRequestMenuItemID ()
+  {
     final IMenuItem aMenuItem = getRequestMenuItem ();
     return aMenuItem == null ? null : aMenuItem.getID ();
   }
@@ -150,10 +162,12 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
    * @return The locale to be used for the current request.
    */
   @Nonnull
-  public static Locale getRequestDisplayLocale () {
+  public static Locale getRequestDisplayLocale ()
+  {
     // Was a request locale set in session scope?
     final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
-    if (aSessionScope != null) {
+    if (aSessionScope != null)
+    {
       final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (REQUEST_VALUE_DISPLAY_LOCALE);
       if (aSessionDisplayLocale != null)
         return aSessionDisplayLocale;
@@ -171,7 +185,8 @@ public final class RequestManager implements IApplicationRequestListenerSPI {
    * @see #getRequestDisplayLocale()
    */
   @Nonnull
-  public static Locale getRequestDisplayCountry () {
+  public static Locale getRequestDisplayCountry ()
+  {
     return CountryCache.getCountry (getRequestDisplayLocale ());
   }
 }

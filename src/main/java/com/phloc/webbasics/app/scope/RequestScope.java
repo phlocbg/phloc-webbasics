@@ -30,11 +30,13 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-public class RequestScope extends AbstractScope implements IRequestScope {
+public class RequestScope extends AbstractScope implements IRequestScope
+{
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
 
-  public RequestScope (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) {
+  public RequestScope (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse)
+  {
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
     if (aHttpResponse == null)
@@ -44,23 +46,28 @@ public class RequestScope extends AbstractScope implements IRequestScope {
   }
 
   @Nonnull
-  public HttpServletRequest getRequest () {
+  public HttpServletRequest getRequest ()
+  {
     return m_aHttpRequest;
   }
 
   @Nonnull
-  public HttpServletResponse getResponse () {
+  public HttpServletResponse getResponse ()
+  {
     return m_aHttpResponse;
   }
 
-  public void destroyScope () {}
+  public void destroyScope ()
+  {}
 
   @Nullable
-  public Object getAttributeObject (@Nullable final String sName) {
+  public Object getAttributeObject (@Nullable final String sName)
+  {
     return m_aHttpRequest.getAttribute (sName);
   }
 
-  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue) {
+  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
+  {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (aValue == null)
@@ -70,7 +77,8 @@ public class RequestScope extends AbstractScope implements IRequestScope {
   }
 
   @Nonnull
-  public EChange removeAttribute (@Nonnull final String sName) {
+  public EChange removeAttribute (@Nonnull final String sName)
+  {
     if (getAttributeObject (sName) == null)
       return EChange.UNCHANGED;
     m_aHttpRequest.removeAttribute (sName);
@@ -78,10 +86,12 @@ public class RequestScope extends AbstractScope implements IRequestScope {
   }
 
   @Nullable
-  public String getUserAgent () {
+  public String getUserAgent ()
+  {
     // Use non-standard headers first
     String sUserAgent = m_aHttpRequest.getHeader ("UA");
-    if (sUserAgent == null) {
+    if (sUserAgent == null)
+    {
       sUserAgent = m_aHttpRequest.getHeader ("x-device-user-agent");
       if (sUserAgent == null)
         sUserAgent = m_aHttpRequest.getHeader ("User-Agent");
@@ -90,7 +100,8 @@ public class RequestScope extends AbstractScope implements IRequestScope {
   }
 
   @Override
-  public String getFullContextPath () {
+  public String getFullContextPath ()
+  {
     final String sScheme = m_aHttpRequest.getScheme ();
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (sScheme).append ("://").append (m_aHttpRequest.getServerName ());

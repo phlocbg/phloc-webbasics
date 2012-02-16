@@ -22,6 +22,7 @@ package com.phloc.webbasics.app.security;
  * 
  * @author philip
  */
-public interface ICredentialValidator {
+public interface ICredentialValidator
+{
   boolean areLoginCredentialsValid (String sUserName, String sPassword);
 }

@@ -29,26 +29,31 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-public class GlobalScope extends AbstractScope implements IGlobalScope {
+public class GlobalScope extends AbstractScope implements IGlobalScope
+{
   private final ServletContext m_aSC;
 
-  public GlobalScope (@Nonnull final ServletContext aSC) {
+  public GlobalScope (@Nonnull final ServletContext aSC)
+  {
     if (aSC == null)
       throw new NullPointerException ("servletContext");
     m_aSC = aSC;
   }
 
   @Nonnull
-  public ServletContext getServletContext () {
+  public ServletContext getServletContext ()
+  {
     return m_aSC;
   }
 
   @Nullable
-  public Object getAttributeObject (@Nullable final String sName) {
+  public Object getAttributeObject (@Nullable final String sName)
+  {
     return m_aSC.getAttribute (sName);
   }
 
-  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue) {
+  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
+  {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (aValue == null)
@@ -58,12 +63,14 @@ public class GlobalScope extends AbstractScope implements IGlobalScope {
   }
 
   @Nonnull
-  public EChange removeAttribute (@Nonnull final String sName) {
+  public EChange removeAttribute (@Nonnull final String sName)
+  {
     if (getAttributeObject (sName) == null)
       return EChange.UNCHANGED;
     m_aSC.removeAttribute (sName);
     return EChange.CHANGED;
   }
 
-  public void destroyScope () {}
+  public void destroyScope ()
+  {}
 }

@@ -45,7 +45,8 @@ import com.phloc.webbasics.servlet.WebFileIO;
  * 
  * @author philip
  */
-public final class HTMLConfigManager {
+public final class HTMLConfigManager
+{
   private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
   private final List <String> m_aAllCSSFiles = new ArrayList <String> ();
@@ -57,7 +58,8 @@ public final class HTMLConfigManager {
   /**
    * Do not call manually! Use {@link #getInstance()} instead.
    */
-  private HTMLConfigManager () {
+  private HTMLConfigManager ()
+  {
     // read all CSS files
     InputStream aIS = WebFileIO.getRegistryInputStream ("css.xml");
     if (aIS != null)
@@ -90,37 +92,43 @@ public final class HTMLConfigManager {
   }
 
   @Nonnull
-  public static HTMLConfigManager getInstance () {
+  public static HTMLConfigManager getInstance ()
+  {
     return s_aInstance;
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public List <String> getAllCSSFiles () {
+  public List <String> getAllCSSFiles ()
+  {
     return ContainerHelper.makeUnmodifiable (m_aAllCSSFiles);
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public List <String> getAllCSSPrintFiles () {
+  public List <String> getAllCSSPrintFiles ()
+  {
     return ContainerHelper.makeUnmodifiable (m_aAllCSSPrintFiles);
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public List <String> getAllCSSIEFiles () {
+  public List <String> getAllCSSIEFiles ()
+  {
     return ContainerHelper.makeUnmodifiable (m_aAllCSSIEFiles);
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public List <String> getAllJSFiles () {
+  public List <String> getAllJSFiles ()
+  {
     return ContainerHelper.makeUnmodifiable (m_aAllJSFiles);
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public Map <String, String> getAllMetaTags () {
+  public Map <String, String> getAllMetaTags ()
+  {
     return ContainerHelper.makeUnmodifiable (m_aAllMetaTags);
   }
 }

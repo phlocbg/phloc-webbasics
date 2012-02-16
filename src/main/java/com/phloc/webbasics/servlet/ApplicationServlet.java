@@ -32,47 +32,58 @@ import com.phloc.webbasics.app.html.HTMLCreationManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 
-public final class ApplicationServlet extends AbstractScopeAwareHttpServlet {
+public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (ApplicationServlet.class);
 
   private final List <IApplicationRequestListenerSPI> m_aListeners;
 
-  public ApplicationServlet () {
+  public ApplicationServlet ()
+  {
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
   }
 
-  private void _run (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws ServletException {
+  private void _run (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws ServletException
+  {
     // Invoke all "request begin" listener
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)
-      try {
+      try
+      {
         aListener.onRequestBegin ();
       }
-      catch (final Throwable t) {
+      catch (final Throwable t)
+      {
         s_aLogger.error ("Failed to invoke onRequestBegin on " + aListener, t);
       }
 
-    try {
+    try
+    {
       HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, new HTMLCreationManager ());
     }
-    finally {
+    finally
+    {
       // Invoke all "request end" listener
       for (final IApplicationRequestListenerSPI aListener : m_aListeners)
-        try {
+        try
+        {
           aListener.onRequestEnd ();
         }
-        catch (final Throwable t) {
+        catch (final Throwable t)
+        {
           s_aLogger.error ("Failed to invoke onRequestEnd on " + aListener, t);
         }
     }
   }
 
   @Override
-  protected void onGet (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws ServletException {
+  protected void onGet (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws ServletException
+  {
     _run (aRequest, aResponse);
   }
 
   @Override
-  protected void onPost (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws ServletException {
+  protected void onPost (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws ServletException
+  {
     _run (aRequest, aResponse);
   }
 }

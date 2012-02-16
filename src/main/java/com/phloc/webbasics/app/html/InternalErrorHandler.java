@@ -40,12 +40,15 @@ import com.phloc.html.hc.htmlext.HCUtils;
  * @author philip
  */
 @ThreadSafe
-public final class InternalErrorHandler {
+public final class InternalErrorHandler
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (InternalErrorHandler.class);
 
-  private InternalErrorHandler () {}
+  private InternalErrorHandler ()
+  {}
 
-  public static void handleInternalError (final IHCElementWithChildren <?> aParent, final Throwable t) {
+  public static void handleInternalError (final IHCElementWithChildren <?> aParent, final Throwable t)
+  {
     // Log the error, to ensure the data is persisted!
     s_aLogger.error ("handleInternalError", t);
 
@@ -59,7 +62,8 @@ public final class InternalErrorHandler {
                                                     sErrorNumber +
                                                     "' for possible investigation.\n\nYou can continue your work.\nIn case this error occurs again avoid the actions leading to it until the problem is solved.")));
 
-    if (GlobalDebug.isDebugMode ()) {
+    if (GlobalDebug.isDebugMode ())
+    {
       final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
                                                                  .setRows (20)
                                                                  .addStyle (CCSSProperties.FONT_SIZE.newValue (CCSS.pt (10)))

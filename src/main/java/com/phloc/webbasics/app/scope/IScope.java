@@ -27,7 +27,8 @@ import com.phloc.commons.state.EChange;
  * 
  * @author philip
  */
-public interface IScope {
+public interface IScope
+{
   @Nullable
   Object getAttributeObject (@Nullable String sName);
 

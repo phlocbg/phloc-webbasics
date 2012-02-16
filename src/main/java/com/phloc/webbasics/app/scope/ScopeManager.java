@@ -29,7 +29,8 @@ import org.slf4j.LoggerFactory;
  * 
  * @author philip
  */
-public final class ScopeManager {
+public final class ScopeManager
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (ScopeManager.class);
 
   /** Global scope */
@@ -38,17 +39,20 @@ public final class ScopeManager {
   /** Request scope */
   private static final ThreadLocal <IRequestScope> s_aRequestScope = new ThreadLocal <IRequestScope> ();
 
-  protected ScopeManager () {}
+  protected ScopeManager ()
+  {}
 
   @Nonnull
-  public static IGlobalScope getGlobalScope () {
+  public static IGlobalScope getGlobalScope ()
+  {
     if (s_aGlobalScope == null)
       throw new IllegalStateException ("No global scope object has been set!");
     return s_aGlobalScope;
   }
 
   @Nonnull
-  public static IRequestScope getRequestScope () {
+  public static IRequestScope getRequestScope ()
+  {
     final IRequestScope aScope = s_aRequestScope.get ();
     if (aScope == null)
       throw new IllegalStateException ("The request context is not available. If you're running the unittests, inherit your test class from a scopeAwareTestCase.");
@@ -56,15 +60,18 @@ public final class ScopeManager {
   }
 
   @Nonnull
-  public static ISessionScope getSessionScope () {
+  public static ISessionScope getSessionScope ()
+  {
     return getSessionScope (true);
   }
 
   @Nullable
-  public static ISessionScope getSessionScope (final boolean bCreateIfNotExisting) {
+  public static ISessionScope getSessionScope (final boolean bCreateIfNotExisting)
+  {
     final IRequestScope aRequestScope = getRequestScope ();
     ISessionScope aSessionScope = aRequestScope.getCastedAttribute ("$session");
-    if (aSessionScope == null && bCreateIfNotExisting) {
+    if (aSessionScope == null && bCreateIfNotExisting)
+    {
       aSessionScope = new SessionScope (aRequestScope.getRequest ().getSession ());
       aRequestScope.setAttribute ("$session", aSessionScope);
     }
@@ -78,7 +85,8 @@ public final class ScopeManager {
    * @param aGlobalScope
    *        The global context to use. May not be null.
    */
-  public static void onGlobalBegin (@Nonnull final IGlobalScope aGlobalScope) {
+  public static void onGlobalBegin (@Nonnull final IGlobalScope aGlobalScope)
+  {
     if (aGlobalScope == null)
       throw new NullPointerException ("globalScope");
     if (s_aGlobalScope != null)
@@ -91,7 +99,8 @@ public final class ScopeManager {
   /**
    * This method initializes a request.
    */
-  public static void onRequestBegin (@Nonnull final IRequestScope aRequestScope) {
+  public static void onRequestBegin (@Nonnull final IRequestScope aRequestScope)
+  {
     if (aRequestScope == null)
       throw new NullPointerException ("requestScope");
     if (s_aGlobalScope == null)
@@ -101,19 +110,23 @@ public final class ScopeManager {
     s_aRequestScope.set (aRequestScope);
   }
 
-  public static void onRequestEnd () {
+  public static void onRequestEnd ()
+  {
     final IRequestScope aScope = s_aRequestScope.get ();
-    try {
+    try
+    {
       if (aScope != null)
         aScope.destroyScope ();
     }
-    finally {
+    finally
+    {
       s_aRequestScope.remove ();
     }
   }
 
   @OverridingMethodsMustInvokeSuper
-  public static void onGlobalEnd () {
+  public static void onGlobalEnd ()
+  {
     /**
      * This code removes all attributes set for the global context. This is
      * necessary, since the attributes would survive a Tomcat servlet context

@@ -26,7 +26,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Implementation base class for menu items.
- *
+ * 
  * @author philip
  */
 public abstract class AbstractMenuObject implements IMenuObject

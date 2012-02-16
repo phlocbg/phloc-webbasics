@@ -21,7 +21,8 @@ import javax.annotation.Nonnull;
 
 import com.phloc.html.hc.html.HCHtml;
 
-public interface IHTMLProvider {
+public interface IHTMLProvider
+{
   @Nonnull
   HCHtml createPageHTML ();
 }

@@ -29,26 +29,31 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-public class SessionScope extends AbstractScope implements ISessionScope {
+public class SessionScope extends AbstractScope implements ISessionScope
+{
   private final HttpSession m_aHttpSession;
 
-  public SessionScope (@Nonnull final HttpSession aHttpSession) {
+  public SessionScope (@Nonnull final HttpSession aHttpSession)
+  {
     if (aHttpSession == null)
       throw new NullPointerException ("httpSession");
     m_aHttpSession = aHttpSession;
   }
 
   @Nonnull
-  public HttpSession getSession () {
+  public HttpSession getSession ()
+  {
     return m_aHttpSession;
   }
 
   @Nullable
-  public Object getAttributeObject (@Nullable final String sName) {
+  public Object getAttributeObject (@Nullable final String sName)
+  {
     return m_aHttpSession.getAttribute (sName);
   }
 
-  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue) {
+  public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
+  {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (aValue == null)
@@ -58,12 +63,14 @@ public class SessionScope extends AbstractScope implements ISessionScope {
   }
 
   @Nonnull
-  public EChange removeAttribute (@Nonnull final String sName) {
+  public EChange removeAttribute (@Nonnull final String sName)
+  {
     if (getAttributeObject (sName) == null)
       return EChange.UNCHANGED;
     m_aHttpSession.removeAttribute (sName);
     return EChange.CHANGED;
   }
 
-  public void destroyScope () {}
+  public void destroyScope ()
+  {}
 }

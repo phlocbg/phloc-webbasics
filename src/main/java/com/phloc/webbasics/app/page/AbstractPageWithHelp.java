@@ -81,9 +81,9 @@ public abstract class AbstractPageWithHelp extends AbstractPage
   protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale)
   {
     return new ReadonlySimpleURL (LinkUtils.getContextAwareURI ("help/" +
-                                                                           getID () +
-                                                                           "?locale=" +
-                                                                           aDisplayLocale.toString ()));
+                                                                getID () +
+                                                                "?locale=" +
+                                                                aDisplayLocale.toString ()));
   }
 
   @Nonnull

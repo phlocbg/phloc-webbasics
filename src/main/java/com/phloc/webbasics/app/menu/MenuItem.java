@@ -29,7 +29,7 @@ import com.phloc.webbasics.app.page.IPage;
 
 /**
  * Default implementation of the {@link IMenuItem} interface.
- *
+ * 
  * @author philip
  */
 public final class MenuItem extends AbstractMenuObject implements IMenuItem
