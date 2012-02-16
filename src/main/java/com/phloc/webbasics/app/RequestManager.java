@@ -22,8 +22,6 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.IsSPIImplementation;
-import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
@@ -33,7 +31,6 @@ import com.phloc.webbasics.app.menu.MenuTree;
 import com.phloc.webbasics.app.scope.IRequestScope;
 import com.phloc.webbasics.app.scope.ISessionScope;
 import com.phloc.webbasics.app.scope.ScopeManager;
-import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 
 /**
  * This class holds the per-request configuration settings.
@@ -44,8 +41,7 @@ import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
  * 
  * @author philip
  */
-@IsSPIImplementation
-public final class RequestManager implements IApplicationRequestListenerSPI
+public final class RequestManager
 {
   public static final String REQUEST_PARAMETER_MENUITEM = "item";
   private static final String REQUEST_VALUE_MENUITEM = "$item";
@@ -53,8 +49,7 @@ public final class RequestManager implements IApplicationRequestListenerSPI
   public static final String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
   private static final String REQUEST_VALUE_DISPLAY_LOCALE = "$displaylocale";
 
-  @UsedViaReflection
-  public RequestManager ()
+  private RequestManager ()
   {}
 
   /**
@@ -64,7 +59,7 @@ public final class RequestManager implements IApplicationRequestListenerSPI
    * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
    * display locale.
    */
-  public void onRequestBegin ()
+  public static void onRequestBegin ()
   {
     final IRequestScope aRequestScope = ScopeManager.getRequestScope ();
     final ISessionScope aSessionScope = ScopeManager.getSessionScope ();
@@ -82,12 +77,6 @@ public final class RequestManager implements IApplicationRequestListenerSPI
         aSessionScope.setAttribute (REQUEST_VALUE_DISPLAY_LOCALE, aDisplayLocale);
     }
   }
-
-  /**
-   * Called upon the end of a request.
-   */
-  public void onRequestEnd ()
-  {}
 
   /**
    * @return The ID of the requested menu item, or <code>null</code> if the

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.ServiceLoaderBackport;
+import com.phloc.webbasics.app.RequestManager;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
@@ -45,6 +46,9 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
   private void _run (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws ServletException
   {
+    // Run default request initialization
+    RequestManager.onRequestBegin ();
+
     // Invoke all "request begin" listener
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)
       try
