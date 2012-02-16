@@ -15,20 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.html;
+package com.phloc.webbasics.app;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.html.EHTMLVersion;
-import com.phloc.html.hc.html.HCHtml;
 
-/**
- * Base interface for an HTML creator
- * 
- * @author philip
- */
-public interface IHTMLProvider
+public final class WebSettings
 {
+  private static EHTMLVersion s_eHTMLVersion = EHTMLVersion.DEFAULT;
+
+  private WebSettings ()
+  {}
+
   @Nonnull
-  HCHtml createHTML (@Nonnull EHTMLVersion eVersion);
+  public static EHTMLVersion getHTMLVersion ()
+  {
+    return s_eHTMLVersion;
+  }
+
+  public static void setHTMLVersion (@Nonnull final EHTMLVersion eVersion)
+  {
+    if (eVersion == null)
+      throw new NullPointerException ("version");
+    s_eHTMLVersion = eVersion;
+  }
 }

@@ -33,6 +33,7 @@ import com.phloc.css.ICSSClassProvider;
 import com.phloc.css.media.CSSMediaList;
 import com.phloc.css.media.ECSSMedium;
 import com.phloc.html.CHTMLCharset;
+import com.phloc.html.EHTMLVersion;
 import com.phloc.html.condcomment.ConditionalComment;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
@@ -124,9 +125,9 @@ public class HTMLCreationManager implements IHTMLProvider
   }
 
   @Nonnull
-  public final HCHtml createPageHTML ()
+  public final HCHtml createHTML (@Nonnull final EHTMLVersion eVersion)
   {
-    final HCHtml aHtml = new HCHtml ();
+    final HCHtml aHtml = new HCHtml (eVersion);
     final Locale aDisplayLocale = RequestManager.getRequestDisplayLocale ();
 
     // create the default layout and fill the areas

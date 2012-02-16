@@ -41,6 +41,7 @@ import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
 import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.webbasics.app.WebSettings;
 
 public final class HTMLResponseHelper
 {
@@ -75,9 +76,9 @@ public final class HTMLResponseHelper
 
   public static void createHTMLResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                          @Nonnull final HttpServletResponse aHttpResponse,
-                                         @Nonnull final IHTMLProvider aHTMLCreationMgr) throws ServletException
+                                         @Nonnull final IHTMLProvider aHtmlProvider) throws ServletException
   {
-    final HCHtml aHtml = aHTMLCreationMgr.createPageHTML ();
+    final HCHtml aHtml = aHtmlProvider.createHTML (WebSettings.getHTMLVersion ());
     final IMicroDocument aDoc = aHtml.getAsNode ();
     createResponse (aHttpRequest, aHttpResponse, aDoc, CMimeType.TEXT_HTML);
   }
