@@ -36,6 +36,8 @@ import com.phloc.html.hc.impl.HCTextNode;
  */
 public class BootstrapNav extends AbstractWrappedHCNode
 {
+  public static final boolean DEFAULT_ACTIVE = false;
+
   private final HCUL m_aUL = new HCUL ();
 
   public BootstrapNav ()
@@ -54,9 +56,21 @@ public class BootstrapNav extends AbstractWrappedHCNode
   }
 
   @Nonnull
+  public BootstrapNav addHeader (@Nullable final String sText)
+  {
+    return addHeader (sText, DEFAULT_ACTIVE);
+  }
+
+  @Nonnull
   public BootstrapNav addHeader (@Nullable final String sText, final boolean bActive)
   {
     return addHeader (new HCTextNode (sText), bActive);
+  }
+
+  @Nonnull
+  public BootstrapNav addHeader (@Nullable final String sText, @Nonnull final ISimpleURL aTarget, final boolean bActive)
+  {
+    return addHeader (new HCA (aTarget).addChild (sText), bActive);
   }
 
   @Nonnull
@@ -66,6 +80,12 @@ public class BootstrapNav extends AbstractWrappedHCNode
     if (bActive)
       aItem.addClass (CBootstrapCSS.ACTIVE);
     return this;
+  }
+
+  @Nonnull
+  public BootstrapNav addItem (@Nullable final String sText, @Nonnull final ISimpleURL aTarget)
+  {
+    return addItem (sText, aTarget, DEFAULT_ACTIVE);
   }
 
   @Nonnull
@@ -82,6 +102,18 @@ public class BootstrapNav extends AbstractWrappedHCNode
                                @Nullable final EBootstrapIcon eIcon)
   {
     return addItem (new HCA (aTarget).addChild (sText), bActive, eIcon);
+  }
+
+  @Nonnull
+  public BootstrapNav addItem (@Nullable final IHCElementWithChildren <?> aContent)
+  {
+    return addItem (aContent, DEFAULT_ACTIVE);
+  }
+
+  @Nonnull
+  public BootstrapNav addItem (@Nullable final IHCElementWithChildren <?> aContent, final boolean bActive)
+  {
+    return addItem (aContent, bActive, null);
   }
 
   @Nonnull
