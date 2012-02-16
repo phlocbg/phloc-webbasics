@@ -30,7 +30,8 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author philip
  */
-public interface IContentProvider {
+public interface IContentProvider
+{
   /**
    * @param aContentLocale
    *        The locale to be used for displaying. May not be <code>null</code>.

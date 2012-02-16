@@ -20,10 +20,11 @@ package com.phloc.webbasics.ui.bootstrap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.conversion.HCConversionSettings;
-import com.phloc.html.hc.html.HCButton;
+import com.phloc.html.hc.html.HCA;
 
-public class BootstrapButton extends HCButton
+public class BootstrapLinkButton extends HCA
 {
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
@@ -33,14 +34,20 @@ public class BootstrapButton extends HCButton
     addClass (CBootstrapCSS.BTN);
   }
 
-  public BootstrapButton ()
+  public BootstrapLinkButton ()
   {
     super ();
     _init ();
   }
 
+  public BootstrapLinkButton (@Nonnull final ISimpleURL aHref)
+  {
+    super (aHref);
+    _init ();
+  }
+
   @Nonnull
-  public BootstrapButton setType (@Nonnull final EBootstrapButtonType eType)
+  public BootstrapLinkButton setType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");
@@ -49,7 +56,7 @@ public class BootstrapButton extends HCButton
   }
 
   @Nonnull
-  public BootstrapButton setSize (@Nullable final EBootstrapButtonSize eSize)
+  public BootstrapLinkButton setSize (@Nullable final EBootstrapButtonSize eSize)
   {
     m_eSize = eSize;
     return this;
