@@ -17,16 +17,38 @@
  */
 package com.phloc.webbasics.ui.bootstrap;
 
+import javax.annotation.Nonnull;
+
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCDiv;
+import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 /**
- * Navigation list
+ * Navigation items
  * 
  * @author philip
  */
-public class BootstrapNavList extends BootstrapNav
+public class BootstrapSidebarNav extends AbstractWrappedHCNode
 {
-  public BootstrapNavList ()
+  private final HCDiv m_aDiv = new HCDiv ();
+
+  public BootstrapSidebarNav ()
   {
-    m_aUL.addClass (CBootstrapCSS.NAV_LIST);
+    m_aDiv.addClass (CBootstrapCSS.WELL);
+  }
+
+  @Nonnull
+  public BootstrapSidebarNav setNav (@Nonnull final BootstrapNav aNav)
+  {
+    aNav.setNavList (true);
+    m_aDiv.removeAllChildren ();
+    m_aDiv.addChild (aNav);
+    return this;
+  }
+
+  @Override
+  protected final IHCNode getContainedHCNode ()
+  {
+    return m_aDiv;
   }
 }

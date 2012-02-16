@@ -36,11 +36,21 @@ import com.phloc.html.hc.impl.HCTextNode;
  */
 public class BootstrapNav extends AbstractWrappedHCNode
 {
-  protected final HCUL m_aUL = new HCUL ();
+  private final HCUL m_aUL = new HCUL ();
 
   public BootstrapNav ()
   {
     m_aUL.addClass (CBootstrapCSS.NAV);
+  }
+
+  @Nonnull
+  public BootstrapNav setNavList (final boolean bNavList)
+  {
+    if (bNavList)
+      m_aUL.addClass (CBootstrapCSS.NAV_LIST);
+    else
+      m_aUL.removeClass (CBootstrapCSS.NAV_LIST);
+    return this;
   }
 
   @Nonnull
