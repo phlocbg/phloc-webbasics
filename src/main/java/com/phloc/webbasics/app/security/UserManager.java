@@ -34,13 +34,13 @@ import com.phloc.webbasics.servlet.WebFileIO;
  * 
  * @author philip
  */
-public final class SimpleWebUserManager {
-  private static final SimpleWebUserManager s_aInstance = new SimpleWebUserManager ();
-  private static final Logger s_aLogger = LoggerFactory.getLogger (SimpleWebUserManager.class);
+public final class UserManager implements ICredentialValidator {
+  private static final ICredentialValidator s_aInstance = new UserManager ();
+  private static final Logger s_aLogger = LoggerFactory.getLogger (UserManager.class);
 
   private final Map <String, String> m_aUsers = new HashMap <String, String> ();
 
-  private SimpleWebUserManager () {
+  private UserManager () {
     final InputStream aIS = WebFileIO.getRegistryInputStream ("users.xml");
     if (aIS == null)
       throw new IllegalStateException ("No users.xml file found in registry!");
@@ -49,7 +49,7 @@ public final class SimpleWebUserManager {
   }
 
   @Nonnull
-  public static SimpleWebUserManager getInstance () {
+  public static ICredentialValidator getInstance () {
     return s_aInstance;
   }
 

@@ -50,7 +50,7 @@ import com.phloc.webbasics.app.RequestManager;
  * 
  * @author philip
  */
-public class HTMLCreationManager {
+public class HTMLCreationManager implements IHTMLProvider {
   private static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
   public HTMLCreationManager () {}
@@ -66,9 +66,7 @@ public class HTMLCreationManager {
     // Special meta tag
     aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (CMimeType.TEXT_XML.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
     // Add all configured meta element
-    for (final Map.Entry <String, String> aEntry : HTMLConfigManager.getInstance ()
-                                                                             .getAllMetaTags ()
-                                                                             .entrySet ())
+    for (final Map.Entry <String, String> aEntry : HTMLConfigManager.getInstance ().getAllMetaTags ().entrySet ())
       aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
     // Add configured CSS
     for (final String sCSSFile : HTMLConfigManager.getInstance ().getAllCSSFiles ())
@@ -97,6 +95,7 @@ public class HTMLCreationManager {
   @OverrideOnDemand
   @Nullable
   protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale) {
+    // By default the layout manager is used
     return LayoutManager.getContentOfArea (sAreaID, aDisplayLocale);
   }
 

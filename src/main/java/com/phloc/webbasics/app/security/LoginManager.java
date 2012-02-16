@@ -28,8 +28,8 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.webbasics.app.html.HTMLCreationManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
+import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.scope.ISessionScope;
 import com.phloc.webbasics.app.scope.ScopeManager;
 
@@ -38,12 +38,12 @@ import com.phloc.webbasics.app.scope.ScopeManager;
  * 
  * @author philip
  */
-public class SimpleWebLogin {
+public class LoginManager {
   private static final String SESSION_ATTR_USERID = "$userid";
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
   @OverrideOnDemand
-  protected HTMLCreationManager createLoginScreen (final boolean bLoginError) {
+  protected IHTMLProvider createLoginScreen (final boolean bLoginError) {
     return new LoginHTML (bLoginError);
   }
 
@@ -60,7 +60,7 @@ public class SimpleWebLogin {
         // -> Check request parameters
         final String sUserID = aHttpRequest.getParameter (LoginHTML.REQUEST_ATTR_USERID);
         final String sPassword = aHttpRequest.getParameter (LoginHTML.REQUEST_ATTR_PASSWORD);
-        if (SimpleWebUserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword)) {
+        if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword)) {
           // Credentials are valid
           aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
           aSessionScope.setAttribute (SESSION_ATTR_USERID, sUserID);

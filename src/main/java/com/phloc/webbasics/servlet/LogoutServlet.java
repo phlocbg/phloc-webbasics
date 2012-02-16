@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.security.SimpleWebLogin;
+import com.phloc.webbasics.app.security.LoginManager;
 
 public final class LogoutServlet extends AbstractScopeAwareHttpServlet {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LogoutServlet.class);
@@ -35,10 +35,10 @@ public final class LogoutServlet extends AbstractScopeAwareHttpServlet {
 
   private void _run (final HttpServletResponse aHttpResponse) throws IOException {
     // Remember the current user ID
-    final String sUserID = SimpleWebLogin.getCurrentUserID ();
+    final String sUserID = LoginManager.getCurrentUserID ();
 
     // Perform the main logout
-    if (SimpleWebLogin.logout ().isChanged ())
+    if (LoginManager.logout ().isChanged ())
       s_aLogger.info ("User " + sUserID + " logged out!");
 
     // Go home

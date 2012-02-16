@@ -70,7 +70,7 @@ public final class HTMLResponseHelper {
 
   public static void createHTMLResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                          @Nonnull final HttpServletResponse aHttpResponse,
-                                         @Nonnull final HTMLCreationManager aHTMLCreationMgr) throws ServletException {
+                                         @Nonnull final IHTMLProvider aHTMLCreationMgr) throws ServletException {
     final HCHtml aHtml = aHTMLCreationMgr.createPageHTML ();
     final IMicroDocument aDoc = aHtml.getAsNode ();
     createResponse (aHttpRequest, aHttpResponse, aDoc, CMimeType.TEXT_HTML);
