@@ -3,6 +3,7 @@ package com.phloc.webbasics.ui.bootstrap;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCDiv;
@@ -61,8 +62,18 @@ public class BootstrapNavbar extends AbstractWrappedHCNode
   @Nonnull
   public BootstrapNavbar setNav (@Nonnull final BootstrapNav aNav)
   {
-    m_aCollapse.removeAllChildren ();
-    m_aCollapse.addChild (aNav);
+    final int nIndex = 0;
+    if (m_aCollapse.getChildAtIndex (nIndex) instanceof BootstrapNav)
+      m_aContainer.removeChild (nIndex);
+    m_aCollapse.addChild (nIndex, aNav);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapNavbar addTextContent (@Nonnull final IHCElement <?> aText)
+  {
+    aText.addClasses (CBootstrapCSS.NAVBAR_TEXT, CBootstrapCSS.PULL_RIGHT);
+    m_aCollapse.addChild (aText);
     return this;
   }
 

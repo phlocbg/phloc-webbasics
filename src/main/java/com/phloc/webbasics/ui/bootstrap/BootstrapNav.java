@@ -13,7 +13,7 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.hc.impl.HCTextNode;
 
 /**
- * Navigation list
+ * Navigation items
  * 
  * @author philip
  */
@@ -39,6 +39,13 @@ public class BootstrapNav extends AbstractWrappedHCNode
     if (bActive)
       aItem.addClass (CBootstrapCSS.ACTIVE);
     return this;
+  }
+
+  @Nonnull
+  public BootstrapNav addItem (@Nullable final String sText, @Nonnull final ISimpleURL aTarget, final boolean bActive)
+  {
+    // no icon
+    return addItem (sText, aTarget, bActive, null);
   }
 
   @Nonnull

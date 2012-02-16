@@ -152,4 +152,10 @@ public final class LinkUtils
       throw new NullPointerException ("menu item id");
     return new SimpleURL ().add (RequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
+
+  @Nonnull
+  public static ISimpleURL getHomeLink ()
+  {
+    return new SimpleURL (ScopeManager.getRequestScope ().getFullContextPath ());
+  }
 }
