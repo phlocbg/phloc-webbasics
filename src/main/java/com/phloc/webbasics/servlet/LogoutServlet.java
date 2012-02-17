@@ -28,6 +28,11 @@ import org.slf4j.LoggerFactory;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.security.LoginManager;
 
+/**
+ * Handles the log-out of a user. Can be called with a user context and without.
+ * 
+ * @author philip
+ */
 public final class LogoutServlet extends AbstractScopeAwareHttpServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LogoutServlet.class);
@@ -42,7 +47,7 @@ public final class LogoutServlet extends AbstractScopeAwareHttpServlet
 
     // Perform the main logout
     if (LoginManager.logout ().isChanged ())
-      s_aLogger.info ("User " + sUserID + " logged out!");
+      s_aLogger.info ("User '" + sUserID + "' logged out!");
 
     // Go home
     aHttpResponse.sendRedirect (LinkUtils.getServletURL ("/").getAsString ());

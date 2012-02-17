@@ -20,6 +20,7 @@ package com.phloc.webbasics.app.scope;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,10 +71,16 @@ public final class BasicScopeManager
   {
     final IRequestScope aRequestScope = getRequestScope ();
     ISessionScope aSessionScope = aRequestScope.getCastedAttribute ("$session");
-    if (aSessionScope == null && bCreateIfNotExisting)
+    if (aSessionScope == null)
     {
-      aSessionScope = new SessionScope (aRequestScope.getRequest ().getSession ());
-      aRequestScope.setAttribute ("$session", aSessionScope);
+      // Get the underlying session (if desired)
+      final HttpSession aSession = aRequestScope.getRequest ().getSession (bCreateIfNotExisting);
+      if (aSession != null)
+      {
+        // We have a session -> create the session scope
+        aSessionScope = new SessionScope (aRequestScope.getRequest ().getSession ());
+        aRequestScope.setAttribute ("$session", aSessionScope);
+      }
     }
     return aSessionScope;
   }

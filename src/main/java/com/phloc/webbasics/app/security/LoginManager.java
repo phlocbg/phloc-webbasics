@@ -24,14 +24,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
-import com.phloc.webbasics.app.scope.ISessionScope;
 import com.phloc.webbasics.app.scope.BasicScopeManager;
+import com.phloc.webbasics.app.scope.ISessionScope;
 
 /**
  * Handle the application login process.
@@ -40,6 +43,7 @@ import com.phloc.webbasics.app.scope.BasicScopeManager;
  */
 public class LoginManager
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LoginManager.class);
   private static final String SESSION_ATTR_USERID = "$userid";
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
@@ -53,13 +57,13 @@ public class LoginManager
   public final EContinue checkUserAndShowLogin (@Nonnull final HttpServletRequest aHttpRequest,
                                                 @Nonnull final HttpServletResponse aHttpResponse) throws ServletException
   {
-    final HttpSession aSessionScope = aHttpRequest.getSession ();
-    String sSessionUserID = (String) aSessionScope.getAttribute (SESSION_ATTR_USERID);
+    final HttpSession aSession = aHttpRequest.getSession ();
+    String sSessionUserID = (String) aSession.getAttribute (SESSION_ATTR_USERID);
     if (sSessionUserID == null)
     {
-      // Start login
+      // No use currently logged in -> start login
       boolean bLoginError = false;
-      if (Boolean.TRUE.equals (aSessionScope.getAttribute (SESSION_ATTR_AUTHINPROGRESS)))
+      if (Boolean.TRUE.equals (aSession.getAttribute (SESSION_ATTR_AUTHINPROGRESS)))
       {
         // Login screen was already shown
         // -> Check request parameters
@@ -68,9 +72,10 @@ public class LoginManager
         if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword))
         {
           // Credentials are valid
-          aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
-          aSessionScope.setAttribute (SESSION_ATTR_USERID, sUserID);
+          aSession.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
+          aSession.setAttribute (SESSION_ATTR_USERID, sUserID);
           sSessionUserID = sUserID;
+          s_aLogger.info ("User '" + sUserID + "' logged in!");
         }
         else
         {
@@ -84,7 +89,7 @@ public class LoginManager
       if (sSessionUserID == null)
       {
         // Show login screen
-        aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
+        aSession.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
         HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, createLoginScreen (bLoginError));
       }
     }
