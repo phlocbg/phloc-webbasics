@@ -25,6 +25,11 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.html.hc.IHCNode;
 
+/**
+ * The base interface for a single page of content.
+ * 
+ * @author philip
+ */
 public interface IPage extends IHasID <String>, IHasDisplayText
 {
   /**

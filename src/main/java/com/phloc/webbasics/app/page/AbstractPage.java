@@ -25,14 +25,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.impl.ConstantTextProvider;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * Abstract base implementation for {@link IPage}.
@@ -45,6 +45,12 @@ public abstract class AbstractPage implements IPage
   private final String m_sID;
   private IHasDisplayText m_aName;
 
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   */
   public AbstractPage (@Nonnull @Nonempty final String sID)
   {
     if (StringHelper.hasNoText (sID))
@@ -55,17 +61,37 @@ public abstract class AbstractPage implements IPage
     m_sID = sID;
   }
 
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param sName
+   *        The constant (non-translatable) name of the page. May not be
+   *        <code>null</code>.
+   */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     this (sID, new ConstantTextProvider (sName));
   }
 
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param aName
+   *        The name of the page. May not be <code>null</code>.
+   */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
     this (sID);
     setName (aName);
   }
 
+  /*
+   * Get the unique page ID
+   */
   @Nonnull
   @Nonempty
   public final String getID ()
@@ -73,6 +99,12 @@ public abstract class AbstractPage implements IPage
     return m_sID;
   }
 
+  /**
+   * Set the name of the page.
+   * 
+   * @param aName
+   *        The multilingual name of the page. May not be <code>null</code>.
+   */
   public final void setName (@Nonnull final IHasDisplayText aName)
   {
     if (aName == null)
@@ -80,6 +112,9 @@ public abstract class AbstractPage implements IPage
     m_aName = aName;
   }
 
+  /*
+   * Get the name of the page in the passed locale.
+   */
   @Nullable
   public final String getDisplayText (@Nonnull final Locale aContentLocale)
   {
@@ -96,14 +131,36 @@ public abstract class AbstractPage implements IPage
   @Nullable
   protected final String getAttr (final String sName)
   {
-    return ScopeManager.getRequestScope ().getAttributeAsString (sName);
+    return BasicScopeManager.getRequestScope ().getAttributeAsString (sName);
   }
 
+  /**
+   * Get the value of the request parameter with the given name as an integer.
+   * 
+   * @param sName
+   *        The attribute values.
+   * @param nDefault
+   *        The default value to be returned if either no such parameter is
+   *        present or if the parameter value cannot be safely converted to an
+   *        integer value.
+   * @return The integer representation of the parameter value or the default
+   *         value.
+   */
   protected final int getIntAttr (final String sName, final int nDefault)
   {
-    return ScopeManager.getRequestScope ().getAttributeAsInt (sName, nDefault);
+    return BasicScopeManager.getRequestScope ().getAttributeAsInt (sName, nDefault);
   }
 
+  /**
+   * Check if a request parameter with the given value is present.
+   * 
+   * @param sName
+   *        The name of the request parameter.
+   * @param sValue
+   *        The expected value of the request parameter.
+   * @return <code>true</code> if the request parameter is present and has the
+   *         expected value - <code>false</code> otherwise.
+   */
   protected final boolean hasAttr (final String sName, final String sValue)
   {
     return EqualsUtils.nullSafeEquals (sValue, getAttr (sName));
@@ -115,10 +172,13 @@ public abstract class AbstractPage implements IPage
     return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_aName).toString ();
   }
 
+  /**
+   * @return A static set with all contained pages.
+   */
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public static Map <String, IPage> getAllPages ()
   {
-    return ContainerHelper.makeUnmodifiable (ALL_IDS);
+    return ContainerHelper.newMap (ALL_IDS);
   }
 }

@@ -49,19 +49,60 @@ public abstract class AbstractPageWithHelp extends AbstractPage
   /** The name of the window where the help opens up */
   protected static final String HELP_WINDOW_NAME = "simplehelpwindow";
 
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   */
   public AbstractPageWithHelp (@Nonnull @Nonempty final String sID)
   {
     super (sID);
   }
 
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param sName
+   *        The constant (non-translatable) name of the page. May not be
+   *        <code>null</code>.
+   */
+  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  {
+    super (sID, sName);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param aName
+   *        The name of the page. May not be <code>null</code>.
+   */
   public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
     super (sID, aName);
   }
 
+  /**
+   * Abstract method to be implemented by subclasses, that creates the main page
+   * content, without the help icon.
+   * 
+   * @param aNodeList
+   *        The node list where the created nodes should be placed. Never
+   *        <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to be used for rendering the current page.
+   */
   protected abstract void fillContent (@Nonnull HCNodeList aNodeList, @Nonnull final Locale aDisplayLocale);
 
   /**
+   * Determine whether help is available for this page. The default
+   * implementation returns always <code>true</code>.
+   * 
    * @return <code>true</code> if help is available for this page,
    *         <code>false</code> otherwise.
    */
@@ -72,9 +113,11 @@ public abstract class AbstractPageWithHelp extends AbstractPage
   }
 
   /**
+   * Get the help URL of the current page
+   * 
    * @param aDisplayLocale
    *        The current display locale
-   * @return The Help URL for this page
+   * @return The help URL for this page. May not be <code>null</code>.
    */
   @Nonnull
   @OverrideOnDemand
@@ -86,6 +129,18 @@ public abstract class AbstractPageWithHelp extends AbstractPage
                                                                 aDisplayLocale.toString ()));
   }
 
+  /**
+   * Create the HC node to represent the help icon. This method is only called,
+   * if help is available for this page. The created code looks like this by
+   * default:<br>
+   * <code>&lt;a href="<i>helpURL</i>" title="Show help for page <i>pageName</i>" target="simplehelpwindow"><br>
+   * &lt;span class="page_help_icon">&lt;/span><br>
+   * &lt;/a></code>
+   * 
+   * @param aDisplayLocale
+   *        The display locale of the page
+   * @return The created help icon node.
+   */
   @Nonnull
   @OverrideOnDemand
   protected IHCNode getHelpIconNode (@Nonnull final Locale aDisplayLocale)
@@ -98,6 +153,11 @@ public abstract class AbstractPageWithHelp extends AbstractPage
     return aHelpNode;
   }
 
+  /**
+   * Default implementation calling the abstract
+   * {@link #fillContent(HCNodeList, Locale)} method and creating the help node
+   * if desired.
+   */
   @Nonnull
   public final IHCNode getContent (@Nonnull final Locale aDisplayLocale)
   {
