@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.app.scope;
 
+import java.util.Enumeration;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +45,20 @@ public class RequestScope extends AbstractScope implements IRequestScope
       throw new NullPointerException ("httpResponse");
     m_aHttpRequest = aHttpRequest;
     m_aHttpResponse = aHttpResponse;
+
+    // set parameters as attributes (handles GET and POST parameters)
+    final Enumeration <?> aEnum = m_aHttpRequest.getParameterNames ();
+    while (aEnum.hasMoreElements ())
+    {
+      final String sParamName = (String) aEnum.nextElement ();
+
+      // Check if it is a single value or not
+      final String [] aParamValues = m_aHttpRequest.getParameterValues (sParamName);
+      if (aParamValues.length == 1)
+        setAttribute (sParamName, aParamValues[0]);
+      else
+        setAttribute (sParamName, aParamValues);
+    }
   }
 
   @Nonnull

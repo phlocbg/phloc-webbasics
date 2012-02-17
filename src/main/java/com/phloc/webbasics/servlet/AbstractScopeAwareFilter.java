@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.webbasics.app.scope.RequestScope;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * Abstract HTTP servlet filter implementation using the correct scope handling.
@@ -66,7 +66,7 @@ public abstract class AbstractScopeAwareFilter implements Filter
   {
     final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
     final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
-    ScopeManager.onRequestBegin (new RequestScope (aHttpRequest, aHttpResponse));
+    BasicScopeManager.onRequestBegin (new RequestScope (aHttpRequest, aHttpResponse));
     try
     {
       if (doFilter (aHttpRequest, aHttpResponse).isContinue ())
@@ -78,7 +78,7 @@ public abstract class AbstractScopeAwareFilter implements Filter
     finally
     {
       // End the scope after the complete filtering process!!!!
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 

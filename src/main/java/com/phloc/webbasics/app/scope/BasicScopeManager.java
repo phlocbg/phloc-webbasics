@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author philip
  */
-public final class ScopeManager
+public final class BasicScopeManager
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ScopeManager.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (BasicScopeManager.class);
 
   /** Global scope */
   private static IGlobalScope s_aGlobalScope;
@@ -39,7 +39,7 @@ public final class ScopeManager
   /** Request scope */
   private static final ThreadLocal <IRequestScope> s_aRequestScope = new ThreadLocal <IRequestScope> ();
 
-  protected ScopeManager ()
+  protected BasicScopeManager ()
   {}
 
   @Nonnull

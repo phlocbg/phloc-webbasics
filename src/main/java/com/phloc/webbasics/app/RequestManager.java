@@ -30,7 +30,7 @@ import com.phloc.webbasics.app.menu.IMenuObject;
 import com.phloc.webbasics.app.menu.MenuTree;
 import com.phloc.webbasics.app.scope.IRequestScope;
 import com.phloc.webbasics.app.scope.ISessionScope;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * This class holds the per-request configuration settings.
@@ -61,8 +61,8 @@ public final class RequestManager
    */
   public static void onRequestBegin ()
   {
-    final IRequestScope aRequestScope = ScopeManager.getRequestScope ();
-    final ISessionScope aSessionScope = ScopeManager.getSessionScope ();
+    final IRequestScope aRequestScope = BasicScopeManager.getRequestScope ();
+    final ISessionScope aSessionScope = BasicScopeManager.getSessionScope ();
 
     // determine page from request and store in request
     final String sMenuItemID = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_MENUITEM);
@@ -85,7 +85,7 @@ public final class RequestManager
   @Nullable
   public static String getRequestMenuItemID ()
   {
-    return ScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
+    return BasicScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
   }
 
   /**
@@ -154,7 +154,7 @@ public final class RequestManager
   public static Locale getRequestDisplayLocale ()
   {
     // Was a request locale set in session scope?
-    final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
+    final ISessionScope aSessionScope = BasicScopeManager.getSessionScope (false);
     if (aSessionScope != null)
     {
       final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (REQUEST_VALUE_DISPLAY_LOCALE);

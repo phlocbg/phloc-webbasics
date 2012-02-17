@@ -36,7 +36,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.webbasics.app.scope.GlobalScope;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
 
 /**
@@ -94,7 +94,7 @@ public final class WebAppListener implements ServletContextListener
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
     // begin global context
-    ScopeManager.onGlobalBegin (new GlobalScope (aSC));
+    BasicScopeManager.onGlobalBegin (new GlobalScope (aSC));
 
     // Save real path!
     WebFileIO.initBaseRealPath (aSC.getRealPath ("."));

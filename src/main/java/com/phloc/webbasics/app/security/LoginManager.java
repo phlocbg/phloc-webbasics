@@ -31,7 +31,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.scope.ISessionScope;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * Handle the application login process.
@@ -100,7 +100,7 @@ public class LoginManager
   @Nullable
   public static String getCurrentUserID ()
   {
-    final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
+    final ISessionScope aSessionScope = BasicScopeManager.getSessionScope (false);
     return aSessionScope == null ? null : aSessionScope.getAttributeAsString (SESSION_ATTR_USERID);
   }
 
@@ -113,7 +113,7 @@ public class LoginManager
   @Nonnull
   public static EChange logout ()
   {
-    final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
+    final ISessionScope aSessionScope = BasicScopeManager.getSessionScope (false);
     return aSessionScope == null ? EChange.UNCHANGED : aSessionScope.removeAttribute (SESSION_ATTR_USERID);
   }
 }

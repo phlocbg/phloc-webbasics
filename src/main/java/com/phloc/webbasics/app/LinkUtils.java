@@ -32,7 +32,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLUtils;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * Misc utilities to create link URLs.
@@ -85,7 +85,7 @@ public final class LinkUtils
     if (EURLProtocol.hasKnownProtocol (sHRef))
       return sHRef;
 
-    final String sContextPath = ScopeManager.getGlobalScope ().getServletContext ().getContextPath ();
+    final String sContextPath = BasicScopeManager.getGlobalScope ().getServletContext ().getContextPath ();
     if (StringHelper.hasText (sContextPath) && sHRef.startsWith (sContextPath))
     {
       s_aLogger.warn ("The passed href '" + sHRef + "' already contains the context path '" + sContextPath + "'!");
@@ -116,7 +116,7 @@ public final class LinkUtils
       return new StringBuilder (aHRef);
 
     // Always prefix with context path!
-    final StringBuilder aSB = new StringBuilder (ScopeManager.getRequestScope ().getFullContextPath ());
+    final StringBuilder aSB = new StringBuilder (BasicScopeManager.getRequestScope ().getFullContextPath ());
     if (!StringHelper.startsWith (aHRef, '/'))
       aSB.append ('/');
     return aSB.append (aHRef);
@@ -135,7 +135,7 @@ public final class LinkUtils
       return sURL;
 
     // Full server and context path + URL
-    return ScopeManager.getRequestScope ().getFullContextPath () + sURL;
+    return BasicScopeManager.getRequestScope ().getFullContextPath () + sURL;
   }
 
   /**
@@ -156,6 +156,6 @@ public final class LinkUtils
   @Nonnull
   public static ISimpleURL getHomeLink ()
   {
-    return new SimpleURL (ScopeManager.getRequestScope ().getFullContextPath ());
+    return new SimpleURL (BasicScopeManager.getRequestScope ().getFullContextPath ());
   }
 }

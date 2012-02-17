@@ -35,7 +35,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.commons.xml.serialize.AbstractXMLWriterSettings;
 import com.phloc.webbasics.app.scope.RequestScope;
-import com.phloc.webbasics.app.scope.ScopeManager;
+import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * A thin wrapper around an {@link HttpServlet} that encapsulates the correct
@@ -129,7 +129,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
   private void _beforeRequest (@Nonnull final HttpServletRequest aHttpRequest,
                                @Nonnull final HttpServletResponse aHttpResponse)
   {
-    ScopeManager.onRequestBegin (new RequestScope (aHttpRequest, aHttpResponse));
+    BasicScopeManager.onRequestBegin (new RequestScope (aHttpRequest, aHttpResponse));
     _ensureResponseCharset (aHttpResponse);
     s_aCounterRequests.increment ();
   }
@@ -154,7 +154,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlDelete.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 
@@ -178,7 +178,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlGet.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 
@@ -202,7 +202,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlHead.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 
@@ -227,7 +227,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlOptions.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 
@@ -251,7 +251,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlPost.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 
@@ -275,7 +275,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlPut.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 
@@ -299,7 +299,7 @@ public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
     finally
     {
       s_aTimerHdlTrace.addTime (aSW.stopAndGetMillis ());
-      ScopeManager.onRequestEnd ();
+      BasicScopeManager.onRequestEnd ();
     }
   }
 }
