@@ -22,21 +22,21 @@ import javax.annotation.Nullable;
 import com.phloc.css.ICSSClassProvider;
 
 /**
- * Type of label
+ * Type of alert
  * 
  * @author philip
  */
-public enum EBootstrapLabelType implements ICSSClassProvider
+public enum EBootstrapAlertType implements ICSSClassProvider
 {
   DEFAULT (null),
-  IMPORTANT ("label-important"),
-  WARNING ("label-warning"),
-  SUCCESS ("label-success"),
-  INFO ("label-info");
+  SUCCESS ("alert-success"),
+  DANGER ("alert-danger"),
+  ERROR ("alert-error"),
+  INFO ("alert-info");
 
   private final String m_sCSSClass;
 
-  private EBootstrapLabelType (@Nullable final String sCSSClass)
+  private EBootstrapAlertType (@Nullable final String sCSSClass)
   {
     m_sCSSClass = sCSSClass;
   }

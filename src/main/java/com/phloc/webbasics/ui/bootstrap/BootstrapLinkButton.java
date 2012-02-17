@@ -24,6 +24,11 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.html.HCA;
 
+/**
+ * A bootstrap button that has a target URL if you click it.
+ * 
+ * @author philip
+ */
 public class BootstrapLinkButton extends HCA
 {
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;

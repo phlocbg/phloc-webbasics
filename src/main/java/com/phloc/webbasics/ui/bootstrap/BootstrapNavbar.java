@@ -28,7 +28,7 @@ import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 /**
- * Navbar
+ * Bootstrap Navbar
  * 
  * @author philip
  */
@@ -62,6 +62,7 @@ public class BootstrapNavbar extends AbstractWrappedHCNode
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
     }
 
+    // Create the collapsable container
     m_aCollapse = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAV_COLLAPSE));
   }
 

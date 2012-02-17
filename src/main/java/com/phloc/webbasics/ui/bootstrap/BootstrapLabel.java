@@ -22,6 +22,11 @@ import javax.annotation.Nonnull;
 import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
 
+/**
+ * Represents a Bootstrap label
+ * 
+ * @author philip
+ */
 public class BootstrapLabel extends HCButton
 {
   private EBootstrapLabelType m_eType = EBootstrapLabelType.DEFAULT;

@@ -24,7 +24,12 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
-public final class BootstrapHeroUnit extends AbstractHCDiv <BootstrapHeroUnit>
+/**
+ * Bootstrap hero unit.
+ * 
+ * @author philip
+ */
+public class BootstrapHeroUnit extends AbstractHCDiv <BootstrapHeroUnit>
 {
   private void _init ()
   {

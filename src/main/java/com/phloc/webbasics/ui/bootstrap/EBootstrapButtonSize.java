@@ -21,6 +21,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.css.ICSSClassProvider;
 
+/**
+ * Button size
+ * 
+ * @author philip
+ */
 public enum EBootstrapButtonSize implements ICSSClassProvider
 {
   LARGE ("btn-large"),

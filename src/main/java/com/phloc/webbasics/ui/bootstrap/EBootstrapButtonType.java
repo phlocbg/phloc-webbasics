@@ -21,6 +21,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.css.ICSSClassProvider;
 
+/**
+ * Button type
+ * 
+ * @author philip
+ */
 public enum EBootstrapButtonType implements ICSSClassProvider
 {
   DEFAULT (null),

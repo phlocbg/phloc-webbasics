@@ -27,7 +27,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCDiv;
 
 /**
- * Bootstrap icons
+ * Bootstrap spans
  * 
  * @author philip
  */

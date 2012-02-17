@@ -103,10 +103,6 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider BTN_TOOLBAR = DefaultCSSClassProvider.create ("btn-toolbar");
   public static final ICSSClassProvider ALERT = DefaultCSSClassProvider.create ("alert");
   public static final ICSSClassProvider ALERT_HEADING = DefaultCSSClassProvider.create ("alert-heading");
-  public static final ICSSClassProvider ALERT_SUCCESS = DefaultCSSClassProvider.create ("alert-success");
-  public static final ICSSClassProvider ALERT_DANGER = DefaultCSSClassProvider.create ("alert-danger");
-  public static final ICSSClassProvider ALERT_ERROR = DefaultCSSClassProvider.create ("alert-error");
-  public static final ICSSClassProvider ALERT_INFO = DefaultCSSClassProvider.create ("alert-info");
   public static final ICSSClassProvider ALERT_BLOCK = DefaultCSSClassProvider.create ("alert-block");
   public static final ICSSClassProvider NAV = DefaultCSSClassProvider.create ("nav");
   public static final ICSSClassProvider NAV_LIST = DefaultCSSClassProvider.create ("nav-list");
