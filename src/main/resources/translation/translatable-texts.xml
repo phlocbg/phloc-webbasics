@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="10">
+<translationitems count="13">
   <item id="com.phloc.webbasics.EWebBasicsText.BOOLEAN_FALSE">
     <de>Nein</de>
     <en>No</en>
@@ -58,5 +58,17 @@
   <item id="com.phloc.webbasics.EWebBasicsText.PAGE_HELP_TITLE">
     <de>Hilfe zu &#39;&#39;{0}&#39;&#39; anzeigen</de>
     <en>Show help for &#39;&#39;{0}&#39;&#39;</en>
+  </item>
+  <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.MESSAGE">
+    <de>Die von Ihnen gesuchte Seite existiert leider nicht!</de>
+    <en>The page you are looking for does not exist!</en>
+  </item>
+  <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.PAGENAME">
+    <de>Seite nicht gefunden</de>
+    <en>Page not found</en>
+  </item>
+  <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.TITLE">
+    <de>Seite nicht gefunden</de>
+    <en>Page not found</en>
   </item>
 </translationitems>
