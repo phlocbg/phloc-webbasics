@@ -24,6 +24,9 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
@@ -34,6 +37,8 @@ import com.phloc.commons.string.StringHelper;
  */
 public class RequestScope extends AbstractScope implements IRequestScope
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (RequestScope.class);
+
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
 
@@ -74,7 +79,23 @@ public class RequestScope extends AbstractScope implements IRequestScope
   }
 
   public void destroyScope ()
-  {}
+  {
+    final Enumeration <?> aEnum = m_aHttpRequest.getAttributeNames ();
+    while (aEnum.hasMoreElements ())
+    {
+      final String sName = (String) aEnum.nextElement ();
+      final Object aValue = getAttributeObject (sName);
+      if (aValue instanceof IScopeDestructionAware)
+        try
+        {
+          ((IScopeDestructionAware) aValue).onScopeDestruction ();
+        }
+        catch (final Exception ex)
+        {
+          s_aLogger.error ("Failed to call destruction method in request scope on " + aValue, ex);
+        }
+    }
+  }
 
   @Nullable
   public Object getAttributeObject (@Nullable final String sName)

@@ -17,9 +17,14 @@
  */
 package com.phloc.webbasics.app.scope;
 
+import java.util.Enumeration;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
@@ -31,6 +36,8 @@ import com.phloc.commons.string.StringHelper;
  */
 public class SessionScope extends AbstractScope implements ISessionScope
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (SessionScope.class);
+
   private final HttpSession m_aHttpSession;
 
   public SessionScope (@Nonnull final HttpSession aHttpSession)
@@ -72,5 +79,21 @@ public class SessionScope extends AbstractScope implements ISessionScope
   }
 
   public void destroyScope ()
-  {}
+  {
+    final Enumeration <?> aEnum = m_aHttpSession.getAttributeNames ();
+    while (aEnum.hasMoreElements ())
+    {
+      final String sName = (String) aEnum.nextElement ();
+      final Object aValue = getAttributeObject (sName);
+      if (aValue instanceof IScopeDestructionAware)
+        try
+        {
+          ((IScopeDestructionAware) aValue).onScopeDestruction ();
+        }
+        catch (final Exception ex)
+        {
+          s_aLogger.error ("Failed to call destruction method in global scope on " + aValue, ex);
+        }
+    }
+  }
 }
