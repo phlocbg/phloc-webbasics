@@ -18,9 +18,12 @@
 package com.phloc.webbasics.app.scope;
 
 import java.util.Enumeration;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,10 +38,12 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
+@ThreadSafe
 public class RequestScope extends AbstractScope implements IRequestScope
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestScope.class);
 
+  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
 
@@ -80,37 +85,62 @@ public class RequestScope extends AbstractScope implements IRequestScope
 
   public void destroyScope ()
   {
-    final Enumeration <?> aEnum = m_aHttpRequest.getAttributeNames ();
-    while (aEnum.hasMoreElements ())
+    m_aRWLock.readLock ().lock ();
+    try
     {
-      final String sName = (String) aEnum.nextElement ();
-      final Object aValue = getAttributeObject (sName);
-      if (aValue instanceof IScopeDestructionAware)
-        try
-        {
-          ((IScopeDestructionAware) aValue).onScopeDestruction ();
-        }
-        catch (final Exception ex)
-        {
-          s_aLogger.error ("Failed to call destruction method in request scope on " + aValue, ex);
-        }
+      final Enumeration <?> aEnum = m_aHttpRequest.getAttributeNames ();
+      while (aEnum.hasMoreElements ())
+      {
+        final String sName = (String) aEnum.nextElement ();
+        final Object aValue = getAttributeObject (sName);
+        if (aValue instanceof IScopeDestructionAware)
+          try
+          {
+            ((IScopeDestructionAware) aValue).onScopeDestruction ();
+          }
+          catch (final Exception ex)
+          {
+            s_aLogger.error ("Failed to call destruction method in request scope on " + aValue, ex);
+          }
+      }
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
     }
   }
 
   @Nullable
   public Object getAttributeObject (@Nullable final String sName)
   {
-    return m_aHttpRequest.getAttribute (sName);
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aHttpRequest.getAttribute (sName);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
-    if (aValue == null)
-      m_aHttpRequest.removeAttribute (sName);
-    else
-      m_aHttpRequest.setAttribute (sName, aValue);
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (aValue == null)
+        m_aHttpRequest.removeAttribute (sName);
+      else
+        m_aHttpRequest.setAttribute (sName, aValue);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nonnull
@@ -118,13 +148,24 @@ public class RequestScope extends AbstractScope implements IRequestScope
   {
     if (getAttributeObject (sName) == null)
       return EChange.UNCHANGED;
-    m_aHttpRequest.removeAttribute (sName);
-    return EChange.CHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aHttpRequest.removeAttribute (sName);
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nullable
   public String getUserAgent ()
   {
+    // Note: access to headers does not need to be synchronized, as they are
+    // read-only
     // Use non-standard headers first
     String sUserAgent = m_aHttpRequest.getHeader ("UA");
     if (sUserAgent == null)
@@ -139,6 +180,8 @@ public class RequestScope extends AbstractScope implements IRequestScope
   @Override
   public String getFullContextPath ()
   {
+    // No need to synchronized, because only information that is read-only is
+    // accessed
     final String sScheme = m_aHttpRequest.getScheme ();
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (sScheme).append ("://").append (m_aHttpRequest.getServerName ());

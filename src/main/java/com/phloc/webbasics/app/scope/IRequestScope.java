@@ -31,15 +31,29 @@ import com.phloc.commons.annotations.Nonempty;
  */
 public interface IRequestScope extends IScope
 {
+  /**
+   * @return The underlying HTTP servlet request. Never <code>null</code>.
+   */
   @Nonnull
   HttpServletRequest getRequest ();
 
+  /**
+   * @return The underlying HTTP servlet response. Never <code>null</code>.
+   */
   @Nonnull
   HttpServletResponse getResponse ();
 
+  /**
+   * @return The user agent of this request. Extracted from header fields of the
+   *         HTTP servlet request.
+   */
   @Nullable
   String getUserAgent ();
 
+  /**
+   * @return The full context path of the request. E.g.
+   *         <code>http://server.com:8080/context</code>. Never ends with a "/".
+   */
   @Nonnull
   @Nonempty
   String getFullContextPath ();

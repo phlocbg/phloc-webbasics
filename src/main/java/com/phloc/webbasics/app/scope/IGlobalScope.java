@@ -27,6 +27,9 @@ import javax.servlet.ServletContext;
  */
 public interface IGlobalScope extends IScope
 {
+  /**
+   * @return The underlying servlet context. Never <code>null</code>.
+   */
   @Nonnull
   ServletContext getServletContext ();
 }

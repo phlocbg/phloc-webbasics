@@ -27,6 +27,9 @@ import javax.servlet.http.HttpSession;
  */
 public interface ISessionScope extends IScope
 {
+  /**
+   * @return The underlying HTTP session. Never <code>null</code>.
+   */
   @Nonnull
   HttpSession getSession ();
 }

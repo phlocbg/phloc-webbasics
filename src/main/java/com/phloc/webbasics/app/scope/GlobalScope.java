@@ -18,9 +18,12 @@
 package com.phloc.webbasics.app.scope;
 
 import java.util.Enumeration;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
@@ -34,10 +37,12 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
+@ThreadSafe
 public class GlobalScope extends AbstractScope implements IGlobalScope
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalScope.class);
 
+  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final ServletContext m_aSC;
 
   public GlobalScope (@Nonnull final ServletContext aSC)
@@ -48,7 +53,7 @@ public class GlobalScope extends AbstractScope implements IGlobalScope
   }
 
   @Nonnull
-  public ServletContext getServletContext ()
+  public final ServletContext getServletContext ()
   {
     return m_aSC;
   }
@@ -56,17 +61,34 @@ public class GlobalScope extends AbstractScope implements IGlobalScope
   @Nullable
   public Object getAttributeObject (@Nullable final String sName)
   {
-    return m_aSC.getAttribute (sName);
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aSC.getAttribute (sName);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
-    if (aValue == null)
-      m_aSC.removeAttribute (sName);
-    else
-      m_aSC.setAttribute (sName, aValue);
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (aValue == null)
+        m_aSC.removeAttribute (sName);
+      else
+        m_aSC.setAttribute (sName, aValue);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nonnull
@@ -74,26 +96,43 @@ public class GlobalScope extends AbstractScope implements IGlobalScope
   {
     if (getAttributeObject (sName) == null)
       return EChange.UNCHANGED;
-    m_aSC.removeAttribute (sName);
-    return EChange.CHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aSC.removeAttribute (sName);
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   public void destroyScope ()
   {
-    final Enumeration <?> aEnum = m_aSC.getAttributeNames ();
-    while (aEnum.hasMoreElements ())
+    m_aRWLock.readLock ().lock ();
+    try
     {
-      final String sName = (String) aEnum.nextElement ();
-      final Object aValue = getAttributeObject (sName);
-      if (aValue instanceof IScopeDestructionAware)
-        try
-        {
-          ((IScopeDestructionAware) aValue).onScopeDestruction ();
-        }
-        catch (final Exception ex)
-        {
-          s_aLogger.error ("Failed to call destruction method in global scope on " + aValue, ex);
-        }
+      final Enumeration <?> aEnum = m_aSC.getAttributeNames ();
+      while (aEnum.hasMoreElements ())
+      {
+        final String sName = (String) aEnum.nextElement ();
+        final Object aValue = getAttributeObject (sName);
+        if (aValue instanceof IScopeDestructionAware)
+          try
+          {
+            ((IScopeDestructionAware) aValue).onScopeDestruction ();
+          }
+          catch (final Exception ex)
+          {
+            s_aLogger.error ("Failed to call destruction method in global scope on " + aValue, ex);
+          }
+      }
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
     }
   }
 }

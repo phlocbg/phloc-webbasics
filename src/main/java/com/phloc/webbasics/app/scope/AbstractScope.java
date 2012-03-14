@@ -27,7 +27,7 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-abstract class AbstractScope implements IScope
+public abstract class AbstractScope implements IScope
 {
   @Nullable
   public final <T> T getCastedAttribute (@Nullable final String sName)

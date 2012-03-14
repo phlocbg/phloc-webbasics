@@ -29,9 +29,24 @@ import com.phloc.commons.state.EChange;
  */
 public interface IScope
 {
+  /**
+   * Get the attribute within the scope with the given name
+   * 
+   * @param sName
+   *        The attribute name to search
+   * @return <code>null</code> if no such attribute is present
+   */
   @Nullable
   Object getAttributeObject (@Nullable String sName);
 
+  /**
+   * Get the attribute within the scope with the given name, casted to the
+   * desired type.
+   * 
+   * @param sName
+   *        The attribute name to search
+   * @return <code>null</code> if no such attribute is present
+   */
   @Nullable
   <T> T getCastedAttribute (@Nullable String sName);
 
@@ -40,10 +55,30 @@ public interface IScope
 
   int getAttributeAsInt (@Nullable String sName, int nDefault);
 
+  /**
+   * Set an attribute within this scope
+   * 
+   * @param sName
+   *        The name of the attribute
+   * @param aValue
+   *        If the value is <code>null</code> the attribute will be removed from
+   *        the scope otherwise it is set within the scope. If another attribute
+   *        with this name is already present it is overwritten.
+   */
   void setAttribute (@Nonnull String sName, @Nullable Object aValue);
 
+  /**
+   * Remove an attribute from the scope.
+   * 
+   * @param sName
+   *        The name of the attribute to be removed.
+   * @return {@link EChange}
+   */
   @Nonnull
   EChange removeAttribute (@Nullable String sName);
 
+  /**
+   * Call when the scope is not needed any longer.
+   */
   void destroyScope ();
 }

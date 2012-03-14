@@ -40,6 +40,9 @@ public final class BasicScopeManager
   /** Request scope */
   private static final ThreadLocal <IRequestScope> s_aRequestScope = new ThreadLocal <IRequestScope> ();
 
+  /** The attribute within the request, where the session scope is stored. */
+  private static final String REQUEST_ATTR_SESSION_SCOPE = "$sessionscope";
+
   protected BasicScopeManager ()
   {}
 
@@ -70,16 +73,16 @@ public final class BasicScopeManager
   public static ISessionScope getSessionScope (final boolean bCreateIfNotExisting)
   {
     final IRequestScope aRequestScope = getRequestScope ();
-    ISessionScope aSessionScope = aRequestScope.getCastedAttribute ("$session");
+    ISessionScope aSessionScope = aRequestScope.getCastedAttribute (REQUEST_ATTR_SESSION_SCOPE);
     if (aSessionScope == null)
     {
-      // Get the underlying session (if desired)
+      // Get the underlying HTTP session (if desired)
       final HttpSession aSession = aRequestScope.getRequest ().getSession (bCreateIfNotExisting);
       if (aSession != null)
       {
         // We have a session -> create the session scope
         aSessionScope = new SessionScope (aRequestScope.getRequest ().getSession ());
-        aRequestScope.setAttribute ("$session", aSessionScope);
+        aRequestScope.setAttribute (REQUEST_ATTR_SESSION_SCOPE, aSessionScope);
       }
     }
     return aSessionScope;
@@ -110,8 +113,8 @@ public final class BasicScopeManager
   {
     if (aRequestScope == null)
       throw new NullPointerException ("requestScope");
-    if (s_aGlobalScope == null)
-      throw new IllegalStateException ("No global context present! May be the global context listener is not installed?");
+    if (s_aRequestScope != null)
+      throw new IllegalStateException ("Another request scope is already present");
 
     // set request context
     s_aRequestScope.set (aRequestScope);
@@ -122,11 +125,13 @@ public final class BasicScopeManager
     final IRequestScope aScope = s_aRequestScope.get ();
     try
     {
+      // if a scope is present, destroy it
       if (aScope != null)
         aScope.destroyScope ();
     }
     finally
     {
+      // Always remove the ThreadLocal value to avoid memory leaks!
       s_aRequestScope.remove ();
     }
   }

@@ -18,9 +18,12 @@
 package com.phloc.webbasics.app.scope;
 
 import java.util.Enumeration;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -34,10 +37,12 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
+@ThreadSafe
 public class SessionScope extends AbstractScope implements ISessionScope
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SessionScope.class);
 
+  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final HttpSession m_aHttpSession;
 
   public SessionScope (@Nonnull final HttpSession aHttpSession)
@@ -56,17 +61,34 @@ public class SessionScope extends AbstractScope implements ISessionScope
   @Nullable
   public Object getAttributeObject (@Nullable final String sName)
   {
-    return m_aHttpSession.getAttribute (sName);
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aHttpSession.getAttribute (sName);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   public void setAttribute (@Nonnull final String sName, @Nullable final Object aValue)
   {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
-    if (aValue == null)
-      m_aHttpSession.removeAttribute (sName);
-    else
-      m_aHttpSession.setAttribute (sName, aValue);
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (aValue == null)
+        m_aHttpSession.removeAttribute (sName);
+      else
+        m_aHttpSession.setAttribute (sName, aValue);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Nonnull
@@ -74,26 +96,43 @@ public class SessionScope extends AbstractScope implements ISessionScope
   {
     if (getAttributeObject (sName) == null)
       return EChange.UNCHANGED;
-    m_aHttpSession.removeAttribute (sName);
-    return EChange.CHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aHttpSession.removeAttribute (sName);
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   public void destroyScope ()
   {
-    final Enumeration <?> aEnum = m_aHttpSession.getAttributeNames ();
-    while (aEnum.hasMoreElements ())
+    m_aRWLock.readLock ().lock ();
+    try
     {
-      final String sName = (String) aEnum.nextElement ();
-      final Object aValue = getAttributeObject (sName);
-      if (aValue instanceof IScopeDestructionAware)
-        try
-        {
-          ((IScopeDestructionAware) aValue).onScopeDestruction ();
-        }
-        catch (final Exception ex)
-        {
-          s_aLogger.error ("Failed to call destruction method in global scope on " + aValue, ex);
-        }
+      final Enumeration <?> aEnum = m_aHttpSession.getAttributeNames ();
+      while (aEnum.hasMoreElements ())
+      {
+        final String sName = (String) aEnum.nextElement ();
+        final Object aValue = getAttributeObject (sName);
+        if (aValue instanceof IScopeDestructionAware)
+          try
+          {
+            ((IScopeDestructionAware) aValue).onScopeDestruction ();
+          }
+          catch (final Exception ex)
+          {
+            s_aLogger.error ("Failed to call destruction method in global scope on " + aValue, ex);
+          }
+      }
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
     }
   }
 }
