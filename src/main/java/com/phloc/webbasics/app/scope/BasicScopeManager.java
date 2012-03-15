@@ -113,7 +113,7 @@ public final class BasicScopeManager
   {
     if (aRequestScope == null)
       throw new NullPointerException ("requestScope");
-    if (s_aRequestScope != null)
+    if (s_aRequestScope.get () != null)
       throw new IllegalStateException ("Another request scope is already present");
 
     // set request context

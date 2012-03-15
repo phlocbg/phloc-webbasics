@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2012-03-15" version="1.0.1" />
+  <entry date="2012-03-15" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed check for duplicate request scope in BasicScopeManager.onRequestBegin</text>
+    </change>
+  </entry>
   <release date="2012-03-15" version="1.0.0" />
   <!-- changelog started -->
 </changelog>
