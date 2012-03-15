@@ -47,8 +47,15 @@ import com.phloc.webbasics.servlet.WebFileIO;
  */
 public final class HTMLConfigManager
 {
+  public static final String FILENAME_CSS_XML = "css.xml";
+  public static final String FILENAME_CSS_PRINT_XML = "css_print.xml";
+  public static final String FILENAME_CSS_IE_XML = "css_ie.xml";
+  public static final String FILENAME_JS_XML = "js.xml";
+  public static final String FILENAME_METATAGS_XML = "metatags.xml";
+
   private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
+
   private final List <String> m_aAllCSSFiles = new ArrayList <String> ();
   private final List <String> m_aAllCSSPrintFiles = new ArrayList <String> ();
   private final List <String> m_aAllCSSIEFiles = new ArrayList <String> ();
@@ -61,31 +68,31 @@ public final class HTMLConfigManager
   private HTMLConfigManager ()
   {
     // read all CSS files
-    InputStream aIS = WebFileIO.getRegistryInputStream ("css.xml");
+    InputStream aIS = WebFileIO.getRegistryInputStream (FILENAME_CSS_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllCSSFiles).isFailure ())
         s_aLogger.warn ("Failed to read css.xml");
 
     // read all print CSS files
-    aIS = WebFileIO.getRegistryInputStream ("css_print.xml");
+    aIS = WebFileIO.getRegistryInputStream (FILENAME_CSS_PRINT_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllCSSPrintFiles).isFailure ())
         s_aLogger.warn ("Failed to read css_print.xml");
 
     // read all IE CSS files
-    aIS = WebFileIO.getRegistryInputStream ("css_ie.xml");
+    aIS = WebFileIO.getRegistryInputStream (FILENAME_CSS_IE_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllCSSIEFiles).isFailure ())
         s_aLogger.warn ("Failed to read css_ie.xml");
 
     // read all JS files
-    aIS = WebFileIO.getRegistryInputStream ("js.xml");
+    aIS = WebFileIO.getRegistryInputStream (FILENAME_JS_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllJSFiles).isFailure ())
         s_aLogger.warn ("Failed to read js.xml");
 
     // read all static MetaTags
-    aIS = WebFileIO.getRegistryInputStream ("metatags.xml");
+    aIS = WebFileIO.getRegistryInputStream (FILENAME_METATAGS_XML);
     if (aIS != null)
       if (XMLMapHandler.readMap (aIS, m_aAllMetaTags).isFailure ())
         s_aLogger.warn ("Failed to read metatags.xml");

@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.css.DefaultCSSClassProvider;
 import com.phloc.css.ICSSClassProvider;
@@ -86,24 +85,30 @@ public class HTMLCreationManager implements IHTMLProvider
   protected void fillHead (@Nonnull final HCHtml aHtml)
   {
     final HCHead aHead = aHtml.getHead ();
+
     // Special meta tag
     aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (CMimeType.TEXT_XML.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
+
     // Add all configured meta element
     for (final Map.Entry <String, String> aEntry : HTMLConfigManager.getInstance ().getAllMetaTags ().entrySet ())
       aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
+
     // Add configured CSS
     for (final String sCSSFile : HTMLConfigManager.getInstance ().getAllCSSFiles ())
       aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSFile)));
+
     // Add configured print-only CSS
     for (final String sCSSPrintFile : HTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
       aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSPrintFile),
-                                     new CSSMediaList (ContainerHelper.newList (ECSSMedium.PRINT)),
+                                     new CSSMediaList (ECSSMedium.PRINT),
                                      null));
+
     // Add configured IE-only CSS
     for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
       aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSIEFile),
                                      null,
                                      ConditionalComment.createForIE ()));
+
     // Add all configured JS
     for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
       aHead.addJS (new JSExternal (LinkUtils.makeAbsoluteSimpleURL (sJSFile)));
@@ -125,9 +130,16 @@ public class HTMLCreationManager implements IHTMLProvider
   }
 
   @Nonnull
+  @OverrideOnDemand
+  protected HCHtml createHCHtml (@Nonnull final EHTMLVersion eVersion)
+  {
+    return new HCHtml (eVersion);
+  }
+
+  @Nonnull
   public final HCHtml createHTML (@Nonnull final EHTMLVersion eVersion)
   {
-    final HCHtml aHtml = new HCHtml (eVersion);
+    final HCHtml aHtml = createHCHtml (eVersion);
     final Locale aDisplayLocale = RequestManager.getRequestDisplayLocale ();
 
     // create the default layout and fill the areas
