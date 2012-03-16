@@ -32,6 +32,10 @@ import com.phloc.commons.annotations.Nonempty;
 public interface IRequestScope extends IScope
 {
   /**
+   * Get the underlying HTTP servlet request. Important: do not use it to access
+   * the attributes within the session. Use only the scope API for this, so that
+   * the synchronization is consistent!
+   * 
    * @return The underlying HTTP servlet request. Never <code>null</code>.
    */
   @Nonnull

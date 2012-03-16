@@ -81,4 +81,31 @@ public interface IScope
    * Call when the scope is not needed any longer.
    */
   void destroyScope ();
+
+  /**
+   * Check if this scope is valid. A valid scope is determined by that it is not
+   * in destruction (@see {@link #isInDestruction()}) and not destroyed (@see
+   * {@link #isDestroyed()}).
+   * 
+   * @return <code>true</code> if the scope is neither in destruction nor
+   *         destroyed.
+   */
+  boolean isValid ();
+
+  /**
+   * Check if this scope is in the middle of destruction.
+   * 
+   * @return <code>true</code> only if the destruction process is just
+   *         performing and <code>false</code> if the scope is OK or if it is
+   *         already destroyed!
+   */
+  boolean isInDestruction ();
+
+  /**
+   * Check if this scope is already destroyed.
+   * 
+   * @return <code>true</code> if the scope is already destroyed,
+   *         <code>false</code> otherwise.
+   */
+  boolean isDestroyed ();
 }

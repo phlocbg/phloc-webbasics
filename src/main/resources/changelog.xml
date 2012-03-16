@@ -20,6 +20,21 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2012-03-16" category="api" action="add">
+    <change>
+      <text locale="en">Added new methods to IScope: isValid, isInDestruction and isDestroyed</text>
+    </change>
+  </entry>
+  <entry date="2012-03-16" category="tech" action="change">
+    <change>
+      <text locale="en">Changed the way how SessionScopes are created and managed to only have a single SessionScope object per HTTP session</text>
+    </change>
+  </entry>
+  <entry date="2012-03-16" category="tech" action="fix">
+    <change>
+      <text locale="en">Added missing call to end the GlobalScope correctly in the WebAppListener</text>
+    </change>
+  </entry>
   <release date="2012-03-15" version="1.0.1" />
   <entry date="2012-03-15" category="tech" action="fix">
     <change>

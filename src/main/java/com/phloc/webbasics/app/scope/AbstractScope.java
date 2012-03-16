@@ -17,6 +17,9 @@
  */
 package com.phloc.webbasics.app.scope;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import javax.annotation.Nullable;
 
 import com.phloc.commons.lang.GenericReflection;
@@ -29,6 +32,10 @@ import com.phloc.commons.string.StringHelper;
  */
 public abstract class AbstractScope implements IScope
 {
+  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  private boolean m_bInDestruction = false;
+  private boolean m_bDestroyed = false;
+
   @Nullable
   public final <T> T getCastedAttribute (@Nullable final String sName)
   {
@@ -43,5 +50,79 @@ public abstract class AbstractScope implements IScope
   public final int getAttributeAsInt (@Nullable final String sName, final int nDefault)
   {
     return StringHelper.parseInt (getAttributeObject (sName), nDefault);
+  }
+
+  public final boolean isValid ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return !m_bInDestruction && !m_bDestroyed;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public final boolean isInDestruction ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_bInDestruction;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public final boolean isDestroyed ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_bDestroyed;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  protected abstract void mainDestroyScope ();
+
+  public final void destroyScope ()
+  {
+    // Check if scope is already destroyed or in destruction
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (m_bDestroyed)
+        throw new IllegalStateException ("Scope is already destroyed!");
+      if (m_bInDestruction)
+        throw new IllegalStateException ("Scope is already in destruction!");
+      m_bInDestruction = true;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+
+    // Main destruction process starts now
+    mainDestroyScope ();
+
+    // Finished destruction process -> remember this
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_bDestroyed = true;
+      m_bInDestruction = false;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 }

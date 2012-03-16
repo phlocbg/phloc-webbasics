@@ -28,6 +28,10 @@ import javax.servlet.ServletContext;
 public interface IGlobalScope extends IScope
 {
   /**
+   * Get the underlying servlet context. Important: do not use it to access the
+   * attributes within the session. Use only the scope API for this, so that the
+   * synchronization is consistent!
+   * 
    * @return The underlying servlet context. Never <code>null</code>.
    */
   @Nonnull

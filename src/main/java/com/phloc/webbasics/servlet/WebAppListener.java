@@ -23,6 +23,8 @@ import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +37,9 @@ import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.system.EJVMVendor;
-import com.phloc.webbasics.app.scope.GlobalScope;
 import com.phloc.webbasics.app.scope.BasicScopeManager;
+import com.phloc.webbasics.app.scope.GlobalScope;
+import com.phloc.webbasics.app.scope.SessionScopeManager;
 import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
 
 /**
@@ -46,7 +49,7 @@ import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
  * 
  * @author philip
  */
-public final class WebAppListener implements ServletContextListener
+public final class WebAppListener implements ServletContextListener, HttpSessionListener
 {
   public static final String INIT_PARAMETER_TRACE = "trace";
   public static final String INIT_PARAMETER_DEBUG = "debug";
@@ -121,5 +124,20 @@ public final class WebAppListener implements ServletContextListener
   }
 
   public void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
-  {}
+  {
+    // Shutdown global scope
+    BasicScopeManager.onGlobalEnd ();
+  }
+
+  public void sessionCreated (@Nonnull final HttpSessionEvent aSE)
+  {
+    // Create the SessionScope
+    SessionScopeManager.createSessionScope (aSE.getSession ());
+  }
+
+  public void sessionDestroyed (@Nonnull final HttpSessionEvent aSE)
+  {
+    // Destroy the SessionScope
+    SessionScopeManager.destroySessionScope (aSE.getSession ());
+  }
 }

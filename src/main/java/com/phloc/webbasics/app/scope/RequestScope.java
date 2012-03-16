@@ -18,8 +18,6 @@
 package com.phloc.webbasics.app.scope;
 
 import java.util.Enumeration;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +41,6 @@ public class RequestScope extends AbstractScope implements IRequestScope
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestScope.class);
 
-  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
 
@@ -83,7 +80,8 @@ public class RequestScope extends AbstractScope implements IRequestScope
     return m_aHttpResponse;
   }
 
-  public void destroyScope ()
+  @Override
+  protected void mainDestroyScope ()
   {
     m_aRWLock.readLock ().lock ();
     try

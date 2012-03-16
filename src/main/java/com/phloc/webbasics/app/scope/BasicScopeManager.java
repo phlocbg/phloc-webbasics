@@ -25,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.GlobalDebug;
+
 /**
  * Manage the available scopes.
  * 
@@ -39,9 +41,6 @@ public final class BasicScopeManager
 
   /** Request scope */
   private static final ThreadLocal <IRequestScope> s_aRequestScope = new ThreadLocal <IRequestScope> ();
-
-  /** The attribute within the request, where the session scope is stored. */
-  private static final String REQUEST_ATTR_SESSION_SCOPE = "$sessionscope";
 
   protected BasicScopeManager ()
   {}
@@ -59,7 +58,7 @@ public final class BasicScopeManager
   {
     final IRequestScope aScope = s_aRequestScope.get ();
     if (aScope == null)
-      throw new IllegalStateException ("The request context is not available. If you're running the unittests, inherit your test class from a scopeAwareTestCase.");
+      throw new IllegalStateException ("The request scope is not available.");
     return aScope;
   }
 
@@ -73,19 +72,23 @@ public final class BasicScopeManager
   public static ISessionScope getSessionScope (final boolean bCreateIfNotExisting)
   {
     final IRequestScope aRequestScope = getRequestScope ();
-    ISessionScope aSessionScope = aRequestScope.getCastedAttribute (REQUEST_ATTR_SESSION_SCOPE);
-    if (aSessionScope == null)
+    // Note: if no session scope is present until now, and bCreateIfNotExisting
+    // is true, the web app server will automatically trigger a call to the
+    // javax.servlet.http.HttpSessionListener which will than trigger the
+    // SessionScopeManager!
+    final HttpSession aHttpSession = aRequestScope.getRequest ().getSession (bCreateIfNotExisting);
+    if (aHttpSession != null)
     {
-      // Get the underlying HTTP session (if desired)
-      final HttpSession aSession = aRequestScope.getRequest ().getSession (bCreateIfNotExisting);
-      if (aSession != null)
-      {
-        // We have a session -> create the session scope
-        aSessionScope = new SessionScope (aRequestScope.getRequest ().getSession ());
-        aRequestScope.setAttribute (REQUEST_ATTR_SESSION_SCOPE, aSessionScope);
-      }
+      // An HTTP session is present -> must be available in the
+      // SessionScopeManager!
+      final ISessionScope aSessionScope = SessionScopeManager.getSessionScope (aHttpSession);
+      if (aSessionScope == null)
+        throw new IllegalStateException ("Internal error: SessionScopeManager does not contain a scope for session ID " +
+                                         aHttpSession.getId ());
+      return aSessionScope;
     }
-    return aSessionScope;
+    // No HTTP session is present -> no scope
+    return null;
   }
 
   /**
@@ -103,7 +106,8 @@ public final class BasicScopeManager
       throw new IllegalStateException ("Another global scope is already present");
 
     s_aGlobalScope = aGlobalScope;
-    s_aLogger.info ("Global scope initialized!");
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.info ("Global scope initialized!");
   }
 
   /**
@@ -149,7 +153,7 @@ public final class BasicScopeManager
       s_aGlobalScope.destroyScope ();
     s_aGlobalScope = null;
 
-    // done
-    s_aLogger.info ("Global scope shut down!");
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.info ("Global scope shut down!");
   }
 }
