@@ -32,8 +32,8 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCH1;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.page.AbstractPage;
-import com.phloc.webbasics.app.scope.BasicScopeManager;
 
 /**
  * Default page showing a very rudimentary "page not found"
@@ -81,7 +81,7 @@ public class SystemPageNotFound extends AbstractPage
   @OverrideOnDemand
   public IHCNode getContent (@Nonnull final Locale aDisplayLocale)
   {
-    s_aLogger.info ("PAGE NOT FOUND " + BasicScopeManager.getRequestScope ().getRequest ().getRequestURL ().toString ());
+    s_aLogger.info ("PAGE NOT FOUND " + WebScopeManager.getRequestScope ().getRequest ().getRequestURL ().toString ());
     return new HCH1 (ETextBase.MESSAGE.getDisplayText (aDisplayLocale));
   }
 }

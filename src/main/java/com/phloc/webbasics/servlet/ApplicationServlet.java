@@ -19,6 +19,7 @@ package com.phloc.webbasics.servlet;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.ServiceLoaderBackport;
+import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.RequestManager;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
@@ -44,10 +47,12 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
   }
 
-  private void _run (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws ServletException
+  private void _run (@Nonnull final HttpServletRequest aHttpRequest,
+                     @Nonnull final HttpServletResponse aHttpResponse,
+                     @Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
     // Run default request initialization
-    RequestManager.onRequestBegin ();
+    RequestManager.onRequestBegin (aRequestScope);
 
     // Invoke all "request begin" listener
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)
@@ -80,14 +85,18 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
   }
 
   @Override
-  protected void onGet (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws ServletException
+  protected void onGet (@Nonnull final HttpServletRequest aRequest,
+                        @Nonnull final HttpServletResponse aResponse,
+                        @Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    _run (aRequest, aResponse);
+    _run (aRequest, aResponse, aRequestScope);
   }
 
   @Override
-  protected void onPost (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws ServletException
+  protected void onPost (@Nonnull final HttpServletRequest aRequest,
+                         @Nonnull final HttpServletResponse aResponse,
+                         @Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    _run (aRequest, aResponse);
+    _run (aRequest, aResponse, aRequestScope);
   }
 }

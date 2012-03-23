@@ -32,7 +32,7 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.impl.ConstantTextProvider;
-import com.phloc.webbasics.app.scope.BasicScopeManager;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
  * Abstract base implementation for {@link IPage}.
@@ -131,7 +131,7 @@ public abstract class AbstractPage implements IPage
   @Nullable
   protected final String getAttr (final String sName)
   {
-    return BasicScopeManager.getRequestScope ().getAttributeAsString (sName);
+    return WebScopeManager.getRequestScope ().getAttributeAsString (sName);
   }
 
   /**
@@ -148,7 +148,7 @@ public abstract class AbstractPage implements IPage
    */
   protected final int getIntAttr (final String sName, final int nDefault)
   {
-    return BasicScopeManager.getRequestScope ().getAttributeAsInt (sName, nDefault);
+    return WebScopeManager.getRequestScope ().getAttributeAsInt (sName, nDefault);
   }
 
   /**

@@ -19,6 +19,7 @@ package com.phloc.webbasics.servlet;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -41,8 +42,9 @@ public class CharacterEncodingFilter implements Filter
   public void init (final FilterConfig aFilterConfig) throws ServletException
   {}
 
-  public void doFilter (final ServletRequest aRequest, final ServletResponse aResponse, final FilterChain aChain) throws IOException,
-                                                                                                                 ServletException
+  public void doFilter (@Nonnull final ServletRequest aRequest,
+                        @Nonnull final ServletResponse aResponse,
+                        @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
     // We need this for all form data etc.
     if (aRequest.getCharacterEncoding () == null)

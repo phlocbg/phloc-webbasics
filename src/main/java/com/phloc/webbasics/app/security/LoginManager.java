@@ -31,10 +31,10 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.scopes.IScope;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
-import com.phloc.webbasics.app.scope.BasicScopeManager;
-import com.phloc.webbasics.app.scope.ISessionScope;
 
 /**
  * Handle the application login process.
@@ -105,7 +105,7 @@ public class LoginManager
   @Nullable
   public static String getCurrentUserID ()
   {
-    final ISessionScope aSessionScope = BasicScopeManager.getSessionScope (false);
+    final IScope aSessionScope = WebScopeManager.getSessionScope (false);
     return aSessionScope == null ? null : aSessionScope.getAttributeAsString (SESSION_ATTR_USERID);
   }
 
@@ -118,7 +118,7 @@ public class LoginManager
   @Nonnull
   public static EChange logout ()
   {
-    final ISessionScope aSessionScope = BasicScopeManager.getSessionScope (false);
+    final IScope aSessionScope = WebScopeManager.getSessionScope (false);
     return aSessionScope == null ? EChange.UNCHANGED : aSessionScope.removeAttribute (SESSION_ATTR_USERID);
   }
 }

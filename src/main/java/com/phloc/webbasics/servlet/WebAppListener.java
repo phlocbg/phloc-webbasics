@@ -37,9 +37,7 @@ import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.system.EJVMVendor;
-import com.phloc.webbasics.app.scope.BasicScopeManager;
-import com.phloc.webbasics.app.scope.GlobalScope;
-import com.phloc.webbasics.app.scope.SessionScopeManager;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
 
 /**
@@ -97,7 +95,7 @@ public final class WebAppListener implements ServletContextListener, HttpSession
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
     // begin global context
-    BasicScopeManager.onGlobalBegin (new GlobalScope (aSC));
+    WebScopeManager.onGlobalBegin (aSC);
 
     // Save real path!
     WebFileIO.initBaseRealPath (aSC.getRealPath ("."));
@@ -126,18 +124,18 @@ public final class WebAppListener implements ServletContextListener, HttpSession
   public void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
   {
     // Shutdown global scope
-    BasicScopeManager.onGlobalEnd ();
+    WebScopeManager.onGlobalEnd ();
   }
 
   public void sessionCreated (@Nonnull final HttpSessionEvent aSE)
   {
     // Create the SessionScope
-    SessionScopeManager.createSessionScope (aSE.getSession ());
+    WebScopeManager.onSessionBegin (aSE.getSession ());
   }
 
   public void sessionDestroyed (@Nonnull final HttpSessionEvent aSE)
   {
     // Destroy the SessionScope
-    SessionScopeManager.destroySessionScope (aSE.getSession ());
+    WebScopeManager.onSessionEnd (aSE.getSession ());
   }
 }

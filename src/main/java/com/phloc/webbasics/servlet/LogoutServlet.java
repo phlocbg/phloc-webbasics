@@ -19,12 +19,15 @@ package com.phloc.webbasics.servlet;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.security.LoginManager;
 
@@ -40,7 +43,7 @@ public final class LogoutServlet extends AbstractScopeAwareHttpServlet
   public LogoutServlet ()
   {}
 
-  private void _run (final HttpServletResponse aHttpResponse) throws IOException
+  private void _run (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     // Remember the current user ID
     final String sUserID = LoginManager.getCurrentUserID ();
@@ -54,14 +57,18 @@ public final class LogoutServlet extends AbstractScopeAwareHttpServlet
   }
 
   @Override
-  protected void onGet (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws IOException
+  protected void onGet (@Nonnull final HttpServletRequest aHttpRequest,
+                        @Nonnull final HttpServletResponse aHttpResponse,
+                        @Nonnull final IRequestWebScope aRequestScope) throws IOException
   {
-    _run (aResponse);
+    _run (aHttpResponse);
   }
 
   @Override
-  protected void onPost (final HttpServletRequest aRequest, final HttpServletResponse aResponse) throws IOException
+  protected void onPost (@Nonnull final HttpServletRequest aHttpRequest,
+                         @Nonnull final HttpServletResponse aHttpResponse,
+                         @Nonnull final IRequestWebScope aRequestScope) throws IOException
   {
-    _run (aResponse);
+    _run (aHttpResponse);
   }
 }
