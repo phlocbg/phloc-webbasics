@@ -47,7 +47,7 @@ import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
  * 
  * @author philip
  */
-public final class WebAppListener implements ServletContextListener, HttpSessionListener
+public class WebAppListener implements ServletContextListener, HttpSessionListener
 {
   public static final String INIT_PARAMETER_TRACE = "trace";
   public static final String INIT_PARAMETER_DEBUG = "debug";
