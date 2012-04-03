@@ -39,6 +39,7 @@ import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
 import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
 import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 
 /**
  * Some HTTP utility methods
@@ -78,13 +79,15 @@ public final class HTTPResponseHelper
     return aHttpResponse.getOutputStream ();
   }
 
-  public static void createResponse (@Nonnull final HttpServletRequest aHttpRequest,
-                                     @Nonnull final HttpServletResponse aHttpResponse,
+  public static void createResponse (@Nonnull final IRequestWebScope aRequestScope,
                                      @Nonnull final IMicroDocument aDoc,
                                      @Nonnull final IMimeType aMimeType) throws ServletException
   {
     try
     {
+      final HttpServletRequest aHttpRequest = aRequestScope.getRequest ();
+      final HttpServletResponse aHttpResponse = aRequestScope.getResponse ();
+
       final String sXMLCode = MicroWriter.getNodeAsString (aDoc, XML_WRITER_SETTINGS);
       final String sCharset = XML_WRITER_SETTINGS.getCharset ();
 

@@ -47,9 +47,7 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
   }
 
-  private void _run (@Nonnull final HttpServletRequest aHttpRequest,
-                     @Nonnull final HttpServletResponse aHttpResponse,
-                     @Nonnull final IRequestWebScope aRequestScope) throws ServletException
+  private void _run (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
     // Run default request initialization
     RequestManager.onRequestBegin (aRequestScope);
@@ -67,7 +65,7 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
     try
     {
-      HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, new HTMLCreationManager ());
+      HTMLResponseHelper.createHTMLResponse (aRequestScope, new HTMLCreationManager ());
     }
     finally
     {
@@ -89,7 +87,7 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
                         @Nonnull final HttpServletResponse aResponse,
                         @Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    _run (aRequest, aResponse, aRequestScope);
+    _run (aRequestScope);
   }
 
   @Override
@@ -97,6 +95,6 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
                          @Nonnull final HttpServletResponse aResponse,
                          @Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    _run (aRequest, aResponse, aRequestScope);
+    _run (aRequestScope);
   }
 }

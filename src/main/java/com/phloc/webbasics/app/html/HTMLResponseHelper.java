@@ -19,12 +19,11 @@ package com.phloc.webbasics.app.html;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.app.WebSettings;
 import com.phloc.webbasics.servlet.HTTPResponseHelper;
 
@@ -38,12 +37,11 @@ public final class HTMLResponseHelper
   private HTMLResponseHelper ()
   {}
 
-  public static void createHTMLResponse (@Nonnull final HttpServletRequest aHttpRequest,
-                                         @Nonnull final HttpServletResponse aHttpResponse,
+  public static void createHTMLResponse (@Nonnull final IRequestWebScope aRequestScope,
                                          @Nonnull final IHTMLProvider aHtmlProvider) throws ServletException
   {
     final HCHtml aHtml = aHtmlProvider.createHTML (WebSettings.getHTMLVersion ());
     final IMicroDocument aDoc = aHtml.getAsNode ();
-    HTTPResponseHelper.createResponse (aHttpRequest, aHttpResponse, aDoc, CMimeType.TEXT_HTML);
+    HTTPResponseHelper.createResponse (aRequestScope, aDoc, CMimeType.TEXT_HTML);
   }
 }

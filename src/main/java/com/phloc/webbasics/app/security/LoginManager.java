@@ -20,9 +20,6 @@ package com.phloc.webbasics.app.security;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +29,8 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.IScope;
+import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
@@ -54,21 +53,20 @@ public class LoginManager
   }
 
   @Nonnull
-  public final EContinue checkUserAndShowLogin (@Nonnull final HttpServletRequest aHttpRequest,
-                                                @Nonnull final HttpServletResponse aHttpResponse) throws ServletException
+  public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    final HttpSession aSession = aHttpRequest.getSession ();
-    String sSessionUserID = (String) aSession.getAttribute (SESSION_ATTR_USERID);
+    final ISessionWebScope aSession = WebScopeManager.getSessionScope ();
+    String sSessionUserID = aSession.getAttributeAsString (SESSION_ATTR_USERID);
     if (sSessionUserID == null)
     {
       // No use currently logged in -> start login
       boolean bLoginError = false;
-      if (Boolean.TRUE.equals (aSession.getAttribute (SESSION_ATTR_AUTHINPROGRESS)))
+      if (Boolean.TRUE.equals (aSession.getAttributeObject (SESSION_ATTR_AUTHINPROGRESS)))
       {
         // Login screen was already shown
         // -> Check request parameters
-        final String sUserID = aHttpRequest.getParameter (BasicLoginHTML.REQUEST_ATTR_USERID);
-        final String sPassword = aHttpRequest.getParameter (BasicLoginHTML.REQUEST_ATTR_PASSWORD);
+        final String sUserID = aRequestScope.getAttributeAsString (BasicLoginHTML.REQUEST_ATTR_USERID);
+        final String sPassword = aRequestScope.getAttributeAsString (BasicLoginHTML.REQUEST_ATTR_PASSWORD);
         if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword))
         {
           // Credentials are valid
@@ -90,7 +88,7 @@ public class LoginManager
       {
         // Show login screen
         aSession.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
-        HTMLResponseHelper.createHTMLResponse (aHttpRequest, aHttpResponse, createLoginScreen (bLoginError));
+        HTMLResponseHelper.createHTMLResponse (aRequestScope, createLoginScreen (bLoginError));
       }
     }
 
