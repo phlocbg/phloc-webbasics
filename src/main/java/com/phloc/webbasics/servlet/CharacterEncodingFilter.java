@@ -37,7 +37,7 @@ import com.phloc.commons.charset.CCharset;
  */
 public class CharacterEncodingFilter implements Filter
 {
-  private static final String s_sEncoding = CCharset.CHARSET_UTF_8;
+  public static final String ENCODING = CCharset.CHARSET_UTF_8;
 
   public void init (final FilterConfig aFilterConfig) throws ServletException
   {}
@@ -48,8 +48,8 @@ public class CharacterEncodingFilter implements Filter
   {
     // We need this for all form data etc.
     if (aRequest.getCharacterEncoding () == null)
-      aRequest.setCharacterEncoding (s_sEncoding);
-    aResponse.setCharacterEncoding (s_sEncoding);
+      aRequest.setCharacterEncoding (ENCODING);
+    aResponse.setCharacterEncoding (ENCODING);
     aChain.doFilter (aRequest, aResponse);
   }
 
