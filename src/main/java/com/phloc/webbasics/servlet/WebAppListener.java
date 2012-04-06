@@ -98,7 +98,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     WebScopeManager.onGlobalBegin (aSC);
 
     // Save real path!
-    WebFileIO.initBaseRealPath (aSC.getRealPath ("."));
+    WebFileIO.initBasePath (aSC.getRealPath ("."));
 
     // Set persistent ID provider: file based
     GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getRegistryFile ("persistent_id.dat")));
