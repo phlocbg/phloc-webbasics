@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScope;
@@ -36,7 +37,12 @@ import com.phloc.webbasics.app.html.HTMLCreationManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 
-public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
+/**
+ * Base servlet for the main application.
+ * 
+ * @author philip
+ */
+public class ApplicationServlet extends AbstractScopeAwareHttpServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ApplicationServlet.class);
 
@@ -45,6 +51,13 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
   public ApplicationServlet ()
   {
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
+  }
+
+  @OverrideOnDemand
+  @Nonnull
+  protected HTMLCreationManager createHTMLCreationManager ()
+  {
+    return new HTMLCreationManager ();
   }
 
   private void _run (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
@@ -65,7 +78,7 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
     try
     {
-      HTMLResponseHelper.createHTMLResponse (aRequestScope, new HTMLCreationManager ());
+      HTMLResponseHelper.createHTMLResponse (aRequestScope, createHTMLCreationManager ());
     }
     finally
     {
