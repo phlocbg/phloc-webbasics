@@ -37,7 +37,7 @@ public final class UserTest
   @Test
   public void testBasic ()
   {
-    final User aUser = new User ("id1", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY);
+    final User aUser = new User ("id1", "MyName", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY);
     assertEquals ("id1", aUser.getID ());
     assertEquals ("me@example.org", aUser.getEmailAddress ());
     assertEquals ("ABCDEF", aUser.getPasswordHash ());
@@ -49,7 +49,7 @@ public final class UserTest
   @Test
   public void testMicroConversion ()
   {
-    final User aUser = new User ("id1", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY);
+    final User aUser = new User ("id1", "MyName", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY);
 
     // To XML
     final IMicroElement aElement = MicroTypeConverter.convertToMicroElement (aUser, "user");

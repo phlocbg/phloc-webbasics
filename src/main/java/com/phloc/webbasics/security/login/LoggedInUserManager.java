@@ -117,10 +117,10 @@ public final class LoggedInUserManager extends GlobalSingleton
   }
 
   @Nonnull
-  public ELoginResult loginUser (@Nullable final String sEmailAddress, @Nullable final String sPlainTextPassword)
+  public ELoginResult loginUser (@Nullable final String sLoginName, @Nullable final String sPlainTextPassword)
   {
     // Try to resolve the user
-    final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sEmailAddress);
+    final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
     if (aUser == null)
       return ELoginResult.USER_NOT_EXISTING;
     final String sUserID = aUser.getID ();

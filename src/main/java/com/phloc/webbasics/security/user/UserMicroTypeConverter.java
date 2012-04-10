@@ -32,6 +32,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
 {
   private static final String ATTR_ID = "id";
   private static final String ATTR_DESIREDLOCALE = "desiredlocale";
+  private static final String ELEMENT_LOGINNAME = "loginname";
   private static final String ELEMENT_EMAILADDRESS = "emailaddress";
   private static final String ELEMENT_PASSWORDHASH = "passwordhash";
   private static final String ELEMENT_FIRSTNAME = "firstname";
@@ -45,6 +46,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final IUser aUser = (IUser) aObject;
     final IMicroElement eUser = new MicroElement (sNamespaceURI, sTagName);
     eUser.setAttribute (ATTR_ID, aUser.getID ());
+    eUser.appendElement (ELEMENT_LOGINNAME).appendText (aUser.getLoginName ());
     eUser.appendElement (ELEMENT_EMAILADDRESS).appendText (aUser.getEmailAddress ());
     eUser.appendElement (ELEMENT_PASSWORDHASH).appendText (aUser.getPasswordHash ());
     if (aUser.getFirstName () != null)
@@ -60,12 +62,13 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   public IUser convertToNative (@Nonnull final IMicroElement eUser)
   {
     final String sID = eUser.getAttribute (ATTR_ID);
+    final String sLoginName = MicroUtils.getChildTextContent (eUser, ELEMENT_LOGINNAME);
     final String sEmailAddress = MicroUtils.getChildTextContent (eUser, ELEMENT_EMAILADDRESS);
     final String sPasswordHash = MicroUtils.getChildTextContent (eUser, ELEMENT_PASSWORDHASH);
     final String sFirstName = MicroUtils.getChildTextContent (eUser, ELEMENT_FIRSTNAME);
     final String sLastName = MicroUtils.getChildTextContent (eUser, ELEMENT_LASTNAME);
     final String sDesiredLocale = eUser.getAttribute (ATTR_DESIREDLOCALE);
     final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.get (sDesiredLocale);
-    return new User (sID, sEmailAddress, sPasswordHash, sFirstName, sLastName, aDesiredLocale);
+    return new User (sID, sLoginName, sEmailAddress, sPasswordHash, sFirstName, sLastName, aDesiredLocale);
   }
 }
