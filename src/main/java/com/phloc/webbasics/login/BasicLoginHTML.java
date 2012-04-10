@@ -45,8 +45,6 @@ import com.phloc.webbasics.app.html.HTMLCreationManager;
 
 public class BasicLoginHTML extends HTMLCreationManager
 {
-  public static final String REQUEST_ATTR_USERID = "userid";
-  public static final String REQUEST_ATTR_PASSWORD = "password";
   protected static final ICSSClassProvider CSS_CLASS_LOGIN_APPLOGO = DefaultCSSClassProvider.create ("login_applogo");
   protected static final ICSSClassProvider CSS_CLASS_LOGIN_HEADER = DefaultCSSClassProvider.create ("login_appheader");
   protected static final ICSSClassProvider CSS_CLASS_LOGIN_ERRORMSG = DefaultCSSClassProvider.create ("login_errormsg");
@@ -85,11 +83,11 @@ public class BasicLoginHTML extends HTMLCreationManager
     final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (200), HCCol.star ()));
     HCRow aRow = aTable.addBodyRow ();
     aRow.addCell (EWebBasicsText.LOGIN_FIELD_USERNAME.getDisplayText (aDisplayLocale));
-    aRow.addCell (new HCEdit (REQUEST_ATTR_USERID));
+    aRow.addCell (new HCEdit (CLogin.REQUEST_ATTR_USERID));
 
     aRow = aTable.addBodyRow ();
     aRow.addCell (EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale));
-    aRow.addCell (new HCEditPassword (REQUEST_ATTR_PASSWORD));
+    aRow.addCell (new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD));
 
     // Submit button
     final AbstractHCCell aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());

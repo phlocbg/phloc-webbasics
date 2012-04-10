@@ -56,23 +56,23 @@ public class LoginManager
   @Nonnull
   public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    final ISessionWebScope aSession = WebScopeManager.getSessionScope ();
-    String sSessionUserID = aSession.getAttributeAsString (SESSION_ATTR_USERID);
+    final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope ();
+    String sSessionUserID = aSessionScope.getAttributeAsString (SESSION_ATTR_USERID);
     if (sSessionUserID == null)
     {
       // No use currently logged in -> start login
       boolean bLoginError = false;
-      if (Boolean.TRUE.equals (aSession.getAttributeObject (SESSION_ATTR_AUTHINPROGRESS)))
+      if (Boolean.TRUE.equals (aSessionScope.getAttributeObject (SESSION_ATTR_AUTHINPROGRESS)))
       {
         // Login screen was already shown
         // -> Check request parameters
-        final String sUserID = aRequestScope.getAttributeAsString (BasicLoginHTML.REQUEST_ATTR_USERID);
-        final String sPassword = aRequestScope.getAttributeAsString (BasicLoginHTML.REQUEST_ATTR_PASSWORD);
+        final String sUserID = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
+        final String sPassword = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
         if (AccessManager.getInstance ().areUserEmailAndPasswordValid (sUserID, sPassword))
         {
           // Credentials are valid
-          aSession.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
-          aSession.setAttribute (SESSION_ATTR_USERID, sUserID);
+          aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
+          aSessionScope.setAttribute (SESSION_ATTR_USERID, sUserID);
           sSessionUserID = sUserID;
           s_aLogger.info ("User '" + sUserID + "' logged in!");
         }
@@ -88,7 +88,7 @@ public class LoginManager
       if (sSessionUserID == null)
       {
         // Show login screen
-        aSession.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
+        aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
         HTMLResponseHelper.createHTMLResponse (aRequestScope, createLoginScreen (bLoginError));
       }
     }

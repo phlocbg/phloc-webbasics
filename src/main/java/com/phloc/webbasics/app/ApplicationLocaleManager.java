@@ -17,7 +17,6 @@
  */
 package com.phloc.webbasics.app;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 
 /**
@@ -83,7 +83,7 @@ public final class ApplicationLocaleManager
   @ReturnsMutableCopy
   public static List <Locale> getAllAvailableLocales ()
   {
-    return new ArrayList <Locale> (s_aAppLocales);
+    return ContainerHelper.newList (s_aAppLocales);
   }
 
   /**
