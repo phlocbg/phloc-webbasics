@@ -59,13 +59,23 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   {}
 
   /**
-   * init
+   * before init
    * 
    * @param aSC
    *        ServletContext
    */
   @OverrideOnDemand
   protected void onContextInitialized (@Nonnull final ServletContext aSC)
+  {}
+
+  /**
+   * after init
+   * 
+   * @param aSC
+   *        ServletContext
+   */
+  @OverrideOnDemand
+  protected void afterContextInitialized (@Nonnull final ServletContext aSC)
   {}
 
   public final void contextInitialized (@Nonnull final ServletContextEvent aSCE)
@@ -116,10 +126,12 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     }
 
     // Set persistent ID provider: file based
-    GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getRegistryFile ("persistent_id.dat")));
+    GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("persistent_id.dat")));
 
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
+
+    afterContextInitialized (aSC);
   }
 
   public final void contextDestroyed (@Nonnull final ServletContextEvent aSCE)

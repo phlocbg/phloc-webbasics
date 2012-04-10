@@ -47,7 +47,6 @@ public final class WebFileIO
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
   private static final IFileOperationManager s_aFOM = new FileOperationManager (new LoggingFileOperationCallback ());
 
-  private static final String WEBINF_REGISTRY = "WEB-INF/registry/";
   private static String s_sBasePath;
 
   private WebFileIO ()
@@ -114,17 +113,5 @@ public final class WebFileIO
   public static IFileOperationManager getFileOpMgr ()
   {
     return s_aFOM;
-  }
-
-  @Nonnull
-  public static InputStream getRegistryInputStream (final String sPath)
-  {
-    return getInputStream (WEBINF_REGISTRY + sPath);
-  }
-
-  @Nonnull
-  public static File getRegistryFile (final String sPath)
-  {
-    return getFile (WEBINF_REGISTRY + sPath);
   }
 }
