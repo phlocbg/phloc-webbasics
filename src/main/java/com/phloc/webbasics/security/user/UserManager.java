@@ -37,7 +37,7 @@ import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.webbasics.app.AbstractManager;
+import com.phloc.webbasics.app.AbstractDAO;
 import com.phloc.webbasics.security.CSecurity;
 
 /**
@@ -46,7 +46,7 @@ import com.phloc.webbasics.security.CSecurity;
  * @author philip
  */
 @ThreadSafe
-public final class UserManager extends AbstractManager implements IUserManager
+public final class UserManager extends AbstractDAO implements IUserManager
 {
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
 

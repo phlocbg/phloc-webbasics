@@ -40,17 +40,17 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.webbasics.web.WebFileIO;
 
-public abstract class AbstractManager
+public abstract class AbstractDAO
 {
   public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractManager.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractDAO.class);
 
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final File m_aFile;
   private boolean m_bPendingChanges = false;
   private boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
 
-  protected AbstractManager (@Nonnull @Nonempty final String sFilename)
+  protected AbstractDAO (@Nonnull @Nonempty final String sFilename)
   {
     m_aFile = WebFileIO.getFile (sFilename);
     if (m_aFile.exists ())

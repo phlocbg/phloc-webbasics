@@ -33,7 +33,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
-import com.phloc.webbasics.app.AbstractManager;
+import com.phloc.webbasics.app.AbstractDAO;
 import com.phloc.webbasics.security.CSecurity;
 
 /**
@@ -42,7 +42,7 @@ import com.phloc.webbasics.security.CSecurity;
  * @author philip
  */
 @ThreadSafe
-public final class RoleManager extends AbstractManager implements IRoleManager
+public final class RoleManager extends AbstractDAO implements IRoleManager
 {
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 

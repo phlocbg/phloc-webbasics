@@ -35,7 +35,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
-import com.phloc.webbasics.app.AbstractManager;
+import com.phloc.webbasics.app.AbstractDAO;
 import com.phloc.webbasics.security.CSecurity;
 import com.phloc.webbasics.security.role.IRoleManager;
 import com.phloc.webbasics.security.user.IUserManager;
@@ -46,7 +46,7 @@ import com.phloc.webbasics.security.user.IUserManager;
  * @author philip
  */
 @ThreadSafe
-public final class UserGroupManager extends AbstractManager implements IUserGroupManager
+public final class UserGroupManager extends AbstractDAO implements IUserGroupManager
 {
   private final IUserManager m_aUserMgr;
   private final IRoleManager m_aRoleMgr;
