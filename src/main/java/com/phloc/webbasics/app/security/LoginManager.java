@@ -34,6 +34,7 @@ import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.security.AccessManager;
 
 /**
  * Handle the application login process.
@@ -67,7 +68,7 @@ public class LoginManager
         // -> Check request parameters
         final String sUserID = aRequestScope.getAttributeAsString (BasicLoginHTML.REQUEST_ATTR_USERID);
         final String sPassword = aRequestScope.getAttributeAsString (BasicLoginHTML.REQUEST_ATTR_PASSWORD);
-        if (UserManager.getInstance ().areLoginCredentialsValid (sUserID, sPassword))
+        if (AccessManager.getInstance ().areUserEmailAndPasswordValid (sUserID, sPassword))
         {
           // Credentials are valid
           aSession.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
