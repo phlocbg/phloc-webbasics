@@ -17,8 +17,6 @@
  */
 package com.phloc.webbasics.servlet;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -33,13 +31,10 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
-import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
 import com.phloc.webbasics.web.WebFileIO;
 
 /**
@@ -58,12 +53,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
 
-  private final List <IApplicationStartupListenerSPI> m_aStartupListeners;
-
   public WebAppListener ()
-  {
-    m_aStartupListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationStartupListenerSPI.class));
-  }
+  {}
 
   /**
    * init
@@ -116,20 +107,6 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
     // Set persistent ID provider: file based
     GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getRegistryFile ("persistent_id.dat")));
-
-    // Invoke all startup listeners
-    for (final IApplicationStartupListenerSPI aStartupListener : m_aStartupListeners)
-      try
-      {
-        aStartupListener.onStartup ();
-        if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Successfully invoked startup listener " + aStartupListener);
-      }
-      catch (final Throwable t)
-      {
-        s_aLogger.error ("Failed to invoke onStartup on " + aStartupListener, t);
-        throw new IllegalStateException ("Failed to invoke onStartup on " + aStartupListener, t);
-      }
 
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
