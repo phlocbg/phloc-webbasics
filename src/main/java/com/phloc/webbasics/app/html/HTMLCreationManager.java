@@ -43,8 +43,8 @@ import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
 import com.phloc.html.resource.css.CSSExternal;
 import com.phloc.html.resource.js.JSExternal;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.ApplicationRequestManager;
+import com.phloc.webbasics.app.LinkUtils;
 
 /**
  * Main class for creating HTML output
