@@ -26,34 +26,43 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.login.LoginManager;
+import com.phloc.webbasics.security.login.LoggedInUserManager;
 
 /**
  * Handles the log-out of a user. Can be called with a user context and without.
  * 
  * @author philip
  */
-public final class LogoutServlet extends AbstractScopeAwareHttpServlet
+public class LogoutServlet extends AbstractScopeAwareHttpServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LogoutServlet.class);
 
   public LogoutServlet ()
   {}
 
+  @OverrideOnDemand
+  @Nonnull
+  protected ISimpleURL getRedirectURL ()
+  {
+    return LinkUtils.getServletURL ("/");
+  }
+
   private void _run (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     // Remember the current user ID
-    final String sUserID = LoginManager.getCurrentUserID ();
+    final String sUserID = LoggedInUserManager.getInstance ().getCurrentUserID ();
 
     // Perform the main logout
-    if (LoginManager.logout ().isChanged ())
+    if (LoggedInUserManager.getInstance ().logoutCurrentUser ().isChanged ())
       s_aLogger.info ("User '" + sUserID + "' logged out!");
 
     // Go home
-    aHttpResponse.sendRedirect (LinkUtils.getServletURL ("/").getAsString ());
+    aHttpResponse.sendRedirect (getRedirectURL ().getAsString ());
   }
 
   @Override
