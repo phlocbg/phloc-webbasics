@@ -34,16 +34,19 @@ public final class CSecurity
 
   // Default users
   public static final String USER_ADMINISTRATOR_ID = "admin";
+  public static final String USER_ADMINISTRATOR_LOGIN = "Admin";
   public static final String USER_ADMINISTRATOR_EMAIL = "admin@phloc.com";
   public static final String USER_ADMINISTRATOR_NAME = "Administrator";
   public static final String USER_ADMINISTRATOR_PASSWORD = "password";
 
   public static final String USER_USER_ID = "user";
+  public static final String USER_USER_LOGIN = "User";
   public static final String USER_USER_EMAIL = "user@phloc.com";
   public static final String USER_USER_NAME = "User";
   public static final String USER_USER_PASSWORD = "user";
 
   public static final String USER_GUEST_ID = "guest";
+  public static final String USER_GUEST_LOGIN = "Guest";
   public static final String USER_GUEST_EMAIL = "guest@phloc.com";
   public static final String USER_GUEST_NAME = "Guest";
   public static final String USER_GUEST_PASSWORD = "guest";

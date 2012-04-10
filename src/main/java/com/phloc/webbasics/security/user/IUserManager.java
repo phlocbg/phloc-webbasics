@@ -37,10 +37,11 @@ public interface IUserManager
   /**
    * Create a new user.
    * 
+   * @param sLoginName
+   *        Login name of the user. May neither be <code>null</code> nor
+   *        empty.This login name must be unique over all existing users.
    * @param sEmailAddress
-   *        The email address, to be used as the login name. May neither be
-   *        <code>null</code> nor empty. This email address must be unique over
-   *        all existing users.
+   *        The email address. May neither be <code>null</code> nor empty.
    * @param sPlainTextPassword
    *        The plain text password to be used. May neither be <code>null</code>
    *        nor empty.
@@ -54,7 +55,8 @@ public interface IUserManager
    *         email address is already present.
    */
   @Nullable
-  IUser createNewUser (@Nonnull @Nonempty String sEmailAddress,
+  IUser createNewUser (@Nonnull @Nonempty String sLoginName,
+                       @Nonnull @Nonempty String sEmailAddress,
                        @Nonnull @Nonempty String sPlainTextPassword,
                        @Nullable String sFirstName,
                        @Nullable String sLastName,
@@ -125,12 +127,12 @@ public interface IUserManager
   /**
    * Get the user with the specified email address
    * 
-   * @param sEmailAddress
+   * @param sLoginName
    *        The email address to be checked. May be <code>null</code>.
    * @return <code>null</code> if no such user exists
    */
   @Nullable
-  IUser getUserOfEmailAddress (@Nullable String sEmailAddress);
+  IUser getUserOfLoginName (@Nullable String sLoginName);
 
   /**
    * @return A non-<code>null</code> collection of all contained users

@@ -34,7 +34,14 @@ import com.phloc.commons.name.IHasDisplayName;
 public interface IUser extends IHasID <String>, IHasDisplayName
 {
   /**
-   * @return The email address of the user. Also the login name.
+   * @return The login name of the user.
+   */
+  @Nonnull
+  @Nonempty
+  String getLoginName ();
+
+  /**
+   * @return The email address of the user.
    */
   @Nonnull
   @Nonempty

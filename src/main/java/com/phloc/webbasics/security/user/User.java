@@ -40,6 +40,7 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class User implements IUser
 {
   private final String m_sID;
+  private final String m_sLoginName;
   private final String m_sEmailAddress;
   private final String m_sPasswordHash;
   private String m_sFirstName;
@@ -49,6 +50,8 @@ public final class User implements IUser
   /**
    * Create a new user
    * 
+   * @param sLoginName
+   *        Login name of the user. May neither be <code>null</code> nor empty.
    * @param sEmailAddress
    *        Email address of the user. May neither be <code>null</code> nor
    *        empty.
@@ -62,13 +65,15 @@ public final class User implements IUser
    * @param aDesiredLocale
    *        The desired locale. May be <code>null</code>.
    */
-  public User (@Nonnull @Nonempty final String sEmailAddress,
+  public User (@Nonnull @Nonempty final String sLoginName,
+               @Nonnull @Nonempty final String sEmailAddress,
                @Nonnull @Nonempty final String sPasswordHash,
                @Nullable final String sFirstName,
                @Nullable final String sLastName,
                @Nullable final Locale aDesiredLocale)
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
+          sLoginName,
           sEmailAddress,
           sPasswordHash,
           sFirstName,
@@ -81,6 +86,8 @@ public final class User implements IUser
    * 
    * @param sID
    *        user ID
+   * @param sLoginName
+   *        Login name of the user. May neither be <code>null</code> nor empty.
    * @param sEmailAddress
    *        Email address of the user. May neither be <code>null</code> nor
    *        empty.
@@ -95,6 +102,7 @@ public final class User implements IUser
    *        The desired locale. May be <code>null</code>.
    */
   User (@Nonnull @Nonempty final String sID,
+        @Nonnull @Nonempty final String sLoginName,
         @Nonnull @Nonempty final String sEmailAddress,
         @Nonnull @Nonempty final String sPasswordHash,
         @Nullable final String sFirstName,
@@ -103,11 +111,14 @@ public final class User implements IUser
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
+    if (StringHelper.hasNoText (sLoginName))
+      throw new IllegalArgumentException ("loginName");
     if (StringHelper.hasNoText (sEmailAddress))
       throw new IllegalArgumentException ("emailAddress");
     if (StringHelper.hasNoText (sPasswordHash))
       throw new IllegalArgumentException ("passwordHash");
     m_sID = sID;
+    m_sLoginName = sLoginName;
     m_sEmailAddress = sEmailAddress;
     m_sPasswordHash = sPasswordHash;
     m_sFirstName = sFirstName;
@@ -120,6 +131,13 @@ public final class User implements IUser
   public String getID ()
   {
     return m_sID;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getLoginName ()
+  {
+    return m_sLoginName;
   }
 
   @Nonnull
@@ -208,6 +226,7 @@ public final class User implements IUser
   public String toString ()
   {
     return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .append ("loginName", m_sLoginName)
                                        .append ("emailAddress", m_sEmailAddress)
                                        .append ("passwordHash", m_sPasswordHash)
                                        .append ("firstName", m_sFirstName)

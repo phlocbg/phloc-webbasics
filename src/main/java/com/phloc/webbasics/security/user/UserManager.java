@@ -61,18 +61,21 @@ public final class UserManager extends AbstractDAO implements IUserManager
   protected EChange onInit ()
   {
     _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,
+                        CSecurity.USER_ADMINISTRATOR_LOGIN,
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
                         CSecurity.USER_ADMINISTRATOR_NAME,
                         null,
                         null));
     _addUser (new User (CSecurity.USER_USER_ID,
+                        CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
                         CSecurity.USER_USER_NAME,
                         null,
                         null));
     _addUser (new User (CSecurity.USER_GUEST_ID,
+                        CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
                         CSecurity.USER_GUEST_NAME,
@@ -110,7 +113,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
   }
 
   @Nullable
-  public IUser createNewUser (@Nonnull @Nonempty final String sEmailAddress,
+  public IUser createNewUser (@Nonnull @Nonempty final String sLoginName,
+                              @Nonnull @Nonempty final String sEmailAddress,
                               @Nonnull @Nonempty final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
@@ -121,14 +125,15 @@ public final class UserManager extends AbstractDAO implements IUserManager
     if (StringHelper.hasNoText (sPlainTextPassword))
       throw new IllegalArgumentException ("plainTextPassword");
 
-    if (getUserOfEmailAddress (sEmailAddress) != null)
+    if (getUserOfLoginName (sEmailAddress) != null)
     {
       // Another user with this email address already exists
       return null;
     }
 
     // Create user
-    final User aUser = new User (sEmailAddress,
+    final User aUser = new User (sLoginName,
+                                 sEmailAddress,
                                  createUserPasswordHash (sPlainTextPassword),
                                  sFirstName,
                                  sLastName,
@@ -188,16 +193,16 @@ public final class UserManager extends AbstractDAO implements IUserManager
   }
 
   @Nullable
-  public IUser getUserOfEmailAddress (@Nullable final String sEmailAddress)
+  public IUser getUserOfLoginName (@Nullable final String sLoginName)
   {
-    if (StringHelper.hasNoText (sEmailAddress))
+    if (StringHelper.hasNoText (sLoginName))
       return null;
 
     m_aRWLock.readLock ().lock ();
     try
     {
       for (final User aUser : m_aUsers.values ())
-        if (aUser.getEmailAddress ().equals (sEmailAddress))
+        if (aUser.getLoginName ().equals (sLoginName))
           return aUser;
       return null;
     }

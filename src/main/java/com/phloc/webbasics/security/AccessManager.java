@@ -71,13 +71,19 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   // User API
 
   @Nonnull
-  public IUser createNewUser (@Nonnull @Nonempty final String sEmailAddress,
+  public IUser createNewUser (@Nonnull @Nonempty final String sLoginName,
+                              @Nonnull @Nonempty final String sEmailAddress,
                               @Nonnull @Nonempty final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale)
   {
-    return m_aUserMgr.createNewUser (sEmailAddress, sPlainTextPassword, sFirstName, sLastName, aDesiredLocale);
+    return m_aUserMgr.createNewUser (sLoginName,
+                                     sEmailAddress,
+                                     sPlainTextPassword,
+                                     sFirstName,
+                                     sLastName,
+                                     aDesiredLocale);
   }
 
   /**
@@ -109,9 +115,9 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   }
 
   @Nullable
-  public IUser getUserOfEmailAddress (@Nullable final String sEmailAddress)
+  public IUser getUserOfLoginName (@Nullable final String sEmailAddress)
   {
-    return m_aUserMgr.getUserOfEmailAddress (sEmailAddress);
+    return m_aUserMgr.getUserOfLoginName (sEmailAddress);
   }
 
   @Nonnull
@@ -149,7 +155,7 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   public boolean areUserEmailAndPasswordValid (@Nullable final String sEmailAddress,
                                                @Nullable final String sPlainTextPassword)
   {
-    final IUser aUser = getUserOfEmailAddress (sEmailAddress);
+    final IUser aUser = getUserOfLoginName (sEmailAddress);
     return aUser == null ? false : m_aUserMgr.areUserIDAndPasswordValid (aUser.getID (), sPlainTextPassword);
   }
 
