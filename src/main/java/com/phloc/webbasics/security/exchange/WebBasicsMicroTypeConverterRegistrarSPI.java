@@ -30,7 +30,7 @@ import com.phloc.webbasics.security.usergroup.UserGroup;
 import com.phloc.webbasics.security.usergroup.UserGroupMicroTypeConverter;
 
 @IsSPIImplementation
-public final class WebGUIMicroTypeConverterRegistrarSPI implements IMicroTypeConverterRegistrarSPI
+public final class WebBasicsMicroTypeConverterRegistrarSPI implements IMicroTypeConverterRegistrarSPI
 {
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {
