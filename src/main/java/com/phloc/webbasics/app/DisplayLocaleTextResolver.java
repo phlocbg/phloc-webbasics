@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.ui;
+package com.phloc.webbasics.app;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +24,6 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.webbasics.app.ApplicationRequestManager;
 
 /**
  * Resolves the current display locale of the application and passes the request

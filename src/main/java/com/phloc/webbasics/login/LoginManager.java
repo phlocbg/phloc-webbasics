@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.security;
+package com.phloc.webbasics.login;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

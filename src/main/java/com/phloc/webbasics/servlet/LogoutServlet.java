@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.security.LoginManager;
+import com.phloc.webbasics.login.LoginManager;
 
 /**
  * Handles the log-out of a user. Can be called with a user context and without.
