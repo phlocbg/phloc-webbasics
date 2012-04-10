@@ -35,7 +35,7 @@ import com.phloc.commons.charset.CCharset;
  * 
  * @author philip
  */
-public class CharacterEncodingFilter implements Filter
+public final class CharacterEncodingFilter implements Filter
 {
   public static final String ENCODING = CCharset.CHARSET_UTF_8;
 

@@ -24,8 +24,8 @@ import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.webbasics.app.WebSettings;
-import com.phloc.webbasics.servlet.HTTPResponseHelper;
+import com.phloc.webbasics.app.ApplicationWebSettings;
+import com.phloc.webbasics.web.HTTPResponseHelper;
 
 /**
  * Some HTTP utility methods
@@ -40,7 +40,7 @@ public final class HTMLResponseHelper
   public static void createHTMLResponse (@Nonnull final IRequestWebScope aRequestScope,
                                          @Nonnull final IHTMLProvider aHtmlProvider) throws ServletException
   {
-    final HCHtml aHtml = aHtmlProvider.createHTML (WebSettings.getHTMLVersion ());
+    final HCHtml aHtml = aHtmlProvider.createHTML (ApplicationWebSettings.getHTMLVersion ());
     final IMicroDocument aDoc = aHtml.getAsNode ();
     HTTPResponseHelper.createResponse (aRequestScope, aDoc, CMimeType.TEXT_HTML);
   }

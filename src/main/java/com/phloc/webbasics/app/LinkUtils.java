@@ -150,7 +150,7 @@ public final class LinkUtils
   {
     if (sMenuItemID == null)
       throw new NullPointerException ("menu item id");
-    return new SimpleURL ().add (RequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
+    return new SimpleURL ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
 
   @Nonnull

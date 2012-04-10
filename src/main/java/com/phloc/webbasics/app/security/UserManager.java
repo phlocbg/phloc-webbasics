@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.microdom.reader.XMLMapHandler;
-import com.phloc.webbasics.servlet.WebFileIO;
+import com.phloc.webbasics.web.WebFileIO;
 
 /**
  * Application user manager.

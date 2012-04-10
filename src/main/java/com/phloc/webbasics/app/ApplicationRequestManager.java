@@ -42,7 +42,7 @@ import com.phloc.webbasics.app.menu.MenuTree;
  * 
  * @author philip
  */
-public final class RequestManager
+public final class ApplicationRequestManager
 {
   public static final String REQUEST_PARAMETER_MENUITEM = "item";
   private static final String REQUEST_VALUE_MENUITEM = "$item";
@@ -50,7 +50,7 @@ public final class RequestManager
   public static final String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
   private static final String REQUEST_VALUE_DISPLAY_LOCALE = "$displaylocale";
 
-  private RequestManager ()
+  private ApplicationRequestManager ()
   {}
 
   /**
@@ -164,7 +164,7 @@ public final class RequestManager
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = WebLocaleManager.getDefaultLocale ();
+    final Locale aDefaultLocale = ApplicationLocaleManager.getDefaultLocale ();
     if (aDefaultLocale == null)
       throw new IllegalStateException ("No application default locale is specified!");
     return aDefaultLocale;

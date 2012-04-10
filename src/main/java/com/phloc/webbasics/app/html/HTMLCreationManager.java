@@ -44,7 +44,7 @@ import com.phloc.html.meta.MetaElement;
 import com.phloc.html.resource.css.CSSExternal;
 import com.phloc.html.resource.js.JSExternal;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.RequestManager;
+import com.phloc.webbasics.app.ApplicationRequestManager;
 
 /**
  * Main class for creating HTML output
@@ -140,7 +140,7 @@ public class HTMLCreationManager implements IHTMLProvider
   public final HCHtml createHTML (@Nonnull final EHTMLVersion eVersion)
   {
     final HCHtml aHtml = createHCHtml (eVersion);
-    final Locale aDisplayLocale = RequestManager.getRequestDisplayLocale ();
+    final Locale aDisplayLocale = ApplicationRequestManager.getRequestDisplayLocale ();
 
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();

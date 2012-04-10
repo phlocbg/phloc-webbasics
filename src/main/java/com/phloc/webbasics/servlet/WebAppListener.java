@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -39,6 +40,7 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
+import com.phloc.webbasics.web.WebFileIO;
 
 /**
  * This class is intended to handle the initial application startup and the
@@ -63,7 +65,17 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     m_aStartupListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationStartupListenerSPI.class));
   }
 
-  public void contextInitialized (@Nonnull final ServletContextEvent aSCE)
+  /**
+   * init
+   * 
+   * @param aSC
+   *        ServletContext
+   */
+  @OverrideOnDemand
+  protected void onContextInitialized (@Nonnull final ServletContext aSC)
+  {}
+
+  public final void contextInitialized (@Nonnull final ServletContextEvent aSCE)
   {
     final ServletContext aSC = aSCE.getServletContext ();
 
@@ -94,6 +106,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
+    onContextInitialized (aSC);
+
     // begin global context
     WebScopeManager.onGlobalBegin (aSC);
 
@@ -121,19 +135,19 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
   }
 
-  public void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
+  public final void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
   {
     // Shutdown global scope
     WebScopeManager.onGlobalEnd ();
   }
 
-  public void sessionCreated (@Nonnull final HttpSessionEvent aSE)
+  public final void sessionCreated (@Nonnull final HttpSessionEvent aSE)
   {
     // Create the SessionScope
     WebScopeManager.onSessionBegin (aSE.getSession ());
   }
 
-  public void sessionDestroyed (@Nonnull final HttpSessionEvent aSE)
+  public final void sessionDestroyed (@Nonnull final HttpSessionEvent aSE)
   {
     // Destroy the SessionScope
     WebScopeManager.onSessionEnd (aSE.getSession ());

@@ -21,11 +21,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.html.EHTMLVersion;
 
-public final class WebSettings
+public final class ApplicationWebSettings
 {
   private static EHTMLVersion s_eHTMLVersion = EHTMLVersion.DEFAULT;
 
-  private WebSettings ()
+  private ApplicationWebSettings ()
   {}
 
   @Nonnull

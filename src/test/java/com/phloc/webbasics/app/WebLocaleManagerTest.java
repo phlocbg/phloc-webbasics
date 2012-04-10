@@ -28,7 +28,7 @@ import org.junit.Test;
 import com.phloc.commons.locale.LocaleCache;
 
 /**
- * Test class for class {@link WebLocaleManager}.
+ * Test class for class {@link ApplicationLocaleManager}.
  * 
  * @author philip
  */
@@ -37,15 +37,15 @@ public final class WebLocaleManagerTest
   @BeforeClass
   public static void init ()
   {
-    WebLocaleManager.registerLocale (LocaleCache.get ("de", "AT"));
+    ApplicationLocaleManager.registerLocale (LocaleCache.get ("de", "AT"));
   }
 
   @Test
   public void testIsSupportedLocale ()
   {
-    assertTrue (WebLocaleManager.isSupportedLocale (LocaleCache.get ("de", "AT")));
-    assertFalse (WebLocaleManager.isSupportedLocale (LocaleCache.get ("de")));
-    assertFalse (WebLocaleManager.isSupportedLocale (null));
-    assertFalse (WebLocaleManager.isSupportedLocale (Locale.CANADA));
+    assertTrue (ApplicationLocaleManager.isSupportedLocale (LocaleCache.get ("de", "AT")));
+    assertFalse (ApplicationLocaleManager.isSupportedLocale (LocaleCache.get ("de")));
+    assertFalse (ApplicationLocaleManager.isSupportedLocale (null));
+    assertFalse (ApplicationLocaleManager.isSupportedLocale (Locale.CANADA));
   }
 }

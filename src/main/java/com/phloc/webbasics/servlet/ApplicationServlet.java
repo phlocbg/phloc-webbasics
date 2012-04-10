@@ -31,7 +31,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
-import com.phloc.webbasics.app.RequestManager;
+import com.phloc.webbasics.app.ApplicationRequestManager;
 import com.phloc.webbasics.app.html.HTMLCreationManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
@@ -50,7 +50,7 @@ public final class ApplicationServlet extends AbstractScopeAwareHttpServlet
   private void _run (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
     // Run default request initialization
-    RequestManager.onRequestBegin (aRequestScope);
+    ApplicationRequestManager.onRequestBegin (aRequestScope);
 
     // Invoke all "request begin" listener
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)

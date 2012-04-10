@@ -24,7 +24,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.webbasics.app.RequestManager;
+import com.phloc.webbasics.app.ApplicationRequestManager;
 
 /**
  * Resolves the current display locale of the application and passes the request
@@ -52,7 +52,7 @@ public final class DisplayLocaleTextResolver
   public static String getText (@Nonnull final Enum <? extends IPredefinedLocaleTextProvider> aEnum,
                                 @Nonnull final ITextProvider aTP)
   {
-    return DefaultTextResolver.getText (aEnum, aTP, RequestManager.getRequestDisplayLocale ());
+    return DefaultTextResolver.getText (aEnum, aTP, ApplicationRequestManager.getRequestDisplayLocale ());
   }
 
   /**
@@ -75,6 +75,6 @@ public final class DisplayLocaleTextResolver
                                         @Nonnull final ITextProvider aTP,
                                         @Nonnull final Object [] aArgs)
   {
-    return DefaultTextResolver.getTextWithArgs (aEnum, aTP, RequestManager.getRequestDisplayLocale (), aArgs);
+    return DefaultTextResolver.getTextWithArgs (aEnum, aTP, ApplicationRequestManager.getRequestDisplayLocale (), aArgs);
   }
 }

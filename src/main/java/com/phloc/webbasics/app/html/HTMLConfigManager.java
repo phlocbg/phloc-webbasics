@@ -32,7 +32,7 @@ import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.reader.XMLListHandler;
 import com.phloc.commons.microdom.reader.XMLMapHandler;
-import com.phloc.webbasics.servlet.WebFileIO;
+import com.phloc.webbasics.web.WebFileIO;
 
 /**
  * This class holds the central configuration settings.
