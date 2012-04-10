@@ -33,6 +33,7 @@ import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.web.WebFileIO;
@@ -49,6 +50,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public static final String INIT_PARAMETER_TRACE = "trace";
   public static final String INIT_PARAMETER_DEBUG = "debug";
   public static final String INIT_PARAMETER_PRODUCTION = "production";
+  public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
 
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
@@ -102,8 +104,16 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     // begin global context
     WebScopeManager.onGlobalBegin (aSC);
 
-    // Save real path!
-    WebFileIO.initBasePath (aSC.getRealPath ("."));
+    // Get base path!
+    {
+      String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
+      if (StringHelper.hasNoText (sBasePath))
+      {
+        s_aLogger.info ("No init-parameter '" + INIT_PARAMETER_STORAGE_PATH + "' found!");
+        sBasePath = aSC.getRealPath (".");
+      }
+      WebFileIO.initBasePath (sBasePath);
+    }
 
     // Set persistent ID provider: file based
     GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getRegistryFile ("persistent_id.dat")));

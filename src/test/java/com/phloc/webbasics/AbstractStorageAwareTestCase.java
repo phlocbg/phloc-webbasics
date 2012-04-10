@@ -27,6 +27,6 @@ public abstract class AbstractStorageAwareTestCase extends AbstractWebScopeAware
   static
   {
     // Init the base path once
-    WebFileIO.initBasePath (new File ("target/junit").getAbsolutePath ());
+    WebFileIO.initBasePath (new File ("target/junit"));
   }
 }

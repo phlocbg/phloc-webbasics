@@ -58,6 +58,11 @@ public final class WebFileIO
     return s_sBasePath != null;
   }
 
+  public static void initBasePath (@Nonnull final File aBasePath)
+  {
+    initBasePath (aBasePath.getAbsolutePath ());
+  }
+
   public static void initBasePath (@Nonnull @Nonempty final String sBasePath)
   {
     if (StringHelper.hasNoText (sBasePath))
