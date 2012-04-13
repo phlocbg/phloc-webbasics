@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.css.DefaultCSSClassProvider;
 import com.phloc.css.ICSSClassProvider;
@@ -53,7 +54,7 @@ import com.phloc.webbasics.app.LinkUtils;
  */
 public class HTMLCreationManager implements IHTMLProvider
 {
-  private static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
+  public static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
   public HTMLCreationManager ()
   {}
@@ -116,6 +117,7 @@ public class HTMLCreationManager implements IHTMLProvider
 
   @OverrideOnDemand
   @Nonnull
+  @ReturnsMutableCopy
   protected List <String> getAllAreaIDs ()
   {
     return LayoutManager.getAllAreaIDs ();
@@ -129,8 +131,8 @@ public class HTMLCreationManager implements IHTMLProvider
     return LayoutManager.getContentOfArea (sAreaID, aDisplayLocale);
   }
 
-  @Nonnull
   @OverrideOnDemand
+  @Nonnull
   protected HCHtml createHCHtml (@Nonnull final EHTMLVersion eVersion)
   {
     return new HCHtml (eVersion);

@@ -22,6 +22,11 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
   <entry date="2012-04-13" category="tech" action="add">
     <change>
+      <text locale="en">Added custom exception handler in InternalErrorHandler</text>
+    </change>
+  </entry>
+  <entry date="2012-04-13" category="tech" action="add">
+    <change>
       <text locale="en">Made login screen more customizable</text>
     </change>
   </entry>

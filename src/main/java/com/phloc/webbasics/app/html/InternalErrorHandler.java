@@ -17,12 +17,18 @@
  */
 package com.phloc.webbasics.app.html;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.callback.IExceptionHandler;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.StackTraceHelper;
 import com.phloc.css.CCSS;
@@ -43,11 +49,40 @@ import com.phloc.html.hc.htmlext.HCUtils;
 public final class InternalErrorHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (InternalErrorHandler.class);
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private static IExceptionHandler <Throwable> s_aCustomExceptionHandler;
 
   private InternalErrorHandler ()
   {}
 
-  public static void handleInternalError (final IHCElementWithChildren <?> aParent, final Throwable t)
+  @Nullable
+  public static IExceptionHandler <Throwable> getCustomExceptionHandler ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aCustomExceptionHandler;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setCustomExceptionHandler (@Nullable final IExceptionHandler <Throwable> aCustomExceptionHandler)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aCustomExceptionHandler = aCustomExceptionHandler;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public static void handleInternalError (@Nonnull final IHCElementWithChildren <?> aParent, @Nonnull final Throwable t)
   {
     // Log the error, to ensure the data is persisted!
     s_aLogger.error ("handleInternalError", t);
@@ -75,5 +110,10 @@ public final class InternalErrorHandler
       if (StackTraceHelper.containsUnitTestElement (t.getStackTrace ()))
         throw new Error ("Error executing unit test", t);
     }
+
+    // Invoke custom exception handler (if present)
+    final IExceptionHandler <Throwable> aCustomExceptionHandler = getCustomExceptionHandler ();
+    if (aCustomExceptionHandler != null)
+      aCustomExceptionHandler.onException (t);
   }
 }
