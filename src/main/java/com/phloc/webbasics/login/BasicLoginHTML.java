@@ -17,15 +17,12 @@
  */
 package com.phloc.webbasics.login;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
@@ -40,14 +37,15 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.html.HTMLCreationManager;
+import com.phloc.webbasics.app.html.LayoutHTMLProvider;
 
-public class BasicLoginHTML extends HTMLCreationManager
+public class BasicLoginHTML extends LayoutHTMLProvider
 {
   private final boolean m_bLoginError;
 
   public BasicLoginHTML (final boolean bLoginError)
   {
+    super (CLogin.LAYOUT_AREAID_LOGIN);
     m_bLoginError = bLoginError;
   }
 
@@ -114,15 +112,6 @@ public class BasicLoginHTML extends HTMLCreationManager
     aCell.addChild (new HCButton_Submit (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale)));
 
     return ret;
-  }
-
-  @Override
-  @Nonnull
-  @ReturnsMutableCopy
-  protected final List <String> getAllAreaIDs ()
-  {
-    // Name of the area ID is used in CSS!
-    return ContainerHelper.newList (CLogin.LAYOUT_AREAID_LOGIN);
   }
 
   @Override

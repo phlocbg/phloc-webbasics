@@ -33,7 +33,7 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.ApplicationRequestManager;
-import com.phloc.webbasics.app.html.HTMLCreationManager;
+import com.phloc.webbasics.app.html.LayoutHTMLProvider;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 
@@ -55,9 +55,9 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
   @OverrideOnDemand
   @Nonnull
-  protected HTMLCreationManager createHTMLCreationManager ()
+  protected LayoutHTMLProvider createHTMLCreationManager ()
   {
-    return new HTMLCreationManager ();
+    return new LayoutHTMLProvider ();
   }
 
   private void _run (@Nonnull final IRequestWebScope aRequestScope) throws ServletException

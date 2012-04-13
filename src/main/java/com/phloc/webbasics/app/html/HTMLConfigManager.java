@@ -37,10 +37,11 @@ import com.phloc.webbasics.web.WebFileIO;
 /**
  * This class holds the central configuration settings.
  * <ul>
- * <li>All page CSS files</li>
- * <li>All page CSS files (IE specific)</li>
- * <li>All page JavaScript files</li>
- * <li>All meta tags</li>
+ * <li>All global page CSS files</li>
+ * <li>All global page CSS files (print only)</li>
+ * <li>All global page CSS files (IE specific)</li>
+ * <li>All global page JavaScript files</li>
+ * <li>All global meta tags</li>
  * </ul>
  * 
  * @author philip
@@ -71,31 +72,31 @@ public final class HTMLConfigManager
     InputStream aIS = WebFileIO.getInputStream (FILENAME_CSS_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllCSSFiles).isFailure ())
-        s_aLogger.warn ("Failed to read css.xml");
+        s_aLogger.error ("Failed to read " + FILENAME_CSS_XML);
 
     // read all print CSS files
     aIS = WebFileIO.getInputStream (FILENAME_CSS_PRINT_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllCSSPrintFiles).isFailure ())
-        s_aLogger.warn ("Failed to read css_print.xml");
+        s_aLogger.error ("Failed to read " + FILENAME_CSS_PRINT_XML);
 
     // read all IE CSS files
     aIS = WebFileIO.getInputStream (FILENAME_CSS_IE_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllCSSIEFiles).isFailure ())
-        s_aLogger.warn ("Failed to read css_ie.xml");
+        s_aLogger.error ("Failed to read " + FILENAME_CSS_IE_XML);
 
     // read all JS files
     aIS = WebFileIO.getInputStream (FILENAME_JS_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllJSFiles).isFailure ())
-        s_aLogger.warn ("Failed to read js.xml");
+        s_aLogger.error ("Failed to read " + FILENAME_JS_XML);
 
     // read all static MetaTags
     aIS = WebFileIO.getInputStream (FILENAME_METATAGS_XML);
     if (aIS != null)
       if (XMLMapHandler.readMap (aIS, m_aAllMetaTags).isFailure ())
-        s_aLogger.warn ("Failed to read metatags.xml");
+        s_aLogger.error ("Failed to read " + FILENAME_METATAGS_XML);
   }
 
   @Nonnull

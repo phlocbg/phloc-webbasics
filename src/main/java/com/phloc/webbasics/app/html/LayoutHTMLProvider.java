@@ -25,9 +25,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.css.DefaultCSSClassProvider;
 import com.phloc.css.ICSSClassProvider;
 import com.phloc.css.media.CSSMediaList;
@@ -52,12 +54,30 @@ import com.phloc.webbasics.app.LinkUtils;
  * 
  * @author philip
  */
-public class HTMLCreationManager implements IHTMLProvider
+public class LayoutHTMLProvider implements IHTMLProvider
 {
   public static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
-  public HTMLCreationManager ()
-  {}
+  private final List <String> m_aLayoutAreaIDs;
+
+  public LayoutHTMLProvider ()
+  {
+    this (LayoutManager.getAllAreaIDs ());
+  }
+
+  public LayoutHTMLProvider (@Nonnull @Nonempty final String sLayoutAreaID)
+  {
+    if (StringHelper.hasNoText (sLayoutAreaID))
+      throw new IllegalArgumentException ("layoutAreaID");
+    m_aLayoutAreaIDs = ContainerHelper.newList (sLayoutAreaID);
+  }
+
+  public LayoutHTMLProvider (@Nonnull @Nonempty final List <String> aLayoutAreaIDs)
+  {
+    if (ContainerHelper.isEmpty (aLayoutAreaIDs))
+      throw new IllegalArgumentException ("layoutAreaIDs");
+    m_aLayoutAreaIDs = ContainerHelper.newList (aLayoutAreaIDs);
+  }
 
   /**
    * @param aHtml
@@ -116,14 +136,6 @@ public class HTMLCreationManager implements IHTMLProvider
   }
 
   @OverrideOnDemand
-  @Nonnull
-  @ReturnsMutableCopy
-  protected List <String> getAllAreaIDs ()
-  {
-    return LayoutManager.getAllAreaIDs ();
-  }
-
-  @OverrideOnDemand
   @Nullable
   protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale)
   {
@@ -149,7 +161,7 @@ public class HTMLCreationManager implements IHTMLProvider
 
     prepareBodyBeforeAreas (aHtml);
 
-    for (final String sAreaID : getAllAreaIDs ())
+    for (final String sAreaID : m_aLayoutAreaIDs)
     {
       final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID));
       try
