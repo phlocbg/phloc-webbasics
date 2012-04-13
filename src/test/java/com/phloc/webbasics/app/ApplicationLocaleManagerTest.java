@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.app;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -32,7 +33,7 @@ import com.phloc.commons.locale.LocaleCache;
  * 
  * @author philip
  */
-public final class WebLocaleManagerTest
+public final class ApplicationLocaleManagerTest
 {
   @BeforeClass
   public static void init ()
@@ -43,6 +44,7 @@ public final class WebLocaleManagerTest
   @Test
   public void testIsSupportedLocale ()
   {
+    assertEquals (LocaleCache.get ("de", "AT"), ApplicationLocaleManager.getDefaultLocale ());
     assertTrue (ApplicationLocaleManager.isSupportedLocale (LocaleCache.get ("de", "AT")));
     assertFalse (ApplicationLocaleManager.isSupportedLocale (LocaleCache.get ("de")));
     assertFalse (ApplicationLocaleManager.isSupportedLocale (null));
