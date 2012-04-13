@@ -49,7 +49,7 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
   @Nonnull
   protected ISimpleURL getRedirectURL ()
   {
-    return LinkUtils.getServletURL ("/");
+    return LinkUtils.getHomeLink ();
   }
 
   private void _run (@Nonnull final HttpServletResponse aHttpResponse) throws IOException

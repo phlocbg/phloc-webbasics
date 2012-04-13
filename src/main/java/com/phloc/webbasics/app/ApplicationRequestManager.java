@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.scopes.IScope;
 import com.phloc.scopes.web.domain.IRequestWebScope;
@@ -87,6 +88,19 @@ public final class ApplicationRequestManager
   public static String getRequestMenuItemID ()
   {
     return WebScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
+  }
+
+  /**
+   * @return The current menu item. If none was selected, that the default menu
+   *         item is returned.
+   */
+  @Nonnull
+  public static String getCurrentMenuItemID ()
+  {
+    String sMenuItemID = getRequestMenuItemID ();
+    if (StringHelper.hasNoText (sMenuItemID))
+      sMenuItemID = MenuTree.getInstance ().getDefaultMenuItem ().getID ();
+    return sMenuItemID;
   }
 
   /**

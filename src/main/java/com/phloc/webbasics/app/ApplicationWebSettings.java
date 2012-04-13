@@ -18,9 +18,16 @@
 package com.phloc.webbasics.app;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.html.EHTMLVersion;
 
+/**
+ * Contains settings for the HTML output.
+ * 
+ * @author philip
+ */
+@NotThreadSafe
 public final class ApplicationWebSettings
 {
   private static EHTMLVersion s_eHTMLVersion = EHTMLVersion.DEFAULT;

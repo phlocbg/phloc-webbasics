@@ -116,23 +116,21 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
     // Add configured CSS
     for (final String sCSSFile : HTMLConfigManager.getInstance ().getAllCSSFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSFile)));
+      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSFile)));
 
     // Add configured print-only CSS
     for (final String sCSSPrintFile : HTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSPrintFile),
+      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSPrintFile),
                                      new CSSMediaList (ECSSMedium.PRINT),
                                      null));
 
     // Add configured IE-only CSS
     for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.makeAbsoluteSimpleURL (sCSSIEFile),
-                                     null,
-                                     ConditionalComment.createForIE ()));
+      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSIEFile), null, ConditionalComment.createForIE ()));
 
     // Add all configured JS
     for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
-      aHead.addJS (new JSExternal (LinkUtils.makeAbsoluteSimpleURL (sJSFile)));
+      aHead.addJS (new JSExternal (LinkUtils.getURLWithContext (sJSFile)));
   }
 
   @OverrideOnDemand

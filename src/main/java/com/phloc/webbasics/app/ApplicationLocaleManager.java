@@ -49,7 +49,17 @@ public final class ApplicationLocaleManager
   {
     if (aLocale == null)
       throw new NullPointerException ("locale");
-    return EChange.valueOf (s_aAppLocales.add (aLocale));
+
+    if (!s_aAppLocales.add (aLocale))
+      return EChange.UNCHANGED;
+
+    if (s_aAppLocales.size () == 1)
+    {
+      // If it is the first locale, automatically make it the default locale
+      // until further notice!
+      setDefaultLocale (aLocale);
+    }
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -68,9 +78,10 @@ public final class ApplicationLocaleManager
   }
 
   /**
-   * @return The application default locale.
+   * @return The application default locale. May be <code>null</code> if non is
+   *         defined
    */
-  @Nonnull
+  @Nullable
   public static Locale getDefaultLocale ()
   {
     return s_aDefaultLocale;

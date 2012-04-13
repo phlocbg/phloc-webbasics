@@ -123,7 +123,7 @@ public abstract class AbstractPageWithHelp extends AbstractPage
   @OverrideOnDemand
   protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale)
   {
-    return new ReadonlySimpleURL (LinkUtils.getContextAwareURI ("help/" +
+    return new ReadonlySimpleURL (LinkUtils.getURIWithContext ("help/" +
                                                                 getID () +
                                                                 "?locale=" +
                                                                 aDisplayLocale.toString ()));

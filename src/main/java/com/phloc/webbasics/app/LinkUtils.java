@@ -28,13 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.EURLProtocol;
-import com.phloc.commons.url.ISimpleURL;
-import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.commons.url.URLUtils;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.app.menu.MenuTree;
 
 /**
  * Misc utilities to create link URLs.
@@ -49,44 +45,9 @@ public final class LinkUtils
   private LinkUtils ()
   {}
 
-  /**
-   * Get the path to the passed servlet by prepending the context path.
-   * 
-   * @param sServletPath
-   *        The servlet path to use. <b>Must</b> start with a "/" character!
-   * @return The context path + the servlet path.<br>
-   *         <code>/context/<i>servletpath</i></code>
-   */
   @Nonnull
-  public static ISimpleURL getServletURL (@Nonnull final String sServletPath)
+  private static String _getURIWithContext (@Nonnull final String sHRef)
   {
-    return getServletURL (sServletPath, null);
-  }
-
-  @Nonnull
-  public static ISimpleURL getServletURL (@Nonnull final String sServletPath,
-                                          @Nullable final Map <String, String> aParams)
-  {
-    final String sURL = URLUtils.getURLString (getContextAwareURI (sServletPath), aParams, null, null);
-    return new ReadonlySimpleURL (sURL);
-  }
-
-  /**
-   * Prefix the passed href with the relative context path in case the passed
-   * href has no protocol yet.
-   * 
-   * @param sHRef
-   *        The href to be extended.
-   * @return Either the original href if already absolute or
-   *         <code>/webapp-context/sHRef</code> otherwise.
-   */
-  @Nonnull
-  public static String getContextAwareURI (@Nonnull final String sHRef)
-  {
-    // If known protocol, keep it
-    if (EURLProtocol.hasKnownProtocol (sHRef))
-      return sHRef;
-
     final String sContextPath = WebScopeManager.getGlobalScope ().getContextPath ();
     if (StringHelper.hasText (sContextPath) && sHRef.startsWith (sContextPath))
     {
@@ -102,42 +63,107 @@ public final class LinkUtils
   }
 
   /**
+   * Prefix the passed href with the relative context path in case the passed
+   * href has no protocol yet.
+   * 
+   * @param sHRef
+   *        The href to be extended.
+   * @return Either the original href if already absolute or
+   *         <code>/webapp-context/<i>href</i></code> otherwise.
+   */
+  @Nonnull
+  public static String getURIWithContext (@Nonnull final String sHRef)
+  {
+    // If known protocol, keep it
+    if (EURLProtocol.hasKnownProtocol (sHRef))
+      return sHRef;
+
+    return _getURIWithContext (sHRef);
+  }
+
+  /**
+   * Prefix the passed href with the relative context path in case the passed
+   * href has no protocol yet.
+   * 
+   * @param sHRef
+   *        The href to be extended.
+   * @return Either the original href if already absolute or
+   *         <code>/webapp-context/<i>href</i></code> otherwise.
+   */
+  @Nonnull
+  public static SimpleURL getURLWithContext (@Nonnull final String sHRef)
+  {
+    return getURLWithContext (sHRef, null);
+  }
+
+  /**
+   * Prefix the passed href with the relative context path in case the passed
+   * href has no protocol yet.
+   * 
+   * @param sHRef
+   *        The href to be extended.
+   * @param aParams
+   *        optional parameter map
+   * @return Either the original href if already absolute or
+   *         <code>/webapp-context/<i>href</i></code> otherwise.
+   */
+  @Nonnull
+  public static SimpleURL getURLWithContext (@Nonnull final String sHRef, @Nullable final Map <String, String> aParams)
+  {
+    return new SimpleURL (getURIWithContext (sHRef), aParams);
+  }
+
+  /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
    * 
-   * @param aHRef
+   * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
-   *         <code>http://servername:8123/webapp-context/sHRef</code> otherwise.
+   *         <code>http://servername:8123/webapp-context/<i>href</i></code>
+   *         otherwise.
    */
   @Nonnull
-  public static StringBuilder getFullyQualifiedExternalURI (@Nonnull final CharSequence aHRef)
+  public static String getURIWithServerAndContext (@Nonnull final String sHRef)
   {
     // If known protocol, keep it
-    if (EURLProtocol.hasKnownProtocol (aHRef))
-      return new StringBuilder (aHRef);
+    if (EURLProtocol.hasKnownProtocol (sHRef))
+      return sHRef;
 
-    // Always prefix with context path!
-    final StringBuilder aSB = new StringBuilder (WebScopeManager.getRequestScope ().getFullContextPath ());
-    if (!StringHelper.startsWith (aHRef, '/'))
-      aSB.append ('/');
-    return aSB.append (aHRef);
+    return WebScopeManager.getRequestScope ().getFullServerPath () + _getURIWithContext (sHRef);
   }
 
+  /**
+   * Prefix the passed href with the absolute server + context path in case the
+   * passed href has no protocol yet.
+   * 
+   * @param sHRef
+   *        The href to be extended.
+   * @return Either the original href if already absolute or
+   *         <code>http://servername:8123/webapp-context/<i>href</i></code>
+   *         otherwise.
+   */
   @Nonnull
-  public static ISimpleURL makeAbsoluteSimpleURL (@Nonnull final String sURL)
+  public static SimpleURL getURLWithServerAndContext (@Nonnull final String sHRef)
   {
-    return new ReadonlySimpleURL (makeAbsoluteURL (sURL));
+    return getURLWithServerAndContext (sHRef, null);
   }
 
+  /**
+   * Prefix the passed href with the absolute server + context path in case the
+   * passed href has no protocol yet.
+   * 
+   * @param sHRef
+   *        The href to be extended.
+   * @return Either the original href if already absolute or
+   *         <code>http://servername:8123/webapp-context/<i>href</i></code>
+   *         otherwise.
+   */
   @Nonnull
-  public static String makeAbsoluteURL (@Nullable final String sURL)
+  public static SimpleURL getURLWithServerAndContext (@Nonnull final String sHRef,
+                                                      @Nullable final Map <String, String> aParams)
   {
-    if (EURLProtocol.hasKnownProtocol (sURL))
-      return sURL;
-
-    // Full server and context path + URL
-    return WebScopeManager.getRequestScope ().getFullContextPath () + sURL;
+    return new SimpleURL (getURIWithServerAndContext (sHRef), aParams);
   }
 
   /**
@@ -156,32 +182,29 @@ public final class LinkUtils
   }
 
   @Nonnull
-  public static ISimpleURL getHomeLink ()
+  public static SimpleURL getHomeLink ()
   {
     return new SimpleURL (WebScopeManager.getRequestScope ().getFullContextPath ());
   }
 
   @Nonnull
-  public static ISimpleURL getSelfHref ()
+  public static SimpleURL getSelfHref ()
   {
     return getSelfHref (null);
   }
 
   @Nonnull
-  public static ISimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
+  public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    String sMenuItemID = ApplicationRequestManager.getRequestMenuItemID ();
-    if (StringHelper.hasNoText (sMenuItemID))
-      sMenuItemID = MenuTree.getInstance ().getDefaultMenuItem ().getID ();
-    return getLinkToMenuItem (sMenuItemID).addAll (aParams);
+    return getLinkToMenuItem (ApplicationRequestManager.getCurrentMenuItemID ()).addAll (aParams);
   }
 
   @Nonnull
   public static SMap getDefaultParams ()
   {
-    String sMenuItemID = ApplicationRequestManager.getRequestMenuItemID ();
-    if (StringHelper.hasNoText (sMenuItemID))
-      sMenuItemID = MenuTree.getInstance ().getDefaultMenuItem ().getID ();
-    return new SMap ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
+    return new SMap ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM,
+                            ApplicationRequestManager.getCurrentMenuItemID ())
+                      .add (ApplicationRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
+                            ApplicationRequestManager.getRequestDisplayLocale ().toString ());
   }
 }

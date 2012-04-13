@@ -32,6 +32,7 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.impl.ConstantTextProvider;
+import com.phloc.scopes.nonweb.domain.IRequestScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
@@ -42,6 +43,7 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
 public abstract class AbstractPage implements IPage
 {
   private static final Map <String, IPage> ALL_IDS = new HashMap <String, IPage> ();
+
   private final String m_sID;
   private IHasDisplayText m_aName;
 
@@ -121,6 +123,12 @@ public abstract class AbstractPage implements IPage
     return m_aName.getDisplayText (aContentLocale);
   }
 
+  @Nonnull
+  private static IRequestScope _getScope ()
+  {
+    return WebScopeManager.getRequestScope ();
+  }
+
   /**
    * Get the value of the request parameter with the given name.
    * 
@@ -129,9 +137,9 @@ public abstract class AbstractPage implements IPage
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected final String getAttr (final String sName)
+  protected final String getAttr (@Nullable final String sName)
   {
-    return WebScopeManager.getRequestScope ().getAttributeAsString (sName);
+    return _getScope ().getAttributeAsString (sName);
   }
 
   /**
@@ -146,9 +154,40 @@ public abstract class AbstractPage implements IPage
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected final int getIntAttr (final String sName, final int nDefault)
+  protected final int getIntAttr (@Nullable final String sName, final int nDefault)
   {
-    return WebScopeManager.getRequestScope ().getAttributeAsInt (sName, nDefault);
+    return _getScope ().getAttributeAsInt (sName, nDefault);
+  }
+
+  /**
+   * Get the value of the request parameter with the given name as a double.
+   * 
+   * @param sName
+   *        The attribute values.
+   * @param dDefault
+   *        The default value to be returned if either no such parameter is
+   *        present or if the parameter value cannot be safely converted to an
+   *        integer value.
+   * @return The integer representation of the parameter value or the default
+   *         value.
+   */
+  protected final double getDoubleAttr (@Nullable final String sName, final double dDefault)
+  {
+    return _getScope ().getAttributeAsDouble (sName, dDefault);
+  }
+
+  /**
+   * Get the value of the request parameter with the given name casted to the
+   * specified data type.
+   * 
+   * @param sName
+   *        Request parameter name
+   * @return The value of the passed request parameter
+   */
+  @Nullable
+  protected final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
+  {
+    return _getScope ().getCastedAttribute (sName);
   }
 
   /**
