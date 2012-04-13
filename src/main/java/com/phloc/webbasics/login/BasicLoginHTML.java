@@ -24,10 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.css.DefaultCSSClassProvider;
-import com.phloc.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCButton_Submit;
@@ -45,10 +44,6 @@ import com.phloc.webbasics.app.html.HTMLCreationManager;
 
 public class BasicLoginHTML extends HTMLCreationManager
 {
-  protected static final ICSSClassProvider CSS_CLASS_LOGIN_APPLOGO = DefaultCSSClassProvider.create ("login_applogo");
-  protected static final ICSSClassProvider CSS_CLASS_LOGIN_HEADER = DefaultCSSClassProvider.create ("login_appheader");
-  protected static final ICSSClassProvider CSS_CLASS_LOGIN_ERRORMSG = DefaultCSSClassProvider.create ("login_errormsg");
-
   private final boolean m_bLoginError;
 
   public BasicLoginHTML (final boolean bLoginError)
@@ -56,30 +51,52 @@ public class BasicLoginHTML extends HTMLCreationManager
     m_bLoginError = bLoginError;
   }
 
+  /**
+   * @return <code>true</code> if the login screen is shown for an error,
+   *         <code>false</code> if the login screen is shown for the first time.
+   */
   public final boolean showLoginError ()
   {
     return m_bLoginError;
   }
 
+  /**
+   * @return <code>true</code> if the header text should be shown,
+   *         <code>false</code> to not show the header text
+   */
   @OverrideOnDemand
   protected boolean showHeaderText ()
   {
     return false;
   }
 
+  /**
+   * Add additional rows. Called after username and password row are added but
+   * before the submit button is added.
+   * 
+   * @param aTable
+   *        The table to be modified.
+   */
   @OverrideOnDemand
-  protected IHCNode getLoginScreen (final Locale aDisplayLocale)
+  protected void customizeLoginFields (@Nonnull final HCTable aTable)
+  {}
+
+  @OverrideOnDemand
+  @Nullable
+  protected HCNodeList getLoginScreen (@Nonnull final Locale aDisplayLocale)
   {
     final HCNodeList ret = new HCNodeList ();
     final HCCenter aCenter = ret.addAndReturnChild (new HCCenter ());
     final HCForm aForm = aCenter.addAndReturnChild (new HCForm (new SimpleURL ()));
     aForm.setSubmitPressingEnter (true);
 
-    aForm.addChild (new HCDiv ().addClass (CSS_CLASS_LOGIN_APPLOGO));
+    aForm.addChild (new HCDiv ().addClass (CLogin.CSS_CLASS_LOGIN_APPLOGO));
     if (showHeaderText ())
-      aForm.addChild (new HCDiv (EWebBasicsText.LOGIN_HEADER.getDisplayText (aDisplayLocale)).addClass (CSS_CLASS_LOGIN_HEADER));
+      aForm.addChild (new HCDiv (EWebBasicsText.LOGIN_HEADER.getDisplayText (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_HEADER));
     if (m_bLoginError)
-      aForm.addChild (new HCDiv (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale)).addClass (CSS_CLASS_LOGIN_ERRORMSG));
+      aForm.addChild (new HCDiv (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_ERRORMSG));
+
+    // User name and password table
     final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (200), HCCol.star ()));
     HCRow aRow = aTable.addBodyRow ();
     aRow.addCell (EWebBasicsText.LOGIN_FIELD_USERNAME.getDisplayText (aDisplayLocale));
@@ -88,6 +105,9 @@ public class BasicLoginHTML extends HTMLCreationManager
     aRow = aTable.addBodyRow ();
     aRow.addCell (EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale));
     aRow.addCell (new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD));
+
+    // Customize
+    customizeLoginFields (aTable);
 
     // Submit button
     final AbstractHCCell aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());
@@ -98,10 +118,11 @@ public class BasicLoginHTML extends HTMLCreationManager
 
   @Override
   @Nonnull
+  @ReturnsMutableCopy
   protected final List <String> getAllAreaIDs ()
   {
     // Name of the area ID is used in CSS!
-    return ContainerHelper.newList ("login");
+    return ContainerHelper.newList (CLogin.LAYOUT_AREAID_LOGIN);
   }
 
   @Override
