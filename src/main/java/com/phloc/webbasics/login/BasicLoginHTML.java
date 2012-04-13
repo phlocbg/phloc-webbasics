@@ -36,6 +36,7 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;
 
@@ -69,14 +70,30 @@ public class BasicLoginHTML extends LayoutHTMLProvider
   }
 
   /**
+   * Define how label elements should look like
+   * 
+   * @param sText
+   *        Text to use
+   * @return The label node
+   */
+  @OverrideOnDemand
+  @Nonnull
+  protected IHCNode createLabelNode (@Nullable final String sText)
+  {
+    return new HCTextNode (sText);
+  }
+
+  /**
    * Add additional rows. Called after username and password row are added but
    * before the submit button is added.
    * 
    * @param aTable
    *        The table to be modified.
+   * @param aDisplayLocale
+   *        Display locale to use
    */
   @OverrideOnDemand
-  protected void customizeLoginFields (@Nonnull final HCTable aTable)
+  protected void customizeLoginFields (@Nonnull final HCTable aTable, @Nonnull final Locale aDisplayLocale)
   {}
 
   @OverrideOnDemand
@@ -97,15 +114,15 @@ public class BasicLoginHTML extends LayoutHTMLProvider
     // User name and password table
     final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (200), HCCol.star ()));
     HCRow aRow = aTable.addBodyRow ();
-    aRow.addCell (EWebBasicsText.LOGIN_FIELD_USERNAME.getDisplayText (aDisplayLocale));
+    aRow.addCell (createLabelNode (EWebBasicsText.LOGIN_FIELD_USERNAME.getDisplayText (aDisplayLocale)));
     aRow.addCell (new HCEdit (CLogin.REQUEST_ATTR_USERID));
 
     aRow = aTable.addBodyRow ();
-    aRow.addCell (EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale));
+    aRow.addCell (createLabelNode (EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale)));
     aRow.addCell (new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD));
 
     // Customize
-    customizeLoginFields (aTable);
+    customizeLoginFields (aTable, aDisplayLocale);
 
     // Submit button
     final AbstractHCCell aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());
