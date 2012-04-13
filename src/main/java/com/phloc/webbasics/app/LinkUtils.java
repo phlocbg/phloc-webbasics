@@ -30,9 +30,11 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.EURLProtocol;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
+import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webbasics.app.menu.MenuTree;
 
 /**
  * Misc utilities to create link URLs.
@@ -157,5 +159,29 @@ public final class LinkUtils
   public static ISimpleURL getHomeLink ()
   {
     return new SimpleURL (WebScopeManager.getRequestScope ().getFullContextPath ());
+  }
+
+  @Nonnull
+  public static ISimpleURL getSelfHref ()
+  {
+    return getSelfHref (null);
+  }
+
+  @Nonnull
+  public static ISimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
+  {
+    String sMenuItemID = ApplicationRequestManager.getRequestMenuItemID ();
+    if (StringHelper.hasNoText (sMenuItemID))
+      sMenuItemID = MenuTree.getInstance ().getDefaultMenuItem ().getID ();
+    return getLinkToMenuItem (sMenuItemID).addAll (aParams);
+  }
+
+  @Nonnull
+  public static SMap getDefaultParams ()
+  {
+    String sMenuItemID = ApplicationRequestManager.getRequestMenuItemID ();
+    if (StringHelper.hasNoText (sMenuItemID))
+      sMenuItemID = MenuTree.getInstance ().getDefaultMenuItem ().getID ();
+    return new SMap ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
 }
