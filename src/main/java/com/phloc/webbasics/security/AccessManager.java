@@ -70,7 +70,7 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
 
   // User API
 
-  @Nonnull
+  @Nullable
   public IUser createNewUser (@Nonnull @Nonempty final String sLoginName,
                               @Nonnull @Nonempty final String sEmailAddress,
                               @Nonnull @Nonempty final String sPlainTextPassword,
@@ -84,6 +84,24 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
                                      sFirstName,
                                      sLastName,
                                      aDesiredLocale);
+  }
+
+  @Nullable
+  public IUser createPredefinedUser (@Nonnull @Nonempty final String sID,
+                                     @Nonnull @Nonempty final String sLoginName,
+                                     @Nonnull @Nonempty final String sEmailAddress,
+                                     @Nonnull @Nonempty final String sPlainTextPassword,
+                                     @Nullable final String sFirstName,
+                                     @Nullable final String sLastName,
+                                     @Nullable final Locale aDesiredLocale)
+  {
+    return m_aUserMgr.createPredefinedUser (sID,
+                                            sLoginName,
+                                            sEmailAddress,
+                                            sPlainTextPassword,
+                                            sFirstName,
+                                            sLastName,
+                                            aDesiredLocale);
   }
 
   /**
@@ -165,6 +183,13 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName)
   {
     return m_aUserGroupMgr.createNewUserGroup (sName);
+  }
+
+  @Nonnull
+  public IUserGroup createPredefinedUserGroup (@Nonnull @Nonempty final String sID,
+                                               @Nonnull @Nonempty final String sName)
+  {
+    return m_aUserGroupMgr.createPredefinedUserGroup (sID, sName);
   }
 
   @Nonnull
@@ -253,6 +278,12 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   public IRole createNewRole (@Nonnull @Nonempty final String sName)
   {
     return m_aRoleMgr.createNewRole (sName);
+  }
+
+  @Nonnull
+  public IRole createPredefinedRole (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  {
+    return m_aRoleMgr.createPredefinedRole (sID, sName);
   }
 
   @Nonnull

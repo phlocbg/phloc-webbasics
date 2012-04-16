@@ -44,6 +44,18 @@ public interface IRoleManager
   IRole createNewRole (@Nonnull @Nonempty String sName);
 
   /**
+   * Create a predefined role.
+   * 
+   * @param sID
+   *        The ID of the new role
+   * @param sName
+   *        The name of the new role
+   * @return The created role and never <code>null</code>.
+   */
+  @Nonnull
+  IRole createPredefinedRole (@Nonnull @Nonempty String sID, @Nonnull @Nonempty String sName);
+
+  /**
    * Delete the role with the passed ID
    * 
    * @param sRoleID

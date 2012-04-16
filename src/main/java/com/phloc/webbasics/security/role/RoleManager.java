@@ -118,6 +118,26 @@ public final class RoleManager extends AbstractDAO implements IRoleManager
     return aRole;
   }
 
+  @Nonnull
+  public IRole createPredefinedRole (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  {
+    // Create role
+    final Role aRole = new Role (sID, sName);
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      // Store
+      _addRole (aRole);
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    return aRole;
+  }
+
   public boolean containsRoleWithID (@Nullable final String sRoleID)
   {
     m_aRWLock.readLock ().lock ();

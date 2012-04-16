@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2012-04-16" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed check on unique login name when creating a new user</text>
+    </change>
+  </entry>
+  <entry date="2012-04-16" category="api" action="add">
+    <change>
+      <text locale="en">Added possibility to create predefined roles, users and user groups</text>
+    </change>
+  </entry>
   <entry date="2012-04-16" category="api" action="add">
     <change>
       <text locale="en">Added possibility to avoid creating default roles, users and user groups</text>

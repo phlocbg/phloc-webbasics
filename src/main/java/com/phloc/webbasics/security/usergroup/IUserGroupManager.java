@@ -34,8 +34,7 @@ import com.phloc.commons.state.EChange;
 public interface IUserGroupManager
 {
   /**
-   * Create a new user group. The passed name must not be unique over all user
-   * names.
+   * Create a new user group.
    * 
    * @param sName
    *        The name of the user group to create. May neither be
@@ -44,6 +43,19 @@ public interface IUserGroupManager
    */
   @Nonnull
   IUserGroup createNewUserGroup (@Nonnull @Nonempty String sName);
+
+  /**
+   * Create a predefined user group.
+   * 
+   * @param sID
+   *        The ID to use
+   * @param sName
+   *        The name of the user group to create. May neither be
+   *        <code>null</code> nor empty.
+   * @return The created user group.
+   */
+  @Nonnull
+  IUserGroup createPredefinedUserGroup (@Nonnull @Nonempty String sID, @Nonnull @Nonempty String sName);
 
   /**
    * Delete the user group with the specified ID

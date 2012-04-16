@@ -27,6 +27,11 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
 import com.phloc.webbasics.app.page.IPage;
 
+/**
+ * Represents the menu tree
+ * 
+ * @author philip
+ */
 public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject>
 {
   private static final MenuTree s_aInstance = new MenuTree ();
@@ -64,7 +69,7 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
 
   public void createRootItem (@Nonnull final IPage aPage)
   {
-    _createChildItem (getRootItem (), new MenuItem (aPage.getID (), aPage));
+    createRootItem (aPage.getID (), aPage);
   }
 
   public void createItem (@Nonnull final String sParentID, @Nonnull final String sItemID, @Nonnull final IPage aPage)
@@ -74,7 +79,7 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
 
   public void createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
-    _createChildItem (getItemWithID (sParentID), new MenuItem (aPage.getID (), aPage));
+    createItem (sParentID, aPage.getID (), aPage);
   }
 
   public void setDefaultMenuItem (@Nullable final String sDefaultMenuItem)

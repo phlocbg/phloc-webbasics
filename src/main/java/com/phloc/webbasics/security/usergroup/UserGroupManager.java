@@ -150,6 +150,27 @@ public final class UserGroupManager extends AbstractDAO implements IUserGroupMan
     return aUserGroup;
   }
 
+  @Nonnull
+  public IUserGroup createPredefinedUserGroup (@Nonnull @Nonempty final String sID,
+                                               @Nonnull @Nonempty final String sName)
+  {
+    // Create user group
+    final UserGroup aUserGroup = new UserGroup (sID, sName);
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      // Store
+      _addUserGroup (aUserGroup);
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    return aUserGroup;
+  }
+
   public boolean containsUserGroupWithID (@Nullable final String sUserGroupID)
   {
     m_aRWLock.readLock ().lock ();

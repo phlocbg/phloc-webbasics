@@ -63,6 +63,37 @@ public interface IUserManager
                        @Nullable Locale aDesiredLocale);
 
   /**
+   * Create a predefined user.
+   * 
+   * @param sID
+   *        The ID to use
+   * @param sLoginName
+   *        Login name of the user. May neither be <code>null</code> nor empty.
+   *        This login name must be unique over all existing users.
+   * @param sEmailAddress
+   *        The email address. May neither be <code>null</code> nor empty.
+   * @param sPlainTextPassword
+   *        The plain text password to be used. May neither be <code>null</code>
+   *        nor empty.
+   * @param sFirstName
+   *        The users first name. May be <code>null</code>.
+   * @param sLastName
+   *        The users last name. May be <code>null</code>.
+   * @param aDesiredLocale
+   *        The users default locale. May be <code>null</code>.
+   * @return The created user or <code>null</code> if another user with the same
+   *         email address is already present.
+   */
+  @Nullable
+  IUser createPredefinedUser (@Nonnull @Nonempty String sID,
+                              @Nonnull @Nonempty String sLoginName,
+                              @Nonnull @Nonempty String sEmailAddress,
+                              @Nonnull @Nonempty String sPlainTextPassword,
+                              @Nullable String sFirstName,
+                              @Nullable String sLastName,
+                              @Nullable Locale aDesiredLocale);
+
+  /**
    * Delete the user with the specified ID.
    * 
    * @param sUserID

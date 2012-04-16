@@ -129,19 +129,61 @@ public final class UserManager extends AbstractDAO implements IUserManager
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale)
   {
-    if (StringHelper.hasNoText (sEmailAddress))
-      throw new IllegalArgumentException ("emailAddress");
+    if (StringHelper.hasNoText (sLoginName))
+      throw new IllegalArgumentException ("loginName");
     if (StringHelper.hasNoText (sPlainTextPassword))
       throw new IllegalArgumentException ("plainTextPassword");
 
-    if (getUserOfLoginName (sEmailAddress) != null)
+    if (getUserOfLoginName (sLoginName) != null)
     {
-      // Another user with this email address already exists
+      // Another user with this login name already exists
       return null;
     }
 
     // Create user
     final User aUser = new User (sLoginName,
+                                 sEmailAddress,
+                                 createUserPasswordHash (sPlainTextPassword),
+                                 sFirstName,
+                                 sLastName,
+                                 aDesiredLocale);
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      _addUser (aUser);
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    return aUser;
+  }
+
+  @Nullable
+  public IUser createPredefinedUser (@Nonnull @Nonempty final String sID,
+                                     @Nonnull @Nonempty final String sLoginName,
+                                     @Nonnull @Nonempty final String sEmailAddress,
+                                     @Nonnull @Nonempty final String sPlainTextPassword,
+                                     @Nullable final String sFirstName,
+                                     @Nullable final String sLastName,
+                                     @Nullable final Locale aDesiredLocale)
+  {
+    if (StringHelper.hasNoText (sLoginName))
+      throw new IllegalArgumentException ("loginName");
+    if (StringHelper.hasNoText (sPlainTextPassword))
+      throw new IllegalArgumentException ("plainTextPassword");
+
+    if (getUserOfLoginName (sLoginName) != null)
+    {
+      // Another user with this login name already exists
+      return null;
+    }
+
+    // Create user
+    final User aUser = new User (sID,
+                                 sLoginName,
                                  sEmailAddress,
                                  createUserPasswordHash (sPlainTextPassword),
                                  sFirstName,
