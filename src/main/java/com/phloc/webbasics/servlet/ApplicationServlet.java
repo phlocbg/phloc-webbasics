@@ -33,8 +33,9 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.ApplicationRequestManager;
-import com.phloc.webbasics.app.html.LayoutHTMLProvider;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
+import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.app.html.LayoutHTMLProvider;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 
 /**
@@ -53,17 +54,45 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
   }
 
+  /**
+   * Called before the request is handled
+   * 
+   * @param aRequestScope
+   *        The request scope
+   */
+  @OverrideOnDemand
+  protected void onRequestBegin (@Nonnull final IRequestWebScope aRequestScope)
+  {}
+
+  /**
+   * @param aRequestScope
+   *        The request scope
+   * @return The HTML provider that creates the content.
+   */
   @OverrideOnDemand
   @Nonnull
-  protected LayoutHTMLProvider createHTMLCreationManager ()
+  protected IHTMLProvider createHTMLProvider (@Nonnull final IRequestWebScope aRequestScope)
   {
     return new LayoutHTMLProvider ();
   }
 
+  /**
+   * Called after the request was handled
+   * 
+   * @param aRequestScope
+   *        The request scope
+   */
+  @OverrideOnDemand
+  protected void onRequestEnd (@Nonnull final IRequestWebScope aRequestScope)
+  {}
+
   private void _run (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    // Run default request initialization
+    // Run default request initialization (menu item and locale)
     ApplicationRequestManager.onRequestBegin (aRequestScope);
+
+    // Protected method invocation
+    onRequestBegin (aRequestScope);
 
     // Invoke all "request begin" listener
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)
@@ -78,7 +107,8 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
     try
     {
-      HTMLResponseHelper.createHTMLResponse (aRequestScope, createHTMLCreationManager ());
+      final IHTMLProvider aHTMLProvider = createHTMLProvider (aRequestScope);
+      HTMLResponseHelper.createHTMLResponse (aRequestScope, aHTMLProvider);
     }
     finally
     {
@@ -93,6 +123,9 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
           s_aLogger.error ("Failed to invoke onRequestEnd on " + aListener, t);
         }
     }
+
+    // Protected method invocation
+    onRequestEnd (aRequestScope);
   }
 
   @Override

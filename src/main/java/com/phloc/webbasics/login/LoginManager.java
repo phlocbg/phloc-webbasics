@@ -39,6 +39,13 @@ public class LoginManager
 {
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
+  /**
+   * Create the HTML code used to render the login screen
+   * 
+   * @param bLoginError
+   *        If <code>true</code> an error occurred in a previous login action
+   * @return Never <code>null</code>.
+   */
   @OverrideOnDemand
   protected IHTMLProvider createLoginScreen (final boolean bLoginError)
   {
