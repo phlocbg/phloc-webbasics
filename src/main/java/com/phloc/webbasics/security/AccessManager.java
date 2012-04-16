@@ -57,9 +57,9 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   @UsedViaReflection
   public AccessManager ()
   {
-    m_aUserMgr = new UserManager ();
-    m_aRoleMgr = new RoleManager ();
-    m_aUserGroupMgr = new UserGroupManager (m_aUserMgr, m_aRoleMgr);
+    m_aUserMgr = new UserManager ("security/users.xml");
+    m_aRoleMgr = new RoleManager ("security/roles.xml");
+    m_aUserGroupMgr = new UserGroupManager ("security/usergroups.xml", m_aUserMgr, m_aRoleMgr);
   }
 
   @Nonnull

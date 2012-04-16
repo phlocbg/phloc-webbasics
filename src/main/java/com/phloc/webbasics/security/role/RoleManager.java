@@ -44,11 +44,17 @@ import com.phloc.webbasics.security.CSecurity;
 @ThreadSafe
 public final class RoleManager extends AbstractDAO implements IRoleManager
 {
+  private static boolean CREATE_DEFAULTS = true;
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 
-  public RoleManager ()
+  public static void setCreateDefaults (final boolean bCreateDefaults)
   {
-    super ("security/roles.xml");
+    CREATE_DEFAULTS = bCreateDefaults;
+  }
+
+  public RoleManager (@Nonnull @Nonempty final String sFilename)
+  {
+    super (sFilename);
     initialRead ();
   }
 
@@ -56,6 +62,9 @@ public final class RoleManager extends AbstractDAO implements IRoleManager
   @Nonnull
   protected EChange onInit ()
   {
+    if (!CREATE_DEFAULTS)
+      return EChange.UNCHANGED;
+
     _addRole (new Role (CSecurity.ROLE_ADMINISTRATOR_ID, CSecurity.ROLE_ADMINISTRATOR_NAME));
     _addRole (new Role (CSecurity.ROLE_USER_ID, CSecurity.ROLE_USER_NAME));
     return EChange.CHANGED;
