@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -56,8 +55,7 @@ public class MenuItemDeterminatorCallback extends
   }
 
   @OverrideOnDemand
-  @OverridingMethodsMustInvokeSuper
-  protected void markItemAsShown (@Nonnull @Nonempty final String sMenuItemID)
+  protected void rememberMenuItemForDisplay (@Nonnull @Nonempty final String sMenuItemID)
   {
     m_aItems.add (sMenuItemID);
   }
@@ -95,10 +93,10 @@ public class MenuItemDeterminatorCallback extends
     }
 
     if (bShow)
-      markItemAsShown (aItem.getID ());
+      rememberMenuItemForDisplay (aItem.getID ());
     if (bAddAllOnThisLevel)
       for (final DefaultTreeItemWithID <String, IMenuObject> aSibling : aItem.getParent ().getChildren ())
-        markItemAsShown (aSibling.getID ());
+        rememberMenuItemForDisplay (aSibling.getID ());
     return EHierarchyCallbackReturn.CONTINUE;
   }
 
@@ -120,6 +118,9 @@ public class MenuItemDeterminatorCallback extends
   @ReturnsImmutableObject
   public static Set <String> getAllDisplayMenuItemIDs (@Nonnull final MenuItemDeterminatorCallback aDeterminator)
   {
+    if (aDeterminator == null)
+      throw new NullPointerException ("determinator");
+
     TreeWalkerDynamic.walkTree (MenuTree.getInstance (), aDeterminator);
     return aDeterminator.getAllItemIDs ();
   }

@@ -216,7 +216,7 @@ public abstract class AbstractPage implements IPage
    */
   @Nonnull
   @ReturnsMutableCopy
-  public static Map <String, IPage> getAllPages ()
+  public static Map <String, IPage> getAllPageIDs ()
   {
     return ContainerHelper.newMap (ALL_IDS);
   }
