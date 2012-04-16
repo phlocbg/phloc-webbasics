@@ -23,9 +23,6 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.web.domain.IRequestWebScope;
@@ -40,8 +37,6 @@ import com.phloc.webbasics.security.login.LoggedInUserManager;
  */
 public class LogoutServlet extends AbstractScopeAwareHttpServlet
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (LogoutServlet.class);
-
   public LogoutServlet ()
   {}
 
@@ -54,12 +49,8 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
 
   private void _run (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
-    // Remember the current user ID
-    final String sUserID = LoggedInUserManager.getInstance ().getCurrentUserID ();
-
     // Perform the main logout
-    if (LoggedInUserManager.getInstance ().logoutCurrentUser ().isChanged ())
-      s_aLogger.info ("User '" + sUserID + "' logged out!");
+    LoggedInUserManager.getInstance ().logoutCurrentUser ();
 
     // Go home
     aHttpResponse.sendRedirect (getRedirectURL ().getAsString ());
