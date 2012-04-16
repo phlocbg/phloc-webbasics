@@ -32,8 +32,11 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.impl.ConstantTextProvider;
+import com.phloc.html.hc.html.HCForm;
+import com.phloc.html.hc.html.HCForm_FileUpload;
 import com.phloc.scopes.nonweb.domain.IRequestScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webbasics.app.LinkUtils;
 
 /**
  * Abstract base implementation for {@link IPage}.
@@ -203,6 +206,18 @@ public abstract class AbstractPage implements IPage
   protected final boolean hasAttr (final String sName, final String sValue)
   {
     return EqualsUtils.nullSafeEquals (sValue, getAttr (sName));
+  }
+
+  @Nonnull
+  protected final HCForm createFormSelf ()
+  {
+    return new HCForm (LinkUtils.getSelfHref ());
+  }
+
+  @Nonnull
+  protected final HCForm createFormFileUploadSelf ()
+  {
+    return new HCForm_FileUpload (LinkUtils.getSelfHref ());
   }
 
   @Override
