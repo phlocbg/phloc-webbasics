@@ -31,6 +31,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 
 /**
  * This class handles the mapping of the area ID to a content provider.
@@ -76,7 +77,9 @@ public final class LayoutManager
   }
 
   @Nullable
-  public static IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale)
+  public static IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
+                                          @Nonnull final String sAreaID,
+                                          @Nonnull final Locale aDisplayLocale)
   {
     if (sAreaID == null)
       throw new NullPointerException ("areaID");
@@ -85,7 +88,7 @@ public final class LayoutManager
     try
     {
       final IAreaContentProvider aContentProvider = s_aContentProviders.get (sAreaID);
-      return aContentProvider == null ? null : aContentProvider.getContent (aDisplayLocale);
+      return aContentProvider == null ? null : aContentProvider.getContent (aRequestScope, aDisplayLocale);
     }
     finally
     {

@@ -46,6 +46,7 @@ import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
 import com.phloc.html.resource.css.CSSExternal;
 import com.phloc.html.resource.js.JSExternal;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.app.ApplicationRequestManager;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -135,10 +136,12 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
   @OverrideOnDemand
   @Nullable
-  protected IHCNode getContentOfArea (@Nonnull final String sAreaID, @Nonnull final Locale aDisplayLocale)
+  protected IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
+                                      @Nonnull final String sAreaID,
+                                      @Nonnull final Locale aDisplayLocale)
   {
     // By default the layout manager is used
-    return LayoutManager.getContentOfArea (sAreaID, aDisplayLocale);
+    return LayoutManager.getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
   }
 
   @OverrideOnDemand
@@ -149,7 +152,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
   }
 
   @Nonnull
-  public final HCHtml createHTML (@Nonnull final EHTMLVersion eVersion)
+  public final HCHtml createHTML (@Nonnull final IRequestWebScope aRequestScope, @Nonnull final EHTMLVersion eVersion)
   {
     final HCHtml aHtml = createHCHtml (eVersion);
     final Locale aDisplayLocale = ApplicationRequestManager.getRequestDisplayLocale ();
@@ -164,7 +167,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
       final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID));
       try
       {
-        aSpan.addChild (getContentOfArea (sAreaID, aDisplayLocale));
+        aSpan.addChild (getContentOfArea (aRequestScope, sAreaID, aDisplayLocale));
       }
       catch (final Throwable t)
       {

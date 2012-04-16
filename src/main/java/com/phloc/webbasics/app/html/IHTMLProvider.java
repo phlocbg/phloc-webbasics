@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 
 /**
  * Base interface for an HTML creator
@@ -30,5 +31,5 @@ import com.phloc.html.hc.html.HCHtml;
 public interface IHTMLProvider
 {
   @Nonnull
-  HCHtml createHTML (@Nonnull EHTMLVersion eVersion);
+  HCHtml createHTML (@Nonnull final IRequestWebScope aRequestScope, @Nonnull EHTMLVersion eVersion);
 }

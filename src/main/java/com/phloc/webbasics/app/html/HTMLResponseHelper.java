@@ -40,7 +40,7 @@ public final class HTMLResponseHelper
   public static void createHTMLResponse (@Nonnull final IRequestWebScope aRequestScope,
                                          @Nonnull final IHTMLProvider aHtmlProvider) throws ServletException
   {
-    final HCHtml aHtml = aHtmlProvider.createHTML (ApplicationWebSettings.getHTMLVersion ());
+    final HCHtml aHtml = aHtmlProvider.createHTML (aRequestScope, ApplicationWebSettings.getHTMLVersion ());
     final IMicroDocument aDoc = aHtml.getAsNode ();
     HTTPResponseHelper.createResponse (aRequestScope, aDoc, CMimeType.TEXT_HTML);
   }
