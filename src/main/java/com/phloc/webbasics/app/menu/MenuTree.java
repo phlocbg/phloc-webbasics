@@ -46,40 +46,50 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
     return s_aInstance;
   }
 
-  private static void _createChildItem (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aParentItem,
-                                        @Nonnull final IMenuObject aMenuObject)
+  @Nonnull
+  private static <T extends IMenuObject> T _createChildItem (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aParentItem,
+                                                             @Nonnull final T aMenuObject)
   {
     aParentItem.createChildItem (aMenuObject.getID (), aMenuObject);
+    return aMenuObject;
   }
 
-  public void createRootSeparator ()
+  @Nonnull
+  public IMenuSeparator createRootSeparator ()
   {
-    _createChildItem (getRootItem (), new MenuSeparator ());
+    return _createChildItem (getRootItem (), new MenuSeparator ());
   }
 
-  public void createSeparator (@Nonnull final String sParentID)
+  @Nonnull
+  public IMenuSeparator createSeparator (@Nonnull final String sParentID)
   {
-    _createChildItem (getItemWithID (sParentID), new MenuSeparator ());
+    return _createChildItem (getItemWithID (sParentID), new MenuSeparator ());
   }
 
-  public void createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
+  @Nonnull
+  public IMenuItem createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
   {
-    _createChildItem (getRootItem (), new MenuItem (sItemID, aPage));
+    return _createChildItem (getRootItem (), new MenuItem (sItemID, aPage));
   }
 
-  public void createRootItem (@Nonnull final IPage aPage)
+  @Nonnull
+  public IMenuItem createRootItem (@Nonnull final IPage aPage)
   {
-    createRootItem (aPage.getID (), aPage);
+    return createRootItem (aPage.getID (), aPage);
   }
 
-  public void createItem (@Nonnull final String sParentID, @Nonnull final String sItemID, @Nonnull final IPage aPage)
+  @Nonnull
+  public IMenuItem createItem (@Nonnull final String sParentID,
+                               @Nonnull final String sItemID,
+                               @Nonnull final IPage aPage)
   {
-    _createChildItem (getItemWithID (sParentID), new MenuItem (sItemID, aPage));
+    return _createChildItem (getItemWithID (sParentID), new MenuItem (sItemID, aPage));
   }
 
-  public void createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
+  @Nonnull
+  public IMenuItem createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
-    createItem (sParentID, aPage.getID (), aPage);
+    return createItem (sParentID, aPage.getID (), aPage);
   }
 
   public void setDefaultMenuItem (@Nullable final String sDefaultMenuItem)
@@ -97,6 +107,13 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
         return (IMenuItem) aDefaultMenuItem.getData ();
     }
     return null;
+  }
+
+  @Nullable
+  public IMenuObject getMenuObjectOfID (@Nullable final String sID)
+  {
+    final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = getItemWithID (sID);
+    return aTreeItem == null ? null : aTreeItem.getData ();
   }
 
   @Override

@@ -17,22 +17,9 @@
  */
 package com.phloc.webbasics.app.menu;
 
-import javax.annotation.Nullable;
-
 import com.phloc.commons.filter.IFilter;
-import com.phloc.commons.id.IHasID;
 
-/**
- * Marker interface for menu items.
- * 
- * @author philip
- */
-public interface IMenuObject extends IHasID <String>
+public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>
 {
-  @Nullable
-  IFilter <IMenuObject> getDisplayFilter ();
-
-  void setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
-
-  boolean matchesDisplayFilter ();
+  /* empty */
 }

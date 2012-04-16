@@ -18,8 +18,10 @@
 package com.phloc.webbasics.app.menu;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -32,6 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
 public abstract class AbstractMenuObject implements IMenuObject
 {
   private final String m_sID;
+  private IFilter <IMenuObject> m_aDisplayFilter;
 
   public AbstractMenuObject (@Nonnull @Nonempty final String sID)
   {
@@ -45,6 +48,22 @@ public abstract class AbstractMenuObject implements IMenuObject
   public final String getID ()
   {
     return m_sID;
+  }
+
+  @Nullable
+  public final IFilter <IMenuObject> getDisplayFilter ()
+  {
+    return m_aDisplayFilter;
+  }
+
+  public final void setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
+  {
+    m_aDisplayFilter = aDisplayFilter;
+  }
+
+  public final boolean matchesDisplayFilter ()
+  {
+    return m_aDisplayFilter == null || m_aDisplayFilter.matchesFilter (this);
   }
 
   @Override

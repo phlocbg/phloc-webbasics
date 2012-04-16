@@ -92,6 +92,13 @@ public class MenuItemDeterminatorCallback extends
       }
     }
 
+    // Check display filter
+    if (bShow || bAddAllOnThisLevel)
+    {
+      if (!aItem.getData ().matchesDisplayFilter ())
+        bShow = bAddAllOnThisLevel = false;
+    }
+
     if (bShow)
       rememberMenuItemForDisplay (aItem.getID ());
     if (bAddAllOnThisLevel)

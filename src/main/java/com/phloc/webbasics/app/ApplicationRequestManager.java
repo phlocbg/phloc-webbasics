@@ -65,7 +65,13 @@ public final class ApplicationRequestManager
   {
     // determine page from request and store in request
     final String sMenuItemID = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_MENUITEM);
-    aRequestScope.setAttribute (REQUEST_VALUE_MENUITEM, sMenuItemID);
+    if (sMenuItemID != null)
+    {
+      // Validate the menu item ID and check the display filter!
+      final IMenuObject aMenuObject = MenuTree.getInstance ().getMenuObjectOfID (sMenuItemID);
+      if (aMenuObject != null && aMenuObject instanceof IMenuItem && aMenuObject.matchesDisplayFilter ())
+        aRequestScope.setAttribute (REQUEST_VALUE_MENUITEM, sMenuItemID);
+    }
 
     // determine locale from request and store in session
     final String sDisplayLocale = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_DISPLAY_LOCALE);
