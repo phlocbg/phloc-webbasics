@@ -73,7 +73,15 @@ public final class LayoutManager
   @ReturnsMutableCopy
   public static List <String> getAllAreaIDs ()
   {
-    return ContainerHelper.newList (s_aContentProviders.keySet ());
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newList (s_aContentProviders.keySet ());
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nullable
