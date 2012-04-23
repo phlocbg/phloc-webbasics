@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -205,7 +205,7 @@ public abstract class AbstractPage implements IPage
    */
   protected final boolean hasAttr (final String sName, final String sValue)
   {
-    return EqualsUtils.nullSafeEquals (sValue, getAttr (sName));
+    return EqualsUtils.equals (sValue, getAttr (sName));
   }
 
   @Nonnull

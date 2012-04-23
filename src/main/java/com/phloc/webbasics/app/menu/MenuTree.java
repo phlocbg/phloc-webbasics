@@ -20,7 +20,7 @@ package com.phloc.webbasics.app.menu;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
@@ -124,7 +124,7 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
     if (!super.equals (o))
       return false;
     final MenuTree rhs = (MenuTree) o;
-    return EqualsUtils.nullSafeEquals (m_sDefaultMenuItem, rhs.m_sDefaultMenuItem);
+    return EqualsUtils.equals (m_sDefaultMenuItem, rhs.m_sDefaultMenuItem);
   }
 
   @Override
