@@ -48,12 +48,12 @@ import com.phloc.webbasics.security.CSecurity;
 @ThreadSafe
 public final class UserManager extends AbstractDAO implements IUserManager
 {
-  private static boolean CREATE_DEFAULTS = true;
+  private static boolean s_bCreateDefaults = true;
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
 
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
-    CREATE_DEFAULTS = bCreateDefaults;
+    s_bCreateDefaults = bCreateDefaults;
   }
 
   public UserManager (@Nonnull @Nonempty final String sFilename)
@@ -66,7 +66,7 @@ public final class UserManager extends AbstractDAO implements IUserManager
   @Nonnull
   protected EChange onInit ()
   {
-    if (!CREATE_DEFAULTS)
+    if (!s_bCreateDefaults)
       return EChange.UNCHANGED;
 
     _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,

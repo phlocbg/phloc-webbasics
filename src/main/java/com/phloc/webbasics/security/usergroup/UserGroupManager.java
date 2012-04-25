@@ -48,7 +48,7 @@ import com.phloc.webbasics.security.user.IUserManager;
 @ThreadSafe
 public final class UserGroupManager extends AbstractDAO implements IUserGroupManager
 {
-  private static boolean CREATE_DEFAULTS = true;
+  private static boolean s_bCreateDefaults = true;
 
   private final IUserManager m_aUserMgr;
   private final IRoleManager m_aRoleMgr;
@@ -56,7 +56,7 @@ public final class UserGroupManager extends AbstractDAO implements IUserGroupMan
 
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
-    CREATE_DEFAULTS = bCreateDefaults;
+    s_bCreateDefaults = bCreateDefaults;
   }
 
   public UserGroupManager (@Nonnull @Nonempty final String sFilename,
@@ -73,7 +73,7 @@ public final class UserGroupManager extends AbstractDAO implements IUserGroupMan
   @Nonnull
   protected EChange onInit ()
   {
-    if (!CREATE_DEFAULTS)
+    if (!s_bCreateDefaults)
       return EChange.UNCHANGED;
 
     // Administrators user group
