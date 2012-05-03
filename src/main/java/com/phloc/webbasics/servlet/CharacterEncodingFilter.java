@@ -27,6 +27,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.charset.CCharset;
 
 /**
@@ -35,9 +37,17 @@ import com.phloc.commons.charset.CCharset;
  * 
  * @author philip
  */
-public final class CharacterEncodingFilter implements Filter
+public class CharacterEncodingFilter implements Filter
 {
-  public static final String ENCODING = CCharset.CHARSET_UTF_8;
+  public static final String DEFAULT_ENCODING = CCharset.CHARSET_UTF_8;
+
+  @OverrideOnDemand
+  @Nonnull
+  @Nonempty
+  protected String getEncoding ()
+  {
+    return DEFAULT_ENCODING;
+  }
 
   public void init (final FilterConfig aFilterConfig) throws ServletException
   {}
@@ -46,10 +56,11 @@ public final class CharacterEncodingFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
+    final String sEncoding = getEncoding ();
     // We need this for all form data etc.
     if (aRequest.getCharacterEncoding () == null)
-      aRequest.setCharacterEncoding (ENCODING);
-    aResponse.setCharacterEncoding (ENCODING);
+      aRequest.setCharacterEncoding (sEncoding);
+    aResponse.setCharacterEncoding (sEncoding);
     aChain.doFilter (aRequest, aResponse);
   }
 

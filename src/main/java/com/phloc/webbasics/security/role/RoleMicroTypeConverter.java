@@ -42,7 +42,7 @@ public final class RoleMicroTypeConverter implements IMicroTypeConverter
   }
 
   @Nonnull
-  public IRole convertToNative (@Nonnull final IMicroElement eRole)
+  public Role convertToNative (@Nonnull final IMicroElement eRole)
   {
     final String sID = eRole.getAttribute (ATTR_ID);
     final String sName = eRole.getAttribute (ATTR_NAME);

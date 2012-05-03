@@ -49,7 +49,7 @@ public final class UserGroupMicroTypeConverter implements IMicroTypeConverter
   }
 
   @Nonnull
-  public IUserGroup convertToNative (@Nonnull final IMicroElement eUserGroup)
+  public UserGroup convertToNative (@Nonnull final IMicroElement eUserGroup)
   {
     final String sID = eUserGroup.getAttribute (ATTR_ID);
     final String sName = eUserGroup.getAttribute (ATTR_NAME);

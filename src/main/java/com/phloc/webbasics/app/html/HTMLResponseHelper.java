@@ -18,6 +18,7 @@
 package com.phloc.webbasics.app.html;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 
 import com.phloc.commons.microdom.IMicroDocument;
@@ -32,6 +33,7 @@ import com.phloc.webbasics.web.HTTPResponseHelper;
  * 
  * @author philip
  */
+@Immutable
 public final class HTMLResponseHelper
 {
   private HTMLResponseHelper ()

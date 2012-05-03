@@ -20,10 +20,12 @@ package com.phloc.webbasics.security.login;
 import java.io.File;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.web.WebFileIO;
 
+@Immutable
 public final class LoggedInUserStorage
 {
   private LoggedInUserStorage ()

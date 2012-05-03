@@ -59,7 +59,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   }
 
   @Nonnull
-  public IUser convertToNative (@Nonnull final IMicroElement eUser)
+  public User convertToNative (@Nonnull final IMicroElement eUser)
   {
     final String sID = eUser.getAttribute (ATTR_ID);
     final String sLoginName = MicroUtils.getChildTextContent (eUser, ELEMENT_LOGINNAME);

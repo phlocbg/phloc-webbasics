@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.security.lock;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 
 import org.joda.time.DateTime;
@@ -26,7 +28,7 @@ import org.joda.time.DateTime;
  * 
  * @author philip
  */
-public interface ILockInfo
+public interface ILockInfo extends Serializable
 {
   /**
    * @return The ID of the user who locked the object.
