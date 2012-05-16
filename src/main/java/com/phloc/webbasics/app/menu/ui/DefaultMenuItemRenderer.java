@@ -28,6 +28,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.IMenuItem;
+import com.phloc.webbasics.app.menu.IMenuSeparator;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
@@ -49,7 +50,7 @@ public class DefaultMenuItemRenderer implements IMenuItemRenderer
   }
 
   @Nonnull
-  public IHCNode renderSeparator ()
+  public IHCNode renderSeparator (@Nonnull final IMenuSeparator aSeparator)
   {
     return HCEntityNode.newNBSP ();
   }

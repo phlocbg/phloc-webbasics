@@ -47,6 +47,11 @@ public final class RoleManager extends AbstractDAO implements IRoleManager
   private static boolean s_bCreateDefaults = true;
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 
+  public static boolean isCreateDefaults ()
+  {
+    return s_bCreateDefaults;
+  }
+
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
     s_bCreateDefaults = bCreateDefaults;

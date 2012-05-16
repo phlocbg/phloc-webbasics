@@ -51,6 +51,11 @@ public final class UserManager extends AbstractDAO implements IUserManager
   private static boolean s_bCreateDefaults = true;
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
 
+  public static boolean isCreateDefaults ()
+  {
+    return s_bCreateDefaults;
+  }
+
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
     s_bCreateDefaults = bCreateDefaults;

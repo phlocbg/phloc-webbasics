@@ -122,7 +122,7 @@ public class MenuRendererCallback extends
       if (aMenuObj instanceof IMenuSeparator)
       {
         // separator
-        final IHCNode aHC = m_aRenderer.renderSeparator ();
+        final IHCNode aHC = m_aRenderer.renderSeparator ((IMenuSeparator) aMenuObj);
         m_aMenuItemStack.push (aParent.addAndReturnItem (aHC).addClass (CSS_CLASS_MENU_SEPARATOR));
       }
       else

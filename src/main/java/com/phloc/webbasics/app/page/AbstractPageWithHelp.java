@@ -124,9 +124,9 @@ public abstract class AbstractPageWithHelp extends AbstractPage
   protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale)
   {
     return new ReadonlySimpleURL (LinkUtils.getURIWithContext ("help/" +
-                                                                getID () +
-                                                                "?locale=" +
-                                                                aDisplayLocale.toString ()));
+                                                               getID () +
+                                                               "?locale=" +
+                                                               aDisplayLocale.toString ()));
   }
 
   /**
@@ -146,8 +146,8 @@ public abstract class AbstractPageWithHelp extends AbstractPage
   protected IHCNode getHelpIconNode (@Nonnull final Locale aDisplayLocale)
   {
     final HCA aHelpNode = new HCA (getHelpURL (aDisplayLocale));
-    aHelpNode.setTitle (EWebBasicsText.PAGE_HELP_TITLE.getDisplayTextWithArgs (aDisplayLocale,
-                                                                               getDisplayText (aDisplayLocale)));
+    final String sPageName = getDisplayText (aDisplayLocale);
+    aHelpNode.setTitle (EWebBasicsText.PAGE_HELP_TITLE.getDisplayTextWithArgs (aDisplayLocale, sPageName));
     aHelpNode.addChild (new HCSpan ().addClass (CSS_PAGE_HELP_ICON));
     aHelpNode.setTarget (new HCA_Target (HELP_WINDOW_NAME));
     return aHelpNode;

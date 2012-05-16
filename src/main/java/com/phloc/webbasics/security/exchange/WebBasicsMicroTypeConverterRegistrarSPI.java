@@ -34,8 +34,8 @@ public final class WebBasicsMicroTypeConverterRegistrarSPI implements IMicroType
 {
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {
+    aRegistry.registerMicroElementTypeConverter (Role.class, new RoleMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (User.class, new UserMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (UserGroup.class, new UserGroupMicroTypeConverter ());
-    aRegistry.registerMicroElementTypeConverter (Role.class, new RoleMicroTypeConverter ());
   }
 }

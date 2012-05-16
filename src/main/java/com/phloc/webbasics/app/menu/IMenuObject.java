@@ -29,10 +29,24 @@ import com.phloc.commons.id.IHasID;
  */
 public interface IMenuObject extends IHasID <String>
 {
+  /**
+   * @return An optional filter that toggles visibility.
+   */
   @Nullable
   IFilter <IMenuObject> getDisplayFilter ();
 
+  /**
+   * Set a new display filter for this menu object.
+   * 
+   * @param aDisplayFilter
+   *        The new display filter to set. Maybe <code>null</code> to indicate
+   *        that no filter is required.
+   */
   void setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
 
+  /**
+   * @return <code>true</code> if either no display filter is installed, or if
+   *         the installed filter matches, <code>false</code> otherwise.
+   */
   boolean matchesDisplayFilter ();
 }

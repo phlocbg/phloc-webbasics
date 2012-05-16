@@ -21,12 +21,34 @@ import javax.annotation.Nonnull;
 
 import com.phloc.html.hc.IHCNode;
 import com.phloc.webbasics.app.menu.IMenuItem;
+import com.phloc.webbasics.app.menu.IMenuSeparator;
 
+/**
+ * Interface for rendering menu objects
+ * 
+ * @author philip
+ */
 public interface IMenuItemRenderer
 {
+  /**
+   * @param aSeparator
+   *        The separator to be rendered.
+   * @return The rendered menu separator. May not be <code>null</code>.
+   */
   @Nonnull
-  IHCNode renderSeparator ();
+  IHCNode renderSeparator (@Nonnull IMenuSeparator aSeparator);
 
+  /**
+   * Render a menu item
+   * 
+   * @param aMenuItem
+   *        The menu item to be rendered.
+   * @param bHasChildren
+   *        <code>true</code> if the menu item has children
+   * @param bIsSelected
+   *        <code>true</code> if the menu item is a selected menu item
+   * @return The rendered menu item. May not be <code>null</code>.
+   */
   @Nonnull
   IHCNode renderMenuItem (@Nonnull IMenuItem aMenuItem, final boolean bHasChildren, final boolean bIsSelected);
 }

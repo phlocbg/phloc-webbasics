@@ -19,6 +19,11 @@ package com.phloc.webbasics.security.lock;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Locked enumeration
+ * 
+ * @author philip
+ */
 public enum ELocked
 {
   LOCKED,

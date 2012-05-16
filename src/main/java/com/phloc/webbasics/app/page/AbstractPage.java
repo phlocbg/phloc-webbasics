@@ -208,12 +208,18 @@ public abstract class AbstractPage implements IPage
     return EqualsUtils.equals (sValue, getAttr (sName));
   }
 
+  /**
+   * @return A form that links to the current page.
+   */
   @Nonnull
   protected final HCForm createFormSelf ()
   {
     return new HCForm (LinkUtils.getSelfHref ());
   }
 
+  /**
+   * @return A file upload form that links to the current page.
+   */
   @Nonnull
   protected final HCForm createFormFileUploadSelf ()
   {

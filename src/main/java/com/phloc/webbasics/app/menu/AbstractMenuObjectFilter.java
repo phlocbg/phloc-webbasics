@@ -19,6 +19,11 @@ package com.phloc.webbasics.app.menu;
 
 import com.phloc.commons.filter.IFilter;
 
+/**
+ * Abstract base class for a menu object filter.
+ * 
+ * @author philip
+ */
 public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>
 {
   /* empty */

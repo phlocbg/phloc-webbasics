@@ -54,6 +54,11 @@ public final class UserGroupManager extends AbstractDAO implements IUserGroupMan
   private final IRoleManager m_aRoleMgr;
   private final Map <String, UserGroup> m_aUserGroups = new HashMap <String, UserGroup> ();
 
+  public static boolean isCreateDefaults ()
+  {
+    return s_bCreateDefaults;
+  }
+
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
     s_bCreateDefaults = bCreateDefaults;

@@ -19,6 +19,7 @@ package com.phloc.webbasics.app.page;
 
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.id.IHasID;
@@ -33,8 +34,10 @@ import com.phloc.html.hc.IHCNode;
 public interface IPage extends IHasID <String>, IHasDisplayText
 {
   /**
+   * @param aDisplayLocale
+   *        The display locale used to render the content
    * @return The content of the area based on the current state.
    */
   @Nullable
-  IHCNode getContent (Locale aDisplayLocale);
+  IHCNode getContent (@Nonnull Locale aDisplayLocale);
 }

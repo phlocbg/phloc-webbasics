@@ -86,6 +86,8 @@ public abstract class AbstractMenuObject implements IMenuObject
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID).toString ();
+    return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .appendIfNotNull ("displayFilter", m_aDisplayFilter)
+                                       .toString ();
   }
 }
