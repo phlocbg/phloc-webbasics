@@ -62,7 +62,9 @@ public abstract class AbstractDAO
     else
     {
       // Ensure the parent directory is present
-      FileOperations.createDirRecursiveIfNotExisting (m_aFile.getParentFile ());
+      final File aParentFile = m_aFile.getParentFile ();
+      if (aParentFile != null)
+        FileOperations.createDirRecursiveIfNotExisting (aParentFile);
     }
   }
 
