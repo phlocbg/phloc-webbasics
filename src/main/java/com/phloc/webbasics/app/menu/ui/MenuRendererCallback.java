@@ -59,22 +59,22 @@ public class MenuRendererCallback extends
   private final NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> m_aTreeItemStack = new NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> ();
   private final String m_sSelectedItem;
 
-  protected MenuRendererCallback (@Nonnull final NonBlockingStack <HCUL> aNodeStack,
+  protected MenuRendererCallback (@Nonnull final NonBlockingStack <HCUL> aMenuListStack,
                                   @Nonnull final IMenuItemRenderer aRenderer,
                                   @Nonnull final Set <String> aDisplayMenuItemIDs)
   {
-    if (aNodeStack == null)
+    if (aMenuListStack == null)
       throw new NullPointerException ("nodeStack");
     if (aRenderer == null)
       throw new NullPointerException ("renderer");
     if (aDisplayMenuItemIDs == null)
       throw new NullPointerException ("displayMenuItemIDs");
 
-    m_aMenuListStack = aNodeStack;
+    m_aMenuListStack = aMenuListStack;
     m_aRenderer = aRenderer;
     m_aDisplayMenuItemIDs = aDisplayMenuItemIDs;
 
-    m_aChildCountStack.push (new AtomicInteger ());
+    m_aChildCountStack.push (new AtomicInteger (0));
     m_sSelectedItem = ApplicationRequestManager.getRequestMenuItemID ();
     // The selected item may be null if an invalid menu item ID was passed
   }
@@ -83,21 +83,18 @@ public class MenuRendererCallback extends
   public final void onLevelDown ()
   {
     super.onLevelDown ();
+
+    // Check if any child is visible
     final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aTreeItemStack.peek ();
-    boolean bHasVisibleChildren = false;
     for (final DefaultTreeItemWithID <String, IMenuObject> aChildItem : aParentItem.getChildren ())
       if (m_aDisplayMenuItemIDs.contains (aChildItem.getID ()))
       {
-        bHasVisibleChildren = true;
+        // add sub menu structure at the right place
+        m_aMenuListStack.push (m_aMenuItemStack.peek ().addAndReturnChild (new HCUL ()));
         break;
       }
 
-    if (bHasVisibleChildren)
-    {
-      // add sub menu structure at the right place
-      m_aMenuListStack.push (m_aMenuItemStack.peek ().addAndReturnChild (new HCUL ()));
-    }
-    m_aChildCountStack.push (new AtomicInteger ());
+    m_aChildCountStack.push (new AtomicInteger (0));
   }
 
   @Override
@@ -117,7 +114,6 @@ public class MenuRendererCallback extends
     if (m_aDisplayMenuItemIDs.contains (aItem.getID ()))
     {
       final HCUL aParent = m_aMenuListStack.peek ();
-      // Only root level and the selected subtree is rendered
       final IMenuObject aMenuObj = aItem.getData ();
       if (aMenuObj instanceof IMenuSeparator)
       {

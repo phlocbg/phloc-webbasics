@@ -103,7 +103,8 @@ public class MenuItemDeterminatorCallback extends
       rememberMenuItemForDisplay (aItem.getID ());
     if (bAddAllOnThisLevel)
       for (final DefaultTreeItemWithID <String, IMenuObject> aSibling : aItem.getParent ().getChildren ())
-        rememberMenuItemForDisplay (aSibling.getID ());
+        if (aSibling.getData ().matchesDisplayFilter ())
+          rememberMenuItemForDisplay (aSibling.getID ());
     return EHierarchyCallbackReturn.CONTINUE;
   }
 
