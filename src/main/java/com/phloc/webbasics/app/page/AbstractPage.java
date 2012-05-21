@@ -140,7 +140,7 @@ public abstract class AbstractPage implements IPage
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected final String getAttr (@Nullable final String sName)
+  protected static final String getAttr (@Nullable final String sName)
   {
     return _getScope ().getAttributeAsString (sName);
   }
@@ -157,7 +157,7 @@ public abstract class AbstractPage implements IPage
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected final int getIntAttr (@Nullable final String sName, final int nDefault)
+  protected static final int getIntAttr (@Nullable final String sName, final int nDefault)
   {
     return _getScope ().getAttributeAsInt (sName, nDefault);
   }
@@ -174,7 +174,7 @@ public abstract class AbstractPage implements IPage
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected final double getDoubleAttr (@Nullable final String sName, final double dDefault)
+  protected static final double getDoubleAttr (@Nullable final String sName, final double dDefault)
   {
     return _getScope ().getAttributeAsDouble (sName, dDefault);
   }
@@ -188,7 +188,7 @@ public abstract class AbstractPage implements IPage
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
+  protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
   {
     return _getScope ().getCastedAttribute (sName);
   }
@@ -203,7 +203,7 @@ public abstract class AbstractPage implements IPage
    * @return <code>true</code> if the request parameter is present and has the
    *         expected value - <code>false</code> otherwise.
    */
-  protected final boolean hasAttr (final String sName, final String sValue)
+  protected static final boolean hasAttr (final String sName, final String sValue)
   {
     return EqualsUtils.equals (sValue, getAttr (sName));
   }
@@ -212,7 +212,7 @@ public abstract class AbstractPage implements IPage
    * @return A form that links to the current page.
    */
   @Nonnull
-  protected final HCForm createFormSelf ()
+  protected static final HCForm createFormSelf ()
   {
     return new HCForm (LinkUtils.getSelfHref ());
   }
@@ -221,15 +221,9 @@ public abstract class AbstractPage implements IPage
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  protected final HCForm createFormFileUploadSelf ()
+  protected static final HCForm createFormFileUploadSelf ()
   {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
-  }
-
-  @Override
-  public String toString ()
-  {
-    return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_aName).toString ();
   }
 
   /**
@@ -240,5 +234,11 @@ public abstract class AbstractPage implements IPage
   public static Map <String, IPage> getAllPageIDs ()
   {
     return ContainerHelper.newMap (ALL_IDS);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_aName).toString ();
   }
 }
