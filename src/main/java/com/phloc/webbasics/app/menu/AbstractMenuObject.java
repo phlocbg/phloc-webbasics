@@ -34,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
 public abstract class AbstractMenuObject implements IMenuObject
 {
   private final String m_sID;
-  private IFilter <IMenuObject> m_aDisplayFilter;
+  protected IFilter <IMenuObject> m_aDisplayFilter;
 
   public AbstractMenuObject (@Nonnull @Nonempty final String sID)
   {
@@ -54,11 +54,6 @@ public abstract class AbstractMenuObject implements IMenuObject
   public final IFilter <IMenuObject> getDisplayFilter ()
   {
     return m_aDisplayFilter;
-  }
-
-  public final void setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
-  {
-    m_aDisplayFilter = aDisplayFilter;
   }
 
   public final boolean matchesDisplayFilter ()

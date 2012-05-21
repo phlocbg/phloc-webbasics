@@ -17,6 +17,11 @@
  */
 package com.phloc.webbasics.app.menu;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.filter.IFilter;
+
 /**
  * Interface for a menu item separator.
  * 
@@ -24,5 +29,9 @@ package com.phloc.webbasics.app.menu;
  */
 public interface IMenuSeparator extends IMenuObject
 {
-  /* empty */
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  IMenuSeparator setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
 }

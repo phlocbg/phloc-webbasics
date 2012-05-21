@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.app.menu;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.filter.IFilter;
@@ -41,8 +42,10 @@ public interface IMenuObject extends IHasID <String>
    * @param aDisplayFilter
    *        The new display filter to set. Maybe <code>null</code> to indicate
    *        that no filter is required.
+   * @return this
    */
-  void setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
+  @Nonnull
+  IMenuObject setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
 
   /**
    * @return <code>true</code> if either no display filter is installed, or if

@@ -91,6 +91,25 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
   }
 
   /**
+   * Append a new menu item separator as a child of the passed menu item
+   * 
+   * @param aParent
+   *        The parent menu item to append the separator to. May not be
+   *        <code>null</code>.
+   * @return The created menu item separator object. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the passed parent menu item could not be resolved
+   */
+  @Nonnull
+  public IMenuSeparator createSeparator (@Nonnull final IMenuItem aParent)
+  {
+    if (aParent == null)
+      throw new NullPointerException ("parent");
+
+    return createSeparator (aParent.getID ());
+  }
+
+  /**
    * Append a new menu item at root level.
    * 
    * @param sItemID
@@ -123,10 +142,10 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
   }
 
   /**
-   * Append a new menu item at root level.
+   * Append a new menu item below the specified parent.
    * 
    * @param sParentID
-   *        The parent menu item ID to append the separator to. May not be
+   *        The parent menu item ID to append the item to. May not be
    *        <code>null</code>.
    * @param sItemID
    *        The new menu item ID. May not be <code>null</code>.
@@ -148,10 +167,10 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
   }
 
   /**
-   * Append a new menu item at root level.
+   * Append a new menu item below the specified parent.
    * 
    * @param sParentID
-   *        The parent menu item ID to append the separator to. May not be
+   *        The parent menu item ID to append the item to. May not be
    *        <code>null</code>.
    * @param aPage
    *        The referenced page. May not be <code>null</code>.
@@ -167,6 +186,28 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
       throw new NullPointerException ("page");
 
     return createItem (sParentID, aPage.getID (), aPage);
+  }
+
+  /**
+   * Append a new menu item below the specified parent.
+   * 
+   * @param aParent
+   *        The parent menu item to append the item to. May not be
+   *        <code>null</code>.
+   * @param aPage
+   *        The referenced page. May not be <code>null</code>.
+   * @return The created menu item object. The ID of the menu item is the ID of
+   *         the page. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the passed parent menu item could not be resolved
+   */
+  @Nonnull
+  public IMenuItem createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
+  {
+    if (aParent == null)
+      throw new NullPointerException ("parent");
+
+    return createItem (aParent.getID (), aPage);
   }
 
   @Deprecated

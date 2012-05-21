@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webbasics.app.page.IPage;
@@ -42,6 +43,13 @@ public final class MenuItem extends AbstractMenuObject implements IMenuItem
     if (aPage == null)
       throw new NullPointerException ("page");
     m_aPage = aPage;
+  }
+
+  @Nonnull
+  public MenuItem setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
+  {
+    m_aDisplayFilter = aDisplayFilter;
+    return this;
   }
 
   @Nonnull

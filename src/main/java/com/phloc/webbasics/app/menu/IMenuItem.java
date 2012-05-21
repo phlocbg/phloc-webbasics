@@ -18,7 +18,9 @@
 package com.phloc.webbasics.app.menu;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.webbasics.app.page.IPage;
 
@@ -29,6 +31,12 @@ import com.phloc.webbasics.app.page.IPage;
  */
 public interface IMenuItem extends IMenuObject, IHasDisplayText
 {
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  IMenuItem setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
+
   /**
    * @return The referenced page object.
    */
