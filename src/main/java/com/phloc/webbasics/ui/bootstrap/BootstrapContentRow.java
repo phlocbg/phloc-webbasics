@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.ui.bootstrap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 public class BootstrapContentRow extends AbstractWrappedHCNode
 {
-  private static final class SpannedNode
+  private static final class SpannedNode implements Serializable
   {
     private final EBootstrapSpan m_eSpan;
     private final IHCNode m_aNode;

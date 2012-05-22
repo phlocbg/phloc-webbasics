@@ -53,9 +53,8 @@ public final class HTMLConfigManager
   public static final String FILENAME_CSS_IE_XML = "html/css_ie.xml";
   public static final String FILENAME_JS_XML = "html/js.xml";
   public static final String FILENAME_METATAGS_XML = "html/metatags.xml";
-
-  private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
+  private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
 
   private final List <String> m_aAllCSSFiles = new ArrayList <String> ();
   private final List <String> m_aAllCSSPrintFiles = new ArrayList <String> ();
