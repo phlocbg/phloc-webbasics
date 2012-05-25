@@ -70,7 +70,7 @@ public final class LoggedInUserManagerTest extends AbstractStorageAwareTestCase
     assertEquals (1, aUM.getLoggedInUserCount ());
 
     // Logout correct user
-    assertTrue (aUM.logoutCurrentUser ().isChanged ());
+    assertTrue (aUM.logoutUser (aUM.getCurrentUserID ()).isChanged ());
     assertEquals (0, aUM.getLoggedInUserCount ());
     assertNull (aUM.getCurrentUserID ());
   }

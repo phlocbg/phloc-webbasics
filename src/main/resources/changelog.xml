@@ -22,7 +22,7 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
   <entry date="2012-05-25" category="tech" action="fix">
     <change>
-      <text locale="en">Fixed scope consistency issue in LoggedInUserManager</text>
+      <text locale="en">Fixed some minor inconsistencies in login/logout mechanism</text>
     </change>
   </entry>
   <entry date="2012-05-21" category="api" action="change">

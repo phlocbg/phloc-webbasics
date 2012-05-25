@@ -31,8 +31,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PrivateAPI;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
+import com.phloc.commons.annotations.VisibleForTesting;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
@@ -49,6 +51,8 @@ import com.phloc.webbasics.security.user.IUser;
 @ThreadSafe
 public final class LoggedInUserManager extends GlobalSingleton
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
+
   /**
    * This class manages the user ID of the current session
    * 
@@ -77,16 +81,17 @@ public final class LoggedInUserManager extends GlobalSingleton
       if (StringHelper.hasNoText (sUserID))
         throw new IllegalArgumentException ("userID");
       if (m_sUserID != null)
+      {
+        s_aLogger.warn ("The session user holder already has the user ID '" +
+                        m_sUserID +
+                        "' so the new ID '" +
+                        sUserID +
+                        "' will not be set!");
         return EChange.UNCHANGED;
+      }
       m_aOwningMgr = aOwningMgr;
       m_sUserID = sUserID;
       return EChange.CHANGED;
-    }
-
-    @Nullable
-    public String getUserID ()
-    {
-      return m_sUserID;
     }
 
     @Override
@@ -94,12 +99,10 @@ public final class LoggedInUserManager extends GlobalSingleton
     {
       // Called when the session is destroyed
       // -> Ensure the user is logged out!
-      if (m_aOwningMgr.logoutUser (m_sUserID).isChanged ())
+      if (m_aOwningMgr._logoutUser (m_sUserID).isChanged ())
         m_sUserID = null;
     }
   }
-
-  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Set <String> m_aLoggedInUsers = new HashSet <String> ();
@@ -155,7 +158,8 @@ public final class LoggedInUserManager extends GlobalSingleton
   }
 
   @Nonnull
-  public EChange logoutUser (@Nullable final String sUserID)
+  @PrivateAPI
+  private EChange _logoutUser (@Nullable final String sUserID)
   {
     m_aRWLock.writeLock ().lock ();
     try
@@ -171,15 +175,14 @@ public final class LoggedInUserManager extends GlobalSingleton
     }
   }
 
-  /**
-   * Logout the currently logged in user.
-   * 
-   * @return {@link EChange#CHANGED} if the user was logged in.
-   */
   @Nonnull
-  public EChange logoutCurrentUser ()
+  @VisibleForTesting
+  EChange logoutUser (@Nullable final String sUserID)
   {
-    return logoutUser (getCurrentUserID ());
+    if (_logoutUser (sUserID).isUnchanged ())
+      return EChange.UNCHANGED;
+    SessionUserHolder.getInstance ().m_sUserID = null;
+    return EChange.CHANGED;
   }
 
   /**
@@ -247,7 +250,7 @@ public final class LoggedInUserManager extends GlobalSingleton
   @Nullable
   public String getCurrentUserID ()
   {
-    return SessionUserHolder.getInstance ().getUserID ();
+    return SessionUserHolder.getInstance ().m_sUserID;
   }
 
   /**

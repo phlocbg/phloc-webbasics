@@ -28,7 +28,6 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.security.login.LoggedInUserManager;
 
 /**
  * Handles the log-out of a user. Can be called with a user context and without.
@@ -47,10 +46,15 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
     return LinkUtils.getHomeLink ();
   }
 
-  private void _run (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
+  private void _run (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     // Perform the main logout
-    LoggedInUserManager.getInstance ().logoutCurrentUser ();
+    // 1. Invalidate the session
+    // 2. Triggers the session scope destruction (via the HttpSessionListener)
+    // 3. which triggers WebScopeManager.onSessionEnd
+    // 4. which triggers WebScopeSessionManager.getInstance ().onSessionEnd
+    // 5. which triggers ISessionWebScope.destroyScope
+    aHttpRequest.getSession ().invalidate ();
 
     // Go home
     aHttpResponse.sendRedirect (getRedirectURL ().getAsString ());
@@ -61,7 +65,7 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
                         @Nonnull final HttpServletResponse aHttpResponse,
                         @Nonnull final IRequestWebScope aRequestScope) throws IOException
   {
-    _run (aHttpResponse);
+    _run (aHttpRequest, aHttpResponse);
   }
 
   @Override
@@ -69,6 +73,6 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
                          @Nonnull final HttpServletResponse aHttpResponse,
                          @Nonnull final IRequestWebScope aRequestScope) throws IOException
   {
-    _run (aHttpResponse);
+    _run (aHttpRequest, aHttpResponse);
   }
 }
