@@ -44,8 +44,8 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
 @ThreadSafe
 public final class LayoutManager extends GlobalSingleton
 {
-  private final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, IAreaContentProvider> s_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
+  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  private final Map <String, IAreaContentProvider> m_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
 
   @UsedViaReflection
   @Deprecated
@@ -66,18 +66,18 @@ public final class LayoutManager extends GlobalSingleton
     if (aContentProvider == null)
       throw new NullPointerException ("contentProvider");
 
-    s_aRWLock.writeLock ().lock ();
+    m_aRWLock.writeLock ().lock ();
     try
     {
-      if (s_aContentProviders.containsKey (sAreaID))
+      if (m_aContentProviders.containsKey (sAreaID))
         throw new IllegalArgumentException ("A content provider for the area ID '" +
                                             sAreaID +
                                             "' is already registered!");
-      s_aContentProviders.put (sAreaID, aContentProvider);
+      m_aContentProviders.put (sAreaID, aContentProvider);
     }
     finally
     {
-      s_aRWLock.writeLock ().unlock ();
+      m_aRWLock.writeLock ().unlock ();
     }
   }
 
@@ -85,14 +85,14 @@ public final class LayoutManager extends GlobalSingleton
   @ReturnsMutableCopy
   public List <String> getAllAreaIDs ()
   {
-    s_aRWLock.readLock ().lock ();
+    m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (s_aContentProviders.keySet ());
+      return ContainerHelper.newList (m_aContentProviders.keySet ());
     }
     finally
     {
-      s_aRWLock.readLock ().unlock ();
+      m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -104,15 +104,15 @@ public final class LayoutManager extends GlobalSingleton
     if (sAreaID == null)
       throw new NullPointerException ("areaID");
 
-    s_aRWLock.readLock ().lock ();
+    m_aRWLock.readLock ().lock ();
     try
     {
-      final IAreaContentProvider aContentProvider = s_aContentProviders.get (sAreaID);
+      final IAreaContentProvider aContentProvider = m_aContentProviders.get (sAreaID);
       return aContentProvider == null ? null : aContentProvider.getContent (aRequestScope, aDisplayLocale);
     }
     finally
     {
-      s_aRWLock.readLock ().unlock ();
+      m_aRWLock.readLock ().unlock ();
     }
   }
 }
