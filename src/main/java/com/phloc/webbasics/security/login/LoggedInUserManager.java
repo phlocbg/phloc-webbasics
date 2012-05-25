@@ -54,9 +54,11 @@ public final class LoggedInUserManager extends GlobalSingleton
    * 
    * @author philip
    */
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("SE_NO_SERIALVERSIONID")
   public static final class SessionUserHolder extends SessionWebSingleton
   {
     private String m_sUserID;
+    private transient LoggedInUserManager m_aOwningMgr;
 
     @Deprecated
     @UsedViaReflection
@@ -70,19 +72,15 @@ public final class LoggedInUserManager extends GlobalSingleton
     }
 
     @Nonnull
-    public EChange setUserID (@Nonnull @Nonempty final String sUserID)
+    public EChange setUserID (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull @Nonempty final String sUserID)
     {
       if (StringHelper.hasNoText (sUserID))
         throw new IllegalArgumentException ("userID");
       if (m_sUserID != null)
         return EChange.UNCHANGED;
+      m_aOwningMgr = aOwningMgr;
       m_sUserID = sUserID;
       return EChange.CHANGED;
-    }
-
-    public void resetUserID ()
-    {
-      m_sUserID = null;
     }
 
     @Nullable
@@ -96,7 +94,8 @@ public final class LoggedInUserManager extends GlobalSingleton
     {
       // Called when the session is destroyed
       // -> Ensure the user is logged out!
-      LoggedInUserManager.getInstance ().logoutUser (m_sUserID);
+      if (m_aOwningMgr.logoutUser (m_sUserID).isChanged ())
+        m_sUserID = null;
     }
   }
 
@@ -139,7 +138,7 @@ public final class LoggedInUserManager extends GlobalSingleton
         return ELoginResult.USER_ALREADY_LOGGED_IN;
       }
 
-      if (SessionUserHolder.getInstance ().setUserID (sUserID).isUnchanged ())
+      if (SessionUserHolder.getInstance ().setUserID (this, sUserID).isUnchanged ())
       {
         // Another user is already in the current session
         m_aLoggedInUsers.remove (sUserID);
@@ -163,7 +162,6 @@ public final class LoggedInUserManager extends GlobalSingleton
     {
       if (!m_aLoggedInUsers.remove (sUserID))
         return EChange.UNCHANGED;
-      SessionUserHolder.getInstance ().resetUserID ();
       s_aLogger.info ("Logged out user '" + sUserID + "'");
       return EChange.CHANGED;
     }
