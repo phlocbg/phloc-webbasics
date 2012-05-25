@@ -134,9 +134,20 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     afterContextInitialized (aSC);
   }
 
+  /**
+   * before destroy
+   */
+  @OverrideOnDemand
+  protected void onContextDestroyed ()
+  {}
+
   public final void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
   {
     // Shutdown global scope
+    onContextDestroyed ();
+
+    WebFileIO.resetBasePath ();
+
     WebScopeManager.onGlobalEnd ();
   }
 

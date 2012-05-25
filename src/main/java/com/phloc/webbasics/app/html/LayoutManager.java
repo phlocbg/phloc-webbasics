@@ -26,11 +26,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 
 /**
@@ -38,16 +41,25 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
  * 
  * @author philip
  */
-public final class LayoutManager
+@ThreadSafe
+public final class LayoutManager extends GlobalSingleton
 {
-  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-  private static final Map <String, IAreaContentProvider> s_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
+  private final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private final Map <String, IAreaContentProvider> s_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
 
-  private LayoutManager ()
+  @UsedViaReflection
+  @Deprecated
+  public LayoutManager ()
   {}
 
-  public static void registerAreaContentProvider (@Nonnull final String sAreaID,
-                                                  @Nonnull final IAreaContentProvider aContentProvider)
+  @Nonnull
+  public static LayoutManager getInstance ()
+  {
+    return getGlobalSingleton (LayoutManager.class);
+  }
+
+  public void registerAreaContentProvider (@Nonnull final String sAreaID,
+                                           @Nonnull final IAreaContentProvider aContentProvider)
   {
     if (StringHelper.hasNoText (sAreaID))
       throw new IllegalArgumentException ("areaID");
@@ -71,7 +83,7 @@ public final class LayoutManager
 
   @Nonnull
   @ReturnsMutableCopy
-  public static List <String> getAllAreaIDs ()
+  public List <String> getAllAreaIDs ()
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -85,9 +97,9 @@ public final class LayoutManager
   }
 
   @Nullable
-  public static IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
-                                          @Nonnull final String sAreaID,
-                                          @Nonnull final Locale aDisplayLocale)
+  public IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
+                                   @Nonnull final String sAreaID,
+                                   @Nonnull final Locale aDisplayLocale)
   {
     if (sAreaID == null)
       throw new NullPointerException ("areaID");

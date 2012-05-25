@@ -63,7 +63,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
   public LayoutHTMLProvider ()
   {
-    this (LayoutManager.getAllAreaIDs ());
+    this (LayoutManager.getInstance ().getAllAreaIDs ());
   }
 
   public LayoutHTMLProvider (@Nonnull @Nonempty final String sLayoutAreaID)
@@ -141,7 +141,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
                                       @Nonnull final Locale aDisplayLocale)
   {
     // By default the layout manager is used
-    return LayoutManager.getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
+    return LayoutManager.getInstance ().getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
   }
 
   @OverrideOnDemand

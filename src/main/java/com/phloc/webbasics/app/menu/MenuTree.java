@@ -17,18 +17,20 @@
  */
 package com.phloc.webbasics.app.menu;
 
+import java.util.Collection;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.equals.EqualsUtils;
-import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.lang.CGStringHelper;
-import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
+import com.phloc.commons.tree.withid.unique.ITreeWithGlobalUniqueID;
+import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.webbasics.app.page.IPage;
 
 /**
@@ -36,20 +38,23 @@ import com.phloc.webbasics.app.page.IPage;
  * 
  * @author philip
  */
-public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject>
+public final class MenuTree extends GlobalSingleton implements
+                                                   ITreeWithGlobalUniqueID <String, IMenuObject, DefaultTreeItemWithID <String, IMenuObject>>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTree.class);
-  private static final MenuTree s_aInstance = new MenuTree ();
+  private final DefaultTreeWithGlobalUniqueID <String, IMenuObject> m_aTree = new DefaultTreeWithGlobalUniqueID <String, IMenuObject> ();
 
   private String m_sDefaultMenuItem;
 
-  private MenuTree ()
+  @UsedViaReflection
+  @Deprecated
+  public MenuTree ()
   {}
 
   @Nonnull
   public static MenuTree getInstance ()
   {
-    return s_aInstance;
+    return getGlobalSingleton (MenuTree.class);
   }
 
   @Nonnull
@@ -276,26 +281,44 @@ public final class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenu
     return aTreeItem == null ? null : aTreeItem.getData ();
   }
 
-  @Override
-  public boolean equals (final Object o)
+  public DefaultTreeItemWithID <String, IMenuObject> getRootItem ()
   {
-    if (o == this)
-      return true;
-    if (!super.equals (o))
-      return false;
-    final MenuTree rhs = (MenuTree) o;
-    return EqualsUtils.equals (m_sDefaultMenuItem, rhs.m_sDefaultMenuItem);
+    return m_aTree.getRootItem ();
   }
 
-  @Override
-  public int hashCode ()
+  public DefaultTreeItemWithID <String, IMenuObject> getChildWithID (final DefaultTreeItemWithID <String, IMenuObject> aCurrent,
+                                                                     final String aID)
   {
-    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_sDefaultMenuItem).getHashCode ();
+    return m_aTree.getChildWithID (aCurrent, aID);
   }
 
-  @Override
-  public String toString ()
+  public boolean hasChildren (final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("defaultMenuItem", m_sDefaultMenuItem).toString ();
+    return m_aTree.hasChildren (aCurrent);
+  }
+
+  public int getChildCount (final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
+  {
+    return m_aTree.getChildCount (aCurrent);
+  }
+
+  public Collection <? extends DefaultTreeItemWithID <String, IMenuObject>> getChildren (final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
+  {
+    return m_aTree.getChildren (aCurrent);
+  }
+
+  public DefaultTreeItemWithID <String, IMenuObject> getItemWithID (final String aDataID)
+  {
+    return m_aTree.getItemWithID (aDataID);
+  }
+
+  public Collection <DefaultTreeItemWithID <String, IMenuObject>> getAllItems ()
+  {
+    return m_aTree.getAllItems ();
+  }
+
+  public boolean isItemSameOrDescendant (final String aParentItemID, final String aChildItemID)
+  {
+    return m_aTree.isItemSameOrDescendant (aParentItemID, aChildItemID);
   }
 }

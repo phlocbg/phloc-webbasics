@@ -17,16 +17,12 @@
  */
 package com.phloc.webbasics.app.page;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
@@ -45,8 +41,6 @@ import com.phloc.webbasics.app.LinkUtils;
  */
 public abstract class AbstractPage implements IPage
 {
-  private static final Map <String, IPage> ALL_IDS = new HashMap <String, IPage> ();
-
   private final String m_sID;
   private IHasDisplayText m_aName;
 
@@ -60,9 +54,6 @@ public abstract class AbstractPage implements IPage
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
-    final IPage aOldPage = ALL_IDS.put (sID, this);
-    if (aOldPage != null)
-      throw new IllegalArgumentException ("A page with the ID '" + sID + "' is already registered to " + aOldPage);
     m_sID = sID;
   }
 
@@ -224,16 +215,6 @@ public abstract class AbstractPage implements IPage
   protected static final HCForm createFormFileUploadSelf ()
   {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
-  }
-
-  /**
-   * @return A static set with all contained pages.
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  public static Map <String, IPage> getAllPageIDs ()
-  {
-    return ContainerHelper.newMap (ALL_IDS);
   }
 
   @Override

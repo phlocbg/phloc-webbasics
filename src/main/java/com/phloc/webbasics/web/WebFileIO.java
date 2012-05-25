@@ -76,6 +76,11 @@ public final class WebFileIO
     s_aFOM.createDirRecursiveIfNotExisting (new File (s_sBasePath));
   }
 
+  public static void resetBasePath ()
+  {
+    s_sBasePath = null;
+  }
+
   @Nonnull
   @Nonempty
   public static String getBasePath ()
@@ -86,25 +91,26 @@ public final class WebFileIO
   }
 
   @Nonnull
-  public static File getFile (final String sPath)
+  public static File getFile (@Nonnull final String sPath)
   {
     return new File (s_sBasePath, sPath);
   }
 
   @Nonnull
-  public static IReadWriteResource getResource (final String sPath)
+  public static IReadWriteResource getResource (@Nonnull final String sPath)
   {
     return new FileSystemResource (getFile (sPath));
   }
 
   @Nonnull
-  public static InputStream getInputStream (final String sPath)
+  public static InputStream getInputStream (@Nonnull final String sPath)
   {
     return getResource (sPath).getInputStream ();
   }
 
   @Nonnull
-  public static OutputStream getOutputStream (final String sBasePathRelativePath, @Nonnull final EAppend eAppend)
+  public static OutputStream getOutputStream (@Nonnull final String sBasePathRelativePath,
+                                              @Nonnull final EAppend eAppend)
   {
     return getResource (sBasePathRelativePath).getOutputStream (eAppend);
   }

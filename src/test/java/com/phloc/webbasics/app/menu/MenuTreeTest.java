@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
 import com.phloc.webbasics.app.page.system.SystemPageNotFound;
 
 /**
@@ -28,7 +29,7 @@ import com.phloc.webbasics.app.page.system.SystemPageNotFound;
  * 
  * @author philip
  */
-public final class MenuTreeTest
+public final class MenuTreeTest extends AbstractScopeAwareTestCase
 {
   @Test
   public void testBasic ()
