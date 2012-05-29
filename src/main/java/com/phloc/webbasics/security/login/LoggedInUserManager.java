@@ -193,7 +193,6 @@ public final class LoggedInUserManager extends GlobalSingleton
    * @return <code>true</code> if the user is logged in, <code>false</code>
    *         otherwise.
    */
-  @Nonnull
   public boolean isUserLoggedIn (@Nullable final String sUserID)
   {
     m_aRWLock.readLock ().lock ();
