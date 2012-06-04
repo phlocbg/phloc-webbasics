@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.HCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCA;
 
@@ -109,7 +109,7 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   }
 
   @Override
-  protected void prepareBeforeCreateElement (@Nonnull final HCConversionSettings aConversionSettings)
+  protected void prepareBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
   {
     super.prepareBeforeCreateElement (aConversionSettings);
     addClass (m_eType);

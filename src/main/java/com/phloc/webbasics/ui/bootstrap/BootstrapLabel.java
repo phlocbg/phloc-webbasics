@@ -19,7 +19,7 @@ package com.phloc.webbasics.ui.bootstrap;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.html.hc.conversion.HCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
 
 /**
@@ -52,7 +52,7 @@ public class BootstrapLabel extends HCButton
   }
 
   @Override
-  protected void prepareBeforeCreateElement (@Nonnull final HCConversionSettings aConversionSettings)
+  protected void prepareBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
   {
     super.prepareBeforeCreateElement (aConversionSettings);
     addClass (m_eType);

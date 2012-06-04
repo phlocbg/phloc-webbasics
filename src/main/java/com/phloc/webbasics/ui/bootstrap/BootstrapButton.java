@@ -20,7 +20,7 @@ package com.phloc.webbasics.ui.bootstrap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.html.hc.conversion.HCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
 
 public class BootstrapButton extends HCButton
@@ -56,7 +56,7 @@ public class BootstrapButton extends HCButton
   }
 
   @Override
-  protected void prepareBeforeCreateElement (@Nonnull final HCConversionSettings aConversionSettings)
+  protected void prepareBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
   {
     super.prepareBeforeCreateElement (aConversionSettings);
     addClasses (m_eType, m_eSize);

@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.HCItalic;
+import com.phloc.html.hc.html.HCI;
 
 /**
  * Bootstrap icons
@@ -170,6 +170,6 @@ public enum EBootstrapIcon implements ICSSClassProvider
   @Nonnull
   public IHCNode getAsNode ()
   {
-    return new HCItalic ().addClass (this);
+    return new HCI ().addClass (this);
   }
 }

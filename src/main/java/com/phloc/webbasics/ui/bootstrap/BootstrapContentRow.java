@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.HCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
@@ -76,7 +76,7 @@ public class BootstrapContentRow extends AbstractWrappedHCNode
   }
 
   @Override
-  protected void prepareBeforeGetAsNode (@Nonnull final HCConversionSettings aConversionSettings)
+  protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
   {
     m_aRow = new HCDiv ().addClass (CBootstrapCSS.ROW_FLUID);
 

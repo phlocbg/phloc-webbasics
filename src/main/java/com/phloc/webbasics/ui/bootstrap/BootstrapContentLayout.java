@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.HCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCHR;
 import com.phloc.html.hc.html5.HCFooter;
@@ -51,7 +51,7 @@ public class BootstrapContentLayout extends AbstractWrappedHCNode
   }
 
   @Override
-  protected void prepareBeforeGetAsNode (@Nonnull final HCConversionSettings aConversionSettings)
+  protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
   {
     m_aContainer = new HCDiv ().addClass (CBootstrapCSS.CONTAINER_FLUID);
     if (m_aContent != null)
