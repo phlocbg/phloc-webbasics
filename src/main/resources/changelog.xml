@@ -23,7 +23,7 @@
   <release date="2012-06-04" version="1.5.0" />
   <entry date="2012-06-04" category="tech" action="update">
     <change>
-      <text locale="en">Updated to phloc-html 3.2.0</text>
+      <text locale="en">Updated to phloc-html 3.2.0 and phloc-css 2.7.1</text>
     </change>
   </entry>
   <entry date="2012-05-25" category="tech" action="change" incompatible="true">
