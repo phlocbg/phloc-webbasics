@@ -30,10 +30,8 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.PrivateAPI;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.annotations.VisibleForTesting;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
@@ -105,8 +103,11 @@ public final class LoggedInUserManager extends GlobalSingleton
     {
       // Called when the session is destroyed
       // -> Ensure the user is logged out!
-      if (m_aOwningMgr != null && m_aOwningMgr._logoutUser (m_sUserID).isChanged ())
-        _reset ();
+      if (m_aOwningMgr != null)
+      {
+        // This method triggers _reset :)
+        m_aOwningMgr.logoutUser (m_sUserID);
+      }
     }
   }
 
@@ -163,15 +164,21 @@ public final class LoggedInUserManager extends GlobalSingleton
     }
   }
 
+  /**
+   * Manually log out the current user
+   * 
+   * @param sUserID
+   * @return {@link EChange} if something changed
+   */
   @Nonnull
-  @PrivateAPI
-  private EChange _logoutUser (@Nullable final String sUserID)
+  EChange logoutUser (@Nullable final String sUserID)
   {
     m_aRWLock.writeLock ().lock ();
     try
     {
       if (!m_aLoggedInUsers.remove (sUserID))
         return EChange.UNCHANGED;
+      SessionUserHolder.getInstance ()._reset ();
       s_aLogger.info ("Logged out user '" + sUserID + "'");
       return EChange.CHANGED;
     }
@@ -179,17 +186,6 @@ public final class LoggedInUserManager extends GlobalSingleton
     {
       m_aRWLock.writeLock ().unlock ();
     }
-  }
-
-  @Nonnull
-  @VisibleForTesting
-  EChange logoutUser (@Nullable final String sUserID)
-  {
-    if (_logoutUser (sUserID).isUnchanged ())
-      return EChange.UNCHANGED;
-
-    SessionUserHolder.getInstance ()._reset ();
-    return EChange.CHANGED;
   }
 
   /**
