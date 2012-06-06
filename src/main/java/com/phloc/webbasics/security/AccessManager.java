@@ -27,6 +27,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
@@ -52,6 +55,8 @@ import com.phloc.webbasics.security.usergroup.UserGroupManager;
 @ThreadSafe
 public final class AccessManager extends GlobalSingleton implements IUserManager, IUserGroupManager, IRoleManager
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AccessManager.class);
+
   private final IUserManager m_aUserMgr;
   private final IRoleManager m_aRoleMgr;
   private final IUserGroupManager m_aUserGroupMgr;
@@ -362,6 +367,23 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   }
 
   /**
+   * Get all role IDs the current user has
+   * 
+   * @param sUserID
+   *        User ID to check
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllUserRoleIDs (@Nullable final String sUserID)
+  {
+    final Set <String> ret = new HashSet <String> ();
+    for (final IUserGroup aUserGroup : m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID))
+      ret.addAll (aUserGroup.getAllContainedRoleIDs ());
+    return ret;
+  }
+
+  /**
    * Get all roles the current user has
    * 
    * @param sUserID
@@ -370,11 +392,18 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
    */
   @Nonnull
   @ReturnsMutableCopy
-  public Set <String> getAllUserRoles (@Nullable final String sUserID)
+  public Set <IRole> getAllUserRoles (@Nullable final String sUserID)
   {
-    final Set <String> ret = new HashSet <String> ();
-    for (final IUserGroup aUserGroup : m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID))
-      ret.addAll (aUserGroup.getAllContainedRoleIDs ());
+    final Set <String> aRoleIDs = getAllUserRoleIDs (sUserID);
+    final Set <IRole> ret = new HashSet <IRole> ();
+    for (final String sRoleID : aRoleIDs)
+    {
+      final IRole aRole = getRoleOfID (sRoleID);
+      if (aRole != null)
+        ret.add (aRole);
+      else
+        s_aLogger.warn ("Failed to resolve role with ID '" + sRoleID + "'");
+    }
     return ret;
   }
 }

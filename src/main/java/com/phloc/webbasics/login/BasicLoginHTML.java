@@ -84,6 +84,34 @@ public class BasicLoginHTML extends LayoutHTMLProvider
     return new HCTextNode (sText);
   }
 
+  @Nullable
+  @OverrideOnDemand
+  protected String getTextHeader (@Nonnull final Locale aDisplayLocale)
+  {
+    return EWebBasicsText.LOGIN_HEADER.getDisplayText (aDisplayLocale);
+  }
+
+  @Nullable
+  @OverrideOnDemand
+  protected String getTextErrorMessage (@Nonnull final Locale aDisplayLocale)
+  {
+    return EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale);
+  }
+
+  @Nullable
+  @OverrideOnDemand
+  protected String getTextFieldUserName (@Nonnull final Locale aDisplayLocale)
+  {
+    return EWebBasicsText.LOGIN_FIELD_USERNAME.getDisplayText (aDisplayLocale);
+  }
+
+  @Nullable
+  @OverrideOnDemand
+  protected String getTextFieldPassword (@Nonnull final Locale aDisplayLocale)
+  {
+    return EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale);
+  }
+
   /**
    * Add additional rows. Called after username and password row are added but
    * before the submit button is added.
@@ -108,18 +136,18 @@ public class BasicLoginHTML extends LayoutHTMLProvider
 
     aForm.addChild (new HCDiv ().addClass (CLogin.CSS_CLASS_LOGIN_APPLOGO));
     if (showHeaderText ())
-      aForm.addChild (new HCDiv (EWebBasicsText.LOGIN_HEADER.getDisplayText (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_HEADER));
+      aForm.addChild (new HCDiv (getTextHeader (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_HEADER));
     if (m_bLoginError)
-      aForm.addChild (new HCDiv (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_ERRORMSG));
+      aForm.addChild (new HCDiv (getTextErrorMessage (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_ERRORMSG));
 
     // User name and password table
     final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (200), HCCol.star ()));
     HCRow aRow = aTable.addBodyRow ();
-    aRow.addCell (createLabelNode (EWebBasicsText.LOGIN_FIELD_USERNAME.getDisplayText (aDisplayLocale)));
+    aRow.addCell (createLabelNode (getTextFieldUserName (aDisplayLocale)));
     aRow.addCell (new HCEdit (CLogin.REQUEST_ATTR_USERID));
 
     aRow = aTable.addBodyRow ();
-    aRow.addCell (createLabelNode (EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale)));
+    aRow.addCell (createLabelNode (getTextFieldPassword (aDisplayLocale)));
     aRow.addCell (new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD));
 
     // Customize
