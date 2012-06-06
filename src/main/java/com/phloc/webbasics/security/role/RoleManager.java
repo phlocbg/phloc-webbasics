@@ -156,6 +156,23 @@ public final class RoleManager extends AbstractDAO implements IRoleManager
     }
   }
 
+  public boolean containsAllRolesWithID (@Nullable final Collection <String> aRoleIDs)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      if (aRoleIDs != null)
+        for (final String sRoleID : aRoleIDs)
+          if (!m_aRoles.containsKey (sRoleID))
+            return false;
+      return true;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
   /**
    * Private locked version returning the implementation class
    * 

@@ -75,6 +75,16 @@ public interface IRoleManager
   boolean containsRoleWithID (@Nullable String sRoleID);
 
   /**
+   * Check if all passed role IDs are contained
+   * 
+   * @param aRoleIDs
+   *        The role IDs to be checked. May be <code>null</code>.
+   * @return <code>true</code> if the collection is empty or if all contained
+   *         role IDs are contained
+   */
+  boolean containsAllRolesWithID (@Nullable Collection <String> aRoleIDs);
+
+  /**
    * Get the role with the specified ID
    * 
    * @param sRoleID

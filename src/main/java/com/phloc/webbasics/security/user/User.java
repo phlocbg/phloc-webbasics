@@ -44,9 +44,9 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class User implements IUser
 {
   private final String m_sID;
-  private final String m_sLoginName;
-  private final String m_sEmailAddress;
-  private final String m_sPasswordHash;
+  private String m_sLoginName;
+  private String m_sEmailAddress;
+  private String m_sPasswordHash;
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
@@ -155,6 +155,18 @@ public final class User implements IUser
   }
 
   @Nonnull
+  EChange setLoginName (@Nullable final String sLoginName)
+  {
+    if (StringHelper.hasNoText (sLoginName))
+      throw new IllegalArgumentException ("loginName");
+
+    if (sLoginName.equals (m_sLoginName))
+      return EChange.UNCHANGED;
+    m_sLoginName = sLoginName;
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   @Nonempty
   public String getEmailAddress ()
   {
@@ -162,10 +174,34 @@ public final class User implements IUser
   }
 
   @Nonnull
+  EChange setEmailAddress (@Nullable final String sEmailAddress)
+  {
+    if (StringHelper.hasNoText (sEmailAddress))
+      throw new IllegalArgumentException ("emailAddress");
+
+    if (sEmailAddress.equals (m_sEmailAddress))
+      return EChange.UNCHANGED;
+    m_sEmailAddress = sEmailAddress;
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   @Nonempty
   public String getPasswordHash ()
   {
     return m_sPasswordHash;
+  }
+
+  @Nonnull
+  EChange setPasswordHash (@Nullable final String sPasswordHash)
+  {
+    if (StringHelper.hasNoText (sPasswordHash))
+      throw new IllegalArgumentException ("passwordHash");
+
+    if (sPasswordHash.equals (m_sPasswordHash))
+      return EChange.UNCHANGED;
+    m_sPasswordHash = sPasswordHash;
+    return EChange.CHANGED;
   }
 
   @Nullable

@@ -306,6 +306,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
 
   @Nonnull
   public EChange setUserData (@Nullable final String sUserID,
+                              @Nonnull @Nonempty final String sNewLoginName,
+                              @Nonnull @Nonempty final String sNewEmailAddress,
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
                               @Nullable final Locale aNewDesiredLocale,
@@ -319,7 +321,9 @@ public final class UserManager extends AbstractDAO implements IUserManager
     m_aRWLock.writeLock ().lock ();
     try
     {
-      EChange eChange = aUser.setFirstName (sNewFirstName);
+      EChange eChange = aUser.setLoginName (sNewLoginName);
+      eChange = eChange.or (aUser.setEmailAddress (sNewEmailAddress));
+      eChange = eChange.or (aUser.setFirstName (sNewFirstName));
       eChange = eChange.or (aUser.setLastName (sNewLastName));
       eChange = eChange.or (aUser.setDesiredLocale (aNewDesiredLocale));
       eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));

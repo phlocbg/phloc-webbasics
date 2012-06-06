@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.app.page;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -134,6 +135,19 @@ public abstract class AbstractPage implements IPage
   protected static final String getAttr (@Nullable final String sName)
   {
     return _getScope ().getAttributeAsString (sName);
+  }
+
+  /**
+   * Get the value list of the request parameter with the given name.
+   * 
+   * @param sName
+   *        Request parameter name
+   * @return The value list of the passed request parameter
+   */
+  @Nullable
+  protected static final List <String> getAttrs (@Nullable final String sName)
+  {
+    return _getScope ().getAttributeValues (sName);
   }
 
   /**

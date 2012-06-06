@@ -18,8 +18,10 @@
 package com.phloc.webbasics.security;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -152,12 +154,20 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
 
   @Nonnull
   public EChange setUserData (@Nullable final String sUserID,
+                              @Nonnull @Nonempty final String sNewLoginName,
+                              @Nonnull @Nonempty final String sNewEmailAddress,
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
                               @Nullable final Locale aNewDesiredLocale,
                               @Nullable final Map <String, String> aCustomAttrs)
   {
-    return m_aUserMgr.setUserData (sUserID, sNewFirstName, sNewLastName, aNewDesiredLocale, aCustomAttrs);
+    return m_aUserMgr.setUserData (sUserID,
+                                   sNewLoginName,
+                                   sNewEmailAddress,
+                                   sNewFirstName,
+                                   sNewLastName,
+                                   aNewDesiredLocale,
+                                   aCustomAttrs);
   }
 
   public boolean areUserIDAndPasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword)
@@ -308,6 +318,11 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return m_aRoleMgr.containsRoleWithID (sRoleID);
   }
 
+  public boolean containsAllRolesWithID (@Nullable final Collection <String> aRoleIDs)
+  {
+    return m_aRoleMgr.containsAllRolesWithID (aRoleIDs);
+  }
+
   @Nullable
   public IRole getRoleOfID (@Nullable final String sRoleID)
   {
@@ -344,5 +359,22 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
       if (aUserGroup.containsRoleID (sRoleID))
         return true;
     return false;
+  }
+
+  /**
+   * Get all roles the current user has
+   * 
+   * @param sUserID
+   *        User ID to check
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllUserRoles (@Nullable final String sUserID)
+  {
+    final Set <String> ret = new HashSet <String> ();
+    for (final IUserGroup aUserGroup : m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID))
+      ret.addAll (aUserGroup.getAllContainedRoleIDs ());
+    return ret;
   }
 }

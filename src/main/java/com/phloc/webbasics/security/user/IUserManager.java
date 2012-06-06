@@ -116,8 +116,10 @@ public interface IUserManager
    * 
    * @param sUserID
    *        The ID of the user to be modified. May be <code>null</code>.
-   * @param sNewFirstName
-   *        The new first name. May be <code>null</code>.
+   * @param sNewLoginName
+   *        The new login name. May not be <code>null</code>.
+   * @param sNewEmailAddress
+   *        The new email address. May not be <code>null</code>.
    * @param sNewLastName
    *        The new last name. May be <code>null</code>.
    * @param aNewDesiredLocale
@@ -128,6 +130,8 @@ public interface IUserManager
    */
   @Nonnull
   EChange setUserData (@Nullable String sUserID,
+                       @Nonnull @Nonempty String sNewLoginName,
+                       @Nonnull @Nonempty String sNewEmailAddress,
                        @Nullable String sNewFirstName,
                        @Nullable String sNewLastName,
                        @Nullable Locale aNewDesiredLocale,
