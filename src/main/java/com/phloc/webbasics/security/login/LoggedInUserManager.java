@@ -47,8 +47,6 @@ import com.phloc.webbasics.security.user.IUser;
 @ThreadSafe
 public final class LoggedInUserManager extends GlobalSingleton
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
-
   /**
    * This class manages the user ID of the current session
    * 
@@ -110,6 +108,8 @@ public final class LoggedInUserManager extends GlobalSingleton
       }
     }
   }
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Set <String> m_aLoggedInUsers = new HashSet <String> ();

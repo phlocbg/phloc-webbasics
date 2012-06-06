@@ -20,6 +20,7 @@ package com.phloc.webbasics.login;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
@@ -52,11 +53,21 @@ public class LoginManager
     return new BasicLoginHTML (bLoginError);
   }
 
+  /**
+   * Callback method to notify on a successful login
+   * 
+   * @param sUserLoginName
+   *        The login name of the user who just logged in
+   */
+  @OverrideOnDemand
+  protected void onUserLogin (@Nonnull @Nonempty final String sUserLoginName)
+  {}
+
   @Nonnull
   public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
   {
-    String sSessionUserID = LoggedInUserManager.getInstance ().getCurrentUserID ();
-    if (sSessionUserID == null)
+    String sSessionUserLoginName = LoggedInUserManager.getInstance ().getCurrentUserID ();
+    if (sSessionUserLoginName == null)
     {
       // No use currently logged in -> start login
       boolean bLoginError = false;
@@ -66,24 +77,25 @@ public class LoginManager
       {
         // Login screen was already shown
         // -> Check request parameters
-        final String sUserID = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
+        final String sLoginName = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
         final String sPassword = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
-        if (LoggedInUserManager.getInstance ().loginUser (sUserID, sPassword).isSuccess ())
+        if (LoggedInUserManager.getInstance ().loginUser (sLoginName, sPassword).isSuccess ())
         {
           // Credentials are valid
           aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
-          sSessionUserID = sUserID;
+          sSessionUserLoginName = sLoginName;
+          onUserLogin (sLoginName);
         }
         else
         {
           // Credentials are invalid
           // Anyway show the error message only if at least some credential
           // values are passed
-          bLoginError = StringHelper.hasText (sUserID) || StringHelper.hasText (sPassword);
+          bLoginError = StringHelper.hasText (sLoginName) || StringHelper.hasText (sPassword);
         }
       }
 
-      if (sSessionUserID == null)
+      if (sSessionUserLoginName == null)
       {
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
@@ -92,6 +104,6 @@ public class LoginManager
     }
 
     // Continue only, if a valid user ID is present
-    return EContinue.valueOf (sSessionUserID != null);
+    return EContinue.valueOf (sSessionUserLoginName != null);
   }
 }
