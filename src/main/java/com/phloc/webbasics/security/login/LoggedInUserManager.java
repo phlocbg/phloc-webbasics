@@ -94,16 +94,19 @@ public final class LoggedInUserManager extends GlobalSingleton
       return EChange.CHANGED;
     }
 
+    private void _reset ()
+    {
+      m_aUser = null;
+      m_sUserID = null;
+    }
+
     @Override
     protected void onDestroy ()
     {
       // Called when the session is destroyed
       // -> Ensure the user is logged out!
       if (m_aOwningMgr != null && m_aOwningMgr._logoutUser (m_sUserID).isChanged ())
-      {
-        m_aUser = null;
-        m_sUserID = null;
-      }
+        _reset ();
     }
   }
 
@@ -184,7 +187,8 @@ public final class LoggedInUserManager extends GlobalSingleton
   {
     if (_logoutUser (sUserID).isUnchanged ())
       return EChange.UNCHANGED;
-    SessionUserHolder.getInstance ().m_sUserID = null;
+
+    SessionUserHolder.getInstance ()._reset ();
     return EChange.CHANGED;
   }
 
