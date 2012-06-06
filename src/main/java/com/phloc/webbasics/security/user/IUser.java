@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.security.user;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import com.phloc.commons.name.IHasDisplayName;
  * 
  * @author philip
  */
-public interface IUser extends IHasID <String>, IHasDisplayName
+public interface IUser extends IHasID <String>, IHasDisplayName, Serializable
 {
   /**
    * @return The login name of the user.

@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.security.role;
 
+import java.io.Serializable;
+
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasName;
 
@@ -25,7 +27,7 @@ import com.phloc.commons.name.IHasName;
  * 
  * @author philip
  */
-public interface IRole extends IHasID <String>, IHasName
+public interface IRole extends IHasID <String>, IHasName, Serializable
 {
   /* empty */
 }

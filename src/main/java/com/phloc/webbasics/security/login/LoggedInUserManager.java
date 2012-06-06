@@ -30,14 +30,12 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PrivateAPI;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.annotations.VisibleForTesting;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.singleton.SessionWebSingleton;
 import com.phloc.webbasics.security.AccessManager;
@@ -61,6 +59,7 @@ public final class LoggedInUserManager extends GlobalSingleton
   @edu.umd.cs.findbugs.annotations.SuppressWarnings ("SE_NO_SERIALVERSIONID")
   public static final class SessionUserHolder extends SessionWebSingleton
   {
+    private IUser m_aUser;
     private String m_sUserID;
     private transient LoggedInUserManager m_aOwningMgr;
 
@@ -76,21 +75,22 @@ public final class LoggedInUserManager extends GlobalSingleton
     }
 
     @Nonnull
-    public EChange setUserID (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull @Nonempty final String sUserID)
+    public EChange setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
     {
-      if (StringHelper.hasNoText (sUserID))
-        throw new IllegalArgumentException ("userID");
-      if (m_sUserID != null)
+      if (aUser == null)
+        throw new NullPointerException ("user");
+      if (m_aUser != null)
       {
         s_aLogger.warn ("The session user holder already has the user ID '" +
                         m_sUserID +
                         "' so the new ID '" +
-                        sUserID +
+                        aUser.getID () +
                         "' will not be set!");
         return EChange.UNCHANGED;
       }
       m_aOwningMgr = aOwningMgr;
-      m_sUserID = sUserID;
+      m_aUser = aUser;
+      m_sUserID = aUser.getID ();
       return EChange.CHANGED;
     }
 
@@ -99,8 +99,11 @@ public final class LoggedInUserManager extends GlobalSingleton
     {
       // Called when the session is destroyed
       // -> Ensure the user is logged out!
-      if (m_aOwningMgr._logoutUser (m_sUserID).isChanged ())
+      if (m_aOwningMgr != null && m_aOwningMgr._logoutUser (m_sUserID).isChanged ())
+      {
+        m_aUser = null;
         m_sUserID = null;
+      }
     }
   }
 
@@ -141,7 +144,7 @@ public final class LoggedInUserManager extends GlobalSingleton
         return ELoginResult.USER_ALREADY_LOGGED_IN;
       }
 
-      if (SessionUserHolder.getInstance ().setUserID (this, sUserID).isUnchanged ())
+      if (SessionUserHolder.getInstance ().setUser (this, aUser).isUnchanged ())
       {
         // Another user is already in the current session
         m_aLoggedInUsers.remove (sUserID);
@@ -268,6 +271,6 @@ public final class LoggedInUserManager extends GlobalSingleton
   @Nullable
   public IUser getCurrentUser ()
   {
-    return AccessManager.getInstance ().getUserOfID (getCurrentUserID ());
+    return SessionUserHolder.getInstance ().m_aUser;
   }
 }

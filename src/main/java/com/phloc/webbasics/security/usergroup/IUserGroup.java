@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.security.usergroup;
 
+import java.io.Serializable;
+
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasName;
 import com.phloc.webbasics.security.role.IRoleContainer;
@@ -27,7 +29,7 @@ import com.phloc.webbasics.security.user.IUserContainer;
  * 
  * @author philip
  */
-public interface IUserGroup extends IHasID <String>, IHasName, IUserContainer, IRoleContainer
+public interface IUserGroup extends IHasID <String>, IHasName, IUserContainer, IRoleContainer, Serializable
 {
   /* empty */
 }
