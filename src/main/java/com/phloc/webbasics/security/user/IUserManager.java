@@ -122,13 +122,16 @@ public interface IUserManager
    *        The new last name. May be <code>null</code>.
    * @param aNewDesiredLocale
    *        The new desired locale. May be <code>null</code>.
+   * @param aCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
    * @return {@link EChange}
    */
   @Nonnull
   EChange setUserData (@Nullable String sUserID,
                        @Nullable String sNewFirstName,
                        @Nullable String sNewLastName,
-                       @Nullable Locale aNewDesiredLocale);
+                       @Nullable Locale aNewDesiredLocale,
+                       @Nullable Map <String, String> aCustomAttrs);
 
   /**
    * Check if the passed combination of user ID and password matches.

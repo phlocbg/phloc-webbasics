@@ -308,7 +308,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
   public EChange setUserData (@Nullable final String sUserID,
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
-                              @Nullable final Locale aNewDesiredLocale)
+                              @Nullable final Locale aNewDesiredLocale,
+                              @Nullable final Map <String, String> aNewCustomAttrs)
   {
     // Resolve user
     final User aUser = _internalGetUserOfID (sUserID);
@@ -321,6 +322,7 @@ public final class UserManager extends AbstractDAO implements IUserManager
       EChange eChange = aUser.setFirstName (sNewFirstName);
       eChange = eChange.or (aUser.setLastName (sNewLastName));
       eChange = eChange.or (aUser.setDesiredLocale (aNewDesiredLocale));
+      eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();

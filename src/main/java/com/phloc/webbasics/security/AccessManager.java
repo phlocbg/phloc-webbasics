@@ -154,9 +154,10 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   public EChange setUserData (@Nullable final String sUserID,
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
-                              @Nullable final Locale aNewDesiredLocale)
+                              @Nullable final Locale aNewDesiredLocale,
+                              @Nullable final Map <String, String> aCustomAttrs)
   {
-    return m_aUserMgr.setUserData (sUserID, sNewFirstName, sNewLastName, aNewDesiredLocale);
+    return m_aUserMgr.setUserData (sUserID, sNewFirstName, sNewLastName, aNewDesiredLocale, aCustomAttrs);
   }
 
   public boolean areUserIDAndPasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword)

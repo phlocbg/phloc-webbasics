@@ -50,7 +50,7 @@ public final class User implements IUser
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
-  private final Map <String, String> m_aCustomAttrs = new LinkedHashMap <String, String> ();
+  private Map <String, String> m_aCustomAttrs = new LinkedHashMap <String, String> ();
 
   /**
    * Create a new user
@@ -224,6 +224,60 @@ public final class User implements IUser
   public Map <String, String> getCustomAttrs ()
   {
     return ContainerHelper.newOrderedMap (m_aCustomAttrs);
+  }
+
+  @Nonnull
+  EChange setCustomAttrs (@Nullable final Map <String, String> aCustomAttrs)
+  {
+    if (ContainerHelper.isEmpty (aCustomAttrs))
+    {
+      if (m_aCustomAttrs.isEmpty ())
+        return EChange.UNCHANGED;
+      m_aCustomAttrs.clear ();
+      return EChange.CHANGED;
+    }
+
+    if (m_aCustomAttrs.equals (aCustomAttrs))
+      return EChange.UNCHANGED;
+    m_aCustomAttrs = aCustomAttrs;
+    return EChange.CHANGED;
+  }
+
+  public boolean containsCustomAttr (@Nullable final String sKey)
+  {
+    return m_aCustomAttrs.containsKey (sKey);
+  }
+
+  @Nullable
+  public String getCustomAttrValue (@Nullable final String sKey)
+  {
+    return m_aCustomAttrs.get (sKey);
+  }
+
+  @Nonnull
+  EChange removeCustomAttrValue (@Nonnull final String sKey)
+  {
+    return EChange.valueOf (m_aCustomAttrs.remove (sKey) != null);
+  }
+
+  @Nonnull
+  EChange setCustomAttrValue (@Nonnull final String sKey, @Nonnull final String sValue)
+  {
+    if (StringHelper.hasNoText (sKey))
+      throw new IllegalArgumentException ("key");
+
+    // Any change?
+    final String sOldValue = getCustomAttrValue (sKey);
+    if (EqualsUtils.equals (sValue, sOldValue))
+      return EChange.UNCHANGED;
+
+    // Remove value?
+    if (sValue == null)
+      return removeCustomAttrValue (sKey);
+
+    // Finally set it
+    m_aCustomAttrs.put (sKey, sValue);
+    return EChange.CHANGED;
   }
 
   @Override

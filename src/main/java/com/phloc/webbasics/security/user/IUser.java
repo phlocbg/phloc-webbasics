@@ -79,4 +79,20 @@ public interface IUser extends IHasID <String>, IHasDisplayName
    */
   @Nonnull
   Map <String, String> getCustomAttrs ();
+
+  /**
+   * @param sKey
+   *        The name of the custom attribute to check. May be <code>null</code>.
+   * @return <code>true</code> if an attribute with the given name is contained,
+   *         <code>false</code> otherwise
+   */
+  boolean containsCustomAttr (@Nullable String sKey);
+
+  /**
+   * @param sKey
+   *        The name of the custom attribute to query. May be <code>null</code>.
+   * @return <code>null</code> if no such attribute is present.
+   */
+  @Nullable
+  String getCustomAttrValue (@Nullable String sKey);
 }
