@@ -19,6 +19,7 @@ package com.phloc.webbasics.security;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,14 +77,16 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
                               @Nonnull @Nonempty final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
-                              @Nullable final Locale aDesiredLocale)
+                              @Nullable final Locale aDesiredLocale,
+                              @Nullable final Map <String, String> aCustomAttrs)
   {
     return m_aUserMgr.createNewUser (sLoginName,
                                      sEmailAddress,
                                      sPlainTextPassword,
                                      sFirstName,
                                      sLastName,
-                                     aDesiredLocale);
+                                     aDesiredLocale,
+                                     aCustomAttrs);
   }
 
   @Nullable
@@ -93,7 +96,8 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
                                      @Nonnull @Nonempty final String sPlainTextPassword,
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
-                                     @Nullable final Locale aDesiredLocale)
+                                     @Nullable final Locale aDesiredLocale,
+                                     @Nullable final Map <String, String> aCustomAttrs)
   {
     return m_aUserMgr.createPredefinedUser (sID,
                                             sLoginName,
@@ -101,7 +105,8 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
                                             sPlainTextPassword,
                                             sFirstName,
                                             sLastName,
-                                            aDesiredLocale);
+                                            aDesiredLocale,
+                                            aCustomAttrs);
   }
 
   /**

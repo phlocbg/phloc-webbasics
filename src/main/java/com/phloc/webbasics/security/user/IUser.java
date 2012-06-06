@@ -18,6 +18,7 @@
 package com.phloc.webbasics.security.user;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,4 +72,11 @@ public interface IUser extends IHasID <String>, IHasDisplayName
    */
   @Nullable
   Locale getDesiredLocale ();
+
+  /**
+   * @return A set of custom attributes in an ordered map. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  Map <String, String> getCustomAttrs ();
 }

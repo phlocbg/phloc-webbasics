@@ -19,6 +19,7 @@ package com.phloc.webbasics.security.user;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,6 +52,8 @@ public interface IUserManager
    *        The users last name. May be <code>null</code>.
    * @param aDesiredLocale
    *        The users default locale. May be <code>null</code>.
+   * @param aCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
    * @return The created user or <code>null</code> if another user with the same
    *         email address is already present.
    */
@@ -60,7 +63,8 @@ public interface IUserManager
                        @Nonnull @Nonempty String sPlainTextPassword,
                        @Nullable String sFirstName,
                        @Nullable String sLastName,
-                       @Nullable Locale aDesiredLocale);
+                       @Nullable Locale aDesiredLocale,
+                       @Nullable Map <String, String> aCustomAttrs);
 
   /**
    * Create a predefined user.
@@ -81,6 +85,8 @@ public interface IUserManager
    *        The users last name. May be <code>null</code>.
    * @param aDesiredLocale
    *        The users default locale. May be <code>null</code>.
+   * @param aCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
    * @return The created user or <code>null</code> if another user with the same
    *         email address is already present.
    */
@@ -91,7 +97,8 @@ public interface IUserManager
                               @Nonnull @Nonempty String sPlainTextPassword,
                               @Nullable String sFirstName,
                               @Nullable String sLastName,
-                              @Nullable Locale aDesiredLocale);
+                              @Nullable Locale aDesiredLocale,
+                              @Nullable Map <String, String> aCustomAttrs);
 
   /**
    * Delete the user with the specified ID.

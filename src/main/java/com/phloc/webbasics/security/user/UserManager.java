@@ -132,7 +132,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
                               @Nonnull @Nonempty final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
-                              @Nullable final Locale aDesiredLocale)
+                              @Nullable final Locale aDesiredLocale,
+                              @Nullable final Map <String, String> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
@@ -151,7 +152,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
                                  createUserPasswordHash (sPlainTextPassword),
                                  sFirstName,
                                  sLastName,
-                                 aDesiredLocale);
+                                 aDesiredLocale,
+                                 aCustomAttrs);
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -173,7 +175,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
                                      @Nonnull @Nonempty final String sPlainTextPassword,
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
-                                     @Nullable final Locale aDesiredLocale)
+                                     @Nullable final Locale aDesiredLocale,
+                                     @Nullable final Map <String, String> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
@@ -193,7 +196,8 @@ public final class UserManager extends AbstractDAO implements IUserManager
                                  createUserPasswordHash (sPlainTextPassword),
                                  sFirstName,
                                  sLastName,
-                                 aDesiredLocale);
+                                 aDesiredLocale,
+                                 aCustomAttrs);
 
     m_aRWLock.writeLock ().lock ();
     try

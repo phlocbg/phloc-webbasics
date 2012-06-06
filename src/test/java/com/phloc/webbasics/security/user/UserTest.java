@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 
@@ -37,7 +38,7 @@ public final class UserTest
   @Test
   public void testBasic ()
   {
-    final User aUser = new User ("id1", "MyName", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY);
+    final User aUser = new User ("id1", "MyName", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY, null);
     assertEquals ("id1", aUser.getID ());
     assertEquals ("me@example.org", aUser.getEmailAddress ());
     assertEquals ("ABCDEF", aUser.getPasswordHash ());
@@ -49,7 +50,14 @@ public final class UserTest
   @Test
   public void testMicroConversion ()
   {
-    final User aUser = new User ("id1", "MyName", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY);
+    final User aUser = new User ("id1",
+                                 "MyName",
+                                 "me@example.org",
+                                 "ABCDEF",
+                                 "Philip",
+                                 "Helger",
+                                 Locale.GERMANY,
+                                 ContainerHelper.newMap ("locale", "de_DE"));
 
     // To XML
     final IMicroElement aElement = MicroTypeConverter.convertToMicroElement (aUser, "user");
@@ -64,5 +72,7 @@ public final class UserTest
     assertEquals ("Philip", aUser2.getFirstName ());
     assertEquals ("Helger", aUser2.getLastName ());
     assertEquals (Locale.GERMANY, aUser2.getDesiredLocale ());
+    assertEquals (1, aUser2.getCustomAttrs ().size ());
+    assertEquals ("de_DE", aUser2.getCustomAttrs ().get ("locale"));
   }
 }

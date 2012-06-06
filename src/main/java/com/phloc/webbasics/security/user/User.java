@@ -17,13 +17,17 @@
  */
 package com.phloc.webbasics.security.user;
 
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -46,6 +50,7 @@ public final class User implements IUser
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
+  private final Map <String, String> m_aCustomAttrs = new LinkedHashMap <String, String> ();
 
   /**
    * Create a new user
@@ -64,13 +69,16 @@ public final class User implements IUser
    *        The last name. May be <code>null</code>.
    * @param aDesiredLocale
    *        The desired locale. May be <code>null</code>.
+   * @param aCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
    */
   public User (@Nonnull @Nonempty final String sLoginName,
                @Nonnull @Nonempty final String sEmailAddress,
                @Nonnull @Nonempty final String sPasswordHash,
                @Nullable final String sFirstName,
                @Nullable final String sLastName,
-               @Nullable final Locale aDesiredLocale)
+               @Nullable final Locale aDesiredLocale,
+               @Nullable final Map <String, String> aCustomAttrs)
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
           sLoginName,
@@ -78,7 +86,8 @@ public final class User implements IUser
           sPasswordHash,
           sFirstName,
           sLastName,
-          aDesiredLocale);
+          aDesiredLocale,
+          aCustomAttrs);
   }
 
   /**
@@ -100,6 +109,8 @@ public final class User implements IUser
    *        The last name. May be <code>null</code>.
    * @param aDesiredLocale
    *        The desired locale. May be <code>null</code>.
+   * @param aCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
    */
   User (@Nonnull @Nonempty final String sID,
         @Nonnull @Nonempty final String sLoginName,
@@ -107,7 +118,8 @@ public final class User implements IUser
         @Nonnull @Nonempty final String sPasswordHash,
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
-        @Nullable final Locale aDesiredLocale)
+        @Nullable final Locale aDesiredLocale,
+        @Nullable final Map <String, String> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
@@ -124,6 +136,8 @@ public final class User implements IUser
     m_sFirstName = sFirstName;
     m_sLastName = sLastName;
     m_aDesiredLocale = aDesiredLocale;
+    if (aCustomAttrs != null)
+      m_aCustomAttrs.putAll (aCustomAttrs);
   }
 
   @Nonnull
@@ -203,6 +217,13 @@ public final class User implements IUser
   public String getDisplayName ()
   {
     return StringHelper.concatenateOnDemand (m_sFirstName, " ", m_sLastName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, String> getCustomAttrs ()
+  {
+    return ContainerHelper.newOrderedMap (m_aCustomAttrs);
   }
 
   @Override
