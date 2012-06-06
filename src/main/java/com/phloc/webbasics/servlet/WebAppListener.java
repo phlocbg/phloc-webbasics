@@ -119,7 +119,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
       if (StringHelper.hasNoText (sBasePath))
       {
-        s_aLogger.info ("No init-parameter '" + INIT_PARAMETER_STORAGE_PATH + "' found!");
+        s_aLogger.info ("No init-parameter '" + INIT_PARAMETER_STORAGE_PATH + "' found! Using the default.");
         sBasePath = aSC.getRealPath (".");
       }
       WebFileIO.initBasePath (sBasePath);

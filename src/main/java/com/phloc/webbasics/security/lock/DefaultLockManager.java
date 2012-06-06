@@ -119,6 +119,7 @@ public class DefaultLockManager extends GlobalSingleton
     return aLock != null ? aLock.getLockDateTime () : null;
   }
 
+  @Nullable
   private static String _getCurrentUserID ()
   {
     return LoggedInUserManager.getInstance ().getCurrentUserID ();
@@ -279,8 +280,8 @@ public class DefaultLockManager extends GlobalSingleton
       m_aRWLock.writeLock ().unlock ();
     }
 
-    if (s_aLogger.isInfoEnabled ())
-      if (!aObjectsToUnlock.isEmpty ())
+    if (!aObjectsToUnlock.isEmpty ())
+      if (s_aLogger.isInfoEnabled ())
         s_aLogger.info ("Unlocked all objects of user '" + sUserID + "': " + aObjectsToUnlock);
     return aObjectsToUnlock;
   }

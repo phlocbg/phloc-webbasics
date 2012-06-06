@@ -48,6 +48,10 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
 
   private void _run (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
+    // Get the redirect URL before the session is invalidated, in case the code
+    // requires the current session
+    final ISimpleURL aRedirectURL = getRedirectURL ();
+
     // Perform the main logout
     // 1. Invalidate the session
     // 2. Triggers the session scope destruction (via the HttpSessionListener)
@@ -57,7 +61,7 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
     aHttpRequest.getSession ().invalidate ();
 
     // Go home
-    aHttpResponse.sendRedirect (getRedirectURL ().getAsString ());
+    aHttpResponse.sendRedirect (aRedirectURL.getAsString ());
   }
 
   @Override
