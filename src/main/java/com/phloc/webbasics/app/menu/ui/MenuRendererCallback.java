@@ -17,7 +17,7 @@
  */
 package com.phloc.webbasics.app.menu.ui;
 
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nonnull;
@@ -53,7 +53,7 @@ public class MenuRendererCallback extends
 
   private final NonBlockingStack <HCUL> m_aMenuListStack;
   private final IMenuItemRenderer m_aRenderer;
-  private final Set <String> m_aDisplayMenuItemIDs;
+  private final Map <String, Boolean> m_aDisplayMenuItemIDs;
   private final NonBlockingStack <HCLI> m_aMenuItemStack = new NonBlockingStack <HCLI> ();
   private final NonBlockingStack <AtomicInteger> m_aChildCountStack = new NonBlockingStack <AtomicInteger> ();
   private final NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> m_aTreeItemStack = new NonBlockingStack <DefaultTreeItemWithID <String, IMenuObject>> ();
@@ -61,7 +61,7 @@ public class MenuRendererCallback extends
 
   protected MenuRendererCallback (@Nonnull final NonBlockingStack <HCUL> aMenuListStack,
                                   @Nonnull final IMenuItemRenderer aRenderer,
-                                  @Nonnull final Set <String> aDisplayMenuItemIDs)
+                                  @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
     if (aMenuListStack == null)
       throw new NullPointerException ("nodeStack");
@@ -87,7 +87,7 @@ public class MenuRendererCallback extends
     // Check if any child is visible
     final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aTreeItemStack.peek ();
     for (final DefaultTreeItemWithID <String, IMenuObject> aChildItem : aParentItem.getChildren ())
-      if (m_aDisplayMenuItemIDs.contains (aChildItem.getID ()))
+      if (m_aDisplayMenuItemIDs.containsKey (aChildItem.getID ()))
       {
         // add sub menu structure at the right place
         m_aMenuListStack.push (m_aMenuItemStack.peek ().addAndReturnChild (new HCUL ()));
@@ -111,23 +111,25 @@ public class MenuRendererCallback extends
   {
     m_aTreeItemStack.push (aItem);
 
-    if (m_aDisplayMenuItemIDs.contains (aItem.getID ()))
+    final Boolean aExpandedState = m_aDisplayMenuItemIDs.get (aItem.getID ());
+    if (aExpandedState != null)
     {
       final HCUL aParent = m_aMenuListStack.peek ();
       final IMenuObject aMenuObj = aItem.getData ();
       if (aMenuObj instanceof IMenuSeparator)
       {
         // separator
-        final IHCNode aHC = m_aRenderer.renderSeparator ((IMenuSeparator) aMenuObj);
-        m_aMenuItemStack.push (aParent.addAndReturnItem (aHC).addClass (CSS_CLASS_MENU_SEPARATOR));
+        final IHCNode aHCNode = m_aRenderer.renderSeparator ((IMenuSeparator) aMenuObj);
+        m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_SEPARATOR));
       }
       else
       {
         // item
-        final IHCNode aHC = m_aRenderer.renderMenuItem ((IMenuItem) aMenuObj,
-                                                        aItem.hasChildren (),
-                                                        aMenuObj.getID ().equals (m_sSelectedItem));
-        m_aMenuItemStack.push (aParent.addAndReturnItem (aHC).addClass (CSS_CLASS_MENU_ITEM));
+        final IHCNode aHCNode = m_aRenderer.renderMenuItem ((IMenuItem) aMenuObj,
+                                                            aItem.hasChildren (),
+                                                            aMenuObj.getID ().equals (m_sSelectedItem),
+                                                            aExpandedState.booleanValue ());
+        m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM));
       }
       m_aChildCountStack.peek ().incrementAndGet ();
       return EHierarchyCallbackReturn.CONTINUE;
@@ -185,12 +187,13 @@ public class MenuRendererCallback extends
    * @param aRenderer
    *        The renderer to use
    * @param aDisplayMenuItemIDs
-   *        The menu items to display
+   *        The menu items to display as a map from menu item ID to expanded
+   *        state
    * @return Never <code>null</code>.
    */
   @Nonnull
   public static IHCNode createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer,
-                                            @Nonnull final Set <String> aDisplayMenuItemIDs)
+                                            @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
     return createRenderedMenu (MenuTree.getInstance ().getRootItem (), aRenderer, aDisplayMenuItemIDs);
   }
@@ -203,13 +206,14 @@ public class MenuRendererCallback extends
    * @param aRenderer
    *        The renderer to use
    * @param aDisplayMenuItemIDs
-   *        The menu items to display
+   *        The menu items to display as a map from menu item ID to expanded
+   *        state
    * @return Never <code>null</code>.
    */
   @Nonnull
   public static IHCNode createRenderedMenu (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                             @Nonnull final IMenuItemRenderer aRenderer,
-                                            @Nonnull final Set <String> aDisplayMenuItemIDs)
+                                            @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
     final NonBlockingStack <HCUL> aNodeStack = new NonBlockingStack <HCUL> (new HCUL ());
     TreeWalkerDynamic.walkSubTree (aStartTreeItem,

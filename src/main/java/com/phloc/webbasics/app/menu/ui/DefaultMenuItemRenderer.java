@@ -58,11 +58,12 @@ public class DefaultMenuItemRenderer implements IMenuItemRenderer
   @Nonnull
   public IHCNode renderMenuItem (@Nonnull final IMenuItem aMenuItem,
                                  final boolean bHasChildren,
-                                 final boolean bIsSelected)
+                                 final boolean bIsSelected,
+                                 final boolean bIsExpanded)
   {
     final String sMenuItemID = aMenuItem.getID ();
     final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren ? " [+]" : ""));
+    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
     aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
     if (bIsSelected)
       aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);

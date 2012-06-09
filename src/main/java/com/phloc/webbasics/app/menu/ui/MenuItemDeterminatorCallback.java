@@ -17,8 +17,8 @@
  */
 package com.phloc.webbasics.app.menu.ui;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -43,7 +43,7 @@ import com.phloc.webbasics.app.menu.MenuTree;
 public class MenuItemDeterminatorCallback extends
                                          DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
-  private final Set <String> m_aItems = new HashSet <String> ();
+  private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();
   private final String m_sSelectedItem;
   private final DefaultTreeItemWithID <String, IMenuObject> m_aSelectedItem;
 
@@ -55,16 +55,19 @@ public class MenuItemDeterminatorCallback extends
   }
 
   @OverrideOnDemand
-  protected void rememberMenuItemForDisplay (@Nonnull @Nonempty final String sMenuItemID)
+  protected void rememberMenuItemForDisplay (@Nonnull @Nonempty final String sMenuItemID, final boolean bExpanded)
   {
-    m_aItems.add (sMenuItemID);
+    final Boolean aExpanded = m_aItems.get (sMenuItemID);
+    if (aExpanded == null || !aExpanded.booleanValue ())
+      m_aItems.put (sMenuItemID, Boolean.valueOf (bExpanded));
   }
 
   @Override
   public final EHierarchyCallbackReturn onItemBeforeChildren (final DefaultTreeItemWithID <String, IMenuObject> aItem)
   {
     boolean bShow;
-    boolean bAddAllOnThisLevel = false;
+    boolean bAddAllChildrenOnThisLevel = false;
+    boolean bExpanded = false;
     final boolean bIsTopLevel = getLevel () == 0;
     if (m_aSelectedItem == null)
     {
@@ -80,51 +83,70 @@ public class MenuItemDeterminatorCallback extends
       // parent
       if (bIsTopLevel)
       {
+        // 1.
         bShow = true;
+        bExpanded = m_aSelectedItem.isSameOrChildOf (aItem);
       }
       else
       {
-        final DefaultTreeItemWithID <String, IMenuObject> aItemParent = aItem.getParent ();
-        bShow = m_aSelectedItem.isSameOrChildOf (aItem) ||
-                aItemParent.equals (m_aSelectedItem) ||
-                aItemParent.getChildItemOfDataID (m_sSelectedItem) != null;
-        bAddAllOnThisLevel = bShow;
+        // 2.
+        if (m_aSelectedItem.isSameOrChildOf (aItem))
+        {
+          bShow = true;
+          bExpanded = true;
+        }
+        else
+        {
+          final DefaultTreeItemWithID <String, IMenuObject> aItemParent = aItem.getParent ();
+          // 3.
+          if (aItemParent.equals (m_aSelectedItem))
+          {
+            bShow = true;
+          }
+          else
+            // 4.
+            if (aItemParent.getChildItemOfDataID (m_sSelectedItem) != null)
+              bShow = true;
+            else
+              bShow = false;
+        }
+        bAddAllChildrenOnThisLevel = bShow;
       }
     }
 
     // Check display filter
-    if (bShow || bAddAllOnThisLevel)
+    if (bShow || bAddAllChildrenOnThisLevel)
     {
       if (!aItem.getData ().matchesDisplayFilter ())
-        bShow = bAddAllOnThisLevel = false;
+        bShow = bAddAllChildrenOnThisLevel = bExpanded = false;
     }
 
     if (bShow)
-      rememberMenuItemForDisplay (aItem.getID ());
-    if (bAddAllOnThisLevel)
+      rememberMenuItemForDisplay (aItem.getID (), bExpanded);
+    if (bAddAllChildrenOnThisLevel)
       for (final DefaultTreeItemWithID <String, IMenuObject> aSibling : aItem.getParent ().getChildren ())
         if (aSibling.getData ().matchesDisplayFilter ())
-          rememberMenuItemForDisplay (aSibling.getID ());
+          rememberMenuItemForDisplay (aSibling.getID (), false);
     return EHierarchyCallbackReturn.CONTINUE;
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public Set <String> getAllItemIDs ()
+  public Map <String, Boolean> getAllItemIDs ()
   {
     return ContainerHelper.makeUnmodifiable (m_aItems);
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public static Set <String> getAllDisplayMenuItemIDs ()
+  public static Map <String, Boolean> getAllDisplayMenuItemIDs ()
   {
     return getAllDisplayMenuItemIDs (new MenuItemDeterminatorCallback ());
   }
 
   @Nonnull
   @ReturnsImmutableObject
-  public static Set <String> getAllDisplayMenuItemIDs (@Nonnull final MenuItemDeterminatorCallback aDeterminator)
+  public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final MenuItemDeterminatorCallback aDeterminator)
   {
     if (aDeterminator == null)
       throw new NullPointerException ("determinator");

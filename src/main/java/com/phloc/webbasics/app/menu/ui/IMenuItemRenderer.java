@@ -47,8 +47,10 @@ public interface IMenuItemRenderer
    *        <code>true</code> if the menu item has children
    * @param bIsSelected
    *        <code>true</code> if the menu item is a selected menu item
+   * @param bIsExpanded
+   *        <code>true</code> if the menu item is expanded
    * @return The rendered menu item. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderMenuItem (@Nonnull IMenuItem aMenuItem, final boolean bHasChildren, final boolean bIsSelected);
+  IHCNode renderMenuItem (@Nonnull IMenuItem aMenuItem, boolean bHasChildren, boolean bIsSelected, boolean bIsExpanded);
 }
