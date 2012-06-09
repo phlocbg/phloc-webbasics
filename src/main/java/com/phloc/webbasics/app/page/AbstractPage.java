@@ -134,7 +134,7 @@ public abstract class AbstractPage implements IPage
   @Nullable
   protected static final String getAttr (@Nullable final String sName)
   {
-    return _getScope ().getAttributeAsString (sName);
+    return StringHelper.trim (_getScope ().getAttributeAsString (sName));
   }
 
   /**
