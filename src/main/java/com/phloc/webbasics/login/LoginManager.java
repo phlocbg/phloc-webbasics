@@ -29,6 +29,7 @@ import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.security.login.ELoginResult;
 import com.phloc.webbasics.security.login.LoggedInUserManager;
 
 /**
@@ -45,12 +46,14 @@ public class LoginManager
    * 
    * @param bLoginError
    *        If <code>true</code> an error occurred in a previous login action
+   * @param eLoginResult
+   *        The login result - only relevant in case of a login error
    * @return Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected IHTMLProvider createLoginScreen (final boolean bLoginError)
+  protected IHTMLProvider createLoginScreen (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
   {
-    return new BasicLoginHTML (bLoginError);
+    return new BasicLoginHTML (bLoginError, eLoginResult);
   }
 
   /**
@@ -71,6 +74,7 @@ public class LoginManager
     {
       // No use currently logged in -> start login
       boolean bLoginError = false;
+      ELoginResult eLoginResult = ELoginResult.SUCCESS;
 
       final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope ();
       if (Boolean.TRUE.equals (aSessionScope.getAttributeObject (SESSION_ATTR_AUTHINPROGRESS)))
@@ -79,7 +83,8 @@ public class LoginManager
         // -> Check request parameters
         final String sLoginName = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
         final String sPassword = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
-        if (LoggedInUserManager.getInstance ().loginUser (sLoginName, sPassword).isSuccess ())
+        eLoginResult = LoggedInUserManager.getInstance ().loginUser (sLoginName, sPassword);
+        if (eLoginResult.isSuccess ())
         {
           // Credentials are valid
           aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
@@ -99,7 +104,7 @@ public class LoginManager
       {
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
-        HTMLResponseHelper.createHTMLResponse (aRequestScope, createLoginScreen (bLoginError));
+        HTMLResponseHelper.createHTMLResponse (aRequestScope, createLoginScreen (bLoginError, eLoginResult));
       }
     }
 

@@ -40,15 +40,20 @@ import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;
+import com.phloc.webbasics.security.login.ELoginResult;
 
 public class BasicLoginHTML extends LayoutHTMLProvider
 {
   private final boolean m_bLoginError;
+  private final ELoginResult m_eLoginResult;
 
-  public BasicLoginHTML (final boolean bLoginError)
+  public BasicLoginHTML (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
   {
     super (CLogin.LAYOUT_AREAID_LOGIN);
+    if (eLoginResult == null)
+      throw new NullPointerException ("loginResult");
     m_bLoginError = bLoginError;
+    m_eLoginResult = eLoginResult;
   }
 
   /**
@@ -58,6 +63,12 @@ public class BasicLoginHTML extends LayoutHTMLProvider
   public final boolean showLoginError ()
   {
     return m_bLoginError;
+  }
+
+  @Nonnull
+  public final ELoginResult getLoginResult ()
+  {
+    return m_eLoginResult;
   }
 
   /**
