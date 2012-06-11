@@ -79,22 +79,25 @@ public final class UserManager extends AbstractDAO implements IUserManager
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
                         CSecurity.USER_ADMINISTRATOR_NAME,
-                        null,
-                        null));
+                        (String) null,
+                        (Locale) null,
+                        (Map <String, String>) null));
     _addUser (new User (CSecurity.USER_USER_ID,
                         CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
                         CSecurity.USER_USER_NAME,
-                        null,
-                        null));
+                        (String) null,
+                        (Locale) null,
+                        (Map <String, String>) null));
     _addUser (new User (CSecurity.USER_GUEST_ID,
                         CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
                         CSecurity.USER_GUEST_NAME,
-                        null,
-                        null));
+                        (String) null,
+                        (Locale) null,
+                        (Map <String, String>) null));
     return EChange.CHANGED;
   }
 

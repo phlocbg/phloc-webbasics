@@ -40,9 +40,11 @@ public final class AccessManagerTest extends AbstractStorageAwareTestCase
     // Check default stuff
     assertNotNull (aAM.getRoleOfID (CSecurity.ROLE_ADMINISTRATOR_ID));
     assertNotNull (aAM.getRoleOfID (CSecurity.ROLE_USER_ID));
+
     assertNotNull (aAM.getUserOfID (CSecurity.USER_ADMINISTRATOR_ID));
     assertNotNull (aAM.getUserOfID (CSecurity.USER_USER_ID));
     assertNotNull (aAM.getUserOfID (CSecurity.USER_GUEST_ID));
+
     assertNotNull (aAM.getUserGroupOfID (CSecurity.USERGROUP_ADMINISTRATORS_ID));
     assertNotNull (aAM.getUserGroupOfID (CSecurity.USERGROUP_USERS_ID));
     assertNotNull (aAM.getUserGroupOfID (CSecurity.USERGROUP_GUESTS_ID));
