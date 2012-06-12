@@ -252,7 +252,7 @@ public final class User implements IUser
   @Nonnull
   public String getDisplayName ()
   {
-    return StringHelper.concatenateOnDemand (m_sFirstName, " ", m_sLastName);
+    return StringHelper.getConcatenatedOnDemand (m_sFirstName, " ", m_sLastName);
   }
 
   @Nonnull

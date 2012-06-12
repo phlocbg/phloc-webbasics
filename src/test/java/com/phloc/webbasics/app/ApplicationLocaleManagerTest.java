@@ -38,15 +38,15 @@ public final class ApplicationLocaleManagerTest
   @BeforeClass
   public static void init ()
   {
-    ApplicationLocaleManager.registerLocale (LocaleCache.get ("de", "AT"));
+    ApplicationLocaleManager.registerLocale (LocaleCache.getLocale ("de", "AT"));
   }
 
   @Test
   public void testIsSupportedLocale ()
   {
-    assertEquals (LocaleCache.get ("de", "AT"), ApplicationLocaleManager.getDefaultLocale ());
-    assertTrue (ApplicationLocaleManager.isSupportedLocale (LocaleCache.get ("de", "AT")));
-    assertFalse (ApplicationLocaleManager.isSupportedLocale (LocaleCache.get ("de")));
+    assertEquals (LocaleCache.getLocale ("de", "AT"), ApplicationLocaleManager.getDefaultLocale ());
+    assertTrue (ApplicationLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de", "AT")));
+    assertFalse (ApplicationLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de")));
     assertFalse (ApplicationLocaleManager.isSupportedLocale (null));
     assertFalse (ApplicationLocaleManager.isSupportedLocale (Locale.CANADA));
   }

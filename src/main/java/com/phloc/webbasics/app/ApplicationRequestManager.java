@@ -77,7 +77,7 @@ public final class ApplicationRequestManager
     final String sDisplayLocale = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_DISPLAY_LOCALE);
     if (sDisplayLocale != null)
     {
-      final Locale aDisplayLocale = LocaleCache.get (sDisplayLocale);
+      final Locale aDisplayLocale = LocaleCache.getLocale (sDisplayLocale);
       if (aDisplayLocale != null)
       {
         final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope ();

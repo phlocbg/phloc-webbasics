@@ -77,7 +77,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final String sFirstName = MicroUtils.getChildTextContent (eUser, ELEMENT_FIRSTNAME);
     final String sLastName = MicroUtils.getChildTextContent (eUser, ELEMENT_LASTNAME);
     final String sDesiredLocale = eUser.getAttribute (ATTR_DESIREDLOCALE);
-    final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.get (sDesiredLocale);
+    final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.getLocale (sDesiredLocale);
     final Map <String, String> aCustomAttrs = new LinkedHashMap <String, String> ();
     for (final IMicroElement eCustom : eUser.getChildElements (ELEMENT_CUSTOM))
       aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
