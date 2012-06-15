@@ -20,7 +20,7 @@ package com.phloc.webbasics.ui.bootstrap;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.css.ICSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCI;
 

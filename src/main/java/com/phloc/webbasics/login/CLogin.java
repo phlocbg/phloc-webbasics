@@ -19,8 +19,8 @@ package com.phloc.webbasics.login;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.css.DefaultCSSClassProvider;
-import com.phloc.css.ICSSClassProvider;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 
 /**
  * Login constants

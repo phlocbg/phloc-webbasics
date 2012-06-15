@@ -19,7 +19,7 @@ package com.phloc.webbasics.ui.bootstrap;
 
 import javax.annotation.Nullable;
 
-import com.phloc.css.ICSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 
 /**
  * Button size

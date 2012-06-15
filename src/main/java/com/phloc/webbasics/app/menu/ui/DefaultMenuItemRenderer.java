@@ -21,8 +21,8 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.css.DefaultCSSClassProvider;
-import com.phloc.css.ICSSClassProvider;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.impl.HCEntityNode;
