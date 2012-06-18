@@ -31,9 +31,9 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.callback.IExceptionHandler;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.StackTraceHelper;
-import com.phloc.css.CCSS;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
+import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCH1;
@@ -102,7 +102,7 @@ public final class InternalErrorHandler
       final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
                                                                  .setRows (20)
                                                                  .addStyle (CCSSProperties.FONT_SIZE.newValue (ECSSUnit.pt (10)))
-                                                                 .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSS.FONT_MONOSPACE));
+                                                                 .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSSValue.FONT_MONOSPACE));
 
       aParent.addChild (aStackTrace);
 
