@@ -63,7 +63,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-html</artifactId>
-      <version>3.3.0-SNAPSHOT</version>
+      <version>3.3.0</version>
     </dependency>
 
     <dependency>

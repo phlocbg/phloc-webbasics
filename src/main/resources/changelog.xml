@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2012-06-18" version="1.6.0" />
+  <entry date="2012-06-18" category="tech" action="add" incompatible="true">
+    <change>
+      <text locale="en">Updated to phloc-css 3.0.0 and phloc-html 3.3.0</text>
+    </change>
+  </entry>
   <entry date="2012-06-10" category="tech" action="add" incompatible="true">
     <change>
       <text locale="en">Extended IMenuItemRenderer to have the current expansion state</text>
