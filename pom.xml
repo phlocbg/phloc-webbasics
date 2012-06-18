@@ -53,12 +53,12 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
-      <version>3.0.0-RC2</version>
+      <version>3.0.0-RC3</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-html</artifactId>
-      <version>3.3.0-RC1</version>
+      <version>3.3.0-RC2</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
