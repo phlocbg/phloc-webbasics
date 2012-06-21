@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2012-06-21" category="tech" action="update">
+    <change>
+      <text locale="en">Made error handling in AbstractDAO writing more secure</text>
+    </change>
+  </entry>
+  <entry date="2012-06-21" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed exception in AbstractDAO writing, if the output stream could not be opened.</text>
+    </change>
+  </entry>
   <release date="2012-06-18" version="1.6.0" />
   <entry date="2012-06-18" category="tech" action="add" incompatible="true">
     <change>

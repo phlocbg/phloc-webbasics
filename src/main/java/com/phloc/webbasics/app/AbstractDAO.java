@@ -18,6 +18,8 @@
 package com.phloc.webbasics.app;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.util.Locale;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -37,7 +39,10 @@ import com.phloc.commons.microdom.impl.MicroComment;
 import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTToString;
 import com.phloc.webbasics.web.WebFileIO;
 
 public abstract class AbstractDAO
@@ -101,28 +106,50 @@ public abstract class AbstractDAO
   @Nonnull
   protected abstract IMicroDocument createWriteData ();
 
-  private void _writeToFile ()
+  @Nonnull
+  private ESuccess _writeToFile ()
   {
     // Create XML document
     final IMicroDocument aDoc = createWriteData ();
+    if (aDoc == null)
+    {
+      s_aLogger.error ("Failed to create data to write!");
+      return ESuccess.FAILURE;
+    }
 
     // Add a small comment
-    aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!"),
+    aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!\n" +
+                                         "Written at " +
+                                         PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (), Locale.US)),
                        aDoc.getDocumentElement ());
 
+    // Get the output stream
+    final OutputStream aOS = FileUtils.getOutputStream (m_aFile);
+    if (aOS == null)
+    {
+      // Happens, when another application has the file open!
+      // Logger warning already emitted
+      return ESuccess.FAILURE;
+    }
+
     // Write to file
-    if (MicroWriter.writeToStream (aDoc, FileUtils.getOutputStream (m_aFile), XMLWriterSettings.SUGGESTED_XML_SETTINGS)
-                   .isFailure ())
+    if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.SUGGESTED_XML_SETTINGS).isFailure ())
+    {
       s_aLogger.error ("Failed to write data to " + m_aFile);
+      return ESuccess.FAILURE;
+    }
+
+    return ESuccess.SUCCESS;
   }
 
   protected final void initialRead ()
   {
+    ESuccess eWriteSuccess = ESuccess.SUCCESS;
     if (!m_aFile.exists ())
     {
       // initial setup
       if (onInit ().isChanged ())
-        _writeToFile ();
+        eWriteSuccess = _writeToFile ();
     }
     else
     {
@@ -132,9 +159,12 @@ public abstract class AbstractDAO
         s_aLogger.error ("Failed to read XML document from file " + m_aFile);
       else
         if (onRead (aDoc).isChanged ())
-          _writeToFile ();
+          eWriteSuccess = _writeToFile ();
     }
-    m_bPendingChanges = false;
+    if (eWriteSuccess.isSuccess ())
+      m_bPendingChanges = false;
+    else
+      s_aLogger.warn ("File has pending changes after initialization!");
   }
 
   /**
@@ -179,8 +209,10 @@ public abstract class AbstractDAO
     if (m_bAutoSaveEnabled)
     {
       // Auto save
-      _writeToFile ();
-      m_bPendingChanges = false;
+      if (_writeToFile ().isSuccess ())
+        m_bPendingChanges = false;
+      else
+        s_aLogger.warn ("File still has pending changes after markAsChanged!");
     }
     else
     {
@@ -216,8 +248,10 @@ public abstract class AbstractDAO
       m_aRWLock.writeLock ().lock ();
       try
       {
-        _writeToFile ();
-        m_bPendingChanges = false;
+        if (_writeToFile ().isSuccess ())
+          m_bPendingChanges = false;
+        else
+          s_aLogger.warn ("File still has pending changes after writeToFileOnPendingChanges!");
       }
       finally
       {
