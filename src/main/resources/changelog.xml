@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2012-06-25" version="1.6.1" />
+  <entry date="2012-06-25" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-commons 3.6.1 and phloc-scopes 3.9.7</text>
+    </change>
+  </entry>
   <entry date="2012-06-21" category="tech" action="update">
     <change>
       <text locale="en">Made error handling in AbstractDAO writing more secure</text>
