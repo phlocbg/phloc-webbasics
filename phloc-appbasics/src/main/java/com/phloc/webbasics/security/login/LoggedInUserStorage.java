@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
-import com.phloc.webbasics.web.WebFileIO;
+import com.phloc.webbasics.app.WebFileIO;
 
 @Immutable
 public final class LoggedInUserStorage

@@ -24,7 +24,7 @@ import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
-import com.phloc.webbasics.web.WebFileIO;
+import com.phloc.webbasics.app.WebFileIO;
 
 public abstract class AbstractStorageAwareTestCase extends AbstractScopeAwareTestCase
 {

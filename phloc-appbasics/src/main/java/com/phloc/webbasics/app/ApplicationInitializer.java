@@ -28,7 +28,6 @@ import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.nonweb.mgr.ScopeManager;
-import com.phloc.webbasics.web.WebFileIO;
 
 /**
  * This class is intended to handle the initial application startup and the
