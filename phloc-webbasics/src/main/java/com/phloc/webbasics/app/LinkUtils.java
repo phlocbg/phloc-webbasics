@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.url.EURLProtocol;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.commons.url.URLProtocolRegistry;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
@@ -76,7 +76,7 @@ public final class LinkUtils
   public static String getURIWithContext (@Nonnull final String sHRef)
   {
     // If known protocol, keep it
-    if (EURLProtocol.hasKnownProtocol (sHRef))
+    if (URLProtocolRegistry.hasKnownProtocol (sHRef))
       return sHRef;
 
     return _getURIWithContext (sHRef);
@@ -128,7 +128,7 @@ public final class LinkUtils
   public static String getURIWithServerAndContext (@Nonnull final String sHRef)
   {
     // If known protocol, keep it
-    if (EURLProtocol.hasKnownProtocol (sHRef))
+    if (URLProtocolRegistry.hasKnownProtocol (sHRef))
       return sHRef;
 
     return WebScopeManager.getRequestScope ().getFullServerPath () + _getURIWithContext (sHRef);
