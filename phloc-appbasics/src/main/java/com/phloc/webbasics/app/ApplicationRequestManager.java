@@ -27,9 +27,9 @@ import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.scopes.IScope;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.domain.ISessionWebScope;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.scopes.nonweb.domain.IRequestScope;
+import com.phloc.scopes.nonweb.domain.ISessionScope;
+import com.phloc.scopes.nonweb.mgr.ScopeManager;
 import com.phloc.webbasics.app.menu.IMenuItem;
 import com.phloc.webbasics.app.menu.IMenuObject;
 import com.phloc.webbasics.app.menu.MenuTree;
@@ -61,7 +61,7 @@ public final class ApplicationRequestManager
    * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
    * display locale.
    */
-  public static void onRequestBegin (@Nonnull final IRequestWebScope aRequestScope)
+  public static void onRequestBegin (@Nonnull final IRequestScope aRequestScope)
   {
     // determine page from request and store in request
     final String sMenuItemID = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_MENUITEM);
@@ -80,7 +80,7 @@ public final class ApplicationRequestManager
       final Locale aDisplayLocale = LocaleCache.getLocale (sDisplayLocale);
       if (aDisplayLocale != null)
       {
-        final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope ();
+        final ISessionScope aSessionScope = ScopeManager.getSessionScope ();
         aSessionScope.setAttribute (REQUEST_VALUE_DISPLAY_LOCALE, aDisplayLocale);
       }
     }
@@ -93,7 +93,7 @@ public final class ApplicationRequestManager
   @Nullable
   public static String getRequestMenuItemID ()
   {
-    return WebScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
+    return ScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
   }
 
   /**
@@ -175,7 +175,7 @@ public final class ApplicationRequestManager
   public static Locale getRequestDisplayLocale ()
   {
     // Was a request locale set in session scope?
-    final IScope aSessionScope = WebScopeManager.getSessionScope (false);
+    final IScope aSessionScope = ScopeManager.getSessionScope (false);
     if (aSessionScope != null)
     {
       final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (REQUEST_VALUE_DISPLAY_LOCALE);

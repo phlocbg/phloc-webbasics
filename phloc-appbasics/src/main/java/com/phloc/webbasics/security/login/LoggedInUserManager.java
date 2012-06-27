@@ -36,7 +36,7 @@ import com.phloc.commons.annotations.VisibleForTesting;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
-import com.phloc.scopes.web.singleton.SessionWebSingleton;
+import com.phloc.scopes.nonweb.singleton.SessionSingleton;
 import com.phloc.webbasics.security.AccessManager;
 import com.phloc.webbasics.security.user.IUser;
 
@@ -54,7 +54,7 @@ public final class LoggedInUserManager extends GlobalSingleton
    * @author philip
    */
   @edu.umd.cs.findbugs.annotations.SuppressWarnings ("SE_NO_SERIALVERSIONID")
-  public static final class SessionUserHolder extends SessionWebSingleton
+  public static final class SessionUserHolder extends SessionSingleton
   {
     private IUser m_aUser;
     private String m_sUserID;

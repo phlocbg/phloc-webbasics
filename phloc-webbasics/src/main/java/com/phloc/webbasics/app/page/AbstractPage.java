@@ -18,7 +18,6 @@
 package com.phloc.webbasics.app.page;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,8 +26,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.commons.text.impl.ConstantTextProvider;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCForm_FileUpload;
 import com.phloc.scopes.nonweb.domain.IRequestScope;
@@ -40,11 +37,8 @@ import com.phloc.webbasics.app.LinkUtils;
  * 
  * @author philip
  */
-public abstract class AbstractPage implements IPage
+public abstract class AbstractPage extends AbstractBasePage implements IPage
 {
-  private final String m_sID;
-  private IHasDisplayText m_aName;
-
   /**
    * Constructor
    * 
@@ -53,9 +47,7 @@ public abstract class AbstractPage implements IPage
    */
   public AbstractPage (@Nonnull @Nonempty final String sID)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    m_sID = sID;
+    super (sID);
   }
 
   /**
@@ -69,7 +61,7 @@ public abstract class AbstractPage implements IPage
    */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
-    this (sID, new ConstantTextProvider (sName));
+    super (sID, sName);
   }
 
   /**
@@ -82,40 +74,7 @@ public abstract class AbstractPage implements IPage
    */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
-    this (sID);
-    setName (aName);
-  }
-
-  /*
-   * Get the unique page ID
-   */
-  @Nonnull
-  @Nonempty
-  public final String getID ()
-  {
-    return m_sID;
-  }
-
-  /**
-   * Set the name of the page.
-   * 
-   * @param aName
-   *        The multilingual name of the page. May not be <code>null</code>.
-   */
-  public final void setName (@Nonnull final IHasDisplayText aName)
-  {
-    if (aName == null)
-      throw new NullPointerException ("name");
-    m_aName = aName;
-  }
-
-  /*
-   * Get the name of the page in the passed locale.
-   */
-  @Nullable
-  public final String getDisplayText (@Nonnull final Locale aContentLocale)
-  {
-    return m_aName.getDisplayText (aContentLocale);
+    super (sID, aName);
   }
 
   @Nonnull
@@ -229,11 +188,5 @@ public abstract class AbstractPage implements IPage
   protected static final HCForm createFormFileUploadSelf ()
   {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
-  }
-
-  @Override
-  public String toString ()
-  {
-    return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_aName).toString ();
   }
 }

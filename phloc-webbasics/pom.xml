@@ -37,18 +37,8 @@
   <dependencies>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-commons</artifactId>
-      <version>3.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-datetime</artifactId>
-      <version>2.9.5</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-scopes</artifactId>
-      <version>3.9.7</version>
+      <artifactId>phloc-appbasics</artifactId>
+      <version>1.6.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
