@@ -27,12 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
-import com.phloc.webbasics.app.ApplicationRequestManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;

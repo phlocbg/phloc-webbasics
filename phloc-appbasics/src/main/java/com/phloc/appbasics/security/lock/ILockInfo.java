@@ -15,28 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.page;
+package com.phloc.appbasics.security.lock;
 
-import java.util.Locale;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.IBasePage;
-import com.phloc.html.hc.IHCNode;
+import org.joda.time.DateTime;
 
 /**
- * The base interface for a single page of content.
+ * A single lock information object.
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public interface ILockInfo extends Serializable
 {
   /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state.
+   * @return The ID of the user who locked the object.
    */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  @Nonnull
+  String getLockUserID ();
+
+  /**
+   * @return The date and time when the lock was created.
+   */
+  @Nonnull
+  DateTime getLockDateTime ();
 }

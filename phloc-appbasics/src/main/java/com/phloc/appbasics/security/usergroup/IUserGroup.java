@@ -15,28 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.page;
+package com.phloc.appbasics.security.usergroup;
 
-import java.util.Locale;
+import java.io.Serializable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.appbasics.app.page.IBasePage;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.appbasics.security.role.IRoleContainer;
+import com.phloc.appbasics.security.user.IUserContainer;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.name.IHasName;
 
 /**
- * The base interface for a single page of content.
+ * Represents a single user group encapsulating 0-n users.
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public interface IUserGroup extends IHasID <String>, IHasName, IUserContainer, IRoleContainer, Serializable
 {
-  /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state.
-   */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  /* empty */
 }

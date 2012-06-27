@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.EURLProtocol;
 import com.phloc.commons.url.SMap;

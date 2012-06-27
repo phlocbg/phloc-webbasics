@@ -21,14 +21,14 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.app.menu.IMenuItem;
+import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.menu.IMenuItem;
-import com.phloc.webbasics.app.menu.IMenuSeparator;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}

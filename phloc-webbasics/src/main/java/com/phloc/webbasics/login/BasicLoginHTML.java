@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -40,7 +41,6 @@ import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;
-import com.phloc.webbasics.security.login.ELoginResult;
 
 public class BasicLoginHTML extends LayoutHTMLProvider
 {

@@ -20,6 +20,8 @@ package com.phloc.webbasics.login;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 
+import com.phloc.appbasics.security.login.ELoginResult;
+import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
@@ -29,8 +31,6 @@ import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.HTMLResponseHelper;
 import com.phloc.webbasics.app.html.IHTMLProvider;
-import com.phloc.webbasics.security.login.ELoginResult;
-import com.phloc.webbasics.security.login.LoggedInUserManager;
 
 /**
  * Handle the application login process.

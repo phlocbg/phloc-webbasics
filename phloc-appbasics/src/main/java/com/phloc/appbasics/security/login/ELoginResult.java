@@ -15,28 +15,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.page;
+package com.phloc.appbasics.security.login;
 
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.appbasics.app.page.IBasePage;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.commons.state.ISuccessIndicator;
 
 /**
- * The base interface for a single page of content.
+ * Represents the different login results.
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public enum ELoginResult implements ISuccessIndicator
 {
-  /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state.
-   */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  /** Login was successfully */
+  SUCCESS,
+  /** No such user */
+  USER_NOT_EXISTING,
+  /** The provided password is invalid */
+  INVALID_PASSWORD,
+  /** The user was already logged in */
+  USER_ALREADY_LOGGED_IN,
+  /** Another user is already logged in this session */
+  SESSION_ALREADY_HAS_USER;
+
+  public boolean isSuccess ()
+  {
+    return this == SUCCESS;
+  }
+
+  public boolean isFailure ()
+  {
+    return this != SUCCESS;
+  }
 }

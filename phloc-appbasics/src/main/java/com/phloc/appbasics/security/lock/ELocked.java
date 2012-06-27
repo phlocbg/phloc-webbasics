@@ -15,28 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.page;
-
-import java.util.Locale;
+package com.phloc.appbasics.security.lock;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.appbasics.app.page.IBasePage;
-import com.phloc.html.hc.IHCNode;
 
 /**
- * The base interface for a single page of content.
+ * Locked enumeration
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public enum ELocked
 {
-  /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state.
-   */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  LOCKED,
+  NOT_LOCKED;
+
+  public boolean isLocked ()
+  {
+    return this == LOCKED;
+  }
+
+  public boolean isNotLocked ()
+  {
+    return this == NOT_LOCKED;
+  }
+
+  @Nonnull
+  public static ELocked valueOf (final boolean bLocked)
+  {
+    return bLocked ? LOCKED : NOT_LOCKED;
+  }
 }

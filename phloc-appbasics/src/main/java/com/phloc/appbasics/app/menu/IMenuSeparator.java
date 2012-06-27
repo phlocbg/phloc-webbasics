@@ -15,28 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.page;
-
-import java.util.Locale;
+package com.phloc.appbasics.app.menu;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.IBasePage;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.commons.filter.IFilter;
 
 /**
- * The base interface for a single page of content.
+ * Interface for a menu item separator.
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public interface IMenuSeparator extends IMenuObject
 {
   /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state.
+   * {@inheritDoc}
    */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  @Nonnull
+  IMenuSeparator setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
 }

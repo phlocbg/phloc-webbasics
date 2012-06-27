@@ -19,9 +19,9 @@ package com.phloc.webbasics.app.menu.ui;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.app.menu.IMenuItem;
+import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.webbasics.app.menu.IMenuItem;
-import com.phloc.webbasics.app.menu.IMenuSeparator;
 
 /**
  * Interface for rendering menu objects

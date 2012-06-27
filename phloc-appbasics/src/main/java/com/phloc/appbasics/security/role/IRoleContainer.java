@@ -15,28 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.page;
+package com.phloc.appbasics.security.role;
 
-import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.appbasics.app.page.IBasePage;
-import com.phloc.html.hc.IHCNode;
 
 /**
- * The base interface for a single page of content.
+ * Base read-only interface for objects containing roles.
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public interface IRoleContainer
 {
   /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state.
+   * @return A non-<code>null</code>but maybe empty set of all assigned role
+   *         IDs.
    */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  @Nonnull
+  Set <String> getAllContainedRoleIDs ();
+
+  /**
+   * Check if the passed role is contained in this container.
+   * 
+   * @param sRoleID
+   *        The role ID to check. May be <code>null</code>.
+   * @return <code>true</code> if the role is contained in this container,
+   *         <code>false</code> otherwise.
+   */
+  boolean containsRoleID (String sRoleID);
 }

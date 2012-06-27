@@ -22,6 +22,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.appbasics.app.menu.MenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
@@ -30,9 +33,6 @@ import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
 import com.phloc.commons.hierarchy.EHierarchyCallbackReturn;
 import com.phloc.commons.tree.utils.walk.TreeWalkerDynamic;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
-import com.phloc.webbasics.app.ApplicationRequestManager;
-import com.phloc.webbasics.app.menu.IMenuObject;
-import com.phloc.webbasics.app.menu.MenuTree;
 
 /**
  * Determine all menu items to show, depending on the currently selected menu
