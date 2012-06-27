@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+
+    Copyright (C) 2006-2012 phloc systems
+    http://www.phloc.com
+    office[at]phloc[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<translationitems count="13">
+  <item id="com.phloc.webbasics.EWebBasicsText.BOOLEAN_FALSE">
+    <de>Nein</de>
+    <en>No</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.BOOLEAN_TRUE">
+    <de>Ja</de>
+    <en>Yes</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
+    <de>Download</de>
+    <en>Download</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_BUTTON_SUBMIT">
+    <de>Login</de>
+    <en>Login</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_ERROR_MSG">
+    <de>Benutzername und/oder Passwort sind ungültig!</de>
+    <en>User name and/or password are invalid!</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_FIELD_PASSWORD">
+    <de>Passwort</de>
+    <en>Password</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_FIELD_USERNAME">
+    <de>Benutzername</de>
+    <en>User name</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_HEADER">
+    <de>Login</de>
+    <en>Login</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_LOGOUT">
+    <de>Abmelden</de>
+    <en>Logout</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGE_HELP_TITLE">
+    <de>Hilfe zu &#39;&#39;{0}&#39;&#39; anzeigen</de>
+    <en>Show help for &#39;&#39;{0}&#39;&#39;</en>
+  </item>
+  <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.MESSAGE">
+    <de>Die von Ihnen gesuchte Seite existiert leider nicht!</de>
+    <en>The page you are looking for does not exist!</en>
+  </item>
+  <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.PAGENAME">
+    <de>Seite nicht gefunden</de>
+    <en>Page not found</en>
+  </item>
+  <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.TITLE">
+    <de>Seite nicht gefunden</de>
+    <en>Page not found</en>
+  </item>
+</translationitems>
