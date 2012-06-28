@@ -10,8 +10,8 @@
   <artifactId>phloc-appbasics</artifactId>
   <version>1.7.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>phloc-webbasics</name>
-  <url>http://repo.phloc.com/apidocs/phloc-webbasics/${project.version}</url>
+  <name>phloc-appbasics</name>
+  <url>http://repo.phloc.com/apidocs/phloc-appbasics/${project.version}</url>
  
   <licenses>
     <license>
@@ -23,7 +23,7 @@
   
   <scm>
     <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk</connection>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/appbasics</connection>
     <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk</developerConnection>
   </scm>
 
