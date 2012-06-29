@@ -63,7 +63,7 @@ public class MenuItemDeterminatorCallback extends
   }
 
   @Override
-  public final EHierarchyCallbackReturn onItemBeforeChildren (final DefaultTreeItemWithID <String, IMenuObject> aItem)
+  public final EHierarchyCallbackReturn onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
   {
     boolean bShow;
     boolean bAddAllChildrenOnThisLevel = false;

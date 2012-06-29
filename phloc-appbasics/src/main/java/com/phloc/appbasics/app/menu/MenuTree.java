@@ -286,28 +286,28 @@ public final class MenuTree extends GlobalSingleton implements
     return m_aTree.getRootItem ();
   }
 
-  public DefaultTreeItemWithID <String, IMenuObject> getChildWithID (final DefaultTreeItemWithID <String, IMenuObject> aCurrent,
-                                                                     final String aID)
+  public DefaultTreeItemWithID <String, IMenuObject> getChildWithID (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent,
+                                                                     @Nullable final String aID)
   {
     return m_aTree.getChildWithID (aCurrent, aID);
   }
 
-  public boolean hasChildren (final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
+  public boolean hasChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
   {
     return m_aTree.hasChildren (aCurrent);
   }
 
-  public int getChildCount (final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
+  public int getChildCount (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
   {
     return m_aTree.getChildCount (aCurrent);
   }
 
-  public Collection <? extends DefaultTreeItemWithID <String, IMenuObject>> getChildren (final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
+  public Collection <? extends DefaultTreeItemWithID <String, IMenuObject>> getChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
   {
     return m_aTree.getChildren (aCurrent);
   }
 
-  public DefaultTreeItemWithID <String, IMenuObject> getItemWithID (final String aDataID)
+  public DefaultTreeItemWithID <String, IMenuObject> getItemWithID (@Nullable final String aDataID)
   {
     return m_aTree.getItemWithID (aDataID);
   }
@@ -317,7 +317,7 @@ public final class MenuTree extends GlobalSingleton implements
     return m_aTree.getAllItems ();
   }
 
-  public boolean isItemSameOrDescendant (final String aParentItemID, final String aChildItemID)
+  public boolean isItemSameOrDescendant (@Nullable final String aParentItemID, @Nullable final String aChildItemID)
   {
     return m_aTree.isItemSameOrDescendant (aParentItemID, aChildItemID);
   }

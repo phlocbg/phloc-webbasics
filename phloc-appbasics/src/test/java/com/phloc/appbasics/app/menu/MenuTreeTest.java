@@ -21,12 +21,9 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.phloc.appbasics.app.menu.AbstractMenuObjectFilter;
-import com.phloc.appbasics.app.menu.IMenuItem;
-import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.MenuTree;
 import com.phloc.appbasics.app.page.AbstractBasePage;
 import com.phloc.appbasics.app.page.IBasePage;
+import com.phloc.commons.filter.FilterFalse;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
 
 /**
@@ -43,13 +40,8 @@ public final class MenuTreeTest extends AbstractScopeAwareTestCase
     {};
 
     final MenuTree aTree = MenuTree.getInstance ();
-    final IMenuItem aRoot1 = aTree.createRootItem ("root1", aPage).setDisplayFilter (new AbstractMenuObjectFilter ()
-    {
-      public boolean matchesFilter (final IMenuObject aValue)
-      {
-        return false;
-      }
-    });
+    final IMenuItem aRoot1 = aTree.createRootItem ("root1", aPage)
+                                  .setDisplayFilter (FilterFalse.<IMenuObject> getInstance ());
     assertNotNull (aRoot1);
     assertNotNull (aTree.createItem (aRoot1, aPage));
     assertNotNull (aTree.getItemWithID ("root1"));
