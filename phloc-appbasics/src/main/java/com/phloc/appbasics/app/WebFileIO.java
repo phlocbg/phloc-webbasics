@@ -47,53 +47,61 @@ public final class WebFileIO
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
   private static final IFileOperationManager s_aFOM = new FileOperationManager (new LoggingFileOperationCallback ());
 
-  private static String s_sBasePath;
+  private static File s_aBasePath;
 
   private WebFileIO ()
   {}
 
   public static boolean isBasePathInited ()
   {
-    return s_sBasePath != null;
+    return s_aBasePath != null;
   }
 
   public static void initBasePath (@Nonnull final File aBasePath)
   {
-    initBasePath (aBasePath.getAbsolutePath ());
+    if (aBasePath == null)
+      throw new NullPointerException ("basePath");
+    if (s_aBasePath != null)
+      throw new IllegalStateException ("Another base path is already present: " + s_aBasePath);
+
+    s_aLogger.info ("Using '" + aBasePath + "' as the storage base");
+    s_aBasePath = aBasePath;
+
+    // Ensure the base directory is present
+    s_aFOM.createDirRecursiveIfNotExisting (s_aBasePath);
   }
 
   public static void initBasePath (@Nonnull @Nonempty final String sBasePath)
   {
     if (StringHelper.hasNoText (sBasePath))
       throw new IllegalArgumentException ("basePath");
-    if (s_sBasePath != null)
-      throw new IllegalStateException ("Another base path is already present: " + s_sBasePath);
-
-    s_aLogger.info ("Using '" + sBasePath + "' as the storage base");
-    s_sBasePath = sBasePath;
-
-    // Ensure the base directory is present
-    s_aFOM.createDirRecursiveIfNotExisting (new File (s_sBasePath));
+    initBasePath (new File (sBasePath));
   }
 
   public static void resetBasePath ()
   {
-    s_sBasePath = null;
+    s_aBasePath = null;
   }
 
   @Nonnull
   @Nonempty
   public static String getBasePath ()
   {
-    if (s_sBasePath == null)
+    return getBasePathFile ().getAbsolutePath ();
+  }
+
+  @Nonnull
+  public static File getBasePathFile ()
+  {
+    if (s_aBasePath == null)
       throw new IllegalStateException ("Base path was not initialized!");
-    return s_sBasePath;
+    return s_aBasePath;
   }
 
   @Nonnull
   public static File getFile (@Nonnull final String sPath)
   {
-    return new File (s_sBasePath, sPath);
+    return new File (s_aBasePath, sPath);
   }
 
   @Nonnull
