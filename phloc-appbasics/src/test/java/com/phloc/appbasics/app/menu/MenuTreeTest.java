@@ -19,10 +19,15 @@ package com.phloc.appbasics.app.menu;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.junit.Test;
 
-import com.phloc.appbasics.app.page.AbstractBasePage;
-import com.phloc.appbasics.app.page.IBasePage;
+import com.phloc.appbasics.app.page.AbstractPage;
+import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.filter.FilterFalse;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
 
@@ -36,8 +41,15 @@ public final class MenuTreeTest extends AbstractScopeAwareTestCase
   @Test
   public void testBasic ()
   {
-    final IBasePage aPage = new AbstractBasePage ("id1")
-    {};
+    final IPage aPage = new AbstractPage ("id1")
+    {
+      @Override
+      @Nullable
+      public Object getContent (@Nonnull final Locale aDisplayLocale)
+      {
+        return null;
+      }
+    };
 
     final MenuTree aTree = MenuTree.getInstance ();
     final IMenuItem aRoot1 = aTree.createRootItem ("root1", aPage)

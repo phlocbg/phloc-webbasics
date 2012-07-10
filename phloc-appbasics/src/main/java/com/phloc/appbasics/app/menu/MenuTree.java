@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.app.page.IBasePage;
+import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
@@ -124,7 +124,7 @@ public final class MenuTree extends GlobalSingleton implements
    * @return The created menu item object. Never <code>null</code>.
    */
   @Nonnull
-  public IMenuItem createRootItem (@Nonnull final String sItemID, @Nonnull final IBasePage aPage)
+  public IMenuItem createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
   {
     return _createChildItem (getRootItem (), new MenuItem (sItemID, aPage));
   }
@@ -138,7 +138,7 @@ public final class MenuTree extends GlobalSingleton implements
    *         the page. Never <code>null</code>.
    */
   @Nonnull
-  public IMenuItem createRootItem (@Nonnull final IBasePage aPage)
+  public IMenuItem createRootItem (@Nonnull final IPage aPage)
   {
     if (aPage == null)
       throw new NullPointerException ("page");
@@ -163,7 +163,7 @@ public final class MenuTree extends GlobalSingleton implements
   @Nonnull
   public IMenuItem createItem (@Nonnull final String sParentID,
                                @Nonnull final String sItemID,
-                               @Nonnull final IBasePage aPage)
+                               @Nonnull final IPage aPage)
   {
     final DefaultTreeItemWithID <String, IMenuObject> aParentItem = getItemWithID (sParentID);
     if (aParentItem == null)
@@ -185,7 +185,7 @@ public final class MenuTree extends GlobalSingleton implements
    *         If the passed parent menu item could not be resolved
    */
   @Nonnull
-  public IMenuItem createItem (@Nonnull final String sParentID, @Nonnull final IBasePage aPage)
+  public IMenuItem createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
     if (aPage == null)
       throw new NullPointerException ("page");
@@ -207,7 +207,7 @@ public final class MenuTree extends GlobalSingleton implements
    *         If the passed parent menu item could not be resolved
    */
   @Nonnull
-  public IMenuItem createItem (@Nonnull final IMenuItem aParent, @Nonnull final IBasePage aPage)
+  public IMenuItem createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
   {
     if (aParent == null)
       throw new NullPointerException ("parent");

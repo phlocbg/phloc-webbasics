@@ -29,11 +29,11 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.impl.ConstantTextProvider;
 
 /**
- * Abstract base implementation for {@link IBasePage}.
+ * Abstract base implementation for {@link IPage}.
  * 
  * @author philip
  */
-public abstract class AbstractBasePage implements IBasePage
+public abstract class AbstractPage implements IPage
 {
   private final String m_sID;
   private IHasDisplayText m_aName;
@@ -44,7 +44,7 @@ public abstract class AbstractBasePage implements IBasePage
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
-  public AbstractBasePage (@Nonnull @Nonempty final String sID)
+  public AbstractPage (@Nonnull @Nonempty final String sID)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
@@ -60,7 +60,7 @@ public abstract class AbstractBasePage implements IBasePage
    *        The constant (non-translatable) name of the page. May not be
    *        <code>null</code>.
    */
-  public AbstractBasePage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     this (sID, new ConstantTextProvider (sName));
   }
@@ -73,7 +73,7 @@ public abstract class AbstractBasePage implements IBasePage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractBasePage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
     this (sID);
     setName (aName);

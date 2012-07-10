@@ -22,7 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.IBasePage;
+import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -35,9 +35,9 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 public final class MenuItem extends AbstractMenuObject implements IMenuItem
 {
-  private final IBasePage m_aPage;
+  private final IPage m_aPage;
 
-  public MenuItem (@Nonnull @Nonempty final String sItemID, @Nonnull final IBasePage aPage)
+  public MenuItem (@Nonnull @Nonempty final String sItemID, @Nonnull final IPage aPage)
   {
     super (sItemID);
     if (aPage == null)
@@ -53,7 +53,7 @@ public final class MenuItem extends AbstractMenuObject implements IMenuItem
   }
 
   @Nonnull
-  public IBasePage getPage ()
+  public IPage getPage ()
   {
     return m_aPage;
   }

@@ -20,7 +20,7 @@ package com.phloc.appbasics.app.menu;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.IBasePage;
+import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.name.IHasDisplayText;
 
@@ -41,5 +41,5 @@ public interface IMenuItem extends IMenuObject, IHasDisplayText
    * @return The referenced page object.
    */
   @Nonnull
-  IBasePage getPage ();
+  IPage getPage ();
 }

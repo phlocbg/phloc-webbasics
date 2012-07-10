@@ -85,7 +85,8 @@ public final class ApplicationInitializer
     WebFileIO.initBasePath (aBasePath);
 
     // Set persistent ID provider: file based
-    GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("persistent_id.dat")));
+    if (!GlobalIDFactory.hasPersistentIntIDFactory ())
+      GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("persistent_id.dat")));
   }
 
   public static void shutdown (final boolean bShutdownGlobalScope)

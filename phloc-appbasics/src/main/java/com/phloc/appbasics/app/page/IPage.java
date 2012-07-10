@@ -17,6 +17,11 @@
  */
 package com.phloc.appbasics.app.page;
 
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayText;
 
@@ -25,7 +30,14 @@ import com.phloc.commons.name.IHasDisplayText;
  * 
  * @author philip
  */
-public interface IBasePage extends IHasID <String>, IHasDisplayText
+public interface IPage extends IHasID <String>, IHasDisplayText
 {
-  /* empty */
+  /**
+   * @param aDisplayLocale
+   *        The display locale used to render the content
+   * @return The content of the area based on the current state. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  Object getContent (@Nonnull Locale aDisplayLocale);
 }

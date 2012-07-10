@@ -18,10 +18,8 @@
 package com.phloc.appbasics;
 
 import java.io.File;
-import java.io.IOException;
 
 import com.phloc.appbasics.app.WebFileIO;
-import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
@@ -31,22 +29,12 @@ public abstract class AbstractStorageAwareTestCase extends AbstractScopeAwareTes
   static
   {
     // Init the base path once
-    WebFileIO.initBasePath (new File ("target/junit"));
+    final File aStoragePath = new File ("target/junit");
+    WebFileIO.initBasePath (aStoragePath);
 
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
     {
-      try
-      {
-        final File aIDFile = File.createTempFile ("junit_persistent_ids", ".dat", null);
-        GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (aIDFile));
-
-        // Ensure the file is deleted at the end of the tests....
-        aIDFile.deleteOnExit ();
-      }
-      catch (final IOException e)
-      {
-        throw new InitializationException (e);
-      }
+      GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("junit_persistent_ids.dat")));
     }
   }
 }

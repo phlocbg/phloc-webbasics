@@ -28,10 +28,10 @@ import com.phloc.commons.name.IHasDisplayText;
  * 
  * @author philip
  */
-public abstract class AbstractBasePageWithHelp extends AbstractBasePage
+public abstract class AbstractBasePageWithHelp extends AbstractPage
 {
   /** The name of the window where the help opens up */
-  protected static final String HELP_WINDOW_NAME = "simplehelpwindow";
+  public static final String HELP_WINDOW_NAME = "simplehelpwindow";
 
   /**
    * Constructor
