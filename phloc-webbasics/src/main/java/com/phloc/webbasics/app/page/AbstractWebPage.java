@@ -22,7 +22,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.AbstractBasePage;
+import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.name.IHasDisplayText;
@@ -34,11 +34,11 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.LinkUtils;
 
 /**
- * Abstract base implementation for {@link IPage}.
+ * Abstract base implementation for {@link IWebPage}.
  * 
  * @author philip
  */
-public abstract class AbstractPage extends AbstractBasePage implements IPage
+public abstract class AbstractWebPage extends AbstractPage implements IWebPage
 {
   /**
    * Constructor
@@ -46,7 +46,7 @@ public abstract class AbstractPage extends AbstractBasePage implements IPage
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
-  public AbstractPage (@Nonnull @Nonempty final String sID)
+  public AbstractWebPage (@Nonnull @Nonempty final String sID)
   {
     super (sID);
   }
@@ -60,7 +60,7 @@ public abstract class AbstractPage extends AbstractBasePage implements IPage
    *        The constant (non-translatable) name of the page. May not be
    *        <code>null</code>.
    */
-  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
@@ -73,7 +73,7 @@ public abstract class AbstractPage extends AbstractBasePage implements IPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
     super (sID, aName);
   }

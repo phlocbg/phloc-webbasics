@@ -33,14 +33,14 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.app.page.AbstractPage;
+import com.phloc.webbasics.app.page.AbstractWebPage;
 
 /**
  * Default page showing a very rudimentary "page not found"
  * 
  * @author philip
  */
-public class SystemPageNotFound extends AbstractPage
+public class SystemPageNotFound extends AbstractWebPage
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SystemPageNotFound.class);
 

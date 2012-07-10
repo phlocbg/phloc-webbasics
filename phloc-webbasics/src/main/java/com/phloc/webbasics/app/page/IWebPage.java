@@ -22,7 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.IBasePage;
+import com.phloc.appbasics.app.page.IPage;
 import com.phloc.html.hc.IHCNode;
 
 /**
@@ -30,7 +30,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author philip
  */
-public interface IPage extends IBasePage
+public interface IWebPage extends IPage
 {
   /**
    * @param aDisplayLocale

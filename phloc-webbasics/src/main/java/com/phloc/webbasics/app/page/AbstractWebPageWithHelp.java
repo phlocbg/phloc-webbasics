@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.app.page.AbstractBasePageWithHelp;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.name.IHasDisplayText;
@@ -41,13 +42,13 @@ import com.phloc.webbasics.app.LinkUtils;
  * 
  * @author philip
  */
-public abstract class AbstractPageWithHelp extends AbstractPage
+public abstract class AbstractWebPageWithHelp extends AbstractWebPage
 {
   /** The CSS class to be applied to the help div */
   private static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
 
   /** The name of the window where the help opens up */
-  protected static final String HELP_WINDOW_NAME = "simplehelpwindow";
+  protected static final String HELP_WINDOW_NAME = AbstractBasePageWithHelp.HELP_WINDOW_NAME;
 
   /**
    * Constructor
@@ -55,7 +56,7 @@ public abstract class AbstractPageWithHelp extends AbstractPage
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
-  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID)
+  public AbstractWebPageWithHelp (@Nonnull @Nonempty final String sID)
   {
     super (sID);
   }
@@ -69,7 +70,7 @@ public abstract class AbstractPageWithHelp extends AbstractPage
    *        The constant (non-translatable) name of the page. May not be
    *        <code>null</code>.
    */
-  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public AbstractWebPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
@@ -82,7 +83,7 @@ public abstract class AbstractPageWithHelp extends AbstractPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractWebPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
     super (sID, aName);
   }
