@@ -89,7 +89,7 @@ public class BasicLoginHTML extends LayoutHTMLProvider
    * @return The label node
    */
   @OverrideOnDemand
-  @Nonnull
+  @Nullable
   protected IHCNode createLabelNode (@Nullable final String sText)
   {
     return new HCTextNode (sText);
