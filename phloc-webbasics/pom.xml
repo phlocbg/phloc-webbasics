@@ -23,8 +23,8 @@
   
   <scm>
     <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/webbasics</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk</developerConnection>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</developerConnection>
   </scm>
 
   <distributionManagement>
