@@ -34,7 +34,6 @@ import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.annotations.VisibleForTesting;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
@@ -194,17 +193,27 @@ public final class LoggedInUserManager extends GlobalSingleton
   }
 
   /**
-   * Manually log out the current user
+   * Manually log out the specified user
    * 
    * @param sUserID
    *        The user ID to log out
    * @return {@link EChange} if something changed
    */
   @Nonnull
-  @VisibleForTesting
-  EChange logoutUser (@Nullable final String sUserID)
+  public EChange logoutUser (@Nullable final String sUserID)
   {
     return _logoutUser (sUserID, SessionUserHolder.getInstance ());
+  }
+
+  /**
+   * Manually log out the current user
+   * 
+   * @return {@link EChange} if something changed
+   */
+  @Nonnull
+  public EChange logoutCurrentUser ()
+  {
+    return logoutUser (getCurrentUserID ());
   }
 
   /**

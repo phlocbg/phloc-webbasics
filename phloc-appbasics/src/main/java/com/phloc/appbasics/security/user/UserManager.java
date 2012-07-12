@@ -275,6 +275,26 @@ public final class UserManager extends AbstractDAO implements IUserManager
     }
   }
 
+  @Nullable
+  public IUser getUserOfEmailAddress (@Nullable final String sEmailAddress)
+  {
+    if (StringHelper.hasNoText (sEmailAddress))
+      return null;
+
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      for (final User aUser : m_aUsers.values ())
+        if (sEmailAddress.equals (aUser.getEmailAddress ()))
+          return aUser;
+      return null;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <? extends IUser> getAllUsers ()
