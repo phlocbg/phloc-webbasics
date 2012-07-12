@@ -28,7 +28,7 @@ import com.phloc.commons.name.IHasDisplayText;
  * 
  * @author philip
  */
-public abstract class AbstractBasePageWithHelp extends AbstractPage
+public abstract class AbstractPageWithHelp extends AbstractPage
 {
   /** The name of the window where the help opens up */
   public static final String HELP_WINDOW_NAME = "simplehelpwindow";
@@ -39,7 +39,7 @@ public abstract class AbstractBasePageWithHelp extends AbstractPage
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
-  public AbstractBasePageWithHelp (@Nonnull @Nonempty final String sID)
+  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID)
   {
     super (sID);
   }
@@ -53,7 +53,7 @@ public abstract class AbstractBasePageWithHelp extends AbstractPage
    *        The constant (non-translatable) name of the page. May not be
    *        <code>null</code>.
    */
-  public AbstractBasePageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
@@ -66,7 +66,7 @@ public abstract class AbstractBasePageWithHelp extends AbstractPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractBasePageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
   {
     super (sID, aName);
   }
