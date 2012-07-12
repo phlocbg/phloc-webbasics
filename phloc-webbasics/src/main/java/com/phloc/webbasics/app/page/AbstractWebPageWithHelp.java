@@ -21,7 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.page.AbstractBasePageWithHelp;
+import com.phloc.appbasics.app.page.AbstractPageWithHelp;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.name.IHasDisplayText;
@@ -48,7 +48,7 @@ public abstract class AbstractWebPageWithHelp extends AbstractWebPage
   private static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
 
   /** The name of the window where the help opens up */
-  protected static final String HELP_WINDOW_NAME = AbstractBasePageWithHelp.HELP_WINDOW_NAME;
+  protected static final String HELP_WINDOW_NAME = AbstractPageWithHelp.HELP_WINDOW_NAME;
 
   /**
    * Constructor
