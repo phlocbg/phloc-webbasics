@@ -24,7 +24,7 @@ import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.id.IHasID;
 
 /**
- * Marker interface for menu items.
+ * Base interface for menu items and menu separators.
  * 
  * @author philip
  */

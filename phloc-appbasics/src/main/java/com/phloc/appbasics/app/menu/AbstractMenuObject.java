@@ -19,6 +19,7 @@ package com.phloc.appbasics.app.menu;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.filter.IFilter;
@@ -31,6 +32,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author philip
  */
+@NotThreadSafe
 public abstract class AbstractMenuObject implements IMenuObject
 {
   private final String m_sID;

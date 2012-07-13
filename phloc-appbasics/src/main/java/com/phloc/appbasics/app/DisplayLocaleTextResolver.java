@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.app;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -37,6 +39,12 @@ public final class DisplayLocaleTextResolver
   private DisplayLocaleTextResolver ()
   {}
 
+  @Nonnull
+  private static Locale _getCurrentLocale ()
+  {
+    return ApplicationRequestManager.getRequestDisplayLocale ();
+  }
+
   /**
    * Resolve the passed text element in the application's display locale. No
    * argument replacement happens.
@@ -51,7 +59,7 @@ public final class DisplayLocaleTextResolver
   public static String getText (@Nonnull final Enum <? extends IPredefinedLocaleTextProvider> aEnum,
                                 @Nonnull final ITextProvider aTP)
   {
-    return DefaultTextResolver.getText (aEnum, aTP, ApplicationRequestManager.getRequestDisplayLocale ());
+    return DefaultTextResolver.getText (aEnum, aTP, _getCurrentLocale ());
   }
 
   /**
@@ -74,6 +82,6 @@ public final class DisplayLocaleTextResolver
                                         @Nonnull final ITextProvider aTP,
                                         @Nonnull final Object [] aArgs)
   {
-    return DefaultTextResolver.getTextWithArgs (aEnum, aTP, ApplicationRequestManager.getRequestDisplayLocale (), aArgs);
+    return DefaultTextResolver.getTextWithArgs (aEnum, aTP, _getCurrentLocale (), aArgs);
   }
 }

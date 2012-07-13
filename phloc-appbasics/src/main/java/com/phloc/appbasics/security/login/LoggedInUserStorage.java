@@ -38,6 +38,10 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class LoggedInUserStorage
 {
+  // The name of the base directory relative to the WebFileIO where the data is
+  // referenced
+  public static final String BASE_DIRECTORY = "userdata/";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserStorage.class);
 
   private LoggedInUserStorage ()
@@ -75,7 +79,7 @@ public final class LoggedInUserStorage
                       sRealUserID +
                       "' to be used as a file system name!");
 
-    final File aDir = WebFileIO.getFile ("userdata/" + sRealUserID);
+    final File aDir = WebFileIO.getFile (BASE_DIRECTORY + sRealUserID);
     WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir);
     return aDir;
   }

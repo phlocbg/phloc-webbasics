@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.Nonempty;
@@ -33,6 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author philip
  */
+@NotThreadSafe
 public final class MenuItem extends AbstractMenuObject implements IMenuItem
 {
   private final IPage m_aPage;
