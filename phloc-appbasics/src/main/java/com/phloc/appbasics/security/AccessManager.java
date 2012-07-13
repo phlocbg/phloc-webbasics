@@ -150,6 +150,12 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return m_aUserMgr.getUserOfLoginName (sLoginName);
   }
 
+  @Nullable
+  public IUser getUserOfEmailAddress (@Nullable final String sEmailAddress)
+  {
+    return m_aUserMgr.getUserOfEmailAddress (sEmailAddress);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public Collection <? extends IUser> getAllUsers ()

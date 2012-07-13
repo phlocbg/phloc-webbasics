@@ -170,14 +170,24 @@ public interface IUserManager
   IUser getUserOfID (@Nullable String sUserID);
 
   /**
-   * Get the user with the specified email address
+   * Get the user with the specified login name
    * 
    * @param sLoginName
-   *        The email address to be checked. May be <code>null</code>.
+   *        The login name to be checked. May be <code>null</code>.
    * @return <code>null</code> if no such user exists
    */
   @Nullable
   IUser getUserOfLoginName (@Nullable String sLoginName);
+
+  /**
+   * Get the user with the specified email address
+   * 
+   * @param sEmailAddress
+   *        The email address to be checked. May be <code>null</code>.
+   * @return <code>null</code> if no such user exists
+   */
+  @Nullable
+  IUser getUserOfEmailAddress (@Nullable String sEmailAddress);
 
   /**
    * @return A non-<code>null</code> collection of all contained users
