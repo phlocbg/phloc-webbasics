@@ -45,7 +45,7 @@ import com.phloc.scopes.nonweb.singleton.SessionSingleton;
  * @author philip
  */
 @ThreadSafe
-public final class LoggedInUserManager extends GlobalSingleton
+public final class LoggedInUserManager extends GlobalSingleton implements ICurrentUserIDProvider
 {
   /**
    * This class manages the user ID of the current session

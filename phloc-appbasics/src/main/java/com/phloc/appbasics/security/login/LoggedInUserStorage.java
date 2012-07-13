@@ -22,23 +22,26 @@ import java.io.File;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.app.WebFileIO;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
 
+/**
+ * This class encapsulates the the file IO base directory for the current user
+ * 
+ * @author philip
+ */
 @Immutable
 public final class LoggedInUserStorage
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserStorage.class);
+
   private LoggedInUserStorage ()
   {}
-
-  @Nonnull
-  private static String _getLoggedInUserID ()
-  {
-    final String ret = LoggedInUserManager.getInstance ().getCurrentUserID ();
-    if (StringHelper.hasNoText (ret))
-      throw new IllegalStateException ("No user is logged in!");
-    return ret;
-  }
 
   /**
    * @return The base directory for all user-related data
@@ -46,19 +49,34 @@ public final class LoggedInUserStorage
   @Nonnull
   public static File getUserdataDirectory ()
   {
-    final File aDir = WebFileIO.getFile ("userdata/" + _getLoggedInUserID ());
-    WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir);
-    return aDir;
+    return getUserdataDirectory (LoggedInUserManager.getInstance ().getCurrentUserID ());
   }
 
   /**
-   * @return The upload directory of the current user.
+   * @param sUserID
+   *        the ID of the user for which the user data is requested. May neither
+   *        be <code>null</code> nor empty.
+   * @return The base directory for all user-related data
    */
   @Nonnull
-  public static File getUploadDirectory ()
+  public static File getUserdataDirectory (@Nonnull @Nonempty final String sUserID)
   {
-    final File aDir = new File (getUserdataDirectory (), "upload");
-    WebFileIO.getFileOpMgr ().createDirIfNotExisting (aDir);
+    if (StringHelper.hasNoText (sUserID))
+      throw new IllegalArgumentException ("userID may not be empty!");
+
+    // Ensure user ID is valid as a filename!
+    final String sRealUserID = FilenameHelper.getAsSecureValidASCIIFilename (sUserID);
+    if (StringHelper.hasNoText (sRealUserID))
+      throw new IllegalStateException ("Passed user ID '" + sUserID + "' is an empty filename!");
+    if (!sRealUserID.equals (sUserID))
+      s_aLogger.warn ("User ID '" +
+                      sUserID +
+                      "' was modified to '" +
+                      sRealUserID +
+                      "' to be used as a file system name!");
+
+    final File aDir = WebFileIO.getFile ("userdata/" + sRealUserID);
+    WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir);
     return aDir;
   }
 }
