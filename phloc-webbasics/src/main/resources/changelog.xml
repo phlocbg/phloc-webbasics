@@ -22,7 +22,7 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
   <entry date="2012-07-13" category="tech" action="update">
     <change>
-      <text locale="en">Updated to phloc-json 2.2.8</text>
+      <text locale="en">Updated to phloc-json 2.2.8 and phloc-html 3.3.1</text>
     </change>
   </entry>
   <release date="2012-07-13" version="1.7.1" />
