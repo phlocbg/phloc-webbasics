@@ -52,7 +52,6 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * 
    * @author philip
    */
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("SE_NO_SERIALVERSIONID")
   public static final class SessionUserHolder extends SessionSingleton
   {
     private IUser m_aUser;
