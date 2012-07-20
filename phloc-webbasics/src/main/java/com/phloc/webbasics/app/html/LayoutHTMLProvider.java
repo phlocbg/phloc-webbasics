@@ -121,9 +121,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
     // Add configured print-only CSS
     for (final String sCSSPrintFile : HTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSPrintFile),
-                                     new CSSMediaList (ECSSMedium.PRINT),
-                                     null));
+      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSPrintFile), ECSSMedium.PRINT));
 
     // Add configured IE-only CSS
     for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
