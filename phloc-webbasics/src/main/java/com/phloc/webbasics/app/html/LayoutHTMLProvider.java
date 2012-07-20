@@ -127,7 +127,9 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
     // Add configured IE-only CSS
     for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSIEFile), null, ConditionalComment.createForIE ()));
+      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSIEFile),
+                                     (CSSMediaList) null,
+                                     ConditionalComment.createForIE ()));
 
     // Add all configured JS
     for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
