@@ -26,6 +26,19 @@
     <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</connection>
     <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</developerConnection>
   </scm>
+  
+  <repositories>
+    <repository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <distributionManagement>
     <repository>
