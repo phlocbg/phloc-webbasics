@@ -102,9 +102,9 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       s_aLogger.warn ("Consider using the Sun Server Runtime by specifiying '-server' on the commandline!");
 
     // set global debug/trace mode
-    final boolean bTraceMode = Boolean.parseBoolean (aSC.getInitParameter (INIT_PARAMETER_TRACE));
-    final boolean bDebugMode = Boolean.parseBoolean (aSC.getInitParameter (INIT_PARAMETER_DEBUG));
-    final boolean bProductionMode = Boolean.parseBoolean (aSC.getInitParameter (INIT_PARAMETER_PRODUCTION));
+    final boolean bTraceMode = StringHelper.parseBool (aSC.getInitParameter (INIT_PARAMETER_TRACE));
+    final boolean bDebugMode = StringHelper.parseBool (aSC.getInitParameter (INIT_PARAMETER_DEBUG));
+    final boolean bProductionMode = StringHelper.parseBool (aSC.getInitParameter (INIT_PARAMETER_PRODUCTION));
     GlobalDebug.setTraceModeDirect (bTraceMode);
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);

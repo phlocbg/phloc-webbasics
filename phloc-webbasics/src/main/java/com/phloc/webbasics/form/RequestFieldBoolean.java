@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCRequestFieldBoolean;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -93,7 +94,7 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
   {
     final String sValue = getCheckBoxRequestValue (sFieldName, null);
-    return sValue == null ? bDefaultValue : Boolean.parseBoolean (sValue);
+    return sValue == null ? bDefaultValue : StringHelper.parseBool (sValue);
   }
 
   @Override
