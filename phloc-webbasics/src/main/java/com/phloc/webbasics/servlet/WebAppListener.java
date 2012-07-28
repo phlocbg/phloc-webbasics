@@ -35,6 +35,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
@@ -102,9 +103,9 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       s_aLogger.warn ("Consider using the Sun Server Runtime by specifiying '-server' on the commandline!");
 
     // set global debug/trace mode
-    final boolean bTraceMode = StringHelper.parseBool (aSC.getInitParameter (INIT_PARAMETER_TRACE));
-    final boolean bDebugMode = StringHelper.parseBool (aSC.getInitParameter (INIT_PARAMETER_DEBUG));
-    final boolean bProductionMode = StringHelper.parseBool (aSC.getInitParameter (INIT_PARAMETER_PRODUCTION));
+    final boolean bTraceMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_TRACE));
+    final boolean bDebugMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_DEBUG));
+    final boolean bProductionMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_PRODUCTION));
     GlobalDebug.setTraceModeDirect (bTraceMode);
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
