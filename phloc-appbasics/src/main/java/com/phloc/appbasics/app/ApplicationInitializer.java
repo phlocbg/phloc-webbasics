@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.nonweb.mgr.ScopeManager;
 
@@ -52,9 +53,9 @@ public final class ApplicationInitializer
                            @Nullable final String sAppID,
                            @Nonnull final File aBasePath)
   {
-    final boolean bTraceMode = Boolean.parseBoolean (sTraceMode);
-    final boolean bDebugMode = Boolean.parseBoolean (sDebugMode);
-    final boolean bProductionMode = Boolean.parseBoolean (sProductionMode);
+    final boolean bTraceMode = StringHelper.parseBool (sTraceMode);
+    final boolean bDebugMode = StringHelper.parseBool (sDebugMode);
+    final boolean bProductionMode = StringHelper.parseBool (sProductionMode);
     init (bTraceMode, bDebugMode, bProductionMode, bInitGlobalScope, sAppID, aBasePath);
   }
 
