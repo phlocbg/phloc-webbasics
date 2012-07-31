@@ -19,6 +19,7 @@ package com.phloc.webbasics.web;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.serialize.MicroWriter;
@@ -89,14 +91,14 @@ public final class HTTPResponseHelper
       final HttpServletResponse aHttpResponse = aRequestScope.getResponse ();
 
       final String sXMLCode = MicroWriter.getNodeAsString (aDoc, XML_WRITER_SETTINGS);
-      final String sCharset = XML_WRITER_SETTINGS.getCharset ();
+      final Charset aCharset = XML_WRITER_SETTINGS.getCharsetObj ();
 
-      aHttpResponse.setContentType (aMimeType.getAsStringWithEncoding (sCharset));
-      aHttpResponse.setCharacterEncoding (sCharset);
+      aHttpResponse.setContentType (aMimeType.getAsStringWithEncoding (aCharset.name ()));
+      aHttpResponse.setCharacterEncoding (aCharset.name ());
 
       // Faster than using a PrintWriter!
       final OutputStream aOS = getBestSuitableOutputStream (aHttpRequest, aHttpResponse);
-      aOS.write (sXMLCode.getBytes (sCharset));
+      aOS.write (CharsetManager.getAsBytes (sXMLCode, aCharset));
       aOS.flush ();
       aOS.close ();
     }
