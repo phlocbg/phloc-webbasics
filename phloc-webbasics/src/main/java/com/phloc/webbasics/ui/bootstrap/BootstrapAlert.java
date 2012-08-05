@@ -19,7 +19,9 @@ package com.phloc.webbasics.ui.bootstrap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
@@ -109,9 +111,11 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   }
 
   @Override
-  protected void prepareBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void prepareOnceBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    super.prepareBeforeCreateElement (aConversionSettings);
+    super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClass (m_eType);
     if (m_bShowClose)
       addChild (0, new HCA ().addClass (CBootstrapCSS.CLOSE).addChild ("*"));

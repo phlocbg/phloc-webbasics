@@ -19,7 +19,9 @@ package com.phloc.webbasics.ui.bootstrap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCA;
@@ -68,9 +70,11 @@ public class BootstrapLinkButton extends HCA
   }
 
   @Override
-  protected void prepareBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void prepareOnceBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    super.prepareBeforeCreateElement (aConversionSettings);
+    super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClasses (m_eType, m_eSize);
   }
 }

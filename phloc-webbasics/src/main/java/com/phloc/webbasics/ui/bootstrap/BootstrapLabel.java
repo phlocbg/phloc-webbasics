@@ -18,7 +18,9 @@
 package com.phloc.webbasics.ui.bootstrap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
 
@@ -52,9 +54,11 @@ public class BootstrapLabel extends HCButton
   }
 
   @Override
-  protected void prepareBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void prepareOnceBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    super.prepareBeforeCreateElement (aConversionSettings);
+    super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClass (m_eType);
   }
 }
