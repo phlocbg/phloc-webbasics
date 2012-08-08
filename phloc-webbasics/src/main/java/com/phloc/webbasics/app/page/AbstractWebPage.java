@@ -98,6 +98,21 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   /**
+   * Get the value of the request parameter with the given name.
+   * 
+   * @param sName
+   *        Request parameter name
+   * @param sDefault
+   *        The default value to be used, if no request attribute is present
+   * @return The value of the passed request parameter or the default value
+   */
+  @Nullable
+  protected static final String getAttr (@Nullable final String sName, @Nullable final String sDefault)
+  {
+    return StringHelper.trim (_getScope ().getAttributeAsString (sName, sDefault));
+  }
+
+  /**
    * Get the value list of the request parameter with the given name.
    * 
    * @param sName
