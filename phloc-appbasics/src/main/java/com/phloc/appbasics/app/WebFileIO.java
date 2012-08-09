@@ -31,6 +31,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.IReadWriteResource;
 import com.phloc.commons.io.file.FileOperationManager;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.IFileOperationManager;
 import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -69,6 +70,12 @@ public final class WebFileIO
 
     // Ensure the base directory is present
     s_aFOM.createDirRecursiveIfNotExisting (s_aBasePath);
+    if (!FileUtils.canRead (s_aBasePath))
+      throw new IllegalArgumentException ("Cannot read in " + s_aBasePath);
+    if (!FileUtils.canWrite (s_aBasePath))
+      throw new IllegalArgumentException ("Cannot write in " + s_aBasePath);
+    if (!FileUtils.canExecute (s_aBasePath))
+      throw new IllegalArgumentException ("Cannot execute in " + s_aBasePath);
   }
 
   public static void initBasePath (@Nonnull @Nonempty final String sBasePath)
