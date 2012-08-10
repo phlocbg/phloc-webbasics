@@ -39,6 +39,7 @@ import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.datetime.PDTFactory;
 
 /**
  * This class manages the available users.
@@ -78,26 +79,17 @@ public final class UserManager extends AbstractDAO implements IUserManager
                         CSecurity.USER_ADMINISTRATOR_LOGIN,
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
-                        CSecurity.USER_ADMINISTRATOR_NAME,
-                        (String) null,
-                        (Locale) null,
-                        (Map <String, String>) null));
+                        CSecurity.USER_ADMINISTRATOR_NAME));
     _addUser (new User (CSecurity.USER_USER_ID,
                         CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
-                        CSecurity.USER_USER_NAME,
-                        (String) null,
-                        (Locale) null,
-                        (Map <String, String>) null));
+                        CSecurity.USER_USER_NAME));
     _addUser (new User (CSecurity.USER_GUEST_ID,
                         CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
                         UserManager.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
-                        CSecurity.USER_GUEST_NAME,
-                        (String) null,
-                        (Locale) null,
-                        (Map <String, String>) null));
+                        CSecurity.USER_GUEST_NAME));
     return EChange.CHANGED;
   }
 
@@ -197,10 +189,10 @@ public final class UserManager extends AbstractDAO implements IUserManager
                                  sLoginName,
                                  sEmailAddress,
                                  createUserPasswordHash (sPlainTextPassword),
-                                 sFirstName,
-                                 sLastName,
-                                 aDesiredLocale,
-                                 aCustomAttrs);
+                                 sFirstName);
+    aUser.setLastName (sLastName);
+    aUser.setDesiredLocale (aDesiredLocale);
+    aUser.setCustomAttrs (aCustomAttrs);
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -316,8 +308,12 @@ public final class UserManager extends AbstractDAO implements IUserManager
     m_aRWLock.writeLock ().lock ();
     try
     {
-      if (m_aUsers.remove (sUserID) == null)
+      final User aUser = m_aUsers.get (sUserID);
+      if (aUser == null)
         return EChange.UNCHANGED;
+      if (aUser.setDeleted (true).isUnchanged ())
+        return EChange.UNCHANGED;
+      aUser.setLastModification (PDTFactory.getCurrentDateTime ());
       markAsChanged ();
       return EChange.CHANGED;
     }
@@ -352,6 +348,7 @@ public final class UserManager extends AbstractDAO implements IUserManager
       eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;
+      aUser.setLastModification (PDTFactory.getCurrentDateTime ());
       markAsChanged ();
       return EChange.CHANGED;
     }

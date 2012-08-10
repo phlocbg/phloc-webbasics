@@ -27,13 +27,20 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
+import com.phloc.datetime.IHasCreationDateTime;
+import com.phloc.datetime.IHasLastModificationDateTime;
 
 /**
  * Interface for a single user
  * 
  * @author philip
  */
-public interface IUser extends IHasID <String>, IHasDisplayName, Serializable
+public interface IUser extends
+                      IHasID <String>,
+                      IHasDisplayName,
+                      IHasCreationDateTime,
+                      IHasLastModificationDateTime,
+                      Serializable
 {
   /**
    * @return The login name of the user.
@@ -96,4 +103,10 @@ public interface IUser extends IHasID <String>, IHasDisplayName, Serializable
    */
   @Nullable
   String getCustomAttrValue (@Nullable String sKey);
+
+  /**
+   * @return <code>true</code> if this user is deleted, <code>false</code> if it
+   *         is active
+   */
+  boolean isDeleted ();
 }

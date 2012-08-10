@@ -24,15 +24,23 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.joda.time.DateTime;
+
+import com.phloc.commons.annotations.ContainsSoftMigration;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.microdom.utils.MicroUtils;
+import com.phloc.commons.string.StringParser;
+import com.phloc.datetime.PDTFactory;
 
 public final class UserMicroTypeConverter implements IMicroTypeConverter
 {
   private static final String ATTR_ID = "id";
+  private static final String ATTR_CREATIONDT = "creationdt";
+  private static final String ATTR_LASTMODDT = "lastmoddt";
+  private static final String ATTR_DELETED = "deleted";
   private static final String ATTR_DESIREDLOCALE = "desiredlocale";
   private static final String ELEMENT_LOGINNAME = "loginname";
   private static final String ELEMENT_EMAILADDRESS = "emailaddress";
@@ -49,6 +57,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final IUser aUser = (IUser) aObject;
     final IMicroElement eUser = new MicroElement (sNamespaceURI, sTagName);
     eUser.setAttribute (ATTR_ID, aUser.getID ());
+    eUser.setAttributeWithConversion (ATTR_CREATIONDT, aUser.getCreationDateTime ());
+    eUser.setAttributeWithConversion (ATTR_LASTMODDT, aUser.getLastModificationDateTime ());
     eUser.appendElement (ELEMENT_LOGINNAME).appendText (aUser.getLoginName ());
     eUser.appendElement (ELEMENT_EMAILADDRESS).appendText (aUser.getEmailAddress ());
     eUser.appendElement (ELEMENT_PASSWORDHASH).appendText (aUser.getPasswordHash ());
@@ -64,13 +74,22 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
       eCustom.setAttribute (ATTR_ID, aEntry.getKey ());
       eCustom.appendText (aEntry.getValue ());
     }
+    eUser.setAttribute (ATTR_DELETED, Boolean.toString (aUser.isDeleted ()));
     return eUser;
   }
 
+  @ContainsSoftMigration
   @Nonnull
   public User convertToNative (@Nonnull final IMicroElement eUser)
   {
     final String sID = eUser.getAttribute (ATTR_ID);
+    DateTime aCreationDT = eUser.getAttributeWithConversion (ATTR_CREATIONDT, DateTime.class);
+    if (aCreationDT == null)
+    {
+      // Migration for old data
+      aCreationDT = PDTFactory.getCurrentDateTime ();
+    }
+    final DateTime aLastModificationDT = eUser.getAttributeWithConversion (ATTR_LASTMODDT, DateTime.class);
     final String sLoginName = MicroUtils.getChildTextContent (eUser, ELEMENT_LOGINNAME);
     final String sEmailAddress = MicroUtils.getChildTextContent (eUser, ELEMENT_EMAILADDRESS);
     final String sPasswordHash = MicroUtils.getChildTextContent (eUser, ELEMENT_PASSWORDHASH);
@@ -81,6 +100,18 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final Map <String, String> aCustomAttrs = new LinkedHashMap <String, String> ();
     for (final IMicroElement eCustom : eUser.getChildElements (ELEMENT_CUSTOM))
       aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
-    return new User (sID, sLoginName, sEmailAddress, sPasswordHash, sFirstName, sLastName, aDesiredLocale, aCustomAttrs);
+    final String sDeleted = eUser.getAttribute (ATTR_DELETED);
+    final boolean bDeleted = StringParser.parseBool (sDeleted);
+    return new User (sID,
+                     aCreationDT,
+                     aLastModificationDT,
+                     sLoginName,
+                     sEmailAddress,
+                     sPasswordHash,
+                     sFirstName,
+                     sLastName,
+                     aDesiredLocale,
+                     aCustomAttrs,
+                     bDeleted);
   }
 }

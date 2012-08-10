@@ -24,10 +24,10 @@ import java.util.Locale;
 
 import org.junit.Test;
 
-import com.phloc.appbasics.security.user.User;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.datetime.PDTFactory;
 
 /**
  * Test class for class {@link User}.
@@ -39,7 +39,17 @@ public final class UserTest
   @Test
   public void testBasic ()
   {
-    final User aUser = new User ("id1", "MyName", "me@example.org", "ABCDEF", "Philip", "Helger", Locale.GERMANY, null);
+    final User aUser = new User ("id1",
+                                 PDTFactory.getCurrentDateTime (),
+                                 null,
+                                 "MyName",
+                                 "me@example.org",
+                                 "ABCDEF",
+                                 "Philip",
+                                 "Helger",
+                                 Locale.GERMANY,
+                                 null,
+                                 false);
     assertEquals ("id1", aUser.getID ());
     assertEquals ("me@example.org", aUser.getEmailAddress ());
     assertEquals ("ABCDEF", aUser.getPasswordHash ());
@@ -52,13 +62,16 @@ public final class UserTest
   public void testMicroConversion ()
   {
     final User aUser = new User ("id1",
+                                 PDTFactory.getCurrentDateTime (),
+                                 null,
                                  "MyName",
                                  "me@example.org",
                                  "ABCDEF",
                                  "Philip",
                                  "Helger",
                                  Locale.GERMANY,
-                                 ContainerHelper.newMap ("locale", "de_DE"));
+                                 ContainerHelper.newMap ("locale", "de_DE"),
+                                 false);
 
     // To XML
     final IMicroElement aElement = MicroTypeConverter.convertToMicroElement (aUser, "user");

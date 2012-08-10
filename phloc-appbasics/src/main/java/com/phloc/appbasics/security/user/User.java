@@ -25,6 +25,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import org.joda.time.DateTime;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -34,6 +36,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.datetime.PDTFactory;
 
 /**
  * Default implementation of the {@link IUser} interface.
@@ -44,6 +47,8 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class User implements IUser
 {
   private final String m_sID;
+  private final DateTime m_aCreationDT;
+  private DateTime m_aLastModificationDT;
   private String m_sLoginName;
   private String m_sEmailAddress;
   private String m_sPasswordHash;
@@ -51,6 +56,7 @@ public final class User implements IUser
   private String m_sLastName;
   private Locale m_aDesiredLocale;
   private Map <String, String> m_aCustomAttrs = new LinkedHashMap <String, String> ();
+  private boolean m_bDeleted;
 
   /**
    * Create a new user
@@ -81,13 +87,36 @@ public final class User implements IUser
                @Nullable final Map <String, String> aCustomAttrs)
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
+          PDTFactory.getCurrentDateTime (),
+          null,
           sLoginName,
           sEmailAddress,
           sPasswordHash,
           sFirstName,
           sLastName,
           aDesiredLocale,
-          aCustomAttrs);
+          aCustomAttrs,
+          false);
+  }
+
+  // Internal use only
+  User (@Nonnull @Nonempty final String sID,
+        @Nonnull @Nonempty final String sLoginName,
+        @Nonnull @Nonempty final String sEmailAddress,
+        @Nonnull @Nonempty final String sPasswordHash,
+        @Nullable final String sFirstName)
+  {
+    this (sID,
+          PDTFactory.getCurrentDateTime (),
+          null,
+          sLoginName,
+          sEmailAddress,
+          sPasswordHash,
+          sFirstName,
+          (String) null,
+          (Locale) null,
+          (Map <String, String>) null,
+          false);
   }
 
   /**
@@ -95,6 +124,10 @@ public final class User implements IUser
    * 
    * @param sID
    *        user ID
+   * @param aCreationDT
+   *        The creation date and time
+   * @param aLastModificationDT
+   *        The last modification date and time
    * @param sLoginName
    *        Login name of the user. May neither be <code>null</code> nor empty.
    * @param sEmailAddress
@@ -111,18 +144,25 @@ public final class User implements IUser
    *        The desired locale. May be <code>null</code>.
    * @param aCustomAttrs
    *        Custom attributes. May be <code>null</code>.
+   * @param bDeleted
+   *        <code>true</code> if the user is deleted, <code>false</code> if nto
    */
   User (@Nonnull @Nonempty final String sID,
+        @Nonnull final DateTime aCreationDT,
+        @Nullable final DateTime aLastModificationDT,
         @Nonnull @Nonempty final String sLoginName,
         @Nonnull @Nonempty final String sEmailAddress,
         @Nonnull @Nonempty final String sPasswordHash,
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
-        @Nullable final Map <String, String> aCustomAttrs)
+        @Nullable final Map <String, String> aCustomAttrs,
+        final boolean bDeleted)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
+    if (aCreationDT == null)
+      throw new NullPointerException ("creationDT");
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
     if (StringHelper.hasNoText (sEmailAddress))
@@ -130,6 +170,8 @@ public final class User implements IUser
     if (StringHelper.hasNoText (sPasswordHash))
       throw new IllegalArgumentException ("passwordHash");
     m_sID = sID;
+    m_aCreationDT = aCreationDT;
+    m_aLastModificationDT = aLastModificationDT;
     m_sLoginName = sLoginName;
     m_sEmailAddress = sEmailAddress;
     m_sPasswordHash = sPasswordHash;
@@ -138,6 +180,7 @@ public final class User implements IUser
     m_aDesiredLocale = aDesiredLocale;
     if (aCustomAttrs != null)
       m_aCustomAttrs.putAll (aCustomAttrs);
+    m_bDeleted = bDeleted;
   }
 
   @Nonnull
@@ -145,6 +188,25 @@ public final class User implements IUser
   public String getID ()
   {
     return m_sID;
+  }
+
+  @Nonnull
+  public DateTime getCreationDateTime ()
+  {
+    return m_aCreationDT;
+  }
+
+  @Nullable
+  public DateTime getLastModificationDateTime ()
+  {
+    return m_aLastModificationDT;
+  }
+
+  void setLastModification (@Nonnull final DateTime aLastModificationDT)
+  {
+    if (aLastModificationDT == null)
+      throw new NullPointerException ("lastModificationDT");
+    m_aLastModificationDT = aLastModificationDT;
   }
 
   @Nonnull
@@ -313,6 +375,20 @@ public final class User implements IUser
 
     // Finally set it
     m_aCustomAttrs.put (sKey, sValue);
+    return EChange.CHANGED;
+  }
+
+  public boolean isDeleted ()
+  {
+    return m_bDeleted;
+  }
+
+  @Nonnull
+  EChange setDeleted (final boolean bDeleted)
+  {
+    if (bDeleted == m_bDeleted)
+      return EChange.UNCHANGED;
+    m_bDeleted = bDeleted;
     return EChange.CHANGED;
   }
 
