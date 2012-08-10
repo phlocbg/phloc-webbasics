@@ -20,9 +20,11 @@ package com.phloc.appbasics.app;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,40 +44,45 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-@Immutable
+@ThreadSafe
 public final class WebFileIO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
   private static final IFileOperationManager s_aFOM = new FileOperationManager (new LoggingFileOperationCallback ());
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   private static File s_aBasePath;
 
   private WebFileIO ()
   {}
 
-  public static boolean isBasePathInited ()
-  {
-    return s_aBasePath != null;
-  }
-
   public static void initBasePath (@Nonnull final File aBasePath)
   {
     if (aBasePath == null)
       throw new NullPointerException ("basePath");
-    if (s_aBasePath != null)
-      throw new IllegalStateException ("Another base path is already present: " + s_aBasePath);
 
-    s_aLogger.info ("Using '" + aBasePath + "' as the storage base");
-    s_aBasePath = aBasePath;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_aBasePath != null)
+        throw new IllegalStateException ("Another base path is already present: " + s_aBasePath);
 
-    // Ensure the base directory is present
-    s_aFOM.createDirRecursiveIfNotExisting (s_aBasePath);
-    if (!FileUtils.canRead (s_aBasePath))
-      throw new IllegalArgumentException ("Cannot read in " + s_aBasePath);
-    if (!FileUtils.canWrite (s_aBasePath))
-      throw new IllegalArgumentException ("Cannot write in " + s_aBasePath);
-    if (!FileUtils.canExecute (s_aBasePath))
-      throw new IllegalArgumentException ("Cannot execute in " + s_aBasePath);
+      s_aLogger.info ("Using '" + aBasePath + "' as the storage base");
+      s_aBasePath = aBasePath;
+
+      // Ensure the base directory is present
+      s_aFOM.createDirRecursiveIfNotExisting (s_aBasePath);
+      if (!FileUtils.canRead (s_aBasePath))
+        throw new IllegalArgumentException ("Cannot read in " + s_aBasePath);
+      if (!FileUtils.canWrite (s_aBasePath))
+        throw new IllegalArgumentException ("Cannot write in " + s_aBasePath);
+      if (!FileUtils.canExecute (s_aBasePath))
+        throw new IllegalArgumentException ("Cannot execute in " + s_aBasePath);
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   public static void initBasePath (@Nonnull @Nonempty final String sBasePath)
@@ -87,7 +94,44 @@ public final class WebFileIO
 
   public static void resetBasePath ()
   {
-    s_aBasePath = null;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aBasePath = null;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public static boolean isBasePathInited ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aBasePath != null;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public static File getBasePathFile ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      if (s_aBasePath == null)
+        throw new IllegalStateException ("Base path was not initialized!");
+      return s_aBasePath;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nonnull
@@ -98,17 +142,9 @@ public final class WebFileIO
   }
 
   @Nonnull
-  public static File getBasePathFile ()
-  {
-    if (s_aBasePath == null)
-      throw new IllegalStateException ("Base path was not initialized!");
-    return s_aBasePath;
-  }
-
-  @Nonnull
   public static File getFile (@Nonnull final String sPath)
   {
-    return new File (s_aBasePath, sPath);
+    return new File (getBasePathFile (), sPath);
   }
 
   @Nonnull
