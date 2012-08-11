@@ -413,12 +413,15 @@ public final class User implements IUser
   public String toString ()
   {
     return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .append ("creationDT", m_aCreationDT)
+                                       .append ("lastModificationDT", m_aLastModificationDT)
                                        .append ("loginName", m_sLoginName)
                                        .append ("emailAddress", m_sEmailAddress)
                                        .append ("passwordHash", m_sPasswordHash)
                                        .append ("firstName", m_sFirstName)
                                        .append ("lastName", m_sLastName)
                                        .append ("desiredLocale", m_aDesiredLocale)
+                                       .append ("deleted", m_bDeleted)
                                        .toString ();
   }
 }
