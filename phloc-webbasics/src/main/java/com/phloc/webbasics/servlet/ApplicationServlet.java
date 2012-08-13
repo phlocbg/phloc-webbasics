@@ -107,7 +107,9 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
     try
     {
+      // Create the main response HTML
       final IHTMLProvider aHTMLProvider = createHTMLProvider (aRequestScope);
+      // Print the result to the output stream
       HTMLResponseHelper.createHTMLResponse (aRequestScope, aHTMLProvider);
     }
     finally
