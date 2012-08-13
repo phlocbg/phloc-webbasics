@@ -94,7 +94,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nullable
   protected static final String getAttr (@Nullable final String sName)
   {
-    return StringHelper.trim (_getScope ().getAttributeAsString (sName));
+    return getAttr (sName, null);
   }
 
   /**
