@@ -109,7 +109,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nullable
   protected static final String getAttr (@Nullable final String sName, @Nullable final String sDefault)
   {
-    return StringHelper.trim (_getScope ().getAttributeAsString (sName, sDefault));
+    final String sScopeValue = _getScope ().getAttributeAsString (sName, sDefault);
+    return StringHelper.trim (sScopeValue);
   }
 
   /**
@@ -170,7 +171,24 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nullable
   protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
   {
-    return _getScope ().getCastedAttribute (sName);
+    return getCastedAttr (sName, (DATATYPE) null);
+  }
+
+  /**
+   * Get the value of the request parameter with the given name casted to the
+   * specified data type.
+   * 
+   * @param sName
+   *        Request parameter name
+   * @param aDefault
+   *        The default value to be returned, if no such parameter is present
+   * @return The value of the passed request parameter
+   */
+  @Nullable
+  protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName,
+                                                            @Nullable final DATATYPE aDefault)
+  {
+    return _getScope ().getCastedAttribute (sName, aDefault);
   }
 
   /**
