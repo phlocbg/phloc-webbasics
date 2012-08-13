@@ -39,7 +39,6 @@ import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.datetime.PDTFactory;
 
 /**
  * This class manages the available users.
@@ -313,7 +312,6 @@ public final class UserManager extends AbstractDAO implements IUserManager
         return EChange.UNCHANGED;
       if (aUser.setDeleted (true).isUnchanged ())
         return EChange.UNCHANGED;
-      aUser.setLastModification (PDTFactory.getCurrentDateTime ());
       markAsChanged ();
       return EChange.CHANGED;
     }
@@ -348,7 +346,7 @@ public final class UserManager extends AbstractDAO implements IUserManager
       eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;
-      aUser.setLastModification (PDTFactory.getCurrentDateTime ());
+      aUser.updateLastModified ();
       markAsChanged ();
       return EChange.CHANGED;
     }

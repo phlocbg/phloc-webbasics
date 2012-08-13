@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.phloc.appbasics.AbstractStorageAwareTestCase;
+import com.phloc.appbasics.mock.AbstractAppBasicTestCase;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
@@ -34,7 +34,7 @@ import com.phloc.appbasics.security.login.LoggedInUserManager;
  * 
  * @author philip
  */
-public final class LoggedInUserManagerTest extends AbstractStorageAwareTestCase
+public final class LoggedInUserManagerTest extends AbstractAppBasicTestCase
 {
   @Test
   public void testInit ()

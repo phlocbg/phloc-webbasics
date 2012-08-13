@@ -18,7 +18,9 @@
 package com.phloc.appbasics.security.user;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Locale;
 
@@ -42,6 +44,7 @@ public final class UserTest
     final User aUser = new User ("id1",
                                  PDTFactory.getCurrentDateTime (),
                                  null,
+                                 null,
                                  "MyName",
                                  "me@example.org",
                                  "ABCDEF",
@@ -56,6 +59,10 @@ public final class UserTest
     assertEquals ("Philip", aUser.getFirstName ());
     assertEquals ("Helger", aUser.getLastName ());
     assertEquals (Locale.GERMANY, aUser.getDesiredLocale ());
+    assertNotNull (aUser.getCreationDateTime ());
+    assertNull (aUser.getLastModificationDateTime ());
+    assertNull (aUser.getDeletionDateTime ());
+    assertFalse (aUser.isDeleted ());
   }
 
   @Test
@@ -63,6 +70,7 @@ public final class UserTest
   {
     final User aUser = new User ("id1",
                                  PDTFactory.getCurrentDateTime (),
+                                 null,
                                  null,
                                  "MyName",
                                  "me@example.org",

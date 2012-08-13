@@ -19,7 +19,6 @@ package com.phloc.appbasics.app;
 
 import java.io.File;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
@@ -49,22 +48,20 @@ public final class ApplicationInitializer
   public static void init (@Nullable final String sTraceMode,
                            @Nullable final String sDebugMode,
                            @Nullable final String sProductionMode,
-                           final boolean bInitGlobalScope,
-                           @Nullable final String sAppID,
-                           @Nonnull final File aBasePath)
+                           @Nullable final String sGlobalScopeID,
+                           @Nullable final File aBasePath)
   {
     final boolean bTraceMode = StringParser.parseBool (sTraceMode);
     final boolean bDebugMode = StringParser.parseBool (sDebugMode);
     final boolean bProductionMode = StringParser.parseBool (sProductionMode);
-    init (bTraceMode, bDebugMode, bProductionMode, bInitGlobalScope, sAppID, aBasePath);
+    init (bTraceMode, bDebugMode, bProductionMode, sGlobalScopeID, aBasePath);
   }
 
   public static void init (final boolean bTraceMode,
                            final boolean bDebugMode,
                            final boolean bProductionMode,
-                           final boolean bInitGlobalScope,
-                           @Nullable final String sAppID,
-                           @Nonnull final File aBasePath)
+                           @Nullable final String sGlobalScopeID,
+                           @Nullable final File aBasePath)
   {
     // Tell them to use the server VM if possible:
     final EJVMVendor eJVMVendor = EJVMVendor.getCurrentVendor ();
@@ -76,23 +73,23 @@ public final class ApplicationInitializer
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
-    if (bInitGlobalScope)
-    {
-      // begin global context
-      ScopeManager.onGlobalBegin (sAppID);
-    }
+    // Init global scope?
+    if (sGlobalScopeID != null)
+      ScopeManager.onGlobalBegin (sGlobalScopeID);
 
-    // Get base path!
-    WebFileIO.initBasePath (aBasePath);
+    // Init base path=
+    if (aBasePath != null)
+      WebFileIO.initBasePath (aBasePath);
 
     // Set persistent ID provider: file based
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
       GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("persistent_id.dat")));
   }
 
-  public static void shutdown (final boolean bShutdownGlobalScope)
+  public static void shutdown (final boolean bResetBasePath, final boolean bShutdownGlobalScope)
   {
-    WebFileIO.resetBasePath ();
+    if (bResetBasePath)
+      WebFileIO.resetBasePath ();
 
     if (bShutdownGlobalScope)
       ScopeManager.onGlobalEnd ();

@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.phloc.appbasics.AbstractStorageAwareTestCase;
+import com.phloc.appbasics.mock.AbstractAppBasicTestCase;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.Role;
@@ -31,7 +31,7 @@ import com.phloc.appbasics.security.role.Role;
  * 
  * @author philip
  */
-public final class AccessManagerTest extends AbstractStorageAwareTestCase
+public final class AccessManagerTest extends AbstractAppBasicTestCase
 {
   @Test
   public void testStartup ()

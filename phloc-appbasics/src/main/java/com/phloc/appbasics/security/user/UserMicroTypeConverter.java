@@ -40,6 +40,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_ID = "id";
   private static final String ATTR_CREATIONDT = "creationdt";
   private static final String ATTR_LASTMODDT = "lastmoddt";
+  private static final String ATTR_DELETIONDT = "deletiondt";
   private static final String ATTR_DELETED = "deleted";
   private static final String ATTR_DESIREDLOCALE = "desiredlocale";
   private static final String ELEMENT_LOGINNAME = "loginname";
@@ -59,6 +60,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     eUser.setAttribute (ATTR_ID, aUser.getID ());
     eUser.setAttributeWithConversion (ATTR_CREATIONDT, aUser.getCreationDateTime ());
     eUser.setAttributeWithConversion (ATTR_LASTMODDT, aUser.getLastModificationDateTime ());
+    eUser.setAttributeWithConversion (ATTR_DELETIONDT, aUser.getDeletionDateTime ());
     eUser.appendElement (ELEMENT_LOGINNAME).appendText (aUser.getLoginName ());
     eUser.appendElement (ELEMENT_EMAILADDRESS).appendText (aUser.getEmailAddress ());
     eUser.appendElement (ELEMENT_PASSWORDHASH).appendText (aUser.getPasswordHash ());
@@ -90,6 +92,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
       aCreationDT = PDTFactory.getCurrentDateTime ();
     }
     final DateTime aLastModificationDT = eUser.getAttributeWithConversion (ATTR_LASTMODDT, DateTime.class);
+    final DateTime aDeletionDT = eUser.getAttributeWithConversion (ATTR_DELETIONDT, DateTime.class);
     final String sLoginName = MicroUtils.getChildTextContent (eUser, ELEMENT_LOGINNAME);
     final String sEmailAddress = MicroUtils.getChildTextContent (eUser, ELEMENT_EMAILADDRESS);
     final String sPasswordHash = MicroUtils.getChildTextContent (eUser, ELEMENT_PASSWORDHASH);
@@ -105,6 +108,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     return new User (sID,
                      aCreationDT,
                      aLastModificationDT,
+                     aDeletionDT,
                      sLoginName,
                      sEmailAddress,
                      sPasswordHash,

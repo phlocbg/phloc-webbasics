@@ -28,6 +28,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.datetime.IHasCreationDateTime;
+import com.phloc.datetime.IHasDeletionDateTime;
 import com.phloc.datetime.IHasLastModificationDateTime;
 
 /**
@@ -40,6 +41,7 @@ public interface IUser extends
                       IHasDisplayName,
                       IHasCreationDateTime,
                       IHasLastModificationDateTime,
+                      IHasDeletionDateTime,
                       Serializable
 {
   /**

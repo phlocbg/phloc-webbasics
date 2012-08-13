@@ -49,6 +49,7 @@ public final class User implements IUser
   private final String m_sID;
   private final DateTime m_aCreationDT;
   private DateTime m_aLastModificationDT;
+  private DateTime m_aDeletionDT;
   private String m_sLoginName;
   private String m_sEmailAddress;
   private String m_sPasswordHash;
@@ -89,6 +90,7 @@ public final class User implements IUser
     this (GlobalIDFactory.getNewPersistentStringID (),
           PDTFactory.getCurrentDateTime (),
           null,
+          null,
           sLoginName,
           sEmailAddress,
           sPasswordHash,
@@ -109,6 +111,7 @@ public final class User implements IUser
     this (sID,
           PDTFactory.getCurrentDateTime (),
           null,
+          null,
           sLoginName,
           sEmailAddress,
           sPasswordHash,
@@ -128,6 +131,8 @@ public final class User implements IUser
    *        The creation date and time
    * @param aLastModificationDT
    *        The last modification date and time
+   * @param aDeletionDT
+   *        The deletion date and time
    * @param sLoginName
    *        Login name of the user. May neither be <code>null</code> nor empty.
    * @param sEmailAddress
@@ -150,6 +155,7 @@ public final class User implements IUser
   User (@Nonnull @Nonempty final String sID,
         @Nonnull final DateTime aCreationDT,
         @Nullable final DateTime aLastModificationDT,
+        @Nullable final DateTime aDeletionDT,
         @Nonnull @Nonempty final String sLoginName,
         @Nonnull @Nonempty final String sEmailAddress,
         @Nonnull @Nonempty final String sPasswordHash,
@@ -202,11 +208,15 @@ public final class User implements IUser
     return m_aLastModificationDT;
   }
 
-  void setLastModification (@Nonnull final DateTime aLastModificationDT)
+  void updateLastModified ()
   {
-    if (aLastModificationDT == null)
-      throw new NullPointerException ("lastModificationDT");
-    m_aLastModificationDT = aLastModificationDT;
+    m_aLastModificationDT = PDTFactory.getCurrentDateTime ();
+  }
+
+  @Nullable
+  public DateTime getDeletionDateTime ()
+  {
+    return m_aDeletionDT;
   }
 
   @Nonnull
@@ -389,6 +399,7 @@ public final class User implements IUser
     if (bDeleted == m_bDeleted)
       return EChange.UNCHANGED;
     m_bDeleted = bDeleted;
+    m_aDeletionDT = bDeleted ? PDTFactory.getCurrentDateTime () : null;
     return EChange.CHANGED;
   }
 

@@ -15,26 +15,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics;
+package com.phloc.appbasics.mock;
 
 import java.io.File;
 
 import com.phloc.appbasics.app.WebFileIO;
-import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.idfactory.MemoryIntIDFactory;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
 
-public abstract class AbstractStorageAwareTestCase extends AbstractScopeAwareTestCase
+/**
+ * Abstract test base class initializing the {@link WebFileIO} base path and
+ * setting a persistent int ID provider
+ * 
+ * @author philip
+ */
+public abstract class AbstractAppBasicTestCase extends AbstractScopeAwareTestCase
 {
+  public static final File STORAGE_PATH = new File ("target/junittest").getAbsoluteFile ();
+
   static
   {
+    initTestEnvironment ();
+  }
+
+  public static final void initTestEnvironment ()
+  {
     // Init the base path once
-    final File aStoragePath = new File ("target/junit");
-    WebFileIO.initBasePath (aStoragePath);
+    if (!WebFileIO.isBasePathInited ())
+      WebFileIO.initBasePath (STORAGE_PATH);
 
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
-    {
-      GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("junit_persistent_ids.dat")));
-    }
+      GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
   }
 }
