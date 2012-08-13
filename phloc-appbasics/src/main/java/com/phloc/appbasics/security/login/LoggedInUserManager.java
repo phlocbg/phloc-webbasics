@@ -76,6 +76,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         throw new NullPointerException ("user");
       if (aUser.isDeleted ())
         throw new IllegalArgumentException ("Passed user is deleted: " + aUser);
+
       if (m_aUser != null)
       {
         s_aLogger.warn ("The session user holder already has the user ID '" +

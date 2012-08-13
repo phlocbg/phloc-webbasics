@@ -339,15 +339,18 @@ public final class User implements IUser
   {
     if (ContainerHelper.isEmpty (aCustomAttrs))
     {
+      // Remove all existing custom attrs
       if (m_aCustomAttrs.isEmpty ())
         return EChange.UNCHANGED;
       m_aCustomAttrs.clear ();
       return EChange.CHANGED;
     }
 
-    if (m_aCustomAttrs.equals (aCustomAttrs))
+    // Set at least one custom attribute
+    final Map <String, String> aRealCustomAttrs = ContainerHelper.newOrderedMap (aCustomAttrs);
+    if (m_aCustomAttrs.equals (aRealCustomAttrs))
       return EChange.UNCHANGED;
-    m_aCustomAttrs = aCustomAttrs;
+    m_aCustomAttrs = aRealCustomAttrs;
     return EChange.CHANGED;
   }
 
@@ -363,13 +366,13 @@ public final class User implements IUser
   }
 
   @Nonnull
-  EChange removeCustomAttrValue (@Nonnull final String sKey)
+  EChange removeCustomAttrValue (@Nullable final String sKey)
   {
     return EChange.valueOf (m_aCustomAttrs.remove (sKey) != null);
   }
 
   @Nonnull
-  EChange setCustomAttrValue (@Nonnull final String sKey, @Nonnull final String sValue)
+  EChange setCustomAttrValue (@Nonnull final String sKey, @Nullable final String sValue)
   {
     if (StringHelper.hasNoText (sKey))
       throw new IllegalArgumentException ("key");
@@ -425,7 +428,8 @@ public final class User implements IUser
   {
     return new ToStringGenerator (this).append ("ID", m_sID)
                                        .append ("creationDT", m_aCreationDT)
-                                       .append ("lastModificationDT", m_aLastModificationDT)
+                                       .appendIfNotNull ("lastModificationDT", m_aLastModificationDT)
+                                       .appendIfNotNull ("deletionDT", m_aDeletionDT)
                                        .append ("loginName", m_sLoginName)
                                        .append ("emailAddress", m_sEmailAddress)
                                        .append ("passwordHash", m_sPasswordHash)
