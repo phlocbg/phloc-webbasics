@@ -99,6 +99,8 @@ public final class HTTPResponseHelper
       // Faster than using a PrintWriter!
       final OutputStream aOS = getBestSuitableOutputStream (aHttpRequest, aHttpResponse);
       aOS.write (CharsetManager.getAsBytes (sXMLCode, aCharset));
+      if (aOS instanceof GZIPOutputStream)
+        ((GZIPOutputStream) aOS).finish ();
       aOS.flush ();
       aOS.close ();
     }

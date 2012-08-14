@@ -1,0 +1,82 @@
+/**
+ * Copyright (C) 2006-2012 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.phloc.webbasics.http;
+
+import javax.annotation.concurrent.Immutable;
+
+/**
+ * HTTP header constants.
+ * 
+ * @author philip
+ */
+@Immutable
+public final class CHTTPHeader
+{
+  public static final String ACCEPT = "Accept";
+  public static final String ACCEPT_CHARSET = "Accept-Charset";
+  public static final String ACCEPT_ENCODING = "Accept-Encoding";
+  public static final String ACCEPT_LANGUAGE = "Accept-Language";
+  public static final String AGE = "Age";
+  public static final String ALLOW = "Allow";
+  public static final String CACHE_CONTROL = "Cache-Control";
+  public static final String CONTENT_DISPOSITION = "Content-Disposition";
+  public static final String CONTENT_ENCODING = "Content-Encoding";
+  public static final String CONTENT_TYPE = "Content-Type";
+  public static final String DATE = "Date";
+  public static final String ETAG = "ETag";
+  public static final String EXPIRES = "Expires";
+  public static final String IF_NON_MATCH = "If-None-Match";
+  public static final String IF_MATCH = "If-Match";
+  public static final String IF_MODIFIED_SINCE = "If-Modified-Since";
+  public static final String IF_UNMODIFIED_SINCE = "If-Unmodified-Since";
+  public static final String LAST_MODIFIED = "Last-Modified";
+  public static final String LOCATION = "Location";
+  public static final String PRAGMA = "Pragma";
+  public static final String REFERER = "Referer";
+  public static final String USER_AGENT = "User-Agent";
+  public static final String VARY = "Vary";
+  public static final String WARNING = "Warning";
+  public static final String AUTHORIZATION = "Authorization";
+  public static final String PROXY_AUTHORIZATION = "Proxy-Authorization";
+
+  /**
+   * The Retry-After response-header field can be used with a 503 (Service
+   * Unavailable) response to indicate how long the service is expected to be
+   * unavailable to the requesting client. This field MAY also be used with any
+   * 3xx (Redirection) response to indicate the minimum time the user-agent is
+   * asked wait before issuing the redirected request. The value of this field
+   * can be either an HTTP-date or an integer number of seconds (in decimal)
+   * after the time of the response
+   */
+  public static final String RETRY_AFTER = "Retry-After";
+
+  // Do Not Track header
+  public static final String DNT = "DNT";
+
+  // Different user agent headers
+  public static final String UA = "UA";
+  public static final String X_DEVICE_USER_AGENT = "x-device-user-agent";
+
+  // Response codes
+  public static final String TRANSFER_ENCODING = "Transfer-Encoding";
+  public static final String SET_COOKIE = "Set-Cookie";
+  public static final String CONNECTION = "Connection";
+
+  private CHTTPHeader ()
+  {}
+}
