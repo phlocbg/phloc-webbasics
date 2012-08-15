@@ -36,9 +36,11 @@ public abstract class AbstractWebBasicTestCase extends AbstractWebScopeAwareTest
     initDefaultListener ();
   }
 
-  static void initDefaultListener ()
+  /**
+   * Set webbasics default HTTP listener for testing and apply them directly
+   */
+  static final void initDefaultListener ()
   {
-    // Set correct default listener
     MockHttpListener.removeAllDefaultListeners ();
     MockHttpListener.addDefaultListener (new WebAppListener ());
     MockHttpListener.addDefaultListener (new MockServletRequestListener ());
