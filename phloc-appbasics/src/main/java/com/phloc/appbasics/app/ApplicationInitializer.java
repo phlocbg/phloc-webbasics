@@ -104,7 +104,7 @@ public final class ApplicationInitializer
     initIO (aBasePath);
 
     // Set persistent ID provider: file based
-    if (!GlobalIDFactory.hasPersistentIntIDFactory ())
+    if (!GlobalIDFactory.hasPersistentIntIDFactory () && WebFileIO.isBasePathInited ())
       GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
   }
 

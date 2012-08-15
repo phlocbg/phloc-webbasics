@@ -17,13 +17,12 @@
  */
 package com.phloc.appbasics.mock;
 
-import java.io.File;
-
 import com.phloc.appbasics.app.ApplicationInitializer;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
+import com.phloc.scopes.nonweb.mock.ScopeAwareTestSetup;
 
 /**
  * Abstract test base class initializing the {@link WebFileIO} base path and
@@ -33,8 +32,6 @@ import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
  */
 public abstract class AbstractAppBasicTestCase extends AbstractScopeAwareTestCase
 {
-  public static final File STORAGE_PATH = new File ("target/junittest").getAbsoluteFile ();
-
   static
   {
     initTestEnvironment ();
@@ -43,7 +40,7 @@ public abstract class AbstractAppBasicTestCase extends AbstractScopeAwareTestCas
   public static final void initTestEnvironment ()
   {
     // Init the base path once
-    ApplicationInitializer.initIO (STORAGE_PATH);
+    ApplicationInitializer.initIO (ScopeAwareTestSetup.STORAGE_PATH);
 
     // Init the IDs
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
