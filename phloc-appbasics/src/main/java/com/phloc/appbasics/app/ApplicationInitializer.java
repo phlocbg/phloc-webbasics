@@ -19,15 +19,20 @@ package com.phloc.appbasics.app;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.app.io.WebIO;
+import com.phloc.appbasics.app.io.WebIOIntIDFactory;
+import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.commons.GlobalDebug;
-import com.phloc.commons.idfactory.FileIntIDFactory;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.scopes.nonweb.mgr.ScopeManager;
@@ -45,6 +50,23 @@ public final class ApplicationInitializer
 
   private ApplicationInitializer ()
   {}
+
+  public static void initIO (@Nonnull @Nonempty final String sBasePath)
+  {
+    if (StringHelper.hasNoText (sBasePath))
+      throw new IllegalArgumentException ("basePath");
+    initIO (new File (sBasePath));
+  }
+
+  public static void initIO (@Nullable final File aBasePath)
+  {
+    // Init base path
+    if (aBasePath != null)
+    {
+      WebFileIO.initBasePath (aBasePath);
+      WebIO.init (new WebIOResourceProviderChain (aBasePath));
+    }
+  }
 
   public static void init (@Nullable final String sTraceMode,
                            @Nullable final String sDebugMode,
@@ -78,13 +100,12 @@ public final class ApplicationInitializer
     if (sGlobalScopeID != null)
       ScopeManager.onGlobalBegin (sGlobalScopeID);
 
-    // Init base path=
-    if (aBasePath != null)
-      WebFileIO.initBasePath (aBasePath);
+    // Init base path
+    initIO (aBasePath);
 
     // Set persistent ID provider: file based
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
-      GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("persistent_id.dat")));
+      GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
   }
 
   public static void shutdown (final boolean bResetBasePath, final boolean bShutdownGlobalScope)

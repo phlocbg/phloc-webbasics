@@ -19,6 +19,7 @@ package com.phloc.appbasics.mock;
 
 import java.io.File;
 
+import com.phloc.appbasics.app.ApplicationInitializer;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
@@ -42,9 +43,9 @@ public abstract class AbstractAppBasicTestCase extends AbstractScopeAwareTestCas
   public static final void initTestEnvironment ()
   {
     // Init the base path once
-    if (!WebFileIO.isBasePathInited ())
-      WebFileIO.initBasePath (STORAGE_PATH);
+    ApplicationInitializer.initIO (STORAGE_PATH);
 
+    // Init the IDs
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
       GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
   }

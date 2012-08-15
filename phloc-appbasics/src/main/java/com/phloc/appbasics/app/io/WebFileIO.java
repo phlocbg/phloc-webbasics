@@ -37,7 +37,6 @@ import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.IFileOperationManager;
 import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.phloc.commons.string.StringHelper;
 
 /**
  * Abstract for accessing files inside the web application
@@ -83,13 +82,6 @@ public final class WebFileIO
     {
       s_aRWLock.writeLock ().unlock ();
     }
-  }
-
-  public static void initBasePath (@Nonnull @Nonempty final String sBasePath)
-  {
-    if (StringHelper.hasNoText (sBasePath))
-      throw new IllegalArgumentException ("basePath");
-    initBasePath (new File (sBasePath));
   }
 
   public static void resetBasePath ()
