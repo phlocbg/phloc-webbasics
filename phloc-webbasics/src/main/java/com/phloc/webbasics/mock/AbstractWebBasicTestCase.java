@@ -21,7 +21,6 @@ import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.scopes.web.mock.AbstractWebScopeAwareTestCase;
 import com.phloc.scopes.web.mock.MockHttpListener;
 import com.phloc.scopes.web.mock.MockServletRequestListener;
-import com.phloc.scopes.web.mock.WebScopeAwareTestSetup;
 import com.phloc.webbasics.servlet.WebAppListener;
 
 /**
@@ -30,17 +29,14 @@ import com.phloc.webbasics.servlet.WebAppListener;
  * 
  * @author philip
  */
-public abstract class AbstractAppBasicWebTestCase extends AbstractWebScopeAwareTestCase
+public abstract class AbstractWebBasicTestCase extends AbstractWebScopeAwareTestCase
 {
   static
   {
-    // Ensure class is loaded, because if this class is loaded afterwards, it
-    // will trigger a MockHttpListener.setToDefault
-    WebScopeAwareTestSetup.getServletContext ();
-
     // Set correct ones
-    MockHttpListener.removeAllListeners ();
-    MockHttpListener.addListener (new WebAppListener ());
-    MockHttpListener.addListener (new MockServletRequestListener ());
+    MockHttpListener.removeAllDefaultListeners ();
+    MockHttpListener.addDefaultListener (new WebAppListener ());
+    MockHttpListener.addDefaultListener (new MockServletRequestListener ());
+    MockHttpListener.setToDefault ();
   }
 }
