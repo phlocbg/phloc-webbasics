@@ -61,7 +61,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   {}
 
   /**
-   * before init
+   * Callback before init
    * 
    * @param aSC
    *        ServletContext
@@ -71,7 +71,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   {}
 
   /**
-   * after init
+   * Callback after init
    * 
    * @param aSC
    *        ServletContext
@@ -111,21 +111,22 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
+    // Call callback
     onContextInitialized (aSC);
 
     // begin global context
     WebScopeManager.onGlobalBegin (aSC);
 
-    // Get base path!
+    // Get base storage path
+    String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
+    if (StringHelper.hasNoText (sBasePath))
     {
-      String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
-      if (StringHelper.hasNoText (sBasePath))
-      {
-        s_aLogger.info ("No init-parameter '" + INIT_PARAMETER_STORAGE_PATH + "' found! Using the default.");
-        sBasePath = aSC.getRealPath (".");
-      }
-      ApplicationInitializer.initIO (sBasePath);
+      s_aLogger.info ("No servlet context init-parameter '" +
+                      INIT_PARAMETER_STORAGE_PATH +
+                      "' found! Using the default.");
+      sBasePath = aSC.getRealPath (".");
     }
+    ApplicationInitializer.initIO (sBasePath);
 
     // Set persistent ID provider: file based
     GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
@@ -133,6 +134,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
 
+    // Callback
     afterContextInitialized (aSC);
   }
 
@@ -143,14 +145,26 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   protected void onContextDestroyed ()
   {}
 
+  /**
+   * after destroy
+   */
+  @OverrideOnDemand
+  protected void afterContextDestroyed ()
+  {}
+
   public final void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
   {
-    // Shutdown global scope
+    // Callback before
     onContextDestroyed ();
 
+    // Reset base path to be sure
     WebFileIO.resetBasePath ();
 
+    // Shutdown global scope
     WebScopeManager.onGlobalEnd ();
+
+    // Callback after
+    afterContextDestroyed ();
   }
 
   public final void sessionCreated (@Nonnull final HttpSessionEvent aSE)

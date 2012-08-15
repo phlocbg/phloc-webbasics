@@ -18,10 +18,7 @@
 package com.phloc.webbasics.mock;
 
 import com.phloc.appbasics.app.io.WebFileIO;
-import com.phloc.scopes.web.mock.AbstractWebScopeAwareTestCase;
-import com.phloc.scopes.web.mock.MockHttpListener;
-import com.phloc.scopes.web.mock.MockServletRequestListener;
-import com.phloc.webbasics.servlet.WebAppListener;
+import com.phloc.scopes.web.mock.AbstractWebScopeAwareTestSuite;
 
 /**
  * Abstract test base class initializing the {@link WebFileIO} base path and
@@ -29,19 +26,10 @@ import com.phloc.webbasics.servlet.WebAppListener;
  * 
  * @author philip
  */
-public abstract class AbstractWebBasicTestCase extends AbstractWebScopeAwareTestCase
+public abstract class AbstractWebBasicTestSuite extends AbstractWebScopeAwareTestSuite
 {
   static
   {
-    initDefaultListener ();
-  }
-
-  static void initDefaultListener ()
-  {
-    // Set correct default listener
-    MockHttpListener.removeAllDefaultListeners ();
-    MockHttpListener.addDefaultListener (new WebAppListener ());
-    MockHttpListener.addDefaultListener (new MockServletRequestListener ());
-    MockHttpListener.setToDefault ();
+    AbstractWebBasicTestCase.initDefaultListener ();
   }
 }
