@@ -19,7 +19,7 @@ package com.phloc.appbasics.mock;
 
 import java.io.File;
 
-import com.phloc.appbasics.app.WebFileIO;
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
 import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
