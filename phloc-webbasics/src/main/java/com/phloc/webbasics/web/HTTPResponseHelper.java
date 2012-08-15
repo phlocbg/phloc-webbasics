@@ -20,9 +20,6 @@ package com.phloc.webbasics.web;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
@@ -59,26 +56,12 @@ public final class HTTPResponseHelper
   private HTTPResponseHelper ()
   {}
 
+  @Deprecated
   @Nonnull
   public static OutputStream getBestSuitableOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
                                                           @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
-    // Note: the checks in this method are not accurate, but I did not want to
-    // make the whole header parsing OSS
-    final String sAcceptEncoding = aHttpRequest.getHeader ("Accept-Encoding");
-    if (sAcceptEncoding.contains ("gzip"))
-    {
-      aHttpResponse.setHeader ("Content-Encoding", "gzip");
-      return new GZIPOutputStream (aHttpResponse.getOutputStream ());
-    }
-    if (sAcceptEncoding.contains ("deflate"))
-    {
-      aHttpResponse.setHeader ("Content-Encoding", "deflate");
-      final ZipOutputStream aOS = new ZipOutputStream (aHttpResponse.getOutputStream ());
-      aOS.putNextEntry (new ZipEntry ("dummy name"));
-      return aOS;
-    }
-    return aHttpResponse.getOutputStream ();
+    return ResponseHelper.getBestSuitableOutputStream (aHttpRequest, aHttpResponse);
   }
 
   public static void createResponse (@Nonnull final IRequestWebScope aRequestScope,
@@ -93,16 +76,11 @@ public final class HTTPResponseHelper
       final String sXMLCode = MicroWriter.getNodeAsString (aDoc, XML_WRITER_SETTINGS);
       final Charset aCharset = XML_WRITER_SETTINGS.getCharsetObj ();
 
-      aHttpResponse.setContentType (aMimeType.getAsStringWithEncoding (aCharset.name ()));
-      aHttpResponse.setCharacterEncoding (aCharset.name ());
-
-      // Faster than using a PrintWriter!
-      final OutputStream aOS = getBestSuitableOutputStream (aHttpRequest, aHttpResponse);
-      aOS.write (CharsetManager.getAsBytes (sXMLCode, aCharset));
-      if (aOS instanceof GZIPOutputStream)
-        ((GZIPOutputStream) aOS).finish ();
-      aOS.flush ();
-      aOS.close ();
+      ResponseHelper.writeResponse (aHttpRequest,
+                                    aHttpResponse,
+                                    CharsetManager.getAsBytes (sXMLCode, aCharset),
+                                    aMimeType,
+                                    aCharset.name ());
     }
     catch (final Throwable t)
     {
