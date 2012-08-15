@@ -22,6 +22,11 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
   <entry date="2012-08-14" category="api" action="add">
     <change>
+      <text locale="en">Added many classes to package 'web' which handle request/response issues</text>
+    </change>
+  </entry>
+  <entry date="2012-08-14" category="api" action="add">
+    <change>
       <text locale="en">Added new package 'http' with some commonly required HTTP utility routines</text>
     </change>
   </entry>
