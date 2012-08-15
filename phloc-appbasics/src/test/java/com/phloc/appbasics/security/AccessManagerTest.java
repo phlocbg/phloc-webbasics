@@ -19,11 +19,10 @@ package com.phloc.appbasics.security;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.phloc.appbasics.mock.AbstractAppBasicTestCase;
-import com.phloc.appbasics.security.AccessManager;
-import com.phloc.appbasics.security.CSecurity;
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.appbasics.security.role.Role;
 
 /**
@@ -31,8 +30,11 @@ import com.phloc.appbasics.security.role.Role;
  * 
  * @author philip
  */
-public final class AccessManagerTest extends AbstractAppBasicTestCase
+public final class AccessManagerTest
 {
+  @Rule
+  public final AppBasicTestRule m_aRule = new AppBasicTestRule ();
+
   @Test
   public void testStartup ()
   {

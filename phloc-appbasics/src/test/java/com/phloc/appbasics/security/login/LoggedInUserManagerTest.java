@@ -22,20 +22,23 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
-import com.phloc.appbasics.mock.AbstractAppBasicTestCase;
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.appbasics.security.CSecurity;
-import com.phloc.appbasics.security.login.ELoginResult;
-import com.phloc.appbasics.security.login.LoggedInUserManager;
 
 /**
  * Test class for class {@link LoggedInUserManager}.
  * 
  * @author philip
  */
-public final class LoggedInUserManagerTest extends AbstractAppBasicTestCase
+public final class LoggedInUserManagerTest
 {
+  @Rule
+  public final TestRule m_aRule = new AppBasicTestRule ();
+
   @Test
   public void testInit ()
   {

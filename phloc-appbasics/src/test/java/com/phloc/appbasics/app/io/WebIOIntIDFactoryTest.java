@@ -22,9 +22,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.phloc.appbasics.mock.AbstractAppBasicTestCase;
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.idfactory.IIntIDFactory;
 
 /**
@@ -32,8 +33,11 @@ import com.phloc.commons.idfactory.IIntIDFactory;
  * 
  * @author philip
  */
-public final class WebIOIntIDFactoryTest extends AbstractAppBasicTestCase
+public final class WebIOIntIDFactoryTest
 {
+  @Rule
+  public final AppBasicTestRule m_aRule = new AppBasicTestRule ();
+
   @Test
   public void testFileBasedIDProvider ()
   {

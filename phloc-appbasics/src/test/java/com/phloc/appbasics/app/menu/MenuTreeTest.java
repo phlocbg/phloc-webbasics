@@ -24,20 +24,24 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.junit.Rule;
 import org.junit.Test;
 
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.filter.FilterFalse;
-import com.phloc.scopes.nonweb.mock.AbstractScopeAwareTestCase;
+import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 
 /**
  * Test class for class {@link MenuTree}
  * 
  * @author philip
  */
-public final class MenuTreeTest extends AbstractScopeAwareTestCase
+public final class MenuTreeTest
 {
+  @Rule
+  public final ScopeTestRule m_aScopeRule = new ScopeTestRule ();
+
   @Test
   public void testBasic ()
   {

@@ -25,9 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.phloc.appbasics.mock.AbstractAppBasicTestCase;
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.io.streams.StreamUtils;
 
 /**
@@ -35,8 +36,11 @@ import com.phloc.commons.io.streams.StreamUtils;
  * 
  * @author philip
  */
-public final class WebIOTest extends AbstractAppBasicTestCase
+public final class WebIOTest
 {
+  @Rule
+  public final AppBasicTestRule m_aRule = new AppBasicTestRule ();
+
   @Test
   public void testBasePath () throws IOException
   {
