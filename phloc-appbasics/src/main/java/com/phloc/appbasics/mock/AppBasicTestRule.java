@@ -12,7 +12,11 @@ public class AppBasicTestRule extends ScopeTestRule
   protected void before () throws Throwable
   {
     super.before ();
+    initAppBasic ();
+  }
 
+  public static void initAppBasic ()
+  {
     // Init the base path once
     WebFileIO.resetBasePath ();
     ApplicationInitializer.initIO (ScopeTestRule.STORAGE_PATH);
