@@ -27,12 +27,13 @@ import javax.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.ApplicationInitializer;
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.app.io.WebIOIntIDFactory;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
@@ -123,11 +124,11 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
         s_aLogger.info ("No init-parameter '" + INIT_PARAMETER_STORAGE_PATH + "' found! Using the default.");
         sBasePath = aSC.getRealPath (".");
       }
-      WebFileIO.initBasePath (sBasePath);
+      ApplicationInitializer.initIO (sBasePath);
     }
 
     // Set persistent ID provider: file based
-    GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("persistent_id.dat")));
+    GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
 
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
