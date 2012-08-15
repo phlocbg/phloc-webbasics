@@ -169,6 +169,38 @@ public final class WebFileIO
   }
 
   /**
+   * Check if a file relative to the base path exists
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @return <code>true</code> if the {@link File} is a file and exists,
+   *         <code>false</code> otherwise.
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
+  @Nonnull
+  public static boolean existsFile (@Nonnull final String sRelativePath)
+  {
+    return FileUtils.existsFile (getFile (sRelativePath));
+  }
+
+  /**
+   * Check if a directory relative to the base path exists
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @return <code>true</code> if the {@link File} is a directory and exists,
+   *         <code>false</code> otherwise.
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
+  @Nonnull
+  public static boolean existsDir (@Nonnull final String sRelativePath)
+  {
+    return FileUtils.existsDir (getFile (sRelativePath));
+  }
+
+  /**
    * Get the file system resource relative to the base path
    * 
    * @param sRelativePath
