@@ -20,10 +20,14 @@ package com.phloc.appbasics.app.io;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -31,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
-import com.phloc.commons.io.IReadWriteResource;
 import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.IFileOperationManager;
@@ -39,7 +42,7 @@ import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resource.FileSystemResource;
 
 /**
- * Abstract for accessing files inside the web application
+ * Abstract for accessing files inside the web application.
  * 
  * @author philip
  */
@@ -84,6 +87,9 @@ public final class WebFileIO
     }
   }
 
+  /**
+   * Reset the base path - no matter if it was initialized or not.
+   */
   public static void resetBasePath ()
   {
     s_aRWLock.writeLock ().lock ();
@@ -97,6 +103,10 @@ public final class WebFileIO
     }
   }
 
+  /**
+   * @return <code>true</code> if the base path was initialized,
+   *         <code>false</code> otherwise
+   */
   public static boolean isBasePathInited ()
   {
     s_aRWLock.readLock ().lock ();
@@ -110,6 +120,11 @@ public final class WebFileIO
     }
   }
 
+  /**
+   * @return The base path.
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
   @Nonnull
   public static File getBasePathFile ()
   {
@@ -126,6 +141,11 @@ public final class WebFileIO
     }
   }
 
+  /**
+   * @return The absolute base path that is used
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
   @Nonnull
   @Nonempty
   public static String getBasePath ()
@@ -133,31 +153,143 @@ public final class WebFileIO
     return getBasePathFile ().getAbsolutePath ();
   }
 
+  /**
+   * Get a {@link File} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @return The "absolute" {@link File} and never <code>null</code>.
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
   @Nonnull
-  public static File getFile (@Nonnull final String sPath)
+  public static File getFile (@Nonnull final String sRelativePath)
   {
-    return new File (getBasePathFile (), sPath);
+    return new File (getBasePathFile (), sRelativePath);
   }
 
+  /**
+   * Get the file system resource relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @return The "absolute" {@link FileSystemResource} and never
+   *         <code>null</code>.
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
   @Nonnull
-  public static IReadWriteResource getResource (@Nonnull final String sPath)
+  public static FileSystemResource getResource (@Nonnull final String sRelativePath)
   {
-    return new FileSystemResource (getFile (sPath));
+    return new FileSystemResource (getFile (sRelativePath));
   }
 
-  @Nonnull
-  public static InputStream getInputStream (@Nonnull final String sPath)
+  /**
+   * Get the {@link InputStream} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @return <code>null</code> if the path does not exist
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
+  @Nullable
+  public static InputStream getInputStream (@Nonnull final String sRelativePath)
   {
-    return getResource (sPath).getInputStream ();
+    return getResource (sRelativePath).getInputStream ();
   }
 
-  @Nonnull
-  public static OutputStream getOutputStream (@Nonnull final String sBasePathRelativePath,
-                                              @Nonnull final EAppend eAppend)
+  /**
+   * Get the {@link Reader} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @param aCharset
+   *        The charset to use. May not be <code>null</code>.
+   * @return <code>null</code> if the path does not exist
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
+  @Nullable
+  public static Reader getReader (@Nonnull final String sRelativePath, @Nonnull final Charset aCharset)
   {
-    return getResource (sBasePathRelativePath).getOutputStream (eAppend);
+    return getResource (sRelativePath).getReader (aCharset);
   }
 
+  /**
+   * Get the {@link Reader} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @param sCharset
+   *        The charset to use. May not be <code>null</code>.
+   * @return <code>null</code> if the path does not exist
+   * @throws IllegalStateException
+   *         if no base path was provided
+   */
+  @Nullable
+  public static Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
+  {
+    return getResource (sRelativePath).getReader (sCharset);
+  }
+
+  /**
+   * Get the {@link OutputStream} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @param eAppend
+   *        Append or truncate mode. May not be <code>null</code>.
+   * @return <code>null</code> if the path is not writable
+   */
+  @Nullable
+  public static OutputStream getOutputStream (@Nonnull final String sRelativePath, @Nonnull final EAppend eAppend)
+  {
+    return getResource (sRelativePath).getOutputStream (eAppend);
+  }
+
+  /**
+   * Get the {@link Writer} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @param aCharset
+   *        The charset to use. May not be <code>null</code>.
+   * @param eAppend
+   *        Append or truncate mode. May not be <code>null</code>.
+   * @return <code>null</code> if the path is not writable
+   */
+  @Nullable
+  public static Writer getWriter (@Nonnull final String sRelativePath,
+                                  @Nonnull final Charset aCharset,
+                                  @Nonnull final EAppend eAppend)
+  {
+    return getResource (sRelativePath).getWriter (aCharset, eAppend);
+  }
+
+  /**
+   * Get the {@link Writer} relative to the base path
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @param sCharset
+   *        The charset to use. May not be <code>null</code>.
+   * @param eAppend
+   *        Append or truncate mode. May not be <code>null</code>.
+   * @return <code>null</code> if the path is not writable
+   */
+  @Nullable
+  public static Writer getWriter (@Nonnull final String sRelativePath,
+                                  @Nonnull final String sCharset,
+                                  @Nonnull final EAppend eAppend)
+  {
+    return getResource (sRelativePath).getWriter (sCharset, eAppend);
+  }
+
+  /**
+   * @return The underlying {@link IFileOperationManager} manager. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   public static IFileOperationManager getFileOpMgr ()
   {
