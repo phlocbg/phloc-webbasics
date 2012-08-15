@@ -37,7 +37,7 @@ public abstract class AbstractAppBasicTestCase extends AbstractScopeAwareTestCas
     initTestEnvironment ();
   }
 
-  public static final void initTestEnvironment ()
+  static final void initTestEnvironment ()
   {
     // Init the base path once
     ApplicationInitializer.initIO (ScopeAwareTestSetup.STORAGE_PATH);
