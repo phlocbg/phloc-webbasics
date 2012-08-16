@@ -27,6 +27,7 @@ import java.io.OutputStream;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -39,7 +40,7 @@ import com.phloc.commons.io.streams.StreamUtils;
 public final class WebIOTest
 {
   @Rule
-  public final AppBasicTestRule m_aRule = new AppBasicTestRule ();
+  public final TestRule m_aRule = new AppBasicTestRule ();
 
   @Test
   public void testBasePath () throws IOException

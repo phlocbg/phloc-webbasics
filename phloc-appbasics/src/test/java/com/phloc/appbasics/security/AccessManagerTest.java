@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.appbasics.security.role.Role;
@@ -33,7 +34,7 @@ import com.phloc.appbasics.security.role.Role;
 public final class AccessManagerTest
 {
   @Rule
-  public final AppBasicTestRule m_aRule = new AppBasicTestRule ();
+  public final TestRule m_aRule = new AppBasicTestRule ();
 
   @Test
   public void testStartup ()

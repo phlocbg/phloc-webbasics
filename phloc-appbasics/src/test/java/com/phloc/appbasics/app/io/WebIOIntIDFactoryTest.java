@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.idfactory.IIntIDFactory;
@@ -36,7 +37,7 @@ import com.phloc.commons.idfactory.IIntIDFactory;
 public final class WebIOIntIDFactoryTest
 {
   @Rule
-  public final AppBasicTestRule m_aRule = new AppBasicTestRule ();
+  public final TestRule m_aRule = new AppBasicTestRule ();
 
   @Test
   public void testFileBasedIDProvider ()

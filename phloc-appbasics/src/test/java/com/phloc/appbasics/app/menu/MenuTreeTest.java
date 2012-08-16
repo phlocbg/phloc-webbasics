@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.appbasics.app.page.IPage;
@@ -40,7 +41,7 @@ import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 public final class MenuTreeTest
 {
   @Rule
-  public final ScopeTestRule m_aScopeRule = new ScopeTestRule ();
+  public final TestRule m_aScopeRule = new ScopeTestRule ();
 
   @Test
   public void testBasic ()
