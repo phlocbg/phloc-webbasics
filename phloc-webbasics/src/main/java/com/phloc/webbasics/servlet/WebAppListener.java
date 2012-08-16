@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.servlet;
 
+import java.io.File;
+
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -27,9 +29,10 @@ import javax.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.app.ApplicationInitializer;
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.appbasics.app.io.WebIOIntIDFactory;
+import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
@@ -60,6 +63,29 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public WebAppListener ()
   {}
 
+  @OverrideOnDemand
+  protected void logStartupInfo (@Nonnull final ServletContext aSC)
+  {
+    // Print Java and Server (e.g. Tomcat) info
+    s_aLogger.info ("Java " +
+                    SystemProperties.getJavaVersion () +
+                    " running '" +
+                    aSC.getServletContextName () +
+                    "' on " +
+                    aSC.getServerInfo () +
+                    " with " +
+                    (Runtime.getRuntime ().maxMemory () / CGlobal.BYTES_PER_MEGABYTE) +
+                    "MB max RAM and Servlet API " +
+                    aSC.getMajorVersion () +
+                    "." +
+                    aSC.getMinorVersion ());
+
+    // Tell them to use the server VM if possible:
+    final EJVMVendor eJVMVendor = EJVMVendor.getCurrentVendor ();
+    if (eJVMVendor.isSun () && eJVMVendor != EJVMVendor.SUN_SERVER)
+      s_aLogger.warn ("Consider using the Sun Server Runtime by specifiying '-server' on the commandline!");
+  }
+
   /**
    * Callback before init
    * 
@@ -83,25 +109,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public final void contextInitialized (@Nonnull final ServletContextEvent aSCE)
   {
     final ServletContext aSC = aSCE.getServletContext ();
-
-    // Print Java and Server (e.g. Tomcat) info
-    s_aLogger.info ("Java " +
-                    SystemProperties.getJavaVersion () +
-                    " running '" +
-                    aSC.getServletContextName () +
-                    "' on " +
-                    aSC.getServerInfo () +
-                    " with " +
-                    (Runtime.getRuntime ().maxMemory () / CGlobal.BYTES_PER_MEGABYTE) +
-                    "MB max RAM and Servlet API " +
-                    aSC.getMajorVersion () +
-                    "." +
-                    aSC.getMinorVersion ());
-
-    // Tell them to use the server VM if possible:
-    final EJVMVendor eJVMVendor = EJVMVendor.getCurrentVendor ();
-    if (eJVMVendor.isSun () && eJVMVendor != EJVMVendor.SUN_SERVER)
-      s_aLogger.warn ("Consider using the Sun Server Runtime by specifiying '-server' on the commandline!");
+    logStartupInfo (aSC);
 
     // set global debug/trace mode
     final boolean bTraceMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_TRACE));
@@ -126,13 +134,15 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
                       "' found! Using the default.");
       sBasePath = aSC.getRealPath (".");
     }
-    ApplicationInitializer.initIO (sBasePath);
+    final File aBasePath = new File (sBasePath);
+    WebFileIO.initBasePath (aBasePath);
+    WebIO.init (new WebIOResourceProviderChain (aBasePath));
 
     // Set persistent ID provider: file based
     GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
 
     if (s_aLogger.isInfoEnabled ())
-      s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' has been initialized");
+      s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' was initialized");
 
     // Callback
     afterContextInitialized (aSC);
