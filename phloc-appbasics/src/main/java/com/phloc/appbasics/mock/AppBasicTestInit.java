@@ -21,34 +21,26 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.scopes.nonweb.mock.ScopeTestRule;
+import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.app.io.WebIO;
+import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
+import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.idfactory.MemoryIntIDFactory;
 
-public class AppBasicTestRule extends ScopeTestRule
+public final class AppBasicTestInit
 {
-  private final File m_aStoragePath;
+  private AppBasicTestInit ()
+  {}
 
-  public AppBasicTestRule ()
+  public static void initAppBasics (@Nonnull final File aStoragePath)
   {
-    this (ScopeTestRule.STORAGE_PATH);
-  }
+    // Init the base path once
+    WebFileIO.resetBasePath ();
+    WebFileIO.initBasePath (aStoragePath);
+    WebIO.init (new WebIOResourceProviderChain (aStoragePath));
 
-  public AppBasicTestRule (@Nonnull final File aStoragePath)
-  {
-    if (aStoragePath == null)
-      throw new NullPointerException ("storagePath");
-    m_aStoragePath = aStoragePath;
-  }
-
-  @Nonnull
-  public File getStoragePath ()
-  {
-    return m_aStoragePath;
-  }
-
-  @Override
-  public void before ()
-  {
-    super.before ();
-    AppBasicTestInit.initAppBasics (m_aStoragePath);
+    // Init the IDs
+    if (!GlobalIDFactory.hasPersistentIntIDFactory ())
+      GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
   }
 }
