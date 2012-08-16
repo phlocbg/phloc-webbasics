@@ -9,15 +9,19 @@ import com.phloc.webbasics.servlet.WebAppListener;
 public class WebBasicTestRule extends WebScopeTestRule
 {
   @Override
-  protected void before () throws Throwable
+  public void before () throws Throwable
   {
     super.before ();
+    initWebBasics ();
+  }
 
+  public static void initWebBasics ()
+  {
     MockHttpListener.removeAllDefaultListeners ();
     MockHttpListener.addDefaultListener (new WebAppListener ());
     MockHttpListener.addDefaultListener (new MockServletRequestListener ());
     MockHttpListener.setToDefault ();
 
-    AppBasicTestRule.initAppBasic ();
+    AppBasicTestRule.initAppBasics ();
   }
 }
