@@ -9,13 +9,13 @@ import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 public class AppBasicTestRule extends ScopeTestRule
 {
   @Override
-  protected void before () throws Throwable
+  public void before () throws Throwable
   {
     super.before ();
-    initAppBasic ();
+    initAppBasics ();
   }
 
-  public static void initAppBasic ()
+  public static void initAppBasics ()
   {
     // Init the base path once
     WebFileIO.resetBasePath ();
