@@ -17,12 +17,10 @@
  */
 package com.phloc.webbasics.mock;
 
-import java.io.File;
+import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.phloc.appbasics.mock.AppBasicTestInit;
-import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 import com.phloc.scopes.web.mock.MockHttpListener;
 import com.phloc.scopes.web.mock.MockServletRequestListener;
 import com.phloc.scopes.web.mock.WebScopeTestRule;
@@ -30,24 +28,14 @@ import com.phloc.webbasics.servlet.WebAppListener;
 
 public class WebBasicTestRule extends WebScopeTestRule
 {
-  private final File m_aStoragePath;
-
   public WebBasicTestRule ()
   {
-    this (ScopeTestRule.STORAGE_PATH);
+    this (null);
   }
 
-  public WebBasicTestRule (@Nonnull final File aStoragePath)
+  public WebBasicTestRule (@Nullable final Map <String, String> aServletContextInitParameters)
   {
-    if (aStoragePath == null)
-      throw new NullPointerException ("storagePath");
-    m_aStoragePath = aStoragePath.getAbsoluteFile ();
-  }
-
-  @Nonnull
-  public File getStoragePath ()
-  {
-    return m_aStoragePath;
+    super (aServletContextInitParameters);
   }
 
   @Override
@@ -56,19 +44,5 @@ public class WebBasicTestRule extends WebScopeTestRule
     MockHttpListener.removeAllListeners ();
     MockHttpListener.addListener (new WebAppListener ());
     MockHttpListener.addListener (new MockServletRequestListener ());
-  }
-
-  @Override
-  public void before ()
-  {
-    super.before ();
-    AppBasicTestInit.initAppBasics (m_aStoragePath);
-  }
-
-  @Override
-  public void after ()
-  {
-    AppBasicTestInit.shutdownAppBasics ();
-    super.after ();
   }
 }

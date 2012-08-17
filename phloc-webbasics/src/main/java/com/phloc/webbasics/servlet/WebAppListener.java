@@ -194,6 +194,13 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   protected void beforeContextInitialized (@Nonnull final ServletContext aSC)
   {}
 
+  @OverrideOnDemand
+  protected void initGlobalIDFactory ()
+  {
+    // Set persistent ID provider: file based
+    GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
+  }
+
   /**
    * Callback after init
    * 
@@ -243,8 +250,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     WebFileIO.initBasePath (aBasePath);
     WebIO.init (new WebIOResourceProviderChain (aBasePath));
 
-    // Set persistent ID provider: file based
-    GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
+    // Set persistent ID provider
+    initGlobalIDFactory ();
 
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' was initialized");
