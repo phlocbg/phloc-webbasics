@@ -35,12 +35,17 @@ public final class AppBasicTestInit
   public static void initAppBasics (@Nonnull final File aStoragePath)
   {
     // Init the base path once
-    WebFileIO.resetBasePath ();
     WebFileIO.initBasePath (aStoragePath);
     WebIO.init (new WebIOResourceProviderChain (aStoragePath));
 
     // Init the IDs
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
       GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
+  }
+
+  public static void shutdownAppBasics ()
+  {
+    // Init the base path once
+    WebFileIO.resetBasePath ();
   }
 }

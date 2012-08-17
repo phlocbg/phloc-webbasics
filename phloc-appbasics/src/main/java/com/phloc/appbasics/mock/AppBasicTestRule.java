@@ -23,6 +23,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 
+/**
+ * Non-web scope aware test rule, with a defined storage root directory
+ * 
+ * @author philip
+ */
 public class AppBasicTestRule extends ScopeTestRule
 {
   private final File m_aStoragePath;
@@ -50,5 +55,12 @@ public class AppBasicTestRule extends ScopeTestRule
   {
     super.before ();
     AppBasicTestInit.initAppBasics (m_aStoragePath);
+  }
+
+  @Override
+  public void after ()
+  {
+    AppBasicTestInit.shutdownAppBasics ();
+    super.after ();
   }
 }
