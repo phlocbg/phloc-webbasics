@@ -73,6 +73,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public static final String INIT_PARAMETER_DEBUG = "debug";
   public static final String INIT_PARAMETER_PRODUCTION = "production";
   public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
+  public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
 
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
@@ -80,8 +81,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public WebAppListener ()
   {}
 
-  @OverrideOnDemand
-  protected void logStartupInfo (@Nonnull final ServletContext aSC)
+  protected final void logServerInfo (@Nonnull final ServletContext aSC)
   {
     // Print Java and Server (e.g. Tomcat) info
     s_aLogger.info ("Java " +
@@ -106,8 +106,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       s_aLogger.warn ("This Java version is bad for development - breakpoints don't work in the debugger!");
   }
 
-  @OverrideOnDemand
-  protected void debugClassPath ()
+  protected final void logClassPath ()
   {
     // List class path elements in trace mode
     if (GlobalDebug.isTraceMode ())
@@ -119,8 +118,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     }
   }
 
-  @OverrideOnDemand
-  protected void debugInitParameters (@Nonnull final ServletContext aSC)
+  protected final void logInitParameters (@Nonnull final ServletContext aSC)
   {
     s_aLogger.info ("Servlet context init-parameters:");
     final Enumeration <?> aEnum = aSC.getInitParameterNames ();
@@ -131,8 +129,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     }
   }
 
-  @OverrideOnDemand
-  protected void debugThirdpartyModules ()
+  protected final void logThirdpartyModules ()
   {
     // List all third party modules for later evaluation
     final Set <IThirdPartyModule> aModules = ThirdPartyModuleRegistry.getAllRegisteredThirdPartyModules ();
@@ -154,8 +151,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     }
   }
 
-  @OverrideOnDemand
-  protected void debugJMX ()
+  protected final void logJMX ()
   {
     if (SystemProperties.getPropertyValue ("com.sun.management.jmxremote") != null)
     {
@@ -178,6 +174,16 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     }
   }
 
+  @OverrideOnDemand
+  protected void logStartupInfo (@Nonnull final ServletContext aSC)
+  {
+    logServerInfo (aSC);
+    logClassPath ();
+    logInitParameters (aSC);
+    logThirdpartyModules ();
+    logJMX ();
+  }
+
   /**
    * Callback before init. By default some relevant debug information is emitted
    * 
@@ -186,13 +192,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
    */
   @OverrideOnDemand
   protected void beforeContextInitialized (@Nonnull final ServletContext aSC)
-  {
-    // Some startup debugging
-    debugClassPath ();
-    debugInitParameters (aSC);
-    debugThirdpartyModules ();
-    debugJMX ();
-  }
+  {}
 
   /**
    * Callback after init
@@ -207,7 +207,6 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public final void contextInitialized (@Nonnull final ServletContextEvent aSCE)
   {
     final ServletContext aSC = aSCE.getServletContext ();
-    logStartupInfo (aSC);
 
     // set global debug/trace mode
     final boolean bTraceMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_TRACE));
@@ -216,6 +215,13 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     GlobalDebug.setTraceModeDirect (bTraceMode);
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
+
+    final boolean bNoStartupInfo = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_NO_STARTUP_INFO));
+    if (!bNoStartupInfo)
+    {
+      // Requires the global debug things to present
+      logStartupInfo (aSC);
+    }
 
     // Call callback
     beforeContextInitialized (aSC);
