@@ -21,8 +21,12 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.mock.AppBasicTestInit;
 import com.phloc.scopes.nonweb.mock.ScopeTestRule;
+import com.phloc.scopes.web.mock.MockHttpListener;
+import com.phloc.scopes.web.mock.MockServletRequestListener;
 import com.phloc.scopes.web.mock.WebScopeTestRule;
+import com.phloc.webbasics.servlet.WebAppListener;
 
 public class WebBasicTestRule extends WebScopeTestRule
 {
@@ -47,9 +51,24 @@ public class WebBasicTestRule extends WebScopeTestRule
   }
 
   @Override
+  protected void initListener ()
+  {
+    MockHttpListener.removeAllListeners ();
+    MockHttpListener.addListener (new WebAppListener ());
+    MockHttpListener.addListener (new MockServletRequestListener ());
+  }
+
+  @Override
   public void before ()
   {
     super.before ();
-    WebBasicTestInit.initWebBasics (m_aStoragePath);
+    AppBasicTestInit.initAppBasics (m_aStoragePath);
+  }
+
+  @Override
+  public void after ()
+  {
+    AppBasicTestInit.shutdownAppBasics ();
+    super.after ();
   }
 }

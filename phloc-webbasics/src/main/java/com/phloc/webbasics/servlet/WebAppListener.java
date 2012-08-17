@@ -233,9 +233,10 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
     if (StringHelper.hasNoText (sBasePath))
     {
-      s_aLogger.info ("No servlet context init-parameter '" +
-                      INIT_PARAMETER_STORAGE_PATH +
-                      "' found! Using the default.");
+      if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
+        s_aLogger.info ("No servlet context init-parameter '" +
+                        INIT_PARAMETER_STORAGE_PATH +
+                        "' found! Using the default.");
       sBasePath = aSC.getRealPath (".");
     }
     final File aBasePath = new File (sBasePath);
@@ -285,7 +286,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     // Shutdown global scope and destroy all singletons
     WebScopeManager.onGlobalEnd ();
 
-    // Reset base path - mainley for testing
+    // Reset base path - mainly for testing
     WebFileIO.resetBasePath ();
 
     // Clear resource bundle cache - avoid potential class loading issues
