@@ -36,7 +36,7 @@ public class AppBasicTestRule extends ScopeTestRule
   {
     if (aStoragePath == null)
       throw new NullPointerException ("storagePath");
-    m_aStoragePath = aStoragePath;
+    m_aStoragePath = aStoragePath.getAbsoluteFile ();
   }
 
   @Nonnull
