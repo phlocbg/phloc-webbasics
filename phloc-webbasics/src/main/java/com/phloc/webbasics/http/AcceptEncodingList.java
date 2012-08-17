@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.string.StringHelper;
@@ -95,15 +96,43 @@ public final class AcceptEncodingList
            supportsEncoding (AcceptEncodingHandler.X_GZIP_ENCODING);
   }
 
+  @Nullable
+  public String getUsedGZIPEncoding ()
+  {
+    if (supportsEncoding (AcceptEncodingHandler.GZIP_ENCODING))
+      return AcceptEncodingHandler.GZIP_ENCODING;
+    if (supportsEncoding (AcceptEncodingHandler.X_GZIP_ENCODING))
+      return AcceptEncodingHandler.X_GZIP_ENCODING;
+    return null;
+  }
+
   public boolean supportsDeflate ()
   {
     return supportsEncoding (AcceptEncodingHandler.DEFLATE_ENCODING);
+  }
+
+  @Nullable
+  public String getUsedDeflateEncoding ()
+  {
+    if (supportsEncoding (AcceptEncodingHandler.DEFLATE_ENCODING))
+      return AcceptEncodingHandler.DEFLATE_ENCODING;
+    return null;
   }
 
   public boolean supportsCompress ()
   {
     return supportsEncoding (AcceptEncodingHandler.COMPRESS_ENCODING) ||
            supportsEncoding (AcceptEncodingHandler.X_COMPRESS_ENCODING);
+  }
+
+  @Nullable
+  public String getUsedCompressEncoding ()
+  {
+    if (supportsEncoding (AcceptEncodingHandler.COMPRESS_ENCODING))
+      return AcceptEncodingHandler.COMPRESS_ENCODING;
+    if (supportsEncoding (AcceptEncodingHandler.X_COMPRESS_ENCODING))
+      return AcceptEncodingHandler.X_COMPRESS_ENCODING;
+    return null;
   }
 
   @Override

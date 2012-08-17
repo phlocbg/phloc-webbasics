@@ -73,9 +73,10 @@ public final class CHTTPHeader
   public static final String X_DEVICE_USER_AGENT = "x-device-user-agent";
 
   // Response codes
-  public static final String TRANSFER_ENCODING = "Transfer-Encoding";
-  public static final String SET_COOKIE = "Set-Cookie";
   public static final String CONNECTION = "Connection";
+  public static final String CONTENT_LENGTH = "Content-Length";
+  public static final String SET_COOKIE = "Set-Cookie";
+  public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 
   private CHTTPHeader ()
   {}

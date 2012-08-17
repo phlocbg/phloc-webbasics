@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.servlet;
+package com.phloc.webbasics.servlet.gzip;
 
 import java.io.IOException;
 
@@ -26,41 +26,43 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.charset.CCharset;
+import com.phloc.webbasics.http.AcceptEncodingHandler;
 
 /**
- * Special servlet filter that applies a certain encoding to a request and a
- * response.
+ * A filter that applies GZip compression to all elements, if applicable. It
+ * interpretes the accept-encoding HTTP header to identify whether GZip is
+ * supported or not.
  * 
  * @author philip
  */
-public class CharacterEncodingFilter implements Filter
+public final class GZIPFilter implements Filter
 {
-  public static final String DEFAULT_ENCODING = CCharset.CHARSET_UTF_8;
-
-  @OverrideOnDemand
-  @Nonnull
-  @Nonempty
-  protected String getEncoding ()
-  {
-    return DEFAULT_ENCODING;
-  }
-
-  public void init (@Nonnull final FilterConfig aFilterConfig) throws ServletException
+  public void init (@Nonnull final FilterConfig filterConfig)
   {}
 
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
-    final String sEncoding = getEncoding ();
-    // We need this for all form data etc.
-    if (aRequest.getCharacterEncoding () == null)
-      aRequest.setCharacterEncoding (sEncoding);
-    aResponse.setCharacterEncoding (sEncoding);
+    if (aRequest instanceof HttpServletRequest)
+    {
+      final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
+      final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
+
+      final String sGZIPEncoding = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest).getUsedGZIPEncoding ();
+      if (sGZIPEncoding != null)
+      {
+        final GZIPResponseWrapper aGZIPResponse = new GZIPResponseWrapper (aHttpResponse, sGZIPEncoding);
+        aChain.doFilter (aRequest, aGZIPResponse);
+        aGZIPResponse.finishResponse ();
+        return;
+      }
+    }
+
+    // No GZipping
     aChain.doFilter (aRequest, aResponse);
   }
 
