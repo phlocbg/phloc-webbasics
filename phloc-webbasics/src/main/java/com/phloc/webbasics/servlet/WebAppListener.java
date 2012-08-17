@@ -18,11 +18,15 @@
 package com.phloc.webbasics.servlet;
 
 import java.io.File;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -37,10 +41,18 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.name.ComparatorHasDisplayName;
+import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.system.EJVMVendor;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.commons.thirdparty.IThirdPartyModule;
+import com.phloc.commons.thirdparty.ThirdPartyModuleRegistry;
+import com.phloc.commons.utils.ClassPathHelper;
+import com.phloc.commons.vminit.VirtualMachineInitializer;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
@@ -52,6 +64,11 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
  */
 public class WebAppListener implements ServletContextListener, HttpSessionListener
 {
+  static
+  {
+    VirtualMachineInitializer.runInitialization ();
+  }
+
   public static final String INIT_PARAMETER_TRACE = "trace";
   public static final String INIT_PARAMETER_DEBUG = "debug";
   public static final String INIT_PARAMETER_PRODUCTION = "production";
@@ -84,17 +101,98 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     final EJVMVendor eJVMVendor = EJVMVendor.getCurrentVendor ();
     if (eJVMVendor.isSun () && eJVMVendor != EJVMVendor.SUN_SERVER)
       s_aLogger.warn ("Consider using the Sun Server Runtime by specifiying '-server' on the commandline!");
+
+    if (SystemProperties.getJavaVersion ().startsWith ("1.6.0_14"))
+      s_aLogger.warn ("This Java version is bad for development - breakpoints don't work in the debugger!");
+  }
+
+  @OverrideOnDemand
+  protected void debugClassPath ()
+  {
+    // List class path elements in trace mode
+    if (GlobalDebug.isTraceMode ())
+    {
+      final List <String> aCP = ClassPathHelper.getAllClassPathEntries ();
+      s_aLogger.info ("Class path [" + aCP.size () + " elements]:");
+      for (final String sCP : ContainerHelper.getSortedInline (aCP))
+        s_aLogger.info ("  " + sCP);
+    }
+  }
+
+  @OverrideOnDemand
+  protected void debugInitParameters (@Nonnull final ServletContext aSC)
+  {
+    s_aLogger.info ("Servlet context init-parameters:");
+    final Enumeration <?> aEnum = aSC.getInitParameterNames ();
+    while (aEnum.hasMoreElements ())
+    {
+      final String sName = (String) aEnum.nextElement ();
+      s_aLogger.info ("  " + sName + "=" + aSC.getInitParameter (sName));
+    }
+  }
+
+  @OverrideOnDemand
+  protected void debugThirdpartyModules ()
+  {
+    // List all third party modules for later evaluation
+    final Set <IThirdPartyModule> aModules = ThirdPartyModuleRegistry.getAllRegisteredThirdPartyModules ();
+    if (!aModules.isEmpty ())
+    {
+      s_aLogger.info ("Using the following third party modules:");
+      for (final IThirdPartyModule aModule : ContainerHelper.getSorted (aModules,
+                                                                        new ComparatorHasDisplayName <IHasDisplayName> (null)))
+        if (!aModule.isOptional ())
+        {
+          String sMsg = "  " + aModule.getDisplayName ();
+          if (aModule.getVersion () != null)
+            sMsg += ' ' + aModule.getVersion ().getAsString (true);
+          sMsg += " licensed under " + aModule.getLicense ().getDisplayName ();
+          if (aModule.getLicense ().getVersion () != null)
+            sMsg += ' ' + aModule.getLicense ().getVersion ().getAsString ();
+          s_aLogger.info (sMsg);
+        }
+    }
+  }
+
+  @OverrideOnDemand
+  protected void debugJMX ()
+  {
+    if (SystemProperties.getPropertyValue ("com.sun.management.jmxremote") != null)
+    {
+      final String sPort = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.port");
+      final String sSSL = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.ssl");
+      final String sAuthenticate = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.authenticate");
+      final String sPasswordFile = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.password.file");
+      final String sAccessFile = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.access.file");
+      s_aLogger.info ("Remote JMX is enabled!");
+      if (sPort != null)
+        s_aLogger.info ("  Port=" + sPort);
+      if (sSSL != null)
+        s_aLogger.info ("  SSL enabled=" + sSSL);
+      if (sAuthenticate != null)
+        s_aLogger.info ("  Authenticate=" + sAuthenticate);
+      if (sPasswordFile != null)
+        s_aLogger.info ("  Password file=" + sPasswordFile);
+      if (sAccessFile != null)
+        s_aLogger.info ("  Access file=" + sAccessFile);
+    }
   }
 
   /**
-   * Callback before init
+   * Callback before init. By default some relevant debug information is emitted
    * 
    * @param aSC
    *        ServletContext
    */
   @OverrideOnDemand
-  protected void onContextInitialized (@Nonnull final ServletContext aSC)
-  {}
+  protected void beforeContextInitialized (@Nonnull final ServletContext aSC)
+  {
+    // Some startup debugging
+    debugClassPath ();
+    debugInitParameters (aSC);
+    debugThirdpartyModules ();
+    debugJMX ();
+  }
 
   /**
    * Callback after init
@@ -120,7 +218,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
     // Call callback
-    onContextInitialized (aSC);
+    beforeContextInitialized (aSC);
 
     // begin global context
     WebScopeManager.onGlobalBegin (aSC);
@@ -150,42 +248,58 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
   /**
    * before destroy
+   * 
+   * @param aSC
+   *        the servlet context in destruction
    */
   @OverrideOnDemand
-  protected void onContextDestroyed ()
+  protected void beforeContextDestroyed (@Nonnull final ServletContext aSC)
   {}
 
   /**
    * after destroy
+   * 
+   * @param aSC
+   *        the servlet context in destruction
    */
   @OverrideOnDemand
-  protected void afterContextDestroyed ()
+  protected void afterContextDestroyed (@Nonnull final ServletContext aSC)
   {}
 
   public final void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
   {
+    final ServletContext aSC = aSCE.getServletContext ();
+
     // Callback before
-    onContextDestroyed ();
+    beforeContextDestroyed (aSC);
 
-    // Reset base path to be sure
-    WebFileIO.resetBasePath ();
+    if (s_aLogger.isInfoEnabled ())
+      s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' is being destroyed");
 
-    // Shutdown global scope
+    // Shutdown global scope and destroy all singletons
     WebScopeManager.onGlobalEnd ();
 
+    // Reset base path - mainley for testing
+    WebFileIO.resetBasePath ();
+
+    // Clear resource bundle cache - avoid potential class loading issues
+    DefaultTextResolver.clearCache ();
+
     // Callback after
-    afterContextDestroyed ();
+    afterContextDestroyed (aSC);
   }
 
-  public final void sessionCreated (@Nonnull final HttpSessionEvent aSE)
+  public final void sessionCreated (@Nonnull final HttpSessionEvent aSessionEvent)
   {
     // Create the SessionScope
-    WebScopeManager.onSessionBegin (aSE.getSession ());
+    final HttpSession aHttpSession = aSessionEvent.getSession ();
+    WebScopeManager.onSessionBegin (aHttpSession);
   }
 
-  public final void sessionDestroyed (@Nonnull final HttpSessionEvent aSE)
+  public final void sessionDestroyed (@Nonnull final HttpSessionEvent aSessionEvent)
   {
     // Destroy the SessionScope
-    WebScopeManager.onSessionEnd (aSE.getSession ());
+    final HttpSession aHttpSession = aSessionEvent.getSession ();
+    WebScopeManager.onSessionEnd (aHttpSession);
   }
 }
