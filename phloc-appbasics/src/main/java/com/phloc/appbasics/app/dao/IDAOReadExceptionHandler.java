@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.io.IReadableResource;
 
 /**
- * Callback interface to handle thrown exception objects on reading.
+ * Callback interface to handle thrown exception objects on DAO reading.
  * 
  * @author philip
  */

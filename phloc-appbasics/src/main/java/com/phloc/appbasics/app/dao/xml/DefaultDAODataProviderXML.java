@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.app.dao.impl;
+package com.phloc.appbasics.app.dao.xml;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.IDAODataProvider;
-import com.phloc.appbasics.app.dao.IXMLDAODataProvider;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.microdom.IMicroDocument;

@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.app.dao.impl;
+package com.phloc.appbasics.app.dao.xml;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.dao.IXMLDAODataProvider;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EChange;
 

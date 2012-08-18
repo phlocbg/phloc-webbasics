@@ -17,6 +17,11 @@
  */
 package com.phloc.appbasics.app.dao;
 
+/**
+ * Base DAO interface
+ * 
+ * @author philip
+ */
 public interface IDAO extends IChangeable, IAutoSaveAware
 {
   /**

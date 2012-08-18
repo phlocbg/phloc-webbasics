@@ -26,6 +26,11 @@ import javax.annotation.Nullable;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.state.ESuccess;
 
+/**
+ * The DAO file IO API
+ * 
+ * @author philip
+ */
 public interface IDAOIO
 {
   @Nullable

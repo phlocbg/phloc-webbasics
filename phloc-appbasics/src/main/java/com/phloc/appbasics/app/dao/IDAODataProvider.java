@@ -26,6 +26,11 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.state.EChange;
 
+/**
+ * The external data provider for a DAO
+ * 
+ * @author philip
+ */
 @MustImplementEqualsAndHashcode
 public interface IDAODataProvider
 {
