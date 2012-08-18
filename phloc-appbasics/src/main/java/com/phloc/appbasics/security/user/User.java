@@ -27,6 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
 
+import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -36,6 +37,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.type.ObjectType;
 import com.phloc.datetime.PDTFactory;
 
 /**
@@ -187,6 +189,12 @@ public final class User implements IUser
     if (aCustomAttrs != null)
       m_aCustomAttrs.putAll (aCustomAttrs);
     m_bDeleted = bDeleted;
+  }
+
+  @Nonnull
+  public ObjectType getTypeID ()
+  {
+    return CSecurity.TYPE_USER;
   }
 
   @Nonnull

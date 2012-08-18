@@ -25,8 +25,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
+import com.phloc.commons.type.ITypedObject;
 import com.phloc.datetime.IHasCreationDateTime;
 import com.phloc.datetime.IHasDeletionDateTime;
 import com.phloc.datetime.IHasLastModificationDateTime;
@@ -36,13 +36,7 @@ import com.phloc.datetime.IHasLastModificationDateTime;
  * 
  * @author philip
  */
-public interface IUser extends
-                      IHasID <String>,
-                      IHasDisplayName,
-                      IHasCreationDateTime,
-                      IHasLastModificationDateTime,
-                      IHasDeletionDateTime,
-                      Serializable
+public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreationDateTime, IHasLastModificationDateTime, IHasDeletionDateTime, Serializable
 {
   /**
    * @return The login name of the user.

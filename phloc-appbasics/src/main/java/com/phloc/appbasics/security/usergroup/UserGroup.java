@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
@@ -31,6 +32,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.type.ObjectType;
 
 /**
  * Default implementation of the {@link IUserGroup} interface.
@@ -58,6 +60,12 @@ public final class UserGroup implements IUserGroup
       throw new IllegalArgumentException ("name");
     m_sID = sID;
     m_sName = sName;
+  }
+
+  @Nonnull
+  public ObjectType getTypeID ()
+  {
+    return CSecurity.TYPE_USERGROUP;
   }
 
   @Nonnull

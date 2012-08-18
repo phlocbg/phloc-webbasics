@@ -21,15 +21,15 @@ import java.io.Serializable;
 
 import com.phloc.appbasics.security.role.IRoleContainer;
 import com.phloc.appbasics.security.user.IUserContainer;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasName;
+import com.phloc.commons.type.ITypedObject;
 
 /**
  * Represents a single user group encapsulating 0-n users.
  * 
  * @author philip
  */
-public interface IUserGroup extends IHasID <String>, IHasName, IUserContainer, IRoleContainer, Serializable
+public interface IUserGroup extends ITypedObject <String>, IHasName, IUserContainer, IRoleContainer, Serializable
 {
   /* empty */
 }

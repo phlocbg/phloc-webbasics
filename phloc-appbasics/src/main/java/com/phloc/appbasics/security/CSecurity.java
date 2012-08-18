@@ -80,6 +80,7 @@ public final class CSecurity
   // Object types
   public static final ObjectType TYPE_USER = new ObjectType ("user");
   public static final ObjectType TYPE_USERGROUP = new ObjectType ("usergroup");
+  public static final ObjectType TYPE_ROLE = new ObjectType ("role");
 
   // Default users
   public static final String USER_ADMINISTRATOR_ID = "admin";

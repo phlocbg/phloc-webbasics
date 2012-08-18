@@ -19,15 +19,15 @@ package com.phloc.appbasics.security.role;
 
 import java.io.Serializable;
 
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasName;
+import com.phloc.commons.type.ITypedObject;
 
 /**
  * Represents a single role that can be assigned to user groups.
  * 
  * @author philip
  */
-public interface IRole extends IHasID <String>, IHasName, Serializable
+public interface IRole extends ITypedObject <String>, IHasName, Serializable
 {
   /* empty */
 }
