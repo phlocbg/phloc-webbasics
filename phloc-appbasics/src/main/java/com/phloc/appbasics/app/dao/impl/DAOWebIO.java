@@ -27,10 +27,11 @@ import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.string.ToStringGenerator;
 
-public class WebDAOIO implements IDAOIO
+public class DAOWebIO implements IDAOIO
 {
-  public WebDAOIO ()
+  public DAOWebIO ()
   {}
 
   /**
@@ -68,5 +69,11 @@ public class WebDAOIO implements IDAOIO
   public ESuccess saveFile (final String sFilename, final String sContent, final Charset aCharset)
   {
     return WebIO.saveFile (sFilename, sContent, aCharset);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.dao.IDAO;
+import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
@@ -42,9 +43,14 @@ public abstract class AbstractDAO implements IDAO
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   protected boolean m_bPendingChanges = false;
   protected boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
+  private final IDAOIO m_aIO;
 
-  protected AbstractDAO ()
-  {}
+  protected AbstractDAO (@Nonnull final IDAOIO aDAOIO)
+  {
+    if (aDAOIO == null)
+      throw new NullPointerException ("No data IO passed");
+    m_aIO = aDAOIO;
+  }
 
   /**
    * Set a custom exception handler that is called in case reading a file fails.
@@ -112,6 +118,12 @@ public abstract class AbstractDAO implements IDAO
     {
       s_aRWLock.readLock ().unlock ();
     }
+  }
+
+  @Nonnull
+  protected final IDAOIO getIO ()
+  {
+    return m_aIO;
   }
 
   /**

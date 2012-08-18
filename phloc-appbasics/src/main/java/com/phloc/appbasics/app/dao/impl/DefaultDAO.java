@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.IDAODataProvider;
-import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.IHasFilename;
@@ -60,8 +59,6 @@ public class DefaultDAO extends AbstractDAO
   /** The main provider to handle the content specific parts */
   private final IDAODataProvider m_aDataProvider;
 
-  private final IDAOIO m_aIO = new WebDAOIO ();
-
   /** Number of backup files to keep. */
   private final int m_nBackupCount;
 
@@ -76,6 +73,7 @@ public class DefaultDAO extends AbstractDAO
                      @Nonnull final IDAODataProvider aDataProvider,
                      @Nonnegative final int nBackupCount)
   {
+    super (new DAOWebIO ());
     if (aFilenameProvider == null)
       throw new NullPointerException ("filenameProvider");
     if (aDataProvider == null)
@@ -92,11 +90,6 @@ public class DefaultDAO extends AbstractDAO
   protected final IDAODataProvider getDataProvider ()
   {
     return m_aDataProvider;
-  }
-
-  protected final IDAOIO getIO ()
-  {
-    return m_aIO;
   }
 
   /**
@@ -122,7 +115,7 @@ public class DefaultDAO extends AbstractDAO
       if (GlobalDebug.isDebugMode ())
         s_aLogger.info ("Trying to read DAO file '" + sFilename + "'");
 
-      final InputStream aIS = m_aIO.openInputStream (sFilename);
+      final InputStream aIS = getIO ().openInputStream (sFilename);
       if (aIS == null)
       {
         // Failed to open file
@@ -209,7 +202,7 @@ public class DefaultDAO extends AbstractDAO
       final IDAOReadExceptionHandler aExceptionHandlerRead = getCustomExceptionHandlerRead ();
       if (aExceptionHandlerRead != null)
       {
-        final IReadableResource aRes = sFilename == null ? null : m_aIO.getReadableResource (sFilename);
+        final IReadableResource aRes = sFilename == null ? null : getIO ().getReadableResource (sFilename);
         try
         {
           aExceptionHandlerRead.onDAOReadException (t, bIsInitialization, aRes);
@@ -283,12 +276,12 @@ public class DefaultDAO extends AbstractDAO
       // rename old files to have a backup
       for (int i = m_nBackupCount; i > 0; --i)
         if (i == 1)
-          m_aIO.renameFile (sFilename, sFilename + "." + i);
+          getIO ().renameFile (sFilename, sFilename + "." + i);
         else
-          m_aIO.renameFile (sFilename + "." + (i - 1), sFilename + "." + i);
+          getIO ().renameFile (sFilename + "." + (i - 1), sFilename + "." + i);
 
       // write to file
-      return m_aIO.saveFile (sFilename, sContent, m_aDataProvider.getCharset ());
+      return getIO ().saveFile (sFilename, sContent, m_aDataProvider.getCharset ());
     }
     catch (final Throwable t)
     {
@@ -297,7 +290,7 @@ public class DefaultDAO extends AbstractDAO
       final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
       if (aExceptionHandlerWrite != null)
       {
-        final IReadableResource aRes = m_aIO.getReadableResource (sFilename);
+        final IReadableResource aRes = getIO ().getReadableResource (sFilename);
         try
         {
           aExceptionHandlerWrite.onDAOWriteException (t, aRes, aFileContent);
@@ -333,7 +326,7 @@ public class DefaultDAO extends AbstractDAO
    * Mark this DAO as changed. Must be called outside a writeLock, as this
    * method locks itself!
    */
-  public final void markAsChanged ()
+  protected final void markAsChanged ()
   {
     m_aRWLock.writeLock ().lock ();
     try

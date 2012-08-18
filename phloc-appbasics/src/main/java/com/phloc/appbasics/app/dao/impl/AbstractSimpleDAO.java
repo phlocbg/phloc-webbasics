@@ -50,6 +50,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
 
   protected AbstractSimpleDAO (@Nonnull @Nonempty final String sFilename)
   {
+    super (new DAOWebFileIO ());
     m_aFile = WebFileIO.getFile (sFilename);
     if (m_aFile.exists ())
     {
