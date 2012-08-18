@@ -32,6 +32,7 @@ import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
@@ -48,20 +49,53 @@ import com.phloc.datetime.io.PDTIOHelper;
 @ThreadSafe
 public final class AuditManager extends AbstractXMLDAO implements IAuditor
 {
+  private static final class AuditHasFilename implements IHasFilename
+  {
+    private final String m_sBaseDir;
+
+    AuditHasFilename (@Nullable final String sBaseDir)
+    {
+      m_sBaseDir = sBaseDir;
+    }
+
+    @Nullable
+    public String getFilename ()
+    {
+      // No base dir -> in memory only
+      if (StringHelper.hasNoText (m_sBaseDir))
+        return null;
+      return m_sBaseDir + PDTIOHelper.getCurrentDateForFilename () + ".xml";
+    }
+
+    @Override
+    public boolean equals (final Object o)
+    {
+      if (o == this)
+        return true;
+      if (!(o instanceof AuditHasFilename))
+        return false;
+      final AuditHasFilename rhs = (AuditHasFilename) o;
+      return EqualsUtils.equals (m_sBaseDir, rhs.m_sBaseDir);
+    }
+
+    @Override
+    public int hashCode ()
+    {
+      return new HashCodeGenerator (this).append (m_sBaseDir).getHashCode ();
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("baseDir", m_sBaseDir).toString ();
+    }
+  }
+
   private final AuditItemList m_aItems;
 
   public AuditManager (@Nullable final String sBaseDir, @Nonnull final ICurrentUserIDProvider aUserIDProvider) throws DAOException
   {
-    super (new IHasFilename ()
-    {
-      @Nullable
-      public String getFilename ()
-      {
-        if (sBaseDir == null)
-          return null;
-        return sBaseDir + PDTIOHelper.getCurrentDateForFilename () + ".xml";
-      }
-    });
+    super (new AuditHasFilename (sBaseDir));
 
     // Ensure base path is present
     if (StringHelper.hasText (sBaseDir) && !WebIO.resourceExists (sBaseDir))

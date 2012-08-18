@@ -86,6 +86,20 @@ public final class WebIO
     }
   }
 
+  @Nonnull
+  public static void setFileOpMgr (@Nonnull final FileOperationManager aFileOpMgr)
+  {
+    if (aFileOpMgr == null)
+      throw new NullPointerException ("fileOpMgr");
+    s_aFileOpMgr = aFileOpMgr;
+  }
+
+  @Nonnull
+  public static FileOperationManager getFileOpMgr ()
+  {
+    return s_aFileOpMgr;
+  }
+
   /**
    * Get a read-only resource object matching the current name using the global
    * resource provider.
@@ -420,11 +434,5 @@ public final class WebIO
   public static ESuccess appendFile (@Nonnull final String sFilename, @Nonnull final byte [] aBytes)
   {
     return _writeFile (sFilename, EAppend.APPEND, aBytes);
-  }
-
-  @Nonnull
-  public static FileOperationManager getFileOpMgr ()
-  {
-    return s_aFileOpMgr;
   }
 }

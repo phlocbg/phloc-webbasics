@@ -35,10 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
-import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.io.file.FileUtils;
-import com.phloc.commons.io.file.IFileOperationManager;
-import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resource.FileSystemResource;
 
 /**
@@ -50,7 +47,6 @@ import com.phloc.commons.io.resource.FileSystemResource;
 public final class WebFileIO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
-  private static final IFileOperationManager s_aFOM = new FileOperationManager (new LoggingFileOperationCallback ());
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   private static File s_aBasePath;
@@ -73,7 +69,7 @@ public final class WebFileIO
       s_aBasePath = aBasePath;
 
       // Ensure the base directory is present
-      s_aFOM.createDirRecursiveIfNotExisting (s_aBasePath);
+      WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (s_aBasePath);
       if (!FileUtils.canRead (s_aBasePath))
         throw new IllegalArgumentException ("Cannot read in " + s_aBasePath);
       if (!FileUtils.canWrite (s_aBasePath))
@@ -316,15 +312,5 @@ public final class WebFileIO
                                   @Nonnull final EAppend eAppend)
   {
     return getResource (sRelativePath).getWriter (sCharset, eAppend);
-  }
-
-  /**
-   * @return The underlying {@link IFileOperationManager} manager. Never
-   *         <code>null</code>.
-   */
-  @Nonnull
-  public static IFileOperationManager getFileOpMgr ()
-  {
-    return s_aFOM;
   }
 }

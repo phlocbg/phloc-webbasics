@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
@@ -80,7 +81,7 @@ public final class LoggedInUserStorage
                       "' to be used as a file system name!");
 
     final File aDir = WebFileIO.getFile (BASE_DIRECTORY + sRealUserID);
-    WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir);
+    WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir);
     return aDir;
   }
 }

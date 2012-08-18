@@ -45,17 +45,17 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 
-public abstract class AbstractDAO
+public abstract class AbstractSimpleDAO
 {
   public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractDAO.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
 
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final File m_aFile;
   private boolean m_bPendingChanges = false;
   private boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
 
-  protected AbstractDAO (@Nonnull @Nonempty final String sFilename)
+  protected AbstractSimpleDAO (@Nonnull @Nonempty final String sFilename)
   {
     m_aFile = WebFileIO.getFile (sFilename);
     if (m_aFile.exists ())

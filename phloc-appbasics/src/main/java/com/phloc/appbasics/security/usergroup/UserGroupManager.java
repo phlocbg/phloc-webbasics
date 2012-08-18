@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import com.phloc.appbasics.app.dao.AbstractDAO;
+import com.phloc.appbasics.app.dao.AbstractSimpleDAO;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.user.IUserManager;
@@ -46,7 +46,7 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @ThreadSafe
-public final class UserGroupManager extends AbstractDAO implements IUserGroupManager
+public final class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager
 {
   private static boolean s_bCreateDefaults = true;
 

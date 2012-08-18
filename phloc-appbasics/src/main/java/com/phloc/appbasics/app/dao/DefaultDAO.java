@@ -107,7 +107,7 @@ public class DefaultDAO implements IDAO
    *        The exception handler to be set. May be <code>null</code> to
    *        indicate no custom exception handler.
    */
-  public static final void setCustomExceptionHandlerRead (final IDAOReadExceptionHandler aExceptionHandler)
+  public static final void setCustomExceptionHandlerRead (@Nullable final IDAOReadExceptionHandler aExceptionHandler)
   {
     s_aRWLock.writeLock ().lock ();
     try
@@ -185,11 +185,6 @@ public class DefaultDAO implements IDAO
     if (sFilename == null)
       return null;
 
-    // do not use fallback to classpath for file lookup, otherwise we might use
-    // a foreign file (from another plugin) --> PDAFIII-1526
-    // All p3 managers/DAOs read only from resource provider
-    // Note[ph]: reset back to "true" as third parameter, because otherwise the
-    // tests fail!
     return WebIO.getInputStream (sFilename, false);
   }
 
@@ -216,9 +211,12 @@ public class DefaultDAO implements IDAO
       final InputStream aIS = openInputStream (sFilename);
       if (aIS == null)
       {
-        // we're not operating on a file - no init!
+        // Failed to open file
         if (sFilename == null)
+        {
+          // we're not operating on a file - no init!
           return;
+        }
 
         if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
           s_aLogger.info ("Initializing DAO for file '" + sFilename + "'");

@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import com.phloc.appbasics.app.dao.AbstractDAO;
+import com.phloc.appbasics.app.dao.AbstractSimpleDAO;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -42,7 +42,7 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @ThreadSafe
-public final class RoleManager extends AbstractDAO implements IRoleManager
+public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
 {
   private static boolean s_bCreateDefaults = true;
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();

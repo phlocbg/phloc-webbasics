@@ -19,11 +19,14 @@ package com.phloc.appbasics.app.io;
 
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
+
 /**
  * Interface for objects providing a filename
  * 
  * @author philip
  */
+@MustImplementEqualsAndHashcode
 public interface IHasFilename
 {
   /**

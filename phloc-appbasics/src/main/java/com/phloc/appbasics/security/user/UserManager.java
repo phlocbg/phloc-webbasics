@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import com.phloc.appbasics.app.dao.AbstractDAO;
+import com.phloc.appbasics.app.dao.AbstractSimpleDAO;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -46,7 +46,7 @@ import com.phloc.commons.string.StringHelper;
  * @author philip
  */
 @ThreadSafe
-public final class UserManager extends AbstractDAO implements IUserManager
+public final class UserManager extends AbstractSimpleDAO implements IUserManager
 {
   private static boolean s_bCreateDefaults = true;
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
