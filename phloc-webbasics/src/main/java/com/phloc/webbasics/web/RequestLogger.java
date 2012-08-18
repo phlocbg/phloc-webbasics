@@ -76,6 +76,7 @@ public final class RequestLogger
     ret.put ("RemoteHost", aHttpRequest.getRemoteHost ());
     ret.put ("RemotePort", Integer.toString (aHttpRequest.getRemotePort ()));
     ret.put ("RemoteUser", aHttpRequest.getRemoteUser ());
+    ret.put ("RequestURL", aHttpRequest.getRequestURL ().toString ());
     ret.put ("Scheme", aHttpRequest.getScheme ());
     ret.put ("ServerName", aHttpRequest.getServerName ());
     ret.put ("ServerPort", Integer.toString (aHttpRequest.getServerPort ()));

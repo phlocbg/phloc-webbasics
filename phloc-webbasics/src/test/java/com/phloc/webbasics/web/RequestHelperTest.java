@@ -40,4 +40,11 @@ public final class RequestHelperTest
     r.addParameters (new SMap ().add ("abc", "xyz"));
     assertEquals ("/context/servlet/index.xyz?x=1", RequestHelper.getRequestURI (r));
   }
+
+  @Test
+  public void testGetRequestString ()
+  {
+    assertEquals ("http://server:517/context/servlet/index.xyz?x=1",
+                  RequestHelper.getUrlString ("http", "server", 517, "/context/servlet/index.xyz", "x=1"));
+  }
 }

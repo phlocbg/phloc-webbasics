@@ -53,42 +53,25 @@ public final class RequestHelper
   {}
 
   /**
-   * Return the path within the servlet mapping for the given request, i.e. the
-   * part of the request's URL beyond the part that called the servlet, or "" if
-   * the whole URL has been used to identify the servlet.
-   * <p>
-   * Detects include request URL if called within a RequestDispatcher include.
-   * <p>
-   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -> "/a".
-   * <p>
-   * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
-   * <p>
-   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
-   * 
-   * @param aHttpRequest
-   *        current HTTP request
-   * @return the path within the servlet mapping, or ""
-   */
-  @Nonnull
-  public static String getPathWithinServlet (@Nonnull final HttpServletRequest aHttpRequest)
-  {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
-
-    final String sPathWithinApp = getPathWithinServletContext (aHttpRequest);
-    final String sServletPath = aHttpRequest.getServletPath ();
-    if (sPathWithinApp.startsWith (sServletPath))
-      return sPathWithinApp.substring (sServletPath.length ());
-
-    // Special case: URI is different from servlet path.
-    // Can happen e.g. with index page: URI="/", servletPath="/index.html"
-    // Use servlet path in this case, as it indicates the actual target path.
-    return sServletPath;
-  }
-
-  /**
    * Get the request URI without an eventually appended session
    * (";jsessionid=...")
+   * <table summary="Examples of Returned Values">
+   * <tr align=left>
+   * <th>First line of HTTP request</th>
+   * <th>Returned Value</th>
+   * <tr>
+   * <td>POST /some/path.html;JSESSIONID=4711</td>
+   * <td>/some/path.html</td>
+   * </tr>
+   * <tr>
+   * <td>GET http://foo.bar/a.html;JSESSIONID=4711</td>
+   * <td>/a.html</td>
+   * </tr>
+   * <tr>
+   * <td>HEAD /xyz;JSESSIONID=4711?a=b</td>
+   * <td>/xyz</td>
+   * </tr>
+   * </table>
    * 
    * @param aHttpRequest
    *        The HTTP request
@@ -145,7 +128,6 @@ public final class RequestHelper
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
 
-    final String sContextPath = aHttpRequest.getContextPath ();
     final String sRequestURI = getRequestURI (aHttpRequest);
     if (StringHelper.hasNoText (sRequestURI))
     {
@@ -154,12 +136,47 @@ public final class RequestHelper
       return "/";
     }
 
+    final String sContextPath = aHttpRequest.getContextPath ();
     if (!sRequestURI.startsWith (sContextPath))
       return sRequestURI;
 
     // Normal case: URI contains context path.
     final String sPath = sRequestURI.substring (sContextPath.length ());
     return sPath.length () > 0 ? sPath : "/";
+  }
+
+  /**
+   * Return the path within the servlet mapping for the given request, i.e. the
+   * part of the request's URL beyond the part that called the servlet, or "" if
+   * the whole URL has been used to identify the servlet.
+   * <p>
+   * Detects include request URL if called within a RequestDispatcher include.
+   * <p>
+   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -> "/a".
+   * <p>
+   * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
+   * <p>
+   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
+   * 
+   * @param aHttpRequest
+   *        current HTTP request
+   * @return the path within the servlet mapping, or ""
+   */
+  @Nonnull
+  public static String getPathWithinServlet (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    final String sPathWithinApp = getPathWithinServletContext (aHttpRequest);
+    final String sServletPath = aHttpRequest.getServletPath ();
+    if (sPathWithinApp.startsWith (sServletPath))
+      return sPathWithinApp.substring (sServletPath.length ());
+
+    // Special case: URI is different from servlet path.
+    // Can happen e.g. with index page: URI="/", servletPath="/index.html"
+    // Use servlet path in this case, as it indicates the actual target path.
+    return sServletPath;
   }
 
   /**
@@ -180,11 +197,11 @@ public final class RequestHelper
     if (aHttpRequest == null)
       throw new NullPointerException ("request");
 
-    final StringBuilder aReqUrl = new StringBuilder (aHttpRequest.getRequestURL ());
+    final String sReqUrl = aHttpRequest.getRequestURL ().toString ();
     final String sQueryString = aHttpRequest.getQueryString (); // d=789
     if (sQueryString != null)
-      aReqUrl.append ('?').append (sQueryString);
-    return aReqUrl.toString ();
+      return sReqUrl + "?" + sQueryString;
+    return sReqUrl;
   }
 
   /**
@@ -213,44 +230,29 @@ public final class RequestHelper
     return sReqUrl;
   }
 
-  /**
-   * Get the full URL (incl. protocol) and parameters of the passed request but
-   * by assembling all parameters manually.<br>
-   * 
-   * <pre>
-   * http://hostname.com:80/mywebapp/servlet/MyServlet/a/b;c=123?d=789
-   * </pre>
-   * 
-   * @param aHttpRequest
-   *        The request to use. May not be <code>null</code>.
-   * @return The full URL.
-   */
   @Nonnull
   @Nonempty
-  public static String getUrlExt (@Nonnull final HttpServletRequest aHttpRequest)
+  public static String getUrlString (@Nonnull final String sScheme,
+                                     @Nonnull final String sServerName,
+                                     final int nServerPort,
+                                     @Nullable final String sPath,
+                                     @Nullable final String sQueryString)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("request");
-
-    final String sScheme = aHttpRequest.getScheme (); // http
-    final String sServerName = aHttpRequest.getServerName (); // hostname.com
-    final int nServerPort = aHttpRequest.getServerPort (); // 80
-    final String sContextPath = aHttpRequest.getContextPath (); // /mywebapp
-    final String sServletPath = aHttpRequest.getServletPath (); // /servlet/MyServlet
-    final String sPathInfo = aHttpRequest.getPathInfo (); // /a/b;c=123
-    final String sQueryString = aHttpRequest.getQueryString (); // d=789
-
     int nDefaultPort = CWeb.DEFAULT_PORT_HTTP;
     if ("https".equals (sScheme))
       nDefaultPort = CWeb.DEFAULT_PORT_HTTPS;
 
-    // Reconstruct original requesting URL
+    // Reconstruct URL
     final StringBuilder aURL = new StringBuilder (sScheme).append ("://").append (sServerName);
     if (nServerPort != nDefaultPort)
       aURL.append (':').append (nServerPort);
-    aURL.append (sContextPath).append (sServletPath);
-    if (sPathInfo != null)
-      aURL.append (sPathInfo);
+
+    if (StringHelper.hasText (sPath))
+    {
+      if (!StringHelper.startsWith (sPath, '/'))
+        aURL.append ('/');
+      aURL.append (sPath);
+    }
     if (sQueryString != null)
       aURL.append ('?').append (sQueryString);
     return aURL.toString ();
@@ -281,23 +283,31 @@ public final class RequestHelper
     @SuppressWarnings ("unchecked")
     final Map <String, Object> aOriginalMap = aHttpRequest.getParameterMap ();
 
+    // For all parameters
     for (final Map.Entry <String, Object> aEntry : aOriginalMap.entrySet ())
     {
       final String sKey = aEntry.getKey ();
       final Object aValue = aEntry.getValue ();
       if (aValue instanceof String [])
       {
+        // It's an array value
         final String [] aArrayValue = (String []) aValue;
         if (aArrayValue.length > 1)
           aResult.put (sKey, aArrayValue);
         else
           if (aArrayValue.length == 1)
+          {
+            // Flatten array to String
             aResult.put (sKey, aArrayValue[0]);
+          }
           else
             aResult.put (sKey, "");
       }
       else
+      {
+        // It's a single value
         aResult.put (sKey, aValue);
+      }
     }
     return aResult;
   }

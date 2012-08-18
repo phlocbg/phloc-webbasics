@@ -25,11 +25,13 @@ import java.util.Set;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.AbstractReadonlyAttributeContainer;
@@ -51,9 +53,11 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author philip
  */
+@Immutable
 public final class RequestParamMap implements IRequestParamMap
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestParamMap.class);
+
   private final Map <String, Object> m_aMap;
 
   public RequestParamMap ()
@@ -165,6 +169,7 @@ public final class RequestParamMap implements IRequestParamMap
   }
 
   @Nullable
+  @ReturnsMutableCopy
   public IRequestParamMap getMap (@Nonnull final String... aPath)
   {
     if (aPath == null)
@@ -220,6 +225,7 @@ public final class RequestParamMap implements IRequestParamMap
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public Map <String, String> asValueMap ()
   {
     final Map <String, String> ret = new HashMap <String, String> (m_aMap.size ());
