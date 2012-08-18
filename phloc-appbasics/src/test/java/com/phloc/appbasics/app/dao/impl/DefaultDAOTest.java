@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.app.dao;
+package com.phloc.appbasics.app.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,6 +30,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
+import com.phloc.appbasics.app.dao.IDAODataProvider;
+import com.phloc.appbasics.app.dao.impl.DAOException;
+import com.phloc.appbasics.app.dao.impl.DefaultDAO;
 import com.phloc.appbasics.app.io.ConstantHasFilename;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebIO;

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.app.dao;
+package com.phloc.appbasics.app.dao.impl;
 
 import java.io.InputStream;
 
@@ -26,6 +26,10 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.dao.IDAODataProvider;
+import com.phloc.appbasics.app.dao.IDAOIO;
+import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
+import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -56,7 +60,7 @@ public class DefaultDAO extends AbstractDAO
   /** The main provider to handle the content specific parts */
   private final IDAODataProvider m_aDataProvider;
 
-  private final WebDAOIO m_aIO = new WebDAOIO ();
+  private final IDAOIO m_aIO = new WebDAOIO ();
 
   /** Number of backup files to keep. */
   private final int m_nBackupCount;
@@ -90,7 +94,7 @@ public class DefaultDAO extends AbstractDAO
     return m_aDataProvider;
   }
 
-  protected final WebDAOIO getIO ()
+  protected final IDAOIO getIO ()
   {
     return m_aIO;
   }

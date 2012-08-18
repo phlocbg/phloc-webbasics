@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.app.dao;
+package com.phloc.appbasics.app.dao.impl;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -23,6 +23,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.dao.IDAO;
+import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
+import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;

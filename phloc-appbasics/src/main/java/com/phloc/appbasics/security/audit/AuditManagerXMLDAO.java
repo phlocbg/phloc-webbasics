@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.app.dao.AbstractXMLDAODataProvider;
+import com.phloc.appbasics.app.dao.impl.AbstractXMLDAODataProvider;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.state.EChange;

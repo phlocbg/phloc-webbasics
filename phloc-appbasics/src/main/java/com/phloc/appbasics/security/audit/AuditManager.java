@@ -23,8 +23,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import com.phloc.appbasics.app.dao.AbstractXMLDAO;
-import com.phloc.appbasics.app.dao.DAOException;
+import com.phloc.appbasics.app.dao.impl.AbstractXMLDAO;
+import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;

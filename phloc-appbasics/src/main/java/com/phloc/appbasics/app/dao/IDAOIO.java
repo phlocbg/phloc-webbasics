@@ -17,22 +17,25 @@
  */
 package com.phloc.appbasics.app.dao;
 
-import com.phloc.commons.exceptions.LoggedException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
-/**
- * Special exception class for DAO read/write errors.
- * 
- * @author philip
- */
-public final class DAOException extends LoggedException
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.state.ESuccess;
+
+public interface IDAOIO
 {
-  public DAOException (final String sMsg)
-  {
-    super (sMsg);
-  }
+  @Nullable
+  InputStream openInputStream (@Nullable String sFilename);
 
-  public DAOException (final String sMsg, final Throwable t)
-  {
-    super (sMsg, t);
-  }
+  @Nonnull
+  IReadableResource getReadableResource (String sFilename);
+
+  void renameFile (String sSrcFileName, String sDstFileName);
+
+  @Nonnull
+  ESuccess saveFile (String sFilename, String sContent, Charset aCharset);
 }

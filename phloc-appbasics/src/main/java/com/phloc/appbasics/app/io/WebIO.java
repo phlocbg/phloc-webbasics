@@ -230,6 +230,18 @@ public final class WebIO
   }
 
   @Nonnull
+  public static ISuccessIndicator deleteFileIfExisting (@Nonnull final String sFilename)
+  {
+    return deleteFileIfExisting (getWritableFile (sFilename));
+  }
+
+  @Nonnull
+  public static ISuccessIndicator deleteFileIfExisting (@Nonnull final File aFile)
+  {
+    return s_aFileOpMgr.deleteFileIfExisting (aFile);
+  }
+
+  @Nonnull
   public static ISuccessIndicator deleteDirectory (@Nonnull final File fDir, final boolean bDeleteContent)
   {
     return bDeleteContent ? s_aFileOpMgr.deleteDirRecursive (fDir) : s_aFileOpMgr.deleteDir (fDir);
