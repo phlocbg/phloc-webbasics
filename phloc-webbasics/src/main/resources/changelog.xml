@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2012-08-17" version="1.8.0" />
   <entry date="2012-08-17" category="api" action="add">
     <change>
       <text locale="en">Added GZip filter for easy response GZipping</text>

@@ -41,8 +41,9 @@ public class WebBasicTestRule extends WebScopeTestRule
   @Override
   protected void initListener ()
   {
-    MockHttpListener.removeAllListeners ();
-    MockHttpListener.addListener (new WebAppListener ());
-    MockHttpListener.addListener (new MockServletRequestListener ());
+    MockHttpListener.removeAllDefaultListeners ();
+    MockHttpListener.addDefaultListener (new WebAppListener ());
+    MockHttpListener.addDefaultListener (new MockServletRequestListener ());
+    MockHttpListener.setToDefault ();
   }
 }

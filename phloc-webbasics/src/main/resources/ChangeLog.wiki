@@ -1,7 +1,9 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>8/15/12</td><td>change</td><td>api</td><td>*yes*</td><td>Removed abstract test case class and using WebBasicTestRule instead</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/17/12</td><td colspan="4">_Release *1.8.0*_</td></tr>
+<tr><td>8/17/12</td><td>add</td><td>api</td><td></td><td>Added GZip filter for easy response GZipping</td></tr>
+<tr><td>8/15/12</td><td>change</td><td>api</td><td>*yes*</td><td>Removed abstract test case class and using WebBasicTestRule instead</td></tr>
 <tr><td>8/14/12</td><td>add</td><td>api</td><td></td><td>Added many classes to package 'web' which handle request/response issues</td></tr>
 <tr><td>8/14/12</td><td>add</td><td>api</td><td></td><td>Added new package 'http' with some commonly required HTTP utility routines</td></tr>
 <tr border="1"><td>8/13/12</td><td colspan="4">_Release *1.7.2*_</td></tr>
