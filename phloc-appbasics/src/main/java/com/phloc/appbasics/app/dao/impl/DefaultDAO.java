@@ -110,13 +110,16 @@ public class DefaultDAO extends AbstractDAO
     {
       // required for testing
       s_aLogger.error ("This DAO of class " + getClass ().getName () + " will not be able to read from a file");
+
+      // do not return, in case "openInputStream" has a special solution for
+      // null filenames...
     }
 
     boolean bIsInitialization = true;
     EChange eChange;
     try
     {
-      if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
+      if (GlobalDebug.isDebugMode ())
         s_aLogger.info ("Trying to read DAO file '" + sFilename + "'");
 
       final InputStream aIS = m_aIO.openInputStream (sFilename);
@@ -129,7 +132,7 @@ public class DefaultDAO extends AbstractDAO
           return;
         }
 
-        if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
+        if (GlobalDebug.isDebugMode ())
           s_aLogger.info ("Initializing DAO for file '" + sFilename + "'");
 
         // The file was not yet found - run initialization
@@ -250,7 +253,7 @@ public class DefaultDAO extends AbstractDAO
       return ESuccess.FAILURE;
     }
 
-    if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
+    if (GlobalDebug.isDebugMode ())
       s_aLogger.info ("Trying to write DAO file '" + sFilename + "'");
 
     // Check for a filename change before writing
@@ -270,7 +273,10 @@ public class DefaultDAO extends AbstractDAO
       final String sContent = aFileContent.toString ();
       if (!m_aDataProvider.isContentValidForSaving (sContent))
       {
-        s_aLogger.warn ("Data provider stopped saving data to file '" + sFilename + "'");
+        s_aLogger.warn ("Data provider stopped saving data to file '" +
+                        sFilename +
+                        "'. Created content was:\n" +
+                        sContent);
         return ESuccess.FAILURE;
       }
 
