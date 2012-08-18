@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import com.phloc.appbasics.app.AbstractDAO;
+import com.phloc.appbasics.app.dao.AbstractDAO;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.user.IUserManager;
