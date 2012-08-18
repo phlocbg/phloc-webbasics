@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.IHasFilename;
-import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
@@ -67,6 +66,8 @@ public class DefaultDAO implements IDAO
 
   /** The main provider to handle the content specific parts */
   private final IDAODataProvider m_aDataProvider;
+
+  private final WebDAOIO m_aIO = new WebDAOIO ();
 
   /** Number of backup files to keep. */
   private final int m_nBackupCount;
@@ -174,18 +175,9 @@ public class DefaultDAO implements IDAO
     return m_aDataProvider;
   }
 
-  /**
-   * @return Overwrite this only if you know what you're doing.
-   */
-  @OverrideOnDemand
-  @Nullable
-  protected InputStream openInputStream (@Nullable final String sFilename)
+  protected final WebDAOIO getIO ()
   {
-    // we're not operating on a file!
-    if (sFilename == null)
-      return null;
-
-    return WebIO.getInputStream (sFilename, false);
+    return m_aIO;
   }
 
   /**
@@ -208,7 +200,7 @@ public class DefaultDAO implements IDAO
       if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
         s_aLogger.info ("Trying to read DAO file '" + sFilename + "'");
 
-      final InputStream aIS = openInputStream (sFilename);
+      final InputStream aIS = m_aIO.openInputStream (sFilename);
       if (aIS == null)
       {
         // Failed to open file
@@ -295,7 +287,7 @@ public class DefaultDAO implements IDAO
       final IDAOReadExceptionHandler aExceptionHandlerRead = getCustomExceptionHandlerRead ();
       if (aExceptionHandlerRead != null)
       {
-        final IReadableResource aRes = sFilename == null ? null : WebIO.getReadableResource (sFilename);
+        final IReadableResource aRes = sFilename == null ? null : m_aIO.getReadableResource (sFilename);
         try
         {
           aExceptionHandlerRead.onDAOReadException (t, bIsInitialization, aRes);
@@ -409,17 +401,17 @@ public class DefaultDAO implements IDAO
   protected void onFilenameChange ()
   {}
 
-  private static void _safeRename (@Nonnull final String sSrcFileName, @Nonnull final String sDstFileName)
+  private void _safeRename (@Nonnull final String sSrcFileName, @Nonnull final String sDstFileName)
   {
-    if (WebIO.resourceExists (sSrcFileName))
+    if (m_aIO.resourceExists (sSrcFileName))
     {
       // if there is already a backup file, delete it
-      if (WebIO.resourceExists (sDstFileName) && WebIO.deleteFile (sDstFileName).isFailure ())
+      if (m_aIO.resourceExists (sDstFileName) && m_aIO.deleteFile (sDstFileName).isFailure ())
         s_aLogger.error ("Failed to delete existing file '" + sDstFileName + "'");
       else
       {
         // and rename existing file to backup file
-        if (WebIO.renameFile (sSrcFileName, sDstFileName).isFailure ())
+        if (m_aIO.renameFile (sSrcFileName, sDstFileName).isFailure ())
           s_aLogger.error ("Failed to rename file '" + sSrcFileName + "' to '" + sDstFileName + "'");
       }
     }
@@ -477,7 +469,7 @@ public class DefaultDAO implements IDAO
           _safeRename (sFilename + "." + (i - 1), sFilename + "." + i);
 
       // write to file
-      return WebIO.saveFile (sFilename, sContent, m_aDataProvider.getCharset ());
+      return m_aIO.saveFile (sFilename, sContent, m_aDataProvider.getCharset ());
     }
     catch (final Throwable t)
     {
@@ -486,7 +478,7 @@ public class DefaultDAO implements IDAO
       final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
       if (aExceptionHandlerWrite != null)
       {
-        final IReadableResource aRes = WebIO.getReadableResource (sFilename);
+        final IReadableResource aRes = m_aIO.getReadableResource (sFilename);
         try
         {
           aExceptionHandlerWrite.onDAOWriteException (t, aRes, aFileContent);

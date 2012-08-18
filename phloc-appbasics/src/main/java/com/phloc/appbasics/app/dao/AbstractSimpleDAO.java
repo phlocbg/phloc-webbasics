@@ -24,6 +24,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.callback.AdapterRunnableToCallable;
+import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.FileUtils;
@@ -45,7 +48,7 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 
-public abstract class AbstractSimpleDAO
+public abstract class AbstractSimpleDAO implements IDAO
 {
   public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
@@ -190,12 +193,16 @@ public abstract class AbstractSimpleDAO
    * @param bAutoSaveEnabled
    *        The new auto save state.
    */
-  public final void setAutoSaveEnabled (final boolean bAutoSaveEnabled)
+  @Nonnull
+  public final EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
   {
     m_aRWLock.writeLock ().lock ();
     try
     {
+      if (m_bAutoSaveEnabled == bAutoSaveEnabled)
+        return EChange.UNCHANGED;
       m_bAutoSaveEnabled = bAutoSaveEnabled;
+      return EChange.CHANGED;
     }
     finally
     {
@@ -261,38 +268,49 @@ public abstract class AbstractSimpleDAO
   }
 
   /**
-   * Run a set of bulk operations with disabled auto save. After the actions,
-   * the original state of auto save is restored. After the actions, all pending
-   * changes are written to disk.
+   * Execute a callback with autosave being disabled. Must be called outside a
+   * writeLock, as this method locks itself!
    * 
-   * @param aCallback
-   *        The callback performing the operations. May not be <code>null</code>
-   *        .
+   * @param aRunnable
+   *        The callback to be executed
    */
-  public final void runWithoutAutoSave (@Nonnull final INonThrowingRunnable aCallback)
+  public final void performWithoutAutoSave (@Nonnull final INonThrowingRunnable aRunnable)
   {
-    if (aCallback == null)
-      throw new NullPointerException ("callback");
+    performWithoutAutoSave (AdapterRunnableToCallable.createAdapter (aRunnable));
+  }
 
+  /**
+   * Execute a callback with autosave being disabled. Must be called outside a
+   * writeLock, as this method locks itself!
+   * 
+   * @param aCallable
+   *        The callback to be executed
+   * @return The result of the callback
+   */
+  @Nullable
+  public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
+  {
     m_aRWLock.writeLock ().lock ();
     try
     {
+      // Save old auto save state
       final boolean bOldAutoSave = m_bAutoSaveEnabled;
       m_bAutoSaveEnabled = false;
       try
       {
-        aCallback.run ();
+        return aCallable.call ();
       }
       finally
       {
+        // Restore old auto save
         m_bAutoSaveEnabled = bOldAutoSave;
+        // And in case something was changed
+        writeToFileOnPendingChanges ();
       }
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
-
-    writeToFileOnPendingChanges ();
   }
 }
