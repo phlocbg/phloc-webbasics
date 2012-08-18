@@ -33,13 +33,11 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 
 /**
  * Default implementation of a locking manager.
@@ -47,24 +45,21 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
  * @author philip
  */
 @ThreadSafe
-public class DefaultLockManager extends GlobalSingleton
+public class DefaultLockManager
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultLockManager.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  private final ICurrentUserIDProvider m_aCurrentUserIDProvider;
 
-  // Key: lockedObjectID
+  // Key: lockedObjectID, value: lock-info
   private final Map <String, ILockInfo> m_aLockedObjs = new HashMap <String, ILockInfo> ();
 
-  @Deprecated
-  @UsedViaReflection
-  public DefaultLockManager ()
-  {}
-
-  @Nonnull
-  public static DefaultLockManager getInstance ()
+  public DefaultLockManager (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
   {
-    return getGlobalSingleton (DefaultLockManager.class);
+    if (aCurrentUserIDProvider == null)
+      throw new NullPointerException ("currentUserIDProvider");
+    m_aCurrentUserIDProvider = aCurrentUserIDProvider;
   }
 
   /**
@@ -119,12 +114,6 @@ public class DefaultLockManager extends GlobalSingleton
     return aLock != null ? aLock.getLockDateTime () : null;
   }
 
-  @Nullable
-  private static String _getCurrentUserID ()
-  {
-    return LoggedInUserManager.getInstance ().getCurrentUserID ();
-  }
-
   /**
    * Lock the object with the given ID. If the passed object is already locked
    * by this user, this method has no effect. This is an atomic action.
@@ -141,7 +130,7 @@ public class DefaultLockManager extends GlobalSingleton
     if (sObjID == null)
       throw new NullPointerException ("objID");
 
-    final String sUserID = _getCurrentUserID ();
+    final String sUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -180,7 +169,7 @@ public class DefaultLockManager extends GlobalSingleton
   @Nonnull
   public final EChange unlockObject (@Nonnull final String sObjID)
   {
-    return unlockObject (_getCurrentUserID (), sObjID);
+    return unlockObject (m_aCurrentUserIDProvider.getCurrentUserID (), sObjID);
   }
 
   /**
@@ -247,7 +236,7 @@ public class DefaultLockManager extends GlobalSingleton
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfCurrentUser ()
   {
-    return unlockAllObjectsOfUser (_getCurrentUserID ());
+    return unlockAllObjectsOfUser (m_aCurrentUserIDProvider.getCurrentUserID ());
   }
 
   /**
@@ -262,27 +251,30 @@ public class DefaultLockManager extends GlobalSingleton
   public final List <String> unlockAllObjectsOfUser (@Nullable final String sUserID)
   {
     final List <String> aObjectsToUnlock = new ArrayList <String> ();
-    m_aRWLock.writeLock ().lock ();
-    try
+    if (sUserID != null)
     {
-      // determine objects to be removed
-      for (final Map.Entry <String, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
-        if (aEntry.getValue ().getLockUserID ().equals (sUserID))
-          aObjectsToUnlock.add (aEntry.getKey ());
+      m_aRWLock.writeLock ().lock ();
+      try
+      {
+        // determine objects to be removed
+        for (final Map.Entry <String, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
+          if (aEntry.getValue ().getLockUserID ().equals (sUserID))
+            aObjectsToUnlock.add (aEntry.getKey ());
 
-      // remove locks
-      for (final String sObjectID : aObjectsToUnlock)
-        if (m_aLockedObjs.remove (sObjectID) == null)
-          throw new IllegalStateException ("Internal inconsistency: failed to unlock " + aObjectsToUnlock);
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+        // remove locks
+        for (final String sObjectID : aObjectsToUnlock)
+          if (m_aLockedObjs.remove (sObjectID) == null)
+            throw new IllegalStateException ("Internal inconsistency: failed to unlock " + aObjectsToUnlock);
+      }
+      finally
+      {
+        m_aRWLock.writeLock ().unlock ();
+      }
 
-    if (!aObjectsToUnlock.isEmpty ())
-      if (s_aLogger.isInfoEnabled ())
-        s_aLogger.info ("Unlocked all objects of user '" + sUserID + "': " + aObjectsToUnlock);
+      if (!aObjectsToUnlock.isEmpty ())
+        if (s_aLogger.isInfoEnabled ())
+          s_aLogger.info ("Unlocked all objects of user '" + sUserID + "': " + aObjectsToUnlock);
+    }
     return aObjectsToUnlock;
   }
 
@@ -297,7 +289,8 @@ public class DefaultLockManager extends GlobalSingleton
    */
   public final boolean isObjectLockedByCurrentUser (@Nullable final String sObjID)
   {
-    return _getCurrentUserID ().equals (getLockUserID (sObjID));
+    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    return sCurrentUserID.equals (getLockUserID (sObjID));
   }
 
   /**
@@ -313,7 +306,7 @@ public class DefaultLockManager extends GlobalSingleton
   public final boolean isObjectLockedByOtherUser (@Nullable final String sObjID)
   {
     final String sLockUser = getLockUserID (sObjID);
-    return sLockUser != null && !_getCurrentUserID ().equals (sLockUser);
+    return sLockUser != null && !m_aCurrentUserIDProvider.getCurrentUserID ().equals (sLockUser);
   }
 
   /**
@@ -347,6 +340,8 @@ public class DefaultLockManager extends GlobalSingleton
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("lockedObjects", m_aLockedObjs).toString ();
+    return new ToStringGenerator (this).append ("currentUserIDProvider", m_aCurrentUserIDProvider)
+                                       .append ("lockedObjects", m_aLockedObjs)
+                                       .toString ();
   }
 }
