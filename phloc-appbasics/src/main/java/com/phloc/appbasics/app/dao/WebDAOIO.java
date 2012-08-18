@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.state.ESuccess;
-import com.phloc.commons.state.ISuccessIndicator;
 
 public class WebDAOIO
 {
@@ -25,7 +24,7 @@ public class WebDAOIO
     if (sFilename == null)
       return null;
 
-    return WebIO.getInputStream (sFilename, false);
+    return getReadableResource (sFilename).getInputStream ();
   }
 
   public IReadableResource getReadableResource (final String sFilename)
@@ -33,23 +32,25 @@ public class WebDAOIO
     return WebIO.getReadableResource (sFilename);
   }
 
-  public boolean resourceExists (final String sFilename)
+  public void renameFile (final String sSrcFileName, final String sDstFileName)
   {
-    return WebIO.resourceExists (sFilename);
-  }
-
-  public ISuccessIndicator renameFile (final String sSrcFileName, final String sDstFileName)
-  {
-    return WebIO.renameFile (sSrcFileName, sDstFileName);
+    if (WebIO.resourceExists (sSrcFileName))
+    {
+      // if there is already a backup file, delete it
+      if (WebIO.resourceExists (sDstFileName) && WebIO.deleteFile (sDstFileName).isFailure ())
+      {
+        // Weird...
+      }
+      else
+      {
+        // and rename existing file to backup file
+        WebIO.renameFile (sSrcFileName, sDstFileName);
+      }
+    }
   }
 
   public ESuccess saveFile (final String sFilename, final String sContent, final Charset aCharset)
   {
     return WebIO.saveFile (sFilename, sContent, aCharset);
-  }
-
-  public ISuccessIndicator deleteFile (final String sFilename)
-  {
-    return WebIO.deleteFile (sFilename);
   }
 }

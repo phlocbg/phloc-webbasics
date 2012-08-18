@@ -18,12 +18,9 @@
 package com.phloc.appbasics.app.dao;
 
 import java.io.InputStream;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -32,9 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
-import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IReadableResource;
@@ -50,16 +45,10 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @ThreadSafe
-public class DefaultDAO implements IDAO
+public class DefaultDAO extends AbstractDAO
 {
   public static final int DEFAULT_BACKUP_COUNT = 3;
-  protected static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultDAO.class);
-
-  private static IDAOReadExceptionHandler s_aExceptionHandlerRead;
-  private static IDAOWriteExceptionHandler s_aExceptionHandlerWrite;
-
-  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
 
   /** The file from which we read/to which we write */
   private final IHasFilename m_aFilenameProvider;
@@ -71,12 +60,6 @@ public class DefaultDAO implements IDAO
 
   /** Number of backup files to keep. */
   private final int m_nBackupCount;
-
-  /** are there any pending changes? */
-  private boolean m_bPendingChanges = false;
-
-  /** is automatic saving enabled? */
-  private boolean m_bAutoSaveEnabled = true;
 
   private String m_sPreviousFilename;
 
@@ -99,74 +82,6 @@ public class DefaultDAO implements IDAO
     m_aDataProvider = aDataProvider;
     m_nBackupCount = nBackupCount;
     m_sPreviousFilename = aFilenameProvider.getFilename ();
-  }
-
-  /**
-   * Set a custom exception handler that is called in case reading a file fails.
-   * 
-   * @param aExceptionHandler
-   *        The exception handler to be set. May be <code>null</code> to
-   *        indicate no custom exception handler.
-   */
-  public static final void setCustomExceptionHandlerRead (@Nullable final IDAOReadExceptionHandler aExceptionHandler)
-  {
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      s_aExceptionHandlerRead = aExceptionHandler;
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  @Nullable
-  public static final IDAOReadExceptionHandler getCustomExceptionHandlerRead ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      return s_aExceptionHandlerRead;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * Set a custom exception handler that is called in case writing a file fails.
-   * 
-   * @param aExceptionHandler
-   *        The exception handler to be set. May be <code>null</code> to
-   *        indicate no custom exception handler.
-   */
-  public static final void setCustomExceptionHandlerWrite (@Nullable final IDAOWriteExceptionHandler aExceptionHandler)
-  {
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      s_aExceptionHandlerWrite = aExceptionHandler;
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  @Nullable
-  public static final IDAOWriteExceptionHandler getCustomExceptionHandlerWrite ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      return s_aExceptionHandlerWrite;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
   }
 
   @Nonnull
@@ -303,96 +218,6 @@ public class DefaultDAO implements IDAO
     }
   }
 
-  public final boolean hasPendingChanges ()
-  {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_bPendingChanges;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  public final boolean isAutoSaveEnabled ()
-  {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_bAutoSaveEnabled;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  @Nonnull
-  public final EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (bAutoSaveEnabled == m_bAutoSaveEnabled)
-        return EChange.UNCHANGED;
-      m_bAutoSaveEnabled = bAutoSaveEnabled;
-      return EChange.CHANGED;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  /**
-   * Execute a callback with autosave being disabled. Must be called outside a
-   * writeLock, as this method locks itself!
-   * 
-   * @param aRunnable
-   *        The callback to be executed
-   */
-  public final void performWithoutAutoSave (@Nonnull final INonThrowingRunnable aRunnable)
-  {
-    performWithoutAutoSave (AdapterRunnableToCallable.createAdapter (aRunnable));
-  }
-
-  /**
-   * Execute a callback with autosave being disabled. Must be called outside a
-   * writeLock, as this method locks itself!
-   * 
-   * @param aCallable
-   *        The callback to be executed
-   * @return The result of the callback
-   */
-  @Nullable
-  public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      // Save old auto save state
-      final boolean bOldAutoSave = m_bAutoSaveEnabled;
-      m_bAutoSaveEnabled = false;
-      try
-      {
-        return aCallable.call ();
-      }
-      finally
-      {
-        // Restore old auto save
-        m_bAutoSaveEnabled = bOldAutoSave;
-        // And in case something was changed
-        _internalWriteToFileOnPendingChanges ();
-      }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-  }
-
   /**
    * Called after a successful write of the file, if the filename is different
    * from the previous filename. This can e.g. be used to clear old data.
@@ -400,22 +225,6 @@ public class DefaultDAO implements IDAO
   @OverrideOnDemand
   protected void onFilenameChange ()
   {}
-
-  private void _safeRename (@Nonnull final String sSrcFileName, @Nonnull final String sDstFileName)
-  {
-    if (m_aIO.resourceExists (sSrcFileName))
-    {
-      // if there is already a backup file, delete it
-      if (m_aIO.resourceExists (sDstFileName) && m_aIO.deleteFile (sDstFileName).isFailure ())
-        s_aLogger.error ("Failed to delete existing file '" + sDstFileName + "'");
-      else
-      {
-        // and rename existing file to backup file
-        if (m_aIO.renameFile (sSrcFileName, sDstFileName).isFailure ())
-          s_aLogger.error ("Failed to rename file '" + sSrcFileName + "' to '" + sDstFileName + "'");
-      }
-    }
-  }
 
   /**
    * Overwrite the file passed in the constructor and save the current state. In
@@ -464,9 +273,9 @@ public class DefaultDAO implements IDAO
       // rename old files to have a backup
       for (int i = m_nBackupCount; i > 0; --i)
         if (i == 1)
-          _safeRename (sFilename, sFilename + "." + i);
+          m_aIO.renameFile (sFilename, sFilename + "." + i);
         else
-          _safeRename (sFilename + "." + (i - 1), sFilename + "." + i);
+          m_aIO.renameFile (sFilename + "." + (i - 1), sFilename + "." + i);
 
       // write to file
       return m_aIO.saveFile (sFilename, sContent, m_aDataProvider.getCharset ());

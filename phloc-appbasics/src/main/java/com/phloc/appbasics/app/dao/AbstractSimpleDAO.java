@@ -20,11 +20,8 @@ package com.phloc.appbasics.app.dao;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.Locale;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.callback.AdapterRunnableToCallable;
-import com.phloc.commons.callback.INonThrowingCallable;
-import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -48,15 +42,11 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 
-public abstract class AbstractSimpleDAO implements IDAO
+public abstract class AbstractSimpleDAO extends AbstractDAO
 {
-  public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
 
-  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final File m_aFile;
-  private boolean m_bPendingChanges = false;
-  private boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
 
   protected AbstractSimpleDAO (@Nonnull @Nonempty final String sFilename)
   {
@@ -170,46 +160,6 @@ public abstract class AbstractSimpleDAO implements IDAO
       s_aLogger.warn ("File has pending changes after initialization!");
   }
 
-  /**
-   * @return <code>true</code> if auto save is enabled, <code>false</code>
-   *         otherwise.
-   */
-  public final boolean isAutoSaveEnabled ()
-  {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_bAutoSaveEnabled;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * Enable or disable auto save. Does not trigger any file writing operations.
-   * 
-   * @param bAutoSaveEnabled
-   *        The new auto save state.
-   */
-  @Nonnull
-  public final EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (m_bAutoSaveEnabled == bAutoSaveEnabled)
-        return EChange.UNCHANGED;
-      m_bAutoSaveEnabled = bAutoSaveEnabled;
-      return EChange.CHANGED;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-  }
-
   // Must be called in a writeLock!
   protected final void markAsChanged ()
   {
@@ -225,22 +175,6 @@ public abstract class AbstractSimpleDAO implements IDAO
     {
       // Just remember that something changed
       m_bPendingChanges = true;
-    }
-  }
-
-  /**
-   * @return <code>true</code> if unsaved changes are present
-   */
-  public boolean hasPendingChanges ()
-  {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_bPendingChanges;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
     }
   }
 
@@ -264,53 +198,6 @@ public abstract class AbstractSimpleDAO implements IDAO
       {
         m_aRWLock.writeLock ().unlock ();
       }
-    }
-  }
-
-  /**
-   * Execute a callback with autosave being disabled. Must be called outside a
-   * writeLock, as this method locks itself!
-   * 
-   * @param aRunnable
-   *        The callback to be executed
-   */
-  public final void performWithoutAutoSave (@Nonnull final INonThrowingRunnable aRunnable)
-  {
-    performWithoutAutoSave (AdapterRunnableToCallable.createAdapter (aRunnable));
-  }
-
-  /**
-   * Execute a callback with autosave being disabled. Must be called outside a
-   * writeLock, as this method locks itself!
-   * 
-   * @param aCallable
-   *        The callback to be executed
-   * @return The result of the callback
-   */
-  @Nullable
-  public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      // Save old auto save state
-      final boolean bOldAutoSave = m_bAutoSaveEnabled;
-      m_bAutoSaveEnabled = false;
-      try
-      {
-        return aCallable.call ();
-      }
-      finally
-      {
-        // Restore old auto save
-        m_bAutoSaveEnabled = bOldAutoSave;
-        // And in case something was changed
-        writeToFileOnPendingChanges ();
-      }
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
     }
   }
 }
