@@ -177,9 +177,16 @@ public final class ResponseHelper
     if (aOS == null)
       throw new NullPointerException ("outputStream");
 
-    // Manually necessary :(
+    // Manually finish them (even though it seems, that finish is called anyway
+    // in the close method)
     if (aOS instanceof GZIPOutputStream)
       ((GZIPOutputStream) aOS).finish ();
+    else
+      if (aOS instanceof ZipOutputStream)
+      {
+        // finish calls closeEntry internally
+        ((ZipOutputStream) aOS).finish ();
+      }
 
     aOS.flush ();
     aOS.close ();
