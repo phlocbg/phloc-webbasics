@@ -27,9 +27,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.charset.CharsetManager;
+import com.phloc.commons.string.StringParser;
 
 /**
  * Special servlet filter that applies a certain encoding to a request and a
@@ -39,18 +44,46 @@ import com.phloc.commons.charset.CCharset;
  */
 public class CharacterEncodingFilter implements Filter
 {
+  public static final String FILTER_INITPARAM_ENCODING = "encoding";
+  public static final String FILTER_INITPARAM_FORCE_ENCODING = "forceEncoding";
   public static final String DEFAULT_ENCODING = CCharset.CHARSET_UTF_8;
+  public static final boolean DEFAULT_FORCE_ENCODING = false;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CharacterEncodingFilter.class);
+
+  private String m_sEncoding = DEFAULT_ENCODING;
+  private boolean m_bForceEncoding = DEFAULT_FORCE_ENCODING;
 
   @OverrideOnDemand
   @Nonnull
   @Nonempty
   protected String getEncoding ()
   {
-    return DEFAULT_ENCODING;
+    return m_sEncoding;
+  }
+
+  @OverrideOnDemand
+  protected boolean isForceEncoding ()
+  {
+    return m_bForceEncoding;
   }
 
   public void init (@Nonnull final FilterConfig aFilterConfig) throws ServletException
-  {}
+  {
+    // encoding
+    final String sEncoding = aFilterConfig.getInitParameter (FILTER_INITPARAM_ENCODING);
+    if (sEncoding != null)
+    {
+      if (CharsetManager.getCharsetFromName (sEncoding) != null)
+        m_sEncoding = sEncoding;
+      else
+        s_aLogger.error ("The supplied encoding '" + sEncoding + "' is not supported!");
+    }
+
+    // force encoding?
+    final String sForceEncoding = aFilterConfig.getInitParameter (FILTER_INITPARAM_FORCE_ENCODING);
+    if (sForceEncoding != null)
+      m_bForceEncoding = StringParser.parseBool (sForceEncoding);
+  }
 
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,
@@ -58,9 +91,11 @@ public class CharacterEncodingFilter implements Filter
   {
     final String sEncoding = getEncoding ();
     // We need this for all form data etc.
-    if (aRequest.getCharacterEncoding () == null)
+    if (aRequest.getCharacterEncoding () == null || isForceEncoding ())
       aRequest.setCharacterEncoding (sEncoding);
     aResponse.setCharacterEncoding (sEncoding);
+
+    // Next filter in the chain
     aChain.doFilter (aRequest, aResponse);
   }
 
