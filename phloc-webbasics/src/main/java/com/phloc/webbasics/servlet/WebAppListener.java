@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -69,11 +70,18 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     VirtualMachineInitializer.runInitialization ();
   }
 
-  public static final String INIT_PARAMETER_TRACE = "trace";
-  public static final String INIT_PARAMETER_DEBUG = "debug";
-  public static final String INIT_PARAMETER_PRODUCTION = "production";
+  public static final String DEFAULT_INIT_PARAMETER_TRACE = "trace";
+  @Deprecated
+  public static final String INIT_PARAMETER_TRACE = DEFAULT_INIT_PARAMETER_TRACE;
+  public static final String DEFAULT_INIT_PARAMETER_DEBUG = "debug";
+  @Deprecated
+  public static final String INIT_PARAMETER_DEBUG = DEFAULT_INIT_PARAMETER_DEBUG;
+  public static final String DEFAULT_INIT_PARAMETER_PRODUCTION = "production";
+  @Deprecated
+  public static final String INIT_PARAMETER_PRODUCTION = DEFAULT_INIT_PARAMETER_PRODUCTION;
   public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
   public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
+  protected static final String ID_FILENAME = "persistent_id.dat";
 
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
@@ -153,13 +161,13 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
   protected final void logJMX ()
   {
-    if (SystemProperties.getPropertyValue ("com.sun.management.jmxremote") != null)
+    if (SystemProperties.getPropertyValueOrNull ("com.sun.management.jmxremote") != null)
     {
-      final String sPort = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.port");
-      final String sSSL = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.ssl");
-      final String sAuthenticate = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.authenticate");
-      final String sPasswordFile = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.password.file");
-      final String sAccessFile = SystemProperties.getPropertyValue ("com.sun.management.jmxremote.access.file");
+      final String sPort = SystemProperties.getPropertyValueOrNull ("com.sun.management.jmxremote.port");
+      final String sSSL = SystemProperties.getPropertyValueOrNull ("com.sun.management.jmxremote.ssl");
+      final String sAuthenticate = SystemProperties.getPropertyValueOrNull ("com.sun.management.jmxremote.authenticate");
+      final String sPasswordFile = SystemProperties.getPropertyValueOrNull ("com.sun.management.jmxremote.password.file");
+      final String sAccessFile = SystemProperties.getPropertyValueOrNull ("com.sun.management.jmxremote.access.file");
       s_aLogger.info ("Remote JMX is enabled!");
       if (sPort != null)
         s_aLogger.info ("  Port=" + sPort);
@@ -194,13 +202,6 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   protected void beforeContextInitialized (@Nonnull final ServletContext aSC)
   {}
 
-  @OverrideOnDemand
-  protected void initGlobalIDFactory ()
-  {
-    // Set persistent ID provider: file based
-    GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory ("persistent_id.dat"));
-  }
-
   /**
    * Callback after init
    * 
@@ -211,14 +212,75 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   protected void afterContextInitialized (@Nonnull final ServletContext aSC)
   {}
 
+  /**
+   * Get the value of the servlet context init-parameter that represents the
+   * <b>trace</b> flag. This value is than converted to a boolean internally.
+   * 
+   * @param aSC
+   *        The servlet context under investigation. Never <code>null</code>.
+   * @return The string value of the <b>trace</b> init-parameter. May be
+   *         <code>null</code> if no such init-parameter is present.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getInitParameterTrace (@Nonnull final ServletContext aSC)
+  {
+    return aSC.getInitParameter (DEFAULT_INIT_PARAMETER_TRACE);
+  }
+
+  /**
+   * Get the value of the servlet context init-parameter that represents the
+   * <b>debug</b> flag. This value is than converted to a boolean internally.
+   * 
+   * @param aSC
+   *        The servlet context under investigation. Never <code>null</code>.
+   * @return The string value of the <b>debug</b> init-parameter. May be
+   *         <code>null</code> if no such init-parameter is present.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getInitParameterDebug (@Nonnull final ServletContext aSC)
+  {
+    return aSC.getInitParameter (DEFAULT_INIT_PARAMETER_DEBUG);
+  }
+
+  /**
+   * Get the value of the servlet context init-parameter that represents the
+   * <b>production</b> flag. This value is than converted to a boolean
+   * internally.
+   * 
+   * @param aSC
+   *        The servlet context under investigation. Never <code>null</code>.
+   * @return The string value of the <b>production</b> init-parameter. May be
+   *         <code>null</code> if no such init-parameter is present.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getInitParameterProduction (@Nonnull final ServletContext aSC)
+  {
+    return aSC.getInitParameter (DEFAULT_INIT_PARAMETER_PRODUCTION);
+  }
+
+  /**
+   * This method is called to initialize the global ID factory. By default a
+   * file-based {@link WebIOIntIDFactory} with the filename {@link #ID_FILENAME}
+   * is created.
+   */
+  @OverrideOnDemand
+  protected void initGlobalIDFactory ()
+  {
+    // Set persistent ID provider: file based
+    GlobalIDFactory.setPersistentIntIDFactory (new WebIOIntIDFactory (ID_FILENAME));
+  }
+
   public final void contextInitialized (@Nonnull final ServletContextEvent aSCE)
   {
     final ServletContext aSC = aSCE.getServletContext ();
 
     // set global debug/trace mode
-    final boolean bTraceMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_TRACE));
-    final boolean bDebugMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_DEBUG));
-    final boolean bProductionMode = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_PRODUCTION));
+    final boolean bTraceMode = StringParser.parseBool (getInitParameterTrace (aSC));
+    final boolean bDebugMode = StringParser.parseBool (getInitParameterDebug (aSC));
+    final boolean bProductionMode = StringParser.parseBool (getInitParameterProduction (aSC));
     GlobalDebug.setTraceModeDirect (bTraceMode);
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
