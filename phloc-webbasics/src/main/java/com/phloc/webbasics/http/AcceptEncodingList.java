@@ -96,6 +96,11 @@ public final class AcceptEncodingList
            supportsEncoding (AcceptEncodingHandler.X_GZIP_ENCODING);
   }
 
+  /**
+   * @return the accepted GZip encoding. May either be
+   *         {@link AcceptEncodingHandler#GZIP_ENCODING} or
+   *         {@link AcceptEncodingHandler#X_GZIP_ENCODING} or <code>null</code>
+   */
   @Nullable
   public String getUsedGZIPEncoding ()
   {
@@ -111,6 +116,10 @@ public final class AcceptEncodingList
     return supportsEncoding (AcceptEncodingHandler.DEFLATE_ENCODING);
   }
 
+  /**
+   * @return the accepted GZip encoding. May either be
+   *         {@link AcceptEncodingHandler#DEFLATE_ENCODING} or <code>null</code>
+   */
   @Nullable
   public String getUsedDeflateEncoding ()
   {
@@ -125,6 +134,12 @@ public final class AcceptEncodingList
            supportsEncoding (AcceptEncodingHandler.X_COMPRESS_ENCODING);
   }
 
+  /**
+   * @return the accepted GZip encoding. May either be
+   *         {@link AcceptEncodingHandler#COMPRESS_ENCODING} or
+   *         {@link AcceptEncodingHandler#X_COMPRESS_ENCODING} or
+   *         <code>null</code>
+   */
   @Nullable
   public String getUsedCompressEncoding ()
   {

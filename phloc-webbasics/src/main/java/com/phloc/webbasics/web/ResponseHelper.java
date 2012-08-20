@@ -153,20 +153,24 @@ public final class ResponseHelper
 
     // Can we get resource transfer working with GZIP or deflate?
     final AcceptEncodingList aAcceptEncodings = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);
-    if (aAcceptEncodings.supportsGZIP ())
+    final String sGZipEncoding = aAcceptEncodings.getUsedGZIPEncoding ();
+    if (sGZipEncoding != null)
     {
-      aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, AcceptEncodingHandler.GZIP_ENCODING);
+      aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sGZipEncoding);
       aOS = new GZIPOutputStream (aHttpResponse.getOutputStream ());
       // Don't forget to call "finish" before flush and close!
     }
     else
-      if (aAcceptEncodings.supportsDeflate ())
+    {
+      final String sDeflateEncoding = aAcceptEncodings.getUsedDeflateEncoding ();
+      if (sDeflateEncoding != null)
       {
-        aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, AcceptEncodingHandler.DEFLATE_ENCODING);
+        aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sDeflateEncoding);
         aOS = new ZipOutputStream (aHttpResponse.getOutputStream ());
         // A dummy ZIP entry is required!
         ((ZipOutputStream) aOS).putNextEntry (new ZipEntry ("dummy name"));
       }
+    }
     // Found in some book :)
     aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
     return aOS;
