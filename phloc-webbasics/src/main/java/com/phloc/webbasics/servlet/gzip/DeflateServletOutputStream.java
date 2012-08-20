@@ -58,8 +58,8 @@ final class DeflateServletOutputStream extends AbstractServletOutputStream
     m_aZOS.finish ();
     m_aZOS.flush ();
 
-    m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_LENGTH, Integer.toString (m_aBAOS.size ()));
-    m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
+    m_aHttpResponse.setContentLength (m_aBAOS.size ());
+    m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
     m_aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
     final ServletOutputStream aOS = m_aHttpResponse.getOutputStream ();
     m_aBAOS.writeTo (aOS);
