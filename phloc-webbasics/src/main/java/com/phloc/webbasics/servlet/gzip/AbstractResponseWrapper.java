@@ -36,7 +36,7 @@ import com.phloc.commons.io.streams.StreamUtils;
  */
 public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
 {
-  private ServletOutputStream m_aStream;
+  private AbstractServletOutputStream m_aStream;
   private PrintWriter m_aWriter;
 
   public AbstractResponseWrapper (@Nonnull final HttpServletResponse aHttpResponse)
@@ -46,12 +46,18 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
 
   public final void finishResponse ()
   {
-    StreamUtils.close (m_aWriter);
-    StreamUtils.close (m_aStream);
+    if (m_aStream != null && !m_aStream.isClosed ())
+    {
+      if (m_aWriter != null)
+        StreamUtils.close (m_aWriter);
+      else
+        if (m_aStream != null)
+          StreamUtils.close (m_aStream);
+    }
   }
 
   @Nonnull
-  protected abstract ServletOutputStream createOutputStream () throws IOException;
+  protected abstract AbstractServletOutputStream createOutputStream () throws IOException;
 
   @Override
   public final void flushBuffer () throws IOException
@@ -64,6 +70,7 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
   }
 
   @Override
+  @Nonnull
   public final ServletOutputStream getOutputStream () throws IOException
   {
     if (m_aWriter != null)
@@ -75,6 +82,7 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
   }
 
   @Override
+  @Nonnull
   public final PrintWriter getWriter () throws IOException
   {
     if (m_aWriter != null)

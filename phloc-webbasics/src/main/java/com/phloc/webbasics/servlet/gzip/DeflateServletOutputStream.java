@@ -33,18 +33,18 @@ import com.phloc.webbasics.http.CHTTPHeader;
  * 
  * @author philip
  */
-final class DeflateServletOutputStream extends ServletOutputStream
+final class DeflateServletOutputStream extends AbstractServletOutputStream
 {
   private final HttpServletResponse m_aHttpResponse;
   private final String m_sContentEncoding;
   private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
   private final ZipOutputStream m_aZOS = new ZipOutputStream (m_aBAOS);
-  private boolean m_bClosed = false;
 
   public DeflateServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse,
                                      @Nonnull final String sContentEncoding) throws IOException
   {
     super ();
+    setWrappedOutputStream (m_aZOS);
     m_aHttpResponse = aHttpResponse;
     m_sContentEncoding = sContentEncoding;
     // A dummy ZIP entry is required!
@@ -52,13 +52,11 @@ final class DeflateServletOutputStream extends ServletOutputStream
   }
 
   @Override
-  public void close () throws IOException
+  protected void onClose () throws IOException
   {
-    if (m_bClosed)
-      throw new IOException ("This output stream has already been closed");
-
     // Finish Deflate stream
     m_aZOS.finish ();
+    m_aZOS.flush ();
 
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_LENGTH, Integer.toString (m_aBAOS.size ()));
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
@@ -67,36 +65,5 @@ final class DeflateServletOutputStream extends ServletOutputStream
     m_aBAOS.writeTo (aOS);
     aOS.flush ();
     aOS.close ();
-    m_bClosed = true;
-  }
-
-  @Override
-  public void flush () throws IOException
-  {
-    if (m_bClosed)
-      throw new IOException ("Cannot flush a closed output stream");
-    m_aZOS.flush ();
-  }
-
-  @Override
-  public void write (final int b) throws IOException
-  {
-    if (m_bClosed)
-      throw new IOException ("Cannot write to a closed output stream");
-    m_aZOS.write ((byte) b);
-  }
-
-  @Override
-  public void write (final byte b[]) throws IOException
-  {
-    write (b, 0, b.length);
-  }
-
-  @Override
-  public void write (final byte b[], final int off, final int len) throws IOException
-  {
-    if (m_bClosed)
-      throw new IOException ("Cannot write to a closed output stream");
-    m_aZOS.write (b, off, len);
   }
 }

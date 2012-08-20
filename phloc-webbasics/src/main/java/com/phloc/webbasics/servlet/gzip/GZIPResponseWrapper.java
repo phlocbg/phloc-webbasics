@@ -20,7 +20,6 @@ package com.phloc.webbasics.servlet.gzip;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -42,7 +41,7 @@ public class GZIPResponseWrapper extends AbstractResponseWrapper
 
   @Override
   @Nonnull
-  protected ServletOutputStream createOutputStream () throws IOException
+  protected GZIPServletOutputStream createOutputStream () throws IOException
   {
     return new GZIPServletOutputStream ((HttpServletResponse) getResponse (), m_sContentEncoding);
   }

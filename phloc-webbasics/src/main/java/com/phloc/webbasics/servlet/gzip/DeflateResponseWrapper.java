@@ -20,7 +20,6 @@ package com.phloc.webbasics.servlet.gzip;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -42,7 +41,7 @@ public class DeflateResponseWrapper extends AbstractResponseWrapper
 
   @Override
   @Nonnull
-  protected ServletOutputStream createOutputStream () throws IOException
+  protected DeflateServletOutputStream createOutputStream () throws IOException
   {
     return new DeflateServletOutputStream ((HttpServletResponse) getResponse (), m_sContentEncoding);
   }

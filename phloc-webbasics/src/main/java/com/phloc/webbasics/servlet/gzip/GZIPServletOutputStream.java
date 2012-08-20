@@ -34,30 +34,28 @@ import com.phloc.webbasics.http.CHTTPHeader;
  * like the code, please pick up a copy of the book and help support the
  * authors, development of more free code, and the JSP/Servlet/J2EE community.
  */
-final class GZIPServletOutputStream extends ServletOutputStream
+final class GZIPServletOutputStream extends AbstractServletOutputStream
 {
   private final HttpServletResponse m_aHttpResponse;
   private final String m_sContentEncoding;
   private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
   private final GZIPOutputStream m_aGZOS = new GZIPOutputStream (m_aBAOS);
-  private boolean m_bClosed = false;
 
   public GZIPServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse,
                                   @Nonnull final String sContentEncoding) throws IOException
   {
     super ();
+    setWrappedOutputStream (m_aGZOS);
     m_aHttpResponse = aHttpResponse;
     m_sContentEncoding = sContentEncoding;
   }
 
   @Override
-  public void close () throws IOException
+  protected void onClose () throws IOException
   {
-    if (m_bClosed)
-      throw new IOException ("This output stream has already been closed");
-
     // Finish GZIP stream
     m_aGZOS.finish ();
+    m_aGZOS.flush ();
 
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_LENGTH, Integer.toString (m_aBAOS.size ()));
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
@@ -66,36 +64,5 @@ final class GZIPServletOutputStream extends ServletOutputStream
     m_aBAOS.writeTo (aOS);
     aOS.flush ();
     aOS.close ();
-    m_bClosed = true;
-  }
-
-  @Override
-  public void flush () throws IOException
-  {
-    if (m_bClosed)
-      throw new IOException ("Cannot flush a closed output stream");
-    m_aGZOS.flush ();
-  }
-
-  @Override
-  public void write (final int b) throws IOException
-  {
-    if (m_bClosed)
-      throw new IOException ("Cannot write to a closed output stream");
-    m_aGZOS.write ((byte) b);
-  }
-
-  @Override
-  public void write (final byte b[]) throws IOException
-  {
-    write (b, 0, b.length);
-  }
-
-  @Override
-  public void write (final byte b[], final int off, final int len) throws IOException
-  {
-    if (m_bClosed)
-      throw new IOException ("Cannot write to a closed output stream");
-    m_aGZOS.write (b, off, len);
   }
 }
