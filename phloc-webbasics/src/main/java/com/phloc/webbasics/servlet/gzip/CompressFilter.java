@@ -33,6 +33,7 @@ import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.AcceptEncodingList;
+import com.phloc.webbasics.web.ResponseHelper;
 
 /**
  * This is a generic filter that first tries to find whether "GZip" is
@@ -51,7 +52,10 @@ public final class CompressFilter implements Filter
                                                                                                      "$none");
 
   public void init (@Nonnull final FilterConfig filterConfig)
-  {}
+  {
+    // As compression is done in the filter, no compression is required there
+    ResponseHelper.setResponseCompressionEnabled (false);
+  }
 
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,

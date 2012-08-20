@@ -30,10 +30,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.webbasics.http.AcceptEncodingHandler;
+import com.phloc.webbasics.web.ResponseHelper;
 
 /**
  * A filter that applies GZip compression to all elements, if applicable. It
- * interpretes the accept-encoding HTTP header to identify whether GZip is
+ * interprets the accept-encoding HTTP header to identify whether GZip is
  * supported or not.
  * 
  * @author philip
@@ -41,7 +42,10 @@ import com.phloc.webbasics.http.AcceptEncodingHandler;
 public final class GZIPFilter implements Filter
 {
   public void init (@Nonnull final FilterConfig filterConfig)
-  {}
+  {
+    // As compression is done in the filter, no compression is required there
+    ResponseHelper.setResponseCompressionEnabled (false);
+  }
 
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,

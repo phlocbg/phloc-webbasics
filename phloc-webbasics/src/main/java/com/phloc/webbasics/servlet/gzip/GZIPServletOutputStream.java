@@ -42,7 +42,8 @@ final class GZIPServletOutputStream extends ServletOutputStream
   private final GZIPOutputStream m_aGZOS = new GZIPOutputStream (m_aBAOS);
   private boolean m_bClosed = false;
 
-  public GZIPServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse, @Nonnull final String sContentEncoding) throws IOException
+  public GZIPServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse,
+                                  @Nonnull final String sContentEncoding) throws IOException
   {
     super ();
     m_aHttpResponse = aHttpResponse;
@@ -60,6 +61,7 @@ final class GZIPServletOutputStream extends ServletOutputStream
 
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_LENGTH, Integer.toString (m_aBAOS.size ()));
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
+    m_aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
     final ServletOutputStream aOS = m_aHttpResponse.getOutputStream ();
     m_aBAOS.writeTo (aOS);
     aOS.flush ();
