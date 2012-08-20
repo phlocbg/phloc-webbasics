@@ -36,19 +36,17 @@ import com.phloc.webbasics.http.CHTTPHeader;
  */
 final class GZIPServletOutputStream extends ServletOutputStream
 {
+  private final HttpServletResponse m_aHttpResponse;
+  private final String m_sContentEncoding;
   private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
   private final GZIPOutputStream m_aGZOS = new GZIPOutputStream (m_aBAOS);
-  private final HttpServletResponse m_aHttpResponse;
-  private final ServletOutputStream m_aOS;
-  private final String m_sGZIPEncoding;
   private boolean m_bClosed = false;
 
-  public GZIPServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse, @Nonnull final String sGZIPEncoding) throws IOException
+  public GZIPServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse, @Nonnull final String sContentEncoding) throws IOException
   {
     super ();
     m_aHttpResponse = aHttpResponse;
-    m_aOS = aHttpResponse.getOutputStream ();
-    m_sGZIPEncoding = sGZIPEncoding;
+    m_sContentEncoding = sContentEncoding;
   }
 
   @Override
@@ -61,10 +59,11 @@ final class GZIPServletOutputStream extends ServletOutputStream
     m_aGZOS.finish ();
 
     m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_LENGTH, Integer.toString (m_aBAOS.size ()));
-    m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_ENCODING, m_sGZIPEncoding);
-    m_aBAOS.writeTo (m_aOS);
-    m_aOS.flush ();
-    m_aOS.close ();
+    m_aHttpResponse.addHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
+    final ServletOutputStream aOS = m_aHttpResponse.getOutputStream ();
+    m_aBAOS.writeTo (aOS);
+    aOS.flush ();
+    aOS.close ();
     m_bClosed = true;
   }
 
