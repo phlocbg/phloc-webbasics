@@ -17,11 +17,10 @@
  */
 package com.phloc.webbasics.web;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +44,7 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
  * 
  * @author philip
  */
+@Immutable
 public final class HTTPResponseHelper
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTTPResponseHelper.class);
@@ -55,14 +55,6 @@ public final class HTTPResponseHelper
 
   private HTTPResponseHelper ()
   {}
-
-  @Deprecated
-  @Nonnull
-  public static OutputStream getBestSuitableOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
-                                                          @Nonnull final HttpServletResponse aHttpResponse) throws IOException
-  {
-    return ResponseHelper.getBestSuitableOutputStream (aHttpRequest, aHttpResponse);
-  }
 
   public static void createResponse (@Nonnull final IRequestWebScope aRequestScope,
                                      @Nonnull final IMicroDocument aDoc,

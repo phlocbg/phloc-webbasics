@@ -35,6 +35,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
+import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
 
 /**
  * Helper class to debug information passed to a JSP page or a servlet.
@@ -59,28 +60,38 @@ public final class RequestLogger
   public static Map <String, String> getRequestFieldMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
-    ret.put ("AuthType", aHttpRequest.getAuthType ());
-    ret.put ("CharacterEncoding", aHttpRequest.getCharacterEncoding ());
-    ret.put ("ContentLength", Integer.toString (aHttpRequest.getContentLength ()));
-    ret.put ("ContentType", aHttpRequest.getContentType ());
-    ret.put ("ContextPath", aHttpRequest.getContextPath ());
-    ret.put ("LocalAddr", aHttpRequest.getLocalAddr ());
-    ret.put ("LocalName", aHttpRequest.getLocalName ());
-    ret.put ("LocalPort", Integer.toString (aHttpRequest.getLocalPort ()));
-    ret.put ("Method", aHttpRequest.getMethod ());
-    ret.put ("PathInfo", aHttpRequest.getPathInfo ());
-    ret.put ("PathTranslated", aHttpRequest.getPathTranslated ());
-    ret.put ("Protocol", aHttpRequest.getProtocol ());
-    ret.put ("QueryString", aHttpRequest.getQueryString ());
-    ret.put ("RemoteAddr", aHttpRequest.getRemoteAddr ());
-    ret.put ("RemoteHost", aHttpRequest.getRemoteHost ());
-    ret.put ("RemotePort", Integer.toString (aHttpRequest.getRemotePort ()));
-    ret.put ("RemoteUser", aHttpRequest.getRemoteUser ());
-    ret.put ("RequestURL", aHttpRequest.getRequestURL ().toString ());
-    ret.put ("Scheme", aHttpRequest.getScheme ());
-    ret.put ("ServerName", aHttpRequest.getServerName ());
-    ret.put ("ServerPort", Integer.toString (aHttpRequest.getServerPort ()));
-    ret.put ("ServletPath", aHttpRequest.getServletPath ());
+    if (aHttpRequest instanceof OfflineHttpServletRequest)
+    {
+      // Special handling, because otherwise exceptions would be thrown
+      ret.put ("Offline", "true");
+    }
+    else
+    {
+      ret.put ("AuthType", aHttpRequest.getAuthType ());
+      ret.put ("CharacterEncoding", aHttpRequest.getCharacterEncoding ());
+      ret.put ("ContentLength", Integer.toString (aHttpRequest.getContentLength ()));
+      ret.put ("ContentType", aHttpRequest.getContentType ());
+      ret.put ("ContextPath", aHttpRequest.getContextPath ());
+      ret.put ("LocalAddr", aHttpRequest.getLocalAddr ());
+      ret.put ("LocalName", aHttpRequest.getLocalName ());
+      ret.put ("LocalPort", Integer.toString (aHttpRequest.getLocalPort ()));
+      ret.put ("Method", aHttpRequest.getMethod ());
+      ret.put ("PathInfo", aHttpRequest.getPathInfo ());
+      ret.put ("PathTranslated", aHttpRequest.getPathTranslated ());
+      ret.put ("Protocol", aHttpRequest.getProtocol ());
+      ret.put ("QueryString", aHttpRequest.getQueryString ());
+      ret.put ("RemoteAddr", aHttpRequest.getRemoteAddr ());
+      ret.put ("RemoteHost", aHttpRequest.getRemoteHost ());
+      ret.put ("RemotePort", Integer.toString (aHttpRequest.getRemotePort ()));
+      ret.put ("RemoteUser", aHttpRequest.getRemoteUser ());
+      ret.put ("RequestedSessionId", aHttpRequest.getRequestedSessionId ());
+      ret.put ("RequestURI", aHttpRequest.getRequestURI ());
+      ret.put ("RequestURL", aHttpRequest.getRequestURL ().toString ());
+      ret.put ("Scheme", aHttpRequest.getScheme ());
+      ret.put ("ServerName", aHttpRequest.getServerName ());
+      ret.put ("ServerPort", Integer.toString (aHttpRequest.getServerPort ()));
+      ret.put ("ServletPath", aHttpRequest.getServletPath ());
+    }
     final HttpSession aSession = aHttpRequest.getSession (false);
     if (aSession != null)
       ret.put ("SessionID", aSession.getId ());

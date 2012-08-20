@@ -261,6 +261,9 @@ public final class RequestHelper
   @Nullable
   public static String getHttpReferer (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
     return aHttpRequest.getHeader (CHTTPHeader.REFERER);
   }
 

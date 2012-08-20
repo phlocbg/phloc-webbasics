@@ -19,12 +19,14 @@ package com.phloc.webbasics.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.string.StringHelper;
 
+@Immutable
 public final class BasicAuth
 {
   private static final String HEADER_VALUE_PREFIX_BASIC = "Basic ";
@@ -36,6 +38,9 @@ public final class BasicAuth
   @Nonempty
   public static String getRequestHeaderValue (@Nonnull final String sUsername, @Nullable final String sPassword)
   {
+    if (StringHelper.hasNoText (sUsername))
+      throw new IllegalArgumentException ("username is missing");
+
     final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ":", sPassword);
     return HEADER_VALUE_PREFIX_BASIC + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1);
   }

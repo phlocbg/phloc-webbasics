@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
 
-public class ServletRedirectIndicatorException extends RuntimeException
+public final class ServletRedirectIndicatorException extends RuntimeException
 {
   private final ISimpleURL m_aURL;
   private final Map <String, Object> m_aRequestParams;
@@ -34,7 +34,8 @@ public class ServletRedirectIndicatorException extends RuntimeException
     this (aURL, null);
   }
 
-  public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL, final Map <String, Object> aRequestParams)
+  public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL,
+                                            @Nullable final Map <String, Object> aRequestParams)
   {
     if (aURL == null)
       throw new NullPointerException ("URL");
