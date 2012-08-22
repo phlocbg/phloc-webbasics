@@ -73,9 +73,9 @@ public final class WebFileIO
       if (!FileUtils.canRead (s_aBasePath))
         throw new IllegalArgumentException ("Cannot read in " + s_aBasePath);
       if (!FileUtils.canWrite (s_aBasePath))
-        throw new IllegalArgumentException ("Cannot write in " + s_aBasePath);
+        s_aLogger.warn ("Cannot write in " + s_aBasePath);
       if (!FileUtils.canExecute (s_aBasePath))
-        throw new IllegalArgumentException ("Cannot execute in " + s_aBasePath);
+        s_aLogger.warn ("Cannot execute in " + s_aBasePath);
     }
     finally
     {
