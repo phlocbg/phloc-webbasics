@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -38,6 +39,7 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
+@NotThreadSafe
 public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractResponseWrapper.class);
@@ -91,6 +93,9 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
     if (m_aWriter != null)
       throw new IllegalStateException ("getWriter() has already been called!");
 
+    if (getResponse ().isCommitted ())
+      return getResponse ().getOutputStream ();
+
     if (m_aStream == null)
       m_aStream = createOutputStream ();
     return m_aStream;
@@ -102,6 +107,9 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
   {
     if (m_aWriter != null)
       return m_aWriter;
+
+    if (getResponse ().isCommitted ())
+      return getResponse ().getWriter ();
 
     if (m_aStream != null)
       throw new IllegalStateException ("getOutputStream() has already been called!");
