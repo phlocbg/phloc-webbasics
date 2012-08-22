@@ -54,11 +54,11 @@ public abstract class AbstractServletOutputStream extends ServletOutputStream
   @OverridingMethodsMustInvokeSuper
   public final void close () throws IOException
   {
-    if (m_bClosed)
-      throw new IOException ("This output stream has already been closed");
-
-    onClose ();
-    m_bClosed = true;
+    if (!m_bClosed)
+    {
+      onClose ();
+      m_bClosed = true;
+    }
   }
 
   @Override
