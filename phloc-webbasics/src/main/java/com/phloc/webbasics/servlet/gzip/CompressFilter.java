@@ -74,7 +74,7 @@ public final class CompressFilter implements Filter
         s_aStatsGZip.increment ();
         final GZIPResponseWrapper aGZIPResponse = new GZIPResponseWrapper (aHttpResponse, sGZIPEncoding);
         aChain.doFilter (aRequest, aGZIPResponse);
-        aGZIPResponse.finishResponse ();
+        aGZIPResponse.finishResponse (aHttpRequest.getRequestURL ().toString ());
         return;
       }
 
@@ -85,7 +85,7 @@ public final class CompressFilter implements Filter
         s_aStatsDeflate.increment ();
         final DeflateResponseWrapper aDeflateResponse = new DeflateResponseWrapper (aHttpResponse, sDeflateEncoding);
         aChain.doFilter (aRequest, aDeflateResponse);
-        aDeflateResponse.finishResponse ();
+        aDeflateResponse.finishResponse (aHttpRequest.getRequestURL ().toString ());
         return;
       }
 

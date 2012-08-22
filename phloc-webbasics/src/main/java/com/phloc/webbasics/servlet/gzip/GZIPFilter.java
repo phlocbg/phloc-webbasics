@@ -61,7 +61,7 @@ public final class GZIPFilter implements Filter
       {
         final GZIPResponseWrapper aGZIPResponse = new GZIPResponseWrapper (aHttpResponse, sGZIPEncoding);
         aChain.doFilter (aRequest, aGZIPResponse);
-        aGZIPResponse.finishResponse ();
+        aGZIPResponse.finishResponse (aHttpRequest.getRequestURL ().toString ());
         return;
       }
     }

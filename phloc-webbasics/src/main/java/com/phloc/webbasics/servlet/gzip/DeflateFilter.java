@@ -61,7 +61,7 @@ public final class DeflateFilter implements Filter
       {
         final DeflateResponseWrapper aDeflateResponse = new DeflateResponseWrapper (aHttpResponse, sDeflateEncoding);
         aChain.doFilter (aRequest, aDeflateResponse);
-        aDeflateResponse.finishResponse ();
+        aDeflateResponse.finishResponse (aHttpRequest.getRequestURL ().toString ());
         return;
       }
     }

@@ -26,8 +26,12 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Abstract output stream switching {@link HttpServletResponseWrapper}
@@ -36,6 +40,8 @@ import com.phloc.commons.io.streams.StreamUtils;
  */
 public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractResponseWrapper.class);
+
   private AbstractServletOutputStream m_aStream;
   private PrintWriter m_aWriter;
 
@@ -44,7 +50,7 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
     super (aHttpResponse);
   }
 
-  public final void finishResponse ()
+  public final void finishResponse (@Nonnull final String sRequestURL)
   {
     if (m_aStream != null && !m_aStream.isClosed ())
     {
@@ -54,6 +60,14 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
         if (m_aStream != null)
           StreamUtils.close (m_aStream);
     }
+
+    // Check if a content type was specified
+    final String sContentType = getContentType ();
+    if (StringHelper.hasNoText (sContentType))
+      s_aLogger.error ("The response has no content type for request '" + sRequestURL + "'");
+    else
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("The response has content type '" + sContentType + "' for request '" + sRequestURL + "'");
   }
 
   @Nonnull
