@@ -44,6 +44,7 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
 
   private AbstractServletOutputStream m_aStream;
   private PrintWriter m_aWriter;
+  private int m_nStatusCode = HttpServletResponse.SC_OK;
 
   public AbstractResponseWrapper (@Nonnull final HttpServletResponse aHttpResponse)
   {
@@ -108,5 +109,39 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
     m_aStream = createOutputStream ();
     m_aWriter = new PrintWriter (new OutputStreamWriter (m_aStream, CCharset.CHARSET_UTF_8));
     return m_aWriter;
+  }
+
+  @Override
+  public void setStatus (final int sc)
+  {
+    super.setStatus (sc);
+    m_nStatusCode = sc;
+  }
+
+  @Override
+  @Deprecated
+  public void setStatus (final int sc, final String sm)
+  {
+    super.setStatus (sc, sm);
+    m_nStatusCode = sc;
+  }
+
+  @Override
+  public void sendError (final int sc, final String msg) throws IOException
+  {
+    super.sendError (sc, msg);
+    m_nStatusCode = sc;
+  }
+
+  @Override
+  public void sendError (final int sc) throws IOException
+  {
+    super.sendError (sc);
+    m_nStatusCode = sc;
+  }
+
+  public int getStatusCode ()
+  {
+    return m_nStatusCode;
   }
 }

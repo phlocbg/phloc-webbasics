@@ -54,16 +54,20 @@ final class DeflateServletOutputStream extends AbstractServletOutputStream
   @Override
   protected void onClose () throws IOException
   {
-    // Finish Deflate stream
-    m_aZOS.finish ();
-    m_aZOS.flush ();
+    // Avoid error when forwarding
+    if (!m_aHttpResponse.isCommitted ())
+    {
+      // Finish Deflate stream
+      m_aZOS.finish ();
+      m_aZOS.flush ();
 
-    m_aHttpResponse.setContentLength (m_aBAOS.size ());
-    m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
-    m_aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
-    final ServletOutputStream aOS = m_aHttpResponse.getOutputStream ();
-    m_aBAOS.writeTo (aOS);
-    aOS.flush ();
-    aOS.close ();
+      m_aHttpResponse.setContentLength (m_aBAOS.size ());
+      m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
+      m_aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
+      final ServletOutputStream aOS = m_aHttpResponse.getOutputStream ();
+      m_aBAOS.writeTo (aOS);
+      aOS.flush ();
+      aOS.close ();
+    }
   }
 }

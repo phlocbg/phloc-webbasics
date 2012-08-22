@@ -51,8 +51,9 @@ public final class GZIPFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
-    if (aRequest instanceof HttpServletRequest)
+    if (aRequest instanceof HttpServletRequest && aRequest.getAttribute (CompressFilter.REQUEST_ATTR) == null)
     {
+      aRequest.setAttribute (CompressFilter.REQUEST_ATTR, Boolean.TRUE);
       final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
       final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
 

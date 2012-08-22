@@ -44,6 +44,7 @@ import com.phloc.webbasics.web.ResponseHelper;
  */
 public final class CompressFilter implements Filter
 {
+  static final String REQUEST_ATTR = CompressFilter.class.getName ();
   private static final IStatisticsHandlerCounter s_aStatsGZip = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
                                                                                                      "$gzip");
   private static final IStatisticsHandlerCounter s_aStatsDeflate = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
@@ -61,8 +62,9 @@ public final class CompressFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
-    if (aRequest instanceof HttpServletRequest)
+    if (aRequest instanceof HttpServletRequest && aRequest.getAttribute (REQUEST_ATTR) == null)
     {
+      aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
       final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
       final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
       final AcceptEncodingList aAEL = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);

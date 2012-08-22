@@ -49,6 +49,7 @@ public class CharacterEncodingFilter implements Filter
   public static final String DEFAULT_ENCODING = CCharset.CHARSET_UTF_8;
   public static final boolean DEFAULT_FORCE_ENCODING = false;
   private static final Logger s_aLogger = LoggerFactory.getLogger (CharacterEncodingFilter.class);
+  private static final String REQUEST_ATTR = CharacterEncodingFilter.class.getName ();
 
   private String m_sEncoding = DEFAULT_ENCODING;
   private boolean m_bForceEncoding = DEFAULT_FORCE_ENCODING;
@@ -89,11 +90,15 @@ public class CharacterEncodingFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
-    final String sEncoding = getEncoding ();
-    // We need this for all form data etc.
-    if (aRequest.getCharacterEncoding () == null || isForceEncoding ())
-      aRequest.setCharacterEncoding (sEncoding);
-    aResponse.setCharacterEncoding (sEncoding);
+    if (aRequest.getAttribute (REQUEST_ATTR) == null)
+    {
+      final String sEncoding = getEncoding ();
+      // We need this for all form data etc.
+      if (aRequest.getCharacterEncoding () == null || isForceEncoding ())
+        aRequest.setCharacterEncoding (sEncoding);
+      aResponse.setCharacterEncoding (sEncoding);
+      aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
+    }
 
     // Next filter in the chain
     aChain.doFilter (aRequest, aResponse);

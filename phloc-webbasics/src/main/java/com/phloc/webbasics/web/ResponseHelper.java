@@ -172,7 +172,6 @@ public final class ResponseHelper
       {
         aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sGZipEncoding);
         aOS = new GZIPOutputStream (aHttpResponse.getOutputStream ());
-        // Don't forget to call "finish" before flush and close!
       }
       else
       {
@@ -196,17 +195,6 @@ public final class ResponseHelper
   {
     if (aOS == null)
       throw new NullPointerException ("outputStream");
-
-    // Manually finish them (even though it seems, that finish is called anyway
-    // in the close method)
-    if (aOS instanceof GZIPOutputStream)
-      ((GZIPOutputStream) aOS).finish ();
-    else
-      if (aOS instanceof ZipOutputStream)
-      {
-        // finish calls closeEntry internally
-        ((ZipOutputStream) aOS).finish ();
-      }
 
     aOS.flush ();
     aOS.close ();
