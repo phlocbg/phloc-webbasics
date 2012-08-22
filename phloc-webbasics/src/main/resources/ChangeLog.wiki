@@ -1,7 +1,11 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/20/12</td><td colspan="4">_Release *1.8.4*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/22/12</td><td colspan="4">_Release *1.8.6*_</td></tr>
+<tr><td>8/22/12</td><td>fix</td><td>tech</td><td></td><td>Not writing content to an already committed HTTP response</td></tr>
+<tr><td>8/22/12</td><td>fix</td><td>tech</td><td></td><td>Avoiding double filter for all predefined filters</td></tr>
+<tr border="1"><td>8/22/12</td><td colspan="4">_Release *1.8.5*_</td></tr>
+<tr border="1"><td>8/20/12</td><td colspan="4">_Release *1.8.4*_</td></tr>
 <tr><td>8/20/12</td><td>fix</td><td>tech</td><td></td><td>Fixed setting correct HTTP response headers</td></tr>
 <tr><td>8/20/12</td><td>fix</td><td>tech</td><td></td><td>Gracefully handling double close on special ServeltOutputStream objects</td></tr>
 <tr border="1"><td>8/20/12</td><td colspan="4">_Release *1.8.3*_</td></tr>
