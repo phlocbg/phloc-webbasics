@@ -86,6 +86,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
 
+  private static boolean s_bInited = false;
+
   public WebAppListener ()
   {}
 
@@ -277,6 +279,10 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   {
     final ServletContext aSC = aSCE.getServletContext ();
 
+    if (s_bInited)
+      throw new IllegalStateException ("WebAppListener was already instantiated!");
+    s_bInited = true;
+
     // set global debug/trace mode
     final boolean bTraceMode = StringParser.parseBool (getInitParameterTrace (aSC));
     final boolean bDebugMode = StringParser.parseBool (getInitParameterDebug (aSC));
@@ -363,6 +369,9 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
     // Callback after
     afterContextDestroyed (aSC);
+
+    // De-init
+    s_bInited = false;
   }
 
   public final void sessionCreated (@Nonnull final HttpSessionEvent aSessionEvent)
