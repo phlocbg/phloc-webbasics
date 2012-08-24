@@ -26,6 +26,11 @@ import com.phloc.scopes.web.mock.MockServletRequestListener;
 import com.phloc.scopes.web.mock.WebScopeTestRule;
 import com.phloc.webbasics.servlet.WebAppListener;
 
+/**
+ * A JUnit test rule that is suitable for all webbasics projects
+ * 
+ * @author philip
+ */
 public class WebBasicTestRule extends WebScopeTestRule
 {
   public WebBasicTestRule ()

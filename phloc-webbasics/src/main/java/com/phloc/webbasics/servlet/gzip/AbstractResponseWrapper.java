@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.mime.MimeTypeDeterminator;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -46,7 +47,7 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
 
   private AbstractServletOutputStream m_aStream;
   private PrintWriter m_aWriter;
-  private int m_nStatusCode = HttpServletResponse.SC_OK;
+  private int m_nStatusCode = SC_OK;
 
   public AbstractResponseWrapper (@Nonnull final HttpServletResponse aHttpResponse)
   {
@@ -67,7 +68,26 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
     // Check if a content type was specified
     final String sContentType = getContentType ();
     if (StringHelper.hasNoText (sContentType))
-      s_aLogger.error ("The response has no content type for request '" + sRequestURL + "'");
+    {
+      // Not important for redirects etc.
+      if (m_nStatusCode >= SC_OK && m_nStatusCode < 300)
+      {
+        final String sDeterminedMimeType = MimeTypeDeterminator.getMimeTypeFromFilename (sRequestURL);
+        if (sDeterminedMimeType == null)
+          s_aLogger.error ("The response has no content type for request '" +
+                           sRequestURL +
+                           "' and failed to determine one");
+        else
+        {
+          s_aLogger.error ("The response has no content type for request '" +
+                           sRequestURL +
+                           "' but determined '" +
+                           sDeterminedMimeType +
+                           "'");
+          setContentType (sDeterminedMimeType);
+        }
+      }
+    }
     else
       if (s_aLogger.isDebugEnabled ())
         s_aLogger.debug ("The response has content type '" + sContentType + "' for request '" + sRequestURL + "'");
@@ -146,6 +166,13 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
   {
     super.sendError (sc);
     m_nStatusCode = sc;
+  }
+
+  @Override
+  public void sendRedirect (final String sLocation) throws IOException
+  {
+    super.sendRedirect (sLocation);
+    m_nStatusCode = SC_MOVED_TEMPORARILY;
   }
 
   public int getStatusCode ()
