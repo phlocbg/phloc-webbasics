@@ -35,6 +35,7 @@ import org.joda.time.LocalTime;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.mime.CMimeType;
@@ -324,5 +325,11 @@ public final class ResponseHelper
                                            @Nonnull final Charset aCharset) throws IOException
   {
     writeTextResponse (aHttpRequest, aHttpResponse, sTextContent, CMimeType.TEXT_XML, aCharset);
+  }
+
+  public static void writeEmptyResponse (@Nonnull final HttpServletRequest aHttpRequest,
+                                          @Nonnull final HttpServletResponse aHttpResponse) throws IOException
+  {
+    writeResponse (aHttpRequest, aHttpResponse, new byte [0], CMimeType.TEXT_PLAIN, CCharset.CHARSET_ISO_8859_1);
   }
 }
