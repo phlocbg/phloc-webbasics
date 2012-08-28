@@ -219,17 +219,17 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
   }
 
   @Override
-  protected void onGet (@Nonnull final HttpServletRequest aHttpRequest,
-                        @Nonnull final HttpServletResponse aHttpResponse,
-                        @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
+  protected final void onGet (@Nonnull final HttpServletRequest aHttpRequest,
+                              @Nonnull final HttpServletResponse aHttpResponse,
+                              @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
   {
     handleRequest (aHttpRequest, aHttpResponse, aRequestScope);
   }
 
   @Override
-  protected void onPost (@Nonnull final HttpServletRequest aHttpRequest,
-                         @Nonnull final HttpServletResponse aHttpResponse,
-                         @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
+  protected final void onPost (@Nonnull final HttpServletRequest aHttpRequest,
+                               @Nonnull final HttpServletResponse aHttpResponse,
+                               @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
   {
     handleRequest (aHttpRequest, aHttpResponse, aRequestScope);
   }

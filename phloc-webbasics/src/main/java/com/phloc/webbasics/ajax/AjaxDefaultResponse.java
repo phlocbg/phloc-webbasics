@@ -17,17 +17,27 @@
  */
 package com.phloc.webbasics.ajax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.resource.css.ICSSPathProvider;
+import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
+import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
+import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
 public final class AjaxDefaultResponse implements ISuccessIndicator
@@ -35,10 +45,14 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
   public static final String PROPERTY_SUCCESS = "success";
   public static final String PROPERTY_ERRORMESSAGE = "errormessage";
   public static final String PROPERTY_VALUE = "value";
+  public static final String PROPERTY_EXTERNAL_CSS = "externalcss";
+  public static final String PROPERTY_EXTERNAL_JS = "externaljs";
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
   private final IJSONObject m_aSuccessValue;
+  private final List <String> m_aExternalCSSs = new ArrayList <String> ();
+  private final List <String> m_aExternalJSs = new ArrayList <String> ();
 
   private AjaxDefaultResponse (final boolean bSuccess,
                                @Nullable final String sErrorMessage,
@@ -47,6 +61,14 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     m_bSuccess = bSuccess;
     m_sErrorMessage = sErrorMessage;
     m_aSuccessValue = aSuccessValue;
+    if (bSuccess)
+    {
+      final boolean bRegularFiles = GlobalDebug.isDebugMode ();
+      for (final ICSSPathProvider aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ())
+        m_aExternalCSSs.add (aCSSPath.getCSSItemPath (bRegularFiles));
+      for (final IJSPathProvider aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludesForThisRequest ())
+        m_aExternalJSs.add (aJSPath.getJSItemPath (bRegularFiles));
+    }
   }
 
   public boolean isSuccess ()
@@ -78,12 +100,30 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
   }
 
   @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllExternalCSSs ()
+  {
+    return ContainerHelper.newList (m_aExternalCSSs);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllExternalJSs ()
+  {
+    return ContainerHelper.newList (m_aExternalJSs);
+  }
+
+  @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
     final JSONObject aAssocArray = new JSONObject ();
     aAssocArray.setBooleanProperty (PROPERTY_SUCCESS, m_bSuccess);
     if (m_bSuccess)
+    {
       aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
+      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, m_aExternalCSSs);
+      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, m_aExternalJSs);
+    }
     else
       aAssocArray.setStringProperty (PROPERTY_ERRORMESSAGE, m_sErrorMessage);
     return aAssocArray.getJSONString (bIndentAndAlign);
@@ -99,7 +139,9 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     final AjaxDefaultResponse rhs = (AjaxDefaultResponse) o;
     return m_bSuccess == rhs.m_bSuccess &&
            EqualsUtils.equals (m_sErrorMessage, rhs.m_sErrorMessage) &&
-           EqualsUtils.equals (m_aSuccessValue, rhs.m_aSuccessValue);
+           EqualsUtils.equals (m_aSuccessValue, rhs.m_aSuccessValue) &&
+           m_aExternalCSSs.equals (rhs.m_aExternalCSSs) &&
+           m_aExternalJSs.equals (rhs.m_aExternalJSs);
   }
 
   @Override
@@ -108,6 +150,8 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     return new HashCodeGenerator (this).append (m_bSuccess)
                                        .append (m_sErrorMessage)
                                        .append (m_aSuccessValue)
+                                       .append (m_aExternalCSSs)
+                                       .append (m_aExternalJSs)
                                        .getHashCode ();
   }
 
@@ -117,6 +161,8 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     return new ToStringGenerator (this).append ("success", m_bSuccess)
                                        .append ("errorMsg", m_sErrorMessage)
                                        .append ("successValue", m_aSuccessValue)
+                                       .append ("externalCSSs", m_aExternalCSSs)
+                                       .append ("externalJSs", m_aExternalJSs)
                                        .toString ();
   }
 

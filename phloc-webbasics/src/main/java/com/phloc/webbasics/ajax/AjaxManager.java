@@ -151,19 +151,6 @@ public final class AjaxManager extends GlobalSingleton
     }
   }
 
-  public void registerExternalResourcesForHandlerFunction (@Nonnull final String sFunctionName) throws Exception
-  {
-    final Class <? extends IAjaxHandler> aHandlerClass = getRegisteredHandler (sFunctionName);
-    if (aHandlerClass == null)
-      throw new IllegalArgumentException ("Failed to find handler for AJAX function '" +
-                                          sFunctionName +
-                                          "' for registering external resources!");
-
-    // create handler instance (we ensured at registration, that a no-argument
-    // ctor is present)
-    aHandlerClass.newInstance ().registerExternalResources ();
-  }
-
   /**
    * Invoke the specified AJAX function.
    * 
@@ -185,8 +172,10 @@ public final class AjaxManager extends GlobalSingleton
   {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Invoking AJAX function '" + sFunctionName + "'");
+
     final StopWatch aSW = new StopWatch (true);
 
+    // Find the handler
     final Class <? extends IAjaxHandler> aHandlerClass = getRegisteredHandler (sFunctionName);
     if (aHandlerClass == null)
       throw new IllegalArgumentException ("Failed to find handler for AJAX function '" + sFunctionName + "'");
@@ -198,6 +187,11 @@ public final class AjaxManager extends GlobalSingleton
     // ctor is present)
     final IAjaxHandler aHandlerObj = aHandlerClass.newInstance ();
 
+    // Register all external resources, prior to handling the main request, as
+    // the JS/CSS elements will be contained in the AjaxDefaultResponse in case
+    // of success
+    aHandlerObj.registerExternalResources ();
+
     // execute request
     final AjaxDefaultResponse aReturnValue = aHandlerObj.handleRequest (aRequestScope);
 
@@ -208,9 +202,9 @@ public final class AjaxManager extends GlobalSingleton
     if (aSW.stopAndGetMillis () > CGlobal.MILLISECONDS_PER_SECOND)
       s_aLogger.warn ("Finished invoking AJAX function '" +
                       sFunctionName +
-                      "' after " +
+                      "' which took " +
                       aSW.getMillis () +
-                      " milliseconds");
+                      " milliseconds (which is too long)");
     return aReturnValue;
   }
 
