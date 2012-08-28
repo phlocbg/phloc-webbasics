@@ -63,6 +63,7 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     m_aSuccessValue = aSuccessValue;
     if (bSuccess)
     {
+      // Grab per-request CSS/JS only in success case!
       final boolean bRegularFiles = GlobalDebug.isDebugMode ();
       for (final ICSSPathProvider aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ())
         m_aExternalCSSs.add (aCSSPath.getCSSItemPath (bRegularFiles));
@@ -99,6 +100,11 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     return m_aSuccessValue;
   }
 
+  /**
+   * @return In case this is a success, this list contains all CSS files that
+   *         were requested by elements created inside the handler. Never
+   *         <code>null</code> but maybe empty.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getAllExternalCSSs ()
@@ -106,6 +112,11 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     return ContainerHelper.newList (m_aExternalCSSs);
   }
 
+  /**
+   * @return In case this is a success, this list contains all JS files that
+   *         were requested by elements created inside the handler. Never
+   *         <code>null</code> but maybe empty.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getAllExternalJSs ()
