@@ -37,9 +37,9 @@ import com.phloc.commons.lang.ClassHelper;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.phloc.commons.stats.StatisticsManager;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.timing.StopWatch;
+import com.phloc.html.js.marshal.JSMarshaller;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 
@@ -127,8 +127,8 @@ public final class AjaxManager extends GlobalSingleton
   public void addHandlerFunction (@Nonnull final String sFunctionName,
                                   @Nonnull final Class <? extends IAjaxHandler> aHandlerClass)
   {
-    if (StringHelper.hasNoText (sFunctionName))
-      throw new IllegalArgumentException ("No function name specified");
+    if (!JSMarshaller.isJSIdentifier (sFunctionName))
+      throw new IllegalArgumentException ("Invalid function name '" + sFunctionName + "' specified");
     if (aHandlerClass == null)
       throw new NullPointerException ("No handler class specified");
     if (!ClassHelper.isInstancableClass (aHandlerClass))
