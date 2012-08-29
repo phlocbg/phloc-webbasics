@@ -23,7 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
-import com.phloc.appbasics.app.menu.IMenuItem;
+import com.phloc.appbasics.app.menu.IMenuItemExternal;
+import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.MenuTree;
@@ -43,8 +44,7 @@ import com.phloc.html.hc.html.HCUL;
  * 
  * @author philip
  */
-public class MenuRendererCallback extends
-                                 DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
   public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
@@ -123,14 +123,27 @@ public class MenuRendererCallback extends
         m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_SEPARATOR));
       }
       else
-      {
-        // item
-        final IHCNode aHCNode = m_aRenderer.renderMenuItem ((IMenuItem) aMenuObj,
-                                                            aItem.hasChildren (),
-                                                            aMenuObj.getID ().equals (m_sSelectedItem),
-                                                            aExpandedState.booleanValue ());
-        m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM));
-      }
+        if (aMenuObj instanceof IMenuItemPage)
+        {
+          // item
+          final IHCNode aHCNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj,
+                                                                  aItem.hasChildren (),
+                                                                  aMenuObj.getID ().equals (m_sSelectedItem),
+                                                                  aExpandedState.booleanValue ());
+          m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM));
+        }
+        else
+          if (aMenuObj instanceof IMenuItemExternal)
+          {
+            // item
+            final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj,
+                                                                        aItem.hasChildren (),
+                                                                        aMenuObj.getID ().equals (m_sSelectedItem),
+                                                                        aExpandedState.booleanValue ());
+            m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM));
+          }
+          else
+            throw new IllegalStateException ();
       m_aChildCountStack.peek ().incrementAndGet ();
       return EHierarchyCallbackReturn.CONTINUE;
     }

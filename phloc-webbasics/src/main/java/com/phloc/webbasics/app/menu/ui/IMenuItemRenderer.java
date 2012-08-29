@@ -19,7 +19,8 @@ package com.phloc.webbasics.app.menu.ui;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.menu.IMenuItem;
+import com.phloc.appbasics.app.menu.IMenuItemExternal;
+import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
 
@@ -39,7 +40,7 @@ public interface IMenuItemRenderer
   IHCNode renderSeparator (@Nonnull IMenuSeparator aSeparator);
 
   /**
-   * Render a menu item
+   * Render a menu item on a page
    * 
    * @param aMenuItem
    *        The menu item to be rendered.
@@ -52,5 +53,27 @@ public interface IMenuItemRenderer
    * @return The rendered menu item. May not be <code>null</code>.
    */
   @Nonnull
-  IHCNode renderMenuItem (@Nonnull IMenuItem aMenuItem, boolean bHasChildren, boolean bIsSelected, boolean bIsExpanded);
+  IHCNode renderMenuItemPage (@Nonnull IMenuItemPage aMenuItem,
+                              boolean bHasChildren,
+                              boolean bIsSelected,
+                              boolean bIsExpanded);
+
+  /**
+   * Render a menu item with an external link
+   * 
+   * @param aMenuItem
+   *        The menu item to be rendered.
+   * @param bHasChildren
+   *        <code>true</code> if the menu item has children
+   * @param bIsSelected
+   *        <code>true</code> if the menu item is a selected menu item
+   * @param bIsExpanded
+   *        <code>true</code> if the menu item is expanded
+   * @return The rendered menu item. May not be <code>null</code>.
+   */
+  @Nonnull
+  IHCNode renderMenuItemExternal (@Nonnull IMenuItemExternal aMenuItem,
+                                  boolean bHasChildren,
+                                  boolean bIsSelected,
+                                  boolean bIsExpanded);
 }

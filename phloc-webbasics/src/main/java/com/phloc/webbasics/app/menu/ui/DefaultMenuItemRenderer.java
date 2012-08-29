@@ -21,7 +21,6 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
@@ -29,6 +28,7 @@ import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -58,33 +58,33 @@ public class DefaultMenuItemRenderer implements IMenuItemRenderer
   }
 
   @Nonnull
-  public IHCNode renderMenuItem (@Nonnull final IMenuItem aMenuItem,
-                                 final boolean bHasChildren,
-                                 final boolean bIsSelected,
-                                 final boolean bIsExpanded)
+  public IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItem,
+                                     final boolean bHasChildren,
+                                     final boolean bIsSelected,
+                                     final boolean bIsExpanded)
   {
-    if (aMenuItem instanceof IMenuItemPage)
-    {
-      final String sMenuItemID = aMenuItem.getID ();
-      final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-      aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
-      aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
-      if (bIsSelected)
-        aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
-      return aLink;
-    }
+    final String sMenuItemID = aMenuItem.getID ();
+    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
+    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
+    aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
+    if (bIsSelected)
+      aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
+    return aLink;
+  }
 
-    if (aMenuItem instanceof IMenuItemExternal)
-    {
-      final String sMenuItemID = aMenuItem.getID ();
-      final HCA aLink = new HCA (((IMenuItemExternal) aMenuItem).getURL ());
-      aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
-      aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
-      if (bIsSelected)
-        aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
-      return aLink;
-    }
-
-    throw new IllegalStateException ();
+  @Nonnull
+  public IHCNode renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItem,
+                                         final boolean bHasChildren,
+                                         final boolean bIsSelected,
+                                         final boolean bIsExpanded)
+  {
+    final String sMenuItemID = aMenuItem.getID ();
+    final HCA aLink = new HCA (aMenuItem.getURL ());
+    aLink.setTarget (HCA_Target.BLANK);
+    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
+    aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
+    if (bIsSelected)
+      aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
+    return aLink;
   }
 }
