@@ -1,7 +1,10 @@
 #summary Change log of phloc-appbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/22/12</td><td colspan="4">_Release *1.8.2*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/29/12</td><td colspan="4">_Release *1.8.2*_</td></tr>
+<tr><td>8/29/12</td><td>add</td><td>api</td><td></td><td>Added handling for external links in the menu</td></tr>
+<tr><td>8/29/12</td><td>change</td><td>api</td><td></td><td>Made MockCurrentUserIDProvider more flexible</td></tr>
+<tr border="1"><td>8/22/12</td><td colspan="4">_Release *1.8.2*_</td></tr>
 <tr><td>8/22/12</td><td>change</td><td>tech</td><td></td><td>Removed exception when a base directory is not writable - emitting a warning instead</td></tr>
 <tr border="1"><td>8/18/12</td><td colspan="4">_Release *1.8.1*_</td></tr>
 <tr><td>8/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved AbstractDAO to new 'dao' package</td></tr>
