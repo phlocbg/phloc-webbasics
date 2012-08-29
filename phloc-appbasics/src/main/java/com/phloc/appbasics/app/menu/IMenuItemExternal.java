@@ -17,14 +17,28 @@
  */
 package com.phloc.appbasics.app.menu;
 
-import com.phloc.commons.name.IHasDisplayText;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.filter.IFilter;
+import com.phloc.commons.url.ISimpleURL;
 
 /**
- * Base interface for a single menu item.
+ * Base interface for a single menu item referencing an arbitrary URL.
  * 
  * @author philip
  */
-public interface IMenuItem extends IMenuObject, IHasDisplayText
+public interface IMenuItemExternal extends IMenuItem
 {
-  /* empty */
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  IMenuItemExternal setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
+
+  /**
+   * @return The referenced external URL.
+   */
+  @Nonnull
+  ISimpleURL getURL ();
 }

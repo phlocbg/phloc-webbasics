@@ -17,14 +17,28 @@
  */
 package com.phloc.appbasics.app.menu;
 
-import com.phloc.commons.name.IHasDisplayText;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.filter.IFilter;
 
 /**
- * Base interface for a single menu item.
+ * Base interface for a single menu item referencing an internal page.
  * 
  * @author philip
  */
-public interface IMenuItem extends IMenuObject, IHasDisplayText
+public interface IMenuItemPage extends IMenuItem
 {
-  /* empty */
+  /**
+   * {@inheritDoc}
+   */
+  @Nonnull
+  IMenuItemPage setDisplayFilter (@Nullable IFilter <IMenuObject> aDisplayFilter);
+
+  /**
+   * @return The referenced page object.
+   */
+  @Nonnull
+  IPage getPage ();
 }

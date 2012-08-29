@@ -31,6 +31,8 @@ import org.junit.rules.TestRule;
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.filter.FilterFalse;
+import com.phloc.commons.text.impl.ConstantTextProvider;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 
 /**
@@ -57,10 +59,12 @@ public final class MenuTreeTest
     };
 
     final MenuTree aTree = MenuTree.getInstance ();
-    final IMenuItem aRoot1 = aTree.createRootItem ("root1", aPage)
-                                  .setDisplayFilter (FilterFalse.<IMenuObject> getInstance ());
+    final IMenuItemPage aRoot1 = aTree.createRootItem ("root1", aPage)
+                                      .setDisplayFilter (FilterFalse.<IMenuObject> getInstance ());
     assertNotNull (aRoot1);
     assertNotNull (aTree.createItem (aRoot1, aPage));
+    assertNotNull (aTree.createItem (aRoot1, "logout", new SimpleURL ("/logout"), new ConstantTextProvider ("Any")));
     assertNotNull (aTree.getItemWithID ("root1"));
+    assertNotNull (aTree.getItemWithID ("logout"));
   }
 }

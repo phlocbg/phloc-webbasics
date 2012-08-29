@@ -23,47 +23,54 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.url.ISimpleURL;
 
 /**
- * Default implementation of the {@link IMenuItem} interface.
+ * Default implementation of the {@link IMenuItemExternal} interface.
  * 
  * @author philip
  */
 @NotThreadSafe
-public final class MenuItem extends AbstractMenuObject implements IMenuItem
+public final class MenuItemExternal extends AbstractMenuObject implements IMenuItemExternal
 {
-  private final IPage m_aPage;
+  private final ISimpleURL m_aURL;
+  private final IHasDisplayText m_aDisplayText;
 
-  public MenuItem (@Nonnull @Nonempty final String sItemID, @Nonnull final IPage aPage)
+  public MenuItemExternal (@Nonnull @Nonempty final String sItemID,
+                           @Nonnull final ISimpleURL aURL,
+                           @Nonnull final IHasDisplayText aDisplayText)
   {
     super (sItemID);
-    if (aPage == null)
-      throw new NullPointerException ("page");
-    m_aPage = aPage;
+    if (aURL == null)
+      throw new NullPointerException ("URL");
+    if (aDisplayText == null)
+      throw new NullPointerException ("displayText");
+    m_aURL = aURL;
+    m_aDisplayText = aDisplayText;
   }
 
   @Nonnull
-  public MenuItem setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
+  public MenuItemExternal setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
     m_aDisplayFilter = aDisplayFilter;
     return this;
   }
 
   @Nonnull
-  public IPage getPage ()
+  public ISimpleURL getURL ()
   {
-    return m_aPage;
+    return m_aURL;
   }
 
   @Nullable
-  public String getDisplayText (final Locale aDisplayLocale)
+  public String getDisplayText (@Nonnull final Locale aDisplayLocale)
   {
-    return m_aPage.getDisplayText (aDisplayLocale);
+    return m_aDisplayText.getDisplayText (aDisplayLocale);
   }
 
   @Override
@@ -73,19 +80,19 @@ public final class MenuItem extends AbstractMenuObject implements IMenuItem
       return true;
     if (!super.equals (o))
       return false;
-    final MenuItem rhs = (MenuItem) o;
-    return m_aPage.getID ().equals (rhs.m_aPage.getID ());
+    final MenuItemExternal rhs = (MenuItemExternal) o;
+    return m_aURL.equals (rhs.m_aURL);
   }
 
   @Override
   public int hashCode ()
   {
-    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_aPage).getHashCode ();
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_aURL).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("page", m_aPage).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("URL", m_aURL).toString ();
   }
 }

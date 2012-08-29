@@ -19,6 +19,7 @@ package com.phloc.appbasics.app.menu;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -28,9 +29,11 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
 import com.phloc.commons.tree.withid.unique.ITreeWithGlobalUniqueID;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 
 /**
@@ -38,8 +41,7 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
  * 
  * @author philip
  */
-public final class MenuTree extends GlobalSingleton implements
-                                                   ITreeWithGlobalUniqueID <String, IMenuObject, DefaultTreeItemWithID <String, IMenuObject>>
+public final class MenuTree extends GlobalSingleton implements ITreeWithGlobalUniqueID <String, IMenuObject, DefaultTreeItemWithID <String, IMenuObject>>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTree.class);
   private final DefaultTreeWithGlobalUniqueID <String, IMenuObject> m_aTree = new DefaultTreeWithGlobalUniqueID <String, IMenuObject> ();
@@ -124,9 +126,9 @@ public final class MenuTree extends GlobalSingleton implements
    * @return The created menu item object. Never <code>null</code>.
    */
   @Nonnull
-  public IMenuItem createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
+  public IMenuItemPage createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
   {
-    return _createChildItem (getRootItem (), new MenuItem (sItemID, aPage));
+    return _createChildItem (getRootItem (), new MenuItemPage (sItemID, aPage));
   }
 
   /**
@@ -138,7 +140,7 @@ public final class MenuTree extends GlobalSingleton implements
    *         the page. Never <code>null</code>.
    */
   @Nonnull
-  public IMenuItem createRootItem (@Nonnull final IPage aPage)
+  public IMenuItemPage createRootItem (@Nonnull final IPage aPage)
   {
     if (aPage == null)
       throw new NullPointerException ("page");
@@ -161,14 +163,14 @@ public final class MenuTree extends GlobalSingleton implements
    *         If the passed parent menu item could not be resolved
    */
   @Nonnull
-  public IMenuItem createItem (@Nonnull final String sParentID,
-                               @Nonnull final String sItemID,
-                               @Nonnull final IPage aPage)
+  public IMenuItemPage createItem (@Nonnull final String sParentID,
+                                   @Nonnull final String sItemID,
+                                   @Nonnull final IPage aPage)
   {
     final DefaultTreeItemWithID <String, IMenuObject> aParentItem = getItemWithID (sParentID);
     if (aParentItem == null)
       throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
-    return _createChildItem (aParentItem, new MenuItem (sItemID, aPage));
+    return _createChildItem (aParentItem, new MenuItemPage (sItemID, aPage));
   }
 
   /**
@@ -185,7 +187,7 @@ public final class MenuTree extends GlobalSingleton implements
    *         If the passed parent menu item could not be resolved
    */
   @Nonnull
-  public IMenuItem createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
+  public IMenuItemPage createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
     if (aPage == null)
       throw new NullPointerException ("page");
@@ -207,7 +209,7 @@ public final class MenuTree extends GlobalSingleton implements
    *         If the passed parent menu item could not be resolved
    */
   @Nonnull
-  public IMenuItem createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
+  public IMenuItemPage createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
   {
     if (aParent == null)
       throw new NullPointerException ("parent");
@@ -215,10 +217,79 @@ public final class MenuTree extends GlobalSingleton implements
     return createItem (aParent.getID (), aPage);
   }
 
-  @Deprecated
-  public void setDefaultMenuItem (@Nullable final String sDefaultMenuItem)
+  /**
+   * Append a new menu item at root level.
+   * 
+   * @param sItemID
+   *        The new menu item ID. May not be <code>null</code>.
+   * @param aURL
+   *        The referenced URL. May not be <code>null</code>.
+   * @param aName
+   *        The name of the menu item. May not be <code>null</code>.
+   * @return The created menu item object. Never <code>null</code>.
+   */
+  @Nonnull
+  public IMenuItemExternal createRootItem (@Nonnull final String sItemID,
+                                           @Nonnull final ISimpleURL aURL,
+                                           @Nonnull final IHasDisplayText aName)
   {
-    setDefaultMenuItemID (sDefaultMenuItem);
+    return _createChildItem (getRootItem (), new MenuItemExternal (sItemID, aURL, aName));
+  }
+
+  /**
+   * Append a new menu item below the specified parent.
+   * 
+   * @param aParent
+   *        The parent menu item to append the item to. May not be
+   *        <code>null</code>.
+   * @param sItemID
+   *        The new menu item ID. May not be <code>null</code>.
+   * @param aURL
+   *        The referenced URL. May not be <code>null</code>.
+   * @param aName
+   *        The name of the menu item. May not be <code>null</code>.
+   * @return The created menu item object. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the passed parent menu item could not be resolved
+   */
+  @Nonnull
+  public IMenuItemExternal createItem (@Nonnull final IMenuItem aParent,
+                                       @Nonnull final String sItemID,
+                                       @Nonnull final ISimpleURL aURL,
+                                       @Nonnull final IHasDisplayText aName)
+  {
+    if (aParent == null)
+      throw new NullPointerException ("parent");
+
+    return createItem (aParent.getID (), sItemID, aURL, aName);
+  }
+
+  /**
+   * Append a new menu item below the specified parent.
+   * 
+   * @param sParentID
+   *        The parent menu item ID to append the item to. May not be
+   *        <code>null</code>.
+   * @param sItemID
+   *        The new menu item ID. May not be <code>null</code>.
+   * @param aURL
+   *        The referenced URL. May not be <code>null</code>.
+   * @param aName
+   *        The name of the menu item. May not be <code>null</code>.
+   * @return The created menu item object. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the passed parent menu item could not be resolved
+   */
+  @Nonnull
+  public IMenuItemExternal createItem (@Nonnull final String sParentID,
+                                       @Nonnull final String sItemID,
+                                       @Nonnull final ISimpleURL aURL,
+                                       @Nonnull final IHasDisplayText aName)
+  {
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = getItemWithID (sParentID);
+    if (aParentItem == null)
+      throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
+    return _createChildItem (aParentItem, new MenuItemExternal (sItemID, aURL, aName));
   }
 
   /**
@@ -281,11 +352,13 @@ public final class MenuTree extends GlobalSingleton implements
     return aTreeItem == null ? null : aTreeItem.getData ();
   }
 
+  @Nonnull
   public DefaultTreeItemWithID <String, IMenuObject> getRootItem ()
   {
     return m_aTree.getRootItem ();
   }
 
+  @Nullable
   public DefaultTreeItemWithID <String, IMenuObject> getChildWithID (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent,
                                                                      @Nullable final String aID)
   {
@@ -297,21 +370,25 @@ public final class MenuTree extends GlobalSingleton implements
     return m_aTree.hasChildren (aCurrent);
   }
 
+  @Nonnegative
   public int getChildCount (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
   {
     return m_aTree.getChildCount (aCurrent);
   }
 
+  @Nullable
   public Collection <? extends DefaultTreeItemWithID <String, IMenuObject>> getChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
   {
     return m_aTree.getChildren (aCurrent);
   }
 
+  @Nullable
   public DefaultTreeItemWithID <String, IMenuObject> getItemWithID (@Nullable final String aDataID)
   {
     return m_aTree.getItemWithID (aDataID);
   }
 
+  @Nonnull
   public Collection <DefaultTreeItemWithID <String, IMenuObject>> getAllItems ()
   {
     return m_aTree.getAllItems ();
