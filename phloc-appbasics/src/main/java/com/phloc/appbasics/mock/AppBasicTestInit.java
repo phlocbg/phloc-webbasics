@@ -27,6 +27,11 @@ import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
 
+/**
+ * Static appbasics test init and shutdown code
+ * 
+ * @author philip
+ */
 public final class AppBasicTestInit
 {
   private AppBasicTestInit ()

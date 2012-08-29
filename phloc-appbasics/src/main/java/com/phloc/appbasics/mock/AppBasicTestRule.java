@@ -32,11 +32,20 @@ public class AppBasicTestRule extends ScopeTestRule
 {
   private final File m_aStoragePath;
 
+  /**
+   * Ctor using the default storage path from {@link ScopeTestRule}
+   */
   public AppBasicTestRule ()
   {
     this (ScopeTestRule.STORAGE_PATH);
   }
 
+  /**
+   * Ctor with an arbitrary path
+   * 
+   * @param aStoragePath
+   *        The base path to be used. May not be <code>null</code>.
+   */
   public AppBasicTestRule (@Nonnull final File aStoragePath)
   {
     if (aStoragePath == null)
@@ -44,6 +53,9 @@ public class AppBasicTestRule extends ScopeTestRule
     m_aStoragePath = aStoragePath.getAbsoluteFile ();
   }
 
+  /**
+   * @return The used storage path. Never <code>null</code>.
+   */
   @Nonnull
   public File getStoragePath ()
   {

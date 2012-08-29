@@ -31,9 +31,19 @@ public final class MockCurrentUserIDProvider implements ICurrentUserIDProvider
 {
   private static final MockCurrentUserIDProvider s_aInstance = new MockCurrentUserIDProvider ();
 
-  private MockCurrentUserIDProvider ()
-  {}
+  private final String m_sUserID;
 
+  private MockCurrentUserIDProvider ()
+  {
+    this ("unittest");
+  }
+
+  public MockCurrentUserIDProvider (@Nonnull @Nonempty final String sUserID)
+  {
+    m_sUserID = sUserID;
+  }
+
+  @Nonnull
   public static MockCurrentUserIDProvider getInstance ()
   {
     return s_aInstance;
@@ -43,6 +53,6 @@ public final class MockCurrentUserIDProvider implements ICurrentUserIDProvider
   @Nonempty
   public String getCurrentUserID ()
   {
-    return "unittest";
+    return m_sUserID;
   }
 }
