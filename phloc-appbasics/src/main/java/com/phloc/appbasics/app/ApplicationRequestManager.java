@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItem;
+import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.MenuTree;
 import com.phloc.commons.locale.LocaleCache;
@@ -109,6 +110,12 @@ public final class ApplicationRequestManager
     return sMenuItemID;
   }
 
+  @Nullable
+  public static IMenuItemPage getDefaultMenuItem ()
+  {
+    return (IMenuItemPage) MenuTree.getInstance ().getDefaultMenuItem ();
+  }
+
   /**
    * Resolve the request parameter for the menu item to an {@link IMenuItem}
    * object. If no parameter is present, return the default menu item.
@@ -117,9 +124,9 @@ public final class ApplicationRequestManager
    *         <code>null</code> if resolving the parameter failed.
    */
   @Nullable
-  public static IMenuItem getRequestMenuItem ()
+  public static IMenuItemPage getRequestMenuItem ()
   {
-    IMenuItem aDisplayMenuItem = null;
+    IMenuItemPage aDisplayMenuItem = null;
 
     final String sSelectedMenuItemID = getRequestMenuItemID ();
     if (sSelectedMenuItemID != null)
@@ -127,25 +134,24 @@ public final class ApplicationRequestManager
       // Request parameter present
       final DefaultTreeItemWithID <String, IMenuObject> aSelectedMenuItem = MenuTree.getInstance ()
                                                                                     .getItemWithID (sSelectedMenuItemID);
-      if (aSelectedMenuItem != null && aSelectedMenuItem.getData () instanceof IMenuItem)
-        aDisplayMenuItem = (IMenuItem) aSelectedMenuItem.getData ();
+      if (aSelectedMenuItem != null && aSelectedMenuItem.getData () instanceof IMenuItemPage)
+        aDisplayMenuItem = (IMenuItemPage) aSelectedMenuItem.getData ();
     }
     else
     {
       // No request parameter
 
       // 1. use default menu item
-      aDisplayMenuItem = MenuTree.getInstance ().getDefaultMenuItem ();
-
+      aDisplayMenuItem = getDefaultMenuItem ();
       if (aDisplayMenuItem == null)
       {
         // 2. no default menu item is present - get the very first menu item
         final DefaultTreeItemWithID <String, IMenuObject> aRootItem = MenuTree.getInstance ().getRootItem ();
         if (aRootItem != null && aRootItem.hasChildren ())
           for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
-            if (aItem.getData () instanceof IMenuItem)
+            if (aItem.getData () instanceof IMenuItemPage)
             {
-              aDisplayMenuItem = (IMenuItem) aItem.getData ();
+              aDisplayMenuItem = (IMenuItemPage) aItem.getData ();
               break;
             }
       }
