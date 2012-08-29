@@ -48,6 +48,7 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
 {
   public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
   public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
+  public static final ICSSClassProvider CSS_CLASS_MENU_ITEM_EXTERNAL = DefaultCSSClassProvider.create ("menu_item_external");
   public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
   public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
 
@@ -125,7 +126,7 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
       else
         if (aMenuObj instanceof IMenuItemPage)
         {
-          // item
+          // page item
           final IHCNode aHCNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj,
                                                                   aItem.hasChildren (),
                                                                   aMenuObj.getID ().equals (m_sSelectedItem),
@@ -135,12 +136,12 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
         else
           if (aMenuObj instanceof IMenuItemExternal)
           {
-            // item
+            // external item
             final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj,
                                                                         aItem.hasChildren (),
                                                                         aMenuObj.getID ().equals (m_sSelectedItem),
                                                                         aExpandedState.booleanValue ());
-            m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM));
+            m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM_EXTERNAL));
           }
           else
             throw new IllegalStateException ();
