@@ -127,7 +127,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     }
 
     // Write to file
-    if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.SUGGESTED_XML_SETTINGS).isFailure ())
+    if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
     {
       s_aLogger.error ("Failed to write data to " + m_aFile);
       return ESuccess.FAILURE;

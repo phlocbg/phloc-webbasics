@@ -108,7 +108,7 @@ final class DefaultDAODataProviderXML implements IDAODataProvider
 
     // serialize document to string
     // Use the version with the improved XML incorrect character handling
-    aSB.append (MicroWriter.getNodeAsString (aDoc, XMLWriterSettings.SUGGESTED_XML_SETTINGS));
+    aSB.append (MicroWriter.getNodeAsString (aDoc, XMLWriterSettings.DEFAULT_XML_SETTINGS));
   }
 
   public boolean isContentValidForSaving (@Nullable final String sContent)
