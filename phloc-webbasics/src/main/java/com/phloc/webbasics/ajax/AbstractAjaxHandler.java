@@ -18,16 +18,11 @@
 package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.scopes.nonweb.domain.IRequestScope;
-import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
-import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**
  * Provides a common implementation of the {@link IAjaxHandler} interface for as
@@ -35,10 +30,9 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * 
  * @author philip
  */
+@NotThreadSafe
 public abstract class AbstractAjaxHandler implements IAjaxHandler
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractAjaxHandler.class);
-
   public AbstractAjaxHandler ()
   {}
 
@@ -53,33 +47,15 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
   @Nonnull
   protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestScope aRequestScope) throws Exception;
 
-  private static void _checkConsistencyAfterHandling (@Nonnull @Nonempty final String sHandlerName)
-  {
-    if (PerRequestCSSIncludes.hasRegisteredCSSIncludesForThisRequest ())
-      s_aLogger.warn ("AJAX handler '" +
-                      sHandlerName +
-                      "' returned at least one CSS for this request only: " +
-                      PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ().toString ());
-
-    if (PerRequestJSIncludes.hasRegisteredJSIncludesForThisRequest ())
-      s_aLogger.warn ("AJAX handler '" +
-                      sHandlerName +
-                      "' returned at least one JS for this request only: " +
-                      PerRequestJSIncludes.getAllRegisteredJSIncludesForThisRequest ().toString ());
-  }
-
   @Nonnull
   public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestScope aRequestScope) throws Exception
   {
-    final String sHandlerName = CGStringHelper.getClassLocalName (getClass ());
-
     // Main invocation
     final AjaxDefaultResponse aResult = mainHandleRequest (aRequestScope);
     if (aResult == null)
-      throw new IllegalStateException ("Invocation of " + sHandlerName + " returned null response!");
-
-    // Check consistency after invocation
-    _checkConsistencyAfterHandling (sHandlerName);
+      throw new IllegalStateException ("Invocation of " +
+                                       CGStringHelper.getClassLocalName (getClass ()) +
+                                       " returned null response!");
 
     // Return invocation result
     return aResult;

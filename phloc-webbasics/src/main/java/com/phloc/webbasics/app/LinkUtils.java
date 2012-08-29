@@ -31,8 +31,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
-import com.phloc.html.js.marshal.JSMarshaller;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webbasics.ajax.AjaxManager;
 
 /**
  * Misc utilities to create link URLs.
@@ -180,7 +180,7 @@ public final class LinkUtils
   @Nonnull
   public static String getAjaxURI (@Nonnull final String sFunctionName)
   {
-    if (!JSMarshaller.isJSIdentifier (sFunctionName))
+    if (!AjaxManager.isValidFunctionName (sFunctionName))
       throw new IllegalArgumentException ("Invalid function name '" + sFunctionName + "' specified");
 
     return getURIWithContext ("/ajax/" + sFunctionName);

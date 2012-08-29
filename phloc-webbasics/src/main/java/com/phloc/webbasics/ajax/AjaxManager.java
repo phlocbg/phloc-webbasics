@@ -33,13 +33,14 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.lang.ClassHelper;
+import com.phloc.commons.factory.IFactory;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.phloc.commons.stats.StatisticsManager;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.timing.StopWatch;
-import com.phloc.html.js.marshal.JSMarshaller;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 
@@ -58,7 +59,7 @@ public final class AjaxManager extends GlobalSingleton
                                                                                                                          "$func");
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, Class <? extends IAjaxHandler>> m_aMap = new HashMap <String, Class <? extends IAjaxHandler>> ();
+  private final Map <String, IFactory <? extends IAjaxHandler>> m_aMap = new HashMap <String, IFactory <? extends IAjaxHandler>> ();
 
   /**
    * Private constructor. Avoid outside instantiation
@@ -76,7 +77,7 @@ public final class AjaxManager extends GlobalSingleton
 
   @Nonnull
   @ReturnsMutableCopy
-  public Map <String, Class <? extends IAjaxHandler>> getAllRegisteredHandlers ()
+  public Map <String, IFactory <? extends IAjaxHandler>> getAllRegisteredHandlers ()
   {
     m_aRWLock.readLock ().lock ();
     try
@@ -90,7 +91,7 @@ public final class AjaxManager extends GlobalSingleton
   }
 
   @Nullable
-  public Class <? extends IAjaxHandler> getRegisteredHandler (@Nullable final String sFunctionName)
+  public IFactory <? extends IAjaxHandler> getRegisteredHandler (@Nullable final String sFunctionName)
   {
     m_aRWLock.readLock ().lock ();
     try
@@ -121,18 +122,16 @@ public final class AjaxManager extends GlobalSingleton
    * 
    * @param sFunctionName
    *        Name AJAX function to be invoked. May not be <code>null</code>.
-   * @param aHandlerClass
+   * @param aFactory
    *        The class handling a special function. May not be <code>null</code>.
    */
   public void addHandlerFunction (@Nonnull final String sFunctionName,
-                                  @Nonnull final Class <? extends IAjaxHandler> aHandlerClass)
+                                  @Nonnull final IFactory <? extends IAjaxHandler> aFactory)
   {
-    if (!JSMarshaller.isJSIdentifier (sFunctionName))
+    if (!isValidFunctionName (sFunctionName))
       throw new IllegalArgumentException ("Invalid function name '" + sFunctionName + "' specified");
-    if (aHandlerClass == null)
+    if (aFactory == null)
       throw new NullPointerException ("No handler class specified");
-    if (!ClassHelper.isInstancableClass (aHandlerClass))
-      throw new IllegalArgumentException ("The passed handler class is not instancable: " + aHandlerClass);
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -141,9 +140,9 @@ public final class AjaxManager extends GlobalSingleton
         throw new IllegalArgumentException ("An AJAX function with the name '" +
                                             sFunctionName +
                                             "' is already registered");
-      m_aMap.put (sFunctionName, aHandlerClass);
+      m_aMap.put (sFunctionName, aFactory);
       if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Registered AJAX function '" + sFunctionName + "' with handler " + aHandlerClass);
+        s_aLogger.debug ("Registered AJAX function '" + sFunctionName + "' with handler " + aFactory);
     }
     finally
     {
@@ -176,7 +175,7 @@ public final class AjaxManager extends GlobalSingleton
     final StopWatch aSW = new StopWatch (true);
 
     // Find the handler
-    final Class <? extends IAjaxHandler> aHandlerClass = getRegisteredHandler (sFunctionName);
+    final IFactory <? extends IAjaxHandler> aHandlerClass = getRegisteredHandler (sFunctionName);
     if (aHandlerClass == null)
       throw new IllegalArgumentException ("Failed to find handler for AJAX function '" + sFunctionName + "'");
 
@@ -185,7 +184,7 @@ public final class AjaxManager extends GlobalSingleton
 
     // create handler instance (we ensured at registration, that a no-argument
     // ctor is present)
-    final IAjaxHandler aHandlerObj = aHandlerClass.newInstance ();
+    final IAjaxHandler aHandlerObj = aHandlerClass.create ();
 
     // Register all external resources, prior to handling the main request, as
     // the JS/CSS elements will be contained in the AjaxDefaultResponse in case
@@ -212,5 +211,12 @@ public final class AjaxManager extends GlobalSingleton
   public String toString ()
   {
     return new ToStringGenerator (this).append ("map", m_aMap).toString ();
+  }
+
+  public static boolean isValidFunctionName (@Nullable final String sFunctionName)
+  {
+    // All characters allowed should be valid in URLs without masking
+    return StringHelper.hasText (sFunctionName) &&
+           RegExHelper.stringMatchesPattern ("^[a-zA-Z0-9\\-_]+$", sFunctionName);
   }
 }
