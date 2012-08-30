@@ -79,11 +79,11 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
                            "' and failed to determine one");
         else
         {
-          s_aLogger.error ("The response has no content type for request '" +
-                           sRequestURL +
-                           "' but determined '" +
-                           sDeterminedMimeType +
-                           "'");
+          s_aLogger.warn ("The response has no content type for request '" +
+                          sRequestURL +
+                          "' but determined '" +
+                          sDeterminedMimeType +
+                          "'");
           setContentType (sDeterminedMimeType);
         }
       }
