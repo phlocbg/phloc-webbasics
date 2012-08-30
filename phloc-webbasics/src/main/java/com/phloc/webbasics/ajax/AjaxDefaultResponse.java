@@ -131,12 +131,16 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
     aAssocArray.setBooleanProperty (PROPERTY_SUCCESS, m_bSuccess);
     if (m_bSuccess)
     {
-      aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
+      if (m_aSuccessValue != null)
+        aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
       aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, m_aExternalCSSs);
       aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, m_aExternalJSs);
     }
     else
-      aAssocArray.setStringProperty (PROPERTY_ERRORMESSAGE, m_sErrorMessage);
+    {
+      if (m_sErrorMessage != null)
+        aAssocArray.setStringProperty (PROPERTY_ERRORMESSAGE, m_sErrorMessage);
+    }
     return aAssocArray.getJSONString (bIndentAndAlign);
   }
 

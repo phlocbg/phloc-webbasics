@@ -17,6 +17,9 @@
  */
 package com.phloc.webbasics.ajax;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -36,22 +39,48 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
   public AbstractAjaxHandler ()
   {}
 
+  @OverrideOnDemand
+  public void registerExternalResources ()
+  {
+    // empty default implementation
+  }
+
+  @OverrideOnDemand
+  protected void modifyRequestParamMap (@Nonnull final Map <String, Object> aParams)
+  {
+    // Remove the jQuery timestamp parameter
+    aParams.remove (AjaxManager.REQUEST_PARAM_JQUERY_NO_CACHE);
+  }
+
   /**
    * This method must be overridden by every handler
    * 
-   * @param aRequestScope
+   * @param aParams
+   *        A mutable copy of the extracted request parameters. The values are
+   *        either of type String, String[] or IFileItem.
    * @return the result object. May not be <code>null</code>
    * @throws Exception
    */
   @OverrideOnDemand
   @Nonnull
-  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestWebScope aRequestScope) throws Exception;
+  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull Map <String, Object> aParams) throws Exception;
 
   @Nonnull
   public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScope aRequestScope) throws Exception
   {
+    // Get all request parameter values to use from the request scope, as the
+    // request scope already differentiated between String, String[] and
+    // IFileItem!
+    final Map <String, Object> aParams = new HashMap <String, Object> ();
+    for (final Object aKey : aRequestScope.getRequest ().getParameterMap ().keySet ())
+    {
+      final String sKey = (String) aKey;
+      aParams.put (sKey, aRequestScope.getAttributeObject (sKey));
+    }
+    modifyRequestParamMap (aParams);
+
     // Main invocation
-    final AjaxDefaultResponse aResult = mainHandleRequest (aRequestScope);
+    final AjaxDefaultResponse aResult = mainHandleRequest (aParams);
     if (aResult == null)
       throw new IllegalStateException ("Invocation of " +
                                        CGStringHelper.getClassLocalName (getClass ()) +
@@ -59,11 +88,5 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
 
     // Return invocation result
     return aResult;
-  }
-
-  @OverrideOnDemand
-  public void registerExternalResources ()
-  {
-    // empty default implementation
   }
 }
