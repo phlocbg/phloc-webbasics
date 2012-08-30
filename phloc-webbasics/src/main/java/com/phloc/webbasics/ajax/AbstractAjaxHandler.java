@@ -22,7 +22,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.lang.CGStringHelper;
-import com.phloc.scopes.nonweb.domain.IRequestScope;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 
 /**
  * Provides a common implementation of the {@link IAjaxHandler} interface for as
@@ -45,10 +45,10 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
    */
   @OverrideOnDemand
   @Nonnull
-  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestScope aRequestScope) throws Exception;
+  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestWebScope aRequestScope) throws Exception;
 
   @Nonnull
-  public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestScope aRequestScope) throws Exception
+  public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScope aRequestScope) throws Exception
   {
     // Main invocation
     final AjaxDefaultResponse aResult = mainHandleRequest (aRequestScope);

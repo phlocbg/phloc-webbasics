@@ -156,7 +156,7 @@ public final class AjaxManager extends GlobalSingleton
    * @param sFunctionName
    *        the alias of the AJAX function to invoke. May not be
    *        <code>null</code>.
-   * @param aRequestScope
+   * @param aRequestWebScope
    *        The request scope to be used for the function.
    * @return <code>null</code> if this is a void function, the JS string to
    *         serialize otherwise.
@@ -167,7 +167,7 @@ public final class AjaxManager extends GlobalSingleton
    */
   @Nonnull
   public AjaxDefaultResponse invokeFunction (@Nonnull final String sFunctionName,
-                                             @Nonnull final IRequestWebScope aRequestScope) throws Exception
+                                             @Nonnull final IRequestWebScope aRequestWebScope) throws Exception
   {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Invoking AJAX function '" + sFunctionName + "'");
@@ -192,7 +192,7 @@ public final class AjaxManager extends GlobalSingleton
     aHandlerObj.registerExternalResources ();
 
     // execute request
-    final AjaxDefaultResponse aReturnValue = aHandlerObj.handleRequest (aRequestScope);
+    final AjaxDefaultResponse aReturnValue = aHandlerObj.handleRequest (aRequestWebScope);
 
     // Increment statistics after successful call
     s_aStatsFunctionInvoke.increment (sFunctionName);

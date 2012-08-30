@@ -19,7 +19,7 @@ package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.scopes.nonweb.domain.IRequestScope;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 
 /**
  * Base interface for an AJAX handling function.
@@ -38,7 +38,7 @@ public interface IAjaxHandler
    *         Any exception if an error occurs.
    */
   @Nonnull
-  AjaxDefaultResponse handleRequest (@Nonnull IRequestScope aRequestScope) throws Exception;
+  AjaxDefaultResponse handleRequest (@Nonnull IRequestWebScope aRequestScope) throws Exception;
 
   /**
    * Registers all external resources (CSS or JS files) needed by controls
