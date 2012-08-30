@@ -18,6 +18,7 @@
 package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 
@@ -26,6 +27,7 @@ import com.phloc.commons.annotations.Nonempty;
  * 
  * @author philip
  */
+@Immutable
 public abstract class AbstractAjaxFunction implements IAjaxFunction
 {
   private final String m_sFunctionName;
@@ -33,13 +35,13 @@ public abstract class AbstractAjaxFunction implements IAjaxFunction
   public AbstractAjaxFunction (@Nonnull @Nonempty final String sFunctionName)
   {
     if (!AjaxManager.isValidFunctionName (sFunctionName))
-      throw new IllegalArgumentException ("name");
+      throw new IllegalArgumentException ("functionName");
     m_sFunctionName = sFunctionName;
   }
 
   @Nonnull
   @Nonempty
-  public String getName ()
+  public final String getName ()
   {
     return m_sFunctionName;
   }

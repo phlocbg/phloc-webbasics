@@ -32,7 +32,6 @@ import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.ajax.AjaxManager;
 
 /**
  * Misc utilities to create link URLs.
@@ -166,24 +165,6 @@ public final class LinkUtils
                                                       @Nullable final Map <String, String> aParams)
   {
     return new SimpleURL (getURIWithServerAndContext (sHRef), aParams);
-  }
-
-  /**
-   * Create a valid AJAX URI for the passed Ajax function name, assuming that
-   * the Ajax servlet is located at "/ajax/"
-   * 
-   * @param sFunctionName
-   *        The name of the Ajax function
-   * @return The absolute path to the Ajax function like
-   *         <code>/webapp-context/ajax/<i>functionName</i></code>.
-   */
-  @Nonnull
-  public static String getAjaxURI (@Nonnull final String sFunctionName)
-  {
-    if (!AjaxManager.isValidFunctionName (sFunctionName))
-      throw new IllegalArgumentException ("Invalid function name '" + sFunctionName + "' specified");
-
-    return getURIWithContext ("/ajax/" + sFunctionName);
   }
 
   /**
