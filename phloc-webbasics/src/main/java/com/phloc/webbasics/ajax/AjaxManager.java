@@ -52,11 +52,6 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
 @ThreadSafe
 public final class AjaxManager extends GlobalSingleton
 {
-  /**
-   * The name of the request parameter used by jQuery to indicate "no cache".
-   * Use this constant for parameter filtering.
-   */
-  public static final String REQUEST_PARAM_JQUERY_NO_CACHE = "_";
   private static final Logger s_aLogger = LoggerFactory.getLogger (AjaxManager.class);
   private static final IStatisticsHandlerCounter s_aStatsGlobalInvoke = StatisticsManager.getCounterHandler (AjaxManager.class.getName () +
                                                                                                              "$invocations");

@@ -17,13 +17,11 @@
  */
 package com.phloc.webbasics.ajax;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 
@@ -36,6 +34,12 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
 @NotThreadSafe
 public abstract class AbstractAjaxHandler implements IAjaxHandler
 {
+  /**
+   * The name of the request parameter used by jQuery to indicate "no cache".
+   * Use this constant for parameter filtering.
+   */
+  public static final String REQUEST_PARAM_JQUERY_NO_CACHE = "_";
+
   public AbstractAjaxHandler ()
   {}
 
@@ -46,10 +50,10 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
   }
 
   @OverrideOnDemand
-  protected void modifyRequestParamMap (@Nonnull final Map <String, Object> aParams)
+  protected void modifyRequestParamMap (@Nonnull final MapBasedAttributeContainer aParams)
   {
     // Remove the jQuery timestamp parameter
-    aParams.remove (AjaxManager.REQUEST_PARAM_JQUERY_NO_CACHE);
+    aParams.removeAttribute (REQUEST_PARAM_JQUERY_NO_CACHE);
   }
 
   /**
@@ -63,7 +67,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
    */
   @OverrideOnDemand
   @Nonnull
-  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull Map <String, Object> aParams) throws Exception;
+  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull MapBasedAttributeContainer aParams) throws Exception;
 
   @Nonnull
   public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScope aRequestScope) throws Exception
@@ -71,11 +75,11 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
     // Get all request parameter values to use from the request scope, as the
     // request scope already differentiated between String, String[] and
     // IFileItem!
-    final Map <String, Object> aParams = new HashMap <String, Object> ();
+    final MapBasedAttributeContainer aParams = new MapBasedAttributeContainer ();
     for (final Object aKey : aRequestScope.getRequest ().getParameterMap ().keySet ())
     {
       final String sKey = (String) aKey;
-      aParams.put (sKey, aRequestScope.getAttributeObject (sKey));
+      aParams.setAttribute (sKey, aRequestScope.getAttributeObject (sKey));
     }
     modifyRequestParamMap (aParams);
 
