@@ -28,7 +28,6 @@ import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.MenuTree;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.scopes.IScope;
 import com.phloc.scopes.nonweb.domain.IRequestScope;
@@ -46,11 +45,11 @@ import com.phloc.scopes.nonweb.mgr.ScopeManager;
  */
 public final class ApplicationRequestManager
 {
-  public static final String REQUEST_PARAMETER_MENUITEM = "item";
-  private static final String REQUEST_VALUE_MENUITEM = "$item";
+  public static final String REQUEST_PARAMETER_MENUITEM = "menuitem";
+  private static final String SESSION_VALUE_MENUITEM = "$menuitem";
 
   public static final String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
-  private static final String REQUEST_VALUE_DISPLAY_LOCALE = "$displaylocale";
+  private static final String SESSION_VALUE_DISPLAY_LOCALE = "$displaylocale";
 
   private ApplicationRequestManager ()
   {}
@@ -70,8 +69,11 @@ public final class ApplicationRequestManager
     {
       // Validate the menu item ID and check the display filter!
       final IMenuObject aMenuObject = MenuTree.getInstance ().getMenuObjectOfID (sMenuItemID);
-      if (aMenuObject != null && aMenuObject instanceof IMenuItem && aMenuObject.matchesDisplayFilter ())
-        aRequestScope.setAttribute (REQUEST_VALUE_MENUITEM, sMenuItemID);
+      if (aMenuObject != null && aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
+      {
+        final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
+        aSessionScope.setAttribute (SESSION_VALUE_MENUITEM, aMenuObject);
+      }
     }
 
     // determine locale from request and store in session
@@ -81,35 +83,28 @@ public final class ApplicationRequestManager
       final Locale aDisplayLocale = LocaleCache.getLocale (sDisplayLocale);
       if (aDisplayLocale != null)
       {
-        final ISessionScope aSessionScope = ScopeManager.getSessionScope ();
-        aSessionScope.setAttribute (REQUEST_VALUE_DISPLAY_LOCALE, aDisplayLocale);
+        // A valid locale was provided
+        final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
+        aSessionScope.setAttribute (SESSION_VALUE_DISPLAY_LOCALE, aDisplayLocale);
       }
     }
   }
 
   /**
-   * @return The ID of the requested menu item, or <code>null</code> if the
-   *         corresponding request parameter is not present.
+   * @return The ID of the last requested menu item, or <code>null</code> if the
+   *         corresponding session parameter is not present.
    */
   @Nullable
-  public static String getRequestMenuItemID ()
+  public static IMenuItemPage getSessionMenuItem ()
   {
-    return ScopeManager.getRequestScope ().getAttributeAsString (REQUEST_VALUE_MENUITEM);
+    final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
+    return aSessionScope == null ? null : aSessionScope.<IMenuItemPage> getCastedAttribute (SESSION_VALUE_MENUITEM);
   }
 
   /**
-   * @return The current menu item. If none was selected, that the default menu
-   *         item is returned.
+   * @return The specified default menu item. May be <code>null</code> if no
+   *         default menu item is specified.
    */
-  @Nonnull
-  public static String getCurrentMenuItemID ()
-  {
-    String sMenuItemID = getRequestMenuItemID ();
-    if (StringHelper.hasNoText (sMenuItemID))
-      sMenuItemID = MenuTree.getInstance ().getDefaultMenuItem ().getID ();
-    return sMenuItemID;
-  }
-
   @Nullable
   public static IMenuItemPage getDefaultMenuItem ()
   {
@@ -120,55 +115,44 @@ public final class ApplicationRequestManager
    * Resolve the request parameter for the menu item to an {@link IMenuItem}
    * object. If no parameter is present, return the default menu item.
    * 
-   * @return The resolved menu item object from the request parameter or
-   *         <code>null</code> if resolving the parameter failed.
+   * @return The resolved menu item object from the request parameter. Never
+   *         <code>null</code>.
    */
-  @Nullable
+  @Nonnull
   public static IMenuItemPage getRequestMenuItem ()
   {
-    IMenuItemPage aDisplayMenuItem = null;
+    // Get selected item from request/session
+    final IMenuItemPage aSelectedMenuItem = getSessionMenuItem ();
+    if (aSelectedMenuItem != null && aSelectedMenuItem.matchesDisplayFilter ())
+      return aSelectedMenuItem;
 
-    final String sSelectedMenuItemID = getRequestMenuItemID ();
-    if (sSelectedMenuItemID != null)
-    {
-      // Request parameter present
-      final DefaultTreeItemWithID <String, IMenuObject> aSelectedMenuItem = MenuTree.getInstance ()
-                                                                                    .getItemWithID (sSelectedMenuItemID);
-      if (aSelectedMenuItem != null && aSelectedMenuItem.getData () instanceof IMenuItemPage)
-        aDisplayMenuItem = (IMenuItemPage) aSelectedMenuItem.getData ();
-    }
-    else
-    {
-      // No request parameter
+    // Use default menu item
+    final IMenuItemPage aDefaultMenuItem = getDefaultMenuItem ();
+    if (aDefaultMenuItem != null && aDefaultMenuItem.matchesDisplayFilter ())
+      return aDefaultMenuItem;
 
-      // 1. use default menu item
-      aDisplayMenuItem = getDefaultMenuItem ();
-      if (aDisplayMenuItem == null)
-      {
-        // 2. no default menu item is present - get the very first menu item
-        final DefaultTreeItemWithID <String, IMenuObject> aRootItem = MenuTree.getInstance ().getRootItem ();
-        if (aRootItem != null && aRootItem.hasChildren ())
-          for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
-            if (aItem.getData () instanceof IMenuItemPage)
-            {
-              aDisplayMenuItem = (IMenuItemPage) aItem.getData ();
-              break;
-            }
-      }
-    }
+    // Last fallback: use the first menu item
+    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = MenuTree.getInstance ().getRootItem ();
+    if (aRootItem != null && aRootItem.hasChildren ())
+      for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
+        if (aItem.getData () instanceof IMenuItemPage)
+        {
+          final IMenuItemPage aFirstMenuItem = (IMenuItemPage) aItem.getData ();
+          if (aFirstMenuItem.matchesDisplayFilter ())
+            return aFirstMenuItem;
+        }
 
-    return aDisplayMenuItem;
+    throw new IllegalStateException ("No menu item is present!");
   }
 
   /**
-   * @return The ID of resolved menu item or <code>null</code> if no menu item
-   *         could be resolved!
+   * @return The ID of the current request menu item. May not be
+   *         <code>null</code>.
    */
-  @Nullable
-  public static String getResolvedRequestMenuItemID ()
+  @Nonnull
+  public static String getRequestMenuItemID ()
   {
-    final IMenuItem aMenuItem = getRequestMenuItem ();
-    return aMenuItem == null ? null : aMenuItem.getID ();
+    return getRequestMenuItem ().getID ();
   }
 
   /**
@@ -184,7 +168,7 @@ public final class ApplicationRequestManager
     final IScope aSessionScope = ScopeManager.getSessionScope (false);
     if (aSessionScope != null)
     {
-      final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (REQUEST_VALUE_DISPLAY_LOCALE);
+      final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (SESSION_VALUE_DISPLAY_LOCALE);
       if (aSessionDisplayLocale != null)
         return aSessionDisplayLocale;
     }
