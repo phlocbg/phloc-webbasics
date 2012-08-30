@@ -197,14 +197,14 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    return getLinkToMenuItem (ApplicationRequestManager.getCurrentMenuItemID ()).addAll (aParams);
+    return getLinkToMenuItem (ApplicationRequestManager.getRequestMenuItemID ()).addAll (aParams);
   }
 
   @Nonnull
   public static SMap getDefaultParams ()
   {
     return new SMap ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM,
-                            ApplicationRequestManager.getCurrentMenuItemID ())
+                            ApplicationRequestManager.getRequestMenuItemID ())
                       .add (ApplicationRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
                             ApplicationRequestManager.getRequestDisplayLocale ().toString ());
   }

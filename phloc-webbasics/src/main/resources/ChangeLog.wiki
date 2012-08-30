@@ -1,7 +1,9 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/30/12</td><td colspan="4">_Release *1.8.8*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/30/12</td><td colspan="4">_Release *1.8.9*_</td></tr>
+<tr><td>8/30/12</td><td>update</td><td>tech</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-appbasics phloc-appbasics] 1.8.4</td></tr>
+<tr border="1"><td>8/30/12</td><td colspan="4">_Release *1.8.8*_</td></tr>
 <tr><td>8/30/12</td><td>change</td><td>api</td><td>*yes*</td><td>Changed some AJAX method signatures for easier handling</td></tr>
 <tr border="1"><td>8/29/12</td><td colspan="4">_Release *1.8.7*_</td></tr>
 <tr><td>8/28/12</td><td>add</td><td>api</td><td></td><td>Added initial version of AJAX servlet and abstract handler</td></tr>
