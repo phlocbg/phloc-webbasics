@@ -120,10 +120,27 @@ public final class AjaxManager extends GlobalSingleton
   /**
    * Add a global handler function that is used as a callback.
    * 
+   * @param aFunction
+   *        The Ajax function declaration to be invoked. May not be
+   *        <code>null</code>.
+   * @param aFactory
+   *        The factory creating the respective handler function. May not be
+   *        <code>null</code>.
+   */
+  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
+                                  @Nonnull final IFactory <? extends IAjaxHandler> aFactory)
+  {
+    addHandlerFunction (aFunction.getName (), aFactory);
+  }
+
+  /**
+   * Add a global handler function that is used as a callback.
+   * 
    * @param sFunctionName
    *        Name AJAX function to be invoked. May not be <code>null</code>.
    * @param aFactory
-   *        The class handling a special function. May not be <code>null</code>.
+   *        The factory creating the respective handler function. May not be
+   *        <code>null</code>.
    */
   public void addHandlerFunction (@Nonnull final String sFunctionName,
                                   @Nonnull final IFactory <? extends IAjaxHandler> aFactory)
@@ -175,16 +192,17 @@ public final class AjaxManager extends GlobalSingleton
     final StopWatch aSW = new StopWatch (true);
 
     // Find the handler
-    final IFactory <? extends IAjaxHandler> aHandlerClass = getRegisteredHandler (sFunctionName);
-    if (aHandlerClass == null)
+    final IFactory <? extends IAjaxHandler> aHandlerFactory = getRegisteredHandler (sFunctionName);
+    if (aHandlerFactory == null)
       throw new IllegalArgumentException ("Failed to find handler for AJAX function '" + sFunctionName + "'");
 
     // Global increment before invocation
     s_aStatsGlobalInvoke.increment ();
 
-    // create handler instance (we ensured at registration, that a no-argument
-    // ctor is present)
-    final IAjaxHandler aHandlerObj = aHandlerClass.create ();
+    // create handler instance
+    final IAjaxHandler aHandlerObj = aHandlerFactory.create ();
+    if (aHandlerObj == null)
+      throw new IllegalStateException ("Factory of '" + sFunctionName + "' created null-handler!");
 
     // Register all external resources, prior to handling the main request, as
     // the JS/CSS elements will be contained in the AjaxDefaultResponse in case
