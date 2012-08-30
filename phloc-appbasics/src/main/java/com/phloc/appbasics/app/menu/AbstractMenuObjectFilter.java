@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import java.io.Serializable;
+
 import com.phloc.commons.filter.IFilter;
 
 /**
@@ -24,7 +26,7 @@ import com.phloc.commons.filter.IFilter;
  * 
  * @author philip
  */
-public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>
+public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>, Serializable
 {
   /* empty */
 }

@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -28,7 +30,7 @@ import com.phloc.commons.id.IHasID;
  * 
  * @author philip
  */
-public interface IMenuObject extends IHasID <String>
+public interface IMenuObject extends IHasID <String>, Serializable
 {
   /**
    * @return An optional filter that toggles visibility.
