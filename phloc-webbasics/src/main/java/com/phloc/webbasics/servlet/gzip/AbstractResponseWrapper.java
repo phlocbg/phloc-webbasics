@@ -58,11 +58,10 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
   {
     if (m_aStream != null && !m_aStream.isClosed ())
     {
-      if (m_aWriter != null)
-        StreamUtils.close (m_aWriter);
-      else
-        if (m_aStream != null)
-          StreamUtils.close (m_aStream);
+      if (m_aWriter != null && StreamUtils.close (m_aWriter).isFailure ())
+        throw new IllegalStateException ("See logfile!");
+      if (m_aStream != null && StreamUtils.close (m_aStream).isFailure ())
+        throw new IllegalStateException ("See logfile!");
     }
 
     // Check if a content type was specified
@@ -79,18 +78,22 @@ public abstract class AbstractResponseWrapper extends HttpServletResponseWrapper
                            "' and failed to determine one");
         else
         {
-          s_aLogger.warn ("The response has no content type for request '" +
-                          sRequestURL +
-                          "' but determined '" +
-                          sDeterminedMimeType +
-                          "'");
+          if (s_aLogger.isDebugEnabled ())
+            s_aLogger.debug ("The response has no content type for request '" +
+                             sRequestURL +
+                             "' but determined '" +
+                             sDeterminedMimeType +
+                             "'");
           setContentType (sDeterminedMimeType);
         }
       }
     }
     else
+    {
+      // Content type is present
       if (s_aLogger.isDebugEnabled ())
         s_aLogger.debug ("The response has content type '" + sContentType + "' for request '" + sRequestURL + "'");
+    }
   }
 
   @Nonnull

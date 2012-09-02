@@ -38,28 +38,29 @@ final class DeflateServletOutputStream extends AbstractServletOutputStream
   private final HttpServletResponse m_aHttpResponse;
   private final String m_sContentEncoding;
   private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
-  private final ZipOutputStream m_aZOS = new ZipOutputStream (m_aBAOS);
+  private final ZipOutputStream m_aZipOS = new ZipOutputStream (m_aBAOS);
 
   public DeflateServletOutputStream (@Nonnull final HttpServletResponse aHttpResponse,
                                      @Nonnull final String sContentEncoding) throws IOException
   {
     super ();
-    setWrappedOutputStream (m_aZOS);
+    setWrappedOutputStream (m_aZipOS);
     m_aHttpResponse = aHttpResponse;
     m_sContentEncoding = sContentEncoding;
     // A dummy ZIP entry is required!
-    m_aZOS.putNextEntry (new ZipEntry ("dummy name"));
+    m_aZipOS.putNextEntry (new ZipEntry ("dummy name"));
   }
 
   @Override
   protected void onClose () throws IOException
   {
     // Avoid error when forwarding
-    if (!m_aHttpResponse.isCommitted ())
+    // if (!m_aHttpResponse.isCommitted ())
     {
       // Finish Deflate stream
-      m_aZOS.finish ();
-      m_aZOS.flush ();
+      m_aZipOS.finish ();
+      m_aZipOS.flush ();
+      m_aZipOS.close ();
 
       m_aHttpResponse.setContentLength (m_aBAOS.size ());
       m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
