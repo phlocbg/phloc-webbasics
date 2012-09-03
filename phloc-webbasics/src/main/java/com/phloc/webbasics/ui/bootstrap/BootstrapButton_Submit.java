@@ -27,7 +27,7 @@ import com.phloc.html.hc.html.HCButton_Submit;
 
 public class BootstrapButton_Submit extends HCButton_Submit
 {
-  private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
+  private EBootstrapButtonType m_eType = EBootstrapButtonType.PRIMARY;
   private EBootstrapButtonSize m_eSize;
 
   private void _init ()

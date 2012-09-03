@@ -54,11 +54,12 @@ final class GZIPServletOutputStream extends AbstractServletOutputStream
   protected void onClose () throws IOException
   {
     // Avoid error when forwarding
-    // if (!m_aHttpResponse.isCommitted ())
+    if (!m_aHttpResponse.isCommitted ())
     {
       // Finish GZIP stream
       m_aGZOS.finish ();
       m_aGZOS.flush ();
+      m_aGZOS.close ();
 
       m_aHttpResponse.setContentLength (m_aBAOS.size ());
       m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);

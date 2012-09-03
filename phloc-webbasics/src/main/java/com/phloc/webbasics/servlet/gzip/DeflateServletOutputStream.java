@@ -55,7 +55,7 @@ final class DeflateServletOutputStream extends AbstractServletOutputStream
   protected void onClose () throws IOException
   {
     // Avoid error when forwarding
-    // if (!m_aHttpResponse.isCommitted ())
+    if (!m_aHttpResponse.isCommitted ())
     {
       // Finish Deflate stream
       m_aZipOS.finish ();
