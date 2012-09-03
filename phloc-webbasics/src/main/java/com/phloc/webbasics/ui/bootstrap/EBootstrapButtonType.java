@@ -33,7 +33,9 @@ public enum EBootstrapButtonType implements ICSSClassProvider
   INFO ("btn-info"),
   SUCCESS ("btn-success"),
   WARNING ("btn-warning"),
-  DANGER ("btn-danger");
+  DANGER ("btn-danger"),
+  INVERSE ("btn-inverse"),
+  LINK ("btn-link");
 
   private final String m_sCSSClass;
 

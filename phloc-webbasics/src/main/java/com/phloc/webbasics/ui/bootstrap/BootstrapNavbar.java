@@ -21,20 +21,19 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCElement;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCDiv;
+import com.phloc.html.hc.html.HCP;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 /**
  * Bootstrap Navbar
  * 
  * @author philip
  */
-public class BootstrapNavbar extends AbstractWrappedHCNode
+public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
 {
-  private final HCDiv m_aDiv = new HCDiv ();
   private final HCDiv m_aContainer;
   private final HCDiv m_aCollapse;
 
@@ -45,10 +44,10 @@ public class BootstrapNavbar extends AbstractWrappedHCNode
 
   public BootstrapNavbar (final boolean bFixedAtTop)
   {
-    m_aDiv.addClass (CBootstrapCSS.NAVBAR);
+    addClass (CBootstrapCSS.NAVBAR);
     if (bFixedAtTop)
-      m_aDiv.addClass (CBootstrapCSS.NAVBAR_FIXED_TOP);
-    final HCDiv aInner = m_aDiv.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAVBAR_INNER));
+      addClass (CBootstrapCSS.NAVBAR_FIXED_TOP);
+    final HCDiv aInner = addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAVBAR_INNER));
     m_aContainer = aInner.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.CONTAINER_FLUID));
 
     // Responsive toggle
@@ -88,16 +87,16 @@ public class BootstrapNavbar extends AbstractWrappedHCNode
   }
 
   @Nonnull
+  public BootstrapNavbar addTextContent (@Nonnull final String sText)
+  {
+    return addTextContent (new HCP (sText));
+  }
+
+  @Nonnull
   public BootstrapNavbar addTextContent (@Nonnull final IHCElement <?> aText)
   {
     aText.addClasses (CBootstrapCSS.NAVBAR_TEXT, CBootstrapCSS.PULL_RIGHT);
     m_aCollapse.addChild (aText);
     return this;
-  }
-
-  @Override
-  protected IHCNode getContainedHCNode ()
-  {
-    return m_aDiv;
   }
 }

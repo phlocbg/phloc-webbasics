@@ -26,7 +26,7 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCDiv;
-import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCButton;
 
 /**
  * Bootstrap alert box
@@ -118,6 +118,8 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
     super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClass (m_eType);
     if (m_bShowClose)
-      addChild (0, new HCA ().addClass (CBootstrapCSS.CLOSE).addChild ("*"));
+      addChild (0, new HCButton ().addClass (CBootstrapCSS.CLOSE)
+                                  .setCustomAttr ("data-dismiss", "alert")
+                                  .addChild ("x"));
   }
 }

@@ -29,7 +29,8 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapButtonSize implements ICSSClassProvider
 {
   LARGE ("btn-large"),
-  SMALL ("btn-small");
+  SMALL ("btn-small"),
+  MINI ("btn-mini");
 
   private final String m_sCSSClass;
 

@@ -31,7 +31,6 @@ import com.phloc.html.hc.html.HCI;
  */
 public enum EBootstrapIcon implements ICSSClassProvider
 {
-  ICON_WHITE ("icon-white"),
   ICON_GLASS ("icon-glass"),
   ICON_MUSIC ("icon-music"),
   ICON_SEARCH ("icon-search"),
@@ -151,7 +150,27 @@ public enum EBootstrapIcon implements ICSSClassProvider
   ICON_FOLDER_CLOSE ("icon-folder-close"),
   ICON_FOLDER_OPEN ("icon-folder-open"),
   ICON_RESIZE_VERTICAL ("icon-resize-vertical"),
-  ICON_RESIZE_HORIZONTAL ("icon-resize-horizontal");
+  ICON_RESIZE_HORIZONTAL ("icon-resize-horizontal"),
+  ICON_HDD ("icon-hdd"),
+  ICON_BULLHORN ("icon-bullhorn"),
+  ICON_BELL ("icon-bell"),
+  ICON_CERTIFICATE ("icon-certificate"),
+  ICON_THUMBS_UP ("icon-thumbs-up"),
+  ICON_THUMBS_DOWN ("icon-thumbs-down"),
+  ICON_HAND_RIGHT ("icon-hand-right"),
+  ICON_HAND_LEFT ("icon-hand-left"),
+  ICON_HAND_UP ("icon-hand-up"),
+  ICON_HAND_DOWN ("icon-hand-down"),
+  ICON_CIRCLE_ARROW_RIGHT ("icon-circle-arrow-right"),
+  ICON_CIRCLE_ARROW_LEFT ("icon-circle-arrow-left"),
+  ICON_CIRCLE_ARROW_UP ("icon-circle-arrow-up"),
+  ICON_CIRCLE_ARROW_DOWN ("icon-circle-arrow-down"),
+  ICON_GLOBE ("icon-globe"),
+  ICON_WRENCH ("icon-wrench"),
+  ICON_TASKS ("icon-tasks"),
+  ICON_FILTER ("icon-filter"),
+  ICON_BRIEFCASE ("icon-briefcase"),
+  ICON_FULLSCREEN ("icon-fullscreen");
 
   private final String m_sCSSClass;
 
