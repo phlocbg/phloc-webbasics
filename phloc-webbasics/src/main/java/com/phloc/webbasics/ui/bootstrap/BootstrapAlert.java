@@ -38,9 +38,11 @@ import com.phloc.html.hc.impl.HCEntityNode;
 public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
 {
   public static final boolean DEFAULT_SHOW_CLOSE = false;
+  public static final boolean DEFAULT_BLOCK = false;
 
   private EBootstrapAlertType m_eType = EBootstrapAlertType.DEFAULT;
   private boolean m_bShowClose = DEFAULT_SHOW_CLOSE;
+  private boolean m_bBlock = DEFAULT_BLOCK;
 
   private void _init ()
   {
@@ -98,10 +100,7 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   @Nonnull
   public BootstrapAlert setBlock (final boolean bBlock)
   {
-    if (bBlock)
-      addClass (CBootstrapCSS.ALERT_BLOCK);
-    else
-      removeClass (CBootstrapCSS.ALERT_BLOCK);
+    m_bBlock = bBlock;
     return this;
   }
 
@@ -124,5 +123,7 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
                 new HCButton ().addClass (CBootstrapCSS.CLOSE)
                                .setCustomAttr ("data-dismiss", "alert")
                                .addChild (new HCEntityNode (EHTMLEntity.times, "x")));
+    if (m_bBlock)
+      addClass (CBootstrapCSS.ALERT_BLOCK);
   }
 }

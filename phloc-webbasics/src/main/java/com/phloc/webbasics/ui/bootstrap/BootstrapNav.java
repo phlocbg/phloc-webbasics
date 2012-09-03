@@ -25,7 +25,6 @@ import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
-import com.phloc.html.hc.html.HCB;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
@@ -140,11 +139,17 @@ public class BootstrapNav extends HCUL
   @Nonnull
   public BootstrapDropDownMenu addDropDownItem (@Nullable final String sText)
   {
+    return addDropDownItem (new HCTextNode (sText));
+  }
+
+  @Nonnull
+  public BootstrapDropDownMenu addDropDownItem (@Nullable final IHCNode aText)
+  {
     final HCLI ret = addItem ().addClass (CBootstrapCSS.DROPDOWN);
     ret.addChild (new HCA (new SimpleURL ("#")).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
                                                .setCustomAttr ("data-toggle", "dropdown")
-                                               .addChild (sText)
-                                               .addChild (new HCB ().addClass (CBootstrapCSS.CARET)));
+                                               .addChild (aText)
+                                               .addChild (new BootstrapCaret ()));
     final BootstrapDropDownMenu aDropDown = ret.addAndReturnChild (new BootstrapDropDownMenu ());
     if (false)
       aDropDown.setCustomAttr ("role", "menu");
