@@ -21,9 +21,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCB;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
@@ -37,9 +39,15 @@ public class BootstrapNav extends HCUL
 {
   public static final boolean DEFAULT_ACTIVE = false;
 
-  public BootstrapNav ()
+  private void _init ()
   {
     addClass (CBootstrapCSS.NAV);
+  }
+
+  public BootstrapNav ()
+  {
+    super ();
+    _init ();
   }
 
   @Nonnull
@@ -127,5 +135,17 @@ public class BootstrapNav extends HCUL
       aContent.addChild (0, eIcon.getAsNode ());
     }
     return this;
+  }
+
+  @Nonnull
+  public BootstrapDropDownMenu addDropDownItem (@Nullable final String sText)
+  {
+    final HCLI ret = addItem ().addClass (CBootstrapCSS.DROPDOWN);
+    ret.addChild (new HCA (new SimpleURL ("#")).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
+                                               .setCustomAttr ("data-toggle", "dropdown")
+                                               .addChild (sText)
+                                               .addChild (new HCB ().addClass (CBootstrapCSS.CARET)));
+    final BootstrapDropDownMenu aDropDown = ret.addAndReturnChild (new BootstrapDropDownMenu ());
+    return aDropDown;
   }
 }
