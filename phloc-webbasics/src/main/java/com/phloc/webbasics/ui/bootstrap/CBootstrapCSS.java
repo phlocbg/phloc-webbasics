@@ -36,6 +36,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider ACCORDION_INNER = DefaultCSSClassProvider.create ("accordion-inner");
   public static final ICSSClassProvider ACTIVE = DefaultCSSClassProvider.create ("active");
   public static final ICSSClassProvider ADD_ON = DefaultCSSClassProvider.create ("add-on");
+  public static final ICSSClassProvider AFFIX = DefaultCSSClassProvider.create ("affix");
   public static final ICSSClassProvider ALERT = DefaultCSSClassProvider.create ("alert");
   public static final ICSSClassProvider ALERT_BLOCK = DefaultCSSClassProvider.create ("alert-block");
   public static final ICSSClassProvider ALERT_HEADING = DefaultCSSClassProvider.create ("alert-heading");
@@ -55,6 +56,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider CAROUSEL_CONTROL = DefaultCSSClassProvider.create ("carousel-control");
   public static final ICSSClassProvider CAROUSEL_INNER = DefaultCSSClassProvider.create ("carousel-inner");
   public static final ICSSClassProvider CHECKBOX = DefaultCSSClassProvider.create ("checkbox");
+  public static final ICSSClassProvider CLEARFIX = DefaultCSSClassProvider.create ("clearfix");
   public static final ICSSClassProvider CLOSE = DefaultCSSClassProvider.create ("close");
   public static final ICSSClassProvider COLLAPSE = DefaultCSSClassProvider.create ("collapse");
   public static final ICSSClassProvider CONTAINER = DefaultCSSClassProvider.create ("container");

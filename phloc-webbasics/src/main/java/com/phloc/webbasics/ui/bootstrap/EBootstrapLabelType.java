@@ -29,10 +29,11 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapLabelType implements ICSSClassProvider
 {
   DEFAULT (null),
-  IMPORTANT ("label-important"),
-  WARNING ("label-warning"),
   SUCCESS ("label-success"),
-  INFO ("label-info");
+  WARNING ("label-warning"),
+  IMPORTANT ("label-important"),
+  INFO ("label-info"),
+  INVERSE ("label-inverse");
 
   private final String m_sCSSClass;
 

@@ -17,17 +17,34 @@
  */
 package com.phloc.webbasics.ui.bootstrap;
 
-import com.phloc.html.hc.html.HCUL;
+import javax.annotation.Nullable;
+
+import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Navigation items
+ * Type of badge
  * 
  * @author philip
  */
-public class BootstrapSidebarNav extends HCUL
+public enum EBootstrapBadgeType implements ICSSClassProvider
 {
-  public BootstrapSidebarNav ()
+  DEFAULT (null),
+  SUCCESS ("badge-success"),
+  WARNING ("badge-warning"),
+  IMPORTANT ("badge-important"),
+  INFO ("badge-info"),
+  INVERSE ("badge-inverse");
+
+  private final String m_sCSSClass;
+
+  private EBootstrapBadgeType (@Nullable final String sCSSClass)
   {
-    addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST, CBootstrapCSS.AFFIX);
+    m_sCSSClass = sCSSClass;
+  }
+
+  @Nullable
+  public String getCSSClass ()
+  {
+    return m_sCSSClass;
   }
 }
