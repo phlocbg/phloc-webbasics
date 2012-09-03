@@ -20,8 +20,9 @@ package com.phloc.webbasics.ui.bootstrap;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.HCI;
 
 /**
@@ -172,6 +173,8 @@ public enum EBootstrapIcon implements ICSSClassProvider
   ICON_BRIEFCASE ("icon-briefcase"),
   ICON_FULLSCREEN ("icon-fullscreen");
 
+  private static final ICSSClassProvider CSS_CLASS_ICON_WHITE = DefaultCSSClassProvider.create ("icon-white");
+
   private final String m_sCSSClass;
 
   private EBootstrapIcon (@Nonnull @Nonempty final String sCSSClass)
@@ -187,8 +190,14 @@ public enum EBootstrapIcon implements ICSSClassProvider
   }
 
   @Nonnull
-  public IHCNode getAsNode ()
+  public IHCElement <?> getAsNode ()
   {
     return new HCI ().addClass (this);
+  }
+
+  @Nonnull
+  public IHCElement <?> getAsNodeInverted ()
+  {
+    return new HCI ().addClasses (this, CSS_CLASS_ICON_WHITE);
   }
 }
