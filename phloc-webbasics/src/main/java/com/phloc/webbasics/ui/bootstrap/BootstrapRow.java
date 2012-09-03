@@ -32,8 +32,9 @@ import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
-public class BootstrapContentRow extends AbstractWrappedHCNode
+public class BootstrapRow extends AbstractWrappedHCNode
 {
+  public static final boolean DEFAULT_FLUID = true;
   public static final int BOOTSTRAP_COLUMN_COUNT = 12;
 
   private static final class SpannedNode implements Serializable
@@ -60,22 +61,30 @@ public class BootstrapContentRow extends AbstractWrappedHCNode
     }
   }
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (BootstrapContentRow.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (BootstrapRow.class);
 
+  private final boolean m_bFluid;
   private HCDiv m_aRow;
   private final List <SpannedNode> m_aNodes = new ArrayList <SpannedNode> ();
 
-  public BootstrapContentRow ()
-  {}
+  public BootstrapRow ()
+  {
+    this (DEFAULT_FLUID);
+  }
+
+  public BootstrapRow (final boolean bFluid)
+  {
+    m_bFluid = bFluid;
+  }
 
   @Nonnull
-  public BootstrapContentRow addColumn (@Nonnull final EBootstrapSpan eSpan)
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan)
   {
     return addColumn (eSpan, null);
   }
 
   @Nonnull
-  public BootstrapContentRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aNode)
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aNode)
   {
     if (eSpan == null)
       throw new NullPointerException ("span");
@@ -86,7 +95,7 @@ public class BootstrapContentRow extends AbstractWrappedHCNode
   @Override
   protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    m_aRow = new HCDiv ().addClass (CBootstrapCSS.ROW_FLUID);
+    m_aRow = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.ROW_FLUID : CBootstrapCSS.ROW);
 
     int nSpanCount = 0;
     for (final SpannedNode aSpannedNode : m_aNodes)
@@ -94,8 +103,8 @@ public class BootstrapContentRow extends AbstractWrappedHCNode
       m_aRow.addChild (aSpannedNode.getAsSpannedNode ());
       nSpanCount += aSpannedNode.getSpanCount ();
     }
-    if (nSpanCount != BOOTSTRAP_COLUMN_COUNT)
-      s_aLogger.warn ("The overall spanning should be exactly " +
+    if (nSpanCount > BOOTSTRAP_COLUMN_COUNT)
+      s_aLogger.warn ("The overall spanning should be less or equal than " +
                       BOOTSTRAP_COLUMN_COUNT +
                       " instead of " +
                       nSpanCount +

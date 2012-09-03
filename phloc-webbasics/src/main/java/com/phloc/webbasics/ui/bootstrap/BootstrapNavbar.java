@@ -18,6 +18,7 @@
 package com.phloc.webbasics.ui.bootstrap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCElement;
@@ -37,21 +38,15 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
   private final HCDiv m_aContainer;
   private final HCDiv m_aCollapse;
 
-  public BootstrapNavbar ()
+  public BootstrapNavbar (@Nonnull final EBootstrapNavBarType eType, final boolean bAddResponsiveToggle)
   {
-    this (false);
-  }
-
-  public BootstrapNavbar (final boolean bFixedAtTop)
-  {
-    addClass (CBootstrapCSS.NAVBAR);
-    if (bFixedAtTop)
-      addClass (CBootstrapCSS.NAVBAR_FIXED_TOP);
+    addClasses (CBootstrapCSS.NAVBAR, eType);
     final HCDiv aInner = addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAVBAR_INNER));
     m_aContainer = aInner.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.CONTAINER_FLUID));
 
-    // Responsive toggle
+    if (bAddResponsiveToggle)
     {
+      // Responsive toggle
       final BootstrapButton aToggle = m_aContainer.addAndReturnChild (new BootstrapButton ());
       aToggle.addClass (CBootstrapCSS.BTN_NAVBAR);
       aToggle.setCustomAttr ("data-toggle", "collapse");
@@ -66,23 +61,24 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
   }
 
   @Nonnull
-  public BootstrapNavbar setBrand (@Nonnull final String sBrand, @Nonnull final ISimpleURL aHomeLink)
+  public BootstrapNavbar addBrand (@Nonnull final String sBrand, @Nonnull final ISimpleURL aHomeLink)
   {
     // Remove old brand (if any)
-    final int nIndex = 1;
-    if (m_aContainer.getChildAtIndex (nIndex) instanceof HCA)
-      m_aContainer.removeChild (nIndex);
-    m_aContainer.addChild (nIndex, new HCA (aHomeLink).addChild (sBrand).addClass (CBootstrapCSS.BRAND));
+    m_aContainer.addChild (new HCA (aHomeLink).addChild (sBrand).addClass (CBootstrapCSS.BRAND));
     return this;
   }
 
   @Nonnull
-  public BootstrapNavbar setNav (@Nonnull final BootstrapNav aNav)
+  public BootstrapNavbar addNav (@Nullable final BootstrapNav aNav)
   {
-    final int nIndex = 0;
-    if (m_aCollapse.getChildAtIndex (nIndex) instanceof BootstrapNav)
-      m_aContainer.removeChild (nIndex);
-    m_aCollapse.addChild (nIndex, aNav);
+    m_aContainer.addChild (aNav);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapNavbar addBreadcrumb (@Nullable final BootstrapBreadcrumb aBreadCrumb)
+  {
+    m_aContainer.addChild (aBreadCrumb);
     return this;
   }
 

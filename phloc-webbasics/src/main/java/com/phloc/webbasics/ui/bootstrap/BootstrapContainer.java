@@ -27,34 +27,34 @@ import com.phloc.html.hc.html.HCHR;
 import com.phloc.html.hc.html5.HCFooter;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
-public class BootstrapContentLayout extends AbstractWrappedHCNode
+public class BootstrapContainer extends AbstractWrappedHCNode
 {
   public static final boolean DEFAULT_FLUID = true;
 
-  private HCDiv m_aContainer;
   private final boolean m_bFluid;
+  private HCDiv m_aContainer;
   private IHCNode m_aContent;
   private IHCNode m_aFooter;
 
-  public BootstrapContentLayout ()
+  public BootstrapContainer ()
   {
     this (DEFAULT_FLUID);
   }
 
-  public BootstrapContentLayout (final boolean bFluid)
+  public BootstrapContainer (final boolean bFluid)
   {
     m_bFluid = bFluid;
   }
 
   @Nonnull
-  public BootstrapContentLayout setContent (@Nullable final IHCNode aContent)
+  public BootstrapContainer setContent (@Nullable final IHCNode aContent)
   {
     m_aContent = aContent;
     return this;
   }
 
   @Nonnull
-  public BootstrapContentLayout setFooter (@Nullable final IHCNode aFooter)
+  public BootstrapContainer setFooter (@Nullable final IHCNode aFooter)
   {
     m_aFooter = aFooter;
     return this;
