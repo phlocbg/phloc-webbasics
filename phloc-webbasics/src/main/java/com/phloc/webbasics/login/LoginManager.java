@@ -20,8 +20,12 @@ package com.phloc.webbasics.login;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
@@ -39,6 +43,7 @@ import com.phloc.webbasics.app.html.IHTMLProvider;
  */
 public class LoginManager
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LoginManager.class);
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
   /**
@@ -94,6 +99,10 @@ public class LoginManager
         else
         {
           // Credentials are invalid
+
+          if (GlobalDebug.isDebugMode ())
+            s_aLogger.warn ("Login of '" + sLoginName + "' failed because " + eLoginResult);
+
           // Anyway show the error message only if at least some credential
           // values are passed
           bLoginError = StringHelper.hasText (sLoginName) || StringHelper.hasText (sPassword);

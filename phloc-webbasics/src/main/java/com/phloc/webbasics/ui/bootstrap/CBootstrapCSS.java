@@ -148,10 +148,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider PRETTYPRINT = DefaultCSSClassProvider.create ("prettyprint");
   public static final ICSSClassProvider PREV = DefaultCSSClassProvider.create ("prev");
   public static final ICSSClassProvider PROGRESS = DefaultCSSClassProvider.create ("progress");
-  public static final ICSSClassProvider PROGRESS_DANGER = DefaultCSSClassProvider.create ("progress-danger");
-  public static final ICSSClassProvider PROGRESS_INFO = DefaultCSSClassProvider.create ("progress-info");
   public static final ICSSClassProvider PROGRESS_STRIPED = DefaultCSSClassProvider.create ("progress-striped");
-  public static final ICSSClassProvider PROGRESS_SUCCESS = DefaultCSSClassProvider.create ("progress-success");
   public static final ICSSClassProvider PULL_LEFT = DefaultCSSClassProvider.create ("pull-left");
   public static final ICSSClassProvider PULL_RIGHT = DefaultCSSClassProvider.create ("pull-right");
   public static final ICSSClassProvider RADIO = DefaultCSSClassProvider.create ("radio");
