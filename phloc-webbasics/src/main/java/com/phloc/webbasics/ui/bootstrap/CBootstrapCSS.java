@@ -168,6 +168,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider TABLE = DefaultCSSClassProvider.create ("table");
   public static final ICSSClassProvider TABLE_BORDERED = DefaultCSSClassProvider.create ("table-bordered");
   public static final ICSSClassProvider TABLE_CONDENSED = DefaultCSSClassProvider.create ("table-condensed");
+  public static final ICSSClassProvider TABLE_HOVER = DefaultCSSClassProvider.create ("table-hover");
   public static final ICSSClassProvider TABLE_STRIPED = DefaultCSSClassProvider.create ("table-striped");
   public static final ICSSClassProvider TABS_BELOW = DefaultCSSClassProvider.create ("tabs-below");
   public static final ICSSClassProvider TABS_LEFT = DefaultCSSClassProvider.create ("tabs-left");

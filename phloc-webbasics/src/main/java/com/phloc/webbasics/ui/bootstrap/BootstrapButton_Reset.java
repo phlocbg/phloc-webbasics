@@ -21,21 +21,20 @@ import javax.annotation.Nullable;
 
 import com.phloc.html.hc.api.EHCButtonType;
 
-public class BootstrapButton_Submit extends BootstrapButton
+public class BootstrapButton_Reset extends BootstrapButton
 {
   private void _init ()
   {
-    setType (EHCButtonType.SUBMIT);
-    setType (EBootstrapButtonType.PRIMARY);
+    setType (EHCButtonType.RESET);
   }
 
-  public BootstrapButton_Submit ()
+  public BootstrapButton_Reset ()
   {
     super ();
     _init ();
   }
 
-  public BootstrapButton_Submit (@Nullable final String sLabel)
+  public BootstrapButton_Reset (@Nullable final String sLabel)
   {
     super (sLabel);
     _init ();

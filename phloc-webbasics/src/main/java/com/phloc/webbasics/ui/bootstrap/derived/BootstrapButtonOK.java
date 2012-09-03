@@ -15,29 +15,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.ui.bootstrap;
+package com.phloc.webbasics.ui.bootstrap.derived;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.html.hc.api.EHCButtonType;
+import com.phloc.commons.text.IPredefinedLocaleTextProvider;
+import com.phloc.webbasics.ui.bootstrap.BootstrapButton;
+import com.phloc.webbasics.ui.bootstrap.EBootstrapIcon;
 
-public class BootstrapButton_Submit extends BootstrapButton
+/**
+ * Special button
+ * 
+ * @author philip
+ */
+public class BootstrapButtonOK extends BootstrapButton
 {
   private void _init ()
   {
-    setType (EHCButtonType.SUBMIT);
-    setType (EBootstrapButtonType.PRIMARY);
+    setIcon (EBootstrapIcon.ICON_OK);
   }
 
-  public BootstrapButton_Submit ()
+  public BootstrapButtonOK ()
   {
     super ();
     _init ();
   }
 
-  public BootstrapButton_Submit (@Nullable final String sLabel)
+  public BootstrapButtonOK (@Nonnull final IPredefinedLocaleTextProvider aChild)
   {
-    super (sLabel);
+    this (aChild.getText ());
+  }
+
+  public BootstrapButtonOK (@Nullable final String sChild)
+  {
+    super (sChild);
     _init ();
   }
 }
