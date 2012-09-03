@@ -24,11 +24,13 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
+import com.phloc.html.hc.impl.HCTextNode;
 
 public class BootstrapButton extends HCButton
 {
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
+  private EBootstrapIcon m_eIcon;
 
   private void _init ()
   {
@@ -63,6 +65,13 @@ public class BootstrapButton extends HCButton
     return this;
   }
 
+  @Nonnull
+  public BootstrapButton setIcon (@Nullable final EBootstrapIcon eIcon)
+  {
+    m_eIcon = eIcon;
+    return this;
+  }
+
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
@@ -70,5 +79,15 @@ public class BootstrapButton extends HCButton
   {
     super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClasses (m_eType, m_eSize);
+    if (m_eIcon != null)
+    {
+      final boolean bAddSeparator = hasChildren ();
+      addChild (0, m_eIcon.getAsNode ());
+      if (bAddSeparator)
+      {
+        // Add spacer
+        addChild (1, new HCTextNode (" "));
+      }
+    }
   }
 }
