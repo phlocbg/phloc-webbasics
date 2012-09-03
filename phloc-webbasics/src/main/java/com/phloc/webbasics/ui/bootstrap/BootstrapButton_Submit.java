@@ -23,9 +23,9 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
-import com.phloc.html.hc.html.HCButton;
+import com.phloc.html.hc.html.HCButton_Submit;
 
-public class BootstrapButton extends HCButton
+public class BootstrapButton_Submit extends HCButton_Submit
 {
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
@@ -35,20 +35,20 @@ public class BootstrapButton extends HCButton
     addClass (CBootstrapCSS.BTN);
   }
 
-  public BootstrapButton ()
+  public BootstrapButton_Submit ()
   {
     super ();
     _init ();
   }
 
-  public BootstrapButton (@Nullable final String sLabel)
+  public BootstrapButton_Submit (@Nullable final String sLabel)
   {
     super (sLabel);
     _init ();
   }
 
   @Nonnull
-  public BootstrapButton setType (@Nonnull final EBootstrapButtonType eType)
+  public BootstrapButton_Submit setType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");
@@ -57,7 +57,7 @@ public class BootstrapButton extends HCButton
   }
 
   @Nonnull
-  public BootstrapButton setSize (@Nullable final EBootstrapButtonSize eSize)
+  public BootstrapButton_Submit setSize (@Nullable final EBootstrapButtonSize eSize)
   {
     m_eSize = eSize;
     return this;
