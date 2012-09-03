@@ -146,6 +146,8 @@ public class BootstrapNav extends HCUL
                                                .addChild (sText)
                                                .addChild (new HCB ().addClass (CBootstrapCSS.CARET)));
     final BootstrapDropDownMenu aDropDown = ret.addAndReturnChild (new BootstrapDropDownMenu ());
+    if (false)
+      aDropDown.setCustomAttr ("role", "menu");
     return aDropDown;
   }
 }

@@ -34,6 +34,8 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 public class BootstrapContentRow extends AbstractWrappedHCNode
 {
+  public static final int BOOTSTRAP_COLUMN_COUNT = 12;
+
   private static final class SpannedNode implements Serializable
   {
     private final EBootstrapSpan m_eSpan;
@@ -86,8 +88,10 @@ public class BootstrapContentRow extends AbstractWrappedHCNode
       m_aRow.addChild (aSpannedNode.getAsSpannedNode ());
       nSpanCount += aSpannedNode.getSpanCount ();
     }
-    if (nSpanCount != 12)
-      s_aLogger.warn ("The overall spanning should be exactly 12 instead of " +
+    if (nSpanCount != BOOTSTRAP_COLUMN_COUNT)
+      s_aLogger.warn ("The overall spanning should be exactly " +
+                      BOOTSTRAP_COLUMN_COUNT +
+                      " instead of " +
                       nSpanCount +
                       " for a consistent layout!");
   }
