@@ -26,7 +26,6 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.hc.impl.HCTextNode;
 
 /**
@@ -34,24 +33,22 @@ import com.phloc.html.hc.impl.HCTextNode;
  * 
  * @author philip
  */
-public class BootstrapNav extends AbstractWrappedHCNode
+public class BootstrapNav extends HCUL
 {
   public static final boolean DEFAULT_ACTIVE = false;
 
-  private final HCUL m_aUL = new HCUL ();
-
   public BootstrapNav ()
   {
-    m_aUL.addClass (CBootstrapCSS.NAV);
+    addClass (CBootstrapCSS.NAV);
   }
 
   @Nonnull
   public BootstrapNav setNavList (final boolean bNavList)
   {
     if (bNavList)
-      m_aUL.addClass (CBootstrapCSS.NAV_LIST);
+      addClass (CBootstrapCSS.NAV_LIST);
     else
-      m_aUL.removeClass (CBootstrapCSS.NAV_LIST);
+      removeClass (CBootstrapCSS.NAV_LIST);
     return this;
   }
 
@@ -76,7 +73,7 @@ public class BootstrapNav extends AbstractWrappedHCNode
   @Nonnull
   public BootstrapNav addHeader (@Nullable final IHCNode aContent, final boolean bActive)
   {
-    final HCLI aItem = m_aUL.addAndReturnItem (aContent).addClass (CBootstrapCSS.NAV_HEADER);
+    final HCLI aItem = addAndReturnItem (aContent).addClass (CBootstrapCSS.NAV_HEADER);
     if (bActive)
       aItem.addClass (CBootstrapCSS.ACTIVE);
     return this;
@@ -121,7 +118,7 @@ public class BootstrapNav extends AbstractWrappedHCNode
                                final boolean bActive,
                                @Nullable final EBootstrapIcon eIcon)
   {
-    final HCLI aItem = m_aUL.addAndReturnItem (aContent);
+    final HCLI aItem = addAndReturnItem (aContent);
     if (bActive)
       aItem.addClass (CBootstrapCSS.ACTIVE);
     if (eIcon != null)
@@ -130,11 +127,5 @@ public class BootstrapNav extends AbstractWrappedHCNode
       aContent.addChild (0, eIcon.getAsNode ());
     }
     return this;
-  }
-
-  @Override
-  protected final IHCNode getContainedHCNode ()
-  {
-    return m_aUL;
   }
 }

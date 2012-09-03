@@ -111,11 +111,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider NAV_STACKED = DefaultCSSClassProvider.create ("nav-stacked");
   public static final ICSSClassProvider NAV_TABS = DefaultCSSClassProvider.create ("nav-tabs");
   public static final ICSSClassProvider NAVBAR = DefaultCSSClassProvider.create ("navbar");
+  public static final ICSSClassProvider NAVBAR_FIXED_BOTTOM = DefaultCSSClassProvider.create ("navbar-fixed-bottom");
   public static final ICSSClassProvider NAVBAR_FIXED_TOP = DefaultCSSClassProvider.create ("navbar-fixed-top");
   public static final ICSSClassProvider NAVBAR_FORM = DefaultCSSClassProvider.create ("navbar-form");
   public static final ICSSClassProvider NAVBAR_INNER = DefaultCSSClassProvider.create ("navbar-inner");
   public static final ICSSClassProvider NAVBAR_INVERSE = DefaultCSSClassProvider.create ("navbar-inverse");
   public static final ICSSClassProvider NAVBAR_SEARCH = DefaultCSSClassProvider.create ("navbar-search");
+  public static final ICSSClassProvider NAVBAR_STATIC_TOP = DefaultCSSClassProvider.create ("navbar-static-top");
   public static final ICSSClassProvider NAVBAR_TEXT = DefaultCSSClassProvider.create ("navbar-text");
   public static final ICSSClassProvider NEXT = DefaultCSSClassProvider.create ("next");
   public static final ICSSClassProvider OFFSET1 = DefaultCSSClassProvider.create ("offset1");
