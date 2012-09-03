@@ -32,10 +32,12 @@ import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
 import com.phloc.webbasics.ui.bootstrap.CBootstrapCSS;
+import com.phloc.webbasics.ui.bootstrap.EBootstrapIcon;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
@@ -70,7 +72,9 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
   {
     final String sMenuItemID = aMenuItem.getID ();
     final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
+    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
+    if (bHasChildren && !bIsExpanded)
+      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.ICON_CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 
@@ -82,7 +86,9 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
   {
     final HCA aLink = new HCA (aMenuItem.getURL ());
     aLink.setTarget (HCA_Target.BLANK);
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
+    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
+    if (bHasChildren && !bIsExpanded)
+      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.ICON_CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 
