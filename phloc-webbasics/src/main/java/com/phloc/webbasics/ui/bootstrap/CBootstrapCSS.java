@@ -160,6 +160,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider ROW_FLUID = DefaultCSSClassProvider.create ("row-fluid");
   public static final ICSSClassProvider SEARCH_QUERY = DefaultCSSClassProvider.create ("search-query");
   public static final ICSSClassProvider SHOW = DefaultCSSClassProvider.create ("show");
+  public static final ICSSClassProvider SIDEBAR_NAV = DefaultCSSClassProvider.create ("sidebar-nav");
   public static final ICSSClassProvider SMALL = DefaultCSSClassProvider.create ("small");
   public static final ICSSClassProvider SUCCESS = DefaultCSSClassProvider.create ("success");
   public static final ICSSClassProvider TAB_CONTENT = DefaultCSSClassProvider.create ("tab-content");

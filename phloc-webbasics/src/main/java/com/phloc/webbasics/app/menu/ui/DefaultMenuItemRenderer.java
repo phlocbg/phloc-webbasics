@@ -29,6 +29,8 @@ import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
+import com.phloc.html.hc.html.HCLI;
+import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -39,6 +41,9 @@ import com.phloc.webbasics.app.LinkUtils;
  */
 public class DefaultMenuItemRenderer implements IMenuItemRenderer
 {
+  public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
+  public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
+  public static final ICSSClassProvider CSS_CLASS_MENU_ITEM_EXTERNAL = DefaultCSSClassProvider.create ("menu_item_external");
   public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
   public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
 
@@ -86,5 +91,25 @@ public class DefaultMenuItemRenderer implements IMenuItemRenderer
     if (bIsSelected)
       aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
     return aLink;
+  }
+
+  public void onLevelDown (@Nonnull final HCUL aNewLevel)
+  {
+    // do nothing
+  }
+
+  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
+  {
+    aLI.addClass (CSS_CLASS_MENU_SEPARATOR);
+  }
+
+  public void onMenuItemPageItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  {
+    aLI.addClass (CSS_CLASS_MENU_ITEM);
+  }
+
+  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  {
+    aLI.addClass (CSS_CLASS_MENU_ITEM_EXTERNAL);
   }
 }

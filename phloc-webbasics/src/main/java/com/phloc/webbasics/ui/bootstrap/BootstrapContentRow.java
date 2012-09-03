@@ -69,6 +69,12 @@ public class BootstrapContentRow extends AbstractWrappedHCNode
   {}
 
   @Nonnull
+  public BootstrapContentRow addColumn (@Nonnull final EBootstrapSpan eSpan)
+  {
+    return addColumn (eSpan, null);
+  }
+
+  @Nonnull
   public BootstrapContentRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aNode)
   {
     if (eSpan == null)

@@ -33,8 +33,6 @@ import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
 import com.phloc.commons.hierarchy.EHierarchyCallbackReturn;
 import com.phloc.commons.tree.utils.walk.TreeWalkerDynamic;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
-import com.phloc.html.css.DefaultCSSClassProvider;
-import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
@@ -46,12 +44,6 @@ import com.phloc.html.hc.html.HCUL;
  */
 public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
-  public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
-  public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
-  public static final ICSSClassProvider CSS_CLASS_MENU_ITEM_EXTERNAL = DefaultCSSClassProvider.create ("menu_item_external");
-  public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
-  public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
-
   private final NonBlockingStack <HCUL> m_aMenuListStack;
   private final IMenuItemRenderer m_aRenderer;
   private final Map <String, Boolean> m_aDisplayMenuItemIDs;
@@ -91,7 +83,9 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
       if (m_aDisplayMenuItemIDs.containsKey (aChildItem.getID ()))
       {
         // add sub menu structure at the right place
-        m_aMenuListStack.push (m_aMenuItemStack.peek ().addAndReturnChild (new HCUL ()));
+        final HCUL aNewLevel = new HCUL ();
+        m_aRenderer.onLevelDown (aNewLevel);
+        m_aMenuListStack.push (m_aMenuItemStack.peek ().addAndReturnChild (aNewLevel));
         break;
       }
 
@@ -121,17 +115,23 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
       {
         // separator
         final IHCNode aHCNode = m_aRenderer.renderSeparator ((IMenuSeparator) aMenuObj);
-        m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_SEPARATOR));
+        final HCLI aLI = aParent.addAndReturnItem (aHCNode);
+        m_aRenderer.onMenuSeparatorItem (aLI);
+        m_aMenuItemStack.push (aLI);
       }
       else
+      {
+        final boolean bSelected = aMenuObj.getID ().equals (m_sSelectedItem);
         if (aMenuObj instanceof IMenuItemPage)
         {
           // page item
           final IHCNode aHCNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj,
                                                                   aItem.hasChildren (),
-                                                                  aMenuObj.getID ().equals (m_sSelectedItem),
+                                                                  bSelected,
                                                                   aExpandedState.booleanValue ());
-          m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM));
+          final HCLI aLI = aParent.addAndReturnItem (aHCNode);
+          m_aRenderer.onMenuItemPageItem (aLI, bSelected);
+          m_aMenuItemStack.push (aLI);
         }
         else
           if (aMenuObj instanceof IMenuItemExternal)
@@ -139,12 +139,15 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
             // external item
             final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj,
                                                                         aItem.hasChildren (),
-                                                                        aMenuObj.getID ().equals (m_sSelectedItem),
+                                                                        bSelected,
                                                                         aExpandedState.booleanValue ());
-            m_aMenuItemStack.push (aParent.addAndReturnItem (aHCNode).addClass (CSS_CLASS_MENU_ITEM_EXTERNAL));
+            final HCLI aLI = aParent.addAndReturnItem (aHCNode);
+            m_aRenderer.onMenuItemExternalItem (aLI, bSelected);
+            m_aMenuItemStack.push (aLI);
           }
           else
             throw new IllegalStateException ();
+      }
       m_aChildCountStack.peek ().incrementAndGet ();
       return EHierarchyCallbackReturn.CONTINUE;
     }
@@ -172,7 +175,7 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static IHCNode createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer)
+  public static HCUL createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer)
   {
     return createRenderedMenu (MenuTree.getInstance ().getRootItem (),
                                aRenderer,
@@ -189,8 +192,8 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static IHCNode createRenderedMenu (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
-                                            @Nonnull final IMenuItemRenderer aRenderer)
+  public static HCUL createRenderedMenu (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
+                                         @Nonnull final IMenuItemRenderer aRenderer)
   {
     return createRenderedMenu (aStartTreeItem, aRenderer, MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs ());
   }
@@ -206,8 +209,8 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static IHCNode createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer,
-                                            @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
+  public static HCUL createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer,
+                                         @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
     return createRenderedMenu (MenuTree.getInstance ().getRootItem (), aRenderer, aDisplayMenuItemIDs);
   }
@@ -225,9 +228,9 @@ public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback 
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static IHCNode createRenderedMenu (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
-                                            @Nonnull final IMenuItemRenderer aRenderer,
-                                            @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
+  public static HCUL createRenderedMenu (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
+                                         @Nonnull final IMenuItemRenderer aRenderer,
+                                         @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
     final NonBlockingStack <HCUL> aNodeStack = new NonBlockingStack <HCUL> (new HCUL ());
     TreeWalkerDynamic.walkSubTree (aStartTreeItem,

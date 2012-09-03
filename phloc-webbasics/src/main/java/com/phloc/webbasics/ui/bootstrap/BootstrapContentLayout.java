@@ -29,12 +29,22 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 public class BootstrapContentLayout extends AbstractWrappedHCNode
 {
+  public static final boolean DEFAULT_FLUID = true;
+
   private HCDiv m_aContainer;
+  private final boolean m_bFluid;
   private IHCNode m_aContent;
   private IHCNode m_aFooter;
 
   public BootstrapContentLayout ()
-  {}
+  {
+    this (DEFAULT_FLUID);
+  }
+
+  public BootstrapContentLayout (final boolean bFluid)
+  {
+    m_bFluid = bFluid;
+  }
 
   @Nonnull
   public BootstrapContentLayout setContent (@Nullable final IHCNode aContent)
@@ -53,7 +63,7 @@ public class BootstrapContentLayout extends AbstractWrappedHCNode
   @Override
   protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    m_aContainer = new HCDiv ().addClass (CBootstrapCSS.CONTAINER_FLUID);
+    m_aContainer = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.CONTAINER_FLUID : CBootstrapCSS.CONTAINER);
     if (m_aContent != null)
       m_aContainer.addChild (m_aContent);
     if (m_aFooter != null)

@@ -23,6 +23,8 @@ import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCLI;
+import com.phloc.html.hc.html.HCUL;
 
 /**
  * Interface for rendering menu objects
@@ -76,4 +78,18 @@ public interface IMenuItemRenderer
                                   boolean bHasChildren,
                                   boolean bIsSelected,
                                   boolean bIsExpanded);
+
+  /**
+   * Called when a new sub-level is entered
+   * 
+   * @param aNewLevel
+   *        The HCUL to be modified
+   */
+  void onLevelDown (@Nonnull HCUL aNewLevel);
+
+  void onMenuSeparatorItem (@Nonnull HCLI aLI);
+
+  void onMenuItemPageItem (@Nonnull HCLI aLI, boolean bSelected);
+
+  void onMenuItemExternalItem (@Nonnull HCLI aLI, boolean bSelected);
 }
