@@ -67,6 +67,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider CONTROL_GROUP = DefaultCSSClassProvider.create ("control-group");
   public static final ICSSClassProvider CONTROL_LABEL = DefaultCSSClassProvider.create ("control-label");
   public static final ICSSClassProvider CONTROLS = DefaultCSSClassProvider.create ("controls");
+  public static final ICSSClassProvider CONTROLS_ROW = DefaultCSSClassProvider.create ("controls-row");
   public static final ICSSClassProvider DISABLED = DefaultCSSClassProvider.create ("disabled");
   public static final ICSSClassProvider DIVIDER = DefaultCSSClassProvider.create ("divider");
   public static final ICSSClassProvider DIVIDER_VERTICAL = DefaultCSSClassProvider.create ("divider-vertical");

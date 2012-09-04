@@ -16,7 +16,6 @@ import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.scopes.web.domain.IRequestWebScope;
@@ -24,6 +23,7 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.form.validation.EFormErrorLevel;
 import com.phloc.webbasics.form.validation.IFormFieldError;
 import com.phloc.webbasics.form.validation.IFormFieldErrorList;
+import com.phloc.webctrls.bootstrap.BootstrapHelpBlock;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.custom.label.IFormLabel;
@@ -103,7 +103,7 @@ public final class BootstrapTableForm extends BootstrapTable
   {
     if (aFormErrors != null)
       for (final IFormFieldError aError : aFormErrors.getAllItems ())
-        aCell.addChild (new HCDiv (aError.getErrorText ()));
+        aCell.addChild (new BootstrapHelpBlock (aError.getErrorText ()));
   }
 
   @Nonnull

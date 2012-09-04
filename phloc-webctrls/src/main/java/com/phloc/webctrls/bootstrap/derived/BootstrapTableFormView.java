@@ -23,6 +23,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.custom.label.IFormLabel;
 
 public class BootstrapTableFormView extends BootstrapTable
 {
@@ -56,13 +57,18 @@ public class BootstrapTableFormView extends BootstrapTable
     _init ();
   }
 
-  public void addItemRow (final IHCNode aLabel, final String sValue)
+  public void addItemRow (final IFormLabel aLabel, final String sValue)
   {
     addItemRow (aLabel, new HCTextNode (sValue));
   }
 
-  public void addItemRow (final IHCNode aLabel, final IHCNode aValue)
+  public void addItemRow (final IFormLabel aLabel, final IHCNode aValue)
   {
     addBodyRow ().addCells (aLabel, aValue);
+  }
+
+  public void addItemRow (final IFormLabel aLabel, final Iterable <? extends IHCNode> aValues)
+  {
+    addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 }
