@@ -1,4 +1,4 @@
-package com.phloc.webctrls.custom.note;
+package com.phloc.webctrls.custom;
 
 import com.phloc.html.hc.IHCNode;
 

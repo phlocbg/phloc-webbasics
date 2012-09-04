@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.custom.label;
+package com.phloc.webctrls.custom.impl;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,6 +29,8 @@ import com.phloc.html.hc.html.HCEM;
 import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
+import com.phloc.webctrls.custom.ELabelType;
+import com.phloc.webctrls.custom.IFormLabel;
 
 public abstract class AbstractFormLabel extends AbstractWrappedHCNode implements IFormLabel
 {

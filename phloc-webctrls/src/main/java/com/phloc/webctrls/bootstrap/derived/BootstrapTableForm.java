@@ -26,8 +26,8 @@ import com.phloc.webbasics.form.validation.IFormFieldErrorList;
 import com.phloc.webctrls.bootstrap.BootstrapHelpBlock;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
-import com.phloc.webctrls.custom.label.IFormLabel;
-import com.phloc.webctrls.custom.note.IFormNote;
+import com.phloc.webctrls.custom.IFormLabel;
+import com.phloc.webctrls.custom.IFormNote;
 
 public final class BootstrapTableForm extends BootstrapTable
 {

@@ -23,7 +23,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.custom.label.IFormLabel;
+import com.phloc.webctrls.custom.IFormLabel;
 
 public class BootstrapTableFormView extends BootstrapTable
 {

@@ -27,8 +27,8 @@ import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
 import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.webctrls.custom.label.AbstractFormLabel;
-import com.phloc.webctrls.custom.label.ELabelType;
+import com.phloc.webctrls.custom.ELabelType;
+import com.phloc.webctrls.custom.impl.AbstractFormLabel;
 
 public class BootstrapFormLabel extends AbstractFormLabel
 {
