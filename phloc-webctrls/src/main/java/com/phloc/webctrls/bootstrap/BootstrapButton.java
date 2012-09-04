@@ -22,15 +22,17 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.webctrls.custom.IIcon;
 
 public class BootstrapButton extends HCButton
 {
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
-  private EBootstrapIcon m_eIcon;
+  private IIcon m_aIcon;
 
   private void _init ()
   {
@@ -40,6 +42,12 @@ public class BootstrapButton extends HCButton
   public BootstrapButton ()
   {
     super ();
+    _init ();
+  }
+
+  public BootstrapButton (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  {
+    super (aTextProvider);
     _init ();
   }
 
@@ -66,9 +74,9 @@ public class BootstrapButton extends HCButton
   }
 
   @Nonnull
-  public BootstrapButton setIcon (@Nullable final EBootstrapIcon eIcon)
+  public BootstrapButton setIcon (@Nullable final IIcon aIcon)
   {
-    m_eIcon = eIcon;
+    m_aIcon = aIcon;
     return this;
   }
 
@@ -79,10 +87,10 @@ public class BootstrapButton extends HCButton
   {
     super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClasses (m_eType, m_eSize);
-    if (m_eIcon != null)
+    if (m_aIcon != null)
     {
       final boolean bAddSeparator = hasChildren ();
-      addChild (0, m_eIcon.getAsNode ());
+      addChild (0, m_aIcon.getAsNode ());
       if (bAddSeparator)
       {
         // Add spacer

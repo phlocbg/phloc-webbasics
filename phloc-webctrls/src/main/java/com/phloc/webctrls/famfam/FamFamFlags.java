@@ -35,7 +35,7 @@ import com.phloc.html.hc.IHCElement;
 @Immutable
 public final class FamFamFlags
 {
-  public static final ICSSClassProvider CSS_CLASS_FAMFAM_FLAG = DefaultCSSClassProvider.create ("famfam-flag");
+  public static final ICSSClassProvider CSS_CLASS_FAMFAM_FLAG = DefaultCSSClassProvider.create ("icon-famfam-flag");
 
   private FamFamFlags ()
   {}

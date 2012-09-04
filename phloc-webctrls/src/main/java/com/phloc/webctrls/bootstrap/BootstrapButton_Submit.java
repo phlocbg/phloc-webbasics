@@ -17,8 +17,10 @@
  */
 package com.phloc.webctrls.bootstrap;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.api.EHCButtonType;
 
 public class BootstrapButton_Submit extends BootstrapButton
@@ -32,6 +34,12 @@ public class BootstrapButton_Submit extends BootstrapButton
   public BootstrapButton_Submit ()
   {
     super ();
+    _init ();
+  }
+
+  public BootstrapButton_Submit (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  {
+    super (aTextProvider);
     _init ();
   }
 

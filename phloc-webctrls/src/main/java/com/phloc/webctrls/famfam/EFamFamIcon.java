@@ -1035,7 +1035,7 @@ public enum EFamFamIcon implements IIcon
   ZOOM_IN ("famfam-zoom_in"),
   ZOOM_OUT ("famfam-zoom_out");
 
-  public static final ICSSClassProvider CSS_CLASS_FAMFAM = DefaultCSSClassProvider.create ("famfam");
+  public static final ICSSClassProvider CSS_CLASS_FAMFAM = DefaultCSSClassProvider.create ("icon-famfam");
 
   private String m_sCSSClass;
 
