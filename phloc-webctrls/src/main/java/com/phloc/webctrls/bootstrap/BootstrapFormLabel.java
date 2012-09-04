@@ -23,9 +23,10 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
-import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCStrong;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.label.AbstractFormLabel;
 import com.phloc.webctrls.custom.label.ELabelType;
 
@@ -34,9 +35,9 @@ public class BootstrapFormLabel extends AbstractFormLabel
   private final IHCElement <?> m_aNode;
 
   @Nonnull
-  private static IHCElement <?> _modifyNode (@Nonnull final IHCElement <?> aNode, @Nonnull final ELabelType eType)
+  private static IHCElement <?> _modifyNode (@Nonnull final IHCNode aNode, @Nonnull final ELabelType eType)
   {
-    IHCElement <?> ret;
+    IHCNode ret;
     if (eType.equals (ELabelType.MANDATORY))
       ret = new HCStrong (aNode);
     else
@@ -44,8 +45,7 @@ public class BootstrapFormLabel extends AbstractFormLabel
         ret = new HCEM (aNode);
       else
         ret = aNode;
-    ret.addClass (CSS_CLASS_FORM_LABEL);
-    return aNode;
+    return new HCDiv (ret).addClass (CSS_CLASS_FORM_LABEL);
   }
 
   protected BootstrapFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
@@ -54,7 +54,7 @@ public class BootstrapFormLabel extends AbstractFormLabel
     if (sText == null)
       throw new NullPointerException ("text");
 
-    m_aNode = _modifyNode (new HCSpan (_getTextWithState (sText, eType)), eType);
+    m_aNode = _modifyNode (new HCTextNode (_getTextWithState (sText, eType)), eType);
   }
 
   protected BootstrapFormLabel (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)

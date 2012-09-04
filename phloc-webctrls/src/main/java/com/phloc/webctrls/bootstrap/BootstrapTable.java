@@ -111,6 +111,19 @@ public class BootstrapTable extends AbstractHCTable <BootstrapTable>
   }
 
   @Nonnull
+  public BootstrapTable addSpanningBodyContent (@Nullable final String sText)
+  {
+    return addSpanningBodyContent (new HCTextNode (sText));
+  }
+
+  @Nonnull
+  public BootstrapTable addSpanningBodyContent (@Nullable final IHCNode aNode)
+  {
+    addBodyRow ().addAndReturnCell (aNode).setColspan (getColumnCount ());
+    return this;
+  }
+
+  @Nonnull
   public BootstrapTable setSpanningFooterContent (@Nullable final String sText)
   {
     return setSpanningFooterContent (new HCTextNode (sText));

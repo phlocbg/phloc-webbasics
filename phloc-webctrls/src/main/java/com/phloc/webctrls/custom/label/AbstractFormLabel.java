@@ -30,7 +30,7 @@ import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
-public abstract class AbstractFormLabel extends AbstractWrappedHCNode
+public abstract class AbstractFormLabel extends AbstractWrappedHCNode implements IFormLabel
 {
   public static final ICSSClassProvider CSS_CLASS_FORM_LABEL = DefaultCSSClassProvider.create ("form-label");
   public static final String SIGN_MANDATORY = "*";

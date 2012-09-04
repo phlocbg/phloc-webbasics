@@ -23,6 +23,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.webbasics.form.validation.EFormErrorLevel;
 
 /**
  * CSS Constants for the Twitter Bootstrap framework
@@ -197,5 +198,11 @@ public final class CBootstrapCSS
     if (eErrorLevel.isLessOrEqualSevereThan (EErrorLevel.WARN))
       return WARNING;
     return ERROR;
+  }
+
+  @Nullable
+  public static ICSSClassProvider getCSSClass (@Nullable final EFormErrorLevel eFormErrorLevel)
+  {
+    return eFormErrorLevel == null ? null : getCSSClass (eFormErrorLevel.getErrorLevel ());
   }
 }
