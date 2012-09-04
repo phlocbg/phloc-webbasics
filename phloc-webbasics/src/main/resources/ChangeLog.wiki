@@ -1,10 +1,13 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>9/4/12</td><td>remove</td><td>api</td><td></td><td>Moved bootstrap stuff to new project phloc-webctrls</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>9/4/12</td><td colspan="4">_Release *1.8.10*_</td></tr>
+<tr><td>9/4/12</td><td>add</td><td>api</td><td></td><td>Added basic stream servlets</td></tr>
+<tr><td>9/4/12</td><td>add</td><td>api</td><td></td><td>Added action handling</td></tr>
+<tr><td>9/4/12</td><td>remove</td><td>api</td><td></td><td>Moved bootstrap stuff to new project [http://code.google.com/p/phloc-webbasics phloc-webctrls]</td></tr>
 <tr><td>9/4/12</td><td>update</td><td>tech</td><td></td><td>Updated GZip filter based on Jetty GZip filter</td></tr>
 <tr border="1"><td>8/30/12</td><td colspan="4">_Release *1.8.9*_</td></tr>
-<tr><td>8/30/12</td><td>update</td><td>tech</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-appbasics phloc-appbasics] 1.8.4</td></tr>
+<tr><td>8/30/12</td><td>update</td><td>tech</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-webbasics phloc-appbasics] 1.8.4</td></tr>
 <tr border="1"><td>8/30/12</td><td colspan="4">_Release *1.8.8*_</td></tr>
 <tr><td>8/30/12</td><td>change</td><td>api</td><td>*yes*</td><td>Changed some AJAX method signatures for easier handling</td></tr>
 <tr border="1"><td>8/29/12</td><td colspan="4">_Release *1.8.7*_</td></tr>
@@ -37,9 +40,9 @@
 <tr><td>8/13/12</td><td>add</td><td>api</td><td></td><td>Extended AbstractWebPage API</td></tr>
 <tr><td>7/13/12</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-json phloc-json] 2.2.8 and [http://code.google.com/p/phloc-html phloc-html] 3.3.1</td></tr>
 <tr border="1"><td>7/13/12</td><td colspan="4">_Release *1.7.1*_</td></tr>
-<tr><td>7/13/12</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-appbasics phloc-appbasics] 1.7.1</td></tr>
+<tr><td>7/13/12</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-webbasics phloc-appbasics] 1.7.1</td></tr>
 <tr border="1"><td>7/12/12</td><td colspan="4">_Release *1.7.0*_</td></tr>
-<tr><td>6/27/12</td><td>change</td><td>tech</td><td>*yes*</td><td>Extracted non-web elements into [http://code.google.com/p/phloc-appbasics phloc-appbasics] project</td></tr>
+<tr><td>6/27/12</td><td>change</td><td>tech</td><td>*yes*</td><td>Extracted non-web elements into [http://code.google.com/p/phloc-webbasics phloc-appbasics] project</td></tr>
 <tr border="1"><td>6/25/12</td><td colspan="4">_Release *1.6.1*_</td></tr>
 <tr><td>6/25/12</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 3.6.1 and [http://code.google.com/p/phloc-scopes phloc-scopes] 3.9.7</td></tr>
 <tr><td>6/21/12</td><td>update</td><td>tech</td><td></td><td>Made error handling in AbstractDAO writing more secure</td></tr>

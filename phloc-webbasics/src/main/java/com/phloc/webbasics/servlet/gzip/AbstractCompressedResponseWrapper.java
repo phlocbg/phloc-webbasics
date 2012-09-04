@@ -266,36 +266,39 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
 
   public final void finish () throws IOException
   {
-    // Check if a content type was specified
-    final String sRequestURL = m_aHttpRequest.getRequestURL ().toString ();
-    final String sContentType = getContentType ();
-    if (StringHelper.hasNoText (sContentType))
+    if (false)
     {
-      // Not important for redirects etc.
-      if (m_nStatusCode >= SC_OK && m_nStatusCode < 300)
+      // Check if a content type was specified
+      final String sRequestURL = m_aHttpRequest.getRequestURL ().toString ();
+      final String sContentType = getContentType ();
+      if (StringHelper.hasNoText (sContentType))
       {
-        final String sDeterminedMimeType = MimeTypeDeterminator.getMimeTypeFromFilename (sRequestURL);
-        if (sDeterminedMimeType == null)
-          s_aLogger.error ("The response has no content type for request '" +
-                           sRequestURL +
-                           "' and failed to determine one");
-        else
+        // Not important for redirects etc.
+        if (m_nStatusCode >= SC_OK && m_nStatusCode < 300)
         {
-          if (s_aLogger.isDebugEnabled ())
-            s_aLogger.debug ("The response has no content type for request '" +
+          final String sDeterminedMimeType = MimeTypeDeterminator.getMimeTypeFromFilename (sRequestURL);
+          if (sDeterminedMimeType == null)
+            s_aLogger.error ("The response has no content type for request '" +
                              sRequestURL +
-                             "' but determined '" +
-                             sDeterminedMimeType +
-                             "'");
-          setContentType (sDeterminedMimeType);
+                             "' and failed to determine one");
+          else
+          {
+            if (s_aLogger.isDebugEnabled ())
+              s_aLogger.debug ("The response has no content type for request '" +
+                               sRequestURL +
+                               "' but determined '" +
+                               sDeterminedMimeType +
+                               "'");
+            setContentType (sDeterminedMimeType);
+          }
         }
       }
-    }
-    else
-    {
-      // Content type is present
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("The response has content type '" + sContentType + "' for request '" + sRequestURL + "'");
+      else
+      {
+        // Content type is present
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("The response has content type '" + sContentType + "' for request '" + sRequestURL + "'");
+      }
     }
 
     if (m_aWriter != null && !m_aCompressedOS.isClosed ())
