@@ -23,13 +23,15 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.html.HCI;
+import com.phloc.webctrls.custom.IIcon;
 
 /**
  * Contains all free FamFam 0.13 icons
  * 
  * @author philip
  */
-public enum EFamFamIcon implements ICSSClassProvider
+public enum EFamFamIcon implements IIcon
 {
   ACCEPT ("famfam-accept"),
   ADD ("famfam-add"),
@@ -1049,8 +1051,16 @@ public enum EFamFamIcon implements ICSSClassProvider
     return m_sCSSClass;
   }
 
-  public void applyToNode (@Nonnull final IHCElement <?> aElement)
+  @Nonnull
+  public IHCElement <?> getAsNode ()
+  {
+    return applyToNode (new HCI ());
+  }
+
+  @Nonnull
+  public <T extends IHCElement <?>> T applyToNode (@Nonnull final T aElement)
   {
     aElement.addClasses (CSS_CLASS_FAMFAM, this);
+    return aElement;
   }
 }

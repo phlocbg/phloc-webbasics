@@ -24,13 +24,14 @@ import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.HCI;
+import com.phloc.webctrls.custom.IIcon;
 
 /**
  * Bootstrap icons
  * 
  * @author philip
  */
-public enum EBootstrapIcon implements ICSSClassProvider
+public enum EBootstrapIcon implements IIcon
 {
   ICON_GLASS ("icon-glass"),
   ICON_MUSIC ("icon-music"),
@@ -199,5 +200,12 @@ public enum EBootstrapIcon implements ICSSClassProvider
   public IHCElement <?> getAsNodeInverted ()
   {
     return new HCI ().addClasses (this, CSS_CLASS_ICON_WHITE);
+  }
+
+  @Nonnull
+  public <T extends IHCElement <?>> T applyToNode (@Nonnull final T aElement)
+  {
+    aElement.addClass (this);
+    return aElement;
   }
 }
