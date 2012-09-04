@@ -106,10 +106,7 @@ public class BootstrapTable extends AbstractHCTable <BootstrapTable>
   @Nonnull
   public BootstrapTable setSpanningHeaderContent (@Nullable final IHCNode aNode)
   {
-    if (hasHeaderRow ())
-      getHeaderRow ().getCellAtIndex (0).removeAllChildren ().addChild (aNode);
-    else
-      addHeaderRow ().addAndReturnCell (aNode).setColspan (getColumnCount ());
+    getOrAddHeaderRow ().removeAllCells ().addAndReturnCell (aNode).setColspan (getColumnCount ());
     return this;
   }
 
@@ -122,10 +119,7 @@ public class BootstrapTable extends AbstractHCTable <BootstrapTable>
   @Nonnull
   public BootstrapTable setSpanningFooterContent (@Nullable final IHCNode aNode)
   {
-    if (hasFooterRow ())
-      getFooterRow ().getCellAtIndex (0).removeAllChildren ().addChild (aNode);
-    else
-      addFooterRow ().addAndReturnCell (aNode).setColspan (getColumnCount ());
+    getOrAddFooterRow ().removeAllCells ().addAndReturnCell (aNode).setColspan (getColumnCount ());
     return this;
   }
 }
