@@ -110,6 +110,9 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
         throw new IllegalStateException ("Response already committed");
 
       m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, m_sContentEncoding);
+
+      // Check if header was really set (may e.g. not be the case when something
+      // is included like a JSP)
       if (m_aHttpResponse.containsHeader (CHTTPHeader.CONTENT_ENCODING))
       {
         m_aOS = m_aCompressedOS = createDeflaterOutputStream (m_aHttpResponse.getOutputStream ());
