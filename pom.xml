@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>20</version>
+    <version>21</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -22,5 +22,6 @@
   <modules>
     <module>phloc-appbasics</module>
     <module>phloc-webbasics</module>
+    <module>phloc-webctrls</module>
   </modules>
 </project>
