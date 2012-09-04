@@ -33,6 +33,7 @@ import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.AcceptEncodingList;
+import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.web.ResponseHelper;
 
 /**
@@ -45,10 +46,6 @@ import com.phloc.webbasics.web.ResponseHelper;
 public final class CompressFilter implements Filter
 {
   static final String REQUEST_ATTR = CompressFilter.class.getName ();
-  private static final IStatisticsHandlerCounter s_aStatsGZip = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
-                                                                                                     "$gzip");
-  private static final IStatisticsHandlerCounter s_aStatsDeflate = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
-                                                                                                        "$deflate");
   private static final IStatisticsHandlerCounter s_aStatsNone = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
                                                                                                      "$none");
 
@@ -67,27 +64,48 @@ public final class CompressFilter implements Filter
       aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
       final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
       final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
+
+      // Inform caches that responses may vary according to Accept-Encoding
+      aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
+
       final AcceptEncodingList aAEL = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);
 
-      // GZip
+      AbstractCompressedResponseWrapper aCompressedResponse = null;
+
       final String sGZIPEncoding = aAEL.getUsedGZIPEncoding ();
       if (sGZIPEncoding != null)
       {
-        s_aStatsGZip.increment ();
-        final GZIPResponseWrapper aGZIPResponse = new GZIPResponseWrapper (aHttpResponse, sGZIPEncoding);
-        aChain.doFilter (aRequest, aGZIPResponse);
-        aGZIPResponse.finishResponse (aHttpRequest.getRequestURL ().toString ());
-        return;
+        // Use gzip
+        aCompressedResponse = new GZIPResponse (aHttpRequest, aHttpResponse, sGZIPEncoding);
+      }
+      else
+      {
+        final String sDeflateEncoding = aAEL.getUsedDeflateEncoding ();
+        if (sDeflateEncoding != null)
+        {
+          // Use deflate
+          aCompressedResponse = new DeflateResponse (aHttpRequest, aHttpResponse, sDeflateEncoding);
+        }
       }
 
-      // Deflate
-      final String sDeflateEncoding = aAEL.getUsedDeflateEncoding ();
-      if (sDeflateEncoding != null)
+      if (aCompressedResponse != null)
       {
-        s_aStatsDeflate.increment ();
-        final DeflateResponseWrapper aDeflateResponse = new DeflateResponseWrapper (aHttpResponse, sDeflateEncoding);
-        aChain.doFilter (aRequest, aDeflateResponse);
-        aDeflateResponse.finishResponse (aHttpRequest.getRequestURL ().toString ());
+        boolean bException = true;
+        try
+        {
+          aChain.doFilter (aRequest, aCompressedResponse);
+          bException = false;
+        }
+        finally
+        {
+          if (bException && !aHttpResponse.isCommitted ())
+          {
+            aCompressedResponse.resetBuffer ();
+            aCompressedResponse.noCompression ();
+          }
+          else
+            aCompressedResponse.finish ();
+        }
         return;
       }
 
