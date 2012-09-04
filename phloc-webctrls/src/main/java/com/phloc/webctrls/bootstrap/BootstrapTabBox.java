@@ -26,8 +26,10 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -51,14 +53,12 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
     private final String m_sID;
     private final IHCNode m_aLabel;
     private final IHCNode m_aContent;
-    private final boolean m_bActive;
 
-    public Tab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent, final boolean bActive)
+    public Tab (@Nullable final String sID, @Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
     {
-      m_sID = GlobalIDFactory.getNewStringID ();
+      m_sID = StringHelper.hasText (sID) ? sID : GlobalIDFactory.getNewStringID ();
       m_aLabel = aLabel;
       m_aContent = aContent;
-      m_bActive = bActive;
     }
 
     @Nonnull
@@ -85,15 +85,13 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
     {
       return m_aContent;
     }
-
-    public boolean isActive ()
-    {
-      return m_bActive;
-    }
   }
+
+  public static final boolean DEFAULT_ACTIVE = false;
 
   private EBootstrapTabBoxType m_eType = EBootstrapTabBoxType.TOP;
   private final List <Tab> m_aTabs = new ArrayList <Tab> ();
+  private String m_sActiveTabID;
 
   private void _init ()
   {
@@ -115,16 +113,62 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
     return this;
   }
 
+  @Nullable
+  public String getActiveTabID ()
+  {
+    return m_sActiveTabID;
+  }
+
+  @Nonnull
+  public BootstrapTabBox setActiveTabID (@Nullable final String sID)
+  {
+    m_sActiveTabID = sID;
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapTabBox addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent)
+  {
+    return addTab (null, new HCTextNode (sLabel), aContent, DEFAULT_ACTIVE);
+  }
+
   @Nonnull
   public BootstrapTabBox addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent, final boolean bActive)
   {
-    return addTab (new HCTextNode (sLabel), aContent, bActive);
+    return addTab (null, new HCTextNode (sLabel), aContent, bActive);
+  }
+
+  @Nonnull
+  public BootstrapTabBox addTab (@Nullable final String sID,
+                                 @Nullable final String sLabel,
+                                 @Nullable final IHCNode aContent,
+                                 final boolean bActive)
+  {
+    return addTab (sID, new HCTextNode (sLabel), aContent, bActive);
+  }
+
+  @Nonnull
+  public BootstrapTabBox addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
+  {
+    return addTab (null, aLabel, aContent, DEFAULT_ACTIVE);
   }
 
   @Nonnull
   public BootstrapTabBox addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent, final boolean bActive)
   {
-    m_aTabs.add (new Tab (aLabel, aContent, bActive));
+    return addTab (null, aLabel, aContent, bActive);
+  }
+
+  @Nonnull
+  public BootstrapTabBox addTab (@Nullable final String sID,
+                                 @Nullable final IHCNode aLabel,
+                                 @Nullable final IHCNode aContent,
+                                 final boolean bActive)
+  {
+    final Tab aTab = new Tab (sID, aLabel, aContent);
+    m_aTabs.add (aTab);
+    if (bActive)
+      m_sActiveTabID = aTab.getID ();
     return this;
   }
 
@@ -142,24 +186,34 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
     super.prepareOnceBeforeCreateElement (aConversionSettings);
     addClass (m_eType);
 
-    // tabs
+    String sActiveTabID = m_sActiveTabID;
+    if (StringHelper.hasNoText (sActiveTabID))
+    {
+      // Activate first tab by default
+      sActiveTabID = ContainerHelper.getFirstElement (m_aTabs).getID ();
+    }
+
+    // Build code for tabs and content
     final HCUL aTabs = new HCUL ().addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_TABS);
     final HCDiv aContent = new HCDiv ().addClass (CBootstrapCSS.TAB_CONTENT);
     for (final Tab aTab : m_aTabs)
     {
+      final boolean bIsActiveTab = aTab.getID ().equals (sActiveTabID);
+
       // header
       final HCLI aToggleLI = aTabs.addItem ();
-      if (aTab.isActive ())
+      if (bIsActiveTab)
         aToggleLI.addClass (CBootstrapCSS.ACTIVE);
       aToggleLI.addChild (new HCA (aTab.getLinkURL ()).setCustomAttr ("data-toggle", "tab").addChild (aTab.getLabel ()));
 
       // content
       final HCDiv aPane = aContent.addAndReturnChild (new HCDiv (aTab.getContent ()).addClass (CBootstrapCSS.TAB_PANE)
                                                                                     .setID (aTab.getID ()));
-      if (aTab.isActive ())
+      if (bIsActiveTab)
         aPane.addClass (CBootstrapCSS.ACTIVE);
     }
 
+    // Determine order of elements
     if (m_eType.emitTabsBeforeContent ())
       addChildren (aTabs, aContent);
     else
