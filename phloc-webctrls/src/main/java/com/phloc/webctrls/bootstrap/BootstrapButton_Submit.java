@@ -35,14 +35,21 @@ public class BootstrapButton_Submit extends HCButton_Submit
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
 
+  private void _init ()
+  {
+    addClass (CBootstrapCSS.BTN);
+  }
+
   public BootstrapButton_Submit ()
   {
     super ();
+    _init ();
   }
 
   public BootstrapButton_Submit (@Nullable final String sLabel)
   {
     super (sLabel);
+    _init ();
   }
 
   public BootstrapButton_Submit (@Nullable final IIcon aIcon)

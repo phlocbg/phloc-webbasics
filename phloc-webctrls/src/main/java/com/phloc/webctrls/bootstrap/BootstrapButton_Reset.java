@@ -35,14 +35,21 @@ public class BootstrapButton_Reset extends HCButton_Reset
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
 
+  private void _init ()
+  {
+    addClass (CBootstrapCSS.BTN);
+  }
+
   public BootstrapButton_Reset ()
   {
     super ();
+    _init ();
   }
 
   public BootstrapButton_Reset (@Nullable final String sLabel)
   {
     super (sLabel);
+    _init ();
   }
 
   public BootstrapButton_Reset (@Nullable final IIcon aIcon)
