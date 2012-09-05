@@ -23,25 +23,17 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
-import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.htmlext.HCA_JS;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.html.js.CJS;
-import com.phloc.html.js.EJSEvent;
 import com.phloc.html.js.IJSCodeProvider;
-import com.phloc.html.js.builder.JSExpr;
-import com.phloc.html.js.builder.JSReturn;
-import com.phloc.html.js.builder.JSStatementList;
 import com.phloc.html.js.builder.html.JSHtml;
-import com.phloc.html.js.provider.CollectingJSCodeProvider;
 import com.phloc.webctrls.custom.DefaultIcons;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
-public class BootstrapButton extends HCA
+public class BootstrapButton extends HCA_JS
 {
-  private static final ISimpleURL JS_URL = new ReadonlySimpleURL (CJS.JS_VOID);
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
@@ -53,17 +45,14 @@ public class BootstrapButton extends HCA
 
   public BootstrapButton (@Nonnull final ISimpleURL aURL)
   {
-    super (JS_URL);
+    super (JSHtml.windowLocationHref ().assign (aURL.getAsString ()));
     _init ();
-    addEventHandler (EJSEvent.ONCLICK, new JSStatementList (JSHtml.windowLocationHref ().assign (aURL.getAsString ()),
-                                                            new JSReturn (JSExpr.FALSE)));
   }
 
   public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode)
   {
-    super (JS_URL);
+    super (aJSCode);
     _init ();
-    addEventHandler (EJSEvent.ONCLICK, new CollectingJSCodeProvider (aJSCode, new JSReturn (JSExpr.FALSE)));
   }
 
   public BootstrapButton (@Nullable final String sLabel, @Nonnull final ISimpleURL aURL)
