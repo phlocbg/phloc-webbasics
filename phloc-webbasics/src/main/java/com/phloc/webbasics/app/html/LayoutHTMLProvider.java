@@ -31,22 +31,21 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.media.CSSMediaList;
 import com.phloc.css.media.ECSSMedium;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.html.EHTMLVersion;
-import com.phloc.html.condcomment.ConditionalComment;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.html.hc.html.HCLink;
+import com.phloc.html.hc.html.HCScriptFile;
 import com.phloc.html.hc.html.HCSpan;
+import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
-import com.phloc.html.resource.css.CSSExternal;
-import com.phloc.html.resource.js.JSExternal;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -117,21 +116,19 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
     // Add configured CSS
     for (final String sCSSFile : HTMLConfigManager.getInstance ().getAllCSSFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSFile)));
+      aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSFile)));
 
     // Add configured print-only CSS
     for (final String sCSSPrintFile : HTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSPrintFile), ECSSMedium.PRINT));
+      aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSPrintFile)).addMedium (ECSSMedium.PRINT));
 
     // Add configured IE-only CSS
     for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
-      aHead.addCSS (new CSSExternal (LinkUtils.getURLWithContext (sCSSIEFile),
-                                     (CSSMediaList) null,
-                                     ConditionalComment.createForIE ()));
+      aHead.addCSS (HCConditionalCommentNode.createForIE (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSIEFile))));
 
     // Add all configured JS
     for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
-      aHead.addJS (new JSExternal (LinkUtils.getURLWithContext (sJSFile)));
+      aHead.addJS (new HCScriptFile (LinkUtils.getURLWithContext (sJSFile)));
   }
 
   @OverrideOnDemand
