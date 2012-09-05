@@ -37,9 +37,6 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 @Translatable
 public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
 {
-  // Boolean representation
-  BOOLEAN_TRUE ("Ja", "Yes"),
-  BOOLEAN_FALSE ("Nein", "No"),
   // Misc texts
   PAGE_HELP_TITLE ("Hilfe zu ''{0}'' anzeigen", "Show help for ''{0}''"),
   DOWNLOAD ("Download", "Download"),
@@ -105,13 +102,21 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }
 
+  @Nullable
   public String getDisplayText (@Nonnull final Locale aContentLocale)
   {
     return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
   }
 
+  @Nullable
   public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
   {
     return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
+  }
+
+  @Nullable
+  public static String getYesOrNo (final boolean bYes, @Nonnull final Locale aContentLocale)
+  {
+    return (bYes ? MSG_BUTTON_YES : MSG_BUTTON_NO).getDisplayText (aContentLocale);
   }
 }

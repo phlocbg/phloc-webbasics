@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translationitems count="44">
+  <item id="com.phloc.webbasics.EWebBasicsText.FILE_SELECT">
+    <cs>Výběr souboru</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_ACTIONS">
+    <cs>Akce</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BACK_TO_OVERVIEW">
+    <cs>Zpět na seznam</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_BACK">
+    <cs>Zpět</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_CANCEL">
+    <cs>Zrušit</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_DELETE">
+    <cs>Odstranit</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_EDIT">
+    <cs>Upravit</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_NEXT">
+    <cs>Další</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_NO">
+    <cs>Ne</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_RESET">
+    <cs>Reset</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE">
+    <cs>Uložit</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE_ALL">
+    <cs>Uložit vše</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE_AS">
+    <cs>Uložit jako ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE_CLOSE">
+    <cs>Uložit a zavřít</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SELECT">
+    <cs>Vybrat</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_UPLOAD">
+    <cs>Nahrát</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_YES">
+    <cs>Ano</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_ERR_INCORRECT_INPUT">
+    <cs>Není možné provést uložení vzhledem k chybějícím či nesprávným údajům. Zkontrolujte zadání a řiďte se podle návrhů řešení.</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_FALSE">
+    <cs>Chybné</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_TRUE">
+    <cs>Správné</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.OPEN_CALENDAR">
+    <cs>Kalendář ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_LABEL_PAGE_SIZE">
+    <cs>Přihlášky na stránku: </cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_OF">
+    <cs> Z {0}</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_PAGE">
+    <cs> Stránky </cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_SHOW_RANGE">
+    <cs>Příspěvky {0} - {1} z celkových {2}</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_ACCEPT">
+    <cs>Platí</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_END">
+    <cs>Poslední strana</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_NEXT">
+    <cs>Další stránka</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_PREV">
+    <cs>Předchozí stránka</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_START">
+    <cs>První strana</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PLEASE_SELECT">
+    <cs>(Vyberte jednu položku)</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.SELECT_NONE">
+    <cs>(Nic)</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.SELECT_SHOW_ALL">
+    <cs>Ukázat vše...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TAB_PROGRESS_MSG">
+    <cs>Načítání ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_COLLAPSE">
+    <cs>Načítání ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_COLLAPSE_ALL">
+    <cs>Načítání ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_EXPAND">
+    <cs>Načítání ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_EXPAND_ALL">
+    <cs>Načítání ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_FILTER">
+    <cs>Filtrování záznamů ...</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_LABEL_FILTER">
+    <cs>Filtrovat záznamy</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEMS_COLLAPSE">
+    <cs>Sbalit všechny položky</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEMS_EXPAND">
+    <cs>Rozbalit všechny položky</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEM_COLLAPSE">
+    <cs>Sbalit položky</cs>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEM_EXPAND">
+    <cs>Rozbalit položka</cs>
+  </item>
+</translationitems>

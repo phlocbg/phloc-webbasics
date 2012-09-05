@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translationitems count="44">
+  <item id="com.phloc.webbasics.EWebBasicsText.FILE_SELECT">
+    <pl>Wybór plików</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_ACTIONS">
+    <pl>Aktywny</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BACK_TO_OVERVIEW">
+    <pl>Z powrotem do widoku ogólnego</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_BACK">
+    <pl>Z powrotem</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_CANCEL">
+    <pl>Anuluj</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_DELETE">
+    <pl>Usuń</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_EDIT">
+    <pl>Edytuj</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_NEXT">
+    <pl>Dalej</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_NO">
+    <pl>Nie</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_RESET">
+    <pl>Nastaw ponownie</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE">
+    <pl>Zapisz</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE_ALL">
+    <pl>Zapisać wszystko</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE_AS">
+    <pl>Zapisz jako…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SAVE_CLOSE">
+    <pl>Zapisz i zamknij</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_SELECT">
+    <pl>Wybierz...</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_UPLOAD">
+    <pl>Wysłać</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_BUTTON_YES">
+    <pl>Tak</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_ERR_INCORRECT_INPUT">
+    <pl>Ze względu na brakujące lub błędne dane nie można dokończyć zapisywanie ! Proszę skontrolować ustawienia i postępować zgodnie ze wskazówkami</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_FALSE">
+    <pl>Źle</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_TRUE">
+    <pl>Dobrze</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.OPEN_CALENDAR">
+    <pl>Kalendarz…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_LABEL_PAGE_SIZE">
+    <pl>Zapisy na stronę: </pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_OF">
+    <pl> od {0}</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_PAGE">
+    <pl> Strona </pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_SHOW_RANGE">
+    <pl>Zapisy {0} - {1} od łącznie {2}</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_ACCEPT">
+    <pl>Zastosuj</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_END">
+    <pl>Ostatnia strona</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_NEXT">
+    <pl>Następna strona</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_PREV">
+    <pl>Poprzednia strona</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGING_TOOLTIP_PAGE_START">
+    <pl>Pierwsza strona</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PLEASE_SELECT">
+    <pl>Wybierzcie jedną pozycję</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.SELECT_NONE">
+    <pl>(Nic)</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.SELECT_SHOW_ALL">
+    <pl>Pokaż wszystko…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TAB_PROGRESS_MSG">
+    <pl>Ładowanie…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_COLLAPSE">
+    <pl>Ładowanie…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_COLLAPSE_ALL">
+    <pl>Ładowanie…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_EXPAND">
+    <pl>Ładowanie…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_EXPAND_ALL">
+    <pl>Ładowanie…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_FILTER">
+    <pl>Zapisy filtrują się</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_LABEL_FILTER">
+    <pl>Filtr wpisów</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEMS_COLLAPSE">
+    <pl>Wszystkie rejestry zamknięte</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEMS_EXPAND">
+    <pl>Wszystkie rejestry otwarte</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEM_COLLAPSE">
+    <pl>Zapis zamknięty</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.TREE_TREEITEM_EXPAND">
+    <pl>Zapis otwarty</pl>
+  </item>
+</translationitems>

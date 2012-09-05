@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<translationitems count="57">
-  <item id="com.phloc.webbasics.EWebBasicsText.BOOLEAN_FALSE">
-    <de>Nein</de>
-    <en>No</en>
-  </item>
-  <item id="com.phloc.webbasics.EWebBasicsText.BOOLEAN_TRUE">
-    <de>Ja</de>
-    <en>Yes</en>
-  </item>
+<translationitems count="55">
   <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
     <de>Download</de>
     <en>Download</en>
