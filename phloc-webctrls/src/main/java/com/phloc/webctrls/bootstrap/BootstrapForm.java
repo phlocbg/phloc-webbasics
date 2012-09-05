@@ -52,15 +52,14 @@ public class BootstrapForm extends HCForm
   public BootstrapForm addControlGroup (@Nullable final EErrorLevel eErrorLevel,
                                         @Nullable final IHCNode aLabel,
                                         @Nullable final IHCNode aCtrls,
-                                        @Nullable final String sErrorMsg)
+                                        @Nullable final IBootstrapHelpItem <?> aHelpItem)
   {
     final HCDiv aCtrlGroup = addAndReturnChild (new HCDiv ().addClasses (CBootstrapCSS.CONTROL_GROUP,
                                                                          CBootstrapCSS.getCSSClass (eErrorLevel)));
     aCtrlGroup.addChild (aLabel);
     final HCDiv aControls = aCtrlGroup.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.CONTROLS));
     aControls.addChild (aCtrls);
-    if (StringHelper.hasText (sErrorMsg))
-      aControls.addChild (new BootstrapHelpInline (sErrorMsg));
+    aControls.addChild (aHelpItem);
     return this;
   }
 

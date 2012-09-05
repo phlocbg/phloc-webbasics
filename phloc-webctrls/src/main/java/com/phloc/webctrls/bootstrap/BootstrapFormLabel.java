@@ -23,8 +23,8 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
+import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.ELabelType;
@@ -45,7 +45,7 @@ public class BootstrapFormLabel extends AbstractFormLabel
         ret = new HCEM (aNode);
       else
         ret = aNode;
-    return new HCDiv (ret).addClass (CSS_CLASS_FORM_LABEL);
+    return new HCLabel (ret).addClass (CSS_CLASS_FORM_LABEL);
   }
 
   protected BootstrapFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
