@@ -17,26 +17,95 @@
  */
 package com.phloc.webctrls.bootstrap;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.html.hc.api.EHCButtonType;
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.html.HCButton_Reset;
+import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.webctrls.custom.DefaultIcons;
+import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.IIcon;
 
-public class BootstrapButton_Reset extends BootstrapButton
+public class BootstrapButton_Reset extends HCButton_Reset
 {
-  private void _init ()
-  {
-    setType (EHCButtonType.RESET);
-  }
+  private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
+  private EBootstrapButtonSize m_eSize;
+  private IIcon m_aIcon;
 
   public BootstrapButton_Reset ()
   {
     super ();
-    _init ();
   }
 
   public BootstrapButton_Reset (@Nullable final String sLabel)
   {
     super (sLabel);
-    _init ();
+  }
+
+  public BootstrapButton_Reset (@Nullable final IIcon aIcon)
+  {
+    this ();
+    setIcon (aIcon);
+  }
+
+  public BootstrapButton_Reset (@Nullable final String sLabel, @Nullable final IIcon aIcon)
+  {
+    this (sLabel);
+    setIcon (aIcon);
+  }
+
+  public BootstrapButton_Reset (@Nonnull final EDefaultIcon eIcon)
+  {
+    this (DefaultIcons.get (eIcon));
+  }
+
+  public BootstrapButton_Reset (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  {
+    this (sLabel, DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public BootstrapButton_Reset setType (@Nonnull final EBootstrapButtonType eType)
+  {
+    if (eType == null)
+      throw new NullPointerException ("type");
+    m_eType = eType;
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapButton_Reset setSize (@Nullable final EBootstrapButtonSize eSize)
+  {
+    m_eSize = eSize;
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapButton_Reset setIcon (@Nullable final IIcon aIcon)
+  {
+    m_aIcon = aIcon;
+    return this;
+  }
+
+  @Override
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void prepareOnceBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
+  {
+    super.prepareOnceBeforeCreateElement (aConversionSettings);
+    addClasses (m_eType, m_eSize);
+    if (m_aIcon != null)
+    {
+      final boolean bAddSeparator = hasChildren ();
+      addChild (0, m_aIcon.getAsNode ());
+      if (bAddSeparator)
+      {
+        // Add spacer
+        addChild (1, new HCTextNode (" "));
+      }
+    }
   }
 }

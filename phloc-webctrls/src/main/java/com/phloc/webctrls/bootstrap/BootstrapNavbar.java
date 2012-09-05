@@ -24,6 +24,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCP;
 import com.phloc.html.hc.html.HCSpan;
@@ -47,17 +48,17 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
     if (bAddResponsiveToggle)
     {
       // Responsive toggle
-      final BootstrapButton aToggle = m_aContainer.addAndReturnChild (new BootstrapButton ());
-      aToggle.addClass (CBootstrapCSS.BTN_NAVBAR);
+      final HCButton aToggle = m_aContainer.addAndReturnChild (new HCButton ());
+      aToggle.addClasses (CBootstrapCSS.BTN, CBootstrapCSS.BTN_NAVBAR);
       aToggle.setCustomAttr ("data-toggle", "collapse");
       aToggle.setCustomAttr ("data-target", "." + CBootstrapCSS.NAV_COLLAPSE.getCSSClass ());
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
-    }
 
-    // Create the collapsable container
-    m_aCollapse = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAV_COLLAPSE));
+      // Create the collapsable container
+      m_aCollapse = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAV_COLLAPSE));
+    }
   }
 
   @Nonnull

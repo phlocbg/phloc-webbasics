@@ -23,9 +23,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.webctrls.famfam.EFamFamIcon;
+
 public class DefaultIcons
 {
   private static Map <EDefaultIcon, IIcon> m_aMap = new HashMap <EDefaultIcon, IIcon> ();
+
+  static
+  {
+    // Vendor and library independent
+    EFamFamIcon.setAsDefault ();
+  }
 
   private DefaultIcons ()
   {}

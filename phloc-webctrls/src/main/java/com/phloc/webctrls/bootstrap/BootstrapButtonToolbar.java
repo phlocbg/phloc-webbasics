@@ -23,6 +23,8 @@ import javax.annotation.Nullable;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
+import com.phloc.html.hc.html.HCHiddenField;
+import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
  * Bootstrap block help.
@@ -75,5 +77,26 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   {
     super (aChildren);
     _init ();
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addHiddenField (@Nullable final String sName, @Nullable final String sValue)
+  {
+    addChild (new HCHiddenField (sName, sValue));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addSubmitButtonSave ()
+  {
+    addChild (new BootstrapButton_Submit ("Speichern", EDefaultIcon.SAVE));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addSubmitButtonYes ()
+  {
+    addChild (new BootstrapButton_Submit ("Ja", EDefaultIcon.YES));
+    return this;
   }
 }

@@ -22,15 +22,26 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
-import com.phloc.html.hc.html.HCButton;
+import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.html.js.CJS;
+import com.phloc.html.js.EJSEvent;
+import com.phloc.html.js.IJSCodeProvider;
+import com.phloc.html.js.builder.JSExpr;
+import com.phloc.html.js.builder.JSReturn;
+import com.phloc.html.js.builder.JSStatementList;
+import com.phloc.html.js.builder.html.JSHtml;
+import com.phloc.html.js.provider.CollectingJSCodeProvider;
 import com.phloc.webctrls.custom.DefaultIcons;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
-public class BootstrapButton extends HCButton
+public class BootstrapButton extends HCA
 {
+  private static final ISimpleURL JS_URL = new ReadonlySimpleURL (CJS.JS_VOID);
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
@@ -40,38 +51,81 @@ public class BootstrapButton extends HCButton
     addClass (CBootstrapCSS.BTN);
   }
 
-  public BootstrapButton ()
+  public BootstrapButton (@Nonnull final ISimpleURL aURL)
   {
-    super ();
+    super (JS_URL);
     _init ();
+    addEventHandler (EJSEvent.ONCLICK, new JSStatementList (JSHtml.windowLocationHref ().assign (aURL.getAsString ()),
+                                                            new JSReturn (JSExpr.FALSE)));
   }
 
-  public BootstrapButton (@Nullable final String sLabel)
+  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode)
   {
-    super (sLabel);
+    super (JS_URL);
     _init ();
+    addEventHandler (EJSEvent.ONCLICK, new CollectingJSCodeProvider (aJSCode, new JSReturn (JSExpr.FALSE)));
   }
 
-  public BootstrapButton (@Nullable final IIcon aIcon)
+  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nullable final String sLabel)
   {
-    this ();
+    this (aURL);
+    addChild (sLabel);
+  }
+
+  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode, @Nullable final String sLabel)
+  {
+    this (aJSCode);
+    addChild (sLabel);
+  }
+
+  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nullable final IIcon aIcon)
+  {
+    this (aURL);
     setIcon (aIcon);
   }
 
-  public BootstrapButton (@Nullable final String sLabel, @Nullable final IIcon aIcon)
+  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode, @Nullable final IIcon aIcon)
   {
-    this (sLabel);
+    this (aJSCode);
     setIcon (aIcon);
   }
 
-  public BootstrapButton (@Nonnull final EDefaultIcon eIcon)
+  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nonnull final EDefaultIcon eIcon)
   {
-    this (DefaultIcons.get (eIcon));
+    this (aURL, DefaultIcons.get (eIcon));
   }
 
-  public BootstrapButton (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode, @Nonnull final EDefaultIcon eIcon)
   {
-    this (sLabel, DefaultIcons.get (eIcon));
+    this (aJSCode, DefaultIcons.get (eIcon));
+  }
+
+  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nullable final String sLabel, @Nullable final IIcon aIcon)
+  {
+    this (aURL, sLabel);
+    setIcon (aIcon);
+  }
+
+  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode,
+                          @Nullable final String sLabel,
+                          @Nullable final IIcon aIcon)
+  {
+    this (aJSCode, sLabel);
+    setIcon (aIcon);
+  }
+
+  public BootstrapButton (@Nonnull final ISimpleURL aURL,
+                          @Nullable final String sLabel,
+                          @Nonnull final EDefaultIcon eIcon)
+  {
+    this (aURL, sLabel, DefaultIcons.get (eIcon));
+  }
+
+  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode,
+                          @Nullable final String sLabel,
+                          @Nonnull final EDefaultIcon eIcon)
+  {
+    this (aJSCode, sLabel, DefaultIcons.get (eIcon));
   }
 
   @Nonnull

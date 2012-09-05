@@ -19,52 +19,93 @@ package com.phloc.webctrls.bootstrap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.html.hc.api.EHCButtonType;
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.html.HCButton_Submit;
+import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.webctrls.custom.DefaultIcons;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
-public class BootstrapButton_Submit extends BootstrapButton
+public class BootstrapButton_Submit extends HCButton_Submit
 {
-  private void _init ()
-  {
-    setType (EHCButtonType.SUBMIT);
-    setType (EBootstrapButtonType.PRIMARY);
-  }
+  private EBootstrapButtonType m_eType = EBootstrapButtonType.PRIMARY;
+  private EBootstrapButtonSize m_eSize;
+  private IIcon m_aIcon;
 
   public BootstrapButton_Submit ()
   {
     super ();
-    _init ();
   }
 
   public BootstrapButton_Submit (@Nullable final String sLabel)
   {
     super (sLabel);
-    _init ();
   }
 
   public BootstrapButton_Submit (@Nullable final IIcon aIcon)
   {
-    super (aIcon);
-    _init ();
+    this ();
+    setIcon (aIcon);
   }
 
   public BootstrapButton_Submit (@Nullable final String sLabel, @Nullable final IIcon aIcon)
   {
-    super (sLabel, aIcon);
-    _init ();
+    this (sLabel);
+    setIcon (aIcon);
   }
 
   public BootstrapButton_Submit (@Nonnull final EDefaultIcon eIcon)
   {
-    super (eIcon);
-    _init ();
+    this (DefaultIcons.get (eIcon));
   }
 
   public BootstrapButton_Submit (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
   {
-    super (sLabel, eIcon);
-    _init ();
+    this (sLabel, DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public BootstrapButton_Submit setType (@Nonnull final EBootstrapButtonType eType)
+  {
+    if (eType == null)
+      throw new NullPointerException ("type");
+    m_eType = eType;
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapButton_Submit setSize (@Nullable final EBootstrapButtonSize eSize)
+  {
+    m_eSize = eSize;
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapButton_Submit setIcon (@Nullable final IIcon aIcon)
+  {
+    m_aIcon = aIcon;
+    return this;
+  }
+
+  @Override
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void prepareOnceBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
+  {
+    super.prepareOnceBeforeCreateElement (aConversionSettings);
+    addClasses (m_eType, m_eSize);
+    if (m_aIcon != null)
+    {
+      final boolean bAddSeparator = hasChildren ();
+      addChild (0, m_aIcon.getAsNode ());
+      if (bAddSeparator)
+      {
+        // Add spacer
+        addChild (1, new HCTextNode (" "));
+      }
+    }
   }
 }
