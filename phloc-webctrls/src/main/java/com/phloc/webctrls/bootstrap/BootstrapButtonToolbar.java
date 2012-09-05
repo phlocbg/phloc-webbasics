@@ -91,14 +91,14 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   @Nonnull
   public final BootstrapButtonToolbar addButton (final IJSCodeProvider aJSCode, final String sCaption)
   {
-    addChild (new BootstrapButton (aJSCode, sCaption));
+    addChild (new BootstrapButton (sCaption, aJSCode));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption)
   {
-    addChild (new BootstrapButton (aURL, sCaption));
+    addChild (new BootstrapButton (sCaption, aURL));
     return this;
   }
 
@@ -107,14 +107,14 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
                                                  final String sCaption,
                                                  final EDefaultIcon eIcon)
   {
-    addChild (new BootstrapButton (aJSCode, sCaption, eIcon));
+    addChild (new BootstrapButton (sCaption, aJSCode, eIcon));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption, final EDefaultIcon eIcon)
   {
-    addChild (new BootstrapButton (aURL, sCaption, eIcon));
+    addChild (new BootstrapButton (sCaption, aURL, eIcon));
     return this;
   }
 

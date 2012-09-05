@@ -40,35 +40,35 @@ public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
   @Nonnull
   public BootstrapButtonToolbarAdvanced addButtonBack ()
   {
-    addChild (new BootstrapButton (m_aSelfHref, "Zurück", EDefaultIcon.BACK));
+    addChild (new BootstrapButton ("Zurück", m_aSelfHref, EDefaultIcon.BACK));
     return this;
   }
 
   @Nonnull
   public BootstrapButtonToolbarAdvanced addButtonCancel ()
   {
-    addChild (new BootstrapButton (m_aSelfHref, "Abbrechen", EDefaultIcon.CANCEL));
+    addChild (new BootstrapButton ("Abbrechen", m_aSelfHref, EDefaultIcon.CANCEL));
     return this;
   }
 
   @Nonnull
   public BootstrapButtonToolbarAdvanced addButtonNo ()
   {
-    addChild (new BootstrapButton (m_aSelfHref, "Nein", EDefaultIcon.NO));
+    addChild (new BootstrapButton ("Nein", m_aSelfHref, EDefaultIcon.NO));
     return this;
   }
 
   @Nonnull
   public BootstrapButtonToolbarAdvanced addButtonEdit (@Nonnull final ISimpleURL aURL)
   {
-    addChild (new BootstrapButton (aURL, "Bearbeiten", EDefaultIcon.EDIT));
+    addChild (new BootstrapButton ("Bearbeiten", aURL, EDefaultIcon.EDIT));
     return this;
   }
 
   @Nonnull
   public BootstrapButtonToolbarAdvanced addButtonNew (@Nonnull final ISimpleURL aURL, final String sCaption)
   {
-    addChild (new BootstrapButton (aURL, sCaption, EDefaultIcon.NEW));
+    addChild (new BootstrapButton (sCaption, aURL, EDefaultIcon.NEW));
     return this;
   }
 }

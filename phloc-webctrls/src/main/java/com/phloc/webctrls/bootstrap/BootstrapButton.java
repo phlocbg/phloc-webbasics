@@ -66,13 +66,13 @@ public class BootstrapButton extends HCA
     addEventHandler (EJSEvent.ONCLICK, new CollectingJSCodeProvider (aJSCode, new JSReturn (JSExpr.FALSE)));
   }
 
-  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nullable final String sLabel)
+  public BootstrapButton (@Nullable final String sLabel, @Nonnull final ISimpleURL aURL)
   {
     this (aURL);
     addChild (sLabel);
   }
 
-  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode, @Nullable final String sLabel)
+  public BootstrapButton (@Nullable final String sLabel, @Nonnull final IJSCodeProvider aJSCode)
   {
     this (aJSCode);
     addChild (sLabel);
@@ -100,32 +100,32 @@ public class BootstrapButton extends HCA
     this (aJSCode, DefaultIcons.get (eIcon));
   }
 
-  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nullable final String sLabel, @Nullable final IIcon aIcon)
+  public BootstrapButton (@Nullable final String sLabel, @Nonnull final ISimpleURL aURL, @Nullable final IIcon aIcon)
   {
-    this (aURL, sLabel);
+    this (sLabel, aURL);
     setIcon (aIcon);
   }
 
-  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode,
-                          @Nullable final String sLabel,
+  public BootstrapButton (@Nullable final String sLabel,
+                          @Nonnull final IJSCodeProvider aJSCode,
                           @Nullable final IIcon aIcon)
   {
-    this (aJSCode, sLabel);
+    this (sLabel, aJSCode);
     setIcon (aIcon);
   }
 
-  public BootstrapButton (@Nonnull final ISimpleURL aURL,
-                          @Nullable final String sLabel,
+  public BootstrapButton (@Nullable final String sLabel,
+                          @Nonnull final ISimpleURL aURL,
                           @Nonnull final EDefaultIcon eIcon)
   {
-    this (aURL, sLabel, DefaultIcons.get (eIcon));
+    this (sLabel, aURL, DefaultIcons.get (eIcon));
   }
 
-  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode,
-                          @Nullable final String sLabel,
+  public BootstrapButton (@Nullable final String sLabel,
+                          @Nonnull final IJSCodeProvider aJSCode,
                           @Nonnull final EDefaultIcon eIcon)
   {
-    this (aJSCode, sLabel, DefaultIcons.get (eIcon));
+    this (sLabel, aJSCode, DefaultIcons.get (eIcon));
   }
 
   @Nonnull
