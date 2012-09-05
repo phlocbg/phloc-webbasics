@@ -94,12 +94,12 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-appbasics</artifactId>
-      <version>1.8.5</version>
+      <version>1.8.6</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
-      <version>1.8.10</version>
+      <version>1.8.11-SNAPSHOT</version>
     </dependency>
 
     <dependency>
