@@ -55,10 +55,10 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
-
-      // Create the collapsable container
-      m_aCollapse = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAV_COLLAPSE));
     }
+
+    // Create the collapsable container
+    m_aCollapse = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAV_COLLAPSE));
   }
 
   @Nonnull

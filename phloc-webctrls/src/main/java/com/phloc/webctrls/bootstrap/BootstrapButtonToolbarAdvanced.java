@@ -59,9 +59,16 @@ public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonEdit (final ISimpleURL aURL)
+  public BootstrapButtonToolbarAdvanced addButtonEdit (@Nonnull final ISimpleURL aURL)
   {
-    addChild (new BootstrapButton (m_aSelfHref, "Bearbeiten", EDefaultIcon.EDIT));
+    addChild (new BootstrapButton (aURL, "Bearbeiten", EDefaultIcon.EDIT));
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapButtonToolbarAdvanced addButtonNew (@Nonnull final ISimpleURL aURL, final String sCaption)
+  {
+    addChild (new BootstrapButton (aURL, sCaption, EDefaultIcon.NEW));
     return this;
   }
 }

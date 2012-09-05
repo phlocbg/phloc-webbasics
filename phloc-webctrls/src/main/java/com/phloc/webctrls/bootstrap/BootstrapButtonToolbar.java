@@ -21,9 +21,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCHiddenField;
+import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
@@ -83,6 +85,43 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   public final BootstrapButtonToolbar addHiddenField (@Nullable final String sName, @Nullable final String sValue)
   {
     addChild (new HCHiddenField (sName, sValue));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addButton (final IJSCodeProvider aJSCode, final String sCaption)
+  {
+    addChild (new BootstrapButton (aJSCode, sCaption));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption)
+  {
+    addChild (new BootstrapButton (aURL, sCaption));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addButton (final IJSCodeProvider aJSCode,
+                                                 final String sCaption,
+                                                 final EDefaultIcon eIcon)
+  {
+    addChild (new BootstrapButton (aJSCode, sCaption, eIcon));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption, final EDefaultIcon eIcon)
+  {
+    addChild (new BootstrapButton (aURL, sCaption, eIcon));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addSubmitButton (final String sCaption)
+  {
+    addChild (new BootstrapButton_Submit (sCaption));
     return this;
   }
 

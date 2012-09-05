@@ -1,9 +1,9 @@
 .icon-famfam {   
   background: url(famfam.png) no-repeat top left; 
 }
-span + .icon-famfam,
-div  + .icon-famfam,
-p    + .icon-famfam {   
+span > .icon-famfam,
+div  > .icon-famfam,
+p    > .icon-famfam {   
   padding-left: 22px !important;
 }
 .famfam-accept{ background-position: 0 0; width: 16px; height: 16px; } 
