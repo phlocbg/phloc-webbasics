@@ -40,6 +40,7 @@ import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.AcceptEncodingList;
 import com.phloc.webbasics.http.CHTTPHeader;
@@ -76,6 +77,11 @@ public final class ResponseHelper
     return s_bResponseCompressionEnabled;
   }
 
+  public static void modifyResponseForNoCaching (@Nonnull final IRequestWebScope aRequestScope)
+  {
+    modifyResponseForNoCaching (aRequestScope.getResponse ());
+  }
+
   public static void modifyResponseForNoCaching (@Nonnull final HttpServletResponse aHttpResponse)
   {
     // Set to expire far in the past.
@@ -89,6 +95,12 @@ public final class ResponseHelper
 
     // Set standard HTTP/1.0 no-cache header.
     aHttpResponse.setHeader (CHTTPHeader.PRAGMA, "no-cache");
+  }
+
+  public static void modifyResponseContentDisposition (@Nonnull final IRequestWebScope aRequestScope,
+                                                       @Nonnull final String sFilename)
+  {
+    modifyResponseContentDisposition (aRequestScope.getResponse (), sFilename);
   }
 
   public static void modifyResponseContentDisposition (@Nonnull final HttpServletResponse aHttpResponse,
@@ -106,6 +118,12 @@ public final class ResponseHelper
     aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, "attachment; filename=\"" + sFilenameToUse + "\"");
   }
 
+  public static void modifyResponseForDownload (@Nonnull final IRequestWebScope aRequestScope,
+                                                @Nonnull final String sFilename)
+  {
+    modifyResponseForDownload (aRequestScope.getResponse (), sFilename);
+  }
+
   public static void modifyResponseForDownload (@Nonnull final HttpServletResponse aHttpResponse,
                                                 @Nonnull final String sFilename)
   {
@@ -113,11 +131,25 @@ public final class ResponseHelper
     modifyResponseForDownload (aHttpResponse, sFilename, CMimeType.APPLICATION_FORCE_DOWNLOAD);
   }
 
+  public static void modifyResponseForDownload (@Nonnull final IRequestWebScope aRequestScope,
+                                                @Nonnull final String sFilename,
+                                                @Nonnull final IMimeType aMimeType)
+  {
+    modifyResponseForDownload (aRequestScope.getResponse (), sFilename, aMimeType);
+  }
+
   public static void modifyResponseForDownload (@Nonnull final HttpServletResponse aHttpResponse,
                                                 @Nonnull final String sFilename,
                                                 @Nonnull final IMimeType aMimeType)
   {
     modifyResponseForDownload (aHttpResponse, sFilename, aMimeType.getAsString ());
+  }
+
+  public static void modifyResponseForDownload (@Nonnull final IRequestWebScope aRequestScope,
+                                                @Nonnull final String sFilename,
+                                                @Nonnull final String sMimeType)
+  {
+    modifyResponseForDownload (aRequestScope.getResponse (), sFilename, sMimeType);
   }
 
   public static void modifyResponseForDownload (@Nonnull final HttpServletResponse aHttpResponse,
@@ -129,6 +161,12 @@ public final class ResponseHelper
     aHttpResponse.setContentType (sMimeType);
   }
 
+  public static void modifyResponseForExpiration (@Nonnull final IRequestWebScope aRequestScope,
+                                                  @Nonnegative final int nSeconds)
+  {
+    modifyResponseForExpiration (aRequestScope.getResponse (), nSeconds);
+  }
+
   public static void modifyResponseForExpiration (@Nonnull final HttpServletResponse aHttpResponse,
                                                   @Nonnegative final int nSeconds)
   {
@@ -137,11 +175,35 @@ public final class ResponseHelper
     aHttpResponse.setHeader (CHTTPHeader.EXPIRES, cal.toString ());
   }
 
+  public static void modifyResponseForMovedPermanently (@Nonnull final IRequestWebScope aRequestScope,
+                                                        @Nonnull final String sURL)
+  {
+    modifyResponseForMovedPermanently (aRequestScope.getResponse (), sURL);
+  }
+
   public static void modifyResponseForMovedPermanently (@Nonnull final HttpServletResponse aHttpResponse,
                                                         @Nonnull final String sURL)
   {
     aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_PERMANENTLY);
     aHttpResponse.setHeader (CHTTPHeader.LOCATION, sURL);
+  }
+
+  /**
+   * Get the best suitable output stream for the given combination of request
+   * and response. If the request supports gzip, the result is a
+   * {@link GZIPOutputStream}, if the request supports deflate or compress, the
+   * result will be a {@link ZipOutputStream}. If none of that matches, the
+   * regular response output stream is used
+   * 
+   * @param aRequestScope
+   *        Request and response
+   * @return The best matching output stream
+   * @throws IOException
+   */
+  @Nonnull
+  public static OutputStream getBestSuitableOutputStream (@Nonnull final IRequestWebScope aRequestScope) throws IOException
+  {
+    return getBestSuitableOutputStream (aRequestScope.getRequest (), aRequestScope.getResponse ());
   }
 
   /**
@@ -206,6 +268,30 @@ public final class ResponseHelper
    * stream, writes the bytes there and then closes the response output stream
    * so that no further emitting is possible!
    * 
+   * @param aRequestScope
+   *        request scope
+   * @param aBytes
+   *        bytes to write
+   * @param aMimeType
+   *        MIME type to use
+   * @param sContentCharset
+   *        Optional charset to use
+   * @throws IOException
+   *         In case of an error
+   */
+  public static void writeResponse (@Nonnull final IRequestWebScope aRequestScope,
+                                    @Nonnull final byte [] aBytes,
+                                    @Nonnull final IMimeType aMimeType,
+                                    @Nullable final String sContentCharset) throws IOException
+  {
+    writeResponse (aRequestScope.getRequest (), aRequestScope.getResponse (), aBytes, aMimeType, sContentCharset);
+  }
+
+  /**
+   * Write the one and only response bytes. This gets the destination output
+   * stream, writes the bytes there and then closes the response output stream
+   * so that no further emitting is possible!
+   * 
    * @param aHttpRequest
    *        Source request
    * @param aHttpResponse
@@ -247,6 +333,33 @@ public final class ResponseHelper
   /**
    * Write a complete response string message.
    * 
+   * @param aRequestScope
+   *        Base request scope
+   * @param sTextContent
+   *        The text content to write. May not be <code>null</code>.
+   * @param aMimeType
+   *        The MIME type to use. May not be <code>null</code>.
+   * @param aCharset
+   *        The charset to use for converting the String into bytes. May not be
+   *        <code>null</code>.
+   * @throws IOException
+   *         If something goes wrong
+   */
+  public static void writeTextResponse (@Nonnull final IRequestWebScope aRequestScope,
+                                        @Nonnull final String sTextContent,
+                                        @Nonnull final IMimeType aMimeType,
+                                        @Nonnull final Charset aCharset) throws IOException
+  {
+    writeResponse (aRequestScope.getRequest (),
+                   aRequestScope.getResponse (),
+                   CharsetManager.getAsBytes (sTextContent, aCharset),
+                   aMimeType,
+                   aCharset.name ());
+  }
+
+  /**
+   * Write a complete response string message.
+   * 
    * @param aHttpRequest
    *        Base request. Is used to determined, whether GZIP can be used for
    *        the output stream. May not be <code>null</code>.
@@ -278,6 +391,28 @@ public final class ResponseHelper
   /**
    * Write a complete response string message as XHTML.
    * 
+   * @param aRequestScope
+   *        Base request scope
+   * @param sTextContent
+   *        The text content to write. May not be <code>null</code>.
+   * @param aCharset
+   *        The charset to use for converting the String into bytes. May not be
+   *        <code>null</code>.
+   * @throws IOException
+   *         If something goes wrong
+   * @see #writeTextResponse(HttpServletRequest, HttpServletResponse, String,
+   *      IMimeType, Charset)
+   */
+  public static void writeTextXHTMLResponse (@Nonnull final IRequestWebScope aRequestScope,
+                                             @Nonnull final String sTextContent,
+                                             @Nonnull final Charset aCharset) throws IOException
+  {
+    writeTextXHTMLResponse (aRequestScope.getRequest (), aRequestScope.getResponse (), sTextContent, aCharset);
+  }
+
+  /**
+   * Write a complete response string message as XHTML.
+   * 
    * @param aHttpRequest
    *        Base request. Is used to determined, whether GZIP can be used for
    *        the output stream. May not be <code>null</code>.
@@ -299,6 +434,28 @@ public final class ResponseHelper
                                              @Nonnull final Charset aCharset) throws IOException
   {
     writeTextResponse (aHttpRequest, aHttpResponse, sTextContent, CMimeType.TEXT_HTML, aCharset);
+  }
+
+  /**
+   * Write a complete response string message as XML.
+   * 
+   * @param aRequestScope
+   *        Base request scope
+   * @param sTextContent
+   *        The text content to write. May not be <code>null</code>.
+   * @param aCharset
+   *        The charset to use for converting the String into bytes. May not be
+   *        <code>null</code>.
+   * @throws IOException
+   *         If something goes wrong
+   * @see #writeTextResponse(HttpServletRequest, HttpServletResponse, String,
+   *      IMimeType, Charset)
+   */
+  public static void writeTextXMLResponse (@Nonnull final IRequestWebScope aRequestScope,
+                                           @Nonnull final String sTextContent,
+                                           @Nonnull final Charset aCharset) throws IOException
+  {
+    writeTextXMLResponse (aRequestScope.getRequest (), aRequestScope.getResponse (), sTextContent, aCharset);
   }
 
   /**
@@ -327,8 +484,13 @@ public final class ResponseHelper
     writeTextResponse (aHttpRequest, aHttpResponse, sTextContent, CMimeType.TEXT_XML, aCharset);
   }
 
+  public static void writeEmptyResponse (@Nonnull final IRequestWebScope aRequestScope) throws IOException
+  {
+    writeEmptyResponse (aRequestScope.getRequest (), aRequestScope.getResponse ());
+  }
+
   public static void writeEmptyResponse (@Nonnull final HttpServletRequest aHttpRequest,
-                                          @Nonnull final HttpServletResponse aHttpResponse) throws IOException
+                                         @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     writeResponse (aHttpRequest, aHttpResponse, new byte [0], CMimeType.TEXT_PLAIN, CCharset.CHARSET_ISO_8859_1);
   }
