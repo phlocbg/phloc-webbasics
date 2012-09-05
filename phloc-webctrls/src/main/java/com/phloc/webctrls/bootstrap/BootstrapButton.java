@@ -22,10 +22,11 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.webctrls.custom.DefaultIcons;
+import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
 public class BootstrapButton extends HCButton
@@ -45,16 +46,32 @@ public class BootstrapButton extends HCButton
     _init ();
   }
 
-  public BootstrapButton (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
-  {
-    super (aTextProvider);
-    _init ();
-  }
-
   public BootstrapButton (@Nullable final String sLabel)
   {
     super (sLabel);
     _init ();
+  }
+
+  public BootstrapButton (@Nullable final IIcon aIcon)
+  {
+    this ();
+    setIcon (aIcon);
+  }
+
+  public BootstrapButton (@Nullable final String sLabel, @Nullable final IIcon aIcon)
+  {
+    this (sLabel);
+    setIcon (aIcon);
+  }
+
+  public BootstrapButton (@Nonnull final EDefaultIcon eIcon)
+  {
+    this (DefaultIcons.get (eIcon));
+  }
+
+  public BootstrapButton (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  {
+    this (sLabel, DefaultIcons.get (eIcon));
   }
 
   @Nonnull

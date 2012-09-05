@@ -24,6 +24,8 @@ import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.HCI;
+import com.phloc.webctrls.custom.DefaultIcons;
+import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
 /**
@@ -1062,5 +1064,28 @@ public enum EFamFamIcon implements IIcon
   {
     aElement.addClasses (CSS_CLASS_FAMFAM, this);
     return aElement;
+  }
+
+  public static void setAsDefault ()
+  {
+    DefaultIcons.set (EDefaultIcon.ADD, ADD);
+    DefaultIcons.set (EDefaultIcon.BACK, ARROW_LEFT);
+    DefaultIcons.set (EDefaultIcon.BACK_TO_LIST, ARROW_LEFT);
+    DefaultIcons.set (EDefaultIcon.CANCEL, CANCEL);
+    DefaultIcons.set (EDefaultIcon.DELETE, DELETE);
+    DefaultIcons.set (EDefaultIcon.DOWN, ARROW_DOWN);
+    DefaultIcons.set (EDefaultIcon.EDIT, PENCIL);
+    DefaultIcons.set (EDefaultIcon.HELP, HELP);
+    DefaultIcons.set (EDefaultIcon.INFO, INFORMATION);
+    DefaultIcons.set (EDefaultIcon.MAGNIFIER, MAGNIFIER);
+    DefaultIcons.set (EDefaultIcon.NEW, PAGE_WHITE);
+    DefaultIcons.set (EDefaultIcon.NEXT, ARROW_RIGHT);
+    DefaultIcons.set (EDefaultIcon.NO, CANCEL);
+    DefaultIcons.set (EDefaultIcon.SAVE, DISK);
+    DefaultIcons.set (EDefaultIcon.SAVE_ALL, DISK_MULTIPLE);
+    DefaultIcons.set (EDefaultIcon.SAVE_AS, DISK);
+    DefaultIcons.set (EDefaultIcon.SAVE_CLOSE, DISK);
+    DefaultIcons.set (EDefaultIcon.UP, ARROW_UP);
+    DefaultIcons.set (EDefaultIcon.YES, ACCEPT);
   }
 }

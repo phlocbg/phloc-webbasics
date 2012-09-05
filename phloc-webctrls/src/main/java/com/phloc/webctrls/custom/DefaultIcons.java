@@ -15,41 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap.derived;
+package com.phloc.webctrls.custom;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.webctrls.bootstrap.BootstrapButton;
-import com.phloc.webctrls.bootstrap.EBootstrapIcon;
-
-/**
- * Special button
- * 
- * @author philip
- */
-public class BootstrapButtonLeft extends BootstrapButton
+public class DefaultIcons
 {
-  private void _init ()
+  private static Map <EDefaultIcon, IIcon> m_aMap = new HashMap <EDefaultIcon, IIcon> ();
+
+  private DefaultIcons ()
+  {}
+
+  @Nullable
+  public static IIcon get (@Nullable final EDefaultIcon eIcon)
   {
-    setIcon (EBootstrapIcon.ICON_ARROW_LEFT);
+    return m_aMap.get (eIcon);
   }
 
-  public BootstrapButtonLeft ()
+  public static void set (@Nonnull final EDefaultIcon eIcon, @Nullable final IIcon aIcon)
   {
-    super ();
-    _init ();
-  }
-
-  public BootstrapButtonLeft (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapButtonLeft (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
+    if (eIcon == null)
+      throw new NullPointerException ("default");
+    m_aMap.put (eIcon, aIcon);
   }
 }

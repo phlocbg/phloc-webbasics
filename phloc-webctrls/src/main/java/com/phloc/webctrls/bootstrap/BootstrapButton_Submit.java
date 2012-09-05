@@ -20,8 +20,9 @@ package com.phloc.webctrls.bootstrap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.api.EHCButtonType;
+import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.IIcon;
 
 public class BootstrapButton_Submit extends BootstrapButton
 {
@@ -37,15 +38,33 @@ public class BootstrapButton_Submit extends BootstrapButton
     _init ();
   }
 
-  public BootstrapButton_Submit (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
-  {
-    super (aTextProvider);
-    _init ();
-  }
-
   public BootstrapButton_Submit (@Nullable final String sLabel)
   {
     super (sLabel);
+    _init ();
+  }
+
+  public BootstrapButton_Submit (@Nullable final IIcon aIcon)
+  {
+    super (aIcon);
+    _init ();
+  }
+
+  public BootstrapButton_Submit (@Nullable final String sLabel, @Nullable final IIcon aIcon)
+  {
+    super (sLabel, aIcon);
+    _init ();
+  }
+
+  public BootstrapButton_Submit (@Nonnull final EDefaultIcon eIcon)
+  {
+    super (eIcon);
+    _init ();
+  }
+
+  public BootstrapButton_Submit (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  {
+    super (sLabel, eIcon);
     _init ();
   }
 }

@@ -74,7 +74,7 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
     final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
     aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
     if (bHasChildren && !bIsExpanded)
-      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.ICON_CHEVRON_RIGHT.getAsNode ());
+      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 
@@ -88,7 +88,7 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
     aLink.setTarget (HCA_Target.BLANK);
     aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
     if (bHasChildren && !bIsExpanded)
-      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.ICON_CHEVRON_RIGHT.getAsNode ());
+      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 
