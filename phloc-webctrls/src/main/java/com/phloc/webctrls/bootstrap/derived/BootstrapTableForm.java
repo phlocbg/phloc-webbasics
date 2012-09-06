@@ -53,7 +53,7 @@ public final class BootstrapTableForm extends BootstrapTable
   private boolean m_bSetAutoFocus = false;
   private IHCNode m_aFirstFocusable;
 
-  public BootstrapTableForm (final HCCol... aWidths)
+  public BootstrapTableForm (@Nullable final HCCol... aWidths)
   {
     super (aWidths);
     setCondensed (true);
