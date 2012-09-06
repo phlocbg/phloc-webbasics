@@ -76,7 +76,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     if (m_aCompressedOS != null)
       try
       {
-        m_aCompressedOS.doNotCompress ();
+        m_aCompressedOS.doNotCompress ("requested from response wrapper");
       }
       catch (final IOException e)
       {

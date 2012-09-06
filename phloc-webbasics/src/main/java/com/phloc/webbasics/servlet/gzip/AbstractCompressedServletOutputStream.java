@@ -28,6 +28,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.http.CHTTPHeader;
@@ -39,6 +42,7 @@ import com.phloc.webbasics.http.CHTTPHeader;
  */
 public abstract class AbstractCompressedServletOutputStream extends ServletOutputStream
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractCompressedServletOutputStream.class);
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
   private final String m_sContentEncoding;
@@ -68,7 +72,7 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
     m_nContentLength = nContentLength;
     m_nMinCompressSize = nMinCompressSize;
     if (nMinCompressSize == 0)
-      doCompress ();
+      doCompress ("ctor: no min compress size");
   }
 
   public final void resetBuffer ()
@@ -102,7 +106,13 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
   @Nonnull
   protected abstract DeflaterOutputStream createDeflaterOutputStream (@Nonnull OutputStream aOS) throws IOException;
 
-  public final void doCompress () throws IOException
+  private static void _debugLog (final boolean bCompress, final String sMsg)
+  {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ((bCompress ? "Compressing: " : "Not compressing: ") + sMsg);
+  }
+
+  public final void doCompress (@Nullable final String sDebugInfo) throws IOException
   {
     if (m_aCompressedOS == null)
     {
@@ -115,6 +125,8 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
       // is included like a JSP)
       if (m_aHttpResponse.containsHeader (CHTTPHeader.CONTENT_ENCODING))
       {
+        _debugLog (true, sDebugInfo);
+
         m_aOS = m_aCompressedOS = createDeflaterOutputStream (m_aHttpResponse.getOutputStream ());
         if (m_aBAOS != null)
         {
@@ -124,17 +136,19 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
         }
       }
       else
-        doNotCompress ();
+        doNotCompress ("from compress: included request");
     }
   }
 
-  public final void doNotCompress () throws IOException
+  public final void doNotCompress (final String sDebugInfo) throws IOException
   {
     if (m_aCompressedOS != null)
       throw new IllegalStateException ("Compressed output stream is already assigned.");
+
     if (m_aOS == null || m_aBAOS != null)
     {
       m_bDoNotCompress = true;
+      _debugLog (false, sDebugInfo);
 
       m_aOS = m_aHttpResponse.getOutputStream ();
       setContentLength (m_nContentLength);
@@ -153,9 +167,9 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
     if (m_aOS == null || m_aBAOS != null)
     {
       if (m_nContentLength > 0 && m_nContentLength < m_nMinCompressSize)
-        doNotCompress ();
+        doNotCompress ("flush");
       else
-        doCompress ();
+        doCompress ("flush");
     }
 
     m_aOS.flush ();
@@ -175,13 +189,13 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
           if (m_nContentLength < 0)
             m_nContentLength = m_aBAOS.size ();
           if (m_nContentLength < m_nMinCompressSize)
-            doNotCompress ();
+            doNotCompress ("close with buffer");
           else
-            doCompress ();
+            doCompress ("close with buffer");
         }
         else
           if (m_aOS == null)
-            doNotCompress ();
+            doNotCompress ("close without buffer");
 
         if (m_aCompressedOS != null)
           m_aCompressedOS.close ();
@@ -204,9 +218,9 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
       if (m_aOS == null || m_aBAOS != null)
       {
         if (m_nContentLength > 0 && m_nContentLength < m_nMinCompressSize)
-          doNotCompress ();
+          doNotCompress ("finish");
         else
-          doCompress ();
+          doCompress ("finish");
       }
 
       if (m_aCompressedOS != null && !m_bClosed)
@@ -217,29 +231,35 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
     }
   }
 
-  private void _prepareToWrite (@Nonnegative final int length) throws IOException
+  private void _prepareToWrite (@Nonnegative final int nLength) throws IOException
   {
     if (m_bClosed)
       throw new IOException ("Already closed");
 
     if (m_aOS == null)
     {
-      if (m_aHttpResponse.isCommitted () || (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize))
-        doNotCompress ();
+      if (m_aHttpResponse.isCommitted ())
+        doNotCompress ("_prepareToWrite new - response already committed");
       else
-        if (length > m_nMinCompressSize)
-          doCompress ();
+        if (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize)
+          doNotCompress ("_prepareToWrite new");
         else
-          m_aOS = m_aBAOS = new NonBlockingByteArrayOutputStream (8192);
+          if (nLength > m_nMinCompressSize)
+            doCompress ("_prepareToWrite new");
+          else
+            m_aOS = m_aBAOS = new NonBlockingByteArrayOutputStream (8192);
     }
     else
       if (m_aBAOS != null)
       {
-        if (m_aHttpResponse.isCommitted () || (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize))
-          doNotCompress ();
+        if (m_aHttpResponse.isCommitted ())
+          doNotCompress ("_prepareToWrite buffered - response already committed");
         else
-          if (m_aBAOS.size () + length > m_nMinCompressSize)
-            doCompress ();
+          if (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize)
+            doNotCompress ("_prepareToWrite buffered");
+          else
+            if (nLength >= (m_aBAOS.getBufferSize () - m_aBAOS.size ()))
+              doCompress ("_prepareToWrite buffered");
       }
   }
 
