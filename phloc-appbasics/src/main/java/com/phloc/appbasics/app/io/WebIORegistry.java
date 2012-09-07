@@ -46,7 +46,7 @@ public final class WebIORegistry
   @Nullable
   public static File getRegistryDirectoryFile ()
   {
-    return WebIO.getDirectoryFile (DIR_REGISTRY);
+    return WebFileIO.getFile (DIR_REGISTRY);
   }
 
   /**
@@ -69,7 +69,7 @@ public final class WebIORegistry
       throw new IllegalArgumentException ("Illegal file name passed: " + sDirectoryName);
     final String sDir = DIR_REGISTRY + sDirectoryName + '/';
     if (bCreateDirOnDemand)
-      WebIO.mkDir (sDir, true);
+      WebFileIO.createDirectory (sDir, true);
     return sDir;
   }
 
@@ -123,7 +123,7 @@ public final class WebIORegistry
                                                                @Nonnull final String sFilename,
                                                                final boolean bCreateDirOnDemand)
   {
-    return WebIO.getReadableResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
+    return WebFileIO.getResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
   }
 
   @Nonnull
@@ -138,6 +138,6 @@ public final class WebIORegistry
                                                                @Nonnull final String sFilename,
                                                                final boolean bCreateDirOnDemand)
   {
-    return WebIO.getWritableResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
+    return WebFileIO.getResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
   }
 }

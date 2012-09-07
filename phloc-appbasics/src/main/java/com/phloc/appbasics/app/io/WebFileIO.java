@@ -37,6 +37,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.state.ISuccessIndicator;
 
 /**
  * Abstract for accessing files inside the web application.
@@ -312,5 +313,21 @@ public final class WebFileIO
                                   @Nonnull final EAppend eAppend)
   {
     return getResource (sRelativePath).getWriter (sCharset, eAppend);
+  }
+
+  /**
+   * Create the appropriate directory if it is not existing
+   * 
+   * @param sRelativePath
+   *        the relative path
+   * @param bRecursive
+   *        if <code>true</code> all missing parent directories will be created
+   * @return Success indicator. Never <code>null</code>.
+   */
+  @Nonnull
+  public static ISuccessIndicator createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
+  {
+    final File aDir = getFile (sRelativePath);
+    return bRecursive ? WebIO.getFileOpMgr ().createDirRecursive (aDir) : WebIO.getFileOpMgr ().createDir (aDir);
   }
 }

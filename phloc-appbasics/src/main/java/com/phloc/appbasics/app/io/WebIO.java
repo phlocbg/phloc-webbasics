@@ -257,8 +257,6 @@ public final class WebIO
   public static ISuccessIndicator mkDir (@Nonnull final String sDirName, final boolean bRecursive)
   {
     final File f = getDirectoryFile (sDirName);
-    if (f.exists ())
-      return ESuccess.SUCCESS;
     return bRecursive ? s_aFileOpMgr.createDirRecursive (f) : s_aFileOpMgr.createDir (f);
   }
 
