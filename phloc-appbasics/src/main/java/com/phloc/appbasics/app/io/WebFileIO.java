@@ -328,6 +328,7 @@ public final class WebFileIO
   public static ISuccessIndicator createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
   {
     final File aDir = getFile (sRelativePath);
-    return bRecursive ? WebIO.getFileOpMgr ().createDirRecursive (aDir) : WebIO.getFileOpMgr ().createDir (aDir);
+    return bRecursive ? WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
+                     : WebIO.getFileOpMgr ().createDirIfNotExisting (aDir);
   }
 }
