@@ -55,7 +55,7 @@ public class GoogleAnalytics extends AbstractWrappedHCNode
     // http://code.google.com/intl/de-DE/apis/analytics/docs/gaJS/gaJSApi_gat.html
     final JSPackage aPkg = new JSPackage ();
     final JSVar gaq = aPkg.var ("_gaq", JSExpr.ref ("_gaq").cor (new JSArray ()));
-    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_setAccont").add (m_sAccount)));
+    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_setAccount").add (m_sAccount)));
     if (bAnonymizeIP)
       aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_gat._anonymizeIp")));
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageview")));
