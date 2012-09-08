@@ -17,7 +17,6 @@
  */
 package com.phloc.webbasics.http;
 
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -29,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.mime.EMimeContentType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
-import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
@@ -59,10 +57,10 @@ public final class AcceptMimeTypeHandler
     else
     {
       // Charsets are separated by "," or ", "
-      for (final String sItem : RegExHelper.getSplitToArray (sAcceptMimeTypes, ","))
+      for (final String sItem : StringHelper.getExploded (',', sAcceptMimeTypes))
       {
         // Qualities are separated by ";"
-        final String [] aParts = RegExHelper.getSplitToArray (sItem.trim (), ";", 2);
+        final String [] aParts = StringHelper.getExplodedArray (';', sItem.trim (), 2);
 
         // Default quality is 1
         double dQuality = QValue.MAX_QUALITY;

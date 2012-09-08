@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.io.file.FilenameHelper;
-import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.scopes.web.domain.IRequestWebScope;
@@ -68,7 +67,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractScopeAwareHt
   {
     final Set <String> ret = new HashSet <String> ();
     if (StringHelper.hasText (sExtensionList))
-      for (final String sExtension : RegExHelper.getSplitToArray (sExtensionList, ","))
+      for (final String sExtension : StringHelper.getExploded (',', sExtensionList))
         ret.add (_unifyExtension (sExtension.trim ()));
     return ret;
   }

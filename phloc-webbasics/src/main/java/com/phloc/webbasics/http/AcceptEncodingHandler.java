@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
@@ -63,10 +62,10 @@ public final class AcceptEncodingHandler
     else
     {
       // Charsets are separated by "," or ", "
-      for (final String sItem : RegExHelper.getSplitToArray (sAcceptEncoding, ","))
+      for (final String sItem : StringHelper.getExploded (',', sAcceptEncoding))
       {
         // Qualities are separated by ";"
-        final String [] aParts = RegExHelper.getSplitToArray (sItem.trim (), ";", 2);
+        final String [] aParts = StringHelper.getExplodedArray (';', sItem.trim (), 2);
         final String sEncoding = aParts[0];
         if (StringHelper.hasNoText (sEncoding))
         {
