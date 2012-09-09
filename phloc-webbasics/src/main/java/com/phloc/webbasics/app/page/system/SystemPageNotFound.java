@@ -82,6 +82,6 @@ public class SystemPageNotFound extends AbstractWebPage
   public IHCNode getContent (@Nonnull final Locale aDisplayLocale)
   {
     s_aLogger.info ("PAGE NOT FOUND " + WebScopeManager.getRequestScope ().getRequest ().getRequestURL ().toString ());
-    return new HCH1 (ETextBase.MESSAGE.getDisplayText (aDisplayLocale));
+    return new HCH1 ().addChild (ETextBase.MESSAGE.getDisplayText (aDisplayLocale));
   }
 }

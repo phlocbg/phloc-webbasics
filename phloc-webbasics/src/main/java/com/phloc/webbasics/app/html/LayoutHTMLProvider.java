@@ -128,7 +128,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
     // Add all configured JS
     for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
-      aHead.addJS (new HCScriptFile (LinkUtils.getURLWithContext (sJSFile)));
+      aHead.addJS (new HCScriptFile ().setSrc (LinkUtils.getURLWithContext (sJSFile)));
   }
 
   @OverrideOnDemand

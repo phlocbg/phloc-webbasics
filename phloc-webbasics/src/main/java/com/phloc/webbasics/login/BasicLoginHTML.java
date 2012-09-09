@@ -147,9 +147,10 @@ public class BasicLoginHTML extends LayoutHTMLProvider
 
     aForm.addChild (new HCDiv ().addClass (CLogin.CSS_CLASS_LOGIN_APPLOGO));
     if (showHeaderText ())
-      aForm.addChild (new HCDiv (getTextHeader (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_HEADER));
+      aForm.addChild (new HCDiv ().addChild (getTextHeader (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_HEADER));
     if (m_bLoginError)
-      aForm.addChild (new HCDiv (getTextErrorMessage (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_ERRORMSG));
+      aForm.addChild (new HCDiv ().addChild (getTextErrorMessage (aDisplayLocale))
+                                  .addClass (CLogin.CSS_CLASS_LOGIN_ERRORMSG));
 
     // User name and password table
     final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (200), HCCol.star ()));

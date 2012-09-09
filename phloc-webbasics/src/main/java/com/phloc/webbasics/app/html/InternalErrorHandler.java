@@ -92,10 +92,10 @@ public final class InternalErrorHandler
     // Get error stack trace
     final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
 
-    aParent.addChild (new HCH1 ("Internal error"));
-    aParent.addChild (new HCDiv (HCUtils.nl2brList ("Sorry!\nAn internal error was encountered.\n\nAn automated error report was already sent to the technical responsible.\nWrite down your personal error number '" +
-                                                    sErrorNumber +
-                                                    "' for possible investigation.\n\nYou can continue your work.\nIn case this error occurs again avoid the actions leading to it until the problem is solved.")));
+    aParent.addChild (new HCH1 ().addChild ("Internal error"));
+    aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList ("Sorry!\nAn internal error was encountered.\n\nAn automated error report was already sent to the technical responsible.\nWrite down your personal error number '" +
+                                                                   sErrorNumber +
+                                                                   "' for possible investigation.\n\nYou can continue your work.\nIn case this error occurs again avoid the actions leading to it until the problem is solved.")));
 
     if (GlobalDebug.isDebugMode ())
     {
