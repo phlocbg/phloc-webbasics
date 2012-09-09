@@ -39,13 +39,13 @@ public class BootstrapFormLabel extends AbstractFormLabel
   {
     IHCNode ret;
     if (eType.equals (ELabelType.MANDATORY))
-      ret = new HCStrong (aNode);
+      ret = new HCStrong ().addChild (aNode);
     else
       if (eType.equals (ELabelType.ALTERNATIVE))
-        ret = new HCEM (aNode);
+        ret = new HCEM ().addChild (aNode);
       else
         ret = aNode;
-    return new HCLabel (ret).addClass (CSS_CLASS_FORM_LABEL);
+    return new HCLabel ().addChild (ret).addClass (CSS_CLASS_FORM_LABEL);
   }
 
   protected BootstrapFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)

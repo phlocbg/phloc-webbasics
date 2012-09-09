@@ -86,7 +86,7 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
   @Nonnull
   public BootstrapNavbar addTextContent (@Nonnull final String sText)
   {
-    return addTextContent (new HCP (sText));
+    return addTextContent (new HCP ().addChild (sText));
   }
 
   @Nonnull

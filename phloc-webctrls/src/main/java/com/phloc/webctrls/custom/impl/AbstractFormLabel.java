@@ -23,10 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCElementWithChildren;
-import com.phloc.html.hc.html.HCEM;
-import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.webctrls.custom.ELabelType;
@@ -69,16 +66,6 @@ public abstract class AbstractFormLabel extends AbstractWrappedHCNode implements
     // Only append the suffix, if at least one text child is present
     if (HCUtils.recursivelyContainsAtLeastOneTextNode (aNode))
       aNode.addChild (_getSuffix (eType));
-    return aNode;
-  }
-
-  @Nonnull
-  private IHCElement <?> _modifyNode (@Nonnull final IHCElement <?> aNode)
-  {
-    if (m_eType.equals (ELabelType.MANDATORY))
-      return new HCStrong (aNode);
-    if (m_eType.equals (ELabelType.ALTERNATIVE))
-      return new HCEM (aNode);
     return aNode;
   }
 

@@ -42,7 +42,7 @@ public class BootstrapForm extends HCForm
   {
     if (StringHelper.hasNoText (sLabel))
       return null;
-    final HCLabel aLabel = new HCLabel (sLabel).addClass (CBootstrapCSS.CONTROL_LABEL);
+    final HCLabel aLabel = new HCLabel ().addChild (sLabel).addClass (CBootstrapCSS.CONTROL_LABEL);
     if (aFor instanceof IHCControl <?>)
       aLabel.setFor (((IHCControl <?>) aFor).getName ());
     return aLabel;
@@ -78,6 +78,6 @@ public class BootstrapForm extends HCForm
   @Nonnull
   public BootstrapForm addControlGroup (@Nullable final IHCNode... aCtrls)
   {
-    return addControlGroup (null, null, new HCNodeList (aCtrls), null);
+    return addControlGroup (null, null, new HCNodeList ().addChildren (aCtrls), null);
   }
 }

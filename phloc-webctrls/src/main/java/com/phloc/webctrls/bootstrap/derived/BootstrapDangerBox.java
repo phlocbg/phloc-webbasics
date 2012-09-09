@@ -17,11 +17,6 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.webctrls.bootstrap.BootstrapAlert;
 import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 
@@ -32,51 +27,11 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
  */
 public class BootstrapDangerBox extends BootstrapAlert
 {
-  private void _init ()
-  {
-    setType (EBootstrapAlertType.DANGER);
-    setBlock (true);
-    setShowClose (true);
-  }
-
   public BootstrapDangerBox ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapDangerBox (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapDangerBox (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapDangerBox (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapDangerBox (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapDangerBox (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapDangerBox (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
-    _init ();
+    setType (EBootstrapAlertType.DANGER);
+    setBlock (true);
+    setShowClose (true);
   }
 }

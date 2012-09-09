@@ -67,7 +67,7 @@ public class BootstrapContainer extends AbstractWrappedHCNode
     if (m_aContent != null)
       m_aContainer.addChild (m_aContent);
     if (m_aFooter != null)
-      m_aContainer.addChildren (new HCHR (), new HCFooter (m_aFooter));
+      m_aContainer.addChildren (new HCHR (), new HCFooter ().addChild (m_aFooter));
   }
 
   @Override

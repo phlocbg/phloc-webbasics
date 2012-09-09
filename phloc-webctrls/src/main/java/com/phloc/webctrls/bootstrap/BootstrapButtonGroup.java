@@ -17,11 +17,6 @@
  */
 package com.phloc.webctrls.bootstrap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
@@ -31,49 +26,9 @@ import com.phloc.html.hc.html.AbstractHCDiv;
  */
 public class BootstrapButtonGroup extends AbstractHCDiv <BootstrapButtonGroup>
 {
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.BTN_GROUP);
-  }
-
   public BootstrapButtonGroup ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapButtonGroup (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapButtonGroup (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapButtonGroup (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapButtonGroup (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapButtonGroup (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapButtonGroup (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
-    _init ();
+    addClass (CBootstrapCSS.BTN_GROUP);
   }
 }

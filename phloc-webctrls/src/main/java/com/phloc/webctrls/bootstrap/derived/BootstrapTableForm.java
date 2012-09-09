@@ -120,7 +120,7 @@ public final class BootstrapTableForm extends BootstrapTable
   {
     if (aFormErrors != null)
       for (final IFormFieldError aError : aFormErrors.getAllItems ())
-        aCell.addChild (new BootstrapHelpBlock (aError.getErrorText ()));
+        aCell.addChild (new BootstrapHelpBlock ().addChild (aError.getErrorText ()));
   }
 
   @Nonnull

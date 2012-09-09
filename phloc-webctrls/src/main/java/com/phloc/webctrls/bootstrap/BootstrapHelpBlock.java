@@ -17,11 +17,6 @@
  */
 package com.phloc.webctrls.bootstrap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCSpan;
 
 /**
@@ -29,8 +24,7 @@ import com.phloc.html.hc.html.AbstractHCSpan;
  * 
  * @author philip
  */
-public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock> implements
-                                                                           IBootstrapHelpItem <BootstrapHelpBlock>
+public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock> implements IBootstrapHelpItem <BootstrapHelpBlock>
 {
   private void _init ()
   {
@@ -40,41 +34,6 @@ public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock> impl
   public BootstrapHelpBlock ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapHelpBlock (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapHelpBlock (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapHelpBlock (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapHelpBlock (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapHelpBlock (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapHelpBlock (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
     _init ();
   }
 }

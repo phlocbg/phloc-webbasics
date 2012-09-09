@@ -17,11 +17,6 @@
  */
 package com.phloc.webctrls.bootstrap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
@@ -31,49 +26,9 @@ import com.phloc.html.hc.html.AbstractHCDiv;
  */
 public class BootstrapHeroUnit extends AbstractHCDiv <BootstrapHeroUnit>
 {
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.HERO_UNIT);
-  }
-
   public BootstrapHeroUnit ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapHeroUnit (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapHeroUnit (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapHeroUnit (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapHeroUnit (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapHeroUnit (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapHeroUnit (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
-    _init ();
+    addClass (CBootstrapCSS.HERO_UNIT);
   }
 }

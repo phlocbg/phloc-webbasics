@@ -22,9 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.entities.EHTMLEntity;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCButton;
@@ -52,41 +50,6 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   public BootstrapAlert ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapAlert (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapAlert (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapAlert (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapAlert (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapAlert (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapAlert (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
     _init ();
   }
 

@@ -20,9 +20,7 @@ package com.phloc.webctrls.bootstrap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.js.IJSCodeProvider;
@@ -35,50 +33,10 @@ import com.phloc.webctrls.custom.EDefaultIcon;
  */
 public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolbar>
 {
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.BTN_TOOLBAR);
-  }
-
   public BootstrapButtonToolbar ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapButtonToolbar (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapButtonToolbar (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapButtonToolbar (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapButtonToolbar (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapButtonToolbar (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapButtonToolbar (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
-    _init ();
+    addClass (CBootstrapCSS.BTN_TOOLBAR);
   }
 
   @Nonnull

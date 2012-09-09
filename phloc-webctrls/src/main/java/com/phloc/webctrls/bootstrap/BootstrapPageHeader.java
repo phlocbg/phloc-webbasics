@@ -17,11 +17,6 @@
  */
 package com.phloc.webctrls.bootstrap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
@@ -31,49 +26,9 @@ import com.phloc.html.hc.html.AbstractHCDiv;
  */
 public class BootstrapPageHeader extends AbstractHCDiv <BootstrapPageHeader>
 {
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.PAGE_HEADER);
-  }
-
   public BootstrapPageHeader ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapPageHeader (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapPageHeader (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapPageHeader (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapPageHeader (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapPageHeader (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapPageHeader (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
-    _init ();
+    addClass (CBootstrapCSS.PAGE_HEADER);
   }
 }

@@ -70,6 +70,6 @@ public enum EBootstrapSpan implements ICSSClassProvider
   @Nonnull
   public HCDiv getAsNode (@Nullable final IHCNode aContent)
   {
-    return new HCDiv (aContent).addClass (this);
+    return new HCDiv ().addChild (aContent).addClass (this);
   }
 }

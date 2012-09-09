@@ -50,7 +50,7 @@ public class BootstrapBreadcrumb extends HCUL
   public BootstrapBreadcrumb addSeparator (@Nullable final String sText)
   {
     if (hasChildren () && StringHelper.hasText (sText))
-      getLastItem ().addChildren (new HCTextNode (" "), new HCSpan (sText).addClass (CBootstrapCSS.DIVIDER));
+      getLastItem ().addChildren (new HCTextNode (" "), new HCSpan ().addChild (sText).addClass (CBootstrapCSS.DIVIDER));
     return this;
   }
 

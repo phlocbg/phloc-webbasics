@@ -207,8 +207,9 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
       aToggleLI.addChild (new HCA (aTab.getLinkURL ()).setCustomAttr ("data-toggle", "tab").addChild (aTab.getLabel ()));
 
       // content
-      final HCDiv aPane = aContent.addAndReturnChild (new HCDiv (aTab.getContent ()).addClass (CBootstrapCSS.TAB_PANE)
-                                                                                    .setID (aTab.getID ()));
+      final HCDiv aPane = aContent.addAndReturnChild (new HCDiv ().addChild (aTab.getContent ())
+                                                                  .addClass (CBootstrapCSS.TAB_PANE)
+                                                                  .setID (aTab.getID ()));
       if (bIsActiveTab)
         aPane.addClass (CBootstrapCSS.ACTIVE);
     }

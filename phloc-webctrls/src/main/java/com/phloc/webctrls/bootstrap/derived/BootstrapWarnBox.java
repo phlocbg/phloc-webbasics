@@ -17,11 +17,6 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.webctrls.bootstrap.BootstrapAlert;
 
 /**
@@ -31,51 +26,11 @@ import com.phloc.webctrls.bootstrap.BootstrapAlert;
  */
 public class BootstrapWarnBox extends BootstrapAlert
 {
-  private void _init ()
-  {
-    // Warning requires no specific type
-    setBlock (true);
-    setShowClose (true);
-  }
-
   public BootstrapWarnBox ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapWarnBox (@Nonnull final IPredefinedLocaleTextProvider aChild)
-  {
-    this (aChild.getText ());
-  }
-
-  public BootstrapWarnBox (@Nullable final String sChild)
-  {
-    super (sChild);
-    _init ();
-  }
-
-  public BootstrapWarnBox (@Nullable final String... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapWarnBox (@Nullable final IHCNode aChild)
-  {
-    super (aChild);
-    _init ();
-  }
-
-  public BootstrapWarnBox (@Nullable final IHCNode... aChildren)
-  {
-    super (aChildren);
-    _init ();
-  }
-
-  public BootstrapWarnBox (@Nullable final Iterable <? extends IHCNode> aChildren)
-  {
-    super (aChildren);
-    _init ();
+    // Warning requires no specific type
+    setBlock (true);
+    setShowClose (true);
   }
 }

@@ -29,7 +29,7 @@ public class BootstrapCaret extends AbstractWrappedHCNode
 
   public BootstrapCaret ()
   {
-    m_aContent = new HCNodeList (new HCTextNode (" "), new HCSpan ().addClass (CBootstrapCSS.CARET));
+    m_aContent = new HCNodeList ().addChildren (new HCTextNode (" "), new HCSpan ().addClass (CBootstrapCSS.CARET));
   }
 
   @Override
