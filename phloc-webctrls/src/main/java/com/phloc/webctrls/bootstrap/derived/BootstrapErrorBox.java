@@ -17,6 +17,9 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.phloc.webctrls.bootstrap.BootstrapAlert;
 import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 
@@ -34,5 +37,11 @@ public class BootstrapErrorBox extends BootstrapAlert
     setBlock (true);
     // Error messages cannot be closed by default
     setShowClose (false);
+  }
+
+  @Nonnull
+  public static BootstrapAlert create (@Nullable final String sChild)
+  {
+    return new BootstrapErrorBox ().addChild (sChild);
   }
 }

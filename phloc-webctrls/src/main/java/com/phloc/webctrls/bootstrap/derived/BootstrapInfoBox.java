@@ -17,6 +17,9 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.phloc.webctrls.bootstrap.BootstrapAlert;
 import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 
@@ -33,5 +36,11 @@ public class BootstrapInfoBox extends BootstrapAlert
     setType (EBootstrapAlertType.INFO);
     setBlock (true);
     setShowClose (true);
+  }
+
+  @Nonnull
+  public static BootstrapAlert create (@Nullable final String sChild)
+  {
+    return new BootstrapInfoBox ().addChild (sChild);
   }
 }
