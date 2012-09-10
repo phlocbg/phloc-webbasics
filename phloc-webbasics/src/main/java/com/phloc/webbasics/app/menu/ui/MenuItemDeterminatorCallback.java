@@ -117,7 +117,11 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
     if (bShow || bAddAllChildrenOnThisLevel)
     {
       if (!aItem.getData ().matchesDisplayFilter ())
-        bShow = bAddAllChildrenOnThisLevel = bExpanded = false;
+      {
+        bShow = false;
+        bAddAllChildrenOnThisLevel = false;
+        bExpanded = false;
+      }
     }
 
     if (bShow)

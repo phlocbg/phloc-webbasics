@@ -108,7 +108,7 @@ public final class InternalErrorHandler
 
       // In case an unexpected error occurs in the UnitTest, make the test fail!
       if (StackTraceHelper.containsUnitTestElement (t.getStackTrace ()))
-        throw new Error ("Error executing unit test", t);
+        throw new IllegalStateException ("Error executing unit test", t);
     }
 
     // Invoke custom exception handler (if present)

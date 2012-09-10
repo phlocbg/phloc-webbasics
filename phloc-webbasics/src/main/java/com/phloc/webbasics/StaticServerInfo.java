@@ -53,9 +53,13 @@ public final class StaticServerInfo
     m_nServerPort = nServerPort;
     m_sContextPath = sContextPath;
 
+    int nDefaultPort = CWeb.DEFAULT_PORT_HTTP;
+    if ("https".equals (sScheme))
+      nDefaultPort = CWeb.DEFAULT_PORT_HTTPS;
+
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (sScheme).append ("://").append (sServerName);
-    if (nServerPort != 80)
+    if (nServerPort != nDefaultPort)
     {
       // append non-standard port
       aSB.append (':').append (nServerPort);

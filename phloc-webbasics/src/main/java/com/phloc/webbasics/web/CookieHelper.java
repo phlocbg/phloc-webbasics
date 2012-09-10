@@ -36,6 +36,7 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class CookieHelper
 {
+  private static final int DEFAULT_MAX_AGE_SECONDS = 30 * CGlobal.SECONDS_PER_DAY;
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final CookieHelper s_aInstance = new CookieHelper ();
@@ -88,7 +89,7 @@ public final class CookieHelper
     if (bExpireWhenBrowserIsClosed)
       aCookie.setMaxAge (-1);
     else
-      aCookie.setMaxAge (30 * CGlobal.SECONDS_PER_DAY);
+      aCookie.setMaxAge (DEFAULT_MAX_AGE_SECONDS);
     return aCookie;
   }
 

@@ -42,6 +42,7 @@ import com.phloc.webbasics.http.CHTTPHeader;
  */
 public abstract class AbstractCompressedServletOutputStream extends ServletOutputStream
 {
+  private static final int DEFAULT_BUFSIZE = 8192;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractCompressedServletOutputStream.class);
   private final HttpServletRequest m_aHttpRequest;
   private final HttpServletResponse m_aHttpResponse;
@@ -127,7 +128,8 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
       {
         _debugLog (true, sDebugInfo);
 
-        m_aOS = m_aCompressedOS = createDeflaterOutputStream (m_aHttpResponse.getOutputStream ());
+        m_aCompressedOS = createDeflaterOutputStream (m_aHttpResponse.getOutputStream ());
+        m_aOS = m_aCompressedOS;
         if (m_aBAOS != null)
         {
           // Copy cached content to new OS
@@ -247,7 +249,10 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
           if (nLength > m_nMinCompressSize)
             doCompress ("_prepareToWrite new");
           else
-            m_aOS = m_aBAOS = new NonBlockingByteArrayOutputStream (8192);
+          {
+            m_aBAOS = new NonBlockingByteArrayOutputStream (DEFAULT_BUFSIZE);
+            m_aOS = m_aBAOS;
+          }
     }
     else
       if (m_aBAOS != null)

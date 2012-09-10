@@ -277,7 +277,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       if (StringHelper.hasNoText (sContentType))
       {
         // Not important for redirects etc.
-        if (m_nStatusCode >= SC_OK && m_nStatusCode < 300)
+        if (m_nStatusCode >= SC_OK && m_nStatusCode < SC_MULTIPLE_CHOICES)
         {
           final String sDeterminedMimeType = MimeTypeDeterminator.getMimeTypeFromFilename (sRequestURL);
           if (sDeterminedMimeType == null)

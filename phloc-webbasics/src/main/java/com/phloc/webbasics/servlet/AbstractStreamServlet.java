@@ -54,6 +54,7 @@ import com.phloc.webbasics.web.ResponseHelper;
  */
 public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServlet
 {
+  private static final int MAX_CSS_KB_FOR_IE = 288;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractStreamServlet.class);
   private final IStatisticsHandlerCounter m_aStatsRequests = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                   "$requests");
@@ -201,9 +202,11 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
           // Source:
           // http://joshua.perina.com/africa/gambia/fajara/post/internet-explorer-css-file-size-limit
           if (StringHelper.startsWith (aHttpResponse.getContentType (), CMimeType.TEXT_CSS.getAsString ()) &&
-              aCopyByteCount.longValue () > 288 * CGlobal.BYTES_PER_KILOBYTE_LONG)
+              aCopyByteCount.longValue () > MAX_CSS_KB_FOR_IE * CGlobal.BYTES_PER_KILOBYTE_LONG)
           {
-            s_aLogger.warn ("Internet Explorer has problems handling CSS files > 288KB and this one has " +
+            s_aLogger.warn ("Internet Explorer has problems handling CSS files > " +
+                            MAX_CSS_KB_FOR_IE +
+                            "KB and this one has " +
                             aCopyByteCount.longValue () +
                             " bytes!");
           }
