@@ -96,16 +96,4 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
     final String sValue = getCheckBoxRequestValue (sFieldName, null);
     return sValue == null ? bDefaultValue : StringParser.parseBool (sValue);
   }
-
-  @Override
-  public boolean equals (final Object o)
-  {
-    return super.equals (o);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return super.hashCode ();
-  }
 }

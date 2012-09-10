@@ -59,7 +59,9 @@ public final class CompressFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
-    if (aRequest instanceof HttpServletRequest && aRequest.getAttribute (REQUEST_ATTR) == null)
+    if (aRequest instanceof HttpServletRequest &&
+        aResponse instanceof HttpServletResponse &&
+        aRequest.getAttribute (REQUEST_ATTR) == null)
     {
       aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
       final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;

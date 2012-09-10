@@ -34,7 +34,7 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
 @Immutable
 public final class StaticServerInfo
 {
-  private static StaticServerInfo s_aDefault;
+  private static volatile StaticServerInfo s_aDefault;
 
   private final String m_sScheme;
   private final String m_sServerName;
@@ -159,8 +159,9 @@ public final class StaticServerInfo
   @Nonnull
   public static StaticServerInfo getInstance ()
   {
-    if (s_aDefault == null)
+    final StaticServerInfo ret = s_aDefault;
+    if (ret == null)
       throw new IllegalStateException ("No default web server info present!");
-    return s_aDefault;
+    return ret;
   }
 }

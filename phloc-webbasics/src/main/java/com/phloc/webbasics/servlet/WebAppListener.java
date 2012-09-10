@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,7 +88,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
 
-  private static boolean s_bInited = false;
+  private static final AtomicBoolean s_aInited = new AtomicBoolean (false);
 
   public WebAppListener ()
   {}
@@ -280,9 +281,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   {
     final ServletContext aSC = aSCE.getServletContext ();
 
-    if (s_bInited)
+    if (s_aInited.getAndSet (true))
       throw new IllegalStateException ("WebAppListener was already instantiated!");
-    s_bInited = true;
 
     // set global debug/trace mode
     final boolean bTraceMode = StringParser.parseBool (getInitParameterTrace (aSC));
@@ -376,7 +376,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     ClassHierarchyCache.clearClassHierarchyCache ();
 
     // De-init
-    s_bInited = false;
+    s_aInited.set (false);
   }
 
   public final void sessionCreated (@Nonnull final HttpSessionEvent aSessionEvent)

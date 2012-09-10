@@ -27,9 +27,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.charset.CCharset;
@@ -48,7 +45,6 @@ public class CharacterEncodingFilter implements Filter
   public static final String FILTER_INITPARAM_FORCE_ENCODING = "forceEncoding";
   public static final String DEFAULT_ENCODING = CCharset.CHARSET_UTF_8;
   public static final boolean DEFAULT_FORCE_ENCODING = false;
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CharacterEncodingFilter.class);
   private static final String REQUEST_ATTR = CharacterEncodingFilter.class.getName ();
 
   private String m_sEncoding = DEFAULT_ENCODING;
@@ -74,10 +70,9 @@ public class CharacterEncodingFilter implements Filter
     final String sEncoding = aFilterConfig.getInitParameter (FILTER_INITPARAM_ENCODING);
     if (sEncoding != null)
     {
-      if (CharsetManager.getCharsetFromName (sEncoding) != null)
-        m_sEncoding = sEncoding;
-      else
-        s_aLogger.error ("The supplied encoding '" + sEncoding + "' is not supported!");
+      // Throws IllegalArgumentException in case it is unknown
+      CharsetManager.getCharsetFromName (sEncoding);
+      m_sEncoding = sEncoding;
     }
 
     // force encoding?
