@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.bootstrap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ import com.phloc.html.hc.impl.HCTextNode;
  */
 public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
 {
-  private static final class Tab implements IHasID <String>
+  private static final class Tab implements IHasID <String>, Serializable
   {
     private final String m_sID;
     private final IHCNode m_aLabel;

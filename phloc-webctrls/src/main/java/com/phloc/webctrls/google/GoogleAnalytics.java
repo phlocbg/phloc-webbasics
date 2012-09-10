@@ -75,6 +75,13 @@ public class GoogleAnalytics extends AbstractWrappedHCNode
     m_aScript = new HCScript (aPkg);
   }
 
+  @Nonnull
+  @Nonempty
+  public String getAccount ()
+  {
+    return m_sAccount;
+  }
+
   @Override
   protected IHCNode getContainedHCNode ()
   {

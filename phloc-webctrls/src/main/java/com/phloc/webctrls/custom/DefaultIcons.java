@@ -25,9 +25,14 @@ import javax.annotation.Nullable;
 
 import com.phloc.webctrls.famfam.EFamFamIcon;
 
-public class DefaultIcons
+/**
+ * This class maintains the actual icon objects to the different default icons.
+ * 
+ * @author philip
+ */
+public final class DefaultIcons
 {
-  private static Map <EDefaultIcon, IIcon> m_aMap = new HashMap <EDefaultIcon, IIcon> ();
+  private static final Map <EDefaultIcon, IIcon> s_aMap = new HashMap <EDefaultIcon, IIcon> ();
 
   static
   {
@@ -41,13 +46,13 @@ public class DefaultIcons
   @Nullable
   public static IIcon get (@Nullable final EDefaultIcon eIcon)
   {
-    return m_aMap.get (eIcon);
+    return s_aMap.get (eIcon);
   }
 
   public static void set (@Nonnull final EDefaultIcon eIcon, @Nullable final IIcon aIcon)
   {
     if (eIcon == null)
       throw new NullPointerException ("default");
-    m_aMap.put (eIcon, aIcon);
+    s_aMap.put (eIcon, aIcon);
   }
 }

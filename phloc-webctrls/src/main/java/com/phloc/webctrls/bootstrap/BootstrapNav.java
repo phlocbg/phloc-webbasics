@@ -150,7 +150,6 @@ public class BootstrapNav extends HCUL
                                                .setCustomAttr ("data-toggle", "dropdown")
                                                .addChild (aText)
                                                .addChild (new BootstrapCaret ()));
-    final BootstrapDropDownMenu aDropDown = aLI.addAndReturnChild (new BootstrapDropDownMenu ());
-    return aDropDown;
+    return aLI.addAndReturnChild (new BootstrapDropDownMenu ());
   }
 }
