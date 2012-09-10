@@ -194,7 +194,7 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
 
       if (t instanceof IOException)
         throw (IOException) t;
-      throw new ServletException ("Error invoking AJAX function");
+      throw new ServletException ("Error invoking AJAX function: " + t.getMessage ());
     }
   }
 

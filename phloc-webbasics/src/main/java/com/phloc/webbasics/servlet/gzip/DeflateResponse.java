@@ -32,6 +32,25 @@ import com.phloc.commons.stats.StatisticsManager;
 
 final class DeflateResponse extends AbstractCompressedResponseWrapper
 {
+  private static final class DeflateServletOutputStream extends AbstractCompressedServletOutputStream
+  {
+    public DeflateServletOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
+                                       @Nonnull final HttpServletResponse aHttpResponse,
+                                       @Nonnull final String sContentEncoding,
+                                       final long nContentLength,
+                                       @Nonnegative final int nMinCompressSize) throws IOException
+    {
+      super (aHttpRequest, aHttpResponse, sContentEncoding, nContentLength, nMinCompressSize);
+    }
+
+    @Override
+    @Nonnull
+    protected DeflaterOutputStream createDeflaterOutputStream (@Nonnull final OutputStream aOS)
+    {
+      return new DeflaterOutputStream (aOS);
+    }
+  }
+
   private static final IStatisticsHandlerCounter s_aStatsDeflate = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
                                                                                                         "$deflate");
 
@@ -51,18 +70,10 @@ final class DeflateResponse extends AbstractCompressedResponseWrapper
                                                                                 final long nContentLength,
                                                                                 @Nonnegative final int nMinCompressSize) throws IOException
   {
-    return new AbstractCompressedServletOutputStream (aHttpRequest,
-                                                      aHttpResponse,
-                                                      sContentEncoding,
-                                                      nContentLength,
-                                                      nMinCompressSize)
-    {
-      @Override
-      @Nonnull
-      protected DeflaterOutputStream createDeflaterOutputStream (@Nonnull final OutputStream aOS)
-      {
-        return new DeflaterOutputStream (aOS);
-      }
-    };
+    return new DeflateServletOutputStream (aHttpRequest,
+                                           aHttpResponse,
+                                           sContentEncoding,
+                                           nContentLength,
+                                           nMinCompressSize);
   }
 }

@@ -17,10 +17,12 @@
  */
 package com.phloc.webbasics.spi;
 
+import java.io.Serializable;
+
 import com.phloc.commons.annotations.IsSPIInterface;
 
 @IsSPIInterface
-public interface IApplicationRequestListenerSPI
+public interface IApplicationRequestListenerSPI extends Serializable
 {
   /**
    * Called at the very beginning of a request.

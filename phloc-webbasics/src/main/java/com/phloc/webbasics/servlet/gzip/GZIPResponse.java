@@ -33,6 +33,25 @@ import com.phloc.commons.stats.StatisticsManager;
 
 final class GZIPResponse extends AbstractCompressedResponseWrapper
 {
+  private static final class GZIPServletOutputStream extends AbstractCompressedServletOutputStream
+  {
+    public GZIPServletOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
+                                    @Nonnull final HttpServletResponse aHttpResponse,
+                                    @Nonnull final String sContentEncoding,
+                                    final long nContentLength,
+                                    @Nonnegative final int nMinCompressSize) throws IOException
+    {
+      super (aHttpRequest, aHttpResponse, sContentEncoding, nContentLength, nMinCompressSize);
+    }
+
+    @Override
+    @Nonnull
+    protected DeflaterOutputStream createDeflaterOutputStream (@Nonnull final OutputStream aOS) throws IOException
+    {
+      return new GZIPOutputStream (aOS);
+    }
+  }
+
   private static final IStatisticsHandlerCounter s_aStatsGZip = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
                                                                                                      "$gzip");
 
@@ -52,18 +71,6 @@ final class GZIPResponse extends AbstractCompressedResponseWrapper
                                                                                 final long nContentLength,
                                                                                 @Nonnegative final int nMinCompressSize) throws IOException
   {
-    return new AbstractCompressedServletOutputStream (aHttpRequest,
-                                                      aHttpResponse,
-                                                      sContentEncoding,
-                                                      nContentLength,
-                                                      nMinCompressSize)
-    {
-      @Override
-      @Nonnull
-      protected DeflaterOutputStream createDeflaterOutputStream (@Nonnull final OutputStream aOS) throws IOException
-      {
-        return new GZIPOutputStream (aOS);
-      }
-    };
+    return new GZIPServletOutputStream (aHttpRequest, aHttpResponse, sContentEncoding, nContentLength, nMinCompressSize);
   }
 }
