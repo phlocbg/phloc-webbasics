@@ -38,7 +38,7 @@ import com.phloc.commons.url.URLProtocolRegistry;
  * @author philip
  */
 @Immutable
-final class UserAgentDecryptor
+public final class UserAgentDecryptor
 {
   private static final String SKIP_PREFIX = "User-Agent: ";
 
