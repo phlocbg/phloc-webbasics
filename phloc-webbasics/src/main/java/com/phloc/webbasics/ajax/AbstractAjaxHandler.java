@@ -19,6 +19,7 @@ package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.meta.When;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
@@ -66,7 +67,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
    * @throws Exception
    */
   @OverrideOnDemand
-  @Nonnull
+  @Nonnull (when = When.MAYBE)
   protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull MapBasedAttributeContainer aParams) throws Exception;
 
   @Nonnull

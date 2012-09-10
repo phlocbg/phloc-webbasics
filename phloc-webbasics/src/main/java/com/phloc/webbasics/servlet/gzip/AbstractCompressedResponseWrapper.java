@@ -25,6 +25,7 @@ import java.io.Writer;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -87,7 +88,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   }
 
   @Override
-  public void setContentType (final String sContentType)
+  public void setContentType (@Nullable final String sContentType)
   {
     super.setContentType (sContentType);
 
