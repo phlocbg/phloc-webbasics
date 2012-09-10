@@ -35,43 +35,10 @@ public class BootstrapButton_Submit extends HCButton_Submit
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
 
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.BTN);
-  }
-
   public BootstrapButton_Submit ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapButton_Submit (@Nullable final String sLabel)
-  {
-    super (sLabel);
-    _init ();
-  }
-
-  public BootstrapButton_Submit (@Nullable final IIcon aIcon)
-  {
-    this ();
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton_Submit (@Nullable final String sLabel, @Nullable final IIcon aIcon)
-  {
-    this (sLabel);
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton_Submit (@Nonnull final EDefaultIcon eIcon)
-  {
-    this (DefaultIcons.get (eIcon));
-  }
-
-  public BootstrapButton_Submit (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
-  {
-    this (sLabel, DefaultIcons.get (eIcon));
+    addClass (CBootstrapCSS.BTN);
   }
 
   @Nonnull
@@ -114,5 +81,37 @@ public class BootstrapButton_Submit extends HCButton_Submit
         addChild (1, new HCTextNode (" "));
       }
     }
+  }
+
+  @Nonnull
+  public static BootstrapButton_Submit create (@Nullable final String sLabel)
+  {
+    final BootstrapButton_Submit ret = new BootstrapButton_Submit ();
+    ret.addChild (sLabel);
+    return ret;
+  }
+
+  @Nonnull
+  public static BootstrapButton_Submit create (@Nullable final IIcon aIcon)
+  {
+    return new BootstrapButton_Submit ().setIcon (aIcon);
+  }
+
+  @Nonnull
+  public static BootstrapButton_Submit create (@Nullable final String sLabel, @Nullable final IIcon aIcon)
+  {
+    return create (sLabel).setIcon (aIcon);
+  }
+
+  @Nonnull
+  public static BootstrapButton_Submit create (@Nonnull final EDefaultIcon eIcon)
+  {
+    return create (DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public static BootstrapButton_Submit create (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  {
+    return create (sLabel, DefaultIcons.get (eIcon));
   }
 }

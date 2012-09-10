@@ -49,14 +49,14 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   @Nonnull
   public final BootstrapButtonToolbar addButton (final IJSCodeProvider aJSCode, final String sCaption)
   {
-    addChild (new BootstrapButton (sCaption, aJSCode));
+    addChild (BootstrapButton.create (sCaption, aJSCode));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption)
   {
-    addChild (new BootstrapButton (sCaption, aURL));
+    addChild (BootstrapButton.create (sCaption, aURL));
     return this;
   }
 
@@ -65,35 +65,35 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
                                                  final String sCaption,
                                                  final EDefaultIcon eIcon)
   {
-    addChild (new BootstrapButton (sCaption, aJSCode, eIcon));
+    addChild (BootstrapButton.create (sCaption, aJSCode, eIcon));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption, final EDefaultIcon eIcon)
   {
-    addChild (new BootstrapButton (sCaption, aURL, eIcon));
+    addChild (BootstrapButton.create (sCaption, aURL, eIcon));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addSubmitButton (final String sCaption)
   {
-    addChild (new BootstrapButton_Submit (sCaption));
+    addChild (BootstrapButton_Submit.create (sCaption));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addSubmitButtonSave ()
   {
-    addChild (new BootstrapButton_Submit ("Speichern", EDefaultIcon.SAVE));
+    addChild (BootstrapButton_Submit.create ("Speichern", EDefaultIcon.SAVE));
     return this;
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addSubmitButtonYes ()
   {
-    addChild (new BootstrapButton_Submit ("Ja", EDefaultIcon.YES));
+    addChild (BootstrapButton_Submit.create ("Ja", EDefaultIcon.YES));
     return this;
   }
 }

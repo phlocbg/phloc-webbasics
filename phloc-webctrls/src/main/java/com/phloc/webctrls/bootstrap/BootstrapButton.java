@@ -55,70 +55,14 @@ public class BootstrapButton extends HCA_JS
     _init ();
   }
 
-  public BootstrapButton (@Nullable final String sLabel, @Nonnull final ISimpleURL aURL)
+  @Nonnull
+  public EBootstrapButtonType getButtonType ()
   {
-    this (aURL);
-    addChild (sLabel);
-  }
-
-  public BootstrapButton (@Nullable final String sLabel, @Nonnull final IJSCodeProvider aJSCode)
-  {
-    this (aJSCode);
-    addChild (sLabel);
-  }
-
-  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nullable final IIcon aIcon)
-  {
-    this (aURL);
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode, @Nullable final IIcon aIcon)
-  {
-    this (aJSCode);
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton (@Nonnull final ISimpleURL aURL, @Nonnull final EDefaultIcon eIcon)
-  {
-    this (aURL, DefaultIcons.get (eIcon));
-  }
-
-  public BootstrapButton (@Nonnull final IJSCodeProvider aJSCode, @Nonnull final EDefaultIcon eIcon)
-  {
-    this (aJSCode, DefaultIcons.get (eIcon));
-  }
-
-  public BootstrapButton (@Nullable final String sLabel, @Nonnull final ISimpleURL aURL, @Nullable final IIcon aIcon)
-  {
-    this (sLabel, aURL);
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton (@Nullable final String sLabel,
-                          @Nonnull final IJSCodeProvider aJSCode,
-                          @Nullable final IIcon aIcon)
-  {
-    this (sLabel, aJSCode);
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton (@Nullable final String sLabel,
-                          @Nonnull final ISimpleURL aURL,
-                          @Nonnull final EDefaultIcon eIcon)
-  {
-    this (sLabel, aURL, DefaultIcons.get (eIcon));
-  }
-
-  public BootstrapButton (@Nullable final String sLabel,
-                          @Nonnull final IJSCodeProvider aJSCode,
-                          @Nonnull final EDefaultIcon eIcon)
-  {
-    this (sLabel, aJSCode, DefaultIcons.get (eIcon));
+    return m_eType;
   }
 
   @Nonnull
-  public BootstrapButton setType (@Nonnull final EBootstrapButtonType eType)
+  public BootstrapButton setButtonType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");
@@ -126,11 +70,23 @@ public class BootstrapButton extends HCA_JS
     return this;
   }
 
+  @Nullable
+  public EBootstrapButtonSize getSize ()
+  {
+    return m_eSize;
+  }
+
   @Nonnull
   public BootstrapButton setSize (@Nullable final EBootstrapButtonSize eSize)
   {
     m_eSize = eSize;
     return this;
+  }
+
+  @Nullable
+  public IIcon getIcon ()
+  {
+    return m_aIcon;
   }
 
   @Nonnull
@@ -157,5 +113,80 @@ public class BootstrapButton extends HCA_JS
         addChild (1, new HCTextNode (" "));
       }
     }
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nullable final String sLabel, @Nonnull final ISimpleURL aURL)
+  {
+    final BootstrapButton ret = new BootstrapButton (aURL);
+    ret.addChild (sLabel);
+    return ret;
+  }
+
+  public static BootstrapButton create (@Nullable final String sLabel, @Nonnull final IJSCodeProvider aJSCode)
+  {
+    final BootstrapButton ret = new BootstrapButton (aJSCode);
+    ret.addChild (sLabel);
+    return ret;
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nonnull final ISimpleURL aURL, @Nullable final IIcon aIcon)
+  {
+    final BootstrapButton ret = new BootstrapButton (aURL);
+    ret.setIcon (aIcon);
+    return ret;
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nonnull final IJSCodeProvider aJSCode, @Nullable final IIcon aIcon)
+  {
+    final BootstrapButton ret = new BootstrapButton (aJSCode);
+    ret.setIcon (aIcon);
+    return ret;
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nonnull final ISimpleURL aURL, @Nonnull final EDefaultIcon eIcon)
+  {
+    return create (aURL, DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nonnull final IJSCodeProvider aJSCode, @Nonnull final EDefaultIcon eIcon)
+  {
+    return create (aJSCode, DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nullable final String sLabel,
+                                        @Nonnull final ISimpleURL aURL,
+                                        @Nullable final IIcon aIcon)
+  {
+    return create (sLabel, aURL).setIcon (aIcon);
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nullable final String sLabel,
+                                        @Nonnull final IJSCodeProvider aJSCode,
+                                        @Nullable final IIcon aIcon)
+  {
+    return create (sLabel, aJSCode).setIcon (aIcon);
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nullable final String sLabel,
+                                        @Nonnull final ISimpleURL aURL,
+                                        @Nonnull final EDefaultIcon eIcon)
+  {
+    return create (sLabel, aURL, DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public static BootstrapButton create (@Nullable final String sLabel,
+                                        @Nonnull final IJSCodeProvider aJSCode,
+                                        @Nonnull final EDefaultIcon eIcon)
+  {
+    return create (sLabel, aJSCode, DefaultIcons.get (eIcon));
   }
 }

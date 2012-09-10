@@ -35,43 +35,10 @@ public class BootstrapButton_Reset extends HCButton_Reset
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
 
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.BTN);
-  }
-
   public BootstrapButton_Reset ()
   {
     super ();
-    _init ();
-  }
-
-  public BootstrapButton_Reset (@Nullable final String sLabel)
-  {
-    super (sLabel);
-    _init ();
-  }
-
-  public BootstrapButton_Reset (@Nullable final IIcon aIcon)
-  {
-    this ();
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton_Reset (@Nullable final String sLabel, @Nullable final IIcon aIcon)
-  {
-    this (sLabel);
-    setIcon (aIcon);
-  }
-
-  public BootstrapButton_Reset (@Nonnull final EDefaultIcon eIcon)
-  {
-    this (DefaultIcons.get (eIcon));
-  }
-
-  public BootstrapButton_Reset (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
-  {
-    this (sLabel, DefaultIcons.get (eIcon));
+    addClass (CBootstrapCSS.BTN);
   }
 
   @Nonnull
@@ -114,5 +81,37 @@ public class BootstrapButton_Reset extends HCButton_Reset
         addChild (1, new HCTextNode (" "));
       }
     }
+  }
+
+  @Nonnull
+  public static BootstrapButton_Reset create (@Nullable final String sLabel)
+  {
+    final BootstrapButton_Reset ret = new BootstrapButton_Reset ();
+    ret.addChild (sLabel);
+    return ret;
+  }
+
+  @Nonnull
+  public static BootstrapButton_Reset create (@Nullable final IIcon aIcon)
+  {
+    return new BootstrapButton_Reset ().setIcon (aIcon);
+  }
+
+  @Nonnull
+  public static BootstrapButton_Reset create (@Nullable final String sLabel, @Nullable final IIcon aIcon)
+  {
+    return create (sLabel).setIcon (aIcon);
+  }
+
+  @Nonnull
+  public static BootstrapButton_Reset create (@Nonnull final EDefaultIcon eIcon)
+  {
+    return create (DefaultIcons.get (eIcon));
+  }
+
+  @Nonnull
+  public static BootstrapButton_Reset create (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  {
+    return create (sLabel, DefaultIcons.get (eIcon));
   }
 }
