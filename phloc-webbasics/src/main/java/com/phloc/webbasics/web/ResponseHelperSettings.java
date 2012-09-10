@@ -17,8 +17,11 @@
  */
 package com.phloc.webbasics.web;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
@@ -29,7 +32,7 @@ import com.phloc.commons.state.EChange;
  * 
  * @author philip
  */
-@Immutable
+@ThreadSafe
 public final class ResponseHelperSettings
 {
   // Expires in at least 2 days (which is the minimum to be accepted for
@@ -37,6 +40,7 @@ public final class ResponseHelperSettings
   // Because of steady changes, use 1 hour
   public static final int DEFAULT_EXPIRATION_SECONDS = 1 * CGlobal.SECONDS_PER_HOUR;
 
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static int s_nExpirationSeconds = DEFAULT_EXPIRATION_SECONDS;
   private static boolean s_bResponseCompressionEnabled = true;
   private static boolean s_bResponseGzipEnabled = true;
@@ -59,10 +63,18 @@ public final class ResponseHelperSettings
   @Nonnull
   public static EChange setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
   {
-    if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
-      return EChange.UNCHANGED;
-    s_bResponseCompressionEnabled = bResponseCompressionEnabled;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
+        return EChange.UNCHANGED;
+      s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -71,7 +83,15 @@ public final class ResponseHelperSettings
    */
   public static boolean isResponseCompressionEnabled ()
   {
-    return s_bResponseCompressionEnabled;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bResponseCompressionEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**
@@ -85,10 +105,18 @@ public final class ResponseHelperSettings
   @Nonnull
   public static EChange setResponseGzipEnabled (final boolean bResponseGzipEnabled)
   {
-    if (s_bResponseGzipEnabled == bResponseGzipEnabled)
-      return EChange.UNCHANGED;
-    s_bResponseGzipEnabled = bResponseGzipEnabled;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bResponseGzipEnabled == bResponseGzipEnabled)
+        return EChange.UNCHANGED;
+      s_bResponseGzipEnabled = bResponseGzipEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -97,7 +125,15 @@ public final class ResponseHelperSettings
    */
   public static boolean isResponseGzipEnabled ()
   {
-    return s_bResponseGzipEnabled;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bResponseGzipEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**
@@ -111,10 +147,18 @@ public final class ResponseHelperSettings
   @Nonnull
   public static EChange setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
   {
-    if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
-      return EChange.UNCHANGED;
-    s_bResponseDeflateEnabled = bResponseDeflateEnabled;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
+        return EChange.UNCHANGED;
+      s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -123,7 +167,58 @@ public final class ResponseHelperSettings
    */
   public static boolean isResponseDeflateEnabled ()
   {
-    return s_bResponseDeflateEnabled;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bResponseDeflateEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set all parameters at once as an atomic transaction
+   * 
+   * @param bResponseCompressionEnabled
+   *        <code>true</code> to overall enable the usage
+   * @param bResponseGzipEnabled
+   *        <code>true</code> to enable GZip if compression is enabled
+   * @param bResponseDeflateEnabled
+   *        <code>true</code> to enable Deflate if compression is enabled
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public static EChange setAll (final boolean bResponseCompressionEnabled,
+                                final boolean bResponseGzipEnabled,
+                                final boolean bResponseDeflateEnabled)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      EChange eChange = EChange.UNCHANGED;
+      if (s_bResponseCompressionEnabled != bResponseCompressionEnabled)
+      {
+        s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+        eChange = EChange.CHANGED;
+      }
+      if (s_bResponseGzipEnabled != bResponseGzipEnabled)
+      {
+        s_bResponseGzipEnabled = bResponseGzipEnabled;
+        eChange = EChange.CHANGED;
+      }
+      if (s_bResponseDeflateEnabled != bResponseDeflateEnabled)
+      {
+        s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+        eChange = EChange.CHANGED;
+      }
+      return eChange;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -131,16 +226,24 @@ public final class ResponseHelperSettings
    * HTTP caching
    * 
    * @param nExpirationSeconds
-   *        The number of seconds for which the response shdould be cache
+   *        The number of seconds for which the response should be cached
    * @return {@link EChange}
    */
   @Nonnull
   public static EChange setExpirationSeconds (final int nExpirationSeconds)
   {
-    if (s_nExpirationSeconds == nExpirationSeconds)
-      return EChange.UNCHANGED;
-    s_nExpirationSeconds = nExpirationSeconds;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_nExpirationSeconds == nExpirationSeconds)
+        return EChange.UNCHANGED;
+      s_nExpirationSeconds = nExpirationSeconds;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -148,6 +251,14 @@ public final class ResponseHelperSettings
    */
   public static int getExpirationSeconds ()
   {
-    return s_nExpirationSeconds;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_nExpirationSeconds;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 }

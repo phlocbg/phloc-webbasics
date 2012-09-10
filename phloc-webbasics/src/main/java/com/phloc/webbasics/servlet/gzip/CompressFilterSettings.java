@@ -17,8 +17,11 @@
  */
 package com.phloc.webbasics.servlet.gzip;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.state.EChange;
@@ -28,9 +31,10 @@ import com.phloc.commons.state.EChange;
  * 
  * @author philip
  */
-@Immutable
+@ThreadSafe
 public final class CompressFilterSettings
 {
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static boolean s_bFilterLoaded = false;
   private static boolean s_bResponseCompressionEnabled = true;
   private static boolean s_bResponseGzipEnabled = true;
@@ -48,7 +52,15 @@ public final class CompressFilterSettings
    */
   static void markFilterLoaded ()
   {
-    s_bFilterLoaded = true;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bFilterLoaded = true;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -57,7 +69,15 @@ public final class CompressFilterSettings
    */
   public static boolean isFilterLoaded ()
   {
-    return s_bFilterLoaded;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bFilterLoaded;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**
@@ -70,10 +90,18 @@ public final class CompressFilterSettings
   @Nonnull
   public static EChange setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
   {
-    if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
-      return EChange.UNCHANGED;
-    s_bResponseCompressionEnabled = bResponseCompressionEnabled;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
+        return EChange.UNCHANGED;
+      s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -82,7 +110,15 @@ public final class CompressFilterSettings
    */
   public static boolean isResponseCompressionEnabled ()
   {
-    return s_bResponseCompressionEnabled;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bResponseCompressionEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**
@@ -96,10 +132,18 @@ public final class CompressFilterSettings
   @Nonnull
   public static EChange setResponseGzipEnabled (final boolean bResponseGzipEnabled)
   {
-    if (s_bResponseGzipEnabled == bResponseGzipEnabled)
-      return EChange.UNCHANGED;
-    s_bResponseGzipEnabled = bResponseGzipEnabled;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bResponseGzipEnabled == bResponseGzipEnabled)
+        return EChange.UNCHANGED;
+      s_bResponseGzipEnabled = bResponseGzipEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -108,7 +152,15 @@ public final class CompressFilterSettings
    */
   public static boolean isResponseGzipEnabled ()
   {
-    return s_bResponseGzipEnabled;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bResponseGzipEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**
@@ -122,10 +174,18 @@ public final class CompressFilterSettings
   @Nonnull
   public static EChange setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
   {
-    if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
-      return EChange.UNCHANGED;
-    s_bResponseDeflateEnabled = bResponseDeflateEnabled;
-    return EChange.CHANGED;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
+        return EChange.UNCHANGED;
+      s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -134,6 +194,57 @@ public final class CompressFilterSettings
    */
   public static boolean isResponseDeflateEnabled ()
   {
-    return s_bResponseDeflateEnabled;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bResponseDeflateEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set all parameters at once as an atomic transaction
+   * 
+   * @param bResponseCompressionEnabled
+   *        <code>true</code> to overall enable the usage
+   * @param bResponseGzipEnabled
+   *        <code>true</code> to enable GZip if compression is enabled
+   * @param bResponseDeflateEnabled
+   *        <code>true</code> to enable Deflate if compression is enabled
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public static EChange setAll (final boolean bResponseCompressionEnabled,
+                                final boolean bResponseGzipEnabled,
+                                final boolean bResponseDeflateEnabled)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      EChange eChange = EChange.UNCHANGED;
+      if (s_bResponseCompressionEnabled != bResponseCompressionEnabled)
+      {
+        s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+        eChange = EChange.CHANGED;
+      }
+      if (s_bResponseGzipEnabled != bResponseGzipEnabled)
+      {
+        s_bResponseGzipEnabled = bResponseGzipEnabled;
+        eChange = EChange.CHANGED;
+      }
+      if (s_bResponseDeflateEnabled != bResponseDeflateEnabled)
+      {
+        s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+        eChange = EChange.CHANGED;
+      }
+      return eChange;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 }
