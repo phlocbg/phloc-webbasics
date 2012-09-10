@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2006-2012 phloc systems
+    http://www.phloc.com
+    office[at]phloc[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!--
+If one of the following texts is contained in a user agent, it is considered to be a webspider.
+Last update: 2011/06/20
+ -->
+<list>
+  <item value="!Susie" />
+  <item value="'artviper" />
+  <item value="50.nu" />
+  <item value="A1 Sitemap Generator" />
+  <item value="ac-baidu.bot" />
+  <item value="AC-BaiduBot" />
+  <item value="AdsBot-Google" />
+  <item value="Advista Crawler" />
+  <item value="aiHitBot" />
+  <item value="askpeter_bot" />
+  <item value="asterias" />
+  <item value="Atomic5 Search" />
+  <item value="BackDoorBot" />
+  <item value="BacklinkCrawler" />
+  <item value="BackWeb" />
+  <item value="BaiduImagespider" />
+  <item value="Baiduspider" />
+  <item value="Bandit" />
+  <item value="BatchFTP" />
+  <item value="betaBot" />
+  <item value="bingbot" />
+  <item value="BlackWidow" />
+  <item value="BlowFish" />
+  <item value="BotALot" />
+  <item value="Buddy" />
+  <item value="BuiltBotTough" />
+  <item value="CamontSpider" />
+  <item value="CatchBot" />
+  <item value="CheeseBot" />
+  <item value="CherryPicker" />
+  <item value="ChinaClaw" />
+  <item value="Cityreview Robot" />
+  <item value="Collector" />
+  <item value="Comodo-Certificates-Spider" />
+  <item value="contype" />
+  <item value="Copier" />
+  <item value="CopyRightCheck" />
+  <item value="cosmos" />
+  <item value="Crescent" />
+  <item value="Custo" />
+  <item value="Die Suchmaschine der Technik" />
+  <item value="DISCoPump" />
+  <item value="DKIMRepBot" />
+  <item value="DBLBot" />
+  <item value="DNS-Digger-Explorer" />
+  <item value="DoubleVerify Crawler" />
+  <item value="Download Demon" />
+  <item value="DownloadWonder" />
+  <item value="Downloader" />
+  <item value="Drip" />
+  <item value="DTS Agent" />
+  <item value="eCatch" />
+  <item value="ee://aol/http" />
+  <item value="EirGrabber" />
+  <item value="EmailSiphon" />
+  <item value="EmailWolf" />
+  <item value="Eurobot" />
+  <item value="eventax" />
+  <item value="Express WebPictures" />
+  <item value="ExtractorPro" />
+  <item value="EyeNetIE" />
+  <item value="favicon Internet survey research" />
+  <item value="Foobot" />
+  <item value="FSPBot" />
+  <item value="GarlikCrawler" />
+  <item value="GetRight" />
+  <item value="GetSmart" />
+  <item value="GetWeb!" />
+  <item value="Go!Zilla" />
+  <item value="Go-Ahead-Got-It" />
+  <item value="gold crawler" />
+  <item value="Google Keyword Generator" />
+  <item value="GoogleDocs" />
+  <item value="GornKer" />
+  <item value="gotit" />
+  <item value="Grabber" />
+  <item value="GrabNet" />
+  <item value="Grafula" />
+  <item value="Herold" />
+  <item value="HMView" />
+  <item value="HuaweiSymantecSpider" />
+  <item value="HTTrack" />
+  <item value="http://Anonymouse.org/" />
+  <item value="http://bot.sjn.com" />
+  <item value="http://wmtips.com/tools/" />
+  <item value="http://www.amagit.com/" />
+  <item value="http://www.lssw365.net/" />
+  <item value="humanlinks" />
+  <item value="ia_archiver" />
+  <item value="iCCrawler" />
+  <item value="ichiro" />
+  <item value="Image Stripper" />
+  <item value="Image Sucker" />
+  <item value="InfoNaviRobot" />
+  <item value="InsurancoBot" />
+  <item value="InterGET" />
+  <item value="Internet Ninja" />
+  <item value="Iria" />
+  <item value="jabubo.com crawler" />
+  <item value="JennyBot" />
+  <item value="JetCar" />
+  <item value="JOC Web Spider" />
+  <item value="Jyxobot" />
+  <item value="KaloogaBot" />
+  <item value="Kenjin.Spider" />
+  <item value="KIT webcrawler" />
+  <item value="lftp" />
+  <item value="likse" />
+  <item value="Linguee Bot" />
+  <item value="LinkextractorPro" />
+  <item value="Linkman" />
+  <item value="LinkScan" />
+  <item value="LinkStash" />
+  <item value="LinkWalker" />
+  <item value="Magnet" />
+  <item value="Mag-Net" />
+  <item value="Mass Downloader" />
+  <item value="Memo" />
+  <item value="MIDown tool" />
+  <item value="Mirror" />
+  <item value="Mister PiX" />
+  <item value="Moose" />
+  <item value="Mozilla 5.0/Bot" />
+  <item value="MSR-ISRCCrawler" />
+  <item value="mylinkcheck" />
+  <item value="Navroad" />
+  <item value="NearSite" />
+  <item value="Net Vampire" />
+  <item value="NetAnts" />
+  <item value="netEstate NE Crawler" />
+  <item value="NetSpider" />
+  <item value="NetZIP" />
+  <item value="nu_tch-princeton" />
+  <item value="Nutscrape" />
+  <item value="oBot" />
+  <item value="oegp" />
+  <item value="Offline Explorer" />
+  <item value="Offline Navigator" />
+  <item value="Openfind" />
+  <item value="oxado-bot" />
+  <item value="PageGrabber" />
+  <item value="Papa Foto" />
+  <item value="pavuk" />
+  <item value="pcBrowser" />
+  <item value="PHarvester" />
+  <item value="PHPCrawl" />
+  <item value="Pockey" />
+  <item value="PrivacyFinder" />
+  <item value="ProWebWalker" />
+  <item value="proximic" />
+  <item value="Pump" />
+  <item value="Purebot" />
+  <item value="QueryN.Metasearch" />
+  <item value="RealDownload" />
+  <item value="Reaper" />
+  <item value="Recorder" />
+  <item value="ReGet" />
+  <item value="rdfbot" />
+  <item value="RMA" />
+  <item value="robotgenius" />
+  <item value="Semager" />
+  <item value="semantissimo.de" />
+  <item value="Seznam" />
+  <item value="Siphon" />
+  <item value="SiteSnagger" />
+  <item value="SiteSucker" />
+  <item value="SmartDownload" />
+  <item value="Snake" />
+  <item value="SpaceBison" />
+  <item value="spbot" />
+  <item value="Sphider" />
+  <item value="Spider.TerraNautic.net" />
+  <item value="ssearch_bot" />
+  <item value="Stripper" />
+  <item value="Sucker" />
+  <item value="SuperBot" />
+  <item value="SuperHTTP" />
+  <item value="Surfbot" />
+  <item value="SygolBot" />
+  <item value="textdigger.com" />
+  <item value="ThumbShots-Bot" />
+  <item value="Toplistbot" />
+  <item value="TripAdvisorBot" />
+  <item value="TwengaBot" />
+  <item value="ua-bot" />
+  <item value="voodoo-it" />
+  <item value="Web Image Collector" />
+  <item value="Web Sucker" />
+  <item value="WebAuto" />
+  <item value="WebCapture" />
+  <item value="WebCopier" />
+  <item value="WebDataCentreBot" />
+  <item value="WebFetch" />
+  <item value="WebGo IS" />
+  <item value="WebLeacher" />
+  <item value="WebmasterCoffee" />
+  <item value="WebReaper" />
+  <item value="WebRipper" />
+  <item value="WebSauger" />
+  <item value="Website eXtractor" />
+  <item value="Website Quester" />
+  <item value="WebStripper" />
+  <item value="WebWhacker" />
+  <item value="WebZIP" />
+  <item value="Wer-liefert-was Crawler" />
+  <item value="Wget" />
+  <item value="Whacker" />
+  <item value="Widow" />
+  <item value="wikiwix-bot" />
+  <item value="WWW-Mechanize" />
+  <item value="WWWOFFLE" />
+  <item value="Xaldon WebSpider" />
+  <item value="XmarksFetch" />
+  <item value="yacybot" />
+  <item value="Yahoo! SearchMonkey" />
+  <item value="Yahoo-MMCrawler" />
+  <item value="YahooCacheSystem" />
+  <item value="YahooExternalCache" />
+  <item value="yovadis" />
+  <item value="ZipppBot" />
+</list>

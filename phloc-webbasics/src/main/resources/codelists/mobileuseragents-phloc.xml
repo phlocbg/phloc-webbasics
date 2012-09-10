@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2006-2012 phloc systems
+    http://www.phloc.com
+    office[at]phloc[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!--
+If one of the following texts is contained in a user agent, it is considered to be a mobile browser.
+Last update: 2011/04/04
+ -->
+<list>
+  <item value=";FOMA;" /> <!-- Panasonic -->
+  <item value="Android" />
+  <item value="BlackBerry" />
+  <item value="CDM-" />
+  <item value="DoCoMo" />
+  <item value="Ericsson" />
+  <item value="EZOS" />
+  <item value="Fly-" />
+  <item value="FLY-" />
+  <item value="HTC " />
+  <item value="HTC-" />
+  <item value="HTC_" />
+  <item value="Huawei" />
+  <item value="i-mobile" />
+  <item value="iPAQ" />
+  <item value="Jataayu" />
+  <item value="J-PHONE" />
+  <item value="iphone" />
+  <item value="jBrowser" />
+  <item value="KDDI-" />
+  <item value="KGT/" /> <!-- NEC -->
+  <item value="LG/" ></item>
+  <item value="LG-" />
+  <item value="LGE-" />
+  <item value="MIDP" />
+  <item value="Mitsu/" />
+  <item value="MobileExplorer/" />
+  <item value="MobileSafari" />
+  <item value="MOT-" />
+  <item value="moto" />
+  <item value="NEC-" />
+  <item value="NetFront" />
+  <item value="Nexian" />
+  <item value="Nokia" />
+  <item value="o2imode" />
+  <item value="OPERA_MINI" />
+  <item value="PalmOS" />
+  <item value="Panasonic" />
+  <item value="Philips" />
+  <item value="phoneOne" />
+  <item value="portalmmm" />
+  <item value="Psion" />
+  <item value="Qtek" />
+  <item value="Rover " />
+  <item value="SAGEM-" />
+  <item value="SAMSUNG" />
+  <item value="Sanyo" />
+  <item value="SCH-" />
+  <item value="SEC-" />
+  <item value="Sendo" />
+  <item value="SGH-" />
+  <item value="SHARP-" />
+  <item value="SIE-" />
+  <item value="SoftBank" />
+  <item value="SonyEricsson" />
+  <item value="Spice " />
+  <item value="Spice-" />
+  <item value="Symbian OS" />
+  <item value="TCL-" />
+  <item value="Telit-" />
+  <item value="Tiphone" />
+  <item value="Toplux" />
+  <item value="TSM-" />
+  <item value="UP.Browser" />
+  <item value="UPG1 UP" />
+  <item value="UTSTARCOM" />
+  <item value="Voxtel" />
+  <item value=" WAP " />
+  <item value="Wapaka" />
+  <item value="Wapalizer" />
+  <item value="WapView" />
+  <item value="WIG Browser" />
+  <item value="WinWAP" />
+  <item value="Vodafone" />
+  <item value="YourWap" />
+  <item value="ZMEM" />
+  <item value="ZTE-" />
+</list>

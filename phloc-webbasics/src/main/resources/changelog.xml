@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2012-09-04" category="api" action="add">
+    <change>
+      <text locale="en">Added support for browser info, web spiders and user agents</text>
+    </change>
+  </entry>
+  <entry date="2012-09-10" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-html 3.6.0</text>
+    </change>
+  </entry>
   <release date="2012-09-09" version="1.8.12" />
   <release date="2012-09-05" version="1.8.11" />
   <release date="2012-09-04" version="1.8.10" />
