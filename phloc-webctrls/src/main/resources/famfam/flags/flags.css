@@ -1,8 +1,11 @@
 .icon-famfam-flag {   
   background: url(flags.png) no-repeat top left; 
 }
-.left-famfam-flag { padding-left: 22px !important; }
-.right-famfam-flag { padding-right: 22px !important; background-position: top right; }
+span > .icon-famfam-flag,
+div  > .icon-famfam-flag,
+p    > .icon-famfam-flag {   
+  padding-left: 22px !important;
+}
 
 .famfam-flag-ad{ background-position: 0 0; width: 16px; height: 11px; } 
 .famfam-flag-ae{ background-position: 0 -12px; width: 16px; height: 11px; } 

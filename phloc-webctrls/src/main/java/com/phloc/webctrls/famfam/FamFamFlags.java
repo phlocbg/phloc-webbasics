@@ -67,7 +67,7 @@ public final class FamFamFlags
     {
       // Note: dynamic CSS class is OK here
       aObject.addClasses (CSS_CLASS_FAMFAM_FLAG,
-                          DefaultCSSClassProvider.create ("famfam-flag-" + sCountry.toLowerCase ()));
+                          DefaultCSSClassProvider.create ("famfam-flag-" + sCountry.toLowerCase (Locale.US)));
     }
     return aObject;
   }
