@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.LocalTime;
 
-import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -53,51 +52,12 @@ import com.phloc.webbasics.http.CHTTPHeader;
 @Immutable
 public final class ResponseHelper
 {
-  // Expires in at least 2 days (which is the minimum to be accepted for
-  // real caching in Yahoo Guidelines)
-  // Because of steady changes, use 1 hour
-  public static final int DEFAULT_EXPIRATION_SECONDS = 1 * CGlobal.SECONDS_PER_HOUR;
-
-  private static boolean s_bResponseCompressionEnabled = true;
-  private static boolean s_bResponseGzipEnabled = true;
-  private static boolean s_bResponseDeflateEnabled = true;
-
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final ResponseHelper s_aInstance = new ResponseHelper ();
 
   private ResponseHelper ()
   {}
-
-  public static void setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
-  {
-    s_bResponseCompressionEnabled = bResponseCompressionEnabled;
-  }
-
-  public static boolean isResponseCompressionEnabled ()
-  {
-    return s_bResponseCompressionEnabled;
-  }
-
-  public static void setResponseGzipEnabled (final boolean bResponseGzipEnabled)
-  {
-    s_bResponseGzipEnabled = bResponseGzipEnabled;
-  }
-
-  public static boolean isResponseGzipEnabled ()
-  {
-    return s_bResponseGzipEnabled;
-  }
-
-  public static void setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
-  {
-    s_bResponseDeflateEnabled = bResponseDeflateEnabled;
-  }
-
-  public static boolean isResponseDeflateEnabled ()
-  {
-    return s_bResponseDeflateEnabled;
-  }
 
   public static void modifyResponseForNoCaching (@Nonnull final IRequestWebScope aRequestScope)
   {
@@ -248,7 +208,7 @@ public final class ResponseHelper
   {
     OutputStream aOS = aHttpResponse.getOutputStream ();
 
-    if (isResponseCompressionEnabled ())
+    if (ResponseHelperSettings.isResponseCompressionEnabled ())
     {
       // Can we get resource transfer working with GZIP or deflate?
       final AcceptEncodingList aAcceptEncodings = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);
@@ -259,7 +219,7 @@ public final class ResponseHelper
       aHttpResponse.setHeader ("X-P", "RH");
 
       final String sGZipEncoding = aAcceptEncodings.getUsedGZIPEncoding ();
-      if (sGZipEncoding != null && isResponseGzipEnabled ())
+      if (sGZipEncoding != null && ResponseHelperSettings.isResponseGzipEnabled ())
       {
         aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sGZipEncoding);
         aOS = new GZIPOutputStream (aHttpResponse.getOutputStream ());
@@ -267,7 +227,7 @@ public final class ResponseHelper
       else
       {
         final String sDeflateEncoding = aAcceptEncodings.getUsedDeflateEncoding ();
-        if (sDeflateEncoding != null && isResponseDeflateEnabled ())
+        if (sDeflateEncoding != null && ResponseHelperSettings.isResponseDeflateEnabled ())
         {
           aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sDeflateEncoding);
           aOS = new ZipOutputStream (aHttpResponse.getOutputStream ());

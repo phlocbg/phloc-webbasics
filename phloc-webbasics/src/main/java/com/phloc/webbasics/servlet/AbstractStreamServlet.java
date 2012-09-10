@@ -44,6 +44,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.webbasics.web.ResponseHelperSettings;
 
 /**
  * Simple servlet to forward requests to pages normally not visible to the
@@ -181,7 +182,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
         // HTTP caching possible?
         if (objectsAllowsForHTTPCaching (aHttpRequest, aHttpResponse, sFilename))
         {
-          ResponseHelper.modifyResponseForExpiration (aHttpResponse, ResponseHelper.DEFAULT_EXPIRATION_SECONDS);
+          ResponseHelper.modifyResponseForExpiration (aHttpResponse, ResponseHelperSettings.getExpirationSeconds ());
         }
         else
           ResponseHelper.modifyResponseForNoCaching (aHttpResponse);

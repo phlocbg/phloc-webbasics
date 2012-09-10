@@ -34,7 +34,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.AcceptEncodingList;
 import com.phloc.webbasics.http.CHTTPHeader;
-import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.webbasics.web.ResponseHelperSettings;
 
 /**
  * This is a generic filter that first tries to find whether "GZip" is
@@ -52,14 +52,40 @@ public final class CompressFilter implements Filter
   public void init (@Nonnull final FilterConfig filterConfig)
   {
     // As compression is done in the filter, no compression is required there
-    ResponseHelper.setResponseCompressionEnabled (false);
+    ResponseHelperSettings.setResponseCompressionEnabled (false);
+  }
+
+  private void _performCompressed (@Nonnull final ServletRequest aRequest,
+                                   @Nonnull final FilterChain aChain,
+                                   @Nonnull final HttpServletResponse aHttpResponse,
+                                   @Nonnull final AbstractCompressedResponseWrapper aCompressedResponse) throws IOException,
+                                                                                                        ServletException
+  {
+    boolean bException = true;
+    try
+    {
+      aChain.doFilter (aRequest, aCompressedResponse);
+      bException = false;
+    }
+    finally
+    {
+      if (bException && !aHttpResponse.isCommitted ())
+      {
+        // An exception occurred
+        aCompressedResponse.resetBuffer ();
+        aCompressedResponse.noCompression ();
+      }
+      else
+        aCompressedResponse.finish ();
+    }
   }
 
   public void doFilter (@Nonnull final ServletRequest aRequest,
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
-    if (aRequest instanceof HttpServletRequest &&
+    if (CompressFilterSettings.isResponseCompressionEnabled () &&
+        aRequest instanceof HttpServletRequest &&
         aResponse instanceof HttpServletResponse &&
         aRequest.getAttribute (REQUEST_ATTR) == null)
     {
@@ -77,7 +103,7 @@ public final class CompressFilter implements Filter
       AbstractCompressedResponseWrapper aCompressedResponse = null;
 
       final String sGZIPEncoding = aAEL.getUsedGZIPEncoding ();
-      if (sGZIPEncoding != null)
+      if (sGZIPEncoding != null && CompressFilterSettings.isResponseGzipEnabled ())
       {
         // Use gzip
         aCompressedResponse = new GZIPResponse (aHttpRequest, aHttpResponse, sGZIPEncoding);
@@ -85,7 +111,7 @@ public final class CompressFilter implements Filter
       else
       {
         final String sDeflateEncoding = aAEL.getUsedDeflateEncoding ();
-        if (sDeflateEncoding != null)
+        if (sDeflateEncoding != null && CompressFilterSettings.isResponseDeflateEnabled ())
         {
           // Use deflate
           aCompressedResponse = new DeflateResponse (aHttpRequest, aHttpResponse, sDeflateEncoding);
@@ -94,22 +120,7 @@ public final class CompressFilter implements Filter
 
       if (aCompressedResponse != null)
       {
-        boolean bException = true;
-        try
-        {
-          aChain.doFilter (aRequest, aCompressedResponse);
-          bException = false;
-        }
-        finally
-        {
-          if (bException && !aHttpResponse.isCommitted ())
-          {
-            aCompressedResponse.resetBuffer ();
-            aCompressedResponse.noCompression ();
-          }
-          else
-            aCompressedResponse.finish ();
-        }
+        _performCompressed (aRequest, aChain, aHttpResponse, aCompressedResponse);
         return;
       }
 
