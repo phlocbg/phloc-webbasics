@@ -17,9 +17,11 @@
  */
 package com.phloc.webbasics.servlet.gzip;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.state.EChange;
 
 /**
  * Contains the settings for the {@link CompressFilter} class.
@@ -29,6 +31,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 @Immutable
 public final class CompressFilterSettings
 {
+  private static boolean s_bFilterLoaded = false;
   private static boolean s_bResponseCompressionEnabled = true;
   private static boolean s_bResponseGzipEnabled = true;
   private static boolean s_bResponseDeflateEnabled = true;
@@ -41,14 +44,36 @@ public final class CompressFilterSettings
   {}
 
   /**
+   * Mark the filter as loaded.
+   */
+  static void markFilterLoaded ()
+  {
+    s_bFilterLoaded = true;
+  }
+
+  /**
+   * @return <code>true</code> if the filter is loaded, <code>false</code> if
+   *         not
+   */
+  public static boolean isFilterLoaded ()
+  {
+    return s_bFilterLoaded;
+  }
+
+  /**
    * Enable or disable the overall compression.
    * 
    * @param bResponseCompressionEnabled
    *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
    */
-  public static void setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
+  @Nonnull
+  public static EChange setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
   {
+    if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
+      return EChange.UNCHANGED;
     s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+    return EChange.CHANGED;
   }
 
   /**
@@ -66,10 +91,15 @@ public final class CompressFilterSettings
    * 
    * @param bResponseGzipEnabled
    *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
    */
-  public static void setResponseGzipEnabled (final boolean bResponseGzipEnabled)
+  @Nonnull
+  public static EChange setResponseGzipEnabled (final boolean bResponseGzipEnabled)
   {
+    if (s_bResponseGzipEnabled == bResponseGzipEnabled)
+      return EChange.UNCHANGED;
     s_bResponseGzipEnabled = bResponseGzipEnabled;
+    return EChange.CHANGED;
   }
 
   /**
@@ -87,10 +117,15 @@ public final class CompressFilterSettings
    * 
    * @param bResponseDeflateEnabled
    *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
    */
-  public static void setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
+  @Nonnull
+  public static EChange setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
   {
+    if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
+      return EChange.UNCHANGED;
     s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+    return EChange.CHANGED;
   }
 
   /**

@@ -17,10 +17,12 @@
  */
 package com.phloc.webbasics.web;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.state.EChange;
 
 /**
  * Contains the settings for the {@link ResponseHelper} class.
@@ -52,10 +54,15 @@ public final class ResponseHelperSettings
    * 
    * @param bResponseCompressionEnabled
    *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
    */
-  public static void setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
+  @Nonnull
+  public static EChange setResponseCompressionEnabled (final boolean bResponseCompressionEnabled)
   {
+    if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
+      return EChange.UNCHANGED;
     s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+    return EChange.CHANGED;
   }
 
   /**
@@ -73,10 +80,15 @@ public final class ResponseHelperSettings
    * 
    * @param bResponseGzipEnabled
    *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
    */
-  public static void setResponseGzipEnabled (final boolean bResponseGzipEnabled)
+  @Nonnull
+  public static EChange setResponseGzipEnabled (final boolean bResponseGzipEnabled)
   {
+    if (s_bResponseGzipEnabled == bResponseGzipEnabled)
+      return EChange.UNCHANGED;
     s_bResponseGzipEnabled = bResponseGzipEnabled;
+    return EChange.CHANGED;
   }
 
   /**
@@ -94,10 +106,15 @@ public final class ResponseHelperSettings
    * 
    * @param bResponseDeflateEnabled
    *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
    */
-  public static void setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
+  @Nonnull
+  public static EChange setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
   {
+    if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
+      return EChange.UNCHANGED;
     s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+    return EChange.CHANGED;
   }
 
   /**
@@ -115,10 +132,15 @@ public final class ResponseHelperSettings
    * 
    * @param nExpirationSeconds
    *        The number of seconds for which the response shdould be cache
+   * @return {@link EChange}
    */
-  public static void setExpirationSeconds (final int nExpirationSeconds)
+  @Nonnull
+  public static EChange setExpirationSeconds (final int nExpirationSeconds)
   {
+    if (s_nExpirationSeconds == nExpirationSeconds)
+      return EChange.UNCHANGED;
     s_nExpirationSeconds = nExpirationSeconds;
+    return EChange.CHANGED;
   }
 
   /**

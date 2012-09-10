@@ -49,9 +49,13 @@ public final class CompressFilter implements Filter
   private static final IStatisticsHandlerCounter s_aStatsNone = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
                                                                                                      "$none");
 
-  public void init (@Nonnull final FilterConfig filterConfig)
+  public void init (@Nonnull final FilterConfig aFilterConfig)
   {
-    // As compression is done in the filter, no compression is required there
+    // Mark the filter as loaded
+    CompressFilterSettings.markFilterLoaded ();
+
+    // As compression is done in the filter, no compression in ResponseHelper is
+    // required there
     ResponseHelperSettings.setResponseCompressionEnabled (false);
   }
 
