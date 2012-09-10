@@ -33,6 +33,7 @@ public final class BrowserInfoIE extends BrowserInfo
 {
   @SuppressWarnings ("hiding")
   public static final BrowserInfoIE IS_IT_NOT = new BrowserInfoIE ();
+
   private final boolean m_bIsIECompatibilityMode;
 
   private BrowserInfoIE ()

@@ -34,6 +34,7 @@ public final class BrowserInfoSpider extends BrowserInfo
 {
   @SuppressWarnings ("hiding")
   public static final BrowserInfoSpider IS_IT_NOT = new BrowserInfoSpider ();
+
   private final WebSpiderInfo m_aWebSpiderInfo;
 
   private BrowserInfoSpider ()

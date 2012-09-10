@@ -42,7 +42,7 @@ public class BrowserInfo implements IHasDisplayText
   private final Version m_aVersion;
 
   /**
-   * Only to indicate that this is not the desird browser.
+   * Only to indicate that this is not the desired browser.
    */
   protected BrowserInfo ()
   {

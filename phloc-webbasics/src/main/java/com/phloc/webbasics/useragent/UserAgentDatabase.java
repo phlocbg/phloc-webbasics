@@ -25,6 +25,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ import com.phloc.webbasics.http.CHTTPHeader;
 @ThreadSafe
 public final class UserAgentDatabase
 {
+  private static final String REQUEST_ATTR = UserAgentDatabase.class.getName ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (UserAgentDatabase.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final Set <String> s_aUniqueUserAgents = new HashSet <String> ();
@@ -69,20 +71,20 @@ public final class UserAgentDatabase
   /**
    * Get the user agent from the given request.
    * 
-   * @param aRequestScope
-   *        The request to get the UA from.
+   * @param aHttpRequest
+   *        The HTTP request to get the UA from.
    * @return <code>null</code> if no user agent string is present
    */
   @Nullable
-  public static String getHttpUserAgentStringFromRequest (@Nonnull final IRequestWebScope aRequestScope)
+  public static String getHttpUserAgentStringFromRequest (@Nonnull final HttpServletRequest aHttpRequest)
   {
     // Use non-standard headers first
-    String sUserAgent = aRequestScope.getRequestHeader (CHTTPHeader.UA);
+    String sUserAgent = aHttpRequest.getHeader (CHTTPHeader.UA);
     if (sUserAgent == null)
     {
-      sUserAgent = aRequestScope.getRequestHeader (CHTTPHeader.X_DEVICE_USER_AGENT);
+      sUserAgent = aHttpRequest.getHeader (CHTTPHeader.X_DEVICE_USER_AGENT);
       if (sUserAgent == null)
-        sUserAgent = aRequestScope.getRequestHeader (CHTTPHeader.USER_AGENT);
+        sUserAgent = aHttpRequest.getHeader (CHTTPHeader.USER_AGENT);
     }
     return sUserAgent;
   }
@@ -114,24 +116,37 @@ public final class UserAgentDatabase
    * Get the user agent object from the given HTTP request.
    * 
    * @param aRequestScope
-   *        The HTTP request to extract the information from.
+   *        The request scope to extract the information from.
    * @return A non-<code>null</code> user agent object.
    */
   @Nonnull
   public static IUserAgent getUserAgent (@Nonnull final IRequestWebScope aRequestScope)
   {
-    IUserAgent aUserAgent = aRequestScope.getCastedAttribute (UserAgentDatabase.class.getName ());
+    return getUserAgent (aRequestScope.getRequest ());
+  }
+
+  /**
+   * Get the user agent object from the given HTTP request.
+   * 
+   * @param aHttpRequest
+   *        The HTTP request to extract the information from.
+   * @return A non-<code>null</code> user agent object.
+   */
+  @Nonnull
+  public static IUserAgent getUserAgent (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    IUserAgent aUserAgent = (IUserAgent) aHttpRequest.getAttribute (REQUEST_ATTR);
     if (aUserAgent == null)
     {
       // Extract HTTP header from request
-      final String sUserAgent = getHttpUserAgentStringFromRequest (aRequestScope);
+      final String sUserAgent = getHttpUserAgentStringFromRequest (aHttpRequest);
       aUserAgent = getParsedUserAgent (sUserAgent);
       if (aUserAgent == null)
       {
         s_aLogger.warn ("No user agent was passed in the request!");
         aUserAgent = new UserAgent ("", new UserAgentElementList ());
       }
-      aRequestScope.setAttribute (UserAgentDatabase.class.getName (), aUserAgent);
+      aHttpRequest.setAttribute (REQUEST_ATTR, aUserAgent);
     }
     return aUserAgent;
   }

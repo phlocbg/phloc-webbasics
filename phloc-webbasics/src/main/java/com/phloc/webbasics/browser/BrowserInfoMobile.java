@@ -33,6 +33,7 @@ public final class BrowserInfoMobile extends BrowserInfo
 {
   @SuppressWarnings ("hiding")
   public static final BrowserInfoMobile IS_IT_NOT = new BrowserInfoMobile ();
+
   private final String m_sUA;
 
   private BrowserInfoMobile ()
