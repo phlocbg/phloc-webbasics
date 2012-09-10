@@ -18,6 +18,7 @@
 package com.phloc.webbasics.http;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnegative;
@@ -42,11 +43,17 @@ public final class AcceptEncodingList
   public AcceptEncodingList ()
   {}
 
+  @Nonnull
+  private static String _unify (@Nonnull final String sEncoding)
+  {
+    return sEncoding.toLowerCase (Locale.US);
+  }
+
   public void addEncoding (@Nonnull final String sEncoding, @Nonnegative final double dQuality)
   {
     if (StringHelper.hasNoText (sEncoding))
       throw new IllegalArgumentException ("encoding is empty");
-    m_aMap.put (sEncoding.toLowerCase (), new QValue (dQuality));
+    m_aMap.put (_unify (sEncoding), new QValue (dQuality));
   }
 
   /**
@@ -61,7 +68,7 @@ public final class AcceptEncodingList
     if (sEncoding == null)
       throw new NullPointerException ("encoding");
 
-    QValue aQuality = m_aMap.get (sEncoding.toLowerCase ());
+    QValue aQuality = m_aMap.get (_unify (sEncoding));
     if (aQuality == null)
     {
       // If not explicitly given, check for "*"
@@ -86,7 +93,7 @@ public final class AcceptEncodingList
     if (sEncoding == null)
       throw new NullPointerException ("encoding");
 
-    final QValue aQuality = m_aMap.get (sEncoding.toLowerCase ());
+    final QValue aQuality = m_aMap.get (_unify (sEncoding));
     return aQuality != null && aQuality.getQuality () > QValue.MIN_QUALITY;
   }
 

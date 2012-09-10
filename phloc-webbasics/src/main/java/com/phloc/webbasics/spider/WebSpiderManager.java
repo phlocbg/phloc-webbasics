@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -60,9 +61,10 @@ public final class WebSpiderManager
     _readListPhloc ("codelists/spiderlist-phloc.xml");
   }
 
-  private static String _getUnifiedID (final String sID)
+  @Nonnull
+  private static String _getUnifiedID (@Nonnull final String sID)
   {
-    return sID.toLowerCase ();
+    return sID.toLowerCase (Locale.US);
   }
 
   private void _readSpiderList (final String sPath)

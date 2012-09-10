@@ -24,7 +24,6 @@ import java.util.regex.Matcher;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.collections.pair.IReadonlyPair;
 import com.phloc.commons.collections.pair.ReadonlyPair;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -50,8 +49,8 @@ public final class UserAgentDecryptor
    * 
    * @param sUserAgent
    *        The user agent string to parse.
-   * @return A list than can contain {@link IReadonlyPair}, {@link String} and
-   *         {@link List} objects.
+   * @return A list than can contain {@link ReadonlyPair}, {@link String} and
+   *         {@link List} of String objects.
    */
   @Nonnull
   private static UserAgentElementList _decryptUserAgent (@Nonnull final String sUserAgent)

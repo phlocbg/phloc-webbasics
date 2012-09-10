@@ -18,6 +18,7 @@
 package com.phloc.webbasics.http;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnegative;
@@ -39,11 +40,17 @@ public final class AcceptCharsetList
   public AcceptCharsetList ()
   {}
 
+  @Nonnull
+  private static String _unify (@Nonnull final String sCharset)
+  {
+    return sCharset.toLowerCase (Locale.US);
+  }
+
   public void addCharset (@Nonnull final String sCharset, @Nonnegative final double dQuality)
   {
     if (StringHelper.hasNoText (sCharset))
       throw new IllegalArgumentException ("charset name is empty");
-    m_aMap.put (sCharset.toLowerCase (), new QValue (dQuality));
+    m_aMap.put (_unify (sCharset), new QValue (dQuality));
   }
 
   /**
@@ -58,7 +65,7 @@ public final class AcceptCharsetList
     if (sCharset == null)
       throw new NullPointerException ("charset");
 
-    QValue aQuality = m_aMap.get (sCharset.toLowerCase ());
+    QValue aQuality = m_aMap.get (_unify (sCharset));
     if (aQuality == null)
     {
       // If not explicitly given, check for "*"
@@ -82,7 +89,7 @@ public final class AcceptCharsetList
     if (sCharset == null)
       throw new NullPointerException ("charset");
 
-    final QValue aQuality = m_aMap.get (sCharset.toLowerCase ());
+    final QValue aQuality = m_aMap.get (_unify (sCharset));
     return aQuality != null && aQuality.getQuality () > QValue.MIN_QUALITY;
   }
 

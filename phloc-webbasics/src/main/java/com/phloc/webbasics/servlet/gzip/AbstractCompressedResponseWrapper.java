@@ -92,15 +92,20 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   {
     super.setContentType (sContentType);
 
-    String sRealContentType = StringHelper.getUntilFirstExcl (sContentType, ';');
-    if (sRealContentType == null)
-      sRealContentType = sContentType;
-
-    if ((m_aCompressedOS == null || m_aCompressedOS.getOutputStream () == null) &&
-        sRealContentType != null &&
-        (sRealContentType.contains (AcceptEncodingHandler.DEFLATE_ENCODING) || sRealContentType.contains (AcceptEncodingHandler.GZIP_ENCODING)))
+    // Is not output stream present yet?
+    if (m_aCompressedOS == null || m_aCompressedOS.getOutputStream () == null)
     {
-      noCompression ();
+      // Extract the content type without the charset
+      String sRealContentType = StringHelper.getUntilFirstExcl (sContentType, ';');
+      if (sRealContentType == null)
+        sRealContentType = sContentType;
+
+      if (sRealContentType != null &&
+          (sRealContentType.contains (AcceptEncodingHandler.DEFLATE_ENCODING) || sRealContentType.contains (AcceptEncodingHandler.GZIP_ENCODING)))
+      {
+        // Deflate or Gzip was manually set
+        noCompression ();
+      }
     }
   }
 
