@@ -180,6 +180,7 @@ public final class User implements IUser
     m_sID = sID;
     m_aCreationDT = aCreationDT;
     m_aLastModificationDT = aLastModificationDT;
+    m_aDeletionDT = aDeletionDT;
     m_sLoginName = sLoginName;
     m_sEmailAddress = sEmailAddress;
     m_sPasswordHash = sPasswordHash;

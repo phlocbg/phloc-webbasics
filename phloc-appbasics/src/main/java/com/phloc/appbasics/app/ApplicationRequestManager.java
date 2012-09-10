@@ -69,7 +69,7 @@ public final class ApplicationRequestManager
     {
       // Validate the menu item ID and check the display filter!
       final IMenuObject aMenuObject = MenuTree.getInstance ().getMenuObjectOfID (sMenuItemID);
-      if (aMenuObject != null && aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
+      if (aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
       {
         final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
         aSessionScope.setAttribute (SESSION_VALUE_MENUITEM, aMenuObject);
