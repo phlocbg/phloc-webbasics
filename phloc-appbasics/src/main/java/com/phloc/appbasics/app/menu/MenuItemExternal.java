@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.ToStringGenerator;
@@ -36,7 +35,7 @@ import com.phloc.commons.url.ISimpleURL;
  * @author philip
  */
 @NotThreadSafe
-public final class MenuItemExternal extends AbstractMenuObject implements IMenuItemExternal
+public final class MenuItemExternal extends AbstractMenuObject <MenuItemExternal> implements IMenuItemExternal
 {
   private final ISimpleURL m_aURL;
   private final IHasDisplayText m_aDisplayText;
@@ -52,13 +51,6 @@ public final class MenuItemExternal extends AbstractMenuObject implements IMenuI
       throw new NullPointerException ("displayText");
     m_aURL = aURL;
     m_aDisplayText = aDisplayText;
-  }
-
-  @Nonnull
-  public MenuItemExternal setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
-  {
-    m_aDisplayFilter = aDisplayFilter;
-    return this;
   }
 
   @Nonnull

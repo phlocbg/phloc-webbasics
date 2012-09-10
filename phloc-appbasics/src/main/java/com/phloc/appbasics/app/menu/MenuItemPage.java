@@ -25,7 +25,6 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.ToStringGenerator;
@@ -36,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public final class MenuItemPage extends AbstractMenuObject implements IMenuItemPage
+public final class MenuItemPage extends AbstractMenuObject <MenuItemPage> implements IMenuItemPage
 {
   private final IPage m_aPage;
   private final IHasDisplayText m_aDisplayText;
@@ -57,13 +56,6 @@ public final class MenuItemPage extends AbstractMenuObject implements IMenuItemP
       throw new NullPointerException ("displayText");
     m_aPage = aPage;
     m_aDisplayText = aDisplayText;
-  }
-
-  @Nonnull
-  public MenuItemPage setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
-  {
-    m_aDisplayFilter = aDisplayFilter;
-    return this;
   }
 
   @Nonnull

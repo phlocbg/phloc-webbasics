@@ -33,10 +33,10 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public abstract class AbstractMenuObject implements IMenuObject
+public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> implements IMenuObject
 {
   private final String m_sID;
-  protected IFilter <IMenuObject> m_aDisplayFilter;
+  private IFilter <IMenuObject> m_aDisplayFilter;
 
   public AbstractMenuObject (@Nonnull @Nonempty final String sID)
   {
@@ -50,6 +50,20 @@ public abstract class AbstractMenuObject implements IMenuObject
   public final String getID ()
   {
     return m_sID;
+  }
+
+  @SuppressWarnings ("unchecked")
+  @Nonnull
+  protected final IMPLTYPE thisAsT ()
+  {
+    return (IMPLTYPE) this;
+  }
+
+  @Nonnull
+  public final IMPLTYPE setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
+  {
+    m_aDisplayFilter = aDisplayFilter;
+    return thisAsT ();
   }
 
   @Nullable
@@ -70,7 +84,7 @@ public abstract class AbstractMenuObject implements IMenuObject
       return true;
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final AbstractMenuObject rhs = (AbstractMenuObject) o;
+    final AbstractMenuObject <?> rhs = (AbstractMenuObject <?>) o;
     return m_sID.equals (rhs.m_sID);
   }
 

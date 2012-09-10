@@ -18,11 +18,9 @@
 package com.phloc.appbasics.app.menu;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 
 /**
@@ -31,7 +29,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
  * @author philip
  */
 @NotThreadSafe
-public final class MenuSeparator extends AbstractMenuObject implements IMenuSeparator
+public final class MenuSeparator extends AbstractMenuObject <MenuSeparator> implements IMenuSeparator
 {
   public MenuSeparator ()
   {
@@ -41,12 +39,5 @@ public final class MenuSeparator extends AbstractMenuObject implements IMenuSepa
   public MenuSeparator (@Nonnull @Nonempty final String sID)
   {
     super (sID);
-  }
-
-  @Nonnull
-  public MenuSeparator setDisplayFilter (@Nullable final IFilter <IMenuObject> aDisplayFilter)
-  {
-    m_aDisplayFilter = aDisplayFilter;
-    return this;
   }
 }
