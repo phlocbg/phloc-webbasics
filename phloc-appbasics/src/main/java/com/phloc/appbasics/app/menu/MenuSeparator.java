@@ -49,16 +49,4 @@ public final class MenuSeparator extends AbstractMenuObject implements IMenuSepa
     m_aDisplayFilter = aDisplayFilter;
     return this;
   }
-
-  @Override
-  public boolean equals (final Object o)
-  {
-    return super.equals (o);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return super.hashCode ();
-  }
 }
