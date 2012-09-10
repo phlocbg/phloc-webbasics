@@ -59,6 +59,8 @@ public final class ResponseHelper
   public static final int DEFAULT_EXPIRATION_SECONDS = 1 * CGlobal.SECONDS_PER_HOUR;
 
   private static boolean s_bResponseCompressionEnabled = true;
+  private static boolean s_bResponseGzipEnabled = true;
+  private static boolean s_bResponseDeflateEnabled = true;
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -75,6 +77,26 @@ public final class ResponseHelper
   public static boolean isResponseCompressionEnabled ()
   {
     return s_bResponseCompressionEnabled;
+  }
+
+  public static void setResponseGzipEnabled (final boolean bResponseGzipEnabled)
+  {
+    s_bResponseGzipEnabled = bResponseGzipEnabled;
+  }
+
+  public static boolean isResponseGzipEnabled ()
+  {
+    return s_bResponseGzipEnabled;
+  }
+
+  public static void setResponseDeflateEnabled (final boolean bResponseDeflateEnabled)
+  {
+    s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+  }
+
+  public static boolean isResponseDeflateEnabled ()
+  {
+    return s_bResponseDeflateEnabled;
   }
 
   public static void modifyResponseForNoCaching (@Nonnull final IRequestWebScope aRequestScope)
@@ -230,8 +252,14 @@ public final class ResponseHelper
     {
       // Can we get resource transfer working with GZIP or deflate?
       final AcceptEncodingList aAcceptEncodings = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);
+
+      // Inform caches that responses may vary according to Accept-Encoding
+      aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
+      // ResponseHelper used
+      aHttpResponse.setHeader ("X-P", "RH");
+
       final String sGZipEncoding = aAcceptEncodings.getUsedGZIPEncoding ();
-      if (sGZipEncoding != null)
+      if (sGZipEncoding != null && isResponseGzipEnabled ())
       {
         aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sGZipEncoding);
         aOS = new GZIPOutputStream (aHttpResponse.getOutputStream ());
@@ -239,7 +267,7 @@ public final class ResponseHelper
       else
       {
         final String sDeflateEncoding = aAcceptEncodings.getUsedDeflateEncoding ();
-        if (sDeflateEncoding != null)
+        if (sDeflateEncoding != null && isResponseDeflateEnabled ())
         {
           aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sDeflateEncoding);
           aOS = new ZipOutputStream (aHttpResponse.getOutputStream ());
@@ -247,8 +275,6 @@ public final class ResponseHelper
           ((ZipOutputStream) aOS).putNextEntry (new ZipEntry ("dummy name"));
         }
       }
-      // Found in some book :)
-      aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
     }
 
     return aOS;

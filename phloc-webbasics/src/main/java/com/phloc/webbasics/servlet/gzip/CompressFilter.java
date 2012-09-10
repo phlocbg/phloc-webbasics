@@ -67,6 +67,8 @@ public final class CompressFilter implements Filter
 
       // Inform caches that responses may vary according to Accept-Encoding
       aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
+      // Compression filter used
+      aHttpResponse.setHeader ("X-P", "CF");
 
       final AcceptEncodingList aAEL = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);
 
