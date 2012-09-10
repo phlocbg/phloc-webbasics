@@ -22,11 +22,13 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.commons.text.impl.ConstantTextProvider;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
+import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 
 /**
  * Abstract base implementation for {@link IPage}.
@@ -36,7 +38,7 @@ import com.phloc.commons.text.impl.ConstantTextProvider;
 public abstract class AbstractPage implements IPage
 {
   private final String m_sID;
-  private IHasDisplayText m_aName;
+  private IReadonlyMultiLingualText m_aName;
 
   /**
    * Constructor
@@ -62,7 +64,7 @@ public abstract class AbstractPage implements IPage
    */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
-    this (sID, new ConstantTextProvider (sName));
+    this (sID, new ReadonlyMultiLingualText (ContainerHelper.newMap (CGlobal.LOCALE_INDEPENDENT, sName)));
   }
 
   /**
@@ -73,7 +75,7 @@ public abstract class AbstractPage implements IPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     this (sID);
     setName (aName);
@@ -95,7 +97,7 @@ public abstract class AbstractPage implements IPage
    * @param aName
    *        The multilingual name of the page. May not be <code>null</code>.
    */
-  public final void setName (@Nonnull final IHasDisplayText aName)
+  public final void setName (@Nonnull final IReadonlyMultiLingualText aName)
   {
     if (aName == null)
       throw new NullPointerException ("name");
@@ -108,7 +110,7 @@ public abstract class AbstractPage implements IPage
   @Nullable
   public final String getDisplayText (@Nonnull final Locale aContentLocale)
   {
-    return m_aName.getDisplayText (aContentLocale);
+    return m_aName.getTextWithLocaleFallback (aContentLocale);
   }
 
   @Override

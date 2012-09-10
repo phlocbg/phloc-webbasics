@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.app.page;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -30,7 +31,7 @@ import com.phloc.commons.name.IHasDisplayText;
  * 
  * @author philip
  */
-public interface IPage extends IHasID <String>, IHasDisplayText
+public interface IPage extends IHasID <String>, IHasDisplayText, Serializable
 {
   /**
    * @param aDisplayLocale

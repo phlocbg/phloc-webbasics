@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 
 /**
  * Base class for a page that supports help.
@@ -66,7 +66,7 @@ public abstract class AbstractPageWithHelp extends AbstractPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     super (sID, aName);
   }
