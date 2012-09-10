@@ -18,8 +18,10 @@
 package com.phloc.webbasics.servlet.gzip;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -342,6 +344,27 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     return m_aCompressedOS;
   }
 
+  private static final class MyPrintWriter extends PrintWriter
+  {
+    public MyPrintWriter (@Nonnull final OutputStream aOS)
+    {
+      super (aOS);
+    }
+
+    public MyPrintWriter (@Nonnull final Writer aWriter)
+    {
+      super (aWriter);
+    }
+
+    @Override
+    public void flush ()
+    {
+      // Intercept here for debugging as described in
+      // http://stackoverflow.com/questions/7513922/jetty-8-gzipfilter-does-not-apply-sometimes
+      super.flush ();
+    }
+  }
+
   @Override
   @Nonnull
   public final PrintWriter getWriter () throws IOException
@@ -357,9 +380,9 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       m_aCompressedOS = _createCompressedOutputStream ();
       final String sEncoding = getCharacterEncoding ();
       if (sEncoding == null)
-        m_aWriter = new PrintWriter (m_aCompressedOS);
+        m_aWriter = new MyPrintWriter (m_aCompressedOS);
       else
-        m_aWriter = new PrintWriter (new OutputStreamWriter (m_aCompressedOS, sEncoding));
+        m_aWriter = new MyPrintWriter (new OutputStreamWriter (m_aCompressedOS, sEncoding));
     }
     return m_aWriter;
   }
