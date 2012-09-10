@@ -44,6 +44,7 @@ import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.lang.ClassHierarchyCache;
 import com.phloc.commons.name.ComparatorHasDisplayName;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.string.StringHelper;
@@ -369,6 +370,10 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
     // Callback after
     afterContextDestroyed (aSC);
+
+    // Clear class hierarchy cache also manually - but after destroy because it
+    // is used in equals and hashCode implementations
+    ClassHierarchyCache.clearClassHierarchyCache ();
 
     // De-init
     s_bInited = false;
