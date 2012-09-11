@@ -45,7 +45,7 @@ import com.phloc.webbasics.web.ResponseHelperSettings;
  */
 public final class CompressFilter implements Filter
 {
-  static final String REQUEST_ATTR = CompressFilter.class.getName ();
+  private static final String REQUEST_ATTR = CompressFilter.class.getName ();
   private static final IStatisticsHandlerCounter s_aStatsNone = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
                                                                                                      "$none");
 

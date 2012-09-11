@@ -23,6 +23,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.state.EChange;
 
@@ -34,6 +37,7 @@ import com.phloc.commons.state.EChange;
 @ThreadSafe
 public final class CompressFilterSettings
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CompressFilterSettings.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static boolean s_bFilterLoaded = false;
   private static boolean s_bResponseCompressionEnabled = true;
@@ -57,6 +61,7 @@ public final class CompressFilterSettings
     try
     {
       s_bFilterLoaded = true;
+      s_aLogger.info ("CompressFilter is loaded");
     }
     finally
     {
@@ -97,6 +102,7 @@ public final class CompressFilterSettings
       if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
         return EChange.UNCHANGED;
       s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+      s_aLogger.info ("CompressFilter responseCompressionEnabled=" + bResponseCompressionEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -139,6 +145,7 @@ public final class CompressFilterSettings
       if (s_bResponseGzipEnabled == bResponseGzipEnabled)
         return EChange.UNCHANGED;
       s_bResponseGzipEnabled = bResponseGzipEnabled;
+      s_aLogger.info ("CompressFilter responseGzipEnabled=" + bResponseGzipEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -181,6 +188,7 @@ public final class CompressFilterSettings
       if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
         return EChange.UNCHANGED;
       s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+      s_aLogger.info ("CompressFilter responseDeflateEnabled=" + bResponseDeflateEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -230,16 +238,19 @@ public final class CompressFilterSettings
       {
         s_bResponseCompressionEnabled = bResponseCompressionEnabled;
         eChange = EChange.CHANGED;
+        s_aLogger.info ("CompressFilter responseCompressionEnabled=" + bResponseCompressionEnabled);
       }
       if (s_bResponseGzipEnabled != bResponseGzipEnabled)
       {
         s_bResponseGzipEnabled = bResponseGzipEnabled;
         eChange = EChange.CHANGED;
+        s_aLogger.info ("CompressFilter responseGzipEnabled=" + bResponseGzipEnabled);
       }
       if (s_bResponseDeflateEnabled != bResponseDeflateEnabled)
       {
         s_bResponseDeflateEnabled = bResponseDeflateEnabled;
         eChange = EChange.CHANGED;
+        s_aLogger.info ("CompressFilter responseDeflateEnabled=" + bResponseDeflateEnabled);
       }
       return eChange;
     }
@@ -265,6 +276,7 @@ public final class CompressFilterSettings
       if (s_bDebugModeEnabled == bDebugModeEnabled)
         return EChange.UNCHANGED;
       s_bDebugModeEnabled = bDebugModeEnabled;
+      s_aLogger.info ("CompressFilter debugMode=" + bDebugModeEnabled);
       return EChange.CHANGED;
     }
     finally

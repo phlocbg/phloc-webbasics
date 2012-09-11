@@ -23,9 +23,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.state.EChange;
+import com.phloc.webbasics.servlet.gzip.CompressFilterSettings;
 
 /**
  * Contains the settings for the {@link ResponseHelper} class.
@@ -35,6 +39,8 @@ import com.phloc.commons.state.EChange;
 @ThreadSafe
 public final class ResponseHelperSettings
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CompressFilterSettings.class);
+
   // Expires in at least 2 days (which is the minimum to be accepted for
   // real caching in Yahoo Guidelines)
   // Because of steady changes, use 1 hour
@@ -69,6 +75,7 @@ public final class ResponseHelperSettings
       if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
         return EChange.UNCHANGED;
       s_bResponseCompressionEnabled = bResponseCompressionEnabled;
+      s_aLogger.info ("ResponseHelper responseCompressionEnabled=" + bResponseCompressionEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -111,6 +118,7 @@ public final class ResponseHelperSettings
       if (s_bResponseGzipEnabled == bResponseGzipEnabled)
         return EChange.UNCHANGED;
       s_bResponseGzipEnabled = bResponseGzipEnabled;
+      s_aLogger.info ("ResponseHelper responseGzipEnabled=" + bResponseGzipEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -153,6 +161,7 @@ public final class ResponseHelperSettings
       if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
         return EChange.UNCHANGED;
       s_bResponseDeflateEnabled = bResponseDeflateEnabled;
+      s_aLogger.info ("ResponseHelper responseDeflateEnabled=" + bResponseDeflateEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -202,16 +211,19 @@ public final class ResponseHelperSettings
       {
         s_bResponseCompressionEnabled = bResponseCompressionEnabled;
         eChange = EChange.CHANGED;
+        s_aLogger.info ("ResponseHelper responseCompressEnabled=" + bResponseCompressionEnabled);
       }
       if (s_bResponseGzipEnabled != bResponseGzipEnabled)
       {
         s_bResponseGzipEnabled = bResponseGzipEnabled;
         eChange = EChange.CHANGED;
+        s_aLogger.info ("ResponseHelper responseGzipEnabled=" + bResponseGzipEnabled);
       }
       if (s_bResponseDeflateEnabled != bResponseDeflateEnabled)
       {
         s_bResponseDeflateEnabled = bResponseDeflateEnabled;
         eChange = EChange.CHANGED;
+        s_aLogger.info ("ResponseHelper responseDeflateEnabled=" + bResponseDeflateEnabled);
       }
       return eChange;
     }
@@ -238,6 +250,7 @@ public final class ResponseHelperSettings
       if (s_nExpirationSeconds == nExpirationSeconds)
         return EChange.UNCHANGED;
       s_nExpirationSeconds = nExpirationSeconds;
+      s_aLogger.info ("ResponseHelper expirationSeconds=" + nExpirationSeconds);
       return EChange.CHANGED;
     }
     finally
