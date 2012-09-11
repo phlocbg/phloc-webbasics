@@ -37,11 +37,17 @@ public final class AppBasicTestInit
   private AppBasicTestInit ()
   {}
 
+  @Deprecated
   public static void initAppBasics (@Nonnull final File aStoragePath)
   {
+    initAppBasics (aStoragePath, aStoragePath);
+  }
+
+  public static void initAppBasics (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
+  {
     // Init the base path once
-    WebFileIO.initBasePath (aStoragePath);
-    WebIO.init (new WebIOResourceProviderChain (aStoragePath));
+    WebFileIO.initPaths (aDataPath, aServletContextPath);
+    WebIO.init (new WebIOResourceProviderChain (aDataPath));
 
     // Init the IDs
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())
@@ -51,6 +57,6 @@ public final class AppBasicTestInit
   public static void shutdownAppBasics ()
   {
     // Init the base path once
-    WebFileIO.resetBasePath ();
+    WebFileIO.resetPaths ();
   }
 }

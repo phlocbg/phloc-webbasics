@@ -30,14 +30,15 @@ import com.phloc.scopes.nonweb.mock.ScopeTestRule;
  */
 public class AppBasicTestRule extends ScopeTestRule
 {
-  private final File m_aStoragePath;
+  private final File m_aDataPath;
+  private final File m_aServletContextPath;
 
   /**
    * Ctor using the default storage path from {@link ScopeTestRule}
    */
   public AppBasicTestRule ()
   {
-    this (ScopeTestRule.STORAGE_PATH);
+    this (ScopeTestRule.STORAGE_PATH, ScopeTestRule.STORAGE_PATH);
   }
 
   /**
@@ -46,11 +47,28 @@ public class AppBasicTestRule extends ScopeTestRule
    * @param aStoragePath
    *        The base path to be used. May not be <code>null</code>.
    */
+  @Deprecated
   public AppBasicTestRule (@Nonnull final File aStoragePath)
   {
-    if (aStoragePath == null)
-      throw new NullPointerException ("storagePath");
-    m_aStoragePath = aStoragePath.getAbsoluteFile ();
+    this (aStoragePath, aStoragePath);
+  }
+
+  /**
+   * Ctor with an arbitrary path
+   * 
+   * @param aDataPath
+   *        The data path to be used. May not be <code>null</code>.
+   * @param aServletContextPath
+   *        The servlet context path to be used. May not be <code>null</code>.
+   */
+  public AppBasicTestRule (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
+  {
+    if (aDataPath == null)
+      throw new NullPointerException ("dataPath");
+    if (aServletContextPath == null)
+      throw new NullPointerException ("servletContextPath");
+    m_aDataPath = aDataPath.getAbsoluteFile ();
+    m_aServletContextPath = aServletContextPath.getAbsoluteFile ();
   }
 
   /**
@@ -59,14 +77,14 @@ public class AppBasicTestRule extends ScopeTestRule
   @Nonnull
   public File getStoragePath ()
   {
-    return m_aStoragePath;
+    return m_aDataPath;
   }
 
   @Override
   public void before ()
   {
     super.before ();
-    AppBasicTestInit.initAppBasics (m_aStoragePath);
+    AppBasicTestInit.initAppBasics (m_aDataPath, m_aServletContextPath);
   }
 
   @Override

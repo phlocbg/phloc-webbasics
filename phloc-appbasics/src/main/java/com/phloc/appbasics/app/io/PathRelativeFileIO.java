@@ -23,156 +23,47 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.ThreadSafe;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.EAppend;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.state.ISuccessIndicator;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Abstract for accessing files inside the web application.
+ * Abstract for accessing files inside a specific path.
  * 
  * @author philip
  */
-@ThreadSafe
-public final class WebFileIO
+@Immutable
+public final class PathRelativeFileIO
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
-  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private final Logger s_aLogger = LoggerFactory.getLogger (PathRelativeFileIO.class);
 
-  private static PathRelativeFileIO s_aDataPath;
-  private static PathRelativeFileIO s_aServletContextPath;
+  private final File m_aBasePath;
 
-  private WebFileIO ()
-  {}
-
-  @Deprecated
-  public static void initBasePath (@Nonnull final File aBasePath)
+  public PathRelativeFileIO (@Nonnull final File aBasePath)
   {
-    initPaths (aBasePath, aBasePath);
-  }
+    if (aBasePath == null)
+      throw new NullPointerException ("basePath");
+    m_aBasePath = aBasePath;
 
-  public static void initPaths (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
-  {
-    if (aDataPath == null)
-      throw new NullPointerException ("dataPath");
-    if (aServletContextPath == null)
-      throw new NullPointerException ("servletContextPath");
-
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (s_aDataPath != null)
-        throw new IllegalStateException ("Another data path is already present: " + s_aDataPath);
-      if (s_aServletContextPath != null)
-        throw new IllegalStateException ("Another servlet context path is already present: " + s_aServletContextPath);
-
-      s_aLogger.info ("Using '" + aDataPath + "' as the data path");
-      s_aDataPath = new PathRelativeFileIO (aDataPath);
-
-      s_aLogger.info ("Using '" + aServletContextPath + "' as the servlet context path");
-      s_aServletContextPath = new PathRelativeFileIO (aServletContextPath);
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  /**
-   * Reset the base path - no matter if it was initialized or not.
-   * 
-   * @deprecated Use {@link #resetPaths()} instead
-   */
-  @Deprecated
-  public static void resetBasePath ()
-  {
-    resetPaths ();
-  }
-
-  /**
-   * Reset the base paths - no matter if it was initialized or not.
-   */
-  public static void resetPaths ()
-  {
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      s_aDataPath = null;
-      s_aServletContextPath = null;
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  /**
-   * @return <code>true</code> if the base path was initialized,
-   *         <code>false</code> otherwise
-   */
-  public static boolean isBasePathInited ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      return s_aDataPath != null;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * @return data IO provider.
-   * @throws IllegalStateException
-   *         if no servlet context path was provided
-   */
-  @Nonnull
-  public static PathRelativeFileIO getDataIO ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      if (s_aDataPath == null)
-        throw new IllegalStateException ("Data path was not initialized!");
-      return s_aDataPath;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * @return The servlet context IO provider.
-   * @throws IllegalStateException
-   *         if no servlet context path was provided
-   */
-  @Nonnull
-  public static PathRelativeFileIO getServletContextIO ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      if (s_aServletContextPath == null)
-        throw new IllegalStateException ("Servlet context path was not initialized!");
-      return s_aServletContextPath;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
+    WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (m_aBasePath);
+    if (!FileUtils.canRead (m_aBasePath))
+      throw new IllegalArgumentException ("Cannot read in " + m_aBasePath);
+    if (!FileUtils.canWrite (m_aBasePath))
+      s_aLogger.warn ("Cannot write in " + m_aBasePath);
+    if (!FileUtils.canExecute (m_aBasePath))
+      s_aLogger.warn ("Cannot execute in " + m_aBasePath);
   }
 
   /**
@@ -181,9 +72,9 @@ public final class WebFileIO
    *         if no base path was provided
    */
   @Nonnull
-  public static File getBasePathFile ()
+  public File getBasePathFile ()
   {
-    return getDataIO ().getBasePathFile ();
+    return m_aBasePath;
   }
 
   /**
@@ -193,9 +84,9 @@ public final class WebFileIO
    */
   @Nonnull
   @Nonempty
-  public static String getBasePath ()
+  public String getBasePath ()
   {
-    return getDataIO ().getBasePath ();
+    return getBasePathFile ().getAbsolutePath ();
   }
 
   /**
@@ -209,9 +100,9 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nonnull
-  public static File getFile (@Nonnull final String sRelativePath)
+  public File getFile (@Nonnull final String sRelativePath)
   {
-    return getDataIO ().getFile (sRelativePath);
+    return new File (getBasePathFile (), sRelativePath);
   }
 
   /**
@@ -225,9 +116,9 @@ public final class WebFileIO
    *         if no base path was provided
    * @see #getBasePathFile()
    */
-  public static boolean existsFile (@Nonnull final String sRelativePath)
+  public boolean existsFile (@Nonnull final String sRelativePath)
   {
-    return getDataIO ().existsFile (sRelativePath);
+    return FileUtils.existsFile (getFile (sRelativePath));
   }
 
   /**
@@ -241,9 +132,9 @@ public final class WebFileIO
    *         if no base path was provided
    * @see #getBasePathFile()
    */
-  public static boolean existsDir (@Nonnull final String sRelativePath)
+  public boolean existsDir (@Nonnull final String sRelativePath)
   {
-    return getDataIO ().existsDir (sRelativePath);
+    return FileUtils.existsDir (getFile (sRelativePath));
   }
 
   /**
@@ -258,9 +149,9 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nonnull
-  public static FileSystemResource getResource (@Nonnull final String sRelativePath)
+  public FileSystemResource getResource (@Nonnull final String sRelativePath)
   {
-    return getDataIO ().getResource (sRelativePath);
+    return new FileSystemResource (getFile (sRelativePath));
   }
 
   /**
@@ -274,9 +165,9 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
-  public static InputStream getInputStream (@Nonnull final String sRelativePath)
+  public InputStream getInputStream (@Nonnull final String sRelativePath)
   {
-    return getDataIO ().getInputStream (sRelativePath);
+    return getResource (sRelativePath).getInputStream ();
   }
 
   /**
@@ -292,9 +183,9 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
-  public static Reader getReader (@Nonnull final String sRelativePath, @Nonnull final Charset aCharset)
+  public Reader getReader (@Nonnull final String sRelativePath, @Nonnull final Charset aCharset)
   {
-    return getDataIO ().getReader (sRelativePath, aCharset);
+    return getResource (sRelativePath).getReader (aCharset);
   }
 
   /**
@@ -310,9 +201,9 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
-  public static Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
+  public Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
   {
-    return getDataIO ().getReader (sRelativePath, sCharset);
+    return getResource (sRelativePath).getReader (sCharset);
   }
 
   /**
@@ -326,9 +217,9 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
-  public static OutputStream getOutputStream (@Nonnull final String sRelativePath, @Nonnull final EAppend eAppend)
+  public OutputStream getOutputStream (@Nonnull final String sRelativePath, @Nonnull final EAppend eAppend)
   {
-    return getDataIO ().getOutputStream (sRelativePath, eAppend);
+    return getResource (sRelativePath).getOutputStream (eAppend);
   }
 
   /**
@@ -344,11 +235,11 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
-  public static Writer getWriter (@Nonnull final String sRelativePath,
-                                  @Nonnull final Charset aCharset,
-                                  @Nonnull final EAppend eAppend)
+  public Writer getWriter (@Nonnull final String sRelativePath,
+                           @Nonnull final Charset aCharset,
+                           @Nonnull final EAppend eAppend)
   {
-    return getDataIO ().getWriter (sRelativePath, aCharset, eAppend);
+    return getResource (sRelativePath).getWriter (aCharset, eAppend);
   }
 
   /**
@@ -364,11 +255,11 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
-  public static Writer getWriter (@Nonnull final String sRelativePath,
-                                  @Nonnull final String sCharset,
-                                  @Nonnull final EAppend eAppend)
+  public Writer getWriter (@Nonnull final String sRelativePath,
+                           @Nonnull final String sCharset,
+                           @Nonnull final EAppend eAppend)
   {
-    return getDataIO ().getWriter (sRelativePath, sCharset, eAppend);
+    return getResource (sRelativePath).getWriter (sCharset, eAppend);
   }
 
   /**
@@ -382,8 +273,33 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nonnull
-  public static ISuccessIndicator createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
+  public ISuccessIndicator createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
   {
-    return getDataIO ().createDirectory (sRelativePath, bRecursive);
+    final File aDir = getFile (sRelativePath);
+    return bRecursive ? WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
+                     : WebIO.getFileOpMgr ().createDirIfNotExisting (aDir);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof PathRelativeFileIO))
+      return false;
+    final PathRelativeFileIO rhs = (PathRelativeFileIO) o;
+    return m_aBasePath.equals (rhs.m_aBasePath);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aBasePath).getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("basePath", m_aBasePath).toString ();
   }
 }

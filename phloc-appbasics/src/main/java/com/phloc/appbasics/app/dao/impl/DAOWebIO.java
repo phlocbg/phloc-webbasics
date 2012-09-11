@@ -53,15 +53,15 @@ public class DAOWebIO implements IDAOIO
     return WebIO.getReadableResource (sFilename);
   }
 
-  public void renameFile (final String sSrcFileName, final String sDstFileName)
+  public void renameFile (final String sSrcFilename, final String sDstFilename)
   {
-    if (WebIO.resourceExists (sSrcFileName))
+    if (WebIO.resourceExists (sSrcFilename))
     {
       // Delete destination file if present
-      WebIO.deleteFileIfExisting (sDstFileName);
+      WebIO.deleteFileIfExisting (sDstFilename);
 
       // and rename existing file to backup file
-      WebIO.renameFile (sSrcFileName, sDstFileName);
+      WebIO.renameFile (sSrcFilename, sDstFilename);
     }
   }
 
