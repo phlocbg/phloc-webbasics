@@ -225,15 +225,19 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   @Override
   public final void flushBuffer () throws IOException
   {
-    if (CompressFilterSettings.isDebugModeEnabled ())
-      s_aLogger.info ("flushBuffer on " +
-                      (m_aWriter != null ? "writer" : m_aCompressedOS != null ? "compressedOS" : "response"));
-
     if (m_aWriter != null)
+    {
+      if (CompressFilterSettings.isDebugModeEnabled ())
+        s_aLogger.info ("flushBuffer on writer");
       m_aWriter.flush ();
+    }
     else
       if (m_aCompressedOS != null)
+      {
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("flushBuffer on compressedOS");
         m_aCompressedOS.finish ();
+      }
       else
         getResponse ().flushBuffer ();
   }
@@ -242,7 +246,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   public void reset ()
   {
     if (CompressFilterSettings.isDebugModeEnabled ())
-      s_aLogger.info ("reset");
+      s_aLogger.info ("reset (e.g. because of conditional requests)");
 
     super.reset ();
     if (m_aCompressedOS != null)
