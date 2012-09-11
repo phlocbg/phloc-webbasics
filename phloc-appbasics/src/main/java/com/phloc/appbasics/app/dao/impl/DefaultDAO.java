@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.IDAODataProvider;
+import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.IHasFilename;
@@ -34,6 +35,8 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.exceptions.InitializationException;
+import com.phloc.commons.factory.FactoryConstantValue;
+import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -52,6 +55,8 @@ public class DefaultDAO extends AbstractDAO
 {
   public static final int DEFAULT_BACKUP_COUNT = 3;
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultDAO.class);
+
+  private static IFactory <? extends IDAOIO> s_aDAOIOFactory = FactoryConstantValue.create (new DAOWebIO ());
 
   /** The file from which we read/to which we write */
   private final IHasFilename m_aFilenameProvider;
@@ -73,7 +78,7 @@ public class DefaultDAO extends AbstractDAO
                      @Nonnull final IDAODataProvider aDataProvider,
                      @Nonnegative final int nBackupCount)
   {
-    super (new DAOWebIO ());
+    super (s_aDAOIOFactory.create ());
     if (aFilenameProvider == null)
       throw new NullPointerException ("filenameProvider");
     if (aDataProvider == null)
@@ -393,5 +398,18 @@ public class DefaultDAO extends AbstractDAO
                                        .append ("autoSaveEnabled", m_bAutoSaveEnabled)
                                        .append ("backupCount", m_nBackupCount)
                                        .toString ();
+  }
+
+  @Nonnull
+  public static IFactory <? extends IDAOIO> getDAOIOFactory ()
+  {
+    return s_aDAOIOFactory;
+  }
+
+  public static void setDAOIOFactory (@Nonnull final IFactory <? extends IDAOIO> aFactory)
+  {
+    if (aFactory == null)
+      throw new NullPointerException ("factory");
+    s_aDAOIOFactory = aFactory;
   }
 }

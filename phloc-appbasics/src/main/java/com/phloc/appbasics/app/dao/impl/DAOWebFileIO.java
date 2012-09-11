@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.io.WebFileIO;
@@ -33,6 +34,7 @@ import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 
+@Immutable
 public class DAOWebFileIO implements IDAOIO
 {
   public DAOWebFileIO ()
