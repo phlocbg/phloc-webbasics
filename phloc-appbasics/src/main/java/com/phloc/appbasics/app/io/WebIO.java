@@ -114,10 +114,6 @@ public final class WebIO
     if (sFilename == null)
       throw new NullPointerException ("fileName");
 
-    if (GlobalDebug.isDebugMode ())
-      if (new File (sFilename).isAbsolute ())
-        s_aLogger.error ("Getting ABSOLUTE RESOURCE '" + sFilename + "'");
-
     return s_aResourceProvider.getReadableResource (sFilename);
   }
 
@@ -134,10 +130,6 @@ public final class WebIO
   {
     if (sFilename == null)
       throw new NullPointerException ("fileName");
-
-    if (GlobalDebug.isDebugMode ())
-      if (new File (sFilename).isAbsolute ())
-        s_aLogger.error ("Getting ABSOLUTE RESOURCE '" + sFilename + "'");
 
     return s_aResourceProvider.getWritableResource (sFilename);
   }
