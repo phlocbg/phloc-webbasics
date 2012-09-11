@@ -25,8 +25,8 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
-import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCForm_FileUpload;
 import com.phloc.scopes.nonweb.domain.IRequestScope;
@@ -73,7 +73,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     super (sID, aName);
   }

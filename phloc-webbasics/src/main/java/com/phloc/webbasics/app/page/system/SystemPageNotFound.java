@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
-import com.phloc.commons.text.ITextProvider;
+import com.phloc.commons.text.ISimpleMultiLingualText;
+import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
@@ -51,7 +52,7 @@ public class SystemPageNotFound extends AbstractWebPage
     TITLE ("Seite nicht gefunden", "Page not found"),
     MESSAGE ("Die von Ihnen gesuchte Seite existiert leider nicht!", "The page you are looking for does not exist!");
 
-    private ITextProvider m_aTP;
+    private ISimpleMultiLingualText m_aTP;
 
     private ETextBase (final String sDE, final String sEN)
     {
@@ -68,7 +69,7 @@ public class SystemPageNotFound extends AbstractWebPage
 
   protected SystemPageNotFound ()
   {
-    super ("system.notfound", ETextBase.PAGENAME);
+    super ("system.notfound", new ReadonlyMultiLingualText (ETextBase.PAGENAME.m_aTP));
   }
 
   @Nonnull

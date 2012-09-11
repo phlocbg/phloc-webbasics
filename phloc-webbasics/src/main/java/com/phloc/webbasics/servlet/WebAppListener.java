@@ -306,17 +306,19 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     WebScopeManager.onGlobalBegin (aSC);
 
     // Get base storage path
+    final String sServletContextPath = aSC.getRealPath (".");
     String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
     if (StringHelper.hasNoText (sBasePath))
     {
       if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
         s_aLogger.info ("No servlet context init-parameter '" +
                         INIT_PARAMETER_STORAGE_PATH +
-                        "' found! Using the default.");
-      sBasePath = aSC.getRealPath (".");
+                        "' found! Defaulting to " +
+                        sServletContextPath);
+      sBasePath = sServletContextPath;
     }
     final File aBasePath = new File (sBasePath);
-    WebFileIO.initBasePath (aBasePath);
+    WebFileIO.initPaths (aBasePath, new File (sServletContextPath));
     WebIO.init (new WebIOResourceProviderChain (aBasePath));
 
     // Set persistent ID provider
@@ -363,7 +365,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     WebScopeManager.onGlobalEnd ();
 
     // Reset base path - mainly for testing
-    WebFileIO.resetBasePath ();
+    WebFileIO.resetPaths ();
 
     // Clear resource bundle cache - avoid potential class loading issues
     DefaultTextResolver.clearCache ();

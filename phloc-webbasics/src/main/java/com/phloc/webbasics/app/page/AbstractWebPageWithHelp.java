@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.page.AbstractPageWithHelp;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.html.css.DefaultCSSClassProvider;
@@ -83,7 +83,7 @@ public abstract class AbstractWebPageWithHelp extends AbstractWebPage
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractWebPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IHasDisplayText aName)
+  public AbstractWebPageWithHelp (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     super (sID, aName);
   }
