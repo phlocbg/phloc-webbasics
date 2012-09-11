@@ -99,7 +99,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
-      <version>1.9.1</version>
+      <version>1.9.2</version>
     </dependency>
 
     <dependency>
