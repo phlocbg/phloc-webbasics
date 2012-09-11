@@ -235,8 +235,8 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       if (m_aCompressedOS != null)
       {
         if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("flushBuffer on compressedOS");
-        m_aCompressedOS.finish ();
+          s_aLogger.info ("flushBuffer on compressedOS - FINISH and CLOSE!");
+        m_aCompressedOS.finishAndClose ();
       }
       else
         getResponse ().flushBuffer ();
@@ -338,7 +338,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     if (m_aWriter != null && !m_aCompressedOS.isClosed ())
       m_aWriter.flush ();
     if (m_aCompressedOS != null)
-      m_aCompressedOS.finish ();
+      m_aCompressedOS.finishAndClose ();
   }
 
   @Nonnull
@@ -358,7 +358,8 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
                       m_nContentLength +
                       ", " +
                       m_nMinCompressSize +
-                      ")");
+                      ") on " +
+                      m_aHttpRequest.getRequestURI ());
 
     return createCompressedOutputStream (m_aHttpRequest,
                                          (HttpServletResponse) getResponse (),

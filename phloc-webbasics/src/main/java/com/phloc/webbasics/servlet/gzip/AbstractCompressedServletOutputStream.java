@@ -212,7 +212,7 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
             doNotCompress ("close without buffer");
 
         if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("Closing streams!");
+          s_aLogger.info ("Closing stream. compressed=" + (m_aCompressedOS != null));
         if (m_aCompressedOS != null)
           m_aCompressedOS.close ();
         else
@@ -227,7 +227,7 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
     return m_bClosed;
   }
 
-  public final void finish () throws IOException
+  public final void finishAndClose () throws IOException
   {
     if (!m_bClosed)
     {
@@ -265,10 +265,10 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
         doNotCompress ("_prepareToWrite new - response already committed");
       else
         if (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize)
-          doNotCompress ("_prepareToWrite new");
+          doNotCompress ("_prepareToWrite new " + m_nContentLength);
         else
           if (nLength > m_nMinCompressSize)
-            doCompress ("_prepareToWrite new");
+            doCompress ("_prepareToWrite new " + nLength);
           else
           {
             if (CompressFilterSettings.isDebugModeEnabled ())
@@ -284,21 +284,17 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
           doNotCompress ("_prepareToWrite buffered - response already committed");
         else
           if (m_nContentLength >= 0 && m_nContentLength < m_nMinCompressSize)
-            doNotCompress ("_prepareToWrite buffered");
+            doNotCompress ("_prepareToWrite buffered " + m_nContentLength);
           else
             if (nLength >= (m_aBAOS.getBufferSize () - m_aBAOS.size ()))
-              doCompress ("_prepareToWrite buffered");
+              doCompress ("_prepareToWrite buffered " + nLength);
             else
             {
               if (CompressFilterSettings.isDebugModeEnabled ())
                 s_aLogger.info ("Continue buffering!");
             }
       }
-      else
-      {
-        if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("Weird: no output stream is present!");
-      }
+    // Else a regular non-buffered OS is present (m_aOS != null)
   }
 
   @Override
