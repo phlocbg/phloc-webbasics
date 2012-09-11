@@ -77,7 +77,7 @@ public final class CompressFilter implements Filter
       {
         // An exception occurred
         aCompressedResponse.resetBuffer ();
-        aCompressedResponse.noCompression ();
+        aCompressedResponse.setNoCompression ();
       }
       else
         aCompressedResponse.finish ();

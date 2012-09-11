@@ -39,6 +39,7 @@ public final class CompressFilterSettings
   private static boolean s_bResponseCompressionEnabled = true;
   private static boolean s_bResponseGzipEnabled = true;
   private static boolean s_bResponseDeflateEnabled = true;
+  private static boolean s_bDebugModeEnabled = false;
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -245,6 +246,47 @@ public final class CompressFilterSettings
     finally
     {
       s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * Enable or disable debug mode
+   * 
+   * @param bDebugModeEnabled
+   *        <code>true</code> to enable it, <code>false</code> to disable it
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public static EChange setDebugModeEnabled (final boolean bDebugModeEnabled)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bDebugModeEnabled == bDebugModeEnabled)
+        return EChange.UNCHANGED;
+      s_bDebugModeEnabled = bDebugModeEnabled;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return <code>true</code> if debugMode is enabled, <code>false</code> if
+   *         not
+   */
+  public static boolean isDebugModeEnabled ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bDebugModeEnabled;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
     }
   }
 }

@@ -76,6 +76,12 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
       doCompress ("ctor: no min compress size");
   }
 
+  private static void _debugLog (final boolean bCompress, final String sMsg)
+  {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ((bCompress ? "Compressing: " : "Not compressing: ") + sMsg);
+  }
+
   public final void resetBuffer ()
   {
     if (m_aHttpResponse.isCommitted ())
@@ -94,6 +100,8 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
 
   public final void setContentLength (final long nLength)
   {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ("Setting content length to " + nLength + "; doNotCompress=" + m_bDoNotCompress);
     m_nContentLength = nLength;
     if (m_bDoNotCompress && nLength >= 0)
     {
@@ -106,12 +114,6 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
 
   @Nonnull
   protected abstract DeflaterOutputStream createDeflaterOutputStream (@Nonnull OutputStream aOS) throws IOException;
-
-  private static void _debugLog (final boolean bCompress, final String sMsg)
-  {
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ((bCompress ? "Compressing: " : "Not compressing: ") + sMsg);
-  }
 
   public final void doCompress (@Nullable final String sDebugInfo) throws IOException
   {
@@ -139,6 +141,11 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
       }
       else
         doNotCompress ("from compress: included request");
+    }
+    else
+    {
+      if (CompressFilterSettings.isDebugModeEnabled ())
+        s_aLogger.info ("doCompress on already compressed stream");
     }
   }
 
@@ -182,8 +189,13 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
   {
     if (!m_bClosed)
     {
-      if (m_aHttpRequest.getAttribute ("javax.servlet.include.request_uri") != null)
+      final Object aIncluded = m_aHttpRequest.getAttribute ("javax.servlet.include.request_uri");
+      if (aIncluded != null)
+      {
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("No close because we're including " + aIncluded);
         flush ();
+      }
       else
       {
         if (m_aBAOS != null)
@@ -199,6 +211,8 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
           if (m_aOS == null)
             doNotCompress ("close without buffer");
 
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("Closing streams!");
         if (m_aCompressedOS != null)
           m_aCompressedOS.close ();
         else
@@ -227,8 +241,15 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
 
       if (m_aCompressedOS != null && !m_bClosed)
       {
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("Closing compressed stream in finish!");
         m_bClosed = true;
         m_aCompressedOS.close ();
+      }
+      else
+      {
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("Not closing anything in finish!");
       }
     }
   }
@@ -250,6 +271,8 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
             doCompress ("_prepareToWrite new");
           else
           {
+            if (CompressFilterSettings.isDebugModeEnabled ())
+              s_aLogger.info ("Starting new output buffering!");
             m_aBAOS = new NonBlockingByteArrayOutputStream (DEFAULT_BUFSIZE);
             m_aOS = m_aBAOS;
           }
@@ -265,6 +288,16 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
           else
             if (nLength >= (m_aBAOS.getBufferSize () - m_aBAOS.size ()))
               doCompress ("_prepareToWrite buffered");
+            else
+            {
+              if (CompressFilterSettings.isDebugModeEnabled ())
+                s_aLogger.info ("Continue buffering!");
+            }
+      }
+      else
+      {
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("Weird: no output stream is present!");
       }
   }
 

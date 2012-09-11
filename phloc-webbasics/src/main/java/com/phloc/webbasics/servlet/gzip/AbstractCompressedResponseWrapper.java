@@ -73,7 +73,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     m_sContentEncoding = sContentEncoding;
   }
 
-  public void noCompression ()
+  public void setNoCompression ()
   {
     m_bNoCompression = true;
     if (m_aCompressedOS != null)
@@ -84,6 +84,25 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       catch (final IOException e)
       {
         throw new IllegalStateException (e);
+      }
+  }
+
+  private void _setContentLength (final long nLength)
+  {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ("Explicitly setting content length " + nLength + "; m_bNoCompression=" + m_bNoCompression);
+
+    m_nContentLength = nLength;
+    if (m_aCompressedOS != null)
+      m_aCompressedOS.setContentLength (nLength);
+    else
+      if (m_bNoCompression && m_nContentLength >= 0)
+      {
+        final HttpServletResponse aHttpResponse = (HttpServletResponse) getResponse ();
+        if (m_nContentLength < Integer.MAX_VALUE)
+          aHttpResponse.setContentLength ((int) m_nContentLength);
+        else
+          aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (m_nContentLength));
       }
   }
 
@@ -103,8 +122,11 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       if (sRealContentType != null &&
           (sRealContentType.contains (AcceptEncodingHandler.DEFLATE_ENCODING) || sRealContentType.contains (AcceptEncodingHandler.GZIP_ENCODING)))
       {
+        if (CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.info ("Explicitly disabling compression because of external content type " + sContentType);
+
         // Deflate or Gzip was manually set
-        noCompression ();
+        setNoCompression ();
       }
     }
   }
@@ -118,7 +140,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
         nStatusCode == SC_RESET_CONTENT ||
         nStatusCode >= SC_MULTIPLE_CHOICES)
     {
-      noCompression ();
+      setNoCompression ();
     }
   }
 
@@ -137,28 +159,12 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     _updateStatus (sc);
   }
 
-  protected void setContentLength (final long nLength)
-  {
-    m_nContentLength = nLength;
-    if (m_aCompressedOS != null)
-      m_aCompressedOS.setContentLength (nLength);
-    else
-      if (m_bNoCompression && m_nContentLength >= 0)
-      {
-        final HttpServletResponse aHttpResponse = (HttpServletResponse) getResponse ();
-        if (m_nContentLength < Integer.MAX_VALUE)
-          aHttpResponse.setContentLength ((int) m_nContentLength);
-        else
-          aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (m_nContentLength));
-      }
-  }
-
   @Override
   public void addHeader (final String sHeaderName, final String sHeaderValue)
   {
     if (CHTTPHeader.CONTENT_LENGTH.equalsIgnoreCase (sHeaderName))
     {
-      setContentLength (Long.parseLong (sHeaderValue));
+      _setContentLength (Long.parseLong (sHeaderValue));
     }
     else
       if (CHTTPHeader.CONTENT_TYPE.equalsIgnoreCase (sHeaderName))
@@ -168,9 +174,12 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       else
         if (CHTTPHeader.CONTENT_ENCODING.equalsIgnoreCase (sHeaderName))
         {
+          if (CompressFilterSettings.isDebugModeEnabled ())
+            s_aLogger.info ("Explicitly content encoding in addHeader: " + sHeaderValue);
+
           super.addHeader (sHeaderName, sHeaderValue);
           if (!isCommitted ())
-            noCompression ();
+            setNoCompression ();
         }
         else
           super.addHeader (sHeaderName, sHeaderValue);
@@ -181,7 +190,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   {
     if (CHTTPHeader.CONTENT_LENGTH.equalsIgnoreCase (sHeaderName))
     {
-      setContentLength (Long.parseLong (sHeaderValue));
+      _setContentLength (Long.parseLong (sHeaderValue));
     }
     else
       if (CHTTPHeader.CONTENT_TYPE.equalsIgnoreCase (sHeaderName))
@@ -191,9 +200,12 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       else
         if (CHTTPHeader.CONTENT_ENCODING.equalsIgnoreCase (sHeaderName))
         {
+          if (CompressFilterSettings.isDebugModeEnabled ())
+            s_aLogger.info ("Explicitly content encoding in setHeader: " + sHeaderValue);
+
           super.setHeader (sHeaderName, sHeaderValue);
           if (!isCommitted ())
-            noCompression ();
+            setNoCompression ();
         }
         else
           super.setHeader (sHeaderName, sHeaderValue);
@@ -213,6 +225,10 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   @Override
   public final void flushBuffer () throws IOException
   {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ("flushBuffer on " +
+                      (m_aWriter != null ? "writer" : m_aCompressedOS != null ? "compressedOS" : "response"));
+
     if (m_aWriter != null)
       m_aWriter.flush ();
     else
@@ -225,6 +241,9 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   @Override
   public void reset ()
   {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ("reset");
+
     super.reset ();
     if (m_aCompressedOS != null)
     {
@@ -239,6 +258,9 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   @Override
   public void resetBuffer ()
   {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ("resetBuffer");
+
     super.resetBuffer ();
     if (m_aCompressedOS != null)
     {
@@ -274,7 +296,7 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
 
   public final void finish () throws IOException
   {
-    if (false)
+    if (CompressFilterSettings.isDebugModeEnabled ())
     {
       // Check if a content type was specified
       final String sRequestURL = m_aHttpRequest.getRequestURL ().toString ();
@@ -325,6 +347,15 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   @Nonnull
   private AbstractCompressedServletOutputStream _createCompressedOutputStream () throws IOException
   {
+    if (CompressFilterSettings.isDebugModeEnabled ())
+      s_aLogger.info ("createCompressedOutputStream(" +
+                      m_sContentEncoding +
+                      ", " +
+                      m_nContentLength +
+                      ", " +
+                      m_nMinCompressSize +
+                      ")");
+
     return createCompressedOutputStream (m_aHttpRequest,
                                          (HttpServletResponse) getResponse (),
                                          m_sContentEncoding,
