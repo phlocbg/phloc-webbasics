@@ -17,9 +17,6 @@
  */
 package com.phloc.appbasics.app.menu;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,20 +28,17 @@ import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
-import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
-import com.phloc.commons.tree.withid.unique.ITreeWithGlobalUniqueID;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.nonweb.singleton.tree.GlobalSingletonTreeWithUniqueID;
 
 /**
- * Represents the menu tree
+ * Represents the global menu tree
  * 
  * @author philip
  */
-public final class MenuTree extends GlobalSingleton implements ITreeWithGlobalUniqueID <String, IMenuObject, DefaultTreeItemWithID <String, IMenuObject>>
+public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTree.class);
-  private final DefaultTreeWithGlobalUniqueID <String, IMenuObject> m_aTree = new DefaultTreeWithGlobalUniqueID <String, IMenuObject> ();
 
   private String m_sDefaultMenuItem;
 
@@ -350,52 +344,5 @@ public final class MenuTree extends GlobalSingleton implements ITreeWithGlobalUn
   {
     final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = getItemWithID (sID);
     return aTreeItem == null ? null : aTreeItem.getData ();
-  }
-
-  @Nonnull
-  public DefaultTreeItemWithID <String, IMenuObject> getRootItem ()
-  {
-    return m_aTree.getRootItem ();
-  }
-
-  @Nullable
-  public DefaultTreeItemWithID <String, IMenuObject> getChildWithID (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent,
-                                                                     @Nullable final String aID)
-  {
-    return m_aTree.getChildWithID (aCurrent, aID);
-  }
-
-  public boolean hasChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
-  {
-    return m_aTree.hasChildren (aCurrent);
-  }
-
-  @Nonnegative
-  public int getChildCount (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
-  {
-    return m_aTree.getChildCount (aCurrent);
-  }
-
-  @Nullable
-  public Collection <? extends DefaultTreeItemWithID <String, IMenuObject>> getChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aCurrent)
-  {
-    return m_aTree.getChildren (aCurrent);
-  }
-
-  @Nullable
-  public DefaultTreeItemWithID <String, IMenuObject> getItemWithID (@Nullable final String aDataID)
-  {
-    return m_aTree.getItemWithID (aDataID);
-  }
-
-  @Nonnull
-  public Collection <DefaultTreeItemWithID <String, IMenuObject>> getAllItems ()
-  {
-    return m_aTree.getAllItems ();
-  }
-
-  public boolean isItemSameOrDescendant (@Nullable final String aParentItemID, @Nullable final String aChildItemID)
-  {
-    return m_aTree.isItemSameOrDescendant (aParentItemID, aChildItemID);
   }
 }

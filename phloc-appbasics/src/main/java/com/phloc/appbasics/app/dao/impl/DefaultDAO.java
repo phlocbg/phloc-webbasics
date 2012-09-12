@@ -78,7 +78,15 @@ public class DefaultDAO extends AbstractDAO
                      @Nonnull final IDAODataProvider aDataProvider,
                      @Nonnegative final int nBackupCount)
   {
-    super (s_aDAOIOFactory.create ());
+    this (aFilenameProvider, aDataProvider, nBackupCount, s_aDAOIOFactory.create ());
+  }
+
+  public DefaultDAO (@Nonnull final IHasFilename aFilenameProvider,
+                     @Nonnull final IDAODataProvider aDataProvider,
+                     @Nonnegative final int nBackupCount,
+                     @Nonnull final IDAOIO aDAOIO)
+  {
+    super (aDAOIO);
     if (aFilenameProvider == null)
       throw new NullPointerException ("filenameProvider");
     if (aDataProvider == null)
