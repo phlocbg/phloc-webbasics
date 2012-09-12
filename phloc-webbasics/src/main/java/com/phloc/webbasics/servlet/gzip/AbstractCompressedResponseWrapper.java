@@ -234,8 +234,8 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     else
       if (m_aCompressedOS != null)
       {
-        if (CompressFilterSettings.isDebugModeEnabled ())
-          s_aLogger.info ("flushBuffer on compressedOS - FINISH and CLOSE!");
+        if (true || CompressFilterSettings.isDebugModeEnabled ())
+          s_aLogger.warn ("flushBuffer on compressedOS - FINISH and CLOSE!");
         m_aCompressedOS.finishAndClose ();
       }
       else
