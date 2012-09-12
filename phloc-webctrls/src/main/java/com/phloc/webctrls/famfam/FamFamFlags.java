@@ -20,10 +20,10 @@ package com.phloc.webctrls.famfam;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
 
@@ -35,10 +35,31 @@ import com.phloc.html.hc.IHCElement;
 @Immutable
 public final class FamFamFlags
 {
-  public static final ICSSClassProvider CSS_CLASS_FAMFAM_FLAG = DefaultCSSClassProvider.create ("icon-famfam-flag");
+  public static final ICSSClassProvider CSS_CLASS_FAMFAM_FLAG = EFamFamFlagIcon.CSS_CLASS_FAMFAM_FLAG;
 
   private FamFamFlags ()
   {}
+
+  /**
+   * Get the flag from the passed locale
+   * 
+   * @param aFlagLocale
+   *        The locale to resolve. May be <code>null</code>.
+   * @return <code>null</code> if the passed locale is <code>null</code>, if the
+   *         locale has no country or if the no flag is present for the passed
+   *         locale.
+   */
+  @Nullable
+  public static EFamFamFlagIcon getFlagFromLocale (@Nullable final Locale aFlagLocale)
+  {
+    if (aFlagLocale != null)
+    {
+      final String sCountry = aFlagLocale.getCountry ();
+      if (StringHelper.hasText (sCountry))
+        return EFamFamFlagIcon.getFromIDOrNull (sCountry);
+    }
+    return null;
+  }
 
   /**
    * Add a specific CSS class, that adds a padding and a background-image with a
@@ -55,20 +76,14 @@ public final class FamFamFlags
    */
   @Nonnull
   public static <T extends IHCElement <?>> T getWithFlagImage (@Nonnull final T aObject,
-                                                               @Nonnull final Locale aFlagLocale)
+                                                               @Nullable final Locale aFlagLocale)
   {
     if (aObject == null)
       throw new NullPointerException ("object");
-    if (aFlagLocale == null)
-      throw new NullPointerException ("flagLocale");
 
-    final String sCountry = aFlagLocale.getCountry ();
-    if (StringHelper.hasText (sCountry))
-    {
-      // Note: dynamic CSS class is OK here
-      aObject.addClasses (CSS_CLASS_FAMFAM_FLAG,
-                          DefaultCSSClassProvider.create ("famfam-flag-" + sCountry.toLowerCase (Locale.US)));
-    }
+    final EFamFamFlagIcon eIcon = getFlagFromLocale (aFlagLocale);
+    if (eIcon != null)
+      eIcon.applyToNode (aObject);
     return aObject;
   }
 }

@@ -20,6 +20,7 @@ package com.phloc.webctrls.custom;
 import javax.annotation.Nonnull;
 
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 
 /**
@@ -29,6 +30,20 @@ import com.phloc.html.hc.IHCNode;
  */
 public interface IIcon extends ICSSClassProvider
 {
+  /**
+   * @return The icon as self-contained node
+   */
   @Nonnull
   IHCNode getAsNode ();
+
+  /**
+   * Apply the respective CSS classes to the passed node
+   * 
+   * @param aElement
+   *        The element to apply the CSS classes to. May not be
+   *        <code>null</code>.
+   * @return The passed element. Never <code>null</code>.
+   */
+  @Nonnull
+  <T extends IHCElement <?>> T applyToNode (@Nonnull T aElement);
 }

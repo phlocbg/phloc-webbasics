@@ -1066,6 +1066,9 @@ public enum EFamFamIcon implements IIcon
     return aElement;
   }
 
+  /**
+   * Set the FamFam icons as the default icons
+   */
   public static void setAsDefault ()
   {
     DefaultIcons.set (EDefaultIcon.ADD, ADD);
