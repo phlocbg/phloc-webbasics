@@ -143,6 +143,7 @@ public final class WebIO
    * @return <code>null</code> if the passed file name cannot be converted to a
    *         {@link File}.
    */
+  @Deprecated
   @Nullable
   public static File getReadableFile (@Nonnull final String sFilename)
   {
@@ -171,6 +172,7 @@ public final class WebIO
    * @return <code>null</code> if the passed file name cannot be converted to a
    *         {@link File}.
    */
+  @Deprecated
   @Nullable
   public static File getWritableFile (@Nonnull final String sFilename)
   {
@@ -190,6 +192,7 @@ public final class WebIO
     }
   }
 
+  @Deprecated
   @Nullable
   public static File getDirectoryFile (@Nonnull final String sFilename)
   {
