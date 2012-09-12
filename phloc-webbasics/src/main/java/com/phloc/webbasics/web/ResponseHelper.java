@@ -31,14 +31,14 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.joda.time.LocalTime;
-
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTWebDateUtils;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.AcceptEncodingList;
@@ -152,9 +152,12 @@ public final class ResponseHelper
   public static void modifyResponseForExpiration (@Nonnull final HttpServletResponse aHttpResponse,
                                                   @Nonnegative final int nSeconds)
   {
-    final LocalTime cal = new LocalTime ().plusSeconds (nSeconds);
-    aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, "PUBLIC, max-age=" + nSeconds + ", must-revalidate");
-    aHttpResponse.setHeader (CHTTPHeader.EXPIRES, cal.toString ());
+    // only use EXPIRES
+    // See http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3
+    // See http://www.mnot.net/cache_docs/#CACHE-CONTROL
+    aHttpResponse.setHeader (CHTTPHeader.EXPIRES,
+                             PDTWebDateUtils.getAsStringRFC822 (PDTFactory.getCurrentLocalDateTime ()
+                                                                          .plusSeconds (nSeconds)));
   }
 
   public static void modifyResponseForMovedPermanently (@Nonnull final IRequestWebScope aRequestScope,
