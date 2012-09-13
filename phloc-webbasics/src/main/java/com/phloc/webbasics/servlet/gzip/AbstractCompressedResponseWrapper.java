@@ -18,10 +18,8 @@
 package com.phloc.webbasics.servlet.gzip;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -36,10 +34,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.mime.MimeTypeDeterminator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.webbasics.servlet.StatusAwareHttpResponseWrapper;
 
 /**
  * Abstract output stream switching {@link HttpServletResponseWrapper}
@@ -47,7 +45,7 @@ import com.phloc.webbasics.http.CHTTPHeader;
  * @author philip
  */
 @NotThreadSafe
-public abstract class AbstractCompressedResponseWrapper extends HttpServletResponseWrapper
+public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpResponseWrapper
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractCompressedResponseWrapper.class);
 
@@ -57,7 +55,6 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   private final int m_nMinCompressSize = 256;
   private AbstractCompressedServletOutputStream m_aCompressedOS;
   private PrintWriter m_aWriter;
-  private int m_nStatusCode = SC_OK;
   private boolean m_bNoCompression = false;
 
   public AbstractCompressedResponseWrapper (@Nonnull final HttpServletRequest aHttpRequest,
@@ -133,7 +130,6 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
 
   private void _updateStatus (final int nStatusCode)
   {
-    m_nStatusCode = nStatusCode;
     // sc<200 || sc==204 || sc==205 || sc>=300
     if (nStatusCode < SC_OK ||
         nStatusCode == SC_NO_CONTENT ||
@@ -279,7 +275,6 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   {
     resetBuffer ();
     super.sendError (sc, msg);
-    m_nStatusCode = sc;
   }
 
   @Override
@@ -287,7 +282,6 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   {
     resetBuffer ();
     super.sendError (sc);
-    m_nStatusCode = sc;
   }
 
   @Override
@@ -295,46 +289,10 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
   {
     resetBuffer ();
     super.sendRedirect (sLocation);
-    m_nStatusCode = SC_MOVED_TEMPORARILY;
   }
 
   public final void finish () throws IOException
   {
-    if (CompressFilterSettings.isDebugModeEnabled ())
-    {
-      // Check if a content type was specified
-      final String sRequestURL = m_aHttpRequest.getRequestURL ().toString ();
-      final String sContentType = getContentType ();
-      if (StringHelper.hasNoText (sContentType))
-      {
-        // Not important for redirects etc.
-        if (m_nStatusCode >= SC_OK && m_nStatusCode < SC_MULTIPLE_CHOICES)
-        {
-          final String sDeterminedMimeType = MimeTypeDeterminator.getMimeTypeFromFilename (sRequestURL);
-          if (sDeterminedMimeType == null)
-            s_aLogger.error ("The response has no content type for request '" +
-                             sRequestURL +
-                             "' and failed to determine one");
-          else
-          {
-            if (s_aLogger.isDebugEnabled ())
-              s_aLogger.debug ("The response has no content type for request '" +
-                               sRequestURL +
-                               "' but determined '" +
-                               sDeterminedMimeType +
-                               "'");
-            setContentType (sDeterminedMimeType);
-          }
-        }
-      }
-      else
-      {
-        // Content type is present
-        if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("The response has content type '" + sContentType + "' for request '" + sRequestURL + "'");
-      }
-    }
-
     if (m_aWriter != null && !m_aCompressedOS.isClosed ())
       m_aWriter.flush ();
     if (m_aCompressedOS != null)
@@ -386,27 +344,6 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
     return m_aCompressedOS;
   }
 
-  private static final class MyPrintWriter extends PrintWriter
-  {
-    public MyPrintWriter (@Nonnull final OutputStream aOS)
-    {
-      super (aOS);
-    }
-
-    public MyPrintWriter (@Nonnull final Writer aWriter)
-    {
-      super (aWriter);
-    }
-
-    @Override
-    public void flush ()
-    {
-      // Intercept here for debugging as described in
-      // http://stackoverflow.com/questions/7513922/jetty-8-gzipfilter-does-not-apply-sometimes
-      super.flush ();
-    }
-  }
-
   @Override
   @Nonnull
   public final PrintWriter getWriter () throws IOException
@@ -422,15 +359,10 @@ public abstract class AbstractCompressedResponseWrapper extends HttpServletRespo
       m_aCompressedOS = _createCompressedOutputStream ();
       final String sEncoding = getCharacterEncoding ();
       if (sEncoding == null)
-        m_aWriter = new MyPrintWriter (m_aCompressedOS);
+        m_aWriter = new PrintWriter (m_aCompressedOS);
       else
-        m_aWriter = new MyPrintWriter (new OutputStreamWriter (m_aCompressedOS, sEncoding));
+        m_aWriter = new PrintWriter (new OutputStreamWriter (m_aCompressedOS, sEncoding));
     }
     return m_aWriter;
-  }
-
-  public final int getStatusCode ()
-  {
-    return m_nStatusCode;
   }
 }
