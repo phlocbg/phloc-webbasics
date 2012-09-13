@@ -89,7 +89,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-appbasics</artifactId>
-      <version>1.8.14</version>
+      <version>1.8.15-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -99,7 +99,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
-      <version>1.9.3</version>
+      <version>1.9.4-SNAPSHOT</version>
     </dependency>
 
     <dependency>
