@@ -83,7 +83,7 @@ public class CheckResponseFilter implements Filter
   {
     final String sRequestURL = aHttpRequest.getRequestURL ().toString ();
     final int nStatusCode = aHttpResponse.getStatusCode ();
-    final Map <String, List <String>> aHeaders = aHttpResponse.getAllHeaders ();
+    final Map <String, List <String>> aHeaders = aHttpResponse.getHeaderMap ().getAllHeaders ();
     final String sCharacterEncoding = aHttpResponse.getCharacterEncoding ();
     final String sContentType = aHttpResponse.getContentType ();
 
