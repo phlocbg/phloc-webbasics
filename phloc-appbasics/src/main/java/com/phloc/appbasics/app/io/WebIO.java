@@ -34,6 +34,7 @@ import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.IWritableResource;
 import com.phloc.commons.io.IWritableResourceProvider;
+import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resourceprovider.ClassPathResourceProvider;
@@ -213,46 +214,60 @@ public final class WebIO
   }
 
   @Nonnull
-  public static ISuccessIndicator deleteFile (@Nonnull final String sFilename)
+  public static FileIOError deleteFile (@Nonnull final String sFilename)
   {
     return deleteFile (getWritableFile (sFilename));
   }
 
   @Nonnull
-  public static ISuccessIndicator deleteFile (@Nonnull final File aFile)
+  public static FileIOError deleteFile (@Nonnull final File aFile)
   {
     return s_aFileOpMgr.deleteFile (aFile);
   }
 
   @Nonnull
-  public static ISuccessIndicator deleteFileIfExisting (@Nonnull final String sFilename)
+  public static FileIOError deleteFileIfExisting (@Nonnull final String sFilename)
   {
     return deleteFileIfExisting (getWritableFile (sFilename));
   }
 
   @Nonnull
-  public static ISuccessIndicator deleteFileIfExisting (@Nonnull final File aFile)
+  public static FileIOError deleteFileIfExisting (@Nonnull final File aFile)
   {
     return s_aFileOpMgr.deleteFileIfExisting (aFile);
   }
 
   @Nonnull
-  public static ISuccessIndicator deleteDirectory (@Nonnull final File fDir, final boolean bDeleteContent)
+  public static FileIOError deleteDirectory (@Nonnull final File fDir, final boolean bDeleteContent)
   {
     return bDeleteContent ? s_aFileOpMgr.deleteDirRecursive (fDir) : s_aFileOpMgr.deleteDir (fDir);
   }
 
   @Nonnull
-  public static ISuccessIndicator deleteDirectory (@Nonnull final String sDirName, final boolean bDeleteContent)
+  public static FileIOError deleteDirectory (@Nonnull final String sDirName, final boolean bDeleteContent)
   {
     return deleteDirectory (getDirectoryFile (sDirName), bDeleteContent);
   }
 
+  @Deprecated
   @Nonnull
-  public static ISuccessIndicator mkDir (@Nonnull final String sDirName, final boolean bRecursive)
+  public static FileIOError mkDir (@Nonnull final String sDirName, final boolean bRecursive)
+  {
+    return bRecursive ? createDirRecursiveIfNotExisting (sDirName) : createDirIfNotExisting (sDirName);
+  }
+
+  @Nonnull
+  public static FileIOError createDirIfNotExisting (@Nonnull final String sDirName)
   {
     final File f = getDirectoryFile (sDirName);
-    return bRecursive ? s_aFileOpMgr.createDirRecursiveIfNotExisting (f) : s_aFileOpMgr.createDirIfNotExisting (f);
+    return s_aFileOpMgr.createDirIfNotExisting (f);
+  }
+
+  @Nonnull
+  public static FileIOError createDirRecursiveIfNotExisting (@Nonnull final String sDirName)
+  {
+    final File f = getDirectoryFile (sDirName);
+    return s_aFileOpMgr.createDirRecursiveIfNotExisting (f);
   }
 
   @Nonnull

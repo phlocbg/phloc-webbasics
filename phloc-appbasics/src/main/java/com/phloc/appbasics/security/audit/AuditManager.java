@@ -99,7 +99,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditor
 
     // Ensure base path is present
     if (StringHelper.hasText (sBaseDir) && !WebIO.resourceExists (sBaseDir))
-      WebIO.mkDir (sBaseDir, true);
+      WebIO.createDirRecursiveIfNotExisting (sBaseDir);
 
     m_aItems = new AuditItemList (aUserIDProvider);
     setXMLDataProvider (new AuditManagerXMLDAO (this));

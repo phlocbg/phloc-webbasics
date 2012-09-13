@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.IWritableResource;
 import com.phloc.commons.io.file.FilenameHelper;
+import com.phloc.commons.io.resource.FileSystemResource;
 
 /**
  * Wrapper around the registry file handling.
@@ -100,6 +101,16 @@ public final class WebIORegistry
     return getRegistryFilename (sDirectoryName, sFilename, false);
   }
 
+  /**
+   * @param sDirectoryName
+   *        Directory name
+   * @param sFilename
+   *        File name
+   * @param bCreateDirOnDemand
+   *        if <code>true</code> the underlying directory is trying to be
+   *        created if it is not existing
+   * @return <code>WEB-INF/registry/<em>dirName</em>/<em>fileName</em></code>
+   */
   @Nonnull
   public static String getRegistryFilename (@Nonnull final String sDirectoryName,
                                             @Nonnull final String sFilename,
@@ -112,32 +123,65 @@ public final class WebIORegistry
   }
 
   @Nonnull
-  public static IReadableResource getReadableRegistryResource (@Nonnull final String sDirectoryName,
-                                                               @Nonnull final String sFilename)
+  public static FileSystemResource getRegistryResource (@Nonnull final String sDirectoryName,
+                                                        @Nonnull final String sFilename)
   {
-    return getReadableRegistryResource (sDirectoryName, sFilename, false);
+    return getRegistryResource (sDirectoryName, sFilename, false);
   }
 
   @Nonnull
-  public static IReadableResource getReadableRegistryResource (@Nonnull final String sDirectoryName,
-                                                               @Nonnull final String sFilename,
-                                                               final boolean bCreateDirOnDemand)
+  public static FileSystemResource getRegistryResource (@Nonnull final String sDirectoryName,
+                                                        @Nonnull final String sFilename,
+                                                        final boolean bCreateDirOnDemand)
   {
     return WebFileIO.getResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
   }
 
+  @Deprecated
+  @Nonnull
+  public static IReadableResource getReadableRegistryResource (@Nonnull final String sDirectoryName,
+                                                               @Nonnull final String sFilename)
+  {
+    return getRegistryResource (sDirectoryName, sFilename);
+  }
+
+  @Deprecated
+  @Nonnull
+  public static FileSystemResource getReadableRegistryResource (@Nonnull final String sDirectoryName,
+                                                                @Nonnull final String sFilename,
+                                                                final boolean bCreateDirOnDemand)
+  {
+    return getRegistryResource (sDirectoryName, sFilename, bCreateDirOnDemand);
+  }
+
+  @Deprecated
   @Nonnull
   public static IWritableResource getWritableRegistryResource (@Nonnull final String sDirectoryName,
                                                                @Nonnull final String sFilename)
   {
-    return getWritableRegistryResource (sDirectoryName, sFilename, false);
+    return getRegistryResource (sDirectoryName, sFilename);
   }
 
+  @Deprecated
   @Nonnull
   public static IWritableResource getWritableRegistryResource (@Nonnull final String sDirectoryName,
                                                                @Nonnull final String sFilename,
                                                                final boolean bCreateDirOnDemand)
   {
-    return WebFileIO.getResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
+    return getRegistryResource (sDirectoryName, sFilename, bCreateDirOnDemand);
+  }
+
+  @Nonnull
+  public static File getFile (@Nonnull final String sDirectoryName, @Nonnull final String sFilename)
+  {
+    return getFile (sDirectoryName, sFilename, false);
+  }
+
+  @Nonnull
+  public static File getFile (@Nonnull final String sDirectoryName,
+                              @Nonnull final String sFilename,
+                              final boolean bCreateDirOnDemand)
+  {
+    return WebFileIO.getFile (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
   }
 }
