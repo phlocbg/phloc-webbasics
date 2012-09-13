@@ -45,9 +45,9 @@ public final class HCFacebookLike extends HCIFrame
   }
 
   public HCFacebookLike (@Nonnull final ISimpleURL aLikeURL,
-                       @Nonnegative final int nWidth,
-                       @Nonnegative final int nHeight,
-                       final boolean bShowFaces)
+                         @Nonnegative final int nWidth,
+                         @Nonnegative final int nHeight,
+                         final boolean bShowFaces)
   {
     final SimpleURL aURL = new SimpleURL ("http://www.facebook.com/plugins/like.php");
     aURL.add ("href", aLikeURL.getAsStringWithEncodedParameters ());
