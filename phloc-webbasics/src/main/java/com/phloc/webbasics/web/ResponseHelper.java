@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDateTime;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
@@ -55,12 +56,13 @@ import com.phloc.webbasics.http.EHTTPVersion;
 @Immutable
 public final class ResponseHelper
 {
-  public static final String EXPIRES_NEVER = PDTWebDateUtils.getAsStringRFC822 (PDTFactory.createLocalDateTime (1995,
-                                                                                                                DateTimeConstants.MAY,
-                                                                                                                6,
-                                                                                                                12,
-                                                                                                                0,
-                                                                                                                0));
+  public static final LocalDateTime EXPIRES_NEVER_DATETIME = PDTFactory.createLocalDateTime (1995,
+                                                                                             DateTimeConstants.MAY,
+                                                                                             6,
+                                                                                             12,
+                                                                                             0,
+                                                                                             0);
+  public static final String EXPIRES_NEVER_STRING = PDTWebDateUtils.getAsStringRFC822 (EXPIRES_NEVER_DATETIME);
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -94,7 +96,7 @@ public final class ResponseHelper
     {
       // Set to expire far in the past for HTTP/1.0.
       // FIXME the date is considered invalid!
-      aHttpResponse.setHeader (CHTTPHeader.EXPIRES, EXPIRES_NEVER);
+      aHttpResponse.setHeader (CHTTPHeader.EXPIRES, EXPIRES_NEVER_STRING);
 
       // Set standard HTTP/1.0 no-cache header.
       aHttpResponse.setHeader (CHTTPHeader.PRAGMA, "no-cache");

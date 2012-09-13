@@ -31,6 +31,6 @@ public final class ResponseHelperTest
   @Test
   public void testExpires ()
   {
-    assertEquals ("Sat, 06 May 1995 12:00:00 GMT", ResponseHelper.EXPIRES_NEVER);
+    assertEquals ("Sat, 06 May 1995 12:00:00 GMT", ResponseHelper.EXPIRES_NEVER_STRING);
   }
 }
