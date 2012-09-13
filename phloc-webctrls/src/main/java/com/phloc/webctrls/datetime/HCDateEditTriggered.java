@@ -50,17 +50,17 @@ import com.phloc.webbasics.EWebBasicsText;
  */
 public final class HCDateEditTriggered extends AbstractWrappedHCNode
 {
-  private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL = DefaultCSSClassProvider.create ("pdaf_calendar_ctrl");
-  private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER = DefaultCSSClassProvider.create ("pdaf_calendar_ctrl_trigger");
-  private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER_OBJ = DefaultCSSClassProvider.create ("pdaf_calendar_ctrl_trigger_obj");
-  private static final String ID_SUFFIX_TRIGGER = "_trigger";
+  private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL = DefaultCSSClassProvider.create ("phloc-calendar-ctrl");
+  private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER = DefaultCSSClassProvider.create ("phloc-calendar-ctrl-trigger");
+  private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER_OBJ = DefaultCSSClassProvider.create ("phloc-calendar-ctrl-trigger-obj");
+  private static final String ID_SUFFIX_TRIGGER = "-trigger";
 
   private final HCTable m_aContainer = new HCTable ();
 
   public HCDateEditTriggered (final IHCRequestField aRF,
-                               final String sID,
-                               final boolean bShowTime,
-                               final Locale aDisplayLocale)
+                              final String sID,
+                              final boolean bShowTime,
+                              final Locale aDisplayLocale)
   {
     m_aContainer.addColumns (HCCol.star (), new HCCol (20));
     m_aContainer.setCellPadding (0);

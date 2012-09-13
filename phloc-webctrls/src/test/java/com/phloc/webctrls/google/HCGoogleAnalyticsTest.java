@@ -30,7 +30,7 @@ import com.phloc.html.hc.html.HCScript.EMode;
  * 
  * @author philip
  */
-public final class GoogleAnalyticsTest
+public final class HCGoogleAnalyticsTest
 {
   @Test
   public void testBasic1 ()

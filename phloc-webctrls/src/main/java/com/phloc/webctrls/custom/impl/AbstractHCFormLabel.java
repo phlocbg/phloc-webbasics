@@ -31,7 +31,7 @@ import com.phloc.webctrls.custom.IFormLabel;
 
 public abstract class AbstractHCFormLabel extends AbstractWrappedHCNode implements IFormLabel
 {
-  public static final ICSSClassProvider CSS_CLASS_FORM_LABEL = DefaultCSSClassProvider.create ("form-label");
+  public static final ICSSClassProvider CSS_CLASS_FORM_LABEL = DefaultCSSClassProvider.create ("phloc-form-label");
   public static final String SIGN_MANDATORY = "*";
   public static final String SIGN_ALTERNATIVE = "°";
   public static final String LABEL_END = ":";

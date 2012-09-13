@@ -30,7 +30,7 @@ import com.phloc.webbasics.EWebBasicsText;
 
 public class HCExtSelect extends HCSelect
 {
-  public static final ICSSClassProvider SPECIAL_OPTION = DefaultCSSClassProvider.create ("select-option-special");
+  public static final ICSSClassProvider SPECIAL_OPTION = DefaultCSSClassProvider.create ("phloc-select-option-special");
 
   public HCExtSelect (@Nonnull final IHCRequestField aRF)
   {

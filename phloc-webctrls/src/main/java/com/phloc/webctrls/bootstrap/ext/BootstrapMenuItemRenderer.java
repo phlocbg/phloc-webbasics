@@ -24,8 +24,6 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
-import com.phloc.html.css.DefaultCSSClassProvider;
-import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
@@ -46,9 +44,6 @@ import com.phloc.webctrls.bootstrap.EBootstrapIcon;
  */
 public class BootstrapMenuItemRenderer implements IMenuItemRenderer
 {
-  public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
-  public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
-
   private final Locale m_aContentLocale;
 
   public BootstrapMenuItemRenderer (@Nonnull final Locale aContentLocale)

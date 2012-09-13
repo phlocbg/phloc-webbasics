@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCButton;
@@ -61,39 +62,49 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
     m_aCollapse = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAV_COLLAPSE));
   }
 
-  @Nonnull
-  public BootstrapNavbar addBrand (@Nonnull final String sBrand, @Nonnull final ISimpleURL aHomeLink)
+  private void _insert (final boolean bCollapsible, @Nullable final IHCNode aNode)
   {
-    // Remove old brand (if any)
-    m_aContainer.addChild (new HCA (aHomeLink).addChild (sBrand).addClass (CBootstrapCSS.BRAND));
+    if (bCollapsible)
+      m_aCollapse.addChild (aNode);
+    else
+      // before collapse
+      m_aContainer.addChild (m_aContainer.getChildCount () - 1, aNode);
+  }
+
+  @Nonnull
+  public BootstrapNavbar addBrand (final boolean bCollapsible,
+                                   @Nonnull final String sBrand,
+                                   @Nonnull final ISimpleURL aHomeLink)
+  {
+    _insert (bCollapsible, new HCA (aHomeLink).addChild (sBrand).addClass (CBootstrapCSS.BRAND));
     return this;
   }
 
   @Nonnull
-  public BootstrapNavbar addNav (@Nullable final BootstrapNav aNav)
+  public BootstrapNavbar addNav (final boolean bCollapsible, @Nullable final BootstrapNav aNav)
   {
-    m_aContainer.addChild (aNav);
+    _insert (bCollapsible, aNav);
     return this;
   }
 
   @Nonnull
-  public BootstrapNavbar addBreadcrumb (@Nullable final BootstrapBreadcrumb aBreadCrumb)
+  public BootstrapNavbar addBreadcrumb (final boolean bCollapsible, @Nullable final BootstrapBreadcrumb aBreadCrumb)
   {
-    m_aContainer.addChild (aBreadCrumb);
+    _insert (bCollapsible, aBreadCrumb);
     return this;
   }
 
   @Nonnull
-  public BootstrapNavbar addTextContent (@Nonnull final String sText)
+  public BootstrapNavbar addTextContent (final boolean bCollapsible, @Nonnull final String sText)
   {
-    return addTextContent (new HCP ().addChild (sText));
+    return addTextContent (bCollapsible, new HCP ().addChild (sText));
   }
 
   @Nonnull
-  public BootstrapNavbar addTextContent (@Nonnull final IHCElement <?> aText)
+  public BootstrapNavbar addTextContent (final boolean bCollapsible, @Nonnull final IHCElement <?> aText)
   {
     aText.addClasses (CBootstrapCSS.NAVBAR_TEXT, CBootstrapCSS.PULL_RIGHT);
-    m_aCollapse.addChild (aText);
+    _insert (bCollapsible, aText);
     return this;
   }
 }

@@ -243,7 +243,7 @@ div.calendar { position: relative; }
   background-color:#406c9a;
 }
 
-.pdaf_calendar_ctrl_trigger_obj {
+.phloc-calendar-ctrl-trigger-obj {
   display:inline-block;
   width:18px;
   height:18px;
