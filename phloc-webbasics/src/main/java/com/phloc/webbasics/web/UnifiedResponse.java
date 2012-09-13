@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.file.FilenameHelper;
@@ -298,6 +299,12 @@ public class UnifiedResponse
     return this;
   }
 
+  @Nullable
+  public String getContentDispositionFilename ()
+  {
+    return m_sContentDispositionFilename;
+  }
+
   @Nonnull
   public UnifiedResponse removeContentDispositionFilename ()
   {
@@ -310,10 +317,17 @@ public class UnifiedResponse
   {
     if (aCacheControl == null)
       throw new NullPointerException ("cacheControl");
-    if (hasContent ())
+    if (m_aCacheControl != null)
       s_aLogger.warn ("UnifiedResponse: Overwriting Cache-Control data");
-    m_aCacheControl = aCacheControl;
+    m_aCacheControl = aCacheControl.getClone ();
     return this;
+  }
+
+  @Nullable
+  @ReturnsMutableCopy
+  public CacheControlBuilder getCacheControl ()
+  {
+    return m_aCacheControl == null ? null : m_aCacheControl.getClone ();
   }
 
   @Nonnull
@@ -337,8 +351,13 @@ public class UnifiedResponse
     if (bETag && !bIsHttp11)
       s_aLogger.warn ("UnifiedResponse: Sending an ETag for HTTP version " + m_eHttpVersion + " has no effect!");
 
-    if ((bLastModified || bETag) && !bExpires && !bCacheControl)
-      s_aLogger.warn ("UnifiedResponse: Validators (Last-Modified and ETag) have no effect if no Expires or Cache-Control is present");
+    if (!bExpires && !bCacheControl)
+    {
+      if (bLastModified || bETag)
+        s_aLogger.warn ("UnifiedResponse: Validators (Last-Modified and ETag) have no effect if no Expires or Cache-Control is present");
+      else
+        s_aLogger.warn ("UnifiedResponse: Response has no caching information at all");
+    }
 
     if (m_aCacheControl != null)
     {

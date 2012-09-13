@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ICloneable;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -35,7 +36,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author philip
  */
-public class CacheControlBuilder
+public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 {
   private Long m_aMaxAgeSeconds;
   private Long m_aSharedMaxAgeSeconds;
@@ -49,6 +50,22 @@ public class CacheControlBuilder
 
   public CacheControlBuilder ()
   {}
+
+  public CacheControlBuilder (@Nonnull final CacheControlBuilder aBase)
+  {
+    if (aBase == null)
+      throw new NullPointerException ("base");
+
+    m_aMaxAgeSeconds = aBase.m_aMaxAgeSeconds;
+    m_aSharedMaxAgeSeconds = aBase.m_aSharedMaxAgeSeconds;
+    m_bPublic = aBase.m_bPublic;
+    m_bPrivate = aBase.m_bPrivate;
+    m_bNoCache = aBase.m_bNoCache;
+    m_bNoStore = aBase.m_bNoStore;
+    m_bNoTransform = aBase.m_bNoTransform;
+    m_bMustRevalidate = aBase.m_bMustRevalidate;
+    m_bProxyRevalidate = aBase.m_bProxyRevalidate;
+  }
 
   /**
    * Set the maximum age relative to the request time
@@ -404,6 +421,12 @@ public class CacheControlBuilder
     if (m_bProxyRevalidate)
       aItems.add ("proxy-revalidate");
     return StringHelper.getImploded (", ", aItems);
+  }
+
+  @Nonnull
+  public CacheControlBuilder getClone ()
+  {
+    return new CacheControlBuilder (this);
   }
 
   @Override
