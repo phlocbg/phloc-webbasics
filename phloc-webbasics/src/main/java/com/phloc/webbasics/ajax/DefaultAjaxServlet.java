@@ -43,6 +43,7 @@ import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.CWebCharset;
+import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.RequestLogger;
 import com.phloc.webbasics.web.ResponseHelper;
@@ -118,6 +119,8 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
                                     @Nonnull final HttpServletResponse aHttpResponse,
                                     @Nonnull final IRequestWebScope aRequestScope) throws IOException, ServletException
   {
+    final EHTTPVersion eHttpVersion = RequestHelper.getHttpVersion (aHttpRequest);
+
     // get handler name from request (skipping the leading "/")
     final String sAjaxFunctionName = StringHelper.trimStart (RequestHelper.getPathWithinServlet (aHttpRequest), "/");
 
@@ -128,7 +131,7 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
         // Just in case somebody tries to play around with our servlet...
         s_aLogger.warn ("No AJAX method name provided");
         aHttpResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
-        ResponseHelper.modifyResponseForNoCaching (aHttpResponse);
+        ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
         ResponseHelper.writeEmptyResponse (aHttpRequest, aHttpResponse);
       }
       else
@@ -137,7 +140,7 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
           // E.g. not valid for current p3 run-mode
           s_aLogger.warn ("Invoking the AJAX function '" + sAjaxFunctionName + "' is not valid in this context!");
           aHttpResponse.setStatus (HttpServletResponse.SC_NOT_ACCEPTABLE);
-          ResponseHelper.modifyResponseForNoCaching (aHttpResponse);
+          ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
           ResponseHelper.writeEmptyResponse (aHttpRequest, aHttpResponse);
         }
         else
@@ -152,7 +155,7 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
             s_aLogger.trace ("  AJAX Result: " + aResult);
 
           // Do not cache the result!
-          ResponseHelper.modifyResponseForNoCaching (aHttpResponse);
+          ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
 
           // response writer cannot handle null values!
           ResponseHelper.writeTextResponse (aHttpRequest,

@@ -43,6 +43,7 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.AcceptEncodingList;
 import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.webbasics.http.EHTTPVersion;
 
 /**
  * Misc. helper methods on {@link HttpServletResponse} objects.
@@ -59,24 +60,44 @@ public final class ResponseHelper
   private ResponseHelper ()
   {}
 
+  @Deprecated
   public static void modifyResponseForNoCaching (@Nonnull final IRequestWebScope aRequestScope)
   {
-    modifyResponseForNoCaching (aRequestScope.getResponse ());
+    modifyResponseForNoCaching (null, aRequestScope);
   }
 
+  @Deprecated
   public static void modifyResponseForNoCaching (@Nonnull final HttpServletResponse aHttpResponse)
   {
-    // Set to expire far in the past.
-    aHttpResponse.setHeader (CHTTPHeader.EXPIRES, "Sat, 6 May 1995 12:00:00 GMT");
+    modifyResponseForNoCaching (null, aHttpResponse);
+  }
 
-    // Set standard HTTP/1.1 no-cache headers.
-    aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, "no-store, no-cache, must-revalidate");
+  public static void modifyResponseForNoCaching (@Nullable final EHTTPVersion eVersion,
+                                                 @Nonnull final IRequestWebScope aRequestScope)
+  {
+    modifyResponseForNoCaching (eVersion, aRequestScope.getResponse ());
+  }
 
-    // Set IE extended HTTP/1.1 no-cache headers.
-    aHttpResponse.addHeader (CHTTPHeader.CACHE_CONTROL, "post-check=0, pre-check=0");
+  public static void modifyResponseForNoCaching (@Nullable final EHTTPVersion eVersion,
+                                                 @Nonnull final HttpServletResponse aHttpResponse)
+  {
+    if (eVersion == null || eVersion == EHTTPVersion.HTTP_10)
+    {
+      // Set to expire far in the past for HTTP/1.0.
+      aHttpResponse.setHeader (CHTTPHeader.EXPIRES, "Sat, 6 May 1995 12:00:00 GMT");
 
-    // Set standard HTTP/1.0 no-cache header.
-    aHttpResponse.setHeader (CHTTPHeader.PRAGMA, "no-cache");
+      // Set standard HTTP/1.0 no-cache header.
+      aHttpResponse.setHeader (CHTTPHeader.PRAGMA, "no-cache");
+    }
+
+    if (eVersion == null || eVersion == EHTTPVersion.HTTP_11)
+    {
+      // Set standard HTTP/1.1 no-cache headers.
+      aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, "no-store, no-cache, must-revalidate");
+
+      // Set IE extended HTTP/1.1 no-cache headers.
+      aHttpResponse.addHeader (CHTTPHeader.CACHE_CONTROL, "post-check=0, pre-check=0");
+    }
   }
 
   public static void modifyResponseContentDisposition (@Nonnull final IRequestWebScope aRequestScope,

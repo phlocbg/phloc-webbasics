@@ -43,6 +43,8 @@ import com.phloc.commons.stats.IStatisticsHandlerSize;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.CHTMLCharset;
+import com.phloc.webbasics.http.EHTTPVersion;
+import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.ResponseHelper;
 import com.phloc.webbasics.web.ResponseHelperSettings;
 
@@ -179,13 +181,15 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
       // Caching (e.g. ETag)?
       if (!useAndReturnCachedObject (aHttpRequest, aHttpResponse))
       {
+        final EHTTPVersion eHttpVersion = RequestHelper.getHttpVersion (aHttpRequest);
+
         // HTTP caching possible?
         if (objectsAllowsForHTTPCaching (aHttpRequest, aHttpResponse, sFilename))
         {
           ResponseHelper.modifyResponseForExpiration (aHttpResponse, ResponseHelperSettings.getExpirationSeconds ());
         }
         else
-          ResponseHelper.modifyResponseForNoCaching (aHttpResponse);
+          ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
 
         // Can we get resource transfer working with GZIP or deflate?
         final OutputStream aOS = ResponseHelper.getBestSuitableOutputStream (aHttpRequest, aHttpResponse);

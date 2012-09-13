@@ -32,8 +32,10 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.CWeb;
 import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.webbasics.http.EHTTPVersion;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
@@ -265,6 +267,31 @@ public final class RequestHelper
       throw new NullPointerException ("httpRequest");
 
     return aHttpRequest.getHeader (CHTTPHeader.REFERER);
+  }
+
+  @Nullable
+  public static EHTTPVersion getHttpVersion (@Nonnull final IRequestWebScope aRequestScope)
+  {
+    if (aRequestScope == null)
+      throw new NullPointerException ("requestScope");
+
+    return getHttpVersion (aRequestScope.getRequest ());
+  }
+
+  /**
+   * Get the HTTP version associated with the given HTTP request
+   * 
+   * @param aHttpRequest
+   *        The http request to query. May not be <code>null</code>.
+   * @return <code>null</code> if no supported HTTP version is contained
+   */
+  @Nullable
+  public static EHTTPVersion getHttpVersion (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    return EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
   }
 
   /**
