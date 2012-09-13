@@ -1,9 +1,11 @@
 package com.phloc.webbasics.servlet;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.webbasics.web.ResponseHelper;
 
 public class CheckResponseFilter implements Filter
 {
@@ -30,12 +33,12 @@ public class CheckResponseFilter implements Filter
    * @param sRequestURL
    * @param nStatusCode
    */
-  protected void checkStatusCode (final String sRequestURL, final int nStatusCode)
+  protected void checkStatusCode (@Nonnull final String sRequestURL, final int nStatusCode)
   {
     if (nStatusCode != HttpServletResponse.SC_OK &&
         nStatusCode < HttpServletResponse.SC_MULTIPLE_CHOICES &&
         nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
-      s_aLogger.warn ("Status code " + nStatusCode + " in response to '" + sRequestURL + '"');
+      s_aLogger.warn ("Status code " + nStatusCode + " in response to '" + sRequestURL + "'");
   }
 
   /**
@@ -44,12 +47,12 @@ public class CheckResponseFilter implements Filter
    * @param nStatusCode
    */
   @OverrideOnDemand
-  protected void checkCharacterEncoding (final String sRequestURL,
-                                         final String sCharacterEncoding,
+  protected void checkCharacterEncoding (@Nonnull final String sRequestURL,
+                                         @Nullable final String sCharacterEncoding,
                                          final int nStatusCode)
   {
-    if (StringHelper.hasNoText (sCharacterEncoding))
-      s_aLogger.warn ("No character encoding in response to '" + sRequestURL + '"');
+    if (StringHelper.hasNoText (sCharacterEncoding) && !ResponseHelper.isRedirectStatusCode (nStatusCode))
+      s_aLogger.warn ("No character encoding on " + nStatusCode + " response to '" + sRequestURL + "'");
   }
 
   /**
@@ -58,10 +61,21 @@ public class CheckResponseFilter implements Filter
    * @param nStatusCode
    */
   @OverrideOnDemand
-  protected void checkContentType (final String sRequestURL, final String sContentType, final int nStatusCode)
+  protected void checkContentType (@Nonnull final String sRequestURL,
+                                   @Nullable final String sContentType,
+                                   final int nStatusCode)
   {
-    if (StringHelper.hasNoText (sContentType))
-      s_aLogger.warn ("No character encoding in response to '" + sRequestURL + '"');
+    if (StringHelper.hasNoText (sContentType) && !ResponseHelper.isRedirectStatusCode (nStatusCode))
+      s_aLogger.warn ("No content type on " + nStatusCode + " response to '" + sRequestURL + "'");
+  }
+
+  @OverrideOnDemand
+  protected void checkHeaders (@Nonnull final String sRequestURL,
+                               @Nonnull final Map <String, List <String>> aHeaders,
+                               final int nStatusCode)
+  {
+    if (nStatusCode != HttpServletResponse.SC_OK && !aHeaders.isEmpty ())
+      s_aLogger.warn ("Headers on " + nStatusCode + " response to '" + sRequestURL + "': " + aHeaders);
   }
 
   private void _checkResults (@Nonnull final HttpServletRequest aHttpRequest,
@@ -69,12 +83,14 @@ public class CheckResponseFilter implements Filter
   {
     final String sRequestURL = aHttpRequest.getRequestURL ().toString ();
     final int nStatusCode = aHttpResponse.getStatusCode ();
+    final Map <String, List <String>> aHeaders = aHttpResponse.getAllHeaders ();
     final String sCharacterEncoding = aHttpResponse.getCharacterEncoding ();
     final String sContentType = aHttpResponse.getContentType ();
 
     checkStatusCode (sRequestURL, nStatusCode);
     checkCharacterEncoding (sRequestURL, sCharacterEncoding, nStatusCode);
     checkContentType (sRequestURL, sContentType, nStatusCode);
+    checkHeaders (sRequestURL, aHeaders, nStatusCode);
   }
 
   public void doFilter (@Nonnull final ServletRequest aRequest,
@@ -83,10 +99,7 @@ public class CheckResponseFilter implements Filter
   {
     StatusAwareHttpResponseWrapper aWrapper = null;
     if (aRequest instanceof HttpServletRequest && aResponse instanceof HttpServletResponse)
-    {
       aWrapper = new StatusAwareHttpResponseWrapper ((HttpServletResponse) aResponse);
-      ((HttpServletResponse) aResponse).addDateHeader ("foo", new Date ().getTime ());
-    }
     aChain.doFilter (aRequest, aWrapper != null ? aWrapper : aResponse);
     if (aWrapper != null)
       _checkResults ((HttpServletRequest) aRequest, aWrapper);

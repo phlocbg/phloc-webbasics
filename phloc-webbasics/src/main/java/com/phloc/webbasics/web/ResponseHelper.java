@@ -56,11 +56,11 @@ import com.phloc.webbasics.http.EHTTPVersion;
 public final class ResponseHelper
 {
   public static final String EXPIRES_NEVER = PDTWebDateUtils.getAsStringRFC822 (PDTFactory.createLocalDateTime (1995,
-                                                                                                                   DateTimeConstants.MAY,
-                                                                                                                   6,
-                                                                                                                   12,
-                                                                                                                   0,
-                                                                                                                   0));
+                                                                                                                DateTimeConstants.MAY,
+                                                                                                                6,
+                                                                                                                12,
+                                                                                                                0,
+                                                                                                                0));
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -513,5 +513,11 @@ public final class ResponseHelper
                                          @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     writeResponse (aHttpRequest, aHttpResponse, new byte [0], CMimeType.TEXT_PLAIN, CCharset.CHARSET_ISO_8859_1);
+  }
+
+  public static boolean isRedirectStatusCode (final int nSC)
+  {
+    // 301 || 302
+    return nSC == HttpServletResponse.SC_MOVED_PERMANENTLY || nSC == HttpServletResponse.SC_MOVED_TEMPORARILY;
   }
 }
