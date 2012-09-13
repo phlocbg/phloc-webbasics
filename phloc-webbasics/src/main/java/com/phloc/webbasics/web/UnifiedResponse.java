@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2012 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.webbasics.web;
 
 import java.io.IOException;
@@ -31,6 +48,12 @@ import com.phloc.webbasics.http.CacheControlBuilder;
 import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.http.HTTPHeaderMap;
 
+/**
+ * This class tries to encapsulate all things required to build a HTTP response.
+ * It offer warnings and consistency checks if something is missing.
+ * 
+ * @author philip
+ */
 public class UnifiedResponse
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
@@ -79,6 +102,13 @@ public class UnifiedResponse
     return this;
   }
 
+  @Nonnull
+  public UnifiedResponse removeCharset ()
+  {
+    m_aCharset = null;
+    return this;
+  }
+
   @Nullable
   public IMimeType getMimeType ()
   {
@@ -93,6 +123,13 @@ public class UnifiedResponse
     if (m_aMimeType != null)
       s_aLogger.warn ("UnifiedResponse: Overwriting MimeType from " + m_aMimeType + " to " + aMimeType);
     m_aMimeType = aMimeType;
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse removeMimeType ()
+  {
+    m_aMimeType = null;
     return this;
   }
 
@@ -153,6 +190,14 @@ public class UnifiedResponse
       s_aLogger.warn ("UnifiedResponse: Overwriting content with content provider!");
     m_aContent = null;
     m_aContentISP = aISP;
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse removeContent ()
+  {
+    m_aContent = null;
+    m_aContentISP = null;
     return this;
   }
 
@@ -254,6 +299,13 @@ public class UnifiedResponse
   }
 
   @Nonnull
+  public UnifiedResponse removeContentDispositionFilename ()
+  {
+    m_sContentDispositionFilename = null;
+    return this;
+  }
+
+  @Nonnull
   public UnifiedResponse setCacheControl (@Nonnull final CacheControlBuilder aCacheControl)
   {
     if (aCacheControl == null)
@@ -264,11 +316,18 @@ public class UnifiedResponse
     return this;
   }
 
+  @Nonnull
+  public UnifiedResponse removeCacheControl ()
+  {
+    m_aCacheControl = null;
+    return this;
+  }
+
   private void _verifyCachingIntegrity ()
   {
     final boolean bIsHttp11 = isHttp11 ();
     final boolean bExpires = m_aHeaderMap.containsHeaders (CHTTPHeader.EXPIRES);
-    final boolean bCacheControl = m_aHeaderMap.containsHeaders (CHTTPHeader.CACHE_CONTROL);
+    final boolean bCacheControl = m_aCacheControl != null;
     final boolean bLastModified = m_aHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
     final boolean bETag = m_aHeaderMap.containsHeaders (CHTTPHeader.ETAG);
 
@@ -302,6 +361,15 @@ public class UnifiedResponse
         if (m_aCacheControl.isProxyRevalidate ())
           s_aLogger.info ("UnifiedResponse: Cache-Control no-store is enabled. So proxy-revalidate does not need to be enabled");
       }
+      else
+        if (m_aCacheControl.isNoCache ())
+        {
+          if (m_aCacheControl.isMustRevalidate ())
+            s_aLogger.info ("UnifiedResponse: Cache-Control no-cache is enabled. So must-revalidate does not need to be enabled");
+
+          if (m_aCacheControl.isProxyRevalidate ())
+            s_aLogger.info ("UnifiedResponse: Cache-Control no-cache is enabled. So proxy-revalidate does not need to be enabled");
+        }
     }
   }
 
@@ -328,7 +396,13 @@ public class UnifiedResponse
     }
 
     if (m_aCacheControl != null)
-      aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, m_aCacheControl.getAsHTTPHeaderValue ());
+    {
+      final String sCacheControlValue = m_aCacheControl.getAsHTTPHeaderValue ();
+      if (StringHelper.hasText (sCacheControlValue))
+        aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, sCacheControlValue);
+      else
+        s_aLogger.warn ("UnifiedResponse: An empty Cache-Control was provided!");
+    }
 
     if (m_sContentDispositionFilename != null)
     {
