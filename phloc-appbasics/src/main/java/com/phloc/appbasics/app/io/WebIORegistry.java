@@ -172,6 +172,18 @@ public final class WebIORegistry
   }
 
   @Nonnull
+  public static File getDirectoryFile (@Nonnull final String sDirectoryName)
+  {
+    return getDirectoryFile (sDirectoryName, false);
+  }
+
+  @Nonnull
+  public static File getDirectoryFile (@Nonnull final String sDirectoryName, final boolean bCreateDirOnDemand)
+  {
+    return WebFileIO.getFile (getRegistryDirectoryName (sDirectoryName, bCreateDirOnDemand));
+  }
+
+  @Nonnull
   public static File getFile (@Nonnull final String sDirectoryName, @Nonnull final String sFilename)
   {
     return getFile (sDirectoryName, sFilename, false);

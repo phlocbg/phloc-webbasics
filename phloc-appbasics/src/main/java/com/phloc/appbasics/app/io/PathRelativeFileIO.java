@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.EAppend;
+import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -67,9 +67,7 @@ public final class PathRelativeFileIO
   }
 
   /**
-   * @return The storage base path.
-   * @throws IllegalStateException
-   *         if no base path was provided
+   * @return The storage base path. Never <code>null</code>.
    */
   @Nonnull
   public File getBasePathFile ()
@@ -78,9 +76,8 @@ public final class PathRelativeFileIO
   }
 
   /**
-   * @return The absolute base path that is used
-   * @throws IllegalStateException
-   *         if no base path was provided
+   * @return The absolute base path that is used. Neither <code>null</code> nor
+   *         empty.
    */
   @Nonnull
   @Nonempty
@@ -95,8 +92,6 @@ public final class PathRelativeFileIO
    * @param sRelativePath
    *        the relative path
    * @return The "absolute" {@link File} and never <code>null</code>.
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   @Nonnull
@@ -112,8 +107,6 @@ public final class PathRelativeFileIO
    *        the relative path
    * @return <code>true</code> if the {@link File} is a file and exists,
    *         <code>false</code> otherwise.
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   public boolean existsFile (@Nonnull final String sRelativePath)
@@ -128,8 +121,6 @@ public final class PathRelativeFileIO
    *        the relative path
    * @return <code>true</code> if the {@link File} is a directory and exists,
    *         <code>false</code> otherwise.
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   public boolean existsDir (@Nonnull final String sRelativePath)
@@ -144,8 +135,6 @@ public final class PathRelativeFileIO
    *        the relative path
    * @return The "absolute" {@link FileSystemResource} and never
    *         <code>null</code>.
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   @Nonnull
@@ -160,8 +149,6 @@ public final class PathRelativeFileIO
    * @param sRelativePath
    *        the relative path
    * @return <code>null</code> if the path does not exist
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   @Nullable
@@ -178,8 +165,6 @@ public final class PathRelativeFileIO
    * @param aCharset
    *        The charset to use. May not be <code>null</code>.
    * @return <code>null</code> if the path does not exist
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   @Nullable
@@ -196,8 +181,6 @@ public final class PathRelativeFileIO
    * @param sCharset
    *        The charset to use. May not be <code>null</code>.
    * @return <code>null</code> if the path does not exist
-   * @throws IllegalStateException
-   *         if no base path was provided
    * @see #getBasePathFile()
    */
   @Nullable
@@ -273,7 +256,7 @@ public final class PathRelativeFileIO
    * @see #getBasePathFile()
    */
   @Nonnull
-  public ISuccessIndicator createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
+  public FileIOError createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
   {
     final File aDir = getFile (sRelativePath);
     return bRecursive ? WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
