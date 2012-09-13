@@ -31,6 +31,8 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.DateTimeConstants;
+
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -53,6 +55,13 @@ import com.phloc.webbasics.http.EHTTPVersion;
 @Immutable
 public final class ResponseHelper
 {
+  public static final String EXPIRES_NEVER = PDTWebDateUtils.getAsStringRFC822 (PDTFactory.createLocalDateTime (1995,
+                                                                                                                   DateTimeConstants.MAY,
+                                                                                                                   6,
+                                                                                                                   12,
+                                                                                                                   0,
+                                                                                                                   0));
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final ResponseHelper s_aInstance = new ResponseHelper ();
@@ -84,7 +93,8 @@ public final class ResponseHelper
     if (eVersion == null || eVersion == EHTTPVersion.HTTP_10)
     {
       // Set to expire far in the past for HTTP/1.0.
-      aHttpResponse.setHeader (CHTTPHeader.EXPIRES, "Sat, 6 May 1995 12:00:00 GMT");
+      // FIXME the date is considered invalid!
+      aHttpResponse.setHeader (CHTTPHeader.EXPIRES, EXPIRES_NEVER);
 
       // Set standard HTTP/1.0 no-cache header.
       aHttpResponse.setHeader (CHTTPHeader.PRAGMA, "no-cache");
