@@ -42,7 +42,7 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * 
  * @author philip
  */
-public final class HCDateEdit extends AbstractWrappedHCNode
+public class HCDateEdit extends AbstractWrappedHCNode
 {
   // dd.mm.yyyy
   public static final int DATE_DEFAULT_MAX_LENGTH = 2 + 1 + 2 + 1 + 4;
@@ -98,8 +98,7 @@ public final class HCDateEdit extends AbstractWrappedHCNode
     if (m_aNL.getChildCount () == 2)
       m_aNL.removeChild (1);
 
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime
-                                                                               ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
                                                                                : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
                                                   .getJSCalendarFormatString ();
 

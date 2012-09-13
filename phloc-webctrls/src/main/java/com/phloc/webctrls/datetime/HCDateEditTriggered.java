@@ -48,7 +48,7 @@ import com.phloc.webbasics.EWebBasicsText;
  * 
  * @author philip
  */
-public final class HCDateEditTriggered extends AbstractWrappedHCNode
+public class HCDateEditTriggered extends AbstractWrappedHCNode
 {
   private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL = DefaultCSSClassProvider.create ("phloc-calendar-ctrl");
   private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER = DefaultCSSClassProvider.create ("phloc-calendar-ctrl-trigger");
@@ -82,8 +82,7 @@ public final class HCDateEditTriggered extends AbstractWrappedHCNode
   @Nonnull
   private HCScript _createJSCode (final boolean bShowTime, final String sID, final Locale aDisplayLocale)
   {
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime
-                                                                             ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
                                                                              : PDTFormatPatterns.getDefaultPatternDate (aDisplayLocale))
                                                   .getJSCalendarFormatString ();
 
