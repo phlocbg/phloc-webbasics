@@ -15,11 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.bootstrap.derived;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webctrls.bootstrap.BootstrapButton;
+import com.phloc.webctrls.bootstrap.BootstrapButtonToolbar;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
@@ -30,6 +33,11 @@ import com.phloc.webctrls.custom.EDefaultIcon;
 public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
 {
   private final ISimpleURL m_aSelfHref;
+
+  public BootstrapButtonToolbarAdvanced ()
+  {
+    this (LinkUtils.getSelfHref ());
+  }
 
   public BootstrapButtonToolbarAdvanced (@Nonnull final ISimpleURL aSelfHref)
   {
