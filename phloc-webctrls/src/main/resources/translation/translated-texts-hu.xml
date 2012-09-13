@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translationitems count="14">
+  <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
+    <hu>Első</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO">
+    <hu>_START_ ig _END_ tól _TOTAL_beadva</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_EMPTY">
+    <hu>0 tól 0 ig 0 beadva</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_FILTERED">
+    <hu>szűrés _MAX_  tól beadva</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_POSTFIX">
+    <hu></hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.LAST">
+    <hu>Utolsó</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.LENGTH_MENU">
+    <hu>_MENU_bejegyzések mutatása</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.NEXT">
+    <hu>Következő</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.PREVIOUS">
+    <hu>Vissza</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.PROCESSING">
+    <hu>Kérem várjon-…</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.SEARCH">
+    <hu>Keresés:</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.URL">
+    <hu></hu>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+    <hu>Nincs bejegyzés.</hu>
+  </item>
+  <item id="com.phloc.webctrls.facebook.EFacebookText.SHARE">
+    <hu>Megosztás</hu>
+  </item>
+</translationitems>

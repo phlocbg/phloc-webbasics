@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translationitems count="14">
+  <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
+    <pl>Pierwszy</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO">
+    <pl>Pokazać _START_ do _END_ z _TOTAL_ pozycji</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_EMPTY">
+    <pl>Pokazać 0 do 0 z 0 pozycji</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_FILTERED">
+    <pl>(filtrować z _MAX_ wszystkich pozycji)</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_POSTFIX">
+    <pl></pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.LAST">
+    <pl>Ostatni</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.LENGTH_MENU">
+    <pl>Pokazać _MENU_ pozycje</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.NEXT">
+    <pl>Następny</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.PREVIOUS">
+    <pl>Poprzedni</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.PROCESSING">
+    <pl>Proszę czekać ...</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.SEARCH">
+    <pl>Wyszukiwanie:</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.URL">
+    <pl></pl>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+    <pl>Nie znaleziono żaden wpis</pl>
+  </item>
+  <item id="com.phloc.webctrls.facebook.EFacebookText.SHARE">
+    <pl>Dzielić</pl>
+  </item>
+</translationitems>

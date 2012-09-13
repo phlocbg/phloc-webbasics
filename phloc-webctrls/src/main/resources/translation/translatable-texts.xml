@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translationitems count="14">
+  <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
+    <de>Erster</de>
+    <en>First</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO">
+    <de>_START_ bis _END_ von _TOTAL_ Einträgen</de>
+    <en>Showing _START_ to _END_ of _TOTAL_ entries</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_EMPTY">
+    <de>0 bis 0 von 0 Einträgen</de>
+    <en>Showing 0 to 0 of 0 entries</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_FILTERED">
+    <de>(gefiltert von _MAX_  Einträgen)</de>
+    <en>(filtered from _MAX_ total entries)</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_POSTFIX">
+    <de></de>
+    <en></en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.LAST">
+    <de>Letzter</de>
+    <en>Last</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.LENGTH_MENU">
+    <de>_MENU_ Einträge anzeigen</de>
+    <en>Show _MENU_ entries</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.NEXT">
+    <de>Nächster</de>
+    <en>Next</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.PREVIOUS">
+    <de>Zurück</de>
+    <en>Previous</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.PROCESSING">
+    <de>Bitte warten...</de>
+    <en>Processing...</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.SEARCH">
+    <de>Suchen:</de>
+    <en>Search:</en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.URL">
+    <de></de>
+    <en></en>
+  </item>
+  <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+    <de>Keine Einträge vorhanden.</de>
+    <en>No matching records found.</en>
+  </item>
+  <item id="com.phloc.webctrls.facebook.EFacebookText.SHARE">
+    <de>Share</de>
+    <en>Share</en>
+  </item>
+</translationitems>
