@@ -22,6 +22,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.microdom.IMicroElement;
@@ -50,6 +51,7 @@ public final class BootstrapTableForm extends BootstrapTable
 {
   private static final String REQUEST_ATTR = "BootstrapTableForm$FirstFocusable";
 
+  private boolean m_bFocusHandlingEnabled = true;
   private boolean m_bSetAutoFocus = false;
   private IHCNode m_aFirstFocusable;
 
@@ -58,6 +60,18 @@ public final class BootstrapTableForm extends BootstrapTable
     super (aWidths);
     setCondensed (true);
     setStriped (true);
+  }
+
+  @Nonnull
+  public BootstrapTableForm setFocusHandlingEnabled (final boolean bFocusHandlingEnabled)
+  {
+    m_bFocusHandlingEnabled = bFocusHandlingEnabled;
+    return this;
+  }
+
+  public boolean isFocusHandlingEnabled ()
+  {
+    return m_bFocusHandlingEnabled;
   }
 
   private static void _focusNode (@Nonnull final IHCNode aCtrl)
@@ -77,6 +91,25 @@ public final class BootstrapTableForm extends BootstrapTable
     aRow.addCell (aLabel);
   }
 
+  /**
+   * Modify the passed controls for a certain row
+   * 
+   * @param aCtrls
+   *        The list of controls for a cell. Never <code>null</code> but maybe
+   *        empty
+   */
+  @OverrideOnDemand
+  protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls)
+  {
+    // Set full width class on first control
+    for (final IHCNode aCtrl : aCtrls)
+      if (aCtrl instanceof IHCElement <?> && !(aCtrl instanceof HCCheckBox))
+      {
+        ((IHCElement <?>) aCtrl).addClass (CBootstrapCSS.INPUT_XXLARGE);
+        break;
+      }
+  }
+
   @Nonnull
   private AbstractHCCell _addControlCell (@Nonnull final HCRow aRow,
                                           @Nullable final Iterable <? extends IHCNode> aCtrls,
@@ -84,32 +117,29 @@ public final class BootstrapTableForm extends BootstrapTable
   {
     if (aCtrls != null)
     {
-      // Set full width class on first control
-      for (final IHCNode aCtrl : aCtrls)
-        if (aCtrl instanceof IHCElement <?> && !(aCtrl instanceof HCCheckBox))
-        {
-          ((IHCElement <?>) aCtrl).addClass (CBootstrapCSS.INPUT_XXLARGE);
-          break;
-        }
+      modifyControls (aCtrls);
 
-      // Set focus on first element with error
-      if (bHasError && !m_bSetAutoFocus)
-        for (final IHCNode aCtrl : aCtrls)
-          if (aCtrl instanceof IHCHasFocus <?>)
-          {
-            _focusNode (aCtrl);
-            m_bSetAutoFocus = true;
-            break;
-          }
+      if (isFocusHandlingEnabled ())
+      {
+        // Set focus on first element with error
+        if (bHasError && !m_bSetAutoFocus)
+          for (final IHCNode aCtrl : aCtrls)
+            if (aCtrl instanceof IHCHasFocus <?>)
+            {
+              _focusNode (aCtrl);
+              m_bSetAutoFocus = true;
+              break;
+            }
 
-      // Find first focusable control
-      if (m_aFirstFocusable == null)
-        for (final IHCNode aCtrl : aCtrls)
-          if (aCtrl instanceof IHCHasFocus <?>)
-          {
-            m_aFirstFocusable = aCtrl;
-            break;
-          }
+        // Find first focusable control
+        if (m_aFirstFocusable == null)
+          for (final IHCNode aCtrl : aCtrls)
+            if (aCtrl instanceof IHCHasFocus <?>)
+            {
+              m_aFirstFocusable = aCtrl;
+              break;
+            }
+      }
     }
 
     return aRow.addAndReturnCell (aCtrls);
@@ -230,7 +260,7 @@ public final class BootstrapTableForm extends BootstrapTable
   @Override
   protected void applyProperties (final IMicroElement aDivElement, final IHCConversionSettings aConversionSettings)
   {
-    if (!m_bSetAutoFocus && m_aFirstFocusable != null)
+    if (isFocusHandlingEnabled () && !m_bSetAutoFocus && m_aFirstFocusable != null)
     {
       // No focus has yet be set
       // Try to focus the first control (if available), but do it only once per

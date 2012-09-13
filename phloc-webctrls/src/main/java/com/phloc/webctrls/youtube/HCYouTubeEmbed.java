@@ -33,7 +33,7 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
  * 
  * @author philip
  */
-public class YouTubeEmbed extends AbstractWrappedHCNode
+public class HCYouTubeEmbed extends AbstractWrappedHCNode
 {
   private static final String PREFIX = "http://www.youtube.com/v/";
   private final ISimpleURL m_aBaseURL;
@@ -43,7 +43,7 @@ public class YouTubeEmbed extends AbstractWrappedHCNode
   private final HCEmbed m_aEmbed;
   private final SMap m_aURLParams = new SMap ();
 
-  public YouTubeEmbed (final int nWidth, final int nHeight, final String sVideoID)
+  public HCYouTubeEmbed (final int nWidth, final int nHeight, final String sVideoID)
   {
     m_aBaseURL = new SimpleURL (PREFIX + sVideoID);
     m_aObject = new HCObject ();

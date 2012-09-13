@@ -33,11 +33,11 @@ import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.name.IDisplayTextProvider;
 import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCOption;
-import com.phloc.webctrls.custom.ExtHCSelect;
+import com.phloc.webctrls.custom.HCExtSelect;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webctrls.famfam.FamFamFlags;
 
-public class CountrySelect extends ExtHCSelect
+public class HCCountrySelect extends HCExtSelect
 {
   @Nonnull
   private static List <Locale> _getAllCountries ()
@@ -48,19 +48,19 @@ public class CountrySelect extends ExtHCSelect
     return aLocales;
   }
 
-  public CountrySelect (@Nonnull final IHCRequestField aRF, @Nonnull final Locale aDisplayLocale)
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF, @Nonnull final Locale aDisplayLocale)
   {
     this (aRF, aDisplayLocale, _getAllCountries ());
   }
 
-  public CountrySelect (@Nonnull final IHCRequestField aRF,
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF,
                         @Nonnull final Locale aDisplayLocale,
                         @Nonnull final Collection <Locale> aLocales)
   {
     this (aRF, aDisplayLocale, aLocales, null);
   }
 
-  public CountrySelect (@Nonnull final IHCRequestField aRF,
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF,
                         @Nonnull final Locale aDisplayLocale,
                         @Nonnull final Collection <Locale> aLocales,
                         @Nullable final IDisplayTextProvider <Locale> aDisplayTextProvider)

@@ -29,7 +29,7 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
 
-public abstract class AbstractFormLabel extends AbstractWrappedHCNode implements IFormLabel
+public abstract class AbstractHCFormLabel extends AbstractWrappedHCNode implements IFormLabel
 {
   public static final ICSSClassProvider CSS_CLASS_FORM_LABEL = DefaultCSSClassProvider.create ("form-label");
   public static final String SIGN_MANDATORY = "*";
@@ -69,7 +69,7 @@ public abstract class AbstractFormLabel extends AbstractWrappedHCNode implements
     return aNode;
   }
 
-  protected AbstractFormLabel (@Nonnull final ELabelType eType)
+  protected AbstractHCFormLabel (@Nonnull final ELabelType eType)
   {
     if (eType == null)
       throw new NullPointerException ("state");

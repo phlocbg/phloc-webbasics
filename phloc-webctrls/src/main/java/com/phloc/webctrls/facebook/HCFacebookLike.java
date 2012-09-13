@@ -34,17 +34,17 @@ import com.phloc.html.hc.html.HCIFrame;
  * 
  * @author philip
  */
-public final class FacebookLike extends HCIFrame
+public final class HCFacebookLike extends HCIFrame
 {
   public static final int DEFAULT_IFRAME_WIDTH = 450;
   public static final int DEFAULT_IFRAME_HEIGHT = 80;
 
-  public FacebookLike (@Nonnull final ISimpleURL aLikeURL)
+  public HCFacebookLike (@Nonnull final ISimpleURL aLikeURL)
   {
     this (aLikeURL, DEFAULT_IFRAME_WIDTH, DEFAULT_IFRAME_HEIGHT, true);
   }
 
-  public FacebookLike (@Nonnull final ISimpleURL aLikeURL,
+  public HCFacebookLike (@Nonnull final ISimpleURL aLikeURL,
                        @Nonnegative final int nWidth,
                        @Nonnegative final int nHeight,
                        final boolean bShowFaces)

@@ -26,7 +26,7 @@ import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScript.EMode;
 
 /**
- * Test class for class {@link GoogleAnalytics}
+ * Test class for class {@link HCGoogleAnalytics}
  * 
  * @author philip
  */
@@ -36,7 +36,7 @@ public final class GoogleAnalyticsTest
   public void testBasic1 ()
   {
     HCScript.setDefaultMode (EMode.PLAIN_TEXT_NO_ESCAPE);
-    final GoogleAnalytics aGA = new GoogleAnalytics ("abc", false);
+    final HCGoogleAnalytics aGA = new HCGoogleAnalytics ("abc", false);
     assertEquals ("<script type=\"text/javascript\">"
                       + "var _gaq=(_gaq||[]);"
                       + "_gaq.push(['_setAccount','abc']);"

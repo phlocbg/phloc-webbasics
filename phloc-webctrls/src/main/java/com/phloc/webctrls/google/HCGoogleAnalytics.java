@@ -40,12 +40,12 @@ import com.phloc.html.js.builder.html.JSHtml;
  * 
  * @author philip
  */
-public class GoogleAnalytics extends AbstractWrappedHCNode
+public class HCGoogleAnalytics extends AbstractWrappedHCNode
 {
   private final String m_sAccount;
   private final HCScript m_aScript;
 
-  public GoogleAnalytics (@Nonnull @Nonempty final String sAccount, final boolean bAnonymizeIP)
+  public HCGoogleAnalytics (@Nonnull @Nonempty final String sAccount, final boolean bAnonymizeIP)
   {
     if (StringHelper.hasNoText (sAccount))
       throw new IllegalArgumentException ("account is empty");

@@ -28,9 +28,9 @@ import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.ELabelType;
-import com.phloc.webctrls.custom.impl.AbstractFormLabel;
+import com.phloc.webctrls.custom.impl.AbstractHCFormLabel;
 
-public class BootstrapFormLabel extends AbstractFormLabel
+public class BootstrapFormLabel extends AbstractHCFormLabel
 {
   private final IHCElement <?> m_aNode;
 

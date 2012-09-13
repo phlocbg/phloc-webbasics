@@ -28,11 +28,11 @@ import com.phloc.html.hc.html.HCOption;
 import com.phloc.html.hc.html.HCSelect;
 import com.phloc.webbasics.EWebBasicsText;
 
-public class ExtHCSelect extends HCSelect
+public class HCExtSelect extends HCSelect
 {
   public static final ICSSClassProvider SPECIAL_OPTION = DefaultCSSClassProvider.create ("select-option-special");
 
-  public ExtHCSelect (@Nonnull final IHCRequestField aRF)
+  public HCExtSelect (@Nonnull final IHCRequestField aRF)
   {
     super (aRF);
   }
