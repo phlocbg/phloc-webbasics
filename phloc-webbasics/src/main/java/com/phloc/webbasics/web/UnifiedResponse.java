@@ -42,6 +42,11 @@ public class UnifiedResponse
     m_eHttpVersion = eHttpVersion;
   }
 
+  private boolean _isNotHttp11 ()
+  {
+    return !EHTTPVersion.HTTP_11.equals (m_eHttpVersion);
+  }
+
   @Nullable
   public Charset getCharset ()
   {
@@ -150,10 +155,71 @@ public class UnifiedResponse
     return this;
   }
 
+  @Nonnull
+  public UnifiedResponse removeExpires ()
+  {
+    m_aHeaderMap.removeHeaders (CHTTPHeader.EXPIRES);
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse setLastModified (@Nonnull final LocalDateTime aLDT)
+  {
+    m_aHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aLDT);
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse setLastModified (@Nonnull final DateTime aDT)
+  {
+    m_aHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aDT);
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse removeLastModified ()
+  {
+    m_aHeaderMap.removeHeaders (CHTTPHeader.LAST_MODIFIED);
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse setETag (@Nonnull final String sETag)
+  {
+    m_aHeaderMap.setHeader (CHTTPHeader.ETAG, sETag);
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse removeETag ()
+  {
+    m_aHeaderMap.removeHeaders (CHTTPHeader.ETAG);
+    return this;
+  }
+
+  private void _verifyHeaders ()
+  {
+    final boolean bExpires = m_aHeaderMap.containsHeaders (CHTTPHeader.EXPIRES);
+    final boolean bCacheControl = m_aHeaderMap.containsHeaders (CHTTPHeader.CACHE_CONTROL);
+    final boolean bLastModified = m_aHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
+    final boolean bETag = m_aHeaderMap.containsHeaders (CHTTPHeader.ETAG);
+
+    if (bExpires && bCacheControl)
+      s_aLogger.warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
+
+    if (bETag && _isNotHttp11 ())
+      s_aLogger.warn ("Sending an ETag for a HTTP version " + m_eHttpVersion + " has no effect!");
+
+    if ((bLastModified || bETag) && !bExpires && !bCacheControl)
+      s_aLogger.warn ("Validators (Last-Modified and ETag) have no effect if no Expires or Cache-Control is present");
+  }
+
   public void applyToResponse (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {
     if (aHttpResponse == null)
       throw new NullPointerException ("httpResponse");
+
+    _verifyHeaders ();
 
     // Apply all collected headers
     for (final Map.Entry <String, List <String>> aEntry : m_aHeaderMap.getAllHeaders ().entrySet ())
