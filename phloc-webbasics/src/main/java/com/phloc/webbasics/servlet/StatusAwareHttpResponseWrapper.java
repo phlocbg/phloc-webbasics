@@ -101,6 +101,7 @@ public class StatusAwareHttpResponseWrapper extends HttpServletResponseWrapper
   public void reset ()
   {
     super.reset ();
+    m_aHeaders.clear ();
   }
 
   private void _setHeader (final String sName, final String sValue)
