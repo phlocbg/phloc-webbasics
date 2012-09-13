@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.file.FileIOError;
@@ -55,15 +56,23 @@ public final class PathRelativeFileIO
   {
     if (aBasePath == null)
       throw new NullPointerException ("basePath");
-    m_aBasePath = aBasePath;
 
-    WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (m_aBasePath);
-    if (!FileUtils.canRead (m_aBasePath))
-      throw new IllegalArgumentException ("Cannot read in " + m_aBasePath);
-    if (!FileUtils.canWrite (m_aBasePath))
-      s_aLogger.warn ("Cannot write in " + m_aBasePath);
-    if (!FileUtils.canExecute (m_aBasePath))
-      s_aLogger.warn ("Cannot execute in " + m_aBasePath);
+    // Ensure the directory is present
+    WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aBasePath);
+
+    // Must be an existing directory
+    if (!aBasePath.isDirectory ())
+      throw new InitializationException ("The passed base path exists but is not a directory!");
+
+    // Check read/write/execute
+    if (!FileUtils.canRead (aBasePath))
+      throw new IllegalArgumentException ("Cannot read in " + aBasePath);
+    if (!FileUtils.canWrite (aBasePath))
+      s_aLogger.warn ("Cannot write in " + aBasePath);
+    if (!FileUtils.canExecute (aBasePath))
+      s_aLogger.warn ("Cannot execute in " + aBasePath);
+
+    m_aBasePath = aBasePath;
   }
 
   /**
