@@ -61,9 +61,10 @@ import com.phloc.webbasics.http.HTTPHeaderMap;
 public class UnifiedResponse
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
-  private static final String LOG_PREFIX = "UnifiedResponse: ";
+  private static final String LOG_PREFIX = "UnifiedResponse to ";
 
   private final EHTTPVersion m_eHttpVersion;
+  private final String m_sRequestURL;
 
   // Main data
   private Charset m_aCharset;
@@ -76,24 +77,27 @@ public class UnifiedResponse
   private final HTTPHeaderMap m_aHeaderMap = new HTTPHeaderMap ();
   private int m_nStatusCode = CGlobal.ILLEGAL_UINT;
 
-  public UnifiedResponse (@Nullable final EHTTPVersion eHttpVersion)
+  public UnifiedResponse (@Nonnull final EHTTPVersion eHttpVersion, @Nonnull final String sRequestURL)
   {
+    if (eHttpVersion == null)
+      throw new NullPointerException ("httpVersion");
     m_eHttpVersion = eHttpVersion;
+    m_sRequestURL = sRequestURL;
   }
 
-  private static void _info (@Nonnull final String sMsg)
+  private void _info (@Nonnull final String sMsg)
   {
-    s_aLogger.info (LOG_PREFIX + sMsg);
+    s_aLogger.info (LOG_PREFIX + m_sRequestURL + ":" + sMsg);
   }
 
-  private static void _warn (@Nonnull final String sMsg)
+  private void _warn (@Nonnull final String sMsg)
   {
-    s_aLogger.warn (LOG_PREFIX + sMsg);
+    s_aLogger.warn (LOG_PREFIX + m_sRequestURL + ":" + sMsg);
   }
 
-  private static void _error (@Nonnull final String sMsg)
+  private void _error (@Nonnull final String sMsg)
   {
-    s_aLogger.error (LOG_PREFIX + sMsg);
+    s_aLogger.error (LOG_PREFIX + m_sRequestURL + ":" + sMsg);
   }
 
   public boolean isHttp10 ()
@@ -400,25 +404,29 @@ public class UnifiedResponse
     removeETag ();
     removeLastModified ();
 
-    if (m_eHttpVersion == null || m_eHttpVersion == EHTTPVersion.HTTP_10)
+    switch (m_eHttpVersion)
     {
-      // Set to expire far in the past for HTTP/1.0.
-      m_aHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelper.EXPIRES_NEVER_STRING);
+      case HTTP_10:
+      {
+        // Set to expire far in the past for HTTP/1.0.
+        m_aHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelper.EXPIRES_NEVER_STRING);
 
-      // Set standard HTTP/1.0 no-cache header.
-      m_aHeaderMap.setHeader (CHTTPHeader.PRAGMA, "no-cache");
-    }
+        // Set standard HTTP/1.0 no-cache header.
+        m_aHeaderMap.setHeader (CHTTPHeader.PRAGMA, "no-cache");
+        break;
+      }
+      case HTTP_11:
+      {
+        // No store must be enough
+        final CacheControlBuilder aCacheControlBuilder = new CacheControlBuilder ().setNoStore (true);
 
-    if (m_eHttpVersion == null || m_eHttpVersion == EHTTPVersion.HTTP_11)
-    {
-      // No store must be enough
-      final CacheControlBuilder aCacheControlBuilder = new CacheControlBuilder ().setNoStore (true);
+        // Set IE extended HTTP/1.1 no-cache headers.
+        // http://aspnetresources.com/blog/cache_control_extensions
+        aCacheControlBuilder.addExtension ("post-check=0").addExtension ("pre-check=0");
 
-      // Set IE extended HTTP/1.1 no-cache headers.
-      // http://aspnetresources.com/blog/cache_control_extensions
-      aCacheControlBuilder.addExtension ("post-check=0").addExtension ("pre-check=0");
-
-      setCacheControl (aCacheControlBuilder);
+        setCacheControl (aCacheControlBuilder);
+        break;
+      }
     }
     return this;
   }
