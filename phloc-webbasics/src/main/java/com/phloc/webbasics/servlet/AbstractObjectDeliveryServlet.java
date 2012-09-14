@@ -24,7 +24,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -33,16 +33,17 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.web.RequestHelper;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Base class for stream and download servlet.
  * 
  * @author philip
  */
-public abstract class AbstractObjectDeliveryServlet extends AbstractScopeAwareHttpServlet
+public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedResponseServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractObjectDeliveryServlet.class);
 
@@ -95,43 +96,36 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractScopeAwareHt
            sFilename.indexOf ("..\\") >= 0;
   }
 
-  protected abstract void onDeliverResource (@Nonnull HttpServletRequest aHttpRequest,
-                                             @Nonnull HttpServletResponse aHttpResponse,
+  protected abstract void onDeliverResource (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                                             @Nonnull UnifiedResponse aUnifiedResponse,
                                              @Nonnull String sFilename) throws IOException;
 
-  private void _handle (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws IOException
+  @Override
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final EHTTPMethod eHTTPMethod,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
-    // cut the leading "/"
-    final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aHttpRequest));
-
-    if (StringHelper.hasText (sFilename) &&
-        _hasValidExtension (sFilename) &&
-        !_isPossibleDirectoryTraversalRequest (sFilename))
-    {
-      onDeliverResource (aHttpRequest, aHttpResponse, sFilename);
-    }
+    if (!eHTTPMethod.equals (EHTTPMethod.GET))
+      aUnifiedResponse.setStatus (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     else
     {
-      // Send the same error code as if it is simply not found to confuse
-      // attackers :)
-      s_aLogger.warn ("Illegal delivery request '" + sFilename + "'");
-      aHttpResponse.sendError (HttpServletResponse.SC_NOT_FOUND, sFilename);
+      // cut the leading "/"
+      final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
+
+      if (StringHelper.hasText (sFilename) &&
+          _hasValidExtension (sFilename) &&
+          !_isPossibleDirectoryTraversalRequest (sFilename))
+      {
+        // Filename seems to be safe
+        onDeliverResource (aRequestScope, aUnifiedResponse, sFilename);
+      }
+      else
+      {
+        // Send the same error code as if it is simply not found to confuse
+        // attackers :)
+        s_aLogger.warn ("Illegal delivery request '" + sFilename + "'");
+        aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
+      }
     }
-  }
-
-  @Override
-  protected final void onGet (@Nonnull final HttpServletRequest aHttpRequest,
-                              @Nonnull final HttpServletResponse aHttpResponse,
-                              @Nonnull final IRequestWebScope aRequestScope) throws IOException
-  {
-    _handle (aHttpRequest, aHttpResponse);
-  }
-
-  @Override
-  protected final void onPost (@Nonnull final HttpServletRequest aHttpRequest,
-                               @Nonnull final HttpServletResponse aHttpResponse,
-                               @Nonnull final IRequestWebScope aRequestScope) throws IOException
-  {
-    _handle (aHttpRequest, aHttpResponse);
   }
 }

@@ -69,6 +69,12 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
                                                                                     ServletException
   {
     final EHTTPVersion eHTTPVersion = EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
+    if (eHTTPVersion == null)
+    {
+      aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
+      return EContinue.BREAK;
+    }
+
     final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion);
     if (handleRequest (aRequestScope, aUnifiedResponse).isContinue ())
     {

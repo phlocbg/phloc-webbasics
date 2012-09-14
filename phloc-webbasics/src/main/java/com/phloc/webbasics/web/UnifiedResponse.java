@@ -74,7 +74,7 @@ public class UnifiedResponse
   private CharsetEncoder m_aContentDispositionEncoder;
   private CacheControlBuilder m_aCacheControl;
   private final HTTPHeaderMap m_aHeaderMap = new HTTPHeaderMap ();
-  private int m_nErrorCode = CGlobal.ILLEGAL_UINT;
+  private int m_nStatusCode = CGlobal.ILLEGAL_UINT;
 
   public UnifiedResponse (@Nullable final EHTTPVersion eHttpVersion)
   {
@@ -345,6 +345,22 @@ public class UnifiedResponse
     return this;
   }
 
+  /**
+   * Utility method for setting the MimeType application/force-download and set
+   * the respective content disposition
+   * 
+   * @param sFilename
+   *        The filename to be used.
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setDownloadFilename (@Nonnull @Nonempty final String sFilename)
+  {
+    setMimeType (CMimeType.APPLICATION_FORCE_DOWNLOAD);
+    setContentDispositionFilename (sFilename);
+    return this;
+  }
+
   @Nonnull
   public UnifiedResponse setCacheControl (@Nonnull final CacheControlBuilder aCacheControl)
   {
@@ -378,6 +394,12 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse disableCaching ()
   {
+    // Remove any eventually set headers
+    removeExpires ();
+    removeCacheControl ();
+    removeETag ();
+    removeLastModified ();
+
     if (m_eHttpVersion == null || m_eHttpVersion == EHTTPVersion.HTTP_10)
     {
       // Set to expire far in the past for HTTP/1.0.
@@ -402,13 +424,11 @@ public class UnifiedResponse
   }
 
   @Nonnull
-  public UnifiedResponse setError (@Nonnegative final int nErrorCode)
+  public UnifiedResponse setStatus (@Nonnegative final int nStatusCode)
   {
-    if (nErrorCode < HttpServletResponse.SC_BAD_REQUEST)
-      throw new IllegalArgumentException ("Status " + nErrorCode + " is not an error!");
-    if (m_nErrorCode != CGlobal.ILLEGAL_UINT)
-      _warn ("Overwriting error code " + m_nErrorCode + " with " + nErrorCode);
-    m_nErrorCode = nErrorCode;
+    if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
+      _warn ("Overwriting status code " + m_nStatusCode + " with " + nStatusCode);
+    m_nStatusCode = nStatusCode;
     return this;
   }
 
@@ -540,14 +560,27 @@ public class UnifiedResponse
             break;
         }
 
-    if (m_nErrorCode != CGlobal.ILLEGAL_UINT)
+    if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
     {
-      // Send the error code, and allow for content (e.g. 404)
-      aHttpResponse.sendError (m_nErrorCode);
+      // Send the status code
+      if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
+      {
+        // Note: After using this method, the response should be considered to
+        // be committed and should not be written to.
+        aHttpResponse.sendError (m_nStatusCode);
+      }
+      else
+      {
+        // Note: The container clears the buffer and sets the Location header,
+        // preserving cookies and other headers.
+        aHttpResponse.setStatus (m_nStatusCode);
+      }
     }
-
-    // Determine content length
-    _applyContent (aHttpResponse);
+    else
+    {
+      // Determine content length
+      _applyContent (aHttpResponse);
+    }
   }
 
   private void _applyContent (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
@@ -565,6 +598,8 @@ public class UnifiedResponse
         aOS.write (m_aContent);
         aOS.flush ();
         aOS.close ();
+
+        _applyLengthChecks (nContentLength);
       }
       else
       {
@@ -594,11 +629,14 @@ public class UnifiedResponse
           if (StreamUtils.copyInputStreamToOutputStream (aContentIS, aOS, aByteCount).isSuccess ())
           {
             // Copying succeeded
-            if (aByteCount.longValue () > 0)
+            final long nBytesCopied = aByteCount.longValue ();
+            if (nBytesCopied > 0)
             {
               // We had at least one content byte
               aOS.flush ();
               aOS.close ();
+
+              _applyLengthChecks (nBytesCopied);
             }
             else
             {
@@ -622,5 +660,23 @@ public class UnifiedResponse
         aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
         _warn ("No content present for the response");
       }
+  }
+
+  private static final int MAX_CSS_KB_FOR_IE = 288;
+
+  private void _applyLengthChecks (final long nContentLength)
+  {
+    // Source:
+    // http://joshua.perina.com/africa/gambia/fajara/post/internet-explorer-css-file-size-limit
+    if (m_aMimeType != null &&
+        m_aMimeType.equals (CMimeType.TEXT_CSS) &&
+        nContentLength > (MAX_CSS_KB_FOR_IE * CGlobal.BYTES_PER_KILOBYTE_LONG))
+    {
+      _warn ("Internet Explorer has problems handling CSS files > " +
+             MAX_CSS_KB_FOR_IE +
+             "KB and this one has " +
+             nContentLength +
+             " bytes!");
+    }
   }
 }

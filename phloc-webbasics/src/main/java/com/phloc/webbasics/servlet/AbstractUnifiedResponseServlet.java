@@ -58,7 +58,8 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    */
   protected abstract void handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
                                          @Nonnull EHTTPMethod eHTTPMethod,
-                                         @Nonnull UnifiedResponse aUnifiedResponse) throws ServletException;
+                                         @Nonnull UnifiedResponse aUnifiedResponse) throws ServletException,
+                                                                                   IOException;
 
   private void _run (@Nonnull final HttpServletRequest aHttpRequest,
                      @Nonnull final HttpServletResponse aHttpResponse,
@@ -66,9 +67,14 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
                      @Nonnull final EHTTPMethod eHTTPMethod) throws ServletException, IOException
   {
     final EHTTPVersion eHTTPVersion = EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
-    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion);
-    handleRequest (aRequestScope, eHTTPMethod, aUnifiedResponse);
-    aUnifiedResponse.applyToResponse (aHttpResponse);
+    if (eHTTPVersion == null)
+      aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
+    else
+    {
+      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion);
+      handleRequest (aRequestScope, eHTTPMethod, aUnifiedResponse);
+      aUnifiedResponse.applyToResponse (aHttpResponse);
+    }
   }
 
   @Override
