@@ -541,7 +541,7 @@ public class UnifiedResponse
       throw new NullPointerException ("httpResponse");
 
     // Apply all collected headers
-    for (final Map.Entry <String, List <String>> aEntry : m_aResponseHeaderMap.getAllHeaders ().entrySet ())
+    for (final Map.Entry <String, List <String>> aEntry : m_aResponseHeaderMap)
     {
       final String sHeaderName = aEntry.getKey ();
       int nIndex = 0;
