@@ -48,6 +48,7 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.http.AcceptCharsetHandler;
 import com.phloc.webbasics.http.AcceptCharsetList;
@@ -472,6 +473,14 @@ public class UnifiedResponse
   }
 
   @Nonnull
+  public UnifiedResponse setRedirect (@Nonnull final ISimpleURL aRedirectTargetUrl)
+  {
+    if (aRedirectTargetUrl == null)
+      throw new NullPointerException ("redirectTargetUrl");
+    return setRedirect (aRedirectTargetUrl.getAsString ());
+  }
+
+  @Nonnull
   public UnifiedResponse setRedirect (@Nonnull @Nonempty final String sRedirectTargetUrl)
   {
     if (StringHelper.hasNoText (sRedirectTargetUrl))
@@ -562,7 +571,7 @@ public class UnifiedResponse
 
       // Note: After using this method, the response should be
       // considered to be committed and should not be written to.
-      aHttpResponse.sendRedirect (m_sRedirectTargetUrl);
+      aHttpResponse.sendRedirect (aHttpResponse.encodeRedirectURL (m_sRedirectTargetUrl));
     }
     else
       if (m_nStatusCode != CGlobal.ILLEGAL_UINT)

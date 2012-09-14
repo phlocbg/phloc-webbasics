@@ -73,7 +73,7 @@ public class LogoutServlet extends AbstractUnifiedResponseServlet
         aHttpSession.invalidate ();
 
       // Go home
-      aUnifiedResponse.setRedirect (aRedirectURL.getAsString ());
+      aUnifiedResponse.setRedirect (aRedirectURL);
     }
   }
 }
