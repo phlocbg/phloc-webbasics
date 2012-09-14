@@ -20,21 +20,22 @@ package com.phloc.webbasics.servlet;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.http.EHTTPMethod;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Handles the log-out of a user. Can be called with a user context and without.
  * 
  * @author philip
  */
-public class LogoutServlet extends AbstractScopeAwareHttpServlet
+public class LogoutServlet extends AbstractUnifiedResponseServlet
 {
   public LogoutServlet ()
   {}
@@ -46,7 +47,10 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
     return LinkUtils.getHomeLink ();
   }
 
-  private void _run (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws IOException
+  @Override
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final EHTTPMethod eHTTPMethod,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
     // Get the redirect URL before the session is invalidated, in case the code
     // requires the current session
@@ -58,25 +62,11 @@ public class LogoutServlet extends AbstractScopeAwareHttpServlet
     // 3. which triggers WebScopeManager.onSessionEnd
     // 4. which triggers WebScopeSessionManager.getInstance ().onSessionEnd
     // 5. which triggers ISessionWebScope.destroyScope
-    aHttpRequest.getSession ().invalidate ();
+    final HttpSession aHttpSession = aRequestScope.getRequest ().getSession (false);
+    if (aHttpSession != null)
+      aHttpSession.invalidate ();
 
     // Go home
-    aHttpResponse.sendRedirect (aRedirectURL.getAsString ());
-  }
-
-  @Override
-  protected void onGet (@Nonnull final HttpServletRequest aHttpRequest,
-                        @Nonnull final HttpServletResponse aHttpResponse,
-                        @Nonnull final IRequestWebScope aRequestScope) throws IOException
-  {
-    _run (aHttpRequest, aHttpResponse);
-  }
-
-  @Override
-  protected void onPost (@Nonnull final HttpServletRequest aHttpRequest,
-                         @Nonnull final HttpServletResponse aHttpResponse,
-                         @Nonnull final IRequestWebScope aRequestScope) throws IOException
-  {
-    _run (aHttpRequest, aHttpResponse);
+    aUnifiedResponse.setRedirect (aRedirectURL.getAsString ());
   }
 }

@@ -557,6 +557,9 @@ public class UnifiedResponse
 
     if (m_sRedirectTargetUrl != null)
     {
+      if (hasContent ())
+        _warn ("Ignoring provided content because a redirect is specified!");
+
       // Note: After using this method, the response should be
       // considered to be committed and should not be written to.
       aHttpResponse.sendRedirect (m_sRedirectTargetUrl);
@@ -564,6 +567,9 @@ public class UnifiedResponse
     else
       if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
       {
+        if (hasContent ())
+          _warn ("Ignoring provided content because a redirect is specified!");
+
         if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
         {
           // It's an error
