@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Represents a list of AcceptCharset values as specified in the HTTP header
+ * Represents a list of Accept-Charset values as specified in the HTTP header
  * 
  * @author philip
  */

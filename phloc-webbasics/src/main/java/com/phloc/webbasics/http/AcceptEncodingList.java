@@ -27,7 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Contains a list of AcceptEncoding values as specified by the HTTP header
+ * Contains a list of Accept-Encoding values as specified by the HTTP header
  * 
  * @author philip
  */
@@ -51,10 +51,10 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
   }
 
   /**
-   * Return the associated quality of the given charset.
+   * Return the associated quality of the given encoding.
    * 
    * @param sEncoding
-   *        The charset name to query. May not be <code>null</code>.
+   *        The encoding name to query. May not be <code>null</code>.
    * @return The matching {@link QValue} and never <code>null</code>.
    */
   @Nonnull
@@ -80,10 +80,10 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
   }
 
   /**
-   * Return the associated quality of the given charset.
+   * Return the associated quality of the given encoding.
    * 
    * @param sEncoding
-   *        The charset name to query. May not be <code>null</code>.
+   *        The encoding name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.
    */
   public double getQualityOfEncoding (@Nonnull final String sEncoding)
