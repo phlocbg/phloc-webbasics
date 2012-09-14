@@ -39,7 +39,9 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class QValue implements Comparable <QValue>, Serializable
 {
   public static final double MIN_QUALITY = 0;
+  public static final QValue MIN_QVALUE = new QValue (MIN_QUALITY);
   public static final double MAX_QUALITY = 1;
+  public static final QValue MAX_QVALUE = new QValue (MAX_QUALITY);
   private static final Logger s_aLogger = LoggerFactory.getLogger (QValue.class);
 
   private final double m_dQuality;
@@ -63,6 +65,47 @@ public final class QValue implements Comparable <QValue>, Serializable
   public int compareTo (@Nonnull final QValue rhs)
   {
     return Double.compare (m_dQuality, rhs.m_dQuality);
+  }
+
+  /**
+   * @return <code>true</code> if the quality is {@link #MIN_QUALITY}
+   */
+  public boolean isMinimumQuality ()
+  {
+    return EqualsUtils.equals (m_dQuality, MIN_QUALITY);
+  }
+
+  /**
+   * @return <code>true</code> if the quality is &gt; {@link #MIN_QUALITY}
+   */
+  public boolean isAboveMinimumQuality ()
+  {
+    return m_dQuality > MIN_QUALITY;
+  }
+
+  /**
+   * @return <code>true</code> if the quality is {@link #MAX_QUALITY}
+   */
+  public boolean isMaximumQuality ()
+  {
+    return EqualsUtils.equals (m_dQuality, MAX_QUALITY);
+  }
+
+  /**
+   * @return <code>true</code> if the quality is &lt; {@link #MAX_QUALITY}
+   */
+  public boolean isBelowMaximumQuality ()
+  {
+    return m_dQuality < MAX_QUALITY;
+  }
+
+  /**
+   * @return <code>true</code> if the quality is &gt; {@link #MIN_QUALITY} and
+   *         &lt; {@link #MAX_QUALITY}.
+   */
+  public boolean isBetweenMinimumAndMaximum ()
+  {
+    return isAboveMinimumQuality () && isBelowMaximumQuality ();
   }
 
   @Override

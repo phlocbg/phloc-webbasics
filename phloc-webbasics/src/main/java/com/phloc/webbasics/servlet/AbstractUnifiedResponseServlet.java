@@ -71,7 +71,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
     else
     {
-      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope.getURL ());
+      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
       handleRequest (aRequestScope, eHTTPMethod, aUnifiedResponse);
       aUnifiedResponse.applyToResponse (aHttpResponse);
     }

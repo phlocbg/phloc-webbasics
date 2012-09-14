@@ -17,12 +17,14 @@
  */
 package com.phloc.webbasics.servlet;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,7 @@ import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.phloc.commons.stats.StatisticsManager;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.http.CacheControlBuilder;
@@ -169,6 +172,15 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
       else
         s_aLogger.warn ("Failed to determine MIME type for filename '" + sFilename + "'");
 
+      LocalDateTime aLastModified = null;
+      final File aFile = aRes.getAsFile ();
+      if (aFile != null)
+      {
+        final long nLastModified = aFile.lastModified ();
+        if (nLastModified > 0)
+          aLastModified = PDTFactory.createLocalDateTimeFromMillis (nLastModified);
+      }
+
       // Caching (e.g. ETag)?
       if (useAndReturnCachedObject (aRequestScope))
       {
@@ -180,6 +192,9 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
       }
       else
       {
+        if (aLastModified != null)
+          aUnifiedResponse.setLastModified (aLastModified);
+
         // Set ETag in response for next time
         aUnifiedResponse.setETag (ETAG_VALUE_STREAMSERVLET);
 

@@ -47,10 +47,14 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.webbasics.http.AcceptCharsetHandler;
+import com.phloc.webbasics.http.AcceptCharsetList;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.CacheControlBuilder;
 import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.http.HTTPHeaderMap;
+import com.phloc.webbasics.http.QValue;
 
 /**
  * This class tries to encapsulate all things required to build a HTTP response.
@@ -65,6 +69,7 @@ public class UnifiedResponse
 
   private final EHTTPVersion m_eHttpVersion;
   private final String m_sRequestURL;
+  private final AcceptCharsetList m_aAcceptCharsetList;
 
   // Main data
   private Charset m_aCharset;
@@ -77,12 +82,15 @@ public class UnifiedResponse
   private final HTTPHeaderMap m_aHeaderMap = new HTTPHeaderMap ();
   private int m_nStatusCode = CGlobal.ILLEGAL_UINT;
 
-  public UnifiedResponse (@Nonnull final EHTTPVersion eHttpVersion, @Nonnull final String sRequestURL)
+  public UnifiedResponse (@Nonnull final EHTTPVersion eHttpVersion, @Nonnull final IRequestWebScope aRequestScope)
   {
     if (eHttpVersion == null)
       throw new NullPointerException ("httpVersion");
+    if (aRequestScope == null)
+      throw new NullPointerException ("requestScope");
     m_eHttpVersion = eHttpVersion;
-    m_sRequestURL = sRequestURL;
+    m_sRequestURL = aRequestScope.getURL ();
+    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope.getRequest ());
   }
 
   private void _info (@Nonnull final String sMsg)
@@ -547,11 +555,25 @@ public class UnifiedResponse
     // Charset
     if (m_aCharset != null)
     {
+      final String sCharset = m_aCharset.name ();
       if (m_aMimeType == null)
-        _warn ("If no MimeType present, the client cannot get notified about the character encoding '" +
-               m_aCharset.name () +
-               "'");
-      aHttpResponse.setCharacterEncoding (m_aCharset.name ());
+        _warn ("If no MimeType present, the client cannot get notified about the character encoding '" + sCharset + "'");
+
+      // Check with request charset
+      final QValue aQuality = m_aAcceptCharsetList.getQValueOfCharset (sCharset);
+      if (aQuality.isMinimumQuality ())
+        _warn ("Character encoding '" +
+               sCharset +
+               "' is not at all supported by the request. Allowed values are: " +
+               m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+      else
+        if (aQuality.isBetweenMinimumAndMaximum ())
+          _warn ("Character encoding '" +
+                 sCharset +
+                 "' is not best supported by the request. Better charsets are: " +
+                 m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+
+      aHttpResponse.setCharacterEncoding (sCharset);
     }
     else
       if (m_aMimeType == null)

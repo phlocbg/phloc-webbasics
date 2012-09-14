@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.http;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -24,6 +25,8 @@ import java.util.Map;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -58,13 +61,15 @@ public final class AcceptCharsetList
    * 
    * @param sCharset
    *        The charset name to query. May not be <code>null</code>.
-   * @return 0 means not accepted, 1 means fully accepted.
+   * @return The associated {@link QValue}.
    */
-  public double getQualityOfCharset (@Nonnull final String sCharset)
+  @Nonnull
+  public QValue getQValueOfCharset (@Nonnull final String sCharset)
   {
     if (sCharset == null)
       throw new NullPointerException ("charset");
 
+    // Find charset direct
     QValue aQuality = m_aMap.get (_unify (sCharset));
     if (aQuality == null)
     {
@@ -73,15 +78,27 @@ public final class AcceptCharsetList
       if (aQuality == null)
       {
         // Neither charset nor "*" is present
-        return sCharset.equals (AcceptCharsetHandler.DEFAULT_CHARSET) ? QValue.MAX_QUALITY : QValue.MIN_QUALITY;
+        return sCharset.equals (AcceptCharsetHandler.DEFAULT_CHARSET) ? QValue.MAX_QVALUE : QValue.MIN_QVALUE;
       }
     }
-    return aQuality.getQuality ();
+    return aQuality;
+  }
+
+  /**
+   * Return the associated quality of the given charset.
+   * 
+   * @param sCharset
+   *        The charset name to query. May not be <code>null</code>.
+   * @return 0 means not accepted, 1 means fully accepted.
+   */
+  public double getQualityOfCharset (@Nonnull final String sCharset)
+  {
+    return getQValueOfCharset (sCharset).getQuality ();
   }
 
   public boolean supportsCharset (@Nonnull final String sCharset)
   {
-    return getQualityOfCharset (sCharset) > QValue.MIN_QUALITY;
+    return getQValueOfCharset (sCharset).isAboveMinimumQuality ();
   }
 
   public boolean explicitlySupportsCharset (@Nonnull final String sCharset)
@@ -90,7 +107,58 @@ public final class AcceptCharsetList
       throw new NullPointerException ("charset");
 
     final QValue aQuality = m_aMap.get (_unify (sCharset));
-    return aQuality != null && aQuality.getQuality () > QValue.MIN_QUALITY;
+    return aQuality != null && aQuality.isAboveMinimumQuality ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, QValue> getAllQValues ()
+  {
+    return ContainerHelper.newMap (m_aMap);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, QValue> getAllQValuesLowerThan (final double dQuality)
+  {
+    final Map <String, QValue> ret = new HashMap <String, QValue> ();
+    for (final Map.Entry <String, QValue> aEntry : m_aMap.entrySet ())
+      if (aEntry.getValue ().getQuality () < dQuality)
+        ret.put (aEntry.getKey (), aEntry.getValue ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, QValue> getAllQValuesLowerOrEqual (final double dQuality)
+  {
+    final Map <String, QValue> ret = new HashMap <String, QValue> ();
+    for (final Map.Entry <String, QValue> aEntry : m_aMap.entrySet ())
+      if (aEntry.getValue ().getQuality () <= dQuality)
+        ret.put (aEntry.getKey (), aEntry.getValue ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, QValue> getAllQValuesGreaterThan (final double dQuality)
+  {
+    final Map <String, QValue> ret = new HashMap <String, QValue> ();
+    for (final Map.Entry <String, QValue> aEntry : m_aMap.entrySet ())
+      if (aEntry.getValue ().getQuality () > dQuality)
+        ret.put (aEntry.getKey (), aEntry.getValue ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, QValue> getAllQValuesGreaterOrEqual (final double dQuality)
+  {
+    final Map <String, QValue> ret = new HashMap <String, QValue> ();
+    for (final Map.Entry <String, QValue> aEntry : m_aMap.entrySet ())
+      if (aEntry.getValue ().getQuality () >= dQuality)
+        ret.put (aEntry.getKey (), aEntry.getValue ());
+    return ret;
   }
 
   @Override
