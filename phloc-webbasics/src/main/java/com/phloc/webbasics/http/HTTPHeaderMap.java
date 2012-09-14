@@ -18,6 +18,7 @@
 package com.phloc.webbasics.http;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ import com.phloc.datetime.format.PDTWebDateUtils;
  * @author philip
  */
 @NotThreadSafe
-public class HTTPHeaderMap
+public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>>>
 {
   private final Map <String, List <String>> m_aHeaders = new LinkedHashMap <String, List <String>> ();
 
@@ -186,6 +187,12 @@ public class HTTPHeaderMap
   public EChange removeHeaders (@Nullable final String sName)
   {
     return EChange.valueOf (m_aHeaders.remove (sName) != null);
+  }
+
+  @Nonnull
+  public Iterator <Map.Entry <String, List <String>>> iterator ()
+  {
+    return m_aHeaders.entrySet ().iterator ();
   }
 
   @Override

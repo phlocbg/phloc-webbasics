@@ -29,6 +29,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.http.EHTTPVersion;
+import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
@@ -66,7 +67,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
                      @Nonnull final IRequestWebScope aRequestScope,
                      @Nonnull final EHTTPMethod eHTTPMethod) throws ServletException, IOException
   {
-    final EHTTPVersion eHTTPVersion = EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
+    final EHTTPVersion eHTTPVersion = RequestHelper.getHttpVersion (aHttpRequest);
     if (eHTTPVersion == null)
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
     else

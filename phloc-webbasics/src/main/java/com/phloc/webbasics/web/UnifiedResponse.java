@@ -74,6 +74,7 @@ public class UnifiedResponse
   private final String m_sRequestURL;
   private final AcceptCharsetList m_aAcceptCharsetList;
   private final AcceptMimeTypeList m_aAcceptMimeTypeList;
+  private final HTTPHeaderMap m_aRequestHeaderMap;
 
   // Main data
   private Charset m_aCharset;
@@ -83,7 +84,7 @@ public class UnifiedResponse
   private String m_sContentDispositionFilename;
   private CharsetEncoder m_aContentDispositionEncoder;
   private CacheControlBuilder m_aCacheControl;
-  private final HTTPHeaderMap m_aHeaderMap = new HTTPHeaderMap ();
+  private final HTTPHeaderMap m_aResponseHeaderMap = new HTTPHeaderMap ();
   private int m_nStatusCode = CGlobal.ILLEGAL_UINT;
 
   public UnifiedResponse (@Nonnull final EHTTPVersion eHttpVersion, @Nonnull final IRequestWebScope aRequestScope)
@@ -94,9 +95,10 @@ public class UnifiedResponse
       throw new NullPointerException ("requestScope");
     m_eHttpVersion = eHttpVersion;
     m_sRequestURL = aRequestScope.getURL ();
-    final HttpServletRequest aRequest = aRequestScope.getRequest ();
-    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequest);
-    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequest);
+    final HttpServletRequest aHttpRequest = aRequestScope.getRequest ();
+    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aHttpRequest);
+    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aHttpRequest);
+    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aHttpRequest);
   }
 
   private void _info (@Nonnull final String sMsg)
@@ -107,11 +109,13 @@ public class UnifiedResponse
   private void _warn (@Nonnull final String sMsg)
   {
     s_aLogger.warn (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
+    s_aLogger.warn ("  Request Headers: " + RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap));
   }
 
   private void _error (@Nonnull final String sMsg)
   {
     s_aLogger.error (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
+    s_aLogger.error ("  Request Headers: " + RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap));
   }
 
   public boolean isHttp10 ()
@@ -262,42 +266,42 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setExpires (@Nonnull final LocalDateTime aLDT)
   {
-    m_aHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, aLDT);
+    m_aResponseHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, aLDT);
     return this;
   }
 
   @Nonnull
   public UnifiedResponse setExpires (@Nonnull final DateTime aDT)
   {
-    m_aHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, aDT);
+    m_aResponseHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, aDT);
     return this;
   }
 
   @Nonnull
   public UnifiedResponse removeExpires ()
   {
-    m_aHeaderMap.removeHeaders (CHTTPHeader.EXPIRES);
+    m_aResponseHeaderMap.removeHeaders (CHTTPHeader.EXPIRES);
     return this;
   }
 
   @Nonnull
   public UnifiedResponse setLastModified (@Nonnull final LocalDateTime aLDT)
   {
-    m_aHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aLDT);
+    m_aResponseHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aLDT);
     return this;
   }
 
   @Nonnull
   public UnifiedResponse setLastModified (@Nonnull final DateTime aDT)
   {
-    m_aHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aDT);
+    m_aResponseHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aDT);
     return this;
   }
 
   @Nonnull
   public UnifiedResponse removeLastModified ()
   {
-    m_aHeaderMap.removeHeaders (CHTTPHeader.LAST_MODIFIED);
+    m_aResponseHeaderMap.removeHeaders (CHTTPHeader.LAST_MODIFIED);
     return this;
   }
 
@@ -306,7 +310,7 @@ public class UnifiedResponse
   {
     if (StringHelper.hasNoText (sETag))
       throw new IllegalArgumentException ("An empty ETag is not allowed!");
-    m_aHeaderMap.setHeader (CHTTPHeader.ETAG, sETag);
+    m_aResponseHeaderMap.setHeader (CHTTPHeader.ETAG, sETag);
     return this;
   }
 
@@ -321,7 +325,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse removeETag ()
   {
-    m_aHeaderMap.removeHeaders (CHTTPHeader.ETAG);
+    m_aResponseHeaderMap.removeHeaders (CHTTPHeader.ETAG);
     return this;
   }
 
@@ -431,10 +435,10 @@ public class UnifiedResponse
       case HTTP_10:
       {
         // Set to expire far in the past for HTTP/1.0.
-        m_aHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelper.EXPIRES_NEVER_STRING);
+        m_aResponseHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelper.EXPIRES_NEVER_STRING);
 
         // Set standard HTTP/1.0 no-cache header.
-        m_aHeaderMap.setHeader (CHTTPHeader.PRAGMA, "no-cache");
+        m_aResponseHeaderMap.setHeader (CHTTPHeader.PRAGMA, "no-cache");
         break;
       }
       case HTTP_11:
@@ -465,10 +469,10 @@ public class UnifiedResponse
   private void _verifyCachingIntegrity ()
   {
     final boolean bIsHttp11 = isHttp11 ();
-    final boolean bExpires = m_aHeaderMap.containsHeaders (CHTTPHeader.EXPIRES);
+    final boolean bExpires = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.EXPIRES);
     final boolean bCacheControl = m_aCacheControl != null;
-    final boolean bLastModified = m_aHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
-    final boolean bETag = m_aHeaderMap.containsHeaders (CHTTPHeader.ETAG);
+    final boolean bLastModified = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
+    final boolean bETag = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.ETAG);
 
     if (bExpires && bCacheControl)
       _warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
@@ -521,7 +525,7 @@ public class UnifiedResponse
       throw new NullPointerException ("httpResponse");
 
     // Apply all collected headers
-    for (final Map.Entry <String, List <String>> aEntry : m_aHeaderMap.getAllHeaders ().entrySet ())
+    for (final Map.Entry <String, List <String>> aEntry : m_aResponseHeaderMap.getAllHeaders ().entrySet ())
     {
       final String sHeaderName = aEntry.getKey ();
       int nIndex = 0;

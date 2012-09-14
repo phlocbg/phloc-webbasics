@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.web;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.CWeb;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPVersion;
+import com.phloc.webbasics.http.HTTPHeaderMap;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
@@ -292,6 +294,32 @@ public final class RequestHelper
       throw new NullPointerException ("httpRequest");
 
     return EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
+  }
+
+  /**
+   * Get a complete request header map as a copy.
+   * 
+   * @param aHttpRequest
+   *        The source HTTP request. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static HTTPHeaderMap getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    final HTTPHeaderMap ret = new HTTPHeaderMap ();
+    final Enumeration <?> eHeaders = aHttpRequest.getHeaderNames ();
+    while (eHeaders.hasMoreElements ())
+    {
+      final String sName = (String) eHeaders.nextElement ();
+      final Enumeration <?> eHeaderValues = aHttpRequest.getHeaders (sName);
+      while (eHeaderValues.hasMoreElements ())
+      {
+        final String sValue = (String) eHeaderValues.nextElement ();
+        ret.addHeader (sName, sValue);
+      }
+    }
+    return ret;
   }
 
   /**

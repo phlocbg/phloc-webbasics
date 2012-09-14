@@ -17,8 +17,8 @@
  */
 package com.phloc.webbasics.web;
 
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -36,6 +36,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
 import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
+import com.phloc.webbasics.http.HTTPHeaderMap;
 
 /**
  * Helper class to debug information passed to a JSP page or a servlet.
@@ -127,14 +128,25 @@ public final class RequestLogger
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public static Map <String, String> getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    return getRequestHeaderMap (RequestHelper.getRequestHeaderMap (aHttpRequest));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public static Map <String, String> getRequestHeaderMap (@Nonnull final HTTPHeaderMap aMap)
+  {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
-    final Enumeration <?> e = aHttpRequest.getHeaderNames ();
-    while (e.hasMoreElements ())
+    for (final Map.Entry <String, List <String>> aEntry : aMap)
     {
-      final String sName = (String) e.nextElement ();
-      ret.put (sName, aHttpRequest.getHeader (sName));
+      final String sName = aEntry.getKey ();
+      final List <String> aValue = aEntry.getValue ();
+      if (aValue.size () == 1)
+        ret.put (sName, aValue.get (0));
+      else
+        ret.put (sName, aValue.toString ());
     }
     return ret;
   }
