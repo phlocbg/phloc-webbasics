@@ -196,7 +196,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
           aUnifiedResponse.setLastModified (aLastModified);
 
         // Set ETag in response for next time
-        aUnifiedResponse.setETag (ETAG_VALUE_STREAMSERVLET);
+        aUnifiedResponse.setETagIfApplicable (ETAG_VALUE_STREAMSERVLET);
 
         // HTTP caching possible?
         if (objectsAllowsForHTTPCaching (aRequestScope, sFilename))

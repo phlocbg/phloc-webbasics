@@ -311,6 +311,14 @@ public class UnifiedResponse
   }
 
   @Nonnull
+  public UnifiedResponse setETagIfApplicable (@Nonnull @Nonempty final String sETag)
+  {
+    if (isHttp11 ())
+      setETag (sETag);
+    return this;
+  }
+
+  @Nonnull
   public UnifiedResponse removeETag ()
   {
     m_aHeaderMap.removeHeaders (CHTTPHeader.ETAG);
