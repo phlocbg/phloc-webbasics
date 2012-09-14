@@ -17,9 +17,7 @@
  */
 package com.phloc.webbasics.http;
 
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -27,7 +25,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Contains a list of AcceptEncoding values as specified by the HTTP header
@@ -35,11 +32,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public final class AcceptEncodingList
+public final class AcceptEncodingList extends AbstractQValueList <String>
 {
-  // Maps charset names to quality
-  private final Map <String, QValue> m_aMap = new LinkedHashMap <String, QValue> ();
-
   public AcceptEncodingList ()
   {}
 
@@ -169,11 +163,5 @@ public final class AcceptEncodingList
     if (supportsEncoding (AcceptEncodingHandler.X_COMPRESS_ENCODING))
       return AcceptEncodingHandler.X_COMPRESS_ENCODING;
     return null;
-  }
-
-  @Override
-  public String toString ()
-  {
-    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
   }
 }

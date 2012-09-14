@@ -28,6 +28,7 @@ import java.util.Map;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
@@ -50,6 +51,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.http.AcceptCharsetHandler;
 import com.phloc.webbasics.http.AcceptCharsetList;
+import com.phloc.webbasics.http.AcceptMimeTypeHandler;
+import com.phloc.webbasics.http.AcceptMimeTypeList;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.CacheControlBuilder;
 import com.phloc.webbasics.http.EHTTPVersion;
@@ -70,6 +73,7 @@ public class UnifiedResponse
   private final EHTTPVersion m_eHttpVersion;
   private final String m_sRequestURL;
   private final AcceptCharsetList m_aAcceptCharsetList;
+  private final AcceptMimeTypeList m_aAcceptMimeTypeList;
 
   // Main data
   private Charset m_aCharset;
@@ -90,7 +94,9 @@ public class UnifiedResponse
       throw new NullPointerException ("requestScope");
     m_eHttpVersion = eHttpVersion;
     m_sRequestURL = aRequestScope.getURL ();
-    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope.getRequest ());
+    final HttpServletRequest aRequest = aRequestScope.getRequest ();
+    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequest);
+    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequest);
   }
 
   private void _info (@Nonnull final String sMsg)
@@ -548,7 +554,32 @@ public class UnifiedResponse
 
     // Mime type
     if (m_aMimeType != null)
-      aHttpResponse.setContentType (m_aMimeType.getAsString ());
+    {
+      final String sMimeType = m_aMimeType.getAsString ();
+
+      // Check with request accept mime types
+      final QValue aQuality = m_aAcceptMimeTypeList.getQValueOfMimeType (m_aMimeType);
+      if (aQuality.isMinimumQuality ())
+        _warn ("MimeType '" +
+               sMimeType +
+               "' is not at all supported by the request. Allowed values are: " +
+               m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+      else
+        if (aQuality.isBelowMaximumQuality ())
+        {
+          // Inform if the quality of the request is <= 50%!
+          final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
+          if (!aBetterValues.isEmpty ())
+            _info ("MimeType '" +
+                   sMimeType +
+                   "' is not best supported by the request (" +
+                   aQuality +
+                   "). Better MimeTypes are: " +
+                   aBetterValues);
+        }
+
+      aHttpResponse.setContentType (sMimeType);
+    }
     else
       _warn ("No MimeType present");
 

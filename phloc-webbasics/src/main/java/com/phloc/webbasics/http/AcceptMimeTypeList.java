@@ -17,16 +17,12 @@
  */
 package com.phloc.webbasics.http;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
-import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Represents a list of Accept HTTP header values
@@ -34,11 +30,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public final class AcceptMimeTypeList
+public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
 {
-  // Maps MIME types to quality
-  private final Map <IMimeType, QValue> m_aMap = new LinkedHashMap <IMimeType, QValue> ();
-
   public AcceptMimeTypeList ()
   {}
 
@@ -148,11 +141,5 @@ public final class AcceptMimeTypeList
   {
     final QValue aQuality = m_aMap.get (aMimeType);
     return aQuality != null && aQuality.isAboveMinimumQuality ();
-  }
-
-  @Override
-  public String toString ()
-  {
-    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
   }
 }
