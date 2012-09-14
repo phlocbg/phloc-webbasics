@@ -37,8 +37,16 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
 import com.phloc.webbasics.web.ResponseHelper;
 
+/**
+ * This filter is used, to determine if some crucial information is missing in
+ * some responses. Checked things are status code, character encoding, content
+ * type and some headers.
+ * 
+ * @author philip
+ */
 public class CheckResponseFilter implements Filter
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CheckResponseFilter.class);

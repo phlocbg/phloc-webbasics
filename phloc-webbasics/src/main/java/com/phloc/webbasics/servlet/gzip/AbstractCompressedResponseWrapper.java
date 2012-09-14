@@ -37,7 +37,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.CHTTPHeader;
-import com.phloc.webbasics.servlet.StatusAwareHttpResponseWrapper;
+import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
 
 /**
  * Abstract output stream switching {@link HttpServletResponseWrapper}

@@ -17,17 +17,16 @@
  */
 package com.phloc.webbasics.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.annotation.Nonnull;
+import javax.servlet.ServletException;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
-import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.http.EHTTPMethod;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * A simple availability-check servlet that responds with a "pong" text message.
@@ -35,32 +34,21 @@ import com.phloc.webbasics.web.ResponseHelper;
  * 
  * @author philip
  */
-public final class PingPongServlet extends HttpServlet
+public final class PingPongServlet extends AbstractUnifiedResponseServlet
 {
   private static final IStatisticsHandlerCounter s_aStatsPingPong = StatisticsManager.getCounterHandler (PingPongServlet.class);
 
   /** The response string to send. */
   private static final String RESPONSE_TEXT = "pong";
 
-  private void _handle (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws IOException
+  @Override
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final EHTTPMethod eHTTPMethod,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException
   {
-    ResponseHelper.writeTextResponse (aHttpRequest,
-                                      aHttpResponse,
-                                      RESPONSE_TEXT,
-                                      CMimeType.TEXT_PLAIN,
-                                      CCharset.CHARSET_UTF_8_OBJ);
+    aUnifiedResponse.setContentAndCharset (RESPONSE_TEXT, CCharset.CHARSET_UTF_8_OBJ)
+                    .setMimeType (CMimeType.TEXT_PLAIN)
+                    .disableCaching ();
     s_aStatsPingPong.increment ();
-  }
-
-  @Override
-  protected void doGet (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws IOException
-  {
-    _handle (aHttpRequest, aHttpResponse);
-  }
-
-  @Override
-  protected void doPost (final HttpServletRequest aHttpRequest, final HttpServletResponse aHttpResponse) throws IOException
-  {
-    _handle (aHttpRequest, aHttpResponse);
   }
 }

@@ -95,7 +95,6 @@ public final class ResponseHelper
     if (eVersion == null || eVersion == EHTTPVersion.HTTP_10)
     {
       // Set to expire far in the past for HTTP/1.0.
-      // FIXME the date is considered invalid!
       aHttpResponse.setHeader (CHTTPHeader.EXPIRES, EXPIRES_NEVER_STRING);
 
       // Set standard HTTP/1.0 no-cache header.

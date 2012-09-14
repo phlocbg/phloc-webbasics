@@ -38,7 +38,7 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;
 
@@ -174,7 +174,7 @@ public class BasicLoginHTML extends LayoutHTMLProvider
 
   @Override
   @Nullable
-  protected final IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
+  protected final IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                             @Nonnull final String sAreaID,
                                             @Nonnull final Locale aDisplayLocale)
   {

@@ -46,7 +46,7 @@ import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.LinkUtils;
 
 /**
@@ -133,7 +133,7 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
   @OverrideOnDemand
   @Nullable
-  protected IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
+  protected IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                       @Nonnull final String sAreaID,
                                       @Nonnull final Locale aDisplayLocale)
   {
@@ -149,7 +149,8 @@ public class LayoutHTMLProvider implements IHTMLProvider
   }
 
   @Nonnull
-  public final HCHtml createHTML (@Nonnull final IRequestWebScope aRequestScope, @Nonnull final EHTMLVersion eVersion)
+  public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                  @Nonnull final EHTMLVersion eVersion)
   {
     final HCHtml aHtml = createHCHtml (eVersion);
     final Locale aDisplayLocale = ApplicationRequestManager.getRequestDisplayLocale ();

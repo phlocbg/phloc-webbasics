@@ -34,7 +34,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This class handles the mapping of the area ID to a content provider.
@@ -97,7 +97,7 @@ public final class LayoutManager extends GlobalSingleton
   }
 
   @Nullable
-  public IHCNode getContentOfArea (@Nonnull final IRequestWebScope aRequestScope,
+  public IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                    @Nonnull final String sAreaID,
                                    @Nonnull final Locale aDisplayLocale)
   {

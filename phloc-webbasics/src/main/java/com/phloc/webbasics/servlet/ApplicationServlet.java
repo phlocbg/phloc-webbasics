@@ -21,8 +21,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,20 +28,22 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.ServiceLoaderBackport;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
-import com.phloc.webbasics.app.html.HTMLResponseHelper;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.app.html.ApplicationRunner;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;
+import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Base servlet for the main application.
  * 
  * @author philip
  */
-public class ApplicationServlet extends AbstractScopeAwareHttpServlet
+public class ApplicationServlet extends AbstractUnifiedResponseServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ApplicationServlet.class);
 
@@ -61,7 +61,7 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
    *        The request scope
    */
   @OverrideOnDemand
-  protected void onRequestBegin (@Nonnull final IRequestWebScope aRequestScope)
+  protected void onRequestBegin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {}
 
   /**
@@ -71,7 +71,7 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
    */
   @OverrideOnDemand
   @Nonnull
-  protected IHTMLProvider createHTMLProvider (@Nonnull final IRequestWebScope aRequestScope)
+  protected IHTMLProvider createHTMLProvider (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return new LayoutHTMLProvider ();
   }
@@ -83,10 +83,13 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
    *        The request scope
    */
   @OverrideOnDemand
-  protected void onRequestEnd (@Nonnull final IRequestWebScope aRequestScope)
+  protected void onRequestEnd (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {}
 
-  private void _run (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
+  @Override
+  protected final void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                      @Nonnull final EHTTPMethod eHTTPMethod,
+                                      @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException
   {
     // Run default request initialization (menu item and locale)
     ApplicationRequestManager.onRequestBegin (aRequestScope);
@@ -107,10 +110,21 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
     try
     {
-      // Create the main response HTML
+      // Who is responsible for creating the HTML?
       final IHTMLProvider aHTMLProvider = createHTMLProvider (aRequestScope);
-      // Print the result to the output stream
-      HTMLResponseHelper.createHTMLResponse (aRequestScope, aHTMLProvider);
+      ApplicationRunner.createHTMLResponse (aRequestScope, aUnifiedResponse, aHTMLProvider);
+    }
+    catch (final Throwable t)
+    {
+      // Do not show the exceptions that occur, when client cancels a request.
+      if (!StreamUtils.isKnownEOFException (t))
+      {
+        s_aLogger.error ("Error running application", t);
+        // Catch Exception and re-throw
+        if (t instanceof ServletException)
+          throw (ServletException) t;
+        throw new ServletException (t);
+      }
     }
     finally
     {
@@ -128,21 +142,5 @@ public class ApplicationServlet extends AbstractScopeAwareHttpServlet
 
     // Protected method invocation
     onRequestEnd (aRequestScope);
-  }
-
-  @Override
-  protected void onGet (@Nonnull final HttpServletRequest aRequest,
-                        @Nonnull final HttpServletResponse aResponse,
-                        @Nonnull final IRequestWebScope aRequestScope) throws ServletException
-  {
-    _run (aRequestScope);
-  }
-
-  @Override
-  protected void onPost (@Nonnull final HttpServletRequest aRequest,
-                         @Nonnull final HttpServletResponse aResponse,
-                         @Nonnull final IRequestWebScope aRequestScope) throws ServletException
-  {
-    _run (aRequestScope);
   }
 }

@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Interface for an object that provides content to an application layout area.
@@ -41,5 +41,5 @@ public interface IAreaContentProvider
    * @return The content of the area based on the current state.
    */
   @Nullable
-  IHCNode getContent (@Nonnull final IRequestWebScope aRequestScope, @Nonnull Locale aDisplayLocale);
+  IHCNode getContent (@Nonnull IRequestWebScopeWithoutResponse aRequestScope, @Nonnull Locale aDisplayLocale);
 }

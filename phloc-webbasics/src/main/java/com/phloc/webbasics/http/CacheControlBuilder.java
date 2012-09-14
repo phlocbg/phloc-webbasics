@@ -27,6 +27,9 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -47,6 +50,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   private boolean m_bNoTransform = false;
   private boolean m_bMustRevalidate = false;
   private boolean m_bProxyRevalidate = false;
+  private final List <String> m_aExtensions = new ArrayList <String> ();
 
   public CacheControlBuilder ()
   {}
@@ -65,6 +69,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
     m_bNoTransform = aBase.m_bNoTransform;
     m_bMustRevalidate = aBase.m_bMustRevalidate;
     m_bProxyRevalidate = aBase.m_bProxyRevalidate;
+    m_aExtensions.addAll (aBase.m_aExtensions);
   }
 
   /**
@@ -399,6 +404,24 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   }
 
   @Nonnull
+  public CacheControlBuilder addExtension (@Nonnull @Nonempty final String sExtension)
+  {
+    if (StringHelper.hasNoText (sExtension))
+      throw new IllegalArgumentException ("extension is empty");
+    if (sExtension.indexOf (',') >= 0)
+      throw new IllegalArgumentException ("Each extension must be added separately: '" + sExtension + "'");
+    m_aExtensions.add (sExtension);
+    return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllExtensions ()
+  {
+    return ContainerHelper.newList (m_aExtensions);
+  }
+
+  @Nonnull
   public String getAsHTTPHeaderValue ()
   {
     final List <String> aItems = new ArrayList <String> ();
@@ -420,6 +443,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
       aItems.add ("must-revalidate");
     if (m_bProxyRevalidate)
       aItems.add ("proxy-revalidate");
+    aItems.addAll (m_aExtensions);
     return StringHelper.getImploded (", ", aItems);
   }
 
@@ -441,6 +465,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
                                        .append ("noTransform", m_bNoTransform)
                                        .append ("mustRevalidate", m_bMustRevalidate)
                                        .append ("proxyRevalidate", m_bProxyRevalidate)
+                                       .append ("extensions", m_aExtensions)
                                        .toString ();
   }
 }

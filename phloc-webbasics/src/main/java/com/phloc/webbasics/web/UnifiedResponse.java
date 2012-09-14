@@ -25,6 +25,7 @@ import java.nio.charset.CharsetEncoder;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
@@ -34,9 +35,11 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -58,6 +61,7 @@ import com.phloc.webbasics.http.HTTPHeaderMap;
 public class UnifiedResponse
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
+  private static final String LOG_PREFIX = "UnifiedResponse: ";
 
   private final EHTTPVersion m_eHttpVersion;
 
@@ -70,10 +74,26 @@ public class UnifiedResponse
   private CharsetEncoder m_aContentDispositionEncoder;
   private CacheControlBuilder m_aCacheControl;
   private final HTTPHeaderMap m_aHeaderMap = new HTTPHeaderMap ();
+  private int m_nErrorCode = CGlobal.ILLEGAL_UINT;
 
   public UnifiedResponse (@Nullable final EHTTPVersion eHttpVersion)
   {
     m_eHttpVersion = eHttpVersion;
+  }
+
+  private static void _info (@Nonnull final String sMsg)
+  {
+    s_aLogger.info (LOG_PREFIX + sMsg);
+  }
+
+  private static void _warn (@Nonnull final String sMsg)
+  {
+    s_aLogger.warn (LOG_PREFIX + sMsg);
+  }
+
+  private static void _error (@Nonnull final String sMsg)
+  {
+    s_aLogger.error (LOG_PREFIX + sMsg);
   }
 
   public boolean isHttp10 ()
@@ -98,7 +118,7 @@ public class UnifiedResponse
     if (aCharset == null)
       throw new NullPointerException ("charset");
     if (m_aCharset != null)
-      s_aLogger.warn ("UnifiedResponse: Overwriting charset from " + m_aCharset + " to " + aCharset);
+      _warn ("Overwriting charset from " + m_aCharset + " to " + aCharset);
     m_aCharset = aCharset;
     return this;
   }
@@ -122,7 +142,7 @@ public class UnifiedResponse
     if (aMimeType == null)
       throw new NullPointerException ("mimeType");
     if (m_aMimeType != null)
-      s_aLogger.warn ("UnifiedResponse: Overwriting MimeType from " + m_aMimeType + " to " + aMimeType);
+      _warn ("Overwriting MimeType from " + m_aMimeType + " to " + aMimeType);
     m_aMimeType = aMimeType;
     return this;
   }
@@ -144,7 +164,7 @@ public class UnifiedResponse
   }
 
   /**
-   * Set an empty response content.
+   * Utility method to set an empty response content.
    * 
    * @return this
    */
@@ -152,6 +172,25 @@ public class UnifiedResponse
   public UnifiedResponse setEmptyContent ()
   {
     return setContent (new byte [0]);
+  }
+
+  /**
+   * Utility method to set content and charset at once.
+   * 
+   * @param sContent
+   *        The response content string. May not be <code>null</code>.
+   * @param aCharset
+   *        The charset to use. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setContentAndCharset (@Nonnull final String sContent, @Nonnull final Charset aCharset)
+  {
+    if (sContent == null)
+      throw new NullPointerException ("content");
+    setCharset (aCharset);
+    setContent (CharsetManager.getAsBytes (sContent, aCharset));
+    return this;
   }
 
   /**
@@ -169,7 +208,7 @@ public class UnifiedResponse
     if (aContent == null)
       throw new NullPointerException ("content");
     if (hasContent ())
-      s_aLogger.warn ("UnifiedResponse: Overwriting content with byte array!");
+      _warn ("Overwriting content with byte array!");
     m_aContent = aContent;
     m_aContentISP = null;
     return this;
@@ -188,7 +227,7 @@ public class UnifiedResponse
     if (aISP == null)
       throw new NullPointerException ("content");
     if (hasContent ())
-      s_aLogger.warn ("UnifiedResponse: Overwriting content with content provider!");
+      _warn ("Overwriting content with content provider!");
     m_aContent = null;
     m_aContentISP = aISP;
     return this;
@@ -270,27 +309,21 @@ public class UnifiedResponse
     // -> Strip all paths and replace all invalid characters
     final String sFilenameToUse = FilenameHelper.getWithoutPath (FilenameHelper.getAsSecureValidFilename (sFilename));
     if (!sFilename.equals (sFilenameToUse))
-      s_aLogger.warn ("UnifiedResponse: Content-Dispostion filename was modified from '" +
-                      sFilename +
-                      "' to '" +
-                      sFilenameToUse +
-                      "'");
+      _warn ("Content-Dispostion filename was modified from '" + sFilename + "' to '" + sFilenameToUse + "'");
 
     // Check if encoding as ISO-8859-1 is possible
     if (m_aContentDispositionEncoder == null)
       m_aContentDispositionEncoder = CCharset.CHARSET_ISO_8859_1_OBJ.newEncoder ();
     if (!m_aContentDispositionEncoder.canEncode (sFilenameToUse))
-      s_aLogger.error ("UnifiedResponse: Content-Dispostion  filename '" +
-                       sFilenameToUse +
-                       "' cannot be encoded to ISO-8859-1!");
+      _error ("Content-Dispostion  filename '" + sFilenameToUse + "' cannot be encoded to ISO-8859-1!");
 
     // Are we overwriting?
     if (m_sContentDispositionFilename != null)
-      s_aLogger.warn ("UnifiedResponse: Overwriting Content-Dispostion filename from '" +
-                      m_sContentDispositionFilename +
-                      "' to '" +
-                      sFilenameToUse +
-                      "'");
+      _warn ("Overwriting Content-Dispostion filename from '" +
+             m_sContentDispositionFilename +
+             "' to '" +
+             sFilenameToUse +
+             "'");
 
     // No URL encoding necessary.
     // Filename must be in ISO-8859-1
@@ -318,7 +351,7 @@ public class UnifiedResponse
     if (aCacheControl == null)
       throw new NullPointerException ("cacheControl");
     if (m_aCacheControl != null)
-      s_aLogger.warn ("UnifiedResponse: Overwriting Cache-Control data");
+      _warn ("Overwriting Cache-Control data");
     m_aCacheControl = aCacheControl.getClone ();
     return this;
   }
@@ -337,6 +370,48 @@ public class UnifiedResponse
     return this;
   }
 
+  /**
+   * A utility method that disables caching for this response.
+   * 
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse disableCaching ()
+  {
+    if (m_eHttpVersion == null || m_eHttpVersion == EHTTPVersion.HTTP_10)
+    {
+      // Set to expire far in the past for HTTP/1.0.
+      m_aHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelper.EXPIRES_NEVER_STRING);
+
+      // Set standard HTTP/1.0 no-cache header.
+      m_aHeaderMap.setHeader (CHTTPHeader.PRAGMA, "no-cache");
+    }
+
+    if (m_eHttpVersion == null || m_eHttpVersion == EHTTPVersion.HTTP_11)
+    {
+      // No store must be enough
+      final CacheControlBuilder aCacheControlBuilder = new CacheControlBuilder ().setNoStore (true);
+
+      // Set IE extended HTTP/1.1 no-cache headers.
+      // http://aspnetresources.com/blog/cache_control_extensions
+      aCacheControlBuilder.addExtension ("post-check=0").addExtension ("pre-check=0");
+
+      setCacheControl (aCacheControlBuilder);
+    }
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse setError (@Nonnegative final int nErrorCode)
+  {
+    if (nErrorCode < HttpServletResponse.SC_BAD_REQUEST)
+      throw new IllegalArgumentException ("Status " + nErrorCode + " is not an error!");
+    if (m_nErrorCode != CGlobal.ILLEGAL_UINT)
+      _warn ("Overwriting error code " + m_nErrorCode + " with " + nErrorCode);
+    m_nErrorCode = nErrorCode;
+    return this;
+  }
+
   private void _verifyCachingIntegrity ()
   {
     final boolean bIsHttp11 = isHttp11 ();
@@ -346,48 +421,46 @@ public class UnifiedResponse
     final boolean bETag = m_aHeaderMap.containsHeaders (CHTTPHeader.ETAG);
 
     if (bExpires && bCacheControl)
-      s_aLogger.warn ("UnifiedResponse: Expires and Cache-Control are both present. Cache-Control takes precedence!");
+      _warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
 
     if (bETag && !bIsHttp11)
-      s_aLogger.warn ("UnifiedResponse: Sending an ETag for HTTP version " + m_eHttpVersion + " has no effect!");
+      _warn ("Sending an ETag for HTTP version " + m_eHttpVersion + " has no effect!");
 
     if (!bExpires && !bCacheControl)
     {
       if (bLastModified || bETag)
-        s_aLogger.warn ("UnifiedResponse: Validators (Last-Modified and ETag) have no effect if no Expires or Cache-Control is present");
+        _warn ("Validators (Last-Modified and ETag) have no effect if no Expires or Cache-Control is present");
       else
-        s_aLogger.warn ("UnifiedResponse: Response has no caching information at all");
+        _warn ("Response has no caching information at all");
     }
 
     if (m_aCacheControl != null)
     {
       if (!bIsHttp11)
-        s_aLogger.warn ("UnifiedResponse: Sending a Cache-Control header for HTTP version " +
-                        m_eHttpVersion +
-                        " may have no or limited effect!");
+        _warn ("Sending a Cache-Control header for HTTP version " + m_eHttpVersion + " may have no or limited effect!");
 
       if (m_aCacheControl.isPrivate () && m_aCacheControl.isPublic ())
-        s_aLogger.warn ("UnifiedResponse: Cache-Control cannot be private and public at the same time");
+        _warn ("Cache-Control cannot be private and public at the same time");
 
       if (m_aCacheControl.isNoStore ())
       {
         if (m_aCacheControl.isNoCache ())
-          s_aLogger.info ("UnifiedResponse: Cache-Control no-store is enabled. So no-cache does not need to be enabled");
+          _info ("Cache-Control no-store is enabled. So no-cache does not need to be enabled");
 
         if (m_aCacheControl.isMustRevalidate ())
-          s_aLogger.info ("UnifiedResponse: Cache-Control no-store is enabled. So must-revalidate does not need to be enabled");
+          _info ("Cache-Control no-store is enabled. So must-revalidate does not need to be enabled");
 
         if (m_aCacheControl.isProxyRevalidate ())
-          s_aLogger.info ("UnifiedResponse: Cache-Control no-store is enabled. So proxy-revalidate does not need to be enabled");
+          _info ("Cache-Control no-store is enabled. So proxy-revalidate does not need to be enabled");
       }
       else
         if (m_aCacheControl.isNoCache ())
         {
           if (m_aCacheControl.isMustRevalidate ())
-            s_aLogger.info ("UnifiedResponse: Cache-Control no-cache is enabled. So must-revalidate does not need to be enabled");
+            _info ("Cache-Control no-cache is enabled. So must-revalidate does not need to be enabled");
 
           if (m_aCacheControl.isProxyRevalidate ())
-            s_aLogger.info ("UnifiedResponse: Cache-Control no-cache is enabled. So proxy-revalidate does not need to be enabled");
+            _info ("Cache-Control no-cache is enabled. So proxy-revalidate does not need to be enabled");
         }
     }
   }
@@ -420,7 +493,7 @@ public class UnifiedResponse
       if (StringHelper.hasText (sCacheControlValue))
         aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, sCacheControlValue);
       else
-        s_aLogger.warn ("UnifiedResponse: An empty Cache-Control was provided!");
+        _warn ("An empty Cache-Control was provided!");
     }
 
     if (m_sContentDispositionFilename != null)
@@ -432,7 +505,7 @@ public class UnifiedResponse
                                                                 "\"");
       if (m_aMimeType == null)
       {
-        s_aLogger.warn ("UnifiedResponse: Content-Disposition is specified but no MimeType is set. Using the default download MimeType.");
+        _warn ("Content-Disposition is specified but no MimeType is set. Using the default download MimeType.");
         aHttpResponse.setContentType (CMimeType.APPLICATION_FORCE_DOWNLOAD.getAsString ());
       }
     }
@@ -441,33 +514,37 @@ public class UnifiedResponse
     if (m_aMimeType != null)
       aHttpResponse.setContentType (m_aMimeType.getAsString ());
     else
-      s_aLogger.warn ("UnifiedResponse: No MimeType present");
+      _warn ("No MimeType present");
 
     // Charset
     if (m_aCharset != null)
     {
       if (m_aMimeType == null)
-        s_aLogger.warn ("UnifiedResponse: If no MimeType present, the client cannot get notified about the character encoding '" +
-                        m_aCharset.name () +
-                        "'");
+        _warn ("If no MimeType present, the client cannot get notified about the character encoding '" +
+               m_aCharset.name () +
+               "'");
       aHttpResponse.setCharacterEncoding (m_aCharset.name ());
     }
     else
       if (m_aMimeType == null)
-        s_aLogger.warn ("UnifiedResponse: Also no character encoding present");
+        _warn ("Also no character encoding present");
       else
         switch (m_aMimeType.getContentType ())
         {
           case TEXT:
           case MULTIPART:
-            s_aLogger.warn ("UnifiedResponse: A character encoding for MimeType '" +
-                            m_aMimeType.getAsString () +
-                            "' is appreciated.");
+            _warn ("A character encoding for MimeType '" + m_aMimeType.getAsString () + "' is appreciated.");
             break;
           default:
             // Do we need character encoding here as well???
             break;
         }
+
+    if (m_nErrorCode != CGlobal.ILLEGAL_UINT)
+    {
+      // Send the error code, and allow for content (e.g. 404)
+      aHttpResponse.sendError (m_nErrorCode);
+    }
 
     // Determine content length
     _applyContent (aHttpResponse);
@@ -533,11 +610,7 @@ public class UnifiedResponse
           else
           {
             // Copying failed -> this is a 500
-            s_aLogger.error ("UnifiedResponse: Copying from " +
-                             m_aContentISP +
-                             " failed after " +
-                             aByteCount.longValue () +
-                             " bytes!");
+            _error ("Copying from " + m_aContentISP + " failed after " + aByteCount.longValue () + " bytes!");
             aHttpResponse.resetBuffer ();
             aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           }
@@ -547,7 +620,7 @@ public class UnifiedResponse
       {
         // Set status 204 - no content
         aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
-        s_aLogger.warn ("UnifiedResponse: No content present for the response");
+        _warn ("No content present for the response");
       }
   }
 }

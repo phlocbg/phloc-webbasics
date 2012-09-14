@@ -18,7 +18,6 @@
 package com.phloc.webbasics.login;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +29,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.app.html.HTMLResponseHelper;
+import com.phloc.webbasics.app.html.ApplicationRunner;
 import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Handle the application login process.
@@ -72,7 +72,8 @@ public class LoginManager
   {}
 
   @Nonnull
-  public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScope aRequestScope) throws ServletException
+  public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                @Nonnull final UnifiedResponse aUnifiedResponse)
   {
     String sSessionUserLoginName = LoggedInUserManager.getInstance ().getCurrentUserID ();
     if (sSessionUserLoginName == null)
@@ -113,7 +114,9 @@ public class LoginManager
       {
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
-        HTMLResponseHelper.createHTMLResponse (aRequestScope, createLoginScreen (bLoginError, eLoginResult));
+        ApplicationRunner.createHTMLResponse (aRequestScope,
+                                             aUnifiedResponse,
+                                             createLoginScreen (bLoginError, eLoginResult));
       }
     }
 
