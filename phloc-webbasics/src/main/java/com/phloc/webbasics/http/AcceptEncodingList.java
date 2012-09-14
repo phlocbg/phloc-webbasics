@@ -61,13 +61,15 @@ public final class AcceptEncodingList
    * 
    * @param sEncoding
    *        The charset name to query. May not be <code>null</code>.
-   * @return 0 means not accepted, 1 means fully accepted.
+   * @return The matching {@link QValue} and never <code>null</code>.
    */
-  public double getQualityOfEncoding (@Nonnull final String sEncoding)
+  @Nonnull
+  public QValue getQValueOfEncoding (@Nonnull final String sEncoding)
   {
     if (sEncoding == null)
       throw new NullPointerException ("encoding");
 
+    // Direct search encoding
     QValue aQuality = m_aMap.get (_unify (sEncoding));
     if (aQuality == null)
     {
@@ -77,15 +79,27 @@ public final class AcceptEncodingList
       {
         // Neither encoding nor "*" is present
         // -> assume minimum quality
-        return QValue.MIN_QUALITY;
+        return QValue.MIN_QVALUE;
       }
     }
-    return aQuality.getQuality ();
+    return aQuality;
+  }
+
+  /**
+   * Return the associated quality of the given charset.
+   * 
+   * @param sEncoding
+   *        The charset name to query. May not be <code>null</code>.
+   * @return 0 means not accepted, 1 means fully accepted.
+   */
+  public double getQualityOfEncoding (@Nonnull final String sEncoding)
+  {
+    return getQValueOfEncoding (sEncoding).getQuality ();
   }
 
   public boolean supportsEncoding (@Nonnull final String sEncoding)
   {
-    return getQualityOfEncoding (sEncoding) > QValue.MIN_QUALITY;
+    return getQValueOfEncoding (sEncoding).isAboveMinimumQuality ();
   }
 
   public boolean explicitlySupportsEncoding (@Nonnull final String sEncoding)
@@ -94,7 +108,7 @@ public final class AcceptEncodingList
       throw new NullPointerException ("encoding");
 
     final QValue aQuality = m_aMap.get (_unify (sEncoding));
-    return aQuality != null && aQuality.getQuality () > QValue.MIN_QUALITY;
+    return aQuality != null && aQuality.isAboveMinimumQuality ();
   }
 
   public boolean supportsGZIP ()

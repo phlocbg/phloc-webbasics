@@ -42,6 +42,7 @@ public final class QValue implements Comparable <QValue>, Serializable
   public static final QValue MIN_QVALUE = new QValue (MIN_QUALITY);
   public static final double MAX_QUALITY = 1;
   public static final QValue MAX_QVALUE = new QValue (MAX_QUALITY);
+  public static final double HALF_QUALITY = 0.5;
   private static final Logger s_aLogger = LoggerFactory.getLogger (QValue.class);
 
   private final double m_dQuality;
@@ -84,11 +85,21 @@ public final class QValue implements Comparable <QValue>, Serializable
   }
 
   /**
-   * @return <code>true</code> if the quality is {@link #MAX_QUALITY}
+   * @return <code>true</code> if the quality is &le; {@link #HALF_QUALITY}
+   * @see #isHighValue()
    */
-  public boolean isMaximumQuality ()
+  public boolean isLowValue ()
   {
-    return EqualsUtils.equals (m_dQuality, MAX_QUALITY);
+    return m_dQuality <= HALF_QUALITY;
+  }
+
+  /**
+   * @return <code>true</code> if the quality is &gt; {@link #HALF_QUALITY}
+   * @see #isLowValue()
+   */
+  public boolean isHighValue ()
+  {
+    return m_dQuality > HALF_QUALITY;
   }
 
   /**
@@ -100,8 +111,18 @@ public final class QValue implements Comparable <QValue>, Serializable
   }
 
   /**
+   * @return <code>true</code> if the quality is {@link #MAX_QUALITY}
+   */
+  public boolean isMaximumQuality ()
+  {
+    return EqualsUtils.equals (m_dQuality, MAX_QUALITY);
+  }
+
+  /**
    * @return <code>true</code> if the quality is &gt; {@link #MIN_QUALITY} and
    *         &lt; {@link #MAX_QUALITY}.
+   * @see #isAboveMinimumQuality()
+   * @see #isBelowMaximumQuality()
    */
   public boolean isBetweenMinimumAndMaximum ()
   {

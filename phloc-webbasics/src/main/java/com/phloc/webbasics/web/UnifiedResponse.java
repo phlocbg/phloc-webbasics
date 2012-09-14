@@ -65,7 +65,7 @@ import com.phloc.webbasics.http.QValue;
 public class UnifiedResponse
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
-  private static final String LOG_PREFIX = "UnifiedResponse to ";
+  private static final String LOG_PREFIX = "UnifiedResponse to [";
 
   private final EHTTPVersion m_eHttpVersion;
   private final String m_sRequestURL;
@@ -95,17 +95,17 @@ public class UnifiedResponse
 
   private void _info (@Nonnull final String sMsg)
   {
-    s_aLogger.info (LOG_PREFIX + m_sRequestURL + ":" + sMsg);
+    s_aLogger.info (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
   }
 
   private void _warn (@Nonnull final String sMsg)
   {
-    s_aLogger.warn (LOG_PREFIX + m_sRequestURL + ":" + sMsg);
+    s_aLogger.warn (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
   }
 
   private void _error (@Nonnull final String sMsg)
   {
-    s_aLogger.error (LOG_PREFIX + m_sRequestURL + ":" + sMsg);
+    s_aLogger.error (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
   }
 
   public boolean isHttp10 ()
@@ -567,11 +567,18 @@ public class UnifiedResponse
                "' is not at all supported by the request. Allowed values are: " +
                m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
       else
-        if (aQuality.isBetweenMinimumAndMaximum ())
-          _warn ("Character encoding '" +
-                 sCharset +
-                 "' is not best supported by the request. Better charsets are: " +
-                 m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+        if (aQuality.isLowValue ())
+        {
+          // Inform if the quality of the request is <= 50%!
+          final Map <String, QValue> aBetterValues = m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ());
+          if (!aBetterValues.isEmpty ())
+            _info ("Character encoding '" +
+                   sCharset +
+                   "' is not best supported by the request (" +
+                   aQuality +
+                   "). Better charsets are: " +
+                   aBetterValues);
+        }
 
       aHttpResponse.setCharacterEncoding (sCharset);
     }

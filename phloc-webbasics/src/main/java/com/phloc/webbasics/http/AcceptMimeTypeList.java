@@ -49,20 +49,16 @@ public final class AcceptMimeTypeList
     m_aMap.put (aMimeType, new QValue (dQuality));
   }
 
-  public double getQualityOfMimeType (@Nonnull final String sMimeType)
-  {
-    return getQualityOfMimeType (MimeType.parseFromStringWithoutEncoding (sMimeType));
-  }
-
   /**
    * Return the associated quality of the given MIME type using the fallback
    * mechanism.
    * 
    * @param aMimeType
    *        The charset name to query. May not be <code>null</code>.
-   * @return 0 means not accepted, 1 means fully accepted.
+   * @return The {@link QValue} of the mime type
    */
-  public double getQualityOfMimeType (@Nonnull final IMimeType aMimeType)
+  @Nonnull
+  public QValue getQValueOfMimeType (@Nonnull final IMimeType aMimeType)
   {
     if (aMimeType == null)
       throw new NullPointerException ("mimeType");
@@ -78,11 +74,29 @@ public final class AcceptMimeTypeList
         if (aQuality == null)
         {
           // Neither charset nor "*" nor "*/*" is present
-          return QValue.MIN_QUALITY;
+          return QValue.MIN_QVALUE;
         }
       }
     }
-    return aQuality.getQuality ();
+    return aQuality;
+  }
+
+  public double getQualityOfMimeType (@Nonnull final String sMimeType)
+  {
+    return getQualityOfMimeType (MimeType.parseFromStringWithoutEncoding (sMimeType));
+  }
+
+  /**
+   * Return the associated quality of the given MIME type using the fallback
+   * mechanism.
+   * 
+   * @param aMimeType
+   *        The charset name to query. May not be <code>null</code>.
+   * @return 0 means not accepted, 1 means fully accepted.
+   */
+  public double getQualityOfMimeType (@Nonnull final IMimeType aMimeType)
+  {
+    return getQValueOfMimeType (aMimeType).getQuality ();
   }
 
   /**
@@ -106,7 +120,7 @@ public final class AcceptMimeTypeList
    */
   public boolean supportsMimeType (@Nonnull final IMimeType aMimeType)
   {
-    return getQualityOfMimeType (aMimeType) > QValue.MIN_QUALITY;
+    return getQValueOfMimeType (aMimeType).isAboveMinimumQuality ();
   }
 
   /**
@@ -133,7 +147,7 @@ public final class AcceptMimeTypeList
   public boolean explicitlySupportsMimeType (@Nonnull final IMimeType aMimeType)
   {
     final QValue aQuality = m_aMap.get (aMimeType);
-    return aQuality != null && aQuality.getQuality () > QValue.MIN_QUALITY;
+    return aQuality != null && aQuality.isAboveMinimumQuality ();
   }
 
   @Override
