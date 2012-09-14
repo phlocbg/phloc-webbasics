@@ -19,6 +19,7 @@ package com.phloc.webbasics.servlet;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.mime.CMimeType;
@@ -46,9 +47,14 @@ public final class PingPongServlet extends AbstractUnifiedResponseServlet
                                 @Nonnull final EHTTPMethod eHTTPMethod,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException
   {
-    aUnifiedResponse.setContentAndCharset (RESPONSE_TEXT, CCharset.CHARSET_UTF_8_OBJ)
-                    .setMimeType (CMimeType.TEXT_PLAIN)
-                    .disableCaching ();
-    s_aStatsPingPong.increment ();
+    if (!eHTTPMethod.equals (EHTTPMethod.GET))
+      aUnifiedResponse.setStatus (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    else
+    {
+      aUnifiedResponse.setContentAndCharset (RESPONSE_TEXT, CCharset.CHARSET_UTF_8_OBJ)
+                      .setMimeType (CMimeType.TEXT_PLAIN)
+                      .disableCaching ();
+      s_aStatsPingPong.increment ();
+    }
   }
 }
