@@ -86,6 +86,7 @@ public class UnifiedResponse
   private CacheControlBuilder m_aCacheControl;
   private final HTTPHeaderMap m_aResponseHeaderMap = new HTTPHeaderMap ();
   private int m_nStatusCode = CGlobal.ILLEGAL_UINT;
+  private String m_sRedirectTargetUrl;
 
   public UnifiedResponse (@Nonnull final EHTTPVersion eHttpVersion, @Nonnull final IRequestWebScope aRequestScope)
   {
@@ -140,7 +141,7 @@ public class UnifiedResponse
     if (aCharset == null)
       throw new NullPointerException ("charset");
     if (m_aCharset != null)
-      _warn ("Overwriting charset from " + m_aCharset + " to " + aCharset);
+      _info ("Overwriting charset from " + m_aCharset + " to " + aCharset);
     m_aCharset = aCharset;
     return this;
   }
@@ -164,7 +165,7 @@ public class UnifiedResponse
     if (aMimeType == null)
       throw new NullPointerException ("mimeType");
     if (m_aMimeType != null)
-      _warn ("Overwriting MimeType from " + m_aMimeType + " to " + aMimeType);
+      _info ("Overwriting MimeType from " + m_aMimeType + " to " + aMimeType);
     m_aMimeType = aMimeType;
     return this;
   }
@@ -230,7 +231,7 @@ public class UnifiedResponse
     if (aContent == null)
       throw new NullPointerException ("content");
     if (hasContent ())
-      _warn ("Overwriting content with byte array!");
+      _info ("Overwriting content with byte array!");
     m_aContent = aContent;
     m_aContentISP = null;
     return this;
@@ -249,7 +250,7 @@ public class UnifiedResponse
     if (aISP == null)
       throw new NullPointerException ("content");
     if (hasContent ())
-      _warn ("Overwriting content with content provider!");
+      _info ("Overwriting content with content provider!");
     m_aContent = null;
     m_aContentISP = aISP;
     return this;
@@ -349,7 +350,7 @@ public class UnifiedResponse
 
     // Are we overwriting?
     if (m_sContentDispositionFilename != null)
-      _warn ("Overwriting Content-Dispostion filename from '" +
+      _info ("Overwriting Content-Dispostion filename from '" +
              m_sContentDispositionFilename +
              "' to '" +
              sFilenameToUse +
@@ -397,7 +398,11 @@ public class UnifiedResponse
     if (aCacheControl == null)
       throw new NullPointerException ("cacheControl");
     if (m_aCacheControl != null)
-      _warn ("Overwriting Cache-Control data");
+      _info ("Overwriting Cache-Control data from '" +
+             m_aCacheControl.getAsHTTPHeaderValue () +
+             "' to '" +
+             aCacheControl.getAsHTTPHeaderValue () +
+             "'");
     m_aCacheControl = aCacheControl.getClone ();
     return this;
   }
@@ -461,8 +466,19 @@ public class UnifiedResponse
   public UnifiedResponse setStatus (@Nonnegative final int nStatusCode)
   {
     if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
-      _warn ("Overwriting status code " + m_nStatusCode + " with " + nStatusCode);
+      _info ("Overwriting status code " + m_nStatusCode + " with " + nStatusCode);
     m_nStatusCode = nStatusCode;
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse setRedirect (@Nonnull @Nonempty final String sRedirectTargetUrl)
+  {
+    if (StringHelper.hasNoText (sRedirectTargetUrl))
+      throw new IllegalArgumentException ("redirectTargetUrl may not be null");
+    if (m_sRedirectTargetUrl != null)
+      _info ("Overwriting redirect target URL '" + m_sRedirectTargetUrl + "' with '" + m_sRedirectTargetUrl + "'");
+    m_sRedirectTargetUrl = sRedirectTargetUrl;
     return this;
   }
 
@@ -539,132 +555,140 @@ public class UnifiedResponse
       }
     }
 
-    if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
+    if (m_sRedirectTargetUrl != null)
     {
-      // Send the status code
-      if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
-      {
-        // Note: After using this method, the response should be considered to
-        // be committed and should not be written to.
-        aHttpResponse.sendError (m_nStatusCode);
-      }
-      else
-      {
-        // Note: The container clears the buffer and sets the Location header,
-        // preserving cookies and other headers.
-        aHttpResponse.setStatus (m_nStatusCode);
-      }
+      // Note: After using this method, the response should be
+      // considered to be committed and should not be written to.
+      aHttpResponse.sendRedirect (m_sRedirectTargetUrl);
     }
     else
-    {
-      // Verify only if is a response with content
-      _verifyCachingIntegrity ();
-
-      if (m_aCacheControl != null)
+      if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
       {
-        final String sCacheControlValue = m_aCacheControl.getAsHTTPHeaderValue ();
-        if (StringHelper.hasText (sCacheControlValue))
-          aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, sCacheControlValue);
-        else
-          _warn ("An empty Cache-Control was provided!");
-      }
-
-      if (m_sContentDispositionFilename != null)
-      {
-        // Filename needs to be surrounded with double quotes (single quotes
-        // don't
-        // work).
-        aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, "attachment; filename=\"" +
-                                                                  m_sContentDispositionFilename +
-                                                                  "\"");
-        if (m_aMimeType == null)
+        if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
         {
-          _warn ("Content-Disposition is specified but no MimeType is set. Using the default download MimeType.");
-          aHttpResponse.setContentType (CMimeType.APPLICATION_FORCE_DOWNLOAD.getAsString ());
+          // It's an error
+          // Note: After using this method, the response should be considered
+          // to be committed and should not be written to.
+          aHttpResponse.sendError (m_nStatusCode);
+        }
+        else
+        {
+          // It's a status message "only"
+          // Note: The container clears the buffer and sets the Location
+          // header, preserving cookies and other headers.
+          aHttpResponse.setStatus (m_nStatusCode);
         }
       }
-
-      // Mime type
-      if (m_aMimeType != null)
-      {
-        final String sMimeType = m_aMimeType.getAsString ();
-
-        // Check with request accept mime types
-        final QValue aQuality = m_aAcceptMimeTypeList.getQValueOfMimeType (m_aMimeType);
-        if (aQuality.isMinimumQuality ())
-          _warn ("MimeType '" +
-                 sMimeType +
-                 "' is not at all supported by the request. Allowed values are: " +
-                 m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ()));
-        else
-          if (aQuality.isBelowMaximumQuality ())
-          {
-            // Inform if the quality of the request is <= 50%!
-            final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
-            if (!aBetterValues.isEmpty ())
-              _info ("MimeType '" +
-                     sMimeType +
-                     "' is not best supported by the request (" +
-                     aQuality +
-                     "). Better MimeTypes are: " +
-                     aBetterValues);
-          }
-
-        aHttpResponse.setContentType (sMimeType);
-      }
       else
-        _warn ("No MimeType present");
-
-      // Charset
-      if (m_aCharset != null)
       {
-        final String sCharset = m_aCharset.name ();
-        if (m_aMimeType == null)
-          _warn ("If no MimeType present, the client cannot get notified about the character encoding '" +
-                 sCharset +
-                 "'");
+        // Verify only if is a response with content
+        _verifyCachingIntegrity ();
 
-        // Check with request charset
-        final QValue aQuality = m_aAcceptCharsetList.getQValueOfCharset (sCharset);
-        if (aQuality.isMinimumQuality ())
-          _warn ("Character encoding '" +
-                 sCharset +
-                 "' is not at all supported by the request. Allowed values are: " +
-                 m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
-        else
-          if (aQuality.isLowValue ())
+        if (m_aCacheControl != null)
+        {
+          final String sCacheControlValue = m_aCacheControl.getAsHTTPHeaderValue ();
+          if (StringHelper.hasText (sCacheControlValue))
+            aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, sCacheControlValue);
+          else
+            _warn ("An empty Cache-Control was provided!");
+        }
+
+        if (m_sContentDispositionFilename != null)
+        {
+          // Filename needs to be surrounded with double quotes (single quotes
+          // don't
+          // work).
+          aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, "attachment; filename=\"" +
+                                                                    m_sContentDispositionFilename +
+                                                                    "\"");
+          if (m_aMimeType == null)
           {
-            // Inform if the quality of the request is <= 50%!
-            final Map <String, QValue> aBetterValues = m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ());
-            if (!aBetterValues.isEmpty ())
-              _info ("Character encoding '" +
-                     sCharset +
-                     "' is not best supported by the request (" +
-                     aQuality +
-                     "). Better charsets are: " +
-                     aBetterValues);
+            _warn ("Content-Disposition is specified but no MimeType is set. Using the default download MimeType.");
+            aHttpResponse.setContentType (CMimeType.APPLICATION_FORCE_DOWNLOAD.getAsString ());
           }
+        }
 
-        aHttpResponse.setCharacterEncoding (sCharset);
+        // Mime type
+        if (m_aMimeType != null)
+        {
+          final String sMimeType = m_aMimeType.getAsString ();
+
+          // Check with request accept mime types
+          final QValue aQuality = m_aAcceptMimeTypeList.getQValueOfMimeType (m_aMimeType);
+          if (aQuality.isMinimumQuality ())
+            _warn ("MimeType '" +
+                   sMimeType +
+                   "' is not at all supported by the request. Allowed values are: " +
+                   m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+          else
+            if (aQuality.isBelowMaximumQuality ())
+            {
+              // Inform if the quality of the request is <= 50%!
+              final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
+              if (!aBetterValues.isEmpty ())
+                _info ("MimeType '" +
+                       sMimeType +
+                       "' is not best supported by the request (" +
+                       aQuality +
+                       "). Better MimeTypes are: " +
+                       aBetterValues);
+            }
+
+          aHttpResponse.setContentType (sMimeType);
+        }
+        else
+          _warn ("No MimeType present");
+
+        // Charset
+        if (m_aCharset != null)
+        {
+          final String sCharset = m_aCharset.name ();
+          if (m_aMimeType == null)
+            _warn ("If no MimeType present, the client cannot get notified about the character encoding '" +
+                   sCharset +
+                   "'");
+
+          // Check with request charset
+          final QValue aQuality = m_aAcceptCharsetList.getQValueOfCharset (sCharset);
+          if (aQuality.isMinimumQuality ())
+            _warn ("Character encoding '" +
+                   sCharset +
+                   "' is not at all supported by the request. Allowed values are: " +
+                   m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+          else
+            if (aQuality.isLowValue ())
+            {
+              // Inform if the quality of the request is <= 50%!
+              final Map <String, QValue> aBetterValues = m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ());
+              if (!aBetterValues.isEmpty ())
+                _info ("Character encoding '" +
+                       sCharset +
+                       "' is not best supported by the request (" +
+                       aQuality +
+                       "). Better charsets are: " +
+                       aBetterValues);
+            }
+
+          aHttpResponse.setCharacterEncoding (sCharset);
+        }
+        else
+          if (m_aMimeType == null)
+            _warn ("Also no character encoding present");
+          else
+            switch (m_aMimeType.getContentType ())
+            {
+              case TEXT:
+              case MULTIPART:
+                _warn ("A character encoding for MimeType '" + m_aMimeType.getAsString () + "' is appreciated.");
+                break;
+              default:
+                // Do we need character encoding here as well???
+                break;
+            }
+
+        // Determine content length
+        _applyContent (aHttpResponse);
       }
-      else
-        if (m_aMimeType == null)
-          _warn ("Also no character encoding present");
-        else
-          switch (m_aMimeType.getContentType ())
-          {
-            case TEXT:
-            case MULTIPART:
-              _warn ("A character encoding for MimeType '" + m_aMimeType.getAsString () + "' is appreciated.");
-              break;
-            default:
-              // Do we need character encoding here as well???
-              break;
-          }
-
-      // Determine content length
-      _applyContent (aHttpResponse);
-    }
   }
 
   private void _applyContent (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
