@@ -24,6 +24,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
@@ -40,7 +44,48 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareHttpServlet
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
+
   public AbstractUnifiedResponseServlet ()
+  {}
+
+  /**
+   * Check if the passed HTTP method is allowed. If not, a
+   * {@link HttpServletResponse#SC_METHOD_NOT_ALLOWED} will be returned. By
+   * default only {@link EHTTPMethod#GET} and {@link EHTTPMethod#POST} are
+   * allowed.
+   * 
+   * @param eHTTPMethod
+   *        The HTTP method to be checked.
+   * @return <code>true</code> if the method is allowed and processing is
+   *         continued, <code>false</code> to immediately send and HTTP error.
+   */
+  @OverrideOnDemand
+  protected boolean isAllowedHTTPMethod (@Nonnull final EHTTPMethod eHTTPMethod)
+  {
+    return eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.POST;
+  }
+
+  /**
+   * Called before a valid request is handled. This method is not called if HTTP
+   * version or HTTP method are not supported.
+   * 
+   * @param aRequestScope
+   *        The request scope that will be used for processing the request
+   */
+  @OverrideOnDemand
+  protected void onRequestBegin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {}
+
+  /**
+   * Called after a valid request was processed. This method is not called if
+   * HTTP version or HTTP method are not supported.
+   * 
+   * @param bExceptionOccurred
+   *        if <code>true</code> an exception occurred in request processing
+   */
+  @OverrideOnDemand
+  protected void onRequestEnd (final boolean bExceptionOccurred)
   {}
 
   /**
@@ -50,15 +95,12 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    *        The request scope to use. There is no direct access to the
    *        {@link HttpServletResponse}. Everything must be handled with the
    *        unified response! Never <code>null</code>.
-   * @param eHTTPMethod
-   *        The HTTP method that was requested. Never <code>null</code>.
    * @param aUnifiedResponse
    *        The response object to be filled. Never <code>null</code>.
    * @throws ServletException
    *         In case of an error
    */
   protected abstract void handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                                         @Nonnull EHTTPMethod eHTTPMethod,
                                          @Nonnull UnifiedResponse aUnifiedResponse) throws ServletException,
                                                                                    IOException;
 
@@ -71,11 +113,42 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (eHTTPVersion == null)
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
     else
-    {
-      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
-      handleRequest (aRequestScope, eHTTPMethod, aUnifiedResponse);
-      aUnifiedResponse.applyToResponse (aHttpResponse);
-    }
+      if (!isAllowedHTTPMethod (eHTTPMethod))
+        aHttpResponse.sendError (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+      else
+      {
+        // before-callback
+        try
+        {
+          onRequestBegin (aRequestScope);
+        }
+        catch (final Throwable t)
+        {
+          s_aLogger.error ("onRequestBegin failed", t);
+        }
+
+        boolean bExceptionOccurred = true;
+        try
+        {
+          // main
+          final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
+          handleRequest (aRequestScope, aUnifiedResponse);
+          aUnifiedResponse.applyToResponse (aHttpResponse);
+          bExceptionOccurred = false;
+        }
+        finally
+        {
+          // after-callback
+          try
+          {
+            onRequestEnd (bExceptionOccurred);
+          }
+          catch (final Throwable t)
+          {
+            s_aLogger.error ("onRequestEnd failed", t);
+          }
+        }
+      }
   }
 
   @Override

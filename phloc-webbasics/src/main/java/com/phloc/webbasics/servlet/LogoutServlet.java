@@ -21,14 +21,12 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
@@ -50,30 +48,24 @@ public class LogoutServlet extends AbstractUnifiedResponseServlet
 
   @Override
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                @Nonnull final EHTTPMethod eHTTPMethod,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
-    if (!eHTTPMethod.equals (EHTTPMethod.GET) && !eHTTPMethod.equals (EHTTPMethod.POST))
-      aUnifiedResponse.setStatus (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-    else
-    {
-      // Get the redirect URL before the session is invalidated, in case the
-      // code
-      // requires the current session
-      final ISimpleURL aRedirectURL = getRedirectURL ();
+    // Get the redirect URL before the session is invalidated, in case the
+    // code
+    // requires the current session
+    final ISimpleURL aRedirectURL = getRedirectURL ();
 
-      // Perform the main logout
-      // 1. Invalidate the session
-      // 2. Triggers the session scope destruction (via the HttpSessionListener)
-      // 3. which triggers WebScopeManager.onSessionEnd
-      // 4. which triggers WebScopeSessionManager.getInstance ().onSessionEnd
-      // 5. which triggers ISessionWebScope.destroyScope
-      final HttpSession aHttpSession = aRequestScope.getRequest ().getSession (false);
-      if (aHttpSession != null)
-        aHttpSession.invalidate ();
+    // Perform the main logout
+    // 1. Invalidate the session
+    // 2. Triggers the session scope destruction (via the HttpSessionListener)
+    // 3. which triggers WebScopeManager.onSessionEnd
+    // 4. which triggers WebScopeSessionManager.getInstance ().onSessionEnd
+    // 5. which triggers ISessionWebScope.destroyScope
+    final HttpSession aHttpSession = aRequestScope.getRequest ().getSession (false);
+    if (aHttpSession != null)
+      aHttpSession.invalidate ();
 
-      // Go home
-      aUnifiedResponse.setRedirect (aRedirectURL);
-    }
+    // Go home
+    aUnifiedResponse.setRedirect (aRedirectURL);
   }
 }

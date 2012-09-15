@@ -24,6 +24,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +35,6 @@ import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
 
@@ -74,6 +74,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected final void onInit ()
   {
     m_aAllowedExtensions = _asSet (getInitParameter ("allowedExtensions"));
@@ -102,30 +103,24 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
 
   @Override
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                @Nonnull final EHTTPMethod eHTTPMethod,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
-    if (!eHTTPMethod.equals (EHTTPMethod.GET))
-      aUnifiedResponse.setStatus (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    // cut the leading "/"
+    final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
+
+    if (StringHelper.hasText (sFilename) &&
+        _hasValidExtension (sFilename) &&
+        !_isPossibleDirectoryTraversalRequest (sFilename))
+    {
+      // Filename seems to be safe
+      onDeliverResource (aRequestScope, aUnifiedResponse, sFilename);
+    }
     else
     {
-      // cut the leading "/"
-      final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
-
-      if (StringHelper.hasText (sFilename) &&
-          _hasValidExtension (sFilename) &&
-          !_isPossibleDirectoryTraversalRequest (sFilename))
-      {
-        // Filename seems to be safe
-        onDeliverResource (aRequestScope, aUnifiedResponse, sFilename);
-      }
-      else
-      {
-        // Send the same error code as if it is simply not found to confuse
-        // attackers :)
-        s_aLogger.warn ("Illegal delivery request '" + sFilename + "'");
-        aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
-      }
+      // Send the same error code as if it is simply not found to confuse
+      // attackers :)
+      s_aLogger.warn ("Illegal delivery request '" + sFilename + "'");
+      aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
     }
   }
 }

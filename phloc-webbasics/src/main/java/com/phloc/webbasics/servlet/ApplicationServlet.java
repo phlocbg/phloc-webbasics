@@ -34,7 +34,6 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.html.ApplicationRunner;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.LayoutHTMLProvider;
-import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 import com.phloc.webbasics.web.UnifiedResponse;
 
@@ -54,15 +53,38 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
   }
 
-  /**
-   * Called before the request is handled
-   * 
-   * @param aRequestScope
-   *        The request scope
-   */
-  @OverrideOnDemand
+  @Override
   protected void onRequestBegin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {}
+  {
+    // Run default request initialization (menu item and locale)
+    ApplicationRequestManager.onRequestBegin (aRequestScope);
+
+    // Invoke all "request begin" listener
+    for (final IApplicationRequestListenerSPI aListener : m_aListeners)
+      try
+      {
+        aListener.onRequestBegin ();
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Failed to invoke onRequestBegin on " + aListener, t);
+      }
+  }
+
+  @Override
+  protected void onRequestEnd (final boolean bExceptionOccurred)
+  {
+    // Invoke all "request end" listener
+    for (final IApplicationRequestListenerSPI aListener : m_aListeners)
+      try
+      {
+        aListener.onRequestEnd ();
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Failed to invoke onRequestEnd on " + aListener, t);
+      }
+  }
 
   /**
    * @param aRequestScope
@@ -76,38 +98,10 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
     return new LayoutHTMLProvider ();
   }
 
-  /**
-   * Called after the request was handled
-   * 
-   * @param aRequestScope
-   *        The request scope
-   */
-  @OverrideOnDemand
-  protected void onRequestEnd (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {}
-
   @Override
   protected final void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                      @Nonnull final EHTTPMethod eHTTPMethod,
                                       @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException
   {
-    // Run default request initialization (menu item and locale)
-    ApplicationRequestManager.onRequestBegin (aRequestScope);
-
-    // Protected method invocation
-    onRequestBegin (aRequestScope);
-
-    // Invoke all "request begin" listener
-    for (final IApplicationRequestListenerSPI aListener : m_aListeners)
-      try
-      {
-        aListener.onRequestBegin ();
-      }
-      catch (final Throwable t)
-      {
-        s_aLogger.error ("Failed to invoke onRequestBegin on " + aListener, t);
-      }
-
     try
     {
       // Who is responsible for creating the HTML?
@@ -126,21 +120,5 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
         throw new ServletException (t);
       }
     }
-    finally
-    {
-      // Invoke all "request end" listener
-      for (final IApplicationRequestListenerSPI aListener : m_aListeners)
-        try
-        {
-          aListener.onRequestEnd ();
-        }
-        catch (final Throwable t)
-        {
-          s_aLogger.error ("Failed to invoke onRequestEnd on " + aListener, t);
-        }
-    }
-
-    // Protected method invocation
-    onRequestEnd (aRequestScope);
   }
 }

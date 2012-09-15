@@ -381,6 +381,12 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     s_aInited.set (false);
   }
 
+  /**
+   * Notification that a session was created.
+   * 
+   * @param aSessionEvent
+   *        The notification event. Never <code>null</code>.
+   */
   public final void sessionCreated (@Nonnull final HttpSessionEvent aSessionEvent)
   {
     // Create the SessionScope
@@ -388,6 +394,12 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     WebScopeManager.onSessionBegin (aHttpSession);
   }
 
+  /**
+   * Notification that a session is about to be invalidated.
+   * 
+   * @param aSessionEvent
+   *        The notification event. Never <code>null</code>.
+   */
   public final void sessionDestroyed (@Nonnull final HttpSessionEvent aSessionEvent)
   {
     // Destroy the SessionScope

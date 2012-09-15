@@ -69,6 +69,7 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
                                       @Nonnull final IRequestWebScope aRequestScope) throws IOException,
                                                                                     ServletException
   {
+    // Check HTTP version
     final EHTTPVersion eHTTPVersion = RequestHelper.getHttpVersion (aHttpRequest);
     if (eHTTPVersion == null)
     {
