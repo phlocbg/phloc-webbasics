@@ -24,7 +24,7 @@ import javax.annotation.meta.When;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.lang.CGStringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Provides a common implementation of the {@link IAjaxHandler} interface for as
@@ -71,7 +71,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
   protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull MapBasedAttributeContainer aParams) throws Exception;
 
   @Nonnull
-  public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScope aRequestScope) throws Exception
+  public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     // Get all request parameter values to use from the request scope, as the
     // request scope already differentiated between String, String[] and

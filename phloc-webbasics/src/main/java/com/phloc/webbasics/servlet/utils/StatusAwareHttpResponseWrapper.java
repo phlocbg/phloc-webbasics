@@ -28,7 +28,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import com.phloc.webbasics.http.HTTPHeaderMap;
 
 /**
- * Abstract output stream switching {@link HttpServletResponseWrapper}
+ * A special {@link HttpServletResponseWrapper} that tracks the used status
+ * codes as well as the set HTTP response headers.
  * 
  * @author philip
  */

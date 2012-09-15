@@ -33,7 +33,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.CWeb;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPVersion;
@@ -147,6 +147,12 @@ public final class RequestHelper
     // Normal case: URI contains context path.
     final String sPath = sRequestURI.substring (sContextPath.length ());
     return sPath.length () > 0 ? sPath : "/";
+  }
+
+  @Nonnull
+  public static String getPathWithinServlet (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getPathWithinServlet (aRequestScope.getRequest ());
   }
 
   /**
@@ -272,7 +278,7 @@ public final class RequestHelper
   }
 
   @Nullable
-  public static EHTTPVersion getHttpVersion (@Nonnull final IRequestWebScope aRequestScope)
+  public static EHTTPVersion getHttpVersion (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     if (aRequestScope == null)
       throw new NullPointerException ("requestScope");
@@ -320,6 +326,21 @@ public final class RequestHelper
       }
     }
     return ret;
+  }
+
+  /**
+   * This is a utility method which avoids that all map values are enclosed in
+   * an array. Jetty seems to create String arrays out of simple string values
+   * 
+   * @param aRequestScope
+   * @return A Map containing pure strings instead of string arrays with one
+   *         item
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static Map <String, Object> getParameterMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getParameterMap (aRequestScope.getRequest ());
   }
 
   /**

@@ -19,8 +19,8 @@ package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Callback interface to handle thrown exception objects from the
@@ -37,13 +37,10 @@ public interface IAjaxExceptionHandler
    *        The exception. Never <code>null</code>.
    * @param sAjaxFunctionName
    *        The AJAX function that should have been involved
-   * @param aHttpRequest
-   *        The HTTP request
-   * @param aHttpResponse
-   *        The HTTP response
+   * @param aRequestScope
+   *        The request scope
    */
   void onAjaxException (@Nonnull Throwable t,
                         @Nullable String sAjaxFunctionName,
-                        @Nonnull HttpServletRequest aHttpRequest,
-                        @Nonnull HttpServletResponse aHttpResponse);
+                        @Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 }

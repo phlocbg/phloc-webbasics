@@ -111,10 +111,20 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   {
     final EHTTPVersion eHTTPVersion = RequestHelper.getHttpVersion (aHttpRequest);
     if (eHTTPVersion == null)
+    {
+      s_aLogger.warn ("Request " + aRequestScope.getURL () + " has no valid HTTP version!");
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
+    }
     else
       if (!isAllowedHTTPMethod (eHTTPMethod))
-        aHttpResponse.sendError (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+      {
+        s_aLogger.warn ("Request " + aRequestScope.getURL () + " uses disallowed HTTP method " + eHTTPMethod + "!");
+        // Disallow method
+        if (eHTTPVersion == EHTTPVersion.HTTP_11)
+          aHttpResponse.sendError (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        else
+          aHttpResponse.sendError (HttpServletResponse.SC_BAD_REQUEST);
+      }
       else
       {
         // before-callback

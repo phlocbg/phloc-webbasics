@@ -42,7 +42,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * The main AJAX service.
@@ -184,7 +184,7 @@ public final class AjaxManager extends GlobalSingleton
    */
   @Nonnull
   public AjaxDefaultResponse invokeFunction (@Nonnull final String sFunctionName,
-                                             @Nonnull final IRequestWebScope aRequestWebScope) throws Exception
+                                             @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception
   {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Invoking AJAX function '" + sFunctionName + "'");

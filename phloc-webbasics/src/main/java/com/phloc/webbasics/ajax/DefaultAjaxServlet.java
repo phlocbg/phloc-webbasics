@@ -23,9 +23,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -40,20 +38,19 @@ import com.phloc.commons.stats.IStatisticsHandlerKeyedTimer;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.CWebCharset;
-import com.phloc.webbasics.http.EHTTPVersion;
+import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.RequestLogger;
-import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Abstract implementation of a servlet that invokes AJAX functions.
  * 
  * @author philip
  */
-public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
+public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultAjaxServlet.class);
   private static final IStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (DefaultAjaxServlet.class);
@@ -115,14 +112,12 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
     return true;
   }
 
-  private void _invokeAJAXFunction (@Nonnull final HttpServletRequest aHttpRequest,
-                                    @Nonnull final HttpServletResponse aHttpResponse,
-                                    @Nonnull final IRequestWebScope aRequestScope) throws IOException, ServletException
+  @Override
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
-    final EHTTPVersion eHttpVersion = RequestHelper.getHttpVersion (aHttpRequest);
-
     // get handler name from request (skipping the leading "/")
-    final String sAjaxFunctionName = StringHelper.trimStart (RequestHelper.getPathWithinServlet (aHttpRequest), "/");
+    final String sAjaxFunctionName = StringHelper.trimStart (RequestHelper.getPathWithinServlet (aRequestScope), "/");
 
     try
     {
@@ -130,18 +125,14 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
       {
         // Just in case somebody tries to play around with our servlet...
         s_aLogger.warn ("No AJAX method name provided");
-        aHttpResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
-        ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
-        ResponseHelper.writeEmptyResponse (aHttpRequest, aHttpResponse);
+        aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
       }
       else
         if (!isValidToInvokeActionFunction (sAjaxFunctionName))
         {
           // E.g. not valid for current p3 run-mode
           s_aLogger.warn ("Invoking the AJAX function '" + sAjaxFunctionName + "' is not valid in this context!");
-          aHttpResponse.setStatus (HttpServletResponse.SC_NOT_ACCEPTABLE);
-          ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
-          ResponseHelper.writeEmptyResponse (aHttpRequest, aHttpResponse);
+          aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_ACCEPTABLE);
         }
         else
         {
@@ -155,14 +146,10 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
             s_aLogger.trace ("  AJAX Result: " + aResult);
 
           // Do not cache the result!
-          ResponseHelper.modifyResponseForNoCaching (eHttpVersion, aHttpResponse);
-
-          // response writer cannot handle null values!
-          ResponseHelper.writeTextResponse (aHttpRequest,
-                                            aHttpResponse,
-                                            aResult.getSerializedAsJSON (GlobalDebug.isDebugMode ()),
-                                            CMimeType.APPLICATION_JSON,
-                                            CWebCharset.CHARSET_XML_OBJ);
+          aUnifiedResponse.disableCaching ()
+                          .setContentAndCharset (aResult.getSerializedAsJSON (GlobalDebug.isDebugMode ()),
+                                                 CWebCharset.CHARSET_XML_OBJ)
+                          .setMimeType (CMimeType.APPLICATION_JSON);
 
           // Remember the time
           s_aStatsTimer.addTime (sAjaxFunctionName, aSW.stopAndGetMillis ());
@@ -180,7 +167,7 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
       else
       {
         s_aLogger.error ("Error invoking AJAX function '" + sAjaxFunctionName + "'", t);
-        RequestLogger.logRequestComplete (aHttpRequest);
+        RequestLogger.logRequestComplete (aRequestScope.getRequest ());
       }
 
       // Notify custom exception handler
@@ -188,52 +175,19 @@ public class DefaultAjaxServlet extends AbstractScopeAwareHttpServlet
       if (aCustomExceptionHandler != null)
         try
         {
-          aCustomExceptionHandler.onAjaxException (t, sAjaxFunctionName, aHttpRequest, aHttpResponse);
+          aCustomExceptionHandler.onAjaxException (t, sAjaxFunctionName, aRequestScope);
         }
         catch (final Throwable t2)
         {
           s_aLogger.error ("Exception in custom AJAX exception handler of function '" + sAjaxFunctionName + "'", t2);
         }
 
+      // Re-throw
       if (t instanceof IOException)
         throw (IOException) t;
+      if (t instanceof ServletException)
+        throw (ServletException) t;
       throw new ServletException ("Error invoking AJAX function", t);
     }
-  }
-
-  /**
-   * Main request handling method. This indirection level is required for doing
-   * additional request initialization methods.
-   * 
-   * @param aHttpRequest
-   *        The HTTP request
-   * @param aHttpResponse
-   *        The HTTP response
-   * @throws IOException
-   */
-  @OverrideOnDemand
-  @OverridingMethodsMustInvokeSuper
-  protected void handleRequest (@Nonnull final HttpServletRequest aHttpRequest,
-                                @Nonnull final HttpServletResponse aHttpResponse,
-                                @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
-  {
-    // Main invocation
-    _invokeAJAXFunction (aHttpRequest, aHttpResponse, aRequestScope);
-  }
-
-  @Override
-  protected final void onGet (@Nonnull final HttpServletRequest aHttpRequest,
-                              @Nonnull final HttpServletResponse aHttpResponse,
-                              @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
-  {
-    handleRequest (aHttpRequest, aHttpResponse, aRequestScope);
-  }
-
-  @Override
-  protected final void onPost (@Nonnull final HttpServletRequest aHttpRequest,
-                               @Nonnull final HttpServletResponse aHttpResponse,
-                               @Nonnull final IRequestWebScope aRequestScope) throws ServletException, IOException
-  {
-    handleRequest (aHttpRequest, aHttpResponse, aRequestScope);
   }
 }
