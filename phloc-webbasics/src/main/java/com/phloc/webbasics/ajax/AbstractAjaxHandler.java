@@ -76,12 +76,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
     // Get all request parameter values to use from the request scope, as the
     // request scope already differentiated between String, String[] and
     // IFileItem!
-    final MapBasedAttributeContainer aParams = new MapBasedAttributeContainer ();
-    for (final Object aKey : aRequestScope.getRequest ().getParameterMap ().keySet ())
-    {
-      final String sKey = (String) aKey;
-      aParams.setAttribute (sKey, aRequestScope.getAttributeObject (sKey));
-    }
+    final MapBasedAttributeContainer aParams = new MapBasedAttributeContainer (aRequestScope.getAllAttributes ());
     modifyRequestParamMap (aParams);
 
     // Main invocation
