@@ -50,6 +50,7 @@ import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.webbasics.http.AcceptCharsetHandler;
 import com.phloc.webbasics.http.AcceptCharsetList;
@@ -510,6 +511,44 @@ public class UnifiedResponse
         if (false)
           aCacheControlBuilder.addExtension ("post-check=0").addExtension ("pre-check=0");
 
+        setCacheControl (aCacheControlBuilder);
+        break;
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Enable caching of this resource for the specified number of seconds.
+   * 
+   * @param nSeconds
+   *        The number of seconds caching is allowed. Must be &gt; 0.
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse enableCaching (@Nonnegative final int nSeconds)
+  {
+    if (nSeconds <= 0)
+      throw new NullPointerException ("seconds");
+
+    // Remove any eventually set headers
+    // Note: don't remove Last-Modified and ETag!
+    removeExpires ();
+    removeCacheControl ();
+    m_aResponseHeaderMap.removeHeaders (CHTTPHeader.PRAGMA);
+
+    switch (m_eHTTPVersion)
+    {
+      case HTTP_10:
+      {
+        m_aResponseHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, PDTFactory.getCurrentDateTime ()
+                                                                           .plusSeconds (nSeconds));
+        break;
+      }
+      case HTTP_11:
+      {
+        final CacheControlBuilder aCacheControlBuilder = new CacheControlBuilder ().setPublic (true)
+                                                                                   .setMaxAgeSeconds (nSeconds);
         setCacheControl (aCacheControlBuilder);
         break;
       }

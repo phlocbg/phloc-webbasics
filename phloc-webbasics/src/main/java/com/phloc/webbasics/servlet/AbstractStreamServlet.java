@@ -42,7 +42,6 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.http.CacheControlBuilder;
 import com.phloc.webbasics.web.ResponseHelperSettings;
 import com.phloc.webbasics.web.UnifiedResponse;
 
@@ -190,8 +189,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
     // HTTP caching possible?
     if (objectsAllowsForHTTPCaching (aRequestScope, sFilename))
     {
-      aUnifiedResponse.setCacheControl (new CacheControlBuilder ().setMaxAgeSeconds (ResponseHelperSettings.getExpirationSeconds ())
-                                                                  .setPublic (true));
+      aUnifiedResponse.enableCaching (ResponseHelperSettings.getExpirationSeconds ());
     }
     else
     {

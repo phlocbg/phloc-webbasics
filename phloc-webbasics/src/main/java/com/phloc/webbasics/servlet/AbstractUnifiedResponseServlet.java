@@ -42,6 +42,7 @@ import com.phloc.datetime.PDTUtils;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.scopes.web.servlet.RequestScopeInitializer;
 import com.phloc.webbasics.StaticServerInfo;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPMethod;
@@ -79,6 +80,16 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   {
     // Round down to the nearest second for a proper compare
     return PDTFactory.createLocalDateTimeFromMillis (getUnifiedMillis (nMillis)).toDateTime (DateTimeZone.UTC);
+  }
+
+  /**
+   * Overwrite only, to avoid further overloading in sub classes.
+   */
+  @Override
+  protected final RequestScopeInitializer beforeRequest (@Nonnull final HttpServletRequest aHttpRequest,
+                                                         @Nonnull final HttpServletResponse aHttpResponse)
+  {
+    return super.beforeRequest (aHttpRequest, aHttpResponse);
   }
 
   /**
