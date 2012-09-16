@@ -777,11 +777,15 @@ public class UnifiedResponse
 
       if (nContentLength > 0)
       {
-        // Emit main content to stream
-        final OutputStream aOS = aHttpResponse.getOutputStream ();
-        aOS.write (m_aContent);
-        aOS.flush ();
-        aOS.close ();
+        // Don't emit content for HEAD method
+        if (m_eHTTPMethod.isContentAllowed ())
+        {
+          // Emit main content to stream
+          final OutputStream aOS = aHttpResponse.getOutputStream ();
+          aOS.write (m_aContent);
+          aOS.flush ();
+          aOS.close ();
+        }
 
         _applyLengthChecks (nContentLength);
       }
@@ -806,38 +810,42 @@ public class UnifiedResponse
         }
         else
         {
-          // We do have an input stream
-          // -> copy it to the response
-          final OutputStream aOS = aHttpResponse.getOutputStream ();
-          final MutableLong aByteCount = new MutableLong ();
-          if (StreamUtils.copyInputStreamToOutputStream (aContentIS, aOS, aByteCount).isSuccess ())
+          // Don't emit content for HEAD method
+          if (m_eHTTPMethod.isContentAllowed ())
           {
-            // Copying succeeded
-            final long nBytesCopied = aByteCount.longValue ();
-            if (nBytesCopied > 0)
+            // We do have an input stream
+            // -> copy it to the response
+            final OutputStream aOS = aHttpResponse.getOutputStream ();
+            final MutableLong aByteCount = new MutableLong ();
+            if (StreamUtils.copyInputStreamToOutputStream (aContentIS, aOS, aByteCount).isSuccess ())
             {
-              // We had at least one content byte
-              aOS.flush ();
-              aOS.close ();
+              // Copying succeeded
+              final long nBytesCopied = aByteCount.longValue ();
+              if (nBytesCopied > 0)
+              {
+                // We had at least one content byte
+                aOS.flush ();
+                aOS.close ();
 
-              _applyLengthChecks (nBytesCopied);
+                _applyLengthChecks (nBytesCopied);
+              }
+              else
+              {
+                // Set status 204 - no content
+                aOS.close ();
+                aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
+              }
             }
             else
             {
-              // Set status 204 - no content
-              aOS.close ();
-              aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
+              // Copying failed -> this is a 500
+              _error ("Copying from " + m_aContentISP + " failed after " + aByteCount.longValue () + " bytes!");
+
+              if (!aHttpResponse.isCommitted ())
+                aHttpResponse.reset ();
+
+              aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-          }
-          else
-          {
-            // Copying failed -> this is a 500
-            _error ("Copying from " + m_aContentISP + " failed after " + aByteCount.longValue () + " bytes!");
-
-            if (!aHttpResponse.isCommitted ())
-              aHttpResponse.reset ();
-
-            aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           }
         }
       }

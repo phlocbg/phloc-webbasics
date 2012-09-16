@@ -57,7 +57,9 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareHttpServlet
 {
-  public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.GET, EHTTPMethod.POST);
+  public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.HEAD,
+                                                                                  EHTTPMethod.GET,
+                                                                                  EHTTPMethod.POST);
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
   private static final AtomicBoolean s_aFirstRequest = new AtomicBoolean (true);
 
