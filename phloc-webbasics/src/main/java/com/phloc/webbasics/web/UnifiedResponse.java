@@ -484,7 +484,10 @@ public class UnifiedResponse
 
         // Set IE extended HTTP/1.1 no-cache headers.
         // http://aspnetresources.com/blog/cache_control_extensions
-        aCacheControlBuilder.addExtension ("post-check=0").addExtension ("pre-check=0");
+        // Disabled because:
+        // http://blogs.msdn.com/b/ieinternals/archive/2009/07/20/using-post_2d00_check-and-pre_2d00_check-cache-directives.aspx
+        if (false)
+          aCacheControlBuilder.addExtension ("post-check=0").addExtension ("pre-check=0");
 
         setCacheControl (aCacheControlBuilder);
         break;
