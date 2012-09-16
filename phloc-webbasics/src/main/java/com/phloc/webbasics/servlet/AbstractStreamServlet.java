@@ -74,7 +74,8 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
    * Therefore the ETag value is calculated only once and used to stream all
    * classpath resources.
    */
-  private static final String ETAG_VALUE_STREAMSERVLET = Long.toString (VerySecureRandom.getInstance ().nextLong ());
+  private static final String ETAG_VALUE_STREAMSERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
+                                                                                              .nextLong ()) + '"';
 
   /**
    * Resolve the resource specified by the given file name.

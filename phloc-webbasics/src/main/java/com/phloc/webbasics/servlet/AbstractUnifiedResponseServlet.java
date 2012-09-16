@@ -18,6 +18,7 @@
 package com.phloc.webbasics.servlet;
 
 import java.io.IOException;
+import java.util.EnumSet;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
@@ -31,6 +32,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.web.RequestHelper;
@@ -44,6 +46,7 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareHttpServlet
 {
+  public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.GET, EHTTPMethod.POST);
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
 
   public AbstractUnifiedResponseServlet ()
@@ -55,15 +58,12 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * default only {@link EHTTPMethod#GET} and {@link EHTTPMethod#POST} are
    * allowed.
    * 
-   * @param eHTTPMethod
-   *        The HTTP method to be checked.
-   * @return <code>true</code> if the method is allowed and processing is
-   *         continued, <code>false</code> to immediately send and HTTP error.
+   * @return A non-<code>null</code> set of all allowed HTTP methods.
    */
   @OverrideOnDemand
-  protected boolean isAllowedHTTPMethod (@Nonnull final EHTTPMethod eHTTPMethod)
+  protected EnumSet <EHTTPMethod> getAllowedHTTPMethods ()
   {
-    return eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.POST;
+    return DEFAULT_ALLOWED_METHDOS;
   }
 
   /**
@@ -112,53 +112,72 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     final EHTTPVersion eHTTPVersion = RequestHelper.getHttpVersion (aHttpRequest);
     if (eHTTPVersion == null)
     {
+      // HTTP version disallowed
       s_aLogger.warn ("Request " + aRequestScope.getURL () + " has no valid HTTP version!");
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
+      return;
     }
-    else
-      if (!isAllowedHTTPMethod (eHTTPMethod))
-      {
-        s_aLogger.warn ("Request " + aRequestScope.getURL () + " uses disallowed HTTP method " + eHTTPMethod + "!");
-        // Disallow method
-        if (eHTTPVersion == EHTTPVersion.HTTP_11)
-          aHttpResponse.sendError (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-        else
-          aHttpResponse.sendError (HttpServletResponse.SC_BAD_REQUEST);
-      }
-      else
-      {
-        // before-callback
-        try
-        {
-          onRequestBegin (aRequestScope);
-        }
-        catch (final Throwable t)
-        {
-          s_aLogger.error ("onRequestBegin failed", t);
-        }
 
-        boolean bExceptionOccurred = true;
-        try
-        {
-          // main
-          final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
-          handleRequest (aRequestScope, aUnifiedResponse);
-          aUnifiedResponse.applyToResponse (aHttpResponse);
-          bExceptionOccurred = false;
-        }
-        finally
-        {
-          // after-callback
-          try
-          {
-            onRequestEnd (bExceptionOccurred);
-          }
-          catch (final Throwable t)
-          {
-            s_aLogger.error ("onRequestEnd failed", t);
-          }
-        }
+    final EnumSet <EHTTPMethod> aAllowedHTTPMethods = getAllowedHTTPMethods ();
+    if (!aAllowedHTTPMethods.contains (eHTTPMethod))
+    {
+      // Disallow method
+
+      // Build Allow response header
+      final StringBuilder aAllow = new StringBuilder ();
+      for (final EHTTPMethod eAllowedHTTPMethod : aAllowedHTTPMethods)
+      {
+        if (aAllow.length () > 0)
+          aAllow.append (", ");
+        aAllow.append (eAllowedHTTPMethod.getName ());
       }
+      final String sAllow = aAllow.toString ();
+      s_aLogger.warn ("Request " +
+                      aRequestScope.getURL () +
+                      " uses disallowed HTTP method " +
+                      eHTTPMethod +
+                      "! Allowed methods are: " +
+                      sAllow);
+      aHttpResponse.setHeader (CHTTPHeader.ALLOW, sAllow);
+
+      if (eHTTPVersion == EHTTPVersion.HTTP_11)
+        aHttpResponse.sendError (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+      else
+        aHttpResponse.sendError (HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    // before-callback
+    try
+    {
+      onRequestBegin (aRequestScope);
+    }
+    catch (final Throwable t)
+    {
+      s_aLogger.error ("onRequestBegin failed", t);
+    }
+
+    boolean bExceptionOccurred = true;
+    try
+    {
+      // main
+      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
+      handleRequest (aRequestScope, aUnifiedResponse);
+      aUnifiedResponse.applyToResponse (aHttpResponse);
+      bExceptionOccurred = false;
+    }
+    finally
+    {
+      // after-callback
+      try
+      {
+        onRequestEnd (bExceptionOccurred);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("onRequestEnd failed", t);
+      }
+    }
   }
 
   @Override

@@ -20,6 +20,7 @@ package com.phloc.webbasics.servlet;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected void onRequestBegin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     // Run default request initialization (menu item and locale)
@@ -72,6 +74,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected void onRequestEnd (final boolean bExceptionOccurred)
   {
     // Invoke all "request end" listener
