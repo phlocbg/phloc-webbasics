@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Misc. helper methods on HTTP cookies.
@@ -80,7 +81,7 @@ public final class CookieHelper
    */
   @Nonnull
   public static Cookie createCookie (@Nonnull final String sName,
-                                     final String sValue,
+                                     @Nullable final String sValue,
                                      final String sPath,
                                      final boolean bExpireWhenBrowserIsClosed)
   {
@@ -94,9 +95,18 @@ public final class CookieHelper
   }
 
   @Nonnull
+  public static Cookie createContextCookie (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                            @Nonnull final String sName,
+                                            @Nullable final String sValue,
+                                            final boolean bExpireWhenBrowserIsClosed)
+  {
+    return createContextCookie (aRequestScope.getRequest (), sName, sValue, bExpireWhenBrowserIsClosed);
+  }
+
+  @Nonnull
   public static Cookie createContextCookie (@Nonnull final HttpServletRequest aHttpRequest,
                                             @Nonnull final String sName,
-                                            final String sValue,
+                                            @Nullable final String sValue,
                                             final boolean bExpireWhenBrowserIsClosed)
   {
     if (aHttpRequest == null)

@@ -17,13 +17,22 @@
  */
 package com.phloc.webbasics.action;
 
+import javax.annotation.Nonnull;
 
 /**
- * Abstract base class in case there will be some common functionality some
- * time.
+ * Callback interface to handle thrown exception objects on action execution.
  * 
  * @author philip
  */
-@Deprecated
-public abstract class AbstractWebActionExecutor extends AbstractActionExecutor
-{}
+public interface IActionExceptionHandler
+{
+  /**
+   * Called when an exception in action execution occurs
+   * 
+   * @param t
+   *        The exception. Never <code>null</code>.
+   * @param sActionName
+   *        The action that should be executed
+   */
+  void onActionExecutionException (@Nonnull Throwable t, @Nonnull String sActionName);
+}

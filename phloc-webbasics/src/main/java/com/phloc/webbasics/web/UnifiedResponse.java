@@ -25,6 +25,7 @@ import java.nio.charset.CharsetEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -74,8 +75,8 @@ import com.phloc.webbasics.http.QValue;
 public class UnifiedResponse
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
-  private static final String LOG_PREFIX = "UnifiedResponse to [";
   private static final int MAX_CSS_KB_FOR_IE = 288;
+  private static final AtomicInteger s_aRequestNum = new AtomicInteger (0);
 
   // Input fields
   private final EHTTPVersion m_eHTTPVersion;
@@ -97,7 +98,22 @@ public class UnifiedResponse
   private Map <String, Cookie> m_aCookies;
 
   // Internal status members
+  /**
+   * Unique internal ID for each response, so that error messages can be more
+   * easily aggregated.
+   */
+  private final int m_nID = s_aRequestNum.incrementAndGet ();
+  /**
+   * Just avoid emitting the request headers more than once, as they wont change
+   * from error to error.
+   */
+  private boolean m_bEmittedRequestHeaders = false;
+  /** This maps keeps all the response headers for later emitting. */
   private final HTTPHeaderMap m_aRequestHeaderMap;
+  /**
+   * An optional encode to be used to determine if a content-disposition
+   * filename can be ISO-8859-1 encoded.
+   */
   private CharsetEncoder m_aContentDispositionEncoder;
 
   public UnifiedResponse (@Nonnull final EHTTPVersion eHTTPVersion,
@@ -119,23 +135,38 @@ public class UnifiedResponse
     m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aHttpRequest);
   }
 
+  @Nonnull
+  @Nonempty
+  private String _getPrefix ()
+  {
+    return "UnifiedResponse[" + m_nID + "] to [" + m_sRequestURL + "]: ";
+  }
+
   private void _info (@Nonnull final String sMsg)
   {
-    s_aLogger.info (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
+    s_aLogger.info (_getPrefix () + sMsg);
+  }
+
+  private void _showRequestInfo ()
+  {
+    if (!m_bEmittedRequestHeaders)
+    {
+      s_aLogger.warn ("  Request Headers: " +
+                      ContainerHelper.getSortedByKey (RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap)));
+      m_bEmittedRequestHeaders = true;
+    }
   }
 
   private void _warn (@Nonnull final String sMsg)
   {
-    s_aLogger.warn (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
-    s_aLogger.warn ("  Request Headers: " +
-                    ContainerHelper.getSortedByKey (RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap)));
+    s_aLogger.warn (_getPrefix () + sMsg);
+    _showRequestInfo ();
   }
 
   private void _error (@Nonnull final String sMsg)
   {
-    s_aLogger.error (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
-    s_aLogger.error ("  Request Headers: " +
-                     ContainerHelper.getSortedByKey (RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap)));
+    s_aLogger.error (_getPrefix () + sMsg);
+    _showRequestInfo ();
   }
 
   @Nonnull
@@ -860,11 +891,8 @@ public class UnifiedResponse
 
         _applyLengthChecks (nContentLength);
       }
-      else
-      {
-        // Set status 204 - no content
-        aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
-      }
+      // Don't send 204, as this is most likely not handled correctly on the
+      // client side
     }
     else
       if (m_aContentISP != null)
@@ -922,7 +950,7 @@ public class UnifiedResponse
       }
       else
       {
-        // Set status 204 - no content
+        // Set status 204 - no content; this is most likely a programming error
         aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
         _warn ("No content present for the response");
       }

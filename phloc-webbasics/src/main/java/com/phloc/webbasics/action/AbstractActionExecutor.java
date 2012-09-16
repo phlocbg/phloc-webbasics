@@ -17,13 +17,13 @@
  */
 package com.phloc.webbasics.action;
 
-
 /**
  * Abstract base class in case there will be some common functionality some
  * time.
  * 
  * @author philip
  */
-@Deprecated
-public abstract class AbstractWebActionExecutor extends AbstractActionExecutor
-{}
+public abstract class AbstractActionExecutor implements IActionExecutor
+{
+  /* empty */
+}

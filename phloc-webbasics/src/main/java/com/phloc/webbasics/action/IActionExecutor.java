@@ -17,13 +17,24 @@
  */
 package com.phloc.webbasics.action;
 
+import javax.annotation.Nonnull;
+
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Abstract base class in case there will be some common functionality some
- * time.
+ * Base web action executor interface.
  * 
  * @author philip
  */
-@Deprecated
-public abstract class AbstractWebActionExecutor extends AbstractActionExecutor
-{}
+public interface IActionExecutor
+{
+  /**
+   * Execute the action on the passed HTTP request/response.
+   * 
+   * @param aRequestScope
+   *        The request scope. Never <code>null</code>.
+   * @throws Exception
+   *         In case something goes wrong.
+   */
+  void execute (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
+}

@@ -35,6 +35,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
 import com.phloc.webbasics.http.HTTPHeaderMap;
 
@@ -236,6 +237,11 @@ public final class RequestLogger
     aSB.append (getRequestHeader (aHttpRequest));
     aSB.append (getRequestParameters (aHttpRequest));
     return aSB;
+  }
+
+  public static void logRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    logRequestComplete (aRequestScope.getRequest ());
   }
 
   public static void logRequestComplete (@Nonnull final HttpServletRequest aHttpRequest)

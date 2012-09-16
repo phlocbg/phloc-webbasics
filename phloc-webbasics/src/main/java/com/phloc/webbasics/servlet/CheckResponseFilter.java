@@ -106,7 +106,10 @@ public class CheckResponseFilter implements Filter
   private void _checkResults (@Nonnull final HttpServletRequest aHttpRequest,
                               @Nonnull final StatusAwareHttpResponseWrapper aHttpResponse)
   {
-    final String sRequestURL = aHttpRequest.getRequestURL ().toString ();
+    String sRequestURL = aHttpRequest.getRequestURL ().toString ();
+    final String sQueryString = aHttpRequest.getQueryString ();
+    if (sQueryString != null)
+      sRequestURL += '?' + sQueryString;
     final int nStatusCode = aHttpResponse.getStatusCode ();
     final Map <String, List <String>> aHeaders = aHttpResponse.getHeaderMap ().getAllHeaders ();
     final String sCharacterEncoding = aHttpResponse.getCharacterEncoding ();
