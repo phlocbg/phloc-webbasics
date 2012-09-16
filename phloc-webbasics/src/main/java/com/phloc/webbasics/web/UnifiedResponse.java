@@ -56,6 +56,7 @@ import com.phloc.webbasics.http.AcceptMimeTypeHandler;
 import com.phloc.webbasics.http.AcceptMimeTypeList;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.CacheControlBuilder;
+import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.http.HTTPHeaderMap;
 import com.phloc.webbasics.http.QValue;
@@ -72,7 +73,8 @@ public class UnifiedResponse
   private static final String LOG_PREFIX = "UnifiedResponse to [";
 
   // Input fields
-  private final EHTTPVersion m_eHttpVersion;
+  private final EHTTPVersion m_eHTTPVersion;
+  private final EHTTPMethod m_eHTTPMethod;
   private final String m_sRequestURL;
   private final AcceptCharsetList m_aAcceptCharsetList;
   private final AcceptMimeTypeList m_aAcceptMimeTypeList;
@@ -92,13 +94,18 @@ public class UnifiedResponse
   private final HTTPHeaderMap m_aRequestHeaderMap;
   private CharsetEncoder m_aContentDispositionEncoder;
 
-  public UnifiedResponse (@Nonnull final EHTTPVersion eHttpVersion, @Nonnull final IRequestWebScope aRequestScope)
+  public UnifiedResponse (@Nonnull final EHTTPVersion eHTTPVersion,
+                          @Nonnull final EHTTPMethod eHTTPMethod,
+                          @Nonnull final IRequestWebScope aRequestScope)
   {
-    if (eHttpVersion == null)
+    if (eHTTPVersion == null)
       throw new NullPointerException ("httpVersion");
+    if (eHTTPMethod == null)
+      throw new NullPointerException ("httpMethod");
     if (aRequestScope == null)
       throw new NullPointerException ("requestScope");
-    m_eHttpVersion = eHttpVersion;
+    m_eHTTPVersion = eHTTPVersion;
+    m_eHTTPMethod = eHTTPMethod;
     m_sRequestURL = aRequestScope.getURL ();
     final HttpServletRequest aHttpRequest = aRequestScope.getRequest ();
     m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aHttpRequest);
@@ -123,14 +130,16 @@ public class UnifiedResponse
     s_aLogger.error ("  Request Headers: " + RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap));
   }
 
-  public boolean isHttp10 ()
+  @Nonnull
+  public final EHTTPVersion getHTTPVersion ()
   {
-    return EHTTPVersion.HTTP_10.equals (m_eHttpVersion);
+    return m_eHTTPVersion;
   }
 
-  public boolean isHttp11 ()
+  @Nonnull
+  public final EHTTPMethod getHTTPMethod ()
   {
-    return EHTTPVersion.HTTP_11.equals (m_eHttpVersion);
+    return m_eHTTPMethod;
   }
 
   @Nullable
@@ -292,6 +301,9 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setLastModified (@Nonnull final LocalDateTime aLDT)
   {
+    if (m_eHTTPMethod != EHTTPMethod.GET && m_eHTTPMethod != EHTTPMethod.HEAD)
+      _warn ("Setting Last-Modified on a non GET or HEAD request may have no impact!");
+
     m_aResponseHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aLDT);
     return this;
   }
@@ -299,6 +311,9 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setLastModified (@Nonnull final DateTime aDT)
   {
+    if (m_eHTTPMethod != EHTTPMethod.GET && m_eHTTPMethod != EHTTPMethod.HEAD)
+      _warn ("Setting Last-Modified on a non GET or HEAD request may have no impact!");
+
     m_aResponseHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aDT);
     return this;
   }
@@ -328,6 +343,8 @@ public class UnifiedResponse
       throw new IllegalArgumentException ("Etag must start with a double quote character: " + sETag);
     if (!sETag.endsWith ("\""))
       throw new IllegalArgumentException ("Etag must end with a double quote character: " + sETag);
+    if (m_eHTTPMethod != EHTTPMethod.GET)
+      _warn ("Setting an ETag on a non-GET request may have no impact!");
 
     m_aResponseHeaderMap.setHeader (CHTTPHeader.ETAG, sETag);
     return this;
@@ -346,7 +363,7 @@ public class UnifiedResponse
   @Nonnull
   public UnifiedResponse setETagIfApplicable (@Nonnull @Nonempty final String sETag)
   {
-    if (isHttp11 ())
+    if (m_eHTTPVersion == EHTTPVersion.HTTP_11)
       setETag (sETag);
     return this;
   }
@@ -463,7 +480,7 @@ public class UnifiedResponse
     removeETag ();
     removeLastModified ();
 
-    switch (m_eHttpVersion)
+    switch (m_eHTTPVersion)
     {
       case HTTP_10:
       {
@@ -526,7 +543,7 @@ public class UnifiedResponse
 
   private void _verifyCachingIntegrity ()
   {
-    final boolean bIsHttp11 = isHttp11 ();
+    final boolean bIsHttp11 = m_eHTTPVersion == EHTTPVersion.HTTP_11;
     final boolean bExpires = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.EXPIRES);
     final boolean bCacheControl = m_aCacheControl != null;
     final boolean bLastModified = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
@@ -536,7 +553,7 @@ public class UnifiedResponse
       _warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
 
     if (bETag && !bIsHttp11)
-      _warn ("Sending an ETag for HTTP version " + m_eHttpVersion + " has no effect!");
+      _warn ("Sending an ETag for HTTP version " + m_eHTTPVersion + " has no effect!");
 
     if (!bExpires && !bCacheControl)
     {
@@ -549,7 +566,7 @@ public class UnifiedResponse
     if (m_aCacheControl != null)
     {
       if (!bIsHttp11)
-        _warn ("Sending a Cache-Control header for HTTP version " + m_eHttpVersion + " may have no or limited effect!");
+        _warn ("Sending a Cache-Control header for HTTP version " + m_eHTTPVersion + " may have no or limited effect!");
 
       if (m_aCacheControl.isPrivate ())
       {

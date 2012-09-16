@@ -28,6 +28,7 @@ import com.phloc.commons.state.EContinue;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareFilter;
+import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
@@ -77,7 +78,18 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
       return EContinue.BREAK;
     }
 
-    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
+    // Check HTTP Method
+    final EHTTPMethod eHTTPMethod = EHTTPMethod.getFromNameOrNull (aHttpRequest.getMethod ());
+    if (eHTTPMethod == null)
+    {
+      if (eHTTPVersion == EHTTPVersion.HTTP_11)
+        aHttpResponse.sendError (HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+      else
+        aHttpResponse.sendError (HttpServletResponse.SC_BAD_REQUEST);
+      return EContinue.BREAK;
+    }
+
+    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aRequestScope);
     if (handleRequest (aRequestScope, aUnifiedResponse).isContinue ())
     {
       // Filter passed, without any output -> continue

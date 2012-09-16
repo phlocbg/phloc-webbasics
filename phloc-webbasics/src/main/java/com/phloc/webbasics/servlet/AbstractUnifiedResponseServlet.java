@@ -25,10 +25,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
@@ -147,6 +149,17 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       return;
     }
 
+    // Check for last-modification on GET
+    if (eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.HEAD)
+    {
+      final long nIfModifiedSince = aHttpRequest.getDateHeader (CHTTPHeader.IF_MODIFIED_SINCE);
+      final LocalDateTime aIfModifiedSince = nIfModifiedSince < 0 ? null
+                                                                 : PDTFactory.createLocalDateTimeFromMillis (nIfModifiedSince);
+      final String sETag = aHttpRequest.getHeader (CHTTPHeader.IF_NON_MATCH);
+
+      // TODO add HttpServletResponse.SC_NOT_MODIFIED handling
+    }
+
     // before-callback
     try
     {
@@ -161,7 +174,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     try
     {
       // main
-      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, aRequestScope);
+      final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aRequestScope);
       handleRequest (aRequestScope, aUnifiedResponse);
       aUnifiedResponse.applyToResponse (aHttpResponse);
       bExceptionOccurred = false;
