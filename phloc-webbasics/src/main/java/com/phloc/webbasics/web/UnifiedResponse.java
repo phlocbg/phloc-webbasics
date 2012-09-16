@@ -479,6 +479,7 @@ public class UnifiedResponse
     removeCacheControl ();
     removeETag ();
     removeLastModified ();
+    m_aResponseHeaderMap.removeHeaders (CHTTPHeader.PRAGMA);
 
     switch (m_eHTTPVersion)
     {
@@ -493,7 +494,6 @@ public class UnifiedResponse
       }
       case HTTP_11:
       {
-        // No store must be enough
         final CacheControlBuilder aCacheControlBuilder = new CacheControlBuilder ().setNoStore (true)
                                                                                    .setNoCache (true)
                                                                                    .setMustRevalidate (true)

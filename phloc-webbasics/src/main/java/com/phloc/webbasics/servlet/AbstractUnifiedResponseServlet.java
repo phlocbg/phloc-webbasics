@@ -19,6 +19,7 @@ package com.phloc.webbasics.servlet;
 
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
@@ -30,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -69,25 +72,61 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   }
 
   /**
-   * Called before a valid request is handled. This method is not called if HTTP
-   * version or HTTP method are not supported.
+   * This callback method is unconditionally called before the last-modification
+   * checks are performed. So this method can be used to determine the requested
+   * object from the request. This method is not called if HTTP version or HTTP
+   * method are not supported.
+   * 
+   * @param aRequestScope
+   *        The request scope that will be used for processing the request
+   */
+  @OverrideOnDemand
+  protected void initRequestState (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {}
+
+  /**
+   * Check if the request was modified since the passed date time. If it was not
+   * modified since the passed time, a 304 (not modified) response code is
+   * returned. This method is only called if an If-Modified-Since request header
+   * is present.
+   * 
+   * @param aIfModifiedSince
+   *        The non-<code>null</code> date time of the request.
+   * @return <code>true</code> if the object was modified since the passed time,
+   *         <code>false</code> if it was not modified since the passed time.
+   */
+  @OverrideOnDemand
+  protected boolean isModifiedSince (@Nonnull final LocalDateTime aIfModifiedSince)
+  {
+    return true;
+  }
+
+  /**
+   * Check if the ETags passed in the request matches the expected ETag. If an
+   * ETag matches, a 304 (not modified) response code is returned. This method
+   * is only called if an If-None-Match request header is present.
+   * 
+   * @param aAllETags
+   *        The non-<code>null</code> non-empty list of the supplied ETags
+   * @return <code>true</code> if the ETag is supported, <code>false</code> if
+   *         none of the ETags match.
+   */
+  @OverrideOnDemand
+  protected boolean isSupportedETag (@Nonnull final List <String> aAllETags)
+  {
+    return true;
+  }
+
+  /**
+   * Called before a valid request is handled. This method is only called if
+   * HTTP version matches, HTTP method is supported and caching is not an
+   * option.
    * 
    * @param aRequestScope
    *        The request scope that will be used for processing the request
    */
   @OverrideOnDemand
   protected void onRequestBegin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {}
-
-  /**
-   * Called after a valid request was processed. This method is not called if
-   * HTTP version or HTTP method are not supported.
-   * 
-   * @param bExceptionOccurred
-   *        if <code>true</code> an exception occurred in request processing
-   */
-  @OverrideOnDemand
-  protected void onRequestEnd (final boolean bExceptionOccurred)
   {}
 
   /**
@@ -105,6 +144,17 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   protected abstract void handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
                                          @Nonnull UnifiedResponse aUnifiedResponse) throws ServletException,
                                                                                    IOException;
+
+  /**
+   * Called after a valid request was processed. This method is not called if
+   * HTTP version or HTTP method are not supported.
+   * 
+   * @param bExceptionOccurred
+   *        if <code>true</code> an exception occurred in request processing
+   */
+  @OverrideOnDemand
+  protected void onRequestEnd (final boolean bExceptionOccurred)
+  {}
 
   private void _run (@Nonnull final HttpServletRequest aHttpRequest,
                      @Nonnull final HttpServletResponse aHttpResponse,
@@ -149,15 +199,44 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       return;
     }
 
+    // Now all pre-conditions were checked. As the next step check some last
+    // modification issues, for performance reasons. If all optimizations fail,
+    // perform the regular request.
+
+    initRequestState (aRequestScope);
+
     // Check for last-modification on GET
     if (eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.HEAD)
     {
+      // Honour the If-Modified-Since date header
       final long nIfModifiedSince = aHttpRequest.getDateHeader (CHTTPHeader.IF_MODIFIED_SINCE);
-      final LocalDateTime aIfModifiedSince = nIfModifiedSince < 0 ? null
-                                                                 : PDTFactory.createLocalDateTimeFromMillis (nIfModifiedSince);
-      final String sETag = aHttpRequest.getHeader (CHTTPHeader.IF_NON_MATCH);
+      if (nIfModifiedSince >= 0)
+      {
+        final LocalDateTime aIfModifiedSince = PDTFactory.createLocalDateTimeFromMillis (nIfModifiedSince);
+        if (!isModifiedSince (aIfModifiedSince))
+        {
+          // Was not modified since the passed time
+          aHttpResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED);
+          return;
+        }
+      }
 
-      // TODO add HttpServletResponse.SC_NOT_MODIFIED handling
+      // Honour the If-Non-Match header (ETag)
+      final String sETag = aHttpRequest.getHeader (CHTTPHeader.IF_NON_MATCH);
+      if (StringHelper.hasText (sETag))
+      {
+        // Header may contain several ETag values
+        final List <String> aAllETags = RegExHelper.getSplitToList (sETag, ",\\s+");
+        if (aAllETags.isEmpty ())
+          s_aLogger.warn ("Empty ETag list found (" + sETag + ")");
+        else
+          if (isSupportedETag (aAllETags))
+          {
+            // Was not modified since the passed time
+            aHttpResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED);
+            return;
+          }
+      }
     }
 
     // before-callback

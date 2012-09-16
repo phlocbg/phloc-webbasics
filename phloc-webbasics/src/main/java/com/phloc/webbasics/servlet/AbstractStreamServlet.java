@@ -19,6 +19,7 @@ package com.phloc.webbasics.servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +43,6 @@ import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.http.CacheControlBuilder;
-import com.phloc.webbasics.http.ETagHandler;
 import com.phloc.webbasics.web.ResponseHelperSettings;
 import com.phloc.webbasics.web.UnifiedResponse;
 
@@ -60,8 +60,6 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
                                                                                                   "$requests");
   private final IStatisticsHandlerKeyedCounter m_aStatsSuccess = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
                                                                                                            "$success");
-  private final IStatisticsHandlerKeyedCounter m_aStatsCached = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
-                                                                                                          "$cached");
   private final IStatisticsHandlerKeyedCounter m_aStatsNotFound = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
                                                                                                             "$notfound");
   private final IStatisticsHandlerKeyedCounter m_aStatsMIMEType = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
@@ -77,6 +75,15 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
   private static final String ETAG_VALUE_STREAMSERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
                                                                                               .nextLong ()) + '"';
 
+  @Override
+  protected final boolean isSupportedETag (@Nonnull final List <String> aAllETags)
+  {
+    for (final String sETag : aAllETags)
+      if (ETAG_VALUE_STREAMSERVLET.equals (sETag))
+        return true;
+    return false;
+  }
+
   /**
    * Resolve the resource specified by the given file name.
    * 
@@ -89,22 +96,6 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
   @Nonnull
   protected abstract IReadableResource getResource (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
                                                     @Nonnull String sFilename);
-
-  /**
-   * Modify the response headers for caching object.
-   * 
-   * @param aRequestScope
-   *        The request scope. Never <code>null</code>.
-   * @return <code>true</code> if the browser cached item should be used and the
-   *         response object has been modified to use this cached object (e.g.
-   *         by using return code 304).
-   */
-  @OverrideOnDemand
-  protected boolean useAndReturnCachedObject (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    final String sETag = ETagHandler.getRequestETagComparison (aRequestScope.getRequest ());
-    return ETAG_VALUE_STREAMSERVLET.equals (sETag);
-  }
 
   /**
    * Check if the object allows for HTTP caching (by setting the appropriate
@@ -182,38 +173,26 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
           aLastModified = PDTFactory.createLocalDateTimeFromMillis (nLastModified);
       }
 
-      // Caching (e.g. ETag)?
-      if (useAndReturnCachedObject (aRequestScope))
-      {
-        // Using the cached resource
-        m_aStatsCached.increment (sFilename);
+      if (aLastModified != null)
+        aUnifiedResponse.setLastModified (aLastModified);
 
-        // Mark as not modified
-        aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED);
+      // Set ETag in response for next time
+      aUnifiedResponse.setETagIfApplicable (ETAG_VALUE_STREAMSERVLET);
+
+      // HTTP caching possible?
+      if (objectsAllowsForHTTPCaching (aRequestScope, sFilename))
+      {
+        aUnifiedResponse.setCacheControl (new CacheControlBuilder ().setMaxAgeSeconds (ResponseHelperSettings.getExpirationSeconds ())
+                                                                    .setPublic (true));
       }
       else
       {
-        if (aLastModified != null)
-          aUnifiedResponse.setLastModified (aLastModified);
-
-        // Set ETag in response for next time
-        aUnifiedResponse.setETagIfApplicable (ETAG_VALUE_STREAMSERVLET);
-
-        // HTTP caching possible?
-        if (objectsAllowsForHTTPCaching (aRequestScope, sFilename))
-        {
-          aUnifiedResponse.setCacheControl (new CacheControlBuilder ().setMaxAgeSeconds (ResponseHelperSettings.getExpirationSeconds ())
-                                                                      .setPublic (true));
-        }
-        else
-        {
-          aUnifiedResponse.disableCaching ();
-        }
-
-        // Do the main copying from InputStream to OutputStream
-        aUnifiedResponse.setContent (aRes);
-        m_aStatsSuccess.increment (sFilename);
+        aUnifiedResponse.disableCaching ();
       }
+
+      // Do the main copying from InputStream to OutputStream
+      aUnifiedResponse.setContent (aRes);
+      m_aStatsSuccess.increment (sFilename);
     }
     else
     {
