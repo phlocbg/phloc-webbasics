@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.EContinue;
@@ -77,6 +78,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
    *        ",".
    */
   @Nonnull
+  @ReturnsMutableCopy
   private static Set <String> _asSet (@Nullable final String sExtensionList)
   {
     final Set <String> ret = new HashSet <String> ();
