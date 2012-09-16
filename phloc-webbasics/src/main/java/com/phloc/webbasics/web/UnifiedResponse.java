@@ -41,6 +41,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -121,13 +122,15 @@ public class UnifiedResponse
   private void _warn (@Nonnull final String sMsg)
   {
     s_aLogger.warn (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
-    s_aLogger.warn ("  Request Headers: " + RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap));
+    s_aLogger.warn ("  Request Headers: " +
+                    ContainerHelper.getSortedByKey (RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap)));
   }
 
   private void _error (@Nonnull final String sMsg)
   {
     s_aLogger.error (LOG_PREFIX + m_sRequestURL + "]: " + sMsg);
-    s_aLogger.error ("  Request Headers: " + RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap));
+    s_aLogger.error ("  Request Headers: " +
+                     ContainerHelper.getSortedByKey (RequestLogger.getRequestHeaderMap (m_aRequestHeaderMap)));
   }
 
   @Nonnull

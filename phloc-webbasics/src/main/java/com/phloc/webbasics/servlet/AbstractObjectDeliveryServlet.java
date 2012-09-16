@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.io.file.FilenameHelper;
+import com.phloc.commons.random.VerySecureRandom;
+import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -45,7 +47,18 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedResponseServlet
 {
+  protected static final String REQUEST_ATTR_OBJECT_DELIVERY_FILENAME = "$object-delivery.filename";
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractObjectDeliveryServlet.class);
+
+  /**
+   * Create a unique value per server startup. This is the ETag value for all
+   * resources streamed from this servlet, since it uses only ClassPath
+   * resources that may only change upon new initialisation of this class.
+   * Therefore the ETag value is calculated only once and used to stream all
+   * classpath resources.
+   */
+  protected static final String ETAG_VALUE_STREAMSERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
+                                                                                                .nextLong ()) + '"';
 
   private Set <String> m_aAllowedExtensions;
   private Set <String> m_aDeniedExtensions;
@@ -97,6 +110,37 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
            sFilename.indexOf ("..\\") >= 0;
   }
 
+  @Override
+  @OverridingMethodsMustInvokeSuper
+  protected EContinue initRequestState (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                        @Nonnull final UnifiedResponse aUnifiedResponse)
+  {
+    // cut the leading "/"
+    final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope));
+
+    if (StringHelper.hasNoText (sFilename) ||
+        !_hasValidExtension (sFilename) ||
+        _isPossibleDirectoryTraversalRequest (sFilename))
+    {
+      // Send the same error code as if it is simply not found to confuse
+      // attackers :)
+      s_aLogger.warn ("Illegal delivery request '" + sFilename + "'");
+      aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
+      return EContinue.BREAK;
+    }
+
+    // Filename seems to be safe
+    aRequestScope.setAttribute (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME, sFilename);
+    return EContinue.CONTINUE;
+  }
+
+  @Override
+  @Nullable
+  protected final String getSupportedETag (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return ETAG_VALUE_STREAMSERVLET;
+  }
+
   protected abstract void onDeliverResource (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull UnifiedResponse aUnifiedResponse,
                                              @Nonnull String sFilename) throws IOException;
@@ -105,22 +149,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
-    // cut the leading "/"
-    final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
-
-    if (StringHelper.hasText (sFilename) &&
-        _hasValidExtension (sFilename) &&
-        !_isPossibleDirectoryTraversalRequest (sFilename))
-    {
-      // Filename seems to be safe
-      onDeliverResource (aRequestScope, aUnifiedResponse, sFilename);
-    }
-    else
-    {
-      // Send the same error code as if it is simply not found to confuse
-      // attackers :)
-      s_aLogger.warn ("Illegal delivery request '" + sFilename + "'");
-      aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
-    }
+    final String sFilename = aRequestScope.getAttributeAsString (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME);
+    onDeliverResource (aRequestScope, aUnifiedResponse, sFilename);
   }
 }

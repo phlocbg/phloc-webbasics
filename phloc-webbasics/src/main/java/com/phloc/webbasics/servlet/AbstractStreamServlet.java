@@ -19,10 +19,10 @@ package com.phloc.webbasics.servlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.LocalDateTime;
@@ -35,11 +35,10 @@ import com.phloc.commons.mime.EMimeContentType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeDeterminator;
-import com.phloc.commons.random.VerySecureRandom;
+import com.phloc.commons.state.EContinue;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.phloc.commons.stats.StatisticsManager;
-import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.http.CacheControlBuilder;
@@ -64,25 +63,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
                                                                                                             "$notfound");
   private final IStatisticsHandlerKeyedCounter m_aStatsMIMEType = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
                                                                                                             "$mimetype");
-
-  /**
-   * Create a unique value per server startup. This is the ETag value for all
-   * resources streamed from this servlet, since it uses only ClassPath
-   * resources that may only change upon new initialisation of this class.
-   * Therefore the ETag value is calculated only once and used to stream all
-   * classpath resources.
-   */
-  private static final String ETAG_VALUE_STREAMSERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
-                                                                                              .nextLong ()) + '"';
-
-  @Override
-  protected final boolean isSupportedETag (@Nonnull final List <String> aAllETags)
-  {
-    for (final String sETag : aAllETags)
-      if (ETAG_VALUE_STREAMSERVLET.equals (sETag))
-        return true;
-    return false;
-  }
+  private static final String REQUEST_ATTR_OBJECT_DELIVERY_RESOURCE = "$stream.resource";
 
   /**
    * Resolve the resource specified by the given file name.
@@ -96,6 +77,48 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
   @Nonnull
   protected abstract IReadableResource getResource (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
                                                     @Nonnull String sFilename);
+
+  @Override
+  @OverridingMethodsMustInvokeSuper
+  protected EContinue initRequestState (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                        @Nonnull final UnifiedResponse aUnifiedResponse)
+  {
+    if (super.initRequestState (aRequestScope, aUnifiedResponse).isBreak ())
+      return EContinue.BREAK;
+
+    // Resolve the resource from the passed filename
+    final String sFilename = aRequestScope.getAttributeAsString (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME);
+    final IReadableResource aRes = getResource (aRequestScope, sFilename);
+    if (!aRes.exists ())
+    {
+      m_aStatsNotFound.increment (sFilename);
+      aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
+      return EContinue.BREAK;
+    }
+
+    // Resource exists - save in request scope
+    aRequestScope.setAttribute (REQUEST_ATTR_OBJECT_DELIVERY_RESOURCE, aRes);
+    return EContinue.CONTINUE;
+  }
+
+  @Override
+  @Nullable
+  protected LocalDateTime getLastModificationDateTime (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    // We have an existing resource
+    final IReadableResource aRes = aRequestScope.<IReadableResource> getCastedAttribute (REQUEST_ATTR_OBJECT_DELIVERY_RESOURCE);
+
+    // Try to convert the resource to a file, because only files have a last
+    // modification DateTime
+    final File aFile = aRes.getAsFile ();
+    if (aFile != null)
+    {
+      final long nLastModified = aFile.lastModified ();
+      if (nLastModified > 0)
+        return convertMillisToDateTime (nLastModified);
+    }
+    return null;
+  }
 
   /**
    * Check if the object allows for HTTP caching (by setting the appropriate
@@ -137,68 +160,42 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
                                     @Nonnull final String sFilename) throws IOException
   {
     m_aStatsRequests.increment ();
-    final IReadableResource aRes = getResource (aRequestScope, sFilename);
 
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Trying to stream " + aRes);
+    // We have an existing resource
+    final IReadableResource aRes = aRequestScope.<IReadableResource> getCastedAttribute (REQUEST_ATTR_OBJECT_DELIVERY_RESOURCE);
 
-    // determine whether requested resource is a directory
-    if (aRes.exists ())
+    // Try to set content type no matter whether caching is used or not!
+    final String sMimeType = determineMimeType (sFilename, aRes);
+    if (sMimeType != null)
     {
-      // Try to set content type no matter whether caching is used or not!
-      final String sMimeType = determineMimeType (sFilename, aRes);
-      if (sMimeType != null)
-      {
-        m_aStatsMIMEType.increment (sMimeType);
-        final IMimeType aMimeType = MimeType.parseFromStringWithoutEncoding (sMimeType);
-        if (aMimeType == null)
-          s_aLogger.warn ("Failed to parse MimeType '" + sMimeType + "'");
-        else
-          aUnifiedResponse.setMimeType (aMimeType);
-        if (EMimeContentType.TEXT.isTypeOf (sMimeType))
-        {
-          // Important for FileBrowser HTML pages
-          aUnifiedResponse.setCharset (CHTMLCharset.CHARSET_HTML_OBJ);
-        }
-      }
+      m_aStatsMIMEType.increment (sMimeType);
+      final IMimeType aMimeType = MimeType.parseFromStringWithoutEncoding (sMimeType);
+      if (aMimeType == null)
+        s_aLogger.warn ("Failed to parse MimeType '" + sMimeType + "'");
       else
-        s_aLogger.warn ("Failed to determine MIME type for filename '" + sFilename + "'");
-
-      LocalDateTime aLastModified = null;
-      final File aFile = aRes.getAsFile ();
-      if (aFile != null)
+        aUnifiedResponse.setMimeType (aMimeType);
+      if (EMimeContentType.TEXT.isTypeOf (sMimeType))
       {
-        final long nLastModified = aFile.lastModified ();
-        if (nLastModified > 0)
-          aLastModified = PDTFactory.createLocalDateTimeFromMillis (nLastModified);
+        // Important for FileBrowser HTML pages
+        aUnifiedResponse.setCharset (CHTMLCharset.CHARSET_HTML_OBJ);
       }
+    }
+    else
+      s_aLogger.warn ("Failed to determine MIME type for filename '" + sFilename + "'");
 
-      if (aLastModified != null)
-        aUnifiedResponse.setLastModified (aLastModified);
-
-      // Set ETag in response for next time
-      aUnifiedResponse.setETagIfApplicable (ETAG_VALUE_STREAMSERVLET);
-
-      // HTTP caching possible?
-      if (objectsAllowsForHTTPCaching (aRequestScope, sFilename))
-      {
-        aUnifiedResponse.setCacheControl (new CacheControlBuilder ().setMaxAgeSeconds (ResponseHelperSettings.getExpirationSeconds ())
-                                                                    .setPublic (true));
-      }
-      else
-      {
-        aUnifiedResponse.disableCaching ();
-      }
-
-      // Do the main copying from InputStream to OutputStream
-      aUnifiedResponse.setContent (aRes);
-      m_aStatsSuccess.increment (sFilename);
+    // HTTP caching possible?
+    if (objectsAllowsForHTTPCaching (aRequestScope, sFilename))
+    {
+      aUnifiedResponse.setCacheControl (new CacheControlBuilder ().setMaxAgeSeconds (ResponseHelperSettings.getExpirationSeconds ())
+                                                                  .setPublic (true));
     }
     else
     {
-      s_aLogger.warn ("Trying to stream non-existing resource " + aRes);
-      m_aStatsNotFound.increment (sFilename);
-      aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
+      aUnifiedResponse.disableCaching ();
     }
+
+    // Do the main copying from InputStream to OutputStream
+    aUnifiedResponse.setContent (aRes);
+    m_aStatsSuccess.increment (sFilename);
   }
 }
