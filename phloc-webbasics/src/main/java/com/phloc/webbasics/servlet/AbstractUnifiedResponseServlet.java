@@ -61,6 +61,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.HEAD,
                                                                                   EHTTPMethod.GET,
                                                                                   EHTTPMethod.POST);
+  public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_GET_POST = EnumSet.of (EHTTPMethod.GET, EHTTPMethod.POST);
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
   private static final AtomicBoolean s_aFirstRequest = new AtomicBoolean (true);
 
@@ -218,7 +219,8 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     }
 
     // Notify event listeners about the very first event on this servlet
-    if (s_aFirstRequest.getAndSet (false))
+    // May already be set in test cases!
+    if (s_aFirstRequest.getAndSet (false) && !StaticServerInfo.isSet ())
     {
       // First set the default web server info
       final StaticServerInfo aInfo = StaticServerInfo.initFromFirstRequest (aRequestScope);
