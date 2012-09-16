@@ -34,7 +34,8 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.http.CHTTPHeader;
 
 /**
@@ -113,6 +114,17 @@ public final class UserAgentDatabase
   }
 
   /**
+   * Get the user agent object from the current HTTP request.
+   * 
+   * @return A non-<code>null</code> user agent object.
+   */
+  @Nonnull
+  public static IUserAgent getCurrentUserAgent ()
+  {
+    return getUserAgent (WebScopeManager.getRequestScope ());
+  }
+
+  /**
    * Get the user agent object from the given HTTP request.
    * 
    * @param aRequestScope
@@ -120,7 +132,7 @@ public final class UserAgentDatabase
    * @return A non-<code>null</code> user agent object.
    */
   @Nonnull
-  public static IUserAgent getUserAgent (@Nonnull final IRequestWebScope aRequestScope)
+  public static IUserAgent getUserAgent (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return getUserAgent (aRequestScope.getRequest ());
   }

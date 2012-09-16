@@ -34,6 +34,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.CWeb;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPVersion;
@@ -47,6 +48,8 @@ import com.phloc.webbasics.http.HTTPHeaderMap;
 @Immutable
 public final class RequestHelper
 {
+  private static final String SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP = "$requesthelp.requestparammap";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestHelper.class);
 
   @PresentForCodeCoverage
@@ -117,6 +120,19 @@ public final class RequestHelper
     // Strip session ID parameter
     final int nIndex = sPathInfo.indexOf (';');
     return nIndex == -1 ? sPathInfo : sPathInfo.substring (0, nIndex);
+  }
+
+  /**
+   * Return the URI of the request within the servlet context.
+   * 
+   * @param aRequestScope
+   *        The request web scope to use. May not be <code>null</code>.
+   * @return the path within the web application and never <code>null</code>.
+   */
+  @Nonnull
+  public static String getPathWithinServletContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getPathWithinServletContext (aRequestScope.getRequest ());
   }
 
   /**
@@ -389,5 +405,23 @@ public final class RequestHelper
       }
     }
     return aResult;
+  }
+
+  @Nonnull
+  public static IRequestParamMap getCurrentRequestParamMap ()
+  {
+    return getRequestParamMap (WebScopeManager.getRequestScope ());
+  }
+
+  @Nonnull
+  public static IRequestParamMap getRequestParamMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    IRequestParamMap aMap = aRequestScope.getCastedAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);
+    if (aMap == null)
+    {
+      aMap = RequestParamMap.create (aRequestScope);
+      aRequestScope.setAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP, aMap);
+    }
+    return aMap;
   }
 }
