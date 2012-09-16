@@ -20,6 +20,7 @@ package com.phloc.webbasics.servlet;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,6 +42,7 @@ import com.phloc.datetime.PDTUtils;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.webbasics.StaticServerInfo;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webbasics.http.EHTTPVersion;
@@ -57,6 +59,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
 {
   public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.GET, EHTTPMethod.POST);
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
+  private static final AtomicBoolean s_aFirstRequest = new AtomicBoolean (true);
 
   public AbstractUnifiedResponseServlet ()
   {}
@@ -199,6 +202,14 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       s_aLogger.warn ("Request " + aRequestScope.getURL () + " has no valid HTTP version!");
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
       return;
+    }
+
+    // Notify event listeners about the very first event on this servlet
+    if (s_aFirstRequest.getAndSet (false))
+    {
+      // First set the default web server info
+      final StaticServerInfo aInfo = StaticServerInfo.initFromFirstRequest (aRequestScope);
+      s_aLogger.info ("Static server information: " + aInfo.toString ());
     }
 
     final EnumSet <EHTTPMethod> aAllowedHTTPMethods = getAllowedHTTPMethods ();
