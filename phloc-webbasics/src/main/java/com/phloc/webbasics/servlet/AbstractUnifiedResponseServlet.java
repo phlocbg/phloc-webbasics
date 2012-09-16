@@ -27,7 +27,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.PDTUtils;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
@@ -60,10 +62,18 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   {}
 
   @Nonnull
-  protected final LocalDateTime convertMillisToDateTime (final long nMillis)
+  protected final long getUnifiedMillis (final long nMillis)
+  {
+    // Round down to the nearest second for a proper compare (Java has milli
+    // seconds, HTTP requests/responses have not)
+    return nMillis / 1000 * 1000;
+  }
+
+  @Nonnull
+  protected final DateTime convertMillisToDateTimeGMT (final long nMillis)
   {
     // Round down to the nearest second for a proper compare
-    return PDTFactory.createLocalDateTimeFromMillis (nMillis / 1000 * 1000);
+    return PDTFactory.createLocalDateTimeFromMillis (getUnifiedMillis (nMillis)).toDateTime (DateTimeZone.UTC);
   }
 
   /**
@@ -115,7 +125,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    */
   @OverrideOnDemand
   @Nullable
-  protected LocalDateTime getLastModificationDateTime (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  protected DateTime getLastModificationDateTime (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return null;
   }
@@ -235,15 +245,28 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     // Check for last-modification on GET and HEAD
     if (eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.HEAD)
     {
-      final LocalDateTime aLastModification = getLastModificationDateTime (aRequestScope);
+      final DateTime aLastModification = getLastModificationDateTime (aRequestScope);
       if (aLastModification != null)
       {
         // Get the If-Modified-Since date header
         final long nRequestIfModifiedSince = aHttpRequest.getDateHeader (CHTTPHeader.IF_MODIFIED_SINCE);
         if (nRequestIfModifiedSince >= 0)
         {
-          final LocalDateTime aRequestIfModifiedSince = convertMillisToDateTime (nRequestIfModifiedSince);
-          if (aLastModification.isAfter (aRequestIfModifiedSince))
+          final DateTime aRequestIfModifiedSince = convertMillisToDateTimeGMT (nRequestIfModifiedSince);
+          if (PDTUtils.isLessOrEqual (aLastModification, aRequestIfModifiedSince))
+          {
+            // Was not modified since the passed time
+            aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
+            return;
+          }
+        }
+
+        // Get the If-Unmodified-Since date header
+        final long nRequestIfUnmodifiedSince = aHttpRequest.getDateHeader (CHTTPHeader.IF_UNMODIFIED_SINCE);
+        if (nRequestIfUnmodifiedSince >= 0)
+        {
+          final DateTime aRequestIfUnmodifiedSince = convertMillisToDateTimeGMT (nRequestIfUnmodifiedSince);
+          if (PDTUtils.isGreaterOrEqual (aLastModification, aRequestIfUnmodifiedSince))
           {
             // Was not modified since the passed time
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);

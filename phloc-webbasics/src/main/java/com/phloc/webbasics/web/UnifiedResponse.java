@@ -72,6 +72,7 @@ public class UnifiedResponse
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
   private static final String LOG_PREFIX = "UnifiedResponse to [";
+  private static final int MAX_CSS_KB_FOR_IE = 288;
 
   // Input fields
   private final EHTTPVersion m_eHTTPVersion;
@@ -659,8 +660,7 @@ public class UnifiedResponse
     if (m_sContentDispositionFilename != null)
     {
       // Filename needs to be surrounded with double quotes (single quotes
-      // don't
-      // work).
+      // don't work).
       aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, "attachment; filename=\"" +
                                                                 m_sContentDispositionFilename +
                                                                 "\"");
@@ -747,8 +747,24 @@ public class UnifiedResponse
             break;
         }
 
-    // Determine content length
+    // Write the body to the response
     _applyContent (aHttpResponse);
+  }
+
+  private void _applyLengthChecks (final long nContentLength)
+  {
+    // Source:
+    // http://joshua.perina.com/africa/gambia/fajara/post/internet-explorer-css-file-size-limit
+    if (m_aMimeType != null &&
+        m_aMimeType.equals (CMimeType.TEXT_CSS) &&
+        nContentLength > (MAX_CSS_KB_FOR_IE * CGlobal.BYTES_PER_KILOBYTE_LONG))
+    {
+      _warn ("Internet Explorer has problems handling CSS files > " +
+             MAX_CSS_KB_FOR_IE +
+             "KB and this one has " +
+             nContentLength +
+             " bytes!");
+    }
   }
 
   private void _applyContent (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
@@ -831,23 +847,5 @@ public class UnifiedResponse
         aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
         _warn ("No content present for the response");
       }
-  }
-
-  private static final int MAX_CSS_KB_FOR_IE = 288;
-
-  private void _applyLengthChecks (final long nContentLength)
-  {
-    // Source:
-    // http://joshua.perina.com/africa/gambia/fajara/post/internet-explorer-css-file-size-limit
-    if (m_aMimeType != null &&
-        m_aMimeType.equals (CMimeType.TEXT_CSS) &&
-        nContentLength > (MAX_CSS_KB_FOR_IE * CGlobal.BYTES_PER_KILOBYTE_LONG))
-    {
-      _warn ("Internet Explorer has problems handling CSS files > " +
-             MAX_CSS_KB_FOR_IE +
-             "KB and this one has " +
-             nContentLength +
-             " bytes!");
-    }
   }
 }

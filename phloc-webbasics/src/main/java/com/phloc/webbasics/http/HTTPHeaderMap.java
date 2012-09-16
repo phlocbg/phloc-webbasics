@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -126,7 +127,8 @@ public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>
 
   public void setDateHeader (@Nonnull @Nonempty final String sName, @Nonnull final LocalDateTime aLDT)
   {
-    _setHeader (sName, _getAsString (aLDT));
+    // Always use UTC (=GMT)
+    _setHeader (sName, _getAsString (aLDT.toDateTime (DateTimeZone.UTC)));
   }
 
   public void addDateHeader (@Nonnull @Nonempty final String sName, final long nMillis)

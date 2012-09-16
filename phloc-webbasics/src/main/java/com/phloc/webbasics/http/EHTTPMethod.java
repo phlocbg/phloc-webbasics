@@ -55,6 +55,16 @@ public enum EHTTPMethod implements IHasName
     return m_sName;
   }
 
+  public boolean isIdempodent ()
+  {
+    return this != POST && this != CONNECT;
+  }
+
+  public boolean isContentAllowed ()
+  {
+    return this != HEAD;
+  }
+
   @Nullable
   public static EHTTPMethod getFromNameOrNull (@Nullable final String sName)
   {

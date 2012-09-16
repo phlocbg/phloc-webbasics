@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.http.HttpServletResponse;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +39,7 @@ import com.phloc.commons.state.EContinue;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
 import com.phloc.commons.stats.StatisticsManager;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.http.CacheControlBuilder;
@@ -103,7 +104,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
 
   @Override
   @Nullable
-  protected LocalDateTime getLastModificationDateTime (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  protected DateTime getLastModificationDateTime (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     // We have an existing resource
     final IReadableResource aRes = aRequestScope.<IReadableResource> getCastedAttribute (REQUEST_ATTR_OBJECT_DELIVERY_RESOURCE);
@@ -115,7 +116,10 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
     {
       final long nLastModified = aFile.lastModified ();
       if (nLastModified > 0)
-        return convertMillisToDateTime (nLastModified);
+      {
+        // Use our time zone as is
+        return PDTFactory.createDateTimeFromMillis (getUnifiedMillis (nLastModified));
+      }
     }
     return null;
   }
