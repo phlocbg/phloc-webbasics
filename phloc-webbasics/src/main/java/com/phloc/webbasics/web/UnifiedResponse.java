@@ -681,7 +681,7 @@ public class UnifiedResponse
                "' is not at all supported by the request. Allowed values are: " +
                m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ()));
       else
-        if (aQuality.isBelowMaximumQuality ())
+        if (aQuality.isLowValue ())
         {
           // Inform if the quality of the request is <= 50%!
           final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
