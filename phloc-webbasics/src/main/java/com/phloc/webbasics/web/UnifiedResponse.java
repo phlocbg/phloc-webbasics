@@ -22,12 +22,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -92,6 +94,7 @@ public class UnifiedResponse
   private final HTTPHeaderMap m_aResponseHeaderMap = new HTTPHeaderMap ();
   private int m_nStatusCode = CGlobal.ILLEGAL_UINT;
   private String m_sRedirectTargetUrl;
+  private Map <String, Cookie> m_aCookies;
 
   // Internal status members
   private final HTTPHeaderMap m_aRequestHeaderMap;
@@ -584,6 +587,30 @@ public class UnifiedResponse
     return this;
   }
 
+  @Nonnull
+  public UnifiedResponse addCookie (@Nonnull final Cookie aCookie)
+  {
+    if (aCookie == null)
+      throw new NullPointerException ("cookie");
+
+    final String sKey = aCookie.getName ();
+    if (m_aCookies == null)
+      m_aCookies = new HashMap <String, Cookie> ();
+    else
+      if (m_aCookies.containsKey (sKey))
+        _warn ("Overwriting cookie '" + sKey + "' with the new value '" + aCookie.getValue () + "'");
+    m_aCookies.put (sKey, aCookie);
+    return this;
+  }
+
+  @Nonnull
+  public UnifiedResponse removeCookie (@Nullable final String sName)
+  {
+    if (m_aCookies != null)
+      m_aCookies.remove (sName);
+    return this;
+  }
+
   private void _verifyCachingIntegrity ()
   {
     final boolean bIsHttp11 = m_eHTTPVersion == EHTTPVersion.HTTP_11;
@@ -785,6 +812,11 @@ public class UnifiedResponse
             // Do we need character encoding here as well???
             break;
         }
+
+    // Add all cookies
+    if (m_aCookies != null)
+      for (final Cookie aCookie : m_aCookies.values ())
+        aHttpResponse.addCookie (aCookie);
 
     // Write the body to the response
     _applyContent (aHttpResponse);
