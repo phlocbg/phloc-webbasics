@@ -39,6 +39,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * This class maps action names to callback objects.
@@ -106,7 +107,8 @@ public final class ActionContainer
 
   @Nonnull
   public ESuccess executeAction (@Nullable final String sActionName,
-                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
+                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
   {
     // Find the executor
     IActionExecutor aActionExecutor;
@@ -127,10 +129,13 @@ public final class ActionContainer
       return ESuccess.FAILURE;
     }
 
+    // For actions caching is not an option, because it is dynamic content
+    aUnifiedResponse.disableCaching ();
+
     try
     {
       final StopWatch aSW = new StopWatch (true);
-      aActionExecutor.execute (aRequestScope);
+      aActionExecutor.execute (aRequestScope, aUnifiedResponse);
       s_aTimer.addTime (sActionName, aSW.stopAndGetMillis ());
       return ESuccess.SUCCESS;
     }

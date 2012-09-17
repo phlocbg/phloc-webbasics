@@ -27,6 +27,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * This class represents a singleton {@link ActionContainer}.
@@ -69,9 +70,10 @@ public final class ActionManager
 
   @Nonnull
   public ESuccess executeAction (@Nullable final String sAction,
-                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
+                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
   {
-    return m_aActionContainer.executeAction (sAction, aRequestScope);
+    return m_aActionContainer.executeAction (sAction, aRequestScope, aUnifiedResponse);
   }
 
   @Nonnull

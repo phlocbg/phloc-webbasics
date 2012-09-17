@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
@@ -190,8 +191,27 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    *         In case of an error
    */
   protected abstract void handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                                         @Nonnull UnifiedResponse aUnifiedResponse) throws ServletException,
-                                                                                   IOException;
+                                         @Nonnull UnifiedResponse aUnifiedResponse) throws Exception;
+
+  /**
+   * Called when an exception occurred in
+   * {@link #handleRequest(IRequestWebScopeWithoutResponse, UnifiedResponse)}.
+   * This method is only called for non-request-cancel operations.
+   * 
+   * @param aRequestScope
+   *        The source request scope. Never <code>null</code>.
+   * @param t
+   */
+  @OverrideOnDemand
+  protected void onException (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope, @Nonnull final Throwable t)
+  {
+    s_aLogger.error ("Error running servlet " +
+                     getClass () +
+                     " using " +
+                     aRequestScope.getMethod () +
+                     " on URI " +
+                     aRequestScope.getURL (), t);
+  }
 
   /**
    * Called after a valid request was processed. This method is not called if
@@ -354,6 +374,20 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       aUnifiedResponse.applyToResponse (aHttpResponse);
       // No error occurred
       bExceptionOccurred = false;
+    }
+    catch (final Throwable t)
+    {
+      // Do not show the exceptions that occur, when client cancels a request.
+      if (!StreamUtils.isKnownEOFException (t))
+      {
+        onException (aRequestScope, t);
+
+        if (t instanceof IOException)
+          throw (IOException) t;
+        if (t instanceof ServletException)
+          throw (ServletException) t;
+        throw new ServletException (t);
+      }
     }
     finally
     {

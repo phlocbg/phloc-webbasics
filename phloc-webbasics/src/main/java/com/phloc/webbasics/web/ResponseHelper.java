@@ -107,7 +107,8 @@ public final class ResponseHelper
       aHttpResponse.setHeader (CHTTPHeader.CACHE_CONTROL, "no-store, no-cache, must-revalidate");
 
       // Set IE extended HTTP/1.1 no-cache headers.
-      aHttpResponse.addHeader (CHTTPHeader.CACHE_CONTROL, "post-check=0, pre-check=0");
+      if (false)
+        aHttpResponse.addHeader (CHTTPHeader.CACHE_CONTROL, "post-check=0, pre-check=0");
     }
   }
 
@@ -516,9 +517,11 @@ public final class ResponseHelper
     writeResponse (aHttpRequest, aHttpResponse, new byte [0], CMimeType.TEXT_PLAIN, CCharset.CHARSET_ISO_8859_1);
   }
 
-  public static boolean isRedirectStatusCode (final int nSC)
+  public static boolean isEmptyStatusCode (final int nSC)
   {
-    // 301 || 302
-    return nSC == HttpServletResponse.SC_MOVED_PERMANENTLY || nSC == HttpServletResponse.SC_MOVED_TEMPORARILY;
+    // 301 || 302 || 304
+    return nSC == HttpServletResponse.SC_MOVED_PERMANENTLY ||
+           nSC == HttpServletResponse.SC_MOVED_TEMPORARILY ||
+           nSC == HttpServletResponse.SC_NOT_MODIFIED;
   }
 }

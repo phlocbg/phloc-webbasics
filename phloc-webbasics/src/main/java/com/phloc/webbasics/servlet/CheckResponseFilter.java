@@ -76,7 +76,7 @@ public class CheckResponseFilter implements Filter
                                          @Nullable final String sCharacterEncoding,
                                          final int nStatusCode)
   {
-    if (StringHelper.hasNoText (sCharacterEncoding) && !ResponseHelper.isRedirectStatusCode (nStatusCode))
+    if (StringHelper.hasNoText (sCharacterEncoding) && !ResponseHelper.isEmptyStatusCode (nStatusCode))
       s_aLogger.warn ("No character encoding on " + nStatusCode + " response to '" + sRequestURL + "'");
   }
 
@@ -90,7 +90,7 @@ public class CheckResponseFilter implements Filter
                                    @Nullable final String sContentType,
                                    final int nStatusCode)
   {
-    if (StringHelper.hasNoText (sContentType) && !ResponseHelper.isRedirectStatusCode (nStatusCode))
+    if (StringHelper.hasNoText (sContentType) && !ResponseHelper.isEmptyStatusCode (nStatusCode))
       s_aLogger.warn ("No content type on " + nStatusCode + " response to '" + sRequestURL + "'");
   }
 

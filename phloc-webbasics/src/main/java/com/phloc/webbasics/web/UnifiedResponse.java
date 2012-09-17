@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +48,12 @@ import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.file.FilenameHelper;
+import com.phloc.commons.io.streams.CountingOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mutable.MutableLong;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.PDTFactory;
@@ -74,6 +77,12 @@ import com.phloc.webbasics.http.QValue;
  */
 public class UnifiedResponse
 {
+  public static interface IContentWriter
+  {
+    @Nonnull
+    ESuccess write (@Nonnull @WillNotClose OutputStream aOS) throws IOException;
+  }
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
   private static final int MAX_CSS_KB_FOR_IE = 288;
   private static final AtomicInteger s_aRequestNum = new AtomicInteger (0);
@@ -90,6 +99,7 @@ public class UnifiedResponse
   private IMimeType m_aMimeType;
   private byte [] m_aContent;
   private IInputStreamProvider m_aContentISP;
+  private IContentWriter m_aContentWriter;
   private String m_sContentDispositionFilename;
   private CacheControlBuilder m_aCacheControl;
   private final HTTPHeaderMap m_aResponseHeaderMap = new HTTPHeaderMap ();
@@ -235,7 +245,7 @@ public class UnifiedResponse
    */
   public boolean hasContent ()
   {
-    return m_aContent != null || m_aContentISP != null;
+    return m_aContent != null || m_aContentISP != null || m_aContentWriter != null;
   }
 
   /**
@@ -286,6 +296,7 @@ public class UnifiedResponse
       _info ("Overwriting content with byte array!");
     m_aContent = aContent;
     m_aContentISP = null;
+    m_aContentWriter = null;
     return this;
   }
 
@@ -305,6 +316,27 @@ public class UnifiedResponse
       _info ("Overwriting content with content provider!");
     m_aContent = null;
     m_aContentISP = aISP;
+    m_aContentWriter = null;
+    return this;
+  }
+
+  /**
+   * Set the response content writer.
+   * 
+   * @param aContentWriter
+   *        The content writer to be used. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setContent (@Nonnull final IContentWriter aContentWriter)
+  {
+    if (aContentWriter == null)
+      throw new NullPointerException ("contentWriter");
+    if (hasContent ())
+      _info ("Overwriting content with content writer!");
+    m_aContent = null;
+    m_aContentISP = null;
+    m_aContentWriter = aContentWriter;
     return this;
   }
 
@@ -313,6 +345,7 @@ public class UnifiedResponse
   {
     m_aContent = null;
     m_aContentISP = null;
+    m_aContentWriter = null;
     return this;
   }
 
@@ -462,7 +495,7 @@ public class UnifiedResponse
 
   /**
    * Utility method for setting the MimeType application/force-download and set
-   * the respective content disposition
+   * the respective content disposition filename.
    * 
    * @param sFilename
    *        The filename to be used.
@@ -649,6 +682,9 @@ public class UnifiedResponse
     final boolean bCacheControl = m_aCacheControl != null;
     final boolean bLastModified = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
     final boolean bETag = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.ETAG);
+
+    if (bExpires)
+      _info ("Expires found: " + m_aResponseHeaderMap.getHeaders (CHTTPHeader.EXPIRES));
 
     if (bExpires && bCacheControl)
       _warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
@@ -920,20 +956,16 @@ public class UnifiedResponse
             {
               // Copying succeeded
               final long nBytesCopied = aByteCount.longValue ();
+              aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nBytesCopied));
               if (nBytesCopied > 0)
               {
                 // We had at least one content byte
                 aOS.flush ();
-                aOS.close ();
 
                 _applyLengthChecks (nBytesCopied);
               }
-              else
-              {
-                // Set status 204 - no content
-                aOS.close ();
-                aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
-              }
+              // Else - simply empty content
+              aOS.close ();
             }
             else
             {
@@ -949,10 +981,47 @@ public class UnifiedResponse
         }
       }
       else
-      {
-        // Set status 204 - no content; this is most likely a programming error
-        aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
-        _warn ("No content present for the response");
-      }
+        if (m_aContentWriter != null)
+        {
+          // Don't emit content for HEAD method
+          if (m_eHTTPMethod.isContentAllowed ())
+          {
+            // We do have an input stream
+            // -> copy it to the response
+            final OutputStream aOS = aHttpResponse.getOutputStream ();
+            final CountingOutputStream aCOS = new CountingOutputStream (aOS);
+            if (m_aContentWriter.write (aCOS).isSuccess ())
+            {
+              // Copying succeeded
+              final long nBytesCopied = aCOS.getBytesWritten ();
+              aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nBytesCopied));
+              if (nBytesCopied > 0)
+              {
+                // We had at least one content byte
+                aOS.flush ();
+                _applyLengthChecks (nBytesCopied);
+              }
+              // Else - simply empty content
+              aOS.close ();
+            }
+            else
+            {
+              // Copying failed -> this is a 500
+              _error ("Copying from " + m_aContentWriter + " failed after " + aCOS.getBytesWritten () + " bytes!");
+
+              if (!aHttpResponse.isCommitted ())
+                aHttpResponse.reset ();
+
+              aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+          }
+        }
+        else
+        {
+          // Set status 204 - no content; this is most likely a programming
+          // error
+          aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
+          _warn ("No content present for the response");
+        }
   }
 }

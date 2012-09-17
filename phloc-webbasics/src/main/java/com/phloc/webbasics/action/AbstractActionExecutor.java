@@ -17,6 +17,10 @@
  */
 package com.phloc.webbasics.action;
 
+import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
+
 /**
  * Abstract base class in case there will be some common functionality some
  * time.
@@ -25,5 +29,9 @@ package com.phloc.webbasics.action;
  */
 public abstract class AbstractActionExecutor implements IActionExecutor
 {
-  /* empty */
+  @Nullable
+  public DateTime getLastModificationDateTime ()
+  {
+    return null;
+  }
 }

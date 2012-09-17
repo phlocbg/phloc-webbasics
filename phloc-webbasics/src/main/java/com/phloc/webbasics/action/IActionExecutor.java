@@ -18,8 +18,12 @@
 package com.phloc.webbasics.action;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
 
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Base web action executor interface.
@@ -28,13 +32,23 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
  */
 public interface IActionExecutor
 {
+  // TODO integrate LastModification in the servlet flow
+  /**
+   * @return The last modification date time for the action result or
+   *         <code>null</code> if none is applicable.
+   */
+  @Nullable
+  DateTime getLastModificationDateTime ();
+
   /**
    * Execute the action on the passed HTTP request/response.
    * 
    * @param aRequestScope
    *        The request scope. Never <code>null</code>.
+   * @param aUnifiedResponse
+   *        The response to write to
    * @throws Exception
    *         In case something goes wrong.
    */
-  void execute (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
+  void execute (@Nonnull IRequestWebScopeWithoutResponse aRequestScope, @Nonnull UnifiedResponse aUnifiedResponse) throws Exception;
 }
