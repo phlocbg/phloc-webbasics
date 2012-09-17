@@ -758,8 +758,14 @@ public class UnifiedResponse
 
     if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
     {
+      if (m_aCharset != null)
+        _warn ("Ignoring provided charset because a status code is specified!");
+      if (m_aMimeType != null)
+        _warn ("Ignoring provided MimeType because a status code is specified!");
       if (hasContent ())
         _warn ("Ignoring provided content because a status code is specified!");
+      if (m_sContentDispositionFilename != null)
+        _warn ("Ignoring provided Content-Dispostion filename because a status code is specified!");
 
       if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
       {
