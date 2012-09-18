@@ -36,7 +36,7 @@ import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.form.validation.EFormErrorLevel;
 import com.phloc.webbasics.form.validation.IFormFieldError;
@@ -265,7 +265,7 @@ public final class BootstrapTableForm extends BootstrapTable
       // No focus has yet be set
       // Try to focus the first control (if available), but do it only once per
       // request because the cursor can only be on one control at a time :)
-      final IRequestWebScope aScope = WebScopeManager.getRequestScope ();
+      final IRequestWebScopeWithoutResponse aScope = WebScopeManager.getRequestScope ();
       if (!aScope.containsAttribute (REQUEST_ATTR))
       {
         _focusNode (m_aFirstFocusable);
