@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.web;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,6 +32,12 @@ import org.junit.Test;
  */
 public final class ResponseHelperSettingsTest
 {
+  @Test
+  public void testExpires ()
+  {
+    assertEquals ("Sat, 06 May 1995 12:00:00 GMT", ResponseHelperSettings.EXPIRES_NEVER_STRING);
+  }
+
   @Before
   @After
   public void beforeAndAfter ()

@@ -23,12 +23,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.state.EChange;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTWebDateUtils;
 import com.phloc.webbasics.servlet.gzip.CompressFilterSettings;
 
 /**
@@ -39,12 +43,22 @@ import com.phloc.webbasics.servlet.gzip.CompressFilterSettings;
 @ThreadSafe
 public final class ResponseHelperSettings
 {
+
+  public static final LocalDateTime EXPIRES_NEVER_DATETIME = PDTFactory.createLocalDateTime (1995,
+                                                                                             DateTimeConstants.MAY,
+                                                                                             6,
+                                                                                             12,
+                                                                                             0,
+                                                                                             0);
+
+  public static final String EXPIRES_NEVER_STRING = PDTWebDateUtils.getAsStringRFC822 (EXPIRES_NEVER_DATETIME);
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (CompressFilterSettings.class);
 
   // Expires in at least 2 days (which is the minimum to be accepted for
   // real caching in Yahoo Guidelines)
   // Because of steady changes, use 1 day
-  public static final int DEFAULT_EXPIRATION_SECONDS = 1 * CGlobal.SECONDS_PER_DAY;
+  public static final int DEFAULT_EXPIRATION_SECONDS = 2 * CGlobal.SECONDS_PER_DAY;
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static int s_nExpirationSeconds = DEFAULT_EXPIRATION_SECONDS;

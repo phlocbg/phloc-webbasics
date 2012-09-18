@@ -525,7 +525,7 @@ public class UnifiedResponse
       case HTTP_10:
       {
         // Set to expire far in the past for HTTP/1.0.
-        m_aResponseHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelper.EXPIRES_NEVER_STRING);
+        m_aResponseHeaderMap.setHeader (CHTTPHeader.EXPIRES, ResponseHelperSettings.EXPIRES_NEVER_STRING);
 
         // Set standard HTTP/1.0 no-cache header.
         m_aResponseHeaderMap.setHeader (CHTTPHeader.PRAGMA, "no-cache");
