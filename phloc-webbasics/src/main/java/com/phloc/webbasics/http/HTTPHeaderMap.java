@@ -28,8 +28,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -104,14 +102,9 @@ public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>
   }
 
   @Nonnull
-  private static String _getAsString (@Nonnull final LocalDateTime aLDT)
-  {
-    return PDTWebDateUtils.getAsStringRFC822 (aLDT);
-  }
-
-  @Nonnull
   private static String _getAsString (@Nonnull final DateTime aDT)
   {
+    // This method internally converts the date to UTC
     return PDTWebDateUtils.getAsStringRFC822 (aDT);
   }
 
@@ -125,12 +118,6 @@ public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>
     _setHeader (sName, _getAsString (aDT));
   }
 
-  public void setDateHeader (@Nonnull @Nonempty final String sName, @Nonnull final LocalDateTime aLDT)
-  {
-    // Always use UTC (=GMT)
-    _setHeader (sName, _getAsString (aLDT.toDateTime (DateTimeZone.UTC)));
-  }
-
   public void addDateHeader (@Nonnull @Nonempty final String sName, final long nMillis)
   {
     _addHeader (sName, _getAsString (PDTFactory.createDateTimeFromMillis (nMillis)));
@@ -139,11 +126,6 @@ public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>
   public void addDateHeader (@Nonnull @Nonempty final String sName, @Nonnull final DateTime aDT)
   {
     _addHeader (sName, _getAsString (aDT));
-  }
-
-  public void addDateHeader (@Nonnull @Nonempty final String sName, @Nonnull final LocalDateTime aLDT)
-  {
-    _addHeader (sName, _getAsString (aLDT));
   }
 
   public void setHeader (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)

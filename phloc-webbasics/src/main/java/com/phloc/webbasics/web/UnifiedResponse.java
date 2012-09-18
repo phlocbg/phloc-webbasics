@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +49,7 @@ import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -223,6 +223,19 @@ public class UnifiedResponse
   }
 
   @Nonnull
+  public UnifiedResponse setMimeTypeString (@Nonnull @Nonempty final String sMimeType)
+  {
+    if (StringHelper.hasNoText (sMimeType))
+      throw new IllegalArgumentException ("mimeType");
+    final IMimeType aMimeType = MimeType.parseFromStringWithoutEncoding (sMimeType);
+    if (aMimeType != null)
+      setMimeType (aMimeType);
+    else
+      _error ("Failed to resolve mime type from '" + sMimeType + "'");
+    return this;
+  }
+
+  @Nonnull
   public UnifiedResponse removeMimeType ()
   {
     m_aMimeType = null;
@@ -317,13 +330,6 @@ public class UnifiedResponse
   }
 
   @Nonnull
-  public UnifiedResponse setExpires (@Nonnull final LocalDateTime aLDT)
-  {
-    m_aResponseHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, aLDT);
-    return this;
-  }
-
-  @Nonnull
   public UnifiedResponse setExpires (@Nonnull final DateTime aDT)
   {
     m_aResponseHeaderMap.setDateHeader (CHTTPHeader.EXPIRES, aDT);
@@ -334,16 +340,6 @@ public class UnifiedResponse
   public UnifiedResponse removeExpires ()
   {
     m_aResponseHeaderMap.removeHeaders (CHTTPHeader.EXPIRES);
-    return this;
-  }
-
-  @Nonnull
-  public UnifiedResponse setLastModified (@Nonnull final LocalDateTime aLDT)
-  {
-    if (m_eHTTPMethod != EHTTPMethod.GET && m_eHTTPMethod != EHTTPMethod.HEAD)
-      _warn ("Setting Last-Modified on a non GET or HEAD request may have no impact!");
-
-    m_aResponseHeaderMap.setDateHeader (CHTTPHeader.LAST_MODIFIED, aLDT);
     return this;
   }
 

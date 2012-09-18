@@ -37,6 +37,9 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
+import com.phloc.commons.stats.IStatisticsHandlerCounter;
+import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
+import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.PDTUtils;
@@ -69,11 +72,48 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
   private static final AtomicBoolean s_aFirstRequest = new AtomicBoolean (true);
 
+  private final IStatisticsHandlerKeyedCounter m_aStatsHttpVersion = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
+                                                                                                               "$httpversion");
+  private final IStatisticsHandlerKeyedCounter m_aStatsHttpMethodDisallowed = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
+                                                                                                                        "$httpmethod.disallowed");
+  private final IStatisticsHandlerKeyedCounter m_aStatsHttpMethodAllowed = StatisticsManager.getKeyedCounterHandler (getClass ().getName () +
+                                                                                                                     "$httpmethod.allowed");
+  private final IStatisticsHandlerCounter m_aStatsInitFailure = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                     "$init.failure");
+  private final IStatisticsHandlerCounter m_aStatsInitSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                     "$init.success");
+  private final IStatisticsHandlerCounter m_aStatsHasLastModification = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                             "$has-lastmodification");
+  private final IStatisticsHandlerCounter m_aStatsHasETag = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                 "$has-etag");
+  private final IStatisticsHandlerCounter m_aStatsNotModifiedIfModifiedSince = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                    "$notmodified.if-modified-since");
+  private final IStatisticsHandlerCounter m_aStatsModifiedIfModifiedSince = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                 "$modified.if-modified-since");
+  private final IStatisticsHandlerCounter m_aStatsNotModifiedIfUnmodifiedSince = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                      "$notmodified.if-unmodified-since");
+  private final IStatisticsHandlerCounter m_aStatsModifiedIfUnmodifiedSince = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                   "$modified.if-unmodified-since");
+  private final IStatisticsHandlerCounter m_aStatsNotModifiedIfNonMatch = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                               "$notmodified.if-unon-match");
+  private final IStatisticsHandlerCounter m_aStatsModifiedIfNonMatch = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                            "$modified.if-unon-match");
+  private final IStatisticsHandlerCounter m_aStatsOnRequestBeginFailure = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                               "$on-request-begin.failure");
+  private final IStatisticsHandlerCounter m_aStatsHandledRequestsTotal = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                              "$handled-requests.total");
+  private final IStatisticsHandlerCounter m_aStatsHandledRequestsSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                "$handled-requests.success");
+  private final IStatisticsHandlerCounter m_aStatsHandledRequestsFailure = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                "$handled-requests.failure");
+  private final IStatisticsHandlerCounter m_aStatsOnRequestEndFailure = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                             "$on-request-end.failure");
+
   public AbstractUnifiedResponseServlet ()
   {}
 
   @Nonnull
-  protected final long getUnifiedMillis (final long nMillis)
+  protected static final long getUnifiedMillis (final long nMillis)
   {
     // Round down to the nearest second for a proper compare (Java has milli
     // seconds, HTTP requests/responses have not)
@@ -81,7 +121,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   }
 
   @Nonnull
-  protected final DateTime convertMillisToDateTimeGMT (final long nMillis)
+  protected static final DateTime convertMillisToDateTimeGMT (final long nMillis)
   {
     // Round down to the nearest second for a proper compare
     return PDTFactory.createLocalDateTimeFromMillis (getUnifiedMillis (nMillis)).toDateTime (DateTimeZone.UTC);
@@ -241,6 +281,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
       return;
     }
+    m_aStatsHttpVersion.increment (eHTTPVersion.getName ());
 
     // Notify event listeners about the very first event on this servlet
     // May already be set in test cases!
@@ -255,6 +296,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (!aAllowedHTTPMethods.contains (eHTTPMethod))
     {
       // Disallow method
+      m_aStatsHttpMethodDisallowed.increment (eHTTPMethod.getName ());
 
       // Build Allow response header
       final StringBuilder aAllow = new StringBuilder ();
@@ -279,6 +321,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
         aHttpResponse.sendError (HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
+    m_aStatsHttpMethodAllowed.increment (eHTTPMethod.getName ());
 
     // Now all pre-conditions were checked. As the next step check some last
     // modification issues, for performance reasons. If all optimizations fail,
@@ -288,9 +331,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (initRequestState (aRequestScope, aUnifiedResponse).isBreak ())
     {
       // May e.g. be an 404 error for some not-found resource
+      m_aStatsInitFailure.increment ();
       aUnifiedResponse.applyToResponse (aHttpResponse);
       return;
     }
+    m_aStatsInitSuccess.increment ();
 
     // Check for last-modification on GET and HEAD
     if (eHTTPMethod == EHTTPMethod.GET || eHTTPMethod == EHTTPMethod.HEAD)
@@ -298,6 +343,8 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       final DateTime aLastModification = getLastModificationDateTime (aRequestScope);
       if (aLastModification != null)
       {
+        m_aStatsHasLastModification.increment ();
+
         // Get the If-Modified-Since date header
         final long nRequestIfModifiedSince = aHttpRequest.getDateHeader (CHTTPHeader.IF_MODIFIED_SINCE);
         if (nRequestIfModifiedSince >= 0)
@@ -306,9 +353,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
           if (PDTUtils.isLessOrEqual (aLastModification, aRequestIfModifiedSince))
           {
             // Was not modified since the passed time
+            m_aStatsNotModifiedIfModifiedSince.increment ();
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
             return;
           }
+          m_aStatsModifiedIfModifiedSince.increment ();
         }
 
         // Get the If-Unmodified-Since date header
@@ -319,9 +368,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
           if (PDTUtils.isGreaterOrEqual (aLastModification, aRequestIfUnmodifiedSince))
           {
             // Was not modified since the passed time
+            m_aStatsNotModifiedIfUnmodifiedSince.increment ();
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
             return;
           }
+          m_aStatsModifiedIfUnmodifiedSince.increment ();
         }
 
         // No If-Modified-Since request header present, set the Last-Modified
@@ -333,14 +384,16 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       final String sSupportedETag = getSupportedETag (aRequestScope);
       if (StringHelper.hasText (sSupportedETag))
       {
+        m_aStatsHasETag.increment ();
+
         // get the request ETag
-        final String sRequestETag = aHttpRequest.getHeader (CHTTPHeader.IF_NON_MATCH);
-        if (StringHelper.hasText (sRequestETag))
+        final String sRequestETags = aHttpRequest.getHeader (CHTTPHeader.IF_NON_MATCH);
+        if (StringHelper.hasText (sRequestETags))
         {
           // Request header may contain several ETag values
-          final List <String> aAllETags = RegExHelper.getSplitToList (sRequestETag, ",\\s+");
+          final List <String> aAllETags = RegExHelper.getSplitToList (sRequestETags, ",\\s+");
           if (aAllETags.isEmpty ())
-            s_aLogger.warn ("Empty ETag list found (" + sRequestETag + ")");
+            s_aLogger.warn ("Empty ETag list found (" + sRequestETags + ")");
           else
           {
             // Scan all found ETags for match
@@ -348,10 +401,12 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
               if (sSupportedETag.equals (sCurrentETag))
               {
                 // We have a matching ETag
+                m_aStatsNotModifiedIfNonMatch.increment ();
                 aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
                 return;
               }
           }
+          m_aStatsModifiedIfNonMatch.increment ();
         }
 
         // Save the ETag for the response
@@ -366,21 +421,27 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     }
     catch (final Throwable t)
     {
+      m_aStatsOnRequestBeginFailure.increment ();
       s_aLogger.error ("onRequestBegin failed", t);
     }
 
     boolean bExceptionOccurred = true;
     try
     {
+      m_aStatsHandledRequestsTotal.increment ();
+
       // main servlet handling
       handleRequest (aRequestScope, aUnifiedResponse);
       // Only write to the response, if no error occurred
       aUnifiedResponse.applyToResponse (aHttpResponse);
       // No error occurred
       bExceptionOccurred = false;
+
+      m_aStatsHandledRequestsSuccess.increment ();
     }
     catch (final Throwable t)
     {
+      m_aStatsHandledRequestsFailure.increment ();
       // Do not show the exceptions that occur, when client cancels a request.
       if (!StreamUtils.isKnownEOFException (t))
       {
@@ -402,6 +463,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       }
       catch (final Throwable t)
       {
+        m_aStatsOnRequestEndFailure.increment ();
         s_aLogger.error ("onRequestEnd failed", t);
       }
     }

@@ -32,8 +32,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.mime.EMimeContentType;
-import com.phloc.commons.mime.IMimeType;
-import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeDeterminator;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
@@ -179,11 +177,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
     if (sMimeType != null)
     {
       m_aStatsMIMEType.increment (sMimeType);
-      final IMimeType aMimeType = MimeType.parseFromStringWithoutEncoding (sMimeType);
-      if (aMimeType == null)
-        s_aLogger.warn ("Failed to parse MimeType '" + sMimeType + "'");
-      else
-        aUnifiedResponse.setMimeType (aMimeType);
+      aUnifiedResponse.setMimeTypeString (sMimeType);
       if (EMimeContentType.TEXT.isTypeOf (sMimeType))
       {
         // Important for FileBrowser HTML pages
