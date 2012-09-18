@@ -37,6 +37,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileUtils;
+import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -270,6 +271,20 @@ public final class PathRelativeFileIO
     final File aDir = getFile (sRelativePath);
     return bRecursive ? WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
                      : WebIO.getFileOpMgr ().createDirIfNotExisting (aDir);
+  }
+
+  /**
+   * Get the relative file name for the passed absolute file.
+   * 
+   * @param aAbsoluteFile
+   *        The non-<code>null</code> absolute file to make relative.
+   * @return <code>null</code> if the passed file is not a child of this base
+   *         directory.
+   */
+  @Nullable
+  public String getRelativeFilename (@Nonnull final File aAbsoluteFile)
+  {
+    return FilenameHelper.getRelativeToParentDirectory (aAbsoluteFile, m_aBasePath);
   }
 
   @Override

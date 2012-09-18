@@ -386,4 +386,18 @@ public final class WebFileIO
   {
     return getDataIO ().createDirectory (sRelativePath, bRecursive);
   }
+
+  /**
+   * Get the relative file name for the passed absolute file.
+   * 
+   * @param aAbsoluteFile
+   *        The non-<code>null</code> absolute file to make relative.
+   * @return <code>null</code> if the passed file is not a child of the data
+   *         directory.
+   */
+  @Nullable
+  public static String getRelativeFilename (@Nonnull final File aAbsoluteFile)
+  {
+    return getDataIO ().getRelativeFilename (aAbsoluteFile);
+  }
 }
