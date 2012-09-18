@@ -17,9 +17,12 @@
  */
 package com.phloc.webbasics.action;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
+
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract base class in case there will be some common functionality some
@@ -29,6 +32,9 @@ import org.joda.time.DateTime;
  */
 public abstract class AbstractActionExecutor implements IActionExecutor
 {
+  public void initExecution (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {}
+
   @Nullable
   public DateTime getLastModificationDateTime ()
   {

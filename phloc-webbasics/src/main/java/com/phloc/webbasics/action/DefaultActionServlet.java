@@ -58,6 +58,9 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
       return EContinue.BREAK;
     }
 
+    // Call the initialization of the action executor
+    aActionExecutor.initExecution (aRequestScope);
+
     // Remember in scope
     aRequestScope.setAttribute (SCOPE_ATTR_ACTION_NAME, sAction);
     aRequestScope.setAttribute (SCOPE_ATTR_EXECUTOR, aActionExecutor);

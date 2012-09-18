@@ -32,7 +32,16 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public interface IActionExecutor
 {
-  // TODO integrate LastModification in the servlet flow
+  /**
+   * Initialization method that is called before the main execution is called.
+   * This can e.g be used to determine the last modification date time.
+   * 
+   * @param aRequestScope
+   *        The request scope to be used, to extract parameters. Never
+   *        <code>null</code>.
+   */
+  void initExecution (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
+
   /**
    * @return The last modification date time for the action result or
    *         <code>null</code> if none is applicable.
