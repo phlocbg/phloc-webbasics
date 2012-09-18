@@ -51,7 +51,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>3.8.2</version>
+      <version>3.8.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -61,7 +61,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-scopes</artifactId>
-      <version>4.1.2</version>
+      <version>4.1.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-appbasics</artifactId>
-      <version>1.8.16</version>
+      <version>1.8.17-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
