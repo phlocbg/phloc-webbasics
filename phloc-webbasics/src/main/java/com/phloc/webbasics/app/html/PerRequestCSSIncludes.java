@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.resource.css.ICSSPathProvider;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
@@ -45,7 +45,7 @@ public final class PerRequestCSSIncludes
   @Nullable
   private static Set <ICSSPathProvider> _getPerRequestSet (final boolean bCreateIfNotExisting)
   {
-    final IRequestWebScope aRequestScope = WebScopeManager.getRequestScope ();
+    final IRequestWebScopeWithoutResponse aRequestScope = WebScopeManager.getRequestScope ();
     Set <ICSSPathProvider> ret = aRequestScope.getCastedAttribute (REQUEST_ATTR_CSSINCLUDE);
     if (ret == null && bCreateIfNotExisting)
     {

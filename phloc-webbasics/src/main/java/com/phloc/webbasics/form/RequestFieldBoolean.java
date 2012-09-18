@@ -25,7 +25,7 @@ import com.phloc.commons.string.StringParser;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCRequestFieldBoolean;
 import com.phloc.html.hc.html.HCCheckBox;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Special request field specially for check boxes with a fixed value.
@@ -75,7 +75,7 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   public static String getCheckBoxRequestValue (@Nonnull @Nonempty final String sFieldName,
                                                 @Nullable final String sDefaultValue)
   {
-    final IRequestWebScope aScope = getScope ();
+    final IRequestWebScopeWithoutResponse aScope = getScope ();
 
     // Is the checked value present?
     final String sRequestValue = aScope.getAttributeAsString (sFieldName);

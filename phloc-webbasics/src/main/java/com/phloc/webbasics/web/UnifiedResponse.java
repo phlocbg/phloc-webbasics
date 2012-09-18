@@ -54,7 +54,7 @@ import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.PDTFactory;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.http.AcceptCharsetHandler;
 import com.phloc.webbasics.http.AcceptCharsetList;
 import com.phloc.webbasics.http.AcceptMimeTypeHandler;
@@ -118,7 +118,7 @@ public class UnifiedResponse
 
   public UnifiedResponse (@Nonnull final EHTTPVersion eHTTPVersion,
                           @Nonnull final EHTTPMethod eHTTPMethod,
-                          @Nonnull final IRequestWebScope aRequestScope)
+                          @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     if (eHTTPVersion == null)
       throw new NullPointerException ("httpVersion");

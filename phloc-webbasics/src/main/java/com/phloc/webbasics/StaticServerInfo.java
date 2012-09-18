@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.web.domain.IRequestWebScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
@@ -134,7 +134,7 @@ public final class StaticServerInfo
   }
 
   @Nonnull
-  public static StaticServerInfo initFromFirstRequest (@Nonnull final IRequestWebScope aRequestWebScope)
+  public static StaticServerInfo initFromFirstRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope)
   {
     return init (aRequestWebScope.getScheme (),
                  aRequestWebScope.getServerName (),
