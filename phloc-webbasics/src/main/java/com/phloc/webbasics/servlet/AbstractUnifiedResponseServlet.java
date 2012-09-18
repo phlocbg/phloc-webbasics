@@ -63,6 +63,9 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
                                                                                   EHTTPMethod.GET,
                                                                                   EHTTPMethod.POST);
   public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_GET_POST = EnumSet.of (EHTTPMethod.GET, EHTTPMethod.POST);
+  public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_GET = EnumSet.of (EHTTPMethod.GET);
+  public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_POST = EnumSet.of (EHTTPMethod.POST);
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
   private static final AtomicBoolean s_aFirstRequest = new AtomicBoolean (true);
 
@@ -103,6 +106,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    * @return A non-<code>null</code> set of all allowed HTTP methods.
    */
   @OverrideOnDemand
+  @Nonnull
   protected EnumSet <EHTTPMethod> getAllowedHTTPMethods ()
   {
     return DEFAULT_ALLOWED_METHDOS;
