@@ -36,7 +36,6 @@ import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.form.validation.EFormErrorLevel;
 import com.phloc.webbasics.form.validation.IFormFieldError;
@@ -49,7 +48,7 @@ import com.phloc.webctrls.custom.IFormNote;
 
 public final class BootstrapTableForm extends BootstrapTable
 {
-  private static final String REQUEST_ATTR = "BootstrapTableForm$FirstFocusable";
+  private static final String REQUEST_ATTR_FIRST_FOCUSABLE = "BootstrapTableForm$FirstFocusable";
 
   private boolean m_bFocusHandlingEnabled = true;
   private boolean m_bSetAutoFocus = false;
@@ -265,12 +264,8 @@ public final class BootstrapTableForm extends BootstrapTable
       // No focus has yet be set
       // Try to focus the first control (if available), but do it only once per
       // request because the cursor can only be on one control at a time :)
-      final IRequestWebScopeWithoutResponse aScope = WebScopeManager.getRequestScope ();
-      if (!aScope.containsAttribute (REQUEST_ATTR))
-      {
+      if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag (REQUEST_ATTR_FIRST_FOCUSABLE))
         _focusNode (m_aFirstFocusable);
-        aScope.setAttribute (REQUEST_ATTR, Boolean.TRUE);
-      }
     }
     super.applyProperties (aDivElement, aConversionSettings);
   }
