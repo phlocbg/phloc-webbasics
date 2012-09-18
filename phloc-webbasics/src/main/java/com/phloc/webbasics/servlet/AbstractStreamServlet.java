@@ -108,14 +108,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
 
     // Try to convert the resource to a file, because only files have a last
     // modification DateTime
-    File aFile = null;
-    try
-    {
-      // FIXME try/catch can be removed in phloc-commons > 3.8.2
-      aFile = aRes.getAsFile ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
+    final File aFile = aRes.getAsFile ();
     if (aFile != null)
     {
       final long nLastModified = aFile.lastModified ();

@@ -75,8 +75,6 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
   FILE_SELECT ("Dateiauswahl", "File Selection"),
   MSG_ACTIONS ("Aktionen", "Actions"),
 
-  // FIXME: how could this be unified with ECoreText without having to change
-  // all calls to pass the display locale?
   MSG_BACK_TO_OVERVIEW ("Zurück zur Übersicht", "Back to the list"),
   MSG_BUTTON_YES ("Ja", "Yes"),
   MSG_BUTTON_NO ("Nein", "No"),
