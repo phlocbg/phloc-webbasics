@@ -1,5 +1,11 @@
 #summary Change log of phloc-webctrls
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>9/4/12</td><td>add</td><td>api</td><td></td><td>Added Bootstrap stuff from [http://code.google.com/p/phloc-webbasics phloc-webbasics]</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>9/18/12</td><td colspan="4">_Release *0.9.5*_</td></tr>
+<tr border="1"><td>9/11/12</td><td colspan="4">_Release *0.9.4*_</td></tr>
+<tr border="1"><td>9/6/12</td><td colspan="4">_Release *0.9.3*_</td></tr>
+<tr border="1"><td>9/6/12</td><td colspan="4">_Release *0.9.2*_</td></tr>
+<tr border="1"><td>9/5/12</td><td colspan="4">_Release *0.9.1*_</td></tr>
+<tr border="1"><td>9/4/12</td><td colspan="4">_Release *0.9.0*_</td></tr>
+<tr><td>9/4/12</td><td>add</td><td>api</td><td></td><td>Added Bootstrap stuff from [http://code.google.com/p/phloc-webbasics phloc-webbasics]</td></tr>
 </tbody></table>
