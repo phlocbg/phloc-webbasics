@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2012-09-18" category="api" action="add">
+    <change>
+      <text locale="en">Added new classes around the unified response handling: the response itself, an abstract servlet and an abstract filter</text>
+    </change>
+  </entry>
+  <entry date="2012-09-14" category="api" action="add">
+    <change>
+      <text locale="en">Added HTTP AcceptLanguageHandler</text>
+    </change>
+  </entry>
   <release date="2012-09-12" version="1.9.3" />
   <release date="2012-09-12" version="1.9.2" />
   <release date="2012-09-11" version="1.9.1" />

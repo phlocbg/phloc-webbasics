@@ -18,8 +18,11 @@
 package com.phloc.webbasics.action;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.http.HttpServletResponse;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
@@ -33,20 +36,46 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public class DefaultActionServlet extends AbstractUnifiedResponseServlet
 {
+  private static final String SCOPE_ATTR_ACTION_NAME = "$defaultactionservlet.actionname";
+  private static final String SCOPE_ATTR_EXECUTOR = "$defaultactionservlet.executor";
+
   @Override
-  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected EContinue initRequestState (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                        @Nonnull final UnifiedResponse aUnifiedResponse)
   {
     // cut the leading "/"
     String sAction = RequestHelper.getPathWithinServlet (aRequestScope.getRequest ());
     if (StringHelper.startsWith (sAction, '/'))
       sAction = sAction.substring (1);
 
-    // Handle the main action
-    if (ActionManager.getInstance ().executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
+    final IActionExecutor aActionExecutor = ActionManager.getInstance ().getActionExecutor (sAction);
+    if (aActionExecutor == null)
     {
       // No such action
       aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
+      return EContinue.BREAK;
+    }
+
+    // Remember in scope
+    aRequestScope.setAttribute (SCOPE_ATTR_ACTION_NAME, sAction);
+    aRequestScope.setAttribute (SCOPE_ATTR_EXECUTOR, aActionExecutor);
+    return EContinue.CONTINUE;
+  }
+
+  @Override
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
+  {
+    // Action is present
+    final String sAction = aRequestScope.getAttributeAsString (SCOPE_ATTR_ACTION_NAME);
+
+    // Handle the main action
+    if (ActionManager.getInstance ().executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
+    {
+      // Error in execution
+      aUnifiedResponse.setStatus (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 }

@@ -83,6 +83,17 @@ public final class ActionManager
     return m_aActionContainer.getAllActions ();
   }
 
+  public boolean containsAction (@Nullable final String sAction)
+  {
+    return m_aActionContainer.containsAction (sAction);
+  }
+
+  @Nullable
+  public IActionExecutor getActionExecutor (@Nullable final String sAction)
+  {
+    return m_aActionContainer.getActionExecutor (sAction);
+  }
+
   @Override
   public String toString ()
   {

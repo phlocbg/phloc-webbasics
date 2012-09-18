@@ -178,6 +178,48 @@ public final class ActionContainer
     }
   }
 
+  /**
+   * Check whether an action with the given name is present
+   * 
+   * @param sName
+   *        The name of the action to check. May be <code>null</code>.
+   * @return <code>true</code> if an action with the given name is contained,
+   *         <code>false</code> otherwise.
+   */
+  public boolean containsAction (@Nullable final String sName)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aMap.containsKey (sName);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Get the executor associated with the given action.
+   * 
+   * @param sName
+   *        The name of the action to check. May be <code>null</code>.
+   * @return <code>null</code> if no such action exists.
+   */
+  @Nullable
+  public IActionExecutor getActionExecutor (@Nullable final String sName)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aMap.get (sName);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
   @Override
   public String toString ()
   {
