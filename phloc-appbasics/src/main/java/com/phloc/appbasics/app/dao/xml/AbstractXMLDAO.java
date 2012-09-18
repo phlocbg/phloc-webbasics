@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.dao.impl.DefaultDAO;
 import com.phloc.appbasics.app.io.ConstantHasFilename;
 import com.phloc.appbasics.app.io.IHasFilename;
@@ -50,6 +51,13 @@ public abstract class AbstractXMLDAO extends DefaultDAO
   public AbstractXMLDAO (@Nonnull final IHasFilename aFilenameProvider, @Nonnegative final int nBackupCount)
   {
     super (aFilenameProvider, new DefaultDAODataProviderXML (), nBackupCount);
+  }
+
+  public AbstractXMLDAO (@Nonnull final IHasFilename aFilenameProvider,
+                         @Nonnegative final int nBackupCount,
+                         @Nonnull final IDAOIO aDAOIO)
+  {
+    super (aFilenameProvider, new DefaultDAODataProviderXML (), nBackupCount, aDAOIO);
   }
 
   protected final void setXMLDataProvider (@Nonnull final IXMLDAODataProvider aXMLDataProvider)
