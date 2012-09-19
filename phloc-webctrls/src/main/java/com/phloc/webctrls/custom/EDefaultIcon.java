@@ -17,7 +17,6 @@
  */
 package com.phloc.webctrls.custom;
 
-
 /**
  * Contains all default icon types
  * 

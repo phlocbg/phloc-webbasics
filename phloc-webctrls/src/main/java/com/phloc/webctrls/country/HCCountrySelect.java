@@ -54,16 +54,16 @@ public class HCCountrySelect extends HCExtSelect
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,
-                        @Nonnull final Locale aDisplayLocale,
-                        @Nonnull final Collection <Locale> aLocales)
+                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final Collection <Locale> aLocales)
   {
     this (aRF, aDisplayLocale, aLocales, null);
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,
-                        @Nonnull final Locale aDisplayLocale,
-                        @Nonnull final Collection <Locale> aLocales,
-                        @Nullable final IDisplayTextProvider <Locale> aDisplayTextProvider)
+                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final Collection <Locale> aLocales,
+                          @Nullable final IDisplayTextProvider <Locale> aDisplayTextProvider)
   {
     super (aRF);
 
@@ -85,9 +85,8 @@ public class HCCountrySelect extends HCExtSelect
     for (final Locale aCountry : ContainerHelper.getSorted (aLocales, aComp))
 
     {
-      final String sDisplayCountry = aDisplayTextProvider != null
-                                                                 ? aDisplayTextProvider.getDisplayText (aCountry,
-                                                                                                        aDisplayLocale)
+      final String sDisplayCountry = aDisplayTextProvider != null ? aDisplayTextProvider.getDisplayText (aCountry,
+                                                                                                         aDisplayLocale)
                                                                  : aCountry.getDisplayCountry (aDisplayLocale);
       final HCOption aOption = addOption (aCountry.getCountry (), sDisplayCountry);
       final EFamFamFlagIcon eIcon = FamFamFlags.getFlagFromLocale (aCountry);
