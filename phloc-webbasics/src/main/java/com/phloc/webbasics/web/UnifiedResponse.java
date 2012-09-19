@@ -914,6 +914,8 @@ public class UnifiedResponse
     {
       // We're having a fixed byte array of content
       final int nContentLength = m_aContent.length;
+
+      // Must be set before the content itself arrivs
       aHttpResponse.setContentLength (nContentLength);
 
       if (nContentLength > 0)
@@ -926,9 +928,9 @@ public class UnifiedResponse
           aOS.write (m_aContent);
           aOS.flush ();
           aOS.close ();
-        }
 
-        _applyLengthChecks (nContentLength);
+          _applyLengthChecks (nContentLength);
+        }
       }
       // Don't send 204, as this is most likely not handled correctly on the
       // client side
@@ -943,8 +945,8 @@ public class UnifiedResponse
         {
           s_aLogger.error ("Failed to open input stream from " + m_aContentISP);
 
-          // Handle it gracefully with a 204 and not with a 500
-          aHttpResponse.setStatus (HttpServletResponse.SC_NO_CONTENT);
+          // Handle it gracefully with a 404 and not with a 500
+          aHttpResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
         }
         else
         {
@@ -955,25 +957,27 @@ public class UnifiedResponse
             // -> copy it to the response
             final OutputStream aOS = aHttpResponse.getOutputStream ();
             final MutableLong aByteCount = new MutableLong ();
+
             if (StreamUtils.copyInputStreamToOutputStream (aContentIS, aOS, aByteCount).isSuccess ())
             {
               // Copying succeeded
               final long nBytesCopied = aByteCount.longValue ();
-              aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nBytesCopied));
-              if (nBytesCopied > 0)
-              {
-                // We had at least one content byte
-                aOS.flush ();
 
-                _applyLengthChecks (nBytesCopied);
-              }
-              // Else - simply empty content
-              aOS.close ();
+              // Don't apply additional Content-Length header after the resource
+              // was streamed!
+              if (false)
+                aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nBytesCopied));
+              _applyLengthChecks (nBytesCopied);
             }
             else
             {
               // Copying failed -> this is a 500
-              _error ("Copying from " + m_aContentISP + " failed after " + aByteCount.longValue () + " bytes!");
+              _error ("Copying from " +
+                      m_aContentISP +
+                      " failed after " +
+                      aByteCount.longValue () +
+                      " bytes! Response is committed: " +
+                      aHttpResponse.isCommitted ());
 
               if (!aHttpResponse.isCommitted ())
                 aHttpResponse.reset ();
