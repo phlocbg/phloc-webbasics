@@ -28,9 +28,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
@@ -49,21 +46,19 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 public final class ClassPathResourceForWEBINF implements IReadableResource
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ClassPathResourceForWEBINF.class);
-
   private final List <String> m_aPaths = new ArrayList <String> (2);
 
-  public ClassPathResourceForWEBINF (@Nonnull @Nonempty final String sPath)
+  public ClassPathResourceForWEBINF (@Nonnull @Nonempty final String sOriginalPath)
   {
-    if (StringHelper.hasNoText (sPath))
+    if (StringHelper.hasNoText (sOriginalPath))
       throw new IllegalArgumentException ("No path specified");
 
-    m_aPaths.add (sPath);
+    m_aPaths.add (sOriginalPath);
     // Required in case the passed path already contains "/WEB-INF"!
-    if (sPath.startsWith ("/WEB-INF/"))
-      m_aPaths.add (0, sPath.substring (8));
+    if (sOriginalPath.startsWith ("/WEB-INF/"))
+      m_aPaths.add (0, sOriginalPath.substring (8));
     else
-      m_aPaths.add ((StringHelper.startsWith (sPath, '/') ? "/WEB-INF" : "WEB-INF/") + sPath);
+      m_aPaths.add ((StringHelper.startsWith (sOriginalPath, '/') ? "/WEB-INF" : "WEB-INF/") + sOriginalPath);
   }
 
   @Nonnull
@@ -136,6 +131,7 @@ public final class ClassPathResourceForWEBINF implements IReadableResource
   public File getAsFile ()
   {
     File ret = null;
+    // First try from classpath
     for (final String sPath : m_aPaths)
     {
       ret = ClassPathResource.getAsFile (sPath);
@@ -144,7 +140,7 @@ public final class ClassPathResourceForWEBINF implements IReadableResource
     }
     if (ret == null)
     {
-      s_aLogger.warn ("Failed to convert " + m_aPaths + " to an URL - using direct File access");
+      // Not in classpath - use directly
       for (final String sPath : m_aPaths)
       {
         final File aFile = new File (sPath);
