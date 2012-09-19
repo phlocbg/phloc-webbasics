@@ -38,8 +38,7 @@ import com.phloc.webbasics.app.page.AbstractWebPage;
 
 public class PageShowChildren extends AbstractWebPage
 {
-  private static final class ShowChildren extends
-                                         DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
+  private static final class ShowChildren extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
     private final Locale m_aDisplayLocale;
     private final NonBlockingStack <HCUL> m_aStack;
@@ -69,7 +68,7 @@ public class PageShowChildren extends AbstractWebPage
     @Override
     public void onItemBeforeChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aTreeItem)
     {
-      final IMenuObject aMenuObj = aTreeItem.getData ();
+      final IMenuObject aMenuObj = aTreeItem == null ? null : aTreeItem.getData ();
       if (aMenuObj instanceof IMenuItem)
       {
         final IMenuItem aMenuItem = (IMenuItem) aMenuObj;
