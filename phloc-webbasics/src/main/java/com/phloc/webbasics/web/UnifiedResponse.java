@@ -646,8 +646,8 @@ public class UnifiedResponse
     final boolean bLastModified = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.LAST_MODIFIED);
     final boolean bETag = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.ETAG);
 
-    if (bExpires)
-      _info ("Expires found: " + m_aResponseHeaderMap.getHeaders (CHTTPHeader.EXPIRES));
+    if (bExpires && bIsHttp11)
+      _info ("Expires found in HTTP 1.1 response: " + m_aResponseHeaderMap.getHeaders (CHTTPHeader.EXPIRES));
 
     if (bExpires && bCacheControl)
       _warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
@@ -680,6 +680,34 @@ public class UnifiedResponse
           _warn ("Cache-Control cannot be private and have a s-maxage definition");
       }
     }
+  }
+
+  @Nonnull
+  @Nonempty
+  private static String _getAsStringMimeTypes (@Nonnull final Map <IMimeType, QValue> aMap)
+  {
+    final StringBuilder aSB = new StringBuilder ("{");
+    for (final Map.Entry <IMimeType, QValue> aEntry : ContainerHelper.getSortedByValue (aMap).entrySet ())
+    {
+      if (aSB.length () > 1)
+        aSB.append (", ");
+      aSB.append (aEntry.getKey ().getAsString ()).append ('=').append (aEntry.getValue ().getQuality ());
+    }
+    return aSB.append ("}").toString ();
+  }
+
+  @Nonnull
+  @Nonempty
+  private static String _getAsStringText (@Nonnull final Map <String, QValue> aMap)
+  {
+    final StringBuilder aSB = new StringBuilder ("{");
+    for (final Map.Entry <String, QValue> aEntry : ContainerHelper.getSortedByValue (aMap).entrySet ())
+    {
+      if (aSB.length () > 1)
+        aSB.append (", ");
+      aSB.append (aEntry.getKey ()).append ('=').append (aEntry.getValue ().getQuality ());
+    }
+    return aSB.append ("}").toString ();
   }
 
   public void applyToResponse (@Nonnull final HttpServletResponse aHttpResponse) throws IOException
@@ -781,22 +809,25 @@ public class UnifiedResponse
       // Check with request accept mime types
       final QValue aQuality = m_aAcceptMimeTypeList.getQValueOfMimeType (m_aMimeType);
       if (aQuality.isMinimumQuality ())
-        _warn ("MimeType '" +
-               sMimeType +
-               "' is not at all supported by the request. Allowed values are: " +
-               m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+      {
+        final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
+        _error ("MimeType '" +
+                sMimeType +
+                "' is not at all supported by the request. Allowed values are: " +
+                _getAsStringMimeTypes (aBetterValues));
+      }
       else
         if (aQuality.isLowValue ())
         {
           // Inform if the quality of the request is <= 50%!
           final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
           if (!aBetterValues.isEmpty ())
-            _info ("MimeType '" +
+            _warn ("MimeType '" +
                    sMimeType +
                    "' is not best supported by the request (" +
                    aQuality +
                    "). Better MimeTypes are: " +
-                   aBetterValues);
+                   _getAsStringMimeTypes (aBetterValues));
         }
 
       aHttpResponse.setContentType (sMimeType);
@@ -814,22 +845,25 @@ public class UnifiedResponse
       // Check with request charset
       final QValue aQuality = m_aAcceptCharsetList.getQValueOfCharset (sCharset);
       if (aQuality.isMinimumQuality ())
-        _warn ("Character encoding '" +
-               sCharset +
-               "' is not at all supported by the request. Allowed values are: " +
-               m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ()));
+      {
+        final Map <String, QValue> aBetterValues = m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ());
+        _error ("Character encoding '" +
+                sCharset +
+                "' is not at all supported by the request. Allowed values are: " +
+                _getAsStringText (aBetterValues));
+      }
       else
         if (aQuality.isLowValue ())
         {
           // Inform if the quality of the request is <= 50%!
           final Map <String, QValue> aBetterValues = m_aAcceptCharsetList.getAllQValuesGreaterThan (aQuality.getQuality ());
           if (!aBetterValues.isEmpty ())
-            _info ("Character encoding '" +
+            _warn ("Character encoding '" +
                    sCharset +
                    "' is not best supported by the request (" +
                    aQuality +
                    "). Better charsets are: " +
-                   aBetterValues);
+                   _getAsStringText (aBetterValues));
         }
 
       aHttpResponse.setCharacterEncoding (sCharset);
