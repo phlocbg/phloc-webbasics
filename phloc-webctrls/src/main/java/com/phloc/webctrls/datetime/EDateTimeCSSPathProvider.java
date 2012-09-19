@@ -30,7 +30,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EDateTimeCSSPathProvider implements ICSSPathProvider
 {
-  // Calendar
+  CALENDAR ("datetime/calendar.css"),
   CALENDAR_THEME ("datetime/theme/theme.css");
 
   private final String m_sPath;

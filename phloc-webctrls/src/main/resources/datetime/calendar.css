@@ -1,0 +1,11 @@
+.phloc-calendar-ctrl,
+.phloc-calendar-ctrl input
+{
+  width:100%;
+}
+
+.phloc-calendar-ctrl .phloc-calendar-ctrl-trigger
+{
+  padding-left:4px;
+}
+
