@@ -24,6 +24,8 @@ import com.phloc.commons.annotations.IsSPIInterface;
 @IsSPIInterface
 public interface IApplicationRequestListenerSPI extends Serializable
 {
+  // TODO add request scope parameters
+
   /**
    * Called at the very beginning of a request.
    */
