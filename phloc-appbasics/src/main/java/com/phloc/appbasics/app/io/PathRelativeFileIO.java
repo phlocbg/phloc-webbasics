@@ -49,7 +49,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public final class PathRelativeFileIO
 {
-  private final Logger s_aLogger = LoggerFactory.getLogger (PathRelativeFileIO.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PathRelativeFileIO.class);
 
   private final File m_aBasePath;
 
