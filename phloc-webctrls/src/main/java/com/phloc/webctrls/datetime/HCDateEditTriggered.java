@@ -38,6 +38,7 @@ import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webbasics.form.RequestFieldDate;
 
 /**
  * This class represents a wrapper around a date picker. It uses the external
@@ -56,6 +57,11 @@ public class HCDateEditTriggered extends AbstractWrappedHCNode
   private static final String ID_SUFFIX_TRIGGER = "-trigger";
 
   private final HCTable m_aContainer = new HCTable ();
+
+  public HCDateEditTriggered (final RequestFieldDate aRFD, final String sID, final boolean bShowTime)
+  {
+    this (aRFD, sID, bShowTime, aRFD.getDisplayLocale ());
+  }
 
   public HCDateEditTriggered (final IHCRequestField aRF,
                               final String sID,
@@ -82,7 +88,8 @@ public class HCDateEditTriggered extends AbstractWrappedHCNode
   @Nonnull
   private HCScript _createJSCode (final boolean bShowTime, final String sID, final Locale aDisplayLocale)
   {
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime
+                                                                             ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
                                                                              : PDTFormatPatterns.getDefaultPatternDate (aDisplayLocale))
                                                   .getJSCalendarFormatString ();
 

@@ -33,6 +33,7 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webbasics.form.RequestFieldDate;
 
 /**
  * This class represents a wrapper around a date picker. It uses the external
@@ -51,6 +52,11 @@ public class HCDateEdit extends AbstractWrappedHCNode
   private final HCEdit m_aEdit;
   private boolean m_bShowTime = false;
   private final Locale m_aLocale;
+
+  public HCDateEdit (final RequestFieldDate aRFD)
+  {
+    this (aRFD.getFieldName (), aRFD.getRequestValue (), aRFD.getDisplayLocale ());
+  }
 
   public HCDateEdit (final IHCRequestField aRF, final Locale aDisplayLocale)
   {
@@ -98,7 +104,8 @@ public class HCDateEdit extends AbstractWrappedHCNode
     if (m_aNL.getChildCount () == 2)
       m_aNL.removeChild (1);
 
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime
+                                                                               ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
                                                                                : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
                                                   .getJSCalendarFormatString ();
 
