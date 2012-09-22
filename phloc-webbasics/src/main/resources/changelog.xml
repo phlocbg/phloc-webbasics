@@ -25,6 +25,11 @@
       <text locale="en">Performance improvement by using phloc-commons 3.8.4</text>
     </change>
   </entry>
+  <entry date="2012-09-19" category="performance" action="update">
+    <change>
+      <text locale="en">Some consistency improvements in UnifiedResponse</text>
+    </change>
+  </entry>
   <release date="2012-09-18" version="1.9.4" />
   <entry date="2012-09-18" category="api" action="add">
     <change>
