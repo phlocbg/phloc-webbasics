@@ -143,6 +143,21 @@
       </plugin>
       <plugin>
         <groupId>com.phloc.maven</groupId>
+        <artifactId>closure-maven-plugin</artifactId>
+        <version>1.0.7</version><!--$NO-MVN-MAN-VER$-->
+        <executions>
+          <execution>
+            <goals>
+              <goal>compressjs</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <forceCreation>false</forceCreation>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
         <version>1.0.10</version><!--$NO-MVN-MAN-VER$-->
         <executions>
