@@ -249,3 +249,8 @@ div.calendar { position: relative; }
   height:18px;
   background: url("calendar-trigger.png") top left no-repeat;
 }
+
+.calendar td {
+  /* work around default line-height */
+  line-height: 14px !important;
+}

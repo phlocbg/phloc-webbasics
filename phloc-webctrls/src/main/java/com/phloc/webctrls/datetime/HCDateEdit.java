@@ -104,8 +104,7 @@ public class HCDateEdit extends AbstractWrappedHCNode
     if (m_aNL.getChildCount () == 2)
       m_aNL.removeChild (1);
 
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime
-                                                                               ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
                                                                                : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
                                                   .getJSCalendarFormatString ();
 
@@ -132,6 +131,7 @@ public class HCDateEdit extends AbstractWrappedHCNode
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimeJSPathProvider.CALENDAR);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimeJSPathProvider.CALENDAR_LANGUAGE.getInstance (aContentLocale.getLanguage ()));
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimeJSPathProvider.CALENDAR_SETUP);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDateTimeCSSPathProvider.CALENDAR);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDateTimeCSSPathProvider.CALENDAR_THEME);
   }
 }
