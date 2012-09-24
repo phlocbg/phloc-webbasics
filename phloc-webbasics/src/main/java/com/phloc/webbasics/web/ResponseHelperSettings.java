@@ -58,7 +58,7 @@ public final class ResponseHelperSettings
   // Expires in at least 2 days (which is the minimum to be accepted for
   // real caching in Yahoo Guidelines)
   // Because of steady changes, use 1 day
-  public static final int DEFAULT_EXPIRATION_SECONDS = 2 * CGlobal.SECONDS_PER_DAY;
+  public static final int DEFAULT_EXPIRATION_SECONDS = 7 * CGlobal.SECONDS_PER_DAY;
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static int s_nExpirationSeconds = DEFAULT_EXPIRATION_SECONDS;
