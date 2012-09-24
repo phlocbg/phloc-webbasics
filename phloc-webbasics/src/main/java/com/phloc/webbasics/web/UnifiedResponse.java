@@ -980,9 +980,7 @@ public class UnifiedResponse
                       aHttpResponse.isCommitted ());
 
               if (!aHttpResponse.isCommitted ())
-                aHttpResponse.reset ();
-
-              aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
           }
         }
