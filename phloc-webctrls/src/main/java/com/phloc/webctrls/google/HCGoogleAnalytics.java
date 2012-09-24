@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.js.builder.JSAnonymousFunction;
@@ -83,7 +82,7 @@ public class HCGoogleAnalytics extends AbstractWrappedHCNode
   }
 
   @Override
-  protected IHCNode getContainedHCNode ()
+  protected HCScript getContainedHCNode ()
   {
     return m_aScript;
   }
