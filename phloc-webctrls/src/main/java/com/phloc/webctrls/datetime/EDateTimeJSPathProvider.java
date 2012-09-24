@@ -26,17 +26,19 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EDateTimeJSPathProvider implements IJSPathProviderWithParam
 {
-  CALENDAR ("datetime/calendar.js"),
-  CALENDAR_LANGUAGE ("datetime/lang/calendar-{0}.js"),
-  CALENDAR_SETUP ("datetime/calendar-setup.js");
+  CALENDAR ("datetime/calendar.js", true),
+  CALENDAR_LANGUAGE ("datetime/lang/calendar-{0}.js", false),
+  CALENDAR_SETUP ("datetime/calendar-setup.js", true);
 
   private final String m_sPath;
+  private final boolean m_bCanBeBundled;
 
-  private EDateTimeJSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EDateTimeJSPathProvider (@Nonnull @Nonempty final String sPath, final boolean bCanBeBundled)
   {
     if (!JSFilenameHelper.isJSFilename (sPath))
       throw new IllegalArgumentException ("path");
     m_sPath = sPath;
+    m_bCanBeBundled = bCanBeBundled;
   }
 
   @Nonnull
@@ -44,6 +46,11 @@ public enum EDateTimeJSPathProvider implements IJSPathProviderWithParam
   public String getJSItemPath (final boolean bRegular)
   {
     return bRegular ? m_sPath : JSFilenameHelper.getMinifiedJSPath (m_sPath);
+  }
+
+  public boolean canBeBundled ()
+  {
+    return m_bCanBeBundled;
   }
 
   @Nonnull
@@ -56,6 +63,11 @@ public enum EDateTimeJSPathProvider implements IJSPathProviderWithParam
       public String getJSItemPath (final boolean bRegular)
       {
         return EDateTimeJSPathProvider.this.getJSItemPath (bRegular).replace ("{0}", sLanguage);
+      }
+
+      public boolean canBeBundled ()
+      {
+        return EDateTimeJSPathProvider.this.canBeBundled ();
       }
     };
   }
