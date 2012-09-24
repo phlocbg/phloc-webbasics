@@ -1,7 +1,8 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>9/20/12</td><td>update</td><td>performance</td><td></td><td>Performance improvement by using [http://code.google.com/p/phloc-commons phloc-commons] 3.8.4</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>9/24/12</td><td colspan="4">_Release *1.9.5*_</td></tr>
+<tr><td>9/20/12</td><td>update</td><td>performance</td><td></td><td>Performance improvement by using [http://code.google.com/p/phloc-commons phloc-commons] 3.8.4</td></tr>
 <tr><td>9/19/12</td><td>update</td><td>performance</td><td></td><td>Some consistency improvements in UnifiedResponse</td></tr>
 <tr border="1"><td>9/18/12</td><td colspan="4">_Release *1.9.4*_</td></tr>
 <tr><td>9/18/12</td><td>add</td><td>api</td><td></td><td>Added new classes around the unified response handling: the response itself, an abstract servlet and an abstract filter</td></tr>
