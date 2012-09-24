@@ -106,16 +106,20 @@ div.calendar { position: relative; }
 .calendar tbody .rowhilite td,
 .calendar tbody .rowhilite td.wn {
   background-color:#f7f7f7; 
-  
 }
 
-.calendar tbody td.today { font-weight: bold; /* background: url("today-bg.gif") no-repeat 70% 50%; */ }
+.calendar tbody td.today { 
+  font-weight: bold; 
+  /* background: url("today-bg.gif") no-repeat 70% 50%; */ 
+}
 
 .calendar tbody td.hilite { /* Hovered cells <TD> */
   background:transparent;
   background-color: #d5e3f0;
-  padding: 2px 4px 2px 2px;
+  /*
+  padding: 1px 3px 1px 1px;
   border:1px solid  #bdcfe1;
+  */
 }
 
 .calendar tbody td.active { /* Active (pressed) cells <TD> */
@@ -128,8 +132,10 @@ div.calendar { position: relative; }
 
 .calendar tbody td.selected { /* Cell showing selected date */
   font-weight: bold;
+  /*
   border: 1px solid #b6cce4;
   padding: 1px 3px 1px 1px;
+  */
   background-color: #b6cce4;
   color:white;
 }
@@ -252,5 +258,5 @@ div.calendar { position: relative; }
 
 .calendar td {
   /* work around default line-height */
-  line-height: 14px !important;
+  line-height: 14px;
 }
