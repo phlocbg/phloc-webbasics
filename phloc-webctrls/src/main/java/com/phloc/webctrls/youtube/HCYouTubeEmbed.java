@@ -17,15 +17,16 @@
  */
 package com.phloc.webctrls.youtube;
 
+import javax.annotation.Nonnull;
+
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCEmbed;
 import com.phloc.html.hc.html.HCObject;
 import com.phloc.html.hc.html.HCParam;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
 /**
  * Embeds YouTube videos!<br>
@@ -33,47 +34,34 @@ import com.phloc.html.hc.impl.AbstractWrappedHCNode;
  * 
  * @author philip
  */
-public class HCYouTubeEmbed extends AbstractWrappedHCNode
+public class HCYouTubeEmbed extends HCObject
 {
   private static final String PREFIX = "http://www.youtube.com/v/";
-  private final ISimpleURL m_aBaseURL;
-  private final HCObject m_aObject;
-  private final HCParam m_aParamMovie;
-  private final HCParam m_aParamAllowFullScreen;
-  private final HCEmbed m_aEmbed;
-  private final SMap m_aURLParams = new SMap ();
 
-  public HCYouTubeEmbed (final int nWidth, final int nHeight, final String sVideoID)
+  public HCYouTubeEmbed (final int nWidth,
+                         final int nHeight,
+                         @Nonnull @Nonempty final String sVideoID,
+                         final boolean bAllowFullScreen)
   {
-    m_aBaseURL = new SimpleURL (PREFIX + sVideoID);
-    m_aObject = new HCObject ();
-    m_aObject.setWidth (nWidth);
-    m_aObject.setHeight (nHeight);
-    m_aParamMovie = m_aObject.addAndReturnChild (new HCParam ("movie"));
-    m_aParamAllowFullScreen = m_aObject.addAndReturnChild (new HCParam ("allowFullScreen"));
-    m_aObject.addChild (new HCParam ("allowscriptaccess").setValue ("always"));
-    m_aEmbed = m_aObject.addAndReturnChild (new HCEmbed ());
-    m_aEmbed.setType (CMimeType.APPLICATION_SHOCKWAVE_FLASH);
-    m_aEmbed.setCustomAttr ("allowscriptaccess", "always");
-    m_aEmbed.setWidth (nWidth);
-    m_aEmbed.setHeight (nHeight);
-    setShowFullScreen (true);
-  }
+    final ISimpleURL aBaseURL = new SimpleURL (PREFIX + sVideoID);
+    setWidth (nWidth);
+    setHeight (nHeight);
+    final HCParam aParamMovie = addAndReturnChild (new HCParam ("movie"));
+    final HCParam aParamAllowFullScreen = addAndReturnChild (new HCParam ("allowFullScreen"));
+    aParamAllowFullScreen.setValue (Boolean.toString (bAllowFullScreen));
+    addChild (new HCParam ("allowscriptaccess").setValue ("always"));
+    final HCEmbed aEmbed = addAndReturnChild (new HCEmbed ());
+    aEmbed.setType (CMimeType.APPLICATION_SHOCKWAVE_FLASH);
+    aEmbed.setCustomAttr ("allowscriptaccess", "always");
+    aEmbed.setWidth (nWidth);
+    aEmbed.setHeight (nHeight);
+    aEmbed.setCustomAttr ("allowfullscreen", Boolean.toString (bAllowFullScreen));
 
-  public void setShowFullScreen (final boolean bShow)
-  {
-    m_aURLParams.add ("fs", bShow ? "1" : "0");
-    m_aParamAllowFullScreen.setValue (Boolean.toString (bShow));
-    m_aEmbed.setCustomAttr ("allowfullscreen", Boolean.toString (bShow));
-  }
-
-  @Override
-  protected IHCNode getContainedHCNode ()
-  {
     // Build the correct URL based on the passed settings
-    final ISimpleURL aURL = new SimpleURL (m_aBaseURL).addAll (m_aURLParams).add ("hl", "en_US");
-    m_aParamMovie.setValue (aURL.getAsString ());
-    m_aEmbed.setSrc (aURL);
-    return m_aObject;
+    final SMap aURLParams = new SMap ("hl", "en_US");
+    aURLParams.add ("fs", bAllowFullScreen ? "1" : "0");
+    final ISimpleURL aURL = new SimpleURL (aBaseURL).addAll (aURLParams);
+    aParamMovie.setValue (aURL.getAsString ());
+    aEmbed.setSrc (aURL);
   }
 }

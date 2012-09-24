@@ -17,24 +17,14 @@
  */
 package com.phloc.webctrls.bootstrap;
 
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 
-public class BootstrapCaret extends AbstractWrappedHCNode
+public class BootstrapCaret extends HCNodeList
 {
-  private final IHCNode m_aContent;
-
   public BootstrapCaret ()
   {
-    m_aContent = new HCNodeList ().addChildren (new HCTextNode (" "), new HCSpan ().addClass (CBootstrapCSS.CARET));
-  }
-
-  @Override
-  protected IHCNode getContainedHCNode ()
-  {
-    return m_aContent;
+    addChildren (new HCTextNode (" "), new HCSpan ().addClass (CBootstrapCSS.CARET));
   }
 }

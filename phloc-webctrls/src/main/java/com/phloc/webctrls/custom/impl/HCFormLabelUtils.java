@@ -18,28 +18,26 @@
 package com.phloc.webctrls.custom.impl;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.htmlext.HCUtils;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.webctrls.custom.ELabelType;
-import com.phloc.webctrls.custom.IFormLabel;
 
-public abstract class AbstractHCFormLabel extends AbstractWrappedHCNode implements IFormLabel
+public final class HCFormLabelUtils
 {
   public static final ICSSClassProvider CSS_CLASS_FORM_LABEL = DefaultCSSClassProvider.create ("phloc-form-label");
   public static final String SIGN_MANDATORY = "*";
   public static final String SIGN_ALTERNATIVE = "°";
   public static final String LABEL_END = ":";
 
-  private final ELabelType m_eType;
+  private HCFormLabelUtils ()
+  {}
 
   @Nonnull
-  protected static final String _getSuffix (@Nonnull final ELabelType eType)
+  private static String _getSuffix (@Nonnull final ELabelType eType)
   {
     if (eType.equals (ELabelType.MANDATORY))
       return SIGN_MANDATORY + LABEL_END;
@@ -49,8 +47,13 @@ public abstract class AbstractHCFormLabel extends AbstractWrappedHCNode implemen
   }
 
   @Nonnull
-  protected static final String _getTextWithState (@Nonnull final String sText, @Nonnull final ELabelType eType)
+  public static String getTextWithState (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
+    if (sText == null)
+      throw new NullPointerException ("text");
+    if (eType == null)
+      throw new NullPointerException ("type");
+
     // Trim optional trailing colon
     String sPlainText = StringHelper.trimEnd (sText.trim (), LABEL_END);
     // Append suffix only, if at least some text is present
@@ -59,27 +62,18 @@ public abstract class AbstractHCFormLabel extends AbstractWrappedHCNode implemen
     return sPlainText;
   }
 
-  @Nullable
-  protected static final IHCElementWithChildren <?> _getNodeWithState (@Nonnull final IHCElementWithChildren <?> aNode,
-                                                                       @Nonnull final ELabelType eType)
+  @Nonnull
+  public static IHCElementWithChildren <?> getNodeWithState (@Nonnull final IHCElementWithChildren <?> aNode,
+                                                             @Nonnull final ELabelType eType)
   {
+    if (aNode == null)
+      throw new NullPointerException ("node");
+    if (eType == null)
+      throw new NullPointerException ("type");
+
     // Only append the suffix, if at least one text child is present
     if (HCUtils.recursivelyContainsAtLeastOneTextNode (aNode))
       aNode.addChild (_getSuffix (eType));
     return aNode;
-  }
-
-  protected AbstractHCFormLabel (@Nonnull final ELabelType eType)
-  {
-    if (eType == null)
-      throw new NullPointerException ("state");
-
-    m_eType = eType;
-  }
-
-  @Nonnull
-  public final ELabelType getType ()
-  {
-    return m_eType;
   }
 }

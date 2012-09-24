@@ -182,9 +182,9 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareOnceBeforeCreateElement (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareOnce (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    super.prepareOnceBeforeCreateElement (aConversionSettings);
+    super.prepareOnce (aConversionSettings);
     addClass (m_eType);
 
     String sActiveTabID = m_sActiveTabID;

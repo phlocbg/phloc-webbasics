@@ -20,7 +20,6 @@ package com.phloc.webctrls.bootstrap;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
-import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCEM;
@@ -28,14 +27,15 @@ import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.ELabelType;
-import com.phloc.webctrls.custom.impl.AbstractHCFormLabel;
+import com.phloc.webctrls.custom.IFormLabel;
+import com.phloc.webctrls.custom.impl.HCFormLabelUtils;
 
-public class BootstrapFormLabel extends AbstractHCFormLabel
+public class BootstrapFormLabel extends HCLabel implements IFormLabel
 {
-  private final IHCElement <?> m_aNode;
+  private final ELabelType m_eType;
 
   @Nonnull
-  private static IHCElement <?> _modifyNode (@Nonnull final IHCNode aNode, @Nonnull final ELabelType eType)
+  private static IHCNode _modifyNode (@Nonnull final IHCNode aNode, @Nonnull final ELabelType eType)
   {
     IHCNode ret;
     if (eType.equals (ELabelType.MANDATORY))
@@ -45,32 +45,27 @@ public class BootstrapFormLabel extends AbstractHCFormLabel
         ret = new HCEM ().addChild (aNode);
       else
         ret = aNode;
-    return new HCLabel ().addChild (ret).addClass (CSS_CLASS_FORM_LABEL);
+    return ret;
   }
 
   protected BootstrapFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
-    super (eType);
-    if (sText == null)
-      throw new NullPointerException ("text");
-
-    m_aNode = _modifyNode (new HCTextNode (_getTextWithState (sText, eType)), eType);
+    addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL);
+    addChild (_modifyNode (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType)), eType));
+    m_eType = eType;
   }
 
   protected BootstrapFormLabel (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)
   {
-    super (eType);
-    if (aNode == null)
-      throw new NullPointerException ("node");
-
-    m_aNode = _modifyNode (_getNodeWithState (aNode, eType), eType);
+    addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL);
+    addChild (_modifyNode (HCFormLabelUtils.getNodeWithState (aNode, eType), eType));
+    m_eType = eType;
   }
 
   @Nonnull
-  @Override
-  protected IHCNode getContainedHCNode ()
+  public ELabelType getType ()
   {
-    return m_aNode;
+    return m_eType;
   }
 
   @Nonnull

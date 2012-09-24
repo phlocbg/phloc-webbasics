@@ -28,11 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
-public class BootstrapRow extends AbstractWrappedHCNode
+public class BootstrapRow implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_FLUID = true;
   public static final int BOOTSTRAP_COLUMN_COUNT = 12;
@@ -64,7 +63,6 @@ public class BootstrapRow extends AbstractWrappedHCNode
   private static final Logger s_aLogger = LoggerFactory.getLogger (BootstrapRow.class);
 
   private final boolean m_bFluid;
-  private HCDiv m_aRow;
   private final List <SpannedNode> m_aNodes = new ArrayList <SpannedNode> ();
 
   public BootstrapRow ()
@@ -92,15 +90,15 @@ public class BootstrapRow extends AbstractWrappedHCNode
     return this;
   }
 
-  @Override
-  protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
+  @Nonnull
+  public IHCNode build ()
   {
-    m_aRow = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.ROW_FLUID : CBootstrapCSS.ROW);
+    final HCDiv aRow = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.ROW_FLUID : CBootstrapCSS.ROW);
 
     int nSpanCount = 0;
     for (final SpannedNode aSpannedNode : m_aNodes)
     {
-      m_aRow.addChild (aSpannedNode.getAsSpannedNode ());
+      aRow.addChild (aSpannedNode.getAsSpannedNode ());
       nSpanCount += aSpannedNode.getSpanCount ();
     }
     if (nSpanCount > BOOTSTRAP_COLUMN_COUNT)
@@ -109,11 +107,6 @@ public class BootstrapRow extends AbstractWrappedHCNode
                       " instead of " +
                       nSpanCount +
                       " for a consistent layout!");
-  }
-
-  @Override
-  protected IHCNode getContainedHCNode ()
-  {
-    return m_aRow;
+    return aRow;
   }
 }

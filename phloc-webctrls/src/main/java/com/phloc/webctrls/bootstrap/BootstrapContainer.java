@@ -21,18 +21,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCHR;
 import com.phloc.html.hc.html5.HCFooter;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 
-public class BootstrapContainer extends AbstractWrappedHCNode
+public class BootstrapContainer implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_FLUID = true;
 
   private final boolean m_bFluid;
-  private HCDiv m_aContainer;
   private IHCNode m_aContent;
   private IHCNode m_aFooter;
 
@@ -60,19 +58,14 @@ public class BootstrapContainer extends AbstractWrappedHCNode
     return this;
   }
 
-  @Override
-  protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
+  @Nonnull
+  public IHCNode build ()
   {
-    m_aContainer = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.CONTAINER_FLUID : CBootstrapCSS.CONTAINER);
+    final HCDiv aContainer = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.CONTAINER_FLUID : CBootstrapCSS.CONTAINER);
     if (m_aContent != null)
-      m_aContainer.addChild (m_aContent);
+      aContainer.addChild (m_aContent);
     if (m_aFooter != null)
-      m_aContainer.addChildren (new HCHR (), new HCFooter ().addChild (m_aFooter));
-  }
-
-  @Override
-  protected IHCNode getContainedHCNode ()
-  {
-    return m_aContainer;
+      aContainer.addChildren (new HCHR (), new HCFooter ().addChild (m_aFooter));
+    return aContainer;
   }
 }

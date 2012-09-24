@@ -23,11 +23,10 @@ import javax.annotation.Nonnull;
 
 import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.IHCRequestField;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCScript;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
@@ -43,22 +42,21 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * 
  * @author philip
  */
-public class HCDateEdit extends AbstractWrappedHCNode
+public class HCDateEdit implements IHCNodeBuilder
 {
   // dd.mm.yyyy
   public static final int DATE_DEFAULT_MAX_LENGTH = 2 + 1 + 2 + 1 + 4;
 
-  private final HCNodeList m_aNL = new HCNodeList ();
   private final HCEdit m_aEdit;
   private boolean m_bShowTime = false;
   private final Locale m_aLocale;
 
-  public HCDateEdit (final RequestFieldDate aRFD)
+  public HCDateEdit (@Nonnull final RequestFieldDate aRFD)
   {
     this (aRFD.getFieldName (), aRFD.getRequestValue (), aRFD.getDisplayLocale ());
   }
 
-  public HCDateEdit (final IHCRequestField aRF, final Locale aDisplayLocale)
+  public HCDateEdit (@Nonnull final IHCRequestField aRF, @Nonnull final Locale aDisplayLocale)
   {
     this (aRF.getFieldName (), aRF.getRequestValue (), aDisplayLocale);
   }
@@ -70,7 +68,7 @@ public class HCDateEdit extends AbstractWrappedHCNode
 
   public HCDateEdit (final String sName, final String sValue, final String sID, final Locale aDisplayLocale)
   {
-    m_aEdit = m_aNL.addAndReturnChild (new HCEdit (sName, sValue));
+    m_aEdit = new HCEdit (sName, sValue);
     m_aEdit.setID (sID);
     m_aLocale = aDisplayLocale;
     registerExternalResources (aDisplayLocale);
@@ -96,34 +94,25 @@ public class HCDateEdit extends AbstractWrappedHCNode
     return this;
   }
 
-  @Override
-  protected void prepareBeforeGetAsNode (@Nonnull final IHCConversionSettings aConversionSettings)
+  @Nonnull
+  public IHCNode build ()
   {
-    // In case the node was already generated, ensure the script tag is
-    // generated again so that eventually new settings are applied
-    if (m_aNL.getChildCount () == 2)
-      m_aNL.removeChild (1);
-
     final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
                                                                                : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
                                                   .getJSCalendarFormatString ();
 
-    m_aNL.addChild (new HCScript (JSExpr.ref ("Calendar")
-                                        .invoke ("setup")
-                                        .arg (new JSAssocArray ().add ("inputField", m_aEdit.getID ())
-                                                                 .add ("ifFormat", sFormatString)
-                                                                 .add ("daFormat", sFormatString)
-                                                                 .add ("eventName", "focus")
-                                                                 .add ("cache", true)
-                                                                 .add ("step", 1)
-                                                                 .add ("showsTime", m_bShowTime))));
-  }
-
-  @Override
-  @Nonnull
-  protected IHCNode getContainedHCNode ()
-  {
-    return m_aNL;
+    final HCNodeList ret = new HCNodeList ();
+    ret.addChild (m_aEdit);
+    ret.addChild (new HCScript (JSExpr.ref ("Calendar")
+                                      .invoke ("setup")
+                                      .arg (new JSAssocArray ().add ("inputField", m_aEdit.getID ())
+                                                               .add ("ifFormat", sFormatString)
+                                                               .add ("daFormat", sFormatString)
+                                                               .add ("eventName", "focus")
+                                                               .add ("cache", true)
+                                                               .add ("step", 1)
+                                                               .add ("showsTime", m_bShowTime))));
+    return ret;
   }
 
   public static void registerExternalResources (final Locale aContentLocale)

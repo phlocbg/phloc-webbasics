@@ -25,7 +25,6 @@ import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCEdit;
@@ -33,7 +32,6 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
@@ -49,47 +47,17 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * 
  * @author philip
  */
-public class HCDateEditTriggered extends AbstractWrappedHCNode
+public class HCDateEditTriggered extends HCTable
 {
   private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL = DefaultCSSClassProvider.create ("phloc-calendar-ctrl");
   private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER = DefaultCSSClassProvider.create ("phloc-calendar-ctrl-trigger");
   private static final ICSSClassProvider CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER_OBJ = DefaultCSSClassProvider.create ("phloc-calendar-ctrl-trigger-obj");
   private static final String ID_SUFFIX_TRIGGER = "-trigger";
 
-  private final HCTable m_aContainer = new HCTable ();
-
-  public HCDateEditTriggered (final RequestFieldDate aRFD, final String sID, final boolean bShowTime)
-  {
-    this (aRFD, sID, bShowTime, aRFD.getDisplayLocale ());
-  }
-
-  public HCDateEditTriggered (final IHCRequestField aRF,
-                              final String sID,
-                              final boolean bShowTime,
-                              final Locale aDisplayLocale)
-  {
-    m_aContainer.addColumns (HCCol.star (), new HCCol (20));
-    m_aContainer.setCellPadding (0);
-    m_aContainer.setCellSpacing (0);
-    final HCRow aRow = m_aContainer.addBodyRow ();
-    m_aContainer.addClass (CSS_CLASS_PDAF_CALENDAR_CTRL);
-    aRow.addCell (new HCEdit (aRF).setID (sID));
-
-    final IHCElement <?> aImg = HCSpan.create (HCEntityNode.newNBSP ());
-    aImg.setTitle (EWebBasicsText.OPEN_CALENDAR.getDisplayText (aDisplayLocale));
-    aImg.setID (sID + ID_SUFFIX_TRIGGER);
-    aImg.addClass (CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER_OBJ);
-
-    aRow.addAndReturnCell (aImg, _createJSCode (bShowTime, sID, aDisplayLocale))
-        .addClass (CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER);
-    HCDateEdit.registerExternalResources (aDisplayLocale);
-  }
-
   @Nonnull
-  private HCScript _createJSCode (final boolean bShowTime, final String sID, final Locale aDisplayLocale)
+  private static HCScript _createJSCode (final boolean bShowTime, final String sID, final Locale aDisplayLocale)
   {
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime
-                                                                             ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
                                                                              : PDTFormatPatterns.getDefaultPatternDate (aDisplayLocale))
                                                   .getJSCalendarFormatString ();
 
@@ -105,15 +73,30 @@ public class HCDateEditTriggered extends AbstractWrappedHCNode
                                                         .add ("align", "BL")));
   }
 
-  @Nonnull
-  public HCTable getContainer ()
+  public HCDateEditTriggered (final RequestFieldDate aRFD, final String sID, final boolean bShowTime)
   {
-    return m_aContainer;
+    this (aRFD, sID, bShowTime, aRFD.getDisplayLocale ());
   }
 
-  @Override
-  protected IHCNode getContainedHCNode ()
+  public HCDateEditTriggered (final IHCRequestField aRF,
+                              final String sID,
+                              final boolean bShowTime,
+                              final Locale aDisplayLocale)
   {
-    return m_aContainer;
+    addColumns (HCCol.star (), new HCCol (20));
+    setCellPadding (0);
+    setCellSpacing (0);
+    final HCRow aRow = addBodyRow ();
+    addClass (CSS_CLASS_PDAF_CALENDAR_CTRL);
+    aRow.addCell (new HCEdit (aRF).setID (sID));
+
+    final IHCElement <?> aImg = HCSpan.create (HCEntityNode.newNBSP ());
+    aImg.setTitle (EWebBasicsText.OPEN_CALENDAR.getDisplayText (aDisplayLocale));
+    aImg.setID (sID + ID_SUFFIX_TRIGGER);
+    aImg.addClass (CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER_OBJ);
+
+    aRow.addAndReturnCell (aImg, _createJSCode (bShowTime, sID, aDisplayLocale))
+        .addClass (CSS_CLASS_PDAF_CALENDAR_CTRL_TRIGGER);
+    HCDateEdit.registerExternalResources (aDisplayLocale);
   }
 }

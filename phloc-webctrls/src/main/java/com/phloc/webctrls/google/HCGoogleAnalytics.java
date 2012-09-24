@@ -24,7 +24,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.html.HCScript;
-import com.phloc.html.hc.impl.AbstractWrappedHCNode;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSExpr;
@@ -39,22 +38,21 @@ import com.phloc.html.js.builder.html.JSHtml;
  * 
  * @author philip
  */
-public class HCGoogleAnalytics extends AbstractWrappedHCNode
+public class HCGoogleAnalytics extends HCScript
 {
   private final String m_sAccount;
-  private final HCScript m_aScript;
 
-  public HCGoogleAnalytics (@Nonnull @Nonempty final String sAccount, final boolean bAnonymizeIP)
+  @Nonnull
+  private static JSPackage _createJSCode (final String sAccount, final boolean bAnonymizeIP)
   {
     if (StringHelper.hasNoText (sAccount))
       throw new IllegalArgumentException ("account is empty");
-    m_sAccount = sAccount;
 
     // Anonymize IP; see
     // http://code.google.com/intl/de-DE/apis/analytics/docs/gaJS/gaJSApi_gat.html
     final JSPackage aPkg = new JSPackage ();
     final JSVar gaq = aPkg.var ("_gaq", JSExpr.ref ("_gaq").cor (new JSArray ()));
-    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_setAccount").add (m_sAccount)));
+    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_setAccount").add (sAccount)));
     if (bAnonymizeIP)
       aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_gat._anonymizeIp")));
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageview")));
@@ -71,7 +69,13 @@ public class HCGoogleAnalytics extends AbstractWrappedHCNode
     final JSVar s = aAnonFunction.body ().decl ("s", JSHtml.documentGetElementsByTagName ("script").component (0));
     aAnonFunction.body ().add (s.ref ("parentNode").invoke ("insertBefore").arg (ga).arg (s));
     aPkg.invoke (aAnonFunction);
-    m_aScript = new HCScript (aPkg);
+    return aPkg;
+  }
+
+  public HCGoogleAnalytics (@Nonnull @Nonempty final String sAccount, final boolean bAnonymizeIP)
+  {
+    super (_createJSCode (sAccount, bAnonymizeIP));
+    m_sAccount = sAccount;
   }
 
   @Nonnull
@@ -79,12 +83,6 @@ public class HCGoogleAnalytics extends AbstractWrappedHCNode
   public String getAccount ()
   {
     return m_sAccount;
-  }
-
-  @Override
-  protected HCScript getContainedHCNode ()
-  {
-    return m_aScript;
   }
 
   /**
