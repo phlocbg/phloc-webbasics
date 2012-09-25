@@ -374,10 +374,10 @@ public class UnifiedResponse
   {
     if (StringHelper.hasNoText (sETag))
       throw new IllegalArgumentException ("An empty ETag is not allowed!");
-    if (!sETag.startsWith ("\""))
-      throw new IllegalArgumentException ("Etag must start with a double quote character: " + sETag);
+    if (!sETag.startsWith ("\"") && !sETag.startsWith ("W/\""))
+      throw new IllegalArgumentException ("Etag must start with a '\"' character or with 'W/\"': " + sETag);
     if (!sETag.endsWith ("\""))
-      throw new IllegalArgumentException ("Etag must end with a double quote character: " + sETag);
+      throw new IllegalArgumentException ("Etag must end with a '\"' character: " + sETag);
     if (m_eHTTPMethod != EHTTPMethod.GET)
       _warn ("Setting an ETag on a non-GET request may have no impact!");
 
@@ -387,7 +387,7 @@ public class UnifiedResponse
 
   /**
    * Set an ETag for the response if this is an HTTP/1.1 response. HTTP/1.0 does
-   * not supprt ETags. The ETag must be a quoted value (being surrounded by
+   * not support ETags. The ETag must be a quoted value (being surrounded by
    * double quotes).
    * 
    * @param sETag

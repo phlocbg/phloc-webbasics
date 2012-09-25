@@ -33,6 +33,7 @@ import com.phloc.commons.string.StringHelper;
  * @author philip
  */
 @Immutable
+@Deprecated
 public final class ETagHandler
 {
   private ETagHandler ()
