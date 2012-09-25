@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -34,22 +35,33 @@ import com.phloc.datetime.format.PDTToString;
  */
 public final class RequestFieldDate extends RequestField
 {
-  private final LocalDate m_aDefaultValue;
   private final Locale m_aDisplayLocale;
+
+  private RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
+                            @Nullable final String sDefaultValue,
+                            @Nonnull final Locale aDisplayLocale)
+  {
+    super (sFieldName, sDefaultValue);
+    m_aDisplayLocale = aDisplayLocale;
+  }
+
+  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName, @Nonnull final Locale aDisplayLocale)
+  {
+    this (sFieldName, (String) null, aDisplayLocale);
+  }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final LocalDate aDefaultValue,
                            @Nonnull final Locale aDisplayLocale)
   {
-    super (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale));
-    m_aDefaultValue = aDefaultValue;
-    m_aDisplayLocale = aDisplayLocale;
+    this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
   }
 
-  @Nonnull
-  public LocalDate getDateDefaultValue ()
+  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
+                           @Nullable final DateTime aDefaultValue,
+                           @Nonnull final Locale aDisplayLocale)
   {
-    return m_aDefaultValue;
+    this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
   }
 
   @Nonnull
