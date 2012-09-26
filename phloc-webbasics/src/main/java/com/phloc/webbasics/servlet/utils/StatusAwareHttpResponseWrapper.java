@@ -20,7 +20,6 @@ package com.phloc.webbasics.servlet.utils;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.http.HttpServletResponse;
@@ -106,7 +105,7 @@ public class StatusAwareHttpResponseWrapper extends HttpServletResponseWrapper
   }
 
   @Override
-  public void setContentType (@Nullable final String sContentType)
+  public void setContentType (@Nonnull final String sContentType)
   {
     super.setContentType (sContentType);
     m_aHeaderMap.setContentType (sContentType);
