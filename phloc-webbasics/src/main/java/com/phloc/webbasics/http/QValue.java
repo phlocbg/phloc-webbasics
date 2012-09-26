@@ -39,11 +39,11 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class QValue implements Comparable <QValue>, Serializable
 {
   public static final double MIN_QUALITY = 0;
-  public static final QValue MIN_QVALUE = new QValue (MIN_QUALITY);
   public static final double MAX_QUALITY = 1;
-  public static final QValue MAX_QVALUE = new QValue (MAX_QUALITY);
   public static final double HALF_QUALITY = 0.5;
   private static final Logger s_aLogger = LoggerFactory.getLogger (QValue.class);
+  public static final QValue MIN_QVALUE = new QValue (MIN_QUALITY);
+  public static final QValue MAX_QVALUE = new QValue (MAX_QUALITY);
 
   private final double m_dQuality;
 
