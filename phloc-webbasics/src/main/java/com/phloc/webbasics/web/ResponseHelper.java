@@ -31,7 +31,6 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -47,9 +46,13 @@ import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.http.EHTTPVersion;
 
 /**
- * Misc. helper methods on {@link HttpServletResponse} objects.
+ * Misc. helper methods on {@link HttpServletResponse} objects.<br>
+ * Most method got deprecated by the activation of the {@link UnifiedResponse}
+ * and the respective servlet and filter.
  * 
  * @author philip
+ * @see com.phloc.webbasics.servlet.AbstractUnifiedResponseFilter
+ * @see com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet
  */
 @Immutable
 public final class ResponseHelper
@@ -73,12 +76,14 @@ public final class ResponseHelper
     modifyResponseForNoCaching (null, aHttpResponse);
   }
 
+  @Deprecated
   public static void modifyResponseForNoCaching (@Nullable final EHTTPVersion eVersion,
                                                  @Nonnull final IRequestWebScope aRequestScope)
   {
     modifyResponseForNoCaching (eVersion, aRequestScope.getResponse ());
   }
 
+  @Deprecated
   public static void modifyResponseForNoCaching (@Nullable final EHTTPVersion eVersion,
                                                  @Nonnull final HttpServletResponse aHttpResponse)
   {
@@ -102,12 +107,14 @@ public final class ResponseHelper
     }
   }
 
+  @Deprecated
   public static void modifyResponseContentDisposition (@Nonnull final IRequestWebScope aRequestScope,
                                                        @Nonnull final String sFilename)
   {
     modifyResponseContentDisposition (aRequestScope.getResponse (), sFilename);
   }
 
+  @Deprecated
   public static void modifyResponseContentDisposition (@Nonnull final HttpServletResponse aHttpResponse,
                                                        @Nonnull final String sFilename)
   {
@@ -117,18 +124,20 @@ public final class ResponseHelper
 
     // Filename needs to be surrounded with double quotes (single quotes don't
     // work)
-    // No URL encoding neceesary.
+    // No URL encoding necessary.
     // Filename must be in ISO-8859-1
     // See http://greenbytes.de/tech/tc2231/
     aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, "attachment; filename=\"" + sFilenameToUse + "\"");
   }
 
+  @Deprecated
   public static void modifyResponseForDownload (@Nonnull final IRequestWebScope aRequestScope,
                                                 @Nonnull final String sFilename)
   {
     modifyResponseForDownload (aRequestScope.getResponse (), sFilename);
   }
 
+  @Deprecated
   public static void modifyResponseForDownload (@Nonnull final HttpServletResponse aHttpResponse,
                                                 @Nonnull final String sFilename)
   {
@@ -136,6 +145,7 @@ public final class ResponseHelper
     modifyResponseForDownload (aHttpResponse, sFilename, CMimeType.APPLICATION_FORCE_DOWNLOAD);
   }
 
+  @Deprecated
   public static void modifyResponseForDownload (@Nonnull final IRequestWebScope aRequestScope,
                                                 @Nonnull final String sFilename,
                                                 @Nonnull final IMimeType aMimeType)
@@ -143,6 +153,7 @@ public final class ResponseHelper
     modifyResponseForDownload (aRequestScope.getResponse (), sFilename, aMimeType);
   }
 
+  @Deprecated
   public static void modifyResponseForDownload (@Nonnull final HttpServletResponse aHttpResponse,
                                                 @Nonnull final String sFilename,
                                                 @Nonnull final IMimeType aMimeType)
@@ -150,6 +161,7 @@ public final class ResponseHelper
     modifyResponseForDownload (aHttpResponse, sFilename, aMimeType.getAsString ());
   }
 
+  @Deprecated
   public static void modifyResponseForDownload (@Nonnull final IRequestWebScope aRequestScope,
                                                 @Nonnull final String sFilename,
                                                 @Nonnull final String sMimeType)
@@ -157,6 +169,7 @@ public final class ResponseHelper
     modifyResponseForDownload (aRequestScope.getResponse (), sFilename, sMimeType);
   }
 
+  @Deprecated
   public static void modifyResponseForDownload (@Nonnull final HttpServletResponse aHttpResponse,
                                                 @Nonnull final String sFilename,
                                                 @Nonnull final String sMimeType)
@@ -166,12 +179,14 @@ public final class ResponseHelper
     aHttpResponse.setContentType (sMimeType);
   }
 
+  @Deprecated
   public static void modifyResponseForExpiration (@Nonnull final IRequestWebScope aRequestScope,
                                                   @Nonnegative final int nSeconds)
   {
     modifyResponseForExpiration (aRequestScope.getResponse (), nSeconds);
   }
 
+  @Deprecated
   public static void modifyResponseForExpiration (@Nonnull final HttpServletResponse aHttpResponse,
                                                   @Nonnegative final int nSeconds)
   {
@@ -183,12 +198,14 @@ public final class ResponseHelper
                                                                           .plusSeconds (nSeconds)));
   }
 
+  @Deprecated
   public static void modifyResponseForMovedPermanently (@Nonnull final IRequestWebScope aRequestScope,
                                                         @Nonnull final String sURL)
   {
     modifyResponseForMovedPermanently (aRequestScope.getResponse (), sURL);
   }
 
+  @Deprecated
   public static void modifyResponseForMovedPermanently (@Nonnull final HttpServletResponse aHttpResponse,
                                                         @Nonnull final String sURL)
   {
@@ -247,6 +264,7 @@ public final class ResponseHelper
       final String sGZipEncoding = aAcceptEncodings.getUsedGZIPEncoding ();
       if (sGZipEncoding != null && ResponseHelperSettings.isResponseGzipEnabled ())
       {
+        // Use GZip
         aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sGZipEncoding);
         aOS = new GZIPOutputStream (aHttpResponse.getOutputStream ());
       }
@@ -255,6 +273,7 @@ public final class ResponseHelper
         final String sDeflateEncoding = aAcceptEncodings.getUsedDeflateEncoding ();
         if (sDeflateEncoding != null && ResponseHelperSettings.isResponseDeflateEnabled ())
         {
+          // Use Deflate
           aHttpResponse.setHeader (CHTTPHeader.CONTENT_ENCODING, sDeflateEncoding);
           aOS = new ZipOutputStream (aHttpResponse.getOutputStream ());
           // A dummy ZIP entry is required!
@@ -291,6 +310,7 @@ public final class ResponseHelper
    * @throws IOException
    *         In case of an error
    */
+  @Deprecated
   public static void writeResponse (@Nonnull final IRequestWebScope aRequestScope,
                                     @Nonnull final byte [] aBytes,
                                     @Nonnull final IMimeType aMimeType,
@@ -317,6 +337,7 @@ public final class ResponseHelper
    * @throws IOException
    *         In case of an error
    */
+  @Deprecated
   public static void writeResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                     @Nonnull final HttpServletResponse aHttpResponse,
                                     @Nonnull final byte [] aBytes,
@@ -357,6 +378,7 @@ public final class ResponseHelper
    * @throws IOException
    *         If something goes wrong
    */
+  @Deprecated
   public static void writeTextResponse (@Nonnull final IRequestWebScope aRequestScope,
                                         @Nonnull final String sTextContent,
                                         @Nonnull final IMimeType aMimeType,
@@ -387,6 +409,7 @@ public final class ResponseHelper
    * @throws IOException
    *         If something goes wrong
    */
+  @Deprecated
   public static void writeTextResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                         @Nonnull final HttpServletResponse aHttpResponse,
                                         @Nonnull final String sTextContent,
@@ -415,6 +438,7 @@ public final class ResponseHelper
    * @see #writeTextResponse(HttpServletRequest, HttpServletResponse, String,
    *      IMimeType, Charset)
    */
+  @Deprecated
   public static void writeTextXHTMLResponse (@Nonnull final IRequestWebScope aRequestScope,
                                              @Nonnull final String sTextContent,
                                              @Nonnull final Charset aCharset) throws IOException
@@ -440,6 +464,7 @@ public final class ResponseHelper
    * @see #writeTextResponse(HttpServletRequest, HttpServletResponse, String,
    *      IMimeType, Charset)
    */
+  @Deprecated
   public static void writeTextXHTMLResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                              @Nonnull final HttpServletResponse aHttpResponse,
                                              @Nonnull final String sTextContent,
@@ -463,6 +488,7 @@ public final class ResponseHelper
    * @see #writeTextResponse(HttpServletRequest, HttpServletResponse, String,
    *      IMimeType, Charset)
    */
+  @Deprecated
   public static void writeTextXMLResponse (@Nonnull final IRequestWebScope aRequestScope,
                                            @Nonnull final String sTextContent,
                                            @Nonnull final Charset aCharset) throws IOException
@@ -488,6 +514,7 @@ public final class ResponseHelper
    * @see #writeTextResponse(HttpServletRequest, HttpServletResponse, String,
    *      IMimeType, Charset)
    */
+  @Deprecated
   public static void writeTextXMLResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                            @Nonnull final HttpServletResponse aHttpResponse,
                                            @Nonnull final String sTextContent,
@@ -496,11 +523,13 @@ public final class ResponseHelper
     writeTextResponse (aHttpRequest, aHttpResponse, sTextContent, CMimeType.TEXT_XML, aCharset);
   }
 
+  @Deprecated
   public static void writeEmptyResponse (@Nonnull final IRequestWebScope aRequestScope) throws IOException
   {
     writeEmptyResponse (aRequestScope.getRequest (), aRequestScope.getResponse ());
   }
 
+  @Deprecated
   public static void writeEmptyResponse (@Nonnull final HttpServletRequest aHttpRequest,
                                          @Nonnull final HttpServletResponse aHttpResponse) throws IOException
   {

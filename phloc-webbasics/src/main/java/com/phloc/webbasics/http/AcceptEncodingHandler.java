@@ -27,9 +27,10 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Handler for the HTTP header field "Accept-Encoding"
+ * Handler for the request HTTP header field "Accept-Encoding"
  * 
  * @author philip
  */
@@ -99,5 +100,11 @@ public final class AcceptEncodingHandler
       aHttpRequest.setAttribute (AcceptEncodingList.class.getName (), aValue);
     }
     return aValue;
+  }
+
+  @Nonnull
+  public static AcceptEncodingList getAcceptEncodings (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getAcceptEncodings (aRequestScope.getRequest ());
   }
 }

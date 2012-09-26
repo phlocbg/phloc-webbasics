@@ -31,7 +31,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
@@ -81,7 +80,7 @@ public class UnifiedResponse
   // Input fields
   private final EHTTPVersion m_eHTTPVersion;
   private final EHTTPMethod m_eHTTPMethod;
-  private final String m_sRequestURL;
+  private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final AcceptCharsetList m_aAcceptCharsetList;
   private final AcceptMimeTypeList m_aAcceptMimeTypeList;
 
@@ -103,6 +102,10 @@ public class UnifiedResponse
    * easily aggregated.
    */
   private final int m_nID = s_aRequestNum.incrementAndGet ();
+  /**
+   * The requst URL, lazily initialized.
+   */
+  private String m_sRequestURL;
   /**
    * Just avoid emitting the request headers more than once, as they wont change
    * from error to error.
@@ -128,17 +131,18 @@ public class UnifiedResponse
       throw new NullPointerException ("requestScope");
     m_eHTTPVersion = eHTTPVersion;
     m_eHTTPMethod = eHTTPMethod;
-    m_sRequestURL = aRequestScope.getURL ();
-    final HttpServletRequest aHttpRequest = aRequestScope.getRequest ();
-    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aHttpRequest);
-    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aHttpRequest);
-    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aHttpRequest);
+    m_aRequestScope = aRequestScope;
+    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope);
+    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequestScope);
+    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aRequestScope);
   }
 
   @Nonnull
   @Nonempty
   private String _getPrefix ()
   {
+    if (m_sRequestURL == null)
+      m_sRequestURL = m_aRequestScope.getURL ();
     return "UnifiedResponse[" + m_nID + "] to [" + m_sRequestURL + "]: ";
   }
 
@@ -924,7 +928,8 @@ public class UnifiedResponse
         if (m_eHTTPMethod.isContentAllowed ())
         {
           // Emit main content to stream
-          final OutputStream aOS = aHttpResponse.getOutputStream ();
+          final OutputStream aOS = ResponseHelper.getBestSuitableOutputStream (m_aRequestScope.getRequest (),
+                                                                               aHttpResponse);
           aOS.write (m_aContent);
           aOS.flush ();
           aOS.close ();
@@ -965,21 +970,20 @@ public class UnifiedResponse
 
               // Don't apply additional Content-Length header after the resource
               // was streamed!
-              if (false)
-                aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nBytesCopied));
               _applyLengthChecks (nBytesCopied);
             }
             else
             {
               // Copying failed -> this is a 500
+              final boolean bResponseCommitted = aHttpResponse.isCommitted ();
               _error ("Copying from " +
                       m_aContentISP +
                       " failed after " +
                       aByteCount.longValue () +
                       " bytes! Response is committed: " +
-                      aHttpResponse.isCommitted ());
+                      bResponseCommitted);
 
-              if (!aHttpResponse.isCommitted ())
+              if (!bResponseCommitted)
                 aHttpResponse.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
           }

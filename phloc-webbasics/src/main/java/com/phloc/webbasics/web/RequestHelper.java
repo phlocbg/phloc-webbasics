@@ -132,6 +132,9 @@ public final class RequestHelper
   @Nonnull
   public static String getPathWithinServletContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
+    if (aRequestScope == null)
+      throw new NullPointerException ("requestScope");
+
     return getPathWithinServletContext (aRequestScope.getRequest ());
   }
 
@@ -168,6 +171,9 @@ public final class RequestHelper
   @Nonnull
   public static String getPathWithinServlet (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
+    if (aRequestScope == null)
+      throw new NullPointerException ("requestScope");
+
     return getPathWithinServlet (aRequestScope.getRequest ());
   }
 
@@ -250,9 +256,9 @@ public final class RequestHelper
       throw new NullPointerException ("request");
 
     final String sReqUrl = getRequestURI (aHttpRequest);
-    final String sQueryString = aHttpRequest.getQueryString (); // d=789
+    final String sQueryString = aHttpRequest.getQueryString (); // d=789&x=y
     if (sQueryString != null)
-      return sReqUrl + "?" + sQueryString;
+      return sReqUrl + '?' + sQueryString;
     return sReqUrl;
   }
 
@@ -321,6 +327,23 @@ public final class RequestHelper
   /**
    * Get a complete request header map as a copy.
    * 
+   * @param aRequestScope
+   *        The source request scope. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static HTTPHeaderMap getRequestHeaderMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    if (aRequestScope == null)
+      throw new NullPointerException ("requestScope");
+
+    return getRequestHeaderMap (aRequestScope.getRequest ());
+  }
+
+  /**
+   * Get a complete request header map as a copy.
+   * 
    * @param aHttpRequest
    *        The source HTTP request. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -349,6 +372,7 @@ public final class RequestHelper
    * an array. Jetty seems to create String arrays out of simple string values
    * 
    * @param aRequestScope
+   *        The request scope to use. May not be <code>null</code>.
    * @return A Map containing pure strings instead of string arrays with one
    *         item
    */
@@ -356,6 +380,9 @@ public final class RequestHelper
   @ReturnsMutableCopy
   public static Map <String, Object> getParameterMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
+    if (aRequestScope == null)
+      throw new NullPointerException ("requestScope");
+
     return getParameterMap (aRequestScope.getRequest ());
   }
 

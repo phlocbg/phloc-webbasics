@@ -34,8 +34,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This class is used to build the HTTP response Cache-Control value in a
- * structured way. Cache extensions are currently not supported.
+ * This class is used to build the response HTTP header field Cache-Control
+ * value in a structured way. This header field is only applicable for HTTP/1.1
  * 
  * @author philip
  */

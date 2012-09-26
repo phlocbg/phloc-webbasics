@@ -30,6 +30,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
@@ -37,6 +38,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.AbstractReadonlyAttributeContainer;
 import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.lang.GenericReflection;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -103,9 +105,6 @@ public final class RequestParamMap implements IRequestParamMap
 
   public void put (@Nonnull final String sName, @Nullable final Object aValue)
   {
-    if (s_aLogger.isTraceEnabled ())
-      s_aLogger.trace ("put(" + sName + ", " + aValue + ")");
-
     // replace everything just to have opening "[" left and one closing "]" at
     // the end that is filtered out manually
     String sRealName = StringHelper.replaceAll (sName, "][", "[");
@@ -119,17 +118,19 @@ public final class RequestParamMap implements IRequestParamMap
     final Object aPathObj = aMap.get (sPath);
     if (aPathObj != null && !(aPathObj instanceof Map <?, ?>))
     {
-      s_aLogger.warn ("You're trying to access the path element '" + sPath + "' as map, but it isn't!");
+      s_aLogger.warn ("You're trying to access the path element '" +
+                      sPath +
+                      "' as map, but it is a " +
+                      CGStringHelper.getClassLocalName (aPathObj) +
+                      "!");
       return null;
     }
     return GenericReflection.<Object, Map <String, Object>> uncheckedCast (aPathObj);
   }
 
-  public boolean contains (@Nonnull final String... aPath)
+  public boolean contains (@Nonnull @Nonempty final String... aPath)
   {
-    if (aPath == null)
-      throw new NullPointerException ("path");
-    if (aPath.length == 0)
+    if (ArrayHelper.isEmpty (aPath))
       throw new IllegalArgumentException ("Path path array may not be empty!");
 
     Map <String, Object> aMap = m_aMap;
@@ -145,9 +146,7 @@ public final class RequestParamMap implements IRequestParamMap
   @Nullable
   public Object getObject (@Nonnull final String... aPath)
   {
-    if (aPath == null)
-      throw new NullPointerException ("path");
-    if (aPath.length == 0)
+    if (ArrayHelper.isEmpty (aPath))
       throw new IllegalArgumentException ("Path path array may not be empty!");
 
     Map <String, Object> aMap = m_aMap;
@@ -172,9 +171,7 @@ public final class RequestParamMap implements IRequestParamMap
   @ReturnsMutableCopy
   public IRequestParamMap getMap (@Nonnull final String... aPath)
   {
-    if (aPath == null)
-      throw new NullPointerException ("path");
-    if (aPath.length == 0)
+    if (ArrayHelper.isEmpty (aPath))
       throw new IllegalArgumentException ("Path path array may not be empty!");
 
     Map <String, Object> aMap = m_aMap;

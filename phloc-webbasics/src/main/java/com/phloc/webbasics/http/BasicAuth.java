@@ -42,6 +42,6 @@ public final class BasicAuth
       throw new IllegalArgumentException ("username is missing");
 
     final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ":", sPassword);
-    return HEADER_VALUE_PREFIX_BASIC + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1);
+    return HEADER_VALUE_PREFIX_BASIC + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1_OBJ);
   }
 }

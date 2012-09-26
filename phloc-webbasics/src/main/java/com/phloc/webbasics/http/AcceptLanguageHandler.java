@@ -24,9 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Handler for the HTTP header field "Accept-Language"
+ * Handler for the request HTTP header field "Accept-Language"
  * 
  * @author philip
  */
@@ -76,5 +77,11 @@ public final class AcceptLanguageHandler
       aHttpRequest.setAttribute (AcceptLanguageList.class.getName (), aValue);
     }
     return aValue;
+  }
+
+  @Nonnull
+  public static AcceptLanguageList getAcceptLanguages (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getAcceptLanguages (aRequestScope.getRequest ());
   }
 }

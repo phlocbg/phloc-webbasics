@@ -30,9 +30,10 @@ import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Handler for the HTTP header field "Accept"
+ * Handler for the request HTTP header field "Accept"
  * 
  * @author philip
  */
@@ -97,5 +98,11 @@ public final class AcceptMimeTypeHandler
       aHttpRequest.setAttribute (AcceptMimeTypeList.class.getName (), aValue);
     }
     return aValue;
+  }
+
+  @Nonnull
+  public static AcceptMimeTypeList getAcceptMimeTypes (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return getAcceptMimeTypes (aRequestScope.getRequest ());
   }
 }
