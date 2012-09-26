@@ -38,6 +38,23 @@ import com.phloc.webbasics.spider.WebSpiderManager;
  */
 final class UserAgent implements IUserAgent
 {
+  private static final String GECKO_SEARCH_STRING = "Gecko";
+  private static final String LYNX_SEARCH_STRING = "Lynx";
+  private static final String CHROME_SEARCH_STRING = "Chrome";
+  private static final String VERSION_SEARCH_STRING = "Version";
+  private static final String SAFARI_SEARCH_STRING = "Safari";
+  private static final String IE_TRIDENT_SEARCH_STRING = "Trident/";
+  private static final String OPERA_SEARCH_STRING = "Opera";
+  private static final String FIREFOX_SEARCH_STRING = "Firefox";
+  private static final String IE_SEARCH_STRING = "MSIE";
+  private static final String KONQUEROR_PREFIX = "Konqueror/";
+  private static final String [] GECKO_VARIANTS = new String [] { "GranParadiso",
+                                                                 "Fedora",
+                                                                 "Namoroka",
+                                                                 "Netscape",
+                                                                 "K-Meleon",
+                                                                 "WebThumb" };
+
   private final String m_sFullUserAgent;
   private final UserAgentElementList m_aElements;
   private BrowserInfo m_aInfoFirefox;
@@ -107,13 +124,13 @@ final class UserAgent implements IUserAgent
       // Example:
       // Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2)
       // Gecko/20100115 Firefox/3.6
-      String sVersionFirefox = m_aElements.getPairValue ("Firefox");
+      String sVersionFirefox = m_aElements.getPairValue (FIREFOX_SEARCH_STRING);
       if (sVersionFirefox == null)
       {
         // Example2:
         // Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.1.4)
         // Gecko/20091016 Boersenfegers Firefox 3.5.4
-        sVersionFirefox = m_aElements.getStringValueFollowing ("Firefox");
+        sVersionFirefox = m_aElements.getStringValueFollowing (FIREFOX_SEARCH_STRING);
       }
 
       if (sVersionFirefox == null)
@@ -142,11 +159,10 @@ final class UserAgent implements IUserAgent
       // Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/4.0; SLCC2;
       // .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media
       // Center PC 6.0; Tablet PC 2.0)
-      final String IE_SEARCH_STRING = "MSIE";
       String sInfoIE = m_aElements.getListItemStartingWith (IE_SEARCH_STRING);
       // Negative Example:
       // Mozilla/4.0 (compatible; MSIE 6.0; X11; Linux i686; en) Opera 9.63
-      if (m_aElements.containsString ("Opera"))
+      if (m_aElements.containsString (OPERA_SEARCH_STRING))
         sInfoIE = null;
 
       if (sInfoIE == null)
@@ -157,7 +173,7 @@ final class UserAgent implements IUserAgent
         // http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
         final Version aVersion = new Version (sInfoIE.substring (IE_SEARCH_STRING.length ()).trim ());
         final boolean bIsIECompatibilityMode = aVersion.getMajor () == 7 &&
-                                               m_aElements.getListItemStartingWith ("Trident/") != null;
+                                               m_aElements.getListItemStartingWith (IE_TRIDENT_SEARCH_STRING) != null;
         m_aInfoIE = new BrowserInfoIE (aVersion, bIsIECompatibilityMode);
       }
     }
@@ -171,12 +187,12 @@ final class UserAgent implements IUserAgent
     {
       // Example:
       // Opera/9.64 (Windows NT 6.1; U; en) Presto/2.1.1
-      String sVersionOpera = m_aElements.getPairValue ("Opera");
+      String sVersionOpera = m_aElements.getPairValue (OPERA_SEARCH_STRING);
       if (sVersionOpera != null)
       {
         // Special case:
         // Opera/9.80 (Windows NT 5.1; U; hu) Presto/2.2.15 Version/10.10
-        final String sVersion = m_aElements.getPairValue ("Version");
+        final String sVersion = m_aElements.getPairValue (VERSION_SEARCH_STRING);
         if (sVersion != null)
           sVersionOpera = sVersion;
       }
@@ -184,7 +200,7 @@ final class UserAgent implements IUserAgent
       {
         // Example:
         // Mozilla/4.0 (compatible; MSIE 6.0; X11; Linux i686; en) Opera 9.63
-        sVersionOpera = m_aElements.getStringValueFollowing ("Opera");
+        sVersionOpera = m_aElements.getStringValueFollowing (OPERA_SEARCH_STRING);
       }
       if (sVersionOpera == null)
         m_aInfoOpera = BrowserInfo.IS_IT_NOT;
@@ -202,8 +218,8 @@ final class UserAgent implements IUserAgent
       // Example:
       // Mozilla/5.0 (Windows; U; Windows NT 6.1; de-DE) AppleWebKit/531.21.8
       // (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
-      final String sSafari = m_aElements.getPairValue ("Safari");
-      final String sVersion = sSafari == null ? null : m_aElements.getPairValue ("Version");
+      final String sSafari = m_aElements.getPairValue (SAFARI_SEARCH_STRING);
+      final String sVersion = sSafari == null ? null : m_aElements.getPairValue (VERSION_SEARCH_STRING);
       if (sVersion == null)
         m_aInfoSafari = BrowserInfo.IS_IT_NOT;
       else
@@ -220,8 +236,8 @@ final class UserAgent implements IUserAgent
       // Example:
       // Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.9
       // (KHTML, like Gecko) Chrome/5.0.317.2 Safari/532.9
-      final String sSafari = m_aElements.getPairValue ("Safari");
-      final String sVersion = sSafari == null ? null : m_aElements.getPairValue ("Chrome");
+      final String sSafari = m_aElements.getPairValue (SAFARI_SEARCH_STRING);
+      final String sVersion = sSafari == null ? null : m_aElements.getPairValue (CHROME_SEARCH_STRING);
       if (sVersion == null)
         m_aInfoChrome = BrowserInfo.IS_IT_NOT;
       else
@@ -237,7 +253,7 @@ final class UserAgent implements IUserAgent
     {
       // Example:
       // Lynx/2.8.3rel.1 libwww-FM/2.14FM
-      final String sVersion = m_aElements.getPairValue ("Lynx");
+      final String sVersion = m_aElements.getPairValue (LYNX_SEARCH_STRING);
       if (sVersion == null)
         m_aInfoLynx = BrowserInfo.IS_IT_NOT;
       else
@@ -254,12 +270,12 @@ final class UserAgent implements IUserAgent
       // Example:
       // Mozilla/5.0 (compatible; Konqueror/3.4; FreeBSD; en_US) KHTML/3.4.0
       // (like Gecko)
-      final String PREFIX = "Konqueror/";
-      final String sVersion = m_aElements.getListItemStartingWith (PREFIX);
+      final String sVersion = m_aElements.getListItemStartingWith (KONQUEROR_PREFIX);
       if (sVersion == null)
         m_aInfoKonqueror = BrowserInfo.IS_IT_NOT;
       else
-        m_aInfoKonqueror = new BrowserInfo (EBrowserType.KONQUEROR, new Version (sVersion.substring (PREFIX.length ())));
+        m_aInfoKonqueror = new BrowserInfo (EBrowserType.KONQUEROR,
+                                            new Version (sVersion.substring (KONQUEROR_PREFIX.length ())));
     }
     return m_aInfoKonqueror;
   }
@@ -272,15 +288,21 @@ final class UserAgent implements IUserAgent
       // Example:
       // Mozilla/5.0 (Windows; U; Windows NT 5.1; de-AT; rv:1.7.12)
       // Gecko/20050915
-      String sVersionGecko = m_aElements.getPairValue ("Gecko");
-      if (sVersionGecko == null && m_sFullUserAgent.contains ("Gecko"))
+      String sVersionGecko = m_aElements.getPairValue (GECKO_SEARCH_STRING);
+      if (sVersionGecko == null && m_sFullUserAgent.contains (GECKO_SEARCH_STRING))
       {
-        sVersionGecko = m_aElements.getPairValue ("GranParadiso");
-        if (sVersionGecko == null)
+        // Examples:
+        // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.11) Gecko
+        // GranParadiso/3.0.11
+        // Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.4) Gecko Netscape/7.1
+        // (ax)
+        // Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.17pre) Gecko
+        // K-Meleon/1.6.0
+        for (final String sVariant : GECKO_VARIANTS)
         {
-          sVersionGecko = m_aElements.getPairValue ("Fedora");
-          if (sVersionGecko == null)
-            sVersionGecko = m_aElements.getPairValue ("Namoroka");
+          sVersionGecko = m_aElements.getPairValue (sVariant);
+          if (sVersionGecko != null)
+            break;
         }
       }
 
@@ -362,10 +384,10 @@ final class UserAgent implements IUserAgent
                                        .append ("infos", m_aElements)
                                        .append ("Firefox", getInfoFirefox ())
                                        .append ("IE", getInfoIE ())
-                                       .append ("Opera", getInfoOpera ())
-                                       .append ("Safari", getInfoSafari ())
-                                       .append ("Chrome", getInfoChrome ())
-                                       .append ("Gecko", getInfoGeckoBased ())
+                                       .append (OPERA_SEARCH_STRING, getInfoOpera ())
+                                       .append (SAFARI_SEARCH_STRING, getInfoSafari ())
+                                       .append (CHROME_SEARCH_STRING, getInfoChrome ())
+                                       .append (GECKO_SEARCH_STRING, getInfoGeckoBased ())
                                        .append ("Mobile", getInfoMobile ())
                                        .append ("WebSpider", getInfoWebSpider ())
                                        .toString ();
