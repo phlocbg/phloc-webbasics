@@ -19,11 +19,16 @@ package com.phloc.webctrls.bootstrap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
+import com.phloc.webctrls.bootstrap.ext.EBootstrapWorkarounds;
 
 public class BootstrapDropDownMenu extends HCUL
 {
@@ -47,5 +52,14 @@ public class BootstrapDropDownMenu extends HCUL
     if (bActive)
       aLI.addClass (CBootstrapCSS.ACTIVE);
     return this;
+  }
+
+  @Override
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected void applyProperties (final IMicroElement aElement, final IHCConversionSettings aConversionSettings)
+  {
+    super.applyProperties (aElement, aConversionSettings);
+    EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (aElement, aConversionSettings);
   }
 }
