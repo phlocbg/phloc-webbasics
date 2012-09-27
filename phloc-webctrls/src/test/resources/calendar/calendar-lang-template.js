@@ -85,44 +85,44 @@ Calendar._SMN = new Array
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = %CALENDAR_INFO%;
+Calendar._TT.INFO = %CALENDAR_INFO%;
 
-Calendar._TT["ABOUT"] =
+Calendar._TT.ABOUT =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this ;-)
 "For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
 "Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
 "\n\n" + %CALENDAR_ABOUT%;
-Calendar._TT["ABOUT_TIME"] = "\n\n" + %CALENDAR_ABOUT_TIME%;
+Calendar._TT.ABOUT_TIME = "\n\n" + %CALENDAR_ABOUT_TIME%;
 
-Calendar._TT["PREV_YEAR"] = %CALENDAR_PREV_YEAR%;
-Calendar._TT["PREV_MONTH"] = %CALENDAR_PREV_MONTH%;
-Calendar._TT["GO_TODAY"] = %CALENDAR_GO_TODAY%;
-Calendar._TT["NEXT_MONTH"] = %CALENDAR_NEXT_MONTH%;
-Calendar._TT["NEXT_YEAR"] = %CALENDAR_NEXT_YEAR%;
-Calendar._TT["SEL_DATE"] = %CALENDAR_SEL_DATE%;
-Calendar._TT["DRAG_TO_MOVE"] = %CALENDAR_DRAG_TO_MOVE%;
-Calendar._TT["PART_TODAY"] = %CALENDAR_PART_TODAY%;
+Calendar._TT.PREV_YEAR = %CALENDAR_PREV_YEAR%;
+Calendar._TT.PREV_MONTH = %CALENDAR_PREV_MONTH%;
+Calendar._TT.GO_TODAY = %CALENDAR_GO_TODAY%;
+Calendar._TT.NEXT_MONTH = %CALENDAR_NEXT_MONTH%;
+Calendar._TT.NEXT_YEAR = %CALENDAR_NEXT_YEAR%;
+Calendar._TT.SEL_DATE = %CALENDAR_SEL_DATE%;
+Calendar._TT.DRAG_TO_MOVE = %CALENDAR_DRAG_TO_MOVE%;
+Calendar._TT.PART_TODAY = %CALENDAR_PART_TODAY%;
 
 // the following is to inform that "%s" is to be the first day of week
 // %s will be replaced with the day name.
-Calendar._TT["DAY_FIRST"] = %CALENDAR_DAY_FIRST%;
+Calendar._TT.DAY_FIRST = %CALENDAR_DAY_FIRST%;
 
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
 // means Monday, etc.
-Calendar._TT["WEEKEND"] = %CALENDAR_WEEKEND%;
+Calendar._TT.WEEKEND = %CALENDAR_WEEKEND%;
 
-Calendar._TT["CLOSE"] = %CALENDAR_CLOSE%;
-Calendar._TT["TODAY"] = %CALENDAR_TODAY%;
-Calendar._TT["TIME_PART"] = %CALENDAR_TIME_PART%;
+Calendar._TT.CLOSE = %CALENDAR_CLOSE%;
+Calendar._TT.TODAY = %CALENDAR_TODAY%;
+Calendar._TT.TIME_PART = %CALENDAR_TIME_PART%;
 
 // date formats
-Calendar._TT["DEF_DATE_FORMAT"] = %CALENDAR_DEF_DATE_FORMAT%;
-Calendar._TT["TT_DATE_FORMAT"] = %CALENDAR_TT_DATE_FORMAT%;
+Calendar._TT.DEF_DATE_FORMAT = %CALENDAR_DEF_DATE_FORMAT%;
+Calendar._TT.TT_DATE_FORMAT = %CALENDAR_TT_DATE_FORMAT%;
 
 // phloc added
-Calendar._TT["DEF_TIME_FORMAT"] = %CALENDAR_DEF_TIME_FORMAT%;
+Calendar._TT.DEF_TIME_FORMAT = %CALENDAR_DEF_TIME_FORMAT%;
 
-Calendar._TT["WK"] = %CALENDAR_WK%;
-Calendar._TT["TIME"] = %CALENDAR_TIME%;
+Calendar._TT.WK = %CALENDAR_WK%;
+Calendar._TT.TIME = %CALENDAR_TIME%;
