@@ -19,12 +19,11 @@ package com.phloc.webctrls.bootstrap.ext;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.version.Version;
 import com.phloc.commons.version.VersionRange;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSVar;
@@ -84,11 +83,10 @@ public enum EBootstrapWorkarounds
   @Nonnull
   public abstract IHCNode createFixCode ();
 
-  public void appendIfApplicable (@Nonnull final IMicroNode aParentNode,
-                                  @Nonnull final IHCConversionSettings aConversionSettings)
+  public void appendIfApplicable (@Nonnull final IHCNodeWithChildren <?> aParentElement)
   {
     if (isApplicable ())
       if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag ("bootstrap-workaround-" + name ()))
-        aParentNode.appendChild (createFixCode ().getAsNode (aConversionSettings));
+        aParentElement.addChild (createFixCode ());
   }
 }
