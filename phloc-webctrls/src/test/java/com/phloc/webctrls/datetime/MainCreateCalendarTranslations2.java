@@ -68,9 +68,9 @@ public final class MainCreateCalendarTranslations2
         sJSCode = sJSCode.replace (sKey, sReplacement);
       }
 
-      SimpleFileIO.writeFile (new File ("src/main/resources/webui/pui/calendar/lang/calendar-" +
-                                        aLocale.getLanguage () +
-                                        ".js"), sJSCode, CCharset.CHARSET_UTF_8);
+      SimpleFileIO.writeFile (new File ("src/main/resources/datetime/lang/calendar-" + aLocale.getLanguage () + ".js"),
+                              sJSCode,
+                              CCharset.CHARSET_UTF_8);
     }
   }
 }

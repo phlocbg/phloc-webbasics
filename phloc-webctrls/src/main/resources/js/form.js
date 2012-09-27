@@ -49,7 +49,7 @@ FormHelperClass.prototype =
   // string,string,string,string,array[map{id,url|html}]
   saveFormData : function(formid,fieldPrefix,pageID,ajaxUrl,successUpdates,errorUpdates) {
     var vals=FormHelper.getAllFormValues(formid,fieldPrefix);
-    vals["$pageID"]=pageID;
+    vals.$pageID=pageID;
     $.ajax({
       url:ajaxUrl,
       data:vals,
@@ -61,7 +61,7 @@ FormHelperClass.prototype =
       }
     });
   }
-}
+};
 
 $.ajaxSetup ({cache:false});
 var FormHelper = window.FormHelper = new FormHelperClass();
