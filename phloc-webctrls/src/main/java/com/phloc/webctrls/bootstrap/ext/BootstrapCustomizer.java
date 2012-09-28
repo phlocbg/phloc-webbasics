@@ -2,7 +2,6 @@ package com.phloc.webctrls.bootstrap.ext;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNodeWithChildren;
@@ -18,7 +17,6 @@ public class BootstrapCustomizer extends HCDefaultCustomizer
   {
     super.customizeHCElement (aParentElement, aElement, eHTMLVersion);
 
-    System.out.println (CGStringHelper.getClassLocalName (aElement));
     if (aElement instanceof BootstrapDropDownMenu)
     {
       EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (aParentElement);
