@@ -175,6 +175,57 @@
           <sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
         </configuration>
       </plugin>
+      <!--
+      <plugin>
+        <groupId>com.cj.jshintmojo</groupId>
+        <artifactId>jshint-maven-plugin</artifactId>
+        <version>0.0.3-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>lint</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <options>camelcase,eqeqeq,forin,immed,latedef,newcap,noarg,noempty,nonew,regexp,undef,trailing,browser,devel,jquery,smarttabs</options>
+          <directory>${basedir}/src/main/resources</directory>
+          <excludes>
+            <exclude>**/jquery/*.js</exclude>
+            <exclude>**/bootstrap/*/js/bootstrap*.js</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      -->
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.cj.jshintmojo</groupId>
+                    <artifactId>jshint-maven-plugin</artifactId>
+                    <versionRange>[0.0.1-SNAPSHOT,)</versionRange>
+                    <goals>
+                      <goal>lint</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
