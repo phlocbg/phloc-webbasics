@@ -23,7 +23,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.htmlext.HCA_JS;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.html.js.IJSCodeProvider;
@@ -99,7 +99,7 @@ public class BootstrapButton extends HCA_JS
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.prepareNodeOnce (aConversionSettings);
     addClasses (m_eType, m_eSize);

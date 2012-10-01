@@ -34,7 +34,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCDiv;
@@ -174,7 +174,7 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
   }
 
   @Override
-  protected boolean canConvertToNode (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected boolean canConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     return !m_aTabs.isEmpty ();
   }
@@ -182,7 +182,7 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.prepareNodeOnce (aConversionSettings);
     addClass (m_eType);

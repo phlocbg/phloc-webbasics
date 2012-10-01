@@ -30,7 +30,7 @@ import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.api.IHCHasFocus;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
@@ -257,7 +257,7 @@ public final class BootstrapTableForm extends BootstrapTable
   }
 
   @Override
-  protected void applyProperties (final IMicroElement aDivElement, final IHCConversionSettings aConversionSettings)
+  protected void applyProperties (final IMicroElement aDivElement, final IHCConversionSettingsToNode aConversionSettings)
   {
     if (isFocusHandlingEnabled () && !m_bSetAutoFocus && m_aFirstFocusable != null)
     {

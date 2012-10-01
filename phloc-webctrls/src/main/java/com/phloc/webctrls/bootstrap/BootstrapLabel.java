@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.HCButton;
 
 /**
@@ -56,7 +56,7 @@ public class BootstrapLabel extends HCButton
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.prepareNodeOnce (aConversionSettings);
     addClass (m_eType);

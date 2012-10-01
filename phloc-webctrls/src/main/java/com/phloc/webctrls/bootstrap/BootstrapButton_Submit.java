@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.HCButton_Submit;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.DefaultIcons;
@@ -67,7 +67,7 @@ public class BootstrapButton_Submit extends HCButton_Submit
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.prepareNodeOnce (aConversionSettings);
     addClasses (m_eType, m_eSize);

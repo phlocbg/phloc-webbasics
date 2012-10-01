@@ -23,7 +23,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.entities.EHTMLEntity;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.impl.HCEntityNode;
@@ -77,7 +77,7 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.prepareNodeOnce (aConversionSettings);
     addClass (m_eType);
