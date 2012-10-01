@@ -58,8 +58,8 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
    * Therefore the ETag value is calculated only once and used to stream all
    * classpath resources.
    */
-  protected static final String ETAG_VALUE_STREAMSERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
-                                                                                                .nextLong ()) + '"';
+  protected static final String ETAG_VALUE_OBJECT_DELIVERY_SERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
+                                                                                                          .nextLong ()) + '"';
 
   private Set <String> m_aAllowedExtensions;
   private Set <String> m_aDeniedExtensions;
@@ -140,7 +140,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   @Nullable
   protected final String getSupportedETag (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return ETAG_VALUE_STREAMSERVLET;
+    return ETAG_VALUE_OBJECT_DELIVERY_SERVLET;
   }
 
   protected abstract void onDeliverResource (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
