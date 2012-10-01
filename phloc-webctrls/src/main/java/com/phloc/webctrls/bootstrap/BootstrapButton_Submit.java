@@ -67,9 +67,9 @@ public class BootstrapButton_Submit extends HCButton_Submit
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    super.prepareOnce (aConversionSettings);
+    super.internalBeforeConvertToNode (aConversionSettings);
     addClasses (m_eType, m_eSize);
     if (m_aIcon != null)
     {

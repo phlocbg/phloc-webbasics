@@ -56,9 +56,9 @@ public class BootstrapLabel extends HCButton
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    super.prepareOnce (aConversionSettings);
+    super.internalBeforeConvertToNode (aConversionSettings);
     addClass (m_eType);
   }
 }

@@ -72,9 +72,9 @@ public class BootstrapLinkButton extends HCA
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    super.prepareOnce (aConversionSettings);
+    super.internalBeforeConvertToNode (aConversionSettings);
     addClasses (m_eType, m_eSize);
   }
 }
