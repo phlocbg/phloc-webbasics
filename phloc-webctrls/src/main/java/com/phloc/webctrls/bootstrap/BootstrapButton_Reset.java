@@ -67,9 +67,9 @@ public class BootstrapButton_Reset extends HCButton_Reset
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareOnce (@Nonnull final IHCConversionSettings aConversionSettings)
+  protected void prepareNodeOnce (@Nonnull final IHCConversionSettings aConversionSettings)
   {
-    super.prepareOnce (aConversionSettings);
+    super.prepareNodeOnce (aConversionSettings);
     addClasses (m_eType, m_eSize);
     if (m_aIcon != null)
     {
