@@ -72,7 +72,7 @@ public final class HCFormLabelUtils
       throw new NullPointerException ("type");
 
     // Only append the suffix, if at least one text child is present
-    if (HCUtils.recursivelyContainsAtLeastOneTextNode (aNode))
+    if (HCUtils.recursiveContainsAtLeastOneTextNode (aNode))
       aNode.addChild (_getSuffix (eType));
     return aNode;
   }
