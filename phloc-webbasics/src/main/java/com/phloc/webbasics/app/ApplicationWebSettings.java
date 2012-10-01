@@ -21,8 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.html.EHTMLVersion;
-import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
-import com.phloc.html.hc.conversion.HCSettings;
 
 /**
  * Contains settings for the HTML output.
@@ -48,6 +46,5 @@ public final class ApplicationWebSettings
     if (eHTMLVersion == null)
       throw new NullPointerException ("version");
     s_eHTMLVersion = eHTMLVersion;
-    HCSettings.setConversionSettingsProvider (new HCConversionSettingsProvider (eHTMLVersion));
   }
 }

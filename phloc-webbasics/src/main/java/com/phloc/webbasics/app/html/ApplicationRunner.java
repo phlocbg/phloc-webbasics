@@ -19,14 +19,9 @@ package com.phloc.webbasics.app.html;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.microdom.IMicroDocument;
-import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.mime.CMimeType;
-import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
-import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
-import com.phloc.commons.xml.serialize.IXMLWriterSettings;
-import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.ApplicationWebSettings;
@@ -34,8 +29,10 @@ import com.phloc.webbasics.web.UnifiedResponse;
 
 public final class ApplicationRunner
 {
-  private static final IXMLWriterSettings XML_WRITER_SETTINGS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
-                                                                                        .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING);
+  static
+  {
+    HCSettings.setConversionSettingsProvider (new WebBasicsHCConversionSettingsProvider ());
+  }
 
   private ApplicationRunner ()
   {}
@@ -44,16 +41,15 @@ public final class ApplicationRunner
                                          @Nonnull final UnifiedResponse aUnifiedResponse,
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
+    final IHCConversionSettings aCS = HCSettings.getConversionSettings (false)
+                                                .getClone (ApplicationWebSettings.getHTMLVersion ());
     // Build the HC tree
     final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope);
-    // Convert to XML tree
-    final IMicroDocument aDoc = aHtml.getAsNode (HCSettings.getConversionSettings (false)
-                                                           .getClone (ApplicationWebSettings.getHTMLVersion ()));
     // Convert to String
-    final String sXMLCode = MicroWriter.getNodeAsString (aDoc, XML_WRITER_SETTINGS);
+    final String sXMLCode = HCSettings.getAsHTMLString (aHtml, aCS);
     // Write to response
     aUnifiedResponse.setMimeType (CMimeType.TEXT_HTML)
-                    .setContentAndCharset (sXMLCode, XML_WRITER_SETTINGS.getCharsetObj ())
+                    .setContentAndCharset (sXMLCode, HCSettings.getHTMLCharset (false))
                     .disableCaching ();
   }
 }
