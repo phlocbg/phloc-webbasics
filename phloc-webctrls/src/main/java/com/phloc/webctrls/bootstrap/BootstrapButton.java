@@ -99,9 +99,9 @@ public class BootstrapButton extends HCA_JS
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  protected void prepareOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    super.prepareNodeOnce (aConversionSettings);
+    super.prepareOnce (aConversionSettings);
     addClasses (m_eType, m_eSize);
     if (m_aIcon != null)
     {

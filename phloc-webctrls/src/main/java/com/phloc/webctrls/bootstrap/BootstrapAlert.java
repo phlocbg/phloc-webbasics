@@ -77,9 +77,9 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
-  protected void prepareNodeOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  protected void prepareOnce (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    super.prepareNodeOnce (aConversionSettings);
+    super.prepareOnce (aConversionSettings);
     addClass (m_eType);
     if (m_bShowClose)
       addChild (0,
