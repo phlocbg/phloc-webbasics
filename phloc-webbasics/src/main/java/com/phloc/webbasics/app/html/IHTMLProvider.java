@@ -19,7 +19,6 @@ package com.phloc.webbasics.app.html;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
@@ -31,5 +30,5 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 public interface IHTMLProvider
 {
   @Nonnull
-  HCHtml createHTML (@Nonnull IRequestWebScopeWithoutResponse aRequestScope, @Nonnull EHTMLVersion eVersion);
+  HCHtml createHTML (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 }

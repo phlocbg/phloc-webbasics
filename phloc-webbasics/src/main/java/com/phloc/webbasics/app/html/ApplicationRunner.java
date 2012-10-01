@@ -26,6 +26,7 @@ import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
 import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
 import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.ApplicationWebSettings;
@@ -44,9 +45,10 @@ public final class ApplicationRunner
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
     // Build the HC tree
-    final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope, ApplicationWebSettings.getHTMLVersion ());
+    final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope);
     // Convert to XML tree
-    final IMicroDocument aDoc = aHtml.getAsNode ();
+    final IMicroDocument aDoc = aHtml.getAsNode (HCSettings.getConversionSettings (false)
+                                                           .getClone (ApplicationWebSettings.getHTMLVersion ()));
     // Convert to String
     final String sXMLCode = MicroWriter.getNodeAsString (aDoc, XML_WRITER_SETTINGS);
     // Write to response

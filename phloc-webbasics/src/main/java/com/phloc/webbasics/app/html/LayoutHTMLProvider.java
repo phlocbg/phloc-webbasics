@@ -33,7 +33,6 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.media.ECSSMedium;
 import com.phloc.html.CHTMLCharset;
-import com.phloc.html.EHTMLVersion;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
@@ -143,16 +142,15 @@ public class LayoutHTMLProvider implements IHTMLProvider
 
   @OverrideOnDemand
   @Nonnull
-  protected HCHtml createHCHtml (@Nonnull final EHTMLVersion eVersion)
+  protected HCHtml createHCHtml ()
   {
-    return new HCHtml (eVersion);
+    return new HCHtml ();
   }
 
   @Nonnull
-  public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                  @Nonnull final EHTMLVersion eVersion)
+  public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    final HCHtml aHtml = createHCHtml (eVersion);
+    final HCHtml aHtml = createHCHtml ();
     final Locale aDisplayLocale = ApplicationRequestManager.getRequestDisplayLocale ();
 
     // create the default layout and fill the areas
