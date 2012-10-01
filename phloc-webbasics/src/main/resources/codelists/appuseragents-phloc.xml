@@ -20,7 +20,7 @@
 -->
 <!--
 If one of the following texts is contained in a user agent, it is considered to be an application/API.
-Last update: 2011/04/04
+Last update: 2012/10/01
  -->
 <list>
   <!-- APIs -->
@@ -32,7 +32,12 @@ Last update: 2011/04/04
   <item value="Java/" />
   <item value="libwww-perl/" />
   <item value="LWP::Simple" />
+  <item value="PEAR HTTP_Request class" />
   <item value="PECL::HTTP/" />
+  <item value="PHP/" />
+  <item value="POE-Component-Client-HTTP" />
+  <item value="Python-httplib2/" />
+  <item value="python-requests" />
   <item value="Ruby" />
   <item value="MockHttpServletRequest" />
   <!-- Apps -->
@@ -50,10 +55,13 @@ Last update: 2011/04/04
   <item value="MindManager" />
   <item value="MS FrontPage" />
   <item value="MSFrontPage" />
+  <item value="nagios-plugins" />
   <item value="NSPlayer/" />
   <item value="OSSProxy" />
   <item value="OutlookConnector" />
+  <item value="PlayStation 3" />
   <item value="PLAYSTATION 3" />
+  <item value="PlayStation Portable" />
   <item value="Shockwave Flash" />
   <item value="VLC media player" />
   <item value="Word" />
