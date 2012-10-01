@@ -174,7 +174,7 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
   }
 
   @Override
-  protected boolean canConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  public boolean canConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     return !m_aTabs.isEmpty ();
   }
