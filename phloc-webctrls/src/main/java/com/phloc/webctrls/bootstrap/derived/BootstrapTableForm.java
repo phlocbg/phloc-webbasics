@@ -52,7 +52,7 @@ public final class BootstrapTableForm extends BootstrapTable
 
   private boolean m_bFocusHandlingEnabled = true;
   private boolean m_bSetAutoFocus = false;
-  private IHCNode m_aFirstFocusable;
+  private IHCHasFocus <?> m_aFirstFocusable;
 
   public BootstrapTableForm (@Nullable final HCCol... aWidths)
   {
@@ -73,9 +73,9 @@ public final class BootstrapTableForm extends BootstrapTable
     return m_bFocusHandlingEnabled;
   }
 
-  private static void _focusNode (@Nonnull final IHCNode aCtrl)
+  private static void _focusNode (@Nonnull final IHCHasFocus <?> aCtrl)
   {
-    ((IHCHasFocus <?>) aCtrl).setFocused (true);
+    aCtrl.setFocused (true);
     if (aCtrl instanceof IHCControl <?>)
     {
       // Ensure that an ID is present
@@ -125,7 +125,7 @@ public final class BootstrapTableForm extends BootstrapTable
           for (final IHCNode aCtrl : aCtrls)
             if (aCtrl instanceof IHCHasFocus <?>)
             {
-              _focusNode (aCtrl);
+              _focusNode ((IHCHasFocus <?>) aCtrl);
               m_bSetAutoFocus = true;
               break;
             }
@@ -135,7 +135,7 @@ public final class BootstrapTableForm extends BootstrapTable
           for (final IHCNode aCtrl : aCtrls)
             if (aCtrl instanceof IHCHasFocus <?>)
             {
-              m_aFirstFocusable = aCtrl;
+              m_aFirstFocusable = (IHCHasFocus <?>) aCtrl;
               break;
             }
       }
