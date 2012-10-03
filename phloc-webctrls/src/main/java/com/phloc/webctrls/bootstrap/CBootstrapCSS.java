@@ -184,6 +184,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider UNSTYLED = DefaultCSSClassProvider.create ("unstyled");
   public static final ICSSClassProvider WARNING = DefaultCSSClassProvider.create ("warning");
   public static final ICSSClassProvider WELL = DefaultCSSClassProvider.create ("well");
+  public static final ICSSClassProvider WELL_LARGE = DefaultCSSClassProvider.create ("well-large");
 
   private CBootstrapCSS ()
   {}
