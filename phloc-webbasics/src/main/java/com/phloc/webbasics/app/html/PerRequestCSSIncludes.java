@@ -80,6 +80,6 @@ public final class PerRequestCSSIncludes
    */
   public static boolean hasRegisteredCSSIncludesForThisRequest ()
   {
-    return !ContainerHelper.isEmpty (_getPerRequestSet (false));
+    return ContainerHelper.isNotEmpty (_getPerRequestSet (false));
   }
 }

@@ -80,6 +80,6 @@ public final class PerRequestJSIncludes
    */
   public static boolean hasRegisteredJSIncludesForThisRequest ()
   {
-    return !ContainerHelper.isEmpty (_getPerRequestSet (false));
+    return ContainerHelper.isNotEmpty (_getPerRequestSet (false));
   }
 }
