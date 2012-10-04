@@ -229,11 +229,11 @@ public final class RequestHelper
     if (aHttpRequest == null)
       throw new NullPointerException ("request");
 
-    final String sReqUrl = aHttpRequest.getRequestURL ().toString ();
+    final StringBuffer aReqUrl = aHttpRequest.getRequestURL ();
     final String sQueryString = aHttpRequest.getQueryString (); // d=789
     if (sQueryString != null)
-      return sReqUrl + "?" + sQueryString;
-    return sReqUrl;
+      aReqUrl.append ('?').append (sQueryString);
+    return aReqUrl.toString ();
   }
 
   /**

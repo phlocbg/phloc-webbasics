@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
+import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.ResponseHelper;
 
 /**
@@ -106,10 +107,7 @@ public class CheckResponseFilter implements Filter
   private void _checkResults (@Nonnull final HttpServletRequest aHttpRequest,
                               @Nonnull final StatusAwareHttpResponseWrapper aHttpResponse)
   {
-    String sRequestURL = aHttpRequest.getRequestURL ().toString ();
-    final String sQueryString = aHttpRequest.getQueryString ();
-    if (sQueryString != null)
-      sRequestURL += '?' + sQueryString;
+    final String sRequestURL = RequestHelper.getURL (aHttpRequest);
     final int nStatusCode = aHttpResponse.getStatusCode ();
     final Map <String, List <String>> aHeaders = aHttpResponse.getHeaderMap ().getAllHeaders ();
     final String sCharacterEncoding = aHttpResponse.getCharacterEncoding ();
