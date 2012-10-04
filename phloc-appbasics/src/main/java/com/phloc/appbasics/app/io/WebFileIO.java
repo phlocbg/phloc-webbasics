@@ -58,10 +58,18 @@ public final class WebFileIO
   @Deprecated
   public static void initBasePath (@Nonnull final File aBasePath)
   {
-    initPaths (aBasePath, aBasePath);
+    initPaths (aBasePath, aBasePath, true);
   }
 
+  @Deprecated
   public static void initPaths (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
+  {
+    initPaths (aDataPath, aServletContextPath, true);
+  }
+
+  public static void initPaths (@Nonnull final File aDataPath,
+                                @Nonnull final File aServletContextPath,
+                                final boolean bCheckFileAccess)
   {
     if (aDataPath == null)
       throw new NullPointerException ("dataPath");
@@ -77,10 +85,12 @@ public final class WebFileIO
         throw new IllegalStateException ("Another servlet context path is already present: " + s_aServletContextPath);
 
       s_aLogger.info ("Using '" + aDataPath + "' as the data path");
-      s_aDataPath = new PathRelativeFileIO (aDataPath);
+      s_aDataPath = new PathRelativeFileIO (aDataPath, bCheckFileAccess);
 
       s_aLogger.info ("Using '" + aServletContextPath + "' as the servlet context path");
-      s_aServletContextPath = new PathRelativeFileIO (aServletContextPath);
+      // Don't check access rights again, if it equals the data path
+      s_aServletContextPath = new PathRelativeFileIO (aServletContextPath, bCheckFileAccess &&
+                                                                           !aServletContextPath.equals (aDataPath));
     }
     finally
     {

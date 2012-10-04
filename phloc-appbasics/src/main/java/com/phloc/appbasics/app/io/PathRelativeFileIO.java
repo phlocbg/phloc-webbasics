@@ -38,6 +38,7 @@ import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.FilenameHelper;
+import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -53,7 +54,13 @@ public final class PathRelativeFileIO
 
   private final File m_aBasePath;
 
+  @Deprecated
   public PathRelativeFileIO (@Nonnull final File aBasePath)
+  {
+    this (aBasePath, true);
+  }
+
+  public PathRelativeFileIO (@Nonnull final File aBasePath, final boolean bCheckAccessRights)
   {
     if (aBasePath == null)
       throw new NullPointerException ("basePath");
@@ -64,16 +71,39 @@ public final class PathRelativeFileIO
     // Must be an existing directory
     if (!aBasePath.isDirectory ())
       throw new InitializationException ("The passed base path exists but is not a directory!");
-
-    // Check read/write/execute
-    if (!FileUtils.canRead (aBasePath))
-      throw new IllegalArgumentException ("Cannot read in " + aBasePath);
-    if (!FileUtils.canWrite (aBasePath))
-      s_aLogger.warn ("Cannot write in " + aBasePath);
-    if (!FileUtils.canExecute (aBasePath))
-      s_aLogger.warn ("Cannot execute in " + aBasePath);
-
     m_aBasePath = aBasePath;
+
+    if (bCheckAccessRights)
+    {
+      // Check read/write/execute
+      s_aLogger.info ("Checking file access in " + aBasePath);
+      int nFiles = 0;
+      int nDirs = 0;
+      for (final File aFile : new FileSystemRecursiveIterator (aBasePath))
+        if (aFile.isFile ())
+        {
+          // Check if files are read-write
+          if (!FileUtils.canRead (aFile))
+            throw new IllegalArgumentException ("Cannot read file " + aFile);
+          if (!FileUtils.canWrite (aFile))
+            s_aLogger.warn ("Cannot write file " + aFile);
+          ++nFiles;
+        }
+        else
+          if (aFile.isDirectory ())
+          {
+            if (!FileUtils.canRead (aFile))
+              throw new IllegalArgumentException ("Cannot read in directory " + aFile);
+            if (!FileUtils.canWrite (aFile))
+              s_aLogger.warn ("Cannot write in directory " + aFile);
+            if (!FileUtils.canExecute (aFile))
+              s_aLogger.warn ("Cannot execute in directory " + aFile);
+            ++nDirs;
+          }
+          else
+            s_aLogger.warn ("Neither file nor directory: " + aFile);
+      s_aLogger.info ("Finished checking file access for " + nFiles + " files and " + nDirs + " directories");
+    }
   }
 
   /**

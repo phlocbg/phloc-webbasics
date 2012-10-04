@@ -45,8 +45,9 @@ public final class AppBasicTestInit
 
   public static void initAppBasics (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
   {
-    // Init the base path once
-    WebFileIO.initPaths (aDataPath, aServletContextPath);
+    // Init the base path once - don't check access rights in test, for
+    // performance reasons
+    WebFileIO.initPaths (aDataPath, aServletContextPath, false);
     WebIO.init (new WebIOResourceProviderChain (aDataPath));
 
     // Init the IDs
