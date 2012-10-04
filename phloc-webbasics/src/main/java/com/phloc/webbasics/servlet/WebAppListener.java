@@ -83,6 +83,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   public static final String INIT_PARAMETER_PRODUCTION = DEFAULT_INIT_PARAMETER_PRODUCTION;
   public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
   public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
+  public static final String INIT_PARAMETER_NO_CHECK_FILE_ACCESS = "noCheckFileAccess";
   protected static final String ID_FILENAME = "persistent_id.dat";
 
   /** The logger to use. */
@@ -306,6 +307,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     WebScopeManager.onGlobalBegin (aSC);
 
     // Get base storage path
+    final boolean bFileAccessCheck = !StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_NO_CHECK_FILE_ACCESS));
     final String sServletContextPath = aSC.getRealPath (".");
     String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
     if (StringHelper.hasNoText (sBasePath))
@@ -318,7 +320,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       sBasePath = sServletContextPath;
     }
     final File aBasePath = new File (sBasePath);
-    WebFileIO.initPaths (aBasePath, new File (sServletContextPath));
+    WebFileIO.initPaths (aBasePath, new File (sServletContextPath), bFileAccessCheck);
     WebIO.init (new WebIOResourceProviderChain (aBasePath));
 
     // Set persistent ID provider
