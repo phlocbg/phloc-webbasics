@@ -37,7 +37,7 @@ public final class HCGoogleAnalyticsTest
   {
     HCScript.setDefaultMode (EMode.PLAIN_TEXT_NO_ESCAPE);
     final HCGoogleAnalytics aGA = new HCGoogleAnalytics ("abc", false);
-    assertEquals ("<script type=\"text/javascript\">"
+    assertEquals ("<script type=\"text/javascript\" xmlns=\"http://www.w3.org/1999/xhtml\">"
                       + "var _gaq=(_gaq||[]);"
                       + "_gaq.push(['_setAccount','abc']);"
                       + "_gaq.push(['_trackPageview']);"
