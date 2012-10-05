@@ -66,13 +66,14 @@ import com.phloc.webbasics.http.HTTPHeaderMap;
 import com.phloc.webbasics.http.QValue;
 
 /**
- * This class tries to encapsulate all things required to build a HTTP response.
- * It offer warnings and consistency checks if something is missing.
+ * This class encapsulates all things required to build a HTTP response. It
+ * offer warnings and consistency checks if something is missing.
  * 
  * @author philip
  */
 public class UnifiedResponse
 {
+  public static final boolean DEFAULT_ALLOW_CONTENT_ON_STATUS = false;
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
   private static final int MAX_CSS_KB_FOR_IE = 288;
   private static final AtomicInteger s_aRequestNum = new AtomicInteger (0);
@@ -83,6 +84,13 @@ public class UnifiedResponse
   private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final AcceptCharsetList m_aAcceptCharsetList;
   private final AcceptMimeTypeList m_aAcceptMimeTypeList;
+
+  // Settings
+  /**
+   * Flag which determines whether content is allow, if a status is set. This is
+   * rarely used, e.g. on some redirect.
+   */
+  private boolean m_bAllowContentOnStatusCode = DEFAULT_ALLOW_CONTENT_ON_STATUS;
 
   // Main response fields
   private Charset m_aCharset;
@@ -102,17 +110,21 @@ public class UnifiedResponse
    * easily aggregated.
    */
   private final int m_nID = s_aRequestNum.incrementAndGet ();
+
   /**
-   * The requst URL, lazily initialized.
+   * The request URL, lazily initialized.
    */
   private String m_sRequestURL;
+
   /**
    * Just avoid emitting the request headers more than once, as they wont change
    * from error to error.
    */
   private boolean m_bEmittedRequestHeaders = false;
+
   /** This maps keeps all the response headers for later emitting. */
   private final HTTPHeaderMap m_aRequestHeaderMap;
+
   /**
    * An optional encode to be used to determine if a content-disposition
    * filename can be ISO-8859-1 encoded.
@@ -183,6 +195,22 @@ public class UnifiedResponse
   public final EHTTPMethod getHTTPMethod ()
   {
     return m_eHTTPMethod;
+  }
+
+  /**
+   * @return <code>true</code> if content is allowed even if a status code is
+   *         present.
+   */
+  public boolean isAllowContentOnStatusCode ()
+  {
+    return m_bAllowContentOnStatusCode;
+  }
+
+  @Nonnull
+  public UnifiedResponse setAllowContentOnStatusCode (final boolean bAllowContentOnStatusCode)
+  {
+    m_bAllowContentOnStatusCode = bAllowContentOnStatusCode;
+    return this;
   }
 
   @Nullable
@@ -753,14 +781,17 @@ public class UnifiedResponse
 
     if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
     {
-      if (m_aCharset != null)
-        _warn ("Ignoring provided charset because a status code is specified!");
-      if (m_aMimeType != null)
-        _warn ("Ignoring provided MimeType because a status code is specified!");
-      if (hasContent ())
-        _warn ("Ignoring provided content because a status code is specified!");
-      if (m_sContentDispositionFilename != null)
-        _warn ("Ignoring provided Content-Dispostion filename because a status code is specified!");
+      if (!m_bAllowContentOnStatusCode)
+      {
+        if (m_aCharset != null)
+          _warn ("Ignoring provided charset because a status code is specified!");
+        if (m_aMimeType != null)
+          _warn ("Ignoring provided MimeType because a status code is specified!");
+        if (hasContent ())
+          _warn ("Ignoring provided content because a status code is specified!");
+        if (m_sContentDispositionFilename != null)
+          _warn ("Ignoring provided Content-Dispostion filename because a status code is specified!");
+      }
 
       if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
       {
@@ -776,7 +807,9 @@ public class UnifiedResponse
         // header, preserving cookies and other headers.
         aHttpResponse.setStatus (m_nStatusCode);
       }
-      return;
+
+      if (!m_bAllowContentOnStatusCode)
+        return;
     }
 
     // Verify only if is a response with content
