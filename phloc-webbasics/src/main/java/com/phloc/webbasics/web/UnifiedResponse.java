@@ -73,7 +73,8 @@ import com.phloc.webbasics.http.QValue;
  */
 public class UnifiedResponse
 {
-  public static final boolean DEFAULT_ALLOW_CONTENT_ON_STATUS = false;
+  public static final boolean DEFAULT_ALLOW_CONTENT_ON_REDIRECT = false;
+  public static final boolean DEFAULT_ALLOW_CONTENT_ON_STATUS_CODE = false;
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
   private static final int MAX_CSS_KB_FOR_IE = 288;
   private static final AtomicInteger s_aRequestNum = new AtomicInteger (0);
@@ -87,10 +88,16 @@ public class UnifiedResponse
 
   // Settings
   /**
-   * Flag which determines whether content is allow, if a status is set. This is
-   * rarely used, e.g. on some redirect.
+   * Flag which determines whether content is allow, if a redirect is set. This
+   * is rarely used.
    */
-  private boolean m_bAllowContentOnStatusCode = DEFAULT_ALLOW_CONTENT_ON_STATUS;
+  private boolean m_bAllowContentOnRedirect = DEFAULT_ALLOW_CONTENT_ON_REDIRECT;
+
+  /**
+   * Flag which determines whether content is allow, if a status code is set.
+   * This is rarely used.
+   */
+  private boolean m_bAllowContentOnStatusCode = DEFAULT_ALLOW_CONTENT_ON_STATUS_CODE;
 
   // Main response fields
   private Charset m_aCharset;
@@ -195,6 +202,22 @@ public class UnifiedResponse
   public final EHTTPMethod getHTTPMethod ()
   {
     return m_eHTTPMethod;
+  }
+
+  /**
+   * @return <code>true</code> if content is allowed even if a redirect is
+   *         present.
+   */
+  public boolean isAllowContentOnRedirect ()
+  {
+    return m_bAllowContentOnRedirect;
+  }
+
+  @Nonnull
+  public UnifiedResponse setAllowContentOnRedirect (final boolean bAllowContentOnRedirect)
+  {
+    m_bAllowContentOnRedirect = bAllowContentOnRedirect;
+    return this;
   }
 
   /**
@@ -762,35 +785,51 @@ public class UnifiedResponse
       }
     }
 
-    if (m_sRedirectTargetUrl != null)
+    final boolean bIsRedirect = m_sRedirectTargetUrl != null;
+    final boolean bHasStatusCode = m_nStatusCode != CGlobal.ILLEGAL_UINT;
+
+    if (bIsRedirect)
     {
-      if (m_aCharset != null)
-        _warn ("Ignoring provided charset because a redirect is specified!");
-      if (m_aMimeType != null)
-        _warn ("Ignoring provided MimeType because a redirect is specified!");
-      if (hasContent ())
-        _warn ("Ignoring provided content because a redirect is specified!");
-      if (m_sContentDispositionFilename != null)
-        _warn ("Ignoring provided Content-Dispostion filename because a redirect is specified!");
+      if (bHasStatusCode)
+        _warn ("Ignoring provided status code because a redirect is specified!");
+      if (!m_bAllowContentOnRedirect)
+      {
+        if (m_aCacheControl != null)
+          _warn ("Ignoring provided Cache-Control because a redirect is specified!");
+        if (m_sContentDispositionFilename != null)
+          _warn ("Ignoring provided Content-Dispostion filename because a redirect is specified!");
+        if (m_aMimeType != null)
+          _warn ("Ignoring provided MimeType because a redirect is specified!");
+        if (m_aCharset != null)
+          _warn ("Ignoring provided charset because a redirect is specified!");
+        if (hasContent ())
+          _warn ("Ignoring provided content because a redirect is specified!");
+      }
 
       // Note: After using this method, the response should be
       // considered to be committed and should not be written to.
       aHttpResponse.sendRedirect (aHttpResponse.encodeRedirectURL (m_sRedirectTargetUrl));
-      return;
+
+      if (!m_bAllowContentOnRedirect)
+        return;
     }
 
-    if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
+    if (bHasStatusCode)
     {
+      if (bIsRedirect)
+        _warn ("Overriding provided redirect because a status code is specified!");
       if (!m_bAllowContentOnStatusCode)
       {
-        if (m_aCharset != null)
-          _warn ("Ignoring provided charset because a status code is specified!");
-        if (m_aMimeType != null)
-          _warn ("Ignoring provided MimeType because a status code is specified!");
-        if (hasContent ())
-          _warn ("Ignoring provided content because a status code is specified!");
+        if (m_aCacheControl != null)
+          _warn ("Ignoring provided Cache-Control because a status code is specified!");
         if (m_sContentDispositionFilename != null)
           _warn ("Ignoring provided Content-Dispostion filename because a status code is specified!");
+        if (m_aMimeType != null)
+          _warn ("Ignoring provided MimeType because a status code is specified!");
+        if (m_aCharset != null)
+          _warn ("Ignoring provided charset because a status code is specified!");
+        if (hasContent ())
+          _warn ("Ignoring provided content because a status code is specified!");
       }
 
       if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
