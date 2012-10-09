@@ -18,7 +18,10 @@
     limitations under the License.
 
 -->
-<translationitems count="44">
+<translationitems count="46">
+  <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
+    <pl>Ściągnąć</pl>
+  </item>
   <item id="com.phloc.webbasics.EWebBasicsText.FILE_SELECT">
     <pl>Wybór plików</pl>
   </item>
@@ -81,6 +84,9 @@
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.OPEN_CALENDAR">
     <pl>Kalendarz…</pl>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGE_HELP_TITLE">
+    <pl>Wyświetlić pomoc dla &#39;&#39;{0}&#39;&#39;</pl>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.PAGING_LABEL_PAGE_SIZE">
     <pl>Zapisy na stronę: </pl>

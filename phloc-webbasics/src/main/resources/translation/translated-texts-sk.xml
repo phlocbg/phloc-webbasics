@@ -18,7 +18,10 @@
     limitations under the License.
 
 -->
-<translationitems count="44">
+<translationitems count="46">
+  <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
+    <sk>Stiahnuť</sk>
+  </item>
   <item id="com.phloc.webbasics.EWebBasicsText.FILE_SELECT">
     <sk>Výber dát</sk>
   </item>
@@ -81,6 +84,9 @@
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.OPEN_CALENDAR">
     <sk>Kalendár</sk>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.PAGE_HELP_TITLE">
+    <sk>Zobraziť pomoc pre &#39;&#39;{0}&#39;&#39;</sk>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.PAGING_LABEL_PAGE_SIZE">
     <sk>Záznamy cez stránku: </sk>
