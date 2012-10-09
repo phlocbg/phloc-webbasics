@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2012-10-09" version="1.9.6" />
+  <entry date="2012-10-05" category="tech" action="add">
+    <change>
+      <text locale="en">Added possibility in UnifiedResponse to send a body even if a status code or a redirect is present</text>
+    </change>
+  </entry>
   <entry date="2012-10-04" category="tech" action="add">
     <change>
       <text locale="en">Added new ServletContext init-parameter noCheckFileAccess to avoid performing the file access on startup</text>

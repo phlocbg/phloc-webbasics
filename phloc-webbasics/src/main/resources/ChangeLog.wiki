@@ -1,7 +1,9 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>10/4/12</td><td>add</td><td>tech</td><td></td><td>Added new ServletContext init-parameter noCheckFileAccess to avoid performing the file access on startup</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>10/9/12</td><td colspan="4">_Release *1.9.6*_</td></tr>
+<tr><td>10/5/12</td><td>add</td><td>tech</td><td></td><td>Added possibility in UnifiedResponse to send a body even if a status code or a redirect is present</td></tr>
+<tr><td>10/4/12</td><td>add</td><td>tech</td><td></td><td>Added new ServletContext init-parameter noCheckFileAccess to avoid performing the file access on startup</td></tr>
 <tr border="1"><td>9/24/12</td><td colspan="4">_Release *1.9.5*_</td></tr>
 <tr><td>9/20/12</td><td>update</td><td>performance</td><td></td><td>Performance improvement by using [http://code.google.com/p/phloc-commons phloc-commons] 3.8.4</td></tr>
 <tr><td>9/19/12</td><td>update</td><td>performance</td><td></td><td>Some consistency improvements in UnifiedResponse</td></tr>
