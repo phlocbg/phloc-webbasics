@@ -24,10 +24,10 @@ import com.phloc.commons.xml.serialize.EXMLSerializeIndent;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
-import com.phloc.html.hc.conversion.IHCConversionSettingsProvider;
 
 /**
- * pdaf3 implementation of {@link IHCConversionSettingsProvider} using the
+ * pdaf3 implementation of
+ * {@link com.phloc.html.hc.conversion.IHCConversionSettingsProvider} using the
  * default {@link EHTMLVersion}
  * 
  * @author philip

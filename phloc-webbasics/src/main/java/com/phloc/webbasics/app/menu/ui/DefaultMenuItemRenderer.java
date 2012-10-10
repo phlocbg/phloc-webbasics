@@ -47,13 +47,19 @@ public class DefaultMenuItemRenderer implements IMenuItemRenderer
   public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
   public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
 
-  protected Locale m_aContentLocale;
+  private final Locale m_aContentLocale;
 
   public DefaultMenuItemRenderer (@Nonnull final Locale aContentLocale)
   {
     if (aContentLocale == null)
       throw new NullPointerException ("contentLocale");
     m_aContentLocale = aContentLocale;
+  }
+
+  @Nonnull
+  public final Locale getContentLocale ()
+  {
+    return m_aContentLocale;
   }
 
   @Nonnull

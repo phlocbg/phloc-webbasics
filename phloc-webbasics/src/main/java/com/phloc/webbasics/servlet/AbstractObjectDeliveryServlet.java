@@ -61,8 +61,8 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   protected static final String ETAG_VALUE_OBJECT_DELIVERY_SERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
                                                                                                           .nextLong ()) + '"';
 
-  private Set <String> m_aAllowedExtensions;
-  private Set <String> m_aDeniedExtensions;
+  private static Set <String> s_aAllowedExtensions = new HashSet <String> ();
+  private static Set <String> s_aDeniedExtensions = new HashSet <String> ();
 
   @Nonnull
   private static String _unifyExtension (@Nonnull final String sExt)
@@ -73,35 +73,35 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   /**
    * Helper function to convert the configuration string to a collection.
    * 
+   * @param aSet
+   *        The set to be filled. May not be <code>null</code>.
    * @param sExtensionList
    *        The string to be separated to a list. Each item is separated by a
    *        ",".
    */
   @Nonnull
   @ReturnsMutableCopy
-  private static Set <String> _asSet (@Nullable final String sExtensionList)
+  private static void _asSet (@Nonnull final Set <String> aSet, @Nullable final String sExtensionList)
   {
-    final Set <String> ret = new HashSet <String> ();
     if (StringHelper.hasText (sExtensionList))
       for (final String sExtension : StringHelper.getExploded (',', sExtensionList))
-        ret.add (_unifyExtension (sExtension.trim ()));
-    return ret;
+        aSet.add (_unifyExtension (sExtension.trim ()));
   }
 
   @Override
   @OverridingMethodsMustInvokeSuper
   protected final void onInit ()
   {
-    m_aAllowedExtensions = _asSet (getInitParameter ("allowedExtensions"));
-    m_aDeniedExtensions = _asSet (getInitParameter ("deniedExtensions"));
+    _asSet (s_aAllowedExtensions, getInitParameter ("allowedExtensions"));
+    _asSet (s_aDeniedExtensions, getInitParameter ("deniedExtensions"));
   }
 
   private boolean _hasValidExtension (@Nullable final String sFilename)
   {
     final String sExt = _unifyExtension (FilenameHelper.getExtension (sFilename));
-    if (m_aDeniedExtensions.contains (sExt) || m_aDeniedExtensions.contains ("*"))
+    if (s_aDeniedExtensions.contains (sExt) || s_aDeniedExtensions.contains ("*"))
       return false;
-    return m_aAllowedExtensions.contains (sExt) || m_aAllowedExtensions.contains ("*");
+    return s_aAllowedExtensions.contains (sExt) || s_aAllowedExtensions.contains ("*");
   }
 
   private static boolean _isPossibleDirectoryTraversalRequest (@Nonnull final String sFilename)

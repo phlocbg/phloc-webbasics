@@ -54,6 +54,7 @@ final class UserAgent implements IUserAgent
                                                                  "Netscape",
                                                                  "K-Meleon",
                                                                  "WebThumb" };
+  private static final int IE_VERSION_IN_COMPATIBILITY_MODE = 7;
 
   private final String m_sFullUserAgent;
   private final UserAgentElementList m_aElements;
@@ -172,7 +173,7 @@ final class UserAgent implements IUserAgent
         // IE Compatibility Mode check
         // http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
         final Version aVersion = new Version (sInfoIE.substring (IE_SEARCH_STRING.length ()).trim ());
-        final boolean bIsIECompatibilityMode = aVersion.getMajor () == 7 &&
+        final boolean bIsIECompatibilityMode = aVersion.getMajor () == IE_VERSION_IN_COMPATIBILITY_MODE &&
                                                m_aElements.getListItemStartingWith (IE_TRIDENT_SEARCH_STRING) != null;
         m_aInfoIE = new BrowserInfoIE (aVersion, bIsIECompatibilityMode);
       }

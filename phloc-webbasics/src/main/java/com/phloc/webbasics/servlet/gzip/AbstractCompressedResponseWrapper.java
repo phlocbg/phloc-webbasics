@@ -23,12 +23,10 @@ import java.io.PrintWriter;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +38,8 @@ import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
 
 /**
- * Abstract output stream switching {@link HttpServletResponseWrapper}
+ * Abstract output stream switching
+ * {@link javax.servlet.http.HttpServletResponseWrapper}
  * 
  * @author philip
  */
@@ -104,7 +103,7 @@ public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpR
   }
 
   @Override
-  public void setContentType (@Nullable final String sContentType)
+  public void setContentType (@Nonnull final String sContentType)
   {
     super.setContentType (sContentType);
 

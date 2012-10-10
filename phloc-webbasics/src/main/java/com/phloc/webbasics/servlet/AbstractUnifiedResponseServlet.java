@@ -33,6 +33,7 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.regex.RegExHelper;
@@ -117,7 +118,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   {
     // Round down to the nearest second for a proper compare (Java has milli
     // seconds, HTTP requests/responses have not)
-    return nMillis / 1000 * 1000;
+    return nMillis / CGlobal.MILLISECONDS_PER_SECOND * CGlobal.MILLISECONDS_PER_SECOND;
   }
 
   @Nonnull

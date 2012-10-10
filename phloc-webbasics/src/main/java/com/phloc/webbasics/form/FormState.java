@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.form;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -33,7 +34,7 @@ import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 
 @Immutable
-public class FormState implements IHasID <String>
+public class FormState implements IHasID <String>, Serializable
 {
   private final String m_sPageID;
   private final DateTime m_aDT;
