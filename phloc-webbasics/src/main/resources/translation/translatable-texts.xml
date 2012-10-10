@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="68">
+<translationitems count="69">
   <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
     <de>Download</de>
     <en>Download</en>
@@ -122,6 +122,10 @@
   <item id="com.phloc.webbasics.EWebBasicsText.MSG_FALSE">
     <de>Falsch</de>
     <en>False</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.MSG_SAVE_CHANGES_SUCCESS">
+    <de>Die Änderungen wurden erfolgreich gespeichert!</de>
+    <en>The changes were saved successfully!</en>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.MSG_TRUE">
     <de>Wahr</de>
