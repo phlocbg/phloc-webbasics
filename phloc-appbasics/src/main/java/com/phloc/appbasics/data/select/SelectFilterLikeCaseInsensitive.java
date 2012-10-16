@@ -29,14 +29,17 @@ public final class SelectFilterLikeCaseInsensitive extends SelectFilterLike
 {
   /**
    * @param sColumn
+   *        The column to filter. May neither be <code>null</code> nor empty.
    * @param sFilterValue
+   *        The value to filter. May not be <code>null</code>.
    * @param aLocale
-   *        the locale to use for upper/lower case conversions
+   *        the locale to use for upper/lower case conversions. May not be
+   *        <code>null</code>.
    */
   public SelectFilterLikeCaseInsensitive (@Nonnull @Nonempty final String sColumn,
                                           @Nonnull final String sFilterValue,
                                           @Nonnull final Locale aLocale)
   {
-    super (sColumn, sFilterValue == null ? sFilterValue : sFilterValue.toUpperCase (aLocale));
+    super (sColumn, sFilterValue.toUpperCase (aLocale));
   }
 }

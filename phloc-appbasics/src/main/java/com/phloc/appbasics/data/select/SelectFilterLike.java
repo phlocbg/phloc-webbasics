@@ -33,6 +33,12 @@ public class SelectFilterLike implements ISelectFilterLike
   private final String m_sColumn;
   private final String m_sFilterValue;
 
+  /**
+   * @param sColumn
+   *        The column to filter. May neither be <code>null</code> nor empty.
+   * @param sFilterValue
+   *        The value to filter. May not be <code>null</code>.
+   */
   public SelectFilterLike (@Nonnull @Nonempty final String sColumn, @Nonnull final String sFilterValue)
   {
     if (StringHelper.hasNoText (sColumn))
