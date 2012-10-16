@@ -65,7 +65,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)
       try
       {
-        aListener.onRequestBegin ();
+        aListener.onRequestBegin (aRequestScope);
       }
       catch (final Throwable t)
       {

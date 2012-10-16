@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2012-10-16" category="tech" action="change" incompatible="true">
+    <change>
+      <text locale="en">Changed IApplicationRequestListenerSPI API to receive the current request scope onRequestBegin</text>
+    </change>
+  </entry>
   <release date="2012-10-09" version="1.9.6" />
   <entry date="2012-10-05" category="tech" action="add">
     <change>

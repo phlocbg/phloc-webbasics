@@ -19,17 +19,21 @@ package com.phloc.webbasics.spi;
 
 import java.io.Serializable;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.commons.annotations.IsSPIInterface;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 @IsSPIInterface
 public interface IApplicationRequestListenerSPI extends Serializable
 {
-  // TODO add request scope parameters
-
   /**
    * Called at the very beginning of a request.
+   * 
+   * @param aRequestScope
+   *        The scope of the current request.
    */
-  void onRequestBegin ();
+  void onRequestBegin (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 
   /**
    * Called at the end of a request.
