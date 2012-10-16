@@ -28,7 +28,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
-public final class SelectFilterLike implements ISelectFilterLike
+public class SelectFilterLike implements ISelectFilterLike
 {
   private final String m_sColumn;
   private final String m_sFilterValue;
