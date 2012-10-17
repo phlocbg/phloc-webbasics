@@ -29,7 +29,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCForm_FileUpload;
-import com.phloc.scopes.nonweb.domain.IRequestScope;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -79,7 +79,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   @Nonnull
-  private static IRequestScope _getScope ()
+  protected static final IRequestWebScopeWithoutResponse getScope ()
   {
     return WebScopeManager.getRequestScope ();
   }
@@ -109,7 +109,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nullable
   protected static final String getAttr (@Nullable final String sName, @Nullable final String sDefault)
   {
-    final String sScopeValue = _getScope ().getAttributeAsString (sName, sDefault);
+    final String sScopeValue = getScope ().getAttributeAsString (sName, sDefault);
     return StringHelper.trim (sScopeValue);
   }
 
@@ -123,7 +123,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nullable
   protected static final List <String> getAttrs (@Nullable final String sName)
   {
-    return _getScope ().getAttributeValues (sName);
+    return getScope ().getAttributeValues (sName);
   }
 
   /**
@@ -140,7 +140,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    */
   protected static final int getIntAttr (@Nullable final String sName, final int nDefault)
   {
-    return _getScope ().getAttributeAsInt (sName, nDefault);
+    return getScope ().getAttributeAsInt (sName, nDefault);
   }
 
   /**
@@ -157,7 +157,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    */
   protected static final double getDoubleAttr (@Nullable final String sName, final double dDefault)
   {
-    return _getScope ().getAttributeAsDouble (sName, dDefault);
+    return getScope ().getAttributeAsDouble (sName, dDefault);
   }
 
   /**
@@ -188,7 +188,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName,
                                                             @Nullable final DATATYPE aDefault)
   {
-    return _getScope ().getCastedAttribute (sName, aDefault);
+    return getScope ().getCastedAttribute (sName, aDefault);
   }
 
   /**
