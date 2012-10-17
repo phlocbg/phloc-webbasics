@@ -52,7 +52,7 @@ public final class RequestParamMapTest
     // get page_name[de] and page_name[en]
     final IRequestParamMap aNames = aMap.getMap ("page_name");
     assertEquals (2, aNames.size ());
-    final Map <String, String> aValueMap = aNames.asValueMap ();
+    final Map <String, String> aValueMap = aNames.getAsValueMap ();
     assertEquals (2, aValueMap.size ());
     assertEquals ("deutscher name", aValueMap.get ("de"));
     assertEquals ("english name", aValueMap.get ("en"));

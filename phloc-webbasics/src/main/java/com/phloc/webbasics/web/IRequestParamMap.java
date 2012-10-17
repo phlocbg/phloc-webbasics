@@ -25,7 +25,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.IHasSize;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
@@ -44,24 +43,73 @@ public interface IRequestParamMap extends IHasSize
   @Nullable
   String getString (@Nonnull String... aPath);
 
+  /**
+   * Get a nested map for the specified path.
+   * 
+   * @param aPath
+   *        The path to be resolved
+   * @return <code>null</code> if the path could not be resolved.
+   */
   @Nullable
   IRequestParamMap getMap (@Nonnull String... aPath);
 
+  /**
+   * Check if this map, contains the passed key. This will be true both for
+   * nested maps as well as for values.
+   * 
+   * @param sKey
+   *        The key to check.
+   * @return <code>true</code> if such a key is contained, <code>false</code> if
+   *         not
+   */
   boolean containsKey (@Nullable String sKey);
 
+  /**
+   * @return A set of all contained key. Never <code>null</code> but maybe
+   *         empty.
+   */
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   Set <String> keySet ();
 
+  /**
+   * @return A collection of all values of this map. The type of the value is
+   *         usually either {@link String}, file item (from upload) or
+   *         {@link Map} from String to Object.
+   */
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   Collection <Object> values ();
 
+  /**
+   * @deprecated Use {@link #getAsObjectMap()} instead
+   */
+  @Deprecated
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   Map <String, Object> asObjectMap ();
 
+  /**
+   * @return A copy of the contained map. For the value types see
+   *         {@link #values()}
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Map <String, Object> getAsObjectMap ();
+
+  /**
+   * @deprecated Use {@link #getAsValueMap()} instead
+   */
+  @Deprecated
   @Nonnull
   @ReturnsMutableCopy
   Map <String, String> asValueMap ();
+
+  /**
+   * @return A key/value map, with enforced values. If this map contains a
+   *         nested map, this method will fail with a ClassCastException!
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Map <String, String> getAsValueMap ();
 }

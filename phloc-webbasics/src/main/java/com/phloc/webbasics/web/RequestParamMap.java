@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
@@ -201,29 +200,51 @@ public final class RequestParamMap implements IRequestParamMap
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Set <String> keySet ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aMap.keySet ());
-  }
-
-  @Nonnull
-  @ReturnsImmutableObject
-  public Collection <Object> values ()
-  {
-    return ContainerHelper.makeUnmodifiable (m_aMap.values ());
-  }
-
-  @Nonnull
-  @ReturnsImmutableObject
-  public Map <String, Object> asObjectMap ()
-  {
-    return ContainerHelper.makeUnmodifiable (m_aMap);
+    return ContainerHelper.newSet (m_aMap.keySet ());
   }
 
   @Nonnull
   @ReturnsMutableCopy
+  public Collection <Object> values ()
+  {
+    return ContainerHelper.newList (m_aMap.values ());
+  }
+
+  /**
+   * @deprecated Use {@link #getAsObjectMap()} instead
+   */
+  @Deprecated
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, Object> asObjectMap ()
+  {
+    return getAsObjectMap ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, Object> getAsObjectMap ()
+  {
+    return ContainerHelper.newMap (m_aMap);
+  }
+
+  /**
+   * @deprecated Use {@link #getAsValueMap()} instead
+   */
+  @Deprecated
+  @Nonnull
+  @ReturnsMutableCopy
   public Map <String, String> asValueMap ()
+  {
+    return getAsValueMap ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, String> getAsValueMap ()
   {
     final Map <String, String> ret = new HashMap <String, String> (m_aMap.size ());
     for (final Map.Entry <String, Object> aEntry : m_aMap.entrySet ())
