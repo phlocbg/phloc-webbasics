@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.IHasSize;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
@@ -35,13 +36,13 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  */
 public interface IRequestParamMap extends IHasSize
 {
-  boolean contains (@Nonnull String... aPath);
+  boolean contains (@Nonnull @Nonempty String... aPath);
 
   @Nullable
-  Object getObject (@Nonnull String... aPath);
+  Object getObject (@Nonnull @Nonempty String... aPath);
 
   @Nullable
-  String getString (@Nonnull String... aPath);
+  String getString (@Nonnull @Nonempty String... aPath);
 
   /**
    * Get a nested map for the specified path.
@@ -51,7 +52,7 @@ public interface IRequestParamMap extends IHasSize
    * @return <code>null</code> if the path could not be resolved.
    */
   @Nullable
-  IRequestParamMap getMap (@Nonnull String... aPath);
+  IRequestParamMap getMap (@Nonnull @Nonempty String... aPath);
 
   /**
    * Check if this map, contains the passed key. This will be true both for

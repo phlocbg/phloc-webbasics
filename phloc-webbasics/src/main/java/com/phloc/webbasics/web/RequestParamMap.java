@@ -112,7 +112,7 @@ public final class RequestParamMap implements IRequestParamMap
   }
 
   @Nullable
-  private static Map <String, Object> _asMap (@Nonnull final Map <String, Object> aMap, @Nullable final String sPath)
+  private static Map <String, Object> _getAsMap (@Nonnull final Map <String, Object> aMap, @Nullable final String sPath)
   {
     final Object aPathObj = aMap.get (sPath);
     if (aPathObj != null && !(aPathObj instanceof Map <?, ?>))
@@ -127,40 +127,38 @@ public final class RequestParamMap implements IRequestParamMap
     return GenericReflection.<Object, Map <String, Object>> uncheckedCast (aPathObj);
   }
 
-  public boolean contains (@Nonnull @Nonempty final String... aPath)
-  {
-    if (ArrayHelper.isEmpty (aPath))
-      throw new IllegalArgumentException ("Path path array may not be empty!");
-
-    Map <String, Object> aMap = m_aMap;
-    for (int i = 0; i < aPath.length - 1; ++i)
-    {
-      aMap = _asMap (aMap, aPath[i]);
-      if (aMap == null)
-        return false;
-    }
-    return aMap.containsKey (ArrayHelper.getLast (aPath));
-  }
-
   @Nullable
-  public Object getObject (@Nonnull final String... aPath)
+  private Map <String, Object> _getResolvedParentMap (@Nonnull @Nonempty final String... aPath)
   {
     if (ArrayHelper.isEmpty (aPath))
       throw new IllegalArgumentException ("Path path array may not be empty!");
 
     Map <String, Object> aMap = m_aMap;
+    // Until the second last object
     for (int i = 0; i < aPath.length - 1; ++i)
     {
-      aMap = _asMap (aMap, aPath[i]);
+      aMap = _getAsMap (aMap, aPath[i]);
       if (aMap == null)
         return null;
     }
+    return aMap;
+  }
 
-    return aMap.get (ArrayHelper.getLast (aPath));
+  public boolean contains (@Nonnull @Nonempty final String... aPath)
+  {
+    final Map <String, Object> aMap = _getResolvedParentMap (aPath);
+    return aMap != null && aMap.containsKey (ArrayHelper.getLast (aPath));
   }
 
   @Nullable
-  public String getString (@Nonnull final String... aPath)
+  public Object getObject (@Nonnull @Nonempty final String... aPath)
+  {
+    final Map <String, Object> aMap = _getResolvedParentMap (aPath);
+    return aMap == null ? null : aMap.get (ArrayHelper.getLast (aPath));
+  }
+
+  @Nullable
+  public String getString (@Nonnull @Nonempty final String... aPath)
   {
     final Object aValue = getObject (aPath);
     return AbstractReadonlyAttributeContainer.getAsString (ArrayHelper.getLast (aPath), aValue, null);
@@ -168,15 +166,15 @@ public final class RequestParamMap implements IRequestParamMap
 
   @Nullable
   @ReturnsMutableCopy
-  public IRequestParamMap getMap (@Nonnull final String... aPath)
+  public IRequestParamMap getMap (@Nonnull @Nonempty final String... aPath)
   {
     if (ArrayHelper.isEmpty (aPath))
       throw new IllegalArgumentException ("Path path array may not be empty!");
 
     Map <String, Object> aMap = m_aMap;
-    for (final String element : aPath)
+    for (final String sPath : aPath)
     {
-      aMap = _asMap (aMap, element);
+      aMap = _getAsMap (aMap, sPath);
       if (aMap == null)
         return null;
     }
@@ -282,5 +280,19 @@ public final class RequestParamMap implements IRequestParamMap
     for (final String sName : aAttrCont.getAllAttributeNames ())
       ret.put (sName, aAttrCont.getAttributeObject (sName));
     return ret;
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String getFieldName (@Nonnull @Nonempty final String sBaseName, @Nullable final String... aSuffixes)
+  {
+    if (StringHelper.hasNoText (sBaseName))
+      throw new IllegalArgumentException ("baseName");
+
+    final StringBuilder aSB = new StringBuilder (sBaseName);
+    if (aSuffixes != null)
+      for (final String sSuffix : aSuffixes)
+        aSB.append ('[').append (StringHelper.getNotNull (sSuffix)).append (']');
+    return aSB.toString ();
   }
 }

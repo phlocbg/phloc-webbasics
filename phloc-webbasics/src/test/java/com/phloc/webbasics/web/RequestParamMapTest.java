@@ -20,6 +20,7 @@ package com.phloc.webbasics.web;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +28,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
-import com.phloc.webbasics.web.IRequestParamMap;
-import com.phloc.webbasics.web.RequestParamMap;
 
 public final class RequestParamMapTest
 {
@@ -48,6 +47,10 @@ public final class RequestParamMapTest
 
     final IRequestParamMap aMap = RequestParamMap.create (new MapBasedAttributeContainer (aTestMap));
     assertEquals (4, aMap.size ());
+    assertTrue (aMap.containsKey ("a"));
+    assertTrue (aMap.containsKey ("b"));
+    assertTrue (aMap.containsKey ("c"));
+    assertTrue (aMap.containsKey ("page_name"));
 
     // get page_name[de] and page_name[en]
     final IRequestParamMap aNames = aMap.getMap ("page_name");
@@ -76,5 +79,12 @@ public final class RequestParamMapTest
     assertFalse (aMap.contains ("a", "yyy"));
     assertNull (aMap.getMap ("a", "yyy"));
     assertNull (aMap.getString ("a", "yyy"));
+  }
+
+  @Test
+  public void testGetFieldName ()
+  {
+    assertEquals ("abc", RequestParamMap.getFieldName ("abc"));
+    assertEquals ("abc[idx1][idx2]", RequestParamMap.getFieldName ("abc", "idx1", "idx2"));
   }
 }
