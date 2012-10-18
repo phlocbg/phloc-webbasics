@@ -30,9 +30,9 @@ import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCUL;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 
@@ -87,15 +87,15 @@ public class PageShowChildren extends AbstractWebPage
     super (sID, sName);
   }
 
-  @Nullable
-  public IHCNode getContent (@Nonnull final Locale aDisplayLocale)
+  @Override
+  protected void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
   {
     final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = MenuTree.getInstance ().getItemWithID (getID ());
-    if (aMenuTreeItem == null || !(aMenuTreeItem.getData () instanceof IMenuItem))
-      return null;
-
-    final HCUL aUL = new HCUL ();
-    TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildren (aUL, aDisplayLocale));
-    return aUL;
+    if (aMenuTreeItem != null && (aMenuTreeItem.getData () instanceof IMenuItem))
+    {
+      final HCUL aUL = new HCUL ();
+      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildren (aUL, aDisplayLocale));
+      aNodeList.addChild (aUL);
+    }
   }
 }

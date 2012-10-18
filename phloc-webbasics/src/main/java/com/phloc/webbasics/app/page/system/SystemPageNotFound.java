@@ -24,15 +24,14 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.ISimpleMultiLingualText;
 import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCH1;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 
@@ -78,11 +77,10 @@ public class SystemPageNotFound extends AbstractWebPage
     return s_aInstance;
   }
 
-  @Nonnull
-  @OverrideOnDemand
-  public IHCNode getContent (@Nonnull final Locale aDisplayLocale)
+  @Override
+  protected void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
   {
     s_aLogger.info ("PAGE NOT FOUND " + WebScopeManager.getRequestScope ().getURL ());
-    return new HCH1 ().addChild (ETextBase.MESSAGE.getDisplayText (aDisplayLocale));
+    aNodeList.addChild (HCH1.create (ETextBase.MESSAGE.getDisplayText (aDisplayLocale)));
   }
 }

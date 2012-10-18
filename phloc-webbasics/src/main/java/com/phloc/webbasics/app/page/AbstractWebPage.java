@@ -18,19 +18,32 @@
 package com.phloc.webbasics.app.page;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.state.EValidity;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
+import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.ReadonlySimpleURL;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCForm_FileUpload;
+import com.phloc.html.hc.html.HCSpan;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 
 /**
@@ -40,6 +53,9 @@ import com.phloc.webbasics.app.LinkUtils;
  */
 public abstract class AbstractWebPage extends AbstractPage implements IWebPage
 {
+  /** The CSS class to be applied to the help div */
+  private static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
+
   /**
    * Constructor
    * 
@@ -222,5 +238,99 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   protected static final HCForm createFormFileUploadSelf ()
   {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
+  }
+
+  /**
+   * Check some pre-requisites
+   * 
+   * @param aDisplayLocale
+   *        Display locale. Never <code>null</code>.
+   * @param aNodeList
+   *        Node list to be filled. Never <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  @Nonnull
+  protected EValidity isValidToDisplayPage (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
+  {
+    return EValidity.VALID;
+  }
+
+  /**
+   * Abstract method to be implemented by subclasses, that creates the main page
+   * content, without the help icon.
+   * 
+   * @param aDisplayLocale
+   *        The display locale to be used for rendering the current page.
+   * @param aNodeList
+   *        The node list where the created nodes should be placed. Never
+   *        <code>null</code>.
+   */
+  protected abstract void fillContent (@Nonnull Locale aDisplayLocale, @Nonnull HCNodeList aNodeList);
+
+  /**
+   * Get the help URL of the current page
+   * 
+   * @param aDisplayLocale
+   *        The current display locale
+   * @return The help URL for this page. May not be <code>null</code>.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale)
+  {
+    return new ReadonlySimpleURL (LinkUtils.getURIWithContext ("help/" +
+                                                               getID () +
+                                                               "?locale=" +
+                                                               aDisplayLocale.toString ()));
+  }
+
+  /**
+   * Create the HC node to represent the help icon. This method is only called,
+   * if help is available for this page. The created code looks like this by
+   * default:<br>
+   * <code>&lt;a href="<i>helpURL</i>" title="Show help for page <i>pageName</i>" target="simplehelpwindow"><br>
+   * &lt;span class="page_help_icon">&lt;/span><br>
+   * &lt;/a></code>
+   * 
+   * @param aDisplayLocale
+   *        The display locale of the page
+   * @return The created help icon node.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected IHCNode getHelpIconNode (@Nonnull final Locale aDisplayLocale)
+  {
+    final HCA aHelpNode = new HCA (getHelpURL (aDisplayLocale));
+    final String sPageName = getDisplayText (aDisplayLocale);
+    aHelpNode.setTitle (EWebBasicsText.PAGE_HELP_TITLE.getDisplayTextWithArgs (aDisplayLocale, sPageName));
+    aHelpNode.addChild (new HCSpan ().addClass (CSS_PAGE_HELP_ICON));
+    aHelpNode.setTarget (new HCA_Target (HELP_WINDOW_NAME));
+    return aHelpNode;
+  }
+
+  /**
+   * Default implementation calling the abstract
+   * {@link #fillContent(Locale,HCNodeList)} method and creating the help node
+   * if desired.
+   */
+  @Nonnull
+  public final IHCNode getContent (@Nonnull final Locale aDisplayLocale)
+  {
+    final HCNodeList aNodeList = new HCNodeList ();
+
+    if (isValidToDisplayPage (aDisplayLocale, aNodeList).isValid ())
+    {
+      // Create the main page content
+      fillContent (aDisplayLocale, aNodeList);
+    }
+
+    // Is help available for this page?
+    if (isHelpAvailable ())
+    {
+      // Add the help icon as the first child of the resulting node list
+      aNodeList.addChild (0, getHelpIconNode (aDisplayLocale));
+    }
+    return aNodeList;
   }
 }
