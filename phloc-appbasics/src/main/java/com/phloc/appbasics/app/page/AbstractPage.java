@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -37,6 +38,9 @@ import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
  */
 public abstract class AbstractPage implements IPage
 {
+  /** The name of the window where the help opens up */
+  public static final String HELP_WINDOW_NAME = "simplehelpwindow";
+
   private final String m_sID;
   private IReadonlyMultiLingualText m_aName;
 
@@ -111,6 +115,19 @@ public abstract class AbstractPage implements IPage
   public final String getDisplayText (@Nonnull final Locale aContentLocale)
   {
     return m_aName.getTextWithLocaleFallback (aContentLocale);
+  }
+
+  /**
+   * Determine whether help is available for this page. The default
+   * implementation returns always <code>true</code>.
+   * 
+   * @return <code>true</code> if help is available for this page,
+   *         <code>false</code> otherwise.
+   */
+  @OverrideOnDemand
+  public boolean isHelpAvailable ()
+  {
+    return false;
   }
 
   @Override
