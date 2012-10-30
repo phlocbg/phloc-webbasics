@@ -55,6 +55,13 @@ public class HCCountrySelect extends HCExtSelect
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,
                           @Nonnull final Locale aDisplayLocale,
+                          final boolean bAlwaysShowPleaseSelect)
+  {
+    this (aRF, aDisplayLocale, _getAllCountries (), null, bAlwaysShowPleaseSelect);
+  }
+
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF,
+                          @Nonnull final Locale aDisplayLocale,
                           @Nonnull final Collection <Locale> aLocales)
   {
     this (aRF, aDisplayLocale, aLocales, null);
@@ -65,10 +72,17 @@ public class HCCountrySelect extends HCExtSelect
                           @Nonnull final Collection <Locale> aLocales,
                           @Nullable final IDisplayTextProvider <Locale> aDisplayTextProvider)
   {
-    super (aRF);
+    // Backwards compatibility
+    this (aRF, aDisplayLocale, aLocales, aDisplayTextProvider, true);
+  }
 
-    if (aLocales.size () > 1)
-      addOptionPleaseSelect (aDisplayLocale);
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF,
+                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final Collection <Locale> aLocales,
+                          @Nullable final IDisplayTextProvider <Locale> aDisplayTextProvider,
+                          final boolean bAlwaysShowPleaseSelect)
+  {
+    super (aRF);
 
     Comparator <Locale> aComp;
     if (aDisplayTextProvider == null)
@@ -85,13 +99,17 @@ public class HCCountrySelect extends HCExtSelect
     for (final Locale aCountry : ContainerHelper.getSorted (aLocales, aComp))
 
     {
-      final String sDisplayCountry = aDisplayTextProvider != null ? aDisplayTextProvider.getDisplayText (aCountry,
-                                                                                                         aDisplayLocale)
+      final String sDisplayCountry = aDisplayTextProvider != null
+                                                                 ? aDisplayTextProvider.getDisplayText (aCountry,
+                                                                                                        aDisplayLocale)
                                                                  : aCountry.getDisplayCountry (aDisplayLocale);
       final HCOption aOption = addOption (aCountry.getCountry (), sDisplayCountry);
       final EFamFamFlagIcon eIcon = FamFamFlags.getFlagFromLocale (aCountry);
       if (eIcon != null)
         eIcon.applyToNode (aOption);
     }
+
+    if (!hasSelectedOption () || bAlwaysShowPleaseSelect)
+      addOptionPleaseSelect (aDisplayLocale);
   }
 }
