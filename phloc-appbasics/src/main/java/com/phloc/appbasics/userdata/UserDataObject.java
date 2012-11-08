@@ -17,19 +17,21 @@
  */
 package com.phloc.appbasics.userdata;
 
+import java.io.File;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
  * Represents a single web accessible object, that was provided by the user.
- * Think of this as a file descriptor.
+ * Think of this as a file descriptor. A {@link UserDataObject} lies directly
+ * within a web application and can be accessed by regular file IO.
  * 
  * @author philip
  */
@@ -48,8 +50,9 @@ public final class UserDataObject
   }
 
   /**
-   * @return The path of the object. Always starting with a "/". This method
-   *         does not contain any server specific context path!
+   * @return The path of the object, relative to the user data directory. Always
+   *         starting with a "/". This method does not contain any server
+   *         specific context path!
    */
   @Nonnull
   @Nonempty
@@ -60,12 +63,49 @@ public final class UserDataObject
 
   /**
    * @return The path to the user data object as an URL, including the context
-   *         path. Always starting with a "/"
+   *         path. Always starting with a "/". E.g.
+   *         <code>/context/user/file.txt</code> if this object points to
+   *         <code>/file.txt</code>.
    */
   @Nonnull
-  public ISimpleURL getAsURL ()
+  @Nonempty
+  public String getAsURLPath ()
   {
-    return new SimpleURL (WebScopeManager.getRequestScope ().getContextPath () + m_sPath);
+    return UserDataManager.getURLPath (this);
+  }
+
+  /**
+   * @return The path to the user data object as an URL, including the context
+   *         path. Always starting with a "/". E.g.
+   *         <code>/context/user/file.txt</code> if this object points to
+   *         <code>/file.txt</code>.
+   */
+  @Nonnull
+  public SimpleURL getAsURL ()
+  {
+    return UserDataManager.getURL (this);
+  }
+
+  /**
+   * @return The file system resource underlying this object. Never
+   *         <code>null</code> but potentially not existing.
+   */
+  @Nonnull
+  public FileSystemResource getAsResource ()
+  {
+    return UserDataManager.getResource (this);
+  }
+
+  /**
+   * Get the File of this UDO object.
+   * 
+   * @return The matching File. No check is performed, whether the file exists
+   *         or not!
+   */
+  @Nonnull
+  public File getAsFile ()
+  {
+    return UserDataManager.getFile (this);
   }
 
   @Override

@@ -17,47 +17,36 @@
  */
 package com.phloc.appbasics.userdata;
 
+import java.io.File;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.SimpleURL;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 
 public final class UserDataManager
 {
+  /**
+   * The default user data path, relative to a URL context and the servlet
+   * context directory.
+   */
   public static final String DEFAULT_USER_DATA_PATH = "/user";
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-
   private static String s_sUserDataPath = DEFAULT_USER_DATA_PATH;
 
   private UserDataManager ()
   {}
 
   /**
-   * Get the base path, where all user objects reside.
-   * 
-   * @return The current user data path. Always starting with a "/".
-   */
-  @Nonnull
-  @Nonempty
-  public static String getUserDataPath ()
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      return s_sUserDataPath;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * Set the user data path.
+   * Set the user data path, relative to the URL context and relative to the
+   * servlet context directory.
    * 
    * @param sUserDataPath
    *        The path to be set. May neither be <code>null</code> nor empty and
@@ -79,5 +68,108 @@ public final class UserDataManager
     {
       s_aRWLock.writeLock ().unlock ();
     }
+  }
+
+  /**
+   * Get the base path, where all user objects reside. It is relative to the URL
+   * context and relative to the servlet context directory.
+   * 
+   * @return The current user data path. Always starting with a "/", but without
+   *         any context information. By default the return value is
+   *         {@value #DEFAULT_USER_DATA_PATH}.
+   */
+  @Nonnull
+  @Nonempty
+  public static String getUserDataPath ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_sUserDataPath;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return Context and user data path. Always starting with a "/". E.g.
+   *         <code>/user</code> or <code>/context/user</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String getContextAndUserDataPath ()
+  {
+    return WebScopeManager.getRequestScope ().getContextPath () + getUserDataPath ();
+  }
+
+  /**
+   * Get the URL to the passed UDO object.
+   * 
+   * @param aUDO
+   *        The UDO object to get the URL from.
+   * @return The path to the user data object as an URL, including the context
+   *         path. Always starting with a "/". E.g.
+   *         <code>/context/user/file.txt</code> if this object points to
+   *         <code>/file.txt</code> and the user data path is <code>/user</code>
+   *         .
+   */
+  @Nonnull
+  @Nonempty
+  public static String getURLPath (@Nonnull final UserDataObject aUDO)
+  {
+    if (aUDO == null)
+      throw new NullPointerException ("UDO");
+    return getContextAndUserDataPath () + aUDO.getPath ();
+  }
+
+  /**
+   * Get the URL to the passed UDO object.
+   * 
+   * @param aUDO
+   *        The UDO object to get the URL from.
+   * @return The URL to the user data object, including the context path. Always
+   *         starting with a "/". E.g. <code>/context/user/file.txt</code> if
+   *         this object points to <code>/file.txt</code> and the user data path
+   *         is <code>/user</code> .
+   */
+  @Nonnull
+  @Nonempty
+  public static SimpleURL getURL (@Nonnull final UserDataObject aUDO)
+  {
+    return new SimpleURL (getURLPath (aUDO));
+  }
+
+  /**
+   * Get the file system resource of the passed UDO object.
+   * 
+   * @param aUDO
+   *        The UDO object to get the resource from.
+   * @return The matching file system resource. No check is performed, whether
+   *         the resource exists or not!
+   */
+  @Nonnull
+  public static FileSystemResource getResource (@Nonnull final UserDataObject aUDO)
+  {
+    if (aUDO == null)
+      throw new NullPointerException ("UDO");
+    return WebFileIO.getServletContextIO ().getResource (getUserDataPath () + aUDO.getPath ());
+  }
+
+  /**
+   * Get the File of the passed UDO object.
+   * 
+   * @param aUDO
+   *        The UDO object to get the resource from.
+   * @return The matching File. No check is performed, whether the file exists
+   *         or not!
+   */
+  @Nonnull
+  public static File getFile (@Nonnull final UserDataObject aUDO)
+  {
+    if (aUDO == null)
+      throw new NullPointerException ("UDO");
+    return WebFileIO.getServletContextIO ().getFile (getUserDataPath () + aUDO.getPath ());
   }
 }
