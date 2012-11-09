@@ -20,6 +20,7 @@ package com.phloc.appbasics.userdata;
 import java.io.File;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -129,5 +130,13 @@ public final class UserDataObject
   public String toString ()
   {
     return new ToStringGenerator (this).append ("path", m_sPath).toString ();
+  }
+
+  @Nullable
+  public static UserDataObject createConditional (@Nullable final String sPath)
+  {
+    if (StringHelper.hasNoText (sPath))
+      return null;
+    return new UserDataObject (sPath);
   }
 }
