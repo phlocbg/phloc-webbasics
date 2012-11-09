@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.state.ETriState;
 import com.phloc.commons.string.StringParser;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCRequestFieldBoolean;
@@ -91,9 +92,15 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
     return sDefaultValue;
   }
 
-  public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
+  @Nonnull
+  public static ETriState getCheckBoxState (@Nonnull @Nonempty final String sFieldName)
   {
     final String sValue = getCheckBoxRequestValue (sFieldName, null);
-    return sValue == null ? bDefaultValue : StringParser.parseBool (sValue);
+    return sValue == null ? ETriState.UNDEFINED : ETriState.valueOf (StringParser.parseBool (sValue));
+  }
+
+  public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
+  {
+    return getCheckBoxState (sFieldName).getAsBooleanValue (bDefaultValue);
   }
 }

@@ -45,6 +45,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.form.RequestFieldBoolean;
 
 /**
  * Abstract base implementation for {@link IWebPage}.
@@ -220,6 +221,20 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   protected static final boolean hasAttr (final String sName, final String sValue)
   {
     return EqualsUtils.equals (sValue, getAttr (sName));
+  }
+
+  /**
+   * Get the value of the checkbox of the request parameter with the given name.
+   * 
+   * @param sName
+   *        Request parameter name
+   * @param bDefaultValue
+   *        the default value to be returned, if no request attribute is present
+   * @return The value of the passed request parameter
+   */
+  protected static final boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
+  {
+    return RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
   }
 
   /**
