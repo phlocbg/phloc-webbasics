@@ -11,10 +11,12 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.js.IJSCodeProvider;
+import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.json.impl.JSONObject;
 
-public class FineUploaderBasic {
+public class FineUploaderBasic implements IJSCodeProvider {
   public static final boolean DEFAULT_DEBUG = false;
   public static final String DEFAULT_ACTION = "/server/upload";
   public static final boolean DEFAULT_MULTIPLE = true;
@@ -431,5 +433,9 @@ public class FineUploaderBasic {
     if (m_bForceMultipart != DEFAULT_FORCE_MULTIPART)
       ret.setBooleanProperty ("forceMultipart", m_bForceMultipart);
     return ret;
+  }
+
+  public String getJSCode () {
+    return new JSInvocation ("new qq.FileUploader").arg (getJSON ()).getJSCode ();
   }
 }
