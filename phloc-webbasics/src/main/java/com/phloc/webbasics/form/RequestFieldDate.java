@@ -21,52 +21,54 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.datetime.xml.PDTXMLConverter;
 
 /**
  * Special request field specially for dates.
  * 
  * @author philip
  */
-public final class RequestFieldDate extends RequestField
-{
+public final class RequestFieldDate extends RequestField {
   private final Locale m_aDisplayLocale;
 
   private RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                             @Nullable final String sDefaultValue,
-                            @Nonnull final Locale aDisplayLocale)
-  {
+                            @Nonnull final Locale aDisplayLocale) {
     super (sFieldName, sDefaultValue);
     m_aDisplayLocale = aDisplayLocale;
   }
 
-  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName, @Nonnull final Locale aDisplayLocale)
-  {
+  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName, @Nonnull final Locale aDisplayLocale) {
     this (sFieldName, (String) null, aDisplayLocale);
   }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final LocalDate aDefaultValue,
-                           @Nonnull final Locale aDisplayLocale)
-  {
+                           @Nonnull final Locale aDisplayLocale) {
     this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
   }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final DateTime aDefaultValue,
-                           @Nonnull final Locale aDisplayLocale)
-  {
+                           @Nonnull final Locale aDisplayLocale) {
     this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
   }
 
+  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
+                           @Nullable final XMLGregorianCalendar aDefaultValue,
+                           @Nonnull final Locale aDisplayLocale) {
+    this (sFieldName, PDTXMLConverter.getDateTime (aDefaultValue), aDisplayLocale);
+  }
+
   @Nonnull
-  public Locale getDisplayLocale ()
-  {
+  public Locale getDisplayLocale () {
     return m_aDisplayLocale;
   }
 }
