@@ -61,6 +61,29 @@ public final class AuditUtils
     }
   }
 
+  /**
+   * @return <code>true</code> if an auditor is set, <code>false</code> if not.
+   */
+  public static boolean isAuditorSet ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aAuditor != null;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set the global auditor to use.
+   * 
+   * @param aAuditor
+   *        The auditor to be set. May be <code>null</code> to indicate that no
+   *        global auditor is available.
+   */
   public static void setAuditor (@Nullable final IAuditor aAuditor)
   {
     s_aRWLock.writeLock ().lock ();
