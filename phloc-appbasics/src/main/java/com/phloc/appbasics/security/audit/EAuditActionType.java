@@ -34,6 +34,7 @@ public enum EAuditActionType implements IHasID <String>
   CREATE ("create"),
   MODIFY ("modify"),
   DELETE ("delete"),
+  UNDELETE ("undelete"),
   EXECUTE ("execute");
 
   private final String m_sID;

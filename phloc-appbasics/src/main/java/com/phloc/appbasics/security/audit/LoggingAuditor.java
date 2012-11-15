@@ -91,6 +91,24 @@ public final class LoggingAuditor implements IAuditor
     s_aLogger.info ("delete.failure(" + aObjectType.getObjectTypeName () + "," + ContainerHelper.newList (aArgs) + ")");
   }
 
+  public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  {
+    s_aLogger.info ("undelete.success(" +
+                    aObjectType.getObjectTypeName () +
+                    "," +
+                    ContainerHelper.newList (aArgs) +
+                    ")");
+  }
+
+  public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  {
+    s_aLogger.info ("undelete.failure(" +
+                    aObjectType.getObjectTypeName () +
+                    "," +
+                    ContainerHelper.newList (aArgs) +
+                    ")");
+  }
+
   public void onExecuteSuccess (final String sWhat, @Nullable final String... aArgs)
   {
     s_aLogger.info ("execute.success(" + sWhat + "," + ContainerHelper.newList (aArgs) + ")");

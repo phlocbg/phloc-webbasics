@@ -94,6 +94,26 @@ public interface IAuditor
   void onDeleteFailure (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
 
   /**
+   * The undeletion of an object succeeded.
+   * 
+   * @param aObjectType
+   *        The object type
+   * @param aArgs
+   *        Additional arguments
+   */
+  void onUndeleteSuccess (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+
+  /**
+   * The undeletion of an object failed.
+   * 
+   * @param aObjectType
+   *        The object type
+   * @param aArgs
+   *        Additional arguments
+   */
+  void onUndeleteFailure (@Nonnull ObjectType aObjectType, @Nullable String... aArgs);
+
+  /**
    * The execution of something succeeded.
    * 
    * @param sWhat

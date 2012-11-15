@@ -233,6 +233,20 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditor
                      _createAuditString (aObjectType.getObjectTypeName (), aArgs));
   }
 
+  public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  {
+    createAuditItem (EAuditActionType.UNDELETE,
+                     ESuccess.SUCCESS,
+                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
+  }
+
+  public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  {
+    createAuditItem (EAuditActionType.UNDELETE,
+                     ESuccess.FAILURE,
+                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
+  }
+
   public void onExecuteSuccess (@Nonnull final String sWhat, @Nullable final String... aArgs)
   {
     createAuditItem (EAuditActionType.EXECUTE, ESuccess.SUCCESS, _createAuditString (sWhat, aArgs));

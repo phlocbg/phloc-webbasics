@@ -178,6 +178,32 @@ public final class AuditUtils
     _getAuditor ().onDeleteFailure (aObjectType, aArgs);
   }
 
+  @SuppressWarnings ("unused")
+  @Deprecated
+  @UnsupportedOperation
+  public static void onAuditUndeleteSuccess (@Nonnull final ObjectType aObjectType)
+  {
+    throw new UnsupportedOperationException ();
+  }
+
+  public static void onAuditUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  {
+    _getAuditor ().onUndeleteSuccess (aObjectType, aArgs);
+  }
+
+  @SuppressWarnings ("unused")
+  @Deprecated
+  @UnsupportedOperation
+  public static void onAuditUndeleteFailure (@Nonnull final ObjectType aObjectType)
+  {
+    throw new UnsupportedOperationException ();
+  }
+
+  public static void onAuditUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  {
+    _getAuditor ().onUndeleteFailure (aObjectType, aArgs);
+  }
+
   public static void onAuditExecuteSuccess (@Nonnull final String sWhat, @Nullable final String... aArgs)
   {
     _getAuditor ().onExecuteSuccess (sWhat, aArgs);
