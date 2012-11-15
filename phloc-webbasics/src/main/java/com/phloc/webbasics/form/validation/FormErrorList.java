@@ -19,7 +19,6 @@ package com.phloc.webbasics.form.validation;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
-
 /**
  * Handles form field specific error messages.
  * 

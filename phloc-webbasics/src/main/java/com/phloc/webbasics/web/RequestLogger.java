@@ -45,7 +45,8 @@ import com.phloc.webbasics.http.HTTPHeaderMap;
  * @author philip
  */
 @Immutable
-public final class RequestLogger {
+public final class RequestLogger
+{
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestLogger.class);
 
@@ -53,17 +54,21 @@ public final class RequestLogger {
   @SuppressWarnings ("unused")
   private static final RequestLogger s_aInstance = new RequestLogger ();
 
-  private RequestLogger () {}
+  private RequestLogger ()
+  {}
 
   @Nonnull
   @ReturnsMutableCopy
-  public static Map <String, String> getRequestFieldMap (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static Map <String, String> getRequestFieldMap (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
-    if (aHttpRequest instanceof OfflineHttpServletRequest) {
+    if (aHttpRequest instanceof OfflineHttpServletRequest)
+    {
       // Special handling, because otherwise exceptions would be thrown
       ret.put ("Offline", "true");
     }
-    else {
+    else
+    {
       ret.put ("AuthType", aHttpRequest.getAuthType ());
       ret.put ("CharacterEncoding", aHttpRequest.getCharacterEncoding ());
       ret.put ("ContentLength", Integer.toString (aHttpRequest.getContentLength ()));
@@ -96,17 +101,20 @@ public final class RequestLogger {
   }
 
   @Nonnull
-  public static StringBuilder getRequestFields (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static StringBuilder getRequestFields (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     return getRequestFields (aRequestScope.getRequest ());
   }
 
   @Nonnull
-  public static StringBuilder getRequestFields (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static StringBuilder getRequestFields (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     return getRequestFields (getRequestFieldMap (aHttpRequest));
   }
 
   @Nonnull
-  public static StringBuilder getRequestFields (@Nonnull final Map <String, String> aRequestFieldMap) {
+  public static StringBuilder getRequestFields (@Nonnull final Map <String, String> aRequestFieldMap)
+  {
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("Request:\n");
     for (final Map.Entry <String, String> aEntry : aRequestFieldMap.entrySet ())
@@ -114,7 +122,8 @@ public final class RequestLogger {
     return aSB;
   }
 
-  public static void logRequestFields (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static void logRequestFields (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     logRequestFields (aRequestScope.getRequest ());
   }
 
@@ -125,21 +134,25 @@ public final class RequestLogger {
    * @param aHttpRequest
    *        the {@link HttpServletRequest} to debug
    */
-  public static void logRequestFields (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static void logRequestFields (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     s_aLogger.info (getRequestFields (aHttpRequest).toString ());
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public static Map <String, String> getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static Map <String, String> getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     return getRequestHeaderMap (RequestHelper.getRequestHeaderMap (aHttpRequest));
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public static Map <String, String> getRequestHeaderMap (@Nonnull final HTTPHeaderMap aMap) {
+  public static Map <String, String> getRequestHeaderMap (@Nonnull final HTTPHeaderMap aMap)
+  {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
-    for (final Map.Entry <String, List <String>> aEntry : aMap) {
+    for (final Map.Entry <String, List <String>> aEntry : aMap)
+    {
       final String sName = aEntry.getKey ();
       final List <String> aValue = aEntry.getValue ();
       if (aValue.size () == 1)
@@ -151,17 +164,20 @@ public final class RequestLogger {
   }
 
   @Nonnull
-  public static StringBuilder getRequestHeader (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static StringBuilder getRequestHeader (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     return getRequestHeader (aRequestScope.getRequest ());
   }
 
   @Nonnull
-  public static StringBuilder getRequestHeader (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static StringBuilder getRequestHeader (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     return getRequestHeader (getRequestHeaderMap (aHttpRequest));
   }
 
   @Nonnull
-  public static StringBuilder getRequestHeader (@Nonnull final Map <String, String> aRequestHeaderMap) {
+  public static StringBuilder getRequestHeader (@Nonnull final Map <String, String> aRequestHeaderMap)
+  {
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("Headers:\n");
     for (final Map.Entry <String, String> aEntry : aRequestHeaderMap.entrySet ())
@@ -169,7 +185,8 @@ public final class RequestLogger {
     return aSB;
   }
 
-  public static void logRequestHeader (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static void logRequestHeader (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     logRequestHeader (aRequestScope.getRequest ());
   }
 
@@ -180,19 +197,22 @@ public final class RequestLogger {
    * @param aHttpRequest
    *        the servlet request to debug the HTTP headers from
    */
-  public static void logRequestHeader (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static void logRequestHeader (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     s_aLogger.info (getRequestHeader (aHttpRequest).toString ());
   }
 
   @Nonnull
-  private static CharSequence _toString (@Nullable final Object o) {
+  private static CharSequence _toString (@Nullable final Object o)
+  {
     if (o == null)
       return "null";
     if (!o.getClass ().isArray ())
       return o.toString ();
     final StringBuilder aSB = new StringBuilder ('[');
     int i = 0;
-    for (final Object aValue : (Object []) o) {
+    for (final Object aValue : (Object []) o)
+    {
       if (i++ > 0)
         aSB.append (", ");
       aSB.append (_toString (aValue));
@@ -201,7 +221,8 @@ public final class RequestLogger {
   }
 
   @Nonnull
-  public static Map <String, String> getRequestParameterMap (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static Map <String, String> getRequestParameterMap (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
     final Map <?, ?> aParams = aHttpRequest.getParameterMap ();
     for (final Entry <?, ?> aEntry : ContainerHelper.getSortedByKey (aParams, new ComparatorAsString ()).entrySet ())
@@ -210,17 +231,20 @@ public final class RequestLogger {
   }
 
   @Nonnull
-  public static StringBuilder getRequestParameters (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static StringBuilder getRequestParameters (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     return getRequestParameters (aRequestScope.getRequest ());
   }
 
   @Nonnull
-  public static StringBuilder getRequestParameters (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static StringBuilder getRequestParameters (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     return getRequestParameters (getRequestParameterMap (aHttpRequest));
   }
 
   @Nonnull
-  public static StringBuilder getRequestParameters (@Nonnull final Map <String, String> aRequestParameterMap) {
+  public static StringBuilder getRequestParameters (@Nonnull final Map <String, String> aRequestParameterMap)
+  {
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("Request parameters:\n");
     for (final Entry <String, String> aEntry : aRequestParameterMap.entrySet ())
@@ -228,21 +252,25 @@ public final class RequestLogger {
     return aSB;
   }
 
-  public static void logRequestParameters (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static void logRequestParameters (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     s_aLogger.info (getRequestParameters (aRequestScope).toString ());
   }
 
-  public static void logRequestParameters (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static void logRequestParameters (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     s_aLogger.info (getRequestParameters (aHttpRequest).toString ());
   }
 
   @Nonnull
-  public static StringBuilder getRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static StringBuilder getRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     return getRequestComplete (aRequestScope.getRequest ());
   }
 
   @Nonnull
-  public static StringBuilder getRequestComplete (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static StringBuilder getRequestComplete (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (getRequestFields (aHttpRequest));
     aSB.append (getRequestHeader (aHttpRequest));
@@ -250,11 +278,13 @@ public final class RequestLogger {
     return aSB;
   }
 
-  public static void logRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) {
+  public static void logRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
     logRequestComplete (aRequestScope.getRequest ());
   }
 
-  public static void logRequestComplete (@Nonnull final HttpServletRequest aHttpRequest) {
+  public static void logRequestComplete (@Nonnull final HttpServletRequest aHttpRequest)
+  {
     s_aLogger.info (getRequestComplete (aHttpRequest).toString ());
   }
 }

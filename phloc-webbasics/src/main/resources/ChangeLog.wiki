@@ -1,7 +1,10 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>10/16/12</td><td>change</td><td>tech</td><td>*yes*</td><td>Changed IApplicationRequestListenerSPI API to receive the current request scope onRequestBegin</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>11/15/12</td><td>add</td><td>api</td><td></td><td>Added new method ResponseHelper.getBestSuitableOutputStreamType(HttpServletRequest)</td></tr>
+<tr><td>11/15/12</td><td>fix</td><td>tech</td><td></td><td>Fixed UnifiedResponse handling for very short content when GZip or Deflate is active (by not setting the Content-Length field)</td></tr>
+<tr><td>11/15/12</td><td>add</td><td>api</td><td></td><td>Added better support for IRequestWebScopeWithoutResponse in RequestLogger</td></tr>
+<tr><td>10/16/12</td><td>change</td><td>tech</td><td>*yes*</td><td>Changed IApplicationRequestListenerSPI API to receive the current request scope onRequestBegin</td></tr>
 <tr border="1"><td>10/9/12</td><td colspan="4">_Release *1.9.6*_</td></tr>
 <tr><td>10/5/12</td><td>add</td><td>tech</td><td></td><td>Added possibility in UnifiedResponse to send a body even if a status code or a redirect is present</td></tr>
 <tr><td>10/4/12</td><td>add</td><td>tech</td><td></td><td>Added new ServletContext init-parameter noCheckFileAccess to avoid performing the file access on startup</td></tr>

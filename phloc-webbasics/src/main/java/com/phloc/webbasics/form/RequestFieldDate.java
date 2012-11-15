@@ -35,40 +35,47 @@ import com.phloc.datetime.xml.PDTXMLConverter;
  * 
  * @author philip
  */
-public final class RequestFieldDate extends RequestField {
+public final class RequestFieldDate extends RequestField
+{
   private final Locale m_aDisplayLocale;
 
   private RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                             @Nullable final String sDefaultValue,
-                            @Nonnull final Locale aDisplayLocale) {
+                            @Nonnull final Locale aDisplayLocale)
+  {
     super (sFieldName, sDefaultValue);
     m_aDisplayLocale = aDisplayLocale;
   }
 
-  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName, @Nonnull final Locale aDisplayLocale) {
+  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName, @Nonnull final Locale aDisplayLocale)
+  {
     this (sFieldName, (String) null, aDisplayLocale);
   }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final LocalDate aDefaultValue,
-                           @Nonnull final Locale aDisplayLocale) {
+                           @Nonnull final Locale aDisplayLocale)
+  {
     this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
   }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final DateTime aDefaultValue,
-                           @Nonnull final Locale aDisplayLocale) {
+                           @Nonnull final Locale aDisplayLocale)
+  {
     this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
   }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final XMLGregorianCalendar aDefaultValue,
-                           @Nonnull final Locale aDisplayLocale) {
+                           @Nonnull final Locale aDisplayLocale)
+  {
     this (sFieldName, PDTXMLConverter.getDateTime (aDefaultValue), aDisplayLocale);
   }
 
   @Nonnull
-  public Locale getDisplayLocale () {
+  public Locale getDisplayLocale ()
+  {
     return m_aDisplayLocale;
   }
 }

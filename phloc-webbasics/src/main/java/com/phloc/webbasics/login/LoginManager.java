@@ -115,8 +115,8 @@ public class LoginManager
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
         ApplicationRunner.createHTMLResponse (aRequestScope,
-                                             aUnifiedResponse,
-                                             createLoginScreen (bLoginError, eLoginResult));
+                                              aUnifiedResponse,
+                                              createLoginScreen (bLoginError, eLoginResult));
       }
     }
 
