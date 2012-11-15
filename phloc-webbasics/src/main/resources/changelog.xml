@@ -22,6 +22,16 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
   <entry date="2012-11-15" category="api" action="add">
     <change>
+      <text locale="en">Added new method ResponseHelper.getBestSuitableOutputStreamType(HttpServletRequest)</text>
+    </change>
+  </entry>
+  <entry date="2012-11-15" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed UnifiedResponse handling for very short content when GZip or Deflate is active (by not setting the Content-Length field)</text>
+    </change>
+  </entry>
+  <entry date="2012-11-15" category="api" action="add">
+    <change>
       <text locale="en">Added better support for IRequestWebScopeWithoutResponse in RequestLogger</text>
     </change>
   </entry>

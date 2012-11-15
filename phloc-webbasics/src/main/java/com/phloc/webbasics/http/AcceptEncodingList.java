@@ -32,19 +32,15 @@ import com.phloc.commons.string.StringHelper;
  * @author philip
  */
 @NotThreadSafe
-public final class AcceptEncodingList extends AbstractQValueList <String>
-{
-  public AcceptEncodingList ()
-  {}
+public final class AcceptEncodingList extends AbstractQValueList <String> {
+  public AcceptEncodingList () {}
 
   @Nonnull
-  private static String _unify (@Nonnull final String sEncoding)
-  {
+  private static String _unify (@Nonnull final String sEncoding) {
     return sEncoding.toLowerCase (Locale.US);
   }
 
-  public void addEncoding (@Nonnull final String sEncoding, @Nonnegative final double dQuality)
-  {
+  public void addEncoding (@Nonnull final String sEncoding, @Nonnegative final double dQuality) {
     if (StringHelper.hasNoText (sEncoding))
       throw new IllegalArgumentException ("encoding is empty");
     m_aMap.put (_unify (sEncoding), new QValue (dQuality));
@@ -58,19 +54,16 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
    * @return The matching {@link QValue} and never <code>null</code>.
    */
   @Nonnull
-  public QValue getQValueOfEncoding (@Nonnull final String sEncoding)
-  {
+  public QValue getQValueOfEncoding (@Nonnull final String sEncoding) {
     if (sEncoding == null)
       throw new NullPointerException ("encoding");
 
     // Direct search encoding
     QValue aQuality = m_aMap.get (_unify (sEncoding));
-    if (aQuality == null)
-    {
+    if (aQuality == null) {
       // If not explicitly given, check for "*"
       aQuality = m_aMap.get (AcceptEncodingHandler.ANY_ENCODING);
-      if (aQuality == null)
-      {
+      if (aQuality == null) {
         // Neither encoding nor "*" is present
         // -> assume minimum quality
         return QValue.MIN_QVALUE;
@@ -86,18 +79,24 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
    *        The encoding name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.
    */
-  public double getQualityOfEncoding (@Nonnull final String sEncoding)
-  {
+  public double getQualityOfEncoding (@Nonnull final String sEncoding) {
     return getQValueOfEncoding (sEncoding).getQuality ();
   }
 
-  public boolean supportsEncoding (@Nonnull final String sEncoding)
-  {
+  /**
+   * Check if the passed encoding is supported. Supported means the quality is
+   * &gt; 0.
+   * 
+   * @param sEncoding
+   *        The encoding to be checked. May not be <code>null</code>.
+   * @return <code>true</code> if the encoding is supported, <code>false</code>
+   *         if not.
+   */
+  public boolean supportsEncoding (@Nonnull final String sEncoding) {
     return getQValueOfEncoding (sEncoding).isAboveMinimumQuality ();
   }
 
-  public boolean explicitlySupportsEncoding (@Nonnull final String sEncoding)
-  {
+  public boolean explicitlySupportsEncoding (@Nonnull final String sEncoding) {
     if (sEncoding == null)
       throw new NullPointerException ("encoding");
 
@@ -105,8 +104,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
     return aQuality != null && aQuality.isAboveMinimumQuality ();
   }
 
-  public boolean supportsGZIP ()
-  {
+  public boolean supportsGZIP () {
     return supportsEncoding (AcceptEncodingHandler.GZIP_ENCODING) ||
            supportsEncoding (AcceptEncodingHandler.X_GZIP_ENCODING);
   }
@@ -117,8 +115,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
    *         {@link AcceptEncodingHandler#X_GZIP_ENCODING} or <code>null</code>
    */
   @Nullable
-  public String getUsedGZIPEncoding ()
-  {
+  public String getUsedGZIPEncoding () {
     if (supportsEncoding (AcceptEncodingHandler.GZIP_ENCODING))
       return AcceptEncodingHandler.GZIP_ENCODING;
     if (supportsEncoding (AcceptEncodingHandler.X_GZIP_ENCODING))
@@ -126,8 +123,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
     return null;
   }
 
-  public boolean supportsDeflate ()
-  {
+  public boolean supportsDeflate () {
     return supportsEncoding (AcceptEncodingHandler.DEFLATE_ENCODING);
   }
 
@@ -136,15 +132,13 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
    *         {@link AcceptEncodingHandler#DEFLATE_ENCODING} or <code>null</code>
    */
   @Nullable
-  public String getUsedDeflateEncoding ()
-  {
+  public String getUsedDeflateEncoding () {
     if (supportsEncoding (AcceptEncodingHandler.DEFLATE_ENCODING))
       return AcceptEncodingHandler.DEFLATE_ENCODING;
     return null;
   }
 
-  public boolean supportsCompress ()
-  {
+  public boolean supportsCompress () {
     return supportsEncoding (AcceptEncodingHandler.COMPRESS_ENCODING) ||
            supportsEncoding (AcceptEncodingHandler.X_COMPRESS_ENCODING);
   }
@@ -156,8 +150,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
    *         <code>null</code>
    */
   @Nullable
-  public String getUsedCompressEncoding ()
-  {
+  public String getUsedCompressEncoding () {
     if (supportsEncoding (AcceptEncodingHandler.COMPRESS_ENCODING))
       return AcceptEncodingHandler.COMPRESS_ENCODING;
     if (supportsEncoding (AcceptEncodingHandler.X_COMPRESS_ENCODING))
