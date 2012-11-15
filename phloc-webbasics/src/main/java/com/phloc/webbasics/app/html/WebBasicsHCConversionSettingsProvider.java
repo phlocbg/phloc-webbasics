@@ -40,7 +40,7 @@ public final class WebBasicsHCConversionSettingsProvider extends HCConversionSet
   public WebBasicsHCConversionSettingsProvider ()
   {
     super (EHTMLVersion.XHTML11);
-    setXMLWriterSettings (new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
+    setXMLWriterSettings (new XMLWriterSettings ().setFormat (EXMLSerializeFormat.XHTML)
                                                   .setIndent (BEAUTIFUL_HTML ? EXMLSerializeIndent.INDENT_AND_ALIGN
                                                                             : EXMLSerializeIndent.NONE)
                                                   .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING));
