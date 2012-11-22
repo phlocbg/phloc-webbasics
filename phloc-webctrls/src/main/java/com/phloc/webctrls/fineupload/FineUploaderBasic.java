@@ -16,34 +16,53 @@ import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.json.impl.JSONObject;
 
+/**
+ * Wrapper for Fineuploader 3.0
+ * 
+ * @author philip
+ */
 public class FineUploaderBasic implements IJSCodeProvider {
   public static final boolean DEFAULT_DEBUG = false;
-  public static final String DEFAULT_ACTION = "/server/upload";
   public static final boolean DEFAULT_MULTIPLE = true;
   public static final int DEFAULT_MAX_CONNECTIONS = 3;
   public static final boolean DEFAULT_DISABLE_CANCEL_FOR_FORM_UPLOADS = false;
   public static final boolean DEFAULT_AUTO_UPLOAD = true;
-  public static final int DEFAULT_SIZE_LIMIT = 0;
-  public static final int DEFAULT_MIN_SIZE_LIMIT = 0;
-  public static final boolean DEFAULT_STOP_ON_FIRST_INVALID_FILE = true;
-  public static final String DEFAULT_INPUT_NAME = "qqfile";
-  public static final boolean DEFAULT_FORCE_MULTIPART = false;
+
+  public static final String DEFAULT_REQUEST_ENDPOINT = "/server/upload";
+  public static final boolean DEFAULT_REQUEST_FORCE_MULTIPART = false;
+  public static final String DEFAULT_REQUEST_INPUT_NAME = "qqfile";
+
+  public static final int DEFAULT_VALIDATION_SIZE_LIMIT = 0;
+  public static final int DEFAULT_VALIDATION_MIN_SIZE_LIMIT = 0;
+  public static final boolean DEFAULT_VALIDATION_STOP_ON_FIRST_INVALID_FILE = true;
+
+  public static final boolean DEFAULT_RETRY_ENABLE_AUTO = false;
+  public static final int DEFAULT_RETRY_MAX_AUTO_ATTEMPTS = 3;
+  public static final int DEFAULT_RETRY_AUTO_ATTEMPT_DELAY = 5;
+  public static final String DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY = "preventRetry";
 
   private boolean m_bDebug = DEFAULT_DEBUG;
-  private String m_sAction = DEFAULT_ACTION;
-  private final Map <String, String> m_aParams = new LinkedHashMap <String, String> ();
-  private final Map <String, String> m_aCustomHeaders = new LinkedHashMap <String, String> ();
   private String m_sButtonElementID;
   private boolean m_bMultiple = DEFAULT_MULTIPLE;
   private int m_nMaxConnections = DEFAULT_MAX_CONNECTIONS;
   private boolean m_bDisableCancelForFormUploads = DEFAULT_DISABLE_CANCEL_FOR_FORM_UPLOADS;
   private boolean m_bAutoUpload = DEFAULT_AUTO_UPLOAD;
-  private final Set <String> m_aAllowedExtensions = new LinkedHashSet <String> ();
-  private int m_nSizeLimit = DEFAULT_SIZE_LIMIT;
-  private int m_nMinSizeLimit = DEFAULT_MIN_SIZE_LIMIT;
-  private boolean m_bStopOnFirstInvalidFile = DEFAULT_STOP_ON_FIRST_INVALID_FILE;
-  private String m_sInputName = DEFAULT_INPUT_NAME;
-  private boolean m_bForceMultipart = DEFAULT_FORCE_MULTIPART;
+
+  private String m_sRequestEndpoint = DEFAULT_REQUEST_ENDPOINT;
+  private final Map <String, String> m_aRequestParams = new LinkedHashMap <String, String> ();
+  private final Map <String, String> m_aRequestCustomHeaders = new LinkedHashMap <String, String> ();
+  private boolean m_bRequestForceMultipart = DEFAULT_REQUEST_FORCE_MULTIPART;
+  private String m_sRequestInputName = DEFAULT_REQUEST_INPUT_NAME;
+
+  private final Set <String> m_aValidationAllowedExtensions = new LinkedHashSet <String> ();
+  private int m_nValidationSizeLimit = DEFAULT_VALIDATION_SIZE_LIMIT;
+  private int m_nValidationMinSizeLimit = DEFAULT_VALIDATION_MIN_SIZE_LIMIT;
+  private boolean m_bValidationStopOnFirstInvalidFile = DEFAULT_VALIDATION_STOP_ON_FIRST_INVALID_FILE;
+
+  private final boolean m_bRetryEnableAuto = DEFAULT_RETRY_ENABLE_AUTO;
+  private final int m_nRetryMaxAutoAttempts = DEFAULT_RETRY_MAX_AUTO_ATTEMPTS;
+  private final int m_nRetryAutoAttemptDelay = DEFAULT_RETRY_AUTO_ATTEMPT_DELAY;
+  private final String m_sRetryPreventRetryResponseProperty = DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY;
 
   /**
    * If enabled, this will result in log messages (such as server response)
@@ -68,15 +87,15 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * with all parameters. In the case of the ajax uploader, it is makes up part
    * of the URL of the XHR request (again, along with the parameters).
    * 
-   * @param sAction
+   * @param sRequestEndpoint
    *        The new action URL
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setAction (@Nonnull @Nonempty final String sAction) {
-    if (StringHelper.hasNoText (sAction))
-      throw new IllegalArgumentException ("action");
-    m_sAction = sAction;
+  public FineUploaderBasic setEndpoint (@Nonnull @Nonempty final String sRequestEndpoint) {
+    if (StringHelper.hasNoText (sRequestEndpoint))
+      throw new IllegalArgumentException ("requestEndpoint");
+    m_sRequestEndpoint = sRequestEndpoint;
     return this;
   }
 
@@ -90,9 +109,9 @@ public class FineUploaderBasic implements IJSCodeProvider {
    */
   @Nonnull
   public FineUploaderBasic setParams (@Nullable final Map <String, String> aParams) {
-    m_aParams.clear ();
+    m_aRequestParams.clear ();
     if (aParams != null)
-      m_aParams.putAll (aParams);
+      m_aRequestParams.putAll (aParams);
     return this;
   }
 
@@ -107,7 +126,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
   @Nonnull
   public FineUploaderBasic addParams (@Nullable final Map <String, String> aParams) {
     if (aParams != null)
-      m_aParams.putAll (aParams);
+      m_aRequestParams.putAll (aParams);
     return this;
   }
 
@@ -127,7 +146,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
       throw new IllegalArgumentException ("key");
     if (sValue == null)
       throw new NullPointerException ("value");
-    m_aParams.put (sKey, sValue);
+    m_aRequestParams.put (sKey, sValue);
     return this;
   }
 
@@ -141,9 +160,9 @@ public class FineUploaderBasic implements IJSCodeProvider {
    */
   @Nonnull
   public FineUploaderBasic setCustomHeaders (@Nullable final Map <String, String> aCustomHeaders) {
-    m_aCustomHeaders.clear ();
+    m_aRequestCustomHeaders.clear ();
     if (aCustomHeaders != null)
-      m_aCustomHeaders.putAll (aCustomHeaders);
+      m_aRequestCustomHeaders.putAll (aCustomHeaders);
     return this;
   }
 
@@ -158,7 +177,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
   @Nonnull
   public FineUploaderBasic addCustomHeaders (@Nullable final Map <String, String> aCustomHeaders) {
     if (aCustomHeaders != null)
-      m_aCustomHeaders.putAll (aCustomHeaders);
+      m_aRequestCustomHeaders.putAll (aCustomHeaders);
     return this;
   }
 
@@ -178,7 +197,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
       throw new IllegalArgumentException ("key");
     if (sValue == null)
       throw new NullPointerException ("value");
-    m_aCustomHeaders.put (sKey, sValue);
+    m_aRequestCustomHeaders.put (sKey, sValue);
     return this;
   }
 
@@ -268,9 +287,9 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   public FineUploaderBasic setAllowedExtensions (@Nullable final Set <String> aAllowedExtensions) {
-    m_aAllowedExtensions.clear ();
+    m_aValidationAllowedExtensions.clear ();
     if (aAllowedExtensions != null)
-      m_aAllowedExtensions.addAll (aAllowedExtensions);
+      m_aValidationAllowedExtensions.addAll (aAllowedExtensions);
     return this;
   }
 
@@ -288,7 +307,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
    */
   public FineUploaderBasic addAllowedExtensions (@Nullable final Set <String> aAllowedExtensions) {
     if (aAllowedExtensions != null)
-      m_aAllowedExtensions.addAll (aAllowedExtensions);
+      m_aValidationAllowedExtensions.addAll (aAllowedExtensions);
     return this;
   }
 
@@ -307,7 +326,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
   public FineUploaderBasic addAllowedExtension (@Nonnull @Nonempty final String sAllowedExtension) {
     if (StringHelper.hasNoText (sAllowedExtension))
       throw new IllegalArgumentException ("allowedExtension");
-    m_aAllowedExtensions.add (sAllowedExtension);
+    m_aValidationAllowedExtensions.add (sAllowedExtension);
     return this;
   }
 
@@ -322,7 +341,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
   public FineUploaderBasic setSizeLimit (@Nonnegative final int nSizeLimit) {
     if (nSizeLimit < 0)
       throw new IllegalArgumentException ("sizeLimit may not be negative!");
-    m_nSizeLimit = nSizeLimit;
+    m_nValidationSizeLimit = nSizeLimit;
     return this;
   }
 
@@ -337,7 +356,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
   public FineUploaderBasic setMinSizeLimit (@Nonnegative final int nMinSizeLimit) {
     if (nMinSizeLimit < 0)
       throw new IllegalArgumentException ("minSizeLimit may not be negative!");
-    m_nMinSizeLimit = nMinSizeLimit;
+    m_nValidationMinSizeLimit = nMinSizeLimit;
     return this;
   }
 
@@ -357,7 +376,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
    */
   @Nonnull
   public FineUploaderBasic setStopOnFirstInvalidFile (final boolean bStopOnFirstInvalidFile) {
-    m_bStopOnFirstInvalidFile = bStopOnFirstInvalidFile;
+    m_bValidationStopOnFirstInvalidFile = bStopOnFirstInvalidFile;
     return this;
   }
 
@@ -373,7 +392,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
    */
   @Nonnull
   public FineUploaderBasic setInputName (@Nonnull @Nonempty final String sInputName) {
-    m_sInputName = sInputName;
+    m_sRequestInputName = sInputName;
     return this;
   }
 
@@ -387,7 +406,7 @@ public class FineUploaderBasic implements IJSCodeProvider {
    */
   @Nonnull
   public FineUploaderBasic setForceMultipart (final boolean bForceMultipart) {
-    m_bForceMultipart = bForceMultipart;
+    m_bRequestForceMultipart = bForceMultipart;
     return this;
   }
 
@@ -396,20 +415,6 @@ public class FineUploaderBasic implements IJSCodeProvider {
     final JSONObject ret = new JSONObject ();
     if (m_bDebug != DEFAULT_DEBUG)
       ret.setBooleanProperty ("debug", m_bDebug);
-    if (!m_sAction.equals (DEFAULT_ACTION))
-      ret.setStringProperty ("action", m_sAction);
-    if (!m_aParams.isEmpty ()) {
-      final JSONObject aParams = new JSONObject ();
-      for (final Map.Entry <String, String> aEntry : m_aParams.entrySet ())
-        aParams.setStringProperty (aEntry.getKey (), aEntry.getValue ());
-      ret.setObjectProperty ("params", aParams);
-    }
-    if (!m_aCustomHeaders.isEmpty ()) {
-      final JSONObject aCustomHeaders = new JSONObject ();
-      for (final Map.Entry <String, String> aEntry : m_aCustomHeaders.entrySet ())
-        aCustomHeaders.setStringProperty (aEntry.getKey (), aEntry.getValue ());
-      ret.setObjectProperty ("customHeaders", aCustomHeaders);
-    }
     if (StringHelper.hasText (m_sButtonElementID))
       ret.setFunctionPrebuildProperty ("button", JQuery.idRef (m_sButtonElementID).component (0).getJSCode ());
     if (m_bMultiple != DEFAULT_MULTIPLE)
@@ -420,18 +425,63 @@ public class FineUploaderBasic implements IJSCodeProvider {
       ret.setBooleanProperty ("disableCancelForFormUploads", m_bDisableCancelForFormUploads);
     if (m_bAutoUpload != DEFAULT_AUTO_UPLOAD)
       ret.setBooleanProperty ("autoUpload", m_bAutoUpload);
-    if (!m_aAllowedExtensions.isEmpty ())
-      ret.setStringListProperty ("allowedExtensions", m_aAllowedExtensions);
-    if (m_nSizeLimit != DEFAULT_SIZE_LIMIT)
-      ret.setIntegerProperty ("sizeLimit", m_nSizeLimit);
-    if (m_nMinSizeLimit != DEFAULT_MIN_SIZE_LIMIT)
-      ret.setIntegerProperty ("minSizeLimit", m_nMinSizeLimit);
-    if (m_bStopOnFirstInvalidFile != DEFAULT_STOP_ON_FIRST_INVALID_FILE)
-      ret.setBooleanProperty ("stopOnFirstInvalidFile", m_bStopOnFirstInvalidFile);
-    if (!m_sInputName.equals (DEFAULT_INPUT_NAME))
-      ret.setStringProperty ("inputName", m_sInputName);
-    if (m_bForceMultipart != DEFAULT_FORCE_MULTIPART)
-      ret.setBooleanProperty ("forceMultipart", m_bForceMultipart);
+
+    // request
+    {
+      final JSONObject aRequest = new JSONObject ();
+      if (!m_sRequestEndpoint.equals (DEFAULT_REQUEST_ENDPOINT))
+        aRequest.setStringProperty ("endpoint", m_sRequestEndpoint);
+      if (!m_aRequestParams.isEmpty ()) {
+        final JSONObject aParams = new JSONObject ();
+        for (final Map.Entry <String, String> aEntry : m_aRequestParams.entrySet ())
+          aParams.setStringProperty (aEntry.getKey (), aEntry.getValue ());
+        aRequest.setObjectProperty ("params", aParams);
+      }
+      if (!m_aRequestCustomHeaders.isEmpty ()) {
+        final JSONObject aCustomHeaders = new JSONObject ();
+        for (final Map.Entry <String, String> aEntry : m_aRequestCustomHeaders.entrySet ())
+          aCustomHeaders.setStringProperty (aEntry.getKey (), aEntry.getValue ());
+        aRequest.setObjectProperty ("customHeaders", aCustomHeaders);
+      }
+      if (m_bRequestForceMultipart != DEFAULT_REQUEST_FORCE_MULTIPART)
+        aRequest.setBooleanProperty ("forceMultipart", m_bRequestForceMultipart);
+      if (!m_sRequestInputName.equals (DEFAULT_REQUEST_INPUT_NAME))
+        ret.setStringProperty ("inputName", m_sRequestInputName);
+
+      if (!aRequest.isEmpty ())
+        ret.setObjectProperty ("request", aRequest);
+    }
+
+    // validation
+    {
+      final JSONObject aValidation = new JSONObject ();
+      if (!m_aValidationAllowedExtensions.isEmpty ())
+        aValidation.setStringListProperty ("allowedExtensions", m_aValidationAllowedExtensions);
+      if (m_nValidationSizeLimit != DEFAULT_VALIDATION_SIZE_LIMIT)
+        aValidation.setIntegerProperty ("sizeLimit", m_nValidationSizeLimit);
+      if (m_nValidationMinSizeLimit != DEFAULT_VALIDATION_MIN_SIZE_LIMIT)
+        aValidation.setIntegerProperty ("minSizeLimit", m_nValidationMinSizeLimit);
+      if (m_bValidationStopOnFirstInvalidFile != DEFAULT_VALIDATION_STOP_ON_FIRST_INVALID_FILE)
+        aValidation.setBooleanProperty ("stopOnFirstInvalidFile", m_bValidationStopOnFirstInvalidFile);
+      if (!aValidation.isEmpty ())
+        ret.setObjectProperty ("validation", aValidation);
+    }
+
+    // retry
+    {
+      final JSONObject aRetry = new JSONObject ();
+      if (m_bRetryEnableAuto != DEFAULT_RETRY_ENABLE_AUTO)
+        aRetry.setBooleanProperty ("enableAuto", m_bRetryEnableAuto);
+      if (m_nRetryMaxAutoAttempts != DEFAULT_RETRY_MAX_AUTO_ATTEMPTS)
+        aRetry.setIntegerProperty ("maxAutoAttempts", m_nRetryMaxAutoAttempts);
+      if (m_nRetryAutoAttemptDelay != DEFAULT_RETRY_AUTO_ATTEMPT_DELAY)
+        aRetry.setIntegerProperty ("autoAttemptDelay", m_nRetryAutoAttemptDelay);
+      if (!DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY.equals (m_sRetryPreventRetryResponseProperty))
+        aRetry.setStringProperty ("preventRetryResponseProperty", m_sRetryPreventRetryResponseProperty);
+      if (!aRetry.isEmpty ())
+        ret.setObjectProperty ("retry", aRetry);
+    }
+
     return ret;
   }
 
