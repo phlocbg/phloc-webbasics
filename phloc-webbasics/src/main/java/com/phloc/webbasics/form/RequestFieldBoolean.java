@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.ETriState;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCRequestFieldBoolean;
@@ -76,6 +77,9 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   public static String getCheckBoxRequestValue (@Nonnull @Nonempty final String sFieldName,
                                                 @Nullable final String sDefaultValue)
   {
+    if (StringHelper.hasNoText (sFieldName))
+      throw new IllegalArgumentException ("fieldName may not be empty!");
+
     final IRequestWebScopeWithoutResponse aScope = getScope ();
 
     // Is the checked value present?
@@ -101,6 +105,9 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
 
   public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
   {
+    if (StringHelper.hasNoText (sFieldName))
+      throw new IllegalArgumentException ("fieldName may not be empty!");
+
     return getCheckBoxState (sFieldName).getAsBooleanValue (bDefaultValue);
   }
 }

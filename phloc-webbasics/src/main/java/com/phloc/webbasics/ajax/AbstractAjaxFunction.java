@@ -34,7 +34,7 @@ public abstract class AbstractAjaxFunction implements IAjaxFunction
 
   public AbstractAjaxFunction (@Nonnull @Nonempty final String sFunctionName)
   {
-    if (!AjaxManager.isValidFunctionName (sFunctionName))
+    if (!AjaxInvoker.isValidFunctionName (sFunctionName))
       throw new IllegalArgumentException ("functionName");
     m_sFunctionName = sFunctionName;
   }

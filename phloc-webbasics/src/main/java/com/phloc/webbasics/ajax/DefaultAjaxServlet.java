@@ -112,6 +112,19 @@ public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
     return true;
   }
 
+  /**
+   * Get the AjaxManager matching the passed request
+   * 
+   * @param aRequestScope
+   *        The request scope to use. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  protected IAjaxInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return AjaxManager.getInstance ();
+  }
+
   @Override
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
@@ -140,8 +153,8 @@ public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
           final StopWatch aSW = new StopWatch (true);
 
           // E.g. for keep-alive
-          final AjaxDefaultResponse aResult = AjaxManager.getInstance ().invokeFunction (sAjaxFunctionName,
-                                                                                         aRequestScope);
+          final AjaxDefaultResponse aResult = getAjaxInvoker (aRequestScope).invokeFunction (sAjaxFunctionName,
+                                                                                             aRequestScope);
           if (s_aLogger.isTraceEnabled ())
             s_aLogger.trace ("  AJAX Result: " + aResult);
 
