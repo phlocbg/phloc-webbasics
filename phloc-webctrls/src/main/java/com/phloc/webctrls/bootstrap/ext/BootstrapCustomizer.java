@@ -19,6 +19,7 @@ package com.phloc.webctrls.bootstrap.ext;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.version.Version;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.IHCBaseNode;
 import com.phloc.html.hc.IHCNodeWithChildren;
@@ -27,6 +28,15 @@ import com.phloc.webctrls.bootstrap.BootstrapDropDownMenu;
 
 public class BootstrapCustomizer extends HCDefaultCustomizer
 {
+  private final Version m_aBootstrapVersion;
+
+  public BootstrapCustomizer (@Nonnull final Version aBootstrapVersion)
+  {
+    if (aBootstrapVersion == null)
+      throw new NullPointerException ("bootstrapVersion");
+    m_aBootstrapVersion = aBootstrapVersion;
+  }
+
   @Override
   public void customizeNode (@Nonnull final IHCNodeWithChildren <?> aParentElement,
                              @Nonnull final IHCBaseNode aNode,
@@ -36,7 +46,7 @@ public class BootstrapCustomizer extends HCDefaultCustomizer
 
     if (aNode instanceof BootstrapDropDownMenu)
     {
-      EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (aParentElement);
+      EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (m_aBootstrapVersion, aParentElement);
     }
   }
 }

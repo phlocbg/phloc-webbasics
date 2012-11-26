@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webctrls">
+  <entry date="2012-11-26" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">BootstrapCustomizer now requires the version number, for which the customizing should be performed</text>
+    </change>
+  </entry>
   <entry date="2012-11-06" category="tech" action="update">
     <change>
       <text locale="en">Added Bootstrap 2.2.1</text>

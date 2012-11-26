@@ -57,7 +57,8 @@ public class HCDateEditTriggered extends HCTable
   @Nonnull
   private static HCScript _createJSCode (final boolean bShowTime, final String sID, final Locale aDisplayLocale)
   {
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (bShowTime
+                                                                             ? PDTFormatPatterns.getDefaultPatternDateTime (aDisplayLocale)
                                                                              : PDTFormatPatterns.getDefaultPatternDate (aDisplayLocale))
                                                   .getJSCalendarFormatString ();
 

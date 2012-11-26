@@ -97,7 +97,8 @@ public class HCDateEdit implements IHCNodeBuilder
   @Nonnull
   public IHCNode build ()
   {
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime
+                                                                               ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
                                                                                : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
                                                   .getJSCalendarFormatString ();
 

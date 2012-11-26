@@ -49,7 +49,8 @@ import com.phloc.json.impl.JSONObject;
  * @param <T>
  *        The object type this data provider operates on
  */
-public abstract class AbstractTableDataProvider <T> extends AbstractPagedDataProviderWithFilter <T> implements IPUIDataTableDataProvider <T>
+public abstract class AbstractTableDataProvider <T> extends AbstractPagedDataProviderWithFilter <T> implements
+                                                                                                   IPUIDataTableDataProvider <T>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractTableDataProvider.class);
 

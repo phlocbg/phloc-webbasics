@@ -24,7 +24,8 @@ import com.phloc.html.hc.html.AbstractHCSpan;
  * 
  * @author philip
  */
-public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock> implements IBootstrapHelpItem <BootstrapHelpBlock>
+public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock> implements
+                                                                           IBootstrapHelpItem <BootstrapHelpBlock>
 {
   private void _init ()
   {

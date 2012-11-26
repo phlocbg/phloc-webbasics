@@ -29,7 +29,6 @@ import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webctrls.bootstrap.CBootstrap;
 
 /**
  * This class provides some workarounds for known Bootstrap bugs.
@@ -47,9 +46,9 @@ public enum EBootstrapWorkarounds
   IPAD_DROPDOWN_FIX
   {
     @Override
-    public boolean isApplicable ()
+    public boolean isApplicable (@Nonnull final Version aBootstrapVersion)
     {
-      return new VersionRange (new Version (2, 1, 0), true, new Version (2, 1, 1), true).versionMatches (CBootstrap.BOOTSTRAP_VERSION);
+      return new VersionRange (new Version (2, 1, 0), true, new Version (2, 2, 1), true).versionMatches (aBootstrapVersion);
     }
 
     @Override
@@ -71,10 +70,12 @@ public enum EBootstrapWorkarounds
   {}
 
   /**
+   * @param aBootstrapVersion
+   *        The bootstrap version to be used. May not be <code>null</code>.
    * @return <code>true</code> if this fix needs to be applied to the current
    *         version, <code>false</code> otherwise.
    */
-  public abstract boolean isApplicable ();
+  public abstract boolean isApplicable (@Nonnull Version aBootstrapVersion);
 
   /**
    * @return The HC node for fixing the issue. May not be <code>null</code> and
@@ -83,9 +84,20 @@ public enum EBootstrapWorkarounds
   @Nonnull
   public abstract IHCNode createFixCode ();
 
-  public void appendIfApplicable (@Nonnull final IHCNodeWithChildren <?> aParentElement)
+  /**
+   * Append this specific fix, if the fix is applicable for the passed bootstrap
+   * version.
+   * 
+   * @param aBootstrapVersion
+   *        The bootstrap version to be used. May not be <code>null</code>.
+   * @param aParentElement
+   *        The parent element to append the fix code to. May not be
+   *        <code>null</code>.
+   */
+  public void appendIfApplicable (@Nonnull final Version aBootstrapVersion,
+                                  @Nonnull final IHCNodeWithChildren <?> aParentElement)
   {
-    if (isApplicable ())
+    if (isApplicable (aBootstrapVersion))
       if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag ("bootstrap-workaround-" + name ()))
         aParentElement.addChild (createFixCode ());
   }

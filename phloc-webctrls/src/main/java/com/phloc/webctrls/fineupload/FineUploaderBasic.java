@@ -21,7 +21,8 @@ import com.phloc.json.impl.JSONObject;
  * 
  * @author philip
  */
-public class FineUploaderBasic implements IJSCodeProvider {
+public class FineUploaderBasic implements IJSCodeProvider
+{
   public static final boolean DEFAULT_DEBUG = false;
   public static final boolean DEFAULT_MULTIPLE = true;
   public static final int DEFAULT_MAX_CONNECTIONS = 3;
@@ -76,7 +77,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setDebug (final boolean bDebug) {
+  public FineUploaderBasic setDebug (final boolean bDebug)
+  {
     m_bDebug = bDebug;
     return this;
   }
@@ -92,7 +94,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setEndpoint (@Nonnull @Nonempty final String sRequestEndpoint) {
+  public FineUploaderBasic setEndpoint (@Nonnull @Nonempty final String sRequestEndpoint)
+  {
     if (StringHelper.hasNoText (sRequestEndpoint))
       throw new IllegalArgumentException ("requestEndpoint");
     m_sRequestEndpoint = sRequestEndpoint;
@@ -108,7 +111,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setParams (@Nullable final Map <String, String> aParams) {
+  public FineUploaderBasic setParams (@Nullable final Map <String, String> aParams)
+  {
     m_aRequestParams.clear ();
     if (aParams != null)
       m_aRequestParams.putAll (aParams);
@@ -124,7 +128,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic addParams (@Nullable final Map <String, String> aParams) {
+  public FineUploaderBasic addParams (@Nullable final Map <String, String> aParams)
+  {
     if (aParams != null)
       m_aRequestParams.putAll (aParams);
     return this;
@@ -141,7 +146,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic addParam (@Nonnull @Nonempty final String sKey, @Nonnull final String sValue) {
+  public FineUploaderBasic addParam (@Nonnull @Nonempty final String sKey, @Nonnull final String sValue)
+  {
     if (StringHelper.hasNoText (sKey))
       throw new IllegalArgumentException ("key");
     if (sValue == null)
@@ -159,7 +165,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setCustomHeaders (@Nullable final Map <String, String> aCustomHeaders) {
+  public FineUploaderBasic setCustomHeaders (@Nullable final Map <String, String> aCustomHeaders)
+  {
     m_aRequestCustomHeaders.clear ();
     if (aCustomHeaders != null)
       m_aRequestCustomHeaders.putAll (aCustomHeaders);
@@ -175,7 +182,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic addCustomHeaders (@Nullable final Map <String, String> aCustomHeaders) {
+  public FineUploaderBasic addCustomHeaders (@Nullable final Map <String, String> aCustomHeaders)
+  {
     if (aCustomHeaders != null)
       m_aRequestCustomHeaders.putAll (aCustomHeaders);
     return this;
@@ -192,7 +200,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic addCustomHeader (@Nonnull @Nonempty final String sKey, @Nonnull final String sValue) {
+  public FineUploaderBasic addCustomHeader (@Nonnull @Nonempty final String sKey, @Nonnull final String sValue)
+  {
     if (StringHelper.hasNoText (sKey))
       throw new IllegalArgumentException ("key");
     if (sValue == null)
@@ -211,7 +220,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setButtonElementID (@Nullable final String sButtonElementID) {
+  public FineUploaderBasic setButtonElementID (@Nullable final String sButtonElementID)
+  {
     m_sButtonElementID = sButtonElementID;
     return this;
   }
@@ -225,7 +235,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setMultiple (final boolean bMultiple) {
+  public FineUploaderBasic setMultiple (final boolean bMultiple)
+  {
     m_bMultiple = bMultiple;
     return this;
   }
@@ -238,7 +249,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setMaxConnections (@Nonnegative final int nMaxConnections) {
+  public FineUploaderBasic setMaxConnections (@Nonnegative final int nMaxConnections)
+  {
     if (nMaxConnections <= 0)
       throw new IllegalArgumentException ("maxConnections may not be negative!");
     m_nMaxConnections = nMaxConnections;
@@ -255,7 +267,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setDisableCancelForFormUploads (final boolean bDisableCancelForFormUploads) {
+  public FineUploaderBasic setDisableCancelForFormUploads (final boolean bDisableCancelForFormUploads)
+  {
     m_bDisableCancelForFormUploads = bDisableCancelForFormUploads;
     return this;
   }
@@ -269,7 +282,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setAutoUpload (final boolean bAutoUpload) {
+  public FineUploaderBasic setAutoUpload (final boolean bAutoUpload)
+  {
     m_bAutoUpload = bAutoUpload;
     return this;
   }
@@ -286,7 +300,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    *        The allowed extensions to be set.
    * @return this
    */
-  public FineUploaderBasic setAllowedExtensions (@Nullable final Set <String> aAllowedExtensions) {
+  public FineUploaderBasic setAllowedExtensions (@Nullable final Set <String> aAllowedExtensions)
+  {
     m_aValidationAllowedExtensions.clear ();
     if (aAllowedExtensions != null)
       m_aValidationAllowedExtensions.addAll (aAllowedExtensions);
@@ -305,7 +320,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    *        The allowed extensions to be added.
    * @return this
    */
-  public FineUploaderBasic addAllowedExtensions (@Nullable final Set <String> aAllowedExtensions) {
+  public FineUploaderBasic addAllowedExtensions (@Nullable final Set <String> aAllowedExtensions)
+  {
     if (aAllowedExtensions != null)
       m_aValidationAllowedExtensions.addAll (aAllowedExtensions);
     return this;
@@ -323,7 +339,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    *        The allowed extension to be added. E.g. ("jpeg", "jpg", "gif")
    * @return this
    */
-  public FineUploaderBasic addAllowedExtension (@Nonnull @Nonempty final String sAllowedExtension) {
+  public FineUploaderBasic addAllowedExtension (@Nonnull @Nonempty final String sAllowedExtension)
+  {
     if (StringHelper.hasNoText (sAllowedExtension))
       throw new IllegalArgumentException ("allowedExtension");
     m_aValidationAllowedExtensions.add (sAllowedExtension);
@@ -338,7 +355,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setSizeLimit (@Nonnegative final int nSizeLimit) {
+  public FineUploaderBasic setSizeLimit (@Nonnegative final int nSizeLimit)
+  {
     if (nSizeLimit < 0)
       throw new IllegalArgumentException ("sizeLimit may not be negative!");
     m_nValidationSizeLimit = nSizeLimit;
@@ -353,7 +371,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setMinSizeLimit (@Nonnegative final int nMinSizeLimit) {
+  public FineUploaderBasic setMinSizeLimit (@Nonnegative final int nMinSizeLimit)
+  {
     if (nMinSizeLimit < 0)
       throw new IllegalArgumentException ("minSizeLimit may not be negative!");
     m_nValidationMinSizeLimit = nMinSizeLimit;
@@ -375,7 +394,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setStopOnFirstInvalidFile (final boolean bStopOnFirstInvalidFile) {
+  public FineUploaderBasic setStopOnFirstInvalidFile (final boolean bStopOnFirstInvalidFile)
+  {
     m_bValidationStopOnFirstInvalidFile = bStopOnFirstInvalidFile;
     return this;
   }
@@ -391,7 +411,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setInputName (@Nonnull @Nonempty final String sInputName) {
+  public FineUploaderBasic setInputName (@Nonnull @Nonempty final String sInputName)
+  {
     m_sRequestInputName = sInputName;
     return this;
   }
@@ -405,13 +426,15 @@ public class FineUploaderBasic implements IJSCodeProvider {
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setForceMultipart (final boolean bForceMultipart) {
+  public FineUploaderBasic setForceMultipart (final boolean bForceMultipart)
+  {
     m_bRequestForceMultipart = bForceMultipart;
     return this;
   }
 
   @Nonnull
-  public JSONObject getJSON () {
+  public JSONObject getJSON ()
+  {
     final JSONObject ret = new JSONObject ();
     if (m_bDebug != DEFAULT_DEBUG)
       ret.setBooleanProperty ("debug", m_bDebug);
@@ -431,13 +454,15 @@ public class FineUploaderBasic implements IJSCodeProvider {
       final JSONObject aRequest = new JSONObject ();
       if (!m_sRequestEndpoint.equals (DEFAULT_REQUEST_ENDPOINT))
         aRequest.setStringProperty ("endpoint", m_sRequestEndpoint);
-      if (!m_aRequestParams.isEmpty ()) {
+      if (!m_aRequestParams.isEmpty ())
+      {
         final JSONObject aParams = new JSONObject ();
         for (final Map.Entry <String, String> aEntry : m_aRequestParams.entrySet ())
           aParams.setStringProperty (aEntry.getKey (), aEntry.getValue ());
         aRequest.setObjectProperty ("params", aParams);
       }
-      if (!m_aRequestCustomHeaders.isEmpty ()) {
+      if (!m_aRequestCustomHeaders.isEmpty ())
+      {
         final JSONObject aCustomHeaders = new JSONObject ();
         for (final Map.Entry <String, String> aEntry : m_aRequestCustomHeaders.entrySet ())
           aCustomHeaders.setStringProperty (aEntry.getKey (), aEntry.getValue ());
@@ -485,7 +510,8 @@ public class FineUploaderBasic implements IJSCodeProvider {
     return ret;
   }
 
-  public String getJSCode () {
+  public String getJSCode ()
+  {
     return new JSInvocation ("new qq.FileUploader").arg (getJSON ()).getJSCode ();
   }
 }
