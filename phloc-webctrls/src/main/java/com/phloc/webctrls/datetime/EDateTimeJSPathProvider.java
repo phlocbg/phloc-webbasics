@@ -20,6 +20,7 @@ package com.phloc.webctrls.datetime;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.html.resource.js.ConstantJSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.html.resource.js.IJSPathProviderWithParam;
 import com.phloc.html.resource.js.JSFilenameHelper;
@@ -56,19 +57,6 @@ public enum EDateTimeJSPathProvider implements IJSPathProviderWithParam
   @Nonnull
   public IJSPathProvider getInstance (@Nonnull @Nonempty final String sLanguage)
   {
-    return new IJSPathProvider ()
-    {
-      @Nonnull
-      @Nonempty
-      public String getJSItemPath (final boolean bRegular)
-      {
-        return EDateTimeJSPathProvider.this.getJSItemPath (bRegular).replace ("{0}", sLanguage);
-      }
-
-      public boolean canBeBundled ()
-      {
-        return EDateTimeJSPathProvider.this.canBeBundled ();
-      }
-    };
+    return new ConstantJSPathProvider (m_sPath.replace ("{0}", sLanguage), m_bCanBeBundled);
   }
 }
