@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.appbasics.data.provider.IPagedDataProviderWithFilter;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.json.IJSONObject;
@@ -38,12 +40,12 @@ public interface IPUIDataTableDataProvider <T> extends IPagedDataProviderWithFil
    * @param aDisplayLocale
    * @return The JSON objects representing the matches
    */
-  Collection <IJSONObject> convertMatches (List <T> aMatches, List <String> aColumnKeys, Locale aDisplayLocale);
+  Collection <IJSONObject> convertMatches (List <T> aMatches, List <String> aColumnKeys, @Nonnull Locale aDisplayLocale);
 
   /**
    * @param aDisplayLocale
    * @return The total number of matching data sets (if no filter is applied,
    *         this would be all existing data sets)
    */
-  int getAllMatchingEntriesCount (Locale aDisplayLocale);
+  int getAllMatchingEntriesCount (@Nonnull Locale aDisplayLocale);
 }

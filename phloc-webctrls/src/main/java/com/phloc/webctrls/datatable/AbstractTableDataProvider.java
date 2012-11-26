@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public abstract class AbstractTableDataProvider <T> extends AbstractPagedDataPro
    * @param aDisplayLocale
    * @return The property value to be used for filtering
    */
-  protected abstract String getFilterValue (final T aObject, final String sColumnKey, final Locale aDisplayLocale);
+  protected abstract String getFilterValue (T aObject, String sColumnKey, Locale aDisplayLocale);
 
   /**
    * Returns the vale of the passed object corresponding to the passed column
@@ -75,7 +76,7 @@ public abstract class AbstractTableDataProvider <T> extends AbstractPagedDataPro
    * @param aDisplayLocale
    * @return The XHTML mark-up to render the object property
    */
-  protected abstract IHCNode getRenderValue (final T aObject, final String sColumnKey, final Locale aDisplayLocale);
+  protected abstract IHCNode getRenderValue (T aObject, String sColumnKey, Locale aDisplayLocale);
 
   /**
    * This method decides whether a certain entry matches the applied filter or
@@ -89,7 +90,9 @@ public abstract class AbstractTableDataProvider <T> extends AbstractPagedDataPro
    * @return <code>true</code> if the entry is matching, <code>false</code>
    *         otherwise
    */
-  protected boolean passesFilter (final T aObject, final ISelectFilterable aFilter, final Locale aDisplayLocale)
+  protected boolean passesFilter (final T aObject,
+                                  @Nullable final ISelectFilterable aFilter,
+                                  final Locale aDisplayLocale)
   {
     if (aFilter instanceof SelectFilterChainOR)
     {

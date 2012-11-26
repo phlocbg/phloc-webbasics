@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.name.IHasDisplayText;
-import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
@@ -32,7 +31,7 @@ import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 
 @Translatable
-public enum EDataTableText implements IHasDisplayText, IHasDisplayTextWithArgs
+public enum EDataTableText implements IHasDisplayText
 {
   PROCESSING ("Bitte warten...", "Processing..."),
   LENGTH_MENU ("_MENU_ Einträge anzeigen", "Show _MENU_ entries"),
@@ -61,14 +60,8 @@ public enum EDataTableText implements IHasDisplayText, IHasDisplayTextWithArgs
     return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
   }
 
-  @Nullable
-  public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
-  {
-    return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
-  }
-
   @Nonnull
-  public static IJSONObject getAsJSON (final Locale aLocale)
+  public static IJSONObject getAsJSON (@Nonnull final Locale aLocale)
   {
     final IJSONObject aJSON = new JSONObject ();
     aJSON.setStringProperty ("sProcessing", PROCESSING.getDisplayText (aLocale));
