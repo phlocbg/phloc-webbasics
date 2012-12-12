@@ -1,0 +1,13 @@
+/* No margin if an alert is used in a nav */
+.nav .alert {
+  margin-bottom: 0px;
+}
+
+/* Do not wrap text and an eventual caret */
+.nav > li > a {
+  white-space: nowrap;
+}
+
+.phloc-form-label{
+  text-align: right;
+}
