@@ -1,7 +1,8 @@
 #summary Change log of phloc-webctrls
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>11/26/12</td><td>add</td><td>tech</td><td></td><td>Added jQuery 1.8.3</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>12/12/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.2</td></tr>
+<tr><td>11/26/12</td><td>add</td><td>tech</td><td></td><td>Added jQuery 1.8.3</td></tr>
 <tr><td>11/26/12</td><td>change</td><td>api</td><td>*yes*</td><td>BootstrapCustomizer now requires the version number, for which the customizing should be performed</td></tr>
 <tr><td>11/6/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.1</td></tr>
 <tr><td>10/30/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.0</td></tr>
