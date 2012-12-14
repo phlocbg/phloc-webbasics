@@ -41,7 +41,9 @@ public interface IPagedDataProvider <DATATYPE> extends Serializable
    * and the limit.
    * 
    * @param aTable
+   *        The source table
    * @param aDisplayLocale
+   *        The display locale
    * @return The sorted list of items to display.
    */
   @Nonnull
