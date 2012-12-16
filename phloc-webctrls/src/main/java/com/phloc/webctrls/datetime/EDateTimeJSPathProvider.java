@@ -57,6 +57,6 @@ public enum EDateTimeJSPathProvider implements IJSPathProviderWithParam
   @Nonnull
   public IJSPathProvider getInstance (@Nonnull @Nonempty final String sLanguage)
   {
-    return new ConstantJSPathProvider (m_sPath.replace ("{0}", sLanguage), m_bCanBeBundled);
+    return new ConstantJSPathProvider (m_sPath.replace ("{0}", sLanguage), true);
   }
 }
