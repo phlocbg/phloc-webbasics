@@ -101,6 +101,12 @@
       <artifactId>phloc-webbasics</artifactId>
       <version>1.9.7-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-masterdata</artifactId>
+      <version>3.0.1</version>
+      <optional>true</optional>
+    </dependency>
 
     <dependency>
       <groupId>javax.servlet</groupId>

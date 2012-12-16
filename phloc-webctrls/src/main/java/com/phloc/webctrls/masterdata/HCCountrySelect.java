@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.country;
+package com.phloc.webctrls.masterdata;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +26,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.IHasBooleanRepresentation;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.AbstractCollationComparator;
 import com.phloc.commons.locale.country.ComparatorLocaleDisplayCountryInLocale;
@@ -33,31 +34,65 @@ import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.name.IDisplayTextProvider;
 import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCOption;
+import com.phloc.masterdata.locale.DeprecatedLocaleHandler;
 import com.phloc.webctrls.custom.HCExtSelect;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webctrls.famfam.FamFamFlags;
 
 public class HCCountrySelect extends HCExtSelect
 {
-  @Nonnull
-  private static List <Locale> _getAllCountries ()
+  public static enum EWithDeprecated implements IHasBooleanRepresentation
   {
+    TRUE,
+    FALSE;
+
+    public static final EWithDeprecated DEFAULT = FALSE;
+
+    public boolean getAsBoolean ()
+    {
+      return this == TRUE;
+    }
+  }
+
+  @Nonnull
+  private static List <Locale> _getAllCountries (@Nonnull final EWithDeprecated eWithDeprecated)
+  {
+    final boolean bWithDeprecated = eWithDeprecated.getAsBoolean ();
     final List <Locale> aLocales = new ArrayList <Locale> ();
     for (final String sCountry : CountryCache.getAllCountries ())
-      aLocales.add (CountryCache.getCountry (sCountry));
+    {
+      final Locale aCountry = CountryCache.getCountry (sCountry);
+      if (bWithDeprecated || !DeprecatedLocaleHandler.getDefaultInstance ().isDeprecatedLocaleWithFallback (aCountry))
+        aLocales.add (aCountry);
+    }
     return aLocales;
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF, @Nonnull final Locale aDisplayLocale)
   {
-    this (aRF, aDisplayLocale, _getAllCountries ());
+    this (aRF, aDisplayLocale, EWithDeprecated.DEFAULT);
+  }
+
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF,
+                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final EWithDeprecated eWithDeprecated)
+  {
+    this (aRF, aDisplayLocale, _getAllCountries (eWithDeprecated));
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,
                           @Nonnull final Locale aDisplayLocale,
                           final boolean bAlwaysShowPleaseSelect)
   {
-    this (aRF, aDisplayLocale, _getAllCountries (), null, bAlwaysShowPleaseSelect);
+    this (aRF, aDisplayLocale, EWithDeprecated.DEFAULT, bAlwaysShowPleaseSelect);
+  }
+
+  public HCCountrySelect (@Nonnull final IHCRequestField aRF,
+                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final EWithDeprecated eWithDeprecated,
+                          final boolean bAlwaysShowPleaseSelect)
+  {
+    this (aRF, aDisplayLocale, _getAllCountries (eWithDeprecated), null, bAlwaysShowPleaseSelect);
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,

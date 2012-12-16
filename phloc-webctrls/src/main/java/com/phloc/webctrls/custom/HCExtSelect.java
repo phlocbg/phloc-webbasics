@@ -30,7 +30,7 @@ import com.phloc.webbasics.EWebBasicsText;
 
 public class HCExtSelect extends HCSelect
 {
-  public static final ICSSClassProvider SPECIAL_OPTION = DefaultCSSClassProvider.create ("phloc-select-option-special");
+  public static final ICSSClassProvider CSS_CLASS_SPECIAL_OPTION = DefaultCSSClassProvider.create ("phloc-select-option-special");
 
   public HCExtSelect (@Nonnull final IHCRequestField aRF)
   {
@@ -42,7 +42,7 @@ public class HCExtSelect extends HCSelect
   {
     final HCOption aOption = new HCOption ().setValue ("")
                                             .addChild (EWebBasicsText.PLEASE_SELECT.getDisplayText (aDisplayLocale));
-    aOption.addClass (SPECIAL_OPTION);
+    aOption.addClass (CSS_CLASS_SPECIAL_OPTION);
     return aOption;
   }
 
@@ -57,7 +57,7 @@ public class HCExtSelect extends HCSelect
   {
     final HCOption aOption = new HCOption ().setValue ("")
                                             .addChild (EWebBasicsText.SELECT_NONE.getDisplayText (aDisplayLocale));
-    aOption.addClass (SPECIAL_OPTION);
+    aOption.addClass (CSS_CLASS_SPECIAL_OPTION);
     return aOption;
   }
 
