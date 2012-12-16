@@ -22,7 +22,6 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import com.phloc.datetime.format.PDTFormatPatterns;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCEdit;
@@ -95,7 +94,7 @@ public class HCDateEdit implements IHCNodeBuilder
   }
 
   @Nonnull
-  public IHCNode build ()
+  public HCNodeList build ()
   {
     final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime
                                                                                ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)

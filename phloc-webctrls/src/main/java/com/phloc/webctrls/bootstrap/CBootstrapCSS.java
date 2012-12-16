@@ -163,6 +163,17 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider SHOW = DefaultCSSClassProvider.create ("show");
   public static final ICSSClassProvider SIDEBAR_NAV = DefaultCSSClassProvider.create ("sidebar-nav");
   public static final ICSSClassProvider SMALL = DefaultCSSClassProvider.create ("small");
+  public static final ICSSClassProvider SPAN1 = DefaultCSSClassProvider.create ("span1");
+  public static final ICSSClassProvider SPAN10 = DefaultCSSClassProvider.create ("span10");
+  public static final ICSSClassProvider SPAN11 = DefaultCSSClassProvider.create ("span11");
+  public static final ICSSClassProvider SPAN2 = DefaultCSSClassProvider.create ("span2");
+  public static final ICSSClassProvider SPAN3 = DefaultCSSClassProvider.create ("span3");
+  public static final ICSSClassProvider SPAN4 = DefaultCSSClassProvider.create ("span4");
+  public static final ICSSClassProvider SPAN5 = DefaultCSSClassProvider.create ("span5");
+  public static final ICSSClassProvider SPAN6 = DefaultCSSClassProvider.create ("span6");
+  public static final ICSSClassProvider SPAN7 = DefaultCSSClassProvider.create ("span7");
+  public static final ICSSClassProvider SPAN8 = DefaultCSSClassProvider.create ("span8");
+  public static final ICSSClassProvider SPAN9 = DefaultCSSClassProvider.create ("span9");
   public static final ICSSClassProvider SUCCESS = DefaultCSSClassProvider.create ("success");
   public static final ICSSClassProvider TAB_CONTENT = DefaultCSSClassProvider.create ("tab-content");
   public static final ICSSClassProvider TAB_PANE = DefaultCSSClassProvider.create ("tab-pane");

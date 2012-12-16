@@ -42,7 +42,7 @@ public class BootstrapButton_Submit extends HCButton_Submit
   }
 
   @Nonnull
-  public BootstrapButton_Submit setType (@Nonnull final EBootstrapButtonType eType)
+  public BootstrapButton_Submit setButtonType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");

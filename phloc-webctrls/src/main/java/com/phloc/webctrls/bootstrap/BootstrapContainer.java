@@ -59,7 +59,7 @@ public class BootstrapContainer implements IHCNodeBuilder
   }
 
   @Nonnull
-  public IHCNode build ()
+  public HCDiv build ()
   {
     final HCDiv aContainer = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.CONTAINER_FLUID : CBootstrapCSS.CONTAINER);
     if (m_aContent != null)

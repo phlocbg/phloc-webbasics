@@ -42,7 +42,7 @@ public class BootstrapButton_Reset extends HCButton_Reset
   }
 
   @Nonnull
-  public BootstrapButton_Reset setType (@Nonnull final EBootstrapButtonType eType)
+  public BootstrapButton_Reset setButtonType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");

@@ -91,7 +91,7 @@ public class BootstrapRow implements IHCNodeBuilder
   }
 
   @Nonnull
-  public IHCNode build ()
+  public HCDiv build ()
   {
     final HCDiv aRow = new HCDiv ().addClass (m_bFluid ? CBootstrapCSS.ROW_FLUID : CBootstrapCSS.ROW);
 
