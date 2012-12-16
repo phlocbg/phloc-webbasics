@@ -176,7 +176,7 @@ public enum EBootstrapIcon implements IIcon
   BRIEFCASE ("icon-briefcase"),
   FULLSCREEN ("icon-fullscreen");
 
-  private static final ICSSClassProvider CSS_CLASS_ICON_WHITE = DefaultCSSClassProvider.create ("icon-white");
+  public static final ICSSClassProvider CSS_CLASS_ICON_WHITE = DefaultCSSClassProvider.create ("icon-white");
 
   private final String m_sCSSClass;
 
@@ -202,6 +202,12 @@ public enum EBootstrapIcon implements IIcon
   public IHCElement <?> getAsNodeInverted ()
   {
     return new HCI ().addClasses (this, CSS_CLASS_ICON_WHITE);
+  }
+
+  @Nonnull
+  public BootstrapIconWhite getAsWhiteIcon ()
+  {
+    return new BootstrapIconWhite (m_sCSSClass);
   }
 
   @Nonnull

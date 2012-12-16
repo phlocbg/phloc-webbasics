@@ -25,8 +25,6 @@ import com.phloc.commons.version.Version;
 public final class CBootstrap
 {
   /** The bootstrap version available */
-  public static final Version BOOTSTRAP_VERSION_211 = new Version (2, 1, 1);
-  public static final Version BOOTSTRAP_VERSION_220 = new Version (2, 2, 0);
   public static final Version BOOTSTRAP_VERSION_221 = new Version (2, 2, 1);
   public static final Version BOOTSTRAP_VERSION_222 = new Version (2, 2, 2);
 
