@@ -42,8 +42,7 @@ import com.phloc.html.hc.html.HCUL;
  * 
  * @author philip
  */
-public class MenuRendererCallback extends
-                                 DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final NonBlockingStack <HCUL> m_aMenuListStack;
   private final IMenuItemRenderer m_aRenderer;
@@ -116,7 +115,11 @@ public class MenuRendererCallback extends
       {
         // separator
         final IHCNode aHCNode = m_aRenderer.renderSeparator ((IMenuSeparator) aMenuObj);
-        final HCLI aLI = aParent.addAndReturnItem (aHCNode);
+        HCLI aLI;
+        if (aHCNode instanceof HCLI)
+          aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
+        else
+          aLI = aParent.addAndReturnItem (aHCNode);
         m_aRenderer.onMenuSeparatorItem (aLI);
         m_aMenuItemStack.push (aLI);
       }
@@ -130,7 +133,11 @@ public class MenuRendererCallback extends
                                                                   aItem.hasChildren (),
                                                                   bSelected,
                                                                   aExpandedState.booleanValue ());
-          final HCLI aLI = aParent.addAndReturnItem (aHCNode);
+          HCLI aLI;
+          if (aHCNode instanceof HCLI)
+            aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
+          else
+            aLI = aParent.addAndReturnItem (aHCNode);
           m_aRenderer.onMenuItemPageItem (aLI, bSelected);
           m_aMenuItemStack.push (aLI);
         }
@@ -142,7 +149,11 @@ public class MenuRendererCallback extends
                                                                         aItem.hasChildren (),
                                                                         bSelected,
                                                                         aExpandedState.booleanValue ());
-            final HCLI aLI = aParent.addAndReturnItem (aHCNode);
+            HCLI aLI;
+            if (aHCNode instanceof HCLI)
+              aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
+            else
+              aLI = aParent.addAndReturnItem (aHCNode);
             m_aRenderer.onMenuItemExternalItem (aLI, bSelected);
             m_aMenuItemStack.push (aLI);
           }
