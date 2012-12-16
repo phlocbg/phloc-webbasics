@@ -75,6 +75,7 @@ public class UnifiedResponse
 {
   public static final boolean DEFAULT_ALLOW_CONTENT_ON_REDIRECT = false;
   public static final boolean DEFAULT_ALLOW_CONTENT_ON_STATUS_CODE = false;
+  public static final EContentDispositionType DEFAULT_CONTENT_DISPOSITION_TYPE = EContentDispositionType.ATTACHMENT;
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
   private static final int MAX_CSS_KB_FOR_IE = 288;
   private static final AtomicInteger s_aRequestNum = new AtomicInteger (0);
@@ -104,6 +105,7 @@ public class UnifiedResponse
   private IMimeType m_aMimeType;
   private byte [] m_aContent;
   private IInputStreamProvider m_aContentISP;
+  private EContentDispositionType m_eContentDispositionType = DEFAULT_CONTENT_DISPOSITION_TYPE;
   private String m_sContentDispositionFilename;
   private CacheControlBuilder m_aCacheControl;
   private final HTTPHeaderMap m_aResponseHeaderMap = new HTTPHeaderMap ();
@@ -466,6 +468,22 @@ public class UnifiedResponse
   }
 
   @Nonnull
+  public UnifiedResponse setContentDispositionType (@Nonnull final EContentDispositionType eContentDispositionType)
+  {
+    if (eContentDispositionType == null)
+      throw new NullPointerException ("ContentDispositionType");
+
+    m_eContentDispositionType = eContentDispositionType;
+    return this;
+  }
+
+  @Nonnull
+  public EContentDispositionType getContentDispositionType ()
+  {
+    return m_eContentDispositionType;
+  }
+
+  @Nonnull
   public UnifiedResponse setContentDispositionFilename (@Nonnull @Nonempty final String sFilename)
   {
     if (StringHelper.hasNoText (sFilename))
@@ -475,7 +493,7 @@ public class UnifiedResponse
     // -> Strip all paths and replace all invalid characters
     final String sFilenameToUse = FilenameHelper.getWithoutPath (FilenameHelper.getAsSecureValidFilename (sFilename));
     if (!sFilename.equals (sFilenameToUse))
-      _warn ("Content-Dispostion filename was modified from '" + sFilename + "' to '" + sFilenameToUse + "'");
+      _warn ("Content-Dispostion filename was internally modified from '" + sFilename + "' to '" + sFilenameToUse + "'");
 
     // Check if encoding as ISO-8859-1 is possible
     if (m_aContentDispositionEncoder == null)
@@ -867,7 +885,8 @@ public class UnifiedResponse
     {
       // Filename needs to be surrounded with double quotes (single quotes
       // don't work).
-      aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, "attachment; filename=\"" +
+      aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, m_eContentDispositionType.getID () +
+                                                                "; filename=\"" +
                                                                 m_sContentDispositionFilename +
                                                                 "\"");
       if (m_aMimeType == null)
