@@ -813,7 +813,7 @@ public class UnifiedResponse
       if (!m_bAllowContentOnRedirect)
       {
         if (m_aCacheControl != null)
-          _warn ("Ignoring provided Cache-Control because a redirect is specified!");
+          _info ("Ignoring provided Cache-Control because a redirect is specified!");
         if (m_sContentDispositionFilename != null)
           _warn ("Ignoring provided Content-Dispostion filename because a redirect is specified!");
         if (m_aMimeType != null)
@@ -839,7 +839,7 @@ public class UnifiedResponse
       if (!m_bAllowContentOnStatusCode)
       {
         if (m_aCacheControl != null)
-          _warn ("Ignoring provided Cache-Control because a status code is specified!");
+          _info ("Ignoring provided Cache-Control because a status code is specified!");
         if (m_sContentDispositionFilename != null)
           _warn ("Ignoring provided Content-Dispostion filename because a status code is specified!");
         if (m_aMimeType != null)
