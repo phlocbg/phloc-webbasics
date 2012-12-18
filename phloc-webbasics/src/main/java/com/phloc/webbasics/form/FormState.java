@@ -29,6 +29,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -111,5 +112,15 @@ public class FormState implements IHasID <String>, Serializable
       // else e.g. fileitem -> ignore
     }
     return ret;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("pageID", m_sPageID)
+                                       .append ("DT", m_aDT)
+                                       .append ("flowID", m_sFlowID)
+                                       .append ("attrs", m_aAttrs)
+                                       .toString ();
   }
 }

@@ -64,7 +64,8 @@ public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
         String sFieldName = aEntry.getKey ().substring (PREFIX_FIELD.length ());
         // Skip the potential array suffix (for multi selects)
         sFieldName = StringHelper.trimEnd (sFieldName, "[]");
-        aFieldCont.setAttribute (sFieldName, aEntry.getValue ());
+        if (StringHelper.hasText (sFieldName))
+          aFieldCont.setAttribute (sFieldName, aEntry.getValue ());
       }
 
     // Extract the flow ID
