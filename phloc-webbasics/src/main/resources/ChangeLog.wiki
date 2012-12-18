@@ -1,7 +1,8 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>12/16/12</td><td>add</td><td>api</td><td></td><td>Added support for other Content-Disposition type than 'attachment' in UnifiedResponse</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>12/18/12</td><td>add</td><td>api</td><td></td><td>Extended FormErrors API to more easily check for error existence</td></tr>
+<tr><td>12/16/12</td><td>add</td><td>api</td><td></td><td>Added support for other Content-Disposition type than 'attachment' in UnifiedResponse</td></tr>
 <tr><td>11/26/12</td><td>add</td><td>api</td><td></td><td>Added CORS specific HTTP headers</td></tr>
 <tr><td>11/23/12</td><td>add</td><td>api</td><td></td><td>Added new interface IAjaxInvoker and implementation AjaxInvoker that have the same API as AjaxManager but allow for easier overriding</td></tr>
 <tr><td>11/15/12</td><td>add</td><td>api</td><td></td><td>Added new method ResponseHelper.getBestSuitableOutputStreamType(HttpServletRequest)</td></tr>

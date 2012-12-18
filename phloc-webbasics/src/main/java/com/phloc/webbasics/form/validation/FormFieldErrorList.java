@@ -26,6 +26,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Handles form field specific error messages.
@@ -35,6 +36,25 @@ import com.phloc.commons.collections.ArrayHelper;
 @NotThreadSafe
 public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> implements IFormFieldErrorList
 {
+  public boolean hasErrorsOrWarningsForField (@Nullable final String sSearchFieldName)
+  {
+    if (StringHelper.hasText (sSearchFieldName))
+      for (final IFormFieldError aError : m_aItems)
+        if (aError.getFieldName ().equals (sSearchFieldName))
+          return true;
+    return false;
+  }
+
+  public boolean hasEntryForField (@Nullable final String sSearchFieldName,
+                                   @Nonnull final EFormErrorLevel eFormErrorLevel)
+  {
+    if (StringHelper.hasText (sSearchFieldName))
+      for (final IFormFieldError aError : m_aItems)
+        if (aError.getLevel ().equals (eFormErrorLevel) && aError.getFieldName ().equals (sSearchFieldName))
+          return true;
+    return false;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public IFormFieldErrorList getListOfField (@Nullable final String sSearchFieldName)

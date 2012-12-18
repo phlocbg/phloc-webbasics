@@ -97,6 +97,16 @@ public final class FormErrors
     return m_aGlobalErrs.isEmpty () && m_aFormFieldErrs.isEmpty ();
   }
 
+  public boolean hasGlobalErrorsOrWarnings ()
+  {
+    return m_aGlobalErrs.hasErrorsOrWarnings ();
+  }
+
+  public boolean hasFormFieldErrorsOrWarnings ()
+  {
+    return m_aFormFieldErrs.hasErrorsOrWarnings ();
+  }
+
   public boolean hasErrorsOrWarnings ()
   {
     return m_aGlobalErrs.hasErrorsOrWarnings () || m_aFormFieldErrs.hasErrorsOrWarnings ();
@@ -125,6 +135,22 @@ public final class FormErrors
   public List <String> getAllGlobalItemTexts ()
   {
     return m_aGlobalErrs.getAllItemTexts ();
+  }
+
+  public boolean hasErrorsOrWarningsForField (@Nullable final String sSearchFieldName)
+  {
+    return m_aFormFieldErrs.hasErrorsOrWarningsForField (sSearchFieldName);
+  }
+
+  public boolean hasEntryForField (@Nullable final String sSearchFieldName,
+                                   @Nonnull final EFormErrorLevel eFormErrorLevel)
+  {
+    return m_aFormFieldErrs.hasEntryForField (sSearchFieldName, eFormErrorLevel);
+  }
+
+  public boolean hasErrorForField (@Nullable final String sSearchFieldName)
+  {
+    return hasEntryForField (sSearchFieldName, EFormErrorLevel.ERROR);
   }
 
   @Nonnull
