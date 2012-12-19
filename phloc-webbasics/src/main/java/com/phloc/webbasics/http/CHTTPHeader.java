@@ -25,7 +25,8 @@ import javax.annotation.concurrent.Immutable;
  * @author philip
  */
 @Immutable
-public final class CHTTPHeader {
+public final class CHTTPHeader
+{
   public static final String ACCEPT = "Accept";
   public static final String ACCEPT_CHARSET = "Accept-Charset";
   public static final String ACCEPT_ENCODING = "Accept-Encoding";
@@ -88,5 +89,6 @@ public final class CHTTPHeader {
   public static final String ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
   public static final String ORIGIN = "Origin";
 
-  private CHTTPHeader () {}
+  private CHTTPHeader ()
+  {}
 }

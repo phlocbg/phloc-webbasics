@@ -54,15 +54,26 @@ public class PageShowChildren extends AbstractWebPage
     public void onLevelDown ()
     {
       super.onLevelDown ();
-      final HCUL aNewLevel = new HCUL ();
-      m_aStack.peek ().getLastItem ().addChild (aNewLevel);
-      m_aStack.push (aNewLevel);
+      m_aStack.push (new HCUL ());
     }
 
     @Override
     public void onLevelUp ()
     {
-      m_aStack.pop ();
+      final HCUL aLastCreated = m_aStack.pop ();
+      if (aLastCreated.hasChildren ())
+      {
+        // There were some LIs created
+        final HCUL aParent = m_aStack.peek ();
+        if (aParent.hasChildren ())
+          aParent.getLastItem ().addChild (aLastCreated);
+        else
+        {
+          // Replace top element with last created element
+          m_aStack.pop ();
+          m_aStack.push (aLastCreated);
+        }
+      }
       super.onLevelUp ();
     }
 

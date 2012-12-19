@@ -42,7 +42,8 @@ import com.phloc.html.hc.html.HCUL;
  * 
  * @author philip
  */
-public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuRendererCallback extends
+                                 DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final NonBlockingStack <HCUL> m_aMenuListStack;
   private final IMenuItemRenderer m_aRenderer;

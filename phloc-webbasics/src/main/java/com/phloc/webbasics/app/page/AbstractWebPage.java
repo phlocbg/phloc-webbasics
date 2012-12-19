@@ -52,7 +52,8 @@ import com.phloc.webbasics.form.RequestFieldBoolean;
  * 
  * @author philip
  */
-public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
+public abstract class AbstractWebPage extends AbstractPage implements IWebPage
+{
   /** The CSS class to be applied to the help div */
   private static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
 
@@ -62,7 +63,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
-  public AbstractWebPage (@Nonnull @Nonempty final String sID) {
+  public AbstractWebPage (@Nonnull @Nonempty final String sID)
+  {
     super (sID);
   }
 
@@ -75,7 +77,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    *        The constant (non-translatable) name of the page. May not be
    *        <code>null</code>.
    */
-  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName) {
+  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  {
     super (sID, sName);
   }
 
@@ -87,12 +90,14 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
-  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName) {
+  public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
+  {
     super (sID, aName);
   }
 
   @Nonnull
-  protected static final IRequestWebScopeWithoutResponse getScope () {
+  protected static final IRequestWebScopeWithoutResponse getScope ()
+  {
     return WebScopeManager.getRequestScope ();
   }
 
@@ -104,7 +109,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected static final String getAttr (@Nullable final String sName) {
+  protected static final String getAttr (@Nullable final String sName)
+  {
     return getAttr (sName, null);
   }
 
@@ -118,7 +124,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return The value of the passed request parameter or the default value
    */
   @Nullable
-  protected static final String getAttr (@Nullable final String sName, @Nullable final String sDefault) {
+  protected static final String getAttr (@Nullable final String sName, @Nullable final String sDefault)
+  {
     final String sScopeValue = getScope ().getAttributeAsString (sName, sDefault);
     return StringHelper.trim (sScopeValue);
   }
@@ -131,8 +138,26 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return The value list of the passed request parameter
    */
   @Nullable
-  protected static final List <String> getAttrs (@Nullable final String sName) {
+  protected static final List <String> getAttrs (@Nullable final String sName)
+  {
     return getScope ().getAttributeValues (sName);
+  }
+
+  /**
+   * Get the value of the request parameter with the given name as a boolean.
+   * 
+   * @param sName
+   *        The attribute values.
+   * @param bDefault
+   *        The default value to be returned if either no such parameter is
+   *        present or if the parameter value cannot be safely converted to an
+   *        boolean value.
+   * @return The boolean representation of the parameter value or the default
+   *         value.
+   */
+  protected static final boolean getBooleanAttr (@Nullable final String sName, final boolean bDefault)
+  {
+    return getScope ().getAttributeAsBoolean (sName, bDefault);
   }
 
   /**
@@ -147,8 +172,26 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected static final int getIntAttr (@Nullable final String sName, final int nDefault) {
+  protected static final int getIntAttr (@Nullable final String sName, final int nDefault)
+  {
     return getScope ().getAttributeAsInt (sName, nDefault);
+  }
+
+  /**
+   * Get the value of the request parameter with the given name as a long.
+   * 
+   * @param sName
+   *        The attribute values.
+   * @param nDefault
+   *        The default value to be returned if either no such parameter is
+   *        present or if the parameter value cannot be safely converted to an
+   *        long value.
+   * @return The long representation of the parameter value or the default
+   *         value.
+   */
+  protected static final long getLongAttr (@Nullable final String sName, final long nDefault)
+  {
+    return getScope ().getAttributeAsLong (sName, nDefault);
   }
 
   /**
@@ -163,7 +206,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected static final double getDoubleAttr (@Nullable final String sName, final double dDefault) {
+  protected static final double getDoubleAttr (@Nullable final String sName, final double dDefault)
+  {
     return getScope ().getAttributeAsDouble (sName, dDefault);
   }
 
@@ -176,7 +220,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName) {
+  protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
+  {
     return getCastedAttr (sName, (DATATYPE) null);
   }
 
@@ -192,7 +237,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    */
   @Nullable
   protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName,
-                                                            @Nullable final DATATYPE aDefault) {
+                                                            @Nullable final DATATYPE aDefault)
+  {
     return getScope ().getCastedAttribute (sName, aDefault);
   }
 
@@ -206,7 +252,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return <code>true</code> if the request parameter is present and has the
    *         expected value - <code>false</code> otherwise.
    */
-  protected static final boolean hasAttr (@Nullable final String sName, final String sValue) {
+  protected static final boolean hasAttr (@Nullable final String sName, final String sValue)
+  {
     return EqualsUtils.equals (sValue, getAttr (sName));
   }
 
@@ -219,7 +266,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    *        the default value to be returned, if no request attribute is present
    * @return The value of the passed request parameter
    */
-  protected static final boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue) {
+  protected static final boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
+  {
     return StringHelper.hasNoText (sName) ? bDefaultValue : RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
   }
 
@@ -227,7 +275,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return A form that links to the current page.
    */
   @Nonnull
-  protected static final HCForm createFormSelf () {
+  protected static final HCForm createFormSelf ()
+  {
     return new HCForm (LinkUtils.getSelfHref ());
   }
 
@@ -235,7 +284,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  protected static final HCForm createFormFileUploadSelf () {
+  protected static final HCForm createFormFileUploadSelf ()
+  {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
   }
 
@@ -250,7 +300,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    */
   @OverrideOnDemand
   @Nonnull
-  protected EValidity isValidToDisplayPage (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList) {
+  protected EValidity isValidToDisplayPage (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
+  {
     return EValidity.VALID;
   }
 
@@ -276,7 +327,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    */
   @Nonnull
   @OverrideOnDemand
-  protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale) {
+  protected ISimpleURL getHelpURL (@Nonnull final Locale aDisplayLocale)
+  {
     return new ReadonlySimpleURL (LinkUtils.getURIWithContext ("help/" +
                                                                getID () +
                                                                "?locale=" +
@@ -297,7 +349,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    */
   @Nonnull
   @OverrideOnDemand
-  protected IHCNode getHelpIconNode (@Nonnull final Locale aDisplayLocale) {
+  protected IHCNode getHelpIconNode (@Nonnull final Locale aDisplayLocale)
+  {
     final HCA aHelpNode = new HCA (getHelpURL (aDisplayLocale));
     final String sPageName = getDisplayText (aDisplayLocale);
     aHelpNode.setTitle (EWebBasicsText.PAGE_HELP_TITLE.getDisplayTextWithArgs (aDisplayLocale, sPageName));
@@ -312,16 +365,19 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage {
    * if desired.
    */
   @Nonnull
-  public final IHCNode getContent (@Nonnull final Locale aDisplayLocale) {
+  public final IHCNode getContent (@Nonnull final Locale aDisplayLocale)
+  {
     final HCNodeList aNodeList = new HCNodeList ();
 
-    if (isValidToDisplayPage (aDisplayLocale, aNodeList).isValid ()) {
+    if (isValidToDisplayPage (aDisplayLocale, aNodeList).isValid ())
+    {
       // Create the main page content
       fillContent (aDisplayLocale, aNodeList);
     }
 
     // Is help available for this page?
-    if (isHelpAvailable ()) {
+    if (isHelpAvailable ())
+    {
       // Add the help icon as the first child of the resulting node list
       aNodeList.addChild (0, getHelpIconNode (aDisplayLocale));
     }
