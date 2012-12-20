@@ -26,6 +26,28 @@
     <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webctrls</connection>
     <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webctrls</developerConnection>
   </scm>
+
+  <organization>
+    <name>phloc systems</name>
+    <url>http://www.phloc.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>philip</id>
+      <name>Philip Helger</name>
+      <email>ph(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+    <developer>
+      <id>boris</id>
+      <name>Boris Gregorcic</name>
+      <email>bg(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+  </developers>
   
   <repositories>
     <repository>
@@ -84,7 +106,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
-      <version>3.2.5</version>
+      <version>3.3.0</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
