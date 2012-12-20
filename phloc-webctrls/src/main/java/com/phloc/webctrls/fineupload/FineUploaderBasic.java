@@ -17,7 +17,7 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.json.impl.JSONObject;
 
 /**
- * Wrapper for Fineuploader 3.0
+ * Wrapper for Fineuploader 3.1.1
  * 
  * @author philip
  */
