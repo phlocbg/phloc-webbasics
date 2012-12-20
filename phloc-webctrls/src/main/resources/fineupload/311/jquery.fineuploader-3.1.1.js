@@ -2353,7 +2353,7 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
             url = qq.obj2url(params, this._options.endpoint);
         }
 
-        xhr.open(protocol, url, false);
+        xhr.open(protocol, url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xhr.setRequestHeader("X-File-Name", encodeURIComponent(name));
         xhr.setRequestHeader("Cache-Control", "no-cache");
