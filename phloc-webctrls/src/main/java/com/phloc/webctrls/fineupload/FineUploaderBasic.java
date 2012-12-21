@@ -2,6 +2,7 @@ package com.phloc.webctrls.fineupload;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSInvocation;
@@ -43,6 +45,8 @@ public class FineUploaderBasic implements IJSCodeProvider
   public static final int DEFAULT_RETRY_AUTO_ATTEMPT_DELAY = 5;
   public static final String DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY = "preventRetry";
 
+  private final Locale m_aDisplayLocale;
+
   private boolean m_bDebug = DEFAULT_DEBUG;
   private String m_sButtonElementID;
   private boolean m_bMultiple = DEFAULT_MULTIPLE;
@@ -66,6 +70,13 @@ public class FineUploaderBasic implements IJSCodeProvider
   private int m_nRetryMaxAutoAttempts = DEFAULT_RETRY_MAX_AUTO_ATTEMPTS;
   private int m_nRetryAutoAttemptDelay = DEFAULT_RETRY_AUTO_ATTEMPT_DELAY;
   private String m_sRetryPreventRetryResponseProperty = DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY;
+
+  public FineUploaderBasic (@Nonnull final Locale aDisplayLocale)
+  {
+    if (aDisplayLocale == null)
+      throw new NullPointerException ("DisplayLocale");
+    m_aDisplayLocale = aDisplayLocale;
+  }
 
   /**
    * If enabled, this will result in log messages (such as server response)
@@ -516,8 +527,18 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  /**
+   * @param aMessages
+   *        The JSON messages object to extend
+   * @param aDisplayLocale
+   *        The locale to be used for test resolving
+   */
+  @OverrideOnDemand
+  protected void extendJSONMessage (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
+  {}
+
   @Nonnull
-  public JSONObject getJSON ()
+  public final JSONObject getJSON ()
   {
     final JSONObject ret = new JSONObject ();
     if (m_bDebug != DEFAULT_DEBUG)
@@ -578,6 +599,22 @@ public class FineUploaderBasic implements IJSCodeProvider
         ret.setObjectProperty ("validation", aValidation);
     }
 
+    // messages
+    {
+      final JSONObject aMessages = new JSONObject ();
+      aMessages.setStringProperty ("typeError", EFineUploaderBasicText.TYPE_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.setStringProperty ("sizeError", EFineUploaderBasicText.SIZE_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.setStringProperty ("minSizeError",
+                                   EFineUploaderBasicText.MIN_SIZE_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.setStringProperty ("emptyError", EFineUploaderBasicText.EMPTY_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.setStringProperty ("noFilesError",
+                                   EFineUploaderBasicText.NO_FILES_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.setStringProperty ("onLeave", EFineUploaderBasicText.ON_LEAVE.getDisplayText (m_aDisplayLocale));
+      // extended
+      extendJSONMessage (aMessages, m_aDisplayLocale);
+      ret.setObjectProperty ("messages", aMessages);
+    }
+
     // retry
     {
       final JSONObject aRetry = new JSONObject ();
@@ -596,6 +633,7 @@ public class FineUploaderBasic implements IJSCodeProvider
     return ret;
   }
 
+  @Nonnull
   public String getJSCode ()
   {
     return new JSInvocation ("new qq.FileUploader").arg (getJSON ()).getJSCode ();

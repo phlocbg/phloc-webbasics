@@ -1,6 +1,8 @@
 package com.phloc.webctrls.fineupload;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Locale;
 
 import org.junit.Test;
 
@@ -9,13 +11,15 @@ import org.junit.Test;
  * 
  * @author helger
  */
-public class FineUploaderBasicTest {
+public class FineUploaderBasicTest
+{
   @Test
-  public void testBasic () {
-    final FineUploaderBasic aFUB = new FineUploaderBasic ();
-    assertEquals ("new qq.FileUploader({});", aFUB.getJSCode ());
+  public void testBasic ()
+  {
+    final FineUploaderBasic aFUB = new FineUploaderBasic (Locale.GERMAN);
+    assertTrue (aFUB.getJSCode ().startsWith ("new qq.FileUploader({"));
 
     aFUB.setDebug (true);
-    assertEquals ("new qq.FileUploader({\"debug\":true});", aFUB.getJSCode ());
+    assertTrue (aFUB.getJSCode ().startsWith ("new qq.FileUploader({\"debug\":true"));
   }
 }
