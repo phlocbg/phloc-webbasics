@@ -30,6 +30,7 @@ public class FineUploaderBasic implements IJSCodeProvider
   public static final boolean DEFAULT_AUTO_UPLOAD = true;
 
   public static final String DEFAULT_REQUEST_ENDPOINT = "/server/upload";
+  public static final boolean DEFAULT_REQUEST_PARAMS_IN_BODY = false;
   public static final boolean DEFAULT_REQUEST_FORCE_MULTIPART = false;
   public static final String DEFAULT_REQUEST_INPUT_NAME = "qqfile";
 
@@ -51,6 +52,7 @@ public class FineUploaderBasic implements IJSCodeProvider
 
   private String m_sRequestEndpoint = DEFAULT_REQUEST_ENDPOINT;
   private final Map <String, String> m_aRequestParams = new LinkedHashMap <String, String> ();
+  private boolean m_bRequestParamsInBody = DEFAULT_REQUEST_PARAMS_IN_BODY;
   private final Map <String, String> m_aRequestCustomHeaders = new LinkedHashMap <String, String> ();
   private boolean m_bRequestForceMultipart = DEFAULT_REQUEST_FORCE_MULTIPART;
   private String m_sRequestInputName = DEFAULT_REQUEST_INPUT_NAME;
@@ -60,10 +62,10 @@ public class FineUploaderBasic implements IJSCodeProvider
   private int m_nValidationMinSizeLimit = DEFAULT_VALIDATION_MIN_SIZE_LIMIT;
   private boolean m_bValidationStopOnFirstInvalidFile = DEFAULT_VALIDATION_STOP_ON_FIRST_INVALID_FILE;
 
-  private final boolean m_bRetryEnableAuto = DEFAULT_RETRY_ENABLE_AUTO;
-  private final int m_nRetryMaxAutoAttempts = DEFAULT_RETRY_MAX_AUTO_ATTEMPTS;
-  private final int m_nRetryAutoAttemptDelay = DEFAULT_RETRY_AUTO_ATTEMPT_DELAY;
-  private final String m_sRetryPreventRetryResponseProperty = DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY;
+  private boolean m_bRetryEnableAuto = DEFAULT_RETRY_ENABLE_AUTO;
+  private int m_nRetryMaxAutoAttempts = DEFAULT_RETRY_MAX_AUTO_ATTEMPTS;
+  private int m_nRetryAutoAttemptDelay = DEFAULT_RETRY_AUTO_ATTEMPT_DELAY;
+  private String m_sRetryPreventRetryResponseProperty = DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY;
 
   /**
    * If enabled, this will result in log messages (such as server response)
@@ -157,6 +159,26 @@ public class FineUploaderBasic implements IJSCodeProvider
   }
 
   /**
+   * Set this to <code>true</code> if you want all parameters to be sent in the
+   * request body. Note that setting this option to <code>true</code> will force
+   * all requests to be multipart encoded. If the value is false all params will
+   * be included in the query string. See the associated blog post
+   * (http://blog.fineuploader
+   * .com/2012/11/include-params-in-request-body-or-query.html) for more
+   * details.
+   * 
+   * @param bRequestParamsInBody
+   *        <code>true</code> to put request params in bodx
+   * @return this
+   */
+  @Nonnull
+  public FineUploaderBasic setRequestParamsInBody (final boolean bRequestParamsInBody)
+  {
+    m_bRequestParamsInBody = bRequestParamsInBody;
+    return this;
+  }
+
+  /**
    * Additional headers sent along with the XHR POST request. Note that is
    * option is only relevant to the ajax/XHR uploader.
    * 
@@ -207,6 +229,21 @@ public class FineUploaderBasic implements IJSCodeProvider
     if (sValue == null)
       throw new NullPointerException ("value");
     m_aRequestCustomHeaders.put (sKey, sValue);
+    return this;
+  }
+
+  /**
+   * While form-based uploads will always be multipart requests, this forces XHR
+   * uploads to send files using multipart requests as well.
+   * 
+   * @param bForceMultipart
+   *        <code>true</code> to force
+   * @return this
+   */
+  @Nonnull
+  public FineUploaderBasic setForceMultipart (final boolean bForceMultipart)
+  {
+    m_bRequestForceMultipart = bForceMultipart;
     return this;
   }
 
@@ -418,17 +455,64 @@ public class FineUploaderBasic implements IJSCodeProvider
   }
 
   /**
-   * While form-based uploads will always be multipart requests, this forces XHR
-   * uploads to send files using multipart requests as well.
+   * If set to <code>true</code>, any error or non-200 response will prompt the
+   * uploader to automatically attempt to upload the file again. Default:
+   * <code>false</code>
    * 
-   * @param bForceMultipart
-   *        <code>true</code> to force
+   * @param bRetryEnableAuto
+   *        <code>true</code> or <code>false</code>
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setForceMultipart (final boolean bForceMultipart)
+  public FineUploaderBasic setRetryEnableAuto (final boolean bRetryEnableAuto)
   {
-    m_bRequestForceMultipart = bForceMultipart;
+    m_bRetryEnableAuto = bRetryEnableAuto;
+    return this;
+  }
+
+  /**
+   * The maximum number of times the uploader will attempt to retry a failed
+   * upload. Ignored if enableAuto is <code>false</code>.
+   * 
+   * @param nRetryMaxAutoAttempts
+   *        The number of retry attempts.
+   * @return this
+   */
+  @Nonnull
+  public FineUploaderBasic setRetryMaxAutoAttempts (final int nRetryMaxAutoAttempts)
+  {
+    m_nRetryMaxAutoAttempts = nRetryMaxAutoAttempts;
+    return this;
+  }
+
+  /**
+   * The number of seconds the uploader will wait in between automatic retry
+   * attempts. Ignored if enableAuto is false.
+   * 
+   * @param nRetryAutoAttemptDelay
+   *        Number of seconds
+   * @return this
+   */
+  @Nonnull
+  public FineUploaderBasic setRetryAutoAttemptDelay (final int nRetryAutoAttemptDelay)
+  {
+    m_nRetryAutoAttemptDelay = nRetryAutoAttemptDelay;
+    return this;
+  }
+
+  /**
+   * If this property is present in the server response and contains a value of
+   * true, the uploader will not allow any further retries of this file (manual
+   * or automatic).
+   * 
+   * @param sRetryPreventRetryResponseProperty
+   *        property name
+   * @return this
+   */
+  @Nonnull
+  public FineUploaderBasic setRetryAutoAttemptDelay (@Nullable final String sRetryPreventRetryResponseProperty)
+  {
+    m_sRetryPreventRetryResponseProperty = sRetryPreventRetryResponseProperty;
     return this;
   }
 
@@ -461,6 +545,8 @@ public class FineUploaderBasic implements IJSCodeProvider
           aParams.setStringProperty (aEntry.getKey (), aEntry.getValue ());
         aRequest.setObjectProperty ("params", aParams);
       }
+      if (m_bRequestParamsInBody != DEFAULT_REQUEST_PARAMS_IN_BODY)
+        aRequest.setBooleanProperty ("paramsInBody", m_bRequestParamsInBody);
       if (!m_aRequestCustomHeaders.isEmpty ())
       {
         final JSONObject aCustomHeaders = new JSONObject ();
