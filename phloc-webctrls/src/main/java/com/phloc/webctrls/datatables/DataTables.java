@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2012 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.webctrls.datatables;
 
 import java.util.ArrayList;
@@ -10,6 +27,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
@@ -20,6 +38,7 @@ import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webctrls.datatable.EDataTableJSONKeyword;
 
 public class DataTables implements IHCNodeBuilder
@@ -30,6 +49,9 @@ public class DataTables implements IHCNodeBuilder
   private boolean m_bPaginate = DEFAULT_PAGINATE;
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
+  // server side processing
+  private ISimpleURL m_aAjaxSource;
+  private EHTTPMethod m_eServerMethod;
 
   @Nonnull
   private static String _ensureID (@Nonnull final AbstractHCBaseTable <?> aTable)
@@ -94,6 +116,20 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  public DataTables setAjaxSource (@Nullable final ISimpleURL aAjaxSource)
+  {
+    m_aAjaxSource = aAjaxSource;
+    return this;
+  }
+
+  @Nonnull
+  public DataTables setServerMethod (@Nullable final EHTTPMethod eServerMethod)
+  {
+    m_eServerMethod = eServerMethod;
+    return this;
+  }
+
   @Nullable
   public IHCNode build ()
   {
@@ -110,6 +146,11 @@ public class DataTables implements IHCNodeBuilder
     }
     if (m_aInitialSorting != null)
       aParams.add (EDataTableJSONKeyword.SORTING.getName (), m_aInitialSorting.getAsJS ());
+    aParams.add (EDataTableJSONKeyword.SERVER_SIDE.getName (), m_aAjaxSource != null);
+    if (m_aAjaxSource != null)
+      aParams.add (EDataTableJSONKeyword.AJAX_SOURCE.getName (), m_aAjaxSource.getAsString ());
+    if (m_eServerMethod != null)
+      aParams.add (EDataTableJSONKeyword.SERVER_METHOD.getName (), m_eServerMethod.getName ());
 
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();

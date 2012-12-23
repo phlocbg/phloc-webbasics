@@ -32,6 +32,7 @@ public enum EDataTableJSONKeyword implements IHasName
   PROCESSING ("bProcessing"),
   SERVER_SIDE ("bServerSide"),
   AJAX_SOURCE ("sAjaxSource"),
+  SERVER_METHOD ("sServerMethod"),
   DATA_PROP ("mDataProp"),
   DATA_TYPE ("dataType"),
   TYPE ("type"),

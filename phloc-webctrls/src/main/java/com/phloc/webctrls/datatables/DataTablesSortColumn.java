@@ -17,35 +17,52 @@
  */
 package com.phloc.webctrls.datatables;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.js.builder.JSArray;
 
-public final class DataTablesSorting
+public final class DataTablesSortColumn
 {
-  private final List <DataTablesSortColumn> m_aSortColumns = new ArrayList <DataTablesSortColumn> ();
+  private final int m_nIndex;
+  private final ESortOrder m_eSortOrder;
 
-  public DataTablesSorting ()
-  {}
+  public DataTablesSortColumn (@Nonnegative final int nIndex, @Nonnull final ESortOrder eSortOrder)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("index");
+    if (eSortOrder == null)
+      throw new NullPointerException ("sortOrder");
+    m_nIndex = nIndex;
+    m_eSortOrder = eSortOrder;
+  }
+
+  @Nonnegative
+  public int getIndex ()
+  {
+    return m_nIndex;
+  }
 
   @Nonnull
-  public DataTablesSorting addColumn (@Nonnegative final int nIndex, @Nonnull final ESortOrder eSortOrder)
+  public ESortOrder getSortOrder ()
   {
-    m_aSortColumns.add (new DataTablesSortColumn (nIndex, eSortOrder));
-    return this;
+    return m_eSortOrder;
   }
 
   @Nonnull
   public JSArray getAsJS ()
   {
     final JSArray ret = new JSArray ();
-    for (final DataTablesSortColumn aSortColumn : m_aSortColumns)
-      ret.add (aSortColumn.getAsJS ());
+    ret.add (m_nIndex);
+    ret.add (m_eSortOrder.isAscending () ? CDataTables.SORT_ASC : CDataTables.SORT_DESC);
     return ret;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("index", m_nIndex).append ("sortOrder", m_eSortOrder).toString ();
   }
 }

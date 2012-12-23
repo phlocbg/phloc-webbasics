@@ -15,25 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.fineupload;
+package com.phloc.webctrls.datatables;
 
-import java.util.Locale;
+import javax.annotation.concurrent.Immutable;
 
-import javax.annotation.Nonnull;
-
-import com.phloc.json.impl.JSONObject;
-
-public class FineUploader extends FineUploaderBasic
+@Immutable
+public final class CDataTables
 {
-  public FineUploader (@Nonnull final Locale aDisplayLocale)
-  {
-    super (aDisplayLocale);
-  }
+  public static final String SORT_ASC = "asc";
+  public static final String SORT_DESC = "desc";
 
-  @Override
-  protected void extendJSONMessage (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
-  {
-    aMessages.setStringProperty ("tooManyFilesError",
-                                 EFineUploaderText.TOO_MANY_FILE_ERROR.getDisplayText (aDisplayLocale));
-  }
+  private CDataTables ()
+  {}
 }
