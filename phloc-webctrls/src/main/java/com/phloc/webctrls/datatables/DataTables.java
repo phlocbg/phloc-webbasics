@@ -195,7 +195,25 @@ public class DataTables implements IHCNodeBuilder
       aParams.add (EDataTableJSONKeyword.SERVER_METHOD.getName (), m_eServerMethod.getName ());
 
     if (m_aDisplayLocale != null)
-      aParams.add (EDataTableJSONKeyword.LANGUAGE.getName (), EDataTableText.getAsJS (m_aDisplayLocale));
+    {
+      final JSAssocArray aLanguage = new JSAssocArray ();
+      final JSAssocArray aPagination = new JSAssocArray ();
+      aPagination.add ("sFirst", EDataTableText.FIRST.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sPrevious", EDataTableText.PREVIOUS.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sNext", EDataTableText.NEXT.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sLast", EDataTableText.LAST.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("oPaginate", aPagination);
+      aLanguage.add ("sProcessing", EDataTableText.PROCESSING.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sLengthMenu", EDataTableText.LENGTH_MENU.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sZeroRecords", EDataTableText.ZERO_RECORDS.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfo", EDataTableText.INFO.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoEmpty", EDataTableText.INFO_EMPTY.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoFiltered", EDataTableText.INFO_FILTERED.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoPostFix", EDataTableText.INFO_POSTFIX.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sSearch", EDataTableText.SEARCH.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sUrl", EDataTableText.URL.getDisplayText (m_aDisplayLocale));
+      aParams.add (EDataTableJSONKeyword.LANGUAGE.getName (), aLanguage);
+    }
 
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();

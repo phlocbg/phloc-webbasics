@@ -192,7 +192,7 @@
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.11</version><!--$NO-MVN-MAN-VER$-->
+        <version>1.0.12</version><!--$NO-MVN-MAN-VER$-->
         <executions>
           <execution>
             <goals>

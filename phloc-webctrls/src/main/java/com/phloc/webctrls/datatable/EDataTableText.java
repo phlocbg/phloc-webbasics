@@ -27,7 +27,6 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 
@@ -82,28 +81,6 @@ public enum EDataTableText implements IHasDisplayText
     aJSON.setStringProperty ("sInfoPostFix", INFO_POSTFIX.getDisplayText (aDisplayLocale));
     aJSON.setStringProperty ("sSearch", SEARCH.getDisplayText (aDisplayLocale));
     aJSON.setStringProperty ("sUrl", URL.getDisplayText (aDisplayLocale));
-    return aJSON;
-  }
-
-  @Nonnull
-  public static JSAssocArray getAsJS (@Nonnull final Locale aDisplayLocale)
-  {
-    final JSAssocArray aJSON = new JSAssocArray ();
-    final JSAssocArray aPagination = new JSAssocArray ();
-    aPagination.add ("sFirst", FIRST.getDisplayText (aDisplayLocale));
-    aPagination.add ("sPrevious", PREVIOUS.getDisplayText (aDisplayLocale));
-    aPagination.add ("sNext", NEXT.getDisplayText (aDisplayLocale));
-    aPagination.add ("sLast", LAST.getDisplayText (aDisplayLocale));
-    aJSON.add ("oPaginate", aPagination);
-    aJSON.add ("sProcessing", PROCESSING.getDisplayText (aDisplayLocale));
-    aJSON.add ("sLengthMenu", LENGTH_MENU.getDisplayText (aDisplayLocale));
-    aJSON.add ("sZeroRecords", ZERO_RECORDS.getDisplayText (aDisplayLocale));
-    aJSON.add ("sInfo", INFO.getDisplayText (aDisplayLocale));
-    aJSON.add ("sInfoEmpty", INFO_EMPTY.getDisplayText (aDisplayLocale));
-    aJSON.add ("sInfoFiltered", INFO_FILTERED.getDisplayText (aDisplayLocale));
-    aJSON.add ("sInfoPostFix", INFO_POSTFIX.getDisplayText (aDisplayLocale));
-    aJSON.add ("sSearch", SEARCH.getDisplayText (aDisplayLocale));
-    aJSON.add ("sUrl", URL.getDisplayText (aDisplayLocale));
     return aJSON;
   }
 }
