@@ -170,27 +170,27 @@ public class DataTables implements IHCNodeBuilder
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
     if (m_bPaginate != DEFAULT_PAGINATE)
-      aParams.add (EDataTablesKeyword.PAGINATE.getName (), m_bPaginate);
+      aParams.add ("bPaginate", m_bPaginate);
     if (m_bPaginate != DEFAULT_STATE_SAVE)
-      aParams.add (EDataTablesKeyword.STATE_SAVE.getName (), m_bStateSave);
+      aParams.add ("bStateSave", m_bStateSave);
     if (m_bJQueryUI != DEFAULT_JQUERY_UI)
-      aParams.add (EDataTablesKeyword.JQUERY_UI.getName (), m_bJQueryUI);
+      aParams.add ("bJQueryUI", m_bJQueryUI);
     if (!m_aColumns.isEmpty ())
     {
       final JSArray aArray = new JSArray ();
       for (final DataTablesColumn aColumn : m_aColumns)
         aArray.add (aColumn.getAsJS ());
-      aParams.add (EDataTablesKeyword.COLUMN_DEFS.getName (), aArray);
+      aParams.add ("aoColumnDefs", aArray);
     }
     if (m_aInitialSorting != null)
-      aParams.add (EDataTablesKeyword.SORTING.getName (), m_aInitialSorting.getAsJS ());
+      aParams.add ("aaSorting", m_aInitialSorting.getAsJS ());
     if (m_ePaginationType != null)
-      aParams.add (EDataTablesKeyword.PAGINATION_TYPE.getName (), m_ePaginationType.getName ());
-    aParams.add (EDataTablesKeyword.SERVER_SIDE.getName (), m_aAjaxSource != null);
+      aParams.add ("sPaginationType", m_ePaginationType.getName ());
+    aParams.add ("bServerSide", m_aAjaxSource != null);
     if (m_aAjaxSource != null)
-      aParams.add (EDataTablesKeyword.AJAX_SOURCE.getName (), m_aAjaxSource.getAsString ());
+      aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
     if (m_eServerMethod != null)
-      aParams.add (EDataTablesKeyword.SERVER_METHOD.getName (), m_eServerMethod.getName ());
+      aParams.add ("sServerMethod", m_eServerMethod.getName ());
 
     if (m_aDisplayLocale != null)
     {
@@ -210,7 +210,7 @@ public class DataTables implements IHCNodeBuilder
       aLanguage.add ("sInfoPostFix", EDataTablesText.INFO_POSTFIX.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sUrl", EDataTablesText.URL.getDisplayText (m_aDisplayLocale));
-      aParams.add (EDataTablesKeyword.LANGUAGE.getName (), aLanguage);
+      aParams.add ("oLanguage", aLanguage);
     }
 
     // main on document ready code

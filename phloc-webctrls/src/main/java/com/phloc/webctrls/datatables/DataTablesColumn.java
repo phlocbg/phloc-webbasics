@@ -125,27 +125,27 @@ public class DataTablesColumn
   public JSAssocArray getAsJS ()
   {
     final JSAssocArray ret = new JSAssocArray ();
-    ret.add (EDataTablesKeyword.TARGETS.getName (), m_aTargets);
+    ret.add ("aTargets", m_aTargets);
     if (m_bSearchable != DEFAULT_SEARCHABLE)
-      ret.add (EDataTablesKeyword.SEARCHABLE.getName (), m_bSearchable);
+      ret.add ("bSearchable", m_bSearchable);
     if (m_bSortable != DEFAULT_SORTABLE)
-      ret.add (EDataTablesKeyword.SORTABLE.getName (), m_bSortable);
+      ret.add ("bSortable", m_bSortable);
     if (m_bVisible != DEFAULT_VISIBLE)
-      ret.add (EDataTablesKeyword.VISIBLE.getName (), m_bVisible);
+      ret.add ("bVisible", m_bVisible);
     if (m_aCSSClassProvider != null)
-      ret.add (EDataTablesKeyword.CLASS.getName (), m_aCSSClassProvider.getCSSClass ());
+      ret.add ("sClass", m_aCSSClassProvider.getCSSClass ());
     if (StringHelper.hasText (m_sName))
-      ret.add (EDataTablesKeyword.S_NAME.getName (), m_sName);
+      ret.add ("sName", m_sName);
     if (m_aType != null)
-      ret.add (EDataTablesKeyword.S_TYPE.getName (), m_aType.getName ());
+      ret.add ("sType", m_aType.getName ());
     if (StringHelper.hasText (m_sWidth))
-      ret.add (EDataTablesKeyword.WIDTH.getName (), m_sWidth);
+      ret.add ("sWidth", m_sWidth);
     if (ArrayHelper.isNotEmpty (m_aDataSort))
     {
       final JSArray aArray = new JSArray ();
       for (final int nDataSort : m_aDataSort)
         aArray.add (nDataSort);
-      ret.add (EDataTablesKeyword.DATASORT.getName (), aArray);
+      ret.add ("aDataSort", aArray);
     }
     return ret;
   }
