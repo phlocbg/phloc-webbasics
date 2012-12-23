@@ -26,7 +26,7 @@ public enum EDataTableJSONKeyword implements IHasName
 {
   RETRIEVE ("bRetrieve"),
   DESTROY ("bDestroy"),
-  JQUERY ("bJQueryUI"),
+  JQUERY_UI ("bJQueryUI"),
   PAGINATION_TYPE ("sPaginationType"),
   LANGUAGE ("oLanguage"),
   PROCESSING ("bProcessing"),
@@ -68,6 +68,9 @@ public enum EDataTableJSONKeyword implements IHasName
   S_NAME ("sName"),
   S_TYPE ("sType"),
   DATASORT ("aDataSort");
+
+  @Deprecated
+  public static final EDataTableJSONKeyword JQUERY = JQUERY_UI;
 
   private final String m_sName;
 

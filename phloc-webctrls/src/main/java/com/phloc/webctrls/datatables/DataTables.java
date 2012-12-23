@@ -47,11 +47,13 @@ public class DataTables implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_PAGINATE = true;
   public static final boolean DEFAULT_STATE_SAVE = false;
+  public static final boolean DEFAULT_JQUERY_UI = false;
 
   private final String m_sParentElementID;
   private Locale m_aDisplayLocale;
   private boolean m_bPaginate = DEFAULT_PAGINATE;
   private boolean m_bStateSave = DEFAULT_STATE_SAVE;
+  private boolean m_bJQueryUI = DEFAULT_JQUERY_UI;
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
   private EDataTablesPaginationType m_ePaginationType;
@@ -115,6 +117,13 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
+  public DataTables setJQueryUI (final boolean bJQueryUI)
+  {
+    m_bJQueryUI = bJQueryUI;
+    return this;
+  }
+
+  @Nonnull
   public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
   {
     if (aColumn == null)
@@ -166,6 +175,8 @@ public class DataTables implements IHCNodeBuilder
       aParams.add (EDataTableJSONKeyword.PAGINATE.getName (), m_bPaginate);
     if (m_bPaginate != DEFAULT_STATE_SAVE)
       aParams.add (EDataTableJSONKeyword.STATE_SAVE.getName (), m_bStateSave);
+    if (m_bJQueryUI != DEFAULT_JQUERY_UI)
+      aParams.add (EDataTableJSONKeyword.JQUERY_UI.getName (), m_bJQueryUI);
     if (!m_aColumns.isEmpty ())
     {
       final JSArray aArray = new JSArray ();
