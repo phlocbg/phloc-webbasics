@@ -7,8 +7,8 @@ import com.phloc.html.css.ICSSClassProvider;
 
 public enum ETipType implements ICSSClassProvider
 {
-  INFO ("pdaf_tip"),
-  ERROR ("pdaf_tip_error");
+  INFO ("tip_info"),
+  ERROR ("tip_error");
 
   private final String m_sCSSClass;
 

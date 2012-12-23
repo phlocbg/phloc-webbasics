@@ -25,7 +25,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EDataTablesJSPathProvider implements IJSPathProvider
 {
-  DATATABLES ("datatables/194/js/jquery.dataTables.js");
+  DATATABLES_194 ("datatables/194/js/jquery.dataTables.js");
 
   private final String m_sPath;
 

@@ -1,5 +1,5 @@
 /* is used for tooltips, overloaded by jQuery tipTip! */
-.pdaf_tip
+.tip_info
 {
   width:16px;
   height: 16px;
@@ -8,7 +8,7 @@
   background-image: url("information.png");
 }
 
-.pdaf_tip_error
+.tip_error
 {
   width:16px;
   height: 16px;

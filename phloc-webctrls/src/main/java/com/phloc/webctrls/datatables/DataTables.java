@@ -84,8 +84,8 @@ public class DataTables implements IHCNodeBuilder
       throw new IllegalArgumentException ("ParentElementID");
     m_sParentElementID = sParentElementID;
 
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES);
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_194);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
   }
 
   @Nonnull
