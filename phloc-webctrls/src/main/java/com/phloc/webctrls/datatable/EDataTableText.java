@@ -27,12 +27,19 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 
 @Translatable
 public enum EDataTableText implements IHasDisplayText
 {
+  // paginate
+  FIRST ("Erster", "First"),
+  PREVIOUS ("Zurück", "Previous"),
+  NEXT ("Nächster", "Next"),
+  LAST ("Letzter", "Last"),
+  // main
   PROCESSING ("Bitte warten...", "Processing..."),
   LENGTH_MENU ("_MENU_ Einträge anzeigen", "Show _MENU_ entries"),
   ZERO_RECORDS ("Keine Einträge vorhanden.", "No matching records found."),
@@ -41,11 +48,7 @@ public enum EDataTableText implements IHasDisplayText
   INFO_FILTERED ("(gefiltert von _MAX_  Einträgen)", "(filtered from _MAX_ total entries)"),
   INFO_POSTFIX ("", ""),
   SEARCH ("Suchen:", "Search:"),
-  URL ("", ""),
-  FIRST ("Erster", "First"),
-  PREVIOUS ("Zurück", "Previous"),
-  NEXT ("Nächster", "Next"),
-  LAST ("Letzter", "Last");
+  URL ("", "");
 
   private final ITextProvider m_aTP;
 
@@ -61,24 +64,46 @@ public enum EDataTableText implements IHasDisplayText
   }
 
   @Nonnull
-  public static IJSONObject getAsJSON (@Nonnull final Locale aLocale)
+  public static IJSONObject getAsJSON (@Nonnull final Locale aDisplayLocale)
   {
     final IJSONObject aJSON = new JSONObject ();
-    aJSON.setStringProperty ("sProcessing", PROCESSING.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sLengthMenu", LENGTH_MENU.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sZeroRecords", ZERO_RECORDS.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sInfo", INFO.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sInfoEmpty", INFO_EMPTY.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sInfoFiltered", INFO_FILTERED.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sInfoPostFix", INFO_POSTFIX.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sSearch", SEARCH.getDisplayText (aLocale));
-    aJSON.setStringProperty ("sUrl", URL.getDisplayText (aLocale));
     final IJSONObject aPagination = new JSONObject ();
-    aPagination.setStringProperty ("sFirst", FIRST.getDisplayText (aLocale));
-    aPagination.setStringProperty ("sPrevious", PREVIOUS.getDisplayText (aLocale));
-    aPagination.setStringProperty ("sNext", NEXT.getDisplayText (aLocale));
-    aPagination.setStringProperty ("sLast", LAST.getDisplayText (aLocale));
+    aPagination.setStringProperty ("sFirst", FIRST.getDisplayText (aDisplayLocale));
+    aPagination.setStringProperty ("sPrevious", PREVIOUS.getDisplayText (aDisplayLocale));
+    aPagination.setStringProperty ("sNext", NEXT.getDisplayText (aDisplayLocale));
+    aPagination.setStringProperty ("sLast", LAST.getDisplayText (aDisplayLocale));
     aJSON.setObjectProperty ("oPaginate", aPagination);
+    aJSON.setStringProperty ("sProcessing", PROCESSING.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sLengthMenu", LENGTH_MENU.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sZeroRecords", ZERO_RECORDS.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sInfo", INFO.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sInfoEmpty", INFO_EMPTY.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sInfoFiltered", INFO_FILTERED.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sInfoPostFix", INFO_POSTFIX.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sSearch", SEARCH.getDisplayText (aDisplayLocale));
+    aJSON.setStringProperty ("sUrl", URL.getDisplayText (aDisplayLocale));
+    return aJSON;
+  }
+
+  @Nonnull
+  public static JSAssocArray getAsJS (@Nonnull final Locale aDisplayLocale)
+  {
+    final JSAssocArray aJSON = new JSAssocArray ();
+    final JSAssocArray aPagination = new JSAssocArray ();
+    aPagination.add ("sFirst", FIRST.getDisplayText (aDisplayLocale));
+    aPagination.add ("sPrevious", PREVIOUS.getDisplayText (aDisplayLocale));
+    aPagination.add ("sNext", NEXT.getDisplayText (aDisplayLocale));
+    aPagination.add ("sLast", LAST.getDisplayText (aDisplayLocale));
+    aJSON.add ("oPaginate", aPagination);
+    aJSON.add ("sProcessing", PROCESSING.getDisplayText (aDisplayLocale));
+    aJSON.add ("sLengthMenu", LENGTH_MENU.getDisplayText (aDisplayLocale));
+    aJSON.add ("sZeroRecords", ZERO_RECORDS.getDisplayText (aDisplayLocale));
+    aJSON.add ("sInfo", INFO.getDisplayText (aDisplayLocale));
+    aJSON.add ("sInfoEmpty", INFO_EMPTY.getDisplayText (aDisplayLocale));
+    aJSON.add ("sInfoFiltered", INFO_FILTERED.getDisplayText (aDisplayLocale));
+    aJSON.add ("sInfoPostFix", INFO_POSTFIX.getDisplayText (aDisplayLocale));
+    aJSON.add ("sSearch", SEARCH.getDisplayText (aDisplayLocale));
+    aJSON.add ("sUrl", URL.getDisplayText (aDisplayLocale));
     return aJSON;
   }
 }

@@ -88,10 +88,8 @@ public class FineUploaderBasic implements IJSCodeProvider
   private int m_nRetryAutoAttemptDelay = DEFAULT_RETRY_AUTO_ATTEMPT_DELAY;
   private String m_sRetryPreventRetryResponseProperty = DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY;
 
-  public FineUploaderBasic (@Nonnull final Locale aDisplayLocale)
+  public FineUploaderBasic (@Nullable final Locale aDisplayLocale)
   {
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("DisplayLocale");
     m_aDisplayLocale = aDisplayLocale;
   }
 
@@ -617,6 +615,7 @@ public class FineUploaderBasic implements IJSCodeProvider
     }
 
     // messages
+    if (m_aDisplayLocale != null)
     {
       final JSONObject aMessages = new JSONObject ();
       aMessages.setStringProperty ("typeError", EFineUploaderBasicText.TYPE_ERROR.getDisplayText (m_aDisplayLocale));

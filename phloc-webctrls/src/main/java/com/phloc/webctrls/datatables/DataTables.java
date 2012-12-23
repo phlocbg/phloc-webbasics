@@ -19,6 +19,7 @@ package com.phloc.webctrls.datatables;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -40,13 +41,17 @@ import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.http.EHTTPMethod;
 import com.phloc.webctrls.datatable.EDataTableJSONKeyword;
+import com.phloc.webctrls.datatable.EDataTableText;
 
 public class DataTables implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_PAGINATE = true;
+  public static final boolean DEFAULT_STATE_SAVE = false;
 
   private final String m_sParentElementID;
+  private Locale m_aDisplayLocale;
   private boolean m_bPaginate = DEFAULT_PAGINATE;
+  private boolean m_bStateSave = DEFAULT_STATE_SAVE;
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
   private EDataTablesPaginationType m_ePaginationType;
@@ -89,9 +94,23 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
+  public DataTables setDisplayLocale (@Nullable final Locale aDisplayLocale)
+  {
+    m_aDisplayLocale = aDisplayLocale;
+    return this;
+  }
+
+  @Nonnull
   public DataTables setPaginate (final boolean bPaginate)
   {
     m_bPaginate = bPaginate;
+    return this;
+  }
+
+  @Nonnull
+  public DataTables setStateSave (final boolean bStateSave)
+  {
+    m_bStateSave = bStateSave;
     return this;
   }
 
@@ -145,6 +164,8 @@ public class DataTables implements IHCNodeBuilder
     final JSAssocArray aParams = new JSAssocArray ();
     if (m_bPaginate != DEFAULT_PAGINATE)
       aParams.add (EDataTableJSONKeyword.PAGINATE.getName (), m_bPaginate);
+    if (m_bPaginate != DEFAULT_STATE_SAVE)
+      aParams.add (EDataTableJSONKeyword.STATE_SAVE.getName (), m_bStateSave);
     if (!m_aColumns.isEmpty ())
     {
       final JSArray aArray = new JSArray ();
@@ -161,6 +182,9 @@ public class DataTables implements IHCNodeBuilder
       aParams.add (EDataTableJSONKeyword.AJAX_SOURCE.getName (), m_aAjaxSource.getAsString ());
     if (m_eServerMethod != null)
       aParams.add (EDataTableJSONKeyword.SERVER_METHOD.getName (), m_eServerMethod.getName ());
+
+    if (m_aDisplayLocale != null)
+      aParams.add (EDataTableJSONKeyword.LANGUAGE.getName (), EDataTableText.getAsJS (m_aDisplayLocale));
 
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();
