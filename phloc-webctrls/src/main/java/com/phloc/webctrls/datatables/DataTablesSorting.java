@@ -40,7 +40,7 @@ public class DataTablesSorting
     }
 
     @Nonnull
-    public JSArray getAsJSON ()
+    public JSArray getAsJS ()
     {
       final JSArray ret = new JSArray ();
       ret.add (m_nIndex);
@@ -68,11 +68,11 @@ public class DataTablesSorting
   }
 
   @Nonnull
-  public JSArray getAsJSON ()
+  public JSArray getAsJS ()
   {
     final JSArray ret = new JSArray ();
     for (final SortColumn aSortColumn : m_aSortColumns)
-      ret.add (aSortColumn.getAsJSON ());
+      ret.add (aSortColumn.getAsJS ());
     return ret;
   }
 }

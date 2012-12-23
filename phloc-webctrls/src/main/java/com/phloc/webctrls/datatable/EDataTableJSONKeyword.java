@@ -24,7 +24,6 @@ import com.phloc.commons.name.IHasName;
 
 public enum EDataTableJSONKeyword implements IHasName
 {
-  PAGINATE ("bPaginate"),
   RETRIEVE ("bRetrieve"),
   DESTROY ("bDestroy"),
   JQUERY ("bJQueryUI"),
@@ -47,6 +46,7 @@ public enum EDataTableJSONKeyword implements IHasName
   NAME ("name"),
   VALUE ("value"),
   COLUMNS ("aoColumns"),
+  COLUMN_DEFS ("aoColumnDefs"),
   ECHO ("sEcho"),
   TOTAL_RECORDS ("iTotalRecords"),
   TOTAL_DISPLAY_RECORDS ("iTotalDisplayRecords"),
@@ -59,7 +59,14 @@ public enum EDataTableJSONKeyword implements IHasName
   SORTABLE ("bSortable"),
   COOKIE_DURATION ("iCookieDuration"),
   SCROLL_Y ("sScrollY"),
-  WIDTH ("sWidth");
+  WIDTH ("sWidth"),
+  PAGINATE ("bPaginate"),
+  TARGETS ("aTargets"),
+  SEARCHABLE ("bSearchable"),
+  VISIBLE ("bVisible"),
+  S_NAME ("sName"),
+  S_TYPE ("sType"),
+  DATASORT ("aDataSort");
 
   private final String m_sName;
 

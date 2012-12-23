@@ -1,14 +1,20 @@
 package com.phloc.webctrls.datatables;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
@@ -22,7 +28,8 @@ public class DataTables implements IHCNodeBuilder
 
   private final String m_sParentElementID;
   private boolean m_bPaginate = DEFAULT_PAGINATE;
-  private DataTablesSorting m_aSorting;
+  private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
+  private DataTablesSorting m_aInitialSorting;
 
   @Nonnull
   private static String _ensureID (@Nonnull final AbstractHCBaseTable <?> aTable)
@@ -66,9 +73,24 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
-  public DataTables setSorting (@Nullable final DataTablesSorting aSorting)
+  public DataTables setInitialSorting (@Nonnegative final int nIndex, @Nonnull final ESortOrder eSortOrder)
   {
-    m_aSorting = aSorting;
+    return setInitialSorting (new DataTablesSorting ().addColumn (nIndex, eSortOrder));
+  }
+
+  @Nonnull
+  public DataTables setInitialSorting (@Nullable final DataTablesSorting aInitialSorting)
+  {
+    m_aInitialSorting = aInitialSorting;
+    return this;
+  }
+
+  @Nonnull
+  public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
+  {
+    if (aColumn == null)
+      throw new NullPointerException ("column");
+    m_aColumns.add (aColumn);
     return this;
   }
 
@@ -77,9 +99,17 @@ public class DataTables implements IHCNodeBuilder
   {
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
-    aParams.add (EDataTableJSONKeyword.PAGINATE.getName (), m_bPaginate);
-    if (m_aSorting != null)
-      aParams.add (EDataTableJSONKeyword.SORTING.getName (), m_aSorting.getAsJSON ());
+    if (m_bPaginate != DEFAULT_PAGINATE)
+      aParams.add (EDataTableJSONKeyword.PAGINATE.getName (), m_bPaginate);
+    if (!m_aColumns.isEmpty ())
+    {
+      final JSArray aArray = new JSArray ();
+      for (final DataTablesColumn aColumn : m_aColumns)
+        aArray.add (aColumn.getAsJS ());
+      aParams.add (EDataTableJSONKeyword.COLUMN_DEFS.getName (), aArray);
+    }
+    if (m_aInitialSorting != null)
+      aParams.add (EDataTableJSONKeyword.SORTING.getName (), m_aInitialSorting.getAsJS ());
 
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();
