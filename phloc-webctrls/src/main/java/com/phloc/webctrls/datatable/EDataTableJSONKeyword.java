@@ -24,6 +24,7 @@ import com.phloc.commons.name.IHasName;
 
 public enum EDataTableJSONKeyword implements IHasName
 {
+  PAGINATE ("bPaginate"),
   RETRIEVE ("bRetrieve"),
   DESTROY ("bDestroy"),
   JQUERY ("bJQueryUI"),
