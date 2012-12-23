@@ -20,11 +20,13 @@ package com.phloc.webctrls.datatables;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
@@ -33,9 +35,11 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
+import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -58,6 +62,8 @@ public class DataTables implements IHCNodeBuilder
   // server side processing
   private ISimpleURL m_aAjaxSource;
   private EHTTPMethod m_eServerMethod;
+  private Map <String, String> m_aServerParams;
+  private boolean m_bUseJQueryAjax;
 
   @Nonnull
   private static String _ensureID (@Nonnull final AbstractHCBaseTable <?> aTable)
@@ -164,6 +170,20 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  public DataTables setServerParams (@Nullable final Map <String, String> aServerParams)
+  {
+    m_aServerParams = aServerParams;
+    return this;
+  }
+
+  @Nonnull
+  public DataTables setUseJQueryAjax (final boolean bUseJQueryAjax)
+  {
+    m_bUseJQueryAjax = bUseJQueryAjax;
+    return this;
+  }
+
   @Nullable
   public IHCNode build ()
   {
@@ -191,6 +211,31 @@ public class DataTables implements IHCNodeBuilder
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
     if (m_eServerMethod != null)
       aParams.add ("sServerMethod", m_eServerMethod.getName ());
+    if (ContainerHelper.isNotEmpty (m_aServerParams))
+    {
+      final JSAssocArray aPush = new JSAssocArray ();
+      for (final Map.Entry <String, String> aEntry : m_aServerParams.entrySet ())
+        aPush.add (aEntry.getKey (), aEntry.getValue ());
+
+      final JSAnonymousFunction aAF = new JSAnonymousFunction ();
+      final JSVar aData = aAF.param ("aoData");
+      aAF.body ().invoke (aData, "push").arg (aPush);
+      aParams.add ("fnServerParams", aAF);
+    }
+    if (m_bUseJQueryAjax)
+    {
+      final JSAnonymousFunction aAF = new JSAnonymousFunction ();
+      final JSVar sSource = aAF.param ("s");
+      final JSVar aoData = aAF.param ("t");
+      final JSVar fnCallback = aAF.param ("u");
+      final JSVar oSettings = aAF.param ("v");
+      final JSAssocArray aAjax = new JSAssocArray ().add ("dataType", "json");
+      if (m_eServerMethod != null)
+        aAjax.add ("type", m_eServerMethod.getName ());
+      aAjax.add ("url", sSource).add ("data", aoData).add ("success", fnCallback);
+      aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax ().arg (aAjax));
+      aParams.add ("fnServerData", aAF);
+    }
 
     if (m_aDisplayLocale != null)
     {
