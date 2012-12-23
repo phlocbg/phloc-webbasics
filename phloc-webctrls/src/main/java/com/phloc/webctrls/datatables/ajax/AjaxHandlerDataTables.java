@@ -24,9 +24,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.json.IJSONObject;
+import com.phloc.json.impl.JSONObject;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webctrls.datatables.CDataTables;
@@ -232,10 +235,103 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
      * @return Information for DataTables to use for rendering.
      */
     @Nonnull
-    public String getEcho ()
+    public int getEcho ()
     {
-      return Integer.toString (m_nEcho);
+      return m_nEcho;
     }
+  }
+
+  public static final class ResponseData
+  {
+    private final int m_nTotalRecords;
+    private final int m_nTotalDisplayRecords;
+    private final int m_nEcho;
+    private final String m_sColumns;
+    private final List <List <String>> m_aData;
+
+    public ResponseData (final int nTotalRecords,
+                         final int nTotalDisplayRecords,
+                         final int nEcho,
+                         @Nullable final String sColumns,
+                         @Nullable final List <List <String>> aData)
+    {
+      m_nTotalRecords = nTotalRecords;
+      m_nTotalDisplayRecords = nTotalDisplayRecords;
+      m_nEcho = nEcho;
+      m_sColumns = sColumns;
+      m_aData = aData;
+    }
+
+    /**
+     * @return Total records, before filtering (i.e. the total number of records
+     *         in the database)
+     */
+    public int getTotalRecords ()
+    {
+      return m_nTotalRecords;
+    }
+
+    /**
+     * @return Total records, after filtering (i.e. the total number of records
+     *         after filtering has been applied - not just the number of records
+     *         being returned in this result set)
+     */
+    public int getTotalDisplayRecords ()
+    {
+      return m_nTotalDisplayRecords;
+    }
+
+    /**
+     * @return An unaltered copy of sEcho sent from the client side. This
+     *         parameter will change with each draw (it is basically a draw
+     *         count) - so it is important that this is implemented.
+     */
+    public int getEcho ()
+    {
+      return m_nEcho;
+    }
+
+    /**
+     * @return Optional - this is a string of column names, comma separated
+     *         (used in combination with sName) which will allow DataTables to
+     *         reorder data on the client-side if required for display. Note
+     *         that the number of column names returned must exactly match the
+     *         number of columns in the table. For a more flexible JSON format,
+     *         please consider using mDataProp.
+     */
+    @Nullable
+    public String getColumns ()
+    {
+      return m_sColumns;
+    }
+
+    /**
+     * @return The data in a 2D array.
+     */
+    @Nonnull
+    @ReturnsMutableCopy
+    public List <List <String>> getData ()
+    {
+      return ContainerHelper.newList (m_aData);
+    }
+
+    @Nonnull
+    public IJSONObject getAsJSON ()
+    {
+      final IJSONObject ret = new JSONObject ();
+      ret.setIntegerProperty ("iTotalRecords", m_nTotalRecords);
+      ret.setIntegerProperty ("iTotalDisplayRecords", m_nTotalDisplayRecords);
+      ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
+      ret.setStringProperty ("sColumns", m_sColumns);
+      ret.setListOfListProperty ("aaData", m_aData);
+      return ret;
+    }
+  }
+
+  @Nonnull
+  private ResponseData _handleRequest (@Nonnull final RequestData aRequestData)
+  {
+    return null;
   }
 
   @Override
@@ -272,7 +368,14 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                  eCSortDir,
                                                  sCDataProp));
     }
-    new RequestData (nDisplayStart, nDisplayLength, sSearch, bRegEx, nSortingCols, aColumnData, nEcho);
-    return AjaxDefaultResponse.createSuccess (null);
+    final RequestData aRequestData = new RequestData (nDisplayStart,
+                                                      nDisplayLength,
+                                                      sSearch,
+                                                      bRegEx,
+                                                      nSortingCols,
+                                                      aColumnData,
+                                                      nEcho);
+    final ResponseData aResponseData = _handleRequest (aRequestData);
+    return AjaxDefaultResponse.createSuccess (aResponseData.getAsJSON ());
   }
 }
