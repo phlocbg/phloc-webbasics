@@ -232,7 +232,14 @@ public class DataTables implements IHCNodeBuilder
       final JSAssocArray aAjax = new JSAssocArray ().add ("dataType", "json");
       if (m_eServerMethod != null)
         aAjax.add ("type", m_eServerMethod.getName ());
-      aAjax.add ("url", sSource).add ("data", aoData).add ("success", fnCallback);
+      // Success callback, to take out the "value" parameter from the AJAX
+      // default response object
+      final JSAnonymousFunction aCB = new JSAnonymousFunction ();
+      final JSVar aData = aCB.param ("a");
+      final JSVar aTextStatus = aCB.param ("b");
+      final JSVar aJQXHR = aCB.param ("c");
+      aCB.body ().invoke (fnCallback.name ()).arg (aData.ref ("value")).arg (aTextStatus).arg (aJQXHR);
+      aAjax.add ("url", sSource).add ("data", aoData).add ("success", aCB);
       aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax ().arg (aAjax));
       aParams.add ("fnServerData", aAF);
     }

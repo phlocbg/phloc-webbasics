@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
 
 /**
@@ -39,8 +40,15 @@ public class DefaultAjaxFunction extends AbstractAjaxFunction
 
   @Nonnull
   @Nonempty
-  public String getInvocationURL ()
+  public String getInvocationURI ()
   {
     return LinkUtils.getURIWithContext ("/ajax/" + getName ());
+  }
+
+  @Nonnull
+  @Nonempty
+  public ISimpleURL getInvocationURL ()
+  {
+    return LinkUtils.getURLWithContext ("/ajax/" + getName ());
   }
 }

@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
+import com.phloc.commons.url.ISimpleURL;
 
 /**
  * Interface for all ajax function declarations
@@ -31,5 +32,8 @@ public interface IAjaxFunction extends IHasName
 {
   @Nonnull
   @Nonempty
-  String getInvocationURL ();
+  String getInvocationURI ();
+
+  @Nonnull
+  ISimpleURL getInvocationURL ();
 }

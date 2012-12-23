@@ -25,9 +25,12 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
@@ -58,7 +61,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     private final String m_sSearch;
     private final boolean m_bRegEx;
     private final boolean m_bSortable;
-    private final int m_nSortCol;
     private final ESortOrder m_eSortDir;
     private final String m_sDataProp;
 
@@ -66,7 +68,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                           @Nullable final String sSearch,
                           final boolean bRegEx,
                           final boolean bSortable,
-                          final int nSortCol,
                           @Nullable final ESortOrder eSortDir,
                           @Nullable final String sDataProp)
     {
@@ -74,7 +75,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       m_sSearch = sSearch;
       m_bRegEx = bRegEx;
       m_bSortable = bSortable;
-      m_nSortCol = nSortCol;
       m_eSortDir = eSortDir;
       m_sDataProp = sDataProp;
     }
@@ -116,15 +116,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     /**
-     * @return Column being sorted on (you will need to decode this number for
-     *         your database)
-     */
-    public int getSortCol ()
-    {
-      return m_nSortCol;
-    }
-
-    /**
      * @return Direction to be sorted
      */
     @Nullable
@@ -143,6 +134,18 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     {
       return m_sDataProp;
     }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("searchable", m_bSearchable)
+                                         .append ("search", m_sSearch)
+                                         .append ("regEx", m_bRegEx)
+                                         .append ("sortable", m_bSortable)
+                                         .append ("sortDir", m_eSortDir)
+                                         .append ("dataProp", m_sDataProp)
+                                         .toString ();
+    }
   }
 
   public static final class RequestData
@@ -151,7 +154,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     private final int m_nDisplayLength;
     private final String m_sSearch;
     private final boolean m_bRegEx;
-    private final int m_nSortingCols;
+    private final int [] m_aSortCols;
     private final List <RequestDataPerColumn> m_aColumnData;
     private final int m_nEcho;
 
@@ -159,7 +162,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                  final int nDisplayLength,
                  @Nullable final String sSearch,
                  final boolean bRegEx,
-                 final int nSortingCols,
+                 @Nonnull final int [] aSortCols,
                  @Nonnull final List <RequestDataPerColumn> aColumnData,
                  final int nEcho)
     {
@@ -167,7 +170,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       m_nDisplayLength = nDisplayLength;
       m_sSearch = sSearch;
       m_bRegEx = bRegEx;
-      m_nSortingCols = nSortingCols;
+      m_aSortCols = aSortCols;
       m_aColumnData = aColumnData;
       m_nEcho = nEcho;
     }
@@ -222,10 +225,18 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
      */
     public int getSortingCols ()
     {
-      return m_nSortingCols;
+      return m_aSortCols.length;
     }
 
     @Nonnull
+    @ReturnsMutableCopy
+    public int [] getSortCols ()
+    {
+      return ArrayHelper.newIntArray (m_aSortCols);
+    }
+
+    @Nonnull
+    @ReturnsMutableCopy
     public List <RequestDataPerColumn> getColumnData ()
     {
       return ContainerHelper.newList (m_aColumnData);
@@ -238,6 +249,19 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     public int getEcho ()
     {
       return m_nEcho;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("displayStart", m_nDisplayStart)
+                                         .append ("displayLength", m_nDisplayLength)
+                                         .append ("search", m_sSearch)
+                                         .append ("regEx", m_bRegEx)
+                                         .append ("sortCols", m_aSortCols)
+                                         .append ("columns", m_aColumnData)
+                                         .append ("echo", m_nEcho)
+                                         .toString ();
     }
   }
 
@@ -253,7 +277,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                          final int nTotalDisplayRecords,
                          final int nEcho,
                          @Nullable final String sColumns,
-                         @Nullable final List <List <String>> aData)
+                         @Nonnull final List <List <String>> aData)
     {
       m_nTotalRecords = nTotalRecords;
       m_nTotalDisplayRecords = nTotalDisplayRecords;
@@ -322,16 +346,28 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       ret.setIntegerProperty ("iTotalRecords", m_nTotalRecords);
       ret.setIntegerProperty ("iTotalDisplayRecords", m_nTotalDisplayRecords);
       ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
-      ret.setStringProperty ("sColumns", m_sColumns);
+      if (StringHelper.hasText (m_sColumns))
+        ret.setStringProperty ("sColumns", m_sColumns);
       ret.setListOfListProperty ("aaData", m_aData);
       return ret;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("totalRecords", m_nTotalRecords)
+                                         .append ("totalDisplayRecords", m_nTotalDisplayRecords)
+                                         .append ("echo", m_nEcho)
+                                         .append ("columns", m_sColumns)
+                                         .append ("data", m_aData)
+                                         .toString ();
     }
   }
 
   @Nonnull
   private ResponseData _handleRequest (@Nonnull final RequestData aRequestData)
   {
-    return null;
+    return new ResponseData (0, 0, aRequestData.getEcho (), null, new ArrayList <List <String>> ());
   }
 
   @Override
@@ -352,7 +388,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       final String sCSearch = aParams.getAttributeAsString (SEARCH_PREFIX + nColumn);
       final boolean bCRegEx = aParams.getAttributeAsBoolean (REGEX_PREFIX + nColumn);
       final boolean bCSortable = aParams.getAttributeAsBoolean (SORTABLE_PREFIX + nColumn);
-      final int nCSortCol = aParams.getAttributeAsInt (SORT_COL_PREFIX + nColumn);
       final String sCSortDir = aParams.getAttributeAsString (SORT_DIR_PREFIX + nColumn);
       final ESortOrder eCSortDir = CDataTables.SORT_ASC.equals (sCSortDir)
                                                                           ? ESortOrder.ASCENDING
@@ -360,22 +395,22 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                                                                                     ? ESortOrder.DESCENDING
                                                                                                                     : null;
       final String sCDataProp = aParams.getAttributeAsString (DATA_PROP_PREFIX + nColumn);
-      aColumnData.add (new RequestDataPerColumn (bCSearchable,
-                                                 sCSearch,
-                                                 bCRegEx,
-                                                 bCSortable,
-                                                 nCSortCol,
-                                                 eCSortDir,
-                                                 sCDataProp));
+      aColumnData.add (new RequestDataPerColumn (bCSearchable, sCSearch, bCRegEx, bCSortable, eCSortDir, sCDataProp));
+    }
+    final int [] aSortCols = new int [nSortingCols];
+    for (int i = 0; i < nSortingCols; ++i)
+    {
+      final int nCSortCol = aParams.getAttributeAsInt (SORT_COL_PREFIX + i);
+      aSortCols[i] = nCSortCol;
     }
     final RequestData aRequestData = new RequestData (nDisplayStart,
                                                       nDisplayLength,
                                                       sSearch,
                                                       bRegEx,
-                                                      nSortingCols,
+                                                      aSortCols,
                                                       aColumnData,
                                                       nEcho);
     final ResponseData aResponseData = _handleRequest (aRequestData);
-    return AjaxDefaultResponse.createSuccess (aResponseData.getAsJSON ());
+    return AjaxDefaultResponse.createSuccess (aResponseData == null ? null : aResponseData.getAsJSON ());
   }
 }
