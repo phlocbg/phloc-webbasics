@@ -49,6 +49,7 @@ public class DataTables implements IHCNodeBuilder
   private boolean m_bPaginate = DEFAULT_PAGINATE;
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
+  private EDataTablesPaginationType m_ePaginationType;
   // server side processing
   private ISimpleURL m_aAjaxSource;
   private EHTTPMethod m_eServerMethod;
@@ -95,6 +96,15 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
+  public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
+  {
+    if (aColumn == null)
+      throw new NullPointerException ("column");
+    m_aColumns.add (aColumn);
+    return this;
+  }
+
+  @Nonnull
   public DataTables setInitialSorting (@Nonnegative final int nIndex, @Nonnull final ESortOrder eSortOrder)
   {
     return setInitialSorting (new DataTablesSorting ().addColumn (nIndex, eSortOrder));
@@ -108,11 +118,9 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
-  public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
+  public DataTables setPaginationType (@Nullable final EDataTablesPaginationType ePaginationType)
   {
-    if (aColumn == null)
-      throw new NullPointerException ("column");
-    m_aColumns.add (aColumn);
+    m_ePaginationType = ePaginationType;
     return this;
   }
 
@@ -146,6 +154,8 @@ public class DataTables implements IHCNodeBuilder
     }
     if (m_aInitialSorting != null)
       aParams.add (EDataTableJSONKeyword.SORTING.getName (), m_aInitialSorting.getAsJS ());
+    if (m_ePaginationType != null)
+      aParams.add (EDataTableJSONKeyword.PAGINATION_TYPE.getName (), m_ePaginationType.getName ());
     aParams.add (EDataTableJSONKeyword.SERVER_SIDE.getName (), m_aAjaxSource != null);
     if (m_aAjaxSource != null)
       aParams.add (EDataTableJSONKeyword.AJAX_SOURCE.getName (), m_aAjaxSource.getAsString ());
