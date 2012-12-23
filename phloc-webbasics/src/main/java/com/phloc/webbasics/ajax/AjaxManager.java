@@ -25,6 +25,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
+import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
@@ -70,6 +71,12 @@ public final class AjaxManager extends GlobalSingleton implements IAjaxInvoker
   public boolean isRegisteredFunction (@Nullable final String sFunctionName)
   {
     return m_aInvoker.isRegisteredFunction (sFunctionName);
+  }
+
+  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
+                                  @Nonnull final Class <? extends IAjaxHandler> aFactory)
+  {
+    addHandlerFunction (aFunction, FactoryNewInstance.create (aFactory));
   }
 
   public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
