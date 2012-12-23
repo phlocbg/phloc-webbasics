@@ -26,7 +26,6 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.webctrls.datatable.EDataTableJSONKeyword;
 
 public class DataTablesColumn
 {
@@ -126,27 +125,27 @@ public class DataTablesColumn
   public JSAssocArray getAsJS ()
   {
     final JSAssocArray ret = new JSAssocArray ();
-    ret.add (EDataTableJSONKeyword.TARGETS.getName (), m_aTargets);
+    ret.add (EDataTablesKeyword.TARGETS.getName (), m_aTargets);
     if (m_bSearchable != DEFAULT_SEARCHABLE)
-      ret.add (EDataTableJSONKeyword.SEARCHABLE.getName (), m_bSearchable);
+      ret.add (EDataTablesKeyword.SEARCHABLE.getName (), m_bSearchable);
     if (m_bSortable != DEFAULT_SORTABLE)
-      ret.add (EDataTableJSONKeyword.SORTABLE.getName (), m_bSortable);
+      ret.add (EDataTablesKeyword.SORTABLE.getName (), m_bSortable);
     if (m_bVisible != DEFAULT_VISIBLE)
-      ret.add (EDataTableJSONKeyword.VISIBLE.getName (), m_bVisible);
+      ret.add (EDataTablesKeyword.VISIBLE.getName (), m_bVisible);
     if (m_aCSSClassProvider != null)
-      ret.add (EDataTableJSONKeyword.CLASS.getName (), m_aCSSClassProvider.getCSSClass ());
+      ret.add (EDataTablesKeyword.CLASS.getName (), m_aCSSClassProvider.getCSSClass ());
     if (StringHelper.hasText (m_sName))
-      ret.add (EDataTableJSONKeyword.S_NAME.getName (), m_sName);
+      ret.add (EDataTablesKeyword.S_NAME.getName (), m_sName);
     if (m_aType != null)
-      ret.add (EDataTableJSONKeyword.S_TYPE.getName (), m_aType.getName ());
+      ret.add (EDataTablesKeyword.S_TYPE.getName (), m_aType.getName ());
     if (StringHelper.hasText (m_sWidth))
-      ret.add (EDataTableJSONKeyword.WIDTH.getName (), m_sWidth);
+      ret.add (EDataTablesKeyword.WIDTH.getName (), m_sWidth);
     if (ArrayHelper.isNotEmpty (m_aDataSort))
     {
       final JSArray aArray = new JSArray ();
       for (final int nDataSort : m_aDataSort)
         aArray.add (nDataSort);
-      ret.add (EDataTableJSONKeyword.DATASORT.getName (), aArray);
+      ret.add (EDataTablesKeyword.DATASORT.getName (), aArray);
     }
     return ret;
   }

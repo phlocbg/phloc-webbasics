@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.datatable;
+package com.phloc.webctrls.datatables;
 
 import java.util.Locale;
 
@@ -27,11 +27,9 @@ import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.json.IJSONObject;
-import com.phloc.json.impl.JSONObject;
 
 @Translatable
-public enum EDataTableText implements IHasDisplayText
+public enum EDataTablesText implements IHasDisplayText
 {
   // paginate
   FIRST ("Erster", "First"),
@@ -51,7 +49,7 @@ public enum EDataTableText implements IHasDisplayText
 
   private final ITextProvider m_aTP;
 
-  private EDataTableText (@Nonnull final String sDE, @Nonnull final String sEN)
+  private EDataTablesText (@Nonnull final String sDE, @Nonnull final String sEN)
   {
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }
@@ -60,27 +58,5 @@ public enum EDataTableText implements IHasDisplayText
   public String getDisplayText (@Nonnull final Locale aContentLocale)
   {
     return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
-  }
-
-  @Nonnull
-  public static IJSONObject getAsJSON (@Nonnull final Locale aDisplayLocale)
-  {
-    final IJSONObject aJSON = new JSONObject ();
-    final IJSONObject aPagination = new JSONObject ();
-    aPagination.setStringProperty ("sFirst", FIRST.getDisplayText (aDisplayLocale));
-    aPagination.setStringProperty ("sPrevious", PREVIOUS.getDisplayText (aDisplayLocale));
-    aPagination.setStringProperty ("sNext", NEXT.getDisplayText (aDisplayLocale));
-    aPagination.setStringProperty ("sLast", LAST.getDisplayText (aDisplayLocale));
-    aJSON.setObjectProperty ("oPaginate", aPagination);
-    aJSON.setStringProperty ("sProcessing", PROCESSING.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sLengthMenu", LENGTH_MENU.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sZeroRecords", ZERO_RECORDS.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sInfo", INFO.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sInfoEmpty", INFO_EMPTY.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sInfoFiltered", INFO_FILTERED.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sInfoPostFix", INFO_POSTFIX.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sSearch", SEARCH.getDisplayText (aDisplayLocale));
-    aJSON.setStringProperty ("sUrl", URL.getDisplayText (aDisplayLocale));
-    return aJSON;
   }
 }

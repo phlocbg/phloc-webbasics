@@ -15,14 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.datatable;
+package com.phloc.webctrls.datatables;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
 
-public enum EDataTableJSONKeyword implements IHasName
+public enum EDataTablesKeyword implements IHasName
 {
   RETRIEVE ("bRetrieve"),
   DESTROY ("bDestroy"),
@@ -70,11 +70,11 @@ public enum EDataTableJSONKeyword implements IHasName
   DATASORT ("aDataSort");
 
   @Deprecated
-  public static final EDataTableJSONKeyword JQUERY = JQUERY_UI;
+  public static final EDataTablesKeyword JQUERY = JQUERY_UI;
 
   private final String m_sName;
 
-  private EDataTableJSONKeyword (@Nonnull @Nonempty final String sName)
+  private EDataTablesKeyword (@Nonnull @Nonempty final String sName)
   {
     m_sName = sName;
   }

@@ -40,8 +40,6 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.http.EHTTPMethod;
-import com.phloc.webctrls.datatable.EDataTableJSONKeyword;
-import com.phloc.webctrls.datatable.EDataTableText;
 
 public class DataTables implements IHCNodeBuilder
 {
@@ -172,47 +170,47 @@ public class DataTables implements IHCNodeBuilder
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
     if (m_bPaginate != DEFAULT_PAGINATE)
-      aParams.add (EDataTableJSONKeyword.PAGINATE.getName (), m_bPaginate);
+      aParams.add (EDataTablesKeyword.PAGINATE.getName (), m_bPaginate);
     if (m_bPaginate != DEFAULT_STATE_SAVE)
-      aParams.add (EDataTableJSONKeyword.STATE_SAVE.getName (), m_bStateSave);
+      aParams.add (EDataTablesKeyword.STATE_SAVE.getName (), m_bStateSave);
     if (m_bJQueryUI != DEFAULT_JQUERY_UI)
-      aParams.add (EDataTableJSONKeyword.JQUERY_UI.getName (), m_bJQueryUI);
+      aParams.add (EDataTablesKeyword.JQUERY_UI.getName (), m_bJQueryUI);
     if (!m_aColumns.isEmpty ())
     {
       final JSArray aArray = new JSArray ();
       for (final DataTablesColumn aColumn : m_aColumns)
         aArray.add (aColumn.getAsJS ());
-      aParams.add (EDataTableJSONKeyword.COLUMN_DEFS.getName (), aArray);
+      aParams.add (EDataTablesKeyword.COLUMN_DEFS.getName (), aArray);
     }
     if (m_aInitialSorting != null)
-      aParams.add (EDataTableJSONKeyword.SORTING.getName (), m_aInitialSorting.getAsJS ());
+      aParams.add (EDataTablesKeyword.SORTING.getName (), m_aInitialSorting.getAsJS ());
     if (m_ePaginationType != null)
-      aParams.add (EDataTableJSONKeyword.PAGINATION_TYPE.getName (), m_ePaginationType.getName ());
-    aParams.add (EDataTableJSONKeyword.SERVER_SIDE.getName (), m_aAjaxSource != null);
+      aParams.add (EDataTablesKeyword.PAGINATION_TYPE.getName (), m_ePaginationType.getName ());
+    aParams.add (EDataTablesKeyword.SERVER_SIDE.getName (), m_aAjaxSource != null);
     if (m_aAjaxSource != null)
-      aParams.add (EDataTableJSONKeyword.AJAX_SOURCE.getName (), m_aAjaxSource.getAsString ());
+      aParams.add (EDataTablesKeyword.AJAX_SOURCE.getName (), m_aAjaxSource.getAsString ());
     if (m_eServerMethod != null)
-      aParams.add (EDataTableJSONKeyword.SERVER_METHOD.getName (), m_eServerMethod.getName ());
+      aParams.add (EDataTablesKeyword.SERVER_METHOD.getName (), m_eServerMethod.getName ());
 
     if (m_aDisplayLocale != null)
     {
       final JSAssocArray aLanguage = new JSAssocArray ();
       final JSAssocArray aPagination = new JSAssocArray ();
-      aPagination.add ("sFirst", EDataTableText.FIRST.getDisplayText (m_aDisplayLocale));
-      aPagination.add ("sPrevious", EDataTableText.PREVIOUS.getDisplayText (m_aDisplayLocale));
-      aPagination.add ("sNext", EDataTableText.NEXT.getDisplayText (m_aDisplayLocale));
-      aPagination.add ("sLast", EDataTableText.LAST.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sFirst", EDataTablesText.FIRST.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sNext", EDataTablesText.NEXT.getDisplayText (m_aDisplayLocale));
+      aPagination.add ("sLast", EDataTablesText.LAST.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("oPaginate", aPagination);
-      aLanguage.add ("sProcessing", EDataTableText.PROCESSING.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sLengthMenu", EDataTableText.LENGTH_MENU.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sZeroRecords", EDataTableText.ZERO_RECORDS.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfo", EDataTableText.INFO.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoEmpty", EDataTableText.INFO_EMPTY.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoFiltered", EDataTableText.INFO_FILTERED.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoPostFix", EDataTableText.INFO_POSTFIX.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sSearch", EDataTableText.SEARCH.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sUrl", EDataTableText.URL.getDisplayText (m_aDisplayLocale));
-      aParams.add (EDataTableJSONKeyword.LANGUAGE.getName (), aLanguage);
+      aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sLengthMenu", EDataTablesText.LENGTH_MENU.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfo", EDataTablesText.INFO.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoEmpty", EDataTablesText.INFO_EMPTY.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoFiltered", EDataTablesText.INFO_FILTERED.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoPostFix", EDataTablesText.INFO_POSTFIX.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sUrl", EDataTablesText.URL.getDisplayText (m_aDisplayLocale));
+      aParams.add (EDataTablesKeyword.LANGUAGE.getName (), aLanguage);
     }
 
     // main on document ready code
