@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
@@ -47,7 +49,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   private static final String ECHO = "sEcho";
 
   @Immutable
-  public static final class PerColumnData
+  public static final class RequestDataPerColumn
   {
     private final boolean m_bSearchable;
     private final String m_sSearch;
@@ -57,13 +59,13 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     private final ESortOrder m_eSortDir;
     private final String m_sDataProp;
 
-    public PerColumnData (final boolean bSearchable,
-                          final String sSearch,
+    RequestDataPerColumn (final boolean bSearchable,
+                          @Nullable final String sSearch,
                           final boolean bRegEx,
                           final boolean bSortable,
                           final int nSortCol,
-                          final ESortOrder eSortDir,
-                          final String sDataProp)
+                          @Nullable final ESortOrder eSortDir,
+                          @Nullable final String sDataProp)
     {
       m_bSearchable = bSearchable;
       m_sSearch = sSearch;
@@ -74,39 +76,165 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       m_sDataProp = sDataProp;
     }
 
+    /**
+     * @return Indicator for if a column is flagged as searchable or not on the
+     *         client-side
+     */
     public boolean isSearchable ()
     {
       return m_bSearchable;
     }
 
+    /**
+     * @return Individual column filter
+     */
+    @Nullable
     public String getSearch ()
     {
       return m_sSearch;
     }
 
+    /**
+     * @return True if the individual column filter should be treated as a
+     *         regular expression for advanced filtering, false if not
+     */
     public boolean isRegEx ()
     {
       return m_bRegEx;
     }
 
+    /**
+     * @return Indicator for if a column is flagged as sortable or not on the
+     *         client-side
+     */
     public boolean isSortable ()
     {
       return m_bSortable;
     }
 
+    /**
+     * @return Column being sorted on (you will need to decode this number for
+     *         your database)
+     */
     public int getSortCol ()
     {
       return m_nSortCol;
     }
 
+    /**
+     * @return Direction to be sorted
+     */
+    @Nullable
     public ESortOrder getSortDir ()
     {
       return m_eSortDir;
     }
 
+    /**
+     * @return The value specified by mDataProp for each column. This can be
+     *         useful for ensuring that the processing of data is independent
+     *         from the order of the columns.
+     */
+    @Nullable
     public String getDataProp ()
     {
       return m_sDataProp;
+    }
+  }
+
+  public static final class RequestData
+  {
+    private final int m_nDisplayStart;
+    private final int m_nDisplayLength;
+    private final String m_sSearch;
+    private final boolean m_bRegEx;
+    private final int m_nSortingCols;
+    private final List <RequestDataPerColumn> m_aColumnData;
+    private final int m_nEcho;
+
+    RequestData (final int nDisplayStart,
+                 final int nDisplayLength,
+                 @Nullable final String sSearch,
+                 final boolean bRegEx,
+                 final int nSortingCols,
+                 @Nonnull final List <RequestDataPerColumn> aColumnData,
+                 final int nEcho)
+    {
+      m_nDisplayStart = nDisplayStart;
+      m_nDisplayLength = nDisplayLength;
+      m_sSearch = sSearch;
+      m_bRegEx = bRegEx;
+      m_nSortingCols = nSortingCols;
+      m_aColumnData = aColumnData;
+      m_nEcho = nEcho;
+    }
+
+    /**
+     * @return Display start point in the current data set.
+     */
+    public int getDisplayStart ()
+    {
+      return m_nDisplayStart;
+    }
+
+    /**
+     * @return Number of records that the table can display in the current draw.
+     *         It is expected that the number of records returned will be equal
+     *         to this number, unless the server has fewer records to return.
+     */
+    public int getDisplayEnd ()
+    {
+      return m_nDisplayLength;
+    }
+
+    /**
+     * @return Number of columns being displayed (useful for getting individual
+     *         column search info)
+     */
+    public int getColumnCount ()
+    {
+      return m_aColumnData.size ();
+    }
+
+    /**
+     * @return Global search field
+     */
+    @Nullable
+    public String getSearch ()
+    {
+      return m_sSearch;
+    }
+
+    /**
+     * @return True if the global filter should be treated as a regular
+     *         expression for advanced filtering, false if not.
+     */
+    public boolean isRegEx ()
+    {
+      return m_bRegEx;
+    }
+
+    /**
+     * @return Number of columns to sort on
+     */
+    public int getSortingCols ()
+    {
+      return m_nSortingCols;
+    }
+
+    @Nonnull
+    public List <RequestDataPerColumn> getColumnData ()
+    {
+      return ContainerHelper.newList (m_aColumnData);
+    }
+
+    /**
+     * @return Information for DataTables to use for rendering.
+     */
+    @Nonnull
+    public String getEcho ()
+    {
+      return Integer.toString (m_nEcho);
     }
   }
 
@@ -120,8 +248,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final String sSearch = aParams.getAttributeAsString (SEARCH);
     final boolean bRegEx = aParams.getAttributeAsBoolean (REGEX, false);
     final int nSortingCols = aParams.getAttributeAsInt (SORTING_COLS);
-    final String sEcho = aParams.getAttributeAsString (ECHO);
-    final List <PerColumnData> aColumnData = new ArrayList <PerColumnData> (nColumns);
+    final int nEcho = aParams.getAttributeAsInt (ECHO);
+    final List <RequestDataPerColumn> aColumnData = new ArrayList <RequestDataPerColumn> (nColumns);
     for (int nColumn = 0; nColumn < nColumns; ++nColumn)
     {
       final boolean bCSearchable = aParams.getAttributeAsBoolean (SEARCHABLE_PREFIX + nColumn);
@@ -136,8 +264,15 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                                                                                     ? ESortOrder.DESCENDING
                                                                                                                     : null;
       final String sCDataProp = aParams.getAttributeAsString (DATA_PROP_PREFIX + nColumn);
-      aColumnData.add (new PerColumnData (bCSearchable, sCSearch, bCRegEx, bCSortable, nCSortCol, eCSortDir, sCDataProp));
+      aColumnData.add (new RequestDataPerColumn (bCSearchable,
+                                                 sCSearch,
+                                                 bCRegEx,
+                                                 bCSortable,
+                                                 nCSortCol,
+                                                 eCSortDir,
+                                                 sCDataProp));
     }
+    new RequestData (nDisplayStart, nDisplayLength, sSearch, bRegEx, nSortingCols, aColumnData, nEcho);
     return AjaxDefaultResponse.createSuccess (null);
   }
 }
