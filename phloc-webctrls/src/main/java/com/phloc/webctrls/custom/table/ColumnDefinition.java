@@ -19,7 +19,6 @@ package com.phloc.webctrls.custom.table;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +28,6 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.types.EBaseType;
 
 @Immutable
 public class ColumnDefinition implements Serializable
@@ -38,38 +36,7 @@ public class ColumnDefinition implements Serializable
   private final HCCol m_aCol;
   private final String m_sFieldID;
   private final Comparator <AbstractHCCell> m_aComparator;
-  private String m_sToolTip = null;
-
-  @Nullable
-  protected static Comparator <AbstractHCCell> _getComparator (@Nullable final EBaseType eType, final Locale aLocale)
-  {
-    if (eType != null)
-      switch (eType)
-      {
-        case DATE:
-          return new ComparatorCellDate (aLocale);
-        case DATETIME:
-          return new ComparatorCellDateTime (aLocale);
-        case DOUBLE:
-          return new ComparatorCellDouble (aLocale);
-        case INT:
-          return new ComparatorCellInteger (aLocale);
-        case TEXT:
-          return new ComparatorCellString (aLocale);
-        case TIME:
-          return new ComparatorCellTime (aLocale);
-      }
-    return null;
-  }
-
-  public ColumnDefinition (@Nonnull final String sName,
-                           @Nonnull final HCCol aCol,
-                           @Nullable final String sFieldID,
-                           @Nullable final EBaseType eType,
-                           @Nonnull final Locale aDisplayLocale)
-  {
-    this (sName, aCol, sFieldID, _getComparator (eType, aDisplayLocale));
-  }
+  private String m_sToolTip;
 
   public ColumnDefinition (@Nonnull final String sName, @Nonnull final HCCol aCol)
   {
@@ -107,9 +74,11 @@ public class ColumnDefinition implements Serializable
     return m_sName;
   }
 
-  public void setToolTip (final String sToolTip)
+  @Nonnull
+  public ColumnDefinition setToolTip (@Nullable final String sToolTip)
   {
     m_sToolTip = sToolTip;
+    return this;
   }
 
   @Nullable

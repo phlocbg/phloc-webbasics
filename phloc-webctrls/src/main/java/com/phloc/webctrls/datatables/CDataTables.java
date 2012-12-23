@@ -20,7 +20,7 @@ package com.phloc.webctrls.datatables;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-final class CDataTables
+public final class CDataTables
 {
   public static final String SORT_ASC = "asc";
   public static final String SORT_DESC = "desc";
