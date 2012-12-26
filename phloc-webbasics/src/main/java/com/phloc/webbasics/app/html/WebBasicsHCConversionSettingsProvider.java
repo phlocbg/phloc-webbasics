@@ -20,7 +20,6 @@ package com.phloc.webbasics.app.html;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
 import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
-import com.phloc.commons.xml.serialize.EXMLSerializeIndent;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
@@ -34,15 +33,10 @@ import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
  */
 public final class WebBasicsHCConversionSettingsProvider extends HCConversionSettingsProvider
 {
-  // For internal debugging only!
-  private static final boolean BEAUTIFUL_HTML = false;
-
   public WebBasicsHCConversionSettingsProvider ()
   {
-    super (EHTMLVersion.XHTML11);
+    super (EHTMLVersion.DEFAULT);
     setXMLWriterSettings (new XMLWriterSettings ().setFormat (EXMLSerializeFormat.XHTML)
-                                                  .setIndent (BEAUTIFUL_HTML ? EXMLSerializeIndent.INDENT_AND_ALIGN
-                                                                            : EXMLSerializeIndent.NONE)
                                                   .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING));
     setConsistencyChecksEnabled (GlobalDebug.isDebugMode ());
   }

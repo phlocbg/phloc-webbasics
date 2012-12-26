@@ -23,6 +23,7 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.html.js.builder.JSPrinter;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.ApplicationWebSettings;
 import com.phloc.webbasics.web.UnifiedResponse;
@@ -41,8 +42,11 @@ public final class ApplicationRunner
                                          @Nonnull final UnifiedResponse aUnifiedResponse,
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
-    final IHCConversionSettings aCS = HCSettings.getConversionSettings (false)
+    final boolean bIndentAndAlign = true;
+    final IHCConversionSettings aCS = HCSettings.getConversionSettings (bIndentAndAlign)
                                                 .getClone (ApplicationWebSettings.getHTMLVersion ());
+    JSPrinter.setIndentAndAlign (bIndentAndAlign);
+
     // Build the HC tree
     final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope);
     // Convert to String
