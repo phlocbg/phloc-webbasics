@@ -18,6 +18,7 @@
 package com.phloc.webbasics.app.html;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.html.hc.conversion.HCSettings;
@@ -28,11 +29,12 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.ApplicationWebSettings;
 import com.phloc.webbasics.web.UnifiedResponse;
 
+@Immutable
 public final class ApplicationRunner
 {
   static
   {
-    HCSettings.setConversionSettingsProvider (new WebBasicsHCConversionSettingsProvider ());
+    HCSettings.setConversionSettingsProvider (new WebBasicsHCConversionSettingsProvider (ApplicationWebSettings.getHTMLVersion ()));
   }
 
   private ApplicationRunner ()
@@ -43,6 +45,7 @@ public final class ApplicationRunner
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
     final boolean bIndentAndAlign = true;
+    // use getCloneIfNecessary in phloc-html > 3.7.1
     final IHCConversionSettings aCS = HCSettings.getConversionSettings (bIndentAndAlign)
                                                 .getClone (ApplicationWebSettings.getHTMLVersion ());
     JSPrinter.setIndentAndAlign (bIndentAndAlign);

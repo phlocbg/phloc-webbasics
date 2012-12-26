@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.app.html;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
 import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
@@ -33,9 +35,9 @@ import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
  */
 public final class WebBasicsHCConversionSettingsProvider extends HCConversionSettingsProvider
 {
-  public WebBasicsHCConversionSettingsProvider ()
+  public WebBasicsHCConversionSettingsProvider (@Nonnull final EHTMLVersion eHTMLVersion)
   {
-    super (EHTMLVersion.DEFAULT);
+    super (eHTMLVersion);
     setXMLWriterSettings (new XMLWriterSettings ().setFormat (EXMLSerializeFormat.XHTML)
                                                   .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING));
     setConsistencyChecksEnabled (GlobalDebug.isDebugMode ());
