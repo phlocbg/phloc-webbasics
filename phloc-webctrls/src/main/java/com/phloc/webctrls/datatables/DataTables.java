@@ -213,13 +213,14 @@ public class DataTables implements IHCNodeBuilder
       aParams.add ("sServerMethod", m_eServerMethod.getName ());
     if (ContainerHelper.isNotEmpty (m_aServerParams))
     {
-      final JSAssocArray aPush = new JSAssocArray ();
-      for (final Map.Entry <String, String> aEntry : m_aServerParams.entrySet ())
-        aPush.add (aEntry.getKey (), aEntry.getValue ());
-
       final JSAnonymousFunction aAF = new JSAnonymousFunction ();
       final JSVar aData = aAF.param ("aoData");
-      aAF.body ().invoke (aData, "push").arg (aPush);
+      for (final Map.Entry <String, String> aEntry : m_aServerParams.entrySet ())
+      {
+        aAF.body ()
+           .invoke (aData, "push")
+           .arg (new JSAssocArray ().add ("name", aEntry.getKey ()).add ("value", aEntry.getValue ()));
+      }
       aParams.add ("fnServerParams", aAF);
     }
     if (m_bUseJQueryAjax)
