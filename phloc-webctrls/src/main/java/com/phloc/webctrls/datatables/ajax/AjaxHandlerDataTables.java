@@ -410,7 +410,9 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                       aSortCols,
                                                       aColumnData,
                                                       nEcho);
+    // Main request handling
     final ResponseData aResponseData = _handleRequest (aRequestData);
+    // Convert the response to JSON
     return AjaxDefaultResponse.createSuccess (aResponseData == null ? null : aResponseData.getAsJSON ());
   }
 }
