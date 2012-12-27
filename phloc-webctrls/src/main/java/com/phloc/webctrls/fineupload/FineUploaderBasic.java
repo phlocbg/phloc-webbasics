@@ -29,7 +29,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.JQuery;
@@ -48,7 +52,7 @@ public class FineUploaderBasic implements IJSCodeProvider
   public static final boolean DEFAULT_DISABLE_CANCEL_FOR_FORM_UPLOADS = false;
   public static final boolean DEFAULT_AUTO_UPLOAD = true;
 
-  public static final String DEFAULT_REQUEST_ENDPOINT = "/server/upload";
+  public static final ISimpleURL DEFAULT_REQUEST_ENDPOINT = new SimpleURL ("/server/upload");
   public static final boolean DEFAULT_REQUEST_PARAMS_IN_BODY = false;
   public static final boolean DEFAULT_REQUEST_FORCE_MULTIPART = false;
   public static final String DEFAULT_REQUEST_INPUT_NAME = "qqfile";
@@ -71,7 +75,7 @@ public class FineUploaderBasic implements IJSCodeProvider
   private boolean m_bDisableCancelForFormUploads = DEFAULT_DISABLE_CANCEL_FOR_FORM_UPLOADS;
   private boolean m_bAutoUpload = DEFAULT_AUTO_UPLOAD;
 
-  private String m_sRequestEndpoint = DEFAULT_REQUEST_ENDPOINT;
+  private ISimpleURL m_aRequestEndpoint = DEFAULT_REQUEST_ENDPOINT;
   private final Map <String, String> m_aRequestParams = new LinkedHashMap <String, String> ();
   private boolean m_bRequestParamsInBody = DEFAULT_REQUEST_PARAMS_IN_BODY;
   private final Map <String, String> m_aRequestCustomHeaders = new LinkedHashMap <String, String> ();
@@ -93,6 +97,11 @@ public class FineUploaderBasic implements IJSCodeProvider
     m_aDisplayLocale = aDisplayLocale;
   }
 
+  public boolean isDebug ()
+  {
+    return m_bDebug;
+  }
+
   /**
    * If enabled, this will result in log messages (such as server response)
    * being written to the javascript console. If your browser does not support
@@ -111,23 +120,36 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  @Nonnull
+  public ISimpleURL getEndpoint ()
+  {
+    return m_aRequestEndpoint;
+  }
+
   /**
    * The is the endpoint used by both the form and ajax uploader. In the case of
    * the form uploader, it is part of the form's action attribute value along
    * with all parameters. In the case of the ajax uploader, it is makes up part
    * of the URL of the XHR request (again, along with the parameters).
    * 
-   * @param sRequestEndpoint
-   *        The new action URL
+   * @param aRequestEndpoint
+   *        The new action URL. May not be <code>null</code>.
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setEndpoint (@Nonnull @Nonempty final String sRequestEndpoint)
+  public FineUploaderBasic setEndpoint (@Nonnull final ISimpleURL aRequestEndpoint)
   {
-    if (StringHelper.hasNoText (sRequestEndpoint))
-      throw new IllegalArgumentException ("requestEndpoint");
-    m_sRequestEndpoint = sRequestEndpoint;
+    if (aRequestEndpoint == null)
+      throw new NullPointerException ("requestEndpoint");
+    m_aRequestEndpoint = aRequestEndpoint;
     return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, String> getAllParams ()
+  {
+    return ContainerHelper.newMap (m_aRequestParams);
   }
 
   /**
@@ -184,6 +206,11 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  public boolean isRequestParamsInBody ()
+  {
+    return m_bRequestParamsInBody;
+  }
+
   /**
    * Set this to <code>true</code> if you want all parameters to be sent in the
    * request body. Note that setting this option to <code>true</code> will force
@@ -202,6 +229,13 @@ public class FineUploaderBasic implements IJSCodeProvider
   {
     m_bRequestParamsInBody = bRequestParamsInBody;
     return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, String> getAllCustomHeaders ()
+  {
+    return ContainerHelper.newMap (m_aRequestCustomHeaders);
   }
 
   /**
@@ -258,6 +292,11 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  public boolean isForceMultipart ()
+  {
+    return m_bRequestForceMultipart;
+  }
+
   /**
    * While form-based uploads will always be multipart requests, this forces XHR
    * uploads to send files using multipart requests as well.
@@ -271,6 +310,12 @@ public class FineUploaderBasic implements IJSCodeProvider
   {
     m_bRequestForceMultipart = bForceMultipart;
     return this;
+  }
+
+  @Nullable
+  public String getButtonElementID ()
+  {
+    return m_sButtonElementID;
   }
 
   /**
@@ -289,6 +334,11 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  public boolean isMultiple ()
+  {
+    return m_bMultiple;
+  }
+
   /**
    * Set to false puts the uploader into what is best described as 'single-file
    * upload mode'. See the [demo](http://fineuploader.com) for an example.
@@ -302,6 +352,12 @@ public class FineUploaderBasic implements IJSCodeProvider
   {
     m_bMultiple = bMultiple;
     return this;
+  }
+
+  @Nonnegative
+  public int getMaxConnections ()
+  {
+    return m_nMaxConnections;
   }
 
   /**
@@ -320,6 +376,11 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  public boolean isDisableCancelForFormUploads ()
+  {
+    return m_bDisableCancelForFormUploads;
+  }
+
   /**
    * If true, the cancel link does not appear next to files when the form
    * uploader is used. This may be desired since it may not be possible to
@@ -334,6 +395,11 @@ public class FineUploaderBasic implements IJSCodeProvider
   {
     m_bDisableCancelForFormUploads = bDisableCancelForFormUploads;
     return this;
+  }
+
+  public boolean isAutoUpload ()
+  {
+    return m_bAutoUpload;
   }
 
   /**
@@ -351,6 +417,13 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllAllowedExtensions ()
+  {
+    return ContainerHelper.newSet (m_aValidationAllowedExtensions);
+  }
+
   /**
    * This may be helpful if you want to restrict uploaded files to specific file
    * types. Note that this validation option is only enforced by examining the
@@ -363,6 +436,7 @@ public class FineUploaderBasic implements IJSCodeProvider
    *        The allowed extensions to be set.
    * @return this
    */
+  @Nonnull
   public FineUploaderBasic setAllowedExtensions (@Nullable final Set <String> aAllowedExtensions)
   {
     m_aValidationAllowedExtensions.clear ();
@@ -383,6 +457,7 @@ public class FineUploaderBasic implements IJSCodeProvider
    *        The allowed extensions to be added.
    * @return this
    */
+  @Nonnull
   public FineUploaderBasic addAllowedExtensions (@Nullable final Set <String> aAllowedExtensions)
   {
     if (aAllowedExtensions != null)
@@ -402,12 +477,19 @@ public class FineUploaderBasic implements IJSCodeProvider
    *        The allowed extension to be added. E.g. ("jpeg", "jpg", "gif")
    * @return this
    */
+  @Nonnull
   public FineUploaderBasic addAllowedExtension (@Nonnull @Nonempty final String sAllowedExtension)
   {
     if (StringHelper.hasNoText (sAllowedExtension))
       throw new IllegalArgumentException ("allowedExtension");
     m_aValidationAllowedExtensions.add (sAllowedExtension);
     return this;
+  }
+
+  @Nonnegative
+  public int getSizeLimit ()
+  {
+    return m_nValidationSizeLimit;
   }
 
   /**
@@ -426,6 +508,12 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  @Nonnegative
+  public int getMinSizeLimit ()
+  {
+    return m_nValidationMinSizeLimit;
+  }
+
   /**
    * Minimum allowable size, in bytes, for a file.
    * 
@@ -440,6 +528,11 @@ public class FineUploaderBasic implements IJSCodeProvider
       throw new IllegalArgumentException ("minSizeLimit may not be negative!");
     m_nValidationMinSizeLimit = nMinSizeLimit;
     return this;
+  }
+
+  public boolean isStopOnFirstInvalidFile ()
+  {
+    return m_bValidationStopOnFirstInvalidFile;
   }
 
   /**
@@ -463,6 +556,13 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  @Nonnull
+  @Nonempty
+  public String getInputName ()
+  {
+    return m_sRequestInputName;
+  }
+
   /**
    * This usually only useful with the ajax uploader, which sends the name of
    * the file as a parameter, using a key name equal to the value of this
@@ -476,8 +576,16 @@ public class FineUploaderBasic implements IJSCodeProvider
   @Nonnull
   public FineUploaderBasic setInputName (@Nonnull @Nonempty final String sInputName)
   {
+    if (StringHelper.hasNoText (sInputName))
+      throw new IllegalArgumentException ("inputName");
+
     m_sRequestInputName = sInputName;
     return this;
+  }
+
+  public boolean isRetryEnableAuto ()
+  {
+    return m_bRetryEnableAuto;
   }
 
   /**
@@ -496,9 +604,14 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  public int getRetryMaxAutoAttempts ()
+  {
+    return m_nRetryMaxAutoAttempts;
+  }
+
   /**
    * The maximum number of times the uploader will attempt to retry a failed
-   * upload. Ignored if enableAuto is <code>false</code>.
+   * upload. Ignored if retryEnableAuto is <code>false</code>.
    * 
    * @param nRetryMaxAutoAttempts
    *        The number of retry attempts.
@@ -509,6 +622,11 @@ public class FineUploaderBasic implements IJSCodeProvider
   {
     m_nRetryMaxAutoAttempts = nRetryMaxAutoAttempts;
     return this;
+  }
+
+  public int getRetryAutoAttemptDelay ()
+  {
+    return m_nRetryAutoAttemptDelay;
   }
 
   /**
@@ -526,6 +644,11 @@ public class FineUploaderBasic implements IJSCodeProvider
     return this;
   }
 
+  public String getRetryPreventRetryResponseProperty ()
+  {
+    return m_sRetryPreventRetryResponseProperty;
+  }
+
   /**
    * If this property is present in the server response and contains a value of
    * true, the uploader will not allow any further retries of this file (manual
@@ -536,7 +659,7 @@ public class FineUploaderBasic implements IJSCodeProvider
    * @return this
    */
   @Nonnull
-  public FineUploaderBasic setRetryAutoAttemptDelay (@Nullable final String sRetryPreventRetryResponseProperty)
+  public FineUploaderBasic setRetryPreventRetryResponseProperty (@Nullable final String sRetryPreventRetryResponseProperty)
   {
     m_sRetryPreventRetryResponseProperty = sRetryPreventRetryResponseProperty;
     return this;
@@ -572,8 +695,8 @@ public class FineUploaderBasic implements IJSCodeProvider
     // request
     {
       final JSONObject aRequest = new JSONObject ();
-      if (!m_sRequestEndpoint.equals (DEFAULT_REQUEST_ENDPOINT))
-        aRequest.setStringProperty ("endpoint", m_sRequestEndpoint);
+      if (!m_aRequestEndpoint.equals (DEFAULT_REQUEST_ENDPOINT))
+        aRequest.setStringProperty ("endpoint", m_aRequestEndpoint.getAsString ());
       if (!m_aRequestParams.isEmpty ())
       {
         final JSONObject aParams = new JSONObject ();
