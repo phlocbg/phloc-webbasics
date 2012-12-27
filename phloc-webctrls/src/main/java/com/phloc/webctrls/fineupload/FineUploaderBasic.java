@@ -670,13 +670,23 @@ public class FineUploaderBasic
   }
 
   /**
+   * @param aRoot
+   *        The JSON messages object to extend
+   * @param aDisplayLocale
+   *        The locale to be used for test resolving
+   */
+  @OverrideOnDemand
+  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nonnull final Locale aDisplayLocale)
+  {}
+
+  /**
    * @param aMessages
    *        The JSON messages object to extend
    * @param aDisplayLocale
    *        The locale to be used for test resolving
    */
   @OverrideOnDemand
-  protected void extendJSONMessage (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
+  protected void extendJSONMessages (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
   {}
 
   @Nonnull
@@ -754,7 +764,7 @@ public class FineUploaderBasic
                                    EFineUploaderBasicText.NO_FILES_ERROR.getDisplayText (m_aDisplayLocale));
       aMessages.setStringProperty ("onLeave", EFineUploaderBasicText.ON_LEAVE.getDisplayText (m_aDisplayLocale));
       // extended
-      extendJSONMessage (aMessages, m_aDisplayLocale);
+      extendJSONMessages (aMessages, m_aDisplayLocale);
       ret.setObjectProperty ("messages", aMessages);
     }
 
@@ -773,6 +783,7 @@ public class FineUploaderBasic
         ret.setObjectProperty ("retry", aRetry);
     }
 
+    extendJSON (ret, m_aDisplayLocale);
     return ret;
   }
 }

@@ -31,9 +31,25 @@ public class FineUploader extends FineUploaderBasic
   }
 
   @Override
-  protected void extendJSONMessage (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
+  protected void extendJSONMessages (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
   {
     aMessages.setStringProperty ("tooManyFilesError",
                                  EFineUploaderText.TOO_MANY_FILE_ERROR.getDisplayText (aDisplayLocale));
+  }
+
+  @Override
+  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nonnull final Locale aDisplayLocale)
+  {
+    final JSONObject aText = new JSONObject ();
+    aText.setStringProperty ("uploadButton", EFineUploaderText.UPLOAD_BUTTON.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("cancelButton", EFineUploaderText.CANCEL_BUTTON.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("retryButton", EFineUploaderText.RETRY_BUTTON.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("failUpload", EFineUploaderText.FAIL_UPLOAD.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("dragZone", EFineUploaderText.DRAG_ZONE.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("dropProcessing", EFineUploaderText.DROP_PROCESSING.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("formatProgress", EFineUploaderText.FORMAT_PROGRESS.getDisplayText (aDisplayLocale));
+    aText.setStringProperty ("waitingForResponse",
+                             EFineUploaderText.WAITING_FOR_RESPONSE.getDisplayText (aDisplayLocale));
+    aRoot.setObjectProperty ("text", aText);
   }
 }
