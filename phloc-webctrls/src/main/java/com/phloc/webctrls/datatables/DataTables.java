@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -68,12 +67,9 @@ public class DataTables implements IHCNodeBuilder
   @Nonnull
   private static String _ensureID (@Nonnull final AbstractHCBaseTable <?> aTable)
   {
-    String sID = aTable.getID ();
+    final String sID = aTable.getID ();
     if (StringHelper.hasNoText (sID))
-    {
-      sID = GlobalIDFactory.getNewStringID ();
-      aTable.setID (sID);
-    }
+      throw new IllegalArgumentException ("Table has no ID!");
     return sID;
   }
 
@@ -82,7 +78,8 @@ public class DataTables implements IHCNodeBuilder
    * is created.
    * 
    * @param aTable
-   *        The table to apply the data table to
+   *        The table to apply the data table to. May not be <code>null</code>
+   *        and must have a valid ID!
    */
   public DataTables (@Nonnull final AbstractHCBaseTable <?> aTable)
   {
