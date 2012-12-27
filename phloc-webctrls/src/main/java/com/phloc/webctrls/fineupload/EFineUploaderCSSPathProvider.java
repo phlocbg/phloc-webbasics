@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.tiptip;
+package com.phloc.webctrls.fineupload;
 
 import javax.annotation.Nonnull;
 
@@ -28,14 +28,13 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  * 
  * @author philip
  */
-public enum ETipTipCSSPathProvider implements ICSSPathProvider
+public enum EFineUploaderCSSPathProvider implements ICSSPathProvider
 {
-  TOOLTIP ("tiptip/tooltip.css"),
-  TIPTIP_13 ("tiptip/13/jquery.tiptip.css");
+  FINEUPLOADER_311 ("fineupload/311/fineuploader.css");
 
   private final String m_sPath;
 
-  private ETipTipCSSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EFineUploaderCSSPathProvider (@Nonnull @Nonempty final String sPath)
   {
     if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");

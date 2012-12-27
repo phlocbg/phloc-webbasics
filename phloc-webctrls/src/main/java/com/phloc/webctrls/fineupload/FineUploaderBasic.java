@@ -34,8 +34,6 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.html.js.IJSCodeProvider;
-import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.json.impl.JSONObject;
 
@@ -44,7 +42,7 @@ import com.phloc.json.impl.JSONObject;
  * 
  * @author philip
  */
-public class FineUploaderBasic implements IJSCodeProvider
+public class FineUploaderBasic
 {
   public static final boolean DEFAULT_DEBUG = false;
   public static final boolean DEFAULT_MULTIPLE = true;
@@ -95,6 +93,12 @@ public class FineUploaderBasic implements IJSCodeProvider
   public FineUploaderBasic (@Nullable final Locale aDisplayLocale)
   {
     m_aDisplayLocale = aDisplayLocale;
+  }
+
+  @Nullable
+  public Locale getDisplayLocale ()
+  {
+    return m_aDisplayLocale;
   }
 
   public boolean isDebug ()
@@ -770,11 +774,5 @@ public class FineUploaderBasic implements IJSCodeProvider
     }
 
     return ret;
-  }
-
-  @Nonnull
-  public String getJSCode ()
-  {
-    return new JSInvocation ("new qq.FileUploader").arg (getJSON ()).getJSCode ();
   }
 }

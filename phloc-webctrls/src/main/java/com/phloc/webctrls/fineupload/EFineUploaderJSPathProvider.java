@@ -15,37 +15,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.tiptip;
+package com.phloc.webctrls.fineupload;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.css.CSSFilenameHelper;
-import com.phloc.html.resource.css.ICSSPathProvider;
+import com.phloc.html.resource.js.IJSPathProvider;
+import com.phloc.html.resource.js.JSFilenameHelper;
 
-/**
- * Contains default CSS paths for this package.
- * 
- * @author philip
- */
-public enum ETipTipCSSPathProvider implements ICSSPathProvider
+public enum EFineUploaderJSPathProvider implements IJSPathProvider
 {
-  TOOLTIP ("tiptip/tooltip.css"),
-  TIPTIP_13 ("tiptip/13/jquery.tiptip.css");
+  FINEUPLOADER_311 ("fineupload/311/jquery.fineuploader-3.1.1.js");
 
   private final String m_sPath;
 
-  private ETipTipCSSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EFineUploaderJSPathProvider (@Nonnull @Nonempty final String sPath)
   {
-    if (!CSSFilenameHelper.isCSSFilename (sPath))
+    if (!JSFilenameHelper.isJSFilename (sPath))
       throw new IllegalArgumentException ("path");
     m_sPath = sPath;
   }
 
   @Nonnull
   @Nonempty
-  public String getCSSItemPath (final boolean bRegular)
+  public String getJSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
+    return bRegular ? m_sPath : JSFilenameHelper.getMinifiedJSPath (m_sPath);
+  }
+
+  public boolean canBeBundled ()
+  {
+    return true;
   }
 }

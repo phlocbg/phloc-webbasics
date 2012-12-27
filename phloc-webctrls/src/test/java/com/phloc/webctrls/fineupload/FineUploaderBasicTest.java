@@ -17,7 +17,7 @@
  */
 package com.phloc.webctrls.fineupload;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -32,9 +32,9 @@ public class FineUploaderBasicTest
   public void testBasic ()
   {
     final FineUploaderBasic aFUB = new FineUploaderBasic (null);
-    assertEquals ("new qq.FileUploader({});", aFUB.getJSCode ());
+    assertNotNull (aFUB.getJSON ());
 
     aFUB.setDebug (true);
-    assertEquals ("new qq.FileUploader({\"debug\":true});", aFUB.getJSCode ());
+    assertNotNull (aFUB.getJSON ());
   }
 }
