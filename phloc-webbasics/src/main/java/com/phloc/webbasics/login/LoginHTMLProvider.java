@@ -44,12 +44,12 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 
-public class BasicLoginHTML extends AbstractHTMLProvider
+public class LoginHTMLProvider extends AbstractHTMLProvider
 {
   private final boolean m_bLoginError;
   private final ELoginResult m_eLoginResult;
 
-  public BasicLoginHTML (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
+  public LoginHTMLProvider (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
   {
     if (eLoginResult == null)
       throw new NullPointerException ("loginResult");

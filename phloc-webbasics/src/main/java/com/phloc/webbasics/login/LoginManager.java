@@ -58,7 +58,7 @@ public class LoginManager
   @OverrideOnDemand
   protected IHTMLProvider createLoginScreen (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
   {
-    return new BasicLoginHTML (bLoginError, eLoginResult);
+    return new LoginHTMLProvider (bLoginError, eLoginResult);
   }
 
   /**

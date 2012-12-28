@@ -73,14 +73,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   }
 
   public static final String DEFAULT_INIT_PARAMETER_TRACE = "trace";
-  @Deprecated
-  public static final String INIT_PARAMETER_TRACE = DEFAULT_INIT_PARAMETER_TRACE;
   public static final String DEFAULT_INIT_PARAMETER_DEBUG = "debug";
-  @Deprecated
-  public static final String INIT_PARAMETER_DEBUG = DEFAULT_INIT_PARAMETER_DEBUG;
   public static final String DEFAULT_INIT_PARAMETER_PRODUCTION = "production";
-  @Deprecated
-  public static final String INIT_PARAMETER_PRODUCTION = DEFAULT_INIT_PARAMETER_PRODUCTION;
   public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
   public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
   public static final String INIT_PARAMETER_NO_CHECK_FILE_ACCESS = "noCheckFileAccess";

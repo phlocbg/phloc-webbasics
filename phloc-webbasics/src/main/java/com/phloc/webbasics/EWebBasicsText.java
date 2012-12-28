@@ -40,6 +40,7 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
   // Misc texts
   PAGE_HELP_TITLE ("Hilfe zu ''{0}'' anzeigen", "Show help for ''{0}''"),
   DOWNLOAD ("Download", "Download"),
+  EMAIL_ADDRESS ("E-Mail-Adresse", "Email address"),
   LOGIN_HEADER ("Login", "Login"),
   LOGIN_ERROR_MSG ("Benutzername und/oder Passwort sind ungültig!", "User name and/or password are invalid!"),
   LOGIN_FIELD_USERNAME ("Benutzername", "User name"),
