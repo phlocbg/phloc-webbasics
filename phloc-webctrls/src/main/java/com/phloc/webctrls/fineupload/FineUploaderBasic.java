@@ -730,7 +730,7 @@ public class FineUploaderBasic
       if (m_bRequestForceMultipart != DEFAULT_REQUEST_FORCE_MULTIPART)
         aRequest.setBooleanProperty ("forceMultipart", m_bRequestForceMultipart);
       if (!m_sRequestInputName.equals (DEFAULT_REQUEST_INPUT_NAME))
-        ret.setStringProperty ("inputName", m_sRequestInputName);
+        aRequest.setStringProperty ("inputName", m_sRequestInputName);
 
       if (!aRequest.isEmpty ())
         ret.setObjectProperty ("request", aRequest);
