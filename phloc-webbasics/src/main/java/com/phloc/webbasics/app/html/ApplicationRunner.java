@@ -20,8 +20,13 @@ package com.phloc.webbasics.app.html;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
+import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
+import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
@@ -35,7 +40,10 @@ public final class ApplicationRunner
 {
   static
   {
-    HCSettings.setConversionSettingsProvider (new WebBasicsHCConversionSettingsProvider (ApplicationWebSettings.getHTMLVersion ()));
+    final HCConversionSettingsProvider aCSP = ((HCConversionSettingsProvider) HCSettings.getConversionSettingsProvider ());
+    aCSP.setXMLWriterSettings (new XMLWriterSettings ().setFormat (EXMLSerializeFormat.XHTML)
+                                                       .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING));
+    aCSP.setConsistencyChecksEnabled (GlobalDebug.isDebugMode ());
   }
 
   private ApplicationRunner ()
