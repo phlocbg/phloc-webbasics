@@ -19,37 +19,22 @@ package com.phloc.webbasics.app.layout;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.media.ECSSMedium;
-import com.phloc.html.CHTMLCharset;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
-import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
-import com.phloc.html.hc.html.HCLink;
-import com.phloc.html.hc.html.HCScriptFile;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.html.hc.impl.HCConditionalCommentNode;
-import com.phloc.html.meta.EStandardMetaElement;
-import com.phloc.html.meta.MetaElement;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.html.HTMLConfigManager;
-import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 import com.phloc.webbasics.app.html.InternalErrorHandler;
 
 /**
@@ -57,7 +42,7 @@ import com.phloc.webbasics.app.html.InternalErrorHandler;
  * 
  * @author philip
  */
-public class LayoutHTMLProvider implements IHTMLProvider
+public class LayoutHTMLProvider extends AbstractHTMLProvider
 {
   public static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
@@ -98,82 +83,6 @@ public class LayoutHTMLProvider implements IHTMLProvider
   protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
   {}
 
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected Map <String, String> getAllMetaTags ()
-  {
-    return HTMLConfigManager.getInstance ().getAllMetaTags ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected List <String> getAllCSSFiles ()
-  {
-    return HTMLConfigManager.getInstance ().getAllCSSFiles ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected List <String> getAllCSSPrintFiles ()
-  {
-    return HTMLConfigManager.getInstance ().getAllCSSPrintFiles ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected List <String> getAllCSSIEFiles ()
-  {
-    return HTMLConfigManager.getInstance ().getAllCSSIEFiles ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected List <String> getAllJSFiles ()
-  {
-    return HTMLConfigManager.getInstance ().getAllJSFiles ();
-  }
-
-  /**
-   * Fill the HTML HEAD element.
-   * 
-   * @param aHtml
-   *        The HTML object to be filled.
-   */
-  @OverrideOnDemand
-  @OverridingMethodsMustInvokeSuper
-  protected void fillHead (@Nonnull final HCHtml aHtml)
-  {
-    final HCHead aHead = aHtml.getHead ();
-
-    // Special meta tag
-    aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (CMimeType.TEXT_XML.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
-
-    // Add all configured meta element
-    for (final Map.Entry <String, String> aEntry : getAllMetaTags ().entrySet ())
-      aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
-
-    // Add configured CSS
-    for (final String sCSSFile : getAllCSSFiles ())
-      aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSFile)));
-
-    // Add configured print-only CSS
-    for (final String sCSSPrintFile : getAllCSSPrintFiles ())
-      aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSPrintFile)).addMedium (ECSSMedium.PRINT));
-
-    // Add configured IE-only CSS
-    for (final String sCSSIEFile : getAllCSSIEFiles ())
-      aHead.addCSS (HCConditionalCommentNode.createForIE (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSIEFile))));
-
-    // Add all configured JS
-    for (final String sJSFile : getAllJSFiles ())
-      aHead.addJS (HCScriptFile.create (LinkUtils.getURLWithContext (sJSFile)));
-  }
-
   @OverrideOnDemand
   @Nullable
   protected IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
@@ -184,19 +93,12 @@ public class LayoutHTMLProvider implements IHTMLProvider
     return LayoutManager.getInstance ().getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
   }
 
-  @OverrideOnDemand
+  @Override
   @Nonnull
-  protected HCHtml createHCHtml ()
+  protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nonnull final HCHtml aHtml,
+                           @Nonnull final Locale aDisplayLocale)
   {
-    return new HCHtml ();
-  }
-
-  @Nonnull
-  public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    final HCHtml aHtml = createHCHtml ();
-    final Locale aDisplayLocale = ApplicationRequestManager.getRequestDisplayLocale ();
-
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
 
@@ -217,10 +119,5 @@ public class LayoutHTMLProvider implements IHTMLProvider
     }
 
     prepareBodyAfterAreas (aHtml);
-
-    // build HTML header (after body for per-request stuff)
-    fillHead (aHtml);
-
-    return aHtml;
   }
 }

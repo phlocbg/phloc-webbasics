@@ -32,7 +32,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.app.html.ApplicationRunner;
+import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.layout.LayoutHTMLProvider;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
@@ -109,7 +109,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
     {
       // Who is responsible for creating the HTML?
       final IHTMLProvider aHTMLProvider = createHTMLProvider (aRequestScope);
-      ApplicationRunner.createHTMLResponse (aRequestScope, aUnifiedResponse, aHTMLProvider);
+      WebHTMLCreator.createHTMLResponse (aRequestScope, aUnifiedResponse, aHTMLProvider);
     }
     catch (final Throwable t)
     {

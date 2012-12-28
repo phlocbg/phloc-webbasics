@@ -27,6 +27,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCButton_Submit;
 import com.phloc.html.hc.html.HCCenter;
 import com.phloc.html.hc.html.HCCol;
@@ -34,22 +35,22 @@ import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
+import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
-import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.layout.LayoutHTMLProvider;
+import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 
-public class BasicLoginHTML extends LayoutHTMLProvider
+public class BasicLoginHTML extends AbstractHTMLProvider
 {
   private final boolean m_bLoginError;
   private final ELoginResult m_eLoginResult;
 
   public BasicLoginHTML (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
   {
-    super (CLogin.LAYOUT_AREAID_LOGIN);
     if (eLoginResult == null)
       throw new NullPointerException ("loginResult");
     m_bLoginError = bLoginError;
@@ -136,12 +137,14 @@ public class BasicLoginHTML extends LayoutHTMLProvider
   protected void customizeLoginFields (@Nonnull final HCTable aTable, @Nonnull final Locale aDisplayLocale)
   {}
 
-  @OverrideOnDemand
-  @Nullable
-  protected HCNodeList getLoginScreen (@Nonnull final Locale aDisplayLocale)
+  @Override
+  protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nonnull final HCHtml aHtml,
+                           @Nonnull final Locale aDisplayLocale)
   {
-    final HCNodeList ret = new HCNodeList ();
-    final HCCenter aCenter = ret.addAndReturnChild (new HCCenter ());
+    final HCBody aBody = aHtml.getBody ();
+    final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN));
+    final HCCenter aCenter = aSpan.addAndReturnChild (new HCCenter ());
     final HCForm aForm = aCenter.addAndReturnChild (new HCForm (new SimpleURL ()));
     aForm.setSubmitPressingEnter (true);
 
@@ -168,16 +171,5 @@ public class BasicLoginHTML extends LayoutHTMLProvider
     // Submit button
     final AbstractHCCell aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());
     aCell.addChild (new HCButton_Submit (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale)));
-
-    return ret;
-  }
-
-  @Override
-  @Nullable
-  protected final IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                            @Nonnull final String sAreaID,
-                                            @Nonnull final Locale aDisplayLocale)
-  {
-    return getLoginScreen (aDisplayLocale);
   }
 }
