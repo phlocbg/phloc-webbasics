@@ -85,22 +85,27 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
       // Manually trigger upload when form is submitted
 
       // Get closest form to the input ID
-      final JSVar aForm = aPkg.var ("f", JQuery.idRef (sID).closest ().arg (EHTMLElement.FORM.getElementName ()));
+      final JSVar aForm = aPkg.var ("f" + sID, JQuery.idRef (sID).closest ().arg (EHTMLElement.FORM.getElementName ()));
 
       final JSAnonymousFunction aOnClick = new JSAnonymousFunction ();
+
+      // If no file was uploaded, process file normally
       aOnClick.body ()._if (aCnt.eq (0))._then ()._return (true);
-      final JSVar aFU = aOnClick.body ().var ("fu", JQuery.idRef (sID));
+
+      final JSVar aUpload = aOnClick.body ().var ("u" + sID, JQuery.idRef (sID));
       {
         // assign an "onComplete" handler to the fileuploader, that submits the
-        // form, as soon, as all uploaded files are done
+        // form, as soon, as all uploaded files are handled
         final JSAnonymousFunction aOnCompete = new JSAnonymousFunction ();
         final JSVar aInProgress = aOnCompete.body ().var ("nInProgress",
-                                                          aFU.invoke ("fineUploader").arg ("getInProgress"));
+                                                          aUpload.invoke ("fineUploader").arg ("getInProgress"));
         aOnCompete.body ()._if (aInProgress.eq (0))._then ().add (aForm.invoke ("submit"));
-        aOnClick.body ().invoke (aFU, "on").arg ("complete").arg (aOnCompete);
+        aOnClick.body ().add (aUpload.invoke ("on").arg ("complete").arg (aOnCompete));
       }
-      aOnClick.body ().invoke (aFU, "fineUploader").arg ("uploadStoredFiles");
+      // Start the uploading manually
+      aOnClick.body ().invoke (aUpload, "fineUploader").arg ("uploadStoredFiles");
       aOnClick.body ()._return (false);
+
       // Find the first ":submit" element of the closest form of the passed
       // element and set the "click" handler
       aPkg.addStatement (JQuery.select (JQuerySelector.submit).arg (aForm).click ().arg (aOnClick));
