@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
@@ -58,7 +59,7 @@ public class HCGoogleAnalytics extends HCScript
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageview")));
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageLoadTime")));
     final JSAnonymousFunction aAnonFunction = new JSAnonymousFunction ();
-    final JSVar ga = aAnonFunction.body ().decl ("ga", JSHtml.documentCreateElement ().arg ("script"));
+    final JSVar ga = aAnonFunction.body ().var ("ga", JSHtml.documentCreateElement (EHTMLElement.SCRIPT));
     aAnonFunction.body ().add (ga.ref ("type").assign (CMimeType.TEXT_JAVASCRIPT.getAsString ()));
     aAnonFunction.body ().add (ga.ref ("async").assign (true));
     aAnonFunction.body ().add (ga.ref ("src").assign (JSOp.cond (JSExpr.lit ("https:")
@@ -66,7 +67,8 @@ public class HCGoogleAnalytics extends HCScript
                                                                  JSExpr.lit ("https://ssl"),
                                                                  JSExpr.lit ("http://www"))
                                                           .plus (".google-analytics.com/ga.js")));
-    final JSVar s = aAnonFunction.body ().decl ("s", JSHtml.documentGetElementsByTagName ("script").component (0));
+    final JSVar s = aAnonFunction.body ().var ("s",
+                                               JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT).component (0));
     aAnonFunction.body ().add (s.ref ("parentNode").invoke ("insertBefore").arg (ga).arg (s));
     aPkg.invoke (aAnonFunction);
     return aPkg;
