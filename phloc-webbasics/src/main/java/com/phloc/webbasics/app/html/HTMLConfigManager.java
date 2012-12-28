@@ -24,12 +24,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.reader.XMLListHandler;
 import com.phloc.commons.microdom.reader.XMLMapHandler;
@@ -46,6 +47,7 @@ import com.phloc.commons.microdom.reader.XMLMapHandler;
  * 
  * @author philip
  */
+@Immutable
 public final class HTMLConfigManager
 {
   public static final String FILENAME_CSS_XML = "html/css.xml";
@@ -105,37 +107,37 @@ public final class HTMLConfigManager
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getAllCSSFiles ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aAllCSSFiles);
+    return ContainerHelper.newList (m_aAllCSSFiles);
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getAllCSSPrintFiles ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aAllCSSPrintFiles);
+    return ContainerHelper.newList (m_aAllCSSPrintFiles);
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getAllCSSIEFiles ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aAllCSSIEFiles);
+    return ContainerHelper.newList (m_aAllCSSIEFiles);
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getAllJSFiles ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aAllJSFiles);
+    return ContainerHelper.newList (m_aAllJSFiles);
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Map <String, String> getAllMetaTags ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aAllMetaTags);
+    return ContainerHelper.newMap (m_aAllMetaTags);
   }
 }

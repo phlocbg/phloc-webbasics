@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.mime.IMimeType;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
@@ -40,14 +41,24 @@ public final class ApplicationRunner
   private ApplicationRunner ()
   {}
 
+  public static boolean isIndentAndAlign ()
+  {
+    return true;
+  }
+
+  @Nonnull
+  public static IMimeType getMimeType ()
+  {
+    return CMimeType.TEXT_HTML;
+  }
+
   public static void createHTMLResponse (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                          @Nonnull final UnifiedResponse aUnifiedResponse,
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
-    final boolean bIndentAndAlign = true;
-    // use getCloneIfNecessary in phloc-html > 3.7.1
+    final boolean bIndentAndAlign = isIndentAndAlign ();
     final IHCConversionSettings aCS = HCSettings.getConversionSettings (bIndentAndAlign)
-                                                .getClone (ApplicationWebSettings.getHTMLVersion ());
+                                                .getCloneIfNecessary (ApplicationWebSettings.getHTMLVersion ());
     JSPrinter.setIndentAndAlign (bIndentAndAlign);
 
     // Build the HC tree
@@ -55,8 +66,8 @@ public final class ApplicationRunner
     // Convert to String
     final String sXMLCode = HCSettings.getAsHTMLString (aHtml, aCS);
     // Write to response
-    aUnifiedResponse.setMimeType (CMimeType.TEXT_HTML)
-                    .setContentAndCharset (sXMLCode, HCSettings.getHTMLCharset (false))
+    aUnifiedResponse.setMimeType (getMimeType ())
+                    .setContentAndCharset (sXMLCode, aCS.getXMLWriterSettings ().getCharsetObj ())
                     .disableCaching ();
   }
 }

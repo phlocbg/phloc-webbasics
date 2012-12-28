@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.html;
+package com.phloc.webbasics.app.layout;
 
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +28,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
@@ -47,6 +48,9 @@ import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.html.HTMLConfigManager;
+import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.app.html.InternalErrorHandler;
 
 /**
  * Main class for creating HTML output
@@ -94,6 +98,46 @@ public class LayoutHTMLProvider implements IHTMLProvider
   protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
   {}
 
+  @Nonnull
+  @ReturnsMutableCopy
+  @OverrideOnDemand
+  protected Map <String, String> getAllMetaTags ()
+  {
+    return HTMLConfigManager.getInstance ().getAllMetaTags ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  @OverrideOnDemand
+  protected List <String> getAllCSSFiles ()
+  {
+    return HTMLConfigManager.getInstance ().getAllCSSFiles ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  @OverrideOnDemand
+  protected List <String> getAllCSSPrintFiles ()
+  {
+    return HTMLConfigManager.getInstance ().getAllCSSPrintFiles ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  @OverrideOnDemand
+  protected List <String> getAllCSSIEFiles ()
+  {
+    return HTMLConfigManager.getInstance ().getAllCSSIEFiles ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  @OverrideOnDemand
+  protected List <String> getAllJSFiles ()
+  {
+    return HTMLConfigManager.getInstance ().getAllJSFiles ();
+  }
+
   /**
    * Fill the HTML HEAD element.
    * 
@@ -110,23 +154,23 @@ public class LayoutHTMLProvider implements IHTMLProvider
     aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (CMimeType.TEXT_XML.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
 
     // Add all configured meta element
-    for (final Map.Entry <String, String> aEntry : HTMLConfigManager.getInstance ().getAllMetaTags ().entrySet ())
+    for (final Map.Entry <String, String> aEntry : getAllMetaTags ().entrySet ())
       aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
 
     // Add configured CSS
-    for (final String sCSSFile : HTMLConfigManager.getInstance ().getAllCSSFiles ())
+    for (final String sCSSFile : getAllCSSFiles ())
       aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSFile)));
 
     // Add configured print-only CSS
-    for (final String sCSSPrintFile : HTMLConfigManager.getInstance ().getAllCSSPrintFiles ())
+    for (final String sCSSPrintFile : getAllCSSPrintFiles ())
       aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSPrintFile)).addMedium (ECSSMedium.PRINT));
 
     // Add configured IE-only CSS
-    for (final String sCSSIEFile : HTMLConfigManager.getInstance ().getAllCSSIEFiles ())
+    for (final String sCSSIEFile : getAllCSSIEFiles ())
       aHead.addCSS (HCConditionalCommentNode.createForIE (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSIEFile))));
 
     // Add all configured JS
-    for (final String sJSFile : HTMLConfigManager.getInstance ().getAllJSFiles ())
+    for (final String sJSFile : getAllJSFiles ())
       aHead.addJS (HCScriptFile.create (LinkUtils.getURLWithContext (sJSFile)));
   }
 

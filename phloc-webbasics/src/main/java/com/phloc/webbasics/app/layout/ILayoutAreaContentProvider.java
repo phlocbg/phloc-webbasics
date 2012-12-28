@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.html;
+package com.phloc.webbasics.app.layout;
 
 import java.util.Locale;
 
@@ -30,7 +30,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author philip
  */
-public interface IAreaContentProvider
+public interface ILayoutAreaContentProvider
 {
   /**
    * @param aRequestScope

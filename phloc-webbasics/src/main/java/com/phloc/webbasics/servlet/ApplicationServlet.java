@@ -34,7 +34,7 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.html.ApplicationRunner;
 import com.phloc.webbasics.app.html.IHTMLProvider;
-import com.phloc.webbasics.app.html.LayoutHTMLProvider;
+import com.phloc.webbasics.app.layout.LayoutHTMLProvider;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 import com.phloc.webbasics.web.UnifiedResponse;
 

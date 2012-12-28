@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.html;
+package com.phloc.webbasics.app.layout;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,7 +45,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 public final class LayoutManager extends GlobalSingleton
 {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, IAreaContentProvider> m_aContentProviders = new LinkedHashMap <String, IAreaContentProvider> ();
+  private final Map <String, ILayoutAreaContentProvider> m_aContentProviders = new LinkedHashMap <String, ILayoutAreaContentProvider> ();
 
   @UsedViaReflection
   @Deprecated
@@ -59,7 +59,7 @@ public final class LayoutManager extends GlobalSingleton
   }
 
   public void registerAreaContentProvider (@Nonnull final String sAreaID,
-                                           @Nonnull final IAreaContentProvider aContentProvider)
+                                           @Nonnull final ILayoutAreaContentProvider aContentProvider)
   {
     if (StringHelper.hasNoText (sAreaID))
       throw new IllegalArgumentException ("areaID");
@@ -107,7 +107,7 @@ public final class LayoutManager extends GlobalSingleton
     m_aRWLock.readLock ().lock ();
     try
     {
-      final IAreaContentProvider aContentProvider = m_aContentProviders.get (sAreaID);
+      final ILayoutAreaContentProvider aContentProvider = m_aContentProviders.get (sAreaID);
       return aContentProvider == null ? null : aContentProvider.getContent (aRequestScope, aDisplayLocale);
     }
     finally
