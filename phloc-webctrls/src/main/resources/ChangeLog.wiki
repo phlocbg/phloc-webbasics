@@ -1,11 +1,16 @@
 #summary Change log of phloc-webctrls
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>12/12/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.2</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>12/28/12</td><td colspan="4">_Release *0.9.7*_</td></tr>
+<tr><td>12/23/12</td><td>add</td><td>tech</td><td></td><td>Added DataTables 1.9.4</td></tr>
+<tr><td>12/23/12</td><td>add</td><td>tech</td><td></td><td>Added TipTip 1.3</td></tr>
+<tr><td>12/20/12</td><td>add</td><td>tech</td><td></td><td>Added FineUploader 3.1.1</td></tr>
+<tr><td>12/12/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.2</td></tr>
 <tr><td>11/26/12</td><td>add</td><td>tech</td><td></td><td>Added jQuery 1.8.3</td></tr>
 <tr><td>11/26/12</td><td>change</td><td>api</td><td>*yes*</td><td>BootstrapCustomizer now requires the version number, for which the customizing should be performed</td></tr>
 <tr><td>11/6/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.1</td></tr>
 <tr><td>10/30/12</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.2.0</td></tr>
+<tr border="1"><td>10/9/12</td><td colspan="4">_Release *0.9.6*_</td></tr>
 <tr><td>9/20/12</td><td>update</td><td>performance</td><td></td><td>Performance improvement by using [http://code.google.com/p/phloc-commons phloc-commons] 3.8.4</td></tr>
 <tr border="1"><td>9/18/12</td><td colspan="4">_Release *0.9.5*_</td></tr>
 <tr border="1"><td>9/11/12</td><td colspan="4">_Release *0.9.4*_</td></tr>

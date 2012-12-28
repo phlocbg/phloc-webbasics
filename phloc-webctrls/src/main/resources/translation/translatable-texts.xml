@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<translationitems count="74">
-  <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
+<translationitems count="89">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.FIRST">
     <de>Erster</de>
     <en>First</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO">
     <de>_START_ bis _END_ von _TOTAL_ Einträgen</de>
     <en>Showing _START_ to _END_ of _TOTAL_ entries</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_EMPTY">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_EMPTY">
     <de>0 bis 0 von 0 Einträgen</de>
     <en>Showing 0 to 0 of 0 entries</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_FILTERED">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_FILTERED">
     <de>(gefiltert von _MAX_  Einträgen)</de>
     <en>(filtered from _MAX_ total entries)</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_POSTFIX">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_POSTFIX">
     <de></de>
     <en></en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.LAST">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LAST">
     <de>Letzter</de>
     <en>Last</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.LENGTH_MENU">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LENGTH_MENU">
     <de>_MENU_ Einträge anzeigen</de>
     <en>Show _MENU_ entries</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.NEXT">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.NEXT">
     <de>Nächster</de>
     <en>Next</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.PREVIOUS">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PREVIOUS">
     <de>Zurück</de>
     <en>Previous</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.PROCESSING">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PROCESSING">
     <de>Bitte warten...</de>
     <en>Processing...</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.SEARCH">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.SEARCH">
     <de>Suchen:</de>
     <en>Search:</en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.URL">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.URL">
     <de></de>
     <en></en>
   </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.ZERO_RECORDS">
     <de>Keine Einträge vorhanden.</de>
     <en>No matching records found.</en>
   </item>
@@ -307,5 +307,67 @@
   <item id="com.phloc.webctrls.facebook.EFacebookText.SHARE">
     <de>Share</de>
     <en>Share</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderBasicText.EMPTY_ERROR">
+    <de>{file} ist leer.</de>
+    <en>{file} is empty, please select files again without it.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderBasicText.MIN_SIZE_ERROR">
+    <de>{file} ist zu klein. Die minimale Dateigröße ist {minSizeLimit}.</de>
+    <en>{file} is too small, minimum file size is {minSizeLimit}.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderBasicText.NO_FILES_ERROR">
+    <de>Es wurde keine Dateien zum Hochladen ausgewählt.</de>
+    <en>No files to upload.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderBasicText.ON_LEAVE">
+    <de>Derzeit werden Dateien hochgeladen. Wenn Sie diese seiten nun verlassen, wird das Hochladen abgebrochen!</de>
+    <en>The files are being uploaded, if you leave now the upload will be cancelled.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderBasicText.SIZE_ERROR">
+    <de>{file} ist zu groß. Die maximale Dateigröße ist {sizeLimit}.</de>
+    <en>{file} is too large, maximum file size is {sizeLimit}.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderBasicText.TYPE_ERROR">
+    <de>{file} hat eine ungültige Erweiterung.
+Erlaubt sind nur: {extensions}.</de>
+    <en>{file} has an invalid extension.
+Valid extension(s): {extensions}.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.CANCEL_BUTTON">
+    <de>Abbrechen</de>
+    <en>Cancel</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.DRAG_ZONE">
+    <de>Dateien hier loslassen, um sie hochzuladen</de>
+    <en>Drop files here to upload</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.DROP_PROCESSING">
+    <de>Verarbeite Dateien...</de>
+    <en>Processing dropped files...</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.FAIL_UPLOAD">
+    <de>Hochladen fehlgeschlagen</de>
+    <en>Upload failed</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.FORMAT_PROGRESS">
+    <de>{percent}% von {total_size}</de>
+    <en>{percent}% of {total_size}</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.RETRY_BUTTON">
+    <de>Wiederholen</de>
+    <en>Retry</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.TOO_MANY_FILE_ERROR">
+    <de>Sie können immer nur eine Datei hierher ziehen.</de>
+    <en>You may only drop one file.</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.UPLOAD_BUTTON">
+    <de>Datei auswählen</de>
+    <en>Upload a file</en>
+  </item>
+  <item id="com.phloc.webctrls.fineupload.EFineUploaderText.WAITING_FOR_RESPONSE">
+    <de>Verarbeitung...</de>
+    <en>Processing...</en>
   </item>
 </translationitems>
