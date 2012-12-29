@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -44,10 +45,8 @@ public final class UserDataObject
   {
     if (StringHelper.hasNoText (sPath))
       throw new IllegalArgumentException ("path");
-    if (sPath.startsWith ("/"))
-      m_sPath = sPath;
-    else
-      m_sPath = '/' + sPath;
+    // Ensure only forward slashes
+    m_sPath = FilenameHelper.getPathUsingUnixSeparator (FilenameHelper.ensurePathStartingWithSeparator (sPath));
   }
 
   /**
