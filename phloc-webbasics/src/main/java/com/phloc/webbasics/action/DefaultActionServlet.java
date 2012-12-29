@@ -21,6 +21,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
@@ -36,6 +39,7 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public class DefaultActionServlet extends AbstractUnifiedResponseServlet
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultActionServlet.class);
   private static final String SCOPE_ATTR_ACTION_NAME = "$defaultactionservlet.actionname";
   private static final String SCOPE_ATTR_EXECUTOR = "$defaultactionservlet.executor";
 
@@ -53,6 +57,8 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
     final IActionExecutor aActionExecutor = ActionManager.getInstance ().getActionExecutor (sAction);
     if (aActionExecutor == null)
     {
+      s_aLogger.warn ("Unknown action '" + sAction + "' provided!");
+
       // No such action
       aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
       return EContinue.BREAK;
