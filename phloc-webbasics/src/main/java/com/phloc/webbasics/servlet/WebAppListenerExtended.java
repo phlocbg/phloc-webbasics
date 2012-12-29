@@ -40,10 +40,10 @@ public class WebAppListenerExtended extends WebAppListener
   /**
    * Register all layout handler
    * 
-   * @param aLayoutManager
+   * @param aLayoutMgr
    */
   @OverrideOnDemand
-  protected void initLayout (@Nonnull final LayoutManager aLayoutManager)
+  protected void initLayout (@Nonnull final LayoutManager aLayoutMgr)
   {}
 
   /**
