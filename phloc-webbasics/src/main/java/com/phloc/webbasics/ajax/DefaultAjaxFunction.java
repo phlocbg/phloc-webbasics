@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -38,17 +39,29 @@ public class DefaultAjaxFunction extends AbstractAjaxFunction
     super (sFunctionName);
   }
 
+  /**
+   * @return The path to the AJAX servlet. Must start with a slash and end with
+   *         a slash!
+   */
+  @Nonnull
+  @Nonempty
+  @OverrideOnDemand
+  protected String getAjaxServletPath ()
+  {
+    return "/ajax/";
+  }
+
   @Nonnull
   @Nonempty
   public String getInvocationURI ()
   {
-    return LinkUtils.getURIWithContext ("/ajax/" + getName ());
+    return LinkUtils.getURIWithContext (getAjaxServletPath () + getName ());
   }
 
   @Nonnull
   @Nonempty
   public ISimpleURL getInvocationURL ()
   {
-    return LinkUtils.getURLWithContext ("/ajax/" + getName ());
+    return LinkUtils.getURLWithContext (getAjaxServletPath () + getName ());
   }
 }
