@@ -18,10 +18,14 @@
     limitations under the License.
 
 -->
-<translationitems count="69">
+<translationitems count="70">
   <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
     <de>Download</de>
     <en>Download</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.EMAIL_ADDRESS">
+    <de>E-Mail-Adresse</de>
+    <en>Email address</en>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.FILE_SELECT">
     <de>Dateiauswahl</de>
