@@ -75,7 +75,7 @@ public abstract class AbstractBulkImportExcel extends AbstractBulkImport
   {
     if (s == null)
       return null;
-    final StringBuilder aSB = new StringBuilder ();
+    final StringBuilder aSB = new StringBuilder (s.length ());
     for (final char c : s.toCharArray ())
       if (Character.getType (c) != Character.CONTROL)
         aSB.append (c);
@@ -89,7 +89,7 @@ public abstract class AbstractBulkImportExcel extends AbstractBulkImport
     if (sValue == null)
       return null;
 
-    final StringBuilder aSB = new StringBuilder ();
+    final StringBuilder aSB = new StringBuilder (sValue.length ());
     for (final char c : sValue.toCharArray ())
       if (Character.getType (c) != Character.CONTROL)
         aSB.append (c);

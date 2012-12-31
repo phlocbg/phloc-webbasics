@@ -33,7 +33,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
  * @author philip
  */
 @Translatable
-enum EExchangeFileTypeName implements IHasDisplayText
+public enum EExchangeFileTypeName implements IHasDisplayText
 {
   /** CSV - comma separated values */
   CSV ("CSV", "CSV"),

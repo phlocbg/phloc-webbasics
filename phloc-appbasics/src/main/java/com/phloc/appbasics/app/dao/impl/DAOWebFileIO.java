@@ -27,7 +27,6 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.io.WebFileIO;
-import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.SimpleFileIO;
@@ -66,10 +65,10 @@ public class DAOWebFileIO implements IDAOIO
     if (FileUtils.existsFile (aSrcFile))
     {
       // Delete destination file if present
-      if (WebIO.getFileOpMgr ().deleteFileIfExisting (aDstFile).isSuccess ())
+      if (WebFileIO.getFileOpMgr ().deleteFileIfExisting (aDstFile).isSuccess ())
       {
         // and rename existing file to backup file
-        WebIO.getFileOpMgr ().renameFile (aSrcFile, aDstFile);
+        WebFileIO.getFileOpMgr ().renameFile (aSrcFile, aDstFile);
       }
     }
   }

@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
-import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.file.FileUtils;
@@ -64,7 +63,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       // Ensure the parent directory is present
       final File aParentFile = m_aFile.getParentFile ();
       if (aParentFile != null)
-        WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentFile);
+        WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentFile);
     }
   }
 

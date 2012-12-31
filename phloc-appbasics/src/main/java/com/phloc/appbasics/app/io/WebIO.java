@@ -36,7 +36,6 @@ import com.phloc.commons.io.IWritableResource;
 import com.phloc.commons.io.IWritableResourceProvider;
 import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileOperationManager;
-import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resourceprovider.ClassPathResourceProvider;
 import com.phloc.commons.io.resourceprovider.FileSystemResourceProvider;
 import com.phloc.commons.io.resourceprovider.WritableResourceProviderChain;
@@ -56,7 +55,6 @@ public final class WebIO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebIO.class);
   private static IWritableResourceProvider s_aResourceProvider;
-  private static FileOperationManager s_aFileOpMgr = new FileOperationManager (new LoggingFileOperationCallback ());
 
   static
   {
@@ -87,18 +85,18 @@ public final class WebIO
     }
   }
 
+  @Deprecated
   @Nonnull
   public static void setFileOpMgr (@Nonnull final FileOperationManager aFileOpMgr)
   {
-    if (aFileOpMgr == null)
-      throw new NullPointerException ("fileOpMgr");
-    s_aFileOpMgr = aFileOpMgr;
+    WebFileIO.setFileOpMgr (aFileOpMgr);
   }
 
+  @Deprecated
   @Nonnull
   public static FileOperationManager getFileOpMgr ()
   {
-    return s_aFileOpMgr;
+    return WebFileIO.getFileOpMgr ();
   }
 
   /**
@@ -222,7 +220,7 @@ public final class WebIO
   @Nonnull
   public static FileIOError deleteFile (@Nonnull final File aFile)
   {
-    return s_aFileOpMgr.deleteFile (aFile);
+    return WebFileIO.getFileOpMgr ().deleteFile (aFile);
   }
 
   @Nonnull
@@ -234,13 +232,14 @@ public final class WebIO
   @Nonnull
   public static FileIOError deleteFileIfExisting (@Nonnull final File aFile)
   {
-    return s_aFileOpMgr.deleteFileIfExisting (aFile);
+    return WebFileIO.getFileOpMgr ().deleteFileIfExisting (aFile);
   }
 
   @Nonnull
   public static FileIOError deleteDirectory (@Nonnull final File fDir, final boolean bDeleteContent)
   {
-    return bDeleteContent ? s_aFileOpMgr.deleteDirRecursive (fDir) : s_aFileOpMgr.deleteDir (fDir);
+    return bDeleteContent ? WebFileIO.getFileOpMgr ().deleteDirRecursive (fDir) : WebFileIO.getFileOpMgr ()
+                                                                                           .deleteDir (fDir);
   }
 
   @Nonnull
@@ -260,14 +259,14 @@ public final class WebIO
   public static FileIOError createDirIfNotExisting (@Nonnull final String sDirName)
   {
     final File f = getDirectoryFile (sDirName);
-    return s_aFileOpMgr.createDirIfNotExisting (f);
+    return WebFileIO.getFileOpMgr ().createDirIfNotExisting (f);
   }
 
   @Nonnull
   public static FileIOError createDirRecursiveIfNotExisting (@Nonnull final String sDirName)
   {
     final File f = getDirectoryFile (sDirName);
-    return s_aFileOpMgr.createDirRecursiveIfNotExisting (f);
+    return WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (f);
   }
 
   @Nonnull
@@ -275,7 +274,7 @@ public final class WebIO
   {
     final File fOld = getReadableFile (sOldFilename);
     final File fNew = getWritableFile (sNewFilename);
-    return fOld == null ? ESuccess.FAILURE : s_aFileOpMgr.renameFile (fOld, fNew);
+    return fOld == null ? ESuccess.FAILURE : WebFileIO.getFileOpMgr ().renameFile (fOld, fNew);
   }
 
   /**

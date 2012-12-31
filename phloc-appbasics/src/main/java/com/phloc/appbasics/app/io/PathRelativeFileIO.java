@@ -66,7 +66,7 @@ public final class PathRelativeFileIO
       throw new NullPointerException ("basePath");
 
     // Ensure the directory is present
-    WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aBasePath);
+    WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aBasePath);
 
     // Must be an existing directory
     if (!aBasePath.isDirectory ())
@@ -299,8 +299,8 @@ public final class PathRelativeFileIO
   public FileIOError createDirectory (@Nonnull final String sRelativePath, final boolean bRecursive)
   {
     final File aDir = getFile (sRelativePath);
-    return bRecursive ? WebIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
-                     : WebIO.getFileOpMgr ().createDirIfNotExisting (aDir);
+    return bRecursive ? WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
+                     : WebFileIO.getFileOpMgr ().createDirIfNotExisting (aDir);
   }
 
   /**

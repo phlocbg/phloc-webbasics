@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
+import com.phloc.commons.io.file.FileOperationManager;
+import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.state.ISuccessIndicator;
 
@@ -46,6 +48,7 @@ import com.phloc.commons.state.ISuccessIndicator;
 @ThreadSafe
 public final class WebFileIO
 {
+  private static FileOperationManager s_aFileOpMgr = new FileOperationManager (new LoggingFileOperationCallback ());
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
@@ -54,6 +57,20 @@ public final class WebFileIO
 
   private WebFileIO ()
   {}
+
+  @Nonnull
+  public static void setFileOpMgr (@Nonnull final FileOperationManager aFileOpMgr)
+  {
+    if (aFileOpMgr == null)
+      throw new NullPointerException ("fileOpMgr");
+    s_aFileOpMgr = aFileOpMgr;
+  }
+
+  @Nonnull
+  public static FileOperationManager getFileOpMgr ()
+  {
+    return s_aFileOpMgr;
+  }
 
   @Deprecated
   public static void initBasePath (@Nonnull final File aBasePath)

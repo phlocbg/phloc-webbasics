@@ -34,7 +34,7 @@ import com.phloc.commons.collections.ContainerHelper;
  * @author philip
  */
 @Immutable
-public final class ConstantExportRecordProvider implements IExportRecordProvider
+public class ConstantExportRecordProvider implements IExportRecordProvider
 {
   private final IExportRecord m_aHeader;
   private final List <IExportRecord> m_aBody;

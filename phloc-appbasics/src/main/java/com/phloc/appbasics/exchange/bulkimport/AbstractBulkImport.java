@@ -39,21 +39,21 @@ import com.phloc.commons.name.IHasDisplayText;
 public abstract class AbstractBulkImport implements IBulkImport
 {
   private final int m_nHeaderRowsToSkip;
-  private final List <IHasDisplayText> m_aColumns;
+  private final List <IHasDisplayText> m_aColumnNames;
   private final List <EExchangeFileType> m_aFileTypes;
 
   protected AbstractBulkImport (@Nonnegative final int nHeaderRowsToSkip,
-                                @Nonnull @Nonempty final List <IHasDisplayText> aColumns,
+                                @Nonnull @Nonempty final List <IHasDisplayText> aColumnNames,
                                 @Nonnull @Nonempty final EExchangeFileType... aFileTypes)
   {
     if (nHeaderRowsToSkip < 0)
       throw new IllegalArgumentException ();
-    if (ContainerHelper.isEmpty (aColumns))
+    if (ContainerHelper.isEmpty (aColumnNames))
       throw new IllegalArgumentException ("columns");
     if (ArrayHelper.isEmpty (aFileTypes))
       throw new IllegalArgumentException ("fileTypes");
     m_nHeaderRowsToSkip = nHeaderRowsToSkip;
-    m_aColumns = aColumns;
+    m_aColumnNames = aColumnNames;
     m_aFileTypes = ContainerHelper.newUnmodifiableList (ContainerHelper.newOrderedSet (aFileTypes));
   }
 
@@ -66,7 +66,7 @@ public abstract class AbstractBulkImport implements IBulkImport
   @Nonnegative
   public final int getColumnCount ()
   {
-    return m_aColumns.size ();
+    return m_aColumnNames.size ();
   }
 
   @Nonnull
@@ -74,7 +74,7 @@ public abstract class AbstractBulkImport implements IBulkImport
   public final List <String> getColumnDescriptions (@Nonnull final Locale aContentLocale)
   {
     final List <String> ret = new ArrayList <String> (getColumnCount ());
-    for (final IHasDisplayText aColumn : m_aColumns)
+    for (final IHasDisplayText aColumn : m_aColumnNames)
       ret.add (aColumn.getDisplayText (aContentLocale));
     return ret;
   }

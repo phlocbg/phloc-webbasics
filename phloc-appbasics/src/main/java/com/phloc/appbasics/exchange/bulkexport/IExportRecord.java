@@ -31,6 +31,11 @@ public interface IExportRecord
   List <? extends IExportRecordField> getAllFields ();
 
   /**
+   * @return <code>true</code> if at least one field is present
+   */
+  boolean hasFields ();
+
+  /**
    * @return The number of fields in this record.
    */
   @Nonnegative

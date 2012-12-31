@@ -34,7 +34,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
  * @author philip
  */
 @Translatable
-enum EExchangeFileTypeText implements IHasDisplayTextWithArgs
+public enum EExchangeFileTypeText implements IHasDisplayTextWithArgs
 {
   EXPORT_AS ("Exportieren als {0}", "Export as {0}"),
   SAVE_AS ("Speichern als {0}", "Save as {0}");

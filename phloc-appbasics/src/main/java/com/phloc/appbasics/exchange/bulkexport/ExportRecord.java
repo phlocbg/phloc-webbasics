@@ -34,6 +34,7 @@ import org.joda.time.LocalTime;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 public final class ExportRecord implements IExportRecord
@@ -50,6 +51,24 @@ public final class ExportRecord implements IExportRecord
 
     for (final IExportRecordField aField : aFields)
       addField (aField);
+  }
+
+  public ExportRecord (@Nonnull final Iterable <? extends IExportRecordField> aFields)
+  {
+    if (aFields == null)
+      throw new NullPointerException ("fields");
+
+    for (final IExportRecordField aField : aFields)
+      addField (aField);
+  }
+
+  @Nonnull
+  public EChange removeFieldAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex < 0 || nIndex >= m_aFields.size ())
+      return EChange.UNCHANGED;
+    m_aFields.remove (nIndex);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -162,6 +181,11 @@ public final class ExportRecord implements IExportRecord
   public List <IExportRecordField> getAllFields ()
   {
     return ContainerHelper.makeUnmodifiable (m_aFields);
+  }
+
+  public boolean hasFields ()
+  {
+    return !m_aFields.isEmpty ();
   }
 
   @Nonnegative
