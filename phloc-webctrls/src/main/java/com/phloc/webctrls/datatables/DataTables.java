@@ -49,6 +49,7 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_PAGINATE = true;
   public static final boolean DEFAULT_STATE_SAVE = false;
   public static final boolean DEFAULT_JQUERY_UI = false;
+  public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
 
   private final String m_sParentElementID;
   private Locale m_aDisplayLocale;
@@ -57,7 +58,7 @@ public class DataTables implements IHCNodeBuilder
   private boolean m_bJQueryUI = DEFAULT_JQUERY_UI;
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
-  private EDataTablesPaginationType m_ePaginationType;
+  private EDataTablesPaginationType m_ePaginationType = DEFAULT_PAGINATION_TYPE;
   // server side processing
   private ISimpleURL m_aAjaxSource;
   private EHTTPMethod m_eServerMethod;
