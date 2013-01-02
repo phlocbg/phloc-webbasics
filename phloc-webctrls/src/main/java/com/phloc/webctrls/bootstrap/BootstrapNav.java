@@ -137,19 +137,19 @@ public class BootstrapNav extends HCUL
   }
 
   @Nonnull
-  public BootstrapDropDownMenu addDropDownItem (@Nullable final String sText)
+  public HCLI addDropDownItem (@Nullable final String sText)
   {
     return addDropDownItem (new HCTextNode (sText));
   }
 
   @Nonnull
-  public BootstrapDropDownMenu addDropDownItem (@Nullable final IHCNode aText)
+  public HCLI addDropDownItem (@Nullable final IHCNode aText)
   {
     final HCLI aLI = addItem ().addClass (CBootstrapCSS.DROPDOWN);
-    aLI.addChild (new HCA (new SimpleURL ("#")).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
-                                               .setCustomAttr ("data-toggle", "dropdown")
-                                               .addChild (aText)
-                                               .addChild (new BootstrapCaret ()));
-    return aLI.addAndReturnChild (new BootstrapDropDownMenu ());
+    aLI.addChild (new HCA (new SimpleURL ()).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
+                                            .setCustomAttr ("data-toggle", "dropdown")
+                                            .addChild (aText)
+                                            .addChild (new BootstrapCaret ()));
+    return aLI;
   }
 }

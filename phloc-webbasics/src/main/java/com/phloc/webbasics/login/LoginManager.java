@@ -32,8 +32,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.app.html.IHTMLProvider;
+import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
@@ -71,6 +71,16 @@ public class LoginManager
   protected void onUserLogin (@Nonnull @Nonempty final String sUserLoginName)
   {}
 
+  /**
+   * Main login
+   * 
+   * @param aRequestScope
+   *        Request scope
+   * @param aUnifiedResponse
+   *        Response
+   * @return {@link EContinue#BREAK} to indicate that no user is logged in and
+   *         therefore the login screen should be shown
+   */
   @Nonnull
   public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                                 @Nonnull final UnifiedResponse aUnifiedResponse)
@@ -115,8 +125,8 @@ public class LoginManager
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
         WebHTMLCreator.createHTMLResponse (aRequestScope,
-                                              aUnifiedResponse,
-                                              createLoginScreen (bLoginError, eLoginResult));
+                                           aUnifiedResponse,
+                                           createLoginScreen (bLoginError, eLoginResult));
       }
     }
 
