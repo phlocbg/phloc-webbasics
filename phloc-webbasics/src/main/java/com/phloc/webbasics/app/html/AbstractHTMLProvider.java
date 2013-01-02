@@ -50,6 +50,13 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   public AbstractHTMLProvider ()
   {}
 
+  @Nonnull
+  @OverrideOnDemand
+  protected Locale getDisplayLocale ()
+  {
+    return GlobalRequestManager.getRequestDisplayLocale ();
+  }
+
   @OverrideOnDemand
   @Nonnull
   protected HCHtml createHCHtml (@Nonnull final Locale aDisplayLocale)
@@ -157,7 +164,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @Nonnull
   public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    final Locale aDisplayLocale = GlobalRequestManager.getRequestDisplayLocale ();
+    final Locale aDisplayLocale = getDisplayLocale ();
 
     final HCHtml aHtml = createHCHtml (aDisplayLocale);
 
