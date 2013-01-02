@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
+import com.phloc.appbasics.app.menu.GlobalMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
@@ -48,14 +49,22 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
     @Nonnull
     protected IMenuTree getMenuTree ()
     {
-      return ApplicationMenuTree.getInstance ();
+      IMenuTree ret = ApplicationMenuTree.getInstance ();
+      // XXX hack alert :(
+      if (!ret.getRootItem ().hasChildren ())
+        ret = GlobalMenuTree.getInstance ();
+      return ret;
     }
 
     @Override
     @Nonnull
     protected ILocaleManager getLocaleManager ()
     {
-      return ApplicationLocaleManager.getInstance ();
+      ILocaleManager ret = ApplicationLocaleManager.getInstance ();
+      // XXX hack alert :(
+      if (!ret.hasLocales ())
+        ret = GlobalLocaleManager.getInstance ();
+      return ret;
     }
 
     @Override

@@ -70,13 +70,12 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
 
     final Map <String, IApplicationInitializer> aIniter = getAllInitializers ();
     if (ContainerHelper.isEmpty (aIniter))
-      throw new IllegalStateException ("No application IDs provided!");
+      throw new IllegalStateException ("No application initializers provided!");
 
     for (final Map.Entry <String, IApplicationInitializer> aEntry : aIniter.entrySet ())
     {
-      WebScopeManager.onRequestBegin (aEntry.getKey (),
-                                      new OfflineHttpServletRequest (),
-                                      new MockHttpServletResponse ());
+      final String sAppID = aEntry.getKey ();
+      WebScopeManager.onRequestBegin (sAppID, new OfflineHttpServletRequest (), new MockHttpServletResponse ());
       try
       {
         final IApplicationInitializer aInitializer = aEntry.getValue ();

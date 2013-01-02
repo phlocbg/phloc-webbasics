@@ -63,6 +63,12 @@ public interface ILocaleManager
   List <Locale> getAllAvailableLocales ();
 
   /**
+   * @return <code>true</code> if at least one locale is present,
+   *         <code>false</code> otherwise
+   */
+  boolean hasLocales ();
+
+  /**
    * Check if the passed locale is a supported locale.
    * 
    * @param aLocale

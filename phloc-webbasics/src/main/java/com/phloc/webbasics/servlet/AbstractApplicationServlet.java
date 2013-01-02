@@ -34,8 +34,6 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
-import com.phloc.webbasics.app.layout.GlobalLayoutManager;
-import com.phloc.webbasics.app.layout.LayoutHTMLProvider;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 import com.phloc.webbasics.web.UnifiedResponse;
 
@@ -44,13 +42,13 @@ import com.phloc.webbasics.web.UnifiedResponse;
  * 
  * @author philip
  */
-public class ApplicationServlet extends AbstractUnifiedResponseServlet
+public abstract class AbstractApplicationServlet extends AbstractUnifiedResponseServlet
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ApplicationServlet.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractApplicationServlet.class);
 
   private final List <IApplicationRequestListenerSPI> m_aListeners;
 
-  public ApplicationServlet ()
+  public AbstractApplicationServlet ()
   {
     m_aListeners = ContainerHelper.newList (ServiceLoaderBackport.load (IApplicationRequestListenerSPI.class));
   }
@@ -97,10 +95,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
    */
   @OverrideOnDemand
   @Nonnull
-  protected IHTMLProvider createHTMLProvider (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return new LayoutHTMLProvider (GlobalLayoutManager.getInstance ());
-  }
+  protected abstract IHTMLProvider createHTMLProvider (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope);
 
   @Override
   protected final void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,

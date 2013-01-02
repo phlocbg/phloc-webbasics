@@ -74,6 +74,11 @@ public final class ApplicationLocaleManager extends ApplicationSingleton impleme
     return m_aProxy.getAllAvailableLocales ();
   }
 
+  public boolean hasLocales ()
+  {
+    return m_aProxy.hasLocales ();
+  }
+
   public boolean isSupportedLocale (@Nullable final Locale aLocale)
   {
     return m_aProxy.isSupportedLocale (aLocale);

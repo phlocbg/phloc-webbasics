@@ -91,6 +91,11 @@ public class LocaleManager implements ILocaleManager
     return ContainerHelper.newList (m_aLocales);
   }
 
+  public boolean hasLocales ()
+  {
+    return !m_aLocales.isEmpty ();
+  }
+
   public boolean isSupportedLocale (@Nullable final Locale aLocale)
   {
     return m_aLocales.contains (aLocale);
