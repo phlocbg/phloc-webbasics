@@ -26,7 +26,8 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.app.GlobalRequestManager;
+import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.IRequestManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
@@ -179,13 +180,27 @@ public final class LinkUtils
   {
     if (sMenuItemID == null)
       throw new NullPointerException ("menu item id");
-    return new SimpleURL ().add (GlobalRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
+    return new SimpleURL ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
 
   @Nonnull
   public static SimpleURL getHomeLink ()
   {
     return new SimpleURL (WebScopeManager.getRequestScope ().getFullContextPath ());
+  }
+
+  @Deprecated
+  @Nonnull
+  public static SimpleURL getGlobalSelfHref ()
+  {
+    return getSelfHref ();
+  }
+
+  @Deprecated
+  @Nonnull
+  public static SimpleURL getGlobalSelfHref (@Nullable final Map <String, String> aParams)
+  {
+    return getSelfHref (aParams);
   }
 
   @Nonnull
@@ -197,15 +212,22 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    return getLinkToMenuItem (GlobalRequestManager.getRequestMenuItemID ()).addAll (aParams);
+    return getLinkToMenuItem (ApplicationRequestManager.getInstance ().getRequestMenuItemID ()).addAll (aParams);
+  }
+
+  @Deprecated
+  @Nonnull
+  public static SMap getGlobalDefaultParams ()
+  {
+    return getDefaultParams ();
   }
 
   @Nonnull
   public static SMap getDefaultParams ()
   {
-    return new SMap ().add (GlobalRequestManager.REQUEST_PARAMETER_MENUITEM,
-                            GlobalRequestManager.getRequestMenuItemID ())
-                      .add (GlobalRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
-                            GlobalRequestManager.getRequestDisplayLocale ().toString ());
+    return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM,
+                            ApplicationRequestManager.getInstance ().getRequestMenuItemID ())
+                      .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
+                            ApplicationRequestManager.getInstance ().getRequestDisplayLocale ().toString ());
   }
 }

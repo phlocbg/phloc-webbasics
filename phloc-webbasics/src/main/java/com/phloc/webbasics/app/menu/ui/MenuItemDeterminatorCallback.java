@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.GlobalRequestManager;
+import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
@@ -53,7 +53,7 @@ public class MenuItemDeterminatorCallback extends
     if (aMenuTree == null)
       throw new NullPointerException ("menuTree");
     m_aMenuTree = aMenuTree;
-    m_sSelectedItem = GlobalRequestManager.getRequestMenuItemID ();
+    m_sSelectedItem = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
     m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItem);
     // The selected item may be null if an invalid menu item ID was passed
   }

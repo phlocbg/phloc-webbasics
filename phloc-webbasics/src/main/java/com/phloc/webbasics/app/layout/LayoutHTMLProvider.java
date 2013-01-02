@@ -23,10 +23,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
@@ -46,25 +43,21 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
 {
   public static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
+  private final ILayoutManager m_aLayoutMgr;
   private final List <String> m_aLayoutAreaIDs;
 
   public LayoutHTMLProvider ()
   {
-    this (GlobalLayoutManager.getInstance ().getAllAreaIDs ());
+    this (GlobalLayoutManager.getInstance ());
   }
 
-  public LayoutHTMLProvider (@Nonnull @Nonempty final String sLayoutAreaID)
+  public LayoutHTMLProvider (@Nonnull final ILayoutManager aLayoutMgr)
   {
-    if (StringHelper.hasNoText (sLayoutAreaID))
-      throw new IllegalArgumentException ("layoutAreaID");
-    m_aLayoutAreaIDs = ContainerHelper.newList (sLayoutAreaID);
-  }
+    if (aLayoutMgr == null)
+      throw new NullPointerException ("LayoutManager");
 
-  public LayoutHTMLProvider (@Nonnull @Nonempty final List <String> aLayoutAreaIDs)
-  {
-    if (ContainerHelper.isEmpty (aLayoutAreaIDs))
-      throw new IllegalArgumentException ("layoutAreaIDs");
-    m_aLayoutAreaIDs = ContainerHelper.newList (aLayoutAreaIDs);
+    m_aLayoutMgr = aLayoutMgr;
+    m_aLayoutAreaIDs = aLayoutMgr.getAllAreaIDs ();
   }
 
   /**
@@ -90,7 +83,7 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
                                       @Nonnull final Locale aDisplayLocale)
   {
     // By default the layout manager is used
-    return GlobalLayoutManager.getInstance ().getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
+    return m_aLayoutMgr.getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
   }
 
   @Override

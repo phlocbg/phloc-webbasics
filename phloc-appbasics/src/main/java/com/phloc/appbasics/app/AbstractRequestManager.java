@@ -22,10 +22,10 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.menu.GlobalMenuTree;
-import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
@@ -43,36 +43,37 @@ import com.phloc.scopes.nonweb.mgr.ScopeManager;
  * 
  * @author philip
  */
-public final class GlobalRequestManager
+public abstract class AbstractRequestManager implements IRequestManager
 {
-  public static final String REQUEST_PARAMETER_MENUITEM = "menuitem";
-  private static final String SESSION_VALUE_MENUITEM = "$menuitem";
-
-  public static final String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
-  private static final String SESSION_VALUE_DISPLAY_LOCALE = "$displaylocale";
-
-  private GlobalRequestManager ()
+  public AbstractRequestManager ()
   {}
 
-  /**
-   * To be called upon the beginning of each request. Checks for the content of
-   * the request parameter {@value #REQUEST_PARAMETER_MENUITEM} to determine the
-   * selected menu item. Checks for the content of the request parameter
-   * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
-   * display locale.
-   */
-  public static void onRequestBegin (@Nonnull final IRequestScope aRequestScope)
+  @Nonnull
+  protected abstract IMenuTree getMenuTree ();
+
+  @Nonnull
+  protected abstract ILocaleManager getLocaleManager ();
+
+  @Nonnull
+  @Nonempty
+  protected abstract String getSessionAttrMenuItem ();
+
+  @Nonnull
+  @Nonempty
+  protected abstract String getSessionAttrLocale ();
+
+  public void onRequestBegin (@Nonnull final IRequestScope aRequestScope)
   {
     // determine page from request and store in request
     final String sMenuItemID = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_MENUITEM);
     if (sMenuItemID != null)
     {
       // Validate the menu item ID and check the display filter!
-      final IMenuObject aMenuObject = GlobalMenuTree.getInstance ().getMenuObjectOfID (sMenuItemID);
+      final IMenuObject aMenuObject = getMenuTree ().getMenuObjectOfID (sMenuItemID);
       if (aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
       {
         final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
-        aSessionScope.setAttribute (SESSION_VALUE_MENUITEM, aMenuObject);
+        aSessionScope.setAttribute (getSessionAttrMenuItem (), aMenuObject);
       }
     }
 
@@ -83,22 +84,22 @@ public final class GlobalRequestManager
       final Locale aDisplayLocale = LocaleCache.getLocale (sDisplayLocale);
       if (aDisplayLocale != null)
       {
-        // A valid locale was provided
-        final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
-        aSessionScope.setAttribute (SESSION_VALUE_DISPLAY_LOCALE, aDisplayLocale);
+        // Check if the locale is present in the locale manager
+        if (getLocaleManager ().isSupportedLocale (aDisplayLocale))
+        {
+          // A valid locale was provided
+          final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
+          aSessionScope.setAttribute (getSessionAttrLocale (), aDisplayLocale);
+        }
       }
     }
   }
 
-  /**
-   * @return The ID of the last requested menu item, or <code>null</code> if the
-   *         corresponding session parameter is not present.
-   */
   @Nullable
-  public static IMenuItemPage getSessionMenuItem ()
+  public IMenuItemPage getSessionMenuItem ()
   {
     final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
-    return aSessionScope == null ? null : aSessionScope.<IMenuItemPage> getCastedAttribute (SESSION_VALUE_MENUITEM);
+    return aSessionScope == null ? null : aSessionScope.<IMenuItemPage> getCastedAttribute (getSessionAttrMenuItem ());
   }
 
   /**
@@ -106,20 +107,13 @@ public final class GlobalRequestManager
    *         default menu item is specified.
    */
   @Nullable
-  public static IMenuItemPage getDefaultMenuItem ()
+  public IMenuItemPage getDefaultMenuItem ()
   {
-    return (IMenuItemPage) GlobalMenuTree.getInstance ().getDefaultMenuItem ();
+    return (IMenuItemPage) getMenuTree ().getDefaultMenuItem ();
   }
 
-  /**
-   * Resolve the request parameter for the menu item to an {@link IMenuItem}
-   * object. If no parameter is present, return the default menu item.
-   * 
-   * @return The resolved menu item object from the request parameter. Never
-   *         <code>null</code>.
-   */
   @Nonnull
-  public static IMenuItemPage getRequestMenuItem ()
+  public IMenuItemPage getRequestMenuItem ()
   {
     // Get selected item from request/session
     final IMenuItemPage aSelectedMenuItem = getSessionMenuItem ();
@@ -132,7 +126,7 @@ public final class GlobalRequestManager
       return aDefaultMenuItem;
 
     // Last fallback: use the first menu item
-    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = GlobalMenuTree.getInstance ().getRootItem ();
+    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = getMenuTree ().getRootItem ();
     if (aRootItem != null && aRootItem.hasChildren ())
       for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
         if (aItem.getData () instanceof IMenuItemPage)
@@ -145,47 +139,33 @@ public final class GlobalRequestManager
     throw new IllegalStateException ("No menu item is present!");
   }
 
-  /**
-   * @return The ID of the current request menu item. May not be
-   *         <code>null</code>.
-   */
   @Nonnull
-  public static String getRequestMenuItemID ()
+  public String getRequestMenuItemID ()
   {
     return getRequestMenuItem ().getID ();
   }
 
-  /**
-   * Get the locale to be used for this request. If no parameter is present, the
-   * one from the session is used.
-   * 
-   * @return The locale to be used for the current request.
-   */
   @Nonnull
-  public static Locale getRequestDisplayLocale ()
+  public Locale getRequestDisplayLocale ()
   {
     // Was a request locale set in session scope?
     final IScope aSessionScope = ScopeManager.getSessionScope (false);
     if (aSessionScope != null)
     {
-      final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (SESSION_VALUE_DISPLAY_LOCALE);
+      final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (getSessionAttrLocale ());
       if (aSessionDisplayLocale != null)
         return aSessionDisplayLocale;
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = GlobalLocaleManager.getInstance ().getDefaultLocale ();
+    final Locale aDefaultLocale = getLocaleManager ().getDefaultLocale ();
     if (aDefaultLocale == null)
       throw new IllegalStateException ("No application default locale is specified!");
     return aDefaultLocale;
   }
 
-  /**
-   * @return The country-Locale of the request display locale
-   * @see #getRequestDisplayLocale()
-   */
   @Nonnull
-  public static Locale getRequestDisplayCountry ()
+  public Locale getRequestDisplayCountry ()
   {
     return CountryCache.getCountry (getRequestDisplayLocale ());
   }

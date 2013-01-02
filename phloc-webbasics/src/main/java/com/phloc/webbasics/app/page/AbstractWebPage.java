@@ -277,7 +277,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nonnull
   protected static final HCForm createFormSelf ()
   {
-    return new HCForm (LinkUtils.getSelfHref ());
+    return new HCForm (LinkUtils.getGlobalSelfHref ());
   }
 
   /**
@@ -286,7 +286,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   @Nonnull
   protected static final HCForm createFormFileUploadSelf ()
   {
-    return new HCForm_FileUpload (LinkUtils.getSelfHref ());
+    return new HCForm_FileUpload (LinkUtils.getGlobalSelfHref ());
   }
 
   /**

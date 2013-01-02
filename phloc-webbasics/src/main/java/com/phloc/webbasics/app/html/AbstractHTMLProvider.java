@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.appbasics.app.GlobalRequestManager;
+import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.IMimeType;
@@ -54,7 +54,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @OverrideOnDemand
   protected Locale getDisplayLocale ()
   {
-    return GlobalRequestManager.getRequestDisplayLocale ();
+    return ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
   }
 
   @OverrideOnDemand

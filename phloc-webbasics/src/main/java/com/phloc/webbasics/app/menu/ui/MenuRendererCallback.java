@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.GlobalRequestManager;
+import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
@@ -69,7 +69,7 @@ public class MenuRendererCallback extends
     m_aDisplayMenuItemIDs = aDisplayMenuItemIDs;
 
     m_aChildCountStack.push (new AtomicInteger (0));
-    m_sSelectedItem = GlobalRequestManager.getRequestMenuItemID ();
+    m_sSelectedItem = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
     // The selected item may be null if an invalid menu item ID was passed
   }
 

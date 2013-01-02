@@ -51,7 +51,7 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected IActionInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  protected IActionInvoker getActionInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return GlobalActionManager.getInstance ();
   }
@@ -67,7 +67,7 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
     if (StringHelper.startsWith (sAction, '/'))
       sAction = sAction.substring (1);
 
-    final IActionExecutor aActionExecutor = getAjaxInvoker (aRequestScope).getActionExecutor (sAction);
+    final IActionExecutor aActionExecutor = getActionInvoker (aRequestScope).getActionExecutor (sAction);
     if (aActionExecutor == null)
     {
       s_aLogger.warn ("Unknown action '" + sAction + "' provided!");
@@ -94,7 +94,7 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
     final String sAction = aRequestScope.getAttributeAsString (SCOPE_ATTR_ACTION_NAME);
 
     // Handle the main action
-    if (getAjaxInvoker (aRequestScope).executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
+    if (getActionInvoker (aRequestScope).executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
     {
       // Error in execution
       aUnifiedResponse.setStatus (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
