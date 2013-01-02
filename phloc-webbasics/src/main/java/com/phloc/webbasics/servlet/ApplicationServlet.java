@@ -34,6 +34,7 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
+import com.phloc.webbasics.app.layout.GlobalLayoutManager;
 import com.phloc.webbasics.app.layout.LayoutHTMLProvider;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
 import com.phloc.webbasics.web.UnifiedResponse;
@@ -98,7 +99,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
   @Nonnull
   protected IHTMLProvider createHTMLProvider (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return new LayoutHTMLProvider ();
+    return new LayoutHTMLProvider (GlobalLayoutManager.getInstance ());
   }
 
   @Override

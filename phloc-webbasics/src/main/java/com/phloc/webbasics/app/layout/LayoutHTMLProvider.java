@@ -46,11 +46,6 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
   private final ILayoutManager m_aLayoutMgr;
   private final List <String> m_aLayoutAreaIDs;
 
-  public LayoutHTMLProvider ()
-  {
-    this (GlobalLayoutManager.getInstance ());
-  }
-
   public LayoutHTMLProvider (@Nonnull final ILayoutManager aLayoutMgr)
   {
     if (aLayoutMgr == null)
