@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.MenuTree;
+import com.phloc.appbasics.app.menu.GlobalMenuTree;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
@@ -68,7 +68,7 @@ public final class ApplicationRequestManager
     if (sMenuItemID != null)
     {
       // Validate the menu item ID and check the display filter!
-      final IMenuObject aMenuObject = MenuTree.getInstance ().getMenuObjectOfID (sMenuItemID);
+      final IMenuObject aMenuObject = GlobalMenuTree.getInstance ().getMenuObjectOfID (sMenuItemID);
       if (aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
       {
         final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
@@ -108,7 +108,7 @@ public final class ApplicationRequestManager
   @Nullable
   public static IMenuItemPage getDefaultMenuItem ()
   {
-    return (IMenuItemPage) MenuTree.getInstance ().getDefaultMenuItem ();
+    return (IMenuItemPage) GlobalMenuTree.getInstance ().getDefaultMenuItem ();
   }
 
   /**
@@ -132,7 +132,7 @@ public final class ApplicationRequestManager
       return aDefaultMenuItem;
 
     // Last fallback: use the first menu item
-    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = MenuTree.getInstance ().getRootItem ();
+    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = GlobalMenuTree.getInstance ().getRootItem ();
     if (aRootItem != null && aRootItem.hasChildren ())
       for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
         if (aItem.getData () instanceof IMenuItemPage)

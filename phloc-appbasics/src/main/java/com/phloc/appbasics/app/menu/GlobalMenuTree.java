@@ -36,21 +36,21 @@ import com.phloc.scopes.nonweb.singleton.tree.GlobalSingletonTreeWithUniqueID;
  * 
  * @author philip
  */
-public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
+public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTree.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalMenuTree.class);
 
   private String m_sDefaultMenuItem;
 
   @UsedViaReflection
   @Deprecated
-  public MenuTree ()
+  public GlobalMenuTree ()
   {}
 
   @Nonnull
-  public static MenuTree getInstance ()
+  public static GlobalMenuTree getInstance ()
   {
-    return getGlobalSingleton (MenuTree.class);
+    return getGlobalSingleton (GlobalMenuTree.class);
   }
 
   @Nonnull
@@ -61,27 +61,12 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return aMenuObject;
   }
 
-  /**
-   * Append a new menu item separator at root level
-   * 
-   * @return The created menu item separator object. Never <code>null</code>.
-   */
   @Nonnull
   public IMenuSeparator createRootSeparator ()
   {
     return _createChildItem (getRootItem (), new MenuSeparator ());
   }
 
-  /**
-   * Append a new menu item separator as a child of the passed menu item
-   * 
-   * @param sParentID
-   *        The parent menu item ID to append the separator to. May not be
-   *        <code>null</code>.
-   * @return The created menu item separator object. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuSeparator createSeparator (@Nonnull final String sParentID)
   {
@@ -91,16 +76,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return _createChildItem (aParentItem, new MenuSeparator ());
   }
 
-  /**
-   * Append a new menu item separator as a child of the passed menu item
-   * 
-   * @param aParent
-   *        The parent menu item to append the separator to. May not be
-   *        <code>null</code>.
-   * @return The created menu item separator object. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuSeparator createSeparator (@Nonnull final IMenuItem aParent)
   {
@@ -110,29 +85,12 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return createSeparator (aParent.getID ());
   }
 
-  /**
-   * Append a new menu item at root level.
-   * 
-   * @param sItemID
-   *        The new menu item ID. May not be <code>null</code>.
-   * @param aPage
-   *        The referenced page. May not be <code>null</code>.
-   * @return The created menu item object. Never <code>null</code>.
-   */
   @Nonnull
   public IMenuItemPage createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
   {
     return _createChildItem (getRootItem (), new MenuItemPage (sItemID, aPage));
   }
 
-  /**
-   * Append a new menu item at root level.
-   * 
-   * @param aPage
-   *        The referenced page. May not be <code>null</code>.
-   * @return The created menu item object. The ID of the menu item is the ID of
-   *         the page. Never <code>null</code>.
-   */
   @Nonnull
   public IMenuItemPage createRootItem (@Nonnull final IPage aPage)
   {
@@ -142,20 +100,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return createRootItem (aPage.getID (), aPage);
   }
 
-  /**
-   * Append a new menu item below the specified parent.
-   * 
-   * @param sParentID
-   *        The parent menu item ID to append the item to. May not be
-   *        <code>null</code>.
-   * @param sItemID
-   *        The new menu item ID. May not be <code>null</code>.
-   * @param aPage
-   *        The referenced page. May not be <code>null</code>.
-   * @return The created menu item object. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final String sParentID,
                                    @Nonnull final String sItemID,
@@ -167,19 +111,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return _createChildItem (aParentItem, new MenuItemPage (sItemID, aPage));
   }
 
-  /**
-   * Append a new menu item below the specified parent.
-   * 
-   * @param sParentID
-   *        The parent menu item ID to append the item to. May not be
-   *        <code>null</code>.
-   * @param aPage
-   *        The referenced page. May not be <code>null</code>.
-   * @return The created menu item object. The ID of the menu item is the ID of
-   *         the page. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
@@ -189,19 +120,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return createItem (sParentID, aPage.getID (), aPage);
   }
 
-  /**
-   * Append a new menu item below the specified parent.
-   * 
-   * @param aParent
-   *        The parent menu item to append the item to. May not be
-   *        <code>null</code>.
-   * @param aPage
-   *        The referenced page. May not be <code>null</code>.
-   * @return The created menu item object. The ID of the menu item is the ID of
-   *         the page. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
   {
@@ -211,17 +129,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return createItem (aParent.getID (), aPage);
   }
 
-  /**
-   * Append a new menu item at root level.
-   * 
-   * @param sItemID
-   *        The new menu item ID. May not be <code>null</code>.
-   * @param aURL
-   *        The referenced URL. May not be <code>null</code>.
-   * @param aName
-   *        The name of the menu item. May not be <code>null</code>.
-   * @return The created menu item object. Never <code>null</code>.
-   */
   @Nonnull
   public IMenuItemExternal createRootItem (@Nonnull final String sItemID,
                                            @Nonnull final ISimpleURL aURL,
@@ -230,22 +137,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return _createChildItem (getRootItem (), new MenuItemExternal (sItemID, aURL, aName));
   }
 
-  /**
-   * Append a new menu item below the specified parent.
-   * 
-   * @param aParent
-   *        The parent menu item to append the item to. May not be
-   *        <code>null</code>.
-   * @param sItemID
-   *        The new menu item ID. May not be <code>null</code>.
-   * @param aURL
-   *        The referenced URL. May not be <code>null</code>.
-   * @param aName
-   *        The name of the menu item. May not be <code>null</code>.
-   * @return The created menu item object. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuItemExternal createItem (@Nonnull final IMenuItem aParent,
                                        @Nonnull final String sItemID,
@@ -258,22 +149,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return createItem (aParent.getID (), sItemID, aURL, aName);
   }
 
-  /**
-   * Append a new menu item below the specified parent.
-   * 
-   * @param sParentID
-   *        The parent menu item ID to append the item to. May not be
-   *        <code>null</code>.
-   * @param sItemID
-   *        The new menu item ID. May not be <code>null</code>.
-   * @param aURL
-   *        The referenced URL. May not be <code>null</code>.
-   * @param aName
-   *        The name of the menu item. May not be <code>null</code>.
-   * @return The created menu item object. Never <code>null</code>.
-   * @throws IllegalArgumentException
-   *         If the passed parent menu item could not be resolved
-   */
   @Nonnull
   public IMenuItemExternal createItem (@Nonnull final String sParentID,
                                        @Nonnull final String sItemID,
@@ -286,32 +161,17 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return _createChildItem (aParentItem, new MenuItemExternal (sItemID, aURL, aName));
   }
 
-  /**
-   * Set the default menu item
-   * 
-   * @param sDefaultMenuItem
-   *        The default menu item to be set. May be <code>null</code>.
-   */
   public void setDefaultMenuItemID (@Nullable final String sDefaultMenuItem)
   {
     m_sDefaultMenuItem = sDefaultMenuItem;
   }
 
-  /**
-   * @return The default menu item ID. May be <code>null</code>.
-   */
   @Nullable
   public String getDefaultMenuItemID ()
   {
     return m_sDefaultMenuItem;
   }
 
-  /**
-   * Get the default menu item object.
-   * 
-   * @return <code>null</code> if either no default menu item is present, or the
-   *         default menu item ID could not be resolved to a menu item
-   */
   @Nullable
   public IMenuItem getDefaultMenuItem ()
   {
@@ -332,13 +192,6 @@ public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMe
     return null;
   }
 
-  /**
-   * Get the menu object with the specified ID
-   * 
-   * @param sID
-   *        The ID to be resolved. May be <code>null</code>.
-   * @return <code>null</code> if the menu item could not be resolved
-   */
   @Nullable
   public IMenuObject getMenuObjectOfID (@Nullable final String sID)
   {

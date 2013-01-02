@@ -36,7 +36,7 @@ import com.phloc.commons.url.SimpleURL;
 import com.phloc.scopes.nonweb.mock.ScopeTestRule;
 
 /**
- * Test class for class {@link MenuTree}
+ * Test class for class {@link GlobalMenuTree}
  * 
  * @author philip
  */
@@ -58,7 +58,7 @@ public final class MenuTreeTest
       }
     };
 
-    final MenuTree aTree = MenuTree.getInstance ();
+    final GlobalMenuTree aTree = GlobalMenuTree.getInstance ();
     final IMenuItemPage aRoot1 = aTree.createRootItem ("root1", aPage)
                                       .setDisplayFilter (FilterFalse.<IMenuObject> getInstance ());
     assertNotNull (aRoot1);
