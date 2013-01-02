@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.ajax.servlet.GlobalAjaxServlet;
 
 /**
  * Callback interface to handle thrown exception objects from the

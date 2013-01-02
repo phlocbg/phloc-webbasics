@@ -15,11 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.action;
+package com.phloc.webbasics.action.servlet;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.action.ApplicationActionManager;
+import com.phloc.webbasics.action.IActionInvoker;
 
 /**
  * Abstract action handling servlet

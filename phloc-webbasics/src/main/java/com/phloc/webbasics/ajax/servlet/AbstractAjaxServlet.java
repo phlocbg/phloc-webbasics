@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.ajax;
+package com.phloc.webbasics.ajax.servlet;
 
 import java.io.IOException;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -40,6 +40,9 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.CWebCharset;
+import com.phloc.webbasics.ajax.AjaxDefaultResponse;
+import com.phloc.webbasics.ajax.IAjaxExceptionHandler;
+import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.RequestLogger;

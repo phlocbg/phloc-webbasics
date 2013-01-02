@@ -15,23 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.ajax;
+package com.phloc.webbasics.action.servlet;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.action.GlobalActionManager;
+import com.phloc.webbasics.action.IActionInvoker;
 
 /**
- * Abstract implementation of a servlet that invokes AJAX functions.
+ * Abstract action handling servlet
  * 
  * @author philip
  */
-public class GlobalAjaxServlet extends AbstractAjaxServlet
+public class GlobalActionServlet extends AbstractActionServlet
 {
   @Override
   @Nonnull
-  protected final IAjaxInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  protected final IActionInvoker getActionInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return GlobalAjaxManager.getInstance ();
+    return GlobalActionManager.getInstance ();
   }
 }
