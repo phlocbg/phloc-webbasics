@@ -271,6 +271,9 @@ public class BulkImportResult implements ISuccessIndicator
     }
   }
 
+  /**
+   * @return The number of all warnings. Always &ge; 0.
+   */
   @Nonnegative
   public final int getWarningsCount ()
   {
