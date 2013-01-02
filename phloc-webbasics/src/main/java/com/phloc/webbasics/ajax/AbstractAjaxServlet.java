@@ -50,13 +50,13 @@ import com.phloc.webbasics.web.UnifiedResponse;
  * 
  * @author philip
  */
-public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
+public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultAjaxServlet.class);
-  private static final IStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (DefaultAjaxServlet.class);
-  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (DefaultAjaxServlet.class +
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractAjaxServlet.class);
+  private static final IStatisticsHandlerKeyedTimer s_aStatsTimer = StatisticsManager.getKeyedTimerHandler (AbstractAjaxServlet.class);
+  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterSuccess = StatisticsManager.getKeyedCounterHandler (AbstractAjaxServlet.class +
                                                                                                                          "$success");
-  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterError = StatisticsManager.getKeyedCounterHandler (DefaultAjaxServlet.class +
+  private static final IStatisticsHandlerKeyedCounter s_aStatsCounterError = StatisticsManager.getKeyedCounterHandler (AbstractAjaxServlet.class +
                                                                                                                        "$error");
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
@@ -120,10 +120,7 @@ public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected IAjaxInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return GlobalAjaxManager.getInstance ();
-  }
+  protected abstract IAjaxInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope);
 
   @Override
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,

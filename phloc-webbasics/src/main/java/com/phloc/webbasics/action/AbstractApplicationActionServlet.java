@@ -26,12 +26,15 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author philip
  */
-public class GlobalActionServlet extends AbstractActionServlet
+public abstract class AbstractApplicationActionServlet extends AbstractActionServlet
 {
+  @Override
+  protected abstract String getApplicationID ();
+
   @Override
   @Nonnull
   protected final IActionInvoker getActionInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return GlobalActionManager.getInstance ();
+    return ApplicationActionManager.getInstance ();
   }
 }
