@@ -25,7 +25,6 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -74,9 +73,9 @@ public final class ApplicationAjaxManager extends ApplicationWebSingleton implem
   }
 
   public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
-                                  @Nonnull final Class <? extends IAjaxHandler> aFactory)
+                                  @Nonnull final Class <? extends IAjaxHandler> aClass)
   {
-    addHandlerFunction (aFunction, FactoryNewInstance.create (aFactory));
+    m_aInvoker.addHandlerFunction (aFunction, aClass);
   }
 
   public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,

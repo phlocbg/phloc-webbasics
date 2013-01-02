@@ -17,17 +17,23 @@
  */
 package com.phloc.webbasics.servlet;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 
+import com.phloc.appbasics.app.ApplicationLocaleManager;
+import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.scopes.web.mock.MockHttpServletResponse;
 import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
+import com.phloc.webbasics.action.ApplicationActionManager;
+import com.phloc.webbasics.ajax.ApplicationAjaxManager;
+import com.phloc.webbasics.app.init.IApplicationInitializer;
+import com.phloc.webbasics.app.layout.ApplicationLayoutManager;
 
 /**
  * Callbacks for the application server
@@ -38,7 +44,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
 {
   @Nonnull
   @Nonempty
-  protected abstract List <String> getAllApplicationIDs ();
+  protected abstract Map <String, IApplicationInitializer> getAllInitializers ();
 
   /**
    * Set global system properties, after the content was initialized
@@ -48,73 +54,9 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
   {}
 
   /**
-   * Register all application locales and set the default locale
-   * 
-   * @param sApplicationID
-   *        The application ID to init
-   */
-  @OverrideOnDemand
-  protected void initLocales (@Nonnull @Nonempty final String sApplicationID)
-  {}
-
-  /**
    * Create all default user and user groups and roles
-   * 
-   * @param sApplicationID
-   *        The application ID to init
    */
-  @OverrideOnDemand
-  protected void initSecurity (@Nonnull @Nonempty final String sApplicationID)
-  {}
-
-  /**
-   * Register all layout handler
-   * 
-   * @param sApplicationID
-   *        The application ID to init
-   */
-  @OverrideOnDemand
-  protected void initLayout (@Nonnull @Nonempty final String sApplicationID)
-  {}
-
-  /**
-   * Create all menu items
-   * 
-   * @param sApplicationID
-   *        The application ID to init
-   */
-  @OverrideOnDemand
-  protected void initMenu (@Nonnull @Nonempty final String sApplicationID)
-  {}
-
-  /**
-   * Register all ajax functions
-   * 
-   * @param sApplicationID
-   *        The application ID to init
-   */
-  @OverrideOnDemand
-  protected void initAjax (@Nonnull @Nonempty final String sApplicationID)
-  {}
-
-  /**
-   * Register all actions
-   * 
-   * @param sApplicationID
-   *        The application ID to init
-   */
-  @OverrideOnDemand
-  protected void initActions (@Nonnull @Nonempty final String sApplicationID)
-  {}
-
-  /**
-   * Init all things for which no special method is present
-   * 
-   * @param sApplicationID
-   *        The application ID to init
-   */
-  @OverrideOnDemand
-  protected void initRest (@Nonnull @Nonempty final String sApplicationID)
+  protected void initSecurity ()
   {}
 
   @Override
@@ -123,35 +65,39 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
     // Global properties
     initSystemProperties ();
 
-    final List <String> aAppIDs = getAllApplicationIDs ();
-    if (ContainerHelper.isEmpty (aAppIDs))
+    // Init the security things
+    initSecurity ();
+
+    final Map <String, IApplicationInitializer> aIniter = getAllInitializers ();
+    if (ContainerHelper.isEmpty (aIniter))
       throw new IllegalStateException ("No application IDs provided!");
 
-    for (final String sApplicationID : aAppIDs)
+    for (final Map.Entry <String, IApplicationInitializer> aEntry : aIniter.entrySet ())
     {
-      WebScopeManager.onRequestBegin (sApplicationID, new OfflineHttpServletRequest (), new MockHttpServletResponse ());
+      WebScopeManager.onRequestBegin (aEntry.getKey (),
+                                      new OfflineHttpServletRequest (),
+                                      new MockHttpServletResponse ());
       try
       {
-        // Register application locales
-        initLocales (sApplicationID);
+        final IApplicationInitializer aInitializer = aEntry.getValue ();
 
-        // Init the security things
-        initSecurity (sApplicationID);
+        // Register application locales
+        aInitializer.initLocales (ApplicationLocaleManager.getInstance ());
 
         // Create the application layouts
-        initLayout (sApplicationID);
+        aInitializer.initLayout (ApplicationLayoutManager.getInstance ());
 
         // Create all menu items
-        initMenu (sApplicationID);
+        aInitializer.initMenu (ApplicationMenuTree.getInstance ());
 
         // Register all Ajax functions here
-        initAjax (sApplicationID);
+        aInitializer.initAjax (ApplicationAjaxManager.getInstance ());
 
         // Register all actions here
-        initActions (sApplicationID);
+        aInitializer.initActions (ApplicationActionManager.getInstance ());
 
         // All other things come last
-        initRest (sApplicationID);
+        aInitializer.initRest ();
       }
       finally
       {

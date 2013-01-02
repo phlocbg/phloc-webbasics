@@ -53,7 +53,7 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
  * @author philip
  */
 @ThreadSafe
-public final class AccessManager extends GlobalSingleton implements IUserManager, IUserGroupManager, IRoleManager
+public final class AccessManager extends GlobalSingleton implements IAccessManager
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessManager.class);
 
@@ -353,17 +353,6 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return m_aRoleMgr.renameRole (sRoleID, sNewName);
   }
 
-  /**
-   * Check if the passed user ID has the passed role by checking all user group
-   * role assignments of the user.
-   * 
-   * @param sUserID
-   *        User ID to check
-   * @param sRoleID
-   *        Role ID to check
-   * @return <code>true</code> if the user is in at least one user group that
-   *         has the assigned role, <code>false</code> otherwise
-   */
   public boolean hasUserRole (@Nullable final String sUserID, @Nullable final String sRoleID)
   {
     for (final IUserGroup aUserGroup : m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID))
@@ -372,13 +361,6 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return false;
   }
 
-  /**
-   * Get all role IDs the current user has
-   * 
-   * @param sUserID
-   *        User ID to check
-   * @return Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public Set <String> getAllUserRoleIDs (@Nullable final String sUserID)
@@ -389,13 +371,6 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return ret;
   }
 
-  /**
-   * Get all roles the current user has
-   * 
-   * @param sUserID
-   *        User ID to check
-   * @return Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public Set <IRole> getAllUserRoles (@Nullable final String sUserID)

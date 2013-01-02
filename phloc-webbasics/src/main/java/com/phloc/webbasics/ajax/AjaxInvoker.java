@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
@@ -102,6 +103,12 @@ public class AjaxInvoker implements IAjaxInvoker
     {
       m_aRWLock.readLock ().unlock ();
     }
+  }
+
+  public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,
+                                  @Nonnull final Class <? extends IAjaxHandler> aFactory)
+  {
+    addHandlerFunction (aFunction, FactoryNewInstance.create (aFactory));
   }
 
   public void addHandlerFunction (@Nonnull final IAjaxFunction aFunction,

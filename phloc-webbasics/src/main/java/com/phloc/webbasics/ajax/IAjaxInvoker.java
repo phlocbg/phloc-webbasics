@@ -34,7 +34,19 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 public interface IAjaxInvoker
 {
   /**
-   * Add a global handler function that is used as a callback.
+   * Add a handler function that is used as a callback.
+   * 
+   * @param aFunction
+   *        The Ajax function declaration to be invoked. May not be
+   *        <code>null</code>.
+   * @param aClass
+   *        The class to be instantiated each time the function is invoked. May
+   *        not be <code>null</code>.
+   */
+  void addHandlerFunction (@Nonnull IAjaxFunction aFunction, @Nonnull Class <? extends IAjaxHandler> aClass);
+
+  /**
+   * Add a handler function that is used as a callback.
    * 
    * @param aFunction
    *        The Ajax function declaration to be invoked. May not be
@@ -46,7 +58,7 @@ public interface IAjaxInvoker
   void addHandlerFunction (@Nonnull IAjaxFunction aFunction, @Nonnull IFactory <? extends IAjaxHandler> aFactory);
 
   /**
-   * Add a global handler function that is used as a callback.
+   * Add a handler function that is used as a callback.
    * 
    * @param sFunctionName
    *        Name AJAX function to be invoked. May not be <code>null</code>.
