@@ -24,20 +24,20 @@ import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.scopes.nonweb.singleton.tree.GlobalSingletonTreeWithUniqueID;
+import com.phloc.scopes.nonweb.singleton.tree.ApplicationSingletonTreeWithUniqueID;
 
 /**
- * Represents the global menu tree
+ * Represents a per-application menu tree
  * 
  * @author philip
  */
-public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
+public final class ApplicationMenuTree extends ApplicationSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
 {
   private MenuTreeProxy m_aProxy;
 
   @UsedViaReflection
   @Deprecated
-  public GlobalMenuTree ()
+  public ApplicationMenuTree ()
   {}
 
   @Override
@@ -47,9 +47,9 @@ public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <Strin
   }
 
   @Nonnull
-  public static GlobalMenuTree getInstance ()
+  public static ApplicationMenuTree getInstance ()
   {
-    return getGlobalSingleton (GlobalMenuTree.class);
+    return getApplicationSingleton (ApplicationMenuTree.class);
   }
 
   @Nonnull
