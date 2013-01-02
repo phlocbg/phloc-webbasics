@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.GlobalRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.IMimeType;
@@ -157,7 +157,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @Nonnull
   public final HCHtml createHTML (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    final Locale aDisplayLocale = ApplicationRequestManager.getRequestDisplayLocale ();
+    final Locale aDisplayLocale = GlobalRequestManager.getRequestDisplayLocale ();
 
     final HCHtml aHtml = createHCHtml (aDisplayLocale);
 

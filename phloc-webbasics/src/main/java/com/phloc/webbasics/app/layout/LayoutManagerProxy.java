@@ -29,11 +29,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
@@ -42,21 +40,13 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
  * @author philip
  */
 @ThreadSafe
-public final class LayoutManager extends GlobalSingleton
+public class LayoutManagerProxy implements ILayoutManager
 {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, ILayoutAreaContentProvider> m_aContentProviders = new LinkedHashMap <String, ILayoutAreaContentProvider> ();
 
-  @UsedViaReflection
-  @Deprecated
-  public LayoutManager ()
+  public LayoutManagerProxy ()
   {}
-
-  @Nonnull
-  public static LayoutManager getInstance ()
-  {
-    return getGlobalSingleton (LayoutManager.class);
-  }
 
   public void registerAreaContentProvider (@Nonnull final String sAreaID,
                                            @Nonnull final ILayoutAreaContentProvider aContentProvider)

@@ -26,7 +26,7 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.GlobalRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -59,7 +59,7 @@ public class ApplicationServlet extends AbstractUnifiedResponseServlet
   protected void onRequestBegin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     // Run default request initialization (menu item and locale)
-    ApplicationRequestManager.onRequestBegin (aRequestScope);
+    GlobalRequestManager.onRequestBegin (aRequestScope);
 
     // Invoke all "request begin" listener
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)

@@ -43,7 +43,7 @@ import com.phloc.scopes.nonweb.mgr.ScopeManager;
  * 
  * @author philip
  */
-public final class ApplicationRequestManager
+public final class GlobalRequestManager
 {
   public static final String REQUEST_PARAMETER_MENUITEM = "menuitem";
   private static final String SESSION_VALUE_MENUITEM = "$menuitem";
@@ -51,7 +51,7 @@ public final class ApplicationRequestManager
   public static final String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
   private static final String SESSION_VALUE_DISPLAY_LOCALE = "$displaylocale";
 
-  private ApplicationRequestManager ()
+  private GlobalRequestManager ()
   {}
 
   /**
@@ -174,7 +174,7 @@ public final class ApplicationRequestManager
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = ApplicationLocaleManager.getDefaultLocale ();
+    final Locale aDefaultLocale = GlobalLocaleManager.getDefaultLocale ();
     if (aDefaultLocale == null)
       throw new IllegalStateException ("No application default locale is specified!");
     return aDefaultLocale;

@@ -26,7 +26,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.appbasics.app.GlobalRequestManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
@@ -179,7 +179,7 @@ public final class LinkUtils
   {
     if (sMenuItemID == null)
       throw new NullPointerException ("menu item id");
-    return new SimpleURL ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
+    return new SimpleURL ().add (GlobalRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
 
   @Nonnull
@@ -197,15 +197,15 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    return getLinkToMenuItem (ApplicationRequestManager.getRequestMenuItemID ()).addAll (aParams);
+    return getLinkToMenuItem (GlobalRequestManager.getRequestMenuItemID ()).addAll (aParams);
   }
 
   @Nonnull
   public static SMap getDefaultParams ()
   {
-    return new SMap ().add (ApplicationRequestManager.REQUEST_PARAMETER_MENUITEM,
-                            ApplicationRequestManager.getRequestMenuItemID ())
-                      .add (ApplicationRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
-                            ApplicationRequestManager.getRequestDisplayLocale ().toString ());
+    return new SMap ().add (GlobalRequestManager.REQUEST_PARAMETER_MENUITEM,
+                            GlobalRequestManager.getRequestMenuItemID ())
+                      .add (GlobalRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
+                            GlobalRequestManager.getRequestDisplayLocale ().toString ());
   }
 }

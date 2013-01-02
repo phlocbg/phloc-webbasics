@@ -36,12 +36,12 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @NotThreadSafe
-public final class ApplicationLocaleManager
+public final class GlobalLocaleManager
 {
   private static final Set <Locale> s_aAppLocales = new LinkedHashSet <Locale> ();
   private static Locale s_aDefaultLocale;
 
-  private ApplicationLocaleManager ()
+  private GlobalLocaleManager ()
   {}
 
   @Nonnull

@@ -42,7 +42,7 @@ public final class DisplayLocaleTextResolver
   @Nonnull
   private static Locale _getCurrentLocale ()
   {
-    return ApplicationRequestManager.getRequestDisplayLocale ();
+    return GlobalRequestManager.getRequestDisplayLocale ();
   }
 
   /**

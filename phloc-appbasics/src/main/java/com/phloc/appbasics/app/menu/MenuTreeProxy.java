@@ -35,16 +35,18 @@ import com.phloc.commons.url.ISimpleURL;
  * 
  * @author philip
  */
-final class MenuTreeProxy
+public class MenuTreeProxy
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTreeProxy.class);
 
-  private final IMenuTree m_aMT;
+  private final IMenuTree m_aMenuTree;
   private String m_sDefaultMenuItem;
 
-  public MenuTreeProxy (final IMenuTree aMT)
+  public MenuTreeProxy (@Nonnull final IMenuTree aMenuTree)
   {
-    m_aMT = aMT;
+    if (aMenuTree == null)
+      throw new NullPointerException ("menuTree");
+    m_aMenuTree = aMenuTree;
   }
 
   @Nonnull
@@ -58,13 +60,13 @@ final class MenuTreeProxy
   @Nonnull
   public IMenuSeparator createRootSeparator ()
   {
-    return _createChildItem (m_aMT.getRootItem (), new MenuSeparator ());
+    return _createChildItem (m_aMenuTree.getRootItem (), new MenuSeparator ());
   }
 
   @Nonnull
   public IMenuSeparator createSeparator (@Nonnull final String sParentID)
   {
-    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aMT.getItemWithID (sParentID);
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aMenuTree.getItemWithID (sParentID);
     if (aParentItem == null)
       throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
     return _createChildItem (aParentItem, new MenuSeparator ());
@@ -82,7 +84,7 @@ final class MenuTreeProxy
   @Nonnull
   public IMenuItemPage createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
   {
-    return _createChildItem (m_aMT.getRootItem (), new MenuItemPage (sItemID, aPage));
+    return _createChildItem (m_aMenuTree.getRootItem (), new MenuItemPage (sItemID, aPage));
   }
 
   @Nonnull
@@ -99,7 +101,7 @@ final class MenuTreeProxy
                                    @Nonnull final String sItemID,
                                    @Nonnull final IPage aPage)
   {
-    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aMT.getItemWithID (sParentID);
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aMenuTree.getItemWithID (sParentID);
     if (aParentItem == null)
       throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
     return _createChildItem (aParentItem, new MenuItemPage (sItemID, aPage));
@@ -128,7 +130,7 @@ final class MenuTreeProxy
                                            @Nonnull final ISimpleURL aURL,
                                            @Nonnull final IHasDisplayText aName)
   {
-    return _createChildItem (m_aMT.getRootItem (), new MenuItemExternal (sItemID, aURL, aName));
+    return _createChildItem (m_aMenuTree.getRootItem (), new MenuItemExternal (sItemID, aURL, aName));
   }
 
   @Nonnull
@@ -149,7 +151,7 @@ final class MenuTreeProxy
                                        @Nonnull final ISimpleURL aURL,
                                        @Nonnull final IHasDisplayText aName)
   {
-    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aMT.getItemWithID (sParentID);
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = m_aMenuTree.getItemWithID (sParentID);
     if (aParentItem == null)
       throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
     return _createChildItem (aParentItem, new MenuItemExternal (sItemID, aURL, aName));
@@ -171,7 +173,7 @@ final class MenuTreeProxy
   {
     if (m_sDefaultMenuItem != null)
     {
-      final DefaultTreeItemWithID <String, IMenuObject> aDefaultMenuItem = m_aMT.getItemWithID (m_sDefaultMenuItem);
+      final DefaultTreeItemWithID <String, IMenuObject> aDefaultMenuItem = m_aMenuTree.getItemWithID (m_sDefaultMenuItem);
       if (aDefaultMenuItem != null)
       {
         final IMenuObject aData = aDefaultMenuItem.getData ();
@@ -189,7 +191,7 @@ final class MenuTreeProxy
   @Nullable
   public IMenuObject getMenuObjectOfID (@Nullable final String sID)
   {
-    final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = m_aMT.getItemWithID (sID);
+    final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = m_aMenuTree.getItemWithID (sID);
     return aTreeItem == null ? null : aTreeItem.getData ();
   }
 }

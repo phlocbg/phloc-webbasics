@@ -26,11 +26,11 @@ import java.util.Locale;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.phloc.appbasics.app.ApplicationLocaleManager;
+import com.phloc.appbasics.app.GlobalLocaleManager;
 import com.phloc.commons.locale.LocaleCache;
 
 /**
- * Test class for class {@link ApplicationLocaleManager}.
+ * Test class for class {@link GlobalLocaleManager}.
  * 
  * @author philip
  */
@@ -39,16 +39,16 @@ public final class ApplicationLocaleManagerTest
   @BeforeClass
   public static void init ()
   {
-    ApplicationLocaleManager.registerLocale (LocaleCache.getLocale ("de", "AT"));
+    GlobalLocaleManager.registerLocale (LocaleCache.getLocale ("de", "AT"));
   }
 
   @Test
   public void testIsSupportedLocale ()
   {
-    assertEquals (LocaleCache.getLocale ("de", "AT"), ApplicationLocaleManager.getDefaultLocale ());
-    assertTrue (ApplicationLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de", "AT")));
-    assertFalse (ApplicationLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de")));
-    assertFalse (ApplicationLocaleManager.isSupportedLocale (null));
-    assertFalse (ApplicationLocaleManager.isSupportedLocale (Locale.CANADA));
+    assertEquals (LocaleCache.getLocale ("de", "AT"), GlobalLocaleManager.getDefaultLocale ());
+    assertTrue (GlobalLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de", "AT")));
+    assertFalse (GlobalLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de")));
+    assertFalse (GlobalLocaleManager.isSupportedLocale (null));
+    assertFalse (GlobalLocaleManager.isSupportedLocale (Locale.CANADA));
   }
 }

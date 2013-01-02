@@ -50,7 +50,7 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
 
   public LayoutHTMLProvider ()
   {
-    this (LayoutManager.getInstance ().getAllAreaIDs ());
+    this (GlobalLayoutManager.getInstance ().getAllAreaIDs ());
   }
 
   public LayoutHTMLProvider (@Nonnull @Nonempty final String sLayoutAreaID)
@@ -90,7 +90,7 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
                                       @Nonnull final Locale aDisplayLocale)
   {
     // By default the layout manager is used
-    return LayoutManager.getInstance ().getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
+    return GlobalLayoutManager.getInstance ().getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
   }
 
   @Override
