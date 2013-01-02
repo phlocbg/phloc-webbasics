@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.MenuTree;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
@@ -94,15 +94,22 @@ public class PageShowChildren extends AbstractWebPage
     }
   }
 
-  public PageShowChildren (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  private final IMenuTree m_aMenuTree;
+
+  public PageShowChildren (@Nonnull @Nonempty final String sID,
+                           @Nonnull final String sName,
+                           @Nonnull final IMenuTree aMenuTree)
   {
     super (sID, sName);
+    if (aMenuTree == null)
+      throw new NullPointerException ("menuTree");
+    m_aMenuTree = aMenuTree;
   }
 
   @Override
   protected void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
   {
-    final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = MenuTree.getInstance ().getItemWithID (getID ());
+    final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = m_aMenuTree.getItemWithID (getID ());
     if (aMenuTreeItem != null && (aMenuTreeItem.getData () instanceof IMenuItem))
     {
       final HCUL aUL = new HCUL ();

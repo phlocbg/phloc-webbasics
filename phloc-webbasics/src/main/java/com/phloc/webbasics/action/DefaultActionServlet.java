@@ -43,6 +43,19 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
   private static final String SCOPE_ATTR_ACTION_NAME = "$defaultactionservlet.actionname";
   private static final String SCOPE_ATTR_EXECUTOR = "$defaultactionservlet.executor";
 
+  /**
+   * Get the action invoker matching the passed request
+   * 
+   * @param aRequestScope
+   *        The request scope to use. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  protected IActionInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return GlobalActionManager.getInstance ();
+  }
+
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
@@ -54,7 +67,7 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
     if (StringHelper.startsWith (sAction, '/'))
       sAction = sAction.substring (1);
 
-    final IActionExecutor aActionExecutor = ActionManager.getInstance ().getActionExecutor (sAction);
+    final IActionExecutor aActionExecutor = getAjaxInvoker (aRequestScope).getActionExecutor (sAction);
     if (aActionExecutor == null)
     {
       s_aLogger.warn ("Unknown action '" + sAction + "' provided!");
@@ -81,7 +94,7 @@ public class DefaultActionServlet extends AbstractUnifiedResponseServlet
     final String sAction = aRequestScope.getAttributeAsString (SCOPE_ATTR_ACTION_NAME);
 
     // Handle the main action
-    if (ActionManager.getInstance ().executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
+    if (getAjaxInvoker (aRequestScope).executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
     {
       // Error in execution
       aUnifiedResponse.setStatus (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

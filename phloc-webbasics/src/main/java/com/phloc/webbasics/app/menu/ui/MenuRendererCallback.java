@@ -27,7 +27,7 @@ import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
-import com.phloc.appbasics.app.menu.MenuTree;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
 import com.phloc.commons.hierarchy.EHierarchyCallbackReturn;
@@ -188,11 +188,11 @@ public class MenuRendererCallback extends
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static HCUL createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer)
+  public static HCUL createRenderedMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final IMenuItemRenderer aRenderer)
   {
-    return createRenderedMenu (MenuTree.getInstance ().getRootItem (),
+    return createRenderedMenu (aMenuTree.getRootItem (),
                                aRenderer,
-                               MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs ());
+                               MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aMenuTree));
   }
 
   /**
@@ -205,10 +205,13 @@ public class MenuRendererCallback extends
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static HCUL createRenderedMenu (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
+  public static HCUL createRenderedMenu (@Nonnull final IMenuTree aMenuTree,
+                                         @Nonnull final DefaultTreeItemWithID <String, IMenuObject> aStartTreeItem,
                                          @Nonnull final IMenuItemRenderer aRenderer)
   {
-    return createRenderedMenu (aStartTreeItem, aRenderer, MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs ());
+    return createRenderedMenu (aStartTreeItem,
+                               aRenderer,
+                               MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aMenuTree));
   }
 
   /**
@@ -222,10 +225,11 @@ public class MenuRendererCallback extends
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static HCUL createRenderedMenu (@Nonnull final IMenuItemRenderer aRenderer,
+  public static HCUL createRenderedMenu (@Nonnull final IMenuTree aMenuTree,
+                                         @Nonnull final IMenuItemRenderer aRenderer,
                                          @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
-    return createRenderedMenu (MenuTree.getInstance ().getRootItem (), aRenderer, aDisplayMenuItemIDs);
+    return createRenderedMenu (aMenuTree.getRootItem (), aRenderer, aDisplayMenuItemIDs);
   }
 
   /**

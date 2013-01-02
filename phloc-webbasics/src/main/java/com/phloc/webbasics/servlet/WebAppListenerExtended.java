@@ -20,11 +20,7 @@ package com.phloc.webbasics.servlet;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 
-import com.phloc.appbasics.app.menu.MenuTree;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.webbasics.action.ActionManager;
-import com.phloc.webbasics.ajax.AjaxManager;
-import com.phloc.webbasics.app.layout.LayoutManager;
 
 /**
  * Callbacks for the application server
@@ -56,41 +52,30 @@ public class WebAppListenerExtended extends WebAppListener
 
   /**
    * Register all layout handler
-   * 
-   * @param aLayoutMgr
    */
   @OverrideOnDemand
-  protected void initLayout (@Nonnull final LayoutManager aLayoutMgr)
+  protected void initLayout ()
   {}
 
   /**
    * Create all menu items
-   * 
-   * @param aMenu
-   *        The menu tree to use
    */
   @OverrideOnDemand
-  protected void initMenu (@Nonnull final MenuTree aMenu)
+  protected void initMenu ()
   {}
 
   /**
    * Register all ajax functions
-   * 
-   * @param aAjaxMgr
-   *        The manager to register the functions at
    */
   @OverrideOnDemand
-  protected void initAjax (@Nonnull final AjaxManager aAjaxMgr)
+  protected void initAjax ()
   {}
 
   /**
    * Register all actions
-   * 
-   * @param aActionMgr
-   *        The manager to register the actions at
    */
   @OverrideOnDemand
-  protected void initActions (@Nonnull final ActionManager aActionMgr)
+  protected void initActions ()
   {}
 
   /**
@@ -113,16 +98,16 @@ public class WebAppListenerExtended extends WebAppListener
     initSecurity ();
 
     // Create the application layouts
-    initLayout (LayoutManager.getInstance ());
+    initLayout ();
 
     // Create all menu items
-    initMenu (MenuTree.getInstance ());
+    initMenu ();
 
     // Register all Ajax functions here
-    initAjax (AjaxManager.getInstance ());
+    initAjax ();
 
     // Register all actions here
-    initActions (ActionManager.getInstance ());
+    initActions ();
 
     // All other things come last
     initRest ();

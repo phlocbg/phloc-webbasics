@@ -28,16 +28,16 @@ import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.scopes.web.singleton.GlobalWebSingleton;
 
 /**
- * The main AJAX manager.
+ * A global AJAX manager.
  * 
  * @author philip
  */
 @ThreadSafe
-public final class AjaxManager extends GlobalSingleton implements IAjaxInvoker
+public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjaxInvoker
 {
   private final AjaxInvoker m_aInvoker = new AjaxInvoker ();
 
@@ -46,13 +46,13 @@ public final class AjaxManager extends GlobalSingleton implements IAjaxInvoker
    */
   @Deprecated
   @UsedViaReflection
-  public AjaxManager ()
+  public GlobalAjaxManager ()
   {}
 
   @Nonnull
-  public static AjaxManager getInstance ()
+  public static GlobalAjaxManager getInstance ()
   {
-    return getGlobalSingleton (AjaxManager.class);
+    return getGlobalSingleton (GlobalAjaxManager.class);
   }
 
   @Nonnull
@@ -102,11 +102,5 @@ public final class AjaxManager extends GlobalSingleton implements IAjaxInvoker
   public String toString ()
   {
     return new ToStringGenerator (this).append ("invoker", m_aInvoker).toString ();
-  }
-
-  @Deprecated
-  public static boolean isValidFunctionName (@Nullable final String sFunctionName)
-  {
-    return AjaxInvoker.isValidFunctionName (sFunctionName);
   }
 }

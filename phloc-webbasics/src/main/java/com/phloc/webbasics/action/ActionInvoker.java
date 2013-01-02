@@ -47,11 +47,10 @@ import com.phloc.webbasics.web.UnifiedResponse;
  * @author philip
  */
 @ThreadSafe
-public final class ActionContainer
+public final class ActionInvoker implements IActionInvoker
 {
-  /** logger to use. */
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ActionContainer.class);
-  private static final IStatisticsHandlerKeyedTimer s_aTimer = StatisticsManager.getKeyedTimerHandler (ActionContainer.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ActionInvoker.class);
+  private static final IStatisticsHandlerKeyedTimer s_aTimer = StatisticsManager.getKeyedTimerHandler (ActionInvoker.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, IActionExecutor> m_aMap = new HashMap <String, IActionExecutor> ();
@@ -160,9 +159,6 @@ public final class ActionContainer
     }
   }
 
-  /**
-   * @return A map from actionID to action executor. Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, IActionExecutor> getAllActions ()
@@ -178,14 +174,6 @@ public final class ActionContainer
     }
   }
 
-  /**
-   * Check whether an action with the given name is present
-   * 
-   * @param sName
-   *        The name of the action to check. May be <code>null</code>.
-   * @return <code>true</code> if an action with the given name is contained,
-   *         <code>false</code> otherwise.
-   */
   public boolean containsAction (@Nullable final String sName)
   {
     m_aRWLock.readLock ().lock ();
@@ -199,13 +187,6 @@ public final class ActionContainer
     }
   }
 
-  /**
-   * Get the executor associated with the given action.
-   * 
-   * @param sName
-   *        The name of the action to check. May be <code>null</code>.
-   * @return <code>null</code> if no such action exists.
-   */
   @Nullable
   public IActionExecutor getActionExecutor (@Nullable final String sName)
   {

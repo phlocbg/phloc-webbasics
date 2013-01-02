@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
@@ -116,10 +117,10 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
   }
 
   @Nonnull
-  public static HCDiv createSideBarMenu (@Nonnull final Locale aDisplayLocale)
+  public static HCDiv createSideBarMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final Locale aDisplayLocale)
   {
     final HCDiv ret = new HCDiv ().addClasses (CBootstrapCSS.WELL, CBootstrapCSS.SIDEBAR_NAV);
-    ret.addChild (MenuRendererCallback.createRenderedMenu (new BootstrapMenuItemRenderer (aDisplayLocale))
+    ret.addChild (MenuRendererCallback.createRenderedMenu (aMenuTree, new BootstrapMenuItemRenderer (aDisplayLocale))
                                       .addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST));
     return ret;
   }

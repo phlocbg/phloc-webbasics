@@ -113,7 +113,7 @@ public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
   }
 
   /**
-   * Get the AjaxManager matching the passed request
+   * Get the AJAX invoker matching the passed request
    * 
    * @param aRequestScope
    *        The request scope to use. May not be <code>null</code>.
@@ -122,7 +122,7 @@ public class DefaultAjaxServlet extends AbstractUnifiedResponseServlet
   @Nonnull
   protected IAjaxInvoker getAjaxInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return AjaxManager.getInstance ();
+    return GlobalAjaxManager.getInstance ();
   }
 
   @Override

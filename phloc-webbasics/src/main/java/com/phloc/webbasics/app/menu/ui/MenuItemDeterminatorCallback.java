@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.MenuTree;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
@@ -43,14 +43,18 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 public class MenuItemDeterminatorCallback extends
                                          DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
+  private final IMenuTree m_aMenuTree;
   private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();
   private final String m_sSelectedItem;
   private final DefaultTreeItemWithID <String, IMenuObject> m_aSelectedItem;
 
-  protected MenuItemDeterminatorCallback ()
+  protected MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
   {
+    if (aMenuTree == null)
+      throw new NullPointerException ("menuTree");
+    m_aMenuTree = aMenuTree;
     m_sSelectedItem = ApplicationRequestManager.getRequestMenuItemID ();
-    m_aSelectedItem = MenuTree.getInstance ().getItemWithID (m_sSelectedItem);
+    m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItem);
     // The selected item may be null if an invalid menu item ID was passed
   }
 
@@ -143,9 +147,9 @@ public class MenuItemDeterminatorCallback extends
 
   @Nonnull
   @ReturnsImmutableObject
-  public static Map <String, Boolean> getAllDisplayMenuItemIDs ()
+  public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final IMenuTree aMenuTree)
   {
-    return getAllDisplayMenuItemIDs (new MenuItemDeterminatorCallback ());
+    return getAllDisplayMenuItemIDs (new MenuItemDeterminatorCallback (aMenuTree));
   }
 
   @Nonnull
@@ -155,7 +159,7 @@ public class MenuItemDeterminatorCallback extends
     if (aDeterminator == null)
       throw new NullPointerException ("determinator");
 
-    TreeWalkerDynamic.walkTree (MenuTree.getInstance (), aDeterminator);
+    TreeWalkerDynamic.walkTree (aDeterminator.m_aMenuTree, aDeterminator);
     return aDeterminator.getAllItemIDs ();
   }
 }

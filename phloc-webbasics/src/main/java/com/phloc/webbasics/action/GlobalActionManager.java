@@ -24,48 +24,49 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
- * This class represents a singleton {@link ActionContainer}.
+ * This class represents a global singleton {@link ActionInvoker}.
  * 
  * @author philip
  */
 @ThreadSafe
-public final class ActionManager
+public final class GlobalActionManager extends GlobalSingleton implements IActionInvoker
 {
-  // Singleton instance
-  private static final ActionManager s_aInstance = new ActionManager ();
-
   // Main container
-  private final ActionContainer m_aActionContainer = new ActionContainer ();
+  private final IActionInvoker m_aInvoker = new ActionInvoker ();
 
-  private ActionManager ()
+  @Deprecated
+  @UsedViaReflection
+  public GlobalActionManager ()
   {}
 
   @Nonnull
-  public static ActionManager getInstance ()
+  public static GlobalActionManager getInstance ()
   {
-    return s_aInstance;
+    return getGlobalSingleton (GlobalActionManager.class);
   }
 
   public void setCustomExceptionHandler (@Nullable final IActionExceptionHandler aExceptionHandler)
   {
-    s_aInstance.setCustomExceptionHandler (aExceptionHandler);
+    m_aInvoker.setCustomExceptionHandler (aExceptionHandler);
   }
 
   @Nullable
   public IActionExceptionHandler getCustomExceptionHandler ()
   {
-    return s_aInstance.getCustomExceptionHandler ();
+    return m_aInvoker.getCustomExceptionHandler ();
   }
 
   public void addAction (@Nonnull final String sAction, @Nonnull final IActionExecutor aCallback)
   {
-    m_aActionContainer.addAction (sAction, aCallback);
+    m_aInvoker.addAction (sAction, aCallback);
   }
 
   @Nonnull
@@ -73,30 +74,30 @@ public final class ActionManager
                                  @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                  @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
   {
-    return m_aActionContainer.executeAction (sAction, aRequestScope, aUnifiedResponse);
+    return m_aInvoker.executeAction (sAction, aRequestScope, aUnifiedResponse);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, IActionExecutor> getAllActions ()
   {
-    return m_aActionContainer.getAllActions ();
+    return m_aInvoker.getAllActions ();
   }
 
   public boolean containsAction (@Nullable final String sAction)
   {
-    return m_aActionContainer.containsAction (sAction);
+    return m_aInvoker.containsAction (sAction);
   }
 
   @Nullable
   public IActionExecutor getActionExecutor (@Nullable final String sAction)
   {
-    return m_aActionContainer.getActionExecutor (sAction);
+    return m_aInvoker.getActionExecutor (sAction);
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("container", m_aActionContainer).toString ();
+    return new ToStringGenerator (this).append ("container", m_aInvoker).toString ();
   }
 }
