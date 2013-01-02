@@ -36,7 +36,7 @@ public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
 
   public BootstrapButtonToolbarAdvanced ()
   {
-    this (LinkUtils.getGlobalSelfHref ());
+    this (LinkUtils.getSelfHref ());
   }
 
   public BootstrapButtonToolbarAdvanced (@Nonnull final ISimpleURL aSelfHref)

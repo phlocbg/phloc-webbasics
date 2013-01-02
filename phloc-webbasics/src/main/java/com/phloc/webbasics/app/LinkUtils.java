@@ -189,20 +189,6 @@ public final class LinkUtils
     return new SimpleURL (WebScopeManager.getRequestScope ().getFullContextPath ());
   }
 
-  @Deprecated
-  @Nonnull
-  public static SimpleURL getGlobalSelfHref ()
-  {
-    return getSelfHref ();
-  }
-
-  @Deprecated
-  @Nonnull
-  public static SimpleURL getGlobalSelfHref (@Nullable final Map <String, String> aParams)
-  {
-    return getSelfHref (aParams);
-  }
-
   @Nonnull
   public static SimpleURL getSelfHref ()
   {
@@ -213,13 +199,6 @@ public final class LinkUtils
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
     return getLinkToMenuItem (ApplicationRequestManager.getInstance ().getRequestMenuItemID ()).addAll (aParams);
-  }
-
-  @Deprecated
-  @Nonnull
-  public static SMap getGlobalDefaultParams ()
-  {
-    return getDefaultParams ();
   }
 
   @Nonnull

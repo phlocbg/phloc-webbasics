@@ -37,9 +37,9 @@ import com.phloc.webbasics.web.UnifiedResponse;
  * 
  * @author philip
  */
-public class DefaultActionServlet extends AbstractUnifiedResponseServlet
+public class GlobalActionServlet extends AbstractUnifiedResponseServlet
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultActionServlet.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalActionServlet.class);
   private static final String SCOPE_ATTR_ACTION_NAME = "$defaultactionservlet.actionname";
   private static final String SCOPE_ATTR_EXECUTOR = "$defaultactionservlet.executor";
 
