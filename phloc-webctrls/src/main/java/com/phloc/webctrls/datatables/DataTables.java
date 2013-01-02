@@ -26,6 +26,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.StringHelper;
@@ -50,6 +53,7 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_STATE_SAVE = false;
   public static final boolean DEFAULT_JQUERY_UI = false;
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
 
   private final String m_sParentElementID;
   private Locale m_aDisplayLocale;
@@ -65,15 +69,6 @@ public class DataTables implements IHCNodeBuilder
   private Map <String, String> m_aServerParams;
   private boolean m_bUseJQueryAjax;
 
-  @Nonnull
-  private static String _ensureID (@Nonnull final AbstractHCBaseTable <?> aTable)
-  {
-    final String sID = aTable.getID ();
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("Table has no ID!");
-    return sID;
-  }
-
   /**
    * Apply to an existing table. If the table does not have an ID yet, a new one
    * is created.
@@ -84,17 +79,16 @@ public class DataTables implements IHCNodeBuilder
    */
   public DataTables (@Nonnull final AbstractHCBaseTable <?> aTable)
   {
-    this (_ensureID (aTable));
-  }
+    if (aTable == null)
+      throw new NullPointerException ("Table");
+    if (!aTable.hasHeaderRow ())
+      s_aLogger.warn ("Table does not have a header row, so DataTables may not be displayed correctly!");
 
-  public DataTables (@Nonnull final String sParentElementID)
-  {
-    if (StringHelper.hasNoText (sParentElementID))
-      throw new IllegalArgumentException ("ParentElementID");
-    m_sParentElementID = sParentElementID;
+    m_sParentElementID = aTable.getID ();
+    if (StringHelper.hasNoText (m_sParentElementID))
+      throw new IllegalArgumentException ("Table has no ID!");
 
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_194);
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
+    registerExternalResources ();
   }
 
   @Nonnull
@@ -125,12 +119,30 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nullable
+  public DataTablesColumn getColumn (@Nonnegative final int nIndex)
+  {
+    if (nIndex < 0 || nIndex >= m_aColumns.size ())
+      return null;
+    return m_aColumns.get (nIndex);
+  }
+
   @Nonnull
   public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
   {
     if (aColumn == null)
       throw new NullPointerException ("column");
     m_aColumns.add (aColumn);
+    return this;
+  }
+
+  @Nonnull
+  public DataTables addAllColumns (@Nonnull final AbstractHCBaseTable <?> aTable)
+  {
+    // Add all columns
+    final int nCols = aTable.getColGroup ().getColumnCount ();
+    for (int i = 0; i < nCols; ++i)
+      addColumn (new DataTablesColumn (i));
     return this;
   }
 
@@ -268,5 +280,11 @@ public class DataTables implements IHCNodeBuilder
     final JSPackage aJSCode = new JSPackage ();
     aJSCode.var ("oTable", JQuery.idRef (m_sParentElementID).invoke ("dataTable").arg (aParams));
     return new HCScriptOnDocumentReady (aJSCode);
+  }
+
+  public static void registerExternalResources ()
+  {
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_194);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
   }
 }

@@ -58,11 +58,21 @@ public class DataTablesColumn
       m_aTargets.add (nTarget);
   }
 
+  public boolean isSearchable ()
+  {
+    return m_bSearchable;
+  }
+
   @Nonnull
   public DataTablesColumn setSearchable (final boolean bSearchable)
   {
     m_bSearchable = bSearchable;
     return this;
+  }
+
+  public boolean isSortable ()
+  {
+    return m_bSortable;
   }
 
   @Nonnull
@@ -72,6 +82,11 @@ public class DataTablesColumn
     return this;
   }
 
+  public boolean isVisible ()
+  {
+    return m_bVisible;
+  }
+
   @Nonnull
   public DataTablesColumn setVisible (final boolean bVisible)
   {
@@ -79,11 +94,23 @@ public class DataTablesColumn
     return this;
   }
 
+  @Nullable
+  public ICSSClassProvider getCSSClass ()
+  {
+    return m_aCSSClassProvider;
+  }
+
   @Nonnull
-  public DataTablesColumn setClass (@Nullable final ICSSClassProvider aCSSClassProvider)
+  public DataTablesColumn setCSSClass (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
     m_aCSSClassProvider = aCSSClassProvider;
     return this;
+  }
+
+  @Nullable
+  public String getName ()
+  {
+    return m_sName;
   }
 
   @Nonnull
@@ -93,6 +120,12 @@ public class DataTablesColumn
     return this;
   }
 
+  @Nullable
+  public IDataTablesColumnType getType ()
+  {
+    return m_aType;
+  }
+
   @Nonnull
   public DataTablesColumn setType (@Nullable final IDataTablesColumnType aType)
   {
@@ -100,11 +133,23 @@ public class DataTablesColumn
     return this;
   }
 
+  @Nullable
+  public String getWidth ()
+  {
+    return m_sWidth;
+  }
+
   @Nonnull
   public DataTablesColumn setWidth (@Nullable final String sWidth)
   {
     m_sWidth = sWidth;
     return this;
+  }
+
+  @Nullable
+  public int [] getDataSort ()
+  {
+    return ArrayHelper.getCopy (m_aDataSort);
   }
 
   /**
