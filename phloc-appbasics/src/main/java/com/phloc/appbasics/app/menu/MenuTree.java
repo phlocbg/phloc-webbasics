@@ -36,7 +36,7 @@ import com.phloc.scopes.nonweb.singleton.tree.GlobalSingletonTreeWithUniqueID;
  * 
  * @author philip
  */
-public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject>
+public final class MenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTree.class);
 
