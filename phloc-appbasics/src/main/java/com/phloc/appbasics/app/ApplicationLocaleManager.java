@@ -27,7 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.EChange;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.nonweb.singleton.ApplicationSingleton;
 
 /**
  * This class manages the locales available in the application.
@@ -35,18 +35,18 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
  * @author philip
  */
 @NotThreadSafe
-public final class GlobalLocaleManager extends GlobalSingleton implements ILocaleManager
+public final class ApplicationLocaleManager extends ApplicationSingleton implements ILocaleManager
 {
   private final LocaleManager m_aProxy = new LocaleManager ();
 
   @Deprecated
   @UsedViaReflection
-  public GlobalLocaleManager ()
+  public ApplicationLocaleManager ()
   {}
 
-  public static GlobalLocaleManager getInstance ()
+  public static ApplicationLocaleManager getInstance ()
   {
-    return getGlobalSingleton (GlobalLocaleManager.class);
+    return getApplicationSingleton (ApplicationLocaleManager.class);
   }
 
   @Nonnull

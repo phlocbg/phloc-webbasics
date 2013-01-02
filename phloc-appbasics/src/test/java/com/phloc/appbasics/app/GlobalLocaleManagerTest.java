@@ -23,10 +23,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
-import com.phloc.appbasics.app.GlobalLocaleManager;
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.locale.LocaleCache;
 
 /**
@@ -34,21 +35,19 @@ import com.phloc.commons.locale.LocaleCache;
  * 
  * @author philip
  */
-public final class ApplicationLocaleManagerTest
+public final class GlobalLocaleManagerTest
 {
-  @BeforeClass
-  public static void init ()
-  {
-    GlobalLocaleManager.registerLocale (LocaleCache.getLocale ("de", "AT"));
-  }
+  @Rule
+  public final TestRule m_aRule = new AppBasicTestRule ();
 
   @Test
   public void testIsSupportedLocale ()
   {
-    assertEquals (LocaleCache.getLocale ("de", "AT"), GlobalLocaleManager.getDefaultLocale ());
-    assertTrue (GlobalLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de", "AT")));
-    assertFalse (GlobalLocaleManager.isSupportedLocale (LocaleCache.getLocale ("de")));
-    assertFalse (GlobalLocaleManager.isSupportedLocale (null));
-    assertFalse (GlobalLocaleManager.isSupportedLocale (Locale.CANADA));
+    GlobalLocaleManager.getInstance ().registerLocale (LocaleCache.getLocale ("de", "AT"));
+    assertEquals (LocaleCache.getLocale ("de", "AT"), GlobalLocaleManager.getInstance ().getDefaultLocale ());
+    assertTrue (GlobalLocaleManager.getInstance ().isSupportedLocale (LocaleCache.getLocale ("de", "AT")));
+    assertFalse (GlobalLocaleManager.getInstance ().isSupportedLocale (LocaleCache.getLocale ("de")));
+    assertFalse (GlobalLocaleManager.getInstance ().isSupportedLocale (null));
+    assertFalse (GlobalLocaleManager.getInstance ().isSupportedLocale (Locale.CANADA));
   }
 }

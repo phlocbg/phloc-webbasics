@@ -22,10 +22,10 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.menu.GlobalMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.GlobalMenuTree;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
@@ -174,7 +174,7 @@ public final class GlobalRequestManager
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = GlobalLocaleManager.getDefaultLocale ();
+    final Locale aDefaultLocale = GlobalLocaleManager.getInstance ().getDefaultLocale ();
     if (aDefaultLocale == null)
       throw new IllegalStateException ("No application default locale is specified!");
     return aDefaultLocale;
