@@ -23,6 +23,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.appbasics.app.io.PathRelativeFileIO;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -37,9 +38,11 @@ public final class UserDataManager
    * context directory.
    */
   public static final String DEFAULT_USER_DATA_PATH = "/user";
+  public static final boolean DEFAULT_SERVLET_CONTEXT_IO = true;
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static String s_sUserDataPath = DEFAULT_USER_DATA_PATH;
+  private static boolean s_bServletContextIO = DEFAULT_SERVLET_CONTEXT_IO;
 
   private UserDataManager ()
   {}
@@ -86,6 +89,42 @@ public final class UserDataManager
     try
     {
       return s_sUserDataPath;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Determine whether file resources are located relative to the servlet
+   * context (inside the web application) or inside the data directory (outside
+   * the web application). By default the files reside inside the web
+   * application.
+   * 
+   * @param bServletContextIO
+   *        <code>true</code> to use servlet context IO, <code>false</code> to
+   *        use data IO.
+   */
+  public static void setServletContextIO (final boolean bServletContextIO)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bServletContextIO = bServletContextIO;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public static boolean isServletContextIO ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bServletContextIO;
     }
     finally
     {
@@ -141,6 +180,21 @@ public final class UserDataManager
     return new SimpleURL (getURLPath (aUDO));
   }
 
+  @Nonnull
+  private static PathRelativeFileIO _getFileIO ()
+  {
+    return isServletContextIO () ? WebFileIO.getServletContextIO () : WebFileIO.getDataIO ();
+  }
+
+  /**
+   * @return The file system base path for UDOs.
+   */
+  @Nonnull
+  public static File getBasePathFile ()
+  {
+    return _getFileIO ().getBasePathFile ();
+  }
+
   /**
    * Get the file system resource of the passed UDO object.
    * 
@@ -154,7 +208,7 @@ public final class UserDataManager
   {
     if (aUDO == null)
       throw new NullPointerException ("UDO");
-    return WebFileIO.getServletContextIO ().getResource (getUserDataPath () + aUDO.getPath ());
+    return _getFileIO ().getResource (getUserDataPath () + aUDO.getPath ());
   }
 
   /**
@@ -170,6 +224,6 @@ public final class UserDataManager
   {
     if (aUDO == null)
       throw new NullPointerException ("UDO");
-    return WebFileIO.getServletContextIO ().getFile (getUserDataPath () + aUDO.getPath ());
+    return _getFileIO ().getFile (getUserDataPath () + aUDO.getPath ());
   }
 }
