@@ -19,6 +19,7 @@ import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
@@ -105,6 +106,18 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   {
     m_aMax = Double.valueOf (dMax);
     return this;
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGet ()
+  {
+    return JQuery.idRef (m_sID).invoke ("autoNumericGet");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericSet ()
+  {
+    return JQuery.idRef (m_sID).invoke ("autoNumericSet");
   }
 
   /**
