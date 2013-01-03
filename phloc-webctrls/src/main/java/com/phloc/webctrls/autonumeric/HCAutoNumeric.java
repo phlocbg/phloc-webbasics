@@ -6,6 +6,9 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
 import com.phloc.html.css.DefaultCSSClassProvider;
@@ -17,6 +20,7 @@ import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
+import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
@@ -29,10 +33,11 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * 
  * @author philip
  */
-public class HCAutoNumeric implements IHCNodeBuilder
+public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 {
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
 
+  private final String m_sID;
   private Double m_aInitialValue;
   private String m_sThousandSeparator;
   private String m_sDecimalSeparator;
@@ -41,13 +46,23 @@ public class HCAutoNumeric implements IHCNodeBuilder
   private Double m_aMax;
 
   public HCAutoNumeric ()
-  {}
+  {
+    m_sID = GlobalIDFactory.getNewStringID ();
+  }
 
   public HCAutoNumeric (@Nonnull final Locale aDisplayLocale)
   {
+    this ();
     final DecimalFormatSymbols aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
     m_sThousandSeparator = Character.toString (aDFS.getGroupingSeparator ());
     m_sDecimalSeparator = Character.toString (aDFS.getDecimalSeparator ());
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getID ()
+  {
+    return m_sID;
   }
 
   @Nonnull
@@ -92,6 +107,16 @@ public class HCAutoNumeric implements IHCNodeBuilder
     return this;
   }
 
+  /**
+   * Customize the edit
+   * 
+   * @param aEdit
+   *        The edit to be customized
+   */
+  @OverrideOnDemand
+  protected void customizeEdit (@Nonnull final HCEdit aEdit)
+  {}
+
   @Nonnull
   public IHCNode build ()
   {
@@ -103,8 +128,8 @@ public class HCAutoNumeric implements IHCNodeBuilder
       throw new IllegalArgumentException ("Initial value must be <= max!");
 
     // build edit
-    final String sID = GlobalIDFactory.getNewStringID ();
-    final HCEdit aEdit = new HCEdit ().setID (sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
+    final HCEdit aEdit = new HCEdit ().setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
+    customizeEdit (aEdit);
 
     // build arguments
     final JSAssocArray aArgs = new JSAssocArray ();
@@ -122,9 +147,10 @@ public class HCAutoNumeric implements IHCNodeBuilder
 
     registerExternalResources ();
     final JSPackage aPkg = new JSPackage ();
-    aPkg.add (JQuery.idRef (sID).invoke ("autoNumeric").arg (aArgs));
+    final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
+    aPkg.add (e.invoke ("autoNumeric").arg (aArgs));
     if (m_aInitialValue != null)
-      aPkg.add (JQuery.idRef (sID).invoke ("autoNumericSet").arg (m_aInitialValue.doubleValue ()));
+      aPkg.add (e.invoke ("autoNumericSet").arg (m_aInitialValue.doubleValue ()));
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
 
