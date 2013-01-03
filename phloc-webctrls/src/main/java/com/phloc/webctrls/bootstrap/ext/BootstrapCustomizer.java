@@ -23,10 +23,10 @@ import com.phloc.commons.version.Version;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.IHCBaseNode;
 import com.phloc.html.hc.IHCNodeWithChildren;
-import com.phloc.html.hc.customize.HCDefaultCustomizer;
+import com.phloc.html.hc.customize.HCEmptyCustomizer;
 import com.phloc.webctrls.bootstrap.BootstrapDropDownMenu;
 
-public class BootstrapCustomizer extends HCDefaultCustomizer
+public class BootstrapCustomizer extends HCEmptyCustomizer
 {
   private final Version m_aBootstrapVersion;
 
@@ -42,8 +42,6 @@ public class BootstrapCustomizer extends HCDefaultCustomizer
                              @Nonnull final IHCBaseNode aNode,
                              @Nonnull final EHTMLVersion eHTMLVersion)
   {
-    super.customizeNode (aParentElement, aNode, eHTMLVersion);
-
     if (aNode instanceof BootstrapDropDownMenu)
     {
       EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (m_aBootstrapVersion, aParentElement);
