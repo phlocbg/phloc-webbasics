@@ -7,6 +7,15 @@ import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
+/**
+ * jQuery autosize plugin from
+ * 
+ * <pre>
+ * http://www.jacklmoore.com/autosize
+ * </pre>
+ * 
+ * @author philip
+ */
 public class HCTextAreaAutosize extends HCTextArea
 {
   public HCTextAreaAutosize (@Nullable final String sName)

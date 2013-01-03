@@ -1,5 +1,7 @@
 package com.phloc.webctrls.colorbox;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -15,10 +17,20 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
+/**
+ * jQuery colorbox plugin from
+ * 
+ * <pre>
+ * http://www.jacklmoore.com/colorbox
+ * </pre>
+ * 
+ * @author philip
+ */
 public class HCColorbox implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_PHOTO = false;
 
+  private Locale m_aDisplayLocale;
   private final IHCElement <?> m_aElement;
   private boolean m_bPhoto = false;
   private String m_sMaxWidth;
@@ -29,6 +41,19 @@ public class HCColorbox implements IHCNodeBuilder
     if (aElement == null)
       throw new NullPointerException ("element");
     m_aElement = aElement;
+  }
+
+  @Nullable
+  public Locale getDisplayLocale ()
+  {
+    return m_aDisplayLocale;
+  }
+
+  @Nonnull
+  public HCColorbox setDisplayLocale (@Nonnull final Locale aDisplayLocale)
+  {
+    m_aDisplayLocale = aDisplayLocale;
+    return this;
   }
 
   public boolean isPhoto ()
@@ -69,7 +94,7 @@ public class HCColorbox implements IHCNodeBuilder
     return this;
   }
 
-  @Nullable
+  @Nonnull
   public IHCNode build ()
   {
     // Ensure element has an ID
@@ -89,6 +114,12 @@ public class HCColorbox implements IHCNodeBuilder
       aArgs.add ("maxWidth", m_sMaxWidth);
     if (StringHelper.hasText (m_sMaxHeight))
       aArgs.add ("maxHeight", m_sMaxHeight);
+
+    if (m_aDisplayLocale != null)
+    {
+      // FIXME add custom texts
+    }
+
     return HCNodeList.create (m_aElement,
                               new HCScriptOnDocumentReady (JQuery.idRef (sID).invoke ("colorbox").arg (aArgs)));
   }
@@ -98,5 +129,4 @@ public class HCColorbox implements IHCNodeBuilder
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorboxCSSPathProvider.COLORBOX_1320);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorboxJSPathProvider.COLORBOX_1320);
   }
-
 }
