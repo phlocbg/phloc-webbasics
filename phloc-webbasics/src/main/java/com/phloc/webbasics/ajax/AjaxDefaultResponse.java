@@ -182,6 +182,12 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
   }
 
   @Nonnull
+  public static AjaxDefaultResponse createSuccess ()
+  {
+    return createSuccess (null);
+  }
+
+  @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
   {
     return new AjaxDefaultResponse (true, null, aSuccessValue);
