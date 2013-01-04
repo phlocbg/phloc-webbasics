@@ -17,6 +17,8 @@
  */
 package com.phloc.webctrls.custom;
 
+import javax.annotation.Nonnull;
+
 /**
  * Contains all default icon types
  * 
@@ -34,13 +36,21 @@ public enum EDefaultIcon
   HELP,
   INFO,
   MAGNIFIER,
+  MINUS,
   NEW,
   NEXT,
   NO,
+  PLUS,
   SAVE,
   SAVE_ALL,
   SAVE_AS,
   SAVE_CLOSE,
   UP,
   YES;
+
+  @Nonnull
+  public IIcon getIcon ()
+  {
+    return DefaultIcons.get (this);
+  }
 }

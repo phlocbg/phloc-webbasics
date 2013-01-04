@@ -90,6 +90,12 @@ public class BootstrapButton extends HCA_JS
   }
 
   @Nonnull
+  public BootstrapButton setIcon (@Nullable final EDefaultIcon eIcon)
+  {
+    return setIcon (eIcon == null ? null : eIcon.getIcon ());
+  }
+
+  @Nonnull
   public BootstrapButton setIcon (@Nullable final IIcon aIcon)
   {
     m_aIcon = aIcon;

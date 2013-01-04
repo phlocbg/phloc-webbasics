@@ -1081,9 +1081,11 @@ public enum EFamFamIcon implements IIcon
     DefaultIcons.set (EDefaultIcon.HELP, HELP);
     DefaultIcons.set (EDefaultIcon.INFO, INFORMATION);
     DefaultIcons.set (EDefaultIcon.MAGNIFIER, MAGNIFIER);
+    DefaultIcons.set (EDefaultIcon.MINUS, DELETE);
     DefaultIcons.set (EDefaultIcon.NEW, PAGE_WHITE);
     DefaultIcons.set (EDefaultIcon.NEXT, ARROW_RIGHT);
     DefaultIcons.set (EDefaultIcon.NO, CANCEL);
+    DefaultIcons.set (EDefaultIcon.PLUS, ADD);
     DefaultIcons.set (EDefaultIcon.SAVE, DISK);
     DefaultIcons.set (EDefaultIcon.SAVE_ALL, DISK_MULTIPLE);
     DefaultIcons.set (EDefaultIcon.SAVE_AS, DISK);

@@ -58,6 +58,12 @@ public class BootstrapButton_Button extends HCButton
   }
 
   @Nonnull
+  public BootstrapButton_Button setIcon (@Nullable final EDefaultIcon eIcon)
+  {
+    return setIcon (eIcon == null ? null : eIcon.getIcon ());
+  }
+
+  @Nonnull
   public BootstrapButton_Button setIcon (@Nullable final IIcon aIcon)
   {
     m_aIcon = aIcon;

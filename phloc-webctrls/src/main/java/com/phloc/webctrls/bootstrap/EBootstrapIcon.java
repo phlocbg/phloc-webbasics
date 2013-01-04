@@ -223,20 +223,29 @@ public enum EBootstrapIcon implements IIcon
     DefaultIcons.set (EDefaultIcon.BACK, CIRCLE_ARROW_LEFT);
     DefaultIcons.set (EDefaultIcon.BACK_TO_LIST, CIRCLE_ARROW_LEFT);
     DefaultIcons.set (EDefaultIcon.CANCEL, REMOVE_CIRCLE);
-    DefaultIcons.set (EDefaultIcon.DELETE, REMOVE_SIGN);
+    DefaultIcons.set (EDefaultIcon.DELETE, REMOVE);
     DefaultIcons.set (EDefaultIcon.DOWN, ARROW_DOWN);
     DefaultIcons.set (EDefaultIcon.EDIT, PENCIL);
     DefaultIcons.set (EDefaultIcon.HELP, QUESTION_SIGN);
     DefaultIcons.set (EDefaultIcon.INFO, INFO_SIGN);
     DefaultIcons.set (EDefaultIcon.MAGNIFIER, ZOOM_IN);
+    DefaultIcons.set (EDefaultIcon.MINUS, MINUS);
     DefaultIcons.set (EDefaultIcon.NEW, FILE);
     DefaultIcons.set (EDefaultIcon.NEXT, CIRCLE_ARROW_RIGHT);
-    DefaultIcons.set (EDefaultIcon.NO, null);
+    DefaultIcons.set (EDefaultIcon.NO, REMOVE);
+    DefaultIcons.set (EDefaultIcon.PLUS, PLUS);
     DefaultIcons.set (EDefaultIcon.SAVE, HDD);
     DefaultIcons.set (EDefaultIcon.SAVE_ALL, HDD);
     DefaultIcons.set (EDefaultIcon.SAVE_AS, HDD);
     DefaultIcons.set (EDefaultIcon.SAVE_CLOSE, HDD);
     DefaultIcons.set (EDefaultIcon.UP, ARROW_UP);
-    DefaultIcons.set (EDefaultIcon.YES, null);
+    DefaultIcons.set (EDefaultIcon.YES, OK);
+  }
+
+  public static void setAsDefaultWhite ()
+  {
+    setAsDefault ();
+    for (final EDefaultIcon eDefault : EDefaultIcon.values ())
+      DefaultIcons.set (eDefault, ((EBootstrapIcon) DefaultIcons.get (eDefault)).getAsWhiteIcon ());
   }
 }

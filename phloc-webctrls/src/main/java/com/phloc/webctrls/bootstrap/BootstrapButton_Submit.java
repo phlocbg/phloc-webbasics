@@ -58,6 +58,12 @@ public class BootstrapButton_Submit extends HCButton_Submit
   }
 
   @Nonnull
+  public BootstrapButton_Submit setIcon (@Nullable final EDefaultIcon eIcon)
+  {
+    return setIcon (eIcon == null ? null : eIcon.getIcon ());
+  }
+
+  @Nonnull
   public BootstrapButton_Submit setIcon (@Nullable final IIcon aIcon)
   {
     m_aIcon = aIcon;
