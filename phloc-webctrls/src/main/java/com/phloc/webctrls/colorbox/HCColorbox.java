@@ -13,7 +13,9 @@ import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
@@ -30,17 +32,39 @@ public class HCColorbox implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_PHOTO = false;
 
-  private Locale m_aDisplayLocale;
   private final IHCElement <?> m_aElement;
+  private final IJQuerySelector m_aSelector;
+  private Locale m_aDisplayLocale;
   private boolean m_bPhoto = false;
   private String m_sMaxWidth;
   private String m_sMaxHeight;
+
+  public HCColorbox (@Nonnull final IJQuerySelector aSelector)
+  {
+    if (aSelector == null)
+      throw new NullPointerException ("selector");
+    m_aElement = null;
+    m_aSelector = aSelector;
+  }
 
   public HCColorbox (@Nonnull final IHCElement <?> aElement)
   {
     if (aElement == null)
       throw new NullPointerException ("element");
     m_aElement = aElement;
+    m_aSelector = null;
+  }
+
+  @Nullable
+  public IHCElement <?> getElement ()
+  {
+    return m_aElement;
+  }
+
+  @Nullable
+  public IJQuerySelector getSelector ()
+  {
+    return m_aSelector;
   }
 
   @Nullable
@@ -97,12 +121,17 @@ public class HCColorbox implements IHCNodeBuilder
   @Nonnull
   public IHCNode build ()
   {
-    // Ensure element has an ID
-    String sID = m_aElement.getID ();
-    if (StringHelper.hasNoText (sID))
+    IJQuerySelector aSelector = m_aSelector;
+    if (aSelector == null)
     {
-      sID = GlobalIDFactory.getNewStringID ();
-      m_aElement.setID (sID);
+      // Ensure element has an ID
+      String sID = m_aElement.getID ();
+      if (StringHelper.hasNoText (sID))
+      {
+        sID = GlobalIDFactory.getNewStringID ();
+        m_aElement.setID (sID);
+      }
+      aSelector = JQuerySelector.id (sID);
     }
     registerExternalResources ();
 
@@ -120,8 +149,9 @@ public class HCColorbox implements IHCNodeBuilder
       // FIXME add custom texts
     }
 
-    return HCNodeList.create (m_aElement,
-                              new HCScriptOnDocumentReady (JQuery.idRef (sID).invoke ("colorbox").arg (aArgs)));
+    return HCNodeList.create (m_aElement, new HCScriptOnDocumentReady (JQuery.select (aSelector)
+                                                                             .invoke ("colorbox")
+                                                                             .arg (aArgs)));
   }
 
   public static void registerExternalResources ()
