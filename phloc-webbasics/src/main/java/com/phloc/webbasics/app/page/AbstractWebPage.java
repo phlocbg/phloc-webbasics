@@ -95,6 +95,13 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
     super (sID, aName);
   }
 
+  @Nullable
+  @OverrideOnDemand
+  public String getHeaderText (@Nonnull final Locale aContentLocale)
+  {
+    return getDisplayText (aContentLocale);
+  }
+
   @Nonnull
   protected static final IRequestWebScopeWithoutResponse getScope ()
   {
@@ -365,21 +372,21 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * if desired.
    */
   @Nonnull
-  public final IHCNode getContent (@Nonnull final Locale aDisplayLocale)
+  public final IHCNode getContent (@Nonnull final Locale aContentLocale)
   {
     final HCNodeList aNodeList = new HCNodeList ();
 
-    if (isValidToDisplayPage (aDisplayLocale, aNodeList).isValid ())
+    if (isValidToDisplayPage (aContentLocale, aNodeList).isValid ())
     {
       // Create the main page content
-      fillContent (aDisplayLocale, aNodeList);
+      fillContent (aContentLocale, aNodeList);
     }
 
     // Is help available for this page?
     if (isHelpAvailable ())
     {
       // Add the help icon as the first child of the resulting node list
-      aNodeList.addChild (0, getHelpIconNode (aDisplayLocale));
+      aNodeList.addChild (0, getHelpIconNode (aContentLocale));
     }
     return aNodeList;
   }

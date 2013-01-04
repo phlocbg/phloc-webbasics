@@ -33,10 +33,20 @@ import com.phloc.html.hc.IHCNode;
 public interface IWebPage extends IPage
 {
   /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
+   * Get the headline of the page. By default it is equal to the page name.
+   * 
+   * @param aContentLocale
+   *        The locale to be used. May not be <code>null</code>.
+   * @return The header/headline of the page. May be <code>null</code>.
+   */
+  @Nullable
+  String getHeaderText (@Nonnull Locale aContentLocale);
+
+  /**
+   * @param aContentLocale
+   *        The locale used to render the content
    * @return The content of the area based on the current state.
    */
   @Nullable
-  IHCNode getContent (@Nonnull Locale aDisplayLocale);
+  IHCNode getContent (@Nonnull Locale aContentLocale);
 }
