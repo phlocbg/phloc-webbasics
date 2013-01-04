@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.type.ITypedObject;
 import com.phloc.datetime.IHasCreationDateTime;
@@ -82,6 +83,7 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
    *         <code>null</code>.
    */
   @Nonnull
+  @ReturnsMutableCopy
   Map <String, String> getCustomAttrs ();
 
   /**
