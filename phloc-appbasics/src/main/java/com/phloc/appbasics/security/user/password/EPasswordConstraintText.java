@@ -37,7 +37,8 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 @Translatable
 public enum EPasswordConstraintText implements IHasDisplayText, IHasDisplayTextWithArgs
 {
-  DESC_MIN_LENGTH ("Das Passwort muss mindestens {0} Zeichen haben.", "The password must have at least {0} characters.");
+  DESC_MIN_LENGTH ("Das Passwort muss mindestens {0} Zeichen haben.", "The password must have at least {0} characters."),
+  DESC_MAX_LENGTH ("Das Passwort darf maximal {0} Zeichen haben.", "The password must have at last {0} characters.");
 
   private final ITextProvider m_aTP;
 

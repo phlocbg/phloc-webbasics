@@ -28,50 +28,50 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Password constraint defining the minimum length (incl.)
+ * Password constraint defining the maximum length (incl.)
  * 
  * @author philip
  */
-public class PasswordConstraintMinLength implements IPasswordConstraint
+public class PasswordConstraintMaxLength implements IPasswordConstraint
 {
-  private static final String ATTR_MIN_LENGTH = "minlength";
+  private static final String ATTR_MAX_LENGTH = "maxlength";
 
-  private final int m_nMinLength;
+  private final int m_nMaxLength;
 
-  public PasswordConstraintMinLength (@Nonnegative final int nMinLength)
+  public PasswordConstraintMaxLength (@Nonnegative final int nMaxLength)
   {
-    if (nMinLength < 1)
-      throw new IllegalArgumentException ("MinLength is too small!");
-    m_nMinLength = nMinLength;
+    if (nMaxLength < 1)
+      throw new IllegalArgumentException ("MaxLength is too small!");
+    m_nMaxLength = nMaxLength;
   }
 
   @Nonnegative
-  public int getMinLength ()
+  public int getMaxLength ()
   {
-    return m_nMinLength;
+    return m_nMaxLength;
   }
 
   public boolean isPasswordValid (@Nullable final String sPlainTextPassword)
   {
-    return StringHelper.getLength (sPlainTextPassword) >= m_nMinLength;
+    return StringHelper.getLength (sPlainTextPassword) <= m_nMaxLength;
   }
 
   @Nullable
   public String getDescription (@Nonnull final Locale aContentLocale)
   {
-    return EPasswordConstraintText.DESC_MIN_LENGTH.getDisplayTextWithArgs (aContentLocale,
-                                                                           Integer.valueOf (m_nMinLength));
+    return EPasswordConstraintText.DESC_MAX_LENGTH.getDisplayTextWithArgs (aContentLocale,
+                                                                           Integer.valueOf (m_nMaxLength));
   }
 
   @Nonnull
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
-    aElement.setAttribute (ATTR_MIN_LENGTH, m_nMinLength);
+    aElement.setAttribute (ATTR_MAX_LENGTH, m_nMaxLength);
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("minLength", m_nMinLength).toString ();
+    return new ToStringGenerator (this).append ("maxLength", m_nMaxLength).toString ();
   }
 }

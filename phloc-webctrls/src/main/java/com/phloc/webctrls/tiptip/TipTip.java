@@ -17,91 +17,133 @@
  */
 package com.phloc.webctrls.tiptip;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.html.hc.html.AbstractHCSpan;
-import com.phloc.html.hc.html.HCScript;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeBuilder;
+import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.hc.html.HCSpan;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.jquery.JQuery;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
  * Tooltip class using tiptip jQuery plugin.<br>
- * Important implementation note: must derive from HCSpan since &lt;span>
- * elements may not be self closed in Internet Explorer!
+ * Source:
+ * 
+ * <pre>
+ * http://code.drewwilson.com/entry/tiptip-jquery-plugin
+ * </pre>
  * 
  * @author philip
  */
-public final class TipTip extends AbstractHCSpan <TipTip>
+public final class TipTip implements IHCNodeBuilder
 {
   /** Used for tooltip initialization as jquery selector! */
   public static final ICSSClassProvider CSS_CLASS_TOOLTIP = DefaultCSSClassProvider.create ("nocss_tooltip");
+  public static final String DEFAULT_MAX_WIDTH = "45%";
+  public static final int DEFAULT_EDGE_OFFSET = 5;
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (TipTip.class);
+  private final String m_sContent;
+  private ETipType m_eType = ETipType.INFO;
+  private String m_sMaxWidth = DEFAULT_MAX_WIDTH;
+  private int m_nEdgeOffset = DEFAULT_EDGE_OFFSET;
 
-  private final ETipType m_eType;
-
-  public TipTip (final IPredefinedLocaleTextProvider aTextProvider)
+  public TipTip (@Nonnull @Nonempty final String sText)
   {
-    this (aTextProvider.getText ());
+    if (StringHelper.hasNoText (sText))
+      throw new IllegalArgumentException ("No text makes no sense!");
+
+    m_sContent = sText;
   }
 
-  public TipTip (final String sText)
+  public TipTip (@Nonnull @Nonempty final String sText, @Nonnull final ETipType eType)
   {
-    this (sText, ETipType.INFO);
+    this (sText);
+    setType (eType);
   }
 
-  public TipTip (final String sText, @Nonnull final ETipType eType)
+  @Nonnull
+  @Nonempty
+  public String getContent ()
+  {
+    return m_sContent;
+  }
+
+  @Nonnull
+  public ETipType getType ()
+  {
+    return m_eType;
+  }
+
+  @Nonnull
+  public TipTip setType (@Nonnull final ETipType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");
-
     m_eType = eType;
-    setTitle (sText);
-    addClasses (m_eType, CSS_CLASS_TOOLTIP);
+    return this;
+  }
+
+  @Nullable
+  public String getMaxWidth ()
+  {
+    return m_sMaxWidth;
+  }
+
+  @Nonnull
+  public TipTip setMaxWidth (@Nullable final String sMaxWidth)
+  {
+    m_sMaxWidth = sMaxWidth;
+    return this;
+  }
+
+  public int getEdgeOffset ()
+  {
+    return m_nEdgeOffset;
+  }
+
+  @Nonnull
+  public TipTip setEdgeOffset (@Nonnegative final int nEdgeOffset)
+  {
+    if (nEdgeOffset < 0)
+      throw new IllegalArgumentException ("EdgeOffset");
+    m_nEdgeOffset = nEdgeOffset;
+    return this;
+  }
+
+  @Nullable
+  public IHCNode build ()
+  {
     registerExternalResources ();
 
-    // Add initializer for tool tip only once per request!
-    if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag (TipTip.class.getName ()))
-    {
-      // this is to enable jQuery tipTip
-      // currently maxWidth set to 45% to avoid page overflow (assuming that the
-      // element where it is applied is not very wide (smaller than 5% of the
-      // total width)
-      addChild (new HCScript (JQuery.classRef (CSS_CLASS_TOOLTIP)
-                                    .jqinvoke ("tipTip")
-                                    .arg (new JSAssocArray ().add ("maxWidth", "45%").add ("edgeOffset", 5))));
-    }
-  }
+    final String sID = GlobalIDFactory.getNewStringID ();
+    final HCSpan aSpan = new HCSpan ().setID (sID).addClasses (m_eType, CSS_CLASS_TOOLTIP);
+    if (false)
+      aSpan.addChild (EDefaultIcon.INFO.getIcon ().getAsNode ());
 
-  @Override
-  public String getPlainText ()
-  {
-    return StringHelper.getNotNull (getTitle ());
-  }
+    final JSAssocArray aOptions = new JSAssocArray ();
+    aOptions.add ("content", m_sContent);
+    if (StringHelper.hasText (m_sMaxWidth))
+      aOptions.add ("maxWidth", m_sMaxWidth);
+    if (m_nEdgeOffset > 0)
+      aOptions.add ("edgeOffset", m_nEdgeOffset);
+    final IHCNode aScript = new HCScriptOnDocumentReady (JQuery.idRef (sID).jqinvoke ("tipTip").arg (aOptions));
 
-  @Override
-  protected void applyProperties (final IMicroElement aElement, final IHCConversionSettingsToNode aConversionSettings)
-  {
-    super.applyProperties (aElement, aConversionSettings);
-
-    // Check if the contained text looks like HTML
-    final String sTitle = getTitle ();
-    if (StringHelper.hasText (sTitle) && (sTitle.indexOf ('<') >= 0 || sTitle.indexOf ('>') >= 0))
-      s_aLogger.warn ("The text of a tooltip may not contain '<' or '>' as they are interpreted as HTML code: '" +
-                      sTitle +
-                      "'");
+    return HCNodeList.create (aSpan, aScript);
   }
 
   /**
@@ -112,5 +154,47 @@ public final class TipTip extends AbstractHCSpan <TipTip>
     PerRequestJSIncludes.registerJSIncludeForThisRequest (ETipTipJSPathProvider.TIPTIP_13);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETipTipCSSPathProvider.TIPTIP_13);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETipTipCSSPathProvider.TOOLTIP);
+  }
+
+  @Nonnull
+  private static String _getAsString (@Nonnull final IHCNode aHCNode)
+  {
+    return HCSettings.getAsHTMLString (aHCNode, GlobalDebug.isDebugMode ());
+  }
+
+  @Nonnull
+  public static IHCNode create (@Nonnull @Nonempty final String sText)
+  {
+    return new TipTip (sText).build ();
+  }
+
+  @Nonnull
+  public static IHCNode create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  {
+    return create (aTextProvider.getText ());
+  }
+
+  @Nonnull
+  public static IHCNode create (@Nonnull final IHCNode aHCNode)
+  {
+    return create (_getAsString (aHCNode));
+  }
+
+  @Nonnull
+  public static IHCNode create (@Nonnull final IHCNode... aHCNodes)
+  {
+    final StringBuilder aSB = new StringBuilder ();
+    for (final IHCNode aHCNode : aHCNodes)
+      aSB.append (_getAsString (aHCNode));
+    return create (aSB.toString ());
+  }
+
+  @Nonnull
+  public static IHCNode create (@Nonnull final Iterable <? extends IHCNode> aHCNodes)
+  {
+    final StringBuilder aSB = new StringBuilder ();
+    for (final IHCNode aHCNode : aHCNodes)
+      aSB.append (_getAsString (aHCNode));
+    return create (aSB.toString ());
   }
 }
