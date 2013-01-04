@@ -28,11 +28,10 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.appbasics.security.user.password.PasswordUtils;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
@@ -77,17 +76,17 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,
                         CSecurity.USER_ADMINISTRATOR_LOGIN,
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
-                        UserManager.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
+                        PasswordUtils.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
                         CSecurity.USER_ADMINISTRATOR_NAME));
     _addUser (new User (CSecurity.USER_USER_ID,
                         CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
-                        UserManager.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
+                        PasswordUtils.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
                         CSecurity.USER_USER_NAME));
     _addUser (new User (CSecurity.USER_GUEST_ID,
                         CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
-                        UserManager.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
+                        PasswordUtils.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
                         CSecurity.USER_GUEST_NAME));
     return EChange.CHANGED;
   }
@@ -143,7 +142,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     // Create user
     final User aUser = new User (sLoginName,
                                  sEmailAddress,
-                                 createUserPasswordHash (sPlainTextPassword),
+                                 PasswordUtils.createUserPasswordHash (sPlainTextPassword),
                                  sFirstName,
                                  sLastName,
                                  aDesiredLocale,
@@ -187,7 +186,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = new User (sID,
                                  sLoginName,
                                  sEmailAddress,
-                                 createUserPasswordHash (sPlainTextPassword),
+                                 PasswordUtils.createUserPasswordHash (sPlainTextPassword),
                                  sFirstName);
     aUser.setLastName (sLastName);
     aUser.setDesiredLocale (aDesiredLocale);
@@ -368,26 +367,6 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       return false;
 
     // Now compare the hashes
-    return aUser.getPasswordHash ().equals (createUserPasswordHash (sPlainTextPassword));
-  }
-
-  /**
-   * The one and only method to create a message digest hash from a password.
-   * 
-   * @param sPlainTextPassword
-   *        Plain text password
-   * @return The String representation of the password hash
-   */
-  @Nonnull
-  @Nonempty
-  public static String createUserPasswordHash (@Nonnull final String sPlainTextPassword)
-  {
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
-
-    final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (CSecurity.USER_PASSWORD_ALGO,
-                                                                    sPlainTextPassword,
-                                                                    CCharset.CHARSET_UTF_8);
-    return MessageDigestGeneratorHelper.getHexValueFromDigest (aDigest);
+    return aUser.getPasswordHash ().equals (PasswordUtils.createUserPasswordHash (sPlainTextPassword));
   }
 }
