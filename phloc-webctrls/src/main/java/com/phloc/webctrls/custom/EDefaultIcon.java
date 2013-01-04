@@ -30,6 +30,7 @@ public enum EDefaultIcon
   BACK,
   BACK_TO_LIST,
   CANCEL,
+  COPY,
   DELETE,
   DOWN,
   EDIT,

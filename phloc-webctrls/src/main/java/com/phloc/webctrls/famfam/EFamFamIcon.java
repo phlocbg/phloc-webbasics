@@ -1075,6 +1075,7 @@ public enum EFamFamIcon implements IIcon
     DefaultIcons.set (EDefaultIcon.BACK, ARROW_LEFT);
     DefaultIcons.set (EDefaultIcon.BACK_TO_LIST, ARROW_LEFT);
     DefaultIcons.set (EDefaultIcon.CANCEL, CANCEL);
+    DefaultIcons.set (EDefaultIcon.COPY, APPLICATION_DOUBLE);
     DefaultIcons.set (EDefaultIcon.DELETE, DELETE);
     DefaultIcons.set (EDefaultIcon.DOWN, ARROW_DOWN);
     DefaultIcons.set (EDefaultIcon.EDIT, PENCIL);

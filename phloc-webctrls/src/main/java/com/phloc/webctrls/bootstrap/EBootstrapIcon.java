@@ -223,6 +223,7 @@ public enum EBootstrapIcon implements IIcon
     DefaultIcons.set (EDefaultIcon.BACK, CIRCLE_ARROW_LEFT);
     DefaultIcons.set (EDefaultIcon.BACK_TO_LIST, CIRCLE_ARROW_LEFT);
     DefaultIcons.set (EDefaultIcon.CANCEL, REMOVE_CIRCLE);
+    DefaultIcons.set (EDefaultIcon.COPY, RETWEET);
     DefaultIcons.set (EDefaultIcon.DELETE, REMOVE);
     DefaultIcons.set (EDefaultIcon.DOWN, ARROW_DOWN);
     DefaultIcons.set (EDefaultIcon.EDIT, PENCIL);

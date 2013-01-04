@@ -92,12 +92,12 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
 
     // On submit, inc counter
     final JSAnonymousFunction aOnSubmit = new JSAnonymousFunction ();
-    aOnSubmit.body ().incr (aGlobalCnt);
-    aOnSubmit.body ().incr (aLocalCnt);
+    aOnSubmit.body ().incrPrefix (aGlobalCnt);
+    aOnSubmit.body ().incrPrefix (aLocalCnt);
     // On cancel, dec counter
     final JSAnonymousFunction aOnCancel = new JSAnonymousFunction ();
-    aOnCancel.body ().decr (aGlobalCnt);
-    aOnCancel.body ().decr (aLocalCnt);
+    aOnCancel.body ().decrPrefix (aGlobalCnt);
+    aOnCancel.body ().decrPrefix (aLocalCnt);
 
     final JSVar aUpload = aPkg.var ("u" + sID, JQuery.idRef (sID));
     aPkg.add (aUpload.invoke ("fineUploader")
@@ -125,9 +125,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
         // assign an "onComplete" handler to the fileuploader, that submits the
         // form, as soon, as all uploaded files are handled
         final JSAnonymousFunction aOnCompete = new JSAnonymousFunction ();
-        aOnCompete.body ().decr (aGlobalCnt);
-        // TODO
-        aOnCompete.body ()._if (aGlobalCnt.eq (JSExpr.lit (0)))._then ().add (aForm.invoke ("submit"));
+        aOnCompete.body ()._if (aGlobalCnt.decrPrefix ().eq (JSExpr.lit (0)))._then ().add (aForm.invoke ("submit"));
         aOnClick.body ().add (aUpload.invoke ("on").arg ("complete").arg (aOnCompete));
       }
       // Start the uploading manually
