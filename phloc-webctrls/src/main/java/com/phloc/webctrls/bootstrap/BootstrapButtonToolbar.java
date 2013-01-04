@@ -36,8 +36,7 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   public BootstrapButtonToolbar ()
   {
     super ();
-    if (false)
-      addClass (CBootstrapCSS.BTN_TOOLBAR);
+    addClass (CBootstrapCSS.BTN_TOOLBAR);
   }
 
   @Nonnull
