@@ -42,6 +42,7 @@ import com.phloc.appbasics.security.usergroup.UserGroupManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 
@@ -383,6 +384,27 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
       if (aUserGroup.containsRoleID (sRoleID))
         return true;
     return false;
+  }
+
+  public boolean hasUserAllRoles (@Nullable final String sUserID, @Nullable final Collection <String> aRoleIDs)
+  {
+    if (ContainerHelper.isNotEmpty (aRoleIDs))
+    {
+      final Collection <IUserGroup> aUserGroups = m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID);
+      for (final String sRoleID : aRoleIDs)
+      {
+        boolean bFoundRole = false;
+        for (final IUserGroup aUserGroup : aUserGroups)
+          if (aUserGroup.containsRoleID (sRoleID))
+          {
+            bFoundRole = true;
+            break;
+          }
+        if (!bFoundRole)
+          return false;
+      }
+    }
+    return true;
   }
 
   @Nonnull

@@ -17,7 +17,7 @@
  */
 package com.phloc.webbasics.login;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,8 +32,6 @@ import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -74,9 +72,8 @@ public class LoginManager
    *         login.
    */
   @Nullable
-  @ReturnsMutableCopy
   @OverrideOnDemand
-  protected List <String> getAllRequiredRoleIDs ()
+  protected Collection <String> getAllRequiredRoleIDs ()
   {
     return null;
   }
@@ -91,22 +88,13 @@ public class LoginManager
   protected void onUserLogin (@Nonnull @Nonempty final String sUserLoginName)
   {}
 
-  public static boolean userHasAllRoles (@Nullable final List <String> aRequiredRoleIDs,
-                                         @Nullable final String sUserLoginName)
+  public static boolean userIsMissingAtLeastOneRole (@Nullable final IUser aUser,
+                                                     @Nullable final Collection <String> aRequiredRoleIDs)
   {
-    // Check required roles
-    if (ContainerHelper.isNotEmpty (aRequiredRoleIDs))
-    {
-      final AccessManager aAccessMgr = AccessManager.getInstance ();
-
-      // Try to resolve user
-      final IUser aUser = aAccessMgr.getUserOfLoginName (sUserLoginName);
-      if (aUser != null)
-        for (final String sRequiredRoleID : aRequiredRoleIDs)
-          if (!aAccessMgr.hasUserRole (aUser.getID (), sRequiredRoleID))
-            return false;
-    }
-    return true;
+    // no user -> not missing something :)
+    if (aUser == null)
+      return false;
+    return !AccessManager.getInstance ().hasUserAllRoles (aUser.getID (), aRequiredRoleIDs);
   }
 
   /**
@@ -124,8 +112,8 @@ public class LoginManager
                                                 @Nonnull final UnifiedResponse aUnifiedResponse)
   {
     final LoggedInUserManager aLUM = LoggedInUserManager.getInstance ();
-    String sSessionUserLoginName = aLUM.getCurrentUserID ();
-    if (sSessionUserLoginName == null)
+    String sSessionUserID = aLUM.getCurrentUserID ();
+    if (sSessionUserID == null)
     {
       // No use currently logged in -> start login
       boolean bLoginError = false;
@@ -139,19 +127,21 @@ public class LoginManager
         final String sLoginName = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
         final String sPassword = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
 
+        final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+
         // Check required roles
-        if (!userHasAllRoles (getAllRequiredRoleIDs (), sLoginName))
+        if (userIsMissingAtLeastOneRole (aUser, getAllRequiredRoleIDs ()))
           eLoginResult = ELoginResult.USER_IS_MISSING_ROLE;
 
         if (eLoginResult.isSuccess ())
         {
           // Try main login
-          eLoginResult = aLUM.loginUser (sLoginName, sPassword);
+          eLoginResult = aLUM.loginUser (aUser, sPassword);
           if (eLoginResult.isSuccess ())
           {
             // Credentials are valid
             aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
-            sSessionUserLoginName = sLoginName;
+            sSessionUserID = aUser.getID ();
             onUserLogin (sLoginName);
           }
         }
@@ -168,17 +158,16 @@ public class LoginManager
         }
       }
 
-      if (sSessionUserLoginName == null)
+      if (sSessionUserID == null)
       {
         // Show login screen
         aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
-        WebHTMLCreator.createHTMLResponse (aRequestScope,
-                                           aUnifiedResponse,
-                                           createLoginScreen (bLoginError, eLoginResult));
+        final IHTMLProvider aLoginScreenProvider = createLoginScreen (bLoginError, eLoginResult);
+        WebHTMLCreator.createHTMLResponse (aRequestScope, aUnifiedResponse, aLoginScreenProvider);
       }
     }
 
     // Continue only, if a valid user ID is present
-    return EContinue.valueOf (sSessionUserLoginName != null);
+    return EContinue.valueOf (sSessionUserID != null);
   }
 }

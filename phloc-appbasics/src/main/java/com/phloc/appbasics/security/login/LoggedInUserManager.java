@@ -132,8 +132,15 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     // Try to resolve the user
     final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+    return loginUser (aUser, sPlainTextPassword);
+  }
+
+  @Nonnull
+  public ELoginResult loginUser (@Nullable final IUser aUser, @Nullable final String sPlainTextPassword)
+  {
     if (aUser == null)
       return ELoginResult.USER_NOT_EXISTING;
+
     final String sUserID = aUser.getID ();
 
     // Check the password
