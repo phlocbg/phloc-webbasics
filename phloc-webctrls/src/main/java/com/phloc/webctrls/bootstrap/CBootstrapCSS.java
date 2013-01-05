@@ -51,6 +51,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider BREADCRUMB = DefaultCSSClassProvider.create ("breadcrumb");
   public static final ICSSClassProvider BTN = DefaultCSSClassProvider.create ("btn");
   public static final ICSSClassProvider BTN_GROUP = DefaultCSSClassProvider.create ("btn-group");
+  public static final ICSSClassProvider BTN_GROUP_VERTICAL = DefaultCSSClassProvider.create ("btn-group-vertical");
   public static final ICSSClassProvider BTN_NAVBAR = DefaultCSSClassProvider.create ("btn-navbar");
   public static final ICSSClassProvider BTN_TOOLBAR = DefaultCSSClassProvider.create ("btn-toolbar");
   public static final ICSSClassProvider CARET = DefaultCSSClassProvider.create ("caret");

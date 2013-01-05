@@ -218,16 +218,12 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     }
   }
 
-  /**
-   * Private locked version returning the implementation class
-   * 
-   * @param sUserID
-   *        The ID to be resolved
-   * @return May be <code>null</code>
-   */
   @Nullable
-  private User _internalGetUserOfID (@Nullable final String sUserID)
+  public User getUserOfID (@Nullable final String sUserID)
   {
+    if (StringHelper.hasNoText (sUserID))
+      return null;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -237,12 +233,6 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     {
       m_aRWLock.readLock ().unlock ();
     }
-  }
-
-  @Nullable
-  public IUser getUserOfID (@Nullable final String sUserID)
-  {
-    return _internalGetUserOfID (sUserID);
   }
 
   @Nullable
@@ -330,7 +320,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                               @Nullable final Map <String, String> aNewCustomAttrs)
   {
     // Resolve user
-    final User aUser = _internalGetUserOfID (sUserID);
+    final User aUser = getUserOfID (sUserID);
     if (aUser == null)
       return EChange.UNCHANGED;
 

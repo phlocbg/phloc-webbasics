@@ -179,16 +179,12 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     }
   }
 
-  /**
-   * Private locked version returning the implementation class
-   * 
-   * @param sRoleID
-   *        The ID to be resolved
-   * @return May be <code>null</code>
-   */
   @Nullable
-  private Role _internalGetRoleOfID (@Nullable final String sRoleID)
+  public Role getRoleOfID (@Nullable final String sRoleID)
   {
+    if (StringHelper.hasNoText (sRoleID))
+      return null;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -198,12 +194,6 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     {
       m_aRWLock.readLock ().unlock ();
     }
-  }
-
-  @Nullable
-  public IRole getRoleOfID (@Nullable final String sRoleID)
-  {
-    return _internalGetRoleOfID (sRoleID);
   }
 
   @Nonnull
@@ -242,7 +232,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   public EChange renameRole (@Nullable final String sRoleID, @Nonnull @Nonempty final String sNewName)
   {
     // Resolve user group
-    final Role aRole = _internalGetRoleOfID (sRoleID);
+    final Role aRole = getRoleOfID (sRoleID);
     if (aRole == null)
       return EChange.UNCHANGED;
 

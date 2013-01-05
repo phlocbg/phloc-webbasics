@@ -212,15 +212,8 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     }
   }
 
-  /**
-   * Private locked version returning the implementation class
-   * 
-   * @param sUserGroupID
-   *        The ID to be resolved
-   * @return May be <code>null</code>
-   */
   @Nullable
-  private UserGroup _internalGetUserGroupOfIDLocked (@Nullable final String sUserGroupID)
+  public UserGroup getUserGroupOfID (@Nullable final String sUserGroupID)
   {
     if (StringHelper.hasNoText (sUserGroupID))
       return null;
@@ -234,12 +227,6 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     {
       m_aRWLock.readLock ().unlock ();
     }
-  }
-
-  @Nullable
-  public IUserGroup getUserGroupOfID (@Nullable final String sUserGroupID)
-  {
-    return _internalGetUserGroupOfIDLocked (sUserGroupID);
   }
 
   @Nonnull
@@ -281,7 +268,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange renameUserGroup (@Nullable final String sUserGroupID, @Nonnull @Nonempty final String sNewName)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -303,7 +290,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange assignUserToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -325,7 +312,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange unassignUserFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -372,7 +359,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     if (StringHelper.hasNoText (sUserID))
       return false;
 
-    final IUserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    final IUserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     return aUserGroup == null ? false : aUserGroup.containsUserID (sUserID);
   }
 
@@ -420,7 +407,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange assignRoleToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -442,7 +429,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange unassignRoleFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 

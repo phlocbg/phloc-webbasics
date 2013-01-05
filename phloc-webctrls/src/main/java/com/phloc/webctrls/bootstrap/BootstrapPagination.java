@@ -38,6 +38,12 @@ public class BootstrapPagination extends AbstractHCDiv <BootstrapPagination>
   }
 
   @Nonnull
+  public HCUL getUL ()
+  {
+    return m_aUL;
+  }
+
+  @Nonnull
   public BootstrapPagination addItem (@Nullable final String sContent)
   {
     if (StringHelper.hasText (sContent))
