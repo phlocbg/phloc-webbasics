@@ -109,6 +109,20 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   /**
+   * Check if the request parameter with the given name is present (independent
+   * of the value).
+   * 
+   * @param sName
+   *        Request parameter name
+   * @return <code>true</code> of the attribute is present, <code>false</code>
+   *         if not
+   */
+  protected static final boolean containsAttr (@Nullable final String sName)
+  {
+    return getScope ().containsAttribute (sName);
+  }
+
+  /**
    * Get the value of the request parameter with the given name.
    * 
    * @param sName
