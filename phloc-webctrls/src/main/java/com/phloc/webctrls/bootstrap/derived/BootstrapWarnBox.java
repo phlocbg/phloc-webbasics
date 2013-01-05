@@ -34,7 +34,6 @@ public class BootstrapWarnBox extends BootstrapAlert
     super ();
     // Warning requires no specific type
     setBlock (true);
-    setShowClose (true);
   }
 
   @Nonnull

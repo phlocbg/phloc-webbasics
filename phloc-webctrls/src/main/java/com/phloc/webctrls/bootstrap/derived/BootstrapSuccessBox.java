@@ -35,7 +35,6 @@ public class BootstrapSuccessBox extends BootstrapAlert
     super ();
     setType (EBootstrapAlertType.SUCCESS);
     setBlock (true);
-    setShowClose (true);
   }
 
   @Nonnull

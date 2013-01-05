@@ -35,7 +35,6 @@ public class BootstrapDangerBox extends BootstrapAlert
     super ();
     setType (EBootstrapAlertType.DANGER);
     setBlock (true);
-    setShowClose (true);
   }
 
   @Nonnull

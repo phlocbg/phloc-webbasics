@@ -35,7 +35,6 @@ public class BootstrapInfoBox extends BootstrapAlert
     super ();
     setType (EBootstrapAlertType.INFO);
     setBlock (true);
-    setShowClose (true);
   }
 
   @Nonnull

@@ -35,8 +35,6 @@ public class BootstrapErrorBox extends BootstrapAlert
     super ();
     setType (EBootstrapAlertType.ERROR);
     setBlock (true);
-    // Error messages cannot be closed by default
-    setShowClose (false);
   }
 
   @Nonnull
