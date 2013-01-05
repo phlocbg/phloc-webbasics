@@ -163,7 +163,12 @@ public class HCColorbox implements IHCNodeBuilder
 
     if (m_aDisplayLocale != null)
     {
-      // FIXME add custom texts
+      aArgs.add ("current", EColorboxText.CURRENT.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("previous", EColorboxText.PREVIOUS.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("next", EColorboxText.NEXT.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("close", EColorboxText.CLOSE.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("xhrError", EColorboxText.XHR_ERROR.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("imgError", EColorboxText.IMG_ERROR.getDisplayText (m_aDisplayLocale));
     }
 
     return HCNodeList.create (m_aElement, new HCScriptOnDocumentReady (JQuery.select (aSelector)
