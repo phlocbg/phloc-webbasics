@@ -35,7 +35,9 @@ public enum ELoginResult implements ISuccessIndicator
   /** The user was already logged in */
   USER_ALREADY_LOGGED_IN,
   /** Another user is already logged in this session */
-  SESSION_ALREADY_HAS_USER;
+  SESSION_ALREADY_HAS_USER,
+  /** User does not have the correct role */
+  USER_IS_MISSING_ROLE;
 
   public boolean isSuccess ()
   {

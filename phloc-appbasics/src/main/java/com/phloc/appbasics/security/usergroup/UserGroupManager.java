@@ -39,6 +39,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * This class manages the available users.
@@ -178,10 +179,32 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
 
   public boolean containsUserGroupWithID (@Nullable final String sUserGroupID)
   {
+    if (StringHelper.hasNoText (sUserGroupID))
+      return false;
+
     m_aRWLock.readLock ().lock ();
     try
     {
       return m_aUserGroups.containsKey (sUserGroupID);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public boolean containsAllUserGroupsWithID (@Nullable final Collection <String> aUserGroupIDs)
+  {
+    if (ContainerHelper.isEmpty (aUserGroupIDs))
+      return true;
+
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      for (final String sUserGroupID : aUserGroupIDs)
+        if (!m_aUserGroups.containsKey (sUserGroupID))
+          return false;
+      return true;
     }
     finally
     {
@@ -197,8 +220,11 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
    * @return May be <code>null</code>
    */
   @Nullable
-  private UserGroup _internalGetUserGroupOfID (@Nullable final String sUserGroupID)
+  private UserGroup _internalGetUserGroupOfIDLocked (@Nullable final String sUserGroupID)
   {
+    if (StringHelper.hasNoText (sUserGroupID))
+      return null;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -213,7 +239,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nullable
   public IUserGroup getUserGroupOfID (@Nullable final String sUserGroupID)
   {
-    return _internalGetUserGroupOfID (sUserGroupID);
+    return _internalGetUserGroupOfIDLocked (sUserGroupID);
   }
 
   @Nonnull
@@ -234,6 +260,9 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   public EChange deleteUserGroup (@Nullable final String sUserGroupID)
   {
+    if (StringHelper.hasNoText (sUserGroupID))
+      return EChange.UNCHANGED;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -252,7 +281,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange renameUserGroup (@Nullable final String sUserGroupID, @Nonnull @Nonempty final String sNewName)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -274,7 +303,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange assignUserToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -296,7 +325,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange unassignUserFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -317,6 +346,9 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   public EChange unassignUserFromAllUserGroups (@Nullable final String sUserID)
   {
+    if (StringHelper.hasNoText (sUserID))
+      return EChange.UNCHANGED;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -335,17 +367,47 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     }
   }
 
+  public boolean isUserAssignedToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
+  {
+    if (StringHelper.hasNoText (sUserID))
+      return false;
+
+    final IUserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
+    return aUserGroup == null ? false : aUserGroup.containsUserID (sUserID);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
-  public Collection <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable final String sUserID)
+  public List <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable final String sUserID)
   {
     m_aRWLock.readLock ().lock ();
     try
     {
       final List <IUserGroup> ret = new ArrayList <IUserGroup> ();
-      for (final IUserGroup aUserGroup : m_aUserGroups.values ())
-        if (aUserGroup.containsUserID (sUserID))
-          ret.add (aUserGroup);
+      if (StringHelper.hasText (sUserID))
+        for (final IUserGroup aUserGroup : m_aUserGroups.values ())
+          if (aUserGroup.containsUserID (sUserID))
+            ret.add (aUserGroup);
+      return ret;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllUserGroupIDsWithAssignedUser (@Nullable final String sUserID)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      final List <String> ret = new ArrayList <String> ();
+      if (StringHelper.hasText (sUserID))
+        for (final IUserGroup aUserGroup : m_aUserGroups.values ())
+          if (aUserGroup.containsUserID (sUserID))
+            ret.add (aUserGroup.getID ());
       return ret;
     }
     finally
@@ -358,7 +420,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange assignRoleToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -380,7 +442,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   public EChange unassignRoleFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID)
   {
     // Resolve user group
-    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    final UserGroup aUserGroup = _internalGetUserGroupOfIDLocked (sUserGroupID);
     if (aUserGroup == null)
       return EChange.UNCHANGED;
 
@@ -401,6 +463,9 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   public EChange unassignRoleFromAllUserGroups (@Nullable final String sRoleID)
   {
+    if (StringHelper.hasNoText (sRoleID))
+      return EChange.UNCHANGED;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -421,15 +486,36 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
 
   @Nonnull
   @ReturnsMutableCopy
-  public Collection <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable final String sRoleID)
+  public List <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable final String sRoleID)
   {
     m_aRWLock.readLock ().lock ();
     try
     {
       final List <IUserGroup> ret = new ArrayList <IUserGroup> ();
-      for (final IUserGroup aUserGroup : m_aUserGroups.values ())
-        if (aUserGroup.containsRoleID (sRoleID))
-          ret.add (aUserGroup);
+      if (StringHelper.hasText (sRoleID))
+        for (final IUserGroup aUserGroup : m_aUserGroups.values ())
+          if (aUserGroup.containsRoleID (sRoleID))
+            ret.add (aUserGroup);
+      return ret;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllUserGroupIDsWithAssignedRole (@Nullable final String sRoleID)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      final List <String> ret = new ArrayList <String> ();
+      if (StringHelper.hasText (sRoleID))
+        for (final IUserGroup aUserGroup : m_aUserGroups.values ())
+          if (aUserGroup.containsRoleID (sRoleID))
+            ret.add (aUserGroup.getID ());
       return ret;
     }
     finally

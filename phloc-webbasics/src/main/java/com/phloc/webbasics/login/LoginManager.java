@@ -17,16 +17,23 @@
  */
 package com.phloc.webbasics.login;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -62,6 +69,19 @@ public class LoginManager
   }
 
   /**
+   * @return A list of all role IDs that the user must have so that he can
+   *         login! May be <code>null</code> to indicate that any valid user can
+   *         login.
+   */
+  @Nullable
+  @ReturnsMutableCopy
+  @OverrideOnDemand
+  protected List <String> getAllRequiredRoleIDs ()
+  {
+    return null;
+  }
+
+  /**
    * Callback method to notify on a successful login
    * 
    * @param sUserLoginName
@@ -70,6 +90,24 @@ public class LoginManager
   @OverrideOnDemand
   protected void onUserLogin (@Nonnull @Nonempty final String sUserLoginName)
   {}
+
+  public static boolean userHasAllRoles (@Nullable final List <String> aRequiredRoleIDs,
+                                         @Nullable final String sUserLoginName)
+  {
+    // Check required roles
+    if (ContainerHelper.isNotEmpty (aRequiredRoleIDs))
+    {
+      final AccessManager aAccessMgr = AccessManager.getInstance ();
+
+      // Try to resolve user
+      final IUser aUser = aAccessMgr.getUserOfLoginName (sUserLoginName);
+      if (aUser != null)
+        for (final String sRequiredRoleID : aRequiredRoleIDs)
+          if (!aAccessMgr.hasUserRole (aUser.getID (), sRequiredRoleID))
+            return false;
+    }
+    return true;
+  }
 
   /**
    * Main login
@@ -85,7 +123,8 @@ public class LoginManager
   public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                                 @Nonnull final UnifiedResponse aUnifiedResponse)
   {
-    String sSessionUserLoginName = LoggedInUserManager.getInstance ().getCurrentUserID ();
+    final LoggedInUserManager aLUM = LoggedInUserManager.getInstance ();
+    String sSessionUserLoginName = aLUM.getCurrentUserID ();
     if (sSessionUserLoginName == null)
     {
       // No use currently logged in -> start login
@@ -99,18 +138,27 @@ public class LoginManager
         // -> Check request parameters
         final String sLoginName = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
         final String sPassword = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
-        eLoginResult = LoggedInUserManager.getInstance ().loginUser (sLoginName, sPassword);
+
+        // Check required roles
+        if (!userHasAllRoles (getAllRequiredRoleIDs (), sLoginName))
+          eLoginResult = ELoginResult.USER_IS_MISSING_ROLE;
+
         if (eLoginResult.isSuccess ())
         {
-          // Credentials are valid
-          aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
-          sSessionUserLoginName = sLoginName;
-          onUserLogin (sLoginName);
+          // Try main login
+          eLoginResult = aLUM.loginUser (sLoginName, sPassword);
+          if (eLoginResult.isSuccess ())
+          {
+            // Credentials are valid
+            aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
+            sSessionUserLoginName = sLoginName;
+            onUserLogin (sLoginName);
+          }
         }
-        else
+
+        if (eLoginResult.isFailure ())
         {
           // Credentials are invalid
-
           if (GlobalDebug.isDebugMode ())
             s_aLogger.warn ("Login of '" + sLoginName + "' failed because " + eLoginResult);
 

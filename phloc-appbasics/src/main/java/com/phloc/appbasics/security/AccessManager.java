@@ -230,6 +230,11 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
     return m_aUserGroupMgr.containsUserGroupWithID (sUserGroupID);
   }
 
+  public boolean containsAllUserGroupsWithID (@Nullable final Collection <String> aUserGroupIDs)
+  {
+    return m_aUserGroupMgr.containsAllUserGroupsWithID (aUserGroupIDs);
+  }
+
   @Nullable
   public IUserGroup getUserGroupOfID (@Nullable final String sUserGroupID)
   {
@@ -267,11 +272,23 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
     return m_aUserGroupMgr.unassignUserFromAllUserGroups (sUserID);
   }
 
+  public boolean isUserAssignedToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
+  {
+    return m_aUserGroupMgr.isUserAssignedToUserGroup (sUserGroupID, sUserID);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public Collection <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable final String sUserID)
   {
     return m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <String> getAllUserGroupIDsWithAssignedUser (@Nullable final String sUserID)
+  {
+    return m_aUserGroupMgr.getAllUserGroupIDsWithAssignedUser (sUserID);
   }
 
   @Nonnull
@@ -297,6 +314,13 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   public Collection <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable final String sRoleID)
   {
     return m_aUserGroupMgr.getAllUserGroupsWithAssignedRole (sRoleID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <String> getAllUserGroupIDsWithAssignedRole (@Nullable final String sRoleID)
+  {
+    return m_aUserGroupMgr.getAllUserGroupIDsWithAssignedRole (sRoleID);
   }
 
   // Role API

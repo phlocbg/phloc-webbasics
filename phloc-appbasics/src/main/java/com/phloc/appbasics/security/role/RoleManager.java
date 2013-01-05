@@ -35,6 +35,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * This class manages the available roles.
@@ -145,6 +146,9 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
 
   public boolean containsRoleWithID (@Nullable final String sRoleID)
   {
+    if (StringHelper.hasNoText (sRoleID))
+      return false;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -158,13 +162,15 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
 
   public boolean containsAllRolesWithID (@Nullable final Collection <String> aRoleIDs)
   {
+    if (ContainerHelper.isEmpty (aRoleIDs))
+      return true;
+
     m_aRWLock.readLock ().lock ();
     try
     {
-      if (aRoleIDs != null)
-        for (final String sRoleID : aRoleIDs)
-          if (!m_aRoles.containsKey (sRoleID))
-            return false;
+      for (final String sRoleID : aRoleIDs)
+        if (!m_aRoles.containsKey (sRoleID))
+          return false;
       return true;
     }
     finally

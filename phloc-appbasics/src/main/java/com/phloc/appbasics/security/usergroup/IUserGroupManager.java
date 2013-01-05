@@ -79,6 +79,16 @@ public interface IUserGroupManager
   boolean containsUserGroupWithID (@Nullable String sUserGroupID);
 
   /**
+   * Check if all passed user group IDs are contained
+   * 
+   * @param aUserGroupIDs
+   *        The user group IDs to be checked. May be <code>null</code>.
+   * @return <code>true</code> if the collection is empty or if all contained
+   *         user group IDs are contained
+   */
+  boolean containsAllUserGroupsWithID (@Nullable Collection <String> aUserGroupIDs);
+
+  /**
    * Get the user group with the specified ID
    * 
    * @param sUserGroupID
@@ -148,6 +158,18 @@ public interface IUserGroupManager
   EChange unassignUserFromAllUserGroups (@Nullable String sUserID);
 
   /**
+   * Check if the passed user is assigned to the specified user group
+   * 
+   * @param sUserGroupID
+   *        ID of the user group to check
+   * @param sUserID
+   *        ID of the user to be checked.
+   * @return <code>true</code> if the specified user is assigned to the
+   *         specified user group.
+   */
+  boolean isUserAssignedToUserGroup (@Nullable String sUserGroupID, @Nullable String sUserID);
+
+  /**
    * Get a collection of all user groups to which a certain user is assigned to.
    * 
    * @param sUserID
@@ -158,6 +180,19 @@ public interface IUserGroupManager
   @Nonnull
   @ReturnsMutableCopy
   Collection <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable String sUserID);
+
+  /**
+   * Get a collection of all user group IDs to which a certain user is assigned
+   * to.
+   * 
+   * @param sUserID
+   *        The user ID to search
+   * @return A non-<code>null</code>but may be empty collection with all
+   *         matching user group IDs.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <String> getAllUserGroupIDsWithAssignedUser (@Nullable String sUserID);
 
   /**
    * Assign the passed role ID to the user group with the passed ID.<br>
@@ -208,4 +243,17 @@ public interface IUserGroupManager
   @Nonnull
   @ReturnsMutableCopy
   Collection <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable String sRoleID);
+
+  /**
+   * Get a collection of all user group IDs to which a certain role is assigned
+   * to.
+   * 
+   * @param sRoleID
+   *        The role ID to search
+   * @return A non-<code>null</code>but may be empty collection with all
+   *         matching user group IDs.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <String> getAllUserGroupIDsWithAssignedRole (@Nullable String sRoleID);
 }
