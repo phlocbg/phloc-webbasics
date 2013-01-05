@@ -75,7 +75,9 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
     for (final Map.Entry <String, IApplicationInitializer> aEntry : aIniter.entrySet ())
     {
       final String sAppID = aEntry.getKey ();
-      WebScopeManager.onRequestBegin (sAppID, new OfflineHttpServletRequest (), new MockHttpServletResponse ());
+      WebScopeManager.onRequestBegin (sAppID,
+                                      new OfflineHttpServletRequest (aSC, false),
+                                      new MockHttpServletResponse ());
       try
       {
         final IApplicationInitializer aInitializer = aEntry.getValue ();
