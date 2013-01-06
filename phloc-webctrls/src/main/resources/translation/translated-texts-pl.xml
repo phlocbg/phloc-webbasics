@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="74">
+<translationitems count="87">
   <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
     <pl>Pierwszy</pl>
   </item>
@@ -56,6 +56,45 @@
     <pl></pl>
   </item>
   <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+    <pl>Nie znaleziono żaden wpis</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.FIRST">
+    <pl>Pierwszy</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO">
+    <pl>Pokazać _START_ do _END_ z _TOTAL_ pozycji</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_EMPTY">
+    <pl>Pokazać 0 do 0 z 0 pozycji</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_FILTERED">
+    <pl>(filtrować z _MAX_ wszystkich pozycji)</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_POSTFIX">
+    <pl></pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LAST">
+    <pl>Ostatni</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LENGTH_MENU">
+    <pl>Pokazać _MENU_ pozycje</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.NEXT">
+    <pl>Następny</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PREVIOUS">
+    <pl>Poprzedni</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PROCESSING">
+    <pl>Proszę czekać ...</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.SEARCH">
+    <pl>Wyszukiwanie:</pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.URL">
+    <pl></pl>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.ZERO_RECORDS">
     <pl>Nie znaleziono żaden wpis</pl>
   </item>
   <item id="com.phloc.webctrls.datetime.EDateEditText.CALENDAR_ABOUT">

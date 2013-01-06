@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="74">
+<translationitems count="87">
   <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
     <hu>Első</hu>
   </item>
@@ -56,6 +56,45 @@
     <hu></hu>
   </item>
   <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+    <hu>Nincs bejegyzés.</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.FIRST">
+    <hu>Első</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO">
+    <hu>_START_ ig _END_ tól _TOTAL_beadva</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_EMPTY">
+    <hu>0 tól 0 ig 0 beadva</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_FILTERED">
+    <hu>szűrés _MAX_  tól beadva</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_POSTFIX">
+    <hu></hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LAST">
+    <hu>Utolsó</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LENGTH_MENU">
+    <hu>_MENU_bejegyzések mutatása</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.NEXT">
+    <hu>Következő</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PREVIOUS">
+    <hu>Vissza</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PROCESSING">
+    <hu>Kérem várjon-…</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.SEARCH">
+    <hu>Keresés:</hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.URL">
+    <hu></hu>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.ZERO_RECORDS">
     <hu>Nincs bejegyzés.</hu>
   </item>
   <item id="com.phloc.webctrls.datetime.EDateEditText.CALENDAR_ABOUT">

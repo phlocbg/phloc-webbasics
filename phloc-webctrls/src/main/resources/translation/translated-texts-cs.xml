@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="74">
+<translationitems count="87">
   <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
     <cs>První</cs>
   </item>
@@ -56,6 +56,45 @@
     <cs></cs>
   </item>
   <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
+    <cs>K dispozici nejsou žádné záznamy</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.FIRST">
+    <cs>První</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO">
+    <cs>Zobrazit _START_ do _END_ z _TOTAL_ záznamů</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_EMPTY">
+    <cs>Zobrazit 0 do 0 z 0 záznamů</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_FILTERED">
+    <cs>(filtrovat z _MAX_ všech záznamů)</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_POSTFIX">
+    <cs></cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LAST">
+    <cs>Poslední</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LENGTH_MENU">
+    <cs>Zobrazit _MENU_ položky</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.NEXT">
+    <cs>Další</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PREVIOUS">
+    <cs>Předešlé</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.PROCESSING">
+    <cs>Čekejte prosím ...</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.SEARCH">
+    <cs>Vyhledávání:</cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.URL">
+    <cs></cs>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.ZERO_RECORDS">
     <cs>K dispozici nejsou žádné záznamy</cs>
   </item>
   <item id="com.phloc.webctrls.datetime.EDateEditText.CALENDAR_ABOUT">
