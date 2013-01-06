@@ -36,6 +36,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
@@ -56,6 +57,7 @@ public class DataTables implements IHCNodeBuilder
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
 
   private final String m_sParentElementID;
+  private boolean m_bGenerateOnDocumentReady = false;
   private Locale m_aDisplayLocale;
   private boolean m_bPaginate = DEFAULT_PAGINATE;
   private boolean m_bStateSave = DEFAULT_STATE_SAVE;
@@ -89,6 +91,24 @@ public class DataTables implements IHCNodeBuilder
       throw new IllegalArgumentException ("Table has no ID!");
 
     registerExternalResources ();
+  }
+
+  public boolean getGenerateOnDocumentReady ()
+  {
+    return m_bGenerateOnDocumentReady;
+  }
+
+  @Nonnull
+  public DataTables setGenerateOnDocumentReady (final boolean bGenerateOnDocumentReady)
+  {
+    m_bGenerateOnDocumentReady = bGenerateOnDocumentReady;
+    return this;
+  }
+
+  @Nullable
+  public Locale getDisplayLocale ()
+  {
+    return m_aDisplayLocale;
   }
 
   @Nonnull
@@ -279,7 +299,7 @@ public class DataTables implements IHCNodeBuilder
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();
     aJSCode.var ("oTable", JQuery.idRef (m_sParentElementID).invoke ("dataTable").arg (aParams));
-    return new HCScriptOnDocumentReady (aJSCode);
+    return m_bGenerateOnDocumentReady ? new HCScriptOnDocumentReady (aJSCode) : new HCScript (aJSCode);
   }
 
   public static void registerExternalResources ()

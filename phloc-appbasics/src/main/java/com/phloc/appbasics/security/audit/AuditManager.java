@@ -98,7 +98,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditor
     super (new AuditHasFilename (sBaseDir));
 
     // Ensure base path is present
-    if (StringHelper.hasText (sBaseDir) && !WebIO.resourceExists (sBaseDir))
+    if (StringHelper.hasText (sBaseDir))
       WebIO.createDirRecursiveIfNotExisting (sBaseDir);
 
     m_aItems = new AuditItemList (aUserIDProvider);
