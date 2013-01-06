@@ -170,7 +170,17 @@
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>src/main/resources/**</exclude>
+            <exclude>src/main/resources/autonumeric/**</exclude>
+            <exclude>src/main/resources/autosize/**</exclude>
+            <exclude>src/main/resources/bootstrap/**</exclude>
+            <exclude>src/main/resources/colorbox/**</exclude>
+            <exclude>src/main/resources/datatables/**</exclude>
+            <exclude>src/main/resources/datetime/**</exclude>
+            <exclude>src/main/resources/famfam/**</exclude>
+            <exclude>src/main/resources/fineupload/**</exclude>
+            <exclude>src/main/resources/jquery/**</exclude>
+            <exclude>src/main/resources/jstree/**</exclude>
+            <exclude>src/main/resources/tiptip/**</exclude>
           </excludes>
         </configuration>
       </plugin>

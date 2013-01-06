@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="11">
+<translationitems count="13">
   <item id="com.phloc.appbasics.exchange.EExchangeFileTypeName.CSV">
     <de>CSV</de>
     <en>CSV</en>
@@ -62,5 +62,13 @@
   <item id="com.phloc.appbasics.exchange.bulkimport.AbstractBulkImportExcel$EText.MSG_ERR_NO_STRING">
     <de>Zeile {0}, Spalte {1}: Zeichenkette erwartet</de>
     <en>Row {0}, Column {1}: expected string</en>
+  </item>
+  <item id="com.phloc.appbasics.security.user.password.EPasswordConstraintText.DESC_MAX_LENGTH">
+    <de>Das Passwort darf maximal {0} Zeichen haben.</de>
+    <en>The password must have at last {0} characters.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.user.password.EPasswordConstraintText.DESC_MIN_LENGTH">
+    <de>Das Passwort muss mindestens {0} Zeichen haben.</de>
+    <en>The password must have at least {0} characters.</en>
   </item>
 </translationitems>
