@@ -19,11 +19,15 @@ package com.phloc.webctrls.bootstrap.ext;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.version.Version;
+import com.phloc.css.ECSSUnit;
+import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.IHCBaseNode;
 import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.customize.HCEmptyCustomizer;
+import com.phloc.html.hc.html.HCImg;
 import com.phloc.webctrls.bootstrap.BootstrapDropDownMenu;
 
 public class BootstrapCustomizer extends HCEmptyCustomizer
@@ -42,9 +46,22 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
                              @Nonnull final IHCBaseNode aNode,
                              @Nonnull final EHTMLVersion eHTMLVersion)
   {
-    if (aNode instanceof BootstrapDropDownMenu)
+    if (aNode instanceof HCImg)
     {
-      EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (m_aBootstrapVersion, aParentElement);
+      final HCImg aImg = (HCImg) aNode;
+      final ScalableSize aExtent = aImg.getExtent ();
+      // Workaround for IE if a CSS contains "width:auto" and/or "height:auto"
+      // See e.g. https://github.com/twitter/bootstrap/issues/1899
+      if (aExtent != null)
+      {
+        aImg.addStyles (CCSSProperties.WIDTH.newValue (ECSSUnit.px (aExtent.getWidth ())),
+                        CCSSProperties.HEIGHT.newValue (ECSSUnit.px (aExtent.getHeight ())));
+      }
     }
+    else
+      if (aNode instanceof BootstrapDropDownMenu)
+      {
+        EBootstrapWorkarounds.IPAD_DROPDOWN_FIX.appendIfApplicable (m_aBootstrapVersion, aParentElement);
+      }
   }
 }
