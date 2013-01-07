@@ -48,14 +48,15 @@ public class BootstrapDataTables extends DataTables
     if (false)
       aPackage.add (JQuery.extend ()
                           .arg (JQuery.fn ().ref ("dataTableExt").ref ("oStdClasses"))
-                          .arg (new JSAssocArray ().add ("sSortAsc", "icon icon-array-down")
-                                                   .add ("sSortDesc", "icon icon-array-up")
+                          .arg (new JSAssocArray ().add ("sSortAsc", "icon icon-arrow-down")
+                                                   .add ("sSortDesc", "icon icon-arrow-up")
                                                    .add ("sSortable", "header")));
   }
 
   public static void registerExternalResources ()
   {
-    PerRequestCSSIncludes.unregisterCSSIncludeFromThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
+    if (false)
+      PerRequestCSSIncludes.unregisterCSSIncludeFromThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EBootstrapJSPathProvider.BOOTSTRAP_DATATABLES);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EBootstrapCSSPathProvider.BOOTSTRAP_DATATABLES);
   }
