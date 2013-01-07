@@ -62,6 +62,13 @@ public final class PerRequestCSSIncludes
     _getPerRequestSet (true).add (aCSSPathProvider);
   }
 
+  public static void unregisterCSSIncludeFromThisRequest (@Nonnull final ICSSPathProvider aCSSPathProvider)
+  {
+    if (aCSSPathProvider == null)
+      throw new NullPointerException ("cssPathProvider");
+    _getPerRequestSet (true).remove (aCSSPathProvider);
+  }
+
   /**
    * @return A non-<code>null</code> set with all CSS paths to be included in
    *         this request. Order is ensured using LinkedHashSet.

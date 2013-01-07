@@ -62,6 +62,13 @@ public final class PerRequestJSIncludes
     _getPerRequestSet (true).add (aJSPathProvider);
   }
 
+  public static void unregisterJSIncludeFromThisRequest (@Nonnull final IJSPathProvider aJSPathProvider)
+  {
+    if (aJSPathProvider == null)
+      throw new NullPointerException ("JSPathProvider");
+    _getPerRequestSet (true).remove (aJSPathProvider);
+  }
+
   /**
    * @return A non-<code>null</code> set with all JS paths to be included in
    *         this request. Order is ensured using LinkedHashSet.
