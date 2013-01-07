@@ -24,7 +24,9 @@ import com.phloc.commons.annotations.Nonempty;
 public enum EDataTablesPaginationType implements IDataTablesColumnType
 {
   TWO_BUTTON ("twobutton"),
-  FULL_NUMBERS ("full_numbers");
+  FULL_NUMBERS ("full_numbers"),
+  /** Only available if the respective datatables plugin is present */
+  BOOTSTRAP ("bootstrap");
 
   private final String m_sName;
 

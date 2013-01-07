@@ -233,6 +233,26 @@ public class DataTables implements IHCNodeBuilder
   protected void modifyParams (@Nonnull final JSAssocArray aParams)
   {}
 
+  /**
+   * Add JS code before the data tables init is called
+   * 
+   * @param aPackage
+   *        The JS Package to add the code to
+   */
+  @OverrideOnDemand
+  protected void addCodeBeforeDataTables (@Nonnull final JSPackage aPackage)
+  {}
+
+  /**
+   * Add JS code before the data tables init is called
+   * 
+   * @param aPackage
+   *        The JS Package to add the code to
+   */
+  @OverrideOnDemand
+  protected void addCodeAfterDataTables (@Nonnull final JSPackage aPackage)
+  {}
+
   @Nullable
   public IHCNode build ()
   {
@@ -322,7 +342,11 @@ public class DataTables implements IHCNodeBuilder
 
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();
+
+    addCodeBeforeDataTables (aJSCode);
     aJSCode.var ("oTable", JQuery.idRef (m_sParentElementID).invoke ("dataTable").arg (aParams));
+    addCodeAfterDataTables (aJSCode);
+
     return m_bGenerateOnDocumentReady ? new HCScriptOnDocumentReady (aJSCode) : new HCScript (aJSCode);
   }
 
