@@ -18,6 +18,7 @@
 package com.phloc.webctrls.bootstrap.ext;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -34,6 +35,7 @@ import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
+import com.phloc.webbasics.app.menu.ui.MenuItemDeterminatorCallback;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
@@ -119,9 +121,20 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
   @Nonnull
   public static HCDiv createSideBarMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final Locale aDisplayLocale)
   {
+    return createSideBarMenu (aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
+  }
+
+  @Nonnull
+  public static HCDiv createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
+                                         @Nonnull final MenuItemDeterminatorCallback aDeterminator,
+                                         @Nonnull final Locale aDisplayLocale)
+  {
     final HCDiv ret = new HCDiv ().addClasses (CBootstrapCSS.WELL, CBootstrapCSS.SIDEBAR_NAV);
-    ret.addChild (MenuRendererCallback.createRenderedMenu (aMenuTree, new BootstrapMenuItemRenderer (aDisplayLocale))
-                                      .addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST));
+    final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
+    ret.addChild (MenuRendererCallback.createRenderedMenu (aMenuTree.getRootItem (),
+                                                           new BootstrapMenuItemRenderer (aDisplayLocale),
+                                                           aAllDisplayMenuItemIDs).addClasses (CBootstrapCSS.NAV,
+                                                                                               CBootstrapCSS.NAV_LIST));
     return ret;
   }
 }

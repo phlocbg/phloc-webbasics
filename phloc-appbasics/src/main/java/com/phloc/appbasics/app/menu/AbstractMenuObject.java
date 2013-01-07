@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.appbasics.app.menu.flags.FlagContainer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -33,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> implements IMenuObject
+public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> extends FlagContainer implements IMenuObject
 {
   private final String m_sID;
   private IFilter <IMenuObject> m_aDisplayFilter;
@@ -82,7 +83,7 @@ public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <I
   {
     if (o == this)
       return true;
-    if (o == null || !getClass ().equals (o.getClass ()))
+    if (!super.equals (o))
       return false;
     final AbstractMenuObject <?> rhs = (AbstractMenuObject <?>) o;
     return m_sID.equals (rhs.m_sID);
@@ -91,14 +92,15 @@ public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <I
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_sID).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID)
-                                       .appendIfNotNull ("displayFilter", m_aDisplayFilter)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("ID", m_sID)
+                            .appendIfNotNull ("displayFilter", m_aDisplayFilter)
+                            .toString ();
   }
 }

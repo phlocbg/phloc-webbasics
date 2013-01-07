@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.menu.IMenuObject;
@@ -28,6 +29,7 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
 import com.phloc.commons.hierarchy.EHierarchyCallbackReturn;
@@ -40,15 +42,14 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
  * 
  * @author philip
  */
-public class MenuItemDeterminatorCallback extends
-                                         DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final IMenuTree m_aMenuTree;
   private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();
   private final String m_sSelectedItem;
   private final DefaultTreeItemWithID <String, IMenuObject> m_aSelectedItem;
 
-  protected MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
+  public MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
   {
     if (aMenuTree == null)
       throw new NullPointerException ("menuTree");
@@ -56,6 +57,13 @@ public class MenuItemDeterminatorCallback extends
     m_sSelectedItem = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
     m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItem);
     // The selected item may be null if an invalid menu item ID was passed
+  }
+
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
+  protected boolean isMenuItemValidToBeDisplayed (@Nonnull final IMenuObject aMenuObj)
+  {
+    return aMenuObj.matchesDisplayFilter ();
   }
 
   @OverrideOnDemand
@@ -121,7 +129,7 @@ public class MenuItemDeterminatorCallback extends
     // Check display filter
     if (bShow || bAddAllChildrenOnThisLevel)
     {
-      if (!aItem.getData ().matchesDisplayFilter ())
+      if (!isMenuItemValidToBeDisplayed (aItem.getData ()))
       {
         bShow = false;
         bAddAllChildrenOnThisLevel = false;
@@ -133,16 +141,16 @@ public class MenuItemDeterminatorCallback extends
       rememberMenuItemForDisplay (aItem.getID (), bExpanded);
     if (bAddAllChildrenOnThisLevel)
       for (final DefaultTreeItemWithID <String, IMenuObject> aSibling : aItem.getParent ().getChildren ())
-        if (aSibling.getData ().matchesDisplayFilter ())
+        if (isMenuItemValidToBeDisplayed (aSibling.getData ()))
           rememberMenuItemForDisplay (aSibling.getID (), false);
     return EHierarchyCallbackReturn.CONTINUE;
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Map <String, Boolean> getAllItemIDs ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aItems);
+    return ContainerHelper.newMap (m_aItems);
   }
 
   @Nonnull
