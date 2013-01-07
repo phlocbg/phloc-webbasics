@@ -24,11 +24,12 @@ public class BootstrapDataTables extends DataTables
   @Override
   protected void addCodeBeforeDataTables (final JSPackage aPackage)
   {
-    aPackage.add (JQuery.extend ()
-                        .arg (JQuery.fn ().ref ("dataTableExt").ref ("oStdClasses"))
-                        .arg (new JSAssocArray ().add ("sSortAsc", "header headerSortDown")
-                                                 .add ("sSortDesc", "header headerSortUp")
-                                                 .add ("sSortable", "header")));
+    if (false)
+      aPackage.add (JQuery.extend ()
+                          .arg (JQuery.fn ().ref ("dataTableExt").ref ("oStdClasses"))
+                          .arg (new JSAssocArray ().add ("sSortAsc", "icon icon-array-down")
+                                                   .add ("sSortDesc", "icon icon-array-up")
+                                                   .add ("sSortable", "header")));
   }
 
   public static void registerExternalResources ()
