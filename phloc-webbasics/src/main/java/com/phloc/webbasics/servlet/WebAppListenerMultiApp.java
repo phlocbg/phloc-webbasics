@@ -47,26 +47,18 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
   protected abstract Map <String, IApplicationInitializer> getAllInitializers ();
 
   /**
-   * Set global system properties, after the content was initialized
+   * Set global system properties, after the content was initialized but before
+   * the application specific init is started
    */
   @OverrideOnDemand
-  protected void initSystemProperties ()
-  {}
-
-  /**
-   * Create all default user and user groups and roles
-   */
-  protected void initSecurity ()
+  protected void initGlobals ()
   {}
 
   @Override
   protected final void afterContextInitialized (@Nonnull final ServletContext aSC)
   {
     // Global properties
-    initSystemProperties ();
-
-    // Init the security things
-    initSecurity ();
+    initGlobals ();
 
     final Map <String, IApplicationInitializer> aIniter = getAllInitializers ();
     if (ContainerHelper.isEmpty (aIniter))
