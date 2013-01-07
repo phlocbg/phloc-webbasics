@@ -32,12 +32,12 @@
     <en>File Selection</en>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_BUTTON_SUBMIT">
-    <de>Login</de>
+    <de>Anmelden</de>
     <en>Login</en>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_ERROR_MSG">
-    <de>Benutzername und/oder Passwort sind ungültig!</de>
-    <en>User name and/or password are invalid!</en>
+    <de>Die Anmeldung ist fehlgeschlagen!</de>
+    <en>User login failed!</en>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_FIELD_PASSWORD">
     <de>Passwort</de>

@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="13">
+<translationitems count="19">
   <item id="com.phloc.appbasics.exchange.EExchangeFileTypeName.CSV">
     <de>CSV</de>
     <en>CSV</en>
@@ -62,6 +62,30 @@
   <item id="com.phloc.appbasics.exchange.bulkimport.AbstractBulkImportExcel$EText.MSG_ERR_NO_STRING">
     <de>Zeile {0}, Spalte {1}: Zeichenkette erwartet</de>
     <en>Row {0}, Column {1}: expected string</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.INVALID_PASSWORD">
+    <de>Das Passwort ist ungültig.</de>
+    <en>Invalid password provided.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.SESSION_ALREADY_HAS_USER">
+    <de>Es ist bereits ein anderer Benutzer angemeldet.</de>
+    <en>Another user is already logged in.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.SUCCESS">
+    <de>Die Anmeldung war erfolgreich.</de>
+    <en>User logged in successfully.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_ALREADY_LOGGED_IN">
+    <de>Der Benutzer ist bereits angemeldet.</de>
+    <en>The user is already logged in.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_IS_MISSING_ROLE">
+    <de>Der Benutzer hat keine Berechtigung sich anzumelden.</de>
+    <en>The user has no rights to login.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_NOT_EXISTING">
+    <de>Der Benutzername ist ungültig.</de>
+    <en>No such user exists.</en>
   </item>
   <item id="com.phloc.appbasics.security.user.password.EPasswordConstraintText.DESC_MAX_LENGTH">
     <de>Das Passwort darf maximal {0} Zeichen haben.</de>
