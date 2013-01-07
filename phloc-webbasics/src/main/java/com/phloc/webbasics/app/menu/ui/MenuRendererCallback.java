@@ -42,8 +42,7 @@ import com.phloc.html.hc.html.HCUL;
  * 
  * @author philip
  */
-public class MenuRendererCallback extends
-                                 DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuRendererCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final NonBlockingStack <HCUL> m_aMenuListStack;
   private final IMenuItemRenderer m_aRenderer;
@@ -159,7 +158,7 @@ public class MenuRendererCallback extends
             m_aMenuItemStack.push (aLI);
           }
           else
-            throw new IllegalStateException ();
+            throw new IllegalStateException ("Unsupported menu object type!");
       }
       m_aChildCountStack.peek ().incrementAndGet ();
       return EHierarchyCallbackReturn.CONTINUE;

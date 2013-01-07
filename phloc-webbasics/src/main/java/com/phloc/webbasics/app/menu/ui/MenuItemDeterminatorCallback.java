@@ -28,7 +28,6 @@ import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
@@ -154,14 +153,14 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final IMenuTree aMenuTree)
   {
     return getAllDisplayMenuItemIDs (new MenuItemDeterminatorCallback (aMenuTree));
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final MenuItemDeterminatorCallback aDeterminator)
   {
     if (aDeterminator == null)
