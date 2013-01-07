@@ -57,7 +57,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
   {
     final HCForm aForm = new HCForm (LinkUtils.getSelfHref ());
     if (showLoginError ())
-      aForm.addChild (BootstrapErrorBox.create (getTextErrorMessage (aDisplayLocale)));
+      aForm.addChild (BootstrapErrorBox.create (getTextErrorMessage (aDisplayLocale, getLoginResult ())));
 
     final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (170), HCCol.star ()));
     aTable.setStriped (false);

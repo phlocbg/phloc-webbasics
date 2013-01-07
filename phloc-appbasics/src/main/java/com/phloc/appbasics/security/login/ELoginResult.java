@@ -17,6 +17,12 @@
  */
 package com.phloc.appbasics.security.login;
 
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.state.ISuccessIndicator;
 
 /**
@@ -24,20 +30,27 @@ import com.phloc.commons.state.ISuccessIndicator;
  * 
  * @author philip
  */
-public enum ELoginResult implements ISuccessIndicator
+public enum ELoginResult implements ISuccessIndicator, IHasDisplayText
 {
   /** Login was successfully */
-  SUCCESS,
+  SUCCESS (ELoginResultText.SUCCESS),
   /** No such user */
-  USER_NOT_EXISTING,
+  USER_NOT_EXISTING (ELoginResultText.USER_NOT_EXISTING),
   /** The provided password is invalid */
-  INVALID_PASSWORD,
+  INVALID_PASSWORD (ELoginResultText.INVALID_PASSWORD),
   /** The user was already logged in */
-  USER_ALREADY_LOGGED_IN,
+  USER_ALREADY_LOGGED_IN (ELoginResultText.USER_ALREADY_LOGGED_IN),
   /** Another user is already logged in this session */
-  SESSION_ALREADY_HAS_USER,
+  SESSION_ALREADY_HAS_USER (ELoginResultText.SESSION_ALREADY_HAS_USER),
   /** User does not have the correct role */
-  USER_IS_MISSING_ROLE;
+  USER_IS_MISSING_ROLE (ELoginResultText.USER_IS_MISSING_ROLE);
+
+  private final IHasDisplayText m_aErrorMsg;
+
+  private ELoginResult (@Nonnull final IHasDisplayText aErrorMsg)
+  {
+    m_aErrorMsg = aErrorMsg;
+  }
 
   public boolean isSuccess ()
   {
@@ -47,5 +60,11 @@ public enum ELoginResult implements ISuccessIndicator
   public boolean isFailure ()
   {
     return this != SUCCESS;
+  }
+
+  @Nullable
+  public String getDisplayText (@Nonnull final Locale aContentLocale)
+  {
+    return m_aErrorMsg.getDisplayText (aContentLocale);
   }
 }

@@ -105,9 +105,11 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
 
   @Nullable
   @OverrideOnDemand
-  protected String getTextErrorMessage (@Nonnull final Locale aDisplayLocale)
+  protected String getTextErrorMessage (@Nonnull final Locale aDisplayLocale, @Nonnull final ELoginResult eLoginResult)
   {
-    return EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale);
+    return EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale) +
+           " " +
+           eLoginResult.getDisplayText (aDisplayLocale);
   }
 
   @Nullable
@@ -152,7 +154,7 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
     if (showHeaderText ())
       aForm.addChild (new HCDiv ().addChild (getTextHeader (aDisplayLocale)).addClass (CLogin.CSS_CLASS_LOGIN_HEADER));
     if (m_bLoginError)
-      aForm.addChild (new HCDiv ().addChild (getTextErrorMessage (aDisplayLocale))
+      aForm.addChild (new HCDiv ().addChild (getTextErrorMessage (aDisplayLocale, m_eLoginResult))
                                   .addClass (CLogin.CSS_CLASS_LOGIN_ERRORMSG));
 
     // User name and password table

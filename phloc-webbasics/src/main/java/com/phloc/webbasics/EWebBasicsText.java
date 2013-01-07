@@ -42,10 +42,10 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
   DOWNLOAD ("Download", "Download"),
   EMAIL_ADDRESS ("E-Mail-Adresse", "Email address"),
   LOGIN_HEADER ("Login", "Login"),
-  LOGIN_ERROR_MSG ("Benutzername und/oder Passwort sind ungültig!", "User name and/or password are invalid!"),
+  LOGIN_ERROR_MSG ("Die Anmeldung ist fehlgeschlagen!", "User login failed!"),
   LOGIN_FIELD_USERNAME ("Benutzername", "User name"),
   LOGIN_FIELD_PASSWORD ("Passwort", "Password"),
-  LOGIN_BUTTON_SUBMIT ("Login", "Login"),
+  LOGIN_BUTTON_SUBMIT ("Anmelden", "Login"),
   LOGIN_LOGOUT ("Abmelden", "Logout"),
 
   MSG_SAVE_CHANGES_SUCCESS ("Die Änderungen wurden erfolgreich gespeichert!", "The changes were saved successfully!"),
