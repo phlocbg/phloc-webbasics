@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.StringHelper;
@@ -65,6 +66,7 @@ public class DataTables implements IHCNodeBuilder
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
   private EDataTablesPaginationType m_ePaginationType = DEFAULT_PAGINATION_TYPE;
+  private String m_sDom;
   // server side processing
   private ISimpleURL m_aAjaxSource;
   private EHTTPMethod m_eServerMethod;
@@ -187,6 +189,13 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
+  public DataTables setDom (@Nullable final String sDom)
+  {
+    m_sDom = sDom;
+    return this;
+  }
+
+  @Nonnull
   public DataTables setAjaxSource (@Nullable final ISimpleURL aAjaxSource)
   {
     m_aAjaxSource = aAjaxSource;
@@ -214,6 +223,16 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  /**
+   * modify parameter map
+   * 
+   * @param aParams
+   *        parameter map
+   */
+  @OverrideOnDemand
+  protected void modifyParams (@Nonnull final JSAssocArray aParams)
+  {}
+
   @Nullable
   public IHCNode build ()
   {
@@ -236,6 +255,9 @@ public class DataTables implements IHCNodeBuilder
       aParams.add ("aaSorting", m_aInitialSorting.getAsJS ());
     if (m_ePaginationType != null)
       aParams.add ("sPaginationType", m_ePaginationType.getName ());
+    if (StringHelper.hasText (m_sDom))
+      aParams.add ("sDom", m_sDom);
+
     aParams.add ("bServerSide", m_aAjaxSource != null);
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
@@ -295,6 +317,8 @@ public class DataTables implements IHCNodeBuilder
       aLanguage.add ("sUrl", EDataTablesText.URL.getDisplayText (m_aDisplayLocale));
       aParams.add ("oLanguage", aLanguage);
     }
+
+    modifyParams (aParams);
 
     // main on document ready code
     final JSPackage aJSCode = new JSPackage ();
