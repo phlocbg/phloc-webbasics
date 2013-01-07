@@ -109,6 +109,8 @@ public class BootstrapButton extends HCA_JS
   {
     super.internalBeforeConvertToNode (aConversionSettings);
     addClasses (m_eType, m_eSize);
+
+    // apply icon
     if (m_aIcon != null)
     {
       final boolean bAddSeparator = hasChildren ();

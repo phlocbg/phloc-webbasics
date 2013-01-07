@@ -17,6 +17,8 @@
  */
 package com.phloc.webctrls.bootstrap;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
@@ -30,5 +32,20 @@ public class BootstrapButtonGroup extends AbstractHCDiv <BootstrapButtonGroup>
   {
     super ();
     addClass (CBootstrapCSS.BTN_GROUP);
+  }
+
+  /**
+   * Add a new empty drop down button to the group.
+   * 
+   * @return The created drop down button
+   */
+  @Nonnull
+  public BootstrapButton_DropDown addDropDownButton ()
+  {
+    final BootstrapDropDownMenu aDDM = new BootstrapDropDownMenu ();
+    final BootstrapButton_DropDown aButton = new BootstrapButton_DropDown (aDDM);
+    addChild (aButton);
+    addChild (aDDM);
+    return aButton;
   }
 }
