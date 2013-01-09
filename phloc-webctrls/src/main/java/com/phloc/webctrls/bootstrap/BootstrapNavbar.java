@@ -29,6 +29,7 @@ import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCP;
 import com.phloc.html.hc.html.HCSpan;
+import com.phloc.html.hc.impl.HCTextNode;
 
 /**
  * Bootstrap Navbar
@@ -76,7 +77,15 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
                                    @Nonnull final String sBrand,
                                    @Nonnull final ISimpleURL aHomeLink)
   {
-    _insert (bCollapsible, new HCA (aHomeLink).addChild (sBrand).addClass (CBootstrapCSS.BRAND));
+    return addBrand (bCollapsible, new HCTextNode (sBrand), aHomeLink);
+  }
+
+  @Nonnull
+  public BootstrapNavbar addBrand (final boolean bCollapsible,
+                                   @Nonnull final IHCNode aBrand,
+                                   @Nonnull final ISimpleURL aHomeLink)
+  {
+    _insert (bCollapsible, new HCA (aHomeLink).addChild (aBrand).addClass (CBootstrapCSS.BRAND));
     return this;
   }
 

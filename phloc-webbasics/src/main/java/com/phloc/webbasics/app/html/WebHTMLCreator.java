@@ -56,7 +56,7 @@ public final class WebHTMLCreator
 
   public static boolean isIndentAndAlign ()
   {
-    return true;
+    return GlobalDebug.isDebugMode ();
   }
 
   /**
