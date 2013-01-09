@@ -15,7 +15,6 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.html.js.builder.JSExpr;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
@@ -274,10 +273,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
             final FormState aSavedState = FormStateManager.getInstance ().getFormStateOfID (sRestoreFlowID);
             if (aSavedState != null)
             {
-              aForm.addChild (new HCScriptOnDocumentReady (JSExpr.ref ("FormHelper")
-                                                                 .invoke ("setAllFormValues")
-                                                                 .arg (INPUT_FORM_ID)
-                                                                 .arg (aSavedState.getAsAssocArray ())));
+              aForm.addChild (new HCScriptOnDocumentReady (JSFormHelper.setAllFormValues (INPUT_FORM_ID,
+                                                                                          aSavedState.getAsAssocArray ())));
             }
           }
 

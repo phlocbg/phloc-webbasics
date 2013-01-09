@@ -35,9 +35,7 @@ FormHelperClass.prototype =
  
   // string,string
   updateElementDirect : function(updateFieldId,html){
-    var updateObj = $('#'+updateFieldId);
-    updateObj.contents ().remove ();
-    updateObj.append(html);
+    $('#'+updateFieldId).empty().append(html);
   },
   
   // string,string
