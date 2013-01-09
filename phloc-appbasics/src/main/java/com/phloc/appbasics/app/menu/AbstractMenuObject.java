@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.appbasics.app.menu.flags.FlagContainer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.flags.FlagContainer;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;

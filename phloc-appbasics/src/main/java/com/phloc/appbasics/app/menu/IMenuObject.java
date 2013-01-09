@@ -20,7 +20,7 @@ package com.phloc.appbasics.app.menu;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.menu.flags.IFlagContainer;
+import com.phloc.commons.collections.flags.IFlagContainer;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.id.IHasID;
 
