@@ -20,6 +20,7 @@ package com.phloc.webctrls.bootstrap.ext;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.html.hc.html.HCBody;
@@ -45,9 +46,23 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 
 public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 {
-  public BootstrapLoginHTMLProvider (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
+  private final String m_sPageTitle;
+
+  public BootstrapLoginHTMLProvider (final boolean bLoginError,
+                                     @Nonnull final ELoginResult eLoginResult,
+                                     @Nullable final String sPageTitle)
   {
     super (bLoginError, eLoginResult);
+    m_sPageTitle = sPageTitle;
+  }
+
+  @Override
+  protected void fillHead (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                           @Nonnull final HCHtml aHtml,
+                           @Nonnull final Locale aDisplayLocale)
+  {
+    super.fillHead (aRequestScope, aHtml, aDisplayLocale);
+    aHtml.getHead ().setPageTitle (m_sPageTitle);
   }
 
   @Override
@@ -59,7 +74,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     if (showLoginError ())
       aForm.addChild (BootstrapErrorBox.create (getTextErrorMessage (aDisplayLocale, getLoginResult ())));
 
-    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (170), HCCol.star ()));
+    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200), HCCol.star ()));
     aTable.setStriped (false);
 
     // User name and password table
