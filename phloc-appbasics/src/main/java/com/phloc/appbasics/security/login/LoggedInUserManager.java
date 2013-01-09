@@ -141,6 +141,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     if (aUser == null)
       return ELoginResult.USER_NOT_EXISTING;
 
+    if (aUser.isDeleted ())
+      return ELoginResult.USER_IS_DELETED;
+
     final String sUserID = aUser.getID ();
 
     // Check the password

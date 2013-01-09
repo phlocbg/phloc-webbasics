@@ -36,6 +36,10 @@ public enum ELoginResult implements ISuccessIndicator, IHasDisplayText
   SUCCESS (ELoginResultText.SUCCESS),
   /** No such user */
   USER_NOT_EXISTING (ELoginResultText.USER_NOT_EXISTING),
+  /** User is marked as deleted */
+  USER_IS_DELETED (ELoginResultText.USER_IS_DELETED),
+  /** User is disabled */
+  USER_IS_DISABLED (ELoginResultText.USER_IS_DISABLED),
   /** The provided password is invalid */
   INVALID_PASSWORD (ELoginResultText.INVALID_PASSWORD),
   /** The user was already logged in */

@@ -37,6 +37,8 @@ public enum ELoginResultText implements IHasDisplayText
 {
   SUCCESS ("Die Anmeldung war erfolgreich.", "User logged in successfully."),
   USER_NOT_EXISTING ("Der Benutzername ist ungültig.", "No such user exists."),
+  USER_IS_DELETED ("Der Benutzer existiert nicht mehr.", "The user not longer exists."),
+  USER_IS_DISABLED ("Der Benutzer ist deaktiviert.", "The user is disabled."),
   INVALID_PASSWORD ("Das Passwort ist ungültig.", "Invalid password provided."),
   USER_ALREADY_LOGGED_IN ("Der Benutzer ist bereits angemeldet.", "The user is already logged in."),
   SESSION_ALREADY_HAS_USER ("Es ist bereits ein anderer Benutzer angemeldet.", "Another user is already logged in."),
