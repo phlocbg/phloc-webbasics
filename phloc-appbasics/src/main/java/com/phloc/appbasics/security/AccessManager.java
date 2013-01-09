@@ -86,7 +86,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale,
-                              @Nullable final Map <String, String> aCustomAttrs)
+                              @Nullable final Map <String, String> aCustomAttrs,
+                              final boolean bDisabled)
   {
     return m_aUserMgr.createNewUser (sLoginName,
                                      sEmailAddress,
@@ -94,7 +95,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                      sFirstName,
                                      sLastName,
                                      aDesiredLocale,
-                                     aCustomAttrs);
+                                     aCustomAttrs,
+                                     bDisabled);
   }
 
   @Nullable
@@ -105,7 +107,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
                                      @Nullable final Locale aDesiredLocale,
-                                     @Nullable final Map <String, String> aCustomAttrs)
+                                     @Nullable final Map <String, String> aCustomAttrs,
+                                     final boolean bDisabled)
   {
     return m_aUserMgr.createPredefinedUser (sID,
                                             sLoginName,
@@ -114,24 +117,35 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                             sFirstName,
                                             sLastName,
                                             aDesiredLocale,
-                                            aCustomAttrs);
+                                            aCustomAttrs,
+                                            bDisabled);
   }
 
   /**
-   * Ensure to have a check, that no logged in user is deleted!
+   * TODO Ensure to have a check, that no logged in user is deleted!
    */
   @Nonnull
   public EChange deleteUser (@Nullable final String sUserID)
   {
-    if (m_aUserMgr.deleteUser (sUserID).isUnchanged ())
-    {
-      // No such user to delete
-      return EChange.UNCHANGED;
-    }
+    return m_aUserMgr.deleteUser (sUserID);
+  }
 
-    // If something deleted, remove from all user groups
-    m_aUserGroupMgr.unassignUserFromAllUserGroups (sUserID);
-    return EChange.CHANGED;
+  @Nonnull
+  public EChange undeleteUser (@Nullable final String sUserID)
+  {
+    return m_aUserMgr.undeleteUser (sUserID);
+  }
+
+  @Nonnull
+  public EChange disableUser (@Nullable final String sUserID)
+  {
+    return m_aUserMgr.disableUser (sUserID);
+  }
+
+  @Nonnull
+  public EChange enableUser (@Nullable final String sUserID)
+  {
+    return m_aUserMgr.enableUser (sUserID);
   }
 
   public boolean containsUserWithID (@Nullable final String sUserID)
@@ -171,7 +185,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
                               @Nullable final Locale aNewDesiredLocale,
-                              @Nullable final Map <String, String> aCustomAttrs)
+                              @Nullable final Map <String, String> aCustomAttrs,
+                              final boolean bDisabled)
   {
     return m_aUserMgr.setUserData (sUserID,
                                    sNewLoginName,
@@ -179,7 +194,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                    sNewFirstName,
                                    sNewLastName,
                                    aNewDesiredLocale,
-                                   aCustomAttrs);
+                                   aCustomAttrs,
+                                   bDisabled);
   }
 
   public boolean areUserIDAndPasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword)

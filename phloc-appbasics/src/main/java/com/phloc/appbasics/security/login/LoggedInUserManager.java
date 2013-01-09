@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.security.login;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -130,24 +131,44 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnull
   public ELoginResult loginUser (@Nullable final String sLoginName, @Nullable final String sPlainTextPassword)
   {
-    // Try to resolve the user
-    final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
-    return loginUser (aUser, sPlainTextPassword);
+    return loginUser (sLoginName, sPlainTextPassword, (Collection <String>) null);
   }
 
   @Nonnull
-  public ELoginResult loginUser (@Nullable final IUser aUser, @Nullable final String sPlainTextPassword)
+  public ELoginResult loginUser (@Nullable final String sLoginName,
+                                 @Nullable final String sPlainTextPassword,
+                                 @Nullable final Collection <String> aRequiredRoleIDs)
+  {
+    // Try to resolve the user
+    final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+    return loginUser (aUser, sPlainTextPassword, aRequiredRoleIDs);
+  }
+
+  @Nonnull
+  public ELoginResult loginUser (@Nullable final IUser aUser,
+                                 @Nullable final String sPlainTextPassword,
+                                 @Nullable final Collection <String> aRequiredRoleIDs)
   {
     if (aUser == null)
       return ELoginResult.USER_NOT_EXISTING;
 
+    // Deleted user?
     if (aUser.isDeleted ())
       return ELoginResult.USER_IS_DELETED;
 
+    // Disabled user?
+    if (aUser.isDisabled ())
+      return ELoginResult.USER_IS_DISABLED;
+
     final String sUserID = aUser.getID ();
+    final AccessManager aAM = AccessManager.getInstance ();
+
+    // Are all roles present?
+    if (!aAM.hasUserAllRoles (sUserID, aRequiredRoleIDs))
+      return ELoginResult.USER_IS_MISSING_ROLE;
 
     // Check the password
-    if (!AccessManager.getInstance ().areUserIDAndPasswordValid (sUserID, sPlainTextPassword))
+    if (!aAM.areUserIDAndPasswordValid (sUserID, sPlainTextPassword))
       return ELoginResult.INVALID_PASSWORD;
 
     // All checks done!

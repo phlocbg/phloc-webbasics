@@ -88,15 +88,6 @@ public class LoginManager
   protected void onUserLogin (@Nonnull @Nonempty final String sUserLoginName)
   {}
 
-  public static boolean userIsMissingAtLeastOneRole (@Nullable final IUser aUser,
-                                                     @Nullable final Collection <String> aRequiredRoleIDs)
-  {
-    // no user -> not missing something :)
-    if (aUser == null)
-      return false;
-    return !AccessManager.getInstance ().hasUserAllRoles (aUser.getID (), aRequiredRoleIDs);
-  }
-
   /**
    * Main login
    * 
@@ -129,21 +120,14 @@ public class LoginManager
 
         final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
 
-        // Check required roles
-        if (userIsMissingAtLeastOneRole (aUser, getAllRequiredRoleIDs ()))
-          eLoginResult = ELoginResult.USER_IS_MISSING_ROLE;
-
+        // Try main login
+        eLoginResult = aLUM.loginUser (aUser, sPassword, getAllRequiredRoleIDs ());
         if (eLoginResult.isSuccess ())
         {
-          // Try main login
-          eLoginResult = aLUM.loginUser (aUser, sPassword);
-          if (eLoginResult.isSuccess ())
-          {
-            // Credentials are valid
-            aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
-            sSessionUserID = aUser.getID ();
-            onUserLogin (sLoginName);
-          }
+          // Credentials are valid
+          aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
+          sSessionUserID = aUser.getID ();
+          onUserLogin (sLoginName);
         }
 
         if (eLoginResult.isFailure ())

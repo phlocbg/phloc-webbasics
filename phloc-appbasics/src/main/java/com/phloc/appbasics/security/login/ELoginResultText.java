@@ -39,10 +39,10 @@ public enum ELoginResultText implements IHasDisplayText
   USER_NOT_EXISTING ("Der Benutzername ist ungültig.", "No such user exists."),
   USER_IS_DELETED ("Der Benutzer existiert nicht mehr.", "The user not longer exists."),
   USER_IS_DISABLED ("Der Benutzer ist deaktiviert.", "The user is disabled."),
+  USER_IS_MISSING_ROLE ("Der Benutzer hat keine Berechtigung sich anzumelden.", "The user has no rights to login."),
   INVALID_PASSWORD ("Das Passwort ist ungültig.", "Invalid password provided."),
   USER_ALREADY_LOGGED_IN ("Der Benutzer ist bereits angemeldet.", "The user is already logged in."),
-  SESSION_ALREADY_HAS_USER ("Es ist bereits ein anderer Benutzer angemeldet.", "Another user is already logged in."),
-  USER_IS_MISSING_ROLE ("Der Benutzer hat keine Berechtigung sich anzumelden.", "The user has no rights to login.");
+  SESSION_ALREADY_HAS_USER ("Es ist bereits ein anderer Benutzer angemeldet.", "Another user is already logged in.");
 
   private final ITextProvider m_aTP;
 

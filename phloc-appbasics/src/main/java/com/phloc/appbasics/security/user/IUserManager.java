@@ -56,6 +56,8 @@ public interface IUserManager
    *        Custom attributes. May be <code>null</code>.
    * @return The created user or <code>null</code> if another user with the same
    *         email address is already present.
+   * @param bDisabled
+   *        <code>true</code> if the user is disabled
    */
   @Nullable
   IUser createNewUser (@Nonnull @Nonempty String sLoginName,
@@ -64,7 +66,8 @@ public interface IUserManager
                        @Nullable String sFirstName,
                        @Nullable String sLastName,
                        @Nullable Locale aDesiredLocale,
-                       @Nullable Map <String, String> aCustomAttrs);
+                       @Nullable Map <String, String> aCustomAttrs,
+                       boolean bDisabled);
 
   /**
    * Create a predefined user.
@@ -89,6 +92,8 @@ public interface IUserManager
    *        Custom attributes. May be <code>null</code>.
    * @return The created user or <code>null</code> if another user with the same
    *         email address is already present.
+   * @param bDisabled
+   *        <code>true</code> if the user is disabled
    */
   @Nullable
   IUser createPredefinedUser (@Nonnull @Nonempty String sID,
@@ -98,18 +103,8 @@ public interface IUserManager
                               @Nullable String sFirstName,
                               @Nullable String sLastName,
                               @Nullable Locale aDesiredLocale,
-                              @Nullable Map <String, String> aCustomAttrs);
-
-  /**
-   * Delete the user with the specified ID.
-   * 
-   * @param sUserID
-   *        The ID of the user to delete
-   * @return {@link EChange#CHANGED} if the user was deleted,
-   *         {@link EChange#UNCHANGED} if no such user ID exists.
-   */
-  @Nonnull
-  EChange deleteUser (@Nullable String sUserID);
+                              @Nullable Map <String, String> aCustomAttrs,
+                              boolean bDisabled);
 
   /**
    * Change the modifiable data of a user
@@ -124,8 +119,10 @@ public interface IUserManager
    *        The new last name. May be <code>null</code>.
    * @param aNewDesiredLocale
    *        The new desired locale. May be <code>null</code>.
-   * @param aCustomAttrs
+   * @param aNewCustomAttrs
    *        Custom attributes. May be <code>null</code>.
+   * @param bNewDisabled
+   *        <code>true</code> if the user is disabled
    * @return {@link EChange}
    */
   @Nonnull
@@ -135,7 +132,52 @@ public interface IUserManager
                        @Nullable String sNewFirstName,
                        @Nullable String sNewLastName,
                        @Nullable Locale aNewDesiredLocale,
-                       @Nullable Map <String, String> aCustomAttrs);
+                       @Nullable Map <String, String> aNewCustomAttrs,
+                       boolean bNewDisabled);
+
+  /**
+   * Delete the user with the specified ID.
+   * 
+   * @param sUserID
+   *        The ID of the user to delete
+   * @return {@link EChange#CHANGED} if the user was deleted,
+   *         {@link EChange#UNCHANGED} otherwise.
+   */
+  @Nonnull
+  EChange deleteUser (@Nullable String sUserID);
+
+  /**
+   * Undelete the user with the specified ID.
+   * 
+   * @param sUserID
+   *        The ID of the user to undelete
+   * @return {@link EChange#CHANGED} if the user was undeleted,
+   *         {@link EChange#UNCHANGED} otherwise.
+   */
+  @Nonnull
+  EChange undeleteUser (@Nullable String sUserID);
+
+  /**
+   * disable the user with the specified ID.
+   * 
+   * @param sUserID
+   *        The ID of the user to disable
+   * @return {@link EChange#CHANGED} if the user was disabled,
+   *         {@link EChange#UNCHANGED} otherwise.
+   */
+  @Nonnull
+  EChange disableUser (@Nullable String sUserID);
+
+  /**
+   * Enable the user with the specified ID.
+   * 
+   * @param sUserID
+   *        The ID of the user to enable
+   * @return {@link EChange#CHANGED} if the user was enabled,
+   *         {@link EChange#UNCHANGED} otherwise.
+   */
+  @Nonnull
+  EChange enableUser (@Nullable String sUserID);
 
   /**
    * Check if the passed combination of user ID and password matches.

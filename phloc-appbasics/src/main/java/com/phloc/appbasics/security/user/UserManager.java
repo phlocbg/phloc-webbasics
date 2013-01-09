@@ -77,17 +77,20 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                         CSecurity.USER_ADMINISTRATOR_LOGIN,
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
                         PasswordUtils.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
-                        CSecurity.USER_ADMINISTRATOR_NAME));
+                        CSecurity.USER_ADMINISTRATOR_NAME,
+                        false));
     _addUser (new User (CSecurity.USER_USER_ID,
                         CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
                         PasswordUtils.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
-                        CSecurity.USER_USER_NAME));
+                        CSecurity.USER_USER_NAME,
+                        false));
     _addUser (new User (CSecurity.USER_GUEST_ID,
                         CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
                         PasswordUtils.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
-                        CSecurity.USER_GUEST_NAME));
+                        CSecurity.USER_GUEST_NAME,
+                        false));
     return EChange.CHANGED;
   }
 
@@ -126,7 +129,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale,
-                              @Nullable final Map <String, String> aCustomAttrs)
+                              @Nullable final Map <String, String> aCustomAttrs,
+                              final boolean bDisabled)
   {
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
@@ -146,7 +150,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                                  sFirstName,
                                  sLastName,
                                  aDesiredLocale,
-                                 aCustomAttrs);
+                                 aCustomAttrs,
+                                 bDisabled);
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -169,7 +174,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
                                      @Nullable final Locale aDesiredLocale,
-                                     @Nullable final Map <String, String> aCustomAttrs)
+                                     @Nullable final Map <String, String> aCustomAttrs,
+                                     final boolean bDisabled)
   {
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
@@ -187,7 +193,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                                  sLoginName,
                                  sEmailAddress,
                                  PasswordUtils.createUserPasswordHash (sPlainTextPassword),
-                                 sFirstName);
+                                 sFirstName,
+                                 bDisabled);
     aUser.setLastName (sLastName);
     aUser.setDesiredLocale (aDesiredLocale);
     aUser.setCustomAttrs (aCustomAttrs);
@@ -291,6 +298,43 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   }
 
   @Nonnull
+  public EChange setUserData (@Nullable final String sUserID,
+                              @Nonnull @Nonempty final String sNewLoginName,
+                              @Nonnull @Nonempty final String sNewEmailAddress,
+                              @Nullable final String sNewFirstName,
+                              @Nullable final String sNewLastName,
+                              @Nullable final Locale aNewDesiredLocale,
+                              @Nullable final Map <String, String> aNewCustomAttrs,
+                              final boolean bNewDisabled)
+  {
+    // Resolve user
+    final User aUser = getUserOfID (sUserID);
+    if (aUser == null)
+      return EChange.UNCHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      EChange eChange = aUser.setLoginName (sNewLoginName);
+      eChange = eChange.or (aUser.setEmailAddress (sNewEmailAddress));
+      eChange = eChange.or (aUser.setFirstName (sNewFirstName));
+      eChange = eChange.or (aUser.setLastName (sNewLastName));
+      eChange = eChange.or (aUser.setDesiredLocale (aNewDesiredLocale));
+      eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
+      eChange = eChange.or (aUser.setDisabled (bNewDisabled));
+      if (eChange.isUnchanged ())
+        return EChange.UNCHANGED;
+      aUser.updateLastModified ();
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
   public EChange deleteUser (@Nullable final String sUserID)
   {
     m_aRWLock.writeLock ().lock ();
@@ -311,31 +355,56 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   }
 
   @Nonnull
-  public EChange setUserData (@Nullable final String sUserID,
-                              @Nonnull @Nonempty final String sNewLoginName,
-                              @Nonnull @Nonempty final String sNewEmailAddress,
-                              @Nullable final String sNewFirstName,
-                              @Nullable final String sNewLastName,
-                              @Nullable final Locale aNewDesiredLocale,
-                              @Nullable final Map <String, String> aNewCustomAttrs)
+  public EChange undeleteUser (@Nullable final String sUserID)
   {
-    // Resolve user
-    final User aUser = getUserOfID (sUserID);
-    if (aUser == null)
-      return EChange.UNCHANGED;
-
     m_aRWLock.writeLock ().lock ();
     try
     {
-      EChange eChange = aUser.setLoginName (sNewLoginName);
-      eChange = eChange.or (aUser.setEmailAddress (sNewEmailAddress));
-      eChange = eChange.or (aUser.setFirstName (sNewFirstName));
-      eChange = eChange.or (aUser.setLastName (sNewLastName));
-      eChange = eChange.or (aUser.setDesiredLocale (aNewDesiredLocale));
-      eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
-      if (eChange.isUnchanged ())
+      final User aUser = m_aUsers.get (sUserID);
+      if (aUser == null)
         return EChange.UNCHANGED;
-      aUser.updateLastModified ();
+      if (aUser.setDeleted (false).isUnchanged ())
+        return EChange.UNCHANGED;
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange disableUser (@Nullable final String sUserID)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      final User aUser = m_aUsers.get (sUserID);
+      if (aUser == null)
+        return EChange.UNCHANGED;
+      if (aUser.setDisabled (true).isUnchanged ())
+        return EChange.UNCHANGED;
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange enableUser (@Nullable final String sUserID)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      final User aUser = m_aUsers.get (sUserID);
+      if (aUser == null)
+        return EChange.UNCHANGED;
+      if (aUser.setDisabled (false).isUnchanged ())
+        return EChange.UNCHANGED;
       markAsChanged ();
       return EChange.CHANGED;
     }

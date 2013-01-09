@@ -52,6 +52,7 @@ public final class UserTest
                                  "Helger",
                                  Locale.GERMANY,
                                  null,
+                                 false,
                                  false);
     assertEquals ("id1", aUser.getID ());
     assertEquals ("me@example.org", aUser.getEmailAddress ());
@@ -63,6 +64,7 @@ public final class UserTest
     assertNull (aUser.getLastModificationDateTime ());
     assertNull (aUser.getDeletionDateTime ());
     assertFalse (aUser.isDeleted ());
+    assertFalse (aUser.isDisabled ());
   }
 
   @Test
@@ -79,6 +81,7 @@ public final class UserTest
                                  "Helger",
                                  Locale.GERMANY,
                                  ContainerHelper.newMap ("locale", "de_DE"),
+                                 false,
                                  false);
 
     // To XML

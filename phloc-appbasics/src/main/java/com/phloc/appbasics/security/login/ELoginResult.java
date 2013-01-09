@@ -40,14 +40,14 @@ public enum ELoginResult implements ISuccessIndicator, IHasDisplayText
   USER_IS_DELETED (ELoginResultText.USER_IS_DELETED),
   /** User is disabled */
   USER_IS_DISABLED (ELoginResultText.USER_IS_DISABLED),
+  /** User does not have the correct role */
+  USER_IS_MISSING_ROLE (ELoginResultText.USER_IS_MISSING_ROLE),
   /** The provided password is invalid */
   INVALID_PASSWORD (ELoginResultText.INVALID_PASSWORD),
   /** The user was already logged in */
   USER_ALREADY_LOGGED_IN (ELoginResultText.USER_ALREADY_LOGGED_IN),
   /** Another user is already logged in this session */
-  SESSION_ALREADY_HAS_USER (ELoginResultText.SESSION_ALREADY_HAS_USER),
-  /** User does not have the correct role */
-  USER_IS_MISSING_ROLE (ELoginResultText.USER_IS_MISSING_ROLE);
+  SESSION_ALREADY_HAS_USER (ELoginResultText.SESSION_ALREADY_HAS_USER);
 
   private final IHasDisplayText m_aErrorMsg;
 

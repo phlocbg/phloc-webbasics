@@ -60,6 +60,7 @@ public final class User implements IUser
   private Locale m_aDesiredLocale;
   private Map <String, String> m_aCustomAttrs = new LinkedHashMap <String, String> ();
   private boolean m_bDeleted;
+  private boolean m_bDisabled;
 
   /**
    * Create a new user
@@ -80,6 +81,8 @@ public final class User implements IUser
    *        The desired locale. May be <code>null</code>.
    * @param aCustomAttrs
    *        Custom attributes. May be <code>null</code>.
+   * @param bDisabled
+   *        <code>true</code> if the user is disabled
    */
   public User (@Nonnull @Nonempty final String sLoginName,
                @Nonnull @Nonempty final String sEmailAddress,
@@ -87,7 +90,8 @@ public final class User implements IUser
                @Nullable final String sFirstName,
                @Nullable final String sLastName,
                @Nullable final Locale aDesiredLocale,
-               @Nullable final Map <String, String> aCustomAttrs)
+               @Nullable final Map <String, String> aCustomAttrs,
+               final boolean bDisabled)
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
           PDTFactory.getCurrentDateTime (),
@@ -100,7 +104,8 @@ public final class User implements IUser
           sLastName,
           aDesiredLocale,
           aCustomAttrs,
-          false);
+          false,
+          bDisabled);
   }
 
   // Internal use only
@@ -108,7 +113,8 @@ public final class User implements IUser
         @Nonnull @Nonempty final String sLoginName,
         @Nonnull @Nonempty final String sEmailAddress,
         @Nonnull @Nonempty final String sPasswordHash,
-        @Nullable final String sFirstName)
+        @Nullable final String sFirstName,
+        final boolean bDisabled)
   {
     this (sID,
           PDTFactory.getCurrentDateTime (),
@@ -121,7 +127,8 @@ public final class User implements IUser
           (String) null,
           (Locale) null,
           (Map <String, String>) null,
-          false);
+          false,
+          bDisabled);
   }
 
   /**
@@ -153,6 +160,8 @@ public final class User implements IUser
    *        Custom attributes. May be <code>null</code>.
    * @param bDeleted
    *        <code>true</code> if the user is deleted, <code>false</code> if nto
+   * @param bDisabled
+   *        <code>true</code> if the user is disabled
    */
   User (@Nonnull @Nonempty final String sID,
         @Nonnull final DateTime aCreationDT,
@@ -165,7 +174,8 @@ public final class User implements IUser
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
         @Nullable final Map <String, String> aCustomAttrs,
-        final boolean bDeleted)
+        final boolean bDeleted,
+        final boolean bDisabled)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
@@ -190,6 +200,7 @@ public final class User implements IUser
     if (aCustomAttrs != null)
       m_aCustomAttrs.putAll (aCustomAttrs);
     m_bDeleted = bDeleted;
+    m_bDisabled = bDisabled;
   }
 
   @Nonnull
@@ -415,6 +426,20 @@ public final class User implements IUser
     return EChange.CHANGED;
   }
 
+  public boolean isDisabled ()
+  {
+    return m_bDisabled;
+  }
+
+  @Nonnull
+  EChange setDisabled (final boolean bDisabled)
+  {
+    if (bDisabled == m_bDisabled)
+      return EChange.UNCHANGED;
+    m_bDisabled = bDisabled;
+    return EChange.CHANGED;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -445,7 +470,9 @@ public final class User implements IUser
                                        .append ("firstName", m_sFirstName)
                                        .append ("lastName", m_sLastName)
                                        .append ("desiredLocale", m_aDesiredLocale)
+                                       .appendIfNotNull ("customAttrs", m_aCustomAttrs)
                                        .append ("deleted", m_bDeleted)
+                                       .append ("disabled", m_bDisabled)
                                        .toString ();
   }
 }

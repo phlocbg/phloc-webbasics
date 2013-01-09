@@ -237,7 +237,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 sFirstName,
                                 sLastName,
                                 m_aDefaultUserLocale,
-                                null);
+                                null,
+                                false);
         aNodeList.addChild (BootstrapSuccessBox.create ("Der Benutzer wurde erfolgreich bearbeitet!"));
 
         // assign to the matching internal user groups
@@ -261,7 +262,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                          sFirstName,
                                                          sLastName,
                                                          m_aDefaultUserLocale,
-                                                         null);
+                                                         null,
+                                                         false);
         if (aNewUser != null)
         {
           aNodeList.addChild (BootstrapSuccessBox.create ("Der neue Benutzer wurde erfolgreich angelegt!"));

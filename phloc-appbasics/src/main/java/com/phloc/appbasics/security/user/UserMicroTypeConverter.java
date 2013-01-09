@@ -41,7 +41,6 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_CREATIONDT = "creationdt";
   private static final String ATTR_LASTMODDT = "lastmoddt";
   private static final String ATTR_DELETIONDT = "deletiondt";
-  private static final String ATTR_DELETED = "deleted";
   private static final String ATTR_DESIREDLOCALE = "desiredlocale";
   private static final String ELEMENT_LOGINNAME = "loginname";
   private static final String ELEMENT_EMAILADDRESS = "emailaddress";
@@ -49,6 +48,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   private static final String ELEMENT_FIRSTNAME = "firstname";
   private static final String ELEMENT_LASTNAME = "lastname";
   private static final String ELEMENT_CUSTOM = "custom";
+  private static final String ATTR_DELETED = "deleted";
+  private static final String ATTR_DISABLED = "disabled";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aObject,
@@ -77,6 +78,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
       eCustom.appendText (aEntry.getValue ());
     }
     eUser.setAttribute (ATTR_DELETED, Boolean.toString (aUser.isDeleted ()));
+    eUser.setAttribute (ATTR_DISABLED, Boolean.toString (aUser.isDisabled ()));
     return eUser;
   }
 
@@ -105,6 +107,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
       aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
     final String sDeleted = eUser.getAttribute (ATTR_DELETED);
     final boolean bDeleted = StringParser.parseBool (sDeleted);
+    final String sDisabled = eUser.getAttribute (ATTR_DISABLED);
+    final boolean bDisabled = StringParser.parseBool (sDisabled);
     return new User (sID,
                      aCreationDT,
                      aLastModificationDT,
@@ -116,6 +120,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
                      sLastName,
                      aDesiredLocale,
                      aCustomAttrs,
-                     bDeleted);
+                     bDeleted,
+                     bDisabled);
   }
 }
