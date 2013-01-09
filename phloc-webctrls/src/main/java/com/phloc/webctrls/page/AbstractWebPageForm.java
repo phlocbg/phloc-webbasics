@@ -164,6 +164,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                           DATATYPE aSelectedObject);
 
   /**
+   * Add additional form IDs (e.g. client and accounting area)
+   * 
+   * @param aForm
+   *        the form to add the elements to
+   */
+  @OverrideOnDemand
+  protected void addAdditionalInputFormIDs (@Nonnull final HCForm aForm)
+  {}
+
+  /**
    * @param aSelectedObject
    * @param aDisplayLocale
    * @param aForm
@@ -236,7 +246,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
         final boolean bEdit = hasAction (ACTION_EDIT);
         final boolean bCopy = hasAction (ACTION_COPY);
         final FormErrors aFormErrors = new FormErrors ();
-        boolean bShowForm = true;
+        boolean bShowInputForm = true;
 
         if (hasSubAction (CHCParam.ACTION_SAVE))
         {
@@ -245,7 +255,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           if (aFormErrors.isEmpty ())
           {
             // Save successful
-            bShowForm = false;
+            bShowInputForm = false;
 
             // Remove an optionally stored state
             FormStateManager.getInstance ().deleteFormState (getAttr (FIELD_FLOW_ID));
@@ -254,7 +264,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
             aNodeList.addChild (createIncorrectInputBox (aDisplayLocale));
         }
 
-        if (bShowForm)
+        if (bShowInputForm)
         {
           // Show the input form. Either for the first time or because of form
           // errors a n-th time
@@ -265,6 +275,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           // The unique form ID, that allows to identify on "transaction"
           // -> Used only for "form state remembering"
           aForm.addChild (new HCHiddenField (new RequestField (FIELD_FLOW_ID, GlobalIDFactory.getNewStringID ())));
+
+          addAdditionalInputFormIDs (aForm);
 
           // Is there as saved state to use?
           final String sRestoreFlowID = getAttr (FIELD_RESTORE_FLOW_ID);
