@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -248,9 +249,11 @@ public class DataTables implements IHCNodeBuilder
    * 
    * @param aPackage
    *        The JS Package to add the code to
+   * @param aJSTable
+   *        The JS reference to the created DataTables object
    */
   @OverrideOnDemand
-  protected void addCodeAfterDataTables (@Nonnull final JSPackage aPackage)
+  protected void addCodeAfterDataTables (@Nonnull final JSPackage aPackage, @Nonnull final JSVar aJSTable)
   {}
 
   @Nullable
@@ -344,8 +347,10 @@ public class DataTables implements IHCNodeBuilder
     final JSPackage aJSCode = new JSPackage ();
 
     addCodeBeforeDataTables (aJSCode);
-    aJSCode.var ("oTable", JQuery.idRef (m_sParentElementID).invoke ("dataTable").arg (aParams));
-    addCodeAfterDataTables (aJSCode);
+    final JSVar aJSTable = aJSCode.var ("oTable" + GlobalIDFactory.getNewIntID (), JQuery.idRef (m_sParentElementID)
+                                                                                         .invoke ("dataTable")
+                                                                                         .arg (aParams));
+    addCodeAfterDataTables (aJSCode, aJSTable);
 
     return m_bGenerateOnDocumentReady ? new HCScriptOnDocumentReady (aJSCode) : new HCScript (aJSCode);
   }
