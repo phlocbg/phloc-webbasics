@@ -28,7 +28,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 
 @Translatable
-public enum EColorboxText implements IHasDisplayText
+public enum EColorBoxText implements IHasDisplayText
 {
   CURRENT ("Bild {current} von {total}", "image {current} of {total}"),
   PREVIOUS ("Vorheriges", "previous"),
@@ -39,7 +39,7 @@ public enum EColorboxText implements IHasDisplayText
 
   private final ITextProvider m_aTP;
 
-  private EColorboxText (@Nonnull final String sDE, @Nonnull final String sEN)
+  private EColorBoxText (@Nonnull final String sDE, @Nonnull final String sEN)
   {
     m_aTP = TextProvider.create_DE_EN (sDE, sEN);
   }

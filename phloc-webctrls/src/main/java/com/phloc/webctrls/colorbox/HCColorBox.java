@@ -45,7 +45,7 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * 
  * @author philip
  */
-public class HCColorbox implements IHCNodeBuilder
+public class HCColorBox implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_PHOTO = false;
 
@@ -56,7 +56,7 @@ public class HCColorbox implements IHCNodeBuilder
   private String m_sMaxWidth;
   private String m_sMaxHeight;
 
-  public HCColorbox (@Nonnull final IJQuerySelector aSelector)
+  public HCColorBox (@Nonnull final IJQuerySelector aSelector)
   {
     if (aSelector == null)
       throw new NullPointerException ("selector");
@@ -64,7 +64,7 @@ public class HCColorbox implements IHCNodeBuilder
     m_aSelector = aSelector;
   }
 
-  public HCColorbox (@Nonnull final IHCElement <?> aElement)
+  public HCColorBox (@Nonnull final IHCElement <?> aElement)
   {
     if (aElement == null)
       throw new NullPointerException ("element");
@@ -91,7 +91,7 @@ public class HCColorbox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorbox setDisplayLocale (@Nonnull final Locale aDisplayLocale)
+  public HCColorBox setDisplayLocale (@Nonnull final Locale aDisplayLocale)
   {
     m_aDisplayLocale = aDisplayLocale;
     return this;
@@ -103,7 +103,7 @@ public class HCColorbox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorbox setPhoto (final boolean bPhoto)
+  public HCColorBox setPhoto (final boolean bPhoto)
   {
     m_bPhoto = bPhoto;
     return this;
@@ -116,7 +116,7 @@ public class HCColorbox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorbox setMaxWidth (@Nullable final String sMaxWidth)
+  public HCColorBox setMaxWidth (@Nullable final String sMaxWidth)
   {
     m_sMaxWidth = sMaxWidth;
     return this;
@@ -129,7 +129,7 @@ public class HCColorbox implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCColorbox setMaxHeight (@Nullable final String sMaxHeight)
+  public HCColorBox setMaxHeight (@Nullable final String sMaxHeight)
   {
     m_sMaxHeight = sMaxHeight;
     return this;
@@ -163,12 +163,12 @@ public class HCColorbox implements IHCNodeBuilder
 
     if (m_aDisplayLocale != null)
     {
-      aArgs.add ("current", EColorboxText.CURRENT.getDisplayText (m_aDisplayLocale));
-      aArgs.add ("previous", EColorboxText.PREVIOUS.getDisplayText (m_aDisplayLocale));
-      aArgs.add ("next", EColorboxText.NEXT.getDisplayText (m_aDisplayLocale));
-      aArgs.add ("close", EColorboxText.CLOSE.getDisplayText (m_aDisplayLocale));
-      aArgs.add ("xhrError", EColorboxText.XHR_ERROR.getDisplayText (m_aDisplayLocale));
-      aArgs.add ("imgError", EColorboxText.IMG_ERROR.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("current", EColorBoxText.CURRENT.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("previous", EColorBoxText.PREVIOUS.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("next", EColorBoxText.NEXT.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("close", EColorBoxText.CLOSE.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("xhrError", EColorBoxText.XHR_ERROR.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("imgError", EColorBoxText.IMG_ERROR.getDisplayText (m_aDisplayLocale));
     }
 
     return HCNodeList.create (m_aElement, new HCScriptOnDocumentReady (JQuery.select (aSelector)
@@ -178,7 +178,7 @@ public class HCColorbox implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorboxCSSPathProvider.COLORBOX_1320);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorboxJSPathProvider.COLORBOX_1320);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorBoxCSSPathProvider.COLORBOX_1320);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorBoxJSPathProvider.COLORBOX_1320);
   }
 }
