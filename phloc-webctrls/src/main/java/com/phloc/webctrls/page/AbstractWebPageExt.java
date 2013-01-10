@@ -127,9 +127,12 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final T aCurObject)
+  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final T aCurObject,
+                                                                                           @Nonnull final Locale aDisplayLocale)
   {
-    return createEditLink (aCurObject, "Bearbeite '" + aCurObject.getDisplayName () + "'");
+    return createEditLink (aCurObject,
+                           EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                            aCurObject.getDisplayName ()));
   }
 
   @Nonnull
@@ -147,9 +150,12 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createCopyLink (@Nonnull final T aCurObject)
+  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createCopyLink (@Nonnull final T aCurObject,
+                                                                                           @Nonnull final Locale aDisplayLocale)
   {
-    return createCopyLink (aCurObject, "Kopiere '" + aCurObject.getDisplayName () + "'");
+    return createCopyLink (aCurObject,
+                           EWebPageText.OBJECT_COPY.getDisplayTextWithArgs (aDisplayLocale,
+                                                                            aCurObject.getDisplayName ()));
   }
 
   @Nonnull
@@ -167,9 +173,12 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final T aCurObject)
+  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final T aCurObject,
+                                                                                             @Nonnull final Locale aDisplayLocale)
   {
-    return createDeleteLink (aCurObject, "Lösche '" + aCurObject.getDisplayName () + "'");
+    return createDeleteLink (aCurObject,
+                             EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                aCurObject.getDisplayName ()));
   }
 
   @Nonnull
@@ -213,20 +222,23 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   @Nonnull
   public static IHCElement <?> createUploadButton (@Nonnull final Locale aDisplayLocale)
   {
-    return new HCSpan ().addClasses (CBootstrapCSS.BTN, EBootstrapButtonType.SUCCESS).addChild ("Datei auswählen");
+    return new HCSpan ().addClasses (CBootstrapCSS.BTN, EBootstrapButtonType.SUCCESS)
+                        .addChild (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
   }
 
   @Nonnull
-  public static IHCNode createImageView (@Nullable final UserDataObject aUDO)
+  public static IHCNode createImageView (@Nullable final UserDataObject aUDO, @Nonnull final Locale aDisplayLocale)
   {
-    return createImageView (aUDO, 200);
+    return createImageView (aUDO, 200, aDisplayLocale);
   }
 
   @Nonnull
-  public static IHCNode createImageView (@Nullable final UserDataObject aUDO, final int nMaxWidth)
+  public static IHCNode createImageView (@Nullable final UserDataObject aUDO,
+                                         final int nMaxWidth,
+                                         @Nonnull final Locale aDisplayLocale)
   {
     if (aUDO == null)
-      return HCEM.create ("keines");
+      return HCEM.create (EWebPageText.IMAGE_NONE.getDisplayText (aDisplayLocale));
 
     final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL ());
     ScalableSize aSize = ImageDataManager.getImageSize (aUDO.getAsResource ());

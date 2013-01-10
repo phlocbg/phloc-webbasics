@@ -381,7 +381,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final AbstractHCCell aActionCell = aRow.addCell ();
       // Administrator cannot be edited
       if (!aCurObject.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID))
-        aActionCell.addChild (createEditLink (aCurObject));
+        aActionCell.addChild (createEditLink (aCurObject, aDisplayLocale));
     }
     if (aTable.getBodyRowCount () == 0)
       aTable.addBodyRow ().addAndReturnCell ("Keine Benutzer gefunden").setColspan (aTable.getColumnCount ());
