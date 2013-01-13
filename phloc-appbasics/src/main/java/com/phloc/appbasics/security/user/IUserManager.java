@@ -237,4 +237,27 @@ public interface IUserManager
   @Nonnull
   @ReturnsMutableCopy
   Collection <? extends IUser> getAllUsers ();
+
+  /**
+   * @return A non-<code>null</code> collection of all contained enabled and
+   *         not-deleted users
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <? extends IUser> getAllActiveUsers ();
+
+  /**
+   * @return A non-<code>null</code> collection of all contained disabled and
+   *         not-deleted users
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <? extends IUser> getAllDisabledUsers ();
+
+  /**
+   * @return A non-<code>null</code> collection of all contained deleted users
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <? extends IUser> getAllDeletedUsers ();
 }

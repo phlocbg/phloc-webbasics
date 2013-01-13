@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.security.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -284,12 +285,69 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <? extends IUser> getAllUsers ()
+  public List <User> getAllUsers ()
   {
     m_aRWLock.readLock ().lock ();
     try
     {
       return ContainerHelper.newList (m_aUsers.values ());
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <User> getAllActiveUsers ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      final List <User> ret = new ArrayList <User> ();
+      for (final User aUser : m_aUsers.values ())
+        if (!aUser.isDeleted () && !aUser.isDisabled ())
+          ret.add (aUser);
+      return ret;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <User> getAllDisabledUsers ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      final List <User> ret = new ArrayList <User> ();
+      for (final User aUser : m_aUsers.values ())
+        if (!aUser.isDeleted () && aUser.isDisabled ())
+          ret.add (aUser);
+      return ret;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <User> getAllDeletedUsers ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      final List <User> ret = new ArrayList <User> ();
+      for (final User aUser : m_aUsers.values ())
+        if (aUser.isDeleted ())
+          ret.add (aUser);
+      return ret;
     }
     finally
     {

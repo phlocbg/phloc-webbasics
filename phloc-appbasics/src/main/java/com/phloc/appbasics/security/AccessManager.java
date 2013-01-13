@@ -179,6 +179,27 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   }
 
   @Nonnull
+  @ReturnsMutableCopy
+  public Collection <? extends IUser> getAllActiveUsers ()
+  {
+    return m_aUserMgr.getAllActiveUsers ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <? extends IUser> getAllDisabledUsers ()
+  {
+    return m_aUserMgr.getAllDisabledUsers ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <? extends IUser> getAllDeletedUsers ()
+  {
+    return m_aUserMgr.getAllDeletedUsers ();
+  }
+
+  @Nonnull
   public EChange setUserData (@Nullable final String sUserID,
                               @Nonnull @Nonempty final String sNewLoginName,
                               @Nonnull @Nonempty final String sNewEmailAddress,

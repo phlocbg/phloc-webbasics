@@ -44,6 +44,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
@@ -52,7 +53,9 @@ import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.form.RequestField;
+import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
@@ -68,11 +71,13 @@ import com.phloc.webctrls.security.UserGroupForUserSelect;
 
 public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 {
+  public static final boolean DEFAULT_ENABLED = true;
   private static final String FIELD_FIRSTNAME = "firstname";
   private static final String FIELD_LASTNAME = "lastname";
   private static final String FIELD_EMAILADDRESS = "emailaddress";
   private static final String FIELD_PASSWORD = "password";
   private static final String FIELD_PASSWORD_CONFIRM = "passwordconf";
+  private static final String FIELD_ENABLED = "enabled";
   private static final String FIELD_USERGROUPS = "usergroups";
 
   private final Locale m_aDefaultUserLocale;
@@ -97,6 +102,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         !hasAction (ACTION_VIEW))
       aSelectedObject = null;
     return aSelectedObject;
+  }
+
+  private static boolean _canEdit (@Nonnull final IUser aUser)
+  {
+    // Deleted users and the Administrator cannot be edited
+    return !aUser.isDeleted () && !aUser.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID);
   }
 
   /**
@@ -142,6 +153,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.addItemRow (BootstrapFormLabel.create ("Nachname"), aSelectedObject.getLastName ());
     aTable.addItemRow (BootstrapFormLabel.create ("E-Mail-Adresse"),
                        createEmailLink (aSelectedObject.getEmailAddress ()));
+    aTable.addItemRow (BootstrapFormLabel.create ("Aktiv?"),
+                       EWebBasicsText.getYesOrNo (!aSelectedObject.isDisabled (), aDisplayLocale));
+    aTable.addItemRow (BootstrapFormLabel.create ("Gelöscht?"),
+                       EWebBasicsText.getYesOrNo (aSelectedObject.isDeleted (), aDisplayLocale));
 
     // user groups
     final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aSelectedObject.getID ());
@@ -208,6 +223,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final String sEmailAddress = getAttr (FIELD_EMAILADDRESS);
     final String sPassword = getAttr (FIELD_PASSWORD);
     final String sPasswordConf = getAttr (FIELD_PASSWORD_CONFIRM);
+    final boolean bEnabled = getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
     final List <String> aUserGroupIDs = getAttrs (FIELD_USERGROUPS);
 
     if (StringHelper.hasNoText (sLastName))
@@ -254,8 +270,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 sFirstName,
                                 sLastName,
                                 m_aDefaultUserLocale,
-                                null,
-                                false);
+                                aSelectedObject.getCustomAttrs (),
+                                !bEnabled);
         aNodeList.addChild (BootstrapSuccessBox.create ("Der Benutzer wurde erfolgreich bearbeitet!"));
 
         // assign to the matching internal user groups
@@ -280,7 +296,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                          sLastName,
                                                          m_aDefaultUserLocale,
                                                          null,
-                                                         false);
+                                                         !bEnabled);
         if (aNewUser != null)
         {
           aNodeList.addChild (BootstrapSuccessBox.create ("Der neue Benutzer wurde erfolgreich angelegt!"));
@@ -303,9 +319,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 final boolean bCopy,
                                 final FormErrors aFormErrors)
   {
+    if (bEdit && !_canEdit (aSelectedObject))
+      throw new IllegalStateException ("Won't work!");
+
     final AccessManager aMgr = AccessManager.getInstance ();
-    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (bEdit ? 170 : 200),
-                                                                                       HCCol.star ()));
+    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (210), HCCol.star ()));
     aTable.setSpanningHeaderContent (bEdit ? "Benutzer bearbeiten" : "Neuen Benutzer anlegen");
     // Use the country of the current client as the default
     aTable.addItemRow (BootstrapFormLabel.create ("Vorname"),
@@ -333,6 +351,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
+    aTable.addItemRow (BootstrapFormLabel.createMandatory ("Aktiv?"),
+                       new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED, DEFAULT_ENABLED)),
+                       aFormErrors.getListOfField (FIELD_ENABLED));
     final Collection <String> aUserGroupIDs = aSelectedObject == null
                                                                      ? getAttrs (FIELD_USERGROUPS)
                                                                      : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
@@ -379,8 +400,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       aRow.addCell (new HCA (aViewLink).addChild (aUserGroupsStr.toString ()));
 
       final AbstractHCCell aActionCell = aRow.addCell ();
-      // Administrator cannot be edited
-      if (!aCurObject.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID))
+      if (_canEdit (aCurObject))
         aActionCell.addChild (createEditLink (aCurObject, aDisplayLocale));
     }
     if (aTable.getBodyRowCount () == 0)
