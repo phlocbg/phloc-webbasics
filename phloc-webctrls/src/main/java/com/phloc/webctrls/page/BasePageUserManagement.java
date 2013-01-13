@@ -154,7 +154,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.addItemRow (BootstrapFormLabel.create ("E-Mail-Adresse"),
                        createEmailLink (aSelectedObject.getEmailAddress ()));
     aTable.addItemRow (BootstrapFormLabel.create ("Aktiv?"),
-                       EWebBasicsText.getYesOrNo (!aSelectedObject.isDisabled (), aDisplayLocale));
+                       EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
     aTable.addItemRow (BootstrapFormLabel.create ("Gelöscht?"),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isDeleted (), aDisplayLocale));
 

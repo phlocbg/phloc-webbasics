@@ -109,8 +109,16 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   boolean isDeleted ();
 
   /**
+   * @return <code>true</code> if this user is enabled, <code>false</code> if it
+   *         is disabled
+   * @see #isDisabled()
+   */
+  boolean isEnabled ();
+
+  /**
    * @return <code>true</code> if this user is disabled, <code>false</code> if
    *         it is enabled
+   * @see #isEnabled()
    */
   boolean isDisabled ();
 }

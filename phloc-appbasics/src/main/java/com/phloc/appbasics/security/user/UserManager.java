@@ -307,7 +307,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     {
       final List <User> ret = new ArrayList <User> ();
       for (final User aUser : m_aUsers.values ())
-        if (!aUser.isDeleted () && !aUser.isDisabled ())
+        if (!aUser.isDeleted () && aUser.isEnabled ())
           ret.add (aUser);
       return ret;
     }

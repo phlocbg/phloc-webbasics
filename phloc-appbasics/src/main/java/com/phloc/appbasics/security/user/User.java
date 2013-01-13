@@ -440,6 +440,17 @@ public final class User implements IUser
     return EChange.CHANGED;
   }
 
+  public boolean isEnabled ()
+  {
+    return !m_bDisabled;
+  }
+
+  @Nonnull
+  EChange setEnabled (final boolean bEnabled)
+  {
+    return setDisabled (!bEnabled);
+  }
+
   @Override
   public boolean equals (final Object o)
   {
