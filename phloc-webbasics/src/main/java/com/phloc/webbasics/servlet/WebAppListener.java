@@ -70,6 +70,9 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   static
   {
     VirtualMachineInitializer.runInitialization ();
+
+    // Ensure that any AWT code runs headless (fonts etc.)
+    SystemProperties.setPropertyValue ("java.awt.headless", "true");
   }
 
   public static final String DEFAULT_INIT_PARAMETER_TRACE = "trace";
