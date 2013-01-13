@@ -55,6 +55,7 @@ public enum EBootstrapSpan implements ICSSClassProvider
     m_sCSSClass = sCSSClass;
   }
 
+  @Nonnegative
   public int getParts ()
   {
     return m_nParts;
@@ -68,8 +69,26 @@ public enum EBootstrapSpan implements ICSSClassProvider
   }
 
   @Nonnull
+  public HCDiv getAsNode (@Nullable final String sContent)
+  {
+    return new HCDiv ().addChild (sContent).addClass (this);
+  }
+
+  @Nonnull
   public HCDiv getAsNode (@Nullable final IHCNode aContent)
   {
     return new HCDiv ().addChild (aContent).addClass (this);
+  }
+
+  @Nonnull
+  public HCDiv getAsNode (@Nullable final IHCNode... aContent)
+  {
+    return new HCDiv ().addChildren (aContent).addClass (this);
+  }
+
+  @Nonnull
+  public HCDiv getAsNode (@Nullable final Iterable <? extends IHCNode> aContent)
+  {
+    return new HCDiv ().addChildren (aContent).addClass (this);
   }
 }

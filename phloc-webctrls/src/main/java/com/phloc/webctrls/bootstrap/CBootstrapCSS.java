@@ -90,6 +90,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider IN = DefaultCSSClassProvider.create ("in");
   public static final ICSSClassProvider INLINE = DefaultCSSClassProvider.create ("inline");
   public static final ICSSClassProvider INPUT_APPEND = DefaultCSSClassProvider.create ("input-append");
+  public static final ICSSClassProvider INPUT_BLOCK_LEVEL = DefaultCSSClassProvider.create ("input-block-level");
   public static final ICSSClassProvider INPUT_LARGE = DefaultCSSClassProvider.create ("input-large");
   public static final ICSSClassProvider INPUT_MEDIUM = DefaultCSSClassProvider.create ("input-medium");
   public static final ICSSClassProvider INPUT_MINI = DefaultCSSClassProvider.create ("input-mini");

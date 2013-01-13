@@ -104,7 +104,7 @@ public final class BootstrapTableForm extends BootstrapTable
     for (final IHCNode aCtrl : aCtrls)
       if (aCtrl instanceof IHCElement <?> && !(aCtrl instanceof HCCheckBox))
       {
-        ((IHCElement <?>) aCtrl).addClass (CBootstrapCSS.INPUT_XXLARGE);
+        ((IHCElement <?>) aCtrl).addClass (CBootstrapCSS.INPUT_BLOCK_LEVEL);
         break;
       }
   }

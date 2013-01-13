@@ -23,12 +23,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.ELoginResult;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.html.HCBody;
-import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
+import com.phloc.html.hc.html.HCFieldSet;
 import com.phloc.html.hc.html.HCForm;
+import com.phloc.html.hc.html.HCH2;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.EWebBasicsText;
@@ -38,11 +41,11 @@ import com.phloc.webbasics.login.LoginHTMLProvider;
 import com.phloc.webctrls.bootstrap.BootstrapButton_Submit;
 import com.phloc.webctrls.bootstrap.BootstrapContainer;
 import com.phloc.webctrls.bootstrap.BootstrapFormActions;
-import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
+import com.phloc.webctrls.bootstrap.BootstrapPageHeader;
 import com.phloc.webctrls.bootstrap.BootstrapRow;
+import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapSpan;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 
 public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 {
@@ -71,26 +74,33 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
                            @Nonnull final Locale aDisplayLocale)
   {
     final HCForm aForm = new HCForm (LinkUtils.getSelfHref ());
+
     if (showLoginError ())
       aForm.addChild (BootstrapErrorBox.create (getTextErrorMessage (aDisplayLocale, getLoginResult ())));
 
-    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200), HCCol.star ()));
-    aTable.setStriped (false);
+    final HCFieldSet aFieldSet = aForm.addAndReturnChild (new HCFieldSet ());
 
     // User name and password table
     final String sUserName = EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.create (sUserName),
-                       new HCEdit (CLogin.REQUEST_ATTR_USERID).setPlaceholder (sUserName));
+    aFieldSet.addChildren (HCLabel.create (sUserName),
+                           new HCEdit (CLogin.REQUEST_ATTR_USERID).setPlaceholder (sUserName)
+                                                                  .addClass (CBootstrapCSS.INPUT_BLOCK_LEVEL));
+
     final String sPassword = EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.create (sPassword),
-                       new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD).setPlaceholder (sPassword));
+    aFieldSet.addChildren (HCLabel.create (sPassword),
+                           new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD).setPlaceholder (sPassword)
+                                                                            .addClass (CBootstrapCSS.INPUT_BLOCK_LEVEL));
 
     // Submit button
     aForm.addChild (new BootstrapFormActions ().addChild (BootstrapButton_Submit.create (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale))));
 
     final BootstrapRow aRow = new BootstrapRow ();
     aRow.addColumn (EBootstrapSpan.SPAN3);
-    aRow.addColumn (EBootstrapSpan.SPAN6, aForm);
+    aRow.addColumn (EBootstrapSpan.SPAN6,
+                    StringHelper.hasText (m_sPageTitle)
+                                                       ? new BootstrapPageHeader ().addChild (HCH2.create (m_sPageTitle))
+                                                       : null,
+                    aForm);
     aRow.addColumn (EBootstrapSpan.SPAN3);
 
     final BootstrapContainer aContentLayout = new BootstrapContainer (true);

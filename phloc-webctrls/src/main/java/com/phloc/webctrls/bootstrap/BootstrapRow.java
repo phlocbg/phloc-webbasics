@@ -21,8 +21,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,27 +38,54 @@ public class BootstrapRow implements IHCNodeBuilder
   public static final boolean DEFAULT_FLUID = true;
   public static final int BOOTSTRAP_COLUMN_COUNT = 12;
 
+  @Immutable
   private static final class SpannedNode implements Serializable
   {
-    private final EBootstrapSpan m_eSpan;
+    private final int m_nSpanCount;
     private final IHCNode m_aNode;
 
-    public SpannedNode (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aNode)
+    public SpannedNode (@Nonnull final EBootstrapSpan eSpan, @Nullable final String sContent)
     {
-      m_eSpan = eSpan;
-      m_aNode = aNode;
+      if (eSpan == null)
+        throw new NullPointerException ("span");
+      m_nSpanCount = eSpan.getParts ();
+      m_aNode = eSpan.getAsNode (sContent);
+    }
+
+    public SpannedNode (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aContent)
+    {
+      if (eSpan == null)
+        throw new NullPointerException ("span");
+      m_nSpanCount = eSpan.getParts ();
+      m_aNode = eSpan.getAsNode (aContent);
+    }
+
+    public SpannedNode (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode... aContent)
+    {
+      if (eSpan == null)
+        throw new NullPointerException ("span");
+      m_nSpanCount = eSpan.getParts ();
+      m_aNode = eSpan.getAsNode (aContent);
+    }
+
+    public SpannedNode (@Nonnull final EBootstrapSpan eSpan, @Nullable final Iterable <? extends IHCNode> aContent)
+    {
+      if (eSpan == null)
+        throw new NullPointerException ("span");
+      m_nSpanCount = eSpan.getParts ();
+      m_aNode = eSpan.getAsNode (aContent);
+    }
+
+    @Nonnegative
+    public int getSpanCount ()
+    {
+      return m_nSpanCount;
     }
 
     @Nonnull
     public IHCNode getAsSpannedNode ()
     {
-      return m_eSpan.getAsNode (m_aNode);
-    }
-
-    @Nonnull
-    public int getSpanCount ()
-    {
-      return m_eSpan.getParts ();
+      return m_aNode;
     }
   }
 
@@ -75,18 +104,43 @@ public class BootstrapRow implements IHCNodeBuilder
     m_bFluid = bFluid;
   }
 
-  @Nonnull
-  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan)
+  public boolean isFluid ()
   {
-    return addColumn (eSpan, null);
+    return m_bFluid;
   }
 
   @Nonnull
-  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aNode)
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan)
   {
-    if (eSpan == null)
-      throw new NullPointerException ("span");
-    m_aNodes.add (new SpannedNode (eSpan, aNode));
+    return addColumn (eSpan, (IHCNode) null);
+  }
+
+  @Nonnull
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final String sContent)
+  {
+    m_aNodes.add (new SpannedNode (eSpan, sContent));
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode aContent)
+  {
+    m_aNodes.add (new SpannedNode (eSpan, aContent));
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan, @Nullable final IHCNode... aContent)
+  {
+    m_aNodes.add (new SpannedNode (eSpan, aContent));
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapRow addColumn (@Nonnull final EBootstrapSpan eSpan,
+                                 @Nullable final Iterable <? extends IHCNode> aContent)
+  {
+    m_aNodes.add (new SpannedNode (eSpan, aContent));
     return this;
   }
 
