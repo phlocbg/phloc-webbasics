@@ -45,7 +45,7 @@ public class BootstrapButton extends HCA_JS
 
   public BootstrapButton (@Nonnull final ISimpleURL aURL)
   {
-    super (JSHtml.windowLocationHref ().assign (aURL.getAsString ()));
+    super (JSHtml.windowLocationHref (aURL));
     _init ();
   }
 
