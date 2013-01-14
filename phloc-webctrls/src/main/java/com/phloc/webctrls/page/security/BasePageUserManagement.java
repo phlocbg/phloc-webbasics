@@ -347,11 +347,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       // Password is only shown on creation of a new user
       aTable.addItemRow (BootstrapFormLabel.createMandatory ("Passwort"),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD),
-                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
+                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                          aFormErrors.getListOfField (FIELD_PASSWORD));
       aTable.addItemRow (BootstrapFormLabel.createMandatory ("Passwort (Bestätigung)"),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM),
-                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
+                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
     aTable.addItemRow (BootstrapFormLabel.createMandatory ("Aktiv?"),

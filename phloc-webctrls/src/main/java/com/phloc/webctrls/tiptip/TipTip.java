@@ -163,37 +163,52 @@ public final class TipTip implements IHCNodeBuilder
   }
 
   @Nonnull
-  public static IHCNode create (@Nonnull @Nonempty final String sText)
+  public static TipTip create (@Nonnull @Nonempty final String sText)
   {
-    return new TipTip (sText).build ();
+    return new TipTip (sText);
   }
 
   @Nonnull
-  public static IHCNode create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  public static TipTip create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
   {
     return create (aTextProvider.getText ());
   }
 
   @Nonnull
-  public static IHCNode create (@Nonnull final IHCNode aHCNode)
+  public static TipTip create (@Nonnull final IHCNodeBuilder aNodeBuilder)
   {
-    return create (_getAsString (aHCNode));
+    return create (aNodeBuilder.build ());
   }
 
   @Nonnull
-  public static IHCNode create (@Nonnull final IHCNode... aHCNodes)
+  public static TipTip create (@Nonnull final IHCNodeBuilder... aNodeBuilders)
   {
     final StringBuilder aSB = new StringBuilder ();
-    for (final IHCNode aHCNode : aHCNodes)
+    for (final IHCNodeBuilder aNodeBuilder : aNodeBuilders)
+      aSB.append (_getAsString (aNodeBuilder.build ()));
+    return create (aSB.toString ());
+  }
+
+  @Nonnull
+  public static TipTip create (@Nonnull final IHCNode aNode)
+  {
+    return create (_getAsString (aNode));
+  }
+
+  @Nonnull
+  public static TipTip create (@Nonnull final IHCNode... aNodes)
+  {
+    final StringBuilder aSB = new StringBuilder ();
+    for (final IHCNode aHCNode : aNodes)
       aSB.append (_getAsString (aHCNode));
     return create (aSB.toString ());
   }
 
   @Nonnull
-  public static IHCNode create (@Nonnull final Iterable <? extends IHCNode> aHCNodes)
+  public static TipTip create (@Nonnull final Iterable <? extends IHCNode> aNodes)
   {
     final StringBuilder aSB = new StringBuilder ();
-    for (final IHCNode aHCNode : aHCNodes)
+    for (final IHCNode aHCNode : aNodes)
       aSB.append (_getAsString (aHCNode));
     return create (aSB.toString ());
   }
