@@ -382,7 +382,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     for (final IUser aCurUser : aUsers)
     {
-      final ISimpleURL aViewLink = createViewLink (aCurUser);
+      final ISimpleURL aViewLink = createViewURL (aCurUser);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getDisplayName ()));
@@ -421,7 +421,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     // Toolbar on top
     final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
-    aToolbar.addButtonNew ("Neuen Benutzer anlegen", createCreateLink ());
+    aToolbar.addButtonNew ("Neuen Benutzer anlegen", createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();
 

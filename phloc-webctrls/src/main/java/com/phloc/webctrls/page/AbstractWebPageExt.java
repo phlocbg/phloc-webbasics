@@ -111,22 +111,23 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  public static final SimpleURL createCreateLink (@Nonnull final String sMenuItemID)
+  public static final SimpleURL createCreateURL (@Nonnull final String sMenuItemID)
   {
     return LinkUtils.getLinkToMenuItem (sMenuItemID).add (CHCParam.PARAM_ACTION, ACTION_CREATE);
   }
 
   @Nonnull
-  public static final SimpleURL createCreateLink ()
+  public static final SimpleURL createCreateURL ()
   {
     return LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_CREATE));
   }
 
   @Nonnull
-  public static final SimpleURL createViewLink (@Nonnull final IHasID <String> aCurObject)
+  public static final SimpleURL createViewURL (@Nonnull final IHasID <String> aCurObject)
   {
-    return LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_VIEW).add (CHCParam.PARAM_OBJECT,
-                                                                                            aCurObject.getID ()));
+    return LinkUtils.getSelfHref ()
+                    .add (CHCParam.PARAM_ACTION, ACTION_VIEW)
+                    .add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
   }
 
   @Nonnull
@@ -192,10 +193,17 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
+  public static final SimpleURL createCopyURL (@Nonnull final IHasID <String> aCurObject)
+  {
+    return LinkUtils.getSelfHref ()
+                    .add (CHCParam.PARAM_ACTION, ACTION_COPY)
+                    .add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
+  }
+
+  @Nonnull
   public static final HCA createCopyLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
   {
-    final ISimpleURL aCopyURL = LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_COPY)
-                                                                  .add (CHCParam.PARAM_OBJECT, aCurObject.getID ()));
+    final ISimpleURL aCopyURL = createCopyURL (aCurObject);
     return new HCA (aCopyURL).setTitle (sTitle).addChild (getCopyImg ());
   }
 
@@ -215,11 +223,26 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
+  public static final SimpleURL createDeleteURL (@Nonnull final IHasID <String> aCurObject)
+  {
+    return LinkUtils.getSelfHref ()
+                    .add (CHCParam.PARAM_ACTION, ACTION_DELETE)
+                    .add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
+  }
+
+  @Nonnull
   public static final HCA createDeleteLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
   {
-    final ISimpleURL aURL = LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_DELETE)
-                                                              .add (CHCParam.PARAM_OBJECT, aCurObject.getID ()));
+    final ISimpleURL aURL = createDeleteURL (aCurObject);
     return new HCA (aURL).setTitle (sTitle).addChild (getDeleteImg ());
+  }
+
+  @Nonnull
+  public static final SimpleURL createUndeleteURL (@Nonnull final IHasID <String> aCurObject)
+  {
+    return LinkUtils.getSelfHref ()
+                    .add (CHCParam.PARAM_ACTION, ACTION_UNDELETE)
+                    .add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
   }
 
   @Nonnull
@@ -232,7 +255,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   public static final HCA createNestedCreateLink (@Nonnull final IHasID <String> aCurObject,
                                                   @Nullable final String sTitle)
   {
-    final ISimpleURL aURL = createCreateLink ().add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
+    final ISimpleURL aURL = createCreateURL ().add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
     return new HCA (aURL).setTitle (sTitle).addChild (getCreateImg ());
   }
 
