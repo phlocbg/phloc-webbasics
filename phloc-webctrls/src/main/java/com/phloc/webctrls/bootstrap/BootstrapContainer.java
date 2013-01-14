@@ -56,6 +56,12 @@ public class BootstrapContainer implements IHCNodeBuilder
   }
 
   @Nonnull
+  public BootstrapContainer setContent (@Nullable final IHCNodeBuilder aContent)
+  {
+    return setContent (aContent == null ? null : aContent.build ());
+  }
+
+  @Nonnull
   public BootstrapContainer setContent (@Nullable final IHCNode aContent)
   {
     m_aContent = aContent;

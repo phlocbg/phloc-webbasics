@@ -29,6 +29,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.api.IHCHasFocus;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.AbstractHCCell;
@@ -159,9 +160,23 @@ public final class BootstrapTableForm extends BootstrapTable
   }
 
   @Nonnull
+  public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNodeBuilder aCtrlBuilder)
+  {
+    return addItemRow (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), null);
+  }
+
+  @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aCtrl)
   {
     return addItemRow (aLabel, aCtrl, null);
+  }
+
+  @Nonnull
+  public HCRow addItemRow (@Nullable final IFormLabel aLabel,
+                           @Nullable final IHCNodeBuilder aCtrlBuilder,
+                           @Nullable final IFormFieldErrorList aFormErrors)
+  {
+    return addItemRow (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aFormErrors);
   }
 
   @Nonnull
@@ -220,6 +235,14 @@ public final class BootstrapTableForm extends BootstrapTable
 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
+                                   @Nullable final IHCNodeBuilder aCtrlBuilder,
+                                   @Nullable final IFormNote aNote)
+  {
+    return addItemRowWithNote (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aNote, null);
+  }
+
+  @Nonnull
+  public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
                                    @Nullable final IFormNote aNote)
   {
@@ -232,6 +255,15 @@ public final class BootstrapTableForm extends BootstrapTable
                                    @Nullable final IFormNote aNote)
   {
     return addItemRowWithNote (aLabel, aCtrls, aNote, null);
+  }
+
+  @Nonnull
+  public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
+                                   @Nullable final IHCNodeBuilder aCtrlBuilder,
+                                   @Nullable final IFormNote aNote,
+                                   @Nullable final IFormFieldErrorList aFormErrors)
+  {
+    return addItemRowWithNote (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aNote, aFormErrors);
   }
 
   @Nonnull

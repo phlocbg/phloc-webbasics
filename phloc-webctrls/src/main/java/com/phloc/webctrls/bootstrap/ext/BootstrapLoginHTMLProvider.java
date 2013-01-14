@@ -104,11 +104,11 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     aRow.addColumn (EBootstrapSpan.SPAN3);
 
     final BootstrapContainer aContentLayout = new BootstrapContainer (true);
-    aContentLayout.setContent (aRow.build ());
+    aContentLayout.setContent (aRow);
 
     // Build body
     final HCBody aBody = aHtml.getBody ();
     final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN));
-    aSpan.addChild (aContentLayout.build ());
+    aSpan.addChild (aContentLayout);
   }
 }
