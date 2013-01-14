@@ -46,6 +46,8 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.form.RequestFieldBoolean;
+import com.phloc.webbasics.web.IRequestParamMap;
+import com.phloc.webbasics.web.RequestHelper;
 
 /**
  * Abstract base implementation for {@link IWebPage}.
@@ -290,6 +292,12 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   protected static final boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
   {
     return StringHelper.hasNoText (sName) ? bDefaultValue : RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
+  }
+
+  @Nonnull
+  protected static IRequestParamMap getRequestParamMap ()
+  {
+    return RequestHelper.getRequestParamMap (getScope ());
   }
 
   /**

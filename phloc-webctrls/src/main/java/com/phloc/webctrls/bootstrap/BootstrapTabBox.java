@@ -23,10 +23,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -34,8 +32,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.html.hc.html.AbstractHCDiv;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCLI;
@@ -47,7 +44,7 @@ import com.phloc.html.hc.impl.HCTextNode;
  * 
  * @author philip
  */
-public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
+public class BootstrapTabBox implements IHCNodeBuilder
 {
   private static final class Tab implements IHasID <String>, Serializable
   {
@@ -94,15 +91,9 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
   private final List <Tab> m_aTabs = new ArrayList <Tab> ();
   private String m_sActiveTabID;
 
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.TABBABLE);
-  }
-
   public BootstrapTabBox ()
   {
     super ();
-    _init ();
   }
 
   @Nonnull
@@ -179,19 +170,13 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
     return this;
   }
 
-  @Override
-  public boolean canConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
+  @Nullable
+  public IHCNode build ()
   {
-    return !m_aTabs.isEmpty ();
-  }
+    if (m_aTabs.isEmpty ())
+      return null;
 
-  @Override
-  @OverrideOnDemand
-  @OverridingMethodsMustInvokeSuper
-  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
-  {
-    super.internalBeforeConvertToNode (aConversionSettings);
-    addClass (m_eType);
+    final HCDiv aDiv = new HCDiv ().addClasses (CBootstrapCSS.TABBABLE, m_eType);
 
     String sActiveTabID = m_sActiveTabID;
     if (StringHelper.hasNoText (sActiveTabID))
@@ -223,8 +208,9 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
 
     // Determine order of elements
     if (m_eType.emitTabsBeforeContent ())
-      addChildren (aTabs, aContent);
+      aDiv.addChildren (aTabs, aContent);
     else
-      addChildren (aContent, aTabs);
+      aDiv.addChildren (aContent, aTabs);
+    return aDiv;
   }
 }

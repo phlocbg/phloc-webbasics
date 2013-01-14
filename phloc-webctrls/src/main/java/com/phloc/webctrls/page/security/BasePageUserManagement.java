@@ -422,7 +422,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
     aToolbar.addButtonNew ("Neuen Benutzer anlegen", createCreateLink ());
 
-    final BootstrapTabBox aTabBox = aNodeList.addAndReturnChild (new BootstrapTabBox ());
+    final BootstrapTabBox aTabBox = new BootstrapTabBox ();
 
     final AccessManager aMgr = AccessManager.getInstance ();
 
@@ -437,5 +437,6 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
     aTabBox.addTab ("Gelöschte Benutzer (" + aDeletedUsers.size () + ")",
                     getTabWithUsers (aDisplayLocale, aDeletedUsers, getID () + "3"));
+    aNodeList.addChild (aTabBox);
   }
 }

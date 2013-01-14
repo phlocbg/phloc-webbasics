@@ -89,7 +89,8 @@ public final class RequestParamMap implements IRequestParamMap
       final String sPrefix = sName.substring (0, nIndex);
 
       // Ensure that the respective map is present
-      Map <String, Object> aChildMap = GenericReflection.<Object, Map <String, Object>> uncheckedCast (aMap.get (sPrefix));
+      final Object aPrefixValue = aMap.get (sPrefix);
+      Map <String, Object> aChildMap = GenericReflection.<Object, Map <String, Object>> uncheckedCast (aPrefixValue);
       if (aChildMap == null)
       {
         aChildMap = new HashMap <String, Object> ();
