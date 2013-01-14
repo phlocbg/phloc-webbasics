@@ -18,6 +18,7 @@
 package com.phloc.webctrls.page;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,6 +59,28 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     return getAttr (CHCParam.PARAM_OBJECT);
   }
 
+  @Nullable
+  protected Map <String, String> getAdditionalParameters ()
+  {
+    return null;
+  }
+
+  /**
+   * Add additional elements to the view toolbar
+   * 
+   * @param aDisplayLocale
+   *        The display locale to be used
+   * @param aSelectedObject
+   *        The selected object
+   * @param aToolbar
+   *        The toolbar to be modified
+   */
+  @OverrideOnDemand
+  protected void modifyViewToolbar (@Nonnull final Locale aDisplayLocale,
+                                    @Nonnull final DATATYPE aSelectedObject,
+                                    @Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
+  {}
+
   /**
    * Create toolbar for viewing an existing object. Contains the back button and
    * the edit button.
@@ -68,17 +91,19 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    *        true to enable back button
    * @param bCanEdit
    *        true to enable edit button
-   * @param sSelectedObjectID
-   *        The ID of the selected object
+   * @param aSelectedObject
+   *        The selected object
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static BootstrapButtonToolbarAdvanced createViewToolbar (@Nonnull final Locale aDisplayLocale,
-                                                                  final boolean bCanGoBack,
-                                                                  final boolean bCanEdit,
-                                                                  @Nonnull final String sSelectedObjectID)
+  protected final BootstrapButtonToolbarAdvanced createViewToolbar (@Nonnull final Locale aDisplayLocale,
+                                                                    final boolean bCanGoBack,
+                                                                    final boolean bCanEdit,
+                                                                    @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+    final Map <String, String> aAdditionalParams = getAdditionalParameters ();
+    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced (LinkUtils.getSelfHref ()
+                                                                                                 .addAll (aAdditionalParams));
     if (bCanGoBack)
     {
       // Back to list
@@ -87,72 +112,96 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     if (bCanEdit)
     {
       // Edit object
-      aToolbar.addButtonEdit (aDisplayLocale,
-                              LinkUtils.getSelfHref ()
-                                       .add (CHCParam.PARAM_ACTION, ACTION_EDIT)
-                                       .add (CHCParam.PARAM_OBJECT, sSelectedObjectID));
+      aToolbar.addButtonEdit (aDisplayLocale, createEditURL (aSelectedObject).addAll (aAdditionalParams));
     }
+    modifyViewToolbar (aDisplayLocale, aSelectedObject, aToolbar);
     return aToolbar;
   }
+
+  /**
+   * Add additional elements to the edit toolbar
+   * 
+   * @param aDisplayLocale
+   *        The display locale to use
+   * @param aSelectedObject
+   *        The selected object. Never <code>null</code>.
+   * @param aToolbar
+   *        The toolbar to be modified
+   */
+  @OverrideOnDemand
+  protected void modifyEditToolbar (@Nonnull final Locale aDisplayLocale,
+                                    @Nonnull final DATATYPE aSelectedObject,
+                                    @Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
+  {}
 
   /**
    * Create toolbar for editing an existing object
    * 
-   * @param sSelectedObjectID
-   *        The ID of the selected object.
    * @param aDisplayLocale
    *        The display locale to use. Never <code>null</code>.
+   * @param aSelectedObject
+   *        The selected object. Never <code>null</code>.
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static BootstrapButtonToolbarAdvanced createEditToolbar (@Nonnull final String sSelectedObjectID,
-                                                                  @Nonnull final Locale aDisplayLocale)
+  protected final BootstrapButtonToolbarAdvanced createEditToolbar (@Nonnull final Locale aDisplayLocale,
+                                                                    @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+    final Map <String, String> aAdditionalParams = getAdditionalParameters ();
+    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced (LinkUtils.getSelfHref ()
+                                                                                                 .addAll (aAdditionalParams));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
-    aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, sSelectedObjectID);
+    aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
+    aToolbar.addHiddenFields (aAdditionalParams);
     // Save button
     aToolbar.addSubmitButtonSave (aDisplayLocale);
     // Cancel button
     aToolbar.addButtonCancel (aDisplayLocale);
+    modifyEditToolbar (aDisplayLocale, aSelectedObject, aToolbar);
     return aToolbar;
   }
 
   /**
-   * Add additional buttons to the create toolbar
+   * Add additional elements to the create toolbar
    * 
+   * @param aDisplayLocale
+   *        The display locale to use
    * @param aToolbar
-   *        The toolbar to where the buttons should be added
+   *        The toolbar to be modified
    */
   @OverrideOnDemand
-  protected void addAdditionalCreateToolbarButtons (@Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
+  protected void modifyCreateToolbar (@Nonnull final Locale aDisplayLocale,
+                                      @Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
   {}
 
   /**
    * Create toolbar for creating a new object
    * 
-   * @param aSelectedObject
-   *        Optional selected object. May be <code>null</code>.
    * @param aDisplayLocale
    *        The display locale to use
+   * @param aSelectedObject
+   *        Optional selected object. May be <code>null</code>.
    * @return Never <code>null</code>.
    */
   @Nonnull
-  private BootstrapButtonToolbarAdvanced _createCreateToolbar (@Nullable final IHasID <String> aSelectedObject,
-                                                               @Nonnull final Locale aDisplayLocale)
+  protected final BootstrapButtonToolbarAdvanced createCreateToolbar (@Nonnull final Locale aDisplayLocale,
+                                                                      @Nullable final IHasID <String> aSelectedObject)
   {
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+    final Map <String, String> aAdditionalParams = getAdditionalParameters ();
+    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced (LinkUtils.getSelfHref ()
+                                                                                                 .addAll (aAdditionalParams));
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
     if (aSelectedObject != null)
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
+    aToolbar.addHiddenFields (aAdditionalParams);
     // Save button
     aToolbar.addSubmitButtonSave (aDisplayLocale);
     // Cancel button
     aToolbar.addButtonCancel (aDisplayLocale);
 
-    addAdditionalCreateToolbarButtons (aToolbar);
+    modifyCreateToolbar (aDisplayLocale, aToolbar);
     return aToolbar;
   }
 
@@ -299,7 +348,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
       showSelectedObject (aSelectedObject, aDisplayLocale, aNodeList);
 
       // Toolbar on bottom
-      aNodeList.addChild (createViewToolbar (aDisplayLocale, true, bIsEditAllowed, aSelectedObject.getID ()));
+      aNodeList.addChild (createViewToolbar (aDisplayLocale, true, bIsEditAllowed, aSelectedObject));
 
       bShowList = false;
     }
@@ -359,8 +408,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           showInputForm (aSelectedObject, aDisplayLocale, aForm, bEdit, bCopy, aFormErrors);
 
           // Toolbar on bottom
-          aForm.addChild (bEdit ? createEditToolbar (aSelectedObject.getID (), aDisplayLocale)
-                               : _createCreateToolbar (aSelectedObject, aDisplayLocale));
+          aForm.addChild (bEdit ? createEditToolbar (aDisplayLocale, aSelectedObject)
+                               : createCreateToolbar (aDisplayLocale, aSelectedObject));
         }
       }
       else

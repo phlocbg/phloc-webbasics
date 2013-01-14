@@ -18,6 +18,7 @@
 package com.phloc.webctrls.bootstrap;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,6 +47,15 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   public final BootstrapButtonToolbar addHiddenField (@Nullable final String sName, @Nullable final String sValue)
   {
     addChild (new HCHiddenField (sName, sValue));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapButtonToolbar addHiddenFields (@Nullable final Map <String, String> aValues)
+  {
+    if (aValues != null)
+      for (final Map.Entry <String, String> aEntry : aValues.entrySet ())
+        addChild (new HCHiddenField (aEntry.getKey (), aEntry.getValue ()));
     return this;
   }
 

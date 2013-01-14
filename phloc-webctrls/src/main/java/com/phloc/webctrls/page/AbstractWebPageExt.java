@@ -154,6 +154,14 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
+  public static final SimpleURL createEditURL (@Nonnull final IHasID <String> aCurObject)
+  {
+    return LinkUtils.getSelfHref ()
+                    .add (CHCParam.PARAM_ACTION, ACTION_EDIT)
+                    .add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
+  }
+
+  @Nonnull
   public static final HCA createEditLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
   {
     return createEditLink (aCurObject, sTitle, (Map <String, String>) null);
@@ -164,9 +172,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
                                           @Nullable final String sTitle,
                                           @Nullable final Map <String, String> aParams)
   {
-    final ISimpleURL aEditURL = LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_EDIT)
-                                                                  .add (CHCParam.PARAM_OBJECT, aCurObject.getID ())
-                                                                  .addAll (aParams));
+    final ISimpleURL aEditURL = createEditURL (aCurObject).addAll (aParams);
     return new HCA (aEditURL).setTitle (sTitle).addChild (getEditImg ());
   }
 

@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webctrls.bootstrap.BootstrapButtonToolbar;
@@ -35,16 +36,18 @@ import com.phloc.webctrls.custom.EDefaultIcon;
  */
 public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
 {
-  private final ISimpleURL m_aSelfHref;
+  private final SimpleURL m_aSelfHref;
 
   public BootstrapButtonToolbarAdvanced ()
   {
     this (LinkUtils.getSelfHref ());
   }
 
-  public BootstrapButtonToolbarAdvanced (@Nonnull final ISimpleURL aSelfHref)
+  public BootstrapButtonToolbarAdvanced (@Nonnull final SimpleURL aSelfHref)
   {
     super ();
+    if (aSelfHref == null)
+      throw new NullPointerException ("selfHref");
     m_aSelfHref = aSelfHref;
   }
 
