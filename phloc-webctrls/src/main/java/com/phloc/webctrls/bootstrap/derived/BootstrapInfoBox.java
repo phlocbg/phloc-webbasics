@@ -20,7 +20,9 @@ package com.phloc.webctrls.bootstrap.derived;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.webctrls.bootstrap.BootstrapAlert;
+import com.phloc.commons.text.IPredefinedLocaleTextProvider;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.webctrls.bootstrap.AbstractBootstrapAlert;
 import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 
 /**
@@ -28,7 +30,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
  * 
  * @author philip
  */
-public class BootstrapInfoBox extends BootstrapAlert
+public class BootstrapInfoBox extends AbstractBootstrapAlert <BootstrapInfoBox>
 {
   public BootstrapInfoBox ()
   {
@@ -37,9 +39,94 @@ public class BootstrapInfoBox extends BootstrapAlert
     setBlock (true);
   }
 
+  /**
+   * Create a new element with the passed child text
+   * 
+   * @param aChild
+   *        The child text provider to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
   @Nonnull
-  public static BootstrapAlert create (@Nullable final String sChild)
+  public static BootstrapInfoBox create (@Nullable final IPredefinedLocaleTextProvider aChild)
+  {
+    return new BootstrapInfoBox ().addChild (aChild);
+  }
+
+  /**
+   * Create a new element with the passed child texts
+   * 
+   * @param aChildren
+   *        The child texts to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapInfoBox create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
+  {
+    return new BootstrapInfoBox ().addChildren (aChildren);
+  }
+
+  /**
+   * Create a new element with the passed child text
+   * 
+   * @param sChild
+   *        The child to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapInfoBox create (@Nullable final String sChild)
   {
     return new BootstrapInfoBox ().addChild (sChild);
+  }
+
+  /**
+   * Create a new element with the passed child texts
+   * 
+   * @param aChildren
+   *        The child texts to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapInfoBox create (@Nullable final String... aChildren)
+  {
+    return new BootstrapInfoBox ().addChildren (aChildren);
+  }
+
+  /**
+   * Create a new element with the passed child node
+   * 
+   * @param aChild
+   *        The child node to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapInfoBox create (@Nullable final IHCNode aChild)
+  {
+    return new BootstrapInfoBox ().addChild (aChild);
+  }
+
+  /**
+   * Create a new element with the passed child nodes
+   * 
+   * @param aChildren
+   *        The child nodes to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapInfoBox create (@Nullable final IHCNode... aChildren)
+  {
+    return new BootstrapInfoBox ().addChildren (aChildren);
+  }
+
+  /**
+   * Create a new element with the passed child nodes
+   * 
+   * @param aChildren
+   *        The child nodes to be appended. May be <code>null</code>
+   * @return The created BootstrapInfoBox element and never <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapInfoBox create (@Nullable final Iterable <? extends IHCNode> aChildren)
+  {
+    return new BootstrapInfoBox ().addChildren (aChildren);
   }
 }

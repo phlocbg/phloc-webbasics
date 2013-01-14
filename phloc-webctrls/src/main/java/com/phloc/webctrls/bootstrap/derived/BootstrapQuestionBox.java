@@ -20,7 +20,9 @@ package com.phloc.webctrls.bootstrap.derived;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.webctrls.bootstrap.BootstrapAlert;
+import com.phloc.commons.text.IPredefinedLocaleTextProvider;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.webctrls.bootstrap.AbstractBootstrapAlert;
 import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 
 /**
@@ -28,7 +30,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
  * 
  * @author philip
  */
-public class BootstrapQuestionBox extends BootstrapAlert
+public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuestionBox>
 {
   public BootstrapQuestionBox ()
   {
@@ -38,9 +40,101 @@ public class BootstrapQuestionBox extends BootstrapAlert
     // question boxes are not closable
   }
 
+  /**
+   * Create a new element with the passed child text
+   * 
+   * @param aChild
+   *        The child text provider to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
   @Nonnull
-  public static BootstrapAlert create (@Nullable final String sChild)
+  public static BootstrapQuestionBox create (@Nullable final IPredefinedLocaleTextProvider aChild)
+  {
+    return new BootstrapQuestionBox ().addChild (aChild);
+  }
+
+  /**
+   * Create a new element with the passed child texts
+   * 
+   * @param aChildren
+   *        The child texts to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapQuestionBox create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
+  {
+    return new BootstrapQuestionBox ().addChildren (aChildren);
+  }
+
+  /**
+   * Create a new element with the passed child text
+   * 
+   * @param sChild
+   *        The child to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapQuestionBox create (@Nullable final String sChild)
   {
     return new BootstrapQuestionBox ().addChild (sChild);
+  }
+
+  /**
+   * Create a new element with the passed child texts
+   * 
+   * @param aChildren
+   *        The child texts to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapQuestionBox create (@Nullable final String... aChildren)
+  {
+    return new BootstrapQuestionBox ().addChildren (aChildren);
+  }
+
+  /**
+   * Create a new element with the passed child node
+   * 
+   * @param aChild
+   *        The child node to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapQuestionBox create (@Nullable final IHCNode aChild)
+  {
+    return new BootstrapQuestionBox ().addChild (aChild);
+  }
+
+  /**
+   * Create a new element with the passed child nodes
+   * 
+   * @param aChildren
+   *        The child nodes to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapQuestionBox create (@Nullable final IHCNode... aChildren)
+  {
+    return new BootstrapQuestionBox ().addChildren (aChildren);
+  }
+
+  /**
+   * Create a new element with the passed child nodes
+   * 
+   * @param aChildren
+   *        The child nodes to be appended. May be <code>null</code>
+   * @return The created BootstrapQuestionBox element and never
+   *         <code>null</code>
+   */
+  @Nonnull
+  public static BootstrapQuestionBox create (@Nullable final Iterable <? extends IHCNode> aChildren)
+  {
+    return new BootstrapQuestionBox ().addChildren (aChildren);
   }
 }

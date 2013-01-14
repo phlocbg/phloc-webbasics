@@ -32,7 +32,7 @@ import com.phloc.html.hc.impl.HCEntityNode;
  * 
  * @author philip
  */
-public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
+public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends AbstractHCDiv <THISTYPE>
 {
   public static final boolean DEFAULT_SHOW_CLOSE = false;
   public static final boolean DEFAULT_BLOCK = false;
@@ -46,7 +46,7 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
     addClass (CBootstrapCSS.ALERT);
   }
 
-  public BootstrapAlert ()
+  public AbstractBootstrapAlert ()
   {
     super ();
     _init ();
@@ -59,12 +59,12 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   }
 
   @Nonnull
-  public BootstrapAlert setType (@Nonnull final EBootstrapAlertType eType)
+  public THISTYPE setType (@Nonnull final EBootstrapAlertType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");
     m_eType = eType;
-    return this;
+    return thisAsT ();
   }
 
   public boolean isBlock ()
@@ -73,10 +73,10 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   }
 
   @Nonnull
-  public BootstrapAlert setBlock (final boolean bBlock)
+  public THISTYPE setBlock (final boolean bBlock)
   {
     m_bBlock = bBlock;
-    return this;
+    return thisAsT ();
   }
 
   public boolean isShowClose ()
@@ -85,10 +85,10 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   }
 
   @Nonnull
-  public BootstrapAlert setShowClose (final boolean bShowClose)
+  public THISTYPE setShowClose (final boolean bShowClose)
   {
     m_bShowClose = bShowClose;
-    return this;
+    return thisAsT ();
   }
 
   @Override
