@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.userdata.UserDataObject;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.gfx.ImageDataManager;
 import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.id.IHasID;
@@ -47,7 +48,6 @@ import com.phloc.html.hc.html.HCImg;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.masterdata.email.IReadonlyExtendedEmailAddress;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
@@ -260,7 +260,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nullable
-  protected static IHCNode createEmailLink (@Nullable final IReadonlyExtendedEmailAddress aEmail)
+  protected static IHCNode createEmailLink (@Nullable final IEmailAddress aEmail)
   {
     if (aEmail == null)
       return null;

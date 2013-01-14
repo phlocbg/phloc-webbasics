@@ -20,7 +20,7 @@ package com.phloc.webctrls.bootstrap;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
- * Bootstrap block help.
+ * Bootstrap form actions.
  * 
  * @author philip
  */

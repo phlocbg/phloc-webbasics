@@ -45,6 +45,12 @@ public class BootstrapLabel extends HCButton
   }
 
   @Nonnull
+  public EBootstrapLabelType getLabelType ()
+  {
+    return m_eType;
+  }
+
+  @Nonnull
   public BootstrapLabel setType (@Nonnull final EBootstrapLabelType eType)
   {
     if (eType == null)

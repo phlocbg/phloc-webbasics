@@ -42,6 +42,12 @@ public class BootstrapButton_Reset extends HCButton_Reset
   }
 
   @Nonnull
+  public EBootstrapButtonType getButtonType ()
+  {
+    return m_eType;
+  }
+
+  @Nonnull
   public BootstrapButton_Reset setButtonType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
@@ -50,11 +56,23 @@ public class BootstrapButton_Reset extends HCButton_Reset
     return this;
   }
 
+  @Nullable
+  public EBootstrapButtonSize getSize ()
+  {
+    return m_eSize;
+  }
+
   @Nonnull
   public BootstrapButton_Reset setSize (@Nullable final EBootstrapButtonSize eSize)
   {
     m_eSize = eSize;
     return this;
+  }
+
+  @Nullable
+  public IIcon getIcon ()
+  {
+    return m_aIcon;
   }
 
   @Nonnull

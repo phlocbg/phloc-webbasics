@@ -17,6 +17,8 @@
  */
 package com.phloc.webctrls.bootstrap;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -24,6 +26,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.js.IJSCodeProvider;
+import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
@@ -84,16 +87,18 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addSubmitButtonSave ()
+  public final BootstrapButtonToolbar addSubmitButtonSave (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton_Submit.create ("Speichern", EDefaultIcon.SAVE));
+    addChild (BootstrapButton_Submit.create (EWebBasicsText.MSG_BUTTON_SAVE.getDisplayText (aDisplayLocale),
+                                             EDefaultIcon.SAVE));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addSubmitButtonYes ()
+  public final BootstrapButtonToolbar addSubmitButtonYes (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton_Submit.create ("Ja", EDefaultIcon.YES));
+    addChild (BootstrapButton_Submit.create (EWebBasicsText.MSG_BUTTON_YES.getDisplayText (aDisplayLocale),
+                                             EDefaultIcon.YES));
     return this;
   }
 }

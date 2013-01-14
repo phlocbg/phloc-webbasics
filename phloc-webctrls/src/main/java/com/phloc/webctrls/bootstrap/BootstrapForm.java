@@ -42,7 +42,7 @@ public class BootstrapForm extends HCForm
   {
     if (StringHelper.hasNoText (sLabel))
       return null;
-    final HCLabel aLabel = new HCLabel ().addChild (sLabel).addClass (CBootstrapCSS.CONTROL_LABEL);
+    final HCLabel aLabel = HCLabel.create (sLabel).addClass (CBootstrapCSS.CONTROL_LABEL);
     if (aFor instanceof IHCControl <?>)
       aLabel.setFor (((IHCControl <?>) aFor).getName ());
     return aLabel;
@@ -58,8 +58,7 @@ public class BootstrapForm extends HCForm
                                                                          CBootstrapCSS.getCSSClass (eErrorLevel)));
     aCtrlGroup.addChild (aLabel);
     final HCDiv aControls = aCtrlGroup.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.CONTROLS));
-    aControls.addChild (aCtrls);
-    aControls.addChild (aHelpItem);
+    aControls.addChildren (aCtrls, aHelpItem);
     return this;
   }
 

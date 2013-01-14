@@ -37,6 +37,12 @@ public class BootstrapIconWhite implements IIcon
   }
 
   @Nonnull
+  public EBootstrapIcon getSrcIcon ()
+  {
+    return m_eSrcIcon;
+  }
+
+  @Nonnull
   @Nonempty
   public String getCSSClass ()
   {

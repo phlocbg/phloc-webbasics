@@ -63,14 +63,19 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * Create toolbar for viewing an existing object. Contains the back button and
    * the edit button.
    * 
+   * @param aDisplayLocale
+   *        The display locale to use
    * @param bCanGoBack
    *        true to enable back button
    * @param bCanEdit
    *        true to enable edit button
+   * @param sSelectedObjectID
+   *        The ID of the selected object
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static BootstrapButtonToolbarAdvanced createViewToolbar (final boolean bCanGoBack,
+  public static BootstrapButtonToolbarAdvanced createViewToolbar (@Nonnull final Locale aDisplayLocale,
+                                                                  final boolean bCanGoBack,
                                                                   final boolean bCanEdit,
                                                                   @Nonnull final String sSelectedObjectID)
   {
@@ -78,13 +83,15 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     if (bCanGoBack)
     {
       // Back to list
-      aToolbar.addButtonBack ();
+      aToolbar.addButtonBack (aDisplayLocale);
     }
     if (bCanEdit)
     {
       // Edit object
-      aToolbar.addButtonEdit (LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_EDIT)
-                                                                .add (CHCParam.PARAM_OBJECT, sSelectedObjectID)));
+      aToolbar.addButtonEdit (aDisplayLocale, LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION,
+                                                                                      ACTION_EDIT)
+                                                                                .add (CHCParam.PARAM_OBJECT,
+                                                                                      sSelectedObjectID)));
     }
     return aToolbar;
   }
@@ -92,19 +99,24 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   /**
    * Create toolbar for editing an existing object
    * 
+   * @param sSelectedObjectID
+   *        The ID of the selected object.
+   * @param aDisplayLocale
+   *        The display locale to use. Never <code>null</code>.
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static BootstrapButtonToolbarAdvanced createEditToolbar (@Nonnull final String sSelectedObjectID)
+  public static BootstrapButtonToolbarAdvanced createEditToolbar (@Nonnull final String sSelectedObjectID,
+                                                                  @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, sSelectedObjectID);
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
     // Save button
-    aToolbar.addSubmitButtonSave ();
+    aToolbar.addSubmitButtonSave (aDisplayLocale);
     // Cancel button
-    aToolbar.addButtonCancel ();
+    aToolbar.addButtonCancel (aDisplayLocale);
     return aToolbar;
   }
 
@@ -123,10 +135,13 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * 
    * @param aSelectedObject
    *        Optional selected object. May be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to use
    * @return Never <code>null</code>.
    */
   @Nonnull
-  private BootstrapButtonToolbarAdvanced _createCreateToolbar (@Nullable final IHasID <String> aSelectedObject)
+  private BootstrapButtonToolbarAdvanced _createCreateToolbar (@Nullable final IHasID <String> aSelectedObject,
+                                                               @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
@@ -134,9 +149,9 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
     // Save button
-    aToolbar.addSubmitButtonSave ();
+    aToolbar.addSubmitButtonSave (aDisplayLocale);
     // Cancel button
-    aToolbar.addButtonCancel ();
+    aToolbar.addButtonCancel (aDisplayLocale);
 
     addAdditionalCreateToolbarButtons (aToolbar);
     return aToolbar;
@@ -206,10 +221,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                          @Nonnull FormErrors aFormErrors);
 
   /**
+   * Perform object delete
+   * 
    * @param aSelectedObject
+   *        The object to be deleted. Never <code>null</code>.
    * @param aDisplayLocale
+   *        The display locale to use. Never <code>null</code>.
    * @param aNodeList
-   * @return <code>true</code> to show the list afterwards
+   *        The node list to append the output to. Never <code>null</code>.
+   * @return <code>true</code> to show the list afterwards. <code>false</code>
+   *         if the object list should not be shown.
    */
   @OverrideOnDemand
   protected boolean handleDeleteAction (@Nonnull final DATATYPE aSelectedObject,
@@ -220,12 +241,41 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * Perform object undelete
+   * 
+   * @param aSelectedObject
+   *        The object to be undeleted. Never <code>null</code>.
    * @param aDisplayLocale
+   *        The display locale to use. Never <code>null</code>.
    * @param aNodeList
-   * @return <code>true</code> to show the list afterwards
+   *        The node list to append the output to. Never <code>null</code>.
+   * @return <code>true</code> to show the list afterwards. <code>false</code>
+   *         if the object list should not be shown.
    */
   @OverrideOnDemand
-  protected boolean handleCustomActions (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
+  protected boolean handleUndeleteAction (@Nonnull final DATATYPE aSelectedObject,
+                                          @Nonnull final Locale aDisplayLocale,
+                                          @Nonnull final HCNodeList aNodeList)
+  {
+    return true;
+  }
+
+  /**
+   * Handle some other custom action
+   * 
+   * @param aSelectedObject
+   *        The selected object. May be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to use. Never <code>null</code>.
+   * @param aNodeList
+   *        The node list to append the output to. Never <code>null</code>.
+   * @return <code>true</code> to show the list afterwards. <code>false</code>
+   *         if the object list should not be shown.
+   */
+  @OverrideOnDemand
+  protected boolean handleCustomActions (@Nullable final DATATYPE aSelectedObject,
+                                         @Nonnull final Locale aDisplayLocale,
+                                         @Nonnull final HCNodeList aNodeList)
   {
     return true;
   }
@@ -250,7 +300,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
       showSelectedObject (aSelectedObject, aDisplayLocale, aNodeList);
 
       // Toolbar on bottom
-      aNodeList.addChild (createViewToolbar (true, bIsEditAllowed, aSelectedObject.getID ()));
+      aNodeList.addChild (createViewToolbar (aDisplayLocale, true, bIsEditAllowed, aSelectedObject.getID ()));
 
       bShowList = false;
     }
@@ -310,7 +360,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           showInputForm (aSelectedObject, aDisplayLocale, aForm, bEdit, bCopy, aFormErrors);
 
           // Toolbar on bottom
-          aForm.addChild (bEdit ? createEditToolbar (aSelectedObject.getID ()) : _createCreateToolbar (aSelectedObject));
+          aForm.addChild (bEdit ? createEditToolbar (aSelectedObject.getID (), aDisplayLocale)
+                               : _createCreateToolbar (aSelectedObject, aDisplayLocale));
         }
       }
       else
@@ -319,10 +370,15 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           bShowList = handleDeleteAction (aSelectedObject, aDisplayLocale, aNodeList);
         }
         else
-        {
-          // Other proprietary actions
-          bShowList = handleCustomActions (aDisplayLocale, aNodeList);
-        }
+          if (hasAction (ACTION_UNDELETE) && aSelectedObject != null)
+          {
+            bShowList = handleUndeleteAction (aSelectedObject, aDisplayLocale, aNodeList);
+          }
+          else
+          {
+            // Other proprietary actions
+            bShowList = handleCustomActions (aSelectedObject, aDisplayLocale, aNodeList);
+          }
 
     if (bShowList)
     {

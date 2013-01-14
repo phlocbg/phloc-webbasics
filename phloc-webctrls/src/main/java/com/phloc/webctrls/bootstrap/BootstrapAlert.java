@@ -18,7 +18,6 @@
 package com.phloc.webctrls.bootstrap;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -54,10 +53,23 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   }
 
   @Nonnull
-  public BootstrapAlert setType (@Nullable final EBootstrapAlertType eType)
+  public EBootstrapAlertType getType ()
   {
+    return m_eType;
+  }
+
+  @Nonnull
+  public BootstrapAlert setType (@Nonnull final EBootstrapAlertType eType)
+  {
+    if (eType == null)
+      throw new NullPointerException ("type");
     m_eType = eType;
     return this;
+  }
+
+  public boolean isBlock ()
+  {
+    return m_bBlock;
   }
 
   @Nonnull
@@ -65,6 +77,11 @@ public class BootstrapAlert extends AbstractHCDiv <BootstrapAlert>
   {
     m_bBlock = bBlock;
     return this;
+  }
+
+  public boolean isShowClose ()
+  {
+    return m_bShowClose;
   }
 
   @Nonnull

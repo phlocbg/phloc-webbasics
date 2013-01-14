@@ -44,11 +44,28 @@ public class BootstrapContainer implements IHCNodeBuilder
     m_bFluid = bFluid;
   }
 
+  public boolean isFluid ()
+  {
+    return m_bFluid;
+  }
+
+  @Nullable
+  public IHCNode getContent ()
+  {
+    return m_aContent;
+  }
+
   @Nonnull
   public BootstrapContainer setContent (@Nullable final IHCNode aContent)
   {
     m_aContent = aContent;
     return this;
+  }
+
+  @Nullable
+  public IHCNode getFooter ()
+  {
+    return m_aFooter;
   }
 
   @Nonnull

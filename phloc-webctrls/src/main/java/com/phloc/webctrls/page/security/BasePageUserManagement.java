@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.page;
+package com.phloc.webctrls.page.security;
 
 import java.util.Collection;
 import java.util.List;
@@ -68,6 +68,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 import com.phloc.webctrls.datatables.DataTablesColumn;
+import com.phloc.webctrls.page.AbstractWebPageForm;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webctrls.security.UserGroupForUserSelect;
 

@@ -31,9 +31,9 @@ import com.phloc.html.hc.html.HCA;
  * 
  * @author philip
  */
-public class BootstrapLinkButton extends HCA
+public class BootstrapButton_Link extends HCA
 {
-  private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
+  private EBootstrapButtonType m_eType = EBootstrapButtonType.LINK;
   private EBootstrapButtonSize m_eSize;
 
   private void _init ()
@@ -41,20 +41,26 @@ public class BootstrapLinkButton extends HCA
     addClass (CBootstrapCSS.BTN);
   }
 
-  public BootstrapLinkButton ()
+  public BootstrapButton_Link ()
   {
     super ();
     _init ();
   }
 
-  public BootstrapLinkButton (@Nonnull final ISimpleURL aHref)
+  public BootstrapButton_Link (@Nonnull final ISimpleURL aHref)
   {
     super (aHref);
     _init ();
   }
 
   @Nonnull
-  public BootstrapLinkButton setType (@Nonnull final EBootstrapButtonType eType)
+  public EBootstrapButtonType getButtonType ()
+  {
+    return m_eType;
+  }
+
+  @Nonnull
+  public BootstrapButton_Link setButtonType (@Nonnull final EBootstrapButtonType eType)
   {
     if (eType == null)
       throw new NullPointerException ("type");
@@ -62,8 +68,14 @@ public class BootstrapLinkButton extends HCA
     return this;
   }
 
+  @Nullable
+  public EBootstrapButtonSize getSize ()
+  {
+    return m_eSize;
+  }
+
   @Nonnull
-  public BootstrapLinkButton setSize (@Nullable final EBootstrapButtonSize eSize)
+  public BootstrapButton_Link setSize (@Nullable final EBootstrapButtonSize eSize)
   {
     m_eSize = eSize;
     return this;

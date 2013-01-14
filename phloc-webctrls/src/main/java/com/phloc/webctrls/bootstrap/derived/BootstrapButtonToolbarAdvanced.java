@@ -17,9 +17,12 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webctrls.bootstrap.BootstrapButton;
 import com.phloc.webctrls.bootstrap.BootstrapButtonToolbar;
@@ -46,30 +49,39 @@ public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonBack ()
+  public BootstrapButtonToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton.create ("Zurück", m_aSelfHref, EDefaultIcon.BACK));
+    addChild (BootstrapButton.create (EWebBasicsText.MSG_BUTTON_BACK.getDisplayText (aDisplayLocale),
+                                      m_aSelfHref,
+                                      EDefaultIcon.BACK));
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonCancel ()
+  public BootstrapButtonToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton.create ("Abbrechen", m_aSelfHref, EDefaultIcon.CANCEL));
+    addChild (BootstrapButton.create (EWebBasicsText.MSG_BUTTON_CANCEL.getDisplayText (aDisplayLocale),
+                                      m_aSelfHref,
+                                      EDefaultIcon.CANCEL));
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonNo ()
+  public BootstrapButtonToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton.create ("Nein", m_aSelfHref, EDefaultIcon.NO));
+    addChild (BootstrapButton.create (EWebBasicsText.MSG_BUTTON_NO.getDisplayText (aDisplayLocale),
+                                      m_aSelfHref,
+                                      EDefaultIcon.NO));
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonEdit (@Nonnull final ISimpleURL aURL)
+  public BootstrapButtonToolbarAdvanced addButtonEdit (@Nonnull final Locale aDisplayLocale,
+                                                       @Nonnull final ISimpleURL aURL)
   {
-    addChild (BootstrapButton.create ("Bearbeiten", aURL, EDefaultIcon.EDIT));
+    addChild (BootstrapButton.create (EWebBasicsText.MSG_BUTTON_EDIT.getDisplayText (aDisplayLocale),
+                                      aURL,
+                                      EDefaultIcon.EDIT));
     return this;
   }
 
