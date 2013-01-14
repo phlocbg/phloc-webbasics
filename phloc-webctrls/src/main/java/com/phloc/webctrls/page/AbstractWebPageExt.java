@@ -60,11 +60,13 @@ import com.phloc.webctrls.custom.EDefaultIcon;
 public abstract class AbstractWebPageExt extends AbstractWebPage
 {
   public static final String ACTION_CANCEL = "cancel";
+  public static final String ACTION_COLLAPSE = CHCParam.ACTION_COLLAPSE;
   public static final String ACTION_COPY = "copy";
   public static final String ACTION_CREATE = CHCParam.ACTION_CREATE;
   public static final String ACTION_DELETE = CHCParam.ACTION_DELETE;
   public static final String ACTION_DELETE_ALL = "delete-all";
   public static final String ACTION_EDIT = CHCParam.ACTION_EDIT;
+  public static final String ACTION_EXPAND = CHCParam.ACTION_EXPAND;
   public static final String ACTION_PERFORM = CHCParam.ACTION_PERFORM;
   public static final String ACTION_SAVE = CHCParam.ACTION_SAVE;
   public static final String ACTION_UNDELETE = "undelete";

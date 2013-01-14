@@ -369,14 +369,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
   @Nonnull
   protected IHCNode getTabWithUsers (@Nonnull final Locale aDisplayLocale,
-                                     @Nonnull final Iterable <? extends IUser> aUsers)
+                                     @Nonnull final Iterable <? extends IUser> aUsers,
+                                     @Nonnull @Nonempty final String sTableID)
   {
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
     final BootstrapTable aTable = new BootstrapTable (new HCCol (200),
                                                       HCCol.star (),
                                                       new HCCol (150),
-                                                      createActionCol (1)).setID (getID ());
+                                                      createActionCol (1)).setID (sTableID);
     aTable.addHeaderRow ().addCells ("Name", "E-Mail", "Benutzergruppen", "Aktionen");
 
     for (final IUser aCurUser : aUsers)
@@ -426,14 +427,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final AccessManager aMgr = AccessManager.getInstance ();
 
     final Collection <? extends IUser> aActiveUsers = aMgr.getAllActiveUsers ();
-    aTabBox.addTab ("Aktive Benutzer (" + aActiveUsers.size () + ")", getTabWithUsers (aDisplayLocale, aActiveUsers));
+    aTabBox.addTab ("Aktive Benutzer (" + aActiveUsers.size () + ")",
+                    getTabWithUsers (aDisplayLocale, aActiveUsers, getID () + "1"));
 
     final Collection <? extends IUser> aDisabledUsers = aMgr.getAllDisabledUsers ();
     aTabBox.addTab ("Deaktivierte Benutzer (" + aDisabledUsers.size () + ")",
-                    getTabWithUsers (aDisplayLocale, aDisabledUsers));
+                    getTabWithUsers (aDisplayLocale, aDisabledUsers, getID () + "2"));
 
     final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
     aTabBox.addTab ("Gelöschte Benutzer (" + aDeletedUsers.size () + ")",
-                    getTabWithUsers (aDisplayLocale, aDeletedUsers));
+                    getTabWithUsers (aDisplayLocale, aDeletedUsers, getID () + "3"));
   }
 }
