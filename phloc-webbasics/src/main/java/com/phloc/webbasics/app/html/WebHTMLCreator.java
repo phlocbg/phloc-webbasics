@@ -83,6 +83,7 @@ public final class WebHTMLCreator
 
     // Build the HC tree
     final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope);
+
     // Convert to String
     final String sXMLCode = HCSettings.getAsHTMLString (aHtml, aCS);
     // Write to response
