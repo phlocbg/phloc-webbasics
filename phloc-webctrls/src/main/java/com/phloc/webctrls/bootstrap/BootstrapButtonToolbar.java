@@ -30,7 +30,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
- * Bootstrap block help.
+ * Bootstrap button toolbar
  * 
  * @author philip
  */
@@ -50,33 +50,41 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (final IJSCodeProvider aJSCode, final String sCaption)
+  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption, @Nonnull final IJSCodeProvider aJSCode)
   {
     addChild (BootstrapButton.create (sCaption, aJSCode));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption)
+  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
   {
     addChild (BootstrapButton.create (sCaption, aURL));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (final IJSCodeProvider aJSCode,
-                                                 final String sCaption,
-                                                 final EDefaultIcon eIcon)
+  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption,
+                                                 @Nonnull final IJSCodeProvider aJSCode,
+                                                 @Nullable final EDefaultIcon eIcon)
   {
     addChild (BootstrapButton.create (sCaption, aJSCode, eIcon));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (final ISimpleURL aURL, final String sCaption, final EDefaultIcon eIcon)
+  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption,
+                                                 @Nonnull final ISimpleURL aURL,
+                                                 @Nullable final EDefaultIcon eIcon)
   {
     addChild (BootstrapButton.create (sCaption, aURL, eIcon));
     return this;
+  }
+
+  @Nonnull
+  public BootstrapButtonToolbar addButtonEdit (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
+  {
+    return addButton (EWebBasicsText.MSG_BUTTON_EDIT.getDisplayText (aDisplayLocale), aURL, EDefaultIcon.EDIT);
   }
 
   @Nonnull
@@ -87,18 +95,22 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   }
 
   @Nonnull
+  public final BootstrapButtonToolbar addSubmitButton (@Nullable final String sCaption,
+                                                       @Nullable final EDefaultIcon eIcon)
+  {
+    addChild (BootstrapButton_Submit.create (sCaption, eIcon));
+    return this;
+  }
+
+  @Nonnull
   public final BootstrapButtonToolbar addSubmitButtonSave (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton_Submit.create (EWebBasicsText.MSG_BUTTON_SAVE.getDisplayText (aDisplayLocale),
-                                             EDefaultIcon.SAVE));
-    return this;
+    return addSubmitButton (EWebBasicsText.MSG_BUTTON_SAVE.getDisplayText (aDisplayLocale), EDefaultIcon.SAVE);
   }
 
   @Nonnull
   public final BootstrapButtonToolbar addSubmitButtonYes (@Nonnull final Locale aDisplayLocale)
   {
-    addChild (BootstrapButton_Submit.create (EWebBasicsText.MSG_BUTTON_YES.getDisplayText (aDisplayLocale),
-                                             EDefaultIcon.YES));
-    return this;
+    return addSubmitButton (EWebBasicsText.MSG_BUTTON_YES.getDisplayText (aDisplayLocale), EDefaultIcon.YES);
   }
 }

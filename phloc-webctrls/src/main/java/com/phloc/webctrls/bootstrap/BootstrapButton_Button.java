@@ -128,13 +128,13 @@ public class BootstrapButton_Button extends HCButton
   }
 
   @Nonnull
-  public static BootstrapButton_Button create (@Nonnull final EDefaultIcon eIcon)
+  public static BootstrapButton_Button create (@Nullable final EDefaultIcon eIcon)
   {
     return create (DefaultIcons.get (eIcon));
   }
 
   @Nonnull
-  public static BootstrapButton_Button create (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  public static BootstrapButton_Button create (@Nullable final String sLabel, @Nullable final EDefaultIcon eIcon)
   {
     return create (sLabel, DefaultIcons.get (eIcon));
   }

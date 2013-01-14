@@ -420,7 +420,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     // Toolbar on top
     final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
-    aToolbar.addButtonNew (createCreateLink (), "Neuen Benutzer anlegen");
+    aToolbar.addButtonNew ("Neuen Benutzer anlegen", createCreateLink ());
 
     final BootstrapTabBox aTabBox = aNodeList.addAndReturnChild (new BootstrapTabBox ());
 

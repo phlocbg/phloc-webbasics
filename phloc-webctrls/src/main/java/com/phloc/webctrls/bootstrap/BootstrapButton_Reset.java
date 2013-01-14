@@ -128,13 +128,13 @@ public class BootstrapButton_Reset extends HCButton_Reset
   }
 
   @Nonnull
-  public static BootstrapButton_Reset create (@Nonnull final EDefaultIcon eIcon)
+  public static BootstrapButton_Reset create (@Nullable final EDefaultIcon eIcon)
   {
     return create (DefaultIcons.get (eIcon));
   }
 
   @Nonnull
-  public static BootstrapButton_Reset create (@Nullable final String sLabel, @Nonnull final EDefaultIcon eIcon)
+  public static BootstrapButton_Reset create (@Nullable final String sLabel, @Nullable final EDefaultIcon eIcon)
   {
     return create (sLabel, DefaultIcons.get (eIcon));
   }

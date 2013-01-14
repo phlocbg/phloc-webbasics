@@ -37,7 +37,6 @@ public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuest
     super ();
     setType (EBootstrapAlertType.INFO);
     setBlock (true);
-    // question boxes are not closable
   }
 
   /**

@@ -155,13 +155,13 @@ public class BootstrapButton extends HCA_JS
   }
 
   @Nonnull
-  public static BootstrapButton create (@Nonnull final ISimpleURL aURL, @Nonnull final EDefaultIcon eIcon)
+  public static BootstrapButton create (@Nonnull final ISimpleURL aURL, @Nullable final EDefaultIcon eIcon)
   {
     return create (aURL, DefaultIcons.get (eIcon));
   }
 
   @Nonnull
-  public static BootstrapButton create (@Nonnull final IJSCodeProvider aJSCode, @Nonnull final EDefaultIcon eIcon)
+  public static BootstrapButton create (@Nonnull final IJSCodeProvider aJSCode, @Nullable final EDefaultIcon eIcon)
   {
     return create (aJSCode, DefaultIcons.get (eIcon));
   }
@@ -185,7 +185,7 @@ public class BootstrapButton extends HCA_JS
   @Nonnull
   public static BootstrapButton create (@Nullable final String sLabel,
                                         @Nonnull final ISimpleURL aURL,
-                                        @Nonnull final EDefaultIcon eIcon)
+                                        @Nullable final EDefaultIcon eIcon)
   {
     return create (sLabel, aURL, DefaultIcons.get (eIcon));
   }
@@ -193,7 +193,7 @@ public class BootstrapButton extends HCA_JS
   @Nonnull
   public static BootstrapButton create (@Nullable final String sLabel,
                                         @Nonnull final IJSCodeProvider aJSCode,
-                                        @Nonnull final EDefaultIcon eIcon)
+                                        @Nullable final EDefaultIcon eIcon)
   {
     return create (sLabel, aJSCode, DefaultIcons.get (eIcon));
   }

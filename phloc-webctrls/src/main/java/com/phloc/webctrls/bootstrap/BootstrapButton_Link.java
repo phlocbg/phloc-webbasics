@@ -89,4 +89,12 @@ public class BootstrapButton_Link extends HCA
     super.internalBeforeConvertToNode (aConversionSettings);
     addClasses (m_eType, m_eSize);
   }
+
+  @Nonnull
+  public static BootstrapButton_Link create (@Nullable final String sLabel)
+  {
+    final BootstrapButton_Link ret = new BootstrapButton_Link ();
+    ret.addChild (sLabel);
+    return ret;
+  }
 }

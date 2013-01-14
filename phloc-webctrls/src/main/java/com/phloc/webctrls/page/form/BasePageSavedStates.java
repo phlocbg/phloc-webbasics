@@ -144,8 +144,8 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
     else
     {
       final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
-      aToolbar.addButton (LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL)),
-                          "Alle löschen",
+      aToolbar.addButton ("Alle löschen",
+                          LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL)),
                           EDefaultIcon.DELETE);
       aNodeList.addChild (aToolbar);
 
