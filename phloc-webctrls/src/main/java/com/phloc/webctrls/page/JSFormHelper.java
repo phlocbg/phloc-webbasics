@@ -20,7 +20,6 @@ package com.phloc.webctrls.page;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -62,7 +61,7 @@ public final class JSFormHelper
   public static JSInvocation updateElementDirect (@Nonnull @Nonempty final String sFieldID,
                                                   @Nonnull final IHCNode aHCNode)
   {
-    return updateElementDirect (sFieldID, HCSettings.getAsHTMLString (aHCNode, GlobalDebug.isDebugMode ()));
+    return updateElementDirect (sFieldID, HCSettings.getAsHTMLString (aHCNode));
   }
 
   @Nonnull
@@ -96,9 +95,7 @@ public final class JSFormHelper
   @Nonnull
   public static JSAssocArray createUpdateParam (@Nonnull @Nonempty final String sFieldID, @Nonnull final IHCNode aHCNode)
   {
-    return new JSAssocArray ().add ("id", sFieldID).add ("html",
-                                                         HCSettings.getAsHTMLString (aHCNode,
-                                                                                     GlobalDebug.isDebugMode ()));
+    return new JSAssocArray ().add ("id", sFieldID).add ("html", HCSettings.getAsHTMLString (aHCNode));
   }
 
   @Nonnull

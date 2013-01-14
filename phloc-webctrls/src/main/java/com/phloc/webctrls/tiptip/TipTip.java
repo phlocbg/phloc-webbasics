@@ -21,7 +21,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
@@ -159,7 +158,7 @@ public final class TipTip implements IHCNodeBuilder
   @Nonnull
   private static String _getAsString (@Nonnull final IHCNode aHCNode)
   {
-    return HCSettings.getAsHTMLString (aHCNode, GlobalDebug.isDebugMode ());
+    return HCSettings.getAsHTMLString (aHCNode);
   }
 
   @Nonnull
