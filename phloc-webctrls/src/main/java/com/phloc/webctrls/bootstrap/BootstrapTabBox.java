@@ -106,6 +106,12 @@ public class BootstrapTabBox extends AbstractHCDiv <BootstrapTabBox>
   }
 
   @Nonnull
+  public EBootstrapTabBoxType getType ()
+  {
+    return m_eType;
+  }
+
+  @Nonnull
   public BootstrapTabBox setType (@Nonnull final EBootstrapTabBoxType eType)
   {
     if (eType == null)

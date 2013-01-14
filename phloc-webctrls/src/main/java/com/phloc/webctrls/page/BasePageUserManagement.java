@@ -42,6 +42,7 @@ import com.phloc.commons.name.ComparatorHasName;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -58,6 +59,7 @@ import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
+import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapButtonToolbarAdvanced;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
@@ -352,7 +354,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
     aTable.addItemRow (BootstrapFormLabel.createMandatory ("Aktiv?"),
-                       new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED, DEFAULT_ENABLED)),
+                       new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
+                                                                aSelectedObject == null ? DEFAULT_ENABLED
+                                                                                       : aSelectedObject.isEnabled ())),
                        aFormErrors.getListOfField (FIELD_ENABLED));
     final Collection <String> aUserGroupIDs = aSelectedObject == null
                                                                      ? getAttrs (FIELD_USERGROUPS)
@@ -362,15 +366,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                        aFormErrors.getListOfField (FIELD_USERGROUPS));
   }
 
-  @Override
-  protected void showListOfExistingObjects (final Locale aDisplayLocale, final HCNodeList aNodeList)
+  @Nonnull
+  protected IHCNode getTabWithUsers (@Nonnull final Locale aDisplayLocale,
+                                     @Nonnull final Iterable <? extends IUser> aUsers)
   {
     final AccessManager aMgr = AccessManager.getInstance ();
-
-    // Toolbar on top
-    final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
-    aToolbar.addButtonNew (createCreateLink (), "Neuen Benutzer anlegen");
-
     // List existing
     final BootstrapTable aTable = new BootstrapTable (new HCCol (200),
                                                       HCCol.star (),
@@ -378,17 +378,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                       createActionCol (1)).setID (getID ());
     aTable.addHeaderRow ().addCells ("Name", "E-Mail", "Benutzergruppen", "Aktionen");
 
-    // Show only the bank accounts of the current client
-    for (final IUser aCurObject : aMgr.getAllUsers ())
+    for (final IUser aCurUser : aUsers)
     {
-      final ISimpleURL aViewLink = createViewLink (aCurObject);
+      final ISimpleURL aViewLink = createViewLink (aCurUser);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (new HCA (aViewLink).addChild (aCurObject.getDisplayName ()));
-      aRow.addCell (new HCA (aViewLink).addChild (aCurObject.getEmailAddress ()));
+      aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getDisplayName ()));
+      aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getEmailAddress ()));
 
       // User groups
-      final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aCurObject.getID ());
+      final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aCurUser.getID ());
       final StringBuilder aUserGroupsStr = new StringBuilder ();
       for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aUserGroups,
                                                                     new ComparatorHasName <IUserGroup> (aDisplayLocale)))
@@ -400,15 +399,41 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       aRow.addCell (new HCA (aViewLink).addChild (aUserGroupsStr.toString ()));
 
       final AbstractHCCell aActionCell = aRow.addCell ();
-      if (_canEdit (aCurObject))
-        aActionCell.addChild (createEditLink (aCurObject, aDisplayLocale));
+      if (_canEdit (aCurUser))
+        aActionCell.addChild (createEditLink (aCurUser, aDisplayLocale));
     }
     if (aTable.getBodyRowCount () == 0)
       aTable.addBodyRow ().addAndReturnCell ("Keine Benutzer gefunden").setColspan (aTable.getColumnCount ());
+
+    final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
     aNodeList.addChild (new BootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
                                                         .addColumn (new DataTablesColumn (3).setSortable (false))
                                                         .setInitialSorting (1, ESortOrder.ASCENDING)
                                                         .build ());
+    return aNodeList;
+  }
+
+  @Override
+  protected void showListOfExistingObjects (final Locale aDisplayLocale, final HCNodeList aNodeList)
+  {
+    // Toolbar on top
+    final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
+    aToolbar.addButtonNew (createCreateLink (), "Neuen Benutzer anlegen");
+
+    final BootstrapTabBox aTabBox = aNodeList.addAndReturnChild (new BootstrapTabBox ());
+
+    final AccessManager aMgr = AccessManager.getInstance ();
+
+    final Collection <? extends IUser> aActiveUsers = aMgr.getAllActiveUsers ();
+    aTabBox.addTab ("Aktive Benutzer (" + aActiveUsers.size () + ")", getTabWithUsers (aDisplayLocale, aActiveUsers));
+
+    final Collection <? extends IUser> aDisabledUsers = aMgr.getAllDisabledUsers ();
+    aTabBox.addTab ("Deaktivierte Benutzer (" + aDisabledUsers.size () + ")",
+                    getTabWithUsers (aDisplayLocale, aDisabledUsers));
+
+    final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
+    aTabBox.addTab ("Gelöschte Benutzer (" + aDeletedUsers.size () + ")",
+                    getTabWithUsers (aDisplayLocale, aDeletedUsers));
   }
 }
