@@ -18,7 +18,6 @@
 package com.phloc.webctrls.page;
 
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +31,6 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
@@ -54,15 +52,9 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   @Nullable
-  private String _getSelectedObjectID ()
+  protected final String getSelectedObjectID ()
   {
     return getAttr (CHCParam.PARAM_OBJECT);
-  }
-
-  @Nullable
-  protected Map <String, String> getAdditionalParameters ()
-  {
-    return null;
   }
 
   /**
@@ -101,9 +93,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                                     final boolean bCanEdit,
                                                                     @Nonnull final DATATYPE aSelectedObject)
   {
-    final Map <String, String> aAdditionalParams = getAdditionalParameters ();
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced (LinkUtils.getSelfHref ()
-                                                                                                 .addAll (aAdditionalParams));
+    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
     if (bCanGoBack)
     {
       // Back to list
@@ -112,7 +102,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     if (bCanEdit)
     {
       // Edit object
-      aToolbar.addButtonEdit (aDisplayLocale, createEditURL (aSelectedObject).addAll (aAdditionalParams));
+      aToolbar.addButtonEdit (aDisplayLocale, createEditURL (aSelectedObject));
     }
     modifyViewToolbar (aDisplayLocale, aSelectedObject, aToolbar);
     return aToolbar;
@@ -147,13 +137,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final BootstrapButtonToolbarAdvanced createEditToolbar (@Nonnull final Locale aDisplayLocale,
                                                                     @Nonnull final DATATYPE aSelectedObject)
   {
-    final Map <String, String> aAdditionalParams = getAdditionalParameters ();
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced (LinkUtils.getSelfHref ()
-                                                                                                 .addAll (aAdditionalParams));
+    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
-    aToolbar.addHiddenFields (aAdditionalParams);
     // Save button
     aToolbar.addSubmitButtonSave (aDisplayLocale);
     // Cancel button
@@ -188,14 +175,11 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final BootstrapButtonToolbarAdvanced createCreateToolbar (@Nonnull final Locale aDisplayLocale,
                                                                       @Nullable final IHasID <String> aSelectedObject)
   {
-    final Map <String, String> aAdditionalParams = getAdditionalParameters ();
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced (LinkUtils.getSelfHref ()
-                                                                                                 .addAll (aAdditionalParams));
+    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
     if (aSelectedObject != null)
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
-    aToolbar.addHiddenFields (aAdditionalParams);
     // Save button
     aToolbar.addSubmitButtonSave (aDisplayLocale);
     // Cancel button
@@ -337,9 +321,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @Override
   protected final void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
   {
-    final DATATYPE aSelectedObject = getSelectedObject (_getSelectedObjectID ());
+    final DATATYPE aSelectedObject = getSelectedObject (getSelectedObjectID ());
     final boolean bIsEditAllowed = isEditAllowed ();
-
     boolean bShowList = true;
 
     if (hasAction (ACTION_VIEW) && aSelectedObject != null)
