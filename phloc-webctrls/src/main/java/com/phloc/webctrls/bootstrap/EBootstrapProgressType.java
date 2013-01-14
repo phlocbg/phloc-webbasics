@@ -28,21 +28,21 @@ import com.phloc.html.css.ICSSClassProvider;
  */
 public enum EBootstrapProgressType implements ICSSClassProvider
 {
-  SUCCESS ("progress-success"),
-  WARNING ("progress-warning"),
-  DANGER ("progress-danger"),
-  INFO ("progress-info");
+  SUCCESS (CBootstrapCSS.PROGRESS_SUCCESS),
+  WARNING (CBootstrapCSS.PROGRESS_WARNING),
+  DANGER (CBootstrapCSS.PROGRESS_DANGER),
+  INFO (CBootstrapCSS.PROGRESS_INFO);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapProgressType (@Nullable final String sCSSClass)
+  private EBootstrapProgressType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }

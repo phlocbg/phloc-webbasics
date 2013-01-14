@@ -29,21 +29,21 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapTabBoxType implements ICSSClassProvider
 {
   TOP (null),
-  BELOW ("tabs-below"),
-  LEFT ("tabs-left"),
-  RIGHT ("tabs-right");
+  BELOW (CBootstrapCSS.TABS_BELOW),
+  LEFT (CBootstrapCSS.TABS_LEFT),
+  RIGHT (CBootstrapCSS.TABS_RIGHT);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapTabBoxType (@Nullable final String sCSSClass)
+  private EBootstrapTabBoxType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 
   /**

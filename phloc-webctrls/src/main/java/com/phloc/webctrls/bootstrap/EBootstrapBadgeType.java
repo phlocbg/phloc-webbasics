@@ -29,22 +29,22 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapBadgeType implements ICSSClassProvider
 {
   DEFAULT (null),
-  SUCCESS ("badge-success"),
-  WARNING ("badge-warning"),
-  IMPORTANT ("badge-important"),
-  INFO ("badge-info"),
-  INVERSE ("badge-inverse");
+  SUCCESS (CBootstrapCSS.BADGE_SUCCESS),
+  WARNING (CBootstrapCSS.BADGE_WARNING),
+  IMPORTANT (CBootstrapCSS.BADGE_IMPORTANT),
+  INFO (CBootstrapCSS.BADGE_INFO),
+  INVERSE (CBootstrapCSS.BADGE_INVERSE);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapBadgeType (@Nullable final String sCSSClass)
+  private EBootstrapBadgeType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }

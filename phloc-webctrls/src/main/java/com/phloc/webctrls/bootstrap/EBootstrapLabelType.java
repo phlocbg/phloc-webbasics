@@ -29,22 +29,22 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapLabelType implements ICSSClassProvider
 {
   DEFAULT (null),
-  SUCCESS ("label-success"),
-  WARNING ("label-warning"),
-  IMPORTANT ("label-important"),
-  INFO ("label-info"),
-  INVERSE ("label-inverse");
+  SUCCESS (CBootstrapCSS.LABEL_SUCCESS),
+  WARNING (CBootstrapCSS.LABEL_WARNING),
+  IMPORTANT (CBootstrapCSS.LABEL_IMPORTANT),
+  INFO (CBootstrapCSS.LABEL_INFO),
+  INVERSE (CBootstrapCSS.LABEL_INVERSE);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapLabelType (@Nullable final String sCSSClass)
+  private EBootstrapLabelType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }

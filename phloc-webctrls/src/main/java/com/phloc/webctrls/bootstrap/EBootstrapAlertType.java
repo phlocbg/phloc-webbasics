@@ -29,21 +29,21 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapAlertType implements ICSSClassProvider
 {
   DEFAULT (null),
-  SUCCESS ("alert-success"),
-  DANGER ("alert-danger"),
-  ERROR ("alert-error"),
-  INFO ("alert-info");
+  SUCCESS (CBootstrapCSS.ALERT_SUCCESS),
+  DANGER (CBootstrapCSS.ALERT_DANGER),
+  ERROR (CBootstrapCSS.ALERT_ERROR),
+  INFO (CBootstrapCSS.ALERT_INFO);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapAlertType (@Nullable final String sCSSClass)
+  private EBootstrapAlertType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }

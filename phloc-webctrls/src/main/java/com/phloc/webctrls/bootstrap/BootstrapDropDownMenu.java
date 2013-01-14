@@ -48,4 +48,10 @@ public class BootstrapDropDownMenu extends HCUL
       aLI.addClass (CBootstrapCSS.ACTIVE);
     return this;
   }
+
+  @Nonnull
+  public BootstrapDropDownMenu addActiveMenuItem (@Nonnull final ISimpleURL aURL, @Nullable final String sLabel)
+  {
+    return addMenuItem (aURL, sLabel, true);
+  }
 }

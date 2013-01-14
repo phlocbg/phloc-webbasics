@@ -33,26 +33,26 @@ import com.phloc.html.hc.html.HCDiv;
  */
 public enum EBootstrapSpan implements ICSSClassProvider
 {
-  SPAN1 (1, "span1"),
-  SPAN2 (2, "span2"),
-  SPAN3 (3, "span3"),
-  SPAN4 (4, "span4"),
-  SPAN5 (5, "span5"),
-  SPAN6 (6, "span6"),
-  SPAN7 (7, "span7"),
-  SPAN8 (8, "span8"),
-  SPAN9 (9, "span9"),
-  SPAN10 (10, "span10"),
-  SPAN11 (11, "span11"),
-  SPAN12 (12, "span12");
+  SPAN1 (1, CBootstrapCSS.SPAN1),
+  SPAN2 (2, CBootstrapCSS.SPAN2),
+  SPAN3 (3, CBootstrapCSS.SPAN3),
+  SPAN4 (4, CBootstrapCSS.SPAN4),
+  SPAN5 (5, CBootstrapCSS.SPAN5),
+  SPAN6 (6, CBootstrapCSS.SPAN6),
+  SPAN7 (7, CBootstrapCSS.SPAN7),
+  SPAN8 (8, CBootstrapCSS.SPAN8),
+  SPAN9 (9, CBootstrapCSS.SPAN9),
+  SPAN10 (10, CBootstrapCSS.SPAN10),
+  SPAN11 (11, CBootstrapCSS.SPAN11),
+  SPAN12 (12, CBootstrapCSS.SPAN12);
 
   private final int m_nParts;
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapSpan (@Nonnegative final int nParts, @Nonnull @Nonempty final String sCSSClass)
+  private EBootstrapSpan (@Nonnegative final int nParts, @Nonnull final ICSSClassProvider aCSSClass)
   {
     m_nParts = nParts;
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nonnegative
@@ -65,7 +65,7 @@ public enum EBootstrapSpan implements ICSSClassProvider
   @Nonempty
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass.getCSSClass ();
   }
 
   @Nonnull

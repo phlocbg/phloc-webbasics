@@ -29,21 +29,21 @@ import com.phloc.html.css.ICSSClassProvider;
 public enum EBootstrapNavBarType implements ICSSClassProvider
 {
   DEFAULT (null),
-  STATIC_TOP ("navbar-static-top"),
-  FIXED_TOP ("navbar-fixed-top"),
-  FIXED_BOTTOM ("navbar-fixed-bottom");
+  STATIC_TOP (CBootstrapCSS.NAVBAR_STATIC_TOP),
+  FIXED_TOP (CBootstrapCSS.NAVBAR_FIXED_TOP),
+  FIXED_BOTTOM (CBootstrapCSS.NAVBAR_FIXED_BOTTOM);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapNavBarType (@Nullable final String sCSSClass)
+  private EBootstrapNavBarType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 
   public boolean isTop ()

@@ -22,24 +22,19 @@ import javax.annotation.Nullable;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Button type
+ * Type of well size
  * 
  * @author philip
  */
-public enum EBootstrapButtonType implements ICSSClassProvider
+public enum EBootstrapWellType implements ICSSClassProvider
 {
   DEFAULT (null),
-  PRIMARY (CBootstrapCSS.BTN_PRIMARY),
-  INFO (CBootstrapCSS.BTN_INFO),
-  SUCCESS (CBootstrapCSS.BTN_SUCCESS),
-  WARNING (CBootstrapCSS.BTN_WARNING),
-  DANGER (CBootstrapCSS.BTN_DANGER),
-  INVERSE (CBootstrapCSS.BTN_INVERSE),
-  LINK (CBootstrapCSS.BTN_LINK);
+  SMALL (CBootstrapCSS.WELL_SMALL),
+  LARGE (CBootstrapCSS.WELL_LARGE);
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapButtonType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }

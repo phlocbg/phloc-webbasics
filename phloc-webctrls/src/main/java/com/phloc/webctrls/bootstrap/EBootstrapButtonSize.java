@@ -28,20 +28,20 @@ import com.phloc.html.css.ICSSClassProvider;
  */
 public enum EBootstrapButtonSize implements ICSSClassProvider
 {
-  LARGE ("btn-large"),
-  SMALL ("btn-small"),
-  MINI ("btn-mini");
+  LARGE (CBootstrapCSS.BTN_LARGE),
+  SMALL (CBootstrapCSS.BTN_SMALL),
+  MINI (CBootstrapCSS.BTN_MINI);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapButtonSize (@Nullable final String sCSSClass)
+  private EBootstrapButtonSize (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }

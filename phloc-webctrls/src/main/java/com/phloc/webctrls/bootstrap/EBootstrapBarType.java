@@ -28,21 +28,21 @@ import com.phloc.html.css.ICSSClassProvider;
  */
 public enum EBootstrapBarType implements ICSSClassProvider
 {
-  SUCCESS ("bar-success"),
-  WARNING ("bar-warning"),
-  DANGER ("bar-danger"),
-  INFO ("bar-info");
+  SUCCESS (CBootstrapCSS.BAR_SUCCESS),
+  WARNING (CBootstrapCSS.BAR_WARNING),
+  DANGER (CBootstrapCSS.BAR_DANGER),
+  INFO (CBootstrapCSS.BAR_INFO);
 
-  private final String m_sCSSClass;
+  private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapBarType (@Nullable final String sCSSClass)
+  private EBootstrapBarType (@Nullable final ICSSClassProvider aCSSClass)
   {
-    m_sCSSClass = sCSSClass;
+    m_aCSSClass = aCSSClass;
   }
 
   @Nullable
   public String getCSSClass ()
   {
-    return m_sCSSClass;
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
   }
 }
