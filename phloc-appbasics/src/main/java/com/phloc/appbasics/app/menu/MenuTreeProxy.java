@@ -24,8 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
+import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.url.ISimpleURL;
 
@@ -194,4 +197,20 @@ public class MenuTreeProxy
     final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = m_aMenuTree.getItemWithID (sID);
     return aTreeItem == null ? null : aTreeItem.getData ();
   }
+
+  public void iterateAllMenuObjects (@Nonnull final INonThrowingRunnableWithParameter <IMenuObject> aCallback)
+  {
+    if (aCallback == null)
+      throw new NullPointerException ("Callback");
+    TreeWalker.walkTree (m_aMenuTree,
+                         new DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>> ()
+                         {
+                           @Override
+                           public final void onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
+                           {
+                             aCallback.run (aItem.getData ());
+                           }
+                         });
+  }
+
 }

@@ -338,6 +338,25 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
 
   @Nonnull
   @ReturnsMutableCopy
+  public List <User> getAllNotDeletedUsers ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      final List <User> ret = new ArrayList <User> ();
+      for (final User aUser : m_aUsers.values ())
+        if (!aUser.isDeleted ())
+          ret.add (aUser);
+      return ret;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public List <User> getAllDeletedUsers ()
   {
     m_aRWLock.readLock ().lock ();

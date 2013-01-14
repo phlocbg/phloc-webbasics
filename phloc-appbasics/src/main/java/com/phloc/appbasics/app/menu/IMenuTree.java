@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.ITreeWithGlobalUniqueID;
@@ -224,4 +225,13 @@ public interface IMenuTree extends ITreeWithGlobalUniqueID <String, IMenuObject,
    */
   @Nullable
   IMenuObject getMenuObjectOfID (@Nullable String sID);
+
+  /**
+   * Iterate all menu objects and invoke the supplied callback.
+   * 
+   * @param aCallback
+   *        The callback to be supplied for each menu object. May not be
+   *        <code>null</code>.
+   */
+  void iterateAllMenuObjects (@Nonnull INonThrowingRunnableWithParameter <IMenuObject> aCallback);
 }

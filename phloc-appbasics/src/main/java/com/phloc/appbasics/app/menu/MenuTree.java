@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
 import com.phloc.commons.url.ISimpleURL;
@@ -136,5 +137,10 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   public IMenuObject getMenuObjectOfID (@Nullable final String sID)
   {
     return m_aProxy.getMenuObjectOfID (sID);
+  }
+
+  public void iterateAllMenuObjects (@Nonnull final INonThrowingRunnableWithParameter <IMenuObject> aCallback)
+  {
+    m_aProxy.iterateAllMenuObjects (aCallback);
   }
 }

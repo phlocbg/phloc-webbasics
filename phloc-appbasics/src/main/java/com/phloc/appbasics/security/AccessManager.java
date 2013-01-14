@@ -194,6 +194,13 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
 
   @Nonnull
   @ReturnsMutableCopy
+  public Collection <? extends IUser> getAllNotDeletedUsers ()
+  {
+    return m_aUserMgr.getAllNotDeletedUsers ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public Collection <? extends IUser> getAllDeletedUsers ()
   {
     return m_aUserMgr.getAllDeletedUsers ();
