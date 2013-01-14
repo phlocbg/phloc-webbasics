@@ -18,6 +18,7 @@
 package com.phloc.webctrls.page;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -72,7 +73,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   public static final String ACTION_UNDELETE = "undelete";
   public static final String ACTION_UNDELETE_ALL = "undelete-all";
   public static final String ACTION_VIEW = CHCParam.ACTION_VIEW;
-  protected static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
+  public static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
 
   public AbstractWebPageExt (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
@@ -101,7 +102,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final HCCol createActionCol (@Nonnegative final int nActions)
+  public static final HCCol createActionCol (@Nonnegative final int nActions)
   {
     // Assume each action icon is 20 pixels (incl. margin)
     final int nWidth = 20 * nActions;
@@ -110,50 +111,68 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final SimpleURL createCreateLink (@Nonnull final String sMenuItemID)
+  public static final SimpleURL createCreateLink (@Nonnull final String sMenuItemID)
   {
     return LinkUtils.getLinkToMenuItem (sMenuItemID).add (CHCParam.PARAM_ACTION, ACTION_CREATE);
   }
 
   @Nonnull
-  protected static final SimpleURL createCreateLink ()
+  public static final SimpleURL createCreateLink ()
   {
     return LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_CREATE));
   }
 
   @Nonnull
-  protected static final ISimpleURL createViewLink (@Nonnull final IHasID <String> aCurObject)
+  public static final SimpleURL createViewLink (@Nonnull final IHasID <String> aCurObject)
   {
     return LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_VIEW).add (CHCParam.PARAM_OBJECT,
                                                                                             aCurObject.getID ()));
   }
 
   @Nonnull
-  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final T aCurObject,
-                                                                                           @Nonnull final Locale aDisplayLocale)
+  public static final <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final T aCurObject,
+                                                                                        @Nonnull final Locale aDisplayLocale)
   {
-    return createEditLink (aCurObject,
-                           EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
-                                                                            aCurObject.getDisplayName ()));
+    return createEditLink (aCurObject, aDisplayLocale, (Map <String, String>) null);
   }
 
   @Nonnull
-  protected static final IHCNode getEditImg ()
+  public static final <T extends IHasID <String> & IHasDisplayName> HCA createEditLink (@Nonnull final T aCurObject,
+                                                                                        @Nonnull final Locale aDisplayLocale,
+                                                                                        @Nullable final Map <String, String> aParams)
+  {
+    return createEditLink (aCurObject,
+                           EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                            aCurObject.getDisplayName ()),
+                           aParams);
+  }
+
+  @Nonnull
+  public static final IHCNode getEditImg ()
   {
     return EDefaultIcon.EDIT.getIcon ().getAsNode ();
   }
 
   @Nonnull
-  protected static final HCA createEditLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
+  public static final HCA createEditLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
+  {
+    return createEditLink (aCurObject, sTitle, (Map <String, String>) null);
+  }
+
+  @Nonnull
+  public static final HCA createEditLink (@Nonnull final IHasID <String> aCurObject,
+                                          @Nullable final String sTitle,
+                                          @Nullable final Map <String, String> aParams)
   {
     final ISimpleURL aEditURL = LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_EDIT)
-                                                                  .add (CHCParam.PARAM_OBJECT, aCurObject.getID ()));
+                                                                  .add (CHCParam.PARAM_OBJECT, aCurObject.getID ())
+                                                                  .addAll (aParams));
     return new HCA (aEditURL).setTitle (sTitle).addChild (getEditImg ());
   }
 
   @Nonnull
-  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createCopyLink (@Nonnull final T aCurObject,
-                                                                                           @Nonnull final Locale aDisplayLocale)
+  public static final <T extends IHasID <String> & IHasDisplayName> HCA createCopyLink (@Nonnull final T aCurObject,
+                                                                                        @Nonnull final Locale aDisplayLocale)
   {
     return createCopyLink (aCurObject,
                            EWebPageText.OBJECT_COPY.getDisplayTextWithArgs (aDisplayLocale,
@@ -161,13 +180,13 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final IHCNode getCopyImg ()
+  public static final IHCNode getCopyImg ()
   {
     return EDefaultIcon.COPY.getIcon ().getAsNode ();
   }
 
   @Nonnull
-  protected static final HCA createCopyLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
+  public static final HCA createCopyLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
   {
     final ISimpleURL aCopyURL = LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_COPY)
                                                                   .add (CHCParam.PARAM_OBJECT, aCurObject.getID ()));
@@ -175,8 +194,8 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final T aCurObject,
-                                                                                             @Nonnull final Locale aDisplayLocale)
+  public static final <T extends IHasID <String> & IHasDisplayName> HCA createDeleteLink (@Nonnull final T aCurObject,
+                                                                                          @Nonnull final Locale aDisplayLocale)
   {
     return createDeleteLink (aCurObject,
                              EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
@@ -184,13 +203,13 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final IHCNode getDeleteImg ()
+  public static final IHCNode getDeleteImg ()
   {
     return EDefaultIcon.DELETE.getIcon ().getAsNode ();
   }
 
   @Nonnull
-  protected static final HCA createDeleteLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
+  public static final HCA createDeleteLink (@Nonnull final IHasID <String> aCurObject, @Nullable final String sTitle)
   {
     final ISimpleURL aURL = LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION, ACTION_DELETE)
                                                               .add (CHCParam.PARAM_OBJECT, aCurObject.getID ()));
@@ -198,21 +217,21 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected static final IHCNode getCreateImg ()
+  public static final IHCNode getCreateImg ()
   {
     return EDefaultIcon.NEW.getIcon ().getAsNode ();
   }
 
   @Nonnull
-  protected static final HCA createNestedCreateLink (@Nonnull final IHasID <String> aCurObject,
-                                                     @Nullable final String sTitle)
+  public static final HCA createNestedCreateLink (@Nonnull final IHasID <String> aCurObject,
+                                                  @Nullable final String sTitle)
   {
     final ISimpleURL aURL = createCreateLink ().add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
     return new HCA (aURL).setTitle (sTitle).addChild (getCreateImg ());
   }
 
   @Nonnull
-  protected static IHCNode createIncorrectInputBox (final Locale aDisplayLocale)
+  public static IHCNode createIncorrectInputBox (final Locale aDisplayLocale)
   {
     return BootstrapErrorBox.create (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
   }
@@ -254,7 +273,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nullable
-  protected static IHCNode createEmailLink (@Nullable final String sEmailAddress)
+  public static IHCNode createEmailLink (@Nullable final String sEmailAddress)
   {
     if (StringHelper.hasNoText (sEmailAddress))
       return null;
@@ -262,7 +281,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nullable
-  protected static IHCNode createEmailLink (@Nullable final IEmailAddress aEmail)
+  public static IHCNode createEmailLink (@Nullable final IEmailAddress aEmail)
   {
     if (aEmail == null)
       return null;
@@ -270,7 +289,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nullable
-  protected static IHCNode createWebLink (@Nullable final String sWebSite)
+  public static IHCNode createWebLink (@Nullable final String sWebSite)
   {
     if (StringHelper.hasNoText (sWebSite))
       return null;

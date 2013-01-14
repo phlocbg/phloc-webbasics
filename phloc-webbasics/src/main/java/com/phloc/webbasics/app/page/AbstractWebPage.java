@@ -105,7 +105,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   @Nonnull
-  protected static final IRequestWebScopeWithoutResponse getScope ()
+  public static final IRequestWebScopeWithoutResponse getScope ()
   {
     return WebScopeManager.getRequestScope ();
   }
@@ -119,7 +119,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return <code>true</code> of the attribute is present, <code>false</code>
    *         if not
    */
-  protected static final boolean containsAttr (@Nullable final String sName)
+  public static final boolean containsAttr (@Nullable final String sName)
   {
     return getScope ().containsAttribute (sName);
   }
@@ -132,7 +132,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected static final String getAttr (@Nullable final String sName)
+  public static final String getAttr (@Nullable final String sName)
   {
     return getAttr (sName, null);
   }
@@ -147,7 +147,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The value of the passed request parameter or the default value
    */
   @Nullable
-  protected static final String getAttr (@Nullable final String sName, @Nullable final String sDefault)
+  public static final String getAttr (@Nullable final String sName, @Nullable final String sDefault)
   {
     final String sScopeValue = getScope ().getAttributeAsString (sName, sDefault);
     return StringHelper.trim (sScopeValue);
@@ -161,7 +161,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The value list of the passed request parameter
    */
   @Nullable
-  protected static final List <String> getAttrs (@Nullable final String sName)
+  public static final List <String> getAttrs (@Nullable final String sName)
   {
     return getScope ().getAttributeValues (sName);
   }
@@ -178,7 +178,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The boolean representation of the parameter value or the default
    *         value.
    */
-  protected static final boolean getBooleanAttr (@Nullable final String sName, final boolean bDefault)
+  public static final boolean getBooleanAttr (@Nullable final String sName, final boolean bDefault)
   {
     return getScope ().getAttributeAsBoolean (sName, bDefault);
   }
@@ -195,7 +195,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected static final int getIntAttr (@Nullable final String sName, final int nDefault)
+  public static final int getIntAttr (@Nullable final String sName, final int nDefault)
   {
     return getScope ().getAttributeAsInt (sName, nDefault);
   }
@@ -212,7 +212,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The long representation of the parameter value or the default
    *         value.
    */
-  protected static final long getLongAttr (@Nullable final String sName, final long nDefault)
+  public static final long getLongAttr (@Nullable final String sName, final long nDefault)
   {
     return getScope ().getAttributeAsLong (sName, nDefault);
   }
@@ -229,7 +229,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The integer representation of the parameter value or the default
    *         value.
    */
-  protected static final double getDoubleAttr (@Nullable final String sName, final double dDefault)
+  public static final double getDoubleAttr (@Nullable final String sName, final double dDefault)
   {
     return getScope ().getAttributeAsDouble (sName, dDefault);
   }
@@ -243,7 +243,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
+  public static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName)
   {
     return getCastedAttr (sName, (DATATYPE) null);
   }
@@ -259,8 +259,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return The value of the passed request parameter
    */
   @Nullable
-  protected static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName,
-                                                            @Nullable final DATATYPE aDefault)
+  public static final <DATATYPE> DATATYPE getCastedAttr (@Nullable final String sName, @Nullable final DATATYPE aDefault)
   {
     return getScope ().getCastedAttribute (sName, aDefault);
   }
@@ -275,7 +274,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return <code>true</code> if the request parameter is present and has the
    *         expected value - <code>false</code> otherwise.
    */
-  protected static final boolean hasAttr (@Nullable final String sName, final String sValue)
+  public static final boolean hasAttr (@Nullable final String sName, final String sValue)
   {
     return EqualsUtils.equals (sValue, getAttr (sName));
   }
@@ -289,13 +288,13 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    *        the default value to be returned, if no request attribute is present
    * @return The value of the passed request parameter
    */
-  protected static final boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
+  public static final boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
   {
     return StringHelper.hasNoText (sName) ? bDefaultValue : RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
   }
 
   @Nonnull
-  protected static IRequestParamMap getRequestParamMap ()
+  public static IRequestParamMap getRequestParamMap ()
   {
     return RequestHelper.getRequestParamMap (getScope ());
   }
@@ -304,7 +303,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A form that links to the current page.
    */
   @Nonnull
-  protected static final HCForm createFormSelf ()
+  public static final HCForm createFormSelf ()
   {
     return new HCForm (LinkUtils.getSelfHref ());
   }
@@ -313,7 +312,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  protected static final HCForm createFormFileUploadSelf ()
+  public static final HCForm createFormFileUploadSelf ()
   {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
   }

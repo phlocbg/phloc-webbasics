@@ -26,7 +26,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
-import com.phloc.commons.url.SMap;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCHiddenField;
@@ -88,10 +87,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     if (bCanEdit)
     {
       // Edit object
-      aToolbar.addButtonEdit (aDisplayLocale, LinkUtils.getSelfHref (new SMap ().add (CHCParam.PARAM_ACTION,
-                                                                                      ACTION_EDIT)
-                                                                                .add (CHCParam.PARAM_OBJECT,
-                                                                                      sSelectedObjectID)));
+      aToolbar.addButtonEdit (aDisplayLocale,
+                              LinkUtils.getSelfHref ()
+                                       .add (CHCParam.PARAM_ACTION, ACTION_EDIT)
+                                       .add (CHCParam.PARAM_OBJECT, sSelectedObjectID));
     }
     return aToolbar;
   }
