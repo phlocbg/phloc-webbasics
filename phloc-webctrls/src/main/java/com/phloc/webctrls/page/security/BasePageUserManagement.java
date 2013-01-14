@@ -369,7 +369,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
   @Nonnull
   protected IHCNode getTabWithUsers (@Nonnull final Locale aDisplayLocale,
-                                     @Nonnull final Iterable <? extends IUser> aUsers,
+                                     @Nonnull final Collection <? extends IUser> aUsers,
                                      @Nonnull @Nonempty final String sTableID)
   {
     final AccessManager aMgr = AccessManager.getInstance ();
@@ -404,14 +404,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       if (_canEdit (aCurUser))
         aActionCell.addChild (createEditLink (aCurUser, aDisplayLocale));
     }
-    if (aTable.getBodyRowCount () == 0)
-      aTable.addBodyRow ().addAndReturnCell ("Keine Benutzer gefunden").setColspan (aTable.getColumnCount ());
+    if (aUsers.isEmpty ())
+      aTable.addSpanningBodyContent ("Keine Benutzer gefunden");
 
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
-    aNodeList.addChild (new BootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
-                                                        .addColumn (new DataTablesColumn (3).setSortable (false))
-                                                        .setInitialSorting (1, ESortOrder.ASCENDING));
+    if (!aUsers.isEmpty ())
+      aNodeList.addChild (new BootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
+                                                          .addColumn (new DataTablesColumn (3).setSortable (false))
+                                                          .setInitialSorting (1, ESortOrder.ASCENDING));
     return aNodeList;
   }
 

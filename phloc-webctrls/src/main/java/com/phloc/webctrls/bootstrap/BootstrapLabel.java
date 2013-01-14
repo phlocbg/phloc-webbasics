@@ -18,10 +18,7 @@
 package com.phloc.webctrls.bootstrap;
 
 import javax.annotation.Nonnull;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.HCButton;
 
 /**
@@ -55,16 +52,9 @@ public class BootstrapLabel extends HCButton
   {
     if (eType == null)
       throw new NullPointerException ("type");
+    removeClass (m_eType);
     m_eType = eType;
-    return this;
-  }
-
-  @Override
-  @OverrideOnDemand
-  @OverridingMethodsMustInvokeSuper
-  protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
-  {
-    super.internalBeforeConvertToNode (aConversionSettings);
     addClass (m_eType);
+    return this;
   }
 }
