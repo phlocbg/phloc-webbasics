@@ -26,10 +26,32 @@ import com.phloc.commons.microdom.IMicroElement;
 
 public interface IPasswordConstraint
 {
+  /**
+   * Check if the supplied password matches this constraint
+   * 
+   * @param sPlainTextPassword
+   *        The plain text password to check. May be <code>null</code>.
+   * @return <code>true</code> if it is valid, <code>false</code> if it is not
+   */
   boolean isPasswordValid (@Nullable String sPlainTextPassword);
 
+  /**
+   * Get a description of this constraint, so that it can be displayed to the
+   * user
+   * 
+   * @param aContentLocale
+   *        The locale to get the description in. Never <code>null</code>.
+   * @return <code>null</code> if no text is present in the provided locale
+   */
   @Nullable
   String getDescription (@Nonnull Locale aContentLocale);
 
+  /**
+   * This method is responsible for filling a micro element for serializing the
+   * password constraints.
+   * 
+   * @param aElement
+   *        The element to be filled. Never <code>null</code>.
+   */
   void fillMicroElement (@Nonnull IMicroElement aElement);
 }

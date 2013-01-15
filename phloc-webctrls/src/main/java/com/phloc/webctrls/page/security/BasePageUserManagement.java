@@ -66,7 +66,6 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.form.validation.FormErrors;
-import com.phloc.webctrls.bootstrap.BootstrapButtonToolbar;
 import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
@@ -87,7 +86,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    CREATE_NEW_USER ("Neuen Benutzer anlegen", "Create new user"),
+    BUTTON_CREATE_NEW_USER ("Neuen Benutzer anlegen", "Create new user"),
     TAB_ACTIVE ("Aktive Benutzer ({0})", "Active users ({0})"),
     TAB_DISABLED ("Deaktivierte Benutzer ({0})", "Disabled users ({0})"),
     TAB_DELETED ("Gelöschte Benutzer ({0})", "Deleted users ({0})"),
@@ -95,6 +94,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     HEADER_EMAIL ("E-Mail", "Email"),
     HEADER_USERGROUPS ("Benutzergruppen", "User groups"),
     HEADER_VALUE ("Wert", "Value"),
+    TITLE_CREATE ("Neuen Benutzer anlegen", "Create new user"),
+    TITLE_EDIT ("Benutzer ''{0}'' bearbeiten", "Edit user ''{0}''"),
     TITLE_RESET_PASSWORD ("Passwort von ''{0}'' zurücksetzen", "Reset password of user ''{0}''"),
     NO_USERS_FOUND ("Keine Benutzer gefunden", "No users found"),
     NONE_DEFINED ("keine definiert", "none defined"),
@@ -114,10 +115,17 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     LABEL_ROLES_0 ("Rollen", "Roles"),
     LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
     LABEL_ATTRIBUTES ("Attribute", "Attributes"),
+    ERROR_LASTNAME_REQUIRED ("Es muss ein Nachname angegeben werden!", "A last name must be specified!"),
+    ERROR_EMAIL_REQUIRED ("Es muss eine E-Mail-Adresse angegeben werden!", "An email address must be specified!"),
+    ERROR_EMAIL_INVALID ("Es muss eine gültige E-Mail-Adresse angegeben werden!", "A valid email address must be specified!"),
+    ERROR_EMAIL_IN_USE ("Ein anderer Benutzer mit dieser E-Mail-Adresse existiert bereits!", "Another user with this email address already exists!"),
     ERROR_PASSWORDS_DONT_MATCH ("Die Passwörter stimmen nicht überein!", "Passwords don't match"),
     ERROR_NO_USERGROUP ("Es muss mindestens eine Benutzergruppe ausgewählt werden!", "At least one user group must be selected!"),
     ERROR_INVALID_USERGROUPS ("Mindestens eine der angegebenen Benutzergruppen ist ungültig!", "At least one selected user group is invalid!"),
-    SUCCESS_RESET_PASSWORD ("Das neue Passwort vom Benutzer ''{0}'' wurde gespeichert!", "Successfully saved the new password of user ''{0}''!");
+    SUCCESS_CREATE ("Der neue Benutzer wurde erfolgreich angelegt!", "Successfully created the new user!"),
+    SUCCESS_EDIT ("Der Benutzer wurde erfolgreich bearbeitet!", "Sucessfully edited the user!"),
+    SUCCESS_RESET_PASSWORD ("Das neue Passwort vom Benutzer ''{0}'' wurde gespeichert!", "Successfully saved the new password of user ''{0}''!"),
+    FAILURE_CREATE ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!");
 
     private final ITextProvider m_aTP;
 
@@ -306,19 +314,18 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final List <String> aUserGroupIDs = getAttrs (FIELD_USERGROUPS);
 
     if (StringHelper.hasNoText (sLastName))
-      aFormErrors.addFieldError (FIELD_LASTNAME, "Es muss ein Nachname angegeben werden!");
+      aFormErrors.addFieldError (FIELD_LASTNAME, EText.ERROR_LASTNAME_REQUIRED.getDisplayText (aDisplayLocale));
     if (StringHelper.hasNoText (sEmailAddress))
-      aFormErrors.addFieldError (FIELD_EMAILADDRESS, "Es muss eine E-Mail-Addresse angegeben werden!");
+      aFormErrors.addFieldError (FIELD_EMAILADDRESS, EText.ERROR_EMAIL_REQUIRED.getDisplayText (aDisplayLocale));
     else
       if (!EmailAddressUtils.isValid (sEmailAddress))
-        aFormErrors.addFieldError (FIELD_EMAILADDRESS, "Es muss eine gültige E-Mail-Addresse angegeben werden!");
+        aFormErrors.addFieldError (FIELD_EMAILADDRESS, EText.ERROR_EMAIL_INVALID.getDisplayText (aDisplayLocale));
       else
       {
         final IUser aSameLoginUser = aAccessMgr.getUserOfLoginName (sEmailAddress);
         if (aSameLoginUser != null)
           if (!bEdit || !aSameLoginUser.equals (aSelectedObject))
-            aFormErrors.addFieldError (FIELD_EMAILADDRESS,
-                                       "Ein anderer Benutzer mit dieser E-Mail-Addresse ist bereits registriert!");
+            aFormErrors.addFieldError (FIELD_EMAILADDRESS, EText.ERROR_EMAIL_IN_USE.getDisplayText (aDisplayLocale));
       }
     if (!bEdit)
     {
@@ -352,7 +359,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 m_aDefaultUserLocale,
                                 aSelectedObject.getCustomAttrs (),
                                 !bEnabled);
-        aNodeList.addChild (BootstrapSuccessBox.create ("Der Benutzer wurde erfolgreich bearbeitet!"));
+        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching internal user groups
         final Collection <String> aPrevUserGroupIDs = aAccessMgr.getAllUserGroupIDsWithAssignedUser (sUserID);
@@ -379,14 +386,14 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                          !bEnabled);
         if (aNewUser != null)
         {
-          aNodeList.addChild (BootstrapSuccessBox.create ("Der neue Benutzer wurde erfolgreich angelegt!"));
+          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
           // assign to the matching internal user groups
           for (final String sUserGroupID : aUserGroupIDs)
             aAccessMgr.assignUserToUserGroup (sUserGroupID, aNewUser.getID ());
         }
         else
-          aNodeList.addChild (BootstrapErrorBox.create ("Fehler beim Anlegen des Benutzers!"));
+          aNodeList.addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
       }
     }
   }
@@ -404,8 +411,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     final AccessManager aMgr = AccessManager.getInstance ();
     final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (210), HCCol.star ()));
-    aTable.setSpanningHeaderContent (bEdit ? "Benutzer '" + aSelectedObject.getDisplayName () + "' bearbeiten"
-                                          : "Neuen Benutzer anlegen");
+    aTable.setSpanningHeaderContent (bEdit
+                                          ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                     aSelectedObject.getDisplayName ())
+                                          : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
     // Use the country of the current client as the default
     aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
                        new HCEdit (new RequestField (FIELD_FIRSTNAME,
@@ -423,11 +432,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (!bEdit)
     {
       // Password is only shown on creation of a new user
-      aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale)),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                          aFormErrors.getListOfField (FIELD_PASSWORD));
-      aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale)),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
@@ -498,11 +507,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final BootstrapButtonToolbar aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbar ());
+        final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
         aToolbar.addSubmitButtonSave (aDisplayLocale);
+        aToolbar.addButtonCancel (aDisplayLocale);
       }
       return false;
     }
@@ -519,7 +529,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final BootstrapTable aTable = new BootstrapTable (new HCCol (200),
                                                       HCCol.star (),
                                                       new HCCol (150),
-                                                      createActionCol (1)).setID (sTableID);
+                                                      createActionCol (3)).setID (sTableID);
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
                                      EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),
@@ -553,6 +563,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       else
         aActionCell.addChild (createEmptyAction ());
 
+      // Copy
+      aActionCell.addChild (createCopyLink (aCurUser, aDisplayLocale));
+
       // Reset password of user
       if (_canResetPassword (aCurUser))
       {
@@ -562,6 +575,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                                                                                               aCurUser.getDisplayName ()))
                                                                                                 .addChild (EBootstrapIcon.LOCK.getAsNode ()));
       }
+      else
+        aActionCell.addChild (createEmptyAction ());
     }
     if (aUsers.isEmpty ())
       aTable.addSpanningBodyContent (EText.NO_USERS_FOUND.getDisplayText (aDisplayLocale));
@@ -580,7 +595,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     // Toolbar on top
     final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
-    aToolbar.addButtonNew (EText.CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
+    aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();
 
