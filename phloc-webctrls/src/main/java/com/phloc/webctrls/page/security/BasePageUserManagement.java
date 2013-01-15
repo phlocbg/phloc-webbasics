@@ -116,7 +116,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     LABEL_ATTRIBUTES ("Attribute", "Attributes"),
     ERROR_PASSWORDS_DONT_MATCH ("Die Passwörter stimmen nicht überein!", "Passwords don't match"),
     ERROR_NO_USERGROUP ("Es muss mindestens eine Benutzergruppe ausgewählt werden!", "At least one user group must be selected!"),
-    ERROR_INVALID_USERGROUPS ("Mindestens eine der angegebenen Benutzergruppen ist ungültig!", "At least one selected user group is invalid!");
+    ERROR_INVALID_USERGROUPS ("Mindestens eine der angegebenen Benutzergruppen ist ungültig!", "At least one selected user group is invalid!"),
+    SUCCESS_RESET_PASSWORD ("Das neue Passwort vom Benutzer ''{0}'' wurde gespeichert!", "Successfully saved the new password of user ''{0}''!");
 
     private final ITextProvider m_aTP;
 
@@ -473,9 +474,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         if (aFormErrors.isEmpty ())
         {
           AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
-          aNodeList.addChild (BootstrapSuccessBox.create ("Das neue Passwort vom Benutzer '" +
-                                                          aSelectedObject.getDisplayName () +
-                                                          "' wurde gespeichert!"));
+          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                               aSelectedObject.getDisplayName ())));
           return true;
         }
       }
