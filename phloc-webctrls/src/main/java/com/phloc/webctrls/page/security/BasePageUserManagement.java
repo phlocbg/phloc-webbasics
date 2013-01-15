@@ -34,12 +34,18 @@ import com.phloc.appbasics.security.user.password.PasswordUtils;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.email.EmailAddressUtils;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.name.ComparatorHasName;
+import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.text.ITextProvider;
+import com.phloc.commons.text.impl.TextProvider;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
@@ -78,6 +84,60 @@ import com.phloc.webctrls.security.UserGroupForUserSelect;
 
 public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 {
+  @Translatable
+  protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
+  {
+    CREATE_NEW_USER ("Neuen Benutzer anlegen", "Create new user"),
+    TAB_ACTIVE ("Aktive Benutzer ({0})", "Active users ({0})"),
+    TAB_DISABLED ("Deaktivierte Benutzer ({0})", "Disabled users ({0})"),
+    TAB_DELETED ("Gelöschte Benutzer ({0})", "Deleted users ({0})"),
+    HEADER_NAME ("Name", "Name"),
+    HEADER_EMAIL ("E-Mail", "Email"),
+    HEADER_USERGROUPS ("Benutzergruppen", "User groups"),
+    HEADER_VALUE ("Wert", "Value"),
+    TITLE_RESET_PASSWORD ("Passwort von ''{0}'' zurücksetzen", "Reset password of user ''{0}''"),
+    NO_USERS_FOUND ("Keine Benutzer gefunden", "No users found"),
+    NONE_DEFINED ("keine definiert", "none defined"),
+    HEADER_DETAILS ("Details von Benutzer {0}", "Details of user {0}"),
+    LABEL_CREATIONDATE ("Angelegt am", "Created on"),
+    LABEL_LASTMODIFICATIONDATE ("Letzte Änderung am", "Last modification on"),
+    LABEL_DELETIONDATE ("Gelöscht am", "Deleted on"),
+    LABEL_FIRSTNAME ("Vorname", "First name"),
+    LABEL_LASTNAME ("Nachname", "Last name"),
+    LABEL_EMAIL ("E-Mail-Adresse", "Email address"),
+    LABEL_PASSWORD ("Passwort", "Password"),
+    LABEL_PASSWORD_CONFIRM ("Passwort (Bestätigung)", "Password (confirmation)"),
+    LABEL_ENABLED ("Aktiv?", "Enabled?"),
+    LABEL_DELETED ("Gelöscht?", "Deleted?"),
+    LABEL_USERGROUPS_0 ("Benutzergruppen", "User groups"),
+    LABEL_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
+    LABEL_ROLES_0 ("Rollen", "Roles"),
+    LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
+    LABEL_ATTRIBUTES ("Attribute", "Attributes"),
+    ERROR_PASSWORDS_DONT_MATCH ("Die Passwörter stimmen nicht überein!", "Passwords don't match"),
+    ERROR_NO_USERGROUP ("Es muss mindestens eine Benutzergruppe ausgewählt werden!", "At least one user group must be selected!"),
+    ERROR_INVALID_USERGROUPS ("Mindestens eine der angegebenen Benutzergruppen ist ungültig!", "At least one selected user group is invalid!");
+
+    private final ITextProvider m_aTP;
+
+    private EText (final String sDE, final String sEN)
+    {
+      m_aTP = TextProvider.create_DE_EN (sDE, sEN);
+    }
+
+    @Nullable
+    public String getDisplayText (@Nonnull final Locale aContentLocale)
+    {
+      return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
+    }
+
+    @Nullable
+    public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
+    {
+      return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
+    }
+  }
+
   public static final boolean DEFAULT_ENABLED = true;
   private static final String FIELD_FIRSTNAME = "firstname";
   private static final String FIELD_LASTNAME = "lastname";
@@ -147,51 +207,60 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final AccessManager aMgr = AccessManager.getInstance ();
     final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
                                                                                                    HCCol.star ()));
-    aTable.setSpanningHeaderContent ("Details von Benutzer " + aSelectedObject.getDisplayName ());
-    aTable.addItemRow (BootstrapFormLabel.create ("Angelegt am"),
+    aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                  aSelectedObject.getDisplayName ()));
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale)),
                        PDTToString.getAsString (aSelectedObject.getCreationDateTime (), aDisplayLocale));
     if (aSelectedObject.getLastModificationDateTime () != null)
-      aTable.addItemRow (BootstrapFormLabel.create ("Letzte Änderung"),
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_LASTMODIFICATIONDATE.getDisplayText (aDisplayLocale)),
                          PDTToString.getAsString (aSelectedObject.getLastModificationDateTime (), aDisplayLocale));
     if (aSelectedObject.getDeletionDateTime () != null)
-      aTable.addItemRow (BootstrapFormLabel.create ("Gelöscht am"),
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_DELETIONDATE.getDisplayText (aDisplayLocale)),
                          PDTToString.getAsString (aSelectedObject.getDeletionDateTime (), aDisplayLocale));
-    aTable.addItemRow (BootstrapFormLabel.create ("Vorname"), aSelectedObject.getFirstName ());
-    aTable.addItemRow (BootstrapFormLabel.create ("Nachname"), aSelectedObject.getLastName ());
-    aTable.addItemRow (BootstrapFormLabel.create ("E-Mail-Adresse"),
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
+                       aSelectedObject.getFirstName ());
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale)),
+                       aSelectedObject.getLastName ());
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale)),
                        createEmailLink (aSelectedObject.getEmailAddress ()));
-    aTable.addItemRow (BootstrapFormLabel.create ("Aktiv?"),
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
-    aTable.addItemRow (BootstrapFormLabel.create ("Gelöscht?"),
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_DELETED.getDisplayText (aDisplayLocale)),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isDeleted (), aDisplayLocale));
 
     // user groups
     final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aSelectedObject.getID ());
     if (aUserGroups.isEmpty ())
     {
-      aTable.addItemRow (BootstrapFormLabel.create ("Benutzergruppen"), HCEM.create ("keine definiert!"));
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
+                         HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
     }
     else
     {
-      final HCNodeList aUSerGroupUI = new HCNodeList ();
+      final HCNodeList aUserGroupUI = new HCNodeList ();
       for (final IUserGroup aUserGroupe : ContainerHelper.getSorted (aUserGroups,
                                                                      new ComparatorHasName <IUserGroup> (aDisplayLocale)))
-        aUSerGroupUI.addChild (HCDiv.create (aUserGroupe.getName ()));
-      aTable.addItemRow (BootstrapFormLabel.create ("Benutzergruppen [" + aUserGroups.size () + "]"), aUSerGroupUI);
+        aUserGroupUI.addChild (HCDiv.create (aUserGroupe.getName ()));
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                     Integer.toString (aUserGroups.size ()))),
+                         aUserGroupUI);
     }
 
     // roles
     final Set <IRole> aUserRoles = aMgr.getAllUserRoles (aSelectedObject.getID ());
     if (aUserRoles.isEmpty ())
     {
-      aTable.addItemRow (BootstrapFormLabel.create ("Rollen"), HCEM.create ("keine definiert!"));
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale)),
+                         HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
     }
     else
     {
       final HCNodeList aRoleUI = new HCNodeList ();
       for (final IRole aRole : ContainerHelper.getSorted (aUserRoles, new ComparatorHasName <IRole> (aDisplayLocale)))
         aRoleUI.addChild (HCDiv.create (aRole.getName ()));
-      aTable.addItemRow (BootstrapFormLabel.create ("Rollen [" + aUserRoles.size () + "]"), aRoleUI);
+      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                Integer.toString (aUserRoles.size ()))),
+                         aRoleUI);
     }
 
     // custom attributes
@@ -204,7 +273,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                           aDisplayLocale);
 
       final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
-      aAttrTable.addHeaderRow ().addCells ("Name", "Wert");
+      aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                                           EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, String> aEntry : aCustomAttrs.entrySet ())
       {
         final String sName = aEntry.getKey ();
@@ -213,7 +283,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
           aAttrTable.addBodyRow ().addCells (sName, sValue);
       }
       if (aAttrTable.getBodyRowCount () > 0)
-        aTable.addItemRow (BootstrapFormLabel.create ("Attribute"), aAttrTable);
+        aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)),
+                           aAttrTable);
     }
   }
 
@@ -255,13 +326,14 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       for (final String sPasswordError : aPasswordErrors)
         aFormErrors.addFieldError (FIELD_PASSWORD, sPasswordError);
       if (!EqualsUtils.equals (sPassword, sPasswordConf))
-        aFormErrors.addFieldError (FIELD_PASSWORD_CONFIRM, "Die Passwörter stimmen nicht überein!");
+        aFormErrors.addFieldError (FIELD_PASSWORD_CONFIRM,
+                                   EText.ERROR_PASSWORDS_DONT_MATCH.getDisplayText (aDisplayLocale));
     }
     if (ContainerHelper.isEmpty (aUserGroupIDs))
-      aFormErrors.addFieldError (FIELD_USERGROUPS, "Es muss mindestens eine Benutzergruppe ausgewählt werden!");
+      aFormErrors.addFieldError (FIELD_USERGROUPS, EText.ERROR_NO_USERGROUP.getDisplayText (aDisplayLocale));
     else
       if (!aAccessMgr.containsAllUserGroupsWithID (aUserGroupIDs))
-        aFormErrors.addFieldError (FIELD_USERGROUPS, "Mindestens eine der angegebenen Benutzergruppen ist ungültig!");
+        aFormErrors.addFieldError (FIELD_USERGROUPS, EText.ERROR_INVALID_USERGROUPS.getDisplayText (aDisplayLocale));
 
     if (aFormErrors.isEmpty ())
     {
@@ -331,17 +403,18 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     final AccessManager aMgr = AccessManager.getInstance ();
     final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (210), HCCol.star ()));
-    aTable.setSpanningHeaderContent (bEdit ? "Benutzer bearbeiten" : "Neuen Benutzer anlegen");
+    aTable.setSpanningHeaderContent (bEdit ? "Benutzer '" + aSelectedObject.getDisplayName () + "' bearbeiten"
+                                          : "Neuen Benutzer anlegen");
     // Use the country of the current client as the default
-    aTable.addItemRow (BootstrapFormLabel.create ("Vorname"),
+    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
                        new HCEdit (new RequestField (FIELD_FIRSTNAME,
                                                      aSelectedObject == null ? null : aSelectedObject.getFirstName ())),
                        aFormErrors.getListOfField (FIELD_FIRSTNAME));
-    aTable.addItemRow (BootstrapFormLabel.createMandatory ("Nachname"),
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale)),
                        new HCEdit (new RequestField (FIELD_LASTNAME,
                                                      aSelectedObject == null ? null : aSelectedObject.getLastName ())),
                        aFormErrors.getListOfField (FIELD_LASTNAME));
-    aTable.addItemRow (BootstrapFormLabel.createMandatory ("E-Mail-Addresse"),
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale)),
                        new HCEdit (new RequestField (FIELD_EMAILADDRESS,
                                                      aSelectedObject == null ? null
                                                                             : aSelectedObject.getEmailAddress ())),
@@ -349,16 +422,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (!bEdit)
     {
       // Password is only shown on creation of a new user
-      aTable.addItemRow (BootstrapFormLabel.createMandatory ("Passwort"),
+      aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale)),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                          aFormErrors.getListOfField (FIELD_PASSWORD));
-      aTable.addItemRow (BootstrapFormLabel.createMandatory ("Passwort (Bestätigung)"),
+      aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale)),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
-    aTable.addItemRow (BootstrapFormLabel.createMandatory ("Aktiv?"),
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
                        new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
                                                                 aSelectedObject == null ? DEFAULT_ENABLED
                                                                                        : aSelectedObject.isEnabled ())),
@@ -366,7 +439,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Collection <String> aUserGroupIDs = aSelectedObject == null
                                                                      ? getAttrs (FIELD_USERGROUPS)
                                                                      : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
-    aTable.addItemRow (BootstrapFormLabel.createMandatory ("Benutzergruppen"),
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
                        new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS), aDisplayLocale, aUserGroupIDs),
                        aFormErrors.getListOfField (FIELD_USERGROUPS));
   }
@@ -394,7 +467,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         for (final String sPasswordError : aPasswordErrors)
           aFormErrors.addFieldError (FIELD_PASSWORD, sPasswordError);
         if (!EqualsUtils.equals (sPlainTextPassword, sPlainTextPasswordConfirm))
-          aFormErrors.addFieldError (FIELD_PASSWORD_CONFIRM, "Die Passwörter stimmen nicht überein!");
+          aFormErrors.addFieldError (FIELD_PASSWORD_CONFIRM,
+                                     EText.ERROR_PASSWORDS_DONT_MATCH.getDisplayText (aDisplayLocale));
 
         if (aFormErrors.isEmpty ())
         {
@@ -411,12 +485,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
         final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200),
                                                                                            HCCol.star ()));
-        aTable.addItemRow (BootstrapFormLabel.create ("Passwort"),
-                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder ("Passwort"),
+        aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                            aSelectedObject.getDisplayName ()));
+        final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
+        aTable.addItemRow (BootstrapFormLabel.create (sPassword),
+                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                            aFormErrors.getListOfField (FIELD_PASSWORD));
-        aTable.addItemRow (BootstrapFormLabel.create ("Passwort (Bestätigung)"),
-                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder ("Passwort (Bestätigung)"),
+        final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
+        aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm),
+                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
@@ -442,7 +520,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                       HCCol.star (),
                                                       new HCCol (150),
                                                       createActionCol (1)).setID (sTableID);
-    aTable.addHeaderRow ().addCells ("Name", "E-Mail", "Benutzergruppen", "Aktionen");
+    aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                                     EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
+                                     EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),
+                                     EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
 
     for (final IUser aCurUser : aUsers)
     {
@@ -465,22 +546,25 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       aRow.addCell (new HCA (aViewLink).addChild (aUserGroupsStr.toString ()));
 
       final AbstractHCCell aActionCell = aRow.addCell ();
+
+      // Edit user
       if (_canEdit (aCurUser))
         aActionCell.addChild (createEditLink (aCurUser, aDisplayLocale));
       else
         aActionCell.addChild (createEmptyAction ());
+
+      // Reset password of user
       if (_canResetPassword (aCurUser))
       {
         aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
                                                 .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
-                                                .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle ("Passwort von '" +
-                                                                                                           aCurUser.getDisplayName () +
-                                                                                                           "' zurücksetzen")
+                                                .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                                              aCurUser.getDisplayName ()))
                                                                                                 .addChild (EBootstrapIcon.LOCK.getAsNode ()));
       }
     }
     if (aUsers.isEmpty ())
-      aTable.addSpanningBodyContent ("Keine Benutzer gefunden");
+      aTable.addSpanningBodyContent (EText.NO_USERS_FOUND.getDisplayText (aDisplayLocale));
 
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
@@ -496,22 +580,23 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     // Toolbar on top
     final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
-    aToolbar.addButtonNew ("Neuen Benutzer anlegen", createCreateURL ());
+    aToolbar.addButtonNew (EText.CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();
 
     final AccessManager aMgr = AccessManager.getInstance ();
 
     final Collection <? extends IUser> aActiveUsers = aMgr.getAllActiveUsers ();
-    aTabBox.addTab ("Aktive Benutzer (" + aActiveUsers.size () + ")",
+    aTabBox.addTab (EText.TAB_ACTIVE.getDisplayTextWithArgs (aDisplayLocale, Integer.toString (aActiveUsers.size ())),
                     getTabWithUsers (aDisplayLocale, aActiveUsers, getID () + "1"));
 
     final Collection <? extends IUser> aDisabledUsers = aMgr.getAllDisabledUsers ();
-    aTabBox.addTab ("Deaktivierte Benutzer (" + aDisabledUsers.size () + ")",
+    aTabBox.addTab (EText.TAB_DISABLED.getDisplayTextWithArgs (aDisplayLocale,
+                                                               Integer.toString (aDisabledUsers.size ())),
                     getTabWithUsers (aDisplayLocale, aDisabledUsers, getID () + "2"));
 
     final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
-    aTabBox.addTab ("Gelöschte Benutzer (" + aDeletedUsers.size () + ")",
+    aTabBox.addTab (EText.TAB_DELETED.getDisplayTextWithArgs (aDisplayLocale, Integer.toString (aDeletedUsers.size ())),
                     getTabWithUsers (aDisplayLocale, aDeletedUsers, getID () + "3"));
     aNodeList.addChild (aTabBox);
   }
