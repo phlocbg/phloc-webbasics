@@ -226,6 +226,12 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                    bDisabled);
   }
 
+  @Nonnull
+  public EChange setUserPassword (@Nullable final String sUserID, @Nonnull final String sNewPlainTextPassword)
+  {
+    return m_aUserMgr.setUserPassword (sUserID, sNewPlainTextPassword);
+  }
+
   public boolean areUserIDAndPasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword)
   {
     return m_aUserMgr.areUserIDAndPasswordValid (sUserID, sPlainTextPassword);

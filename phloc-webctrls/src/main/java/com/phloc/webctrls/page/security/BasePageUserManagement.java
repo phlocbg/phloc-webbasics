@@ -42,6 +42,7 @@ import com.phloc.commons.name.ComparatorHasName;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
@@ -55,12 +56,15 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.form.validation.FormErrors;
+import com.phloc.webctrls.bootstrap.BootstrapButtonToolbar;
 import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 import com.phloc.webctrls.bootstrap.derived.BootstrapButtonToolbarAdvanced;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
@@ -83,6 +87,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   private static final String FIELD_ENABLED = "enabled";
   private static final String FIELD_USERGROUPS = "usergroups";
 
+  private static final String ACTION_RESET_PASSWORD = "resetpw";
+
   private final Locale m_aDefaultUserLocale;
 
   public BasePageUserManagement (@Nonnull @Nonempty final String sID,
@@ -97,20 +103,18 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   @Nullable
   protected IUser getSelectedObject (@Nullable final String sID)
   {
-    final AccessManager aMgr = AccessManager.getInstance ();
-    IUser aSelectedObject = aMgr.getUserOfID (sID);
-    // Administrator can only be viewed!
-    if (aSelectedObject != null &&
-        aSelectedObject.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID) &&
-        !hasAction (ACTION_VIEW))
-      aSelectedObject = null;
-    return aSelectedObject;
+    return AccessManager.getInstance ().getUserOfID (sID);
   }
 
   private static boolean _canEdit (@Nonnull final IUser aUser)
   {
     // Deleted users and the Administrator cannot be edited
     return !aUser.isDeleted () && !aUser.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID);
+  }
+
+  private static boolean _canResetPassword (@Nonnull final IUser aUser)
+  {
+    return !aUser.isDeleted ();
   }
 
   /**
@@ -367,6 +371,66 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                        aFormErrors.getListOfField (FIELD_USERGROUPS));
   }
 
+  @Override
+  protected boolean handleCustomActions (@Nullable final IUser aSelectedObject,
+                                         @Nonnull final Locale aDisplayLocale,
+                                         @Nonnull final HCNodeList aNodeList)
+  {
+    if (hasAction (ACTION_RESET_PASSWORD) && aSelectedObject != null)
+    {
+      if (!_canResetPassword (aSelectedObject))
+        throw new IllegalStateException ("Won't work!");
+
+      final boolean bShowForm = true;
+      final FormErrors aFormErrors = new FormErrors ();
+      if (hasSubAction (ACTION_PERFORM))
+      {
+        final String sPlainTextPassword = getAttr (FIELD_PASSWORD);
+        final String sPlainTextPasswordConfirm = getAttr (FIELD_PASSWORD_CONFIRM);
+
+        final List <String> aPasswordErrors = PasswordUtils.getPasswordConstraints ()
+                                                           .getInvalidPasswordDescriptions (sPlainTextPassword,
+                                                                                            aDisplayLocale);
+        for (final String sPasswordError : aPasswordErrors)
+          aFormErrors.addFieldError (FIELD_PASSWORD, sPasswordError);
+        if (!EqualsUtils.equals (sPlainTextPassword, sPlainTextPasswordConfirm))
+          aFormErrors.addFieldError (FIELD_PASSWORD_CONFIRM, "Die Passwörter stimmen nicht überein!");
+
+        if (aFormErrors.isEmpty ())
+        {
+          AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
+          aNodeList.addChild (BootstrapSuccessBox.create ("Das neue Passwort vom Benutzer '" +
+                                                          aSelectedObject.getDisplayName () +
+                                                          "' wurde gespeichert!"));
+          return true;
+        }
+      }
+      if (bShowForm)
+      {
+        // Show input form
+        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+        final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200),
+                                                                                           HCCol.star ()));
+        aTable.addItemRow (BootstrapFormLabel.create ("Passwort"),
+                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder ("Passwort"),
+                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
+                           aFormErrors.getListOfField (FIELD_PASSWORD));
+        aTable.addItemRow (BootstrapFormLabel.create ("Passwort (Bestätigung)"),
+                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder ("Passwort (Bestätigung)"),
+                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
+                           aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
+
+        final BootstrapButtonToolbar aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbar ());
+        aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
+        aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
+        aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
+        aToolbar.addSubmitButtonSave (aDisplayLocale);
+      }
+      return false;
+    }
+    return true;
+  }
+
   @Nonnull
   protected IHCNode getTabWithUsers (@Nonnull final Locale aDisplayLocale,
                                      @Nonnull final Collection <? extends IUser> aUsers,
@@ -403,6 +467,17 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final AbstractHCCell aActionCell = aRow.addCell ();
       if (_canEdit (aCurUser))
         aActionCell.addChild (createEditLink (aCurUser, aDisplayLocale));
+      else
+        aActionCell.addChild (createEmptyAction ());
+      if (_canResetPassword (aCurUser))
+      {
+        aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
+                                                .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
+                                                .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle ("Passwort von '" +
+                                                                                                           aCurUser.getDisplayName () +
+                                                                                                           "' zurücksetzen")
+                                                                                                .addChild (EBootstrapIcon.LOCK.getAsNode ()));
+      }
     }
     if (aUsers.isEmpty ())
       aTable.addSpanningBodyContent ("Keine Benutzer gefunden");

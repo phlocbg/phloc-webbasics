@@ -62,7 +62,7 @@ public interface IUserManager
   @Nullable
   IUser createNewUser (@Nonnull @Nonempty String sLoginName,
                        @Nonnull @Nonempty String sEmailAddress,
-                       @Nonnull @Nonempty String sPlainTextPassword,
+                       @Nonnull String sPlainTextPassword,
                        @Nullable String sFirstName,
                        @Nullable String sLastName,
                        @Nullable Locale aDesiredLocale,
@@ -99,7 +99,7 @@ public interface IUserManager
   IUser createPredefinedUser (@Nonnull @Nonempty String sID,
                               @Nonnull @Nonempty String sLoginName,
                               @Nonnull @Nonempty String sEmailAddress,
-                              @Nonnull @Nonempty String sPlainTextPassword,
+                              @Nonnull String sPlainTextPassword,
                               @Nullable String sFirstName,
                               @Nullable String sLastName,
                               @Nullable Locale aDesiredLocale,
@@ -134,6 +134,18 @@ public interface IUserManager
                        @Nullable Locale aNewDesiredLocale,
                        @Nullable Map <String, String> aNewCustomAttrs,
                        boolean bNewDisabled);
+
+  /**
+   * Change the modifiable data of a user
+   * 
+   * @param sUserID
+   *        The ID of the user to be modified. May be <code>null</code>.
+   * @param sNewPlainTextPassword
+   *        The new password in plain text. May not be <code>null</code>.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  EChange setUserPassword (@Nullable String sUserID, @Nonnull String sNewPlainTextPassword);
 
   /**
    * Delete the user with the specified ID.

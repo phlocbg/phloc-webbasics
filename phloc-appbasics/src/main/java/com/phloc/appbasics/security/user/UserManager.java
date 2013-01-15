@@ -126,7 +126,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   @Nullable
   public IUser createNewUser (@Nonnull @Nonempty final String sLoginName,
                               @Nonnull @Nonempty final String sEmailAddress,
-                              @Nonnull @Nonempty final String sPlainTextPassword,
+                              @Nonnull final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale,
@@ -135,7 +135,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   {
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
-    if (StringHelper.hasNoText (sPlainTextPassword))
+    if (sPlainTextPassword == null)
       throw new IllegalArgumentException ("plainTextPassword");
 
     if (getUserOfLoginName (sLoginName) != null)
@@ -171,7 +171,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   public IUser createPredefinedUser (@Nonnull @Nonempty final String sID,
                                      @Nonnull @Nonempty final String sLoginName,
                                      @Nonnull @Nonempty final String sEmailAddress,
-                                     @Nonnull @Nonempty final String sPlainTextPassword,
+                                     @Nonnull final String sPlainTextPassword,
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
                                      @Nullable final Locale aDesiredLocale,
@@ -180,7 +180,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   {
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
-    if (StringHelper.hasNoText (sPlainTextPassword))
+    if (sPlainTextPassword == null)
       throw new IllegalArgumentException ("plainTextPassword");
 
     if (getUserOfLoginName (sLoginName) != null)
@@ -399,6 +399,30 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       eChange = eChange.or (aUser.setDesiredLocale (aNewDesiredLocale));
       eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
       eChange = eChange.or (aUser.setDisabled (bNewDisabled));
+      if (eChange.isUnchanged ())
+        return EChange.UNCHANGED;
+      aUser.updateLastModified ();
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange setUserPassword (@Nullable final String sUserID, @Nonnull final String sNewPlainTextPassword)
+  {
+    // Resolve user
+    final User aUser = getUserOfID (sUserID);
+    if (aUser == null)
+      return EChange.UNCHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      final EChange eChange = aUser.setPasswordHash (PasswordUtils.createUserPasswordHash (sNewPlainTextPassword));
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;
       aUser.updateLastModified ();

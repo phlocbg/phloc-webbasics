@@ -37,6 +37,8 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLValidator;
+import com.phloc.css.ECSSUnit;
+import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCElement;
@@ -108,6 +110,13 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
     final int nWidth = 20 * nActions;
     // Min width of 60!
     return new HCCol (Math.max (nWidth, 60));
+  }
+
+  @Nonnull
+  public static final HCSpan createEmptyAction ()
+  {
+    return new HCSpan ().addStyle (CCSSProperties.DISPLAY_INLINE_BLOCK)
+                        .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.px (14)));
   }
 
   @Nonnull
