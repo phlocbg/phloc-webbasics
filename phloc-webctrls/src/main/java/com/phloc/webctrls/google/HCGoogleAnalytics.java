@@ -51,25 +51,26 @@ public class HCGoogleAnalytics extends HCScript
     if (StringHelper.hasNoText (sAccount))
       throw new IllegalArgumentException ("account is empty");
 
-    // Anonymize IP; see
-    // http://code.google.com/intl/de-DE/apis/analytics/docs/gaJS/gaJSApi_gat.html
     final JSPackage aPkg = new JSPackage ();
     final JSVar gaq = aPkg.var ("_gaq", JSExpr.ref ("_gaq").cor (new JSArray ()));
-    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_setAccount").add (sAccount)));
+    aPkg.add (gaq.invoke ("push").arg (new JSArray ().add ("_setAccount").add (sAccount)));
     if (bEnhancedLinkAttribution)
     {
       // Source:
       // http://support.google.com/analytics/bin/answer.py?hl=en&answer=2558867
       // Must be before the _trackPageview!
-      final JSArray aArray = new JSArray ().add ("_require")
-                                           .add ("inpage_linkid")
-                                           .add ("//www.google-analytics.com/plugins/ga/inpage_linkid.js");
-      aPkg.add (JSExpr.ref ("_gaq").invoke ("push").arg (aArray));
+      aPkg.add (gaq.invoke ("push").arg (new JSArray ().add ("_require")
+                                                       .add ("inpage_linkid")
+                                                       .add ("//www.google-analytics.com/plugins/ga/inpage_linkid.js")));
     }
     if (bAnonymizeIP)
-      aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_gat._anonymizeIp")));
-    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageview")));
-    aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageLoadTime")));
+    {
+      // Anonymize IP; see
+      // http://code.google.com/intl/de-DE/apis/analytics/docs/gaJS/gaJSApi_gat.html
+      aPkg.add (gaq.invoke ("push").arg (new JSArray ().add ("_gat._anonymizeIp")));
+    }
+    aPkg.add (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageview")));
+    aPkg.add (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageLoadTime")));
 
     final JSAnonymousFunction aAnonFunction = new JSAnonymousFunction ();
     final JSVar ga = aAnonFunction.body ().var ("ga", JSHtml.documentCreateElement (EHTMLElement.SCRIPT));
