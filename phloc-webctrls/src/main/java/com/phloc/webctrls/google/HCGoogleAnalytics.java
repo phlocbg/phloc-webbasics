@@ -44,7 +44,9 @@ public class HCGoogleAnalytics extends HCScript
   private final String m_sAccount;
 
   @Nonnull
-  private static JSPackage _createJSCode (final String sAccount, final boolean bAnonymizeIP)
+  private static JSPackage _createJSCode (final String sAccount,
+                                          final boolean bAnonymizeIP,
+                                          final boolean bEnhancedLinkAttribution)
   {
     if (StringHelper.hasNoText (sAccount))
       throw new IllegalArgumentException ("account is empty");
@@ -54,10 +56,21 @@ public class HCGoogleAnalytics extends HCScript
     final JSPackage aPkg = new JSPackage ();
     final JSVar gaq = aPkg.var ("_gaq", JSExpr.ref ("_gaq").cor (new JSArray ()));
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_setAccount").add (sAccount)));
+    if (bEnhancedLinkAttribution)
+    {
+      // Source:
+      // http://support.google.com/analytics/bin/answer.py?hl=en&answer=2558867
+      // Must be before the _trackPageview!
+      final JSArray aArray = new JSArray ().add ("_require")
+                                           .add ("inpage_linkid")
+                                           .add ("//www.google-analytics.com/plugins/ga/inpage_linkid.js");
+      aPkg.add (JSExpr.ref ("_gaq").invoke ("push").arg (aArray));
+    }
     if (bAnonymizeIP)
       aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_gat._anonymizeIp")));
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageview")));
     aPkg.addStatement (gaq.invoke ("push").arg (new JSArray ().add ("_trackPageLoadTime")));
+
     final JSAnonymousFunction aAnonFunction = new JSAnonymousFunction ();
     final JSVar ga = aAnonFunction.body ().var ("ga", JSHtml.documentCreateElement (EHTMLElement.SCRIPT));
     aAnonFunction.body ().add (ga.ref ("type").assign (CMimeType.TEXT_JAVASCRIPT.getAsString ()));
@@ -76,7 +89,14 @@ public class HCGoogleAnalytics extends HCScript
 
   public HCGoogleAnalytics (@Nonnull @Nonempty final String sAccount, final boolean bAnonymizeIP)
   {
-    super (_createJSCode (sAccount, bAnonymizeIP));
+    this (sAccount, bAnonymizeIP, false);
+  }
+
+  public HCGoogleAnalytics (@Nonnull @Nonempty final String sAccount,
+                            final boolean bAnonymizeIP,
+                            final boolean bEnhancedLinkAttribution)
+  {
+    super (_createJSCode (sAccount, bAnonymizeIP, bEnhancedLinkAttribution));
     m_sAccount = sAccount;
   }
 
