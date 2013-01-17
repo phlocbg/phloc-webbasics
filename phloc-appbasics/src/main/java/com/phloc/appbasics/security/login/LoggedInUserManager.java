@@ -115,6 +115,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  // Set of logged in user IDs
   private final Set <String> m_aLoggedInUsers = new HashSet <String> ();
 
   @Deprecated
