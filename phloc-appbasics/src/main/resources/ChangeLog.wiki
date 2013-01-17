@@ -1,7 +1,9 @@
 #summary Change log of phloc-appbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>1/9/13</td><td>add</td><td>api</td><td></td><td>Extended IUser API to support enabled/disabled state as well</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>1/17/13</td><td colspan="4">_Release *1.9.0*_</td></tr>
+<tr><td>1/14/13</td><td>add</td><td>api</td><td></td><td>Extended IMenuTree to easily iterate all items</td></tr>
+<tr><td>1/9/13</td><td>add</td><td>api</td><td></td><td>Extended IUser API to support enabled/disabled state as well</td></tr>
 <tr><td>1/8/13</td><td>add</td><td>api</td><td></td><td>Extended login API so that certain required rules are checked as well</td></tr>
 <tr><td>1/3/13</td><td>add</td><td>api</td><td></td><td>Added possibility to place UserData objects inside the data directory</td></tr>
 <tr><td>1/1/13</td><td>add</td><td>api</td><td>*yes*</td><td>Added possibility for most manager to be either global or application-specific</td></tr>
