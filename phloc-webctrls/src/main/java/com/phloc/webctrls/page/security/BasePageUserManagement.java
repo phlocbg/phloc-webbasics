@@ -175,10 +175,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     return AccessManager.getInstance ().getUserOfID (sID);
   }
 
-  private static boolean _canEdit (@Nonnull final IUser aUser)
+  @Override
+  protected boolean isEditAllowed (@Nullable final IUser aUser)
   {
     // Deleted users and the Administrator cannot be edited
-    return !aUser.isDeleted () && !aUser.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID);
+    return aUser != null && !aUser.isDeleted () && !aUser.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID);
   }
 
   private static boolean _canResetPassword (@Nonnull final IUser aUser)
@@ -406,7 +407,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 final boolean bCopy,
                                 final FormErrors aFormErrors)
   {
-    if (bEdit && !_canEdit (aSelectedObject))
+    if (bEdit && !isEditAllowed (aSelectedObject))
       throw new IllegalStateException ("Won't work!");
 
     final AccessManager aMgr = AccessManager.getInstance ();
@@ -558,7 +559,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final AbstractHCCell aActionCell = aRow.addCell ();
 
       // Edit user
-      if (_canEdit (aCurUser))
+      if (isEditAllowed (aCurUser))
         aActionCell.addChild (createEditLink (aCurUser, aDisplayLocale));
       else
         aActionCell.addChild (createEmptyAction ());

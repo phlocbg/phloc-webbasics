@@ -189,8 +189,15 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     return aToolbar;
   }
 
+  /**
+   * Check if editing the passed object is allowed.
+   * 
+   * @param aSelectedObject
+   *        The currently selected object. May be <code>null</code>.
+   * @return <code>true</code> if edit is allowed, <code>false</code> if not
+   */
   @OverrideOnDemand
-  protected boolean isEditAllowed ()
+  protected boolean isEditAllowed (@Nullable final DATATYPE aSelectedObject)
   {
     return true;
   }
@@ -322,7 +329,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
   {
     final DATATYPE aSelectedObject = getSelectedObject (getSelectedObjectID ());
-    final boolean bIsEditAllowed = isEditAllowed ();
+    final boolean bIsEditAllowed = isEditAllowed (aSelectedObject);
     boolean bShowList = true;
 
     if (hasAction (ACTION_VIEW) && aSelectedObject != null)
