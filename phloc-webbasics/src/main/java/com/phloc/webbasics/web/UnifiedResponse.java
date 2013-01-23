@@ -680,7 +680,7 @@ public class UnifiedResponse
   public UnifiedResponse setRedirect (@Nonnull @Nonempty final String sRedirectTargetUrl)
   {
     if (StringHelper.hasNoText (sRedirectTargetUrl))
-      throw new IllegalArgumentException ("redirectTargetUrl may not be null");
+      throw new IllegalArgumentException ("redirectTargetUrl may not be empty");
     if (m_sRedirectTargetUrl != null)
       _info ("Overwriting redirect target URL '" + m_sRedirectTargetUrl + "' with '" + m_sRedirectTargetUrl + "'");
     m_sRedirectTargetUrl = sRedirectTargetUrl;

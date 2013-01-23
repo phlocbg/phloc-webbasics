@@ -186,7 +186,8 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getHomeLink ()
   {
-    return new SimpleURL (WebScopeManager.getRequestScope ().getFullContextPath ());
+    final String sContextPath = WebScopeManager.getRequestScope ().getContextPath ();
+    return new SimpleURL (sContextPath.length () == 0 ? "/" : sContextPath);
   }
 
   @Nonnull
