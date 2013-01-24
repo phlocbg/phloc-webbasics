@@ -194,8 +194,7 @@ public class MenuTreeProxy
   @Nullable
   public IMenuObject getMenuObjectOfID (@Nullable final String sID)
   {
-    final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = m_aMenuTree.getItemWithID (sID);
-    return aTreeItem == null ? null : aTreeItem.getData ();
+    return m_aMenuTree.getItemDataWithID (sID);
   }
 
   public void iterateAllMenuObjects (@Nonnull final INonThrowingRunnableWithParameter <IMenuObject> aCallback)
