@@ -22,7 +22,6 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
-import javax.annotation.meta.When;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +96,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    * 
    * @return The non-<code>null</code> document to write to the file.
    */
-  @Nonnull (when = When.MAYBE)
+  @Nonnull
   protected abstract IMicroDocument createWriteData ();
 
   @Nonnull
