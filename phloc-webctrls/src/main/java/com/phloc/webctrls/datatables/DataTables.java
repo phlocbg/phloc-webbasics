@@ -502,7 +502,7 @@ public class DataTables implements IHCNodeBuilder
       aParams.add ("fnServerData", aAF);
     }
     if (m_bDeferRender != DEFAULT_DEFER_RENDER)
-      aParams.add ("  bDeferRender", m_bDeferRender);
+      aParams.add ("bDeferRender", m_bDeferRender);
 
     if (m_aDisplayLocale != null)
     {
