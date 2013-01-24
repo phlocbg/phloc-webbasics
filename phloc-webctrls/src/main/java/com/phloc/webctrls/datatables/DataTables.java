@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -55,6 +56,11 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_PAGINATE = true;
   public static final boolean DEFAULT_STATE_SAVE = false;
   public static final boolean DEFAULT_JQUERY_UI = false;
+  public static final boolean DEFAULT_SCROLL_AUTO_CSS = true;
+  public static final boolean DEFAULT_SCROLL_COLLAPSE = false;
+  public static final boolean DEFAULT_SCROLL_INFINITE = false;
+  public static final boolean DEFAULT_USER_JQUERY_AJAX = false;
+  public static final boolean DEFAULT_DEFER_RENDER = false;
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
 
@@ -67,12 +73,19 @@ public class DataTables implements IHCNodeBuilder
   private final List <DataTablesColumn> m_aColumns = new ArrayList <DataTablesColumn> ();
   private DataTablesSorting m_aInitialSorting;
   private EDataTablesPaginationType m_ePaginationType = DEFAULT_PAGINATION_TYPE;
+  private String m_sScrollX;
+  private String m_sScrollXInner;
+  private String m_sScrollY;
+  private boolean m_bScrollAutoCSS = DEFAULT_SCROLL_AUTO_CSS;
+  private boolean m_bScrollCollapse = DEFAULT_SCROLL_COLLAPSE;
+  private boolean m_bScrollInfinite = DEFAULT_SCROLL_INFINITE;
   private String m_sDom;
   // server side processing
   private ISimpleURL m_aAjaxSource;
   private EHTTPMethod m_eServerMethod;
   private Map <String, String> m_aServerParams;
-  private boolean m_bUseJQueryAjax;
+  private boolean m_bUseJQueryAjax = DEFAULT_USER_JQUERY_AJAX;
+  private boolean m_bDeferRender = DEFAULT_DEFER_RENDER;
 
   /**
    * Apply to an existing table. If the table does not have an ID yet, a new one
@@ -121,6 +134,11 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  public boolean isPaginate ()
+  {
+    return m_bPaginate;
+  }
+
   @Nonnull
   public DataTables setPaginate (final boolean bPaginate)
   {
@@ -128,11 +146,21 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  public boolean isStateSave ()
+  {
+    return m_bStateSave;
+  }
+
   @Nonnull
   public DataTables setStateSave (final boolean bStateSave)
   {
     m_bStateSave = bStateSave;
     return this;
+  }
+
+  public boolean isJQueryUI ()
+  {
+    return m_bJQueryUI;
   }
 
   @Nonnull
@@ -162,11 +190,30 @@ public class DataTables implements IHCNodeBuilder
   @Nonnull
   public DataTables addAllColumns (@Nonnull final AbstractHCBaseTable <?> aTable)
   {
+    if (aTable == null)
+      throw new NullPointerException ("table");
     // Add all columns
     final int nCols = aTable.getColGroup ().getColumnCount ();
     for (int i = 0; i < nCols; ++i)
       addColumn (new DataTablesColumn (i));
     return this;
+  }
+
+  public boolean hasColumns ()
+  {
+    return !m_aColumns.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getColumnCount ()
+  {
+    return m_aColumns.size ();
+  }
+
+  @Nullable
+  public DataTablesSorting getInitialSorting ()
+  {
+    return m_aInitialSorting;
   }
 
   @Nonnull
@@ -182,11 +229,98 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nullable
+  public EDataTablesPaginationType getPaginationType ()
+  {
+    return m_ePaginationType;
+  }
+
   @Nonnull
   public DataTables setPaginationType (@Nullable final EDataTablesPaginationType ePaginationType)
   {
     m_ePaginationType = ePaginationType;
     return this;
+  }
+
+  @Nullable
+  public String getScrollX ()
+  {
+    return m_sScrollX;
+  }
+
+  @Nonnull
+  public DataTables setScrollX (@Nullable final String sScrollX)
+  {
+    m_sScrollX = sScrollX;
+    return this;
+  }
+
+  @Nullable
+  public String getScrollXInner ()
+  {
+    return m_sScrollXInner;
+  }
+
+  @Nonnull
+  public DataTables setScrollXInner (@Nullable final String sScrollXInner)
+  {
+    m_sScrollXInner = sScrollXInner;
+    return this;
+  }
+
+  @Nullable
+  public String getScrollY ()
+  {
+    return m_sScrollY;
+  }
+
+  @Nonnull
+  public DataTables setScrollY (@Nullable final String sScrollY)
+  {
+    m_sScrollY = sScrollY;
+    return this;
+  }
+
+  public boolean isScrollAutoCSS ()
+  {
+    return m_bScrollAutoCSS;
+  }
+
+  @Nonnull
+  public DataTables setScrollAutoCSS (final boolean bScrollAutoCSS)
+  {
+    m_bScrollAutoCSS = bScrollAutoCSS;
+    return this;
+  }
+
+  public boolean isScrollCollapse ()
+  {
+    return m_bScrollCollapse;
+  }
+
+  @Nonnull
+  public DataTables setScrollCollapse (final boolean bScrollCollapse)
+  {
+    m_bScrollCollapse = bScrollCollapse;
+    return this;
+  }
+
+  public boolean isScrollInfinite ()
+  {
+    return m_bScrollInfinite;
+  }
+
+  @Nonnull
+  public DataTables setScrollInfinite (final boolean bScrollInfinite)
+  {
+    m_bScrollInfinite = bScrollInfinite;
+    return this;
+  }
+
+  @Nullable
+  public String getDom ()
+  {
+    return m_sDom;
   }
 
   @Nonnull
@@ -196,11 +330,23 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nullable
+  public ISimpleURL getAjaxSource ()
+  {
+    return m_aAjaxSource;
+  }
+
   @Nonnull
   public DataTables setAjaxSource (@Nullable final ISimpleURL aAjaxSource)
   {
     m_aAjaxSource = aAjaxSource;
     return this;
+  }
+
+  @Nullable
+  public EHTTPMethod getServerMethod ()
+  {
+    return m_eServerMethod;
   }
 
   @Nonnull
@@ -211,16 +357,40 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, String> getAllServerParams ()
+  {
+    return ContainerHelper.newMap (m_aServerParams);
+  }
+
+  @Nonnull
   public DataTables setServerParams (@Nullable final Map <String, String> aServerParams)
   {
     m_aServerParams = aServerParams;
     return this;
   }
 
+  public boolean isUseJQueryAjax ()
+  {
+    return m_bUseJQueryAjax;
+  }
+
   @Nonnull
   public DataTables setUseJQueryAjax (final boolean bUseJQueryAjax)
   {
     m_bUseJQueryAjax = bUseJQueryAjax;
+    return this;
+  }
+
+  public boolean isDeferRender ()
+  {
+    return m_bDeferRender;
+  }
+
+  @Nonnull
+  public DataTables setDeferRender (final boolean bDeferRender)
+  {
+    m_bDeferRender = bDeferRender;
     return this;
   }
 
@@ -278,6 +448,18 @@ public class DataTables implements IHCNodeBuilder
       aParams.add ("aaSorting", m_aInitialSorting.getAsJS ());
     if (m_ePaginationType != null)
       aParams.add ("sPaginationType", m_ePaginationType.getName ());
+    if (StringHelper.hasText (m_sScrollX))
+      aParams.add ("sScrollX", m_sScrollX);
+    if (StringHelper.hasText (m_sScrollXInner))
+      aParams.add ("sScrollXInner", m_sScrollXInner);
+    if (StringHelper.hasText (m_sScrollY))
+      aParams.add ("sScrollY", m_sScrollY);
+    if (m_bScrollAutoCSS != DEFAULT_SCROLL_AUTO_CSS)
+      aParams.add ("bScrollAutoCss", m_bScrollAutoCSS);
+    if (m_bScrollCollapse != DEFAULT_SCROLL_COLLAPSE)
+      aParams.add ("bScrollCollapse", m_bScrollCollapse);
+    if (m_bScrollInfinite != DEFAULT_SCROLL_INFINITE)
+      aParams.add ("bScrollInfinite", m_bScrollInfinite);
     if (StringHelper.hasText (m_sDom))
       aParams.add ("sDom", m_sDom);
 
@@ -319,6 +501,8 @@ public class DataTables implements IHCNodeBuilder
       aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax ().arg (aAjax));
       aParams.add ("fnServerData", aAF);
     }
+    if (m_bDeferRender != DEFAULT_DEFER_RENDER)
+      aParams.add ("  bDeferRender", m_bDeferRender);
 
     if (m_aDisplayLocale != null)
     {
