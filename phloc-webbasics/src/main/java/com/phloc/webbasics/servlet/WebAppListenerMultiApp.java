@@ -17,16 +17,34 @@
  */
 package com.phloc.webbasics.servlet;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletContext;
 
 import com.phloc.appbasics.app.ApplicationLocaleManager;
+import com.phloc.appbasics.app.dao.impl.DAOWebFileIO;
+import com.phloc.appbasics.app.dao.impl.DefaultDAO;
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
+import com.phloc.appbasics.security.user.password.PasswordConstraintMinLength;
+import com.phloc.appbasics.security.user.password.PasswordConstraints;
+import com.phloc.appbasics.security.user.password.PasswordUtils;
+import com.phloc.appbasics.userdata.UserDataManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.factory.FactoryConstantValue;
+import com.phloc.commons.io.file.SimpleFileIO;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.serialize.MicroWriter;
+import com.phloc.commons.stats.utils.StatisticsExporter;
+import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTWebDateUtils;
+import com.phloc.datetime.io.PDTIOHelper;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.scopes.web.mock.MockHttpServletResponse;
 import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
@@ -51,8 +69,21 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
    * the application specific init is started
    */
   @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
   protected void initGlobals ()
-  {}
+  {
+    // Enable when ready
+    WebScopeManager.setSessionPassivationAllowed (false);
+
+    // UDO to data directory
+    UserDataManager.setServletContextIO (false);
+
+    // DAO use use FileIO! (for AuditManager)
+    DefaultDAO.setDAOIOFactory (FactoryConstantValue.create (new DAOWebFileIO ()));
+
+    // Define the password constrains
+    PasswordUtils.setPasswordConstraints (new PasswordConstraints (new PasswordConstraintMinLength (6)));
+  }
 
   @Override
   protected final void afterContextInitialized (@Nonnull final ServletContext aSC)
@@ -96,6 +127,28 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
       {
         WebScopeManager.onRequestEnd ();
       }
+    }
+  }
+
+  protected boolean isWriteStatisticsOnEnd ()
+  {
+    return true;
+  }
+
+  @Override
+  protected void afterContextDestroyed (@Nonnull final ServletContext aSC)
+  {
+    if (isWriteStatisticsOnEnd ())
+    {
+      // serialize statistics
+      final File aDestPath = WebFileIO.getFile ("statistics/statistics_" +
+                                                PDTIOHelper.getCurrentDateTimeForFilename () +
+                                                ".xml");
+      final IMicroDocument aDoc = StatisticsExporter.getAsXMLDocument ();
+      aDoc.getDocumentElement ().setAttribute ("location", "shutdown");
+      aDoc.getDocumentElement ().setAttribute ("datetime",
+                                               PDTWebDateUtils.getAsStringXSD (PDTFactory.getCurrentDateTime ()));
+      SimpleFileIO.writeFile (aDestPath, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET);
     }
   }
 }
