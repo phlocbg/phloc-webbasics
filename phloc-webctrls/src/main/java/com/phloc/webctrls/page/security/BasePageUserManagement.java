@@ -439,11 +439,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       // Password is only shown on creation of a new user
       aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale)),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD),
-                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
+                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD));
       aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale)),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM),
-                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
+                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
     aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
@@ -505,12 +505,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.addItemRow (BootstrapFormLabel.create (sPassword),
                            HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
-                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
+                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD));
         final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
         aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm),
                            HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
-                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale).build ()),
+                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
         final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());

@@ -11,3 +11,12 @@
 .phloc-form-label{
   text-align: right;
 }
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+  outline:none;
+}
+
+/* Remove dotted outline from image inputs */
+input::-moz-focus-inner {
+  border: 0;
+}

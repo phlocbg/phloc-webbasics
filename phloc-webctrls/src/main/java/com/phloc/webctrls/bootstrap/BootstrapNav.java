@@ -28,6 +28,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.webctrls.custom.IIcon;
 
 /**
  * Navigation items
@@ -89,7 +90,15 @@ public class BootstrapNav extends HCUL
   @Nonnull
   public BootstrapNav addItem (@Nullable final String sText, @Nonnull final ISimpleURL aTarget)
   {
-    return addItem (sText, aTarget, DEFAULT_ACTIVE);
+    return addItem (sText, aTarget, DEFAULT_ACTIVE, (IIcon) null);
+  }
+
+  @Nonnull
+  public BootstrapNav addItem (@Nullable final String sText,
+                               @Nonnull final ISimpleURL aTarget,
+                               @Nullable final IIcon aIcon)
+  {
+    return addItem (sText, aTarget, DEFAULT_ACTIVE, aIcon);
   }
 
   @Nonnull
@@ -103,9 +112,9 @@ public class BootstrapNav extends HCUL
   public BootstrapNav addItem (@Nullable final String sText,
                                @Nonnull final ISimpleURL aTarget,
                                final boolean bActive,
-                               @Nullable final EBootstrapIcon eIcon)
+                               @Nullable final IIcon aIcon)
   {
-    return addItem (new HCA (aTarget).addChild (sText), bActive, eIcon);
+    return addItem (new HCA (aTarget).addChild (sText), bActive, aIcon);
   }
 
   @Nonnull
@@ -123,15 +132,15 @@ public class BootstrapNav extends HCUL
   @Nonnull
   public BootstrapNav addItem (@Nullable final IHCElementWithChildren <?> aContent,
                                final boolean bActive,
-                               @Nullable final EBootstrapIcon eIcon)
+                               @Nullable final IIcon aIcon)
   {
     final HCLI aItem = addAndReturnItem (aContent);
     if (bActive)
       aItem.addClass (CBootstrapCSS.ACTIVE);
-    if (eIcon != null)
+    if (aIcon != null)
     {
       // Icon is the first child of the content
-      aContent.addChild (0, eIcon.getAsNode ());
+      aContent.addChild (0, aIcon.getAsNode ());
     }
     return this;
   }
