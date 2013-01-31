@@ -82,8 +82,8 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   {}
 
   @Override
-  protected void showInputForm (final FormState aSelectedObject,
-                                final WebPageExecutionContext aWPEC,
+  protected void showInputForm (final WebPageExecutionContext aWPEC,
+                                final FormState aSelectedObject,
                                 final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,

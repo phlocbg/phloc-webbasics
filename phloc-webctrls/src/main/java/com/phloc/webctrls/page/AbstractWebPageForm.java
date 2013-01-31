@@ -244,10 +244,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   {}
 
   /**
-   * @param aSelectedObject
-   *        The currently selected object
    * @param aWPEC
    *        The web page execution context
+   * @param aSelectedObject
+   *        The currently selected object
    * @param aForm
    *        The parent form
    * @param bEdit
@@ -258,8 +258,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    *        Previous errors from validation. Never <code>null</code> but maybe
    *        empty.
    */
-  protected abstract void showInputForm (DATATYPE aSelectedObject,
-                                         @Nonnull WebPageExecutionContext aWPEC,
+  protected abstract void showInputForm (@Nonnull WebPageExecutionContext aWPEC,
+                                         @Nullable DATATYPE aSelectedObject,
                                          @Nonnull HCForm aForm,
                                          boolean bEdit,
                                          boolean bCopy,
@@ -392,7 +392,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
             }
           }
 
-          showInputForm (aSelectedObject, aWPEC, aForm, bEdit, bCopy, aFormErrors);
+          showInputForm (aWPEC, aSelectedObject, aForm, bEdit, bCopy, aFormErrors);
 
           // Toolbar on bottom
           aForm.addChild (bEdit ? createEditToolbar (aWPEC, aSelectedObject) : createCreateToolbar (aWPEC,

@@ -403,8 +403,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected void showInputForm (final IUser aSelectedObject,
-                                final WebPageExecutionContext aWPEC,
+  protected void showInputForm (final WebPageExecutionContext aWPEC,
+                                final IUser aSelectedObject,
                                 final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,
