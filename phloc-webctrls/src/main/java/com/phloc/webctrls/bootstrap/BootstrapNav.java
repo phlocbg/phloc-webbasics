@@ -153,6 +153,13 @@ public class BootstrapNav extends HCUL
   }
 
   @Nonnull
+  public BootstrapNav addDividerVertical ()
+  {
+    addItem ().addClass (CBootstrapCSS.DIVIDER_VERTICAL);
+    return this;
+  }
+
+  @Nonnull
   public HCLI addDropDownItem (@Nullable final String sText)
   {
     return addDropDownItem (new HCTextNode (sText));

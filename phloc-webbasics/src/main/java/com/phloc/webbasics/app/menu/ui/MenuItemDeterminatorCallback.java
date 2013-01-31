@@ -45,7 +45,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
 {
   private final IMenuTree m_aMenuTree;
   private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();
-  private final String m_sSelectedItem;
+  private final String m_sSelectedItemID;
   private final DefaultTreeItemWithID <String, IMenuObject> m_aSelectedItem;
 
   public MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
@@ -53,8 +53,8 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
     if (aMenuTree == null)
       throw new NullPointerException ("menuTree");
     m_aMenuTree = aMenuTree;
-    m_sSelectedItem = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
-    m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItem);
+    m_sSelectedItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
+    m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItemID);
     // The selected item may be null if an invalid menu item ID was passed
   }
 
@@ -116,7 +116,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
           }
           else
             // 4.
-            if (aItemParent.getChildItemOfDataID (m_sSelectedItem) != null)
+            if (aItemParent.getChildItemOfDataID (m_sSelectedItemID) != null)
               bShow = true;
             else
               bShow = false;

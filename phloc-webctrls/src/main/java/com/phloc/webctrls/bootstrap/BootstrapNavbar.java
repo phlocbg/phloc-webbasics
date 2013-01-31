@@ -120,14 +120,19 @@ public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
   public BootstrapNavbar addElementLeft (final boolean bCollapsible, @Nonnull final IHCElement <?> aElement)
   {
     aElement.addClass (CBootstrapCSS.PULL_LEFT);
-    _insert (bCollapsible, aElement);
-    return this;
+    return addElement (bCollapsible, aElement);
   }
 
   @Nonnull
   public BootstrapNavbar addElementRight (final boolean bCollapsible, @Nonnull final IHCElement <?> aElement)
   {
     aElement.addClass (CBootstrapCSS.PULL_RIGHT);
+    return addElement (bCollapsible, aElement);
+  }
+
+  @Nonnull
+  public BootstrapNavbar addElement (final boolean bCollapsible, @Nonnull final IHCElement <?> aElement)
+  {
     _insert (bCollapsible, aElement);
     return this;
   }
