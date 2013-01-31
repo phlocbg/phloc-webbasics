@@ -45,11 +45,11 @@ import com.phloc.webctrls.bootstrap.EBootstrapIcon;
  * 
  * @author philip
  */
-public class BootstrapMenuItemRenderer implements IMenuItemRenderer
+public class BootstrapMenuItemRendererWell implements IMenuItemRenderer
 {
   private final Locale m_aContentLocale;
 
-  public BootstrapMenuItemRenderer (@Nonnull final Locale aContentLocale)
+  public BootstrapMenuItemRendererWell (@Nonnull final Locale aContentLocale)
   {
     if (aContentLocale == null)
       throw new NullPointerException ("contentLocale");
@@ -133,7 +133,7 @@ public class BootstrapMenuItemRenderer implements IMenuItemRenderer
     final BootstrapWell ret = new BootstrapWell ();
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
     ret.addChild (MenuRendererCallback.createRenderedMenu (aMenuTree.getRootItem (),
-                                                           new BootstrapMenuItemRenderer (aDisplayLocale),
+                                                           new BootstrapMenuItemRendererWell (aDisplayLocale),
                                                            aAllDisplayMenuItemIDs).addClasses (CBootstrapCSS.NAV,
                                                                                                CBootstrapCSS.NAV_LIST));
     return ret;

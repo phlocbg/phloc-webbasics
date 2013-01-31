@@ -32,9 +32,9 @@ import com.phloc.webctrls.bootstrap.CBootstrapCSS;
  * 
  * @author philip
  */
-public class BootstrapMenuItemRendererHorz extends BootstrapMenuItemRenderer
+public class BootstrapMenuItemRendererWellHorz extends BootstrapMenuItemRendererWell
 {
-  public BootstrapMenuItemRendererHorz (@Nonnull final Locale aContentLocale)
+  public BootstrapMenuItemRendererWellHorz (@Nonnull final Locale aContentLocale)
   {
     super (aContentLocale);
   }
