@@ -117,13 +117,6 @@ public abstract class AbstractPage implements IPage
     return m_aName.getTextWithLocaleFallback (aContentLocale);
   }
 
-  /**
-   * Determine whether help is available for this page. The default
-   * implementation returns always <code>true</code>.
-   * 
-   * @return <code>true</code> if help is available for this page,
-   *         <code>false</code> otherwise.
-   */
   @OverrideOnDemand
   public boolean isHelpAvailable ()
   {

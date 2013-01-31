@@ -25,6 +25,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.form.FormState;
@@ -48,7 +49,8 @@ public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
 
   @Override
   @Nonnull
-  protected AjaxDefaultResponse mainHandleRequest (@Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
     // Extract page ID
     final String sPageID = aParams.getAttributeAsString (ATTR_PAGE_ID);

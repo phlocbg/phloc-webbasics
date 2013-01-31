@@ -17,13 +17,10 @@
  */
 package com.phloc.webbasics.app.page;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.IPage;
-import com.phloc.html.hc.IHCNode;
 
 /**
  * The base interface for a single page of content.
@@ -35,18 +32,16 @@ public interface IWebPage extends IPage
   /**
    * Get the headline of the page. By default it is equal to the page name.
    * 
-   * @param aContentLocale
-   *        The locale to be used. May not be <code>null</code>.
+   * @param aWPEC
+   *        The web page execution context. Never <code>null</code>.
    * @return The header/headline of the page. May be <code>null</code>.
    */
   @Nullable
-  String getHeaderText (@Nonnull Locale aContentLocale);
+  String getHeaderText (@Nonnull WebPageExecutionContext aWPEC);
 
   /**
-   * @param aContentLocale
-   *        The locale used to render the content
-   * @return The content of the area based on the current state.
+   * @param aWPEC
+   *        The web page execution context. Never <code>null</code>.
    */
-  @Nullable
-  IHCNode getContent (@Nonnull Locale aContentLocale);
+  void getContent (@Nonnull WebPageExecutionContext aWPEC);
 }

@@ -19,7 +19,6 @@ package com.phloc.webbasics.app.layout;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -28,11 +27,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This class handles the mapping of the area ID to a content provider.
@@ -87,9 +86,7 @@ public class LayoutManagerProxy implements ILayoutManager
   }
 
   @Nullable
-  public IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                   @Nonnull final String sAreaID,
-                                   @Nonnull final Locale aDisplayLocale)
+  public IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull @Nonempty final String sAreaID)
   {
     if (sAreaID == null)
       throw new NullPointerException ("areaID");
@@ -98,7 +95,7 @@ public class LayoutManagerProxy implements ILayoutManager
     try
     {
       final ILayoutAreaContentProvider aContentProvider = m_aContentProviders.get (sAreaID);
-      return aContentProvider == null ? null : aContentProvider.getContent (aRequestScope, aDisplayLocale);
+      return aContentProvider == null ? null : aContentProvider.getContent (aLEC);
     }
     finally
     {

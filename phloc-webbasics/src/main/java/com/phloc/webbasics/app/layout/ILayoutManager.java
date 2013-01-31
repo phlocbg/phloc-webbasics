@@ -18,14 +18,13 @@
 package com.phloc.webbasics.app.layout;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 public interface ILayoutManager
 {
@@ -36,7 +35,5 @@ public interface ILayoutManager
   List <String> getAllAreaIDs ();
 
   @Nullable
-  IHCNode getContentOfArea (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                            @Nonnull String sAreaID,
-                            @Nonnull Locale aDisplayLocale);
+  IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull @Nonempty String sAreaID);
 }

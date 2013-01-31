@@ -93,9 +93,9 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
 
   @Nullable
   @OverrideOnDemand
-  public String getHeaderText (@Nonnull final Locale aContentLocale)
+  public String getHeaderText (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    return getDisplayText (aContentLocale);
+    return getDisplayText (aWPEC.getDisplayLocale ());
   }
 
   @Nonnull
@@ -214,10 +214,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * node if desired.
    */
   @Nonnull
-  public final IHCNode getContent (@Nonnull final Locale aContentLocale)
+  public final void getContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final WebPageExecutionContext aWPEC = new WebPageExecutionContext (this, aContentLocale);
-
     if (isValidToDisplayPage (aWPEC).isValid ())
     {
       // Create the main page content
@@ -230,6 +228,5 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
       // Add the help icon as the first child of the resulting node list
       aWPEC.getNodeList ().addChild (0, getHelpIconNode (aWPEC));
     }
-    return aWPEC.getNodeList ();
   }
 }

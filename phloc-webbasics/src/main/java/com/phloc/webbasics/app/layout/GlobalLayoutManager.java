@@ -18,7 +18,6 @@
 package com.phloc.webbasics.app.layout;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,7 +27,6 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * This class handles the mapping of the area ID to a content provider.
@@ -65,10 +63,8 @@ public final class GlobalLayoutManager extends GlobalSingleton implements ILayou
   }
 
   @Nullable
-  public IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                   @Nonnull final String sAreaID,
-                                   @Nonnull final Locale aDisplayLocale)
+  public IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
   {
-    return m_aProxy.getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
+    return m_aProxy.getContentOfArea (aLEC, sAreaID);
   }
 }

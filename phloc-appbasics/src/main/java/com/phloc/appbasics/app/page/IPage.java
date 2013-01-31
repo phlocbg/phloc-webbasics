@@ -18,10 +18,6 @@
 package com.phloc.appbasics.app.page;
 
 import java.io.Serializable;
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayText;
@@ -34,11 +30,11 @@ import com.phloc.commons.name.IHasDisplayText;
 public interface IPage extends IHasID <String>, IHasDisplayText, Serializable
 {
   /**
-   * @param aDisplayLocale
-   *        The display locale used to render the content
-   * @return The content of the area based on the current state. May be
-   *         <code>null</code>.
+   * Determine whether help is available for this page. The default
+   * implementation returns always <code>true</code>.
+   * 
+   * @return <code>true</code> if help is available for this page,
+   *         <code>false</code> otherwise.
    */
-  @Nullable
-  Object getContent (@Nonnull Locale aDisplayLocale);
+  boolean isHelpAvailable ();
 }

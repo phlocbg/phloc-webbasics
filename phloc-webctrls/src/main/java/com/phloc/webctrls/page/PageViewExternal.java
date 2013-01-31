@@ -66,7 +66,7 @@ public class PageViewExternal extends AbstractWebPageExt
   }
 
   @Override
-  protected void fillContent (final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     if (m_aDocElem.hasChildren ())
       for (final IMicroNode aChild : m_aDocElem.getChildren ())

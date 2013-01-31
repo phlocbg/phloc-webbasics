@@ -33,6 +33,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webctrls.datatables.CDataTables;
@@ -372,7 +373,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
   @Override
   @Nonnull
-  protected AjaxDefaultResponse mainHandleRequest (@Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
     final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
     final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);

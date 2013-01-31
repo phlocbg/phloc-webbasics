@@ -59,15 +59,19 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
   /**
    * This method must be overridden by every handler
    * 
+   * @param aRequestScope
+   *        The current request scope. Never <code>null</code>.
    * @param aParams
    *        A mutable copy of the extracted request parameters. The values are
-   *        either of type String, String[] or IFileItem.
+   *        either of type String, String[] or IFileItem. Never
+   *        <code>null</code>.
    * @return the result object. May not be <code>null</code>
    * @throws Exception
    */
   @OverrideOnDemand
   @Nonnull
-  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull MapBasedAttributeContainer aParams) throws Exception;
+  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                                                            @Nonnull MapBasedAttributeContainer aParams) throws Exception;
 
   @Nonnull
   public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
@@ -79,7 +83,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
     modifyRequestParamMap (aParams);
 
     // Main invocation
-    final AjaxDefaultResponse aResult = mainHandleRequest (aParams);
+    final AjaxDefaultResponse aResult = mainHandleRequest (aRequestScope, aParams);
     if (aResult == null)
       throw new IllegalStateException ("Invocation of " +
                                        CGStringHelper.getClassLocalName (getClass ()) +

@@ -17,13 +17,10 @@
  */
 package com.phloc.webbasics.app.layout;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Interface for an object that provides content to an application layout area.
@@ -33,13 +30,10 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 public interface ILayoutAreaContentProvider
 {
   /**
-   * @param aRequestScope
-   *        Request scope
-   * @param aDisplayLocale
-   *        The display locale to be used for rendering. May not be
-   *        <code>null</code>.
+   * @param aLEC
+   *        The layout execution context. Never <code>null</code>.
    * @return The content of the area based on the current state.
    */
   @Nullable
-  IHCNode getContent (@Nonnull IRequestWebScopeWithoutResponse aRequestScope, @Nonnull Locale aDisplayLocale);
+  IHCNode getContent (@Nonnull LayoutExecutionContext aLEC);
 }

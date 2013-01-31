@@ -73,12 +73,10 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
 
   @OverrideOnDemand
   @Nullable
-  protected IHCNode getContentOfArea (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                      @Nonnull final String sAreaID,
-                                      @Nonnull final Locale aDisplayLocale)
+  protected IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
   {
     // By default the layout manager is used
-    return m_aLayoutMgr.getContentOfArea (aRequestScope, sAreaID, aDisplayLocale);
+    return m_aLayoutMgr.getContentOfArea (aLEC, sAreaID);
   }
 
   @Override
@@ -92,17 +90,21 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
 
     prepareBodyBeforeAreas (aHtml);
 
+    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aRequestScope, aDisplayLocale);
+
     for (final String sAreaID : m_aLayoutAreaIDs)
     {
-      final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID));
       try
       {
-        aSpan.addChild (getContentOfArea (aRequestScope, sAreaID, aDisplayLocale));
+        final HCSpan aSpan = new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID);
+        aSpan.addChild (getContentOfArea (aLEC, sAreaID));
+        // Append to body if no error occurred
+        aBody.addChild (aSpan);
       }
       catch (final Throwable t)
       {
         // send internal error mail here
-        InternalErrorHandler.handleInternalError (aSpan, t);
+        InternalErrorHandler.handleInternalError (aBody, t);
       }
     }
 

@@ -19,11 +19,6 @@ package com.phloc.appbasics.app.menu;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -49,14 +44,7 @@ public final class MenuTreeTest
   public void testBasic ()
   {
     final IPage aPage = new AbstractPage ("id1")
-    {
-      @Override
-      @Nullable
-      public Object getContent (@Nonnull final Locale aDisplayLocale)
-      {
-        return null;
-      }
-    };
+    {};
 
     final GlobalMenuTree aTree = GlobalMenuTree.getInstance ();
     final IMenuItemPage aRoot1 = aTree.createRootItem ("root1", aPage)
