@@ -87,22 +87,6 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
     super (sID, aName);
   }
 
-  @Nullable
-  protected final String getAction ()
-  {
-    return getAttr (CHCParam.PARAM_ACTION);
-  }
-
-  protected final boolean hasAction (@Nullable final String sAction)
-  {
-    return hasAttr (CHCParam.PARAM_ACTION, sAction);
-  }
-
-  protected final boolean hasSubAction (@Nullable final String sSubAction)
-  {
-    return hasAttr (CHCParam.PARAM_SUBACTION, sSubAction);
-  }
-
   @Nonnull
   public static final HCCol createActionCol (@Nonnegative final int nActions)
   {
@@ -269,7 +253,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  public static IHCNode createIncorrectInputBox (final Locale aDisplayLocale)
+  public static IHCNode createIncorrectInputBox (@Nonnull final Locale aDisplayLocale)
   {
     return BootstrapErrorBox.create (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
   }

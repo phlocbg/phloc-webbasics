@@ -63,6 +63,7 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.form.validation.FormErrors;
@@ -170,7 +171,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
   @Override
   @Nullable
-  protected IUser getSelectedObject (@Nullable final String sID)
+  protected IUser getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getUserOfID (sID);
   }
@@ -210,13 +211,13 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected void showSelectedObject (final IUser aSelectedObject,
-                                     final Locale aDisplayLocale,
-                                     final HCNodeList aNodeList)
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, final IUser aSelectedObject)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
-    final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
-                                                                                                   HCCol.star ()));
+    final BootstrapTableFormView aTable = aWPEC.getNodeList ()
+                                               .addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
+                                                                                               HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getDisplayName ()));
     aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale)),
@@ -299,20 +300,20 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected void validateAndSaveInputParameters (final FormErrors aFormErrors,
-                                                 final Locale aDisplayLocale,
-                                                 final HCNodeList aNodeList,
-                                                 final boolean bEdit,
-                                                 final IUser aSelectedObject)
+  protected void validateAndSaveInputParameters (final WebPageExecutionContext aWPEC,
+                                                 final IUser aSelectedObject,
+                                                 final FormErrors aFormErrors,
+                                                 final boolean bEdit)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aAccessMgr = AccessManager.getInstance ();
-    final String sFirstName = getAttr (FIELD_FIRSTNAME);
-    final String sLastName = getAttr (FIELD_LASTNAME);
-    final String sEmailAddress = getAttr (FIELD_EMAILADDRESS);
-    final String sPassword = getAttr (FIELD_PASSWORD);
-    final String sPasswordConf = getAttr (FIELD_PASSWORD_CONFIRM);
-    final boolean bEnabled = getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
-    final List <String> aUserGroupIDs = getAttrs (FIELD_USERGROUPS);
+    final String sFirstName = aWPEC.getAttr (FIELD_FIRSTNAME);
+    final String sLastName = aWPEC.getAttr (FIELD_LASTNAME);
+    final String sEmailAddress = aWPEC.getAttr (FIELD_EMAILADDRESS);
+    final String sPassword = aWPEC.getAttr (FIELD_PASSWORD);
+    final String sPasswordConf = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
+    final boolean bEnabled = aWPEC.getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
+    final List <String> aUserGroupIDs = aWPEC.getAttrs (FIELD_USERGROUPS);
 
     if (StringHelper.hasNoText (sLastName))
       aFormErrors.addFieldError (FIELD_LASTNAME, EText.ERROR_LASTNAME_REQUIRED.getDisplayText (aDisplayLocale));
@@ -360,7 +361,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 m_aDefaultUserLocale,
                                 aSelectedObject.getCustomAttrs (),
                                 !bEnabled);
-        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+        aWPEC.getNodeList ().addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching internal user groups
         final Collection <String> aPrevUserGroupIDs = aAccessMgr.getAllUserGroupIDsWithAssignedUser (sUserID);
@@ -387,21 +388,23 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                          !bEnabled);
         if (aNewUser != null)
         {
-          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+          aWPEC.getNodeList ()
+               .addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
           // assign to the matching internal user groups
           for (final String sUserGroupID : aUserGroupIDs)
             aAccessMgr.assignUserToUserGroup (sUserGroupID, aNewUser.getID ());
         }
         else
-          aNodeList.addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
+          aWPEC.getNodeList ()
+               .addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
       }
     }
   }
 
   @Override
   protected void showInputForm (final IUser aSelectedObject,
-                                final Locale aDisplayLocale,
+                                final WebPageExecutionContext aWPEC,
                                 final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,
@@ -410,6 +413,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (bEdit && !isEditAllowed (aSelectedObject))
       throw new IllegalStateException ("Won't work!");
 
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
     final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (210), HCCol.star ()));
     aTable.setSpanningHeaderContent (bEdit
@@ -448,7 +452,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                        : aSelectedObject.isEnabled ())),
                        aFormErrors.getListOfField (FIELD_ENABLED));
     final Collection <String> aUserGroupIDs = aSelectedObject == null
-                                                                     ? getAttrs (FIELD_USERGROUPS)
+                                                                     ? aWPEC.getAttrs (FIELD_USERGROUPS)
                                                                      : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
     aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
                        new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS), aDisplayLocale, aUserGroupIDs),
@@ -456,21 +460,21 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected boolean handleCustomActions (@Nullable final IUser aSelectedObject,
-                                         @Nonnull final Locale aDisplayLocale,
-                                         @Nonnull final HCNodeList aNodeList)
+  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nullable final IUser aSelectedObject)
   {
-    if (hasAction (ACTION_RESET_PASSWORD) && aSelectedObject != null)
+    if (aWPEC.hasAction (ACTION_RESET_PASSWORD) && aSelectedObject != null)
     {
       if (!_canResetPassword (aSelectedObject))
         throw new IllegalStateException ("Won't work!");
 
+      final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final boolean bShowForm = true;
       final FormErrors aFormErrors = new FormErrors ();
-      if (hasSubAction (ACTION_PERFORM))
+      if (aWPEC.hasSubAction (ACTION_PERFORM))
       {
-        final String sPlainTextPassword = getAttr (FIELD_PASSWORD);
-        final String sPlainTextPasswordConfirm = getAttr (FIELD_PASSWORD_CONFIRM);
+        final String sPlainTextPassword = aWPEC.getAttr (FIELD_PASSWORD);
+        final String sPlainTextPasswordConfirm = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
 
         final List <String> aPasswordErrors = PasswordUtils.getPasswordConstraints ()
                                                            .getInvalidPasswordDescriptions (sPlainTextPassword,
@@ -484,15 +488,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         if (aFormErrors.isEmpty ())
         {
           AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
-          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                               aSelectedObject.getDisplayName ())));
+          aWPEC.getNodeList ()
+               .addChild (BootstrapSuccessBox.create (EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                           aSelectedObject.getDisplayName ())));
           return true;
         }
       }
       if (bShowForm)
       {
         // Show input form
-        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+        final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
         final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200),
                                                                                            HCCol.star ()));
         aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
@@ -592,10 +597,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected void showListOfExistingObjects (final Locale aDisplayLocale, final HCNodeList aNodeList)
+  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     // Toolbar on top
-    final BootstrapButtonToolbarAdvanced aToolbar = aNodeList.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
+    final BootstrapButtonToolbarAdvanced aToolbar = aWPEC.getNodeList ()
+                                                         .addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();
@@ -614,6 +621,6 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
     aTabBox.addTab (EText.TAB_DELETED.getDisplayTextWithArgs (aDisplayLocale, Integer.toString (aDeletedUsers.size ())),
                     getTabWithUsers (aDisplayLocale, aDeletedUsers, getID () + "3"));
-    aNodeList.addChild (aTabBox);
+    aWPEC.getNodeList ().addChild (aTabBox);
   }
 }

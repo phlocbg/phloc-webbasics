@@ -17,8 +17,6 @@
  */
 package com.phloc.webctrls.page;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -32,7 +30,7 @@ import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.html.entities.HTMLEntityResolver;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.impl.HCDOMWrapper;
-import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 /**
  * Renders a page with HTML code that is provided from an external resource
@@ -68,10 +66,10 @@ public class PageViewExternal extends AbstractWebPageExt
   }
 
   @Override
-  protected void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
+  protected void fillContent (final WebPageExecutionContext aWPEC)
   {
     if (m_aDocElem.hasChildren ())
       for (final IMicroNode aChild : m_aDocElem.getChildren ())
-        aNodeList.addChild (new HCDOMWrapper (aChild.getClone ()));
+        aWPEC.getNodeList ().addChild (new HCDOMWrapper (aChild.getClone ()));
   }
 }

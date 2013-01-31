@@ -31,9 +31,8 @@ import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.html.HCH1;
-import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.page.AbstractWebPage;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 /**
  * Default page showing a very rudimentary "page not found"
@@ -78,9 +77,9 @@ public class SystemPageNotFound extends AbstractWebPage
   }
 
   @Override
-  protected void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
+  protected void fillContent (final WebPageExecutionContext aWPEC)
   {
-    s_aLogger.info ("PAGE NOT FOUND " + WebScopeManager.getRequestScope ().getURL ());
-    aNodeList.addChild (HCH1.create (ETextBase.MESSAGE.getDisplayText (aDisplayLocale)));
+    s_aLogger.info ("PAGE NOT FOUND " + aWPEC.getRequestScope ().getURL ());
+    aWPEC.getNodeList ().addChild (HCH1.create (ETextBase.MESSAGE.getDisplayText (aWPEC.getDisplayLocale ())));
   }
 }

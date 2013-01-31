@@ -32,9 +32,9 @@ import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCUL;
-import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 public class PageShowChildren extends AbstractWebPage
 {
@@ -107,14 +107,14 @@ public class PageShowChildren extends AbstractWebPage
   }
 
   @Override
-  protected void fillContent (@Nonnull final Locale aDisplayLocale, @Nonnull final HCNodeList aNodeList)
+  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = m_aMenuTree.getItemWithID (getID ());
     if (aMenuTreeItem != null && (aMenuTreeItem.getData () instanceof IMenuItem))
     {
       final HCUL aUL = new HCUL ();
-      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildren (aUL, aDisplayLocale));
-      aNodeList.addChild (aUL);
+      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildren (aUL, aWPEC.getDisplayLocale ()));
+      aWPEC.getNodeList ().addChild (aUL);
     }
   }
 }

@@ -18,7 +18,6 @@
 package com.phloc.webctrls.page.form;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,8 +35,8 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
-import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.validation.FormErrors;
@@ -66,28 +65,25 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
   @Override
   @Nullable
-  protected FormState getSelectedObject (@Nullable final String sID)
+  protected FormState getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return FormStateManager.getInstance ().getFormStateOfID (sID);
   }
 
   @Override
-  protected void showSelectedObject (final FormState aSelectedObject,
-                                     final Locale aDisplayLocale,
-                                     final HCNodeList aNodeList)
+  protected void showSelectedObject (final WebPageExecutionContext aWPEC, final FormState aSelectedObject)
   {}
 
   @Override
-  protected void validateAndSaveInputParameters (final FormErrors aFormErrors,
-                                                 final Locale aDisplayLocale,
-                                                 final HCNodeList aNodeList,
-                                                 final boolean bEdit,
-                                                 final FormState aSelectedObject)
+  protected void validateAndSaveInputParameters (final WebPageExecutionContext aWPEC,
+                                                 final FormState aSelectedObject,
+                                                 final FormErrors aFormErrors,
+                                                 final boolean bEdit)
   {}
 
   @Override
   protected void showInputForm (final FormState aSelectedObject,
-                                final Locale aDisplayLocale,
+                                final WebPageExecutionContext aWPEC,
                                 final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,
@@ -95,53 +91,52 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   {}
 
   @Override
-  protected boolean handleDeleteAction (@Nonnull final FormState aSelectedObject,
-                                        @Nonnull final Locale aDisplayLocale,
-                                        @Nonnull final HCNodeList aNodeList)
+  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
+                                        @Nonnull final FormState aSelectedObject)
   {
-    if (hasSubAction (CHCParam.ACTION_SAVE))
+    if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (FormStateManager.getInstance ().deleteFormState (aSelectedObject.getID ()).isChanged ())
-        aNodeList.addChild (BootstrapSuccessBox.create ("Die gemerkten Daten wurden erfolgreich gelöscht!"));
+        aWPEC.getNodeList ().addChild (BootstrapSuccessBox.create ("Die gemerkten Daten wurden erfolgreich gelöscht!"));
       else
-        aNodeList.addChild (BootstrapErrorBox.create ("Fehler beim Löschen der gemerkten Daten!"));
+        aWPEC.getNodeList ().addChild (BootstrapErrorBox.create ("Fehler beim Löschen der gemerkten Daten!"));
       return true;
     }
 
-    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
     aForm.addChild (BootstrapQuestionBox.create ("Sollen diese gemerkten Daten wirklich gelöscht werden?"));
     final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
-    aToolbar.addSubmitButtonYes (aDisplayLocale);
-    aToolbar.addButtonNo (aDisplayLocale);
+    aToolbar.addSubmitButtonYes (aWPEC.getDisplayLocale ());
+    aToolbar.addButtonNo (aWPEC.getDisplayLocale ());
     return false;
   }
 
   @Override
-  protected boolean handleCustomActions (@Nullable final FormState aSelectedObject,
-                                         @Nonnull final Locale aDisplayLocale,
-                                         @Nonnull final HCNodeList aNodeList)
+  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nullable final FormState aSelectedObject)
   {
-    if (hasAction (ACTION_DELETE_ALL))
+    if (aWPEC.hasAction (ACTION_DELETE_ALL))
     {
-      if (hasSubAction (CHCParam.ACTION_SAVE))
+      if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
       {
         if (FormStateManager.getInstance ().deleteAllFormStates ().isChanged ())
-          aNodeList.addChild (BootstrapSuccessBox.create ("Alle gemerkten Daten wurden erfolgreich gelöscht!"));
+          aWPEC.getNodeList ()
+               .addChild (BootstrapSuccessBox.create ("Alle gemerkten Daten wurden erfolgreich gelöscht!"));
         else
-          aNodeList.addChild (BootstrapErrorBox.create ("Fehler beim Löschen der gemerkten Daten!"));
+          aWPEC.getNodeList ().addChild (BootstrapErrorBox.create ("Fehler beim Löschen der gemerkten Daten!"));
         return true;
       }
 
-      final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+      final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
       aForm.addChild (BootstrapQuestionBox.create ("Sollen alle gemerkten Daten wirklich gelöscht werden?"));
       final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL);
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
-      aToolbar.addSubmitButtonYes (aDisplayLocale);
-      aToolbar.addButtonNo (aDisplayLocale);
+      aToolbar.addSubmitButtonYes (aWPEC.getDisplayLocale ());
+      aToolbar.addButtonNo (aWPEC.getDisplayLocale ());
       return false;
     }
 
@@ -149,14 +144,14 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   }
 
   @Override
-  protected void showListOfExistingObjects (final Locale aDisplayLocale, final HCNodeList aNodeList)
+  protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final FormStateManager aFSM = FormStateManager.getInstance ();
 
     final Collection <FormState> aAllFormStates = aFSM.getAllFormStates ();
     if (aAllFormStates.isEmpty ())
     {
-      aNodeList.addChild (BootstrapInfoBox.create ("Es sind keine gemerkten Daten vorhanden!"));
+      aWPEC.getNodeList ().addChild (BootstrapInfoBox.create ("Es sind keine gemerkten Daten vorhanden!"));
     }
     else
     {
@@ -164,12 +159,12 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
       aToolbar.addButton ("Alle löschen",
                           LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL)),
                           EDefaultIcon.DELETE);
-      aNodeList.addChild (aToolbar);
+      aWPEC.getNodeList ().addChild (aToolbar);
 
       // Start emitting saved states
-      final BootstrapTable aPerPage = aNodeList.addAndReturnChild (new BootstrapTable (HCCol.star (),
-                                                                                       new HCCol (170),
-                                                                                       createActionCol (2)));
+      final BootstrapTable aPerPage = aWPEC.getNodeList ().addAndReturnChild (new BootstrapTable (HCCol.star (),
+                                                                                                  new HCCol (170),
+                                                                                                  createActionCol (2)));
       aPerPage.addHeaderRow ().addCells ("Seite", "Gemerkt am", "Aktionen");
       for (final FormState aFormState : aAllFormStates)
       {
@@ -177,9 +172,9 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
         final String sPageID = aFormState.getPageID ();
         final IMenuItem aMenuItem = (IMenuItem) getMenuTree ().getMenuObjectOfID (sPageID);
-        aRow.addCell (aMenuItem.getDisplayText (aDisplayLocale));
+        aRow.addCell (aMenuItem.getDisplayText (aWPEC.getDisplayLocale ()));
 
-        aRow.addCell (PDTToString.getAsString (aFormState.getDateTime (), aDisplayLocale));
+        aRow.addCell (PDTToString.getAsString (aFormState.getDateTime (), aWPEC.getDisplayLocale ()));
 
         final AbstractHCCell aActionCell = aRow.addCell ();
         // Original action (currently always create even for copy)
