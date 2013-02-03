@@ -27,10 +27,10 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webbasics.app.LinkUtils;
 
@@ -39,7 +39,7 @@ import com.phloc.webbasics.app.LinkUtils;
  * 
  * @author philip
  */
-public class DefaultMenuItemRenderer implements IMenuItemRenderer
+public class DefaultMenuItemRenderer <T extends AbstractHCList <T>> implements IMenuItemRenderer <T>
 {
   public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
   public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
@@ -99,7 +99,12 @@ public class DefaultMenuItemRenderer implements IMenuItemRenderer
     return aLink;
   }
 
-  public void onLevelDown (@Nonnull final HCUL aNewLevel)
+  public void onLevelDown (@Nonnull final T aNewLevel)
+  {
+    // do nothing
+  }
+
+  public void onLevelUp (@Nonnull final T aLastLevel)
   {
     // do nothing
   }

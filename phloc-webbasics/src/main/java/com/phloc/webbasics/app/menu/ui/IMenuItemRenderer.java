@@ -23,15 +23,15 @@ import com.phloc.appbasics.app.menu.IMenuItemExternal;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.AbstractHCList;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.html.hc.html.HCUL;
 
 /**
  * Interface for rendering menu objects
  * 
  * @author philip
  */
-public interface IMenuItemRenderer
+public interface IMenuItemRenderer <T extends AbstractHCList <?>>
 {
   /**
    * @param aSeparator
@@ -83,9 +83,17 @@ public interface IMenuItemRenderer
    * Called when a new sub-level is entered
    * 
    * @param aNewLevel
-   *        The HCUL to be modified
+   *        The new UL to be modified
    */
-  void onLevelDown (@Nonnull HCUL aNewLevel);
+  void onLevelDown (@Nonnull T aNewLevel);
+
+  /**
+   * Called when a sub-level is left
+   * 
+   * @param aLastLevel
+   *        The last UL that was used
+   */
+  void onLevelUp (@Nonnull T aLastLevel);
 
   void onMenuSeparatorItem (@Nonnull HCLI aLI);
 

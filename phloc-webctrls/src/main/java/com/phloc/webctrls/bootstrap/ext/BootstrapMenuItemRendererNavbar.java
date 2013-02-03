@@ -31,26 +31,25 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuItemDeterminatorCallback;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
-import com.phloc.webctrls.bootstrap.BootstrapWell;
+import com.phloc.webctrls.bootstrap.BootstrapNav;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 
 /**
- * Default implementation of {@link IMenuItemRenderer}
+ * Implementation of {@link IMenuItemRenderer} creating a Navbar compliant menu
  * 
  * @author philip
  */
-public class BootstrapMenuItemRendererWell implements IMenuItemRenderer <HCUL>
+public class BootstrapMenuItemRendererNavbar implements IMenuItemRenderer <BootstrapNav>
 {
   private final Locale m_aContentLocale;
 
-  public BootstrapMenuItemRendererWell (@Nonnull final Locale aContentLocale)
+  public BootstrapMenuItemRendererNavbar (@Nonnull final Locale aContentLocale)
   {
     if (aContentLocale == null)
       throw new NullPointerException ("contentLocale");
@@ -97,12 +96,12 @@ public class BootstrapMenuItemRendererWell implements IMenuItemRenderer <HCUL>
     return aLink;
   }
 
-  public void onLevelDown (@Nonnull final HCUL aNewLevel)
+  public void onLevelDown (@Nonnull final BootstrapNav aNewLevel)
   {
     aNewLevel.addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST);
   }
 
-  public void onLevelUp (@Nonnull final HCUL aLastLevel)
+  public void onLevelUp (@Nonnull final BootstrapNav aLastLevel)
   {
     // empty
   }
@@ -125,24 +124,20 @@ public class BootstrapMenuItemRendererWell implements IMenuItemRenderer <HCUL>
   }
 
   @Nonnull
-  public static BootstrapWell createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
-                                                 @Nonnull final Locale aDisplayLocale)
+  public static BootstrapNav createNavbarMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final Locale aDisplayLocale)
   {
-    return createSideBarMenu (aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
+    return createNavbarMenu (aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
   }
 
   @Nonnull
-  public static BootstrapWell createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
-                                                 @Nonnull final MenuItemDeterminatorCallback aDeterminator,
-                                                 @Nonnull final Locale aDisplayLocale)
+  public static BootstrapNav createNavbarMenu (@Nonnull final IMenuTree aMenuTree,
+                                               @Nonnull final MenuItemDeterminatorCallback aDeterminator,
+                                               @Nonnull final Locale aDisplayLocale)
   {
-    final BootstrapWell ret = new BootstrapWell ();
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
-    ret.addChild (MenuRendererCallback.createRenderedMenu (FactoryNewInstance.create (HCUL.class),
-                                                           aMenuTree.getRootItem (),
-                                                           new BootstrapMenuItemRendererWell (aDisplayLocale),
-                                                           aAllDisplayMenuItemIDs).addClasses (CBootstrapCSS.NAV,
-                                                                                               CBootstrapCSS.NAV_LIST));
-    return ret;
+    return MenuRendererCallback.<BootstrapNav> createRenderedMenu (FactoryNewInstance.create (BootstrapNav.class),
+                                                                   aMenuTree.getRootItem (),
+                                                                   new BootstrapMenuItemRendererNavbar (aDisplayLocale),
+                                                                   aAllDisplayMenuItemIDs);
   }
 }

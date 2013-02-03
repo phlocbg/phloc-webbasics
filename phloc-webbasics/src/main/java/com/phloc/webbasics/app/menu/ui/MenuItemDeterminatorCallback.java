@@ -145,6 +145,10 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
     return EHierarchyCallbackReturn.CONTINUE;
   }
 
+  /**
+   * @return A map with all items to be displayed, where the key is the menu
+   *         item ID and the value is the expansion state of the item.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, Boolean> getAllItemIDs ()
