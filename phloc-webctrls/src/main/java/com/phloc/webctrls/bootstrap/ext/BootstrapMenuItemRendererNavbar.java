@@ -36,6 +36,7 @@ import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuItemDeterminatorCallback;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
+import com.phloc.webctrls.bootstrap.BootstrapCaret;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 
 /**
@@ -125,6 +126,20 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
                                                               aAllDisplayMenuItemIDs);
     aUL.addClass (CBootstrapCSS.NAV);
     aUL.setCustomAttr ("role", "navigation");
+
+    // For all root items
+    for (final HCLI aLI : aUL.getChildren ())
+    {
+      // Childcount >= 2 means "has sub items"
+      if (aLI.getChildCount () >= 2)
+      {
+        aLI.addClass (CBootstrapCSS.DROPDOWN);
+        ((HCA) aLI.getChild (0)).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
+                                .setCustomAttr ("data-toggle", "dropdown")
+                                .setCustomAttr ("role", "button")
+                                .addChild (new BootstrapCaret ());
+      }
+    }
     return aUL;
   }
 }
