@@ -39,7 +39,7 @@ import com.phloc.webbasics.app.LinkUtils;
  * 
  * @author philip
  */
-public class DefaultMenuItemRenderer <T extends AbstractHCList <T>> implements IMenuItemRenderer <T>
+public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends AbstractMenuItemRenderer <T>
 {
   public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
   public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
@@ -47,19 +47,9 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <T>> implements I
   public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
   public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
 
-  private final Locale m_aContentLocale;
-
   public DefaultMenuItemRenderer (@Nonnull final Locale aContentLocale)
   {
-    if (aContentLocale == null)
-      throw new NullPointerException ("contentLocale");
-    m_aContentLocale = aContentLocale;
-  }
-
-  @Nonnull
-  public final Locale getContentLocale ()
-  {
-    return m_aContentLocale;
+    super (aContentLocale);
   }
 
   @Nonnull
@@ -76,7 +66,7 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <T>> implements I
   {
     final String sMenuItemID = aMenuItem.getID ();
     final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
+    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
     aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
     if (bIsSelected)
       aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
@@ -92,34 +82,27 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <T>> implements I
     final String sMenuItemID = aMenuItem.getID ();
     final HCA aLink = new HCA (aMenuItem.getURL ());
     aLink.setTarget (HCA_Target.BLANK);
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
+    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()) + (bHasChildren && !bIsExpanded ? " [+]" : ""));
     aLink.setID (CSS_ID_PREFIX_MENU_ITEM + sMenuItemID);
     if (bIsSelected)
       aLink.addClass (CSS_CLASS_SELECTED_MENU_ITEM);
     return aLink;
   }
 
-  public void onLevelDown (@Nonnull final T aNewLevel)
-  {
-    // do nothing
-  }
-
-  public void onLevelUp (@Nonnull final T aLastLevel)
-  {
-    // do nothing
-  }
-
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
+  @Override
+  public void onMenuSeparatorItem (@Nonnull final HCLI aLI, boolean bExpanded)
   {
     aLI.addClass (CSS_CLASS_MENU_SEPARATOR);
   }
 
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  @Override
+  public void onMenuItemPageItem (@Nonnull final HCLI aLI, boolean bHasChildren, final boolean bSelected, boolean bExpanded)
   {
     aLI.addClass (CSS_CLASS_MENU_ITEM);
   }
 
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  @Override
+  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, boolean bHasChildren, final boolean bSelected, boolean bExpanded)
   {
     aLI.addClass (CSS_CLASS_MENU_ITEM_EXTERNAL);
   }

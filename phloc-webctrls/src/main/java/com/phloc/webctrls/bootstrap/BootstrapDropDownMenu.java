@@ -28,15 +28,10 @@ import com.phloc.html.hc.html.HCUL;
 
 public class BootstrapDropDownMenu extends HCUL
 {
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.DROPDOWN_MENU);
-  }
-
   public BootstrapDropDownMenu ()
   {
     super ();
-    _init ();
+    addClass (CBootstrapCSS.DROPDOWN_MENU);
   }
 
   @Nonnull

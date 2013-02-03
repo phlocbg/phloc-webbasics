@@ -39,15 +39,10 @@ public class BootstrapNav extends HCUL
 {
   public static final boolean DEFAULT_ACTIVE = false;
 
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.NAV);
-  }
-
   public BootstrapNav ()
   {
     super ();
-    _init ();
+    addClass (CBootstrapCSS.NAV);
   }
 
   @Nonnull

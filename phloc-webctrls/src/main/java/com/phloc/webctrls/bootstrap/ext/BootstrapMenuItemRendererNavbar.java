@@ -27,117 +27,104 @@ import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.factory.FactoryNewInstance;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.html.hc.html.HCUL;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuItemDeterminatorCallback;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
-import com.phloc.webctrls.bootstrap.BootstrapNav;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
-import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 
 /**
  * Implementation of {@link IMenuItemRenderer} creating a Navbar compliant menu
  * 
  * @author philip
  */
-public class BootstrapMenuItemRendererNavbar implements IMenuItemRenderer <BootstrapNav>
+public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <HCUL>
 {
-  private final Locale m_aContentLocale;
+  private int m_nLevel = 0;
 
   public BootstrapMenuItemRendererNavbar (@Nonnull final Locale aContentLocale)
   {
-    if (aContentLocale == null)
-      throw new NullPointerException ("contentLocale");
-    m_aContentLocale = aContentLocale;
+    super (aContentLocale);
   }
 
   @Nonnull
-  public Locale getContentLocale ()
-  {
-    return m_aContentLocale;
-  }
-
-  @Nonnull
-  public IHCNode renderSeparator (@Nonnull final IMenuSeparator aSeparator)
+  public HCLI renderSeparator (@Nonnull final IMenuSeparator aSeparator)
   {
     return new HCLI ().addClass (CBootstrapCSS.DIVIDER);
   }
 
   @Nonnull
-  public IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItem,
+  public HCA renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItem,
+                                 final boolean bHasChildren,
+                                 final boolean bIsSelected,
+                                 final boolean bIsExpanded)
+  {
+    final String sMenuItemID = aMenuItem.getID ();
+    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
+    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()));
+    return aLink;
+  }
+
+  @Nonnull
+  public HCA renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
-    final String sMenuItemID = aMenuItem.getID ();
-    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
-    if (bHasChildren && !bIsExpanded)
-      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
-    return aLink;
-  }
-
-  @Nonnull
-  public IHCNode renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItem,
-                                         final boolean bHasChildren,
-                                         final boolean bIsSelected,
-                                         final boolean bIsExpanded)
-  {
     final HCA aLink = new HCA (aMenuItem.getURL ());
     aLink.setTarget (HCA_Target.BLANK);
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
-    if (bHasChildren && !bIsExpanded)
-      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
+    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()));
     return aLink;
   }
 
-  public void onLevelDown (@Nonnull final BootstrapNav aNewLevel)
+  @Override
+  public void onLevelDown (@Nonnull final HCUL aNewLevel)
   {
-    aNewLevel.addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST);
+    aNewLevel.addClass (CBootstrapCSS.DROPDOWN_MENU).setCustomAttr ("role", "menu");
+    ++m_nLevel;
   }
 
-  public void onLevelUp (@Nonnull final BootstrapNav aLastLevel)
+  @Override
+  public void onLevelUp (@Nonnull final HCUL aLastLevel)
   {
-    // empty
+    --m_nLevel;
   }
 
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
+  @Override
+  public void onMenuItemPageItem (@Nonnull final HCLI aLI,
+                                  final boolean bHasChildren,
+                                  final boolean bSelected,
+                                  final boolean bExpanded)
   {
-    // empty
+    if (m_nLevel > 0 && bHasChildren)
+      aLI.addClass (CBootstrapCSS.DROPDOWN_SUBMENU);
   }
 
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  @Override
+  public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
+                                      final boolean bHasChildren,
+                                      final boolean bSelected,
+                                      final boolean bExpanded)
   {
-    if (bSelected)
-      aLI.addClass (CBootstrapCSS.ACTIVE);
-  }
-
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, final boolean bSelected)
-  {
-    if (bSelected)
-      aLI.addClass (CBootstrapCSS.ACTIVE);
+    if (m_nLevel > 0 && bHasChildren)
+      aLI.addClass (CBootstrapCSS.DROPDOWN_SUBMENU);
   }
 
   @Nonnull
-  public static BootstrapNav createNavbarMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final Locale aDisplayLocale)
+  public static HCUL createNavbarMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final Locale aDisplayLocale)
   {
-    return createNavbarMenu (aMenuTree, new MenuItemDeterminatorCallback (aMenuTree), aDisplayLocale);
-  }
-
-  @Nonnull
-  public static BootstrapNav createNavbarMenu (@Nonnull final IMenuTree aMenuTree,
-                                               @Nonnull final MenuItemDeterminatorCallback aDeterminator,
-                                               @Nonnull final Locale aDisplayLocale)
-  {
-    final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
-    return MenuRendererCallback.<BootstrapNav> createRenderedMenu (FactoryNewInstance.create (BootstrapNav.class),
-                                                                   aMenuTree.getRootItem (),
-                                                                   new BootstrapMenuItemRendererNavbar (aDisplayLocale),
-                                                                   aAllDisplayMenuItemIDs);
+    final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllMenuItemIDs (aMenuTree);
+    final HCUL aUL = MenuRendererCallback.createRenderedMenu (FactoryNewInstance.create (HCUL.class),
+                                                              aMenuTree.getRootItem (),
+                                                              new BootstrapMenuItemRendererNavbar (aDisplayLocale),
+                                                              aAllDisplayMenuItemIDs);
+    aUL.addClass (CBootstrapCSS.NAV);
+    aUL.setCustomAttr ("role", "navigation");
+    return aUL;
   }
 }

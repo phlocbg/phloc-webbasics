@@ -30,9 +30,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
-import com.phloc.commons.hierarchy.EHierarchyCallbackReturn;
-import com.phloc.commons.tree.utils.walk.TreeWalkerDynamic;
+import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
+import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 
 /**
@@ -41,7 +40,7 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
  * 
  * @author philip
  */
-public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final IMenuTree m_aMenuTree;
   private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();
@@ -74,7 +73,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
   }
 
   @Override
-  public final EHierarchyCallbackReturn onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
+  public final void onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
   {
     boolean bShow;
     boolean bAddAllChildrenOnThisLevel = false;
@@ -142,7 +141,6 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
       for (final DefaultTreeItemWithID <String, IMenuObject> aSibling : aItem.getParent ().getChildren ())
         if (isMenuItemValidToBeDisplayed (aSibling.getData ()))
           rememberMenuItemForDisplay (aSibling.getID (), false);
-    return EHierarchyCallbackReturn.CONTINUE;
   }
 
   /**
@@ -170,7 +168,26 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerDynamicC
     if (aDeterminator == null)
       throw new NullPointerException ("determinator");
 
-    TreeWalkerDynamic.walkTree (aDeterminator.m_aMenuTree, aDeterminator);
+    TreeWalker.walkTree (aDeterminator.m_aMenuTree, aDeterminator);
     return aDeterminator.getAllItemIDs ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public static Map <String, Boolean> getAllMenuItemIDs (@Nonnull final IMenuTree aMenuTree)
+  {
+    if (aMenuTree == null)
+      throw new NullPointerException ("MenuTree");
+
+    final Map <String, Boolean> ret = new HashMap <String, Boolean> ();
+    TreeWalker.walkTree (aMenuTree, new DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>> ()
+    {
+      @Override
+      public void onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
+      {
+        ret.put (aItem.getID (), Boolean.TRUE);
+      }
+    });
+    return ret;
   }
 }

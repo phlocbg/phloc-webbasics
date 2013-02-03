@@ -118,6 +118,8 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
     {
       final T aParent = m_aMenuListStack.peek ();
       final IMenuObject aMenuObj = aItem.getData ();
+      final boolean bHasChildren = aItem.hasChildren ();
+      final boolean bExpanded = aExpandedState.booleanValue ();
       if (aMenuObj instanceof IMenuSeparator)
       {
         // separator
@@ -127,7 +129,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
           aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
         else
           aLI = aParent.addAndReturnItem (aHCNode);
-        m_aRenderer.onMenuSeparatorItem (aLI);
+        m_aRenderer.onMenuSeparatorItem (aLI, bExpanded);
         m_aMenuItemStack.push (aLI);
       }
       else
@@ -137,15 +139,15 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
         {
           // page item
           final IHCNode aHCNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj,
-                                                                  aItem.hasChildren (),
+                                                                  bHasChildren,
                                                                   bSelected,
-                                                                  aExpandedState.booleanValue ());
+                                                                  bExpanded);
           HCLI aLI;
           if (aHCNode instanceof HCLI)
             aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
           else
             aLI = aParent.addAndReturnItem (aHCNode);
-          m_aRenderer.onMenuItemPageItem (aLI, bSelected);
+          m_aRenderer.onMenuItemPageItem (aLI, bHasChildren, bSelected, bExpanded);
           m_aMenuItemStack.push (aLI);
         }
         else
@@ -153,15 +155,15 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
           {
             // external item
             final IHCNode aHCNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj,
-                                                                        aItem.hasChildren (),
+                                                                        bHasChildren,
                                                                         bSelected,
-                                                                        aExpandedState.booleanValue ());
+                                                                        bExpanded);
             HCLI aLI;
             if (aHCNode instanceof HCLI)
               aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
             else
               aLI = aParent.addAndReturnItem (aHCNode);
-            m_aRenderer.onMenuItemExternalItem (aLI, bSelected);
+            m_aRenderer.onMenuItemExternalItem (aLI, bHasChildren, bSelected, bExpanded);
             m_aMenuItemStack.push (aLI);
           }
           else

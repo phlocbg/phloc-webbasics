@@ -34,6 +34,7 @@ import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuItemDeterminatorCallback;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
@@ -46,21 +47,11 @@ import com.phloc.webctrls.bootstrap.EBootstrapIcon;
  * 
  * @author philip
  */
-public class BootstrapMenuItemRendererWell implements IMenuItemRenderer <HCUL>
+public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCUL>
 {
-  private final Locale m_aContentLocale;
-
   public BootstrapMenuItemRendererWell (@Nonnull final Locale aContentLocale)
   {
-    if (aContentLocale == null)
-      throw new NullPointerException ("contentLocale");
-    m_aContentLocale = aContentLocale;
-  }
-
-  @Nonnull
-  public Locale getContentLocale ()
-  {
-    return m_aContentLocale;
+    super (aContentLocale);
   }
 
   @Nonnull
@@ -77,7 +68,7 @@ public class BootstrapMenuItemRendererWell implements IMenuItemRenderer <HCUL>
   {
     final String sMenuItemID = aMenuItem.getID ();
     final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
+    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
@@ -91,34 +82,27 @@ public class BootstrapMenuItemRendererWell implements IMenuItemRenderer <HCUL>
   {
     final HCA aLink = new HCA (aMenuItem.getURL ());
     aLink.setTarget (HCA_Target.BLANK);
-    aLink.addChild (aMenuItem.getDisplayText (m_aContentLocale));
+    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 
+  @Override
   public void onLevelDown (@Nonnull final HCUL aNewLevel)
   {
     aNewLevel.addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST);
   }
 
-  public void onLevelUp (@Nonnull final HCUL aLastLevel)
-  {
-    // empty
-  }
-
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
-  {
-    // empty
-  }
-
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  @Override
+  public void onMenuItemPageItem (@Nonnull final HCLI aLI, boolean bHasChildren, final boolean bSelected, boolean bExpanded)
   {
     if (bSelected)
       aLI.addClass (CBootstrapCSS.ACTIVE);
   }
 
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, final boolean bSelected)
+  @Override
+  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, boolean bHasChildren, final boolean bSelected, boolean bExpanded)
   {
     if (bSelected)
       aLI.addClass (CBootstrapCSS.ACTIVE);

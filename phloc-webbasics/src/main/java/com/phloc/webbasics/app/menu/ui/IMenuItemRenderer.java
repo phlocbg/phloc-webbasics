@@ -95,9 +95,9 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    */
   void onLevelUp (@Nonnull T aLastLevel);
 
-  void onMenuSeparatorItem (@Nonnull HCLI aLI);
+  void onMenuSeparatorItem (@Nonnull HCLI aLI, boolean bExpanded);
 
-  void onMenuItemPageItem (@Nonnull HCLI aLI, boolean bSelected);
+  void onMenuItemPageItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bSelected, boolean bExpanded);
 
-  void onMenuItemExternalItem (@Nonnull HCLI aLI, boolean bSelected);
+  void onMenuItemExternalItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bSelected, boolean bExpanded);
 }
