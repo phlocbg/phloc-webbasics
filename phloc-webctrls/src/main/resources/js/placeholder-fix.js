@@ -39,3 +39,7 @@ jQuery.fn.addPlaceholder = function() {
     input.val(input.attr('placeholder'));
   });
 };
+
+$(document).ready (function() { 
+  $.placeholder();
+});
