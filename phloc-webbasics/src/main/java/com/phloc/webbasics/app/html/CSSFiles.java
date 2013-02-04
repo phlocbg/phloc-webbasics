@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -24,6 +25,7 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.css.CSSFilenameHelper;
 import com.phloc.css.media.ECSSMedium;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCLink;
@@ -51,8 +53,8 @@ public class CSSFiles
       if (StringHelper.hasNoText (sPath))
         throw new IllegalArgumentException ("path");
       m_sCondComment = sCondComment;
-      m_sPath = sPath;
-      m_aURL = LinkUtils.getURLWithContext (sPath);
+      m_sPath = GlobalDebug.isDebugMode () ? sPath : CSSFilenameHelper.getMinifiedCSSFilename (sPath);
+      m_aURL = LinkUtils.getURLWithContext (m_sPath);
       m_aMedia = ContainerHelper.newList (aMedia);
     }
 
