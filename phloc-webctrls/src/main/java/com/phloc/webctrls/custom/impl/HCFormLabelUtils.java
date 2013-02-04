@@ -37,13 +37,13 @@ public final class HCFormLabelUtils
   {}
 
   @Nonnull
-  private static String _getSuffix (@Nonnull final ELabelType eType)
+  private static String _getSuffix (@Nonnull final ELabelType eType, final boolean bAppendColon)
   {
     if (eType.equals (ELabelType.MANDATORY))
-      return SIGN_MANDATORY + LABEL_END;
+      return SIGN_MANDATORY + (bAppendColon ? LABEL_END : "");
     if (eType.equals (ELabelType.ALTERNATIVE))
-      return SIGN_ALTERNATIVE + LABEL_END;
-    return LABEL_END;
+      return SIGN_ALTERNATIVE + (bAppendColon ? LABEL_END : "");
+    return bAppendColon ? LABEL_END : "";
   }
 
   @Nonnull
@@ -58,7 +58,7 @@ public final class HCFormLabelUtils
     String sPlainText = StringHelper.trimEnd (sText.trim (), LABEL_END);
     // Append suffix only, if at least some text is present
     if (StringHelper.hasText (sPlainText))
-      sPlainText += _getSuffix (eType);
+      sPlainText += _getSuffix (eType, !StringHelper.endsWith (sPlainText, '?'));
     return sPlainText;
   }
 
@@ -73,7 +73,7 @@ public final class HCFormLabelUtils
 
     // Only append the suffix, if at least one text child is present
     if (HCUtils.recursiveContainsAtLeastOneTextNode (aNode))
-      aNode.addChild (_getSuffix (eType));
+      aNode.addChild (_getSuffix (eType, true));
     return aNode;
   }
 }
