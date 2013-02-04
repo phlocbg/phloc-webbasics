@@ -28,13 +28,10 @@ import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.css.media.ECSSMedium;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
-import com.phloc.html.hc.html.HCLink;
 import com.phloc.html.hc.html.HCScriptFile;
-import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -75,25 +72,9 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @Nonnull
   @ReturnsMutableCopy
   @OverrideOnDemand
-  protected List <String> getAllCSSFiles ()
+  protected List <CSSFiles.Item> getAllCSSItems ()
   {
-    return HTMLConfigManager.getInstance ().getAllCSSFiles ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected List <String> getAllCSSPrintFiles ()
-  {
-    return HTMLConfigManager.getInstance ().getAllCSSPrintFiles ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @OverrideOnDemand
-  protected List <String> getAllCSSIEFiles ()
-  {
-    return HTMLConfigManager.getInstance ().getAllCSSIEFiles ();
+    return HTMLConfigManager.getInstance ().getAllCSSItems ();
   }
 
   @Nonnull
@@ -131,16 +112,8 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
       aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
 
     // Add configured CSS
-    for (final String sCSSFile : getAllCSSFiles ())
-      aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSFile)));
-
-    // Add configured print-only CSS
-    for (final String sCSSPrintFile : getAllCSSPrintFiles ())
-      aHead.addCSS (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSPrintFile)).addMedium (ECSSMedium.PRINT));
-
-    // Add configured IE-only CSS
-    for (final String sCSSIEFile : getAllCSSIEFiles ())
-      aHead.addCSS (HCConditionalCommentNode.createForIE (HCLink.createCSSLink (LinkUtils.getURLWithContext (sCSSIEFile))));
+    for (final CSSFiles.Item aCSSItem : getAllCSSItems ())
+      aHead.addCSS (aCSSItem.getAsNode ());
 
     // Add all configured JS
     for (final String sJSFile : getAllJSFiles ())

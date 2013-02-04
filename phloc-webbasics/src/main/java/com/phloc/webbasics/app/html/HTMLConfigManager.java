@@ -51,16 +51,12 @@ import com.phloc.commons.microdom.reader.XMLMapHandler;
 public final class HTMLConfigManager
 {
   public static final String FILENAME_CSS_XML = "html/css.xml";
-  public static final String FILENAME_CSS_PRINT_XML = "html/css_print.xml";
-  public static final String FILENAME_CSS_IE_XML = "html/css_ie.xml";
   public static final String FILENAME_JS_XML = "html/js.xml";
   public static final String FILENAME_METATAGS_XML = "html/metatags.xml";
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
   private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
 
-  private final List <String> m_aAllCSSFiles = new ArrayList <String> ();
-  private final List <String> m_aAllCSSPrintFiles = new ArrayList <String> ();
-  private final List <String> m_aAllCSSIEFiles = new ArrayList <String> ();
+  private final List <CSSFiles.Item> m_aAllCSSItems;
   private final List <String> m_aAllJSFiles = new ArrayList <String> ();
   private final Map <String, String> m_aAllMetaTags = new LinkedHashMap <String, String> ();
 
@@ -70,25 +66,10 @@ public final class HTMLConfigManager
   private HTMLConfigManager ()
   {
     // read all CSS files
-    InputStream aIS = WebFileIO.getInputStream (FILENAME_CSS_XML);
-    if (aIS != null)
-      if (XMLListHandler.readList (aIS, m_aAllCSSFiles).isFailure ())
-        s_aLogger.error ("Failed to read " + FILENAME_CSS_XML);
-
-    // read all print CSS files
-    aIS = WebFileIO.getInputStream (FILENAME_CSS_PRINT_XML);
-    if (aIS != null)
-      if (XMLListHandler.readList (aIS, m_aAllCSSPrintFiles).isFailure ())
-        s_aLogger.error ("Failed to read " + FILENAME_CSS_PRINT_XML);
-
-    // read all IE CSS files
-    aIS = WebFileIO.getInputStream (FILENAME_CSS_IE_XML);
-    if (aIS != null)
-      if (XMLListHandler.readList (aIS, m_aAllCSSIEFiles).isFailure ())
-        s_aLogger.error ("Failed to read " + FILENAME_CSS_IE_XML);
+    m_aAllCSSItems = new CSSFiles (WebFileIO.getResource (FILENAME_CSS_XML)).getAllItems ();
 
     // read all JS files
-    aIS = WebFileIO.getInputStream (FILENAME_JS_XML);
+    InputStream aIS = WebFileIO.getInputStream (FILENAME_JS_XML);
     if (aIS != null)
       if (XMLListHandler.readList (aIS, m_aAllJSFiles).isFailure ())
         s_aLogger.error ("Failed to read " + FILENAME_JS_XML);
@@ -108,23 +89,9 @@ public final class HTMLConfigManager
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <String> getAllCSSFiles ()
+  public List <CSSFiles.Item> getAllCSSItems ()
   {
-    return ContainerHelper.newList (m_aAllCSSFiles);
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <String> getAllCSSPrintFiles ()
-  {
-    return ContainerHelper.newList (m_aAllCSSPrintFiles);
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <String> getAllCSSIEFiles ()
-  {
-    return ContainerHelper.newList (m_aAllCSSIEFiles);
+    return ContainerHelper.newList (m_aAllCSSItems);
   }
 
   @Nonnull
