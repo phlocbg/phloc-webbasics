@@ -31,11 +31,9 @@ import com.phloc.commons.mime.IMimeType;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
-import com.phloc.html.hc.html.HCScriptFile;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.app.LinkUtils;
 
 /**
  * Main class for creating HTML output
@@ -80,9 +78,9 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @Nonnull
   @ReturnsMutableCopy
   @OverrideOnDemand
-  protected List <String> getAllJSFiles ()
+  protected List <JSFiles.Item> getAllJSItems ()
   {
-    return HTMLConfigManager.getInstance ().getAllJSFiles ();
+    return HTMLConfigManager.getInstance ().getAllJSItems ();
   }
 
   /**
@@ -116,8 +114,8 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
       aHead.addCSS (aCSSItem.getAsNode ());
 
     // Add all configured JS
-    for (final String sJSFile : getAllJSFiles ())
-      aHead.addJS (HCScriptFile.create (LinkUtils.getURLWithContext (sJSFile)));
+    for (final JSFiles.Item aJSFile : getAllJSItems ())
+      aHead.addJS (aJSFile.getAsNode ());
   }
 
   /**

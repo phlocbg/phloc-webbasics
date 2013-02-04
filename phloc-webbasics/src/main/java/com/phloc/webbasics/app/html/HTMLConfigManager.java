@@ -18,7 +18,6 @@
 package com.phloc.webbasics.app.html;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.microdom.reader.XMLListHandler;
 import com.phloc.commons.microdom.reader.XMLMapHandler;
 
 /**
@@ -57,7 +55,7 @@ public final class HTMLConfigManager
   private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
 
   private final List <CSSFiles.Item> m_aAllCSSItems;
-  private final List <String> m_aAllJSFiles = new ArrayList <String> ();
+  private final List <JSFiles.Item> m_aAllJSItems;
   private final Map <String, String> m_aAllMetaTags = new LinkedHashMap <String, String> ();
 
   /**
@@ -69,13 +67,10 @@ public final class HTMLConfigManager
     m_aAllCSSItems = new CSSFiles (WebFileIO.getResource (FILENAME_CSS_XML)).getAllItems ();
 
     // read all JS files
-    InputStream aIS = WebFileIO.getInputStream (FILENAME_JS_XML);
-    if (aIS != null)
-      if (XMLListHandler.readList (aIS, m_aAllJSFiles).isFailure ())
-        s_aLogger.error ("Failed to read " + FILENAME_JS_XML);
+    m_aAllJSItems = new JSFiles (WebFileIO.getResource (FILENAME_JS_XML)).getAllItems ();
 
     // read all static MetaTags
-    aIS = WebFileIO.getInputStream (FILENAME_METATAGS_XML);
+    final InputStream aIS = WebFileIO.getInputStream (FILENAME_METATAGS_XML);
     if (aIS != null)
       if (XMLMapHandler.readMap (aIS, m_aAllMetaTags).isFailure ())
         s_aLogger.error ("Failed to read " + FILENAME_METATAGS_XML);
@@ -96,9 +91,9 @@ public final class HTMLConfigManager
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <String> getAllJSFiles ()
+  public List <JSFiles.Item> getAllJSItems ()
   {
-    return ContainerHelper.newList (m_aAllJSFiles);
+    return ContainerHelper.newList (m_aAllJSItems);
   }
 
   @Nonnull
