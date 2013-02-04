@@ -525,6 +525,13 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     return true;
   }
 
+  @Nullable
+  @OverrideOnDemand
+  protected IHCNode getResetPasswordIcon ()
+  {
+    return EBootstrapIcon.LOCK.getAsNode ();
+  }
+
   @Nonnull
   protected IHCNode getTabWithUsers (@Nonnull final Locale aDisplayLocale,
                                      @Nonnull final Collection <? extends IUser> aUsers,
@@ -579,7 +586,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                 .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
                                                 .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                                                                               aCurUser.getDisplayName ()))
-                                                                                                .addChild (EBootstrapIcon.LOCK.getAsNode ()));
+                                                                                                .addChild (getResetPasswordIcon ()));
       }
       else
         aActionCell.addChild (createEmptyAction ());
