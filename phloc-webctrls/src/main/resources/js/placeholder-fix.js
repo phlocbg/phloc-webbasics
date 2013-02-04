@@ -4,7 +4,7 @@
 
 // Init with: $.placeholder()
 jQuery.placeholder = function() {
-  $('[placeholder]').focus(function() {
+  $('[placeholder]').css("color", "#aaa").focus(function() {
     var input = $(this);
     if (input.hasClass('placeholder')) {
       input.val('');
