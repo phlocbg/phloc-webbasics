@@ -18,6 +18,7 @@
 package com.phloc.webctrls.bootstrap.derived;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
@@ -91,6 +93,18 @@ public final class BootstrapTableForm extends BootstrapTable
     aRow.addCell (aLabel);
   }
 
+  public static final boolean hasDefinedInputSize (@Nonnull final IHCElement <?> aElement)
+  {
+    final Set <ICSSClassProvider> aClasses = aElement.getAllClasses ();
+    return aClasses.contains (CBootstrapCSS.INPUT_MINI) ||
+           aClasses.contains (CBootstrapCSS.INPUT_SMALL) ||
+           aClasses.contains (CBootstrapCSS.INPUT_MEDIUM) ||
+           aClasses.contains (CBootstrapCSS.INPUT_LARGE) ||
+           aClasses.contains (CBootstrapCSS.INPUT_XLARGE) ||
+           aClasses.contains (CBootstrapCSS.INPUT_XXLARGE) ||
+           aClasses.contains (CBootstrapCSS.INPUT_BLOCK_LEVEL);
+  }
+
   /**
    * Modify the passed controls for a certain row
    * 
@@ -105,7 +119,10 @@ public final class BootstrapTableForm extends BootstrapTable
     for (final IHCNode aCtrl : aCtrls)
       if (aCtrl instanceof IHCElement <?> && !(aCtrl instanceof HCCheckBox))
       {
-        ((IHCElement <?>) aCtrl).addClass (CBootstrapCSS.INPUT_BLOCK_LEVEL);
+        final IHCElement <?> aElement = (IHCElement <?>) aCtrl;
+        // Don't resize elements with a predefined size
+        if (!hasDefinedInputSize (aElement))
+          aElement.addClass (CBootstrapCSS.INPUT_BLOCK_LEVEL);
         break;
       }
   }
