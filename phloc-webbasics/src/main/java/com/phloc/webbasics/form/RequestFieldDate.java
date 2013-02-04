@@ -25,6 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.datetime.format.PDTToString;
@@ -54,6 +55,13 @@ public final class RequestFieldDate extends RequestField
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
                            @Nullable final LocalDate aDefaultValue,
+                           @Nonnull final Locale aDisplayLocale)
+  {
+    this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
+  }
+
+  public RequestFieldDate (@Nonnull @Nonempty final String sFieldName,
+                           @Nullable final LocalDateTime aDefaultValue,
                            @Nonnull final Locale aDisplayLocale)
   {
     this (sFieldName, PDTToString.getAsString (aDefaultValue, aDisplayLocale), aDisplayLocale);
