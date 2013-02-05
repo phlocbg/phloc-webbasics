@@ -28,6 +28,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
@@ -40,7 +41,9 @@ import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webbasics.form.RequestField;
 
 /**
  * jQuery autoNumeric plugin from
@@ -55,6 +58,34 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 {
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
 
+  public static enum ELeadingZero
+  {
+    /**
+     * allows leading zero to be entered. They are removed on focusout event
+     * (default)
+     */
+    ALLOW ("allow"),
+    /** leading zeros not allowed. */
+    DENY ("deny"),
+    /** leading zeros allowed and will be retained on the focusout event */
+    KEEP ("keep");
+
+    private final String m_sID;
+
+    private ELeadingZero (@Nonnull @Nonempty final String sID)
+    {
+      m_sID = sID;
+    }
+
+    @Nonnull
+    @Nonempty
+    public String getID ()
+    {
+      return m_sID;
+    }
+  }
+
+  private final String m_sFieldName;
   private final String m_sID;
   private Double m_aInitialValue;
   private String m_sThousandSeparator;
@@ -62,15 +93,20 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   private Integer m_aDecimalPlaces;
   private Double m_aMin;
   private Double m_aMax;
-
-  public HCAutoNumeric ()
-  {
-    m_sID = GlobalIDFactory.getNewStringID ();
-  }
+  private ELeadingZero m_eLeadingZero;
 
   public HCAutoNumeric (@Nonnull final Locale aDisplayLocale)
   {
-    this ();
+    this (aDisplayLocale, null);
+  }
+
+  public HCAutoNumeric (@Nonnull final Locale aDisplayLocale, @Nullable final String sFieldName)
+  {
+    if (aDisplayLocale == null)
+      throw new NullPointerException ("displayLocale");
+
+    m_sFieldName = sFieldName;
+    m_sID = GlobalIDFactory.getNewStringID ();
     final DecimalFormatSymbols aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
     m_sThousandSeparator = Character.toString (aDFS.getGroupingSeparator ());
     m_sDecimalSeparator = Character.toString (aDFS.getDecimalSeparator ());
@@ -126,15 +162,22 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public HCAutoNumeric setLeadingZero (@Nullable final ELeadingZero eLeadingZero)
+  {
+    m_eLeadingZero = eLeadingZero;
+    return this;
+  }
+
+  @Nonnull
   public JSInvocation autoNumericGet ()
   {
-    return JQuery.idRef (m_sID).invoke ("autoNumericGet");
+    return JQuery.idRef (m_sID).invoke ("get");
   }
 
   @Nonnull
   public JSInvocation autoNumericSet ()
   {
-    return JQuery.idRef (m_sID).invoke ("autoNumericSet");
+    return JQuery.idRef (m_sID).invoke ("set");
   }
 
   /**
@@ -158,7 +201,9 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       throw new IllegalArgumentException ("Initial value must be <= max!");
 
     // build edit
-    final HCEdit aEdit = new HCEdit ().setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
+    final HCEdit aEdit = StringHelper.hasText (m_sFieldName) ? new HCEdit (new RequestField (m_sFieldName))
+                                                            : new HCEdit ();
+    aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
     customizeEdit (aEdit);
 
     // build arguments
@@ -174,18 +219,21 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       aArgs.add ("vMin", m_aMin.toString ());
     if (m_aMax != null)
       aArgs.add ("vMax", m_aMax.toString ());
+    if (m_eLeadingZero != null)
+      aArgs.add ("lZero", m_eLeadingZero.getID ());
 
     registerExternalResources ();
     final JSPackage aPkg = new JSPackage ();
     final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
-    aPkg.add (e.invoke ("autoNumeric").arg (aArgs));
+    aPkg.add (e.invoke ("autoNumeric").arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
-      aPkg.add (e.invoke ("autoNumericSet").arg (m_aInitialValue.doubleValue ()));
+      aPkg.add (e.invoke ("set").arg (m_aInitialValue.doubleValue ()));
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_175);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_182);
   }
 }

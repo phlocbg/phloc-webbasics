@@ -20,31 +20,31 @@ package com.phloc.webctrls.autonumeric;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.html.resource.js.IJSPathProvider;
-import com.phloc.html.resource.js.JSFilenameHelper;
+import com.phloc.css.CSSFilenameHelper;
+import com.phloc.html.resource.css.ICSSPathProvider;
 
-public enum EAutoNumericJSPathProvider implements IJSPathProvider
+/**
+ * Contains default CSS paths for this package.
+ * 
+ * @author philip
+ */
+public enum EAutoNumericCSSPathProvider implements ICSSPathProvider
 {
-  AUTONUMERIC_182 ("autonumeric/182/autonumeric.js");
+  AUTONUMERIC ("autonumeric/autonumeric.css");
 
   private final String m_sPath;
 
-  private EAutoNumericJSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EAutoNumericCSSPathProvider (@Nonnull @Nonempty final String sPath)
   {
-    if (!JSFilenameHelper.isJSFilename (sPath))
+    if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");
     m_sPath = sPath;
   }
 
   @Nonnull
   @Nonempty
-  public String getJSItemPath (final boolean bRegular)
+  public String getCSSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : JSFilenameHelper.getMinifiedJSPath (m_sPath);
-  }
-
-  public boolean canBeBundled ()
-  {
-    return true;
+    return bRegular ? m_sPath : CSSFilenameHelper.getMinifiedCSSFilename (m_sPath);
   }
 }
