@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.autonumeric;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
@@ -87,12 +88,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 
   private final String m_sFieldName;
   private final String m_sID;
-  private Double m_aInitialValue;
+  private BigDecimal m_aInitialValue;
   private String m_sThousandSeparator;
   private String m_sDecimalSeparator;
   private Integer m_aDecimalPlaces;
-  private Double m_aMin;
-  private Double m_aMax;
+  private BigDecimal m_aMin;
+  private BigDecimal m_aMax;
   private ELeadingZero m_eLeadingZero;
 
   public HCAutoNumeric (@Nonnull final Locale aDisplayLocale)
@@ -122,7 +123,13 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   @Nonnull
   public HCAutoNumeric setInitialValue (final double dInitialValue)
   {
-    m_aInitialValue = Double.valueOf (dInitialValue);
+    return setInitialValue (BigDecimal.valueOf (dInitialValue));
+  }
+
+  @Nonnull
+  public HCAutoNumeric setInitialValue (@Nullable final BigDecimal aInitialValue)
+  {
+    m_aInitialValue = aInitialValue;
     return this;
   }
 
@@ -150,14 +157,26 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   @Nonnull
   public HCAutoNumeric setMin (final double dMin)
   {
-    m_aMin = Double.valueOf (dMin);
+    return setMin (BigDecimal.valueOf (dMin));
+  }
+
+  @Nonnull
+  public HCAutoNumeric setMin (@Nullable final BigDecimal aMin)
+  {
+    m_aMin = aMin;
     return this;
   }
 
   @Nonnull
   public HCAutoNumeric setMax (final double dMax)
   {
-    m_aMax = Double.valueOf (dMax);
+    return setMax (BigDecimal.valueOf (dMax));
+  }
+
+  @Nonnull
+  public HCAutoNumeric setMax (@Nullable final BigDecimal aMax)
+  {
+    m_aMax = aMax;
     return this;
   }
 
@@ -195,9 +214,9 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   {
     if (m_aMin != null && m_aMax != null && m_aMin.doubleValue () > m_aMax.doubleValue ())
       throw new IllegalArgumentException ("Min must be <= max!");
-    if (m_aMin != null && m_aInitialValue != null && m_aInitialValue.doubleValue () < m_aMin.doubleValue ())
+    if (m_aMin != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMin) < 0)
       throw new IllegalArgumentException ("Initial value must be >= min!");
-    if (m_aMax != null && m_aInitialValue != null && m_aInitialValue.doubleValue () > m_aMax.doubleValue ())
+    if (m_aMax != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMax) > 0)
       throw new IllegalArgumentException ("Initial value must be <= max!");
 
     // build edit
