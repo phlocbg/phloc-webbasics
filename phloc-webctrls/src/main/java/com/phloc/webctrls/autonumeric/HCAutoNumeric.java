@@ -26,6 +26,9 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
@@ -60,6 +63,7 @@ import com.phloc.webbasics.form.RequestField;
 public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 {
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
+  private static final Logger s_aLogger = LoggerFactory.getLogger (HCAutoNumeric.class);
 
   public static enum ELeadingZero
   {
@@ -89,7 +93,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   private final Locale m_aDisplayLocale;
-  private final String m_sFieldName;
+  private final RequestField m_aRF;
   private String m_sID;
   private BigDecimal m_aInitialValue;
   private String m_sThousandSeparator;
@@ -104,13 +108,13 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     this (aDisplayLocale, null);
   }
 
-  public HCAutoNumeric (@Nonnull final Locale aDisplayLocale, @Nullable final String sFieldName)
+  public HCAutoNumeric (@Nonnull final Locale aDisplayLocale, @Nullable final RequestField aRF)
   {
     if (aDisplayLocale == null)
       throw new NullPointerException ("displayLocale");
 
     m_aDisplayLocale = aDisplayLocale;
-    m_sFieldName = sFieldName;
+    m_aRF = aRF;
     m_sID = GlobalIDFactory.getNewStringID ();
     final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
     m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());
@@ -251,8 +255,10 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       throw new IllegalArgumentException ("Initial value must be <= max!");
 
     // build edit
-    final HCEdit aEdit = StringHelper.hasText (m_sFieldName) ? new HCEdit (new RequestField (m_sFieldName))
-                                                            : new HCEdit ();
+    if (m_aRF != null && m_aInitialValue != null)
+      s_aLogger.error ("InitialValue and RequestField cannot be used together - ignoring RequestField default value");
+    final HCEdit aEdit = m_aRF != null ? m_aInitialValue != null ? new HCEdit (m_aRF.getFieldName ())
+                                                                : new HCEdit (m_aRF) : new HCEdit ();
     aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
     customizeEdit (aEdit);
 
