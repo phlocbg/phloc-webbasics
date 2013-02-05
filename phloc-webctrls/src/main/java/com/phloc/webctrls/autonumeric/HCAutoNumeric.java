@@ -134,6 +134,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public HCAutoNumeric setInitialValue (final long nInitialValue)
+  {
+    return setInitialValue (BigDecimal.valueOf (nInitialValue));
+  }
+
+  @Nonnull
   public HCAutoNumeric setInitialValue (final double dInitialValue)
   {
     return setInitialValue (BigDecimal.valueOf (dInitialValue));
@@ -168,6 +174,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public HCAutoNumeric setMin (final long nMin)
+  {
+    return setMin (BigDecimal.valueOf (nMin));
+  }
+
+  @Nonnull
   public HCAutoNumeric setMin (final double dMin)
   {
     return setMin (BigDecimal.valueOf (dMin));
@@ -178,6 +190,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   {
     m_aMin = aMin;
     return this;
+  }
+
+  @Nonnull
+  public HCAutoNumeric setMax (final long nMax)
+  {
+    return setMax (BigDecimal.valueOf (nMax));
   }
 
   @Nonnull
