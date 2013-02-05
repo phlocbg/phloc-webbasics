@@ -240,7 +240,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 
     // build arguments
     final JSAssocArray aArgs = new JSAssocArray ();
-    final DecimalFormat aDF = (DecimalFormat) NumberFormat.getInstance (m_aDisplayLocale);
 
     if (m_sThousandSeparator != null)
       aArgs.add ("aSep", m_sThousandSeparator);
@@ -249,9 +248,9 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     if (m_aDecimalPlaces != null)
       aArgs.add ("mDec", m_aDecimalPlaces.toString ());
     if (m_aMin != null)
-      aArgs.add ("vMin", aDF.format (m_aMin));
+      aArgs.add ("vMin", m_aMin.toString ());
     if (m_aMax != null)
-      aArgs.add ("vMax", aDF.format (m_aMax));
+      aArgs.add ("vMax", m_aMax.toString ());
     if (m_eLeadingZero != null)
       aArgs.add ("lZero", m_eLeadingZero.getID ());
 
@@ -260,7 +259,10 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
     aPkg.add (e.invoke ("autoNumeric").arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
+    {
+      final DecimalFormat aDF = (DecimalFormat) NumberFormat.getInstance (m_aDisplayLocale);
       aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (aDF.format (m_aInitialValue)));
+    }
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
 
