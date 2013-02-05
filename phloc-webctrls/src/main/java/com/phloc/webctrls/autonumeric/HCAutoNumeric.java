@@ -18,7 +18,9 @@
 package com.phloc.webctrls.autonumeric;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -86,8 +88,9 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     }
   }
 
+  private final Locale m_aDisplayLocale;
   private final String m_sFieldName;
-  private final String m_sID;
+  private String m_sID;
   private BigDecimal m_aInitialValue;
   private String m_sThousandSeparator;
   private String m_sDecimalSeparator;
@@ -106,11 +109,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     if (aDisplayLocale == null)
       throw new NullPointerException ("displayLocale");
 
+    m_aDisplayLocale = aDisplayLocale;
     m_sFieldName = sFieldName;
     m_sID = GlobalIDFactory.getNewStringID ();
-    final DecimalFormatSymbols aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
-    m_sThousandSeparator = Character.toString (aDFS.getGroupingSeparator ());
-    m_sDecimalSeparator = Character.toString (aDFS.getDecimalSeparator ());
+    final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
+    m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());
+    m_sDecimalSeparator = Character.toString (m_aDFS.getDecimalSeparator ());
   }
 
   @Nonnull
@@ -118,6 +122,15 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   public String getID ()
   {
     return m_sID;
+  }
+
+  @Nonnull
+  public HCAutoNumeric setID (@Nonnull @Nonempty final String sID)
+  {
+    if (StringHelper.hasNoText (sID))
+      throw new IllegalArgumentException ("ID");
+    m_sID = sID;
+    return this;
   }
 
   @Nonnull
@@ -227,6 +240,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 
     // build arguments
     final JSAssocArray aArgs = new JSAssocArray ();
+    final DecimalFormat aDF = (DecimalFormat) NumberFormat.getInstance (m_aDisplayLocale);
 
     if (m_sThousandSeparator != null)
       aArgs.add ("aSep", m_sThousandSeparator);
@@ -235,9 +249,9 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     if (m_aDecimalPlaces != null)
       aArgs.add ("mDec", m_aDecimalPlaces.toString ());
     if (m_aMin != null)
-      aArgs.add ("vMin", m_aMin.toString ());
+      aArgs.add ("vMin", aDF.format (m_aMin));
     if (m_aMax != null)
-      aArgs.add ("vMax", m_aMax.toString ());
+      aArgs.add ("vMax", aDF.format (m_aMax));
     if (m_eLeadingZero != null)
       aArgs.add ("lZero", m_eLeadingZero.getID ());
 
@@ -246,7 +260,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
     aPkg.add (e.invoke ("autoNumeric").arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
-      aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (m_aInitialValue.doubleValue ()));
+      aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (aDF.format (m_aInitialValue)));
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
 
