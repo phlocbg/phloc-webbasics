@@ -20,3 +20,8 @@
 input::-moz-focus-inner {
   border: 0;
 }
+
+/* Input fields with a suffix are always right aligned */
+.input-append > input {
+  text-align: right;
+}

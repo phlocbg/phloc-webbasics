@@ -34,6 +34,19 @@ public class BootstrapEditWithPrefix implements IHCNodeBuilder
     m_aInput = aInput;
   }
 
+  @Nonnull
+  @Nonempty
+  public String getPrefix ()
+  {
+    return m_sPrefix;
+  }
+
+  @Nonnull
+  public AbstractHCInput <?> getInput ()
+  {
+    return m_aInput;
+  }
+
   @Nullable
   public IHCNode build ()
   {

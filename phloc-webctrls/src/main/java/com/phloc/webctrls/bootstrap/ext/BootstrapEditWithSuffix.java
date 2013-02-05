@@ -34,6 +34,19 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
     m_sSuffix = sSuffix;
   }
 
+  @Nonnull
+  public AbstractHCInput <?> getInput ()
+  {
+    return m_aInput;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getSuffix ()
+  {
+    return m_sSuffix;
+  }
+
   @Nullable
   public IHCNode build ()
   {
