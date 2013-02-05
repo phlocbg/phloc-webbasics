@@ -335,4 +335,13 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     return SessionUserHolder.getInstance ().m_aUser;
   }
+
+  /**
+   * @return <code>true</code> if a user is logged in and is administrator
+   */
+  public boolean isCurrentUserAdministrator ()
+  {
+    final IUser aUser = getCurrentUser ();
+    return aUser != null && aUser.isAdministrator ();
+  }
 }

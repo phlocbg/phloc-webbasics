@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.name.IHasDisplayName;
@@ -37,8 +38,21 @@ import com.phloc.datetime.IHasLastModificationDateTime;
  * 
  * @author philip
  */
-public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreationDateTime, IHasLastModificationDateTime, IHasDeletionDateTime, Serializable
+public interface IUser extends
+                      ITypedObject <String>,
+                      IHasDisplayName,
+                      IHasCreationDateTime,
+                      IHasLastModificationDateTime,
+                      IHasDeletionDateTime,
+                      Serializable
 {
+  /**
+   * @return <code>true</code> if the user has the ID
+   *         {@link CSecurity#USER_ADMINISTRATOR_ID}, <code>false</code>
+   *         otherwise
+   */
+  boolean isAdministrator ();
+
   /**
    * @return The login name of the user.
    */

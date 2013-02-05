@@ -209,6 +209,11 @@ public final class User implements IUser
     return CSecurity.TYPE_USER;
   }
 
+  public boolean isAdministrator ()
+  {
+    return CSecurity.USER_ADMINISTRATOR_ID.equals (m_sID);
+  }
+
   @Nonnull
   @Nonempty
   public String getID ()
