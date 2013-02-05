@@ -11,7 +11,10 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.browser.BrowserInfo;
 import com.phloc.webbasics.form.RequestFieldBoolean;
+import com.phloc.webbasics.useragent.IUserAgent;
+import com.phloc.webbasics.useragent.UserAgentDatabase;
 import com.phloc.webbasics.web.IRequestParamMap;
 import com.phloc.webbasics.web.RequestHelper;
 
@@ -253,5 +256,17 @@ public class LayoutExecutionContext
   public boolean hasSubAction (@Nullable final String sSubAction)
   {
     return hasAttr (CHCParam.PARAM_SUBACTION, sSubAction);
+  }
+
+  @Nonnull
+  public IUserAgent getUserAgent ()
+  {
+    return UserAgentDatabase.getUserAgent (m_aRequestScope);
+  }
+
+  @Nonnull
+  public BrowserInfo getBrowserInfo ()
+  {
+    return getUserAgent ().getBrowserInfo ();
   }
 }
