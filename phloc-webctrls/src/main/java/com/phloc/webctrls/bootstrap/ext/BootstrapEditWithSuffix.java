@@ -5,19 +5,21 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.AbstractHCInput;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 
 public class BootstrapEditWithSuffix implements IHCNodeBuilder
 {
   private final AbstractHCInput <?> m_aInput;
-  private final String m_sSuffix;
+  private final IHCNode m_aSuffix;
 
   public BootstrapEditWithSuffix (@Nonnull final RequestField aRF, @Nonnull @Nonempty final String sSuffix)
   {
@@ -31,7 +33,22 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
     if (StringHelper.hasNoText (sSuffix))
       throw new IllegalArgumentException ("suffix");
     m_aInput = aInput;
-    m_sSuffix = sSuffix;
+    m_aSuffix = new HCTextNode (sSuffix);
+  }
+
+  public BootstrapEditWithSuffix (@Nonnull final RequestField aRF, @Nonnull final IHCNode aSuffix)
+  {
+    this (new HCEdit (aRF), aSuffix);
+  }
+
+  public BootstrapEditWithSuffix (@Nonnull final AbstractHCInput <?> aInput, @Nonnull final IHCNode aSuffix)
+  {
+    if (aInput == null)
+      throw new NullPointerException ("input");
+    if (aSuffix == null)
+      throw new NullPointerException ("suffix");
+    m_aInput = aInput;
+    m_aSuffix = aSuffix;
   }
 
   @Nonnull
@@ -42,9 +59,9 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
 
   @Nonnull
   @Nonempty
-  public String getSuffix ()
+  public IHCNode getSuffix ()
   {
-    return m_sSuffix;
+    return m_aSuffix;
   }
 
   @Nullable
@@ -52,7 +69,12 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
   {
     final HCDiv aDiv = new HCDiv ().addClass (CBootstrapCSS.INPUT_APPEND);
     aDiv.addChild (m_aInput);
-    aDiv.addChild (HCSpan.create (m_sSuffix).addClass (CBootstrapCSS.ADD_ON));
+    IHCElement <?> aElement;
+    if (m_aSuffix instanceof IHCElement <?>)
+      aElement = (IHCElement <?>) m_aSuffix;
+    else
+      aElement = HCSpan.create (m_aSuffix);
+    aDiv.addChild (aElement.addClass (CBootstrapCSS.ADD_ON));
     return aDiv;
   }
 }

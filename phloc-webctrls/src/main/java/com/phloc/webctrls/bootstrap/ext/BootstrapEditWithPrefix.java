@@ -5,18 +5,20 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.AbstractHCInput;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 
 public class BootstrapEditWithPrefix implements IHCNodeBuilder
 {
-  private final String m_sPrefix;
+  private final IHCNode m_aPrefix;
   private final AbstractHCInput <?> m_aInput;
 
   public BootstrapEditWithPrefix (@Nonnull @Nonempty final String sPrefix, @Nonnull final RequestField aRF)
@@ -30,15 +32,29 @@ public class BootstrapEditWithPrefix implements IHCNodeBuilder
       throw new IllegalArgumentException ("prefix");
     if (aInput == null)
       throw new NullPointerException ("input");
-    m_sPrefix = sPrefix;
+    m_aPrefix = new HCTextNode (sPrefix);
+    m_aInput = aInput;
+  }
+
+  public BootstrapEditWithPrefix (@Nonnull final IHCNode aPrefix, @Nonnull final RequestField aRF)
+  {
+    this (aPrefix, new HCEdit (aRF));
+  }
+
+  public BootstrapEditWithPrefix (@Nonnull final IHCNode aPrefix, @Nonnull final AbstractHCInput <?> aInput)
+  {
+    if (aPrefix == null)
+      throw new NullPointerException ("prefix");
+    if (aInput == null)
+      throw new NullPointerException ("input");
+    m_aPrefix = aPrefix;
     m_aInput = aInput;
   }
 
   @Nonnull
-  @Nonempty
-  public String getPrefix ()
+  public IHCNode getPrefix ()
   {
-    return m_sPrefix;
+    return m_aPrefix;
   }
 
   @Nonnull
@@ -51,7 +67,12 @@ public class BootstrapEditWithPrefix implements IHCNodeBuilder
   public IHCNode build ()
   {
     final HCDiv aDiv = new HCDiv ().addClass (CBootstrapCSS.INPUT_PREPEND);
-    aDiv.addChild (HCSpan.create (m_sPrefix).addClass (CBootstrapCSS.ADD_ON));
+    IHCElement <?> aElement;
+    if (m_aPrefix instanceof IHCElement <?>)
+      aElement = (IHCElement <?>) m_aPrefix;
+    else
+      aElement = HCSpan.create (m_aPrefix);
+    aDiv.addChild (aElement.addClass (CBootstrapCSS.ADD_ON));
     aDiv.addChild (m_aInput);
     return aDiv;
   }
