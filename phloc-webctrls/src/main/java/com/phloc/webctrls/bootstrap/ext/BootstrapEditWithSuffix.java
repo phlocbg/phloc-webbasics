@@ -11,14 +11,13 @@ import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.html.hc.impl.AbstractHCInput;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 
 public class BootstrapEditWithSuffix implements IHCNodeBuilder
 {
-  private final AbstractHCInput <?> m_aInput;
+  private final IHCNode m_aInput;
   private final IHCNode m_aSuffix;
 
   public BootstrapEditWithSuffix (@Nonnull final RequestField aRF, @Nonnull @Nonempty final String sSuffix)
@@ -26,7 +25,12 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
     this (new HCEdit (aRF), sSuffix);
   }
 
-  public BootstrapEditWithSuffix (@Nonnull final AbstractHCInput <?> aInput, @Nonnull @Nonempty final String sSuffix)
+  public BootstrapEditWithSuffix (@Nonnull final IHCNodeBuilder aInput, @Nonnull @Nonempty final String sSuffix)
+  {
+    this (aInput.build (), sSuffix);
+  }
+
+  public BootstrapEditWithSuffix (@Nonnull final IHCNode aInput, @Nonnull @Nonempty final String sSuffix)
   {
     if (aInput == null)
       throw new NullPointerException ("input");
@@ -41,7 +45,12 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
     this (new HCEdit (aRF), aSuffix);
   }
 
-  public BootstrapEditWithSuffix (@Nonnull final AbstractHCInput <?> aInput, @Nonnull final IHCNode aSuffix)
+  public BootstrapEditWithSuffix (@Nonnull final IHCNodeBuilder aInput, @Nonnull final IHCNode aSuffix)
+  {
+    this (aInput.build (), aSuffix);
+  }
+
+  public BootstrapEditWithSuffix (@Nonnull final IHCNode aInput, @Nonnull final IHCNode aSuffix)
   {
     if (aInput == null)
       throw new NullPointerException ("input");
@@ -52,7 +61,7 @@ public class BootstrapEditWithSuffix implements IHCNodeBuilder
   }
 
   @Nonnull
-  public AbstractHCInput <?> getInput ()
+  public IHCNode getInput ()
   {
     return m_aInput;
   }

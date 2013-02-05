@@ -171,13 +171,13 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   @Nonnull
   public JSInvocation autoNumericGet ()
   {
-    return JQuery.idRef (m_sID).invoke ("get");
+    return JQuery.idRef (m_sID).invoke ("autoNumeric").arg ("get");
   }
 
   @Nonnull
   public JSInvocation autoNumericSet ()
   {
-    return JQuery.idRef (m_sID).invoke ("set");
+    return JQuery.idRef (m_sID).invoke ("autoNumeric").arg ("set");
   }
 
   /**
@@ -227,7 +227,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
     aPkg.add (e.invoke ("autoNumeric").arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
-      aPkg.add (e.invoke ("set").arg (m_aInitialValue.doubleValue ()));
+      aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (m_aInitialValue.doubleValue ()));
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
 
