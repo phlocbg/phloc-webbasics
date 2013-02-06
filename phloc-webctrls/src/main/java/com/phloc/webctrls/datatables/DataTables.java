@@ -18,6 +18,7 @@
 package com.phloc.webctrls.datatables;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -79,6 +80,7 @@ public class DataTables implements IHCNodeBuilder
   private boolean m_bScrollAutoCSS = DEFAULT_SCROLL_AUTO_CSS;
   private boolean m_bScrollCollapse = DEFAULT_SCROLL_COLLAPSE;
   private boolean m_bScrollInfinite = DEFAULT_SCROLL_INFINITE;
+  private Map <Integer, String> m_aLengthMenu;
   private String m_sDom;
   // server side processing
   private ISimpleURL m_aAjaxSource;
@@ -394,6 +396,35 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <Integer, String> getLengthMenu ()
+  {
+    return ContainerHelper.newMap (m_aLengthMenu);
+  }
+
+  @Nonnull
+  public DataTables setLengthMenu (@Nullable final int... aLength)
+  {
+    if (aLength == null)
+      m_aLengthMenu = null;
+    else
+    {
+      final Map <Integer, String> aLengthMenu = new LinkedHashMap <Integer, String> ();
+      for (final int nValue : aLength)
+        aLengthMenu.put (Integer.valueOf (nValue), null);
+      m_aLengthMenu = aLengthMenu;
+    }
+    return this;
+  }
+
+  @Nonnull
+  public DataTables setLengthMenu (@Nullable final Map <Integer, String> aLength)
+  {
+    m_aLengthMenu = aLength == null ? null : ContainerHelper.newOrderedMap (aLength);
+    return this;
+  }
+
   /**
    * modify parameter map
    * 
@@ -503,6 +534,23 @@ public class DataTables implements IHCNodeBuilder
     }
     if (m_bDeferRender != DEFAULT_DEFER_RENDER)
       aParams.add ("bDeferRender", m_bDeferRender);
+
+    if (m_aLengthMenu != null && !m_aLengthMenu.isEmpty ())
+    {
+      final JSArray aArray1 = new JSArray ();
+      final JSArray aArray2 = new JSArray ();
+      for (final Map.Entry <Integer, String> aEntry : m_aLengthMenu.entrySet ())
+      {
+        final int nKey = aEntry.getKey ().intValue ();
+        final String sValue = aEntry.getValue ();
+        aArray1.add (nKey);
+        if (sValue != null)
+          aArray2.add (sValue);
+        else
+          aArray2.add (nKey);
+      }
+      aParams.add ("aLengthMenu", new JSArray ().add (aArray1).add (aArray2));
+    }
 
     if (m_aDisplayLocale != null)
     {
