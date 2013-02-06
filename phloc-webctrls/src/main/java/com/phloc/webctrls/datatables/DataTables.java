@@ -63,6 +63,7 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_USER_JQUERY_AJAX = false;
   public static final boolean DEFAULT_DEFER_RENDER = false;
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
+  public static final int DEFAULT_DISPLAY_LENGTH = 10;
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
 
   private final String m_sParentElementID;
@@ -81,6 +82,7 @@ public class DataTables implements IHCNodeBuilder
   private boolean m_bScrollCollapse = DEFAULT_SCROLL_COLLAPSE;
   private boolean m_bScrollInfinite = DEFAULT_SCROLL_INFINITE;
   private Map <Integer, String> m_aLengthMenu;
+  private int m_nDisplayLength = DEFAULT_DISPLAY_LENGTH;
   private String m_sDom;
   // server side processing
   private ISimpleURL m_aAjaxSource;
@@ -425,6 +427,21 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnegative
+  public int getDisplayLength ()
+  {
+    return m_nDisplayLength;
+  }
+
+  @Nonnull
+  public DataTables setDisplayLength (@Nonnegative final int nDisplayLength)
+  {
+    if (nDisplayLength < 1)
+      throw new IllegalArgumentException ("displayLength is too small!");
+    m_nDisplayLength = nDisplayLength;
+    return this;
+  }
+
   /**
    * modify parameter map
    * 
@@ -551,6 +568,8 @@ public class DataTables implements IHCNodeBuilder
       }
       aParams.add ("aLengthMenu", new JSArray ().add (aArray1).add (aArray2));
     }
+    if (m_nDisplayLength != DEFAULT_DISPLAY_LENGTH)
+      aParams.add ("iDisplayLength", m_nDisplayLength);
 
     if (m_aDisplayLocale != null)
     {
