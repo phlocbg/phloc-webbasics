@@ -103,16 +103,23 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   private BigDecimal m_aMax;
   private ELeadingZero m_eLeadingZero;
 
-  public HCAutoNumeric (@Nonnull final Locale aDisplayLocale)
+  public HCAutoNumeric ()
+  {
+    this (null, null);
+  }
+
+  public HCAutoNumeric (@Nullable final Locale aDisplayLocale)
   {
     this (aDisplayLocale, null);
   }
 
-  public HCAutoNumeric (@Nonnull final Locale aDisplayLocale, @Nullable final RequestField aRF)
+  public HCAutoNumeric (@Nullable final RequestField aRF)
   {
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("displayLocale");
+    this (null, aRF);
+  }
 
+  public HCAutoNumeric (@Nullable final Locale aDisplayLocale, @Nullable final RequestField aRF)
+  {
     // Because the default min value is 0 (in v1.8.2) and we want negative
     // values by default!
     setMin (-999999999);
@@ -120,9 +127,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     m_aDisplayLocale = aDisplayLocale;
     m_aRF = aRF;
     m_sID = GlobalIDFactory.getNewStringID ();
-    final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
-    m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());
-    m_sDecimalSeparator = Character.toString (m_aDFS.getDecimalSeparator ());
+    if (aDisplayLocale != null)
+    {
+      final DecimalFormatSymbols m_aDFS = DecimalFormatSymbolsFactory.getInstance (aDisplayLocale);
+      m_sThousandSeparator = Character.toString (m_aDFS.getGroupingSeparator ());
+      m_sDecimalSeparator = Character.toString (m_aDFS.getDecimalSeparator ());
+    }
   }
 
   @Nonnull
@@ -288,8 +298,15 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     aPkg.add (e.invoke ("autoNumeric").arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
     {
-      final DecimalFormat aDF = (DecimalFormat) NumberFormat.getInstance (m_aDisplayLocale);
-      aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (aDF.format (m_aInitialValue)));
+      String sInitialValue;
+      if (m_aDisplayLocale != null)
+      {
+        final DecimalFormat aDF = (DecimalFormat) NumberFormat.getInstance (m_aDisplayLocale);
+        sInitialValue = aDF.format (m_aInitialValue);
+      }
+      else
+        sInitialValue = m_aInitialValue.toString ();
+      aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (sInitialValue));
     }
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
