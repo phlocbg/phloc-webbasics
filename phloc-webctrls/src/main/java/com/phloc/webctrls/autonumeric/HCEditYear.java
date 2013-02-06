@@ -12,7 +12,7 @@ import com.phloc.webbasics.form.RequestField;
  */
 public class HCEditYear extends HCAutoNumeric
 {
-  public static final int DEFAULT_MIN = 1900;
+  public static final int DEFAULT_MIN = 0;
   public static final int DEFAULT_MAX = 9999;
 
   public HCEditYear ()
