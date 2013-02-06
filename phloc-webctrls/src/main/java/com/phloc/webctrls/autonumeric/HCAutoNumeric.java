@@ -113,6 +113,10 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     if (aDisplayLocale == null)
       throw new NullPointerException ("displayLocale");
 
+    // Because the default min value is 0 (in v1.8.2) and we want negative
+    // values by default!
+    setMin (-999999999);
+
     m_aDisplayLocale = aDisplayLocale;
     m_aRF = aRF;
     m_sID = GlobalIDFactory.getNewStringID ();
@@ -270,7 +274,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     if (m_sDecimalSeparator != null)
       aArgs.add ("aDec", m_sDecimalSeparator);
     if (m_aDecimalPlaces != null)
-      aArgs.add ("mDec", m_aDecimalPlaces.toString ());
+      aArgs.add ("mDec", m_aDecimalPlaces.intValue ());
     if (m_aMin != null)
       aArgs.add ("vMin", m_aMin.toString ());
     if (m_aMax != null)
