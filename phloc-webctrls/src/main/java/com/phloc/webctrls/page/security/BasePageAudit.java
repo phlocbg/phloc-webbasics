@@ -18,9 +18,9 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.security.audit.AuditManager;
 import com.phloc.appbasics.security.audit.ComparatorAuditItemDateTime;
 import com.phloc.appbasics.security.audit.IAuditItem;
+import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
@@ -39,11 +39,11 @@ import com.phloc.webctrls.security.SecurityUI;
 
 public class BasePageAudit extends AbstractWebPageExt
 {
-  private final AuditManager m_aAuditManager;
+  private final IAuditManager m_aAuditManager;
 
   public BasePageAudit (@Nonnull @Nonempty final String sID,
                         @Nonnull final String sName,
-                        @Nonnull final AuditManager aAuditManager)
+                        @Nonnull final IAuditManager aAuditManager)
   {
     super (sID, sName);
     if (aAuditManager == null)

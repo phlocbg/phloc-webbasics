@@ -47,7 +47,7 @@ import com.phloc.datetime.io.PDTIOHelper;
  * @author philip
  */
 @ThreadSafe
-public final class AuditManager extends AbstractXMLDAO implements IAuditor
+public final class AuditManager extends AbstractXMLDAO implements IAuditManager
 {
   private static final class AuditHasFilename implements IHasFilename
   {
@@ -126,6 +126,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditor
     return m_aItems.getAllItems ();
   }
 
+  @Override
   @Nonnull
   public EChange createAuditItem (@Nonnull final EAuditActionType eType,
                                   @Nonnull final ESuccess eSuccess,
@@ -145,6 +146,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditor
     return EChange.CHANGED;
   }
 
+  @Override
   @Nonnull
   @ReturnsMutableCopy
   public List <IAuditItem> getAllAuditItems ()
