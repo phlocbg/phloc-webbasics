@@ -75,6 +75,14 @@ FormHelperClass.prototype =
           FormHelper.updateElements(errorUpdates);
       }
     });
+  },
+  
+  // jQuery-select-obj,map<value,text>
+  setSelectOptions : function ($select,newOptions) {
+    $select.empty(); // remove old options
+    $.each(newOptions, function(value,text) {
+      $select.append($("<option></option>").attr("value",value).text(text));
+    });    
   }
 };
 

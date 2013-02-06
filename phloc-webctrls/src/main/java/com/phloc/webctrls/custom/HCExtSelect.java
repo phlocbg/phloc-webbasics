@@ -30,6 +30,11 @@ import com.phloc.webbasics.EWebBasicsText;
 
 public class HCExtSelect extends HCSelect
 {
+  /** The value of the "please select" field */
+  public static final String VALUE_PLEASE_SELECT = "";
+  /** The value of the "none" field */
+  public static final String VALUE_NONE = "";
+
   public static final ICSSClassProvider CSS_CLASS_SPECIAL_OPTION = DefaultCSSClassProvider.create ("phloc-select-option-special");
 
   public HCExtSelect (@Nonnull final IHCRequestField aRF)
@@ -40,7 +45,7 @@ public class HCExtSelect extends HCSelect
   @Nonnull
   public static HCOption createOptionPleaseSelect (@Nonnull final Locale aDisplayLocale)
   {
-    final HCOption aOption = new HCOption ().setValue ("")
+    final HCOption aOption = new HCOption ().setValue (VALUE_PLEASE_SELECT)
                                             .addChild (EWebBasicsText.PLEASE_SELECT.getDisplayText (aDisplayLocale));
     aOption.addClass (CSS_CLASS_SPECIAL_OPTION);
     return aOption;
@@ -55,7 +60,7 @@ public class HCExtSelect extends HCSelect
   @Nonnull
   public static HCOption createOptionNone (@Nonnull final Locale aDisplayLocale)
   {
-    final HCOption aOption = new HCOption ().setValue ("")
+    final HCOption aOption = new HCOption ().setValue (VALUE_NONE)
                                             .addChild (EWebBasicsText.SELECT_NONE.getDisplayText (aDisplayLocale));
     aOption.addClass (CSS_CLASS_SPECIAL_OPTION);
     return aOption;
