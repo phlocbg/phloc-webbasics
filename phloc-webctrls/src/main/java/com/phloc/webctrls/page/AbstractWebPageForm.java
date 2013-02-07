@@ -220,6 +220,17 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   protected abstract void showSelectedObject (@Nonnull WebPageExecutionContext aWPEC, @Nonnull DATATYPE aSelectedObject);
 
+  protected final void handleViewObject (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nonnull final DATATYPE aSelectedObject,
+                                         final boolean bIsEditAllowed)
+  {
+    // Valid object found - show details
+    showSelectedObject (aWPEC, aSelectedObject);
+
+    // Toolbar on bottom
+    aWPEC.getNodeList ().addChild (createViewToolbar (aWPEC, true, bIsEditAllowed, aSelectedObject));
+  }
+
   /**
    * @param aWPEC
    *        Web page execution context
@@ -332,10 +343,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     if (aWPEC.hasAction (ACTION_VIEW) && aSelectedObject != null)
     {
       // Valid object found - show details
-      showSelectedObject (aWPEC, aSelectedObject);
-
-      // Toolbar on bottom
-      aWPEC.getNodeList ().addChild (createViewToolbar (aWPEC, true, bIsEditAllowed, aSelectedObject));
+      handleViewObject (aWPEC, aSelectedObject, bIsEditAllowed);
 
       bShowList = false;
     }
