@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.form;
 
+import java.math.BigDecimal;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -77,6 +79,20 @@ public class RequestField extends RequestFieldData implements IHCRequestField
   public RequestField (@Nonnull @Nonempty final String sFieldName, @Nullable final IHasID <String> aDefaultValueProvider)
   {
     super (sFieldName, aDefaultValueProvider);
+  }
+
+  /**
+   * Helper constructor using a BigDecimal instead of a String.
+   * 
+   * @param sFieldName
+   *        The field name to use. May neither be <code>null</code> nor empty.
+   * @param aDefaultValue
+   *        The default value to be used. Is converted to a String. May be
+   *        <code>null</code>.
+   */
+  public RequestField (@Nonnull @Nonempty final String sFieldName, @Nullable final BigDecimal aDefaultValue)
+  {
+    super (sFieldName, aDefaultValue == null ? null : aDefaultValue.toString ());
   }
 
   /**
