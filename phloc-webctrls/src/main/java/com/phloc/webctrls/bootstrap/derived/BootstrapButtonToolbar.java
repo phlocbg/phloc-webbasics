@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.bootstrap.derived;
 
 import java.util.Locale;
 import java.util.Map;
@@ -28,6 +28,9 @@ import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webctrls.bootstrap.BootstrapButton;
+import com.phloc.webctrls.bootstrap.BootstrapButton_Submit;
+import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
