@@ -25,8 +25,17 @@ package com.phloc.appbasics.app.dao;
 public interface IDAO extends IChangeable, IAutoSaveAware
 {
   /**
+   * Set the auto save state and get the old value.
+   * 
+   * @param bAutoSaveEnabled
+   * @return the old value of the auto-save state.
+   */
+  boolean setAndGetAutoSaveEnabled (boolean bAutoSaveEnabled);
+
+  /**
    * This method is called to persist the content in disk in case there are
-   * pending changes. If no pending changes are present, nothing happens.
+   * pending changes. If no pending changes are present, nothing happens. In
+   * case the implementation is thread-safe, this method must be thread-safe!
    */
   void writeToFileOnPendingChanges ();
 }

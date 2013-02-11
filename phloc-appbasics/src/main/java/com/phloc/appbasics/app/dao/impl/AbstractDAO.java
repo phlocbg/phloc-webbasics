@@ -143,12 +143,6 @@ public abstract class AbstractDAO implements IDAO
     }
   }
 
-  /**
-   * Enable or disable auto save. Does not trigger any file writing operations.
-   * 
-   * @param bAutoSaveEnabled
-   *        The new auto save state.
-   */
   @Nonnull
   public final EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
   {
@@ -159,6 +153,21 @@ public abstract class AbstractDAO implements IDAO
         return EChange.UNCHANGED;
       m_bAutoSaveEnabled = bAutoSaveEnabled;
       return EChange.CHANGED;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public final boolean setAndGetAutoSaveEnabled (final boolean bAutoSaveEnabled)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      final boolean bOldState = m_bAutoSaveEnabled;
+      m_bAutoSaveEnabled = bAutoSaveEnabled;
+      return bOldState;
     }
     finally
     {
@@ -205,27 +214,41 @@ public abstract class AbstractDAO implements IDAO
   @Nullable
   public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
+    boolean bOldAutoSave;
     m_aRWLock.writeLock ().lock ();
     try
     {
       // Save old auto save state
-      final boolean bOldAutoSave = m_bAutoSaveEnabled;
+      bOldAutoSave = m_bAutoSaveEnabled;
       m_bAutoSaveEnabled = false;
-      try
-      {
-        return aCallable.call ();
-      }
-      finally
-      {
-        // Restore old auto save
-        m_bAutoSaveEnabled = bOldAutoSave;
-        // And in case something was changed
-        writeToFileOnPendingChanges ();
-      }
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
+    }
+
+    try
+    {
+      return aCallable.call ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().lock ();
+      try
+      {
+        // Restore old auto save
+        m_bAutoSaveEnabled = bOldAutoSave;
+      }
+      finally
+      {
+        m_aRWLock.writeLock ().unlock ();
+      }
+
+      if (bOldAutoSave)
+      {
+        // And in case something was changed - writeLocked itself
+        writeToFileOnPendingChanges ();
+      }
     }
   }
 }
