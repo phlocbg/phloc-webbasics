@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.custom.IFormLabel;
 
@@ -57,18 +57,33 @@ public class BootstrapTableFormView extends BootstrapTable
     _init ();
   }
 
-  public void addItemRow (final IFormLabel aLabel, final String sValue)
+  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
-    addItemRow (aLabel, new HCTextNode (sValue));
+    addBodyRow ().addCell (aLabel).addCell (sValue);
   }
 
-  public void addItemRow (final IFormLabel aLabel, final IHCNode aValue)
+  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aValue)
   {
-    addBodyRow ().addCells (aLabel, aValue);
+    addBodyRow ().addCell (aLabel).addCell (aValue);
   }
 
-  public void addItemRow (final IFormLabel aLabel, final Iterable <? extends IHCNode> aValues)
+  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
+  }
+
+  public void addItemRow (@Nullable final String sLabel, @Nullable final String sValue)
+  {
+    addItemRow (BootstrapFormLabel.create (sLabel), sValue);
+  }
+
+  public void addItemRow (@Nullable final String sLabel, @Nullable final IHCNode aValue)
+  {
+    addItemRow (BootstrapFormLabel.create (sLabel), aValue);
+  }
+
+  public void addItemRow (@Nullable final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
+  {
+    addItemRow (BootstrapFormLabel.create (sLabel), aValues);
   }
 }
