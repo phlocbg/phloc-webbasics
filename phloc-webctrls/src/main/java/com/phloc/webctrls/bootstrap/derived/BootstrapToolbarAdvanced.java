@@ -33,16 +33,16 @@ import com.phloc.webctrls.custom.EDefaultIcon;
  * 
  * @author philip
  */
-public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
+public class BootstrapToolbarAdvanced extends BootstrapToolbar
 {
   private final SimpleURL m_aSelfHref;
 
-  public BootstrapButtonToolbarAdvanced ()
+  public BootstrapToolbarAdvanced ()
   {
     this (LinkUtils.getSelfHref ());
   }
 
-  public BootstrapButtonToolbarAdvanced (@Nonnull final SimpleURL aSelfHref)
+  public BootstrapToolbarAdvanced (@Nonnull final SimpleURL aSelfHref)
   {
     super ();
     if (aSelfHref == null)
@@ -51,28 +51,28 @@ public class BootstrapButtonToolbarAdvanced extends BootstrapButtonToolbar
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
+  public BootstrapToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
   {
     addButton (EWebBasicsText.MSG_BUTTON_BACK.getDisplayText (aDisplayLocale), m_aSelfHref, EDefaultIcon.BACK);
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
+  public BootstrapToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
   {
     addButton (EWebBasicsText.MSG_BUTTON_CANCEL.getDisplayText (aDisplayLocale), m_aSelfHref, EDefaultIcon.CANCEL);
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
+  public BootstrapToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
   {
     addButton (EWebBasicsText.MSG_BUTTON_NO.getDisplayText (aDisplayLocale), m_aSelfHref, EDefaultIcon.NO);
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbarAdvanced addButtonNew (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
+  public BootstrapToolbarAdvanced addButtonNew (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
   {
     addButton (sCaption, aURL, EDefaultIcon.NEW);
     return this;

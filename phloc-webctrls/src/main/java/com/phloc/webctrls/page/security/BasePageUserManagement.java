@@ -71,7 +71,7 @@ import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
-import com.phloc.webctrls.bootstrap.derived.BootstrapButtonToolbarAdvanced;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
@@ -513,7 +513,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
+        final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -608,8 +608,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     // Toolbar on top
-    final BootstrapButtonToolbarAdvanced aToolbar = aWPEC.getNodeList ()
-                                                         .addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
+    final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ()
+                                                         .addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();

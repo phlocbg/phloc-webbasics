@@ -34,7 +34,7 @@ import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
 import com.phloc.webbasics.form.validation.FormErrors;
-import com.phloc.webctrls.bootstrap.derived.BootstrapButtonToolbarAdvanced;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 
 public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> extends AbstractWebPageExt
 {
@@ -68,7 +68,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected void modifyViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                     @Nonnull final DATATYPE aSelectedObject,
-                                    @Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
+                                    @Nonnull final BootstrapToolbarAdvanced aToolbar)
   {}
 
   /**
@@ -86,12 +86,12 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected final BootstrapButtonToolbarAdvanced createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+  protected final BootstrapToolbarAdvanced createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                                     final boolean bCanGoBack,
                                                                     final boolean bCanEdit,
                                                                     @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+    final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
     if (bCanGoBack)
     {
       // Back to list
@@ -119,7 +119,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected void modifyEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                     @Nonnull final DATATYPE aSelectedObject,
-                                    @Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
+                                    @Nonnull final BootstrapToolbarAdvanced aToolbar)
   {}
 
   /**
@@ -132,10 +132,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected final BootstrapButtonToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+  protected final BootstrapToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                                     @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+    final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -157,7 +157,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @OverrideOnDemand
   protected void modifyCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                      @Nonnull final BootstrapButtonToolbarAdvanced aToolbar)
+                                      @Nonnull final BootstrapToolbarAdvanced aToolbar)
   {}
 
   /**
@@ -170,10 +170,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected final BootstrapButtonToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+  protected final BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                                       @Nullable final IHasID <String> aSelectedObject)
   {
-    final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+    final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
     if (aSelectedObject != null)
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());

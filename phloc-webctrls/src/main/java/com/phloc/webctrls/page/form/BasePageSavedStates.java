@@ -41,7 +41,7 @@ import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapButtonToolbarAdvanced;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
@@ -105,7 +105,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
     final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
     aForm.addChild (BootstrapQuestionBox.create ("Sollen diese gemerkten Daten wirklich gelöscht werden?"));
-    final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
+    final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -132,7 +132,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
       final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
       aForm.addChild (BootstrapQuestionBox.create ("Sollen alle gemerkten Daten wirklich gelöscht werden?"));
-      final BootstrapButtonToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbarAdvanced ());
+      final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL);
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
       aToolbar.addSubmitButtonYes (aWPEC.getDisplayLocale ());
@@ -155,7 +155,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
     }
     else
     {
-      final BootstrapButtonToolbarAdvanced aToolbar = new BootstrapButtonToolbarAdvanced ();
+      final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
       aToolbar.addButton ("Alle löschen",
                           LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL)),
                           EDefaultIcon.DELETE);

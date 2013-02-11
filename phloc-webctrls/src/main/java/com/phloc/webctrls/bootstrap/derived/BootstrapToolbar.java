@@ -30,7 +30,6 @@ import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.bootstrap.BootstrapButton;
 import com.phloc.webctrls.bootstrap.BootstrapButton_Submit;
-import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
@@ -38,23 +37,29 @@ import com.phloc.webctrls.custom.EDefaultIcon;
  * 
  * @author philip
  */
-public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolbar>
+public class BootstrapToolbar extends AbstractHCDiv <BootstrapToolbar>
 {
-  public BootstrapButtonToolbar ()
+  public BootstrapToolbar ()
   {
     super ();
-    addClass (CBootstrapCSS.BTN_TOOLBAR);
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addHiddenField (@Nullable final String sName, @Nullable final String sValue)
+  public final BootstrapToolbar addHiddenField (@Nullable final String sName, final int nValue)
+  {
+    addChild (new HCHiddenField (sName, nValue));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapToolbar addHiddenField (@Nullable final String sName, @Nullable final String sValue)
   {
     addChild (new HCHiddenField (sName, sValue));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addHiddenFields (@Nullable final Map <String, String> aValues)
+  public final BootstrapToolbar addHiddenFields (@Nullable final Map <String, String> aValues)
   {
     if (aValues != null)
       for (final Map.Entry <String, String> aEntry : aValues.entrySet ())
@@ -63,66 +68,65 @@ public class BootstrapButtonToolbar extends AbstractHCDiv <BootstrapButtonToolba
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption, @Nonnull final IJSCodeProvider aJSCode)
+  public final BootstrapToolbar addButton (@Nullable final String sCaption, @Nonnull final IJSCodeProvider aJSCode)
   {
     addChild (BootstrapButton.create (sCaption, aJSCode));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
+  public final BootstrapToolbar addButton (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
   {
     addChild (BootstrapButton.create (sCaption, aURL));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption,
-                                                 @Nonnull final IJSCodeProvider aJSCode,
-                                                 @Nullable final EDefaultIcon eIcon)
+  public final BootstrapToolbar addButton (@Nullable final String sCaption,
+                                           @Nonnull final IJSCodeProvider aJSCode,
+                                           @Nullable final EDefaultIcon eIcon)
   {
     addChild (BootstrapButton.create (sCaption, aJSCode, eIcon));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addButton (@Nullable final String sCaption,
-                                                 @Nonnull final ISimpleURL aURL,
-                                                 @Nullable final EDefaultIcon eIcon)
+  public final BootstrapToolbar addButton (@Nullable final String sCaption,
+                                           @Nonnull final ISimpleURL aURL,
+                                           @Nullable final EDefaultIcon eIcon)
   {
     addChild (BootstrapButton.create (sCaption, aURL, eIcon));
     return this;
   }
 
   @Nonnull
-  public BootstrapButtonToolbar addButtonEdit (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
+  public BootstrapToolbar addButtonEdit (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
   {
     return addButton (EWebBasicsText.MSG_BUTTON_EDIT.getDisplayText (aDisplayLocale), aURL, EDefaultIcon.EDIT);
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addSubmitButton (final String sCaption)
+  public final BootstrapToolbar addSubmitButton (final String sCaption)
   {
     addChild (BootstrapButton_Submit.create (sCaption));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addSubmitButton (@Nullable final String sCaption,
-                                                       @Nullable final EDefaultIcon eIcon)
+  public final BootstrapToolbar addSubmitButton (@Nullable final String sCaption, @Nullable final EDefaultIcon eIcon)
   {
     addChild (BootstrapButton_Submit.create (sCaption, eIcon));
     return this;
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addSubmitButtonSave (@Nonnull final Locale aDisplayLocale)
+  public final BootstrapToolbar addSubmitButtonSave (@Nonnull final Locale aDisplayLocale)
   {
     return addSubmitButton (EWebBasicsText.MSG_BUTTON_SAVE.getDisplayText (aDisplayLocale), EDefaultIcon.SAVE);
   }
 
   @Nonnull
-  public final BootstrapButtonToolbar addSubmitButtonYes (@Nonnull final Locale aDisplayLocale)
+  public final BootstrapToolbar addSubmitButtonYes (@Nonnull final Locale aDisplayLocale)
   {
     return addSubmitButton (EWebBasicsText.MSG_BUTTON_YES.getDisplayText (aDisplayLocale), EDefaultIcon.YES);
   }
