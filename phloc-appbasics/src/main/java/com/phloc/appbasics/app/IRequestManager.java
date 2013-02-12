@@ -28,8 +28,8 @@ import com.phloc.scopes.nonweb.domain.IRequestScope;
 
 public interface IRequestManager
 {
-  public static final String REQUEST_PARAMETER_MENUITEM = "menuitem";
-  public static final String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
+  String REQUEST_PARAMETER_MENUITEM = "menuitem";
+  String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
 
   /**
    * To be called upon the beginning of each request. Checks for the content of
