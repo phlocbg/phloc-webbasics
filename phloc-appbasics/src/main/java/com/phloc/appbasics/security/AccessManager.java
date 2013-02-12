@@ -30,6 +30,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.role.RoleManager;
@@ -64,7 +65,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
 
   @Deprecated
   @UsedViaReflection
-  public AccessManager ()
+  public AccessManager () throws DAOException
   {
     m_aUserMgr = new UserManager ("security/users.xml");
     m_aRoleMgr = new RoleManager ("security/roles.xml");

@@ -38,5 +38,5 @@ public interface IDAOWriteExceptionHandler
    * @param aFileContent
    *        the content that should be written to the file
    */
-  void onDAOWriteException (@Nonnull Throwable t, @Nonnull IReadableResource aRes, @Nonnull StringBuilder aFileContent);
+  void onDAOWriteException (@Nonnull Throwable t, @Nonnull IReadableResource aRes, @Nonnull CharSequence aFileContent);
 }

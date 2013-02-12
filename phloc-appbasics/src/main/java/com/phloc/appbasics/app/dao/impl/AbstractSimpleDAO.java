@@ -26,9 +26,13 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
+import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.exceptions.InitializationException;
+import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.microdom.IMicroDocument;
@@ -55,7 +59,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     {
       // file exist -> must be a file!
       if (!m_aFile.isFile ())
-        throw new IllegalArgumentException ("The passed filename '" + sFilename + "' is a directory and not a file!");
+        throw new IllegalArgumentException ("The passed filename '" +
+                                            sFilename +
+                                            "' is not a file (maybe a directory?)");
     }
     else
     {
@@ -68,7 +74,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
 
   /**
    * Custom initialization routine. Called only if the underlying file does not
-   * exist yet.
+   * exist yet. This method is only called within a write lock!
    * 
    * @return {@link EChange#CHANGED} if something was modified inside this
    *         method
@@ -81,7 +87,8 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
-   * Fill the internal structures with from the passed XML document.
+   * Fill the internal structures with from the passed XML document. This method
+   * is only called within a write lock!
    * 
    * @param aDoc
    *        The XML document to read from
@@ -92,94 +99,202 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   protected abstract EChange onRead (@Nonnull IMicroDocument aDoc);
 
   /**
-   * Create the XML document that should be saved to the file.
+   * Create the XML document that should be saved to the file. This method is
+   * only called within a write lock!
    * 
    * @return The non-<code>null</code> document to write to the file.
    */
   @Nonnull
   protected abstract IMicroDocument createWriteData ();
 
+  /**
+   * The main method for writing the new data to a file. This method may only be
+   * called within a write lock!
+   * 
+   * @return {@link ESuccess} and never <code>null</code>.
+   */
   @Nonnull
   private ESuccess _writeToFile ()
   {
-    // Create XML document
-    final IMicroDocument aDoc = createWriteData ();
-    if (aDoc == null)
+    IMicroDocument aDoc = null;
+    try
     {
-      s_aLogger.error ("Failed to create data to write!");
-      return ESuccess.FAILURE;
-    }
-
-    // Add a small comment
-    aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!\n" +
-                                         "Written at " +
-                                         PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (), Locale.US)),
-                       aDoc.getDocumentElement ());
-
-    // Get the output stream
-    final OutputStream aOS = FileUtils.getOutputStream (m_aFile);
-    if (aOS == null)
-    {
-      // Happens, when another application has the file open!
-      // Logger warning already emitted
-      return ESuccess.FAILURE;
-    }
-
-    // Write to file
-    if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
-    {
-      s_aLogger.error ("Failed to write data to " + m_aFile);
-      return ESuccess.FAILURE;
-    }
-
-    return ESuccess.SUCCESS;
-  }
-
-  protected final void initialRead ()
-  {
-    ESuccess eWriteSuccess = ESuccess.SUCCESS;
-    if (!m_aFile.exists ())
-    {
-      // initial setup
-      if (onInit ().isChanged ())
-        eWriteSuccess = _writeToFile ();
-    }
-    else
-    {
-      // Read existing file
-      final IMicroDocument aDoc = MicroReader.readMicroXML (new FileSystemResource (m_aFile));
+      // Create XML document to write
+      aDoc = createWriteData ();
       if (aDoc == null)
-        s_aLogger.error ("Failed to read XML document from file " + m_aFile);
-      else
-        if (onRead (aDoc).isChanged ())
-          eWriteSuccess = _writeToFile ();
+      {
+        s_aLogger.error ("Failed to create data to write to '" + m_aFile + "'!");
+        return ESuccess.FAILURE;
+      }
+
+      // Add a small comment
+      aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!\n" +
+                                           "Written at " +
+                                           PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (), Locale.US)),
+                         aDoc.getDocumentElement ());
+
+      // Get the output stream
+      final OutputStream aOS = FileUtils.getOutputStream (m_aFile);
+      if (aOS == null)
+      {
+        // Happens, when another application has the file open!
+        // Logger warning already emitted
+        return ESuccess.FAILURE;
+      }
+
+      // Write to file
+      if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
+      {
+        s_aLogger.error ("Failed to write DAO XML data to '" + m_aFile + "'");
+        return ESuccess.FAILURE;
+      }
+
+      return ESuccess.SUCCESS;
     }
-    if (eWriteSuccess.isSuccess ())
-      m_bPendingChanges = false;
-    else
-      s_aLogger.warn ("File has pending changes after initialization!");
+    catch (final Throwable t)
+    {
+      s_aLogger.error ("Failed to write the DAO data to  '" + m_aFile + "'", t);
+      // Check if a custom exception handler is present
+      final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
+      if (aExceptionHandlerWrite != null)
+      {
+        final IReadableResource aRes = new FileSystemResource (m_aFile);
+        try
+        {
+          aExceptionHandlerWrite.onDAOWriteException (t,
+                                                      aRes,
+                                                      aDoc == null ? "no XML document created"
+                                                                  : MicroWriter.getXMLString (aDoc));
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Error in custom exception handler for writing " + aRes.toString (), t2);
+        }
+      }
+      return ESuccess.FAILURE;
+    }
   }
 
-  // Must be called in a writeLock!
+  /**
+   * Call this method inside the constructor to read the file contents directly.
+   * This method is write locked!
+   * 
+   * @throws DAOException
+   *         in case initialization or reading failed!
+   */
+  protected final void initialRead () throws DAOException
+  {
+    boolean bIsInitialization = false;
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      ESuccess eWriteSuccess = ESuccess.SUCCESS;
+      bIsInitialization = !m_aFile.exists ();
+      if (bIsInitialization)
+      {
+        // initial setup for non-existing file
+        try
+        {
+          if (onInit ().isChanged ())
+            eWriteSuccess = _writeToFile ();
+        }
+        catch (final Exception ex)
+        {
+          throw new InitializationException ("Error initializing the DAO for file '" + m_aFile + "'", ex);
+        }
+        finally
+        {
+          // reset any pending changes, because the initialization should
+          // be read-only. If the implementing class changed something,
+          // the return value of onInit() is what counts
+          m_bPendingChanges = false;
+        }
+      }
+      else
+      {
+        // Read existing file
+        final IMicroDocument aDoc = MicroReader.readMicroXML (new FileSystemResource (m_aFile));
+        if (aDoc == null)
+          s_aLogger.error ("Failed to read XML document from file '" + m_aFile + "'");
+        else
+        {
+          // Valid XML - start interpreting
+          try
+          {
+            if (onRead (aDoc).isChanged ())
+              eWriteSuccess = _writeToFile ();
+          }
+          catch (final Exception ex)
+          {
+            throw new InitializationException ("Error reading DAO for file '" + m_aFile + "'", ex);
+          }
+          finally
+          {
+            // reset any pending changes, because the initialization should
+            // be read-only. If the implementing class changed something,
+            // the return value of onRead() is what counts
+            m_bPendingChanges = false;
+          }
+        }
+      }
+
+      // Check if writing was successful on any of the 2 branches
+      if (eWriteSuccess.isSuccess ())
+        m_bPendingChanges = false;
+      else
+        s_aLogger.warn ("File '" + m_aFile + "' has pending changes after initialRead!");
+    }
+    catch (final Throwable t)
+    {
+      // Custom exception handler for reading
+      final IDAOReadExceptionHandler aExceptionHandlerRead = getCustomExceptionHandlerRead ();
+      if (aExceptionHandlerRead != null)
+      {
+        final IReadableResource aRes = m_aFile == null ? null : new FileSystemResource (m_aFile);
+        try
+        {
+          aExceptionHandlerRead.onDAOReadException (t, bIsInitialization, aRes);
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Error in custom exception handler for reading " +
+                               (aRes == null ? "memory-only" : aRes.toString ()),
+                           t2);
+        }
+      }
+      throw new DAOException ("Error " +
+                              (bIsInitialization ? "initializing" : "reading") +
+                              " the file '" +
+                              m_aFile +
+                              "'", t);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * This method must be called everytime something changed in the DAO. This
+   * method must be called within a write-lock as it is not locked!
+   */
   protected final void markAsChanged ()
   {
+    // Just remember that something changed
+    m_bPendingChanges = true;
     if (m_bAutoSaveEnabled)
     {
       // Auto save
       if (_writeToFile ().isSuccess ())
         m_bPendingChanges = false;
       else
-        s_aLogger.warn ("File still has pending changes after markAsChanged!");
-    }
-    else
-    {
-      // Just remember that something changed
-      m_bPendingChanges = true;
+        s_aLogger.warn ("File '" + m_aFile + "' still has pending changes after markAsChanged!");
     }
   }
 
   /**
-   * In case there are pending changes write them to the file.
+   * In case there are pending changes write them to the file. This method is
+   * write locked!
    */
   public void writeToFileOnPendingChanges ()
   {
@@ -192,7 +307,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         if (_writeToFile ().isSuccess ())
           m_bPendingChanges = false;
         else
-          s_aLogger.warn ("File still has pending changes after writeToFileOnPendingChanges!");
+          s_aLogger.warn ("File '" + m_aFile + "' still has pending changes after writeToFileOnPendingChanges!");
       }
       finally
       {

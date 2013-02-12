@@ -30,6 +30,7 @@ import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
+import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.state.EChange;
 
 public abstract class AbstractDAO implements IDAO
@@ -41,9 +42,10 @@ public abstract class AbstractDAO implements IDAO
   private static IDAOWriteExceptionHandler s_aExceptionHandlerWrite;
 
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  private final IDAOIO m_aIO;
+  private final NonBlockingStack <Boolean> m_aAutoSaveStack = new NonBlockingStack <Boolean> ();
   protected boolean m_bPendingChanges = false;
   protected boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
-  private final IDAOIO m_aIO;
 
   protected AbstractDAO (@Nonnull final IDAOIO aDAOIO)
   {
@@ -160,21 +162,6 @@ public abstract class AbstractDAO implements IDAO
     }
   }
 
-  public final boolean setAndGetAutoSaveEnabled (final boolean bAutoSaveEnabled)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      final boolean bOldState = m_bAutoSaveEnabled;
-      m_bAutoSaveEnabled = bAutoSaveEnabled;
-      return bOldState;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-  }
-
   /**
    * @return <code>true</code> if unsaved changes are present
    */
@@ -188,6 +175,43 @@ public abstract class AbstractDAO implements IDAO
     finally
     {
       m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public final void beginWithoutAutoSave ()
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      // Save old auto save state
+      m_aAutoSaveStack.push (Boolean.valueOf (m_bAutoSaveEnabled));
+      m_bAutoSaveEnabled = false;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public final void endWithoutAutoSave ()
+  {
+    // Restore previous auto save state
+    boolean bPreviouslyAutoSaveEnabled;
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      bPreviouslyAutoSaveEnabled = m_aAutoSaveStack.pop ().booleanValue ();
+      m_bAutoSaveEnabled = bPreviouslyAutoSaveEnabled;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+
+    if (bPreviouslyAutoSaveEnabled)
+    {
+      // And in case something was changed - writeLocked itself
+      writeToFileOnPendingChanges ();
     }
   }
 
@@ -209,46 +233,20 @@ public abstract class AbstractDAO implements IDAO
    * 
    * @param aCallable
    *        The callback to be executed
-   * @return The result of the callback
+   * @return The result of the callback. May be <code>null</code>.
    */
   @Nullable
   public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
-    boolean bOldAutoSave;
-    m_aRWLock.writeLock ().lock ();
+    beginWithoutAutoSave ();
     try
     {
-      // Save old auto save state
-      bOldAutoSave = m_bAutoSaveEnabled;
-      m_bAutoSaveEnabled = false;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-
-    try
-    {
+      // Main call of callable
       return aCallable.call ();
     }
     finally
     {
-      m_aRWLock.writeLock ().lock ();
-      try
-      {
-        // Restore old auto save
-        m_bAutoSaveEnabled = bOldAutoSave;
-      }
-      finally
-      {
-        m_aRWLock.writeLock ().unlock ();
-      }
-
-      if (bOldAutoSave)
-      {
-        // And in case something was changed - writeLocked itself
-        writeToFileOnPendingChanges ();
-      }
+      endWithoutAutoSave ();
     }
   }
 }

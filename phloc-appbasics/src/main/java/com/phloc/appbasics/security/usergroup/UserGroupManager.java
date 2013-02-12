@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
+import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.user.IUserManager;
@@ -57,19 +58,39 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
 
   public static boolean isCreateDefaults ()
   {
-    return s_bCreateDefaults;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bCreateDefaults;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
-    s_bCreateDefaults = bCreateDefaults;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bCreateDefaults = bCreateDefaults;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
   public UserGroupManager (@Nonnull @Nonempty final String sFilename,
                            @Nonnull final IUserManager aUserMgr,
-                           @Nonnull final IRoleManager aRoleMgr)
+                           @Nonnull final IRoleManager aRoleMgr) throws DAOException
   {
     super (sFilename);
+    if (aUserMgr == null)
+      throw new NullPointerException ("UserMgr");
+    if (aRoleMgr == null)
+      throw new NullPointerException ("RoleMgr");
     m_aUserMgr = aUserMgr;
     m_aRoleMgr = aRoleMgr;
     initialRead ();
@@ -79,7 +100,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   protected EChange onInit ()
   {
-    if (!s_bCreateDefaults)
+    if (!isCreateDefaults ())
       return EChange.UNCHANGED;
 
     // Administrators user group

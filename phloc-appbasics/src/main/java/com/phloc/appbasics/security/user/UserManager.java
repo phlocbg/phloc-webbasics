@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
+import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.user.password.PasswordUtils;
 import com.phloc.commons.annotations.Nonempty;
@@ -53,15 +54,31 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
 
   public static boolean isCreateDefaults ()
   {
-    return s_bCreateDefaults;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bCreateDefaults;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
-    s_bCreateDefaults = bCreateDefaults;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bCreateDefaults = bCreateDefaults;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
-  public UserManager (@Nonnull @Nonempty final String sFilename)
+  public UserManager (@Nonnull @Nonempty final String sFilename) throws DAOException
   {
     super (sFilename);
     initialRead ();
@@ -71,7 +88,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   @Nonnull
   protected EChange onInit ()
   {
-    if (!s_bCreateDefaults)
+    if (!isCreateDefaults ())
       return EChange.UNCHANGED;
 
     _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,

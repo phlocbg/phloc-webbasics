@@ -100,6 +100,36 @@ public class DefaultDAO extends AbstractDAO
   }
 
   @Nonnull
+  public static IFactory <? extends IDAOIO> getDAOIOFactory ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aDAOIOFactory;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setDAOIOFactory (@Nonnull final IFactory <? extends IDAOIO> aFactory)
+  {
+    if (aFactory == null)
+      throw new NullPointerException ("factory");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aDAOIOFactory = aFactory;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
   protected final IDAODataProvider getDataProvider ()
   {
     return m_aDataProvider;
@@ -227,7 +257,11 @@ public class DefaultDAO extends AbstractDAO
                            t2);
         }
       }
-      throw new DAOException ("Error reading the file '" + sFilename + "'", t);
+      throw new DAOException ("Error " +
+                              (bIsInitialization ? "initializing" : "reading") +
+                              " the file '" +
+                              sFilename +
+                              "'", t);
     }
   }
 
@@ -406,18 +440,5 @@ public class DefaultDAO extends AbstractDAO
                                        .append ("autoSaveEnabled", m_bAutoSaveEnabled)
                                        .append ("backupCount", m_nBackupCount)
                                        .toString ();
-  }
-
-  @Nonnull
-  public static IFactory <? extends IDAOIO> getDAOIOFactory ()
-  {
-    return s_aDAOIOFactory;
-  }
-
-  public static void setDAOIOFactory (@Nonnull final IFactory <? extends IDAOIO> aFactory)
-  {
-    if (aFactory == null)
-      throw new NullPointerException ("factory");
-    s_aDAOIOFactory = aFactory;
   }
 }

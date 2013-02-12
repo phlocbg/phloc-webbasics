@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
+import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -50,15 +51,31 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
 
   public static boolean isCreateDefaults ()
   {
-    return s_bCreateDefaults;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bCreateDefaults;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   public static void setCreateDefaults (final boolean bCreateDefaults)
   {
-    s_bCreateDefaults = bCreateDefaults;
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bCreateDefaults = bCreateDefaults;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
-  public RoleManager (@Nonnull @Nonempty final String sFilename)
+  public RoleManager (@Nonnull @Nonempty final String sFilename) throws DAOException
   {
     super (sFilename);
     initialRead ();
@@ -68,7 +85,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   @Nonnull
   protected EChange onInit ()
   {
-    if (!s_bCreateDefaults)
+    if (!isCreateDefaults ())
       return EChange.UNCHANGED;
 
     _addRole (new Role (CSecurity.ROLE_ADMINISTRATOR_ID, CSecurity.ROLE_ADMINISTRATOR_NAME));
