@@ -37,10 +37,10 @@ public interface IDAOIO
   InputStream openInputStream (@Nullable String sFilename);
 
   @Nonnull
-  IReadableResource getReadableResource (String sFilename);
+  IReadableResource getReadableResource (@Nonnull String sFilename);
 
-  void renameFile (String sSrcFileName, String sDstFileName);
+  void renameFile (@Nonnull String sSrcFileName, @Nonnull String sDstFileName);
 
   @Nonnull
-  ESuccess saveFile (String sFilename, String sContent, Charset aCharset);
+  ESuccess saveFile (@Nonnull String sFilename, @Nonnull String sContent, @Nonnull Charset aCharset);
 }

@@ -31,7 +31,6 @@ import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -51,7 +50,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
 
   private final File m_aFile;
 
-  protected AbstractSimpleDAO (@Nonnull @Nonempty final String sFilename)
+  protected AbstractSimpleDAO (@Nonnull @Nonempty final String sFilename) throws DAOException
   {
     super (new DAOWebFileIO ());
     m_aFile = WebFileIO.getFile (sFilename);
@@ -59,16 +58,15 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     {
       // file exist -> must be a file!
       if (!m_aFile.isFile ())
-        throw new IllegalArgumentException ("The passed filename '" +
-                                            sFilename +
-                                            "' is not a file (maybe a directory?)");
+        throw new DAOException ("The passed filename '" + sFilename + "' is not a file (maybe a directory?)");
     }
     else
     {
       // Ensure the parent directory is present
-      final File aParentFile = m_aFile.getParentFile ();
-      if (aParentFile != null)
-        WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentFile);
+      final File aParentDir = m_aFile.getParentFile ();
+      if (aParentDir != null)
+        if (WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentDir).isFailure ())
+          throw new DAOException ("Failed to create parent directory '" + aParentDir + "'");
     }
   }
 
@@ -99,83 +97,6 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   protected abstract EChange onRead (@Nonnull IMicroDocument aDoc);
 
   /**
-   * Create the XML document that should be saved to the file. This method is
-   * only called within a write lock!
-   * 
-   * @return The non-<code>null</code> document to write to the file.
-   */
-  @Nonnull
-  protected abstract IMicroDocument createWriteData ();
-
-  /**
-   * The main method for writing the new data to a file. This method may only be
-   * called within a write lock!
-   * 
-   * @return {@link ESuccess} and never <code>null</code>.
-   */
-  @Nonnull
-  private ESuccess _writeToFile ()
-  {
-    IMicroDocument aDoc = null;
-    try
-    {
-      // Create XML document to write
-      aDoc = createWriteData ();
-      if (aDoc == null)
-      {
-        s_aLogger.error ("Failed to create data to write to '" + m_aFile + "'!");
-        return ESuccess.FAILURE;
-      }
-
-      // Add a small comment
-      aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!\n" +
-                                           "Written at " +
-                                           PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (), Locale.US)),
-                         aDoc.getDocumentElement ());
-
-      // Get the output stream
-      final OutputStream aOS = FileUtils.getOutputStream (m_aFile);
-      if (aOS == null)
-      {
-        // Happens, when another application has the file open!
-        // Logger warning already emitted
-        return ESuccess.FAILURE;
-      }
-
-      // Write to file
-      if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
-      {
-        s_aLogger.error ("Failed to write DAO XML data to '" + m_aFile + "'");
-        return ESuccess.FAILURE;
-      }
-
-      return ESuccess.SUCCESS;
-    }
-    catch (final Throwable t)
-    {
-      s_aLogger.error ("Failed to write the DAO data to  '" + m_aFile + "'", t);
-      // Check if a custom exception handler is present
-      final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
-      if (aExceptionHandlerWrite != null)
-      {
-        final IReadableResource aRes = new FileSystemResource (m_aFile);
-        try
-        {
-          aExceptionHandlerWrite.onDAOWriteException (t,
-                                                      aRes,
-                                                      aDoc == null ? "no XML document created"
-                                                                  : MicroWriter.getXMLString (aDoc));
-        }
-        catch (final Throwable t2)
-        {
-          s_aLogger.error ("Error in custom exception handler for writing " + aRes.toString (), t2);
-        }
-      }
-      return ESuccess.FAILURE;
-    }
-  }
-
-  /**
    * Call this method inside the constructor to read the file contents directly.
    * This method is write locked!
    * 
@@ -198,10 +119,6 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           if (onInit ().isChanged ())
             eWriteSuccess = _writeToFile ();
         }
-        catch (final Exception ex)
-        {
-          throw new InitializationException ("Error initializing the DAO for file '" + m_aFile + "'", ex);
-        }
         finally
         {
           // reset any pending changes, because the initialization should
@@ -223,10 +140,6 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           {
             if (onRead (aDoc).isChanged ())
               eWriteSuccess = _writeToFile ();
-          }
-          catch (final Exception ex)
-          {
-            throw new InitializationException ("Error reading DAO for file '" + m_aFile + "'", ex);
           }
           finally
           {
@@ -275,6 +188,105 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
+   * Create the XML document that should be saved to the file. This method is
+   * only called within a write lock!
+   * 
+   * @return The non-<code>null</code> document to write to the file.
+   */
+  @Nonnull
+  protected abstract IMicroDocument createWriteData ();
+
+  /**
+   * Modify the created document by e.g. adding some comment or digital
+   * signature or whatsoever.
+   * 
+   * @param aDoc
+   *        The created non-<code>null</code> document.
+   */
+  @OverrideOnDemand
+  protected void modifyWriteData (@Nonnull final IMicroDocument aDoc)
+  {
+    // Add a small comment
+    aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!\n" +
+                                         "Written at " +
+                                         PDTToString.getAsString (PDTFactory.getCurrentDateTimeUTC (), Locale.US)),
+                       aDoc.getDocumentElement ());
+  }
+
+  /**
+   * The main method for writing the new data to a file. This method may only be
+   * called within a write lock!
+   * 
+   * @return {@link ESuccess} and never <code>null</code>.
+   */
+  @Nonnull
+  private ESuccess _writeToFile ()
+  {
+    IMicroDocument aDoc = null;
+    try
+    {
+      // Create XML document to write
+      aDoc = createWriteData ();
+      if (aDoc == null)
+      {
+        s_aLogger.error ("Failed to create data to write to '" + m_aFile + "'!");
+        return ESuccess.FAILURE;
+      }
+
+      // Generic modification
+      modifyWriteData (aDoc);
+
+      // Get the output stream
+      final OutputStream aOS = FileUtils.getOutputStream (m_aFile);
+      if (aOS == null)
+      {
+        // Happens, when another application has the file open!
+        // Logger warning already emitted
+        return ESuccess.FAILURE;
+      }
+
+      // rename old files to have a backup
+      // for (int i = m_nBackupCount; i > 0; --i)
+      // if (i == 1)
+      // getIO ().renameFile (sFilename, sFilename + "." + i);
+      // else
+      // getIO ().renameFile (sFilename + "." + (i - 1), sFilename + "." + i);
+
+      // Write to file
+      if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
+      {
+        s_aLogger.error ("Failed to write DAO XML data to '" + m_aFile + "'");
+        return ESuccess.FAILURE;
+      }
+
+      return ESuccess.SUCCESS;
+    }
+    catch (final Throwable t)
+    {
+      s_aLogger.error ("Failed to write the DAO data to  '" + m_aFile + "'", t);
+
+      // Check if a custom exception handler is present
+      final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
+      if (aExceptionHandlerWrite != null)
+      {
+        final IReadableResource aRes = new FileSystemResource (m_aFile);
+        try
+        {
+          aExceptionHandlerWrite.onDAOWriteException (t,
+                                                      aRes,
+                                                      aDoc == null ? "no XML document created"
+                                                                  : MicroWriter.getXMLString (aDoc));
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Error in custom exception handler for writing " + aRes.toString (), t2);
+        }
+      }
+      return ESuccess.FAILURE;
+    }
+  }
+
+  /**
    * This method must be called everytime something changed in the DAO. This
    * method must be called within a write-lock as it is not locked!
    */
@@ -296,14 +308,14 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    * In case there are pending changes write them to the file. This method is
    * write locked!
    */
-  public void writeToFileOnPendingChanges ()
+  public final void writeToFileOnPendingChanges ()
   {
     if (hasPendingChanges ())
     {
-      // Write changes
       m_aRWLock.writeLock ().lock ();
       try
       {
+        // Write to file
         if (_writeToFile ().isSuccess ())
           m_bPendingChanges = false;
         else

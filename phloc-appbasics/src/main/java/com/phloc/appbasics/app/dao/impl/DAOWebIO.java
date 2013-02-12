@@ -50,12 +50,12 @@ public class DAOWebIO implements IDAOIO
   }
 
   @Nonnull
-  public IReadableResource getReadableResource (final String sFilename)
+  public IReadableResource getReadableResource (@Nonnull final String sFilename)
   {
     return WebIO.getReadableResource (sFilename);
   }
 
-  public void renameFile (final String sSrcFilename, final String sDstFilename)
+  public void renameFile (@Nonnull final String sSrcFilename, @Nonnull final String sDstFilename)
   {
     if (WebIO.resourceExists (sSrcFilename))
     {
@@ -68,7 +68,9 @@ public class DAOWebIO implements IDAOIO
   }
 
   @Nonnull
-  public ESuccess saveFile (final String sFilename, final String sContent, final Charset aCharset)
+  public ESuccess saveFile (@Nonnull final String sFilename,
+                            @Nonnull final String sContent,
+                            @Nonnull final Charset aCharset)
   {
     return WebIO.saveFile (sFilename, sContent, aCharset);
   }

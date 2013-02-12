@@ -26,8 +26,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.appbasics.app.dao.IDAOIO;
+import com.phloc.appbasics.app.io.PathRelativeFileIO;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.state.ESuccess;
@@ -39,6 +41,18 @@ public class DAOWebFileIO implements IDAOIO
   public DAOWebFileIO ()
   {}
 
+  @Nonnull
+  private static PathRelativeFileIO _getIO ()
+  {
+    return WebFileIO.getDataIO ();
+  }
+
+  @Nonnull
+  private static FileOperationManager _getFOM ()
+  {
+    return WebFileIO.getFileOpMgr ();
+  }
+
   /**
    * @return Overwrite this only if you know what you're doing.
    */
@@ -49,34 +63,37 @@ public class DAOWebFileIO implements IDAOIO
     if (sFilename == null)
       return null;
 
-    return getReadableResource (sFilename).getInputStream ();
+    return _getIO ().getInputStream (sFilename);
   }
 
   @Nonnull
-  public IReadableResource getReadableResource (final String sFilename)
+  public IReadableResource getReadableResource (@Nonnull final String sFilename)
   {
-    return WebFileIO.getResource (sFilename);
+    return _getIO ().getResource (sFilename);
   }
 
-  public void renameFile (final String sSrcFileName, final String sDstFileName)
+  public void renameFile (@Nonnull final String sSrcFileName, @Nonnull final String sDstFileName)
   {
-    final File aSrcFile = WebFileIO.getFile (sSrcFileName);
-    final File aDstFile = WebFileIO.getFile (sDstFileName);
+    final File aSrcFile = _getIO ().getFile (sSrcFileName);
+    final File aDstFile = _getIO ().getFile (sDstFileName);
     if (FileUtils.existsFile (aSrcFile))
     {
       // Delete destination file if present
-      if (WebFileIO.getFileOpMgr ().deleteFileIfExisting (aDstFile).isSuccess ())
+      if (_getFOM ().deleteFileIfExisting (aDstFile).isSuccess ())
       {
         // and rename existing file to backup file
-        WebFileIO.getFileOpMgr ().renameFile (aSrcFile, aDstFile);
+        _getFOM ().renameFile (aSrcFile, aDstFile);
       }
     }
   }
 
   @Nonnull
-  public ESuccess saveFile (final String sFilename, final String sContent, final Charset aCharset)
+  public ESuccess saveFile (@Nonnull final String sFilename,
+                            @Nonnull final String sContent,
+                            @Nonnull final Charset aCharset)
   {
-    return SimpleFileIO.writeFile (WebFileIO.getFile (sFilename), sContent, aCharset);
+    final File aFile = WebFileIO.getFile (sFilename);
+    return SimpleFileIO.writeFile (aFile, sContent, aCharset);
   }
 
   @Override
