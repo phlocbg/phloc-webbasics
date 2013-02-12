@@ -114,6 +114,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       if (bIsInitialization)
       {
         // initial setup for non-existing file
+        beginWithoutAutoSave ();
         try
         {
           if (onInit ().isChanged ())
@@ -121,6 +122,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         }
         finally
         {
+          endWithoutAutoSave ();
           // reset any pending changes, because the initialization should
           // be read-only. If the implementing class changed something,
           // the return value of onInit() is what counts
@@ -136,6 +138,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         else
         {
           // Valid XML - start interpreting
+          beginWithoutAutoSave ();
           try
           {
             if (onRead (aDoc).isChanged ())
@@ -143,6 +146,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           }
           finally
           {
+            endWithoutAutoSave ();
             // reset any pending changes, because the initialization should
             // be read-only. If the implementing class changed something,
             // the return value of onRead() is what counts

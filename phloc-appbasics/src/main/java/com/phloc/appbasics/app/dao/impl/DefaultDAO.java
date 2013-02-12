@@ -375,17 +375,21 @@ public class DefaultDAO extends AbstractDAO
    */
   protected final void markAsChanged ()
   {
-    m_aRWLock.writeLock ().lock ();
-    try
+    if (m_aRWLock.writeLock ().tryLock ())
     {
-      m_bPendingChanges = true;
-      if (m_bAutoSaveEnabled)
-        _internalWriteToFileOnPendingChanges ();
+      try
+      {
+        m_bPendingChanges = true;
+        if (m_bAutoSaveEnabled)
+          _internalWriteToFileOnPendingChanges ();
+      }
+      finally
+      {
+        m_aRWLock.writeLock ().unlock ();
+      }
     }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    else
+      throw new IllegalStateException ("Failed to acquire write lock. Maybe markAsChanged was called within a writeLock???");
   }
 
   /**

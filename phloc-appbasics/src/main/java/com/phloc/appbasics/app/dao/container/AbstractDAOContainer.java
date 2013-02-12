@@ -17,8 +17,6 @@
  */
 package com.phloc.appbasics.app.dao.container;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -31,7 +29,6 @@ import com.phloc.appbasics.app.dao.IDAO;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 
 @ThreadSafe
@@ -59,6 +56,7 @@ public abstract class AbstractDAOContainer implements IDAOContainer
 
   @OverridingMethodsMustInvokeSuper
   @Nonnull
+  @Deprecated
   public EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
   {
     m_aRWLock.writeLock ().lock ();
@@ -76,6 +74,36 @@ public abstract class AbstractDAOContainer implements IDAOContainer
     }
   }
 
+  public final void beginWithoutAutoSave ()
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      for (final IDAO aDAO : getContainedDAOs ())
+        if (aDAO != null)
+          aDAO.beginWithoutAutoSave ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public final void endWithoutAutoSave ()
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      for (final IDAO aDAO : getContainedDAOs ())
+        if (aDAO != null)
+          aDAO.endWithoutAutoSave ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
   public final void performWithoutAutoSave (@Nonnull final INonThrowingRunnable aRunnable)
   {
     performWithoutAutoSave (AdapterRunnableToCallable.createAdapter (aRunnable));
@@ -85,37 +113,14 @@ public abstract class AbstractDAOContainer implements IDAOContainer
   @Nullable
   public <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
-    final List <IDAO> aDAOs = ContainerHelper.newList (getContainedDAOs ());
-    final int nLength = aDAOs.size ();
-
-    // Remember the old auto save state
-    final boolean [] aOld = new boolean [nLength];
-    Arrays.fill (aOld, false);
-    for (int i = 0; i < nLength; ++i)
-    {
-      final IDAO aDAO = aDAOs.get (i);
-      if (aDAO != null)
-      {
-        aOld[i] = aDAO.isAutoSaveEnabled ();
-        aDAO.setAutoSaveEnabled (false);
-      }
-    }
+    beginWithoutAutoSave ();
     try
     {
       return aCallable.call ();
     }
     finally
     {
-      // Restore the old auto-save state, and write pending changes
-      for (int i = 0; i < nLength; ++i)
-      {
-        final IDAO aDAO = aDAOs.get (i);
-        if (aDAO != null)
-        {
-          aDAO.setAutoSaveEnabled (aOld[i]);
-          aDAO.writeToFileOnPendingChanges ();
-        }
-      }
+      endWithoutAutoSave ();
     }
   }
 }

@@ -45,8 +45,21 @@ public interface IAutoSaveAware
    *        <code>false</code> auto save is disabled.
    * @return {@link EChange}
    */
+  @Deprecated
   @Nonnull
   EChange setAutoSaveEnabled (boolean bAutoSaveEnabled);
+
+  /**
+   * Start doing something without auto save.
+   */
+  void beginWithoutAutoSave ();
+
+  /**
+   * End doing something without auto save. It must be ensure that each call to
+   * {@link #beginWithoutAutoSave()} is always correctly ended with a call to
+   * this method.
+   */
+  void endWithoutAutoSave ();
 
   /**
    * This method is used for batch processing of instructions (like the initial
