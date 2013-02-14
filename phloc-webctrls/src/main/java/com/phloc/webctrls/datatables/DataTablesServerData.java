@@ -21,6 +21,7 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
+import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
@@ -38,8 +39,10 @@ public final class DataTablesServerData implements IHasUIState
     public CellData (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
     {
       final IMicroNode aNode = aCell.getAllChildrenAsNodeList ().convertToNode (aCS);
-      final String sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
-      final String sNamespaceToRemove = " xmlns=\"" + aCS.getHTMLVersion ().getNamespaceURI () + '"';
+      final IXMLWriterSettings aXWS = aCS.getXMLWriterSettings ();
+      final String sHTML = MicroWriter.getNodeAsString (aNode, aXWS);
+      final char cSep = aXWS.isUseDoubleQuotesForAttributes () ? '"' : '\'';
+      final String sNamespaceToRemove = " xmlns=" + cSep + aCS.getHTMLVersion ().getNamespaceURI () + cSep;
       m_sHTML = StringHelper.replaceAll (sHTML, sNamespaceToRemove, "");
 
       if (aNode instanceof IMicroNodeWithChildren)
