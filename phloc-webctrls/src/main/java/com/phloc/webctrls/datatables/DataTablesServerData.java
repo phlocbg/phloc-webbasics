@@ -91,13 +91,34 @@ public final class DataTablesServerData implements IHasUIState
 
   public static final class RowData
   {
+    private final String m_sRowID;
+    private final String m_sRowClass;
     private final List <CellData> m_aCells;
 
     public RowData (@Nonnull final HCRow aRow, @Nonnull final IHCConversionSettings aCS)
     {
+      m_sRowID = aRow.getID ();
+      m_sRowClass = aRow.getAllClassesAsString ();
       m_aCells = new ArrayList <CellData> (aRow.getCellCount ());
       for (final AbstractHCCell aCell : aRow.getAllCells ())
         m_aCells.add (new CellData (aCell, aCS));
+    }
+
+    @Nullable
+    public String getRowID ()
+    {
+      return m_sRowID;
+    }
+
+    public boolean hasRowID ()
+    {
+      return StringHelper.hasText (m_sRowID);
+    }
+
+    @Nullable
+    public String getRowClass ()
+    {
+      return m_sRowClass;
     }
 
     @Nonnull
