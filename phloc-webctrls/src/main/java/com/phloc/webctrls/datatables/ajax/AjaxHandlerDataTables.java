@@ -28,6 +28,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
+import com.phloc.commons.compare.AbstractComparator;
+import com.phloc.commons.compare.ComparatorAsString;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
@@ -69,6 +71,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   private ResponseData _handleRequest (@Nonnull final RequestData aRequestData,
                                        @Nonnull final DataTablesServerData aDataTables)
   {
+    final Locale aDisplayLocale = aDataTables.getDisplayLocale ();
     final DataTablesServerState aOldServerState = aDataTables.getServerState ();
     final DataTablesServerState aNewServerState = new DataTablesServerState (aRequestData.getSearch (),
                                                                              aRequestData.isRegEx (),
@@ -79,10 +82,26 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       final int [] aNewSortCols = aNewServerState.getSortCols ();
       if (!Arrays.equals (aOldServerState.getSortCols (), aNewSortCols))
       {
+        final ComparatorAsString aStringComp = new ComparatorAsString (aDisplayLocale);
         // FIXME comparator
-        final Comparator <RowData> aComp = null;
-        if (aComp != null)
-          aDataTables.sortAllRows (aComp);
+        final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
+        {
+          @Override
+          protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
+          {
+            int ret = 0;
+            for (final int nSortIndex : aNewSortCols)
+            {
+              final CellData aCell1 = aRow1.getCellAtIndex (nSortIndex);
+              final CellData aCell2 = aRow2.getCellAtIndex (nSortIndex);
+              ret = aStringComp.compare (aCell1.getTextContent (), aCell2.getTextContent ());
+              if (ret != 0)
+                break;
+            }
+            return ret;
+          }
+        };
+        aDataTables.sortAllRows (aComp);
       }
 
       // Remember the new server state
@@ -96,7 +115,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       final String sGlobalSearchText = aNewServerState.getSearchText ();
       final boolean bGlobalSearchRegEx = aNewServerState.isSearchRegEx ();
       final RequestDataPerColumn [] aColumns = aRequestData.getColumnDataArray ();
-      final Locale aDisplayLocale = aDataTables.getDisplayLocale ();
 
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
       for (final RowData aRow : aResultRows)

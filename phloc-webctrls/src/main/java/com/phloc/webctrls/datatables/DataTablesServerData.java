@@ -138,6 +138,12 @@ public final class DataTablesServerData implements IHasUIState
     {
       return m_aCells;
     }
+
+    @Nonnull
+    public CellData getCellAtIndex (@Nonnegative final int nIndex)
+    {
+      return m_aCells.get (nIndex);
+    }
   }
 
   public static final ObjectType OBJECT_TYPE = new ObjectType ("datatables");
