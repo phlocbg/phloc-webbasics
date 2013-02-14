@@ -55,9 +55,11 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
+import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 import com.phloc.webctrls.custom.EDefaultIcon;
 
 public abstract class AbstractWebPageExt extends AbstractWebPage
@@ -85,6 +87,12 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   public AbstractWebPageExt (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     super (sID, aName);
+  }
+
+  @Nonnull
+  protected BootstrapDataTables createBootstrapDataTables (@Nonnull final BootstrapTable aTable)
+  {
+    return new BootstrapDataTables (aTable);
   }
 
   @Nonnull

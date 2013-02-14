@@ -35,7 +35,6 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.page.AbstractWebPageExt;
 import com.phloc.webctrls.security.SecurityUI;
@@ -86,8 +85,8 @@ public class BasePageAudit extends AbstractWebPageExt
             .setColspan (aTable.getColumnCount ());
 
     aNodeList.addChild (aTable);
-    aNodeList.addChild (new BootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
-                                                        .addColumn (new DataTablesColumn (4).setSortable (false))
-                                                        .setInitialSorting (0, ESortOrder.DESCENDING));
+    aNodeList.addChild (createBootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
+                                                          .addColumn (new DataTablesColumn (4).setSortable (false))
+                                                          .setInitialSorting (0, ESortOrder.DESCENDING));
   }
 }

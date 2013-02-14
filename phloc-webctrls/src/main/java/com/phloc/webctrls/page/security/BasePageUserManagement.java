@@ -71,12 +71,11 @@ import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
-import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.page.AbstractWebPageForm;
 import com.phloc.webctrls.security.SecurityUI;
@@ -597,9 +596,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
     if (!aUsers.isEmpty ())
-      aNodeList.addChild (new BootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
-                                                          .addColumn (new DataTablesColumn (3).setSortable (false))
-                                                          .setInitialSorting (1, ESortOrder.ASCENDING));
+      aNodeList.addChild (createBootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
+                                                            .addColumn (new DataTablesColumn (3).setSortable (false))
+                                                            .setInitialSorting (1, ESortOrder.ASCENDING));
     return aNodeList;
   }
 
@@ -608,8 +607,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     // Toolbar on top
-    final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ()
-                                                         .addAndReturnChild (new BootstrapToolbarAdvanced ());
+    final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ().addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();
