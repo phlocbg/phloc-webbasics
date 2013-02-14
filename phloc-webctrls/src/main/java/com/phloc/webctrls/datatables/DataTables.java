@@ -117,7 +117,7 @@ public class DataTables implements IHCNodeBuilder
   {
     if (aTable == null)
       throw new NullPointerException ("Table");
-    if (!aTable.hasHeaderRow ())
+    if (!aTable.hasHeaderRows ())
       s_aLogger.warn ("Table does not have a header row, so DataTables may not be displayed correctly!");
     if (StringHelper.hasNoText (aTable.getID ()))
       throw new IllegalArgumentException ("Table has no ID!");
