@@ -20,6 +20,7 @@ package com.phloc.webctrls.fineupload;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.json.impl.JSONObject;
 
@@ -38,18 +39,21 @@ public class FineUploader extends FineUploaderBasic
   }
 
   @Override
-  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nonnull final Locale aDisplayLocale)
+  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nullable final Locale aDisplayLocale)
   {
-    final JSONObject aText = new JSONObject ();
-    aText.setStringProperty ("uploadButton", EFineUploaderText.UPLOAD_BUTTON.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("cancelButton", EFineUploaderText.CANCEL_BUTTON.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("retryButton", EFineUploaderText.RETRY_BUTTON.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("failUpload", EFineUploaderText.FAIL_UPLOAD.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("dragZone", EFineUploaderText.DRAG_ZONE.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("dropProcessing", EFineUploaderText.DROP_PROCESSING.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("formatProgress", EFineUploaderText.FORMAT_PROGRESS.getDisplayText (aDisplayLocale));
-    aText.setStringProperty ("waitingForResponse",
-                             EFineUploaderText.WAITING_FOR_RESPONSE.getDisplayText (aDisplayLocale));
-    aRoot.setObjectProperty ("text", aText);
+    if (aDisplayLocale != null)
+    {
+      final JSONObject aText = new JSONObject ();
+      aText.setStringProperty ("uploadButton", EFineUploaderText.UPLOAD_BUTTON.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("cancelButton", EFineUploaderText.CANCEL_BUTTON.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("retryButton", EFineUploaderText.RETRY_BUTTON.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("failUpload", EFineUploaderText.FAIL_UPLOAD.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("dragZone", EFineUploaderText.DRAG_ZONE.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("dropProcessing", EFineUploaderText.DROP_PROCESSING.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("formatProgress", EFineUploaderText.FORMAT_PROGRESS.getDisplayText (aDisplayLocale));
+      aText.setStringProperty ("waitingForResponse",
+                               EFineUploaderText.WAITING_FOR_RESPONSE.getDisplayText (aDisplayLocale));
+      aRoot.setObjectProperty ("text", aText);
+    }
   }
 }

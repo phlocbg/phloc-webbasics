@@ -673,10 +673,11 @@ public class FineUploaderBasic
    * @param aRoot
    *        The JSON messages object to extend
    * @param aDisplayLocale
-   *        The locale to be used for test resolving
+   *        The locale to be used for test resolving. May be <code>null</code>
+   *        if none passed.
    */
   @OverrideOnDemand
-  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nonnull final Locale aDisplayLocale)
+  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nullable final Locale aDisplayLocale)
   {}
 
   /**
