@@ -1,8 +1,23 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.webctrls.datatables.ajax;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,13 +35,13 @@ final class ResponseData
   private final int m_nTotalDisplayRecords;
   private final int m_nEcho;
   private final String m_sColumns;
-  private final List <Map <String, String>> m_aData;
+  private final List <List <String>> m_aData;
 
   ResponseData (final int nTotalRecords,
                 final int nTotalDisplayRecords,
                 final int nEcho,
                 @Nullable final String sColumns,
-                @Nonnull final List <Map <String, String>> aData)
+                @Nonnull final List <List <String>> aData)
   {
     if (aData == null)
       throw new NullPointerException ("data");
@@ -85,7 +100,7 @@ final class ResponseData
    */
   @Nonnull
   @ReturnsMutableCopy
-  public List <Map <String, String>> getData ()
+  public List <List <String>> getData ()
   {
     return ContainerHelper.newList (m_aData);
   }
@@ -99,15 +114,7 @@ final class ResponseData
     ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
     if (StringHelper.hasText (m_sColumns))
       ret.setStringProperty ("sColumns", m_sColumns);
-    final List <JSONObject> aData = new ArrayList <JSONObject> ();
-    for (final Map <String, String> aEntry : m_aData)
-    {
-      final JSONObject aObj = new JSONObject ();
-      for (final Map.Entry <String, String> aObjEntry : aEntry.entrySet ())
-        aObj.setStringProperty (aObjEntry.getKey (), aObjEntry.getValue ());
-      aData.add (aObj);
-    }
-    ret.setObjectListProperty ("aaData", aData);
+    ret.setListOfListProperty ("aaData", m_aData);
     return ret;
   }
 

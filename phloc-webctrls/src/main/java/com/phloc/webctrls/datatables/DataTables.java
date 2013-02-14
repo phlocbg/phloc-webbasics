@@ -47,6 +47,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.js.builder.JSAnonymousFunction;
@@ -78,7 +79,7 @@ public class DataTables implements IHCNodeBuilder, IHasUIState
     {
       if (aSortCols == null)
         throw new NullPointerException ("sortCols");
-      m_sSearchText = sSearchText;
+      m_sSearchText = StringHelper.hasNoText (sSearchText) ? null : sSearchText;
       m_bSearchRegEx = bSearchRegEx;
       m_aSortCols = aSortCols;
     }
@@ -143,6 +144,12 @@ public class DataTables implements IHCNodeBuilder, IHasUIState
                                          .append ("searchRegEx", m_bSearchRegEx)
                                          .append ("sortCols", m_aSortCols)
                                          .toString ();
+    }
+
+    public boolean matchesSearchTerms (@Nonnull final HCRow aRow)
+    {
+      // FIXME
+      return true;
     }
   }
 

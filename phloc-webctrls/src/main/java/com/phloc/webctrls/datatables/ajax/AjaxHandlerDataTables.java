@@ -18,15 +18,19 @@
 package com.phloc.webctrls.datatables.ajax;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.HCRow;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
@@ -66,18 +70,50 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                          aRequestData.getSortCols ());
     if (!aNewServerState.equals (aOldServerState))
     {
-      // Restructure table
-      System.out.println ("Table needs to be changed to: " + aNewServerState);
+      // Must we change the sorting?
+      final int [] aNewSortCols = aNewServerState.getSortCols ();
+      if (!Arrays.equals (aOldServerState.getSortCols (), aNewSortCols))
+      {
+        final Comparator <HCRow> aComp = null;
+        // FIXME sort
+        if (aComp != null)
+          aTable.sortAllBodyRows (aComp);
+      }
+
+      // Remember the new server state
       aDataTables.setServerState (aNewServerState);
     }
 
+    List <HCRow> aResultRows = aTable.getAllBodyRows ();
+    if (aNewServerState.hasSearchText ())
+    {
+      // filter rows
+      final List <HCRow> aFilteredRows = new ArrayList <HCRow> ();
+      for (final HCRow aRow : aResultRows)
+        if (aNewServerState.matchesSearchTerms (aRow))
+          aFilteredRows.add (aRow);
+      aResultRows = aFilteredRows;
+    }
+
+    final List <List <String>> aData = new ArrayList <List <String>> ();
+    for (int i = 0; i < aRequestData.getDisplayEnd (); ++i)
+    {
+      final int nRealIndex = aRequestData.getDisplayStart () + i;
+      if (aResultRows.size () <= nRealIndex)
+        break;
+
+      final HCRow aRow = aResultRows.get (nRealIndex);
+      final List <String> aRowData = new ArrayList <String> ();
+      for (final AbstractHCCell aCell : aRow.getAllCells ())
+      {
+        aRowData.add (HCSettings.getAsHTMLString (aCell.getAllChildrenAsNodeList ()));
+      }
+      aData.add (aRowData);
+    }
+
     final int nTotalRecords = aTable.getBodyRowCount ();
-    final int nTotalDisplayRecords = 0;
-    return new ResponseData (nTotalRecords,
-                             nTotalDisplayRecords,
-                             aRequestData.getEcho (),
-                             null,
-                             new ArrayList <Map <String, String>> ());
+    final int nTotalDisplayRecords = aData.size ();
+    return new ResponseData (nTotalRecords, nTotalDisplayRecords, aRequestData.getEcho (), null, aData);
   }
 
   @Override
@@ -85,8 +121,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
-
-    System.out.println (aParams.getAllAttributeNames ());
     // Read input parameters
     final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
     final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);
@@ -125,10 +159,11 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                                       aColumnData,
                                                       nEcho);
 
-    final String sTableID = aParams.getAttributeAsString (OBJECT_ID);
-    final DataTables aDataTables = UIStateRegistry.getCurrent ().getCastedState (DataTables.OBJECT_TYPE, sTableID);
+    // Resolve dataTables
+    final String sDataTablesID = aParams.getAttributeAsString (OBJECT_ID);
+    final DataTables aDataTables = UIStateRegistry.getCurrent ().getCastedState (DataTables.OBJECT_TYPE, sDataTablesID);
     if (aDataTables == null)
-      throw new IllegalArgumentException ("No such table: " + sTableID);
+      return AjaxDefaultResponse.createError ("No such table: " + sDataTablesID);
 
     // Main request handling
     final ResponseData aResponseData = _handleRequest (aRequestData, aDataTables);
