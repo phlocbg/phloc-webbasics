@@ -558,8 +558,11 @@ public class DataTables implements IHCNodeBuilder
     if (bServerSide)
     {
       aParams.add ("bServerSide", true);
-      UIStateRegistry.getCurrent ().registerState (m_aTable.getID (),
-                                                   new DataTablesServerData (m_aTable, m_aDisplayLocale));
+      // This copies the content of the table
+      final DataTablesServerData aServerData = new DataTablesServerData (m_aTable, m_aDisplayLocale);
+      UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
+      // Remove all body rows to avoid initial double painting
+      m_aTable.removeAllBodyRows ();
     }
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());

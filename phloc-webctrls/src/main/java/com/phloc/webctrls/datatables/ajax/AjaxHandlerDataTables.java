@@ -92,7 +92,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     List <RowData> aResultRows = aDataTables.directGetAllRows ();
     if (aNewServerState.hasSearchText ())
     {
-      System.out.println (aRequestData.toString ());
       // filter rows
       final String sGlobalSearchText = aNewServerState.getSearchText ();
       final boolean bGlobalSearchRegEx = aNewServerState.isSearchRegEx ();
