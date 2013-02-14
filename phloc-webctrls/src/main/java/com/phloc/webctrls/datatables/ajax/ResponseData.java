@@ -1,0 +1,124 @@
+package com.phloc.webctrls.datatables.ajax;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.json.IJSONObject;
+import com.phloc.json.impl.JSONObject;
+
+final class ResponseData
+{
+  private final int m_nTotalRecords;
+  private final int m_nTotalDisplayRecords;
+  private final int m_nEcho;
+  private final String m_sColumns;
+  private final List <Map <String, String>> m_aData;
+
+  ResponseData (final int nTotalRecords,
+                final int nTotalDisplayRecords,
+                final int nEcho,
+                @Nullable final String sColumns,
+                @Nonnull final List <Map <String, String>> aData)
+  {
+    if (aData == null)
+      throw new NullPointerException ("data");
+    m_nTotalRecords = nTotalRecords;
+    m_nTotalDisplayRecords = nTotalDisplayRecords;
+    m_nEcho = nEcho;
+    m_sColumns = sColumns;
+    m_aData = aData;
+  }
+
+  /**
+   * @return Total records, before filtering (i.e. the total number of records
+   *         in the database)
+   */
+  public int getTotalRecords ()
+  {
+    return m_nTotalRecords;
+  }
+
+  /**
+   * @return Total records, after filtering (i.e. the total number of records
+   *         after filtering has been applied - not just the number of records
+   *         being returned in this result set)
+   */
+  public int getTotalDisplayRecords ()
+  {
+    return m_nTotalDisplayRecords;
+  }
+
+  /**
+   * @return An unaltered copy of sEcho sent from the client side. This
+   *         parameter will change with each draw (it is basically a draw count)
+   *         - so it is important that this is implemented.
+   */
+  public int getEcho ()
+  {
+    return m_nEcho;
+  }
+
+  /**
+   * @return Optional - this is a string of column names, comma separated (used
+   *         in combination with sName) which will allow DataTables to reorder
+   *         data on the client-side if required for display. Note that the
+   *         number of column names returned must exactly match the number of
+   *         columns in the table. For a more flexible JSON format, please
+   *         consider using mDataProp.
+   */
+  @Nullable
+  public String getColumns ()
+  {
+    return m_sColumns;
+  }
+
+  /**
+   * @return The data in a 2D array.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Map <String, String>> getData ()
+  {
+    return ContainerHelper.newList (m_aData);
+  }
+
+  @Nonnull
+  public IJSONObject getAsJSON ()
+  {
+    final IJSONObject ret = new JSONObject ();
+    ret.setIntegerProperty ("iTotalRecords", m_nTotalRecords);
+    ret.setIntegerProperty ("iTotalDisplayRecords", m_nTotalDisplayRecords);
+    ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
+    if (StringHelper.hasText (m_sColumns))
+      ret.setStringProperty ("sColumns", m_sColumns);
+    final List <JSONObject> aData = new ArrayList <JSONObject> ();
+    for (final Map <String, String> aEntry : m_aData)
+    {
+      final JSONObject aObj = new JSONObject ();
+      for (final Map.Entry <String, String> aObjEntry : aEntry.entrySet ())
+        aObj.setStringProperty (aObjEntry.getKey (), aObjEntry.getValue ());
+      aData.add (aObj);
+    }
+    ret.setObjectListProperty ("aaData", aData);
+    return ret;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("totalRecords", m_nTotalRecords)
+                                       .append ("totalDisplayRecords", m_nTotalDisplayRecords)
+                                       .append ("echo", m_nEcho)
+                                       .append ("columns", m_sColumns)
+                                       .append ("data", m_aData)
+                                       .toString ();
+  }
+}
