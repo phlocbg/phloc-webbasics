@@ -17,7 +17,9 @@
  */
 package com.phloc.webctrls.datatables.ajax;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,13 +37,13 @@ final class ResponseData
   private final int m_nTotalDisplayRecords;
   private final int m_nEcho;
   private final String m_sColumns;
-  private final List <List <String>> m_aData;
+  private final List <Map <String, String>> m_aData;
 
   ResponseData (final int nTotalRecords,
                 final int nTotalDisplayRecords,
                 final int nEcho,
                 @Nullable final String sColumns,
-                @Nonnull final List <List <String>> aData)
+                @Nonnull final List <Map <String, String>> aData)
   {
     if (aData == null)
       throw new NullPointerException ("data");
@@ -100,7 +102,7 @@ final class ResponseData
    */
   @Nonnull
   @ReturnsMutableCopy
-  public List <List <String>> getData ()
+  public List <Map <String, String>> getData ()
   {
     return ContainerHelper.newList (m_aData);
   }
@@ -114,7 +116,15 @@ final class ResponseData
     ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
     if (StringHelper.hasText (m_sColumns))
       ret.setStringProperty ("sColumns", m_sColumns);
-    ret.setListOfListProperty ("aaData", m_aData);
+    final List <JSONObject> aObjs = new ArrayList <JSONObject> ();
+    for (final Map <String, String> aRow : m_aData)
+    {
+      final JSONObject aObj = new JSONObject ();
+      for (final Map.Entry <String, String> aEntry : aRow.entrySet ())
+        aObj.setStringProperty (aEntry.getKey (), aEntry.getValue ());
+      aObjs.add (aObj);
+    }
+    ret.setObjectListProperty ("aaData", aObjs);
     return ret;
   }
 

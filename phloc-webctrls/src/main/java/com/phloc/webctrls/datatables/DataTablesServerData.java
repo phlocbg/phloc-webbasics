@@ -38,7 +38,10 @@ public final class DataTablesServerData implements IHasUIState
     public CellData (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
     {
       final IMicroNode aNode = aCell.getAllChildrenAsNodeList ().convertToNode (aCS);
-      m_sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
+      final String sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
+      final String sNamespaceToRemove = " xmlns=\"" + aCS.getHTMLVersion ().getNamespaceURI () + '"';
+      m_sHTML = StringHelper.replaceAll (sHTML, sNamespaceToRemove, "");
+
       if (aNode instanceof IMicroNodeWithChildren)
         m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
       else
@@ -119,6 +122,11 @@ public final class DataTablesServerData implements IHasUIState
     public String getRowClass ()
     {
       return m_sRowClass;
+    }
+
+    public boolean hasRowClass ()
+    {
+      return StringHelper.hasText (m_sRowClass);
     }
 
     @Nonnull

@@ -20,8 +20,10 @@ package com.phloc.webctrls.datatables.ajax;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -59,6 +61,9 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   private static final String SORT_DIR_PREFIX = "sSortDir_";
   private static final String DATA_PROP_PREFIX = "mDataProp_";
   private static final String ECHO = "sEcho";
+
+  private static final String DT_ROW_ID = "DT_RowId";
+  private static final String DT_ROW_CLASS = "DT_RowClass";
 
   @Nonnull
   private ResponseData _handleRequest (@Nonnull final RequestData aRequestData,
@@ -121,7 +126,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       aResultRows = aFilteredRows;
     }
 
-    final List <List <String>> aData = new ArrayList <List <String>> ();
+    final List <Map <String, String>> aData = new ArrayList <Map <String, String>> ();
     for (int i = 0; i < aRequestData.getDisplayEnd (); ++i)
     {
       final int nRealIndex = aRequestData.getDisplayStart () + i;
@@ -129,9 +134,14 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         break;
 
       final RowData aRow = aResultRows.get (nRealIndex);
-      final List <String> aRowData = new ArrayList <String> ();
+      final Map <String, String> aRowData = new HashMap <String, String> ();
+      if (aRow.hasRowID ())
+        aRowData.put (DT_ROW_ID, aRow.getRowID ());
+      if (aRow.hasRowClass ())
+        aRowData.put (DT_ROW_CLASS, aRow.getRowClass ());
+      int nCellIndex = 0;
       for (final CellData aCell : aRow.directGetAllCells ())
-        aRowData.add (aCell.getHTML ());
+        aRowData.put (Integer.toString (nCellIndex++), aCell.getHTML ());
       aData.add (aRowData);
     }
 
