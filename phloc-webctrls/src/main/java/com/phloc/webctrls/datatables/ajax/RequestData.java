@@ -50,6 +50,8 @@ final class RequestData
       throw new NullPointerException ("sortCols");
     if (aColumnData == null)
       throw new NullPointerException ("columnData");
+    if (ContainerHelper.containsAnyNullElement (aColumnData))
+      throw new IllegalArgumentException ("ColumnData may not contain null elements");
     m_nDisplayStart = nDisplayStart;
     m_nDisplayLength = nDisplayLength;
     m_sSearch = sSearch;
@@ -121,10 +123,23 @@ final class RequestData
   }
 
   @Nonnull
+  public RequestDataPerColumn getColumn (@Nonnegative final int nIndex)
+  {
+    return m_aColumnData.get (nIndex);
+  }
+
+  @Nonnull
   @ReturnsMutableCopy
   public List <RequestDataPerColumn> getColumnData ()
   {
     return ContainerHelper.newList (m_aColumnData);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public RequestDataPerColumn [] getColumnDataArray ()
+  {
+    return ArrayHelper.newArray (m_aColumnData, RequestDataPerColumn.class);
   }
 
   /**

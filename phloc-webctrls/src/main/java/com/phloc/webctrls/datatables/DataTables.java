@@ -17,9 +17,7 @@
  */
 package com.phloc.webctrls.datatables;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,20 +32,14 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
-import com.phloc.commons.equals.EqualsUtils;
-import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.commons.type.ObjectType;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
-import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.js.builder.JSAnonymousFunction;
@@ -59,101 +51,10 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.http.EHTTPMethod;
-import com.phloc.webbasics.state.IHasUIState;
 import com.phloc.webbasics.state.UIStateRegistry;
 
-public class DataTables implements IHCNodeBuilder, IHasUIState
+public class DataTables implements IHCNodeBuilder
 {
-  public static final class ServerState implements Serializable
-  {
-    private final String m_sSearchText;
-    private final boolean m_bSearchRegEx;
-    private final int [] m_aSortCols;
-
-    public ServerState ()
-    {
-      this (null, false, new int [0]);
-    }
-
-    public ServerState (@Nullable final String sSearchText, final boolean bSearchRegEx, @Nonnull final int [] aSortCols)
-    {
-      if (aSortCols == null)
-        throw new NullPointerException ("sortCols");
-      m_sSearchText = StringHelper.hasNoText (sSearchText) ? null : sSearchText;
-      m_bSearchRegEx = bSearchRegEx;
-      m_aSortCols = aSortCols;
-    }
-
-    public boolean hasSearchText ()
-    {
-      return StringHelper.hasText (m_sSearchText);
-    }
-
-    @Nullable
-    public String getSearchText ()
-    {
-      return m_sSearchText;
-    }
-
-    public boolean isSearchRegEx ()
-    {
-      return m_bSearchRegEx;
-    }
-
-    /**
-     * @return Number of columns to sort on
-     */
-    public int getSortingCols ()
-    {
-      return m_aSortCols.length;
-    }
-
-    @Nonnull
-    @ReturnsMutableCopy
-    public int [] getSortCols ()
-    {
-      return ArrayHelper.getCopy (m_aSortCols);
-    }
-
-    @Override
-    public boolean equals (final Object o)
-    {
-      if (o == this)
-        return true;
-      if (!(o instanceof ServerState))
-        return false;
-      final ServerState rhs = (ServerState) o;
-      return EqualsUtils.equals (m_sSearchText, rhs.m_sSearchText) &&
-             m_bSearchRegEx == rhs.m_bSearchRegEx &&
-             Arrays.equals (m_aSortCols, rhs.m_aSortCols);
-    }
-
-    @Override
-    public int hashCode ()
-    {
-      return new HashCodeGenerator (this).append (m_sSearchText)
-                                         .append (m_bSearchRegEx)
-                                         .append (m_aSortCols)
-                                         .getHashCode ();
-    }
-
-    @Override
-    public String toString ()
-    {
-      return new ToStringGenerator (this).append ("searchText", m_sSearchText)
-                                         .append ("searchRegEx", m_bSearchRegEx)
-                                         .append ("sortCols", m_aSortCols)
-                                         .toString ();
-    }
-
-    public boolean matchesSearchTerms (@Nonnull final HCRow aRow)
-    {
-      // FIXME
-      return true;
-    }
-  }
-
-  public static final ObjectType OBJECT_TYPE = new ObjectType ("datatables");
   public static final boolean DEFAULT_GENERATE_ON_DOCUMENT_READY = false;
   public static final boolean DEFAULT_PAGINATE = true;
   public static final boolean DEFAULT_STATE_SAVE = false;
@@ -193,7 +94,6 @@ public class DataTables implements IHCNodeBuilder, IHasUIState
   private Map <String, String> m_aServerParams;
   private boolean m_bUseJQueryAjax = DEFAULT_USER_JQUERY_AJAX;
   private boolean m_bDeferRender = DEFAULT_DEFER_RENDER;
-  private ServerState m_aServerState;
 
   public static boolean isDefaultGenerateOnDocumentReady ()
   {
@@ -224,12 +124,6 @@ public class DataTables implements IHCNodeBuilder, IHasUIState
 
     m_aTable = aTable;
     registerExternalResources ();
-  }
-
-  @Nonnull
-  public ObjectType getTypeID ()
-  {
-    return OBJECT_TYPE;
   }
 
   /**
@@ -572,21 +466,6 @@ public class DataTables implements IHCNodeBuilder, IHasUIState
     return this;
   }
 
-  @Nullable
-  public ServerState getServerState ()
-  {
-    return m_aServerState;
-  }
-
-  @Nonnull
-  public DataTables setServerState (@Nonnull final ServerState aServerState)
-  {
-    if (aServerState == null)
-      throw new NullPointerException ("serverState");
-    m_aServerState = aServerState;
-    return this;
-  }
-
   /**
    * modify parameter map
    * 
@@ -679,8 +558,8 @@ public class DataTables implements IHCNodeBuilder, IHasUIState
     if (bServerSide)
     {
       aParams.add ("bServerSide", true);
-      m_aServerState = new ServerState ();
-      UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), this);
+      UIStateRegistry.getCurrent ().registerState (m_aTable.getID (),
+                                                   new DataTablesServerData (m_aTable, m_aDisplayLocale));
     }
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
