@@ -145,7 +145,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     final int nTotalRecords = aDataTables.getRowCount ();
-    final int nTotalDisplayRecords = aData.size ();
+    final int nTotalDisplayRecords = aResultRows.size ();
     return new ResponseData (nTotalRecords, nTotalDisplayRecords, aRequestData.getEcho (), null, aData);
   }
 

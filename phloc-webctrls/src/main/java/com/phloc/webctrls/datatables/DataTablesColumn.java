@@ -33,7 +33,7 @@ public class DataTablesColumn
   public static final boolean DEFAULT_SORTABLE = true;
   public static final boolean DEFAULT_VISIBLE = true;
 
-  private final JSArray m_aTargets;
+  private final int [] m_aTargets;
   private boolean m_bSearchable = DEFAULT_SEARCHABLE;
   private boolean m_bSortable = DEFAULT_SORTABLE;
   private boolean m_bVisible = DEFAULT_VISIBLE;
@@ -45,17 +45,14 @@ public class DataTablesColumn
 
   public DataTablesColumn (final int nTarget)
   {
-    m_aTargets = new JSArray ();
-    m_aTargets.add (nTarget);
+    m_aTargets = new int [] { nTarget };
   }
 
   public DataTablesColumn (@Nonnull @Nonempty final int... aTargets)
   {
     if (ArrayHelper.isEmpty (aTargets))
       throw new IllegalArgumentException ("targets may not be empty");
-    m_aTargets = new JSArray ();
-    for (final int nTarget : aTargets)
-      m_aTargets.add (nTarget);
+    m_aTargets = ArrayHelper.getCopy (aTargets);
   }
 
   public boolean isSearchable ()
@@ -162,7 +159,7 @@ public class DataTablesColumn
   @Nonnull
   public DataTablesColumn setDataSort (@Nullable final int... aDataSort)
   {
-    m_aDataSort = aDataSort;
+    m_aDataSort = ArrayHelper.getCopy (aDataSort);
     return this;
   }
 
@@ -170,7 +167,7 @@ public class DataTablesColumn
   public JSAssocArray getAsJS ()
   {
     final JSAssocArray ret = new JSAssocArray ();
-    ret.add ("aTargets", m_aTargets);
+    ret.add ("aTargets", new JSArray ().addAll (m_aTargets));
     if (m_bSearchable != DEFAULT_SEARCHABLE)
       ret.add ("bSearchable", m_bSearchable);
     if (m_bSortable != DEFAULT_SORTABLE)
@@ -186,12 +183,7 @@ public class DataTablesColumn
     if (StringHelper.hasText (m_sWidth))
       ret.add ("sWidth", m_sWidth);
     if (ArrayHelper.isNotEmpty (m_aDataSort))
-    {
-      final JSArray aArray = new JSArray ();
-      for (final int nDataSort : m_aDataSort)
-        aArray.add (nDataSort);
-      ret.add ("aDataSort", aArray);
-    }
+      ret.add ("aDataSort", new JSArray ().addAll (m_aDataSort));
     return ret;
   }
 }
