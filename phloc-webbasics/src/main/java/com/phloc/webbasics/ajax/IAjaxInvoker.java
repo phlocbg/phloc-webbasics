@@ -93,6 +93,5 @@ public interface IAjaxInvoker
    *         If no handler is registered for the specified function name.
    */
   @Nonnull
-  AjaxDefaultResponse invokeFunction (@Nonnull String sFunctionName,
-                                      @Nonnull IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception;
+  IAjaxResponse invokeFunction (@Nonnull String sFunctionName, @Nonnull IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception;
 }

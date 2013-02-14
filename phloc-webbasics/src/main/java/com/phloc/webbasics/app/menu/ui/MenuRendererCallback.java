@@ -43,7 +43,8 @@ import com.phloc.html.hc.html.HCLI;
  * 
  * @author philip
  */
-public class MenuRendererCallback <T extends AbstractHCList <?>> extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuRendererCallback <T extends AbstractHCList <?>> extends
+                                                                 DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final IFactory <T> m_aFactory;
   private final NonBlockingStack <T> m_aMenuListStack;

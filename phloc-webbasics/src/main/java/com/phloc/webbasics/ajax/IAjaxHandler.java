@@ -38,7 +38,7 @@ public interface IAjaxHandler
    *         Any exception if an error occurs.
    */
   @Nonnull
-  AjaxDefaultResponse handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
+  IAjaxResponse handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope) throws Exception;
 
   /**
    * Registers all external resources (CSS or JS files) needed by controls

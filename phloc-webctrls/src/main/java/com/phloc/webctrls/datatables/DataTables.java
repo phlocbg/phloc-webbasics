@@ -51,9 +51,11 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.http.EHTTPMethod;
+import com.phloc.webbasics.state.UIStateRegistry;
 
 public class DataTables implements IHCNodeBuilder
 {
+  public static final boolean DEFAULT_GENERATE_ON_DOCUMENT_READY = false;
   public static final boolean DEFAULT_PAGINATE = true;
   public static final boolean DEFAULT_STATE_SAVE = false;
   public static final boolean DEFAULT_JQUERY_UI = false;
@@ -64,10 +66,12 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_DEFER_RENDER = false;
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
   public static final int DEFAULT_DISPLAY_LENGTH = 10;
-  private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
 
-  private final String m_sParentElementID;
-  private boolean m_bGenerateOnDocumentReady = false;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
+  private static boolean s_bDefaultGenerateOnDocumentReady = DEFAULT_GENERATE_ON_DOCUMENT_READY;
+
+  private final AbstractHCBaseTable <?> m_aParentElement;
+  private boolean m_bGenerateOnDocumentReady = s_bDefaultGenerateOnDocumentReady;
   private Locale m_aDisplayLocale;
   private boolean m_bPaginate = DEFAULT_PAGINATE;
   private boolean m_bStateSave = DEFAULT_STATE_SAVE;
@@ -91,6 +95,16 @@ public class DataTables implements IHCNodeBuilder
   private boolean m_bUseJQueryAjax = DEFAULT_USER_JQUERY_AJAX;
   private boolean m_bDeferRender = DEFAULT_DEFER_RENDER;
 
+  public static boolean isDefaultGenerateOnDocumentReady ()
+  {
+    return s_bDefaultGenerateOnDocumentReady;
+  }
+
+  public static void setDefaultGenerateOnDocumentReady (final boolean bGenerateOnDocumentReady)
+  {
+    s_bDefaultGenerateOnDocumentReady = bGenerateOnDocumentReady;
+  }
+
   /**
    * Apply to an existing table. If the table does not have an ID yet, a new one
    * is created.
@@ -105,11 +119,10 @@ public class DataTables implements IHCNodeBuilder
       throw new NullPointerException ("Table");
     if (!aTable.hasHeaderRow ())
       s_aLogger.warn ("Table does not have a header row, so DataTables may not be displayed correctly!");
-
-    m_sParentElementID = aTable.getID ();
-    if (StringHelper.hasNoText (m_sParentElementID))
+    if (StringHelper.hasNoText (aTable.getID ()))
       throw new IllegalArgumentException ("Table has no ID!");
 
+    m_aParentElement = aTable;
     registerExternalResources ();
   }
 
@@ -511,7 +524,12 @@ public class DataTables implements IHCNodeBuilder
     if (StringHelper.hasText (m_sDom))
       aParams.add ("sDom", m_sDom);
 
-    aParams.add ("bServerSide", m_aAjaxSource != null);
+    final boolean bServerSide = m_aAjaxSource != null;
+    if (bServerSide)
+    {
+      aParams.add ("bServerSide", true);
+      UIStateRegistry.getCurrent ().registerState (m_aParentElement);
+    }
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
     if (m_eServerMethod != null)
@@ -598,9 +616,8 @@ public class DataTables implements IHCNodeBuilder
     final JSPackage aJSCode = new JSPackage ();
 
     addCodeBeforeDataTables (aJSCode);
-    final JSVar aJSTable = aJSCode.var ("oTable" + GlobalIDFactory.getNewIntID (), JQuery.idRef (m_sParentElementID)
-                                                                                         .invoke ("dataTable")
-                                                                                         .arg (aParams));
+    final JSVar aJSTable = aJSCode.var ("oTable" + GlobalIDFactory.getNewIntID (),
+                                        JQuery.idRef (m_aParentElement.getID ()).invoke ("dataTable").arg (aParams));
     addCodeAfterDataTables (aJSCode, aJSTable);
 
     return m_bGenerateOnDocumentReady ? new HCScriptOnDocumentReady (aJSCode) : new HCScript (aJSCode);

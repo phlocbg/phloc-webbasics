@@ -143,8 +143,8 @@ public class AjaxInvoker implements IAjaxInvoker
   }
 
   @Nonnull
-  public AjaxDefaultResponse invokeFunction (@Nonnull final String sFunctionName,
-                                             @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception
+  public IAjaxResponse invokeFunction (@Nonnull final String sFunctionName,
+                                       @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception
   {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Invoking AJAX function '" + sFunctionName + "'");
@@ -170,7 +170,7 @@ public class AjaxInvoker implements IAjaxInvoker
     aHandlerObj.registerExternalResources ();
 
     // execute request
-    final AjaxDefaultResponse aReturnValue = aHandlerObj.handleRequest (aRequestWebScope);
+    final IAjaxResponse aReturnValue = aHandlerObj.handleRequest (aRequestWebScope);
 
     // Increment statistics after successful call
     s_aStatsFunctionInvoke.increment (sFunctionName);

@@ -91,8 +91,8 @@ public final class ApplicationAjaxManager extends ApplicationWebSingleton implem
   }
 
   @Nonnull
-  public AjaxDefaultResponse invokeFunction (@Nonnull final String sFunctionName,
-                                             @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception
+  public IAjaxResponse invokeFunction (@Nonnull final String sFunctionName,
+                                       @Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope) throws Exception
   {
     return m_aInvoker.invokeFunction (sFunctionName, aRequestWebScope);
   }

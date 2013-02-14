@@ -19,6 +19,7 @@ package com.phloc.webctrls.datatables.ajax;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +36,8 @@ import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
-import com.phloc.webbasics.ajax.AjaxDefaultResponse;
+import com.phloc.webbasics.ajax.AjaxSimpleResponse;
+import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webctrls.datatables.CDataTables;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
@@ -167,6 +169,10 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                  @Nonnull final List <RequestDataPerColumn> aColumnData,
                  final int nEcho)
     {
+      if (aSortCols == null)
+        throw new NullPointerException ("sortCols");
+      if (aColumnData == null)
+        throw new NullPointerException ("columnData");
       m_nDisplayStart = nDisplayStart;
       m_nDisplayLength = nDisplayLength;
       m_sSearch = sSearch;
@@ -260,7 +266,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                          .append ("search", m_sSearch)
                                          .append ("regEx", m_bRegEx)
                                          .append ("sortCols", m_aSortCols)
-                                         .append ("columns", m_aColumnData)
+                                         .append ("columnData", m_aColumnData)
                                          .append ("echo", m_nEcho)
                                          .toString ();
     }
@@ -272,14 +278,16 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     private final int m_nTotalDisplayRecords;
     private final int m_nEcho;
     private final String m_sColumns;
-    private final List <List <String>> m_aData;
+    private final List <Map <String, String>> m_aData;
 
     public ResponseData (final int nTotalRecords,
                          final int nTotalDisplayRecords,
                          final int nEcho,
                          @Nullable final String sColumns,
-                         @Nonnull final List <List <String>> aData)
+                         @Nonnull final List <Map <String, String>> aData)
     {
+      if (aData == null)
+        throw new NullPointerException ("data");
       m_nTotalRecords = nTotalRecords;
       m_nTotalDisplayRecords = nTotalDisplayRecords;
       m_nEcho = nEcho;
@@ -335,7 +343,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
      */
     @Nonnull
     @ReturnsMutableCopy
-    public List <List <String>> getData ()
+    public List <Map <String, String>> getData ()
     {
       return ContainerHelper.newList (m_aData);
     }
@@ -349,7 +357,15 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
       if (StringHelper.hasText (m_sColumns))
         ret.setStringProperty ("sColumns", m_sColumns);
-      ret.setListOfListProperty ("aaData", m_aData);
+      final List <JSONObject> aData = new ArrayList <JSONObject> ();
+      for (final Map <String, String> aEntry : m_aData)
+      {
+        final JSONObject aObj = new JSONObject ();
+        for (final Map.Entry <String, String> aObjEntry : aEntry.entrySet ())
+          aObj.setStringProperty (aObjEntry.getKey (), aObjEntry.getValue ());
+        aData.add (aObj);
+      }
+      ret.setObjectListProperty ("aaData", aData);
       return ret;
     }
 
@@ -368,14 +384,22 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   @Nonnull
   private ResponseData _handleRequest (@Nonnull final RequestData aRequestData)
   {
-    return new ResponseData (0, 0, aRequestData.getEcho (), null, new ArrayList <List <String>> ());
+    System.out.println (aRequestData.toString ());
+    final int nTotalRecords = 0;
+    final int nTotalDisplayRecords = 0;
+    return new ResponseData (nTotalRecords,
+                             nTotalDisplayRecords,
+                             aRequestData.getEcho (),
+                             null,
+                             new ArrayList <Map <String, String>> ());
   }
 
   @Override
   @Nonnull
-  protected AjaxDefaultResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
+    // Read input parameters
     final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
     final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);
     final int nColumns = aParams.getAttributeAsInt (COLUMNS, 0);
@@ -415,6 +439,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     // Main request handling
     final ResponseData aResponseData = _handleRequest (aRequestData);
     // Convert the response to JSON
-    return AjaxDefaultResponse.createSuccess (aResponseData == null ? null : aResponseData.getAsJSON ());
+    return new AjaxSimpleResponse (aResponseData == null ? null : aResponseData.getAsJSON ());
   }
 }

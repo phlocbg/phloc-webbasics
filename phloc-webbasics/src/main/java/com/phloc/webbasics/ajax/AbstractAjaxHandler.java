@@ -70,11 +70,11 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
    */
   @OverrideOnDemand
   @Nonnull
-  protected abstract AjaxDefaultResponse mainHandleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                                                            @Nonnull MapBasedAttributeContainer aParams) throws Exception;
+  protected abstract IAjaxResponse mainHandleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                                                      @Nonnull MapBasedAttributeContainer aParams) throws Exception;
 
   @Nonnull
-  public final AjaxDefaultResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
+  public final IAjaxResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     // Get all request parameter values to use from the request scope, as the
     // request scope already differentiated between String, String[] and
@@ -83,7 +83,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
     modifyRequestParamMap (aParams);
 
     // Main invocation
-    final AjaxDefaultResponse aResult = mainHandleRequest (aRequestScope, aParams);
+    final IAjaxResponse aResult = mainHandleRequest (aRequestScope, aParams);
     if (aResult == null)
       throw new IllegalStateException ("Invocation of " +
                                        CGStringHelper.getClassLocalName (getClass ()) +

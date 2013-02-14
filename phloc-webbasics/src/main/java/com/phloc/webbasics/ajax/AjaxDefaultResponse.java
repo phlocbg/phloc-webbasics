@@ -40,7 +40,7 @@ import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
-public final class AjaxDefaultResponse implements ISuccessIndicator
+public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
 {
   public static final String PROPERTY_SUCCESS = "success";
   public static final String PROPERTY_ERRORMESSAGE = "errormessage";
@@ -182,19 +182,19 @@ public final class AjaxDefaultResponse implements ISuccessIndicator
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess ()
+  public static IAjaxResponse createSuccess ()
   {
     return createSuccess (null);
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
+  public static IAjaxResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
   {
     return new AjaxDefaultResponse (true, null, aSuccessValue);
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createError (@Nullable final String sErrorMessage)
+  public static IAjaxResponse createError (@Nullable final String sErrorMessage)
   {
     return new AjaxDefaultResponse (false, sErrorMessage, null);
   }

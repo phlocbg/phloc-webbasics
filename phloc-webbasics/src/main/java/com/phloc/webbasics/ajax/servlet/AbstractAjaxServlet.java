@@ -40,9 +40,9 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.CWebCharset;
-import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxExceptionHandler;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
+import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.RequestLogger;
@@ -153,8 +153,7 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
           final StopWatch aSW = new StopWatch (true);
 
           // E.g. for keep-alive
-          final AjaxDefaultResponse aResult = getAjaxInvoker (aRequestScope).invokeFunction (sAjaxFunctionName,
-                                                                                             aRequestScope);
+          final IAjaxResponse aResult = getAjaxInvoker (aRequestScope).invokeFunction (sAjaxFunctionName, aRequestScope);
           if (s_aLogger.isTraceEnabled ())
             s_aLogger.trace ("  AJAX Result: " + aResult);
 

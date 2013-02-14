@@ -38,6 +38,8 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
+import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.IScopeRenewalAware;
 import com.phloc.scopes.web.singleton.SessionWebSingleton;
 
@@ -49,6 +51,7 @@ import com.phloc.scopes.web.singleton.SessionWebSingleton;
 @ThreadSafe
 public final class UIStateRegistry extends SessionWebSingleton implements IScopeRenewalAware
 {
+  public static final ObjectType OT_HCNODE = new ObjectType ("hcnode");
   private static final Logger s_aLogger = LoggerFactory.getLogger (UIStateRegistry.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
@@ -66,7 +69,8 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   }
 
   /**
-   * Get the state with the passed ID for the current session.
+   * Get the state with the passed ID for the current session. In case the state
+   * is a {@link UIStateWrapper} instance, it is returned as is.
    * 
    * @param sStateID
    *        The state ID to be searched
@@ -74,8 +78,13 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
    *         registered or <code>null</code>
    */
   @Nullable
-  public IHasUIState getState (@Nonnull final ObjectType aOT, @Nullable final String sStateID)
+  public IHasUIState getState (@Nullable final ObjectType aOT, @Nullable final String sStateID)
   {
+    if (aOT == null)
+      return null;
+    if (StringHelper.hasNoText (sStateID))
+      return null;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -106,10 +115,29 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     }
   }
 
+  /**
+   * Get the state object in the specified type. If the saved state is a
+   * {@link UIStateWrapper} instance, the contained value is returned!
+   * 
+   * @param aOT
+   *        The ObjectType to be resolved. May be <code>null</code>.
+   * @param sStateID
+   *        The state ID to be resolved.
+   * @return <code>null</code> if no such object was found.
+   */
   @Nullable
-  public <T extends IHasUIState> T getCastedState (@Nonnull final ObjectType aOT, @Nullable final String sStateID)
+  public <T> T getCastedState (@Nullable final ObjectType aOT, @Nullable final String sStateID)
   {
-    return GenericReflection.<IHasUIState, T> uncheckedCast (getState (aOT, sStateID));
+    final IHasUIState aObject = getState (aOT, sStateID);
+    if (aObject == null)
+      return null;
+
+    // Special handling for UI state wrapper to retrieve the contained object
+    if (aObject instanceof UIStateWrapper <?>)
+      return ((UIStateWrapper <?>) aObject).<T> getCastedObject ();
+
+    // Regular cast
+    return GenericReflection.<IHasUIState, T> uncheckedCast (aObject);
   }
 
   /**
@@ -132,10 +160,13 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     if (aNewState == null)
       throw new NullPointerException ("newState");
 
+    final ObjectType aOT = aNewState.getTypeID ();
+    if (aOT == null)
+      throw new IllegalStateException ("Object has no typeID: " + aNewState);
+
     m_aRWLock.writeLock ().lock ();
     try
     {
-      final ObjectType aOT = aNewState.getTypeID ();
       Map <String, IHasUIState> aMap = m_aMap.get (aOT);
       if (aMap == null)
       {
@@ -153,6 +184,33 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
     {
       m_aRWLock.writeLock ().unlock ();
     }
+  }
+
+  /**
+   * Register a state for the passed HC element, using the internal ID of the
+   * element.
+   * 
+   * @param aNewElement
+   *        The element to be added to the registry. May not be
+   *        <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public EChange registerState (@Nonnull final IHCElement <?> aNewElement)
+  {
+    if (aNewElement == null)
+      throw new NullPointerException ("newElement");
+
+    return registerState (aNewElement.getID (), aNewElement);
+  }
+
+  @Nonnull
+  public EChange registerState (@Nonnull @Nonempty final String sStateID, @Nonnull final IHCNode aNewNode)
+  {
+    if (aNewNode == null)
+      throw new NullPointerException ("newNode");
+
+    return registerState (sStateID, UIStateWrapper.create (OT_HCNODE, aNewNode));
   }
 
   @Nonnull
