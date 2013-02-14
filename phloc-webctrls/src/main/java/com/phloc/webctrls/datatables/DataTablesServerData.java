@@ -37,7 +37,7 @@ public final class DataTablesServerData implements IHasUIState
 
     public CellData (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
     {
-      final IMicroNode aNode = aCell.convertToNode (aCS);
+      final IMicroNode aNode = aCell.getAllChildrenAsNodeList ().convertToNode (aCS);
       m_sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
       if (aNode instanceof IMicroNodeWithChildren)
         m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
