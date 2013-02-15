@@ -51,7 +51,7 @@ public class BootstrapTableFormView extends BootstrapTable
     _init ();
   }
 
-  public BootstrapTableFormView (@Nullable final Iterable <HCCol> aCols)
+  public BootstrapTableFormView (@Nullable final Iterable <? extends HCCol> aCols)
   {
     super (aCols);
     _init ();

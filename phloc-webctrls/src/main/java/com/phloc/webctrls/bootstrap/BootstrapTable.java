@@ -51,7 +51,7 @@ public class BootstrapTable extends AbstractHCTable <BootstrapTable>
     _init ();
   }
 
-  public BootstrapTable (@Nullable final Iterable <HCCol> aCols)
+  public BootstrapTable (@Nullable final Iterable <? extends HCCol> aCols)
   {
     super (aCols);
     _init ();
