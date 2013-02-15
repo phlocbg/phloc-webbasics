@@ -34,15 +34,13 @@ public enum EFineUploaderText implements IHasDisplayText
   TOO_MANY_FILE_ERROR ("Sie können immer nur eine Datei hierher ziehen.", "You may only drop one file."),
   // text
   UPLOAD_BUTTON ("Datei auswählen", "Upload a file"),
-  CANCEL_BUTTON ("Abbrechen", "Cancel"),
+  CANCEL_BUTTON ("Löschen", "Delete"),
   RETRY_BUTTON ("Wiederholen", "Retry"),
   FAIL_UPLOAD ("Hochladen fehlgeschlagen", "Upload failed"),
   DRAG_ZONE ("Dateien hier loslassen, um sie hochzuladen", "Drop files here to upload"),
   DROP_PROCESSING ("Verarbeite Dateien...", "Processing dropped files..."),
   FORMAT_PROGRESS ("{percent}% von {total_size}", "{percent}% of {total_size}"),
-  WAITING_FOR_RESPONSE ("Verarbeitung...", "Processing...")
-
-  ;
+  WAITING_FOR_RESPONSE ("Verarbeitung...", "Processing...");
 
   private final ITextProvider m_aTP;
 
