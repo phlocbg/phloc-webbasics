@@ -1,4 +1,4 @@
-package com.phloc.webctrls.datatables;
+package com.phloc.webctrls.datatables.ajax;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ComparatorAsString;
@@ -39,10 +40,8 @@ import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
-import com.phloc.webctrls.datatables.DataTablesServerData;
-import com.phloc.webctrls.datatables.DataTablesServerData.CellData;
-import com.phloc.webctrls.datatables.DataTablesServerData.RowData;
-import com.phloc.webctrls.datatables.DataTablesServerState;
+import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
+import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {
@@ -75,11 +74,11 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final DataTablesServerState aOldServerState = aDataTables.getServerState ();
     final DataTablesServerState aNewServerState = new DataTablesServerState (aRequestData.getSearch (),
                                                                              aRequestData.isRegEx (),
-                                                                             aRequestData.getSortCols ());
+                                                                             aRequestData.getSortColumnArray ());
     if (true || !aNewServerState.equals (aOldServerState))
     {
       // Must we change the sorting?
-      final int [] aNewSortCols = aNewServerState.getSortCols ();
+      final RequestDataSortColumn [] aNewSortCols = aNewServerState.getSortCols ();
       if (true || !Arrays.equals (aOldServerState.getSortCols (), aNewSortCols))
       {
         final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
@@ -88,13 +87,14 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
           protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
           {
             int ret = 0;
-            for (final int nSortIndex : aNewSortCols)
+            for (final RequestDataSortColumn aSortColumn : aNewSortCols)
             {
-              final RequestDataPerColumn aDPC = aRequestData.getColumn (aNewSortCols[nSortIndex]);
-              final ComparatorAsString aStringComp = new ComparatorAsString (aDisplayLocale, aDPC.getSortDir ());
+              final int nSortColumnIndex = aSortColumn.getColumnIndex ();
+              final ComparatorAsString aStringComp = new ComparatorAsString (aDisplayLocale,
+                                                                             aSortColumn.getSortDirectionOrDefault ());
 
-              final CellData aCell1 = aRow1.getCellAtIndex (nSortIndex);
-              final CellData aCell2 = aRow2.getCellAtIndex (nSortIndex);
+              final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
+              final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
               ret = aStringComp.compare (aCell1.getTextContent (), aCell2.getTextContent ());
               if (ret != 0)
                 break;
@@ -115,7 +115,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       // filter rows
       final String sGlobalSearchText = aNewServerState.getSearchText ();
       final boolean bGlobalSearchRegEx = aNewServerState.isSearchRegEx ();
-      final RequestDataPerColumn [] aColumns = aRequestData.getColumnDataArray ();
+      final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
 
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
       for (final RowData aRow : aResultRows)
@@ -123,13 +123,13 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         int nCellIndex = 0;
         for (final CellData aCell : aRow.directGetAllCells ())
         {
-          final RequestDataPerColumn aColumn = aColumns[nCellIndex];
+          final RequestDataColumn aColumn = aColumns[nCellIndex];
           if (aColumn.isSearchable ())
           {
-            String sSearchText = aColumn.getSearch ();
+            String sSearchText = aColumn.getSearchText ();
             if (StringHelper.hasNoText (sSearchText))
               sSearchText = sGlobalSearchText;
-            final boolean bIsRegEx = aColumn.isRegEx () || bGlobalSearchRegEx;
+            final boolean bIsRegEx = aColumn.isSearchRegEx () || bGlobalSearchRegEx;
             final boolean bIsMatching = bIsRegEx ? aCell.matchesRegEx (sSearchText)
                                                 : aCell.matchesPlain (sSearchText, aDisplayLocale);
             if (bIsMatching)
@@ -173,6 +173,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
+    System.out.println (ContainerHelper.getSortedByKey (aParams.getAllAttributes ()));
     // Read input parameters
     final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
     final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);
@@ -181,34 +182,34 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final boolean bRegEx = aParams.getAttributeAsBoolean (REGEX, false);
     final int nSortingCols = aParams.getAttributeAsInt (SORTING_COLS);
     final int nEcho = aParams.getAttributeAsInt (ECHO);
-    final List <RequestDataPerColumn> aColumnData = new ArrayList <RequestDataPerColumn> (nColumns);
+    final List <RequestDataColumn> aColumnData = new ArrayList <RequestDataColumn> (nColumns);
     for (int nColumn = 0; nColumn < nColumns; ++nColumn)
     {
       final boolean bCSearchable = aParams.getAttributeAsBoolean (SEARCHABLE_PREFIX + nColumn);
       final String sCSearch = aParams.getAttributeAsString (SEARCH_PREFIX + nColumn);
       final boolean bCRegEx = aParams.getAttributeAsBoolean (REGEX_PREFIX + nColumn);
       final boolean bCSortable = aParams.getAttributeAsBoolean (SORTABLE_PREFIX + nColumn);
-      final String sCSortDir = aParams.getAttributeAsString (SORT_DIR_PREFIX + nColumn);
+      final String sCDataProp = aParams.getAttributeAsString (DATA_PROP_PREFIX + nColumn);
+      aColumnData.add (new RequestDataColumn (bCSearchable, sCSearch, bCRegEx, bCSortable, sCDataProp));
+    }
+    final RequestDataSortColumn [] aSortColumns = new RequestDataSortColumn [nSortingCols];
+    for (int i = 0; i < nSortingCols; ++i)
+    {
+      final int nCSortCol = aParams.getAttributeAsInt (SORT_COL_PREFIX + i);
+      final String sCSortDir = aParams.getAttributeAsString (SORT_DIR_PREFIX + i);
       final ESortOrder eCSortDir = CDataTables.SORT_ASC.equals (sCSortDir)
                                                                           ? ESortOrder.ASCENDING
                                                                           : CDataTables.SORT_DESC.equals (sCSortDir)
                                                                                                                     ? ESortOrder.DESCENDING
                                                                                                                     : null;
-      final String sCDataProp = aParams.getAttributeAsString (DATA_PROP_PREFIX + nColumn);
-      aColumnData.add (new RequestDataPerColumn (bCSearchable, sCSearch, bCRegEx, bCSortable, eCSortDir, sCDataProp));
-    }
-    final int [] aSortCols = new int [nSortingCols];
-    for (int i = 0; i < nSortingCols; ++i)
-    {
-      final int nCSortCol = aParams.getAttributeAsInt (SORT_COL_PREFIX + i);
-      aSortCols[i] = nCSortCol;
+      aSortColumns[i] = new RequestDataSortColumn (nCSortCol, eCSortDir);
     }
     final RequestData aRequestData = new RequestData (nDisplayStart,
                                                       nDisplayLength,
                                                       sSearch,
                                                       bRegEx,
-                                                      aSortCols,
                                                       aColumnData,
+                                                      aSortColumns,
                                                       nEcho);
 
     // Resolve dataTables

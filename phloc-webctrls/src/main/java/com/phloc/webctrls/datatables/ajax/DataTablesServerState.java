@@ -1,4 +1,4 @@
-package com.phloc.webctrls.datatables;
+package com.phloc.webctrls.datatables.ajax;
 
 import java.util.Arrays;
 
@@ -11,26 +11,27 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.webctrls.datatables.DataTables;
 
 /**
  * The current search and sort state of a {@link DataTables} object.
  * 
  * @author philip
  */
-public final class DataTablesServerState
+final class DataTablesServerState
 {
   private final String m_sSearchText;
   private final boolean m_bSearchRegEx;
-  private final int [] m_aSortCols;
+  private final RequestDataSortColumn [] m_aSortCols;
 
   public DataTablesServerState ()
   {
-    this (null, false, new int [0]);
+    this (null, false, new RequestDataSortColumn [0]);
   }
 
   public DataTablesServerState (@Nullable final String sSearchText,
                                 final boolean bSearchRegEx,
-                                @Nonnull final int [] aSortCols)
+                                @Nonnull final RequestDataSortColumn [] aSortCols)
   {
     if (aSortCols == null)
       throw new NullPointerException ("sortCols");
@@ -65,7 +66,7 @@ public final class DataTablesServerState
 
   @Nonnull
   @ReturnsMutableCopy
-  public int [] getSortCols ()
+  public RequestDataSortColumn [] getSortCols ()
   {
     return ArrayHelper.getCopy (m_aSortCols);
   }

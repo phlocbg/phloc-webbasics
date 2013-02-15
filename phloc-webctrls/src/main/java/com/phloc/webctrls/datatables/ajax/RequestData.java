@@ -34,19 +34,19 @@ final class RequestData
   private final int m_nDisplayLength;
   private final String m_sSearch;
   private final boolean m_bRegEx;
-  private final int [] m_aSortCols;
-  private final List <RequestDataPerColumn> m_aColumnData;
+  private final List <RequestDataColumn> m_aColumnData;
+  private final RequestDataSortColumn [] m_aSortColumns;
   private final int m_nEcho;
 
   RequestData (final int nDisplayStart,
                final int nDisplayLength,
                @Nullable final String sSearch,
                final boolean bRegEx,
-               @Nonnull final int [] aSortCols,
-               @Nonnull final List <RequestDataPerColumn> aColumnData,
+               @Nonnull final List <RequestDataColumn> aColumnData,
+               @Nonnull final RequestDataSortColumn [] aSortColumns,
                final int nEcho)
   {
-    if (aSortCols == null)
+    if (aSortColumns == null)
       throw new NullPointerException ("sortCols");
     if (aColumnData == null)
       throw new NullPointerException ("columnData");
@@ -56,8 +56,8 @@ final class RequestData
     m_nDisplayLength = nDisplayLength;
     m_sSearch = sSearch;
     m_bRegEx = bRegEx;
-    m_aSortCols = aSortCols;
     m_aColumnData = aColumnData;
+    m_aSortColumns = aSortColumns;
     m_nEcho = nEcho;
   }
 
@@ -106,40 +106,40 @@ final class RequestData
     return m_bRegEx;
   }
 
-  /**
-   * @return Number of columns to sort on. Always &ge; 0.
-   */
-  @Nonnegative
-  public int getSortingCols ()
-  {
-    return m_aSortCols.length;
-  }
-
   @Nonnull
-  @ReturnsMutableCopy
-  public int [] getSortCols ()
-  {
-    return ArrayHelper.newIntArray (m_aSortCols);
-  }
-
-  @Nonnull
-  public RequestDataPerColumn getColumn (@Nonnegative final int nIndex)
+  public RequestDataColumn getColumn (@Nonnegative final int nIndex)
   {
     return m_aColumnData.get (nIndex);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <RequestDataPerColumn> getColumnData ()
+  public List <RequestDataColumn> getColumnData ()
   {
     return ContainerHelper.newList (m_aColumnData);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public RequestDataPerColumn [] getColumnDataArray ()
+  public RequestDataColumn [] getColumnDataArray ()
   {
-    return ArrayHelper.newArray (m_aColumnData, RequestDataPerColumn.class);
+    return ArrayHelper.newArray (m_aColumnData, RequestDataColumn.class);
+  }
+
+  /**
+   * @return Number of columns to sort on. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getSortColumnCount ()
+  {
+    return m_aSortColumns.length;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public RequestDataSortColumn [] getSortColumnArray ()
+  {
+    return ArrayHelper.getCopy (m_aSortColumns);
   }
 
   /**
@@ -158,7 +158,7 @@ final class RequestData
                                        .append ("displayLength", m_nDisplayLength)
                                        .append ("search", m_sSearch)
                                        .append ("regEx", m_bRegEx)
-                                       .append ("sortCols", m_aSortCols)
+                                       .append ("sortCols", m_aSortColumns)
                                        .append ("columnData", m_aColumnData)
                                        .append ("echo", m_nEcho)
                                        .toString ();
