@@ -142,7 +142,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
 
   public static final void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EFineUploaderJSPathProvider.FINEUPLOADER_311);
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EFineUploaderCSSPathProvider.FINEUPLOADER_311);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EFineUploaderJSPathProvider.FINEUPLOADER_320);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EFineUploaderCSSPathProvider.FINEUPLOADER_320);
   }
 }

@@ -30,7 +30,8 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EFineUploaderCSSPathProvider implements ICSSPathProvider
 {
-  FINEUPLOADER_311 ("fineupload/311/fineuploader.css");
+  FINEUPLOADER_311 ("fineupload/311/fineuploader.css"),
+  FINEUPLOADER_320 ("fineupload/320/fineuploader.css");
 
   private final String m_sPath;
 

@@ -25,7 +25,8 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EFineUploaderJSPathProvider implements IJSPathProvider
 {
-  FINEUPLOADER_311 ("fineupload/311/jquery.fineuploader-3.1.1.js");
+  FINEUPLOADER_311 ("fineupload/311/jquery.fineuploader-3.1.1.js"),
+  FINEUPLOADER_320 ("fineupload/320/fineuploader.js");
 
   private final String m_sPath;
 

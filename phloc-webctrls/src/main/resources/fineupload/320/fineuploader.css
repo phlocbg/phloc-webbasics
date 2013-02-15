@@ -17,12 +17,14 @@
     border-bottom: 1px solid #DDD;
     color: #FFF;
 }
+/* Change Philip
 .qq-upload-button-hover {
     background: #CC0000;
 }
 .qq-upload-button-focus {
     outline: 1px dotted #000000;
 }
+*/
 .qq-upload-drop-area, .qq-upload-extra-drop-area {
     position: absolute;
     top: 0;
