@@ -76,14 +76,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final DataTablesServerState aNewServerState = new DataTablesServerState (aRequestData.getSearch (),
                                                                              aRequestData.isRegEx (),
                                                                              aRequestData.getSortCols ());
-    if (!aNewServerState.equals (aOldServerState))
+    if (true || !aNewServerState.equals (aOldServerState))
     {
       // Must we change the sorting?
       final int [] aNewSortCols = aNewServerState.getSortCols ();
-      if (!Arrays.equals (aOldServerState.getSortCols (), aNewSortCols))
+      if (true || !Arrays.equals (aOldServerState.getSortCols (), aNewSortCols))
       {
-        final ComparatorAsString aStringComp = new ComparatorAsString (aDisplayLocale);
-        // FIXME comparator
         final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
         {
           @Override
@@ -92,6 +90,9 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
             int ret = 0;
             for (final int nSortIndex : aNewSortCols)
             {
+              final RequestDataPerColumn aDPC = aRequestData.getColumn (aNewSortCols[nSortIndex]);
+              final ComparatorAsString aStringComp = new ComparatorAsString (aDisplayLocale, aDPC.getSortDir ());
+
               final CellData aCell1 = aRow1.getCellAtIndex (nSortIndex);
               final CellData aCell2 = aRow2.getCellAtIndex (nSortIndex);
               ret = aStringComp.compare (aCell1.getTextContent (), aCell2.getTextContent ());
