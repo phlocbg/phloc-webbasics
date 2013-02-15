@@ -146,6 +146,7 @@ public abstract class AbstractDAO implements IDAO
   }
 
   @Nonnull
+  @Deprecated
   public final EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
   {
     m_aRWLock.writeLock ().lock ();
