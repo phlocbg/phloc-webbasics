@@ -18,26 +18,26 @@ import com.phloc.webctrls.datatables.DataTables;
  * 
  * @author philip
  */
-final class DataTablesServerState
+final class ServerState
 {
   private final String m_sSearchText;
   private final boolean m_bSearchRegEx;
-  private final RequestDataSortColumn [] m_aSortCols;
+  private final RequestDataSortColumn [] m_aSortState;
 
-  public DataTablesServerState ()
+  public ServerState ()
   {
     this (null, false, new RequestDataSortColumn [0]);
   }
 
-  public DataTablesServerState (@Nullable final String sSearchText,
-                                final boolean bSearchRegEx,
-                                @Nonnull final RequestDataSortColumn [] aSortCols)
+  public ServerState (@Nullable final String sSearchText,
+                      final boolean bSearchRegEx,
+                      @Nonnull final RequestDataSortColumn [] aSortCols)
   {
     if (aSortCols == null)
       throw new NullPointerException ("sortCols");
     m_sSearchText = StringHelper.hasNoText (sSearchText) ? null : sSearchText;
     m_bSearchRegEx = bSearchRegEx;
-    m_aSortCols = aSortCols;
+    m_aSortState = aSortCols;
   }
 
   public boolean hasSearchText ()
@@ -61,14 +61,14 @@ final class DataTablesServerState
    */
   public int getSortingCols ()
   {
-    return m_aSortCols.length;
+    return m_aSortState.length;
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public RequestDataSortColumn [] getSortCols ()
   {
-    return ArrayHelper.getCopy (m_aSortCols);
+    return ArrayHelper.getCopy (m_aSortState);
   }
 
   @Override
@@ -76,12 +76,12 @@ final class DataTablesServerState
   {
     if (o == this)
       return true;
-    if (!(o instanceof DataTablesServerState))
+    if (!(o instanceof ServerState))
       return false;
-    final DataTablesServerState rhs = (DataTablesServerState) o;
+    final ServerState rhs = (ServerState) o;
     return EqualsUtils.equals (m_sSearchText, rhs.m_sSearchText) &&
            m_bSearchRegEx == rhs.m_bSearchRegEx &&
-           Arrays.equals (m_aSortCols, rhs.m_aSortCols);
+           Arrays.equals (m_aSortState, rhs.m_aSortState);
   }
 
   @Override
@@ -89,7 +89,7 @@ final class DataTablesServerState
   {
     return new HashCodeGenerator (this).append (m_sSearchText)
                                        .append (m_bSearchRegEx)
-                                       .append (m_aSortCols)
+                                       .append (m_aSortState)
                                        .getHashCode ();
   }
 
@@ -98,7 +98,7 @@ final class DataTablesServerState
   {
     return new ToStringGenerator (this).append ("searchText", m_sSearchText)
                                        .append ("searchRegEx", m_bSearchRegEx)
-                                       .append ("sortCols", m_aSortCols)
+                                       .append ("sortCols", m_aSortState)
                                        .toString ();
   }
 }

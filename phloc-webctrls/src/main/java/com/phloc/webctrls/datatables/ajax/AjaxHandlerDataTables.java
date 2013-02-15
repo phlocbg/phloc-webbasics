@@ -71,8 +71,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                        @Nonnull final DataTablesServerData aDataTables)
   {
     final Locale aDisplayLocale = aDataTables.getDisplayLocale ();
-    final DataTablesServerState aOldServerState = aDataTables.getServerState ();
-    final DataTablesServerState aNewServerState = new DataTablesServerState (aRequestData.getSearch (),
+    final ServerState aOldServerState = aDataTables.getServerState ();
+    final ServerState aNewServerState = new ServerState (aRequestData.getSearch (),
                                                                              aRequestData.isRegEx (),
                                                                              aRequestData.getSortColumnArray ());
     if (true || !aNewServerState.equals (aOldServerState))

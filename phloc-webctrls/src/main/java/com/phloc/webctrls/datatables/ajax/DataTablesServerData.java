@@ -148,7 +148,7 @@ public final class DataTablesServerData implements IHasUIState
 
   public static final ObjectType OBJECT_TYPE = new ObjectType ("datatables");
 
-  private DataTablesServerState m_aServerState = new DataTablesServerState ();
+  private ServerState m_aServerState = new ServerState ();
   private final List <RowData> m_aRows;
   private final Locale m_aDisplayLocale;
 
@@ -172,13 +172,13 @@ public final class DataTablesServerData implements IHasUIState
   }
 
   @Nonnull
-  public DataTablesServerState getServerState ()
+  public ServerState getServerState ()
   {
     return m_aServerState;
   }
 
   @Nonnull
-  public void setServerState (@Nonnull final DataTablesServerState aServerState)
+  public void setServerState (@Nonnull final ServerState aServerState)
   {
     if (aServerState == null)
       throw new NullPointerException ("serverState");

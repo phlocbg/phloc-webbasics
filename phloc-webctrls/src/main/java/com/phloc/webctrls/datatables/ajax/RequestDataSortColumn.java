@@ -33,7 +33,7 @@ final class RequestDataSortColumn
   private final int m_nColumnIndex;
   private final ESortOrder m_eSortDirection;
 
-  RequestDataSortColumn (final int nColumnIndex, @Nullable final ESortOrder eSortDirection)
+  RequestDataSortColumn (@Nonnegative final int nColumnIndex, @Nullable final ESortOrder eSortDirection)
   {
     m_nColumnIndex = nColumnIndex;
     m_eSortDirection = eSortDirection;
