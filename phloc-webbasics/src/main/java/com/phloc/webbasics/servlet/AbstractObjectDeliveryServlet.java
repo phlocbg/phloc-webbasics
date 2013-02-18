@@ -96,7 +96,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
     _asSet (s_aDeniedExtensions, getInitParameter ("deniedExtensions"));
   }
 
-  private boolean _hasValidExtension (@Nullable final String sFilename)
+  private static boolean _hasValidExtension (@Nullable final String sFilename)
   {
     final String sExt = _unifyExtension (FilenameHelper.getExtension (sFilename));
     if (s_aDeniedExtensions.contains (sExt) || s_aDeniedExtensions.contains ("*"))

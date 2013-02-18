@@ -34,8 +34,11 @@ import com.phloc.webbasics.form.FormStateManager;
 
 public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
 {
+  /** Special field for the flow ID */
   public static final String FIELD_FLOW_ID = "$flowid";
+  /** Special field to restore a flow ID */
   public static final String FIELD_RESTORE_FLOW_ID = "$restoreflowid";
+  /** Special prefix for field names */
   public static final String PREFIX_FIELD = "field-";
   // Same as in form.js!
   private static final String ATTR_PAGE_ID = "$pageID";

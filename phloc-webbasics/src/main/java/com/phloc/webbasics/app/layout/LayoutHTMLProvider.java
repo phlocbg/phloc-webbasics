@@ -41,6 +41,7 @@ import com.phloc.webbasics.app.html.InternalErrorHandler;
  */
 public class LayoutHTMLProvider extends AbstractHTMLProvider
 {
+  /** CSS class for each layout area - mainly for debugging */
   public static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
   private final ILayoutManager m_aLayoutMgr;

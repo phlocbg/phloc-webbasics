@@ -37,13 +37,20 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 @Immutable
 public final class AcceptEncodingHandler
 {
+  /** Any encoding */
   public static final String ANY_ENCODING = "*";
   // Standard encodings - must all be lowercase!
+  /** Standard encoding "identity" */
   public static final String IDENTITY_ENCODING = "identity";
+  /** Standard encoding "gzip" */
   public static final String GZIP_ENCODING = "gzip";
+  /** Standard encoding "x-gzip" */
   public static final String X_GZIP_ENCODING = "x-gzip";
+  /** Standard encoding "deflate" */
   public static final String DEFLATE_ENCODING = "deflate";
+  /** Standard encoding "compress" */
   public static final String COMPRESS_ENCODING = "compress";
+  /** Standard encoding "x-compress" */
   public static final String X_COMPRESS_ENCODING = "x-compress";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (AcceptEncodingHandler.class);

@@ -41,10 +41,15 @@ import com.phloc.webbasics.app.LinkUtils;
  */
 public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends AbstractMenuItemRenderer <T>
 {
+  /** CSS class for a menu separator */
   public static final ICSSClassProvider CSS_CLASS_MENU_SEPARATOR = DefaultCSSClassProvider.create ("menu_separator");
+  /** CSS class for a menu item to an internal page */
   public static final ICSSClassProvider CSS_CLASS_MENU_ITEM = DefaultCSSClassProvider.create ("menu_item");
+  /** CSS class for a menu item to an external page */
   public static final ICSSClassProvider CSS_CLASS_MENU_ITEM_EXTERNAL = DefaultCSSClassProvider.create ("menu_item_external");
+  /** CSS class for the selected menu item */
   public static final ICSSClassProvider CSS_CLASS_SELECTED_MENU_ITEM = DefaultCSSClassProvider.create ("selected_menu_item");
+  /** HTML ID prefix for menu items */
   public static final String CSS_ID_PREFIX_MENU_ITEM = "menu_item_";
 
   public DefaultMenuItemRenderer (@Nonnull final Locale aContentLocale)

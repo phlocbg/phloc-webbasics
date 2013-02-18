@@ -36,6 +36,7 @@ import com.phloc.commons.version.Version;
 @Immutable
 public class BrowserInfo implements IHasDisplayText
 {
+  /** Is it not */
   public static final BrowserInfo IS_IT_NOT = new BrowserInfo ();
 
   private final EBrowserType m_eBrowserType;

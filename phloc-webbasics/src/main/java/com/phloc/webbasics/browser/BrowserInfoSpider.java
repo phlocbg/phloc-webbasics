@@ -32,6 +32,7 @@ import com.phloc.webbasics.spider.WebSpiderInfo;
  */
 public final class BrowserInfoSpider extends BrowserInfo
 {
+  /** Is it not */
   @SuppressWarnings ("hiding")
   public static final BrowserInfoSpider IS_IT_NOT = new BrowserInfoSpider ();
 

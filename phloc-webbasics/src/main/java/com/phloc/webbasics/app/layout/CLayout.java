@@ -24,14 +24,23 @@ package com.phloc.webbasics.app.layout;
  */
 public final class CLayout
 {
-  /** Layout area IDs - used in CSS!!! */
+  // Layout area IDs - used in CSS!!!
+
+  /** Header layout area */
   public static final String LAYOUT_AREAID_HEADER = "header";
+  /** NavBar layout area */
   public static final String LAYOUT_AREAID_NAVBAR = "navbar";
+  /** Viewport/MainContent layout area */
   public static final String LAYOUT_AREAID_VIEWPORT = "viewport";
+  /** Left layout area */
   public static final String LAYOUT_AREAID_LEFT = "left";
+  /** Menu layout area */
   public static final String LAYOUT_AREAID_MENU = "menu";
+  /** Special layout area */
   public static final String LAYOUT_AREAID_SPECIAL = "special";
+  /** Content layout area */
   public static final String LAYOUT_AREAID_CONTENT = "content";
+  /** Footer layout area */
   public static final String LAYOUT_AREAID_FOOTER = "footer";
 
   private CLayout ()

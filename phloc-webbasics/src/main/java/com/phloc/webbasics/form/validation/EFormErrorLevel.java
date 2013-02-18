@@ -34,20 +34,17 @@ import com.phloc.commons.state.ISuccessIndicator;
  * 
  * @author philip
  */
-public enum EFormErrorLevel implements
-                           IHasID <String>,
-                           ISuccessIndicator,
-                           IErrorIndicator,
-                           IHasErrorLevel,
-                           ISeverityComparable <EFormErrorLevel>
+public enum EFormErrorLevel implements IHasID <String>, ISuccessIndicator, IErrorIndicator, IHasErrorLevel, ISeverityComparable <EFormErrorLevel>
 {
   SUCCESS (EErrorLevel.SUCCESS),
   INFO (EErrorLevel.INFO),
   WARN (EErrorLevel.WARN),
   ERROR (EErrorLevel.ERROR);
 
+  /** Lowest error level */
   @Nonnull
   public static final EFormErrorLevel LOWEST = SUCCESS;
+  /** Highest error level */
   @Nonnull
   public static final EFormErrorLevel HIGHEST = ERROR;
 

@@ -28,6 +28,7 @@ import com.phloc.html.hc.html5.HCFooter;
 
 public class BootstrapContainer implements IHCNodeBuilder
 {
+  /** By default the container is fluid */
   public static final boolean DEFAULT_FLUID = true;
 
   private final boolean m_bFluid;

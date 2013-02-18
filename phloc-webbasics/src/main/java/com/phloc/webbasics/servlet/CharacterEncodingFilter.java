@@ -41,9 +41,13 @@ import com.phloc.commons.string.StringParser;
  */
 public class CharacterEncodingFilter implements Filter
 {
+  /** Name of the init parameter for the encoding */
   public static final String FILTER_INITPARAM_ENCODING = "encoding";
+  /** Name of the init parameter to force setting the encoding */
   public static final String FILTER_INITPARAM_FORCE_ENCODING = "forceEncoding";
+  /** The default encoding is UTF-8 */
   public static final String DEFAULT_ENCODING = CCharset.CHARSET_UTF_8;
+  /** By default the encoding is not enforced. */
   public static final boolean DEFAULT_FORCE_ENCODING = false;
   private static final String REQUEST_ATTR = CharacterEncodingFilter.class.getName ();
 

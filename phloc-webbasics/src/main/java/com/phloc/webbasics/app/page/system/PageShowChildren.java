@@ -38,8 +38,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 public class PageShowChildren extends AbstractWebPage
 {
-  private static final class ShowChildren extends
-                                         DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
+  private static final class ShowChildren extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
     private final Locale m_aDisplayLocale;
     private final NonBlockingStack <HCUL> m_aStack;

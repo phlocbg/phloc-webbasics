@@ -34,7 +34,9 @@ import com.phloc.html.hc.impl.HCEntityNode;
  */
 public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends AbstractHCDiv <THISTYPE>
 {
+  /** By default the close box is not shown */
   public static final boolean DEFAULT_SHOW_CLOSE = false;
+  /** By default the block CSS class is not applied */
   public static final boolean DEFAULT_BLOCK = false;
 
   private EBootstrapAlertType m_eType = EBootstrapAlertType.DEFAULT;

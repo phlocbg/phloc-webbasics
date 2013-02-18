@@ -42,10 +42,15 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 @Immutable
 public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
 {
+  /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
+  /** Error message property */
   public static final String PROPERTY_ERRORMESSAGE = "errormessage";
+  /** Response value property */
   public static final String PROPERTY_VALUE = "value";
+  /** Additional CSS property */
   public static final String PROPERTY_EXTERNAL_CSS = "externalcss";
+  /** Additional JS property */
   public static final String PROPERTY_EXTERNAL_JS = "externaljs";
 
   private final boolean m_bSuccess;

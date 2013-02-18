@@ -85,6 +85,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
     }
   }
 
+  /** By default a tab is not active */
   public static final boolean DEFAULT_ACTIVE = false;
 
   private EBootstrapTabBoxType m_eType = EBootstrapTabBoxType.TOP;

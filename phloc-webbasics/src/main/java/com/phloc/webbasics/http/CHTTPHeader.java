@@ -19,6 +19,7 @@ package com.phloc.webbasics.http;
 
 import javax.annotation.concurrent.Immutable;
 
+// ESCA-JAVA0116:
 /**
  * HTTP header constants.
  * 

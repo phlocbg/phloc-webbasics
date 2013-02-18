@@ -35,7 +35,9 @@ import com.phloc.html.hc.html.HCDiv;
 
 public class BootstrapRow implements IHCNodeBuilder
 {
+  /** By default a row is fluid */
   public static final boolean DEFAULT_FLUID = true;
+  /** The column count must match exactly 12 */
   public static final int BOOTSTRAP_COLUMN_COUNT = 12;
 
   @Immutable

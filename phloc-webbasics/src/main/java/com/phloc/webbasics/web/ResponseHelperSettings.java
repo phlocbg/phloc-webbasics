@@ -43,7 +43,7 @@ import com.phloc.webbasics.servlet.gzip.CompressFilterSettings;
 @ThreadSafe
 public final class ResponseHelperSettings
 {
-
+  /** A special date that never expires */
   public static final LocalDateTime EXPIRES_NEVER_DATETIME = PDTFactory.createLocalDateTime (1995,
                                                                                              DateTimeConstants.MAY,
                                                                                              6,
@@ -51,13 +51,15 @@ public final class ResponseHelperSettings
                                                                                              0,
                                                                                              0);
 
+  /** The string representation of never expires date */
   public static final String EXPIRES_NEVER_STRING = PDTWebDateUtils.getAsStringRFC822 (EXPIRES_NEVER_DATETIME);
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (CompressFilterSettings.class);
 
-  // Expires in at least 2 days (which is the minimum to be accepted for
-  // real caching in Yahoo Guidelines)
-  // Because of steady changes, use 1 day
+  /**
+   * Expires in at least 2 days (which is the minimum to be accepted for real
+   * caching in Yahoo Guidelines).
+   */
   public static final int DEFAULT_EXPIRATION_SECONDS = 7 * CGlobal.SECONDS_PER_DAY;
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();

@@ -31,6 +31,7 @@ import com.phloc.commons.version.Version;
  */
 public final class BrowserInfoIE extends BrowserInfo
 {
+  /** Is it not */
   @SuppressWarnings ("hiding")
   public static final BrowserInfoIE IS_IT_NOT = new BrowserInfoIE ();
 

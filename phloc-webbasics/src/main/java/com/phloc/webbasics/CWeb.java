@@ -29,7 +29,9 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 @Immutable
 public final class CWeb
 {
+  /** Default HTTP port */
   public static final int DEFAULT_PORT_HTTP = 80;
+  /** Default HTTPS port */
   public static final int DEFAULT_PORT_HTTPS = 443;
 
   @PresentForCodeCoverage

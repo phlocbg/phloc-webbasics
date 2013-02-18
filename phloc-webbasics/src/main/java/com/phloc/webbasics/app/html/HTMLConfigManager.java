@@ -48,9 +48,13 @@ import com.phloc.commons.microdom.reader.XMLMapHandler;
 @Immutable
 public final class HTMLConfigManager
 {
+  /** Filename containing the CSS includes */
   public static final String FILENAME_CSS_XML = "html/css.xml";
+  /** Filename containing the JS includes */
   public static final String FILENAME_JS_XML = "html/js.xml";
+  /** Filename containing the meta elements */
   public static final String FILENAME_METATAGS_XML = "html/metatags.xml";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
   private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
 

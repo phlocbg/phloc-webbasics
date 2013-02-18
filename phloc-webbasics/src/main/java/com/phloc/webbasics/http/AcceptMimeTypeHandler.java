@@ -40,6 +40,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 @Immutable
 public final class AcceptMimeTypeHandler
 {
+  /** Any MIME type */
   public static final IMimeType ANY_MIMETYPE = new MimeType (EMimeContentType._STAR, "*");
   private static final Logger s_aLogger = LoggerFactory.getLogger (AcceptMimeTypeHandler.class);
 

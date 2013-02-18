@@ -46,12 +46,14 @@ import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
 @NotThreadSafe
 public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpResponseWrapper
 {
+  /** The minimum size where compression is applied */
+  public static final int DEFAULT_MIN_COMPRESSED_SIZE = 256;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractCompressedResponseWrapper.class);
 
   private final HttpServletRequest m_aHttpRequest;
   private final String m_sContentEncoding;
   private long m_nContentLength = -1;
-  private final int m_nMinCompressSize = 256;
+  private final int m_nMinCompressSize = DEFAULT_MIN_COMPRESSED_SIZE;
   private AbstractCompressedServletOutputStream m_aCompressedOS;
   private PrintWriter m_aWriter;
   private boolean m_bNoCompression = false;

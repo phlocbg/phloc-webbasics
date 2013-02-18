@@ -37,6 +37,7 @@ import com.phloc.webctrls.custom.IIcon;
  */
 public class BootstrapNav extends HCUL
 {
+  /** By default the Nav is not active */
   public static final boolean DEFAULT_ACTIVE = false;
 
   public BootstrapNav ()

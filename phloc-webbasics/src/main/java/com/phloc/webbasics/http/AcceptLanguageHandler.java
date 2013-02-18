@@ -34,6 +34,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 @Immutable
 public final class AcceptLanguageHandler
 {
+  /** Any language */
   public static final String ANY_LANGUAGE = "*";
 
   private AcceptLanguageHandler ()

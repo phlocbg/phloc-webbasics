@@ -34,13 +34,21 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 @Immutable
 public final class CWebCharset
 {
+  /** Default charset for URLs: UTF-8 */
   public static final String CHARSET_URL = URLUtils.CHARSET_URL;
+  /** Default charset for URLs: UTF-8 */
   public static final Charset CHARSET_URL_OBJ = URLUtils.CHARSET_URL_OBJ;
+  /** Default charset for requests: UTF-8 */
   public static final String CHARSET_REQUEST = CCharset.CHARSET_UTF_8;
+  /** Default charset for requests: UTF-8 */
   public static final Charset CHARSET_REQUEST_OBJ = CCharset.CHARSET_UTF_8_OBJ;
+  /** Default charset for multipart requests: UTF-8 */
   public static final String CHARSET_MULTIPART = CCharset.CHARSET_UTF_8;
+  /** Default charset for multipart requests: UTF-8 */
   public static final Charset CHARSET_MULTIPART_OBJ = CCharset.CHARSET_UTF_8_OBJ;
+  /** Default charset for XML: UTF-8 */
   public static final String CHARSET_XML = XMLWriterSettings.DEFAULT_XML_CHARSET;
+  /** Default charset for XML: UTF-8 */
   public static final Charset CHARSET_XML_OBJ = XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ;
 
   @PresentForCodeCoverage

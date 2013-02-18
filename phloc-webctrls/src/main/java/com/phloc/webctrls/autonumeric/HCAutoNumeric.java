@@ -62,6 +62,7 @@ import com.phloc.webbasics.form.RequestField;
  */
 public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 {
+  /** The special CSS class to use for numeric inputs */
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
   private static final Logger s_aLogger = LoggerFactory.getLogger (HCAutoNumeric.class);
 

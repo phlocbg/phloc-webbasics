@@ -51,6 +51,7 @@ import com.phloc.scopes.web.singleton.SessionWebSingleton;
 @ThreadSafe
 public final class UIStateRegistry extends SessionWebSingleton implements IScopeRenewalAware
 {
+  /** ObjectType */
   public static final ObjectType OT_HCNODE = new ObjectType ("hcnode");
   private static final Logger s_aLogger = LoggerFactory.getLogger (UIStateRegistry.class);
 

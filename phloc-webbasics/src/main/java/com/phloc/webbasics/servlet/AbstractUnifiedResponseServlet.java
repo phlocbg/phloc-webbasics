@@ -20,6 +20,7 @@ package com.phloc.webbasics.servlet;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
@@ -63,11 +65,15 @@ import com.phloc.webbasics.web.UnifiedResponse;
  */
 public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareHttpServlet
 {
+  /** Default allowed methods: HEAD, GET and POST */
   public static final EnumSet <EHTTPMethod> DEFAULT_ALLOWED_METHDOS = EnumSet.of (EHTTPMethod.HEAD,
                                                                                   EHTTPMethod.GET,
                                                                                   EHTTPMethod.POST);
+  /** Allowed methods: GET and POST */
   public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_GET_POST = EnumSet.of (EHTTPMethod.GET, EHTTPMethod.POST);
+  /** Allowed methods: GET */
   public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_GET = EnumSet.of (EHTTPMethod.GET);
+  /** Allowed methods: POST */
   public static final EnumSet <EHTTPMethod> ALLOWED_METHDOS_POST = EnumSet.of (EHTTPMethod.POST);
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractUnifiedResponseServlet.class);
@@ -148,9 +154,9 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    */
   @OverrideOnDemand
   @Nonnull
-  protected EnumSet <EHTTPMethod> getAllowedHTTPMethods ()
+  protected Set <EHTTPMethod> getAllowedHTTPMethods ()
   {
-    return DEFAULT_ALLOWED_METHDOS;
+    return ContainerHelper.makeUnmodifiable (DEFAULT_ALLOWED_METHDOS);
   }
 
   /**
@@ -232,7 +238,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    *        unified response! Never <code>null</code>.
    * @param aUnifiedResponse
    *        The response object to be filled. Never <code>null</code>.
-   * @throws ServletException
+   * @throws Exception
    *         In case of an error
    */
   protected abstract void handleRequest (@Nonnull IRequestWebScopeWithoutResponse aRequestScope,
@@ -293,7 +299,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       s_aLogger.info ("Static server information: " + aInfo.toString ());
     }
 
-    final EnumSet <EHTTPMethod> aAllowedHTTPMethods = getAllowedHTTPMethods ();
+    final Set <EHTTPMethod> aAllowedHTTPMethods = getAllowedHTTPMethods ();
     if (!aAllowedHTTPMethods.contains (eHTTPMethod))
     {
       // Disallow method

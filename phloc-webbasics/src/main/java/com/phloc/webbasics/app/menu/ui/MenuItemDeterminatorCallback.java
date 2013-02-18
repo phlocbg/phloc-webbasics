@@ -40,8 +40,7 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
  * 
  * @author philip
  */
-public class MenuItemDeterminatorCallback extends
-                                         DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
+public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {
   private final IMenuTree m_aMenuTree;
   private final Map <String, Boolean> m_aItems = new HashMap <String, Boolean> ();

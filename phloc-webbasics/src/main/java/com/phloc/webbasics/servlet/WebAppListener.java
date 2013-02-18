@@ -75,11 +75,20 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     SystemProperties.setPropertyValue ("java.awt.headless", "true");
   }
 
+  /** Name of the initialization parameter to enable tracing. */
   public static final String DEFAULT_INIT_PARAMETER_TRACE = "trace";
+  /** Name of the initialization parameter to enable debug. */
   public static final String DEFAULT_INIT_PARAMETER_DEBUG = "debug";
+  /** Name of the initialization parameter to enable production mode. */
   public static final String DEFAULT_INIT_PARAMETER_PRODUCTION = "production";
+  /** Name of the initialization parameter for the storagePath. */
   public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
+  /** Name of the initialization parameter to disable logging the startup info. */
   public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
+  /**
+   * Name of the initialization parameter to disable the file access check on
+   * startup.
+   */
   public static final String INIT_PARAMETER_NO_CHECK_FILE_ACCESS = "noCheckFileAccess";
   protected static final String ID_FILENAME = "persistent_id.dat";
 

@@ -30,7 +30,7 @@ import com.phloc.html.css.ICSSClassProvider;
 @Immutable
 public final class WebBasicsCSS
 {
-  // Align text right
+  /** Align text right */
   public static final ICSSClassProvider CSS_CLASS_RIGHT = DefaultCSSClassProvider.create ("right");
 
   private WebBasicsCSS ()

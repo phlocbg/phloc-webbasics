@@ -146,6 +146,7 @@ public class CSSFiles
             continue;
           }
           final String sMedia = eChild.getAttribute ("media");
+          // ESCA-JAVA0261:
           final Set <ECSSMedium> aMediaList = new LinkedHashSet <ECSSMedium> ();
           if (sMedia != null)
             for (final String sMedium : RegExHelper.getSplitToArray (sMedia, ",\\s*"))

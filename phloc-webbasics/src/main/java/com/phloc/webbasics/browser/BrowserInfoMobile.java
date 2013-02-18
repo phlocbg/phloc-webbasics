@@ -31,6 +31,7 @@ import com.phloc.commons.version.Version;
  */
 public final class BrowserInfoMobile extends BrowserInfo
 {
+  /** Is it not */
   @SuppressWarnings ("hiding")
   public static final BrowserInfoMobile IS_IT_NOT = new BrowserInfoMobile ();
 

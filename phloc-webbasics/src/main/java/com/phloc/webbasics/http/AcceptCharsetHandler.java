@@ -35,7 +35,9 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 @Immutable
 public final class AcceptCharsetHandler
 {
+  /** Any charset */
   public static final String ANY_CHARSET = "*";
+  /** Default charset iso-8859-1 */
   public static final String DEFAULT_CHARSET = CCharset.CHARSET_ISO_8859_1;
 
   private AcceptCharsetHandler ()

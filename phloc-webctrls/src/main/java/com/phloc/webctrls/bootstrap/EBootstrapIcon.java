@@ -176,6 +176,7 @@ public enum EBootstrapIcon implements IIcon
   ZOOM_IN (CBootstrapCSS.ICON_ZOOM_IN),
   ZOOM_OUT (CBootstrapCSS.ICON_ZOOM_OUT);
 
+  /** The CSS class to be applied to a Bootstrap icon to make it white */
   public static final ICSSClassProvider CSS_CLASS_ICON_WHITE = CBootstrapCSS.ICON_WHITE;
 
   private final ICSSClassProvider m_aCSSClass;
