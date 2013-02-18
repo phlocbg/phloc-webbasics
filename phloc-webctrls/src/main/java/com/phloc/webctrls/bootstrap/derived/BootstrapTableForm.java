@@ -49,7 +49,7 @@ import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.IFormNote;
 
-public final class BootstrapTableForm extends BootstrapTable
+public class BootstrapTableForm extends BootstrapTable
 {
   private static final String REQUEST_ATTR_FIRST_FOCUSABLE = "BootstrapTableForm$FirstFocusable";
 
@@ -88,7 +88,7 @@ public final class BootstrapTableForm extends BootstrapTable
     }
   }
 
-  private void _addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
+  private static void _addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
   {
     aRow.addCell (aLabel);
   }

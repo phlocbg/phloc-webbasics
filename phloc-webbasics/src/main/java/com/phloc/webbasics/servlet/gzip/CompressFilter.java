@@ -43,99 +43,95 @@ import com.phloc.webbasics.web.ResponseHelperSettings;
  * 
  * @author philip
  */
-public final class CompressFilter implements Filter
-{
-  private static final String REQUEST_ATTR = CompressFilter.class.getName ();
-  private static final IStatisticsHandlerCounter s_aStatsNone = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
-                                                                                                     "$none");
+public final class CompressFilter implements Filter {
+	private static final String REQUEST_ATTR = CompressFilter.class.getName();
+	private static final IStatisticsHandlerCounter s_aStatsNone = StatisticsManager
+			.getCounterHandler(CompressFilter.class.getName() + "$none");
 
-  public void init (@Nonnull final FilterConfig aFilterConfig)
-  {
-    // Mark the filter as loaded
-    CompressFilterSettings.markFilterLoaded ();
+	public void init(@Nonnull final FilterConfig aFilterConfig) {
+		// Mark the filter as loaded
+		CompressFilterSettings.markFilterLoaded();
 
-    // As compression is done in the filter, no compression in ResponseHelper is
-    // required there
-    ResponseHelperSettings.setResponseCompressionEnabled (false);
-  }
+		// As compression is done in the filter, no compression in
+		// ResponseHelper is
+		// required there
+		ResponseHelperSettings.setResponseCompressionEnabled(false);
+	}
 
-  private void _performCompressed (@Nonnull final ServletRequest aRequest,
-                                   @Nonnull final FilterChain aChain,
-                                   @Nonnull final HttpServletResponse aHttpResponse,
-                                   @Nonnull final AbstractCompressedResponseWrapper aCompressedResponse) throws IOException,
-                                                                                                        ServletException
-  {
-    boolean bException = true;
-    try
-    {
-      aChain.doFilter (aRequest, aCompressedResponse);
-      bException = false;
-    }
-    finally
-    {
-      if (bException && !aHttpResponse.isCommitted ())
-      {
-        // An exception occurred
-        aCompressedResponse.resetBuffer ();
-        aCompressedResponse.setNoCompression ();
-      }
-      else
-        aCompressedResponse.finish ();
-    }
-  }
+	private static void _performCompressed(
+			@Nonnull final ServletRequest aRequest,
+			@Nonnull final FilterChain aChain,
+			@Nonnull final HttpServletResponse aHttpResponse,
+			@Nonnull final AbstractCompressedResponseWrapper aCompressedResponse)
+			throws IOException, ServletException {
+		boolean bException = true;
+		try {
+			aChain.doFilter(aRequest, aCompressedResponse);
+			bException = false;
+		} finally {
+			if (bException && !aHttpResponse.isCommitted()) {
+				// An exception occurred
+				aCompressedResponse.resetBuffer();
+				aCompressedResponse.setNoCompression();
+			} else
+				aCompressedResponse.finish();
+		}
+	}
 
-  public void doFilter (@Nonnull final ServletRequest aRequest,
-                        @Nonnull final ServletResponse aResponse,
-                        @Nonnull final FilterChain aChain) throws IOException, ServletException
-  {
-    if (CompressFilterSettings.isResponseCompressionEnabled () &&
-        aRequest instanceof HttpServletRequest &&
-        aResponse instanceof HttpServletResponse &&
-        aRequest.getAttribute (REQUEST_ATTR) == null)
-    {
-      aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
-      final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
-      final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
+	public void doFilter(@Nonnull final ServletRequest aRequest,
+			@Nonnull final ServletResponse aResponse,
+			@Nonnull final FilterChain aChain) throws IOException,
+			ServletException {
+		if (CompressFilterSettings.isResponseCompressionEnabled()
+				&& aRequest instanceof HttpServletRequest
+				&& aResponse instanceof HttpServletResponse
+				&& aRequest.getAttribute(REQUEST_ATTR) == null) {
+			aRequest.setAttribute(REQUEST_ATTR, Boolean.TRUE);
+			final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
+			final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
 
-      // Inform caches that responses may vary according to Accept-Encoding
-      aHttpResponse.setHeader (CHTTPHeader.VARY, CHTTPHeader.ACCEPT_ENCODING);
-      // Compression filter used
-      aHttpResponse.setHeader ("X-P", "CF");
+			// Inform caches that responses may vary according to
+			// Accept-Encoding
+			aHttpResponse.setHeader(CHTTPHeader.VARY,
+					CHTTPHeader.ACCEPT_ENCODING);
+			// Compression filter used
+			aHttpResponse.setHeader("X-P", "CF");
 
-      final AcceptEncodingList aAEL = AcceptEncodingHandler.getAcceptEncodings (aHttpRequest);
+			final AcceptEncodingList aAEL = AcceptEncodingHandler
+					.getAcceptEncodings(aHttpRequest);
 
-      AbstractCompressedResponseWrapper aCompressedResponse = null;
+			AbstractCompressedResponseWrapper aCompressedResponse = null;
 
-      final String sGZIPEncoding = aAEL.getUsedGZIPEncoding ();
-      if (sGZIPEncoding != null && CompressFilterSettings.isResponseGzipEnabled ())
-      {
-        // Use gzip
-        aCompressedResponse = new GZIPResponse (aHttpRequest, aHttpResponse, sGZIPEncoding);
-      }
-      else
-      {
-        final String sDeflateEncoding = aAEL.getUsedDeflateEncoding ();
-        if (sDeflateEncoding != null && CompressFilterSettings.isResponseDeflateEnabled ())
-        {
-          // Use deflate
-          aCompressedResponse = new DeflateResponse (aHttpRequest, aHttpResponse, sDeflateEncoding);
-        }
-      }
+			final String sGZIPEncoding = aAEL.getUsedGZIPEncoding();
+			if (sGZIPEncoding != null
+					&& CompressFilterSettings.isResponseGzipEnabled()) {
+				// Use gzip
+				aCompressedResponse = new GZIPResponse(aHttpRequest,
+						aHttpResponse, sGZIPEncoding);
+			} else {
+				final String sDeflateEncoding = aAEL.getUsedDeflateEncoding();
+				if (sDeflateEncoding != null
+						&& CompressFilterSettings.isResponseDeflateEnabled()) {
+					// Use deflate
+					aCompressedResponse = new DeflateResponse(aHttpRequest,
+							aHttpResponse, sDeflateEncoding);
+				}
+			}
 
-      if (aCompressedResponse != null)
-      {
-        _performCompressed (aRequest, aChain, aHttpResponse, aCompressedResponse);
-        return;
-      }
+			if (aCompressedResponse != null) {
+				_performCompressed(aRequest, aChain, aHttpResponse,
+						aCompressedResponse);
+				return;
+			}
 
-      // No GZip or deflate
-      s_aStatsNone.increment ();
-    }
+			// No GZip or deflate
+			s_aStatsNone.increment();
+		}
 
-    // Perform as is
-    aChain.doFilter (aRequest, aResponse);
-  }
+		// Perform as is
+		aChain.doFilter(aRequest, aResponse);
+	}
 
-  public void destroy ()
-  {}
+	public void destroy() {
+	}
 }

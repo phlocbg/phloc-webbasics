@@ -62,7 +62,7 @@ public enum EAccess implements IHasID <String>
   }
 
   @Nullable
-  public static final EAccess getFromIDOrNull (@Nullable final String sID)
+  public static EAccess getFromIDOrNull (@Nullable final String sID)
   {
     return EnumHelper.getFromIDOrNull (EAccess.class, sID);
   }
