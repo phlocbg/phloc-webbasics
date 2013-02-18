@@ -22,6 +22,11 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+/**
+ * Represents a single record to be exported.
+ * 
+ * @author philip
+ */
 public interface IExportRecord
 {
   /**

@@ -1,0 +1,836 @@
+# Enerjy Software baseline data (files=126, problems=709).
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/AbstractRequestManager.java
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractRequestManager' contains public constructor
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'AbstractRequestManager'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/ApplicationLocaleManager.java
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'ApplicationLocaleManager'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/ApplicationRequestManager.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'ApplicationRequestManager'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/DisplayLocaleTextResolver.java
+problem: JAVA0018:JAVA0018 Method name '_getCurrentLocale' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/GlobalLocaleManager.java
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'GlobalLocaleManager'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/ILocaleManager.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ILocaleManager'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/IRequestManager.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IRequestManager'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'REQUEST_PARAMETER_MENUITEM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'REQUEST_PARAMETER_DISPLAY_LOCALE'
+problem: JAVA0108:JAVA0108 Incorrect javadoc: no @param tag for 'aRequestScope'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/LocaleManager.java
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'LocaleManager'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/container/AbstractDAOContainer.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractDAOContainer' does not contain an abstract method
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractDAOContainer'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/container/DefaultDAOContainer.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DefaultDAOContainer'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/impl/AbstractDAO.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractDAO' does not contain an abstract method
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractDAO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_AUTO_SAVE_ENABLED'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'bPreviouslyAutoSaveEnabled' missing initializer
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/impl/AbstractSimpleDAO.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractSimpleDAO'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0018:JAVA0018 Method name '_writeToFile' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/impl/DAOException.java
+problem: JAVA0234:JAVA0234 Class 'DAOException' is Serializable but does not define serialVersionUID
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/impl/DAOWebFileIO.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DAOWebFileIO'
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'DAOWebFileIO'
+problem: JAVA0018:JAVA0018 Method name '_getIO' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0018:JAVA0018 Method name '_getFOM' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/impl/DAOWebIO.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DAOWebIO'
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'DAOWebIO'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/impl/DefaultDAO.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_BACKUP_COUNT'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0115:JAVA0115 Incorrect javadoc: no @throws or @exception tag for 'DAOException'
+problem: JAVA0177:JAVA0177 Variable declaration 'eChange' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Exception' caught
+problem: JAVA0174:JAVA0174 Assigned local variable 'bIsInitialization' never used
+problem: JAVA0049:JAVA0049 Nested block at depth '6' (maximum: '5')
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Exception' caught
+problem: JAVA0049:JAVA0049 Nested block at depth '6' (maximum: '5')
+problem: JAVA0049:JAVA0049 Nested block at depth '6' (maximum: '5')
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0018:JAVA0018 Method name '_writeToFile' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0035:JAVA0035 Missing braces in for statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Throwable' caught
+problem: JAVA0018:JAVA0018 Method name '_internalWriteToFileOnPendingChanges' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/xml/AbstractXMLDAO.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractXMLDAO' does not contain an abstract method
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractXMLDAO' contains public constructor
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractXMLDAO' contains public constructor
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractXMLDAO' contains public constructor
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractXMLDAO' contains public constructor
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/xml/AbstractXMLDAODataProvider.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractXMLDAODataProvider' does not contain an abstract method
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/xml/DefaultDAODataProviderXML.java
+problem: JAVA0128:JAVA0128 Public constructor 'DefaultDAODataProviderXML' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/dao/xml/IXMLDAODataProvider.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IXMLDAODataProvider'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/ClassPathResourceForWEBINF.java
+problem: JAVA0234:JAVA0234 Class 'ClassPathResourceForWEBINF' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/ConstantHasFilename.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/ConstantHasFilenameNotEmpty.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/PathRelativeFileIO.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/WebFileIO.java
+problem: JAVA0136:JAVA0136 25 methods defined in class 'WebFileIO' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/WebIO.java
+problem: JAVA0136:JAVA0136 31 methods defined in class 'WebIO' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Exception' caught
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Exception' caught
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_writeFile' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/WebIORegistry.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/io/WebIOResourceProviderChain.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/AbstractMenuObject.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractMenuObject' does not contain an abstract method
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractMenuObject' contains public constructor
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/AbstractMenuObjectFilter.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractMenuObjectFilter' does not contain an abstract method
+problem: JAVA0024:JAVA0024 Empty class 'AbstractMenuObjectFilter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/ApplicationMenuTree.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'ApplicationMenuTree'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/GlobalMenuTree.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'GlobalMenuTree'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/IMenuTree.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IMenuTree'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/MenuItemExternal.java
+problem: JAVA0234:JAVA0234 Class 'MenuItemExternal' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/MenuItemPage.java
+problem: JAVA0234:JAVA0234 Class 'MenuItemPage' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/MenuSeparator.java
+problem: JAVA0234:JAVA0234 Class 'MenuSeparator' is Serializable but does not define serialVersionUID
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/MenuTree.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/menu/MenuTreeProxy.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_createChildItem' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/app/page/AbstractPage.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractPage' does not contain an abstract method
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractPage' contains public constructor
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractPage' contains public constructor
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractPage' contains public constructor
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/buildinfo/BuildInfo.java
+problem: JAVA0136:JAVA0136 36 methods defined in class 'BuildInfo' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/provider/AbstractPagedDataProviderWithFilter.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractPagedDataProviderWithFilter' does not contain an abstract method
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractPagedDataProviderWithFilter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/provider/IPagedDataProvider.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IPagedDataProvider'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/provider/IPagedDataProviderWithFilter.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IPagedDataProviderWithFilter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/IHasOrderAndLimit.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IHasOrderAndLimit'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/ISelectFilter.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ISelectFilter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/ISelectFilterChain.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ISelectFilterChain'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/ISelectFilterLike.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ISelectFilterLike'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectConstraints.java
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'SelectConstraints'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterBetween.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterBetween'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterChainAND.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterChainAND'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterChainOR.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterChainOR'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterEquals.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterEquals'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterIsNull.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterIsNull'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterLike.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterLike'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterLikeCaseInsensitive.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterLikeCaseInsensitive'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectFilterNotNull.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectFilterNotNull'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectLimit.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SelectLimit'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectOrderBy.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/data/select/SelectUtils.java
+problem: JAVA0014:JAVA0014 Class 'SelectUtils' with only static members has non-private constructor
+problem: JAVA0009:JAVA0009 Protected member 'SelectUtils' in final class 'SelectUtils'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0035:JAVA0035 Missing braces in for statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/datetime/IHasCreationInfo.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IHasCreationInfo'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/datetime/IHasDeletionInfo.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IHasDeletionInfo'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/datetime/IHasLastModificationInfo.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IHasLastModificationInfo'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/datetime/IHasTrashInfo.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IHasTrashInfo'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/ConstantExportRecordProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/ExportRecord.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ExportRecord'
+problem: JAVA0136:JAVA0136 27 methods defined in class 'ExportRecord' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(IExportRecordField)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(String)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(LocalDate)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(LocalTime)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(LocalDateTime)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(DateTime)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(boolean)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(Boolean)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(int)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(Integer)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(long)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(Long)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(BigInteger)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(double)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(Double)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0132:JAVA0132 Method overload 'ExportRecord.addField(BigDecimal)' with compatible signature to 'ExportRecord.addField(Object)'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/ExportRecordField.java
+problem: JAVA0136:JAVA0136 23 methods defined in class 'ExportRecordField' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_autoDetermineType' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/IExportRecord.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IExportRecord'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/IExportRecordField.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IExportRecordField'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/IExporter.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IExporter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/format/ExporterCSV.java
+problem: JAVA0005:JAVA0005 Imports not in specified order
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ExporterCSV'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_emitRecord' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/format/ExporterExcel.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWBCH'
+problem: JAVA0173:JAVA0173 Unused method parameter 'eRecordType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aRow'
+problem: JAVA0173:JAVA0173 Unused method parameter 'nRowIndex'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWBCH'
+problem: JAVA0173:JAVA0173 Unused method parameter 'eRecordType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aCell'
+problem: JAVA0173:JAVA0173 Unused method parameter 'nCellIndex'
+problem: JAVA0173:JAVA0173 Unused method parameter 'eBaseType'
+problem: JAVA0018:JAVA0018 Method name '_emitRecord' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0177:JAVA0177 Variable declaration 'aCell' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkexport/format/ExporterXML.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ExporterXML'
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'ExporterXML'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_emitRecord' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkimport/AbstractBulkImport.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractBulkImport' does not contain an abstract method
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkimport/AbstractBulkImportExcel.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractBulkImportExcel' does not contain an abstract method
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractBulkImportExcel'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/exchange/bulkimport/BulkImportResult.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_MAX_WARNINGS'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0110:JAVA0110 Incorrect javadoc: no @return tag
+problem: JAVA0110:JAVA0110 Incorrect javadoc: no @return tag
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/misc/ComparatorHasUIText.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorHasUIText'
+problem: JAVA0234:JAVA0234 Class 'ComparatorHasUIText' is Serializable but does not define serialVersionUID
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/misc/IHasUIText.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IHasUIText'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/mock/AppBasicTestInit.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/mock/AppBasicTestRule.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/AccessManager.java
+problem: JAVA0136:JAVA0136 52 methods defined in class 'AccessManager' (maximum: 20)
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'createNewUser' (maximum: 5)
+problem: JAVA0138:JAVA0138 9 parameters defined for method 'createPredefinedUser' (maximum: 5)
+problem: JAVA0110:JAVA0110 Incorrect javadoc: no @return tag
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'setUserData' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/CSecurity.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FACET_READ'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FACET_WRITE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TYPE_USER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TYPE_USERGROUP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TYPE_ROLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_ADMINISTRATOR_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_ADMINISTRATOR_LOGIN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_ADMINISTRATOR_EMAIL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_ADMINISTRATOR_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_ADMINISTRATOR_PASSWORD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_USER_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_USER_LOGIN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_USER_EMAIL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_USER_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_USER_PASSWORD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_GUEST_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_GUEST_LOGIN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_GUEST_EMAIL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_GUEST_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USER_GUEST_PASSWORD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ROLE_ADMINISTRATOR_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ROLE_ADMINISTRATOR_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ROLE_USER_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ROLE_USER_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USERGROUP_ADMINISTRATORS_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USERGROUP_ADMINISTRATORS_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USERGROUP_USERS_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USERGROUP_USERS_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USERGROUP_GUESTS_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'USERGROUP_GUESTS_NAME'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/EAccess.java
+problem: JAVA0065:JAVA0065 Unnecessary final modifier for method 'getFromIDOrNull' in final class
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/IAccessManager.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IAccessManager'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/AuditItem.java
+problem: JAVA0128:JAVA0128 Public constructor 'AuditItem' in non-public class
+problem: JAVA0128:JAVA0128 Public constructor 'AuditItem' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/AuditItemList.java
+problem: JAVA0128:JAVA0128 Public constructor 'AuditItemList' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/AuditManager.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0136:JAVA0136 23 methods defined in class 'AuditManager' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_createAuditString' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_createAuditStringWithWhat' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/AuditManagerXMLDAO.java
+problem: JAVA0128:JAVA0128 Public constructor 'AuditManagerXMLDAO' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/AuditUtils.java
+problem: JAVA0136:JAVA0136 24 methods defined in class 'AuditUtils' (maximum: 20)
+problem: JAVA0018:JAVA0018 Method name '_getAuditor' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'sWhat'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'sWhat'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aObjectType'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/ComparatorAuditItemDateTime.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorAuditItemDateTime'
+problem: JAVA0234:JAVA0234 Class 'ComparatorAuditItemDateTime' is Serializable but does not define serialVersionUID
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/audit/IAuditManager.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IAuditManager'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/exchange/WebBasicsMicroTypeConverterRegistrarSPI.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'WebBasicsMicroTypeConverterRegistrarSPI'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/lock/DefaultLockManager.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/lock/LockInfo.java
+problem: JAVA0234:JAVA0234 Class 'LockInfo' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/login/LoggedInUserManager.java
+problem: JAVA0234:JAVA0234 Class 'SessionUserHolder' is Serializable but does not define serialVersionUID
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'SessionUserHolder'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_reset' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'LoggedInUserManager'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_logoutUser' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/login/LoggedInUserStorage.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BASE_DIRECTORY'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/role/Role.java
+problem: JAVA0234:JAVA0234 Class 'Role' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/role/RoleManager.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_addRole' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/role/RoleMicroTypeConverter.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'RoleMicroTypeConverter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/IUserManager.java
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'createNewUser' (maximum: 5)
+problem: JAVA0138:JAVA0138 9 parameters defined for method 'createPredefinedUser' (maximum: 5)
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'setUserData' (maximum: 5)
+problem: JAVA0108:JAVA0108 Incorrect javadoc: no @param tag for 'sNewFirstName'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/User.java
+problem: JAVA0100:JAVA0100 Class contains 11 non-final fields (maximum: 8)
+problem: JAVA0136:JAVA0136 38 methods defined in class 'User' (maximum: 20)
+problem: JAVA0234:JAVA0234 Class 'User' is Serializable but does not define serialVersionUID
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'User' (maximum: 5)
+problem: JAVA0138:JAVA0138 6 parameters defined for method 'User' (maximum: 5)
+problem: JAVA0138:JAVA0138 13 parameters defined for method 'User' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/UserManager.java
+problem: JAVA0136:JAVA0136 25 methods defined in class 'UserManager' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_addUser' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'createNewUser' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0138:JAVA0138 9 parameters defined for method 'createPredefinedUser' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0138:JAVA0138 8 parameters defined for method 'setUserData' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/UserMicroTypeConverter.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'UserMicroTypeConverter'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/password/IPasswordConstraint.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IPasswordConstraint'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/password/IPasswordConstraints.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IPasswordConstraints'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/password/PasswordConstraintMaxLength.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/password/PasswordConstraintMinLength.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/password/PasswordConstraints.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'PasswordConstraints'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/user/password/PasswordUtils.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'PasswordUtils'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/usergroup/UserGroup.java
+problem: JAVA0234:JAVA0234 Class 'UserGroup' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/usergroup/UserGroupManager.java
+problem: JAVA0136:JAVA0136 26 methods defined in class 'UserGroupManager' (maximum: 20)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_addUserGroup' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/security/usergroup/UserGroupMicroTypeConverter.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'UserGroupMicroTypeConverter'
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/userdata/UserDataManager.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'UserDataManager'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SERVLET_CONTEXT_IO'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_getFileIO' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/main/java/com/phloc/appbasics/userdata/UserDataObject.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/app/GlobalLocaleManagerTest.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aRule'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/app/dao/impl/DefaultDAOTest.java
+problem: JAVA0106:JAVA0106 Unnecessary import from current package 'com.phloc.appbasics.app.dao.impl.DAOException'
+problem: JAVA0106:JAVA0106 Unnecessary import from current package 'com.phloc.appbasics.app.dao.impl.DefaultDAO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aRule'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/app/io/WebIOIntIDFactoryTest.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aRule'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/app/io/WebIOTest.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aRule'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/app/menu/MenuTreeTest.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aScopeRule'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/exchange/ExportRecordTest.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)"Hallo")
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)PDTFactory.getCurrentLocalTime())
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)PDTFactory.getCurrentLocalDate())
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)PDTFactory.getCurrentLocalDateTime())
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)PDTFactory.getCurrentDateTime())
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)Boolean.FALSE)
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)Integer.valueOf(-34))
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)Long.valueOf(Long.MIN_VALUE))
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)new BigInteger("1234512345123451234512345123451234512345123451234512345"))
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)Double.valueOf(Double.MIN_VALUE))
+problem: JAVA0082:JAVA0082 Unnecessary widening cast ((Object)new BigDecimal("12345123451234512345123451234512345123451234512345.12345"))
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/exchange/format/ExporterCSVTest.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/exchange/format/ExporterExcelTest.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/exchange/format/ExporterXMLTest.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/security/AccessManagerTest.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aRule'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/security/login/LoggedInUserManagerTest.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'm_aRule'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/security/role/RoleTest.java
+problem: JAVA0106:JAVA0106 Unnecessary import from current package 'com.phloc.appbasics.security.role.Role'
+path: /phloc-appbasics/src/test/java/com/phloc/appbasics/security/usergroup/UserGroupTest.java
+problem: JAVA0106:JAVA0106 Unnecessary import from current package 'com.phloc.appbasics.security.usergroup.UserGroup'

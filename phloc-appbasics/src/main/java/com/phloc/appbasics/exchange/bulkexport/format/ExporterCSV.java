@@ -46,6 +46,11 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.commons.typeconvert.TypeConverter;
 
+/**
+ * Implementation of {@link IExporterFile} for CSV files.
+ * 
+ * @author philip
+ */
 public final class ExporterCSV implements IExporterFile
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ExporterCSV.class);
@@ -95,6 +100,7 @@ public final class ExporterCSV implements IExporterFile
     aRecords.add (aValues);
   }
 
+  @Override
   @Nonnull
   public ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                  @Nonnull @WillClose final OutputStream aOS)
@@ -148,6 +154,7 @@ public final class ExporterCSV implements IExporterFile
     }
   }
 
+  @Override
   @Nonnull
   public EExchangeFileType getFileType ()
   {

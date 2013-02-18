@@ -40,6 +40,11 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.poi.excel.ExcelReadUtils;
 
+/**
+ * Abstract base implementation of a bulk import based on MS Excel files.
+ * 
+ * @author philip
+ */
 public abstract class AbstractBulkImportExcel extends AbstractBulkImport
 {
   @Translatable
@@ -57,6 +62,7 @@ public abstract class AbstractBulkImportExcel extends AbstractBulkImport
       m_aTP = TextProvider.create_DE_EN (sDE, sEN);
     }
 
+    @Override
     public String getDisplayTextWithArgs (@Nonnull final Locale aContentLocale, @Nullable final Object... aArgs)
     {
       return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);

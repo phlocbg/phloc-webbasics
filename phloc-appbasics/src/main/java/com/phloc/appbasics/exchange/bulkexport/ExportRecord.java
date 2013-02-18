@@ -37,6 +37,11 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Default implementation of {@link IExportRecord}.
+ * 
+ * @author philip
+ */
 public final class ExportRecord implements IExportRecord
 {
   private final List <IExportRecordField> m_aFields = new ArrayList <IExportRecordField> ();
@@ -176,6 +181,7 @@ public final class ExportRecord implements IExportRecord
     return addField (ExportRecordField.create (aValue));
   }
 
+  @Override
   @Nonnull
   @ReturnsImmutableObject
   public List <IExportRecordField> getAllFields ()
@@ -183,11 +189,13 @@ public final class ExportRecord implements IExportRecord
     return ContainerHelper.makeUnmodifiable (m_aFields);
   }
 
+  @Override
   public boolean hasFields ()
   {
     return !m_aFields.isEmpty ();
   }
 
+  @Override
   @Nonnegative
   public int getFieldCount ()
   {

@@ -1,0 +1,1335 @@
+# Enerjy Software baseline data (files=143, problems=1191).
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/autonumeric/EAutoNumericCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/autonumeric/EAutoNumericJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/autonumeric/HCAutoNumeric.java
+problem: JAVA0136:JAVA0136 24 methods defined in class 'HCAutoNumeric' (maximum: 20)
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_AUTO_NUMERIC_EDIT'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aEdit'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'sInitialValue' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/autonumeric/HCEditYear.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_MIN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_MAX'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/autosize/EAutosizeJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/autosize/HCTextAreaAutosize.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'HCTextAreaAutosize' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/AbstractBootstrapAlert.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractBootstrapAlert' does not contain an abstract method
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SHOW_CLOSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_BLOCK'
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractBootstrapAlert' contains public constructor
+problem: JAVA0058:JAVA0058 Constructor 'AbstractBootstrapAlert' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapBreadcrumb.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapBreadcrumb' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButton.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapButton'
+problem: JAVA0136:JAVA0136 21 methods defined in class 'BootstrapButton' (maximum: 20)
+problem: JAVA0234:JAVA0234 Class 'BootstrapButton' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButtonGroup.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapButtonGroup' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapButtonGroup' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButton_Button.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapButton_Button'
+problem: JAVA0234:JAVA0234 Class 'BootstrapButton_Button' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapButton_Button' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButton_DropDown.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapButton_DropDown'
+problem: JAVA0234:JAVA0234 Class 'BootstrapButton_DropDown' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapButton_DropDown' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButton_Link.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapButton_Link' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapButton_Link' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButton_Reset.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapButton_Reset'
+problem: JAVA0234:JAVA0234 Class 'BootstrapButton_Reset' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapButton_Reset' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapButton_Submit.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapButton_Submit'
+problem: JAVA0234:JAVA0234 Class 'BootstrapButton_Submit' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapButton_Submit' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapCaret.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapCaret'
+problem: JAVA0234:JAVA0234 Class 'BootstrapCaret' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapContainer.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapContainer'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_FLUID'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapDropDownMenu.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapDropDownMenu'
+problem: JAVA0234:JAVA0234 Class 'BootstrapDropDownMenu' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapDropDownMenu' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapForm.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapForm'
+problem: JAVA0234:JAVA0234 Class 'BootstrapForm' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapFormActions.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapFormActions' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapFormActions' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapFormHorizontal.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapFormHorizontal'
+problem: JAVA0234:JAVA0234 Class 'BootstrapFormHorizontal' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapFormLabel.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapFormLabel'
+problem: JAVA0234:JAVA0234 Class 'BootstrapFormLabel' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_modifyNode' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0177:JAVA0177 Variable declaration 'ret' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapHelpBlock.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapHelpBlock' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapHelpBlock' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapHelpInline.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapHelpInline' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapHelpInline' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapHeroUnit.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapHeroUnit' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapHeroUnit' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapIconWhite.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapIconWhite'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapLabel.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapLabel' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapLabel' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapNav.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapNav' is Serializable but does not define serialVersionUID
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_ACTIVE'
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapNav' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapNavbar.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapNavbar' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_insert' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapPageHeader.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapPageHeader' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapPageHeader' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapPagination.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapPagination'
+problem: JAVA0234:JAVA0234 Class 'BootstrapPagination' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapRow.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapRow'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_FLUID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BOOTSTRAP_COLUMN_COUNT'
+problem: JAVA0234:JAVA0234 Class 'SpannedNode' is Serializable but does not define serialVersionUID
+problem: JAVA0128:JAVA0128 Public constructor 'SpannedNode' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0128:JAVA0128 Public constructor 'SpannedNode' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0128:JAVA0128 Public constructor 'SpannedNode' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0128:JAVA0128 Public constructor 'SpannedNode' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapSidebarNav.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapSidebarNav' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapTabBox.java
+problem: JAVA0234:JAVA0234 Class 'Tab' is Serializable but does not define serialVersionUID
+problem: JAVA0128:JAVA0128 Public constructor 'Tab' in non-public class
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_ACTIVE'
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'BootstrapTabBox'
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapTabBox' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapTable.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapTable'
+problem: JAVA0234:JAVA0234 Class 'BootstrapTable' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapTable' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/BootstrapWell.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapWell' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapWell' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/CBootstrap.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'CBootstrap'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/CBootstrapCSS.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACCORDION'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACCORDION_GROUP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACCORDION_HEADING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACCORDION_INNER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACCORDION_TOGGLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTIVE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ADD_ON'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'AFFIX'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ALERT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ALERT_BLOCK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ALERT_DANGER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ALERT_ERROR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ALERT_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ALERT_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ARROW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BADGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BADGE_IMPORTANT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BADGE_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BADGE_INVERSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BADGE_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BADGE_WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BAR_DANGER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BAR_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BAR_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BAR_WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BOTTOM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BRAND'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BREADCRUMB'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_BLOCK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_DANGER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_GROUP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_GROUP_VERTICAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_INVERSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_LARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_LINK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_MINI'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_NAVBAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_PRIMARY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_SMALL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_TOOLBAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'BTN_WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CAPTION'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CARET'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CAROUSEL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CAROUSEL_CAPTION'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CAROUSEL_CONTROL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CAROUSEL_INNER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CHECKBOX'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CLEARFIX'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CLOSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'COLLAPSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CONTAINER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CONTAINER_FLUID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CONTROL_GROUP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CONTROL_LABEL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CONTROLS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CONTROLS_ROW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DISABLED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DIVIDER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DIVIDER_VERTICAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DL_HORIZONTAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DROPDOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DROPDOWN_MENU'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DROPDOWN_SUBMENU'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DROPDOWN_TOGGLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DROPUP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ERROR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FADE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FOCUSED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FORM_ACTIONS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FORM_HORIZONTAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FORM_INLINE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FORM_SEARCH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'GOOGLE_MAPS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'HELP_BLOCK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'HELP_INLINE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'HERO_UNIT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'HIDE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'HIDE_TEXT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ADJUST'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ALIGN_CENTER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ALIGN_JUSTIFY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ALIGN_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ALIGN_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ARROW_DOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ARROW_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ARROW_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ARROW_UP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ASTERISK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BACKWARD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BAN_CIRCLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BARCODE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BELL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BOLD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BOOK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BOOKMARK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BRIEFCASE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_BULLHORN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CALENDAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CAMERA'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CERTIFICATE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CHECK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CHEVRON_DOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CHEVRON_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CHEVRON_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CHEVRON_UP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CIRCLE_ARROW_DOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CIRCLE_ARROW_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CIRCLE_ARROW_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_CIRCLE_ARROW_UP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_COG'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_COMMENT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_DOWNLOAD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_DOWNLOAD_ALT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_EDIT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_EJECT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ENVELOPE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_EXCLAMATION_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_EYE_CLOSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_EYE_OPEN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FACETIME_VIDEO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FAST_BACKWARD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FAST_FORWARD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FILE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FILM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FILTER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FIRE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FLAG'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FOLDER_CLOSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FOLDER_OPEN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FONT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FORWARD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_FULLSCREEN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_GIFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_GLASS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_GLOBE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HAND_DOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HAND_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HAND_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HAND_UP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HDD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HEADPHONES'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HEART'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_HOME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_INBOX'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_INDENT_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_INDENT_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_INFO_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ITALIC'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_LEAF'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_LIST'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_LIST_ALT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_LOCK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_MAGNET'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_MAP_MARKER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_MINUS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_MINUS_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_MOVE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_MUSIC'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_OFF'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_OK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_OK_CIRCLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_OK_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PAUSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PENCIL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PICTURE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PLANE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PLAY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PLAY_CIRCLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PLUS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PLUS_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_PRINT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_QRCODE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_QUESTION_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_RANDOM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_REFRESH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_REMOVE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_REMOVE_CIRCLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_REMOVE_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_REPEAT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_RESIZE_FULL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_RESIZE_HORIZONTAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_RESIZE_SMALL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_RESIZE_VERTICAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_RETWEET'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ROAD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_SCREENSHOT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_SEARCH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_SHARE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_SHARE_ALT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_SHOPPING_CART'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_SIGNAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_STAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_STAR_EMPTY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_STEP_BACKWARD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_STEP_FORWARD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_STOP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TAG'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TAGS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TASKS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TEXT_HEIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TEXT_WIDTH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TH_LARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TH_LIST'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_THUMBS_DOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_THUMBS_UP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TIME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TINT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_TRASH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_UPLOAD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_USER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_VOLUME_DOWN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_VOLUME_OFF'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_VOLUME_UP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_WARNING_SIGN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_WHITE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_WRENCH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ZOOM_IN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ICON_ZOOM_OUT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'IMG_CIRCLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'IMG_POLAROID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'IMG_ROUNDED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'IN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INITIALISM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INLINE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_APPEND'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_BLOCK_LEVEL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_LARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_MEDIUM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_MINI'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_PREPEND'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_SMALL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_XLARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INPUT_XXLARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'INVISIBLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'IR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ITEM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL_IMPORTANT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL_INVERSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL_WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LEAD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MEDIA'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MEDIA_BODY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MEDIA_HEADING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MEDIA_LIST'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MEDIA_OBJECT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MODAL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MODAL_BACKDROP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MODAL_BODY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MODAL_FOOTER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MODAL_FORM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MODAL_HEADER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'MUTED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV_COLLAPSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV_HEADER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV_LIST'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV_PILLS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV_STACKED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAV_TABS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_FIXED_BOTTOM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_FIXED_TOP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_FORM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_INNER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_INVERSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_LINK'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_SEARCH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_STATIC_TOP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAVBAR_TEXT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NEXT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET1'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET10'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET11'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET12'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET2'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET3'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET4'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET5'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET6'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET7'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET8'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OFFSET9'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OPEN'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGE_HEADER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGINATION'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGINATION_CENTERED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGINATION_LARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGINATION_MINI'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGINATION_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PAGINATION_SMALL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PILL_CONTENT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PILL_PANE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'POPOVER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'POPOVER_CONTENT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'POPOVER_TITLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PRE_SCROLLABLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PRETTYPRINT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PREV'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PREVIOUS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PROGRESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PROGRESS_DANGER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PROGRESS_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PROGRESS_STRIPED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PROGRESS_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PROGRESS_WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PULL_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'PULL_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'RADIO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ROW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ROW_FLUID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SEARCH_QUERY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SHOW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN1'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN10'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN11'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN12'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN2'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN3'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN4'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN5'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN6'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN7'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN8'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SPAN9'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TAB_CONTENT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TAB_PANE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABBABLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABLE_BORDERED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABLE_CONDENSED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABLE_HOVER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABLE_STRIPED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABS_BELOW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABS_LEFT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABS_RIGHT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TABS_STACKED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TEXT_ERROR'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TEXT_INFO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TEXT_SUCCESS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TEXT_WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'THUMBNAIL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'THUMBNAILS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TOOLTIP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TOOLTIP_ARROW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TOOLTIP_INNER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TOP'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'TYPEAHEAD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'UNEDITABLE_INPUT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'UNEDITABLE_TEXTAREA'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'UNSTYLED'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'WARNING'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'WELL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'WELL_LARGE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'WELL_SMALL'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/EBootstrapCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/EBootstrapIcon.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_ICON_WHITE'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/EBootstrapJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapDangerBox.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapDangerBox' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapDangerBox' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapErrorBox.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapErrorBox' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapErrorBox' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapInfoBox.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapInfoBox' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapInfoBox' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapQuestionBox.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapQuestionBox' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapQuestionBox' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapSuccessBox.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapSuccessBox' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapSuccessBox' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapTableForm.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapTableForm'
+problem: JAVA0136:JAVA0136 25 methods defined in class 'BootstrapTableForm' (maximum: 20)
+problem: JAVA0234:JAVA0234 Class 'BootstrapTableForm' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_focusNode' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_addLabelCell' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0130:JAVA0130 Non-static method '_addLabelCell' does not use instance fields
+problem: JAVA0065:JAVA0065 Unnecessary final modifier for method 'hasDefinedInputSize' in final class
+problem: JAVA0009:JAVA0009 Protected member 'modifyControls' in final class 'BootstrapTableForm'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_addControlCell' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_addControlCellErrorMessages' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapTableFormView.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapTableFormView'
+problem: JAVA0234:JAVA0234 Class 'BootstrapTableFormView' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_init' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapTableFormView' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapToolbar.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapToolbar' is Serializable but does not define serialVersionUID
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'BootstrapToolbar'
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapToolbar' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapToolbarAdvanced.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapToolbarAdvanced' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapToolbarAdvanced' calls super()
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/derived/BootstrapWarnBox.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'BootstrapWarnBox' is Serializable but does not define serialVersionUID
+problem: JAVA0058:JAVA0058 Constructor 'BootstrapWarnBox' calls super()
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapBreadcrumbProvider.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapBreadcrumbProvider'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapCustomizer.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapCustomizer'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapDataTables.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapDataTables'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapEditWithPrefix.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapEditWithPrefix'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'aElement' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapEditWithSuffix.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapEditWithSuffix'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'aElement' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapLoginHTMLProvider.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BootstrapLoginHTMLProvider'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapMenuItemRendererNavbar.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/BootstrapMenuItemRendererWell.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/ext/EBootstrapWorkarounds.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/bootstrap/servlet/WebAppListenerMultiAppBootstrap.java
+problem: JAVA0011:JAVA0011 Abstract class 'WebAppListenerMultiAppBootstrap' does not contain an abstract method
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/colorbox/EColorBoxCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/colorbox/EColorBoxJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/colorbox/HCColorBox.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_PHOTO'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/DefaultIcons.java
+problem: JAVA0261:JAVA0261 Use specialized 'EnumMap' instead of 'Map'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/ELabelType.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/HCExtSelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCExtSelect'
+problem: JAVA0234:JAVA0234 Class 'HCExtSelect' is Serializable but does not define serialVersionUID
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_SPECIAL_OPTION'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/impl/HCFormLabelUtils.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCFormLabelUtils'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_FORM_LABEL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SIGN_MANDATORY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SIGN_ALTERNATIVE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'LABEL_END'
+problem: JAVA0018:JAVA0018 Method name '_getSuffix' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ColumnDefinition.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ColumnDefinition'
+problem: JAVA0234:JAVA0234 Class 'ColumnDefinition' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ColumnDefinitionTyped.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ColumnDefinitionTyped'
+problem: JAVA0234:JAVA0234 Class 'ColumnDefinitionTyped' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellBigDecimal.java
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellBigDecimal' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellBigInteger.java
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellBigInteger' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellDate.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorCellDate'
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellDate' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellDateTime.java
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellDateTime' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellDouble.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorCellDouble'
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellDouble' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellFixedCurrencyFormat.java
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellFixedCurrencyFormat' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellFixedCurrencyValueFormat.java
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellFixedCurrencyValueFormat' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellInteger.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorCellInteger'
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellInteger' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellLong.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorCellLong'
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellLong' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellString.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorCellString'
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellString' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellTime.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'ComparatorCellTime'
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellTime' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/custom/table/ComparatorCellVersion.java
+problem: JAVA0234:JAVA0234 Class 'ComparatorCellVersion' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/CDataTables.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'CDataTables'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SORT_ASC'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'SORT_DESC'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/DataTables.java
+problem: JAVA0100:JAVA0100 Class contains 22 non-final fields (maximum: 8)
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DataTables'
+problem: JAVA0136:JAVA0136 58 methods defined in class 'DataTables' (maximum: 20)
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_GENERATE_ON_DOCUMENT_READY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_PAGINATE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_STATE_SAVE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_JQUERY_UI'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SCROLL_AUTO_CSS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SCROLL_COLLAPSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SCROLL_INFINITE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_USER_JQUERY_AJAX'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_DEFER_RENDER'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_PAGINATION_TYPE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_DISPLAY_LENGTH'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0035:JAVA0035 Missing braces in for statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aParams'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aPackage'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aPackage'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aJSTable'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/DataTablesColumn.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DataTablesColumn'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SEARCHABLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_SORTABLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_VISIBLE'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/DataTablesSortColumn.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DataTablesSortColumn'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/DataTablesSorting.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DataTablesSorting'
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'DataTablesSorting'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/EDataTablesCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/EDataTablesJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/IDataTablesColumnType.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IDataTablesColumnType'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/ajax/AjaxHandlerDataTables.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AjaxHandlerDataTables'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OBJECT_ID'
+problem: JAVA0018:JAVA0018 Method name '_handleRequest' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0130:JAVA0130 Non-static method '_handleRequest' does not use instance fields
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0049:JAVA0049 Nested block at depth '6' (maximum: '5')
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/ajax/DataTablesServerData.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DataTablesServerData'
+problem: JAVA0234:JAVA0234 Class 'DataTablesServerData' is Serializable but does not define serialVersionUID
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'CellData'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'RowData'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'OBJECT_TYPE'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/ajax/RequestData.java
+problem: JAVA0138:JAVA0138 7 parameters defined for method 'RequestData' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/ajax/RequestDataSortColumn.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/ajax/ResponseData.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datatables/ajax/ServerState.java
+problem: JAVA0128:JAVA0128 Public constructor 'ServerState' in non-public class
+problem: JAVA0128:JAVA0128 Public constructor 'ServerState' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/DateFormatBuilder.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'DateFormatBuilder'
+problem: JAVA0057:JAVA0057 Unnecessary default constructor 'DateFormatBuilder'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0234:JAVA0234 Class 'ComparatorStringLongestFirst' is Serializable but does not define serialVersionUID
+problem: JAVA0128:JAVA0128 Public constructor 'Searcher' in non-public class
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'aEntry' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/EDateEditText.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/EDateTimeCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/EDateTimeJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/HCDateEdit.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DATE_DEFAULT_MAX_LENGTH'
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/HCDateEditTriggered.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'HCDateEditTriggered' is Serializable but does not define serialVersionUID
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0018:JAVA0018 Method name '_createJSCode' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/datetime/IDateFormatBuilder.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'IDateFormatBuilder'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/facebook/AbstractFBNode.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractFBNode' does not contain an abstract method
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'NAMESPACE_URI'
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractFBNode' contains public constructor
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aConversionSettings'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aElement'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aConversionSettings'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aConversionSettings'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/facebook/FBLike.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'FBLike'
+problem: JAVA0234:JAVA0234 Class 'FBLike' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/facebook/HCFacebookLike.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'HCFacebookLike' is Serializable but does not define serialVersionUID
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_IFRAME_WIDTH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_IFRAME_HEIGHT'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/famfam/EFamFamCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/famfam/EFamFamFlagIcon.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_FAMFAM_FLAG'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/famfam/EFamFamIcon.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_FAMFAM'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/famfam/FamFamFlags.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_FAMFAM_FLAG'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/fineupload/EFineUploaderBasicText.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/fineupload/EFineUploaderCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/fineupload/EFineUploaderJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/fineupload/FineUploader.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'FineUploader'
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/fineupload/FineUploaderBasic.java
+problem: JAVA0100:JAVA0100 Class contains 17 non-final fields (maximum: 8)
+problem: JAVA0136:JAVA0136 51 methods defined in class 'FineUploaderBasic' (maximum: 20)
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_DEBUG'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_MULTIPLE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_MAX_CONNECTIONS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_DISABLE_CANCEL_FOR_FORM_UPLOADS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_AUTO_UPLOAD'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_REQUEST_ENDPOINT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_REQUEST_PARAMS_IN_BODY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_REQUEST_FORCE_MULTIPART'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_REQUEST_INPUT_NAME'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_VALIDATION_SIZE_LIMIT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_VALIDATION_MIN_SIZE_LIMIT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_VALIDATION_STOP_ON_FIRST_INVALID_FILE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_RETRY_ENABLE_AUTO'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_RETRY_MAX_AUTO_ATTEMPTS'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_RETRY_AUTO_ATTEMPT_DELAY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aRoot'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aDisplayLocale'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aMessages'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aDisplayLocale'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/fineupload/HCFineUploaderBasic.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCFineUploaderBasic'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'aGlobalCnt' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/google/HCGoogleAnalytics.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'HCGoogleAnalytics' is Serializable but does not define serialVersionUID
+problem: JAVA0018:JAVA0018 Method name '_createJSCode' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCCountrySelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCCountrySelect'
+problem: JAVA0234:JAVA0234 Class 'HCCountrySelect' is Serializable but does not define serialVersionUID
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT'
+problem: JAVA0018:JAVA0018 Method name '_getAllCountries' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0177:JAVA0177 Variable declaration 'aComp' missing initializer
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCCurrencySelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCCurrencySelect'
+problem: JAVA0234:JAVA0234 Class 'HCCurrencySelect' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCGenderSelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCGenderSelect'
+problem: JAVA0234:JAVA0234 Class 'HCGenderSelect' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCIncotermSelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCIncotermSelect'
+problem: JAVA0234:JAVA0234 Class 'HCIncotermSelect' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCSalutationSelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCSalutationSelect'
+problem: JAVA0234:JAVA0234 Class 'HCSalutationSelect' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCTaxCategoryUN5305Select.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCTaxCategoryUN5305Select'
+problem: JAVA0234:JAVA0234 Class 'HCTaxCategoryUN5305Select' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCTaxTypeUN5153Select.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCTaxTypeUN5153Select'
+problem: JAVA0234:JAVA0234 Class 'HCTaxTypeUN5153Select' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/masterdata/HCVATItemSelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'HCVATItemSelect'
+problem: JAVA0234:JAVA0234 Class 'HCVATItemSelect' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/AbstractWebPageExt.java
+problem: JAVA0011:JAVA0011 Abstract class 'AbstractWebPageExt' does not contain an abstract method
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractWebPageExt'
+problem: JAVA0136:JAVA0136 32 methods defined in class 'AbstractWebPageExt' (maximum: 20)
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_CANCEL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_COLLAPSE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_COPY'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_CREATE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_DELETE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_DELETE_ALL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_EDIT'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_EXPAND'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_PERFORM'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_SAVE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_UNDELETE'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_UNDELETE_ALL'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'ACTION_VIEW'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'CSS_CLASS_RIGHT'
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractWebPageExt' contains public constructor
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractWebPageExt' contains public constructor
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/AbstractWebPageForm.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'AbstractWebPageForm'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FIELD_FLOW_ID'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'FIELD_RESTORE_FLOW_ID'
+problem: JAVA0016:JAVA0016 Abstract class 'AbstractWebPageForm' contains public constructor
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWPEC'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aSelectedObject'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aToolbar'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWPEC'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aSelectedObject'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aToolbar'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWPEC'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aToolbar'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0173:JAVA0173 Unused method parameter 'aSelectedObject'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aForm'
+problem: JAVA0138:JAVA0138 6 parameters defined for method 'showInputForm' (maximum: 5)
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWPEC'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aSelectedObject'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWPEC'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aSelectedObject'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aWPEC'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aSelectedObject'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/JSFormHelper.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'JSFormHelper'
+problem: JAVA0138:JAVA0138 6 parameters defined for method 'saveFormData' (maximum: 5)
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/PageViewExternal.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'PageViewExternal' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/form/BasePageSavedStates.java
+problem: JAVA0005:JAVA0005 Imports not in specified order
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BasePageSavedStates'
+problem: JAVA0234:JAVA0234 Class 'BasePageSavedStates' is Serializable but does not define serialVersionUID
+problem: JAVA0138:JAVA0138 6 parameters defined for method 'showInputForm' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/security/BasePageAudit.java
+problem: JAVA0054:JAVA0054 Inheritance depth 4 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BasePageAudit'
+problem: JAVA0234:JAVA0234 Class 'BasePageAudit' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/page/security/BasePageUserManagement.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'BasePageUserManagement'
+problem: JAVA0234:JAVA0234 Class 'BasePageUserManagement' is Serializable but does not define serialVersionUID
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_ENABLED'
+problem: JAVA0018:JAVA0018 Method name '_canResetPassword' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0173:JAVA0173 Unused method parameter 'aCurrentUser'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aCustomAttrs'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aTable'
+problem: JAVA0173:JAVA0173 Unused method parameter 'aDisplayLocale'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0138:JAVA0138 6 parameters defined for method 'showInputForm' (maximum: 5)
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/security/SecurityUI.java
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'SecurityUI'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/security/UserGroupForUserSelect.java
+problem: JAVA0054:JAVA0054 Inheritance depth 6 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'UserGroupForUserSelect' is Serializable but does not define serialVersionUID
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/tiptip/ETipTipCSSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/tiptip/ETipTipJSPathProvider.java
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/tiptip/TipTip.java
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_MAX_WIDTH'
+problem: JAVA0116:JAVA0116 Missing javadoc: field 'DEFAULT_EDGE_OFFSET'
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_getAsString' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+path: /phloc-webctrls/src/main/java/com/phloc/webctrls/youtube/HCYouTubeEmbed.java
+problem: JAVA0054:JAVA0054 Inheritance depth 5 exceeds maximum 3
+problem: JAVA0234:JAVA0234 Class 'HCYouTubeEmbed' is Serializable but does not define serialVersionUID
+path: /phloc-webctrls/src/test/java/com/phloc/webctrls/bootstrap/MainExtractBootstrapCSSClasses.java
+problem: JAVA0014:JAVA0014 Class 'MainExtractBootstrapCSSClasses' with only static members has non-private constructor
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'MainExtractBootstrapCSSClasses'
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/test/java/com/phloc/webctrls/datetime/DateFormatBuilderTest.java
+problem: JAVA0076:JAVA0076 Use of magic number '2010'
+problem: JAVA0076:JAVA0076 Use of magic number '8'
+problem: JAVA0076:JAVA0076 Use of magic number '12'
+problem: JAVA0076:JAVA0076 Use of magic number '45'
+problem: JAVA0076:JAVA0076 Use of magic number '13'
+problem: JAVA0076:JAVA0076 Use of magic number '2010'
+problem: JAVA0076:JAVA0076 Use of magic number '8'
+problem: JAVA0076:JAVA0076 Use of magic number '12'
+problem: JAVA0076:JAVA0076 Use of magic number '45'
+problem: JAVA0076:JAVA0076 Use of magic number '13'
+problem: JAVA0177:JAVA0177 Variable declaration 'sPattern' missing initializer
+problem: JAVA0177:JAVA0177 Variable declaration 'aDFB' missing initializer
+path: /phloc-webctrls/src/test/java/com/phloc/webctrls/datetime/MainCreateCalendarTranslations.java
+problem: JAVA0014:JAVA0014 Class 'MainCreateCalendarTranslations' with only static members has non-private constructor
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'MainCreateCalendarTranslations'
+problem: JAVA0018:JAVA0018 Method name '_isValid' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0018:JAVA0018 Method name '_mask' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0018:JAVA0018 Method name '_translate' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/test/java/com/phloc/webctrls/datetime/MainCreateCalendarTranslations2.java
+problem: JAVA0014:JAVA0014 Class 'MainCreateCalendarTranslations2' with only static members has non-private constructor
+problem: JAVA0118:JAVA0118 Missing javadoc: type 'MainCreateCalendarTranslations2'
+problem: JAVA0018:JAVA0018 Method name '_mask' does not have required form: (<uppercase>|<lowercase>)(<uppercase>|<lowercase>|<underscore>|<digit>)*
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+problem: JAVA0034:JAVA0034 Missing braces in if statement
+path: /phloc-webctrls/src/test/java/com/phloc/webctrls/google/HCGoogleAnalyticsTest.java
+problem: JAVA0144:JAVA0144 Line exceeds maximum 132 characters

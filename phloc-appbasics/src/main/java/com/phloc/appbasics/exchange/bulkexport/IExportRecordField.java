@@ -22,6 +22,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.types.EBaseType;
 
+/**
+ * Represents a single field of an {@link IExportRecord} to be exported.
+ * 
+ * @author philip
+ */
 public interface IExportRecordField
 {
   /**

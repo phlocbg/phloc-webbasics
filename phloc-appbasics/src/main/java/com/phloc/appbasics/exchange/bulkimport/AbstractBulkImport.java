@@ -20,13 +20,14 @@ package com.phloc.appbasics.exchange.bulkimport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.exchange.EExchangeFileType;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.name.IHasDisplayText;
@@ -40,7 +41,7 @@ public abstract class AbstractBulkImport implements IBulkImport
 {
   private final int m_nHeaderRowsToSkip;
   private final List <IHasDisplayText> m_aColumnNames;
-  private final List <EExchangeFileType> m_aFileTypes;
+  private final Set <EExchangeFileType> m_aFileTypes;
 
   protected AbstractBulkImport (@Nonnegative final int nHeaderRowsToSkip,
                                 @Nonnull @Nonempty final List <IHasDisplayText> aColumnNames,
@@ -54,21 +55,24 @@ public abstract class AbstractBulkImport implements IBulkImport
       throw new IllegalArgumentException ("fileTypes");
     m_nHeaderRowsToSkip = nHeaderRowsToSkip;
     m_aColumnNames = aColumnNames;
-    m_aFileTypes = ContainerHelper.newUnmodifiableList (ContainerHelper.newOrderedSet (aFileTypes));
+    m_aFileTypes = ContainerHelper.newOrderedSet (aFileTypes);
   }
 
+  @Override
   @Nonnegative
   public final int getHeaderRowsToSkip ()
   {
     return m_nHeaderRowsToSkip;
   }
 
+  @Override
   @Nonnegative
   public final int getColumnCount ()
   {
     return m_aColumnNames.size ();
   }
 
+  @Override
   @Nonnull
   @Nonempty
   public final List <String> getColumnDescriptions (@Nonnull final Locale aContentLocale)
@@ -79,11 +83,12 @@ public abstract class AbstractBulkImport implements IBulkImport
     return ret;
   }
 
+  @Override
   @Nonnull
   @Nonempty
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public final List <EExchangeFileType> getSupportedFileTypes ()
   {
-    return m_aFileTypes;
+    return ContainerHelper.newList (m_aFileTypes);
   }
 }

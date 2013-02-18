@@ -24,6 +24,11 @@ import javax.annotation.WillClose;
 
 import com.phloc.commons.state.ESuccess;
 
+/**
+ * Generic interface for exporting records to an OutputStream.
+ * 
+ * @author philip
+ */
 public interface IExporter
 {
   /**

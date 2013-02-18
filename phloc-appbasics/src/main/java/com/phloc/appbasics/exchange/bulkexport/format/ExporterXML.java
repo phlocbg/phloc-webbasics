@@ -37,6 +37,11 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.typeconvert.TypeConverter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 
+/**
+ * Implementation of {@link IExporterFile} for XML files
+ * 
+ * @author philip
+ */
 public final class ExporterXML implements IExporterFile
 {
   private static final String ELEMENT_ROOT = "root";
@@ -119,6 +124,7 @@ public final class ExporterXML implements IExporterFile
     return aDoc;
   }
 
+  @Override
   @Nonnull
   public ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                  @Nonnull @WillClose final OutputStream aOS)
@@ -131,6 +137,7 @@ public final class ExporterXML implements IExporterFile
     return ESuccess.SUCCESS;
   }
 
+  @Override
   @Nonnull
   public EExchangeFileType getFileType ()
   {

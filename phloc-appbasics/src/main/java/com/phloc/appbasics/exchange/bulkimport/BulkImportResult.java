@@ -45,7 +45,13 @@ import com.phloc.commons.type.ITypedObject;
 @ThreadSafe
 public class BulkImportResult implements ISuccessIndicator
 {
+  /**
+   * Default success value
+   */
   public static final boolean DEFAULT_SUCCESS = true;
+  /**
+   * Default value for maximum number of warnings to maintain in a list.
+   */
   public static final int DEFAULT_MAX_WARNINGS = 1000;
   private static final Logger s_aLogger = LoggerFactory.getLogger (BulkImportResult.class);
 
@@ -303,7 +309,11 @@ public class BulkImportResult implements ISuccessIndicator
 
   /**
    * Indicates, that the overall import succeeded. Default is <code>true</code>.
+   * 
+   * @return <code>true</code> for import success, <code>false</code> for import
+   *         failure.
    */
+  @Override
   public final boolean isSuccess ()
   {
     m_aRWLock.readLock ().lock ();
@@ -319,7 +329,10 @@ public class BulkImportResult implements ISuccessIndicator
 
   /**
    * Indicates, that the overall import failed.
+   * 
+   * @return Inverse of {@link #isSuccess()}
    */
+  @Override
   public final boolean isFailure ()
   {
     return !isSuccess ();
