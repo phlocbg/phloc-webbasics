@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableObject;
-import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.IMicroNodeWithChildren;
 import com.phloc.commons.microdom.IMicroText;
@@ -165,7 +164,7 @@ public final class DataTablesServerData implements IHasUIState
 
   public static final ObjectType OBJECT_TYPE = new ObjectType ("datatables");
 
-  private ServerState m_aServerState = new ServerState ();
+  private ServerSortState m_aServerSortState = new ServerSortState ();
   private final List <RowData> m_aRows;
   private final Locale m_aDisplayLocale;
 
@@ -189,17 +188,17 @@ public final class DataTablesServerData implements IHasUIState
   }
 
   @Nonnull
-  public ServerState getServerState ()
+  public ServerSortState getServerSortState ()
   {
-    return m_aServerState;
+    return m_aServerSortState;
   }
 
   @Nonnull
-  public void setServerState (@Nonnull final ServerState aServerState)
+  public void setServerSortState (@Nonnull final ServerSortState aServerSortState)
   {
-    if (aServerState == null)
-      throw new NullPointerException ("serverState");
-    m_aServerState = aServerState;
+    if (aServerSortState == null)
+      throw new NullPointerException ("serverSortState");
+    m_aServerSortState = aServerSortState;
   }
 
   @Nonnegative
@@ -227,14 +226,8 @@ public final class DataTablesServerData implements IHasUIState
   }
 
   @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).append (m_aServerState).getHashCode ();
-  }
-
-  @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("serverState", m_aServerState).toString ();
+    return new ToStringGenerator (this).append ("serverSortState", m_aServerSortState).toString ();
   }
 }

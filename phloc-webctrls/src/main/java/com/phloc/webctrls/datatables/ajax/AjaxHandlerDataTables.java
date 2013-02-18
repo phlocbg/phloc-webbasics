@@ -18,7 +18,6 @@
 package com.phloc.webctrls.datatables.ajax;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -71,16 +70,16 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                                        @Nonnull final DataTablesServerData aDataTables)
   {
     final Locale aDisplayLocale = aDataTables.getDisplayLocale ();
-    final ServerState aOldServerState = aDataTables.getServerState ();
-    final ServerState aNewServerState = new ServerState (aRequestData.getSearch (),
-                                                                             aRequestData.isRegEx (),
-                                                                             aRequestData.getSortColumnArray ());
-    if (true || !aNewServerState.equals (aOldServerState))
+
+    // Sorting
     {
+      final ServerSortState aOldServerSortState = aDataTables.getServerSortState ();
+      final ServerSortState aNewServerSortState = new ServerSortState (aRequestData.getSortColumnArray ());
       // Must we change the sorting?
-      final RequestDataSortColumn [] aNewSortCols = aNewServerState.getSortCols ();
-      if (true || !Arrays.equals (aOldServerState.getSortCols (), aNewSortCols))
+      if (!aNewServerSortState.equals (aOldServerSortState))
       {
+        final RequestDataSortColumn [] aNewSortCols = aNewServerSortState.getSortCols ();
+
         final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
         {
           @Override
@@ -102,19 +101,24 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
             return ret;
           }
         };
-        aDataTables.sortAllRows (aComp);
-      }
 
-      // Remember the new server state
-      aDataTables.setServerState (aNewServerState);
+        // Main sorting
+        aDataTables.sortAllRows (aComp);
+
+        // Remember the new server state
+        aDataTables.setServerSortState (aNewServerSortState);
+      }
     }
 
+    final ServerFilterState aNewServerFilterState = new ServerFilterState (aRequestData.getSearch (),
+                                                                           aRequestData.isRegEx ());
+
     List <RowData> aResultRows = aDataTables.directGetAllRows ();
-    if (aNewServerState.hasSearchText ())
+    if (aNewServerFilterState.hasSearchText ())
     {
       // filter rows
-      final String sGlobalSearchText = aNewServerState.getSearchText ();
-      final boolean bGlobalSearchRegEx = aNewServerState.isSearchRegEx ();
+      final String sGlobalSearchText = aNewServerFilterState.getSearchText ();
+      final boolean bGlobalSearchRegEx = aNewServerFilterState.isSearchRegEx ();
       final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
 
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
@@ -141,9 +145,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
           }
         }
       }
+
+      // Use the filtered rows
       aResultRows = aFilteredRows;
     }
 
+    // Build the resulting array
     final List <Map <String, String>> aData = new ArrayList <Map <String, String>> ();
     for (int i = 0; i < aRequestData.getDisplayEnd (); ++i)
     {
@@ -163,6 +170,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       aData.add (aRowData);
     }
 
+    // Main response
     final int nTotalRecords = aDataTables.getRowCount ();
     final int nTotalDisplayRecords = aResultRows.size ();
     return new ResponseData (nTotalRecords, nTotalDisplayRecords, aRequestData.getEcho (), null, aData);
@@ -197,10 +205,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     {
       final int nCSortCol = aParams.getAttributeAsInt (SORT_COL_PREFIX + i);
       final String sCSortDir = aParams.getAttributeAsString (SORT_DIR_PREFIX + i);
-      final ESortOrder eCSortDir = CDataTables.SORT_ASC.equals (sCSortDir)
-                                                                          ? ESortOrder.ASCENDING
-                                                                          : CDataTables.SORT_DESC.equals (sCSortDir)
-                                                                                                                    ? ESortOrder.DESCENDING
+      final ESortOrder eCSortDir = CDataTables.SORT_ASC.equals (sCSortDir) ? ESortOrder.ASCENDING
+                                                                          : CDataTables.SORT_DESC.equals (sCSortDir) ? ESortOrder.DESCENDING
                                                                                                                     : null;
       aSortColumns[i] = new RequestDataSortColumn (nCSortCol, eCSortDir);
     }
