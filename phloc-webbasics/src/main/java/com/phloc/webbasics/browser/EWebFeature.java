@@ -50,8 +50,8 @@ public enum EWebFeature
     }
   };
 
-  private static final Version V72 = new Version (7, 2);
-  private static final Version V80 = new Version (8);
+  static final Version V72 = new Version (7, 2);
+  static final Version V80 = new Version (8);
 
   /**
    * Check if this feature is supported on the current browser.

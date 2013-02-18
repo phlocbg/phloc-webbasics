@@ -31,8 +31,6 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import com.phloc.appbasics.app.dao.IDAODataProvider;
-import com.phloc.appbasics.app.dao.impl.DAOException;
-import com.phloc.appbasics.app.dao.impl.DefaultDAO;
 import com.phloc.appbasics.app.io.ConstantHasFilename;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebIO;
