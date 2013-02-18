@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="19">
+<translationitems count="21">
   <item id="com.phloc.appbasics.exchange.EExchangeFileTypeName.CSV">
     <de>CSV</de>
     <en>CSV</en>
@@ -78,6 +78,14 @@
   <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_ALREADY_LOGGED_IN">
     <de>Der Benutzer ist bereits angemeldet.</de>
     <en>The user is already logged in.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_IS_DELETED">
+    <de>Der Benutzer existiert nicht mehr.</de>
+    <en>The user not longer exists.</en>
+  </item>
+  <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_IS_DISABLED">
+    <de>Der Benutzer ist deaktiviert.</de>
+    <en>The user is disabled.</en>
   </item>
   <item id="com.phloc.appbasics.security.login.ELoginResultText.USER_IS_MISSING_ROLE">
     <de>Der Benutzer hat keine Berechtigung sich anzumelden.</de>

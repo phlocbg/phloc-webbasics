@@ -18,28 +18,28 @@
     limitations under the License.
 
 -->
-<translationitems count="95">
-  <item id="com.phloc.webctrls.colorbox.EColorboxText.CLOSE">
+<translationitems count="139">
+  <item id="com.phloc.webctrls.colorbox.EColorBoxText.CLOSE">
     <de>Schließen</de>
     <en>close</en>
   </item>
-  <item id="com.phloc.webctrls.colorbox.EColorboxText.CURRENT">
+  <item id="com.phloc.webctrls.colorbox.EColorBoxText.CURRENT">
     <de>Bild {current} von {total}</de>
     <en>image {current} of {total}</en>
   </item>
-  <item id="com.phloc.webctrls.colorbox.EColorboxText.IMG_ERROR">
+  <item id="com.phloc.webctrls.colorbox.EColorBoxText.IMG_ERROR">
     <de>Fehler beim Laden des Bildes</de>
     <en>This image failed to load.</en>
   </item>
-  <item id="com.phloc.webctrls.colorbox.EColorboxText.NEXT">
+  <item id="com.phloc.webctrls.colorbox.EColorBoxText.NEXT">
     <de>Nächstes</de>
     <en>next</en>
   </item>
-  <item id="com.phloc.webctrls.colorbox.EColorboxText.PREVIOUS">
+  <item id="com.phloc.webctrls.colorbox.EColorBoxText.PREVIOUS">
     <de>Vorheriges</de>
     <en>previous</en>
   </item>
-  <item id="com.phloc.webctrls.colorbox.EColorboxText.XHR_ERROR">
+  <item id="com.phloc.webctrls.colorbox.EColorBoxText.XHR_ERROR">
     <de>Fehler beim Laden des Inhalts</de>
     <en>This content failed to load.</en>
   </item>
@@ -378,8 +378,8 @@ Erlaubt sind nur: {extensions}.</de>
 Valid extension(s): {extensions}.</en>
   </item>
   <item id="com.phloc.webctrls.fineupload.EFineUploaderText.CANCEL_BUTTON">
-    <de>Abbrechen</de>
-    <en>Cancel</en>
+    <de>Löschen</de>
+    <en>Delete</en>
   </item>
   <item id="com.phloc.webctrls.fineupload.EFineUploaderText.DRAG_ZONE">
     <de>Dateien hier loslassen, um sie hochzuladen</de>
@@ -412,5 +412,181 @@ Valid extension(s): {extensions}.</en>
   <item id="com.phloc.webctrls.fineupload.EFineUploaderText.WAITING_FOR_RESPONSE">
     <de>Verarbeitung...</de>
     <en>Processing...</en>
+  </item>
+  <item id="com.phloc.webctrls.page.EWebPageText.IMAGE_NONE">
+    <de>keines</de>
+    <en>none</en>
+  </item>
+  <item id="com.phloc.webctrls.page.EWebPageText.OBJECT_COPY">
+    <de>Kopiere &#39;&#39;{0}&#39;&#39;</de>
+    <en>Copy &#39;&#39;{0}&#39;&#39;</en>
+  </item>
+  <item id="com.phloc.webctrls.page.EWebPageText.OBJECT_DELETE">
+    <de>Lösche &#39;&#39;{0}&#39;&#39;</de>
+    <en>Delete &#39;&#39;{0}&#39;&#39;</en>
+  </item>
+  <item id="com.phloc.webctrls.page.EWebPageText.OBJECT_EDIT">
+    <de>Bearbeite &#39;&#39;{0}&#39;&#39;</de>
+    <en>Edit &#39;&#39;{0}&#39;&#39;</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.BUTTON_CREATE_NEW_USER">
+    <de>Neuen Benutzer anlegen</de>
+    <en>Create new user</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_EMAIL_INVALID">
+    <de>Es muss eine gültige E-Mail-Adresse angegeben werden!</de>
+    <en>A valid email address must be specified!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_EMAIL_IN_USE">
+    <de>Ein anderer Benutzer mit dieser E-Mail-Adresse existiert bereits!</de>
+    <en>Another user with this email address already exists!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_EMAIL_REQUIRED">
+    <de>Es muss eine E-Mail-Adresse angegeben werden!</de>
+    <en>An email address must be specified!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_INVALID_USERGROUPS">
+    <de>Mindestens eine der angegebenen Benutzergruppen ist ungültig!</de>
+    <en>At least one selected user group is invalid!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_LASTNAME_REQUIRED">
+    <de>Es muss ein Nachname angegeben werden!</de>
+    <en>A last name must be specified!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_NO_USERGROUP">
+    <de>Es muss mindestens eine Benutzergruppe ausgewählt werden!</de>
+    <en>At least one user group must be selected!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.ERROR_PASSWORDS_DONT_MATCH">
+    <de>Die Passwörter stimmen nicht überein!</de>
+    <en>Passwords don&#39;t match</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.FAILURE_CREATE">
+    <de>Fehler beim Anlegen des Benutzers!</de>
+    <en>Error creating the new user!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.HEADER_DETAILS">
+    <de>Details von Benutzer {0}</de>
+    <en>Details of user {0}</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.HEADER_EMAIL">
+    <de>E-Mail</de>
+    <en>Email</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.HEADER_NAME">
+    <de>Name</de>
+    <en>Name</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.HEADER_USERGROUPS">
+    <de>Benutzergruppen</de>
+    <en>User groups</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.HEADER_VALUE">
+    <de>Wert</de>
+    <en>Value</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_ATTRIBUTES">
+    <de>Attribute</de>
+    <en>Attributes</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_CREATIONDATE">
+    <de>Angelegt am</de>
+    <en>Created on</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_DELETED">
+    <de>Gelöscht?</de>
+    <en>Deleted?</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_DELETIONDATE">
+    <de>Gelöscht am</de>
+    <en>Deleted on</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_EMAIL">
+    <de>E-Mail-Adresse</de>
+    <en>Email address</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_ENABLED">
+    <de>Aktiv?</de>
+    <en>Enabled?</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_FIRSTNAME">
+    <de>Vorname</de>
+    <en>First name</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_LASTMODIFICATIONDATE">
+    <de>Letzte Änderung am</de>
+    <en>Last modification on</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_LASTNAME">
+    <de>Nachname</de>
+    <en>Last name</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_PASSWORD">
+    <de>Passwort</de>
+    <en>Password</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_PASSWORD_CONFIRM">
+    <de>Passwort (Bestätigung)</de>
+    <en>Password (confirmation)</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_ROLES_0">
+    <de>Rollen</de>
+    <en>Roles</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_ROLES_N">
+    <de>Rollen ({0})</de>
+    <en>Roles ({0})</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_USERGROUPS_0">
+    <de>Benutzergruppen</de>
+    <en>User groups</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.LABEL_USERGROUPS_N">
+    <de>Benutzergruppen ({0})</de>
+    <en>User groups ({0})</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.NONE_DEFINED">
+    <de>keine definiert</de>
+    <en>none defined</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.NO_USERS_FOUND">
+    <de>Keine Benutzer gefunden</de>
+    <en>No users found</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.SUCCESS_CREATE">
+    <de>Der neue Benutzer wurde erfolgreich angelegt!</de>
+    <en>Successfully created the new user!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.SUCCESS_EDIT">
+    <de>Der Benutzer wurde erfolgreich bearbeitet!</de>
+    <en>Sucessfully edited the user!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.SUCCESS_RESET_PASSWORD">
+    <de>Das neue Passwort vom Benutzer &#39;&#39;{0}&#39;&#39; wurde gespeichert!</de>
+    <en>Successfully saved the new password of user &#39;&#39;{0}&#39;&#39;!</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.TAB_ACTIVE">
+    <de>Aktive Benutzer ({0})</de>
+    <en>Active users ({0})</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.TAB_DELETED">
+    <de>Gelöschte Benutzer ({0})</de>
+    <en>Deleted users ({0})</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.TAB_DISABLED">
+    <de>Deaktivierte Benutzer ({0})</de>
+    <en>Disabled users ({0})</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.TITLE_CREATE">
+    <de>Neuen Benutzer anlegen</de>
+    <en>Create new user</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.TITLE_EDIT">
+    <de>Benutzer &#39;&#39;{0}&#39;&#39; bearbeiten</de>
+    <en>Edit user &#39;&#39;{0}&#39;&#39;</en>
+  </item>
+  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.TITLE_RESET_PASSWORD">
+    <de>Passwort von &#39;&#39;{0}&#39;&#39; zurücksetzen</de>
+    <en>Reset password of user &#39;&#39;{0}&#39;&#39;</en>
   </item>
 </translationitems>
