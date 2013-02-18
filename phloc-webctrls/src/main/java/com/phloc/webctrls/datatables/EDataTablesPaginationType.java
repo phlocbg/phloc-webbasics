@@ -20,8 +20,9 @@ package com.phloc.webctrls.datatables;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.name.IHasName;
 
-public enum EDataTablesPaginationType implements IDataTablesColumnType
+public enum EDataTablesPaginationType implements IHasName
 {
   TWO_BUTTON ("twobutton"),
   FULL_NUMBERS ("full_numbers"),

@@ -17,11 +17,16 @@
  */
 package com.phloc.webctrls.datatables;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.js.builder.JSArray;
@@ -37,7 +42,8 @@ public class DataTablesColumn
   private boolean m_bSearchable = DEFAULT_SEARCHABLE;
   private boolean m_bSortable = DEFAULT_SORTABLE;
   private boolean m_bVisible = DEFAULT_VISIBLE;
-  private ICSSClassProvider m_aCSSClassProvider;
+  // Must be a LinkedHashSet:
+  private Set <ICSSClassProvider> m_aCSSClassProviders;
   private String m_sName;
   private IDataTablesColumnType m_aType;
   private String m_sWidth;
@@ -91,17 +97,106 @@ public class DataTablesColumn
     return this;
   }
 
-  @Nullable
-  public ICSSClassProvider getCSSClass ()
+  public final boolean containsClass (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
-    return m_aCSSClassProvider;
+    return m_aCSSClassProviders != null &&
+           aCSSClassProvider != null &&
+           m_aCSSClassProviders.contains (aCSSClassProvider);
   }
 
   @Nonnull
-  public DataTablesColumn setCSSClass (@Nullable final ICSSClassProvider aCSSClassProvider)
+  public final DataTablesColumn addClass (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
-    m_aCSSClassProvider = aCSSClassProvider;
+    if (aCSSClassProvider != null)
+    {
+      if (m_aCSSClassProviders == null)
+        m_aCSSClassProviders = new LinkedHashSet <ICSSClassProvider> ();
+      m_aCSSClassProviders.add (aCSSClassProvider);
+    }
     return this;
+  }
+
+  @Deprecated
+  @Nonnull
+  public final DataTablesColumn addClasses (@Nullable final ICSSClassProvider aCSSClassProvider)
+  {
+    return addClass (aCSSClassProvider);
+  }
+
+  @Nonnull
+  public final DataTablesColumn addClasses (@Nullable final ICSSClassProvider... aCSSClassProviders)
+  {
+    if (aCSSClassProviders != null)
+      for (final ICSSClassProvider aProvider : aCSSClassProviders)
+        addClass (aProvider);
+    return this;
+  }
+
+  @Nonnull
+  public final DataTablesColumn addClasses (@Nullable final Iterable <? extends ICSSClassProvider> aCSSClassProviders)
+  {
+    if (aCSSClassProviders != null)
+      for (final ICSSClassProvider aProvider : aCSSClassProviders)
+        addClass (aProvider);
+    return this;
+  }
+
+  @Nonnull
+  public final DataTablesColumn removeClass (@Nullable final ICSSClassProvider aCSSClassProvider)
+  {
+    if (m_aCSSClassProviders != null && aCSSClassProvider != null)
+      m_aCSSClassProviders.remove (aCSSClassProvider);
+    return this;
+  }
+
+  @Nonnull
+  public final DataTablesColumn removeAllClasses ()
+  {
+    if (m_aCSSClassProviders != null)
+      m_aCSSClassProviders.clear ();
+    return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public final Set <ICSSClassProvider> getAllClasses ()
+  {
+    return ContainerHelper.newOrderedSet (m_aCSSClassProviders);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public final Set <String> getAllClassNames ()
+  {
+    final Set <String> ret = new LinkedHashSet <String> ();
+    if (m_aCSSClassProviders != null)
+      for (final ICSSClassProvider aCSSClassProvider : m_aCSSClassProviders)
+      {
+        final String sCSSClass = aCSSClassProvider.getCSSClass ();
+        if (StringHelper.hasText (sCSSClass))
+          ret.add (sCSSClass);
+      }
+    return ret;
+  }
+
+  @Nullable
+  public final String getAllClassesAsString ()
+  {
+    if (m_aCSSClassProviders == null || m_aCSSClassProviders.isEmpty ())
+      return null;
+
+    final StringBuilder aSB = new StringBuilder ();
+    for (final ICSSClassProvider aCSSClassProvider : m_aCSSClassProviders)
+    {
+      final String sCSSClass = aCSSClassProvider.getCSSClass ();
+      if (StringHelper.hasText (sCSSClass))
+      {
+        if (aSB.length () > 0)
+          aSB.append (' ');
+        aSB.append (sCSSClass);
+      }
+    }
+    return aSB.toString ();
   }
 
   @Nullable
@@ -174,8 +269,9 @@ public class DataTablesColumn
       ret.add ("bSortable", m_bSortable);
     if (m_bVisible != DEFAULT_VISIBLE)
       ret.add ("bVisible", m_bVisible);
-    if (m_aCSSClassProvider != null)
-      ret.add ("sClass", m_aCSSClassProvider.getCSSClass ());
+    final String sClasses = getAllClassesAsString ();
+    if (StringHelper.hasText (sClasses))
+      ret.add ("sClass", sClasses);
     if (StringHelper.hasText (m_sName))
       ret.add ("sName", m_sName);
     if (m_aType != null)
