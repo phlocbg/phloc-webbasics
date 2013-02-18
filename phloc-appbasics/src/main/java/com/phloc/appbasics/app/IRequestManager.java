@@ -28,7 +28,9 @@ import com.phloc.scopes.nonweb.domain.IRequestScope;
 
 public interface IRequestManager
 {
+  /** The name of the parameter selecting the current menu item */
   String REQUEST_PARAMETER_MENUITEM = "menuitem";
+  /** The name of the parameter selecting the current display locale */
   String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
 
   /**
@@ -37,6 +39,9 @@ public interface IRequestManager
    * selected menu item. Checks for the content of the request parameter
    * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
    * display locale.
+   * 
+   * @param aRequestScope
+   *        The request scope that just begun
    */
   void onRequestBegin (@Nonnull IRequestScope aRequestScope);
 

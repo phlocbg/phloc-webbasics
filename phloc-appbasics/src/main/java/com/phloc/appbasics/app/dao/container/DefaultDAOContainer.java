@@ -43,6 +43,7 @@ public class DefaultDAOContainer extends AbstractDAOContainer
   @ReturnsImmutableObject
   public Collection <IDAO> getContainedDAOs ()
   {
+    // ESCA-JAVA0259:
     return m_aDAOs;
   }
 }

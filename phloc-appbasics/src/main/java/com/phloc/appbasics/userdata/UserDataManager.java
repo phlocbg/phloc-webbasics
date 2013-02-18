@@ -38,6 +38,7 @@ public final class UserDataManager
    * context directory.
    */
   public static final String DEFAULT_USER_DATA_PATH = "/user";
+  /** By default the user data is accessed via the servletContext IO */
   public static final boolean DEFAULT_SERVLET_CONTEXT_IO = true;
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();

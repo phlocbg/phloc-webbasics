@@ -63,6 +63,7 @@ public final class SelectFilterChainOR implements ISelectFilterChain
   @ReturnsImmutableObject
   public List <ISelectFilterable> getFilters ()
   {
+    // ESCA-JAVA0259:
     return m_aFilters;
   }
 

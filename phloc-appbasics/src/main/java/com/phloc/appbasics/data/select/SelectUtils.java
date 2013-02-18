@@ -34,7 +34,7 @@ import com.phloc.commons.collections.ContainerHelper;
 @Immutable
 public final class SelectUtils
 {
-  protected SelectUtils ()
+  private SelectUtils ()
   {}
 
   /**

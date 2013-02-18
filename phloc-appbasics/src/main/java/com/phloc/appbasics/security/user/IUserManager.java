@@ -115,6 +115,8 @@ public interface IUserManager
    *        The new login name. May not be <code>null</code>.
    * @param sNewEmailAddress
    *        The new email address. May not be <code>null</code>.
+   * @param sNewFirstName
+   *        The new first name. May be <code>null</code>.
    * @param sNewLastName
    *        The new last name. May be <code>null</code>.
    * @param aNewDesiredLocale

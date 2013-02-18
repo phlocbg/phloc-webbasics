@@ -38,8 +38,10 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class LoggedInUserStorage
 {
-  // The name of the base directory relative to the WebFileIO where the data is
-  // referenced
+  /**
+   * The name of the base directory relative to the WebFileIO where the data is
+   * referenced
+   */
   public static final String BASE_DIRECTORY = "userdata/";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserStorage.class);

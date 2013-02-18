@@ -122,7 +122,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                             bDisabled);
   }
 
-  /**
+  /*
    * TODO Ensure to have a check, that no logged in user is deleted!
    */
   @Nonnull

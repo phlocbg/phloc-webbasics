@@ -33,8 +33,14 @@ import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.state.EChange;
 
+/**
+ * Base implementation of {@link IDAO}
+ * 
+ * @author philip
+ */
 public abstract class AbstractDAO implements IDAO
 {
+  /** By default auto-save is enabled */
   public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
 
   protected static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();

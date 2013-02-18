@@ -22,6 +22,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.type.ObjectType;
 
+// ESCA-JAVA0116:
 /**
  * Constants for user handling
  * 

@@ -53,6 +53,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @ThreadSafe
 public class DefaultDAO extends AbstractDAO
 {
+  /** By default the last 3 files are kept for backup */
   public static final int DEFAULT_BACKUP_COUNT = 3;
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultDAO.class);
 
@@ -138,6 +139,9 @@ public class DefaultDAO extends AbstractDAO
   /**
    * Initially read the content from the file. Should only be called from the
    * constructor. That's why no locking is needed.
+   * 
+   * @throws DAOException
+   *         In case reading fails
    */
   protected final void readFromFile () throws DAOException
   {
@@ -181,11 +185,11 @@ public class DefaultDAO extends AbstractDAO
             {
               return m_aDataProvider.initForFirstTimeUsage ();
             }
-            catch (final Exception ex)
+            catch (final Throwable t)
             {
               throw new InitializationException ("Error initializing the file '" +
                                                  sFilename +
-                                                 "' for the first time usage", ex);
+                                                 "' for the first time usage", t);
             }
             finally
             {
@@ -199,6 +203,7 @@ public class DefaultDAO extends AbstractDAO
       }
       else
       {
+        // ESCA-JAVA0174:
         // An input stream was open
         bIsInitialization = false;
         try
@@ -214,10 +219,9 @@ public class DefaultDAO extends AbstractDAO
                 // try read it from the stream
                 return m_aDataProvider.readFromStream (aIS);
               }
-              catch (final Exception ex)
+              catch (final Throwable t)
               {
-                throw new InitializationException ("Error reading the file '" + sFilename + "' from an input stream",
-                                                   ex);
+                throw new InitializationException ("Error reading the file '" + sFilename + "' from an input stream", t);
               }
               finally
               {
