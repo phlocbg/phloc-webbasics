@@ -30,8 +30,14 @@ public final class CFacebook
   /** The namespace URI for OpenGraph elements */
   public static final String OPENGRAPH_NAMESPACE_URI = "http://ogp.me/ns#";
 
+  /** The preferred namespace prefix for OpenGraph nodes */
+  public static final String OPENGRAPH_PREFIX = "og";
+
   /** The OpenGraph Facebook specific namespace URI */
   public static final String FACEBOOK_NAMESPACE_URI = "http://ogp.me/ns/fb#";
+
+  /** The preferred namespace prefix for Facebook nodes */
+  public static final String FACEBOOK_PREFIX = "fb";
 
   private CFacebook ()
   {}

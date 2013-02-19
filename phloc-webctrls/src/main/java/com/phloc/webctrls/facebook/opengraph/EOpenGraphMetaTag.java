@@ -23,21 +23,22 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
+import com.phloc.webctrls.facebook.CFacebook;
 
 public enum EOpenGraphMetaTag implements IHasID <String>
 {
-  TITLE ("og:title"),
-  TYPE ("og:type"),
-  URL ("og:url"),
-  IMAGE ("og:image"),
-  SITE_NAME ("og:site_name"),
-  DESCRIPTION ("og:description");
+  TITLE ("title"),
+  TYPE ("type"),
+  URL ("url"),
+  IMAGE ("image"),
+  SITE_NAME ("site_name"),
+  DESCRIPTION ("description");
 
   private final String m_sID;
 
   private EOpenGraphMetaTag (@Nonnull @Nonempty final String sID)
   {
-    m_sID = sID;
+    m_sID = CFacebook.OPENGRAPH_PREFIX + ':' + sID;
   }
 
   @Nonnull
