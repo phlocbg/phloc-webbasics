@@ -34,6 +34,7 @@ import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.compare.ReverseComparator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -94,6 +95,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
           Comparator <String> aStringComp = aDataTables.getColumnComparator (aSortColumn.getColumnIndex ());
           if (aStringComp == null)
             aStringComp = new ComparatorString (aDisplayLocale, eSortOrder);
+          else
+            if (eSortOrder.isDescending ())
+            {
+              // Reverse the comparator
+              aStringComp = ReverseComparator.create (aStringComp);
+            }
           aComparators.add (aStringComp);
         }
 
