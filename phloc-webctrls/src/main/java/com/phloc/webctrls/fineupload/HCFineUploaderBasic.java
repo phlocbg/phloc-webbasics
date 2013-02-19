@@ -114,7 +114,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
       // Manually trigger upload when form is submitted
 
       // Get closest form to the input ID
-      final JSVar aForm = aPkg.var ("f" + sID, aUpload.invoke ("closest").arg (EHTMLElement.FORM.getElementName ()));
+      final JSVar aForm = aPkg.var ("f" + sID, aUpload.invoke ("closest").arg (EHTMLElement.FORM));
 
       final JSAnonymousFunction aOnClick = new JSAnonymousFunction ();
 
