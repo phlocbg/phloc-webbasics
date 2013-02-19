@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.datatables;
 
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -45,9 +46,9 @@ public class DataTablesColumn
   // Must be a LinkedHashSet:
   private Set <ICSSClassProvider> m_aCSSClassProviders;
   private String m_sName;
-  private IDataTablesColumnType m_aType;
   private String m_sWidth;
   private int [] m_aDataSort;
+  private Comparator <String> m_aComparator;
 
   public DataTablesColumn (final int nTarget)
   {
@@ -59,6 +60,14 @@ public class DataTablesColumn
     if (ArrayHelper.isEmpty (aTargets))
       throw new IllegalArgumentException ("targets may not be empty");
     m_aTargets = ArrayHelper.getCopy (aTargets);
+  }
+
+  @Nonnull
+  @Nonempty
+  @ReturnsMutableCopy
+  public int [] getAllTargets ()
+  {
+    return ArrayHelper.getCopy (m_aTargets);
   }
 
   public boolean isSearchable ()
@@ -212,16 +221,22 @@ public class DataTablesColumn
     return this;
   }
 
+  @Deprecated
   @Nullable
   public IDataTablesColumnType getType ()
   {
-    return m_aType;
+    return null;
   }
 
+  /**
+   * @param aType
+   *        type - ignored
+   * @return this
+   */
+  @Deprecated
   @Nonnull
   public DataTablesColumn setType (@Nullable final IDataTablesColumnType aType)
   {
-    m_aType = aType;
     return this;
   }
 
@@ -258,6 +273,19 @@ public class DataTablesColumn
     return this;
   }
 
+  @Nullable
+  public Comparator <String> getComparator ()
+  {
+    return m_aComparator;
+  }
+
+  @Nonnull
+  public DataTablesColumn setComparator (@Nullable final Comparator <String> aComparator)
+  {
+    m_aComparator = aComparator;
+    return this;
+  }
+
   @Nonnull
   public JSAssocArray getAsJS ()
   {
@@ -274,8 +302,6 @@ public class DataTablesColumn
       ret.add ("sClass", sClasses);
     if (StringHelper.hasText (m_sName))
       ret.add ("sName", m_sName);
-    if (m_aType != null)
-      ret.add ("sType", m_aType.getName ());
     if (StringHelper.hasText (m_sWidth))
       ret.add ("sWidth", m_sWidth);
     if (ArrayHelper.isNotEmpty (m_aDataSort))

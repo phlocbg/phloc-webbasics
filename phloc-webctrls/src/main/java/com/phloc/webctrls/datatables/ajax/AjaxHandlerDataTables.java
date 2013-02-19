@@ -26,10 +26,13 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
-import com.phloc.commons.compare.ComparatorAsString;
+import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
@@ -65,6 +68,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   private static final String DT_ROW_ID = "DT_RowId";
   private static final String DT_ROW_CLASS = "DT_RowClass";
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AjaxHandlerDataTables.class);
+
   @Nonnull
   private ResponseData _handleRequest (@Nonnull final RequestData aRequestData,
                                        @Nonnull final DataTablesServerData aDataTables)
@@ -72,6 +77,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final Locale aDisplayLocale = aDataTables.getDisplayLocale ();
 
     // Sorting
+    if (aDataTables.getRowCount () > 0)
     {
       final ServerSortState aOldServerSortState = aDataTables.getServerSortState ();
       final ServerSortState aNewServerSortState = new ServerSortState (aRequestData.getSortColumnArray ());
@@ -80,21 +86,31 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       {
         final RequestDataSortColumn [] aNewSortCols = aNewServerSortState.getSortCols ();
 
+        // Extract the comparators for all sort columns
+        final List <Comparator <String>> aComparators = new ArrayList <Comparator <String>> (aNewSortCols.length);
+        for (final RequestDataSortColumn aSortColumn : aNewSortCols)
+        {
+          final ESortOrder eSortOrder = aSortColumn.getSortDirectionOrDefault ();
+          Comparator <String> aStringComp = aDataTables.getColumnComparator (aSortColumn.getColumnIndex ());
+          if (aStringComp == null)
+            aStringComp = new ComparatorString (aDisplayLocale, eSortOrder);
+          aComparators.add (aStringComp);
+        }
+
         final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
         {
           @Override
           protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
           {
             int ret = 0;
-            for (final RequestDataSortColumn aSortColumn : aNewSortCols)
+            for (int i = 0; i < aNewSortCols.length; ++i)
             {
-              final int nSortColumnIndex = aSortColumn.getColumnIndex ();
-              final ComparatorAsString aStringComp = new ComparatorAsString (aDisplayLocale,
-                                                                             aSortColumn.getSortDirectionOrDefault ());
-
+              final int nSortColumnIndex = aNewSortCols[i].getColumnIndex ();
               final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
               final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
-              ret = aStringComp.compare (aCell1.getTextContent (), aCell2.getTextContent ());
+
+              final Comparator <String> aComparator = aComparators.get (i);
+              ret = aComparator.compare (aCell1.getTextContent (), aCell2.getTextContent ());
               if (ret != 0)
                 break;
             }
@@ -103,6 +119,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         };
 
         // Main sorting
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Sorting " + aDataTables.getRowCount () + " rows");
         aDataTables.sortAllRows (aComp);
 
         // Remember the new server state
@@ -146,6 +164,9 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         }
       }
 
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Filtered " + aFilteredRows.size () + " rows out of " + aResultRows.size ());
+
       // Use the filtered rows
       aResultRows = aFilteredRows;
     }
@@ -181,7 +202,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
-    System.out.println (ContainerHelper.getSortedByKey (aParams.getAllAttributes ()));
+    if (false)
+      System.out.println (ContainerHelper.getSortedByKey (aParams.getAllAttributes ()));
     // Read input parameters
     final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
     final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);

@@ -560,7 +560,7 @@ public class DataTables implements IHCNodeBuilder
     {
       aParams.add ("bServerSide", true);
       // This copies the content of the table
-      final DataTablesServerData aServerData = new DataTablesServerData (m_aTable, m_aDisplayLocale);
+      final DataTablesServerData aServerData = new DataTablesServerData (m_aTable, m_aColumns, m_aDisplayLocale);
       UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
       // Remove all body rows to avoid initial double painting
       m_aTable.removeAllBodyRows ();

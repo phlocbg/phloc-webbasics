@@ -95,14 +95,20 @@ public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCU
   }
 
   @Override
-  public void onMenuItemPageItem (@Nonnull final HCLI aLI, boolean bHasChildren, final boolean bSelected, boolean bExpanded)
+  public void onMenuItemPageItem (@Nonnull final HCLI aLI,
+                                  boolean bHasChildren,
+                                  final boolean bSelected,
+                                  boolean bExpanded)
   {
     if (bSelected)
       aLI.addClass (CBootstrapCSS.ACTIVE);
   }
 
   @Override
-  public void onMenuItemExternalItem (@Nonnull final HCLI aLI, boolean bHasChildren, final boolean bSelected, boolean bExpanded)
+  public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
+                                      boolean bHasChildren,
+                                      final boolean bSelected,
+                                      boolean bExpanded)
   {
     if (bSelected)
       aLI.addClass (CBootstrapCSS.ACTIVE);

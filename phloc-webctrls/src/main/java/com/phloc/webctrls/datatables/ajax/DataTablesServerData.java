@@ -44,6 +44,7 @@ import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.webbasics.state.IHasUIState;
+import com.phloc.webctrls.datatables.DataTablesColumn;
 
 public final class DataTablesServerData implements IHasUIState
 {
@@ -162,18 +163,63 @@ public final class DataTablesServerData implements IHasUIState
     }
   }
 
+  static final class ColumnData
+  {
+    private final Comparator <String> m_aComparator;
+
+    private ColumnData (@Nonnull final Comparator <String> aComparator)
+    {
+      m_aComparator = aComparator;
+    }
+
+    public Comparator <String> getComparator ()
+    {
+      return m_aComparator;
+    }
+
+    @Nullable
+    public static ColumnData create (@Nullable final Comparator <String> aComparator)
+    {
+      return aComparator == null ? null : new ColumnData (aComparator);
+    }
+  }
+
   public static final ObjectType OBJECT_TYPE = new ObjectType ("datatables");
 
-  private ServerSortState m_aServerSortState = new ServerSortState ();
+  private final ColumnData [] m_aColumns;
   private final List <RowData> m_aRows;
   private final Locale m_aDisplayLocale;
+  private ServerSortState m_aServerSortState = new ServerSortState ();
 
-  public DataTablesServerData (@Nonnull final AbstractHCBaseTable <?> aTable, @Nonnull final Locale aDisplayLocale)
+  public DataTablesServerData (@Nonnull final AbstractHCBaseTable <?> aTable,
+                               @Nonnull final List <DataTablesColumn> aColumns,
+                               @Nonnull final Locale aDisplayLocale)
   {
     if (aTable == null)
       throw new NullPointerException ("table");
+    if (aColumns == null)
+      throw new NullPointerException ("columns");
     if (aDisplayLocale == null)
       throw new NullPointerException ("displayLocale");
+
+    // Column data
+    final int nColumns = aTable.getColumnCount ();
+    m_aColumns = new ColumnData [nColumns];
+    for (final DataTablesColumn aColumn : aColumns)
+    {
+      final ColumnData aColumnData = ColumnData.create (aColumn.getComparator ());
+      for (final int nTarget : aColumn.getAllTargets ())
+      {
+        if (nTarget < 0 || nTarget >= nColumns)
+          throw new IllegalArgumentException ("DataTablesColumn is targeting illegal column index " +
+                                              nTarget +
+                                              "; must be >= 0 and < " +
+                                              nColumns);
+        m_aColumns[nTarget] = aColumnData;
+      }
+    }
+
+    // Row data
     final IHCConversionSettings aCS = HCSettings.getConversionSettings (GlobalDebug.isDebugMode ());
     m_aRows = new ArrayList <RowData> (aTable.getBodyRowCount ());
     for (final HCRow aRow : aTable.getAllBodyRows ())
@@ -223,6 +269,13 @@ public final class DataTablesServerData implements IHasUIState
   public Locale getDisplayLocale ()
   {
     return m_aDisplayLocale;
+  }
+
+  @Nullable
+  public Comparator <String> getColumnComparator (@Nonnegative final int nColumnIndex)
+  {
+    final ColumnData aColumnData = m_aColumns[nColumnIndex];
+    return aColumnData == null ? null : aColumnData.getComparator ();
   }
 
   @Override

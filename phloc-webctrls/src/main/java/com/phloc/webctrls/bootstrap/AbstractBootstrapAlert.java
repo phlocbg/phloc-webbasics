@@ -32,7 +32,8 @@ import com.phloc.html.hc.impl.HCEntityNode;
  * 
  * @author philip
  */
-public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends AbstractHCDiv <THISTYPE>
+public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends
+                                                                                                  AbstractHCDiv <THISTYPE>
 {
   /** By default the close box is not shown */
   public static final boolean DEFAULT_SHOW_CLOSE = false;
