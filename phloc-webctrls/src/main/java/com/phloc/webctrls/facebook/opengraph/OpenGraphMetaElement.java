@@ -26,9 +26,9 @@ import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.meta.MetaElement;
 import com.phloc.webctrls.facebook.CFacebook;
 
-public class OpenGraphMetaTag extends MetaElement
+public class OpenGraphMetaElement extends MetaElement
 {
-  public OpenGraphMetaTag (@Nonnull final EOpenGraphMetaTag eProperty, @Nullable final String sContent)
+  public OpenGraphMetaElement (@Nonnull final EOpenGraphMetaTag eProperty, @Nullable final String sContent)
   {
     super (eProperty.getID (), false, sContent);
   }
