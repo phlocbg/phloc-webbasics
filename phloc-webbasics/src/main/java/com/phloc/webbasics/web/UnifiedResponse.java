@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.charset.CCharset;
@@ -918,15 +919,20 @@ public class UnifiedResponse
       else
         if (aQuality.isLowValue ())
         {
-          // Inform if the quality of the request is <= 50%!
-          final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
-          if (!aBetterValues.isEmpty ())
-            _warn ("MimeType '" +
-                   sMimeType +
-                   "' is not best supported by the request (" +
-                   aQuality +
-                   "). Better MimeTypes are: " +
-                   _getAsStringMimeTypes (aBetterValues));
+          // This might bloat the logfile for text/css MIME types and therefore
+          // only in the debug version
+          if (GlobalDebug.isDebugMode ())
+          {
+            // Inform if the quality of the request is <= 50%!
+            final Map <IMimeType, QValue> aBetterValues = m_aAcceptMimeTypeList.getAllQValuesGreaterThan (aQuality.getQuality ());
+            if (!aBetterValues.isEmpty ())
+              _warn ("MimeType '" +
+                     sMimeType +
+                     "' is not best supported by the request (" +
+                     aQuality +
+                     "). Better MimeTypes are: " +
+                     _getAsStringMimeTypes (aBetterValues));
+          }
         }
 
       aHttpResponse.setContentType (sMimeType);
