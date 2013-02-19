@@ -36,9 +36,6 @@ import com.phloc.html.hc.impl.AbstractHCNode;
  */
 public abstract class AbstractFBNode extends AbstractHCNode
 {
-  /** The OpenGraph Facebook specific namespace URI */
-  public static final String FACEBOOK_NAMESPACE_URI = "http://ogp.me/ns/fb#";
-
   private final String m_sElementName;
 
   public AbstractFBNode (@Nonnull @Nonempty final String sElementName)
@@ -58,7 +55,7 @@ public abstract class AbstractFBNode extends AbstractHCNode
   @Nonnull
   protected IMicroElement createElement (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    return new MicroElement (FACEBOOK_NAMESPACE_URI, m_sElementName);
+    return new MicroElement (CFacebook.FACEBOOK_NAMESPACE_URI, m_sElementName);
   }
 
   /**
