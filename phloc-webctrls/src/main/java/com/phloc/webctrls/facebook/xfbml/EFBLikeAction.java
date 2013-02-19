@@ -3,35 +3,32 @@ package com.phloc.webctrls.facebook.xfbml;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
 
 public enum EFBLikeAction implements IHasID <String>
 {
   LIKE ("like"),
   RECOMMEND ("recommend");
 
-  private String m_sID;
+  private final String m_sID;
 
-  private EFBLikeAction (@Nonnull final String sID)
+  private EFBLikeAction (@Nonnull @Nonempty final String sID)
   {
-    this.m_sID = sID;
+    m_sID = sID;
   }
 
+  @Nonnull
+  @Nonempty
   public String getID ()
   {
-    return this.m_sID;
+    return m_sID;
   }
 
   @Nullable
   public static EFBLikeAction getFromID (@Nullable final String sID)
   {
-    for (final EFBLikeAction eEntry : EFBLikeAction.values ())
-    {
-      if (eEntry.getID ().equals (sID))
-      {
-        return eEntry;
-      }
-    }
-    return null;
+    return EnumHelper.getFromIDOrNull (EFBLikeAction.class, sID);
   }
 }

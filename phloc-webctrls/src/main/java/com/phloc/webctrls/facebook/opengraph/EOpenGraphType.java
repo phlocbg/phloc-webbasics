@@ -3,7 +3,9 @@ package com.phloc.webctrls.facebook.opengraph;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
 
 public enum EOpenGraphType implements IHasID <String>
 {
@@ -14,28 +16,23 @@ public enum EOpenGraphType implements IHasID <String>
   SITE_NAME ("og:site_name"),
   DESCRIPTION ("og:description");
 
-  private String m_sID;
+  private final String m_sID;
 
-  private EOpenGraphType (@Nonnull final String sID)
+  private EOpenGraphType (@Nonnull @Nonempty final String sID)
   {
-    this.m_sID = sID;
+    m_sID = sID;
   }
 
+  @Nonnull
+  @Nonempty
   public String getID ()
   {
-    return this.m_sID;
+    return m_sID;
   }
 
   @Nullable
-  public static EOpenGraphType getFromID (@Nullable final String sID)
+  public static EOpenGraphType getFromIDOrNull (@Nullable final String sID)
   {
-    for (final EOpenGraphType eEntry : EOpenGraphType.values ())
-    {
-      if (eEntry.getID ().equals (sID))
-      {
-        return eEntry;
-      }
-    }
-    return null;
+    return EnumHelper.getFromIDOrNull (EOpenGraphType.class, sID);
   }
 }

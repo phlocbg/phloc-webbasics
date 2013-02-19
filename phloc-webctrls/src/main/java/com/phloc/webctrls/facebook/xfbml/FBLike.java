@@ -116,36 +116,22 @@ public class FBLike extends AbstractFBNode
   protected void applyProperties (@Nonnull final IMicroElement aElement,
                                   @Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
-    aElement.setAttribute ("href", this.m_aURL.getAsString ());
+    aElement.setAttribute ("href", m_aURL.getAsString ());
     if (m_bWithSendButton)
-    {
-      aElement.setAttribute ("send", String.valueOf (true));
-    }
+      aElement.setAttribute ("send", Boolean.TRUE.toString ());
     if (m_aLayout != null)
-    {
-      aElement.setAttribute ("layout", this.m_aLayout.getID ());
-    }
+      aElement.setAttribute ("layout", m_aLayout.getID ());
     if (m_bShowFaces)
-    {
-      aElement.setAttribute ("show_faces", String.valueOf (true));
-    }
-    aElement.setAttribute ("width", this.m_nWidth);
+      aElement.setAttribute ("show_faces", Boolean.TRUE.toString ());
+    aElement.setAttribute ("width", m_nWidth);
     if (m_aAction != null)
-    {
-      aElement.setAttribute ("action", this.m_aAction.getID ());
-    }
+      aElement.setAttribute ("action", m_aAction.getID ());
     if (m_aFont != null)
-    {
-      aElement.setAttribute ("font", this.m_aFont.getID ());
-    }
+      aElement.setAttribute ("font", m_aFont.getID ());
     if (m_aColorScheme != null)
-    {
-      aElement.setAttribute ("colorscheme", this.m_aColorScheme.getID ());
-    }
-    if (StringHelper.hasText (this.m_sRefInfo))
-    {
-      aElement.setAttribute ("ref", this.m_sRefInfo);
-    }
+      aElement.setAttribute ("colorscheme", m_aColorScheme.getID ());
+    if (StringHelper.hasText (m_sRefInfo))
+      aElement.setAttribute ("ref", m_sRefInfo);
   }
 
   /**

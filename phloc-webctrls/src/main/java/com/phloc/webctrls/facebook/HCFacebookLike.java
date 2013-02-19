@@ -34,6 +34,7 @@ import com.phloc.html.hc.html.HCIFrame;
  * 
  * @author philip
  */
+@Deprecated
 public final class HCFacebookLike extends HCIFrame
 {
   public static final int DEFAULT_IFRAME_WIDTH = 450;

@@ -3,7 +3,9 @@ package com.phloc.webctrls.facebook.xfbml;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
 
 public enum EFBLikeLayout implements IHasID <String>
 {
@@ -13,7 +15,7 @@ public enum EFBLikeLayout implements IHasID <String>
    * 'recommend' by and increases by 60px if send is 'true'. Default width: 450
    * pixels. Height: 35 pixels (without photos) or 80 pixels (with photos).
    */
-  STANDARD ("standard"), // default
+  STANDARD ("standard"),
 
   /**
    * displays the total number of likes to the right of the button. Minimum
@@ -27,28 +29,26 @@ public enum EFBLikeLayout implements IHasID <String>
    */
   BOX_COUNT ("box_count");
 
-  private String m_sID;
+  /** Default like layout */
+  public static final EFBLikeLayout DEFAULT = STANDARD;
 
-  private EFBLikeLayout (@Nonnull final String sID)
+  private final String m_sID;
+
+  private EFBLikeLayout (@Nonnull @Nonempty final String sID)
   {
-    this.m_sID = sID;
+    m_sID = sID;
   }
 
+  @Nonnull
+  @Nonempty
   public String getID ()
   {
-    return this.m_sID;
+    return m_sID;
   }
 
   @Nullable
   public static EFBLikeLayout getFromID (@Nullable final String sID)
   {
-    for (final EFBLikeLayout eEntry : EFBLikeLayout.values ())
-    {
-      if (eEntry.getID ().equals (sID))
-      {
-        return eEntry;
-      }
-    }
-    return null;
+    return EnumHelper.getFromIDOrNull (EFBLikeLayout.class, sID);
   }
 }

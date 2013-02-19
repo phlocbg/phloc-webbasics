@@ -3,7 +3,9 @@ package com.phloc.webctrls.facebook.xfbml;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
 
 public enum EFBFont implements IHasID <String>
 {
@@ -14,28 +16,23 @@ public enum EFBFont implements IHasID <String>
   TREBUCHET ("trebuchet ms"),
   VERDANA ("verdana");
 
-  private String m_sID;
+  private final String m_sID;
 
-  private EFBFont (@Nonnull final String sID)
+  private EFBFont (@Nonnull @Nonempty final String sID)
   {
-    this.m_sID = sID;
+    m_sID = sID;
   }
 
+  @Nonnull
+  @Nonempty
   public String getID ()
   {
-    return this.m_sID;
+    return m_sID;
   }
 
   @Nullable
   public static EFBFont getFromID (@Nullable final String sID)
   {
-    for (final EFBFont eEntry : EFBFont.values ())
-    {
-      if (eEntry.getID ().equals (sID))
-      {
-        return eEntry;
-      }
-    }
-    return null;
+    return EnumHelper.getFromIDOrNull (EFBFont.class, sID);
   }
 }
