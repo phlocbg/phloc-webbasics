@@ -26,13 +26,19 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Encapsulates the request data to a single DataTables AJAX request
+ * 
+ * @author philip
+ */
 final class RequestData
 {
   private final int m_nDisplayStart;
   private final int m_nDisplayLength;
-  private final String m_sSearch;
+  private final String m_sSearchText;
   private final boolean m_bRegEx;
   private final List <RequestDataColumn> m_aColumnData;
   private final RequestDataSortColumn [] m_aSortColumns;
@@ -54,7 +60,7 @@ final class RequestData
       throw new IllegalArgumentException ("ColumnData may not contain null elements");
     m_nDisplayStart = nDisplayStart;
     m_nDisplayLength = nDisplayLength;
-    m_sSearch = sSearch;
+    m_sSearchText = sSearch;
     m_bRegEx = bRegEx;
     m_aColumnData = aColumnData;
     m_aSortColumns = aSortColumns;
@@ -89,19 +95,27 @@ final class RequestData
   }
 
   /**
+   * @return <code>true</code> if any global search text is present
+   */
+  public boolean hasSearchText ()
+  {
+    return StringHelper.hasText (m_sSearchText);
+  }
+
+  /**
    * @return Global search field
    */
   @Nullable
-  public String getSearch ()
+  public String getSearchText ()
   {
-    return m_sSearch;
+    return m_sSearchText;
   }
 
   /**
    * @return True if the global filter should be treated as a regular expression
    *         for advanced filtering, false if not.
    */
-  public boolean isRegEx ()
+  public boolean isSearchRegEx ()
   {
     return m_bRegEx;
   }
@@ -156,7 +170,7 @@ final class RequestData
   {
     return new ToStringGenerator (this).append ("displayStart", m_nDisplayStart)
                                        .append ("displayLength", m_nDisplayLength)
-                                       .append ("search", m_sSearch)
+                                       .append ("search", m_sSearchText)
                                        .append ("regEx", m_bRegEx)
                                        .append ("sortCols", m_aSortColumns)
                                        .append ("columnData", m_aColumnData)

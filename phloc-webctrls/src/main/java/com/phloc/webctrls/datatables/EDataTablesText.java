@@ -42,7 +42,7 @@ public enum EDataTablesText implements IHasDisplayText
   ZERO_RECORDS ("Keine Einträge vorhanden.", "No matching records found."),
   INFO ("_START_ bis _END_ von _TOTAL_ Einträgen", "Showing _START_ to _END_ of _TOTAL_ entries"),
   INFO_EMPTY ("0 bis 0 von 0 Einträgen", "Showing 0 to 0 of 0 entries"),
-  INFO_FILTERED ("(gefiltert von _MAX_  Einträgen)", "(filtered from _MAX_ total entries)"),
+  INFO_FILTERED ("(gefiltert von _MAX_ Einträgen)", "(filtered from _MAX_ total entries)"),
   INFO_POSTFIX ("", ""),
   SEARCH ("Suchen:", "Search:"),
   URL ("", "");

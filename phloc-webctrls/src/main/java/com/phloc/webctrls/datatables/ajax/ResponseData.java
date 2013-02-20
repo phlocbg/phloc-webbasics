@@ -31,6 +31,11 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 
+/**
+ * Encapsulates the response to a single DataTables AJAX request
+ * 
+ * @author philip
+ */
 final class ResponseData
 {
   private final int m_nTotalRecords;

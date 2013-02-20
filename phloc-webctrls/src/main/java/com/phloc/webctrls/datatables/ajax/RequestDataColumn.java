@@ -22,6 +22,11 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Encapsulates the request data for a single column
+ * 
+ * @author philip
+ */
 @Immutable
 final class RequestDataColumn
 {

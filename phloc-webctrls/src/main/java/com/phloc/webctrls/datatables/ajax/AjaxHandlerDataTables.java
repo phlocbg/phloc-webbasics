@@ -34,6 +34,7 @@ import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
@@ -52,6 +53,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
     RequestComparator (@Nonnull final ServerSortState aServerSortState)
     {
+      if (aServerSortState == null)
+        throw new NullPointerException ("ServerSortState");
       m_aSortCols = aServerSortState.getSortCols ();
     }
 
@@ -61,16 +64,23 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       int ret = 0;
       for (final RequestDataSortColumn aSortCol : m_aSortCols)
       {
-        // Get the texts to compare
+        // Get the cells to compare
         final int nSortColumnIndex = aSortCol.getColumnIndex ();
         final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
         final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
 
+        // Main compare
         ret = aSortCol.getComparator ().compare (aCell1.getTextContent (), aCell2.getTextContent ());
         if (ret != 0)
           break;
       }
       return ret;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("sortCols", m_aSortCols).toString ();
     }
   }
 
@@ -115,7 +125,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
         // Main sorting
         if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Sorting " + aServerData.getRowCount () + " rows");
+          s_aLogger.debug ("Sorting " + aServerData.getRowCount () + " rows with " + aComp);
         aServerData.sortAllRows (aComp);
 
         // Remember the new server state
@@ -123,15 +133,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       }
     }
 
-    final ServerFilterState aNewServerFilterState = new ServerFilterState (aRequestData.getSearch (),
-                                                                           aRequestData.isRegEx ());
-
     List <RowData> aResultRows = aServerData.directGetAllRows ();
-    if (aNewServerFilterState.hasSearchText ())
+    if (aRequestData.hasSearchText ())
     {
       // filter rows
-      final String sGlobalSearchText = aNewServerFilterState.getSearchText ();
-      final boolean bGlobalSearchRegEx = aNewServerFilterState.isSearchRegEx ();
+      final String sGlobalSearchText = aRequestData.getSearchText ();
+      final boolean bGlobalSearchRegEx = aRequestData.isSearchRegEx ();
       final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
 
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
@@ -143,10 +150,15 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
           final RequestDataColumn aColumn = aColumns[nCellIndex];
           if (aColumn.isSearchable ())
           {
+            // Determine search text
             String sSearchText = aColumn.getSearchText ();
             if (StringHelper.hasNoText (sSearchText))
               sSearchText = sGlobalSearchText;
+
+            // RegEx search?
             final boolean bIsRegEx = aColumn.isSearchRegEx () || bGlobalSearchRegEx;
+
+            // Main matching
             final boolean bIsMatching = bIsRegEx ? aCell.matchesRegEx (sSearchText)
                                                 : aCell.matchesPlain (sSearchText, aDisplayLocale);
             if (bIsMatching)

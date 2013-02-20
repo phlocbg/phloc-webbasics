@@ -32,7 +32,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableString;
 
 /**
- * The current search and sort state of a {@link DataTables} object.
+ * The current sort state of a {@link DataTables} object.
  * 
  * @author philip
  */
@@ -40,13 +40,12 @@ final class ServerSortState
 {
   private final RequestDataSortColumn [] m_aSortState;
 
-  public ServerSortState (@Nonnull final DataTablesServerData aServerData)
+  ServerSortState (@Nonnull final DataTablesServerData aServerData)
   {
     this (aServerData, new RequestDataSortColumn [0]);
   }
 
-  public ServerSortState (@Nonnull final DataTablesServerData aServerData,
-                          @Nonnull final RequestDataSortColumn [] aSortCols)
+  ServerSortState (@Nonnull final DataTablesServerData aServerData, @Nonnull final RequestDataSortColumn [] aSortCols)
   {
     if (aServerData == null)
       throw new NullPointerException ("serverData");

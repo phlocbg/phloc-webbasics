@@ -19,10 +19,18 @@ package com.phloc.webctrls.datatables;
 
 import javax.annotation.concurrent.Immutable;
 
+/**
+ * This class contains constants for DataTables.
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CDataTables
 {
+  /** Sort something ascending. */
   public static final String SORT_ASC = "asc";
+
+  /** Sort something descending. */
   public static final String SORT_DESC = "desc";
 
   private CDataTables ()

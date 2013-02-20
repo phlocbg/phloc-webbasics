@@ -30,6 +30,13 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Encapsulates the sorting information for the columns that are affected in
+ * sorting. So the number of sort columns is always &ge; as the number of
+ * overall columns.
+ * 
+ * @author philip
+ */
 @Immutable
 final class RequestDataSortColumn implements Serializable
 {
