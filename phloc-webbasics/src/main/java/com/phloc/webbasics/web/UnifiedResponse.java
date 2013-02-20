@@ -1028,7 +1028,10 @@ public class UnifiedResponse
         // Note: Set it only if the content is uncompressed, because we cannot
         // determine the length of the compressed text in advance without
         // computational overhead
-        aHttpResponse.setContentLength (nContentLength);
+        if (nContentLength < Integer.MAX_VALUE)
+          aHttpResponse.setContentLength (nContentLength);
+        else
+          aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nContentLength));
       }
 
       // Don't emit empty content or content for HEAD method
