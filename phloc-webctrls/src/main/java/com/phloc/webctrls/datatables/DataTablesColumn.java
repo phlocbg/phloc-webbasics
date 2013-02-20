@@ -29,11 +29,12 @@ import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCHasCSSClasses;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.webctrls.datatables.comparator.AbstractComparatorTable;
 
-public class DataTablesColumn
+public class DataTablesColumn implements IHCHasCSSClasses <DataTablesColumn>
 {
   public static final boolean DEFAULT_SEARCHABLE = true;
   public static final boolean DEFAULT_SORTABLE = true;
@@ -106,7 +107,7 @@ public class DataTablesColumn
     return this;
   }
 
-  public final boolean containsClass (@Nullable final ICSSClassProvider aCSSClassProvider)
+  public boolean containsClass (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
     return m_aCSSClassProviders != null &&
            aCSSClassProvider != null &&
@@ -114,7 +115,7 @@ public class DataTablesColumn
   }
 
   @Nonnull
-  public final DataTablesColumn addClass (@Nullable final ICSSClassProvider aCSSClassProvider)
+  public DataTablesColumn addClass (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
     if (aCSSClassProvider != null)
     {
@@ -127,13 +128,13 @@ public class DataTablesColumn
 
   @Deprecated
   @Nonnull
-  public final DataTablesColumn addClasses (@Nullable final ICSSClassProvider aCSSClassProvider)
+  public DataTablesColumn addClasses (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
     return addClass (aCSSClassProvider);
   }
 
   @Nonnull
-  public final DataTablesColumn addClasses (@Nullable final ICSSClassProvider... aCSSClassProviders)
+  public DataTablesColumn addClasses (@Nullable final ICSSClassProvider... aCSSClassProviders)
   {
     if (aCSSClassProviders != null)
       for (final ICSSClassProvider aProvider : aCSSClassProviders)
@@ -142,7 +143,7 @@ public class DataTablesColumn
   }
 
   @Nonnull
-  public final DataTablesColumn addClasses (@Nullable final Iterable <? extends ICSSClassProvider> aCSSClassProviders)
+  public DataTablesColumn addClasses (@Nullable final Iterable <? extends ICSSClassProvider> aCSSClassProviders)
   {
     if (aCSSClassProviders != null)
       for (final ICSSClassProvider aProvider : aCSSClassProviders)
@@ -151,7 +152,7 @@ public class DataTablesColumn
   }
 
   @Nonnull
-  public final DataTablesColumn removeClass (@Nullable final ICSSClassProvider aCSSClassProvider)
+  public DataTablesColumn removeClass (@Nullable final ICSSClassProvider aCSSClassProvider)
   {
     if (m_aCSSClassProviders != null && aCSSClassProvider != null)
       m_aCSSClassProviders.remove (aCSSClassProvider);
@@ -159,7 +160,7 @@ public class DataTablesColumn
   }
 
   @Nonnull
-  public final DataTablesColumn removeAllClasses ()
+  public DataTablesColumn removeAllClasses ()
   {
     if (m_aCSSClassProviders != null)
       m_aCSSClassProviders.clear ();
@@ -168,14 +169,14 @@ public class DataTablesColumn
 
   @Nonnull
   @ReturnsMutableCopy
-  public final Set <ICSSClassProvider> getAllClasses ()
+  public Set <ICSSClassProvider> getAllClasses ()
   {
     return ContainerHelper.newOrderedSet (m_aCSSClassProviders);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public final Set <String> getAllClassNames ()
+  public Set <String> getAllClassNames ()
   {
     final Set <String> ret = new LinkedHashSet <String> ();
     if (m_aCSSClassProviders != null)
@@ -189,7 +190,7 @@ public class DataTablesColumn
   }
 
   @Nullable
-  public final String getAllClassesAsString ()
+  public String getAllClassesAsString ()
   {
     if (m_aCSSClassProviders == null || m_aCSSClassProviders.isEmpty ())
       return null;
@@ -206,6 +207,11 @@ public class DataTablesColumn
       }
     }
     return aSB.toString ();
+  }
+
+  public boolean hasAnyClass ()
+  {
+    return m_aCSSClassProviders != null && !m_aCSSClassProviders.isEmpty ();
   }
 
   @Nullable
