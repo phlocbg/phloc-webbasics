@@ -24,80 +24,50 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
-import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.compare.AbstractComparator;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.format.IFormatter;
 import com.phloc.datetime.PDTUtils;
 import com.phloc.datetime.format.PDTFromString;
 import com.phloc.datetime.format.SerializableDateTimeFormatter;
 import com.phloc.datetime.format.SerializableDateTimeFormatter.EFormatStyle;
-import com.phloc.html.hc.html.AbstractHCCell;
 
 /**
  * This comparator is responsible for sorting cells by date and/or time.
  * 
  * @author philip
  */
-public class ComparatorTableDateTime extends AbstractComparator <AbstractHCCell>
+public class ComparatorTableDateTime extends AbstractComparatorTable
 {
-  private final SerializableDateTimeFormatter m_aFormatter;
-  private final String m_sCommonPrefix;
-  private final String m_sCommonSuffix;
+  private final SerializableDateTimeFormatter m_aDTFormatter;
 
   public ComparatorTableDateTime (@Nullable final Locale aParseLocale)
   {
-    this (aParseLocale, null, null);
+    this (null, aParseLocale);
   }
 
-  public ComparatorTableDateTime (@Nullable final Locale aParseLocale,
-                                 @Nullable final String sCommonPrefix,
-                                 @Nullable final String sCommonSuffix)
+  public ComparatorTableDateTime (@Nullable final IFormatter aFormatter, @Nullable final Locale aParseLocale)
   {
-    this (SerializableDateTimeFormatter.create (EFormatStyle.DEFAULT, EFormatStyle.DEFAULT, aParseLocale),
-          sCommonPrefix,
-          sCommonSuffix);
+    this (aFormatter, SerializableDateTimeFormatter.create (EFormatStyle.DEFAULT, EFormatStyle.DEFAULT, aParseLocale));
   }
 
-  public ComparatorTableDateTime (@Nonnull final SerializableDateTimeFormatter aFormatter)
+  public ComparatorTableDateTime (@Nonnull final SerializableDateTimeFormatter aDTFormatter)
   {
-    this (aFormatter, null, null);
+    this (null, aDTFormatter);
   }
 
-  public ComparatorTableDateTime (@Nonnull final SerializableDateTimeFormatter aFormatter,
-                                 @Nullable final String sCommonPrefix,
-                                 @Nullable final String sCommonSuffix)
+  public ComparatorTableDateTime (@Nullable final IFormatter aFormatter,
+                                  @Nonnull final SerializableDateTimeFormatter aDTFormatter)
   {
-    if (aFormatter == null)
+    super (aFormatter);
+    if (aDTFormatter == null)
       throw new NullPointerException ("formatter");
-    m_aFormatter = aFormatter;
-    m_sCommonPrefix = sCommonPrefix;
-    m_sCommonSuffix = sCommonSuffix;
-  }
-
-  @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
-  {
-    if (aCell == null)
-      return "";
-
-    String sText = aCell.getPlainText ();
-
-    // strip common prefix and suffix
-    if (StringHelper.hasText (m_sCommonPrefix))
-      sText = StringHelper.trimStart (sText, m_sCommonPrefix);
-    if (StringHelper.hasText (m_sCommonSuffix))
-      sText = StringHelper.trimEnd (sText, m_sCommonSuffix);
-
-    return sText;
+    m_aDTFormatter = aDTFormatter;
   }
 
   @Override
-  protected final int mainCompare (final AbstractHCCell aCell1, final AbstractHCCell aCell2)
+  protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
-    final String sText1 = getCellText (aCell1);
-    final String sText2 = getCellText (aCell2);
-    final DateTime aDT1 = PDTFromString.getDateTimeFromString (sText1, m_aFormatter.getFormatter ());
-    final DateTime aDT2 = PDTFromString.getDateTimeFromString (sText2, m_aFormatter.getFormatter ());
+    final DateTime aDT1 = PDTFromString.getDateTimeFromString (sText1, m_aDTFormatter.getFormatter ());
+    final DateTime aDT2 = PDTFromString.getDateTimeFromString (sText2, m_aDTFormatter.getFormatter ());
     return PDTUtils.nullSafeCompare (aDT1, aDT2);
   }
 }

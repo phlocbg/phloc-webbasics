@@ -23,6 +23,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.locale.LocaleFormatter;
 
@@ -33,7 +34,7 @@ import com.phloc.commons.locale.LocaleFormatter;
  */
 public class ComparatorTableBigDecimal extends AbstractComparatorTable
 {
-  private static final BigDecimal DEFAULT_VALUE = BigDecimal.ZERO;
+  protected static final BigDecimal DEFAULT_VALUE = BigDecimal.ZERO;
   private final Locale m_aParseLocale;
 
   public ComparatorTableBigDecimal (@Nonnull final Locale aParseLocale)
@@ -49,11 +50,22 @@ public class ComparatorTableBigDecimal extends AbstractComparatorTable
     m_aParseLocale = aParseLocale;
   }
 
-  @Override
-  protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
+  @OverrideOnDemand
+  @Nonnull
+  protected BigDecimal getAsBigDecimal (@Nonnull final String sCellText)
   {
-    final BigDecimal aBD1 = LocaleFormatter.parseBigDecimal (sText1, m_aParseLocale, DEFAULT_VALUE);
-    final BigDecimal aBD2 = LocaleFormatter.parseBigDecimal (sText2, m_aParseLocale, DEFAULT_VALUE);
+    // Ensure that columns without text are sorted consistently compared to the
+    // ones with non-numeric content
+    if (sCellText.isEmpty ())
+      return DEFAULT_VALUE;
+    return LocaleFormatter.parseBigDecimal (sCellText, m_aParseLocale, DEFAULT_VALUE);
+  }
+
+  @Override
+  protected int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
+  {
+    final BigDecimal aBD1 = getAsBigDecimal (sText1);
+    final BigDecimal aBD2 = getAsBigDecimal (sText2);
     return aBD1.compareTo (aBD2);
   }
 }

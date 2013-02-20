@@ -17,60 +17,48 @@
  */
 package com.phloc.webctrls.datatables.comparator;
 
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.compare.AbstractComparator;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.version.Version;
-import com.phloc.html.hc.html.AbstractHCCell;
 
 /**
  * This comparator is responsible for sorting cells by {@link Version}
  * 
  * @author philip
  */
-public class ComparatorTableVersion extends AbstractComparator <AbstractHCCell>
+public class ComparatorTableVersion extends AbstractComparatorTable
 {
-  private final String m_sCommonPrefix;
-  private final String m_sCommonSuffix;
+  protected final Locale m_aLocale;
 
-  public ComparatorTableVersion ()
+  public ComparatorTableVersion (@Nonnull final Locale aParseLocale)
   {
-    this (null, null);
+    this (null, aParseLocale);
   }
 
-  public ComparatorTableVersion (@Nullable final String sCommonPrefix, @Nullable final String sCommonSuffix)
+  public ComparatorTableVersion (@Nullable final IFormatter aFormatter, @Nonnull final Locale aParseLocale)
   {
-    m_sCommonPrefix = sCommonPrefix;
-    m_sCommonSuffix = sCommonSuffix;
+    super (aFormatter);
+    if (aParseLocale == null)
+      throw new NullPointerException ("locale");
+    m_aLocale = aParseLocale;
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected Version getAsVersion (@Nonnull final String sCellText)
   {
-    if (aCell == null)
-      return "";
-
-    String sText = aCell.getPlainText ();
-
-    // strip common prefix and suffix
-    if (StringHelper.hasText (m_sCommonPrefix))
-      sText = StringHelper.trimStart (sText, m_sCommonPrefix);
-    if (StringHelper.hasText (m_sCommonSuffix))
-      sText = StringHelper.trimEnd (sText, m_sCommonSuffix);
-
-    return sText;
+    return new Version (sCellText);
   }
 
   @Override
-  protected final int mainCompare (final AbstractHCCell aCell1, final AbstractHCCell aCell2)
+  protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
-    final String sText1 = getCellText (aCell1);
-    final String sText2 = getCellText (aCell2);
-
-    final Version aBD1 = new Version (sText1);
-    final Version aBD2 = new Version (sText2);
-    return aBD1.compareTo (aBD2);
+    final Version aVer1 = getAsVersion (sText1);
+    final Version aVer2 = getAsVersion (sText2);
+    return aVer1.compareTo (aVer2);
   }
 }

@@ -17,7 +17,6 @@
  */
 package com.phloc.webctrls.datatables.comparator;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Locale;
 
@@ -25,18 +24,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.format.IFormatter;
-import com.phloc.commons.locale.LocaleFormatter;
 
 /**
  * This comparator is responsible for sorting cells by BigInteger
  * 
  * @author philip
  */
-public class ComparatorTableBigInteger extends AbstractComparatorTable
+public class ComparatorTableBigInteger extends ComparatorTableBigDecimal
 {
-  private static final BigDecimal DEFAULT_VALUE = BigDecimal.ZERO;
-  private final Locale m_aParseLocale;
-
   public ComparatorTableBigInteger (@Nonnull final Locale aParseLocale)
   {
     this (null, aParseLocale);
@@ -44,19 +39,14 @@ public class ComparatorTableBigInteger extends AbstractComparatorTable
 
   public ComparatorTableBigInteger (@Nullable final IFormatter aFormatter, @Nonnull final Locale aParseLocale)
   {
-    super (aFormatter);
-    if (aParseLocale == null)
-      throw new NullPointerException ("parseLocale");
-    m_aParseLocale = aParseLocale;
+    super (aFormatter, aParseLocale);
   }
 
   @Override
   protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
-    final BigInteger aBD1 = LocaleFormatter.parseBigDecimal (sText1, m_aParseLocale, DEFAULT_VALUE)
-                                           .toBigIntegerExact ();
-    final BigInteger aBD2 = LocaleFormatter.parseBigDecimal (sText2, m_aParseLocale, DEFAULT_VALUE)
-                                           .toBigIntegerExact ();
-    return aBD1.compareTo (aBD2);
+    final BigInteger aBI1 = getAsBigDecimal (sText1).toBigIntegerExact ();
+    final BigInteger aBI2 = getAsBigDecimal (sText2).toBigIntegerExact ();
+    return aBI1.compareTo (aBI2);
   }
 }

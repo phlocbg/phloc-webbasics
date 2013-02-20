@@ -30,7 +30,7 @@ import com.phloc.masterdata.currency.ECurrency;
  * 
  * @author philip
  */
-public final class ComparatorTableFixedCurrencyFormat extends ComparatorTableDouble
+public final class ComparatorTableFixedCurrencyFormat extends ComparatorTableBigDecimal
 {
   private final ECurrency m_eCurrency;
 
@@ -43,8 +43,9 @@ public final class ComparatorTableFixedCurrencyFormat extends ComparatorTableDou
   }
 
   @Override
-  protected double asDouble (final String sCellText)
+  @Nonnull
+  protected BigDecimal getAsBigDecimal (@Nonnull final String sCellText)
   {
-    return m_eCurrency.parseCurrencyFormat (sCellText, BigDecimal.ZERO).doubleValue ();
+    return m_eCurrency.parseCurrencyFormat (sCellText, DEFAULT_VALUE);
   }
 }

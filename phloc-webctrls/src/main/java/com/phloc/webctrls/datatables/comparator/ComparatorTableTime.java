@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import com.phloc.commons.format.IFormatter;
 import com.phloc.datetime.format.SerializableDateTimeFormatter;
 import com.phloc.datetime.format.SerializableDateTimeFormatter.EFormatStyle;
 
@@ -28,15 +29,11 @@ public class ComparatorTableTime extends ComparatorTableDateTime
 {
   public ComparatorTableTime (@Nullable final Locale aParseLocale)
   {
-    this (aParseLocale, null, null);
+    this (null, aParseLocale);
   }
 
-  public ComparatorTableTime (@Nullable final Locale aParseLocale,
-                             @Nullable final String sCommonPrefix,
-                             @Nullable final String sCommonSuffix)
+  public ComparatorTableTime (@Nullable final IFormatter aFormatter, @Nullable final Locale aParseLocale)
   {
-    super (SerializableDateTimeFormatter.createForTime (EFormatStyle.DEFAULT, aParseLocale),
-           sCommonPrefix,
-           sCommonSuffix);
+    super (aFormatter, SerializableDateTimeFormatter.createForTime (EFormatStyle.DEFAULT, aParseLocale));
   }
 }

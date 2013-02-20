@@ -23,59 +23,41 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.compare.AbstractIntegerComparator;
+import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.locale.LocaleFormatter;
-import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.html.AbstractHCCell;
 
-public class ComparatorTableLong extends AbstractIntegerComparator <AbstractHCCell>
+public class ComparatorTableLong extends AbstractComparatorTable
 {
-  private final Locale m_aLocale;
-  private final String m_sCommonPrefix;
-  private final String m_sCommonSuffix;
+  protected final Locale m_aLocale;
 
-  public ComparatorTableLong (@Nonnull final Locale aSortLocale)
+  public ComparatorTableLong (@Nonnull final Locale aParseLocale)
   {
-    this (aSortLocale, null, null);
+    this (null, aParseLocale);
   }
 
-  public ComparatorTableLong (@Nonnull final Locale aSortLocale,
-                             @Nullable final String sCommonPrefix,
-                             @Nullable final String sCommonSuffix)
+  public ComparatorTableLong (@Nullable final IFormatter aFormatter, @Nonnull final Locale aParseLocale)
   {
-    if (aSortLocale == null)
+    super (aFormatter);
+    if (aParseLocale == null)
       throw new NullPointerException ("locale");
-    m_aLocale = aSortLocale;
-    m_sCommonPrefix = sCommonPrefix;
-    m_sCommonSuffix = sCommonSuffix;
+    m_aLocale = aParseLocale;
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected long getAsLong (@Nonnull final String sCellText)
   {
-    if (aCell == null)
-      return "";
-
-    String sText = aCell.getPlainText ();
-
-    // strip common prefix and suffix
-    if (StringHelper.hasText (m_sCommonPrefix))
-      sText = StringHelper.trimStart (sText, m_sCommonPrefix);
-    if (StringHelper.hasText (m_sCommonSuffix))
-      sText = StringHelper.trimEnd (sText, m_sCommonSuffix);
-
-    return sText;
+    // Ensure that columns without text are sorted consistently compared to the
+    // ones with non-numeric content
+    if (sCellText.isEmpty ())
+      return Long.MIN_VALUE;
+    return LocaleFormatter.parseLong (sCellText, m_aLocale, 0);
   }
 
   @Override
-  protected final long asLong (@Nullable final AbstractHCCell aCell)
+  protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
-    final String sText = getCellText (aCell);
-
-    // Ensure that columns without text are sorted consistently compared to the
-    // ones with non-numeric content
-    if (StringHelper.hasNoText (sText))
-      return -1;
-    return LocaleFormatter.parseLong (sText, m_aLocale, 0);
+    final long n1 = getAsLong (sText1);
+    final long n2 = getAsLong (sText2);
+    return n1 < n2 ? -1 : n1 == n2 ? 0 : +1;
   }
 }
