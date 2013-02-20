@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.datatables.ajax;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import javax.annotation.Nonnegative;
@@ -30,7 +31,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
-final class RequestDataSortColumn
+final class RequestDataSortColumn implements Serializable
 {
   private final int m_nColumnIndex;
   private final ESortOrder m_eSortDirection;

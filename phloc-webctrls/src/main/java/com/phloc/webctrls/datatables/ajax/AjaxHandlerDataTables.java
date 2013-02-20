@@ -46,6 +46,34 @@ import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {
+  private static final class RequestComparator extends AbstractComparator <RowData>
+  {
+    private final RequestDataSortColumn [] m_aSortCols;
+
+    RequestComparator (@Nonnull final ServerSortState aServerSortState)
+    {
+      m_aSortCols = aServerSortState.getSortCols ();
+    }
+
+    @Override
+    protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
+    {
+      int ret = 0;
+      for (final RequestDataSortColumn aSortCol : m_aSortCols)
+      {
+        // Get the texts to compare
+        final int nSortColumnIndex = aSortCol.getColumnIndex ();
+        final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
+        final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
+
+        ret = aSortCol.getComparator ().compare (aCell1.getTextContent (), aCell2.getTextContent ());
+        if (ret != 0)
+          break;
+      }
+      return ret;
+    }
+  }
+
   // This parameter must be passed to identify the table from the
   // UIStateRegistry!
   public static final String OBJECT_ID = CHCParam.PARAM_OBJECT;
@@ -83,28 +111,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       // Must we change the sorting?
       if (!aNewServerSortState.equals (aOldServerSortState))
       {
-        final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
-        {
-          private final RequestDataSortColumn [] m_aSortCols = aNewServerSortState.getSortCols ();
-
-          @Override
-          protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
-          {
-            int ret = 0;
-            for (final RequestDataSortColumn aSortCol : m_aSortCols)
-            {
-              final int nSortColumnIndex = aSortCol.getColumnIndex ();
-              final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
-              final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
-
-              final Comparator <String> aComparator = aSortCol.getComparator ();
-              ret = aComparator.compare (aCell1.getTextContent (), aCell2.getTextContent ());
-              if (ret != 0)
-                break;
-            }
-            return ret;
-          }
-        };
+        final Comparator <RowData> aComp = new RequestComparator (aNewServerSortState);
 
         // Main sorting
         if (s_aLogger.isDebugEnabled ())
