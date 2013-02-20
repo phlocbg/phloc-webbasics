@@ -77,7 +77,9 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   public static final String ACTION_UNDELETE = "undelete";
   public static final String ACTION_UNDELETE_ALL = "undelete-all";
   public static final String ACTION_VIEW = CHCParam.ACTION_VIEW;
-  public static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
+  protected static final ICSSClassProvider CSS_CLASS_LEFT = WebBasicsCSS.CSS_CLASS_LEFT;
+  protected static final ICSSClassProvider CSS_CLASS_CENTER = WebBasicsCSS.CSS_CLASS_CENTER;
+  protected static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
 
   public AbstractWebPageExt (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {

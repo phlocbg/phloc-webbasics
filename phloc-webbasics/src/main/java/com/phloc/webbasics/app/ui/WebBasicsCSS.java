@@ -30,6 +30,12 @@ import com.phloc.html.css.ICSSClassProvider;
 @Immutable
 public final class WebBasicsCSS
 {
+  /** Align text center */
+  public static final ICSSClassProvider CSS_CLASS_LEFT = DefaultCSSClassProvider.create ("left");
+
+  /** Align text center */
+  public static final ICSSClassProvider CSS_CLASS_CENTER = DefaultCSSClassProvider.create ("center");
+
   /** Align text right */
   public static final ICSSClassProvider CSS_CLASS_RIGHT = DefaultCSSClassProvider.create ("right");
 
