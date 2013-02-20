@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.webbasics.web.ResponseHelper;
 
 /**
  * Special {@link ServletOutputStream} that knows whether it is closed or not
@@ -104,12 +105,7 @@ public abstract class AbstractCompressedServletOutputStream extends ServletOutpu
       s_aLogger.info ("Setting content length to " + nLength + "; doNotCompress=" + m_bDoNotCompress);
     m_nContentLength = nLength;
     if (m_bDoNotCompress && nLength >= 0)
-    {
-      if (m_nContentLength < Integer.MAX_VALUE)
-        m_aHttpResponse.setContentLength ((int) m_nContentLength);
-      else
-        m_aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (m_nContentLength));
-    }
+      ResponseHelper.setContentLength (m_aHttpResponse, m_nContentLength);
   }
 
   @Nonnull

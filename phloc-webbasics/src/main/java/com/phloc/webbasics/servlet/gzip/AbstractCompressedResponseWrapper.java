@@ -36,6 +36,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.http.AcceptEncodingHandler;
 import com.phloc.webbasics.http.CHTTPHeader;
 import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
+import com.phloc.webbasics.web.ResponseHelper;
 
 /**
  * Abstract output stream switching
@@ -95,13 +96,7 @@ public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpR
       m_aCompressedOS.setContentLength (nLength);
     else
       if (m_bNoCompression && m_nContentLength >= 0)
-      {
-        final HttpServletResponse aHttpResponse = (HttpServletResponse) getResponse ();
-        if (m_nContentLength < Integer.MAX_VALUE)
-          aHttpResponse.setContentLength ((int) m_nContentLength);
-        else
-          aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (m_nContentLength));
-      }
+        ResponseHelper.setContentLength ((HttpServletResponse) getResponse (), m_nContentLength);
   }
 
   @Override

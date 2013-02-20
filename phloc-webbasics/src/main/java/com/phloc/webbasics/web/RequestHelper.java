@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -33,6 +34,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.CWeb;
@@ -450,5 +452,21 @@ public final class RequestHelper
       aRequestScope.setAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP, aMap);
     }
     return aMap;
+  }
+
+  /**
+   * Get the content length of the passed request. This is not done using
+   * <code>request.getContentLength()</code> but instead parsing the HTTP header
+   * field {@link CHTTPHeader#CONTENT_LENGTH} manually!
+   * 
+   * @param aHttpRequest
+   *        Source HTTP request. May not be <code>null</code>.
+   * @return -1 if no or an invalid content length is set in the header
+   */
+  @CheckForSigned
+  public static long getContentLength (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    final String sContentLength = aHttpRequest.getHeader (CHTTPHeader.CONTENT_LENGTH);
+    return StringParser.parseLong (sContentLength, -1L);
   }
 }
