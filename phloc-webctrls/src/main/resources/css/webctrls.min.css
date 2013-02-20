@@ -15,4 +15,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.placeholder{color:#aaa;}
+.left{text-align:left;}.center{text-align:center;}.right{text-align:right;}tr.force_colspan{height:0 !important;line-height:0 !important;display:none !important;}
