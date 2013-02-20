@@ -71,7 +71,7 @@ public final class RequestLogger
     {
       ret.put ("AuthType", aHttpRequest.getAuthType ());
       ret.put ("CharacterEncoding", aHttpRequest.getCharacterEncoding ());
-      ret.put ("ContentLength", Integer.toString (aHttpRequest.getContentLength ()));
+      ret.put ("ContentLength", Long.toString (RequestHelper.getContentLength (aHttpRequest)));
       ret.put ("ContentType", aHttpRequest.getContentType ());
       ret.put ("ContextPath", aHttpRequest.getContextPath ());
       ret.put ("LocalAddr", aHttpRequest.getLocalAddr ());
