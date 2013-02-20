@@ -21,11 +21,9 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.security.audit.ComparatorAuditItemDateTime;
 import com.phloc.appbasics.security.audit.IAuditItem;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.html.HCCol;
@@ -67,8 +65,7 @@ public class BasePageAudit extends AbstractWebPageExt
                                                       HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells ("Datum", "Benutzer", "Typ", "Erfolg?", "Aktion");
 
-    for (final IAuditItem aItem : ContainerHelper.getSorted (m_aAuditManager.getAllAuditItems (),
-                                                             new ComparatorAuditItemDateTime (ESortOrder.DESCENDING)))
+    for (final IAuditItem aItem : m_aAuditManager.getLastAuditItems (250))
     {
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (PDTToString.getAsString (aItem.getDateTime (), aDisplayLocale));
@@ -76,9 +73,6 @@ public class BasePageAudit extends AbstractWebPageExt
       aRow.addCell (aItem.getType ().getID ());
       aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
       aRow.addCell (aItem.getAction ());
-
-      if (aTable.getBodyRowCount () >= 1000)
-        break;
     }
 
     if (aTable.getBodyRowCount () == 0)

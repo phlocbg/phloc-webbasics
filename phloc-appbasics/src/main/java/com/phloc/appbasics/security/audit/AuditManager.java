@@ -19,6 +19,7 @@ package com.phloc.appbasics.security.audit;
 
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
@@ -31,7 +32,6 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -154,7 +154,22 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (m_aItems.getAllItems ());
+      return m_aItems.getAllItems ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IAuditItem> getLastAuditItems (@Nonnegative final int nMaxItems)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aItems.getLastItems (nMaxItems);
     }
     finally
     {

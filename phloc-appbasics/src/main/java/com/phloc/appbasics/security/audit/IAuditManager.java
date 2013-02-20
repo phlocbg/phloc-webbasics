@@ -19,18 +19,48 @@ package com.phloc.appbasics.security.audit;
 
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
 
+/**
+ * Interface for a manager that can handle audit items.
+ * 
+ * @author philip
+ */
 public interface IAuditManager extends IAuditor
 {
+  /**
+   * Create a new audit item.
+   * 
+   * @param eType
+   *        The audit action type. May not be <code>null</code>.
+   * @param eSuccess
+   *        Was the action successful? May not be <code>null</code>.
+   * @param sAction
+   *        The performed action. May not be <code>null</code>.
+   * @return {@link EChange}.
+   */
   @Nonnull
   EChange createAuditItem (@Nonnull EAuditActionType eType, @Nonnull ESuccess eSuccess, @Nonnull String sAction);
 
+  /**
+   * @return All available audit items. Never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
+  @Deprecated
   List <IAuditItem> getAllAuditItems ();
+
+  /**
+   * @param nMaxItems
+   *        The maximum number of items. Must be &gt; 0.
+   * @return The n latest audit items. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <IAuditItem> getLastAuditItems (@Nonnegative int nMaxItems);
 }

@@ -61,9 +61,12 @@ import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.datatables.DataTables;
 
 public abstract class AbstractWebPageExt extends AbstractWebPage
 {
+  /** The width of a single action column in pixels */
+  public static final int ACTION_COL_WIDTH = 20;
   public static final String ACTION_CANCEL = "cancel";
   public static final String ACTION_COLLAPSE = CHCParam.ACTION_COLLAPSE;
   public static final String ACTION_COPY = "copy";
@@ -92,8 +95,8 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  public static BootstrapDataTables createBootstrapDataTables (@Nonnull final BootstrapTable aTable,
-                                                               @Nonnull final Locale aDisplayLocale)
+  public static DataTables createBootstrapDataTables (@Nonnull final BootstrapTable aTable,
+                                                      @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapDataTables ret = new BootstrapDataTables (aTable);
     ret.setDisplayLocale (aDisplayLocale);
@@ -103,10 +106,10 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   @Nonnull
   public static HCCol createActionCol (@Nonnegative final int nActions)
   {
-    // Assume each action icon is 20 pixels (incl. margin)
-    final int nWidth = 20 * nActions;
-    // Min width of 60!
-    return new HCCol (Math.max (nWidth, 60));
+    // Assume each action icon is 20 pixels (incl. margin) - at least 3 column
+    // widths are required for the header
+    final int nWidth = ACTION_COL_WIDTH * Math.max (3, nActions);
+    return new HCCol (nWidth);
   }
 
   @Nonnull
