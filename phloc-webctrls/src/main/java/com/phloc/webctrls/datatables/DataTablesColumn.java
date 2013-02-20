@@ -17,7 +17,6 @@
  */
 package com.phloc.webctrls.datatables;
 
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -32,6 +31,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.webctrls.datatables.comparator.AbstractComparatorTable;
 
 public class DataTablesColumn
 {
@@ -48,7 +48,7 @@ public class DataTablesColumn
   private String m_sName;
   private String m_sWidth;
   private int [] m_aDataSort;
-  private Comparator <String> m_aComparator;
+  private AbstractComparatorTable m_aComparator;
 
   public DataTablesColumn (final int nTarget)
   {
@@ -274,13 +274,13 @@ public class DataTablesColumn
   }
 
   @Nullable
-  public Comparator <String> getComparator ()
+  public AbstractComparatorTable getComparator ()
   {
     return m_aComparator;
   }
 
   @Nonnull
-  public DataTablesColumn setComparator (@Nullable final Comparator <String> aComparator)
+  public DataTablesColumn setComparator (@Nullable final AbstractComparatorTable aComparator)
   {
     m_aComparator = aComparator;
     return this;
