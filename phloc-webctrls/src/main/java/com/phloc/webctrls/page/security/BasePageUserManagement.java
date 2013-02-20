@@ -76,6 +76,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
+import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.page.AbstractWebPageForm;
 import com.phloc.webctrls.security.SecurityUI;
@@ -97,7 +98,6 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     TITLE_CREATE ("Neuen Benutzer anlegen", "Create new user"),
     TITLE_EDIT ("Benutzer ''{0}'' bearbeiten", "Edit user ''{0}''"),
     TITLE_RESET_PASSWORD ("Passwort von ''{0}'' zurücksetzen", "Reset password of user ''{0}''"),
-    NO_USERS_FOUND ("Keine Benutzer gefunden", "No users found"),
     NONE_DEFINED ("keine definiert", "none defined"),
     HEADER_DETAILS ("Details von Benutzer {0}", "Details of user {0}"),
     LABEL_CREATIONDATE ("Angelegt am", "Created on"),
@@ -415,9 +415,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
     final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (210), HCCol.star ()));
-    aTable.setSpanningHeaderContent (bEdit
-                                          ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                     aSelectedObject.getDisplayName ())
+    aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                      aSelectedObject.getDisplayName ())
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
     // Use the country of the current client as the default
     aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
@@ -450,8 +449,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                 aSelectedObject == null ? DEFAULT_ENABLED
                                                                                        : aSelectedObject.isEnabled ())),
                        aFormErrors.getListOfField (FIELD_ENABLED));
-    final Collection <String> aUserGroupIDs = aSelectedObject == null
-                                                                     ? aWPEC.getAttrs (FIELD_USERGROUPS)
+    final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_USERGROUPS)
                                                                      : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
     aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
                        new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS), aDisplayLocale, aUserGroupIDs),
@@ -590,15 +588,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       else
         aActionCell.addChild (createEmptyAction ());
     }
-    if (aUsers.isEmpty ())
-      aTable.addSpanningBodyContent (EText.NO_USERS_FOUND.getDisplayText (aDisplayLocale));
 
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
-    if (!aUsers.isEmpty ())
-      aNodeList.addChild (createBootstrapDataTables (aTable).setDisplayLocale (aDisplayLocale)
-                                                            .addColumn (new DataTablesColumn (3).setSortable (false))
-                                                            .setInitialSorting (1, ESortOrder.ASCENDING));
+
+    final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
+    aDataTables.addColumn (new DataTablesColumn (3).setSortable (false));
+    aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
+    aNodeList.addChild (aDataTables);
+
     return aNodeList;
   }
 

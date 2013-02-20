@@ -221,25 +221,6 @@ public class DataTablesColumn
     return this;
   }
 
-  @Deprecated
-  @Nullable
-  public IDataTablesColumnType getType ()
-  {
-    return null;
-  }
-
-  /**
-   * @param aType
-   *        type - ignored
-   * @return this
-   */
-  @Deprecated
-  @Nonnull
-  public DataTablesColumn setType (@Nullable final IDataTablesColumnType aType)
-  {
-    return this;
-  }
-
   @Nullable
   public String getWidth ()
   {
