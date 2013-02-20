@@ -40,6 +40,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.js.builder.JSAnonymousFunction;
@@ -48,6 +49,7 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.http.EHTTPMethod;
@@ -200,9 +202,7 @@ public class DataTables implements IHCNodeBuilder
   @Nullable
   public DataTablesColumn getColumn (@Nonnegative final int nIndex)
   {
-    if (nIndex < 0 || nIndex >= m_aColumns.size ())
-      return null;
-    return m_aColumns.get (nIndex);
+    return ContainerHelper.getSafe (m_aColumns, nIndex);
   }
 
   @Nonnull
@@ -220,9 +220,12 @@ public class DataTables implements IHCNodeBuilder
     if (aTable == null)
       throw new NullPointerException ("table");
     // Add all columns
-    final int nCols = aTable.getColGroup ().getColumnCount ();
-    for (int i = 0; i < nCols; ++i)
-      addColumn (new DataTablesColumn (i));
+    int nColIndex = 0;
+    for (final HCCol aCol : aTable.getColGroup ().getAllColumns ())
+    {
+      addColumn (new DataTablesColumn (nColIndex).setWidth (aCol.getWidth ()));
+      ++nColIndex;
+    }
     return this;
   }
 
@@ -597,7 +600,11 @@ public class DataTables implements IHCNodeBuilder
       final JSVar aData = aCB.param ("a");
       final JSVar aTextStatus = aCB.param ("b");
       final JSVar aJQXHR = aCB.param ("c");
-      aCB.body ().invoke (fnCallback.name ()).arg (aData.ref ("value")).arg (aTextStatus).arg (aJQXHR);
+      aCB.body ()
+         .invoke (fnCallback.name ())
+         .arg (aData.ref (AjaxDefaultResponse.PROPERTY_VALUE))
+         .arg (aTextStatus)
+         .arg (aJQXHR);
       aAjax.add ("url", sSource).add ("data", aoData).add ("success", aCB);
       aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax ().arg (aAjax));
       aParams.add ("fnServerData", aAF);

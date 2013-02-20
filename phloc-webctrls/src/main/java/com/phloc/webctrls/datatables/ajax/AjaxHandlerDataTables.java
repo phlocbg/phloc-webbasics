@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
-import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.compare.ReverseComparator;
 import com.phloc.commons.string.StringHelper;
@@ -45,6 +44,7 @@ import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
+import com.phloc.webctrls.datatables.comparator.ComparatorTableString;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {
@@ -94,13 +94,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
           final ESortOrder eSortOrder = aSortColumn.getSortDirectionOrDefault ();
           Comparator <String> aStringComp = aDataTables.getColumnComparator (aSortColumn.getColumnIndex ());
           if (aStringComp == null)
-            aStringComp = new ComparatorString (aDisplayLocale, eSortOrder);
-          else
-            if (eSortOrder.isDescending ())
-            {
-              // Reverse the comparator
-              aStringComp = ReverseComparator.create (aStringComp);
-            }
+            aStringComp = new ComparatorTableString ();
+          if (eSortOrder.isDescending ())
+          {
+            // Reverse the comparator
+            aStringComp = ReverseComparator.create (aStringComp);
+          }
           aComparators.add (aStringComp);
         }
 
