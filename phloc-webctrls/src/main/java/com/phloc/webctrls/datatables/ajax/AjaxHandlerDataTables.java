@@ -33,7 +33,6 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ESortOrder;
-import com.phloc.commons.compare.ReverseComparator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
@@ -44,7 +43,6 @@ import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
-import com.phloc.webctrls.datatables.comparator.ComparatorTableString;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {
@@ -73,49 +71,33 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
   @Nonnull
   private ResponseData _handleRequest (@Nonnull final RequestData aRequestData,
-                                       @Nonnull final DataTablesServerData aDataTables)
+                                       @Nonnull final DataTablesServerData aServerData)
   {
-    final Locale aDisplayLocale = aDataTables.getDisplayLocale ();
+    final Locale aDisplayLocale = aServerData.getDisplayLocale ();
 
     // Sorting
-    if (aDataTables.getRowCount () > 0)
+    if (aServerData.getRowCount () > 0)
     {
-      final ServerSortState aOldServerSortState = aDataTables.getServerSortState ();
-      final ServerSortState aNewServerSortState = new ServerSortState (aRequestData.getSortColumnArray ());
+      final ServerSortState aOldServerSortState = aServerData.getServerSortState ();
+      final ServerSortState aNewServerSortState = new ServerSortState (aServerData, aRequestData.getSortColumnArray ());
       // Must we change the sorting?
       if (!aNewServerSortState.equals (aOldServerSortState))
       {
-        final RequestDataSortColumn [] aNewSortCols = aNewServerSortState.getSortCols ();
-
-        // Extract the comparators for all sort columns
-        final List <Comparator <String>> aComparators = new ArrayList <Comparator <String>> (aNewSortCols.length);
-        for (final RequestDataSortColumn aSortColumn : aNewSortCols)
-        {
-          final ESortOrder eSortOrder = aSortColumn.getSortDirectionOrDefault ();
-          Comparator <String> aStringComp = aDataTables.getColumnComparator (aSortColumn.getColumnIndex ());
-          if (aStringComp == null)
-            aStringComp = new ComparatorTableString ();
-          if (eSortOrder.isDescending ())
-          {
-            // Reverse the comparator
-            aStringComp = ReverseComparator.create (aStringComp);
-          }
-          aComparators.add (aStringComp);
-        }
-
         final Comparator <RowData> aComp = new AbstractComparator <RowData> ()
         {
+          private final RequestDataSortColumn [] m_aSortCols = aNewServerSortState.getSortCols ();
+
           @Override
           protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
           {
             int ret = 0;
-            for (int i = 0; i < aNewSortCols.length; ++i)
+            for (final RequestDataSortColumn aSortCol : m_aSortCols)
             {
-              final int nSortColumnIndex = aNewSortCols[i].getColumnIndex ();
+              final int nSortColumnIndex = aSortCol.getColumnIndex ();
               final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
               final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
 
-              final Comparator <String> aComparator = aComparators.get (i);
+              final Comparator <String> aComparator = aSortCol.getComparator ();
               ret = aComparator.compare (aCell1.getTextContent (), aCell2.getTextContent ());
               if (ret != 0)
                 break;
@@ -126,18 +108,18 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
         // Main sorting
         if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Sorting " + aDataTables.getRowCount () + " rows");
-        aDataTables.sortAllRows (aComp);
+          s_aLogger.debug ("Sorting " + aServerData.getRowCount () + " rows");
+        aServerData.sortAllRows (aComp);
 
         // Remember the new server state
-        aDataTables.setServerSortState (aNewServerSortState);
+        aServerData.setServerSortState (aNewServerSortState);
       }
     }
 
     final ServerFilterState aNewServerFilterState = new ServerFilterState (aRequestData.getSearch (),
                                                                            aRequestData.isRegEx ());
 
-    List <RowData> aResultRows = aDataTables.directGetAllRows ();
+    List <RowData> aResultRows = aServerData.directGetAllRows ();
     if (aNewServerFilterState.hasSearchText ())
     {
       // filter rows
@@ -198,7 +180,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     // Main response
-    final int nTotalRecords = aDataTables.getRowCount ();
+    final int nTotalRecords = aServerData.getRowCount ();
     final int nTotalDisplayRecords = aResultRows.size ();
     return new ResponseData (nTotalRecords, nTotalDisplayRecords, aRequestData.getEcho (), null, aData);
   }
@@ -248,14 +230,14 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
     // Resolve dataTables
     final String sDataTablesID = aParams.getAttributeAsString (OBJECT_ID);
-    final DataTablesServerData aDataTables = UIStateRegistry.getCurrent ()
+    final DataTablesServerData aServerData = UIStateRegistry.getCurrent ()
                                                             .getCastedState (DataTablesServerData.OBJECT_TYPE,
                                                                              sDataTablesID);
-    if (aDataTables == null)
-      return AjaxDefaultResponse.createError ("No such table: " + sDataTablesID);
+    if (aServerData == null)
+      return AjaxDefaultResponse.createError ("No such table data: " + sDataTablesID);
 
     // Main request handling
-    final ResponseData aResponseData = _handleRequest (aRequestData, aDataTables);
+    final ResponseData aResponseData = _handleRequest (aRequestData, aServerData);
     // Convert the response to JSON
     return AjaxDefaultResponse.createSuccess (aResponseData.getAsJSON ());
   }

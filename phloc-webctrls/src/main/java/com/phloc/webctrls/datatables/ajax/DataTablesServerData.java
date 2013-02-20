@@ -27,6 +27,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.microdom.IMicroNode;
@@ -48,13 +51,20 @@ import com.phloc.webctrls.datatables.DataTablesColumn;
 
 public final class DataTablesServerData implements IHasUIState
 {
-  public static final class CellData
+  static final class CellData
   {
+    private static final Logger s_aLogger = LoggerFactory.getLogger (CellData.class);
+
     private final String m_sHTML;
     private final String m_sTextContent;
 
     public CellData (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
     {
+      if (aCell.hasAnyStyle ())
+        s_aLogger.warn ("Cell has styles assigned which will be lost: " + aCell.getAllStyles ());
+      if (aCell.hasAnyClass ())
+        s_aLogger.warn ("Cell has classes assigned which will be lost: " + aCell.getAllClasses ());
+
       final IMicroNode aNode = aCell.getAllChildrenAsNodeList ().convertToNode (aCS);
       final IXMLWriterSettings aXWS = aCS.getXMLWriterSettings ();
       final String sHTML = MicroWriter.getNodeAsString (aNode, aXWS);
@@ -112,14 +122,19 @@ public final class DataTablesServerData implements IHasUIState
     }
   }
 
-  public static final class RowData
+  static final class RowData
   {
+    private static final Logger s_aLogger = LoggerFactory.getLogger (RowData.class);
+
     private final String m_sRowID;
     private final String m_sRowClass;
     private final List <CellData> m_aCells;
 
     public RowData (@Nonnull final HCRow aRow, @Nonnull final IHCConversionSettings aCS)
     {
+      if (aRow.hasAnyStyle ())
+        s_aLogger.warn ("Cell has styles assigned which will be lost: " + aRow.getAllStyles ());
+
       m_sRowID = aRow.getID ();
       m_sRowClass = aRow.getAllClassesAsString ();
       m_aCells = new ArrayList <CellData> (aRow.getCellCount ());
@@ -189,7 +204,7 @@ public final class DataTablesServerData implements IHasUIState
   private final ColumnData [] m_aColumns;
   private final List <RowData> m_aRows;
   private final Locale m_aDisplayLocale;
-  private ServerSortState m_aServerSortState = new ServerSortState ();
+  private ServerSortState m_aServerSortState;
 
   public DataTablesServerData (@Nonnull final AbstractHCBaseTable <?> aTable,
                                @Nonnull final List <DataTablesColumn> aColumns,
@@ -225,6 +240,7 @@ public final class DataTablesServerData implements IHasUIState
     for (final HCRow aRow : aTable.getAllBodyRows ())
       m_aRows.add (new RowData (aRow, aCS));
     m_aDisplayLocale = aDisplayLocale;
+    m_aServerSortState = new ServerSortState (this);
   }
 
   @Nonnull

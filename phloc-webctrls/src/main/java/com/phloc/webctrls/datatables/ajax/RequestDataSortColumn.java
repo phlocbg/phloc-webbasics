@@ -17,6 +17,8 @@
  */
 package com.phloc.webctrls.datatables.ajax;
 
+import java.util.Comparator;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,6 +34,7 @@ final class RequestDataSortColumn
 {
   private final int m_nColumnIndex;
   private final ESortOrder m_eSortDirection;
+  private Comparator <String> m_aComparator;
 
   RequestDataSortColumn (@Nonnegative final int nColumnIndex, @Nullable final ESortOrder eSortDirection)
   {
@@ -67,6 +70,21 @@ final class RequestDataSortColumn
     return m_eSortDirection == null ? ESortOrder.DEFAULT : m_eSortDirection;
   }
 
+  @Nonnull
+  public Comparator <String> getComparator ()
+  {
+    if (m_aComparator == null)
+      throw new IllegalStateException ("No comparator defined!");
+    return m_aComparator;
+  }
+
+  public void setComparator (@Nonnull final Comparator <String> aComparator)
+  {
+    if (aComparator == null)
+      throw new NullPointerException ("comparator");
+    m_aComparator = aComparator;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -89,6 +107,7 @@ final class RequestDataSortColumn
   {
     return new ToStringGenerator (this).append ("columnIndex", m_nColumnIndex)
                                        .append ("sortDirection", m_eSortDirection)
+                                       .append ("comparator", m_aComparator)
                                        .toString ();
   }
 }

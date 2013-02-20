@@ -18,14 +18,18 @@
 package com.phloc.webctrls.datatables.ajax;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.compare.ReverseComparator;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.datatables.comparator.ComparatorTableString;
 
 /**
  * The current search and sort state of a {@link DataTables} object.
@@ -36,21 +40,40 @@ final class ServerSortState
 {
   private final RequestDataSortColumn [] m_aSortState;
 
-  public ServerSortState ()
+  public ServerSortState (@Nonnull final DataTablesServerData aServerData)
   {
-    this (new RequestDataSortColumn [0]);
+    this (aServerData, new RequestDataSortColumn [0]);
   }
 
-  public ServerSortState (@Nonnull final RequestDataSortColumn [] aSortCols)
+  public ServerSortState (@Nonnull final DataTablesServerData aServerData,
+                          @Nonnull final RequestDataSortColumn [] aSortCols)
   {
+    if (aServerData == null)
+      throw new NullPointerException ("serverData");
     if (aSortCols == null)
       throw new NullPointerException ("sortCols");
     m_aSortState = aSortCols;
+
+    // Extract the comparators for all sort columns
+    for (final RequestDataSortColumn aSortColumn : aSortCols)
+    {
+      // Get the configured comparator
+      Comparator <String> aStringComp = aServerData.getColumnComparator (aSortColumn.getColumnIndex ());
+      if (aStringComp == null)
+        aStringComp = new ComparatorTableString ();
+      if (aSortColumn.getSortDirectionOrDefault ().isDescending ())
+      {
+        // Reverse the comparator
+        aStringComp = ReverseComparator.create (aStringComp);
+      }
+      aSortColumn.setComparator (aStringComp);
+    }
   }
 
   /**
    * @return Number of columns to sort on
    */
+  @Nonnegative
   public int getSortingCols ()
   {
     return m_aSortState.length;
