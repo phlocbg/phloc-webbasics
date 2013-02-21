@@ -149,6 +149,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
   @Override
   @Nonnull
   @ReturnsMutableCopy
+  @Deprecated
   public List <IAuditItem> getAllAuditItems ()
   {
     m_aRWLock.readLock ().lock ();
