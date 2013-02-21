@@ -704,9 +704,9 @@ public class DataTables implements IHCNodeBuilder
    * first column must be the expand/collapse column and it must contain an
    * image where the event handler is registered.
    * 
-   * @param aExpandIcon
+   * @param aExpandImgURL
    *        The URL of the expand icon (closed state)
-   * @param aCollapseIcon
+   * @param aCollapseImgURL
    *        The URL of the collapse icon (open state)
    * @param nColumnIndexWithDetails
    *        The index of the column that contains the details. Must be &ge; 0
@@ -717,11 +717,15 @@ public class DataTables implements IHCNodeBuilder
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public IHCNode createExpandCollapseHandling (@Nonnull final ISimpleURL aExpandIcon,
-                                               @Nonnull final ISimpleURL aCollapseIcon,
+  public IHCNode createExpandCollapseHandling (@Nonnull final ISimpleURL aExpandImgURL,
+                                               @Nonnull final ISimpleURL aCollapseImgURL,
                                                @Nonnegative final int nColumnIndexWithDetails,
                                                @Nullable final ICSSClassProvider aCellClass)
   {
+    final DataTablesColumn aColumn = getColumn (nColumnIndexWithDetails);
+    if (aColumn != null)
+    {}
+
     final JSRef jsTable = JSExpr.ref (m_sGeneratedJSVariableName);
 
     final JSPackage aPackage = new JSPackage ();
@@ -730,9 +734,9 @@ public class DataTables implements IHCNodeBuilder
       final JSVar jsTR = aOpenCloseCallback.body ().var ("r",
                                                          JQuery.jQueryThis ().parents (EHTMLElement.TR).component0 ());
       final JSConditional aIf = aOpenCloseCallback.body ()._if (jsTable.invoke ("fnIsOpen").arg (jsTR));
-      aIf._then ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aExpandIcon.getAsString ());
+      aIf._then ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aExpandImgURL.getAsString ());
       aIf._then ().invoke (jsTable, "fnClose").arg (jsTR);
-      aIf._else ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aCollapseIcon.getAsString ());
+      aIf._else ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aCollapseImgURL.getAsString ());
       aIf._else ()
          .invoke (jsTable, "fnOpen")
          .arg (jsTR)
