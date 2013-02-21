@@ -117,7 +117,9 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     if (aServerData.getRowCount () > 0)
     {
       final ServerSortState aOldServerSortState = aServerData.getServerSortState ();
-      final ServerSortState aNewServerSortState = new ServerSortState (aServerData, aRequestData.getSortColumnArray ());
+      final ServerSortState aNewServerSortState = new ServerSortState (aServerData,
+                                                                       aRequestData.getSortColumnArray (),
+                                                                       aDisplayLocale);
       // Must we change the sorting?
       if (!aNewServerSortState.equals (aOldServerSortState))
       {

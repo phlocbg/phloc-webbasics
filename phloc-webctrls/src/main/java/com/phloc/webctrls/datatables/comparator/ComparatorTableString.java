@@ -17,26 +17,33 @@
  */
 package com.phloc.webctrls.datatables.comparator;
 
+import java.text.Collator;
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.compare.CollatorUtils;
 import com.phloc.commons.format.IFormatter;
 
 public class ComparatorTableString extends AbstractComparatorTable
 {
-  public ComparatorTableString ()
+  private final Collator m_aCollator;
+
+  public ComparatorTableString (@Nonnull final Locale aDisplayLocale)
   {
-    this (null);
+    this (null, aDisplayLocale);
   }
 
-  public ComparatorTableString (@Nullable final IFormatter aFormatter)
+  public ComparatorTableString (@Nullable final IFormatter aFormatter, @Nonnull final Locale aDisplayLocale)
   {
     super (aFormatter);
+    m_aCollator = CollatorUtils.getCollatorSpaceBeforeDot (aDisplayLocale);
   }
 
   @Override
   protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
-    return sText1.compareTo (sText2);
+    return m_aCollator.compare (sText1, sText2);
   }
 }

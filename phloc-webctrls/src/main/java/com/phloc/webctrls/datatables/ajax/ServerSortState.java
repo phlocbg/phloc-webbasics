@@ -19,6 +19,7 @@ package com.phloc.webctrls.datatables.ajax;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Locale;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -40,12 +41,14 @@ final class ServerSortState
 {
   private final RequestDataSortColumn [] m_aSortState;
 
-  ServerSortState (@Nonnull final DataTablesServerData aServerData)
+  ServerSortState (@Nonnull final DataTablesServerData aServerData, @Nonnull final Locale aDisplayLocale)
   {
-    this (aServerData, new RequestDataSortColumn [0]);
+    this (aServerData, new RequestDataSortColumn [0], aDisplayLocale);
   }
 
-  ServerSortState (@Nonnull final DataTablesServerData aServerData, @Nonnull final RequestDataSortColumn [] aSortCols)
+  ServerSortState (@Nonnull final DataTablesServerData aServerData,
+                   @Nonnull final RequestDataSortColumn [] aSortCols,
+                   @Nonnull final Locale aDisplayLocale)
   {
     if (aServerData == null)
       throw new NullPointerException ("serverData");
@@ -59,7 +62,7 @@ final class ServerSortState
       // Get the configured comparator
       Comparator <String> aStringComp = aServerData.getColumnComparator (aSortColumn.getColumnIndex ());
       if (aStringComp == null)
-        aStringComp = new ComparatorTableString ();
+        aStringComp = new ComparatorTableString (aDisplayLocale);
       if (aSortColumn.getSortDirectionOrDefault ().isDescending ())
       {
         // Reverse the comparator

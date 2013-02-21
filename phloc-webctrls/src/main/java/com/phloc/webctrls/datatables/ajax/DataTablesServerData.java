@@ -240,7 +240,7 @@ public final class DataTablesServerData implements IHasUIState
     for (final HCRow aRow : aTable.getAllBodyRows ())
       m_aRows.add (new RowData (aRow, aCS));
     m_aDisplayLocale = aDisplayLocale;
-    m_aServerSortState = new ServerSortState (this);
+    m_aServerSortState = new ServerSortState (this, aDisplayLocale);
   }
 
   @Nonnull
