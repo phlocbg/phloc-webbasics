@@ -34,6 +34,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.api.IHCHasFocus;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
+import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
@@ -117,7 +118,9 @@ public class BootstrapTableForm extends BootstrapTable
   {
     // Set full width class on first control
     for (final IHCNode aCtrl : aCtrls)
-      if (aCtrl instanceof IHCElement <?> && !(aCtrl instanceof HCCheckBox))
+      if (aCtrl instanceof IHCElement <?> &&
+          !(aCtrl instanceof HCCheckBox) &&
+          !(aCtrl instanceof AbstractHCBaseTable <?>))
       {
         final IHCElement <?> aElement = (IHCElement <?>) aCtrl;
         // Don't resize elements with a predefined size
