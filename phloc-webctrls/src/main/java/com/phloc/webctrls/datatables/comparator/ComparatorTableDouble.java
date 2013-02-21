@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.compare.CompareUtils;
 import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.locale.LocaleFormatter;
 
@@ -58,6 +59,6 @@ public class ComparatorTableDouble extends AbstractComparatorTable
   {
     final double d1 = getAsDouble (sText1);
     final double d2 = getAsDouble (sText2);
-    return Double.compare (d1, d2);
+    return CompareUtils.compare (d1, d2);
   }
 }

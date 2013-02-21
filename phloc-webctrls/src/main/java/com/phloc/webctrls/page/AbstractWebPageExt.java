@@ -103,6 +103,15 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
     return ret;
   }
 
+  /**
+   * Create a HCCol (table column) for the specified number of actions. Each
+   * action represents a width of {@link #ACTION_COL_WIDTH} pixels. At least the
+   * width of 3 actions is displayed, so that the header text fits :)
+   * 
+   * @param nActions
+   *        Number of actions. Must be &ge; 0.
+   * @return The column with the according column width.
+   */
   @Nonnull
   public static HCCol createActionCol (@Nonnegative final int nActions)
   {

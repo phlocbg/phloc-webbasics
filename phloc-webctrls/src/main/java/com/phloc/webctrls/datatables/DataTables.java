@@ -223,7 +223,10 @@ public class DataTables implements IHCNodeBuilder
     int nColIndex = 0;
     for (final HCCol aCol : aTable.getColGroup ().getAllColumns ())
     {
-      addColumn (new DataTablesColumn (nColIndex).setWidth (aCol.getWidth ()));
+      final DataTablesColumn aColumn = new DataTablesColumn (nColIndex);
+      if (!aCol.isStar ())
+        aColumn.setWidth (aCol.getWidth ());
+      addColumn (aColumn);
       ++nColIndex;
     }
     return this;
