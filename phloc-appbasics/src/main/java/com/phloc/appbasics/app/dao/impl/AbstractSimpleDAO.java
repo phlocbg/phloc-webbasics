@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.IReadableResource;
@@ -132,6 +133,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       else
       {
         // Read existing file
+        if (GlobalDebug.isDebugMode ())
+          s_aLogger.info ("Trying to read DAO XML file '" + m_aFile + "'");
+
         final IMicroDocument aDoc = MicroReader.readMicroXML (new FileSystemResource (m_aFile));
         if (aDoc == null)
           s_aLogger.error ("Failed to read XML document from file '" + m_aFile + "'");

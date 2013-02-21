@@ -101,6 +101,7 @@ public final class InternalErrorHandler
     {
       final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
                                                                  .setRows (20)
+                                                                 .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (100)))
                                                                  .addStyle (CCSSProperties.FONT_SIZE.newValue (ECSSUnit.pt (10)))
                                                                  .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSSValue.FONT_MONOSPACE));
 
