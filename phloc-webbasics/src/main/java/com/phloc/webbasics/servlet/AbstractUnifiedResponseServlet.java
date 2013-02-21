@@ -295,8 +295,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (s_aFirstRequest.getAndSet (false) && !StaticServerInfo.isSet ())
     {
       // First set the default web server info
-      final StaticServerInfo aInfo = StaticServerInfo.initFromFirstRequest (aRequestScope);
-      s_aLogger.info ("Static server information: " + aInfo.toString ());
+      StaticServerInfo.initFromFirstRequest (aRequestScope);
     }
 
     final Set <EHTTPMethod> aAllowedHTTPMethods = getAllowedHTTPMethods ();

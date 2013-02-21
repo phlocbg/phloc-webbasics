@@ -18,6 +18,7 @@
 package com.phloc.webbasics.servlet;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
@@ -54,9 +55,11 @@ import com.phloc.commons.system.EJVMVendor;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.ThirdPartyModuleRegistry;
+import com.phloc.commons.url.URLUtils;
 import com.phloc.commons.utils.ClassPathHelper;
 import com.phloc.commons.vminit.VirtualMachineInitializer;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webbasics.StaticServerInfo;
 
 /**
  * This class is intended to handle the initial application startup and the
@@ -86,10 +89,21 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   /** Name of the initialization parameter to disable logging the startup info. */
   public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
   /**
+   * Name of the initialization parameter that contains the server URL for
+   * non-production mode.
+   */
+  public static final String INIT_PARAMETER_SERVER_URL = "serverUrl";
+  /**
+   * Name of the initialization parameter that contains the server URL for
+   * production mode.
+   */
+  public static final String INIT_PARAMETER_SERVER_URL_PRODUCTION = "serverUrlProduction";
+  /**
    * Name of the initialization parameter to disable the file access check on
    * startup.
    */
   public static final String INIT_PARAMETER_NO_CHECK_FILE_ACCESS = "noCheckFileAccess";
+
   protected static final String ID_FILENAME = "persistent_id.dat";
 
   /** The logger to use. */
@@ -304,6 +318,27 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     {
       // Requires the global debug things to present
       logStartupInfo (aSC);
+    }
+
+    // StaticServerInfo
+    {
+      final String sInitParameterName = bProductionMode ? INIT_PARAMETER_SERVER_URL_PRODUCTION
+                                                       : INIT_PARAMETER_SERVER_URL;
+      final String sInitParameter = aSC.getInitParameter (sInitParameterName);
+      if (StringHelper.hasText (sInitParameter))
+      {
+        final URL aURL = URLUtils.getAsURL (sInitParameter);
+        if (aURL != null)
+        {
+          StaticServerInfo.init (aURL.getProtocol (), aURL.getHost (), aURL.getPort (), aSC.getContextPath ());
+        }
+        else
+          s_aLogger.error ("The init-parameter '" +
+                           sInitParameterName +
+                           "' contains the non-URL value '" +
+                           sInitParameter +
+                           "'");
+      }
     }
 
     // Call callback

@@ -21,6 +21,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
@@ -34,6 +37,7 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
 @Immutable
 public final class StaticServerInfo
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (StaticServerInfo.class);
   private static volatile StaticServerInfo s_aDefault;
 
   private final String m_sScheme;
@@ -48,21 +52,23 @@ public final class StaticServerInfo
                             @Nonnegative final int nServerPort,
                             @Nonnull final String sContextPath)
   {
-    m_sScheme = sScheme;
-    m_sServerName = sServerName;
-    m_nServerPort = nServerPort;
-    m_sContextPath = sContextPath;
-
     int nDefaultPort = CWeb.DEFAULT_PORT_HTTP;
     if ("https".equals (sScheme))
       nDefaultPort = CWeb.DEFAULT_PORT_HTTPS;
+    // URL.getPort() delivers -1 for unspecified ports
+    final int nRealServerPort = nServerPort == -1 ? nDefaultPort : nServerPort;
+
+    m_sScheme = sScheme;
+    m_sServerName = sServerName;
+    m_nServerPort = nRealServerPort;
+    m_sContextPath = sContextPath;
 
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (sScheme).append ("://").append (sServerName);
-    if (nServerPort != nDefaultPort)
+    if (nRealServerPort != nDefaultPort)
     {
       // append non-standard port
-      aSB.append (':').append (nServerPort);
+      aSB.append (':').append (nRealServerPort);
     }
     m_sFullServerPath = aSB.toString ();
     m_sFullServerAndContextPath = m_sFullServerPath + sContextPath;
@@ -151,8 +157,10 @@ public final class StaticServerInfo
     if (s_aDefault != null)
       throw new IllegalStateException ("Static server info already present!");
 
-    s_aDefault = new StaticServerInfo (sScheme, sServerName, nServerPort, sContextPath);
-    return s_aDefault;
+    final StaticServerInfo aDefault = new StaticServerInfo (sScheme, sServerName, nServerPort, sContextPath);
+    s_aLogger.info ("Static server information set: " + aDefault.toString ());
+    s_aDefault = aDefault;
+    return aDefault;
   }
 
   public static boolean isSet ()
