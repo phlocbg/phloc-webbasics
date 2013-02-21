@@ -28,3 +28,8 @@ div.dataTables_paginate {
   margin: 1em 0;
   clear: both;
 }
+
+.dataTables_scrollHeadInner table,
+.dataTables_scrollBody table {
+  margin: 0;
+} 
