@@ -24,6 +24,8 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
@@ -47,11 +49,19 @@ public final class StaticServerInfo
   private final String m_sFullServerPath;
   private final String m_sFullServerAndContextPath;
 
-  private StaticServerInfo (@Nonnull final String sScheme,
-                            @Nonnull final String sServerName,
+  private StaticServerInfo (@Nonnull @Nonempty final String sScheme,
+                            @Nonnull @Nonempty final String sServerName,
                             @Nonnegative final int nServerPort,
                             @Nonnull final String sContextPath)
   {
+    if (StringHelper.hasNoText (sScheme))
+      throw new IllegalArgumentException ("scheme");
+    if (StringHelper.hasNoText (sServerName))
+      throw new IllegalArgumentException ("serverName");
+    // may be empty!!
+    if (sContextPath == null)
+      throw new NullPointerException ("contextPath");
+
     int nDefaultPort = CWeb.DEFAULT_PORT_HTTP;
     if ("https".equals (sScheme))
       nDefaultPort = CWeb.DEFAULT_PORT_HTTPS;
@@ -149,8 +159,8 @@ public final class StaticServerInfo
   }
 
   @Nonnull
-  public static StaticServerInfo init (@Nonnull final String sScheme,
-                                       @Nonnull final String sServerName,
+  public static StaticServerInfo init (@Nonnull @Nonempty final String sScheme,
+                                       @Nonnull @Nonempty final String sServerName,
                                        @Nonnegative final int nServerPort,
                                        @Nonnull final String sContextPath)
   {
