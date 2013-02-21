@@ -56,6 +56,21 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * @param aWPEC
+   *        The web page execution context
+   * @param aSelectedObject
+   *        The selected object
+   * @return <code>true</code> to show the view toolbar, <code>false</code> to
+   *         draw your own toolbar
+   */
+  @OverrideOnDemand
+  protected boolean showViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                     @Nonnull final DATATYPE aSelectedObject)
+  {
+    return true;
+  }
+
+  /**
    * Add additional elements to the view toolbar
    * 
    * @param aWPEC
@@ -107,6 +122,21 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * @param aWPEC
+   *        The web page execution context
+   * @param aSelectedObject
+   *        The selected object
+   * @return <code>true</code> to show the edit toolbar, <code>false</code> to
+   *         draw your own toolbar
+   */
+  @OverrideOnDemand
+  protected boolean showEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                     @Nonnull final DATATYPE aSelectedObject)
+  {
+    return true;
+  }
+
+  /**
    * Add additional elements to the edit toolbar
    * 
    * @param aWPEC
@@ -148,6 +178,21 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * @param aWPEC
+   *        The web page execution context
+   * @param aSelectedObject
+   *        The selected object. May be <code>null</code>.
+   * @return <code>true</code> to show the create toolbar, <code>false</code> to
+   *         draw your own toolbar
+   */
+  @OverrideOnDemand
+  protected boolean showCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                       @Nullable final DATATYPE aSelectedObject)
+  {
+    return true;
+  }
+
+  /**
    * Add additional elements to the create toolbar
    * 
    * @param aWPEC
@@ -171,7 +216,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   protected final BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                                @Nullable final IHasID <String> aSelectedObject)
+                                                                @Nullable final DATATYPE aSelectedObject)
   {
     final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
@@ -227,8 +272,11 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     // Valid object found - show details
     showSelectedObject (aWPEC, aSelectedObject);
 
-    // Toolbar on bottom
-    aWPEC.getNodeList ().addChild (createViewToolbar (aWPEC, true, bIsEditAllowed, aSelectedObject));
+    if (showViewToolbar (aWPEC, aSelectedObject))
+    {
+      // Toolbar on bottom
+      aWPEC.getNodeList ().addChild (createViewToolbar (aWPEC, true, bIsEditAllowed, aSelectedObject));
+    }
   }
 
   /**
@@ -403,8 +451,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           showInputForm (aWPEC, aSelectedObject, aForm, bEdit, bCopy, aFormErrors);
 
           // Toolbar on bottom
-          aForm.addChild (bEdit ? createEditToolbar (aWPEC, aSelectedObject) : createCreateToolbar (aWPEC,
-                                                                                                    aSelectedObject));
+          if (bEdit)
+          {
+            if (showEditToolbar (aWPEC, aSelectedObject))
+              aForm.addChild (createEditToolbar (aWPEC, aSelectedObject));
+          }
+          else
+          {
+            if (showCreateToolbar (aWPEC, aSelectedObject))
+              aForm.addChild (createCreateToolbar (aWPEC, aSelectedObject));
+          }
         }
       }
       else
