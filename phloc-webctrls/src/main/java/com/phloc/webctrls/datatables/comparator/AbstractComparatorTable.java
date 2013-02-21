@@ -33,6 +33,11 @@ public abstract class AbstractComparatorTable extends AbstractComparator <String
 {
   private final IFormatter m_aFormatter;
 
+  public AbstractComparatorTable ()
+  {
+    this (null);
+  }
+
   public AbstractComparatorTable (@Nullable final IFormatter aFormatter)
   {
     super ();
