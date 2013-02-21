@@ -520,8 +520,9 @@ public class DataTables implements IHCNodeBuilder
         aArray.add (aColumn.getAsJS ());
       aParams.add ("aoColumnDefs", aArray);
     }
-    if (m_aInitialSorting != null)
-      aParams.add ("aaSorting", m_aInitialSorting.getAsJS ());
+    // Provide any empty array if no sorting is defined, because otherwise an
+    // implicit sorting of the first column, ascending is done
+    aParams.add ("aaSorting", m_aInitialSorting != null ? m_aInitialSorting.getAsJS () : new JSArray ());
     if (m_ePaginationType != null)
       aParams.add ("sPaginationType", m_ePaginationType.getName ());
     if (StringHelper.hasText (m_sScrollX))
