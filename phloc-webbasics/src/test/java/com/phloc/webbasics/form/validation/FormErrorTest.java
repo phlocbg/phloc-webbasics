@@ -25,6 +25,8 @@ import org.junit.Test;
 
 import com.phloc.commons.mock.PhlocTestUtils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Test class for class {@link FormError}.
  * 
@@ -33,6 +35,7 @@ import com.phloc.commons.mock.PhlocTestUtils;
 public final class FormErrorTest
 {
   @Test
+  @SuppressFBWarnings (value = "NP_NONNULL_PARAM_VIOLATION")
   public void testBasic ()
   {
     final FormError aFE = new FormError (EFormErrorLevel.ERROR, "any");
