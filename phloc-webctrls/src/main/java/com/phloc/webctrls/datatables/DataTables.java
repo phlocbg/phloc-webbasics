@@ -38,6 +38,9 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.html.CHTMLAttributes;
+import com.phloc.html.EHTMLElement;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
@@ -48,9 +51,14 @@ import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSConditional;
+import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSPackage;
+import com.phloc.html.js.builder.JSRef;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.html.js.builder.jquery.JQuerySelector;
+import com.phloc.html.js.builder.jquery.JQuerySelectorList;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -139,6 +147,15 @@ public class DataTables implements IHCNodeBuilder
   public final AbstractHCBaseTable <?> getTable ()
   {
     return m_aTable;
+  }
+
+  /**
+   * @return The ID of the underlying table on which this object is operating.
+   */
+  @Nonnull
+  public final String getTableID ()
+  {
+    return m_aTable.getID ();
   }
 
   public boolean isGenerateOnDocumentReady ()
@@ -679,6 +696,56 @@ public class DataTables implements IHCNodeBuilder
   public final String getJSVariableName ()
   {
     return m_sGeneratedJSVariableName;
+  }
+
+  /**
+   * Create an {@link HCScript} or {@link HCScriptOnDocumentReady} block that
+   * handles expand and collapse. The following pre-conditions must be met: The
+   * first column must be the expand/collapse column and it must contain an
+   * image where the event handler is registered.
+   * 
+   * @param aExpandIcon
+   *        The URL of the expand icon (closed state)
+   * @param aCollapseIcon
+   *        The URL of the collapse icon (open state)
+   * @param nColumnIndexWithDetails
+   *        The index of the column that contains the details. Must be &ge; 0
+   *        and is usually hidden.
+   * @param aCellClass
+   *        The CSS class to be applied to the created cell. May be
+   *        <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public IHCNode createExpandCollapseHandling (@Nonnull final ISimpleURL aExpandIcon,
+                                               @Nonnull final ISimpleURL aCollapseIcon,
+                                               @Nonnegative final int nColumnIndexWithDetails,
+                                               @Nullable final ICSSClassProvider aCellClass)
+  {
+    final JSRef jsTable = JSExpr.ref (m_sGeneratedJSVariableName);
+
+    final JSPackage aPackage = new JSPackage ();
+    final JSAnonymousFunction aOpenCloseCallback = new JSAnonymousFunction ();
+    {
+      final JSVar jsTR = aOpenCloseCallback.body ().var ("r",
+                                                         JQuery.jQueryThis ().parents (EHTMLElement.TR).component0 ());
+      final JSConditional aIf = aOpenCloseCallback.body ()._if (jsTable.invoke ("fnIsOpen").arg (jsTR));
+      aIf._then ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aExpandIcon.getAsString ());
+      aIf._then ().invoke (jsTable, "fnClose").arg (jsTR);
+      aIf._else ().assign (JSExpr.THIS.ref (CHTMLAttributes.SRC), aCollapseIcon.getAsString ());
+      aIf._else ()
+         .invoke (jsTable, "fnOpen")
+         .arg (jsTR)
+         .arg (jsTable.invoke ("fnGetData").arg (jsTR).component (nColumnIndexWithDetails))
+         .arg (aCellClass == null ? null : aCellClass.getCSSClass ());
+    }
+    aPackage.add (JQuery.idRef (m_aTable.getID ())
+                        .onClick ()
+                        .arg (new JQuerySelectorList (JQuerySelector.elementName (EHTMLElement.TBODY),
+                                                      JQuerySelector.elementName (EHTMLElement.TD),
+                                                      JQuerySelector.elementName (EHTMLElement.IMG)))
+                        .arg (aOpenCloseCallback));
+    return getWrapped (aPackage);
   }
 
   public static void registerExternalResources ()
