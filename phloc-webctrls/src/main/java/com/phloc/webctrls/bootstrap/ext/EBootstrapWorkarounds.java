@@ -29,6 +29,7 @@ import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 
 /**
  * This class provides some workarounds for known Bootstrap bugs.
@@ -61,7 +62,7 @@ public enum EBootstrapWorkarounds
       return new HCScript (JQuery.elementNameRef (EHTMLElement.BODY)
                                  .on ()
                                  .arg ("touchstart.dropdown")
-                                 .arg (".dropdown-menu")
+                                 .arg (JQuery.classRef (CBootstrapCSS.DROPDOWN_MENU))
                                  .arg (aAF));
     }
   };

@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -43,6 +44,7 @@ import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -97,6 +99,7 @@ public class DataTables implements IHCNodeBuilder
   private Map <String, String> m_aServerParams;
   private boolean m_bUseJQueryAjax = DEFAULT_USER_JQUERY_AJAX;
   private boolean m_bDeferRender = DEFAULT_DEFER_RENDER;
+  private final String m_sGeneratedJSVariableName = "oTable" + GlobalIDFactory.getNewIntID ();
 
   public static boolean isDefaultGenerateOnDocumentReady ()
   {
@@ -138,7 +141,7 @@ public class DataTables implements IHCNodeBuilder
     return m_aTable;
   }
 
-  public boolean getGenerateOnDocumentReady ()
+  public boolean isGenerateOnDocumentReady ()
   {
     return m_bGenerateOnDocumentReady;
   }
@@ -610,7 +613,7 @@ public class DataTables implements IHCNodeBuilder
          .arg (aTextStatus)
          .arg (aJQXHR);
       aAjax.add ("url", sSource).add ("data", aoData).add ("success", aCB);
-      aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax ().arg (aAjax));
+      aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax (aAjax));
       aParams.add ("fnServerData", aAF);
     }
     if (m_bDeferRender != DEFAULT_DEFER_RENDER)
@@ -644,12 +647,38 @@ public class DataTables implements IHCNodeBuilder
     final JSPackage aJSCode = new JSPackage ();
 
     addCodeBeforeDataTables (aJSCode);
-    final JSVar aJSTable = aJSCode.var ("oTable" + GlobalIDFactory.getNewIntID (), JQuery.idRef (m_aTable.getID ())
-                                                                                         .invoke ("dataTable")
-                                                                                         .arg (aParams));
+    final JSVar aJSTable = aJSCode.var (m_sGeneratedJSVariableName,
+                                        JQuery.idRef (m_aTable.getID ()).invoke ("dataTable").arg (aParams));
     addCodeAfterDataTables (aJSCode, aJSTable);
 
+    return getWrapped (aJSCode);
+  }
+
+  /**
+   * Depending on {@link #isGenerateOnDocumentReady()} wrap the passed JSCode in
+   * the matching HTML element (either {@link HCScriptOnDocumentReady} or in
+   * {@link HCScript}.
+   * 
+   * @param aJSCode
+   *        The JS code to be wrapped. May not be <code>null</code>.
+   * @return The non-<code>null</code> HCNode
+   */
+  @Nonnull
+  public IHCNode getWrapped (@Nonnull final IJSCodeProvider aJSCode)
+  {
     return m_bGenerateOnDocumentReady ? new HCScriptOnDocumentReady (aJSCode) : new HCScript (aJSCode);
+  }
+
+  /**
+   * @return The name of the JS variable that contains the dataTable object. The
+   *         scope of the variable depends on the state of the
+   *         {@link #isGenerateOnDocumentReady()} method.
+   */
+  @Nonnull
+  @Nonempty
+  public final String getJSVariableName ()
+  {
+    return m_sGeneratedJSVariableName;
   }
 
   public static void registerExternalResources ()

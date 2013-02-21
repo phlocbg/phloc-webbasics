@@ -22,24 +22,13 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.meta.MetaElement;
-import com.phloc.webctrls.facebook.CFacebook;
 
 public class OpenGraphMetaElement extends MetaElement
 {
   public OpenGraphMetaElement (@Nonnull final EOpenGraphMetaTag eProperty, @Nullable final String sContent)
   {
     super (eProperty.getID (), false, sContent);
-  }
-
-  @Override
-  @Nonnull
-  @Nonempty
-  @OverrideOnDemand
-  protected String getNamespaceURI (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
-  {
-    return CFacebook.OPENGRAPH_NAMESPACE_URI;
   }
 
   @Override

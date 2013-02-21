@@ -82,7 +82,7 @@ public class HCGoogleAnalytics extends HCScript
                                                                  JSExpr.lit ("http://www"))
                                                           .plus (".google-analytics.com/ga.js")));
     final JSVar s = aAnonFunction.body ().var ("s",
-                                               JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT).component (0));
+                                               JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT).component0 ());
     aAnonFunction.body ().add (s.ref ("parentNode").invoke ("insertBefore").arg (ga).arg (s));
     aPkg.invoke (aAnonFunction);
     return aPkg;

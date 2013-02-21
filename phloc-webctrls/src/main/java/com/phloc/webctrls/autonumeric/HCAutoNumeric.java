@@ -42,6 +42,7 @@ import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSPackage;
@@ -238,15 +239,27 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  private static JSInvocation _invoke (@Nonnull final IJSExpression aExpr)
+  {
+    return aExpr.invoke ("autoNumeric");
+  }
+
+  @Nonnull
+  private JSInvocation _invoke ()
+  {
+    return _invoke (JQuery.idRef (m_sID));
+  }
+
+  @Nonnull
   public JSInvocation autoNumericGet ()
   {
-    return JQuery.idRef (m_sID).invoke ("autoNumeric").arg ("get");
+    return _invoke ().arg ("get");
   }
 
   @Nonnull
   public JSInvocation autoNumericSet ()
   {
-    return JQuery.idRef (m_sID).invoke ("autoNumeric").arg ("set");
+    return _invoke ().arg ("set");
   }
 
   /**
@@ -296,7 +309,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     registerExternalResources ();
     final JSPackage aPkg = new JSPackage ();
     final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
-    aPkg.add (e.invoke ("autoNumeric").arg ("init").arg (aArgs));
+    aPkg.add (_invoke (e).arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
     {
       String sInitialValue;
@@ -307,7 +320,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       }
       else
         sInitialValue = m_aInitialValue.toString ();
-      aPkg.add (e.invoke ("autoNumeric").arg ("set").arg (sInitialValue));
+      aPkg.add (_invoke (e).arg ("set").arg (sInitialValue));
     }
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }

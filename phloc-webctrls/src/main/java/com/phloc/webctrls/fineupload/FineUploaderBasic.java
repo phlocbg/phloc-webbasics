@@ -697,7 +697,7 @@ public class FineUploaderBasic
     if (m_bDebug != DEFAULT_DEBUG)
       ret.setBooleanProperty ("debug", m_bDebug);
     if (StringHelper.hasText (m_sButtonElementID))
-      ret.setFunctionPrebuildProperty ("button", JQuery.idRef (m_sButtonElementID).component (0).getJSCode ());
+      ret.setFunctionPrebuildProperty ("button", JQuery.idRef (m_sButtonElementID).component0 ().getJSCode ());
     if (m_bMultiple != DEFAULT_MULTIPLE)
       ret.setBooleanProperty ("multiple", m_bMultiple);
     if (m_nMaxConnections != DEFAULT_MAX_CONNECTIONS)
