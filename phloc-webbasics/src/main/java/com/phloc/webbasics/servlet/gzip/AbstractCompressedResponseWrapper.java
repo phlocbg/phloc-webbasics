@@ -340,6 +340,7 @@ public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpR
     return m_aCompressedOS;
   }
 
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ({ "DM_DEFAULT_ENCODING" })
   @Override
   @Nonnull
   public final PrintWriter getWriter () throws IOException

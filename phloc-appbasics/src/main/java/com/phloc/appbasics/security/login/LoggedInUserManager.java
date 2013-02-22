@@ -42,7 +42,7 @@ import com.phloc.scopes.nonweb.singleton.SessionSingleton;
 
 /**
  * This class manages all logged-in users.
- * 
+ *
  * @author philip
  */
 @ThreadSafe
@@ -50,11 +50,13 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 {
   /**
    * This class manages the user ID of the current session
-   * 
+   *
    * @author philip
    */
   public static final class SessionUserHolder extends SessionSingleton
   {
+    private static final long serialVersionUID = 2322897734799334L;
+
     private IUser m_aUser;
     private String m_sUserID;
     private transient LoggedInUserManager m_aOwningMgr;
@@ -200,7 +202,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   /**
    * Manually log out the current user
-   * 
+   *
    * @param sUserID
    *        The user to log out
    * @param aSessionUserHolder
@@ -228,7 +230,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   /**
    * Manually log out the specified user
-   * 
+   *
    * @param sUserID
    *        The user ID to log out
    * @return {@link EChange} if something changed
@@ -241,7 +243,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   /**
    * Manually log out the current user
-   * 
+   *
    * @return {@link EChange} if something changed
    */
   @Nonnull
@@ -252,7 +254,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   /**
    * Check if the specified user is logged in or not
-   * 
+   *
    * @param sUserID
    *        The user ID to check. May be <code>null</code>.
    * @return <code>true</code> if the user is logged in, <code>false</code>
