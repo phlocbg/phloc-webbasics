@@ -60,8 +60,7 @@ public enum EBootstrapWorkarounds
       final JSVar e = aAF.param ("e");
       aAF.body ().invoke (e, "stopPropagation");
       return new HCScript (JQuery.elementNameRef (EHTMLElement.BODY)
-                                 .on ()
-                                 .arg ("touchstart.dropdown")
+                                 .on ("touchstart.dropdown")
                                  .arg (JQuery.classRef (CBootstrapCSS.DROPDOWN_MENU))
                                  .arg (aAF));
     }
