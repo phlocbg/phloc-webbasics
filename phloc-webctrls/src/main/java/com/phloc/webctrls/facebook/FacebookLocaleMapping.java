@@ -124,7 +124,7 @@ public final class FacebookLocaleMapping extends GlobalSingleton
     @Nonnull
     protected Locale getValueToCache (@Nullable final Locale aLocale)
     {
-      return _getFBCompatibleLocale (aLocale);
+      return aLocale == null ? FALLBACK : _getFBCompatibleLocale (aLocale);
     }
   };
 

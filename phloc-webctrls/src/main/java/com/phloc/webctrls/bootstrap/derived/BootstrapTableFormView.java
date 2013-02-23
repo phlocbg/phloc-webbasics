@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
@@ -72,17 +73,17 @@ public class BootstrapTableFormView extends BootstrapTable
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
-  public void addItemRow (@Nullable final String sLabel, @Nullable final String sValue)
+  public void addItemRow (@Nonnull final String sLabel, @Nullable final String sValue)
   {
     addItemRow (BootstrapFormLabel.create (sLabel), sValue);
   }
 
-  public void addItemRow (@Nullable final String sLabel, @Nullable final IHCNode aValue)
+  public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode aValue)
   {
     addItemRow (BootstrapFormLabel.create (sLabel), aValue);
   }
 
-  public void addItemRow (@Nullable final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
+  public void addItemRow (@Nonnull final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     addItemRow (BootstrapFormLabel.create (sLabel), aValues);
   }

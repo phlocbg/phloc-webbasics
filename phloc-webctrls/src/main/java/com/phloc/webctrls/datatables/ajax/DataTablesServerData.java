@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.datatables.ajax;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,7 +52,7 @@ import com.phloc.webctrls.datatables.DataTablesColumn;
 
 public final class DataTablesServerData implements IHasUIState
 {
-  static final class CellData
+  static final class CellData implements Serializable
   {
     private static final Logger s_aLogger = LoggerFactory.getLogger (CellData.class);
 
@@ -122,7 +123,7 @@ public final class DataTablesServerData implements IHasUIState
     }
   }
 
-  static final class RowData
+  static final class RowData implements Serializable
   {
     private static final Logger s_aLogger = LoggerFactory.getLogger (RowData.class);
 
@@ -178,7 +179,7 @@ public final class DataTablesServerData implements IHasUIState
     }
   }
 
-  static final class ColumnData
+  static final class ColumnData implements Serializable
   {
     private final Comparator <String> m_aComparator;
 

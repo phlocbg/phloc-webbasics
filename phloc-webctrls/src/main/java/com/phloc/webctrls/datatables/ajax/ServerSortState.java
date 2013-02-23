@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.datatables.ajax;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
@@ -37,7 +38,7 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableString;
  * 
  * @author philip
  */
-final class ServerSortState
+final class ServerSortState implements Serializable
 {
   private final RequestDataSortColumn [] m_aSortState;
 
