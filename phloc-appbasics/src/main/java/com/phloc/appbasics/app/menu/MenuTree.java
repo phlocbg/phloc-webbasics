@@ -143,4 +143,16 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   {
     m_aProxy.iterateAllMenuObjects (aCallback);
   }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    return super.equals (o);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return super.hashCode ();
+  }
 }

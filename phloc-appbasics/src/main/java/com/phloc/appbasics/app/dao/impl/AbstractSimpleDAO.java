@@ -45,6 +45,8 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public abstract class AbstractSimpleDAO extends AbstractDAO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
@@ -228,6 +230,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    * @return {@link ESuccess} and never <code>null</code>.
    */
   @Nonnull
+  @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   private ESuccess _writeToFile ()
   {
     IMicroDocument aDoc = null;

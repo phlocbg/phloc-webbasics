@@ -29,6 +29,7 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecordField;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
 import com.phloc.commons.collections.iterate.IterableIterator;
+import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroDocument;
@@ -129,12 +130,19 @@ public final class ExporterXML implements IExporterFile
   public ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                  @Nonnull @WillClose final OutputStream aOS)
   {
-    final IMicroDocument aDoc = convertRecords (aProvider);
-    if (aDoc == null)
-      return ESuccess.FAILURE;
+    try
+    {
+      final IMicroDocument aDoc = convertRecords (aProvider);
+      if (aDoc == null)
+        return ESuccess.FAILURE;
 
-    MicroWriter.writeToStream (aDoc, aOS, new XMLWriterSettings ().setCharset (m_sCharset));
-    return ESuccess.SUCCESS;
+      MicroWriter.writeToStream (aDoc, aOS, new XMLWriterSettings ().setCharset (m_sCharset));
+      return ESuccess.SUCCESS;
+    }
+    finally
+    {
+      StreamUtils.close (aOS);
+    }
   }
 
   @Override

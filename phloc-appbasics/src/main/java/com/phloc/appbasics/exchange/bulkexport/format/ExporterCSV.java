@@ -105,52 +105,59 @@ public final class ExporterCSV implements IExporterFile
   public ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                  @Nonnull @WillClose final OutputStream aOS)
   {
-    if (aProvider == null)
-      throw new NullPointerException ("provider");
-    if (aOS == null)
-      throw new NullPointerException ("outputStream");
-
-    final List <String []> aRecords = new ArrayList <String []> ();
-
-    // Header
-    final IExportRecord aHeaderRecord = aProvider.getHeader ();
-    if (aHeaderRecord != null)
-      _emitRecord (aRecords, aHeaderRecord);
-
-    // Body
-    for (final IExportRecord aBodyRecord : IterableIterator.create (aProvider.getBodyRecords ()))
-      _emitRecord (aRecords, aBodyRecord);
-
-    // Footer
-    final IExportRecord aFooterRecord = aProvider.getFooter ();
-    if (aFooterRecord != null)
-      _emitRecord (aRecords, aFooterRecord);
-
-    // The body element is always present
-    if (aRecords.isEmpty ())
-      return ESuccess.FAILURE;
-
-    CSVWriter aWriter = null;
     try
     {
-      // Write BOM if necessary
-      if (m_eBOM != null)
-        try
-        {
-          aOS.write (m_eBOM.getBytes ());
-        }
-        catch (final IOException ex)
-        {
-          s_aLogger.error ("Failed to write BOM on stream", ex);
-        }
+      if (aProvider == null)
+        throw new NullPointerException ("provider");
+      if (aOS == null)
+        throw new NullPointerException ("outputStream");
 
-      aWriter = new CSVWriter (new OutputStreamWriter (aOS, m_aCharset), m_cSeparator);
-      aWriter.writeAll (aRecords);
-      return ESuccess.SUCCESS;
+      final List <String []> aRecords = new ArrayList <String []> ();
+
+      // Header
+      final IExportRecord aHeaderRecord = aProvider.getHeader ();
+      if (aHeaderRecord != null)
+        _emitRecord (aRecords, aHeaderRecord);
+
+      // Body
+      for (final IExportRecord aBodyRecord : IterableIterator.create (aProvider.getBodyRecords ()))
+        _emitRecord (aRecords, aBodyRecord);
+
+      // Footer
+      final IExportRecord aFooterRecord = aProvider.getFooter ();
+      if (aFooterRecord != null)
+        _emitRecord (aRecords, aFooterRecord);
+
+      // The body element is always present
+      if (aRecords.isEmpty ())
+        return ESuccess.FAILURE;
+
+      CSVWriter aWriter = null;
+      try
+      {
+        // Write BOM if necessary
+        if (m_eBOM != null)
+          try
+          {
+            aOS.write (m_eBOM.getBytes ());
+          }
+          catch (final IOException ex)
+          {
+            s_aLogger.error ("Failed to write BOM on stream", ex);
+          }
+
+        aWriter = new CSVWriter (new OutputStreamWriter (aOS, m_aCharset), m_cSeparator);
+        aWriter.writeAll (aRecords);
+        return ESuccess.SUCCESS;
+      }
+      finally
+      {
+        StreamUtils.close (aWriter);
+      }
     }
     finally
     {
-      StreamUtils.close (aWriter);
+      StreamUtils.close (aOS);
     }
   }
 

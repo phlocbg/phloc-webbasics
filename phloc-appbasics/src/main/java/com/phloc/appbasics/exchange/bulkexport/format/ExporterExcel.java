@@ -38,6 +38,7 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.iterate.IterableIterator;
+import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.datetime.CPDT;
 import com.phloc.poi.excel.EExcelVersion;
@@ -169,33 +170,40 @@ public class ExporterExcel implements IExporterFile
   public final ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                        @Nonnull @WillClose final OutputStream aOS)
   {
-    if (aProvider == null)
-      throw new NullPointerException ("provider");
-    if (aOS == null)
-      throw new NullPointerException ("outputStream");
+    try
+    {
+      if (aProvider == null)
+        throw new NullPointerException ("provider");
+      if (aOS == null)
+        throw new NullPointerException ("outputStream");
 
-    final WorkbookCreationHelper aWBCH = new WorkbookCreationHelper (m_eVersion);
-    aWBCH.createNewSheet ();
+      final WorkbookCreationHelper aWBCH = new WorkbookCreationHelper (m_eVersion);
+      aWBCH.createNewSheet ();
 
-    // Header
-    final IExportRecord aHeaderRecord = aProvider.getHeader ();
-    if (aHeaderRecord != null)
-      _emitRecord (aWBCH, EExportRecordType.HEADER, aHeaderRecord);
+      // Header
+      final IExportRecord aHeaderRecord = aProvider.getHeader ();
+      if (aHeaderRecord != null)
+        _emitRecord (aWBCH, EExportRecordType.HEADER, aHeaderRecord);
 
-    // Body
-    for (final IExportRecord aBodyRecord : IterableIterator.create (aProvider.getBodyRecords ()))
-      _emitRecord (aWBCH, EExportRecordType.BODY, aBodyRecord);
+      // Body
+      for (final IExportRecord aBodyRecord : IterableIterator.create (aProvider.getBodyRecords ()))
+        _emitRecord (aWBCH, EExportRecordType.BODY, aBodyRecord);
 
-    // Footer
-    final IExportRecord aFooterRecord = aProvider.getFooter ();
-    if (aFooterRecord != null)
-      _emitRecord (aWBCH, EExportRecordType.FOOTER, aFooterRecord);
+      // Footer
+      final IExportRecord aFooterRecord = aProvider.getFooter ();
+      if (aFooterRecord != null)
+        _emitRecord (aWBCH, EExportRecordType.FOOTER, aFooterRecord);
 
-    if (aWBCH.getRowCount () == 0)
-      return ESuccess.FAILURE;
+      if (aWBCH.getRowCount () == 0)
+        return ESuccess.FAILURE;
 
-    aWBCH.autoSizeAllColumns ();
-    return aWBCH.write (aOS);
+      aWBCH.autoSizeAllColumns ();
+      return aWBCH.write (aOS);
+    }
+    finally
+    {
+      StreamUtils.close (aOS);
+    }
   }
 
   @Nonnull
