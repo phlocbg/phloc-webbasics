@@ -43,6 +43,8 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.IScopeRenewalAware;
 import com.phloc.scopes.web.singleton.SessionWebSingleton;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Global registry for UI control state data.
  * 
@@ -154,6 +156,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
    *         control has already been registered for that ID
    */
   @Nonnull
+  @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public EChange registerState (@Nonnull @Nonempty final String sStateID, @Nonnull final IHasUIState aNewState)
   {
     if (StringHelper.hasNoText (sStateID))

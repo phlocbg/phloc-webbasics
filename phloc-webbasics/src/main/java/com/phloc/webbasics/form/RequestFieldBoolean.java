@@ -21,9 +21,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ETriState;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCRequestFieldBoolean;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -71,6 +73,29 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   public boolean isChecked ()
   {
     return getCheckBoxValue (getFieldName (), m_bDefaultValue);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final RequestFieldBoolean rhs = (RequestFieldBoolean) o;
+    return m_bDefaultValue == rhs.m_bDefaultValue;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_bDefaultValue).getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("defaultValue", m_bDefaultValue).toString ();
   }
 
   @Nullable

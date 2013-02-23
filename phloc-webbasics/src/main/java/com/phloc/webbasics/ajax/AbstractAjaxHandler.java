@@ -25,6 +25,8 @@ import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Provides a common implementation of the {@link IAjaxHandler} interface for as
  * easy reuse as possible.
@@ -74,6 +76,7 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
                                                       @Nonnull MapBasedAttributeContainer aParams) throws Exception;
 
   @Nonnull
+  @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public final IAjaxResponse handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws Exception
   {
     // Get all request parameter values to use from the request scope, as the

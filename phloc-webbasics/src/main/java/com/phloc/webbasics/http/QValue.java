@@ -44,11 +44,13 @@ public final class QValue implements Comparable <QValue>, Serializable
   public static final double MAX_QUALITY = 1;
   /** 50% quantile quality value */
   public static final double HALF_QUALITY = 0.5;
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (QValue.class);
+
   /** Minimum quality */
   public static final QValue MIN_QVALUE = new QValue (MIN_QUALITY);
   /** Maximum quality */
   public static final QValue MAX_QVALUE = new QValue (MAX_QUALITY);
-  private static final Logger s_aLogger = LoggerFactory.getLogger (QValue.class);
 
   private final double m_dQuality;
 

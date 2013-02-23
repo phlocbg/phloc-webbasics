@@ -66,6 +66,8 @@ import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.http.HTTPHeaderMap;
 import com.phloc.webbasics.http.QValue;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This class encapsulates all things required to build a HTTP response. It
  * offer warnings and consistency checks if something is missing.
@@ -353,6 +355,7 @@ public class UnifiedResponse
    * @return this
    */
   @Nonnull
+  @SuppressFBWarnings ("EI_EXPOSE_REP2")
   public UnifiedResponse setContent (@Nonnull final byte [] aContent)
   {
     if (aContent == null)

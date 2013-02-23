@@ -28,6 +28,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.datetime.xml.PDTXMLConverter;
 
@@ -45,6 +47,8 @@ public final class RequestFieldDate extends RequestField
                             @Nonnull final Locale aDisplayLocale)
   {
     super (sFieldName, sDefaultValue);
+    if (aDisplayLocale == null)
+      throw new NullPointerException ("displayLocale");
     m_aDisplayLocale = aDisplayLocale;
   }
 
@@ -85,5 +89,28 @@ public final class RequestFieldDate extends RequestField
   public Locale getDisplayLocale ()
   {
     return m_aDisplayLocale;
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final RequestFieldDate rhs = (RequestFieldDate) o;
+    return m_aDisplayLocale.equals (rhs.m_aDisplayLocale);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_aDisplayLocale).getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("displayLocale", m_aDisplayLocale).toString ();
   }
 }
