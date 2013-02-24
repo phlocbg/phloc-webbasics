@@ -1,7 +1,9 @@
 #summary Change log of phloc-webbasics
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>1/17/13</td><td colspan="4">_Release *1.9.8*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>2/24/13</td><td colspan="4">_Release *1.9.9*_</td></tr>
+<tr><td>2/24/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 3.9.6</td></tr>
+<tr border="1"><td>1/17/13</td><td colspan="4">_Release *1.9.8*_</td></tr>
 <tr><td>1/17/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-webbasics phloc-appbasics] 1.9.0</td></tr>
 <tr><td>1/8/13</td><td>add</td><td>api</td><td></td><td>Extended PreRequest(CSS|JS)Includes API to remove certain items</td></tr>
 <tr><td>1/5/13</td><td>add</td><td>api</td><td></td><td>Extended LoginManager with a method to retrieve required roles of the user</td></tr>
