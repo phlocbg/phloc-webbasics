@@ -7,11 +7,11 @@
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>phloc-webbasics</artifactId>
-  <version>1.9.9-SNAPSHOT</version>
+  <artifactId>phloc-appbasics</artifactId>
+  <version>1.9.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>phloc-webbasics</name>
-  <url>http://repo.phloc.com/apidocs/phloc-webbasics/${project.version}</url>
+  <name>phloc-appbasics</name>
+  <url>http://repo.phloc.com/apidocs/phloc-appbasics/${project.version}</url>
  
   <licenses>
     <license>
@@ -23,8 +23,8 @@
   
   <scm>
     <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</developerConnection>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-appbasics</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-appbasics</developerConnection>
   </scm>
 
   <organization>
@@ -100,30 +100,22 @@
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-json</artifactId>
-      <version>2.3.7</version>
+      <artifactId>phloc-types</artifactId>
+      <version>1.3.0</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-css</artifactId>
-      <version>3.3.1</version>
+      <artifactId>phloc-poi</artifactId>
+      <version>2.7.5</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-appbasics</artifactId>
-      <version>1.9.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-html</artifactId>
-      <version>3.8.5</version>
+      <groupId>net.sf.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>2.3</version>
+      <optional>true</optional>
     </dependency>
 
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -145,7 +137,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>com.phloc.webbasics.*</Export-Package>
+            <Export-Package>com.phloc.appbasics.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>
