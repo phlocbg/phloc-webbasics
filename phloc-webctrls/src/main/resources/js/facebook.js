@@ -61,11 +61,4 @@ function facebookLoadSDKAsync (sAppID, sLang, sContainerID, bCheckLoginStatus, b
       fnOnLoad();
     }
   };
-  (function() 
-   {
-     var e = document.createElement('script'); e.async = true;
-     e.src = document.location.protocol + '//connect.facebook.net/' + sLang + '/all.js';
-     document.getElementById(sContainerID).appendChild(e);
-   }()
-  );
 }
