@@ -126,7 +126,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
-      <version>1.9.9-SNAPSHOT</version>
+      <version>1.9.9</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
