@@ -20,6 +20,7 @@ package com.phloc.web.smtp.settings;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.ContainsSoftMigration;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
@@ -52,18 +53,29 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
     return eSMTPSettings;
   }
 
+  /*
+   * The alternative attributes are used to be consistent with old failed mail
+   * conversions, as they did the transformation manually!
+   */
   @Nonnull
+  @ContainsSoftMigration
   public SMTPSettings convertToNative (@Nonnull final IMicroElement eSMTPSettings)
   {
-    final String sHost = eSMTPSettings.getAttribute (ATTR_HOST);
+    String sHost = eSMTPSettings.getAttribute (ATTR_HOST);
+    if (sHost == null)
+      sHost = eSMTPSettings.getAttribute ("hostname");
     final String sPort = eSMTPSettings.getAttribute (ATTR_PORT);
     final int nPort = StringParser.parseInt (sPort, CWeb.DEFAULT_PORT_SMTP);
-    final String sUser = eSMTPSettings.getAttribute (ATTR_USER);
+    String sUser = eSMTPSettings.getAttribute (ATTR_USER);
+    if (sUser == null)
+      sUser = eSMTPSettings.getAttribute ("username");
     final String sPassword = eSMTPSettings.getAttribute (ATTR_PASSWORD);
     String sCharset = eSMTPSettings.getAttribute (ATTR_CHARSET);
     if (sCharset == null)
       sCharset = CWebCharset.CHARSET_SMTP;
-    final String sSSLEnabled = eSMTPSettings.getAttribute (ATTR_SSLENABLED);
+    String sSSLEnabled = eSMTPSettings.getAttribute (ATTR_SSLENABLED);
+    if (sSSLEnabled == null)
+      sSSLEnabled = eSMTPSettings.getAttribute ("usessl");
     final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled);
     return new SMTPSettings (sHost, nPort, sUser, sPassword, sCharset, bSSLEnabled);
   }

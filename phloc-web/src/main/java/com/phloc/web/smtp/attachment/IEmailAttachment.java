@@ -17,11 +17,12 @@
  */
 package com.phloc.web.smtp.attachment;
 
+import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IInputStreamProvider;
-import com.phloc.commons.state.EChange;
 
 /**
  * This interface represents attachments to be added to a mail message. Messages
@@ -29,35 +30,30 @@ import com.phloc.commons.state.EChange;
  * 
  * @author philip
  */
-public interface IEmailAttachments extends IReadonlyEmailAttachments
+public interface IEmailAttachment extends IInputStreamProvider
 {
   /**
-   * Add an attachment.
-   * 
-   * @param sFilename
-   *        The ID/filename of the attachment. May not be <code>null</code>.
-   * @param aISS
-   *        The {@link IInputStreamProvider} representing the data. May not be
-   *        <code>null</code>.
-   */
-  void addAttachment (@Nonnull String sFilename, @Nonnull IInputStreamProvider aISS);
-
-  /**
-   * Add an attachment.
-   * 
-   * @param aAttachment
-   *        The attachment to be added. May not be <code>null</code>.
-   */
-  void addAttachment (@Nonnull IEmailAttachment aAttachment);
-
-  /**
-   * Remove the passed attachment.
-   * 
-   * @param sFilename
-   *        The file name of the attachment to be removed. The file name is case
-   *        sensitive.
-   * @return {@link EChange}
+   * @return The filename of the attachment
    */
   @Nonnull
-  EChange removeAttachment (@Nullable String sFilename);
+  @Nonempty
+  String getFilename ();
+
+  /**
+   * @return The object holding the input stream to the data.
+   */
+  @Nonnull
+  IInputStreamProvider getInputStreamProvider ();
+
+  /**
+   * @return The content type (MIME type) of the attachment
+   */
+  @Nullable
+  String getContentType ();
+
+  /**
+   * @return The attachment as a {@link DataSource}.
+   */
+  @Nonnull
+  DataSource getAsDataSource ();
 }

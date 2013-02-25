@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.IHasSize;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
  * This interface represents attachments to be added to a mail message.
@@ -46,11 +47,20 @@ public interface IReadonlyEmailAttachments extends IHasSize
    * @return A list with all registered file names or an empty list.
    */
   @Nonnull
+  @ReturnsMutableCopy
   List <String> getAllAttachmentFilenames ();
+
+  /**
+   * @return A list with all registered attachments or an empty list.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <IEmailAttachment> getAllAttachments ();
 
   /**
    * @return A list of all attachments as Java Activation DataSource objects.
    */
   @Nonnull
+  @ReturnsMutableCopy
   List <DataSource> getAsDataSourceList ();
 }

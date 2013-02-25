@@ -18,18 +18,22 @@
 package com.phloc.web.smtp.attachment;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.activation.DataSource;
-import javax.activation.FileTypeMap;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.state.EChange;
@@ -42,11 +46,13 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public class EmailAttachments implements IEmailAttachments
+public class EmailAttachmentList implements IEmailAttachments
 {
-  private final Map <String, IInputStreamProvider> m_aMap = new LinkedHashMap <String, IInputStreamProvider> ();
+  private static final Logger s_aLogger = LoggerFactory.getLogger (EmailAttachmentList.class);
 
-  public EmailAttachments ()
+  private final Map <String, IEmailAttachment> m_aMap = new LinkedHashMap <String, IEmailAttachment> ();
+
+  public EmailAttachmentList ()
   {}
 
   @Nonnegative
@@ -62,11 +68,18 @@ public class EmailAttachments implements IEmailAttachments
 
   public void addAttachment (@Nonnull final String sFilename, @Nonnull final IInputStreamProvider aISS)
   {
-    if (sFilename == null)
-      throw new NullPointerException ("filename");
-    if (aISS == null)
-      throw new NullPointerException ("inputStreamProvider");
-    m_aMap.put (sFilename, aISS);
+    addAttachment (new EmailAttachment (sFilename, aISS));
+  }
+
+  public void addAttachment (@Nonnull final IEmailAttachment aAttachment)
+  {
+    if (aAttachment == null)
+      throw new NullPointerException ("attachment");
+
+    final String sKey = aAttachment.getFilename ();
+    if (m_aMap.containsKey (sKey))
+      s_aLogger.warn ("Overwriting email attachment with filename '" + sKey + "'");
+    m_aMap.put (sKey, aAttachment);
   }
 
   @Nonnull
@@ -88,15 +101,26 @@ public class EmailAttachments implements IEmailAttachments
   }
 
   @Nonnull
+  @ReturnsMutableObject (reason = "speed")
+  Collection <IEmailAttachment> directGetAllAttachments ()
+  {
+    return m_aMap.values ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IEmailAttachment> getAllAttachments ()
+  {
+    return ContainerHelper.newList (m_aMap.values ());
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public List <DataSource> getAsDataSourceList ()
   {
     final List <DataSource> ret = new ArrayList <DataSource> ();
-    for (final Map.Entry <String, IInputStreamProvider> aEntry : m_aMap.entrySet ())
-    {
-      final String sFilename = aEntry.getKey ();
-      final String sContentType = FileTypeMap.getDefaultFileTypeMap ().getContentType (sFilename);
-      ret.add (new InputStreamProviderDataSource (aEntry.getValue (), sFilename, sContentType));
-    }
+    for (final IEmailAttachment aAttachment : m_aMap.values ())
+      ret.add (aAttachment.getAsDataSource ());
     return ret;
   }
 
