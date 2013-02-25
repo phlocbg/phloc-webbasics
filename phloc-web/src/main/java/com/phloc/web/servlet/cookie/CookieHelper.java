@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.cookie;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Misc. helper methods on HTTP cookies.
@@ -92,15 +91,6 @@ public final class CookieHelper
     else
       aCookie.setMaxAge (DEFAULT_MAX_AGE_SECONDS);
     return aCookie;
-  }
-
-  @Nonnull
-  public static Cookie createContextCookie (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                            @Nonnull final String sName,
-                                            @Nullable final String sValue,
-                                            final boolean bExpireWhenBrowserIsClosed)
-  {
-    return createContextCookie (aRequestScope.getRequest (), sName, sValue, bExpireWhenBrowserIsClosed);
   }
 
   @Nonnull

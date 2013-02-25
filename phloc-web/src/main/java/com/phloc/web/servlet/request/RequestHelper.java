@@ -389,6 +389,12 @@ public final class RequestHelper
   @CheckForSigned
   public static long getContentLength (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    if (false)
+    {
+      // Missing support > 2GB!!!
+      return aHttpRequest.getContentLength ();
+    }
+
     final String sContentLength = aHttpRequest.getHeader (CHTTPHeader.CONTENT_LENGTH);
     return StringParser.parseLong (sContentLength, -1L);
   }

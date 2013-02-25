@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.response.gzip;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -23,57 +23,68 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.state.EChange;
-import com.phloc.datetime.PDTFactory;
-import com.phloc.datetime.format.PDTWebDateUtils;
-import com.phloc.webbasics.servlet.gzip.CompressFilterSettings;
 
 /**
- * Contains the settings for the {@link ResponseHelper} class.
+ * Contains the settings for the CompressFilter class.
  * 
  * @author philip
  */
 @ThreadSafe
-public final class ResponseHelperSettings
+public final class CompressFilterSettings
 {
-  /** A special date that never expires */
-  public static final LocalDateTime EXPIRES_NEVER_DATETIME = PDTFactory.createLocalDateTime (1995,
-                                                                                             DateTimeConstants.MAY,
-                                                                                             6,
-                                                                                             12,
-                                                                                             0,
-                                                                                             0);
-
-  /** The string representation of never expires date */
-  public static final String EXPIRES_NEVER_STRING = PDTWebDateUtils.getAsStringRFC822 (EXPIRES_NEVER_DATETIME);
-
   private static final Logger s_aLogger = LoggerFactory.getLogger (CompressFilterSettings.class);
-
-  /**
-   * Expires in at least 2 days (which is the minimum to be accepted for real
-   * caching in Yahoo Guidelines).
-   */
-  public static final int DEFAULT_EXPIRATION_SECONDS = 7 * CGlobal.SECONDS_PER_DAY;
-
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-  private static int s_nExpirationSeconds = DEFAULT_EXPIRATION_SECONDS;
+  private static boolean s_bFilterLoaded = false;
   private static boolean s_bResponseCompressionEnabled = true;
   private static boolean s_bResponseGzipEnabled = true;
   private static boolean s_bResponseDeflateEnabled = true;
+  private static boolean s_bDebugModeEnabled = false;
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
-  private static final ResponseHelperSettings s_aInstance = new ResponseHelperSettings ();
+  private static final CompressFilterSettings s_aInstance = new CompressFilterSettings ();
 
-  private ResponseHelperSettings ()
+  private CompressFilterSettings ()
   {}
+
+  /**
+   * Mark the filter as loaded.
+   */
+  public static void markFilterLoaded ()
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bFilterLoaded = true;
+      s_aLogger.info ("CompressFilter is loaded");
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return <code>true</code> if the filter is loaded, <code>false</code> if
+   *         not
+   */
+  public static boolean isFilterLoaded ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bFilterLoaded;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
 
   /**
    * Enable or disable the overall compression.
@@ -91,7 +102,7 @@ public final class ResponseHelperSettings
       if (s_bResponseCompressionEnabled == bResponseCompressionEnabled)
         return EChange.UNCHANGED;
       s_bResponseCompressionEnabled = bResponseCompressionEnabled;
-      s_aLogger.info ("ResponseHelper responseCompressionEnabled=" + bResponseCompressionEnabled);
+      s_aLogger.info ("CompressFilter responseCompressionEnabled=" + bResponseCompressionEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -134,7 +145,7 @@ public final class ResponseHelperSettings
       if (s_bResponseGzipEnabled == bResponseGzipEnabled)
         return EChange.UNCHANGED;
       s_bResponseGzipEnabled = bResponseGzipEnabled;
-      s_aLogger.info ("ResponseHelper responseGzipEnabled=" + bResponseGzipEnabled);
+      s_aLogger.info ("CompressFilter responseGzipEnabled=" + bResponseGzipEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -177,7 +188,7 @@ public final class ResponseHelperSettings
       if (s_bResponseDeflateEnabled == bResponseDeflateEnabled)
         return EChange.UNCHANGED;
       s_bResponseDeflateEnabled = bResponseDeflateEnabled;
-      s_aLogger.info ("ResponseHelper responseDeflateEnabled=" + bResponseDeflateEnabled);
+      s_aLogger.info ("CompressFilter responseDeflateEnabled=" + bResponseDeflateEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -227,19 +238,19 @@ public final class ResponseHelperSettings
       {
         s_bResponseCompressionEnabled = bResponseCompressionEnabled;
         eChange = EChange.CHANGED;
-        s_aLogger.info ("ResponseHelper responseCompressEnabled=" + bResponseCompressionEnabled);
+        s_aLogger.info ("CompressFilter responseCompressionEnabled=" + bResponseCompressionEnabled);
       }
       if (s_bResponseGzipEnabled != bResponseGzipEnabled)
       {
         s_bResponseGzipEnabled = bResponseGzipEnabled;
         eChange = EChange.CHANGED;
-        s_aLogger.info ("ResponseHelper responseGzipEnabled=" + bResponseGzipEnabled);
+        s_aLogger.info ("CompressFilter responseGzipEnabled=" + bResponseGzipEnabled);
       }
       if (s_bResponseDeflateEnabled != bResponseDeflateEnabled)
       {
         s_bResponseDeflateEnabled = bResponseDeflateEnabled;
         eChange = EChange.CHANGED;
-        s_aLogger.info ("ResponseHelper responseDeflateEnabled=" + bResponseDeflateEnabled);
+        s_aLogger.info ("CompressFilter responseDeflateEnabled=" + bResponseDeflateEnabled);
       }
       return eChange;
     }
@@ -250,23 +261,22 @@ public final class ResponseHelperSettings
   }
 
   /**
-   * Set the default expiration settings to be used for objects that should use
-   * HTTP caching
+   * Enable or disable debug mode
    * 
-   * @param nExpirationSeconds
-   *        The number of seconds for which the response should be cached
+   * @param bDebugModeEnabled
+   *        <code>true</code> to enable it, <code>false</code> to disable it
    * @return {@link EChange}
    */
   @Nonnull
-  public static EChange setExpirationSeconds (final int nExpirationSeconds)
+  public static EChange setDebugModeEnabled (final boolean bDebugModeEnabled)
   {
     s_aRWLock.writeLock ().lock ();
     try
     {
-      if (s_nExpirationSeconds == nExpirationSeconds)
+      if (s_bDebugModeEnabled == bDebugModeEnabled)
         return EChange.UNCHANGED;
-      s_nExpirationSeconds = nExpirationSeconds;
-      s_aLogger.info ("ResponseHelper expirationSeconds=" + nExpirationSeconds);
+      s_bDebugModeEnabled = bDebugModeEnabled;
+      s_aLogger.info ("CompressFilter debugMode=" + bDebugModeEnabled);
       return EChange.CHANGED;
     }
     finally
@@ -276,14 +286,15 @@ public final class ResponseHelperSettings
   }
 
   /**
-   * @return The default expiration seconds for objects to be cached
+   * @return <code>true</code> if debugMode is enabled, <code>false</code> if
+   *         not
    */
-  public static int getExpirationSeconds ()
+  public static boolean isDebugModeEnabled ()
   {
     s_aRWLock.readLock ().lock ();
     try
     {
-      return s_nExpirationSeconds;
+      return s_bDebugModeEnabled;
     }
     finally
     {

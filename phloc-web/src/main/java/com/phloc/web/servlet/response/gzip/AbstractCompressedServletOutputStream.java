@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.servlet.gzip;
+package com.phloc.web.servlet.response.gzip;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.CHTTPHeader;
-import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.web.servlet.response.ResponseHelper;
 
 /**
  * Special {@link ServletOutputStream} that knows whether it is closed or not

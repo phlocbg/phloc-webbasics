@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.servlet.gzip;
+package com.phloc.web.servlet.response.gzip;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -35,8 +35,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.AcceptEncodingHandler;
 import com.phloc.web.http.CHTTPHeader;
-import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
-import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.web.servlet.response.ResponseHelper;
+import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
 
 /**
  * Abstract output stream switching

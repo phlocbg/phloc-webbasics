@@ -67,6 +67,10 @@ import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
+import com.phloc.web.servlet.response.EContentDispositionType;
+import com.phloc.web.servlet.response.EResponseStreamType;
+import com.phloc.web.servlet.response.ResponseHelper;
+import com.phloc.web.servlet.response.ResponseHelperSettings;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

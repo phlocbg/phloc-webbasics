@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.response;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
-import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.web.http.AcceptEncodingHandler;
 import com.phloc.web.http.AcceptEncodingList;
 import com.phloc.web.http.CHTTPHeader;
@@ -54,24 +53,6 @@ public final class ResponseHelper
 
   private ResponseHelper ()
   {}
-
-  /**
-   * Get the best suitable output stream for the given combination of request
-   * and response. If the request supports gzip, the result is a
-   * {@link GZIPOutputStream}, if the request supports deflate or compress, the
-   * result will be a {@link ZipOutputStream}. If none of that matches, the
-   * regular response output stream is used
-   * 
-   * @param aRequestScope
-   *        Request and response
-   * @return The best matching output stream
-   * @throws IOException
-   */
-  @Nonnull
-  public static OutputStream getBestSuitableOutputStream (@Nonnull final IRequestWebScope aRequestScope) throws IOException
-  {
-    return getBestSuitableOutputStream (aRequestScope.getRequest (), aRequestScope.getResponse ());
-  }
 
   /**
    * Determine the best suitable output stream type for the given request

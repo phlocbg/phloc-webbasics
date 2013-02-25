@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.servlet.request.RequestHelper;
-import com.phloc.webbasics.servlet.utils.StatusAwareHttpResponseWrapper;
-import com.phloc.webbasics.web.ResponseHelper;
+import com.phloc.web.servlet.response.ResponseHelper;
+import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
 
 /**
  * This filter is used, to determine if some crucial information is missing in

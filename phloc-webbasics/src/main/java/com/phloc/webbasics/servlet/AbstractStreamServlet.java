@@ -40,7 +40,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.web.ResponseHelperSettings;
+import com.phloc.web.servlet.response.ResponseHelperSettings;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**

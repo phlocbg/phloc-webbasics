@@ -15,12 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.servlet.gzip;
+package com.phloc.web.servlet.response.gzip;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -31,36 +30,35 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 
-final class GZIPResponse extends AbstractCompressedResponseWrapper
+public final class DeflateResponse extends AbstractCompressedResponseWrapper
 {
-  private static final class GZIPServletOutputStream extends AbstractCompressedServletOutputStream
+  private static final class DeflateServletOutputStream extends AbstractCompressedServletOutputStream
   {
-    public GZIPServletOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
-                                    @Nonnull final HttpServletResponse aHttpResponse,
-                                    @Nonnull final String sContentEncoding,
-                                    final long nContentLength,
-                                    @Nonnegative final int nMinCompressSize) throws IOException
+    public DeflateServletOutputStream (@Nonnull final HttpServletRequest aHttpRequest,
+                                       @Nonnull final HttpServletResponse aHttpResponse,
+                                       @Nonnull final String sContentEncoding,
+                                       final long nContentLength,
+                                       @Nonnegative final int nMinCompressSize) throws IOException
     {
       super (aHttpRequest, aHttpResponse, sContentEncoding, nContentLength, nMinCompressSize);
     }
 
     @Override
     @Nonnull
-    protected DeflaterOutputStream createDeflaterOutputStream (@Nonnull final OutputStream aOS) throws IOException
+    protected DeflaterOutputStream createDeflaterOutputStream (@Nonnull final OutputStream aOS)
     {
-      return new GZIPOutputStream (aOS);
+      return new DeflaterOutputStream (aOS);
     }
   }
 
-  private static final IStatisticsHandlerCounter s_aStatsGZip = StatisticsManager.getCounterHandler (CompressFilter.class.getName () +
-                                                                                                     "$gzip");
+  private static final IStatisticsHandlerCounter s_aStatsDeflate = StatisticsManager.getCounterHandler (DeflateResponse.class);
 
-  GZIPResponse (final HttpServletRequest aHttpRequest,
-                final HttpServletResponse aHttpResponse,
-                final String sContentEncoding)
+  public DeflateResponse (@Nonnull final HttpServletRequest aHttpRequest,
+                          @Nonnull final HttpServletResponse aHttpResponse,
+                          @Nonnull final String sContentEncoding)
   {
     super (aHttpRequest, aHttpResponse, sContentEncoding);
-    s_aStatsGZip.increment ();
+    s_aStatsDeflate.increment ();
   }
 
   @Override
@@ -71,6 +69,10 @@ final class GZIPResponse extends AbstractCompressedResponseWrapper
                                                                                 final long nContentLength,
                                                                                 @Nonnegative final int nMinCompressSize) throws IOException
   {
-    return new GZIPServletOutputStream (aHttpRequest, aHttpResponse, sContentEncoding, nContentLength, nMinCompressSize);
+    return new DeflateServletOutputStream (aHttpRequest,
+                                           aHttpResponse,
+                                           sContentEncoding,
+                                           nContentLength,
+                                           nMinCompressSize);
   }
 }

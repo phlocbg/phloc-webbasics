@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.response;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,18 +25,19 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 
 /**
- * Determine the content disposition type to be used.
+ * Determine the response stream type to be used.
  * 
  * @author philip
  */
-public enum EContentDispositionType implements IHasID <String>
+public enum EResponseStreamType implements IHasID <String>
 {
-  ATTACHMENT ("attachment"),
-  INLINE ("inline");
+  PLAIN ("plain"),
+  GZIP ("gzip"),
+  DEFLATE ("deflate");
 
   private final String m_sID;
 
-  private EContentDispositionType (@Nonnull @Nonempty final String sID)
+  private EResponseStreamType (@Nonnull @Nonempty final String sID)
   {
     m_sID = sID;
   }
@@ -48,9 +49,25 @@ public enum EContentDispositionType implements IHasID <String>
     return m_sID;
   }
 
-  @Nullable
-  public static EContentDispositionType getFromIDOrNull (@Nullable final String sID)
+  /**
+   * @return <code>true</code> if the response stream type is uncompressed.
+   */
+  public boolean isUncompressed ()
   {
-    return EnumHelper.getFromIDOrNull (EContentDispositionType.class, sID);
+    return this == PLAIN;
+  }
+
+  /**
+   * @return <code>true</code> if the response stream type is compressed.
+   */
+  public boolean isCompressed ()
+  {
+    return this == GZIP || this == DEFLATE;
+  }
+
+  @Nullable
+  public static EResponseStreamType getFromIDOrNull (@Nullable final String sID)
+  {
+    return EnumHelper.getFromIDOrNull (EResponseStreamType.class, sID);
   }
 }
