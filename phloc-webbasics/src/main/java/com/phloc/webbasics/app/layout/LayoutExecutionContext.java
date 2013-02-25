@@ -28,12 +28,12 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.web.servlet.request.IRequestParamMap;
+import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.useragent.IUserAgent;
 import com.phloc.web.useragent.UserAgentDatabase;
 import com.phloc.web.useragent.browser.BrowserInfo;
 import com.phloc.webbasics.form.RequestFieldBoolean;
-import com.phloc.webbasics.web.IRequestParamMap;
-import com.phloc.webbasics.web.RequestHelper;
 
 /**
  * This page is instantiated per page view, so that the thread safety of the
@@ -256,7 +256,7 @@ public class LayoutExecutionContext
   @Nonnull
   public IRequestParamMap getRequestParamMap ()
   {
-    return RequestHelper.getRequestParamMap (m_aRequestScope);
+    return RequestHelper.getRequestParamMap (m_aRequestScope.getRequest ());
   }
 
   @Nullable

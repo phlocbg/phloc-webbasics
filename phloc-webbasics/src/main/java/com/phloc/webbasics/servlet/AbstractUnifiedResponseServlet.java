@@ -48,13 +48,14 @@ import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.PDTUtils;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.scopes.web.servlet.RequestScopeInitializer;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
-import com.phloc.webbasics.StaticServerInfo;
-import com.phloc.webbasics.web.RequestHelper;
+import com.phloc.web.servlet.request.RequestHelper;
+import com.phloc.web.servlet.server.StaticServerInfo;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
@@ -295,7 +296,10 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (s_aFirstRequest.getAndSet (false) && !StaticServerInfo.isSet ())
     {
       // First set the default web server info
-      StaticServerInfo.initFromFirstRequest (aRequestScope);
+      StaticServerInfo.init (aRequestScope.getScheme (),
+                             aRequestScope.getServerName (),
+                             aRequestScope.getServerPort (),
+                             WebScopeManager.getGlobalScope ().getContextPath ());
     }
 
     final Set <EHTTPMethod> aAllowedHTTPMethods = getAllowedHTTPMethods ();

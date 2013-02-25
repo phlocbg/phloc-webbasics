@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics;
+package com.phloc.web.servlet.server;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -27,8 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.web.CWeb;
 
 /**
  * This singleton instance represents default server information for locations
@@ -147,15 +146,6 @@ public final class StaticServerInfo
                                        .append ("fullServerPath", m_sFullServerPath)
                                        .append ("fullServerAndContextPath", m_sFullServerAndContextPath)
                                        .toString ();
-  }
-
-  @Nonnull
-  public static StaticServerInfo initFromFirstRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestWebScope)
-  {
-    return init (aRequestWebScope.getScheme (),
-                 aRequestWebScope.getServerName (),
-                 aRequestWebScope.getServerPort (),
-                 WebScopeManager.getGlobalScope ().getContextPath ());
   }
 
   @Nonnull

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.request;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -277,10 +277,7 @@ public final class RequestParamMap implements IRequestParamMap
   @Nonnull
   public static IRequestParamMap create (@Nonnull final IReadonlyAttributeContainer aAttrCont)
   {
-    final RequestParamMap ret = new RequestParamMap ();
-    for (final String sName : aAttrCont.getAllAttributeNames ())
-      ret.put (sName, aAttrCont.getAttributeObject (sName));
-    return ret;
+    return new RequestParamMap (aAttrCont.getAllAttributes ());
   }
 
   @Nonnull

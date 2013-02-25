@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.request;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,9 +35,8 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
 import com.phloc.web.http.HTTPHeaderMap;
+import com.phloc.web.mock.OfflineHttpServletRequest;
 
 /**
  * Helper class to debug information passed to a JSP page or a servlet.
@@ -101,12 +100,6 @@ public final class RequestLogger
   }
 
   @Nonnull
-  public static StringBuilder getRequestFields (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getRequestFields (aRequestScope.getRequest ());
-  }
-
-  @Nonnull
   public static StringBuilder getRequestFields (@Nonnull final HttpServletRequest aHttpRequest)
   {
     return getRequestFields (getRequestFieldMap (aHttpRequest));
@@ -120,11 +113,6 @@ public final class RequestLogger
     for (final Map.Entry <String, String> aEntry : aRequestFieldMap.entrySet ())
       aSB.append ("  ").append (aEntry.getKey ()).append (" = ").append (aEntry.getValue ()).append ('\n');
     return aSB;
-  }
-
-  public static void logRequestFields (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    logRequestFields (aRequestScope.getRequest ());
   }
 
   /**
@@ -164,12 +152,6 @@ public final class RequestLogger
   }
 
   @Nonnull
-  public static StringBuilder getRequestHeader (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getRequestHeader (aRequestScope.getRequest ());
-  }
-
-  @Nonnull
   public static StringBuilder getRequestHeader (@Nonnull final HttpServletRequest aHttpRequest)
   {
     return getRequestHeader (getRequestHeaderMap (aHttpRequest));
@@ -183,11 +165,6 @@ public final class RequestLogger
     for (final Map.Entry <String, String> aEntry : aRequestHeaderMap.entrySet ())
       aSB.append ("  ").append (aEntry.getKey ()).append (" = ").append (aEntry.getValue ()).append ('\n');
     return aSB;
-  }
-
-  public static void logRequestHeader (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    logRequestHeader (aRequestScope.getRequest ());
   }
 
   /**
@@ -231,12 +208,6 @@ public final class RequestLogger
   }
 
   @Nonnull
-  public static StringBuilder getRequestParameters (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getRequestParameters (aRequestScope.getRequest ());
-  }
-
-  @Nonnull
   public static StringBuilder getRequestParameters (@Nonnull final HttpServletRequest aHttpRequest)
   {
     return getRequestParameters (getRequestParameterMap (aHttpRequest));
@@ -252,20 +223,9 @@ public final class RequestLogger
     return aSB;
   }
 
-  public static void logRequestParameters (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    s_aLogger.info (getRequestParameters (aRequestScope).toString ());
-  }
-
   public static void logRequestParameters (@Nonnull final HttpServletRequest aHttpRequest)
   {
     s_aLogger.info (getRequestParameters (aHttpRequest).toString ());
-  }
-
-  @Nonnull
-  public static StringBuilder getRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getRequestComplete (aRequestScope.getRequest ());
   }
 
   @Nonnull
@@ -276,11 +236,6 @@ public final class RequestLogger
     aSB.append (getRequestHeader (aHttpRequest));
     aSB.append (getRequestParameters (aHttpRequest));
     return aSB;
-  }
-
-  public static void logRequestComplete (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    logRequestComplete (aRequestScope.getRequest ());
   }
 
   public static void logRequestComplete (@Nonnull final HttpServletRequest aHttpRequest)

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.request;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -35,12 +35,10 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.web.CWeb;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.http.HTTPHeaderMap;
-import com.phloc.webbasics.CWeb;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
@@ -127,22 +125,6 @@ public final class RequestHelper
   /**
    * Return the URI of the request within the servlet context.
    * 
-   * @param aRequestScope
-   *        The request web scope to use. May not be <code>null</code>.
-   * @return the path within the web application and never <code>null</code>.
-   */
-  @Nonnull
-  public static String getPathWithinServletContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-
-    return getPathWithinServletContext (aRequestScope.getRequest ());
-  }
-
-  /**
-   * Return the URI of the request within the servlet context.
-   * 
    * @param aHttpRequest
    *        The HTTP request. May not be <code>null</code>.
    * @return the path within the web application and never <code>null</code>.
@@ -168,15 +150,6 @@ public final class RequestHelper
     // Normal case: URI contains context path.
     final String sPath = sRequestURI.substring (sContextPath.length ());
     return sPath.length () > 0 ? sPath : "/";
-  }
-
-  @Nonnull
-  public static String getPathWithinServlet (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-
-    return getPathWithinServlet (aRequestScope.getRequest ());
   }
 
   /**
@@ -301,15 +274,6 @@ public final class RequestHelper
     return aHttpRequest.getHeader (CHTTPHeader.REFERER);
   }
 
-  @Nullable
-  public static EHTTPVersion getHttpVersion (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-
-    return getHttpVersion (aRequestScope.getRequest ());
-  }
-
   /**
    * Get the HTTP version associated with the given HTTP request
    * 
@@ -324,23 +288,6 @@ public final class RequestHelper
       throw new NullPointerException ("httpRequest");
 
     return EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
-  }
-
-  /**
-   * Get a complete request header map as a copy.
-   * 
-   * @param aRequestScope
-   *        The source request scope. May not be <code>null</code>.
-   * @return Never <code>null</code>.
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  public static HTTPHeaderMap getRequestHeaderMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-
-    return getRequestHeaderMap (aRequestScope.getRequest ());
   }
 
   /**
@@ -367,25 +314,6 @@ public final class RequestHelper
       }
     }
     return ret;
-  }
-
-  /**
-   * This is a utility method which avoids that all map values are enclosed in
-   * an array. Jetty seems to create String arrays out of simple string values
-   * 
-   * @param aRequestScope
-   *        The request scope to use. May not be <code>null</code>.
-   * @return A Map containing pure strings instead of string arrays with one
-   *         item
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  public static Map <String, Object> getParameterMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-
-    return getParameterMap (aRequestScope.getRequest ());
   }
 
   /**
@@ -437,21 +365,16 @@ public final class RequestHelper
   }
 
   @Nonnull
-  public static IRequestParamMap getCurrentRequestParamMap ()
+  public static IRequestParamMap getRequestParamMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    return getRequestParamMap (WebScopeManager.getRequestScope ());
-  }
-
-  @Nonnull
-  public static IRequestParamMap getRequestParamMap (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    IRequestParamMap aMap = aRequestScope.getCastedAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);
-    if (aMap == null)
+    // Check if a value is cached in the HTTP request
+    IRequestParamMap aValue = (IRequestParamMap) aHttpRequest.getAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);
+    if (aValue == null)
     {
-      aMap = RequestParamMap.create (aRequestScope);
-      aRequestScope.setAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP, aMap);
+      aValue = new RequestParamMap (getParameterMap (aHttpRequest));
+      aHttpRequest.setAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP, aValue);
     }
-    return aMap;
+    return aValue;
   }
 
   /**

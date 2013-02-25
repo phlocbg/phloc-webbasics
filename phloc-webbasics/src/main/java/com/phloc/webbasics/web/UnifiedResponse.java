@@ -65,6 +65,8 @@ import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
+import com.phloc.web.servlet.request.RequestHelper;
+import com.phloc.web.servlet.request.RequestLogger;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -162,7 +164,7 @@ public class UnifiedResponse
     m_aRequestScope = aRequestScope;
     m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope.getRequest ());
     m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequestScope.getRequest ());
-    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aRequestScope);
+    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aRequestScope.getRequest ());
   }
 
   @Nonnull

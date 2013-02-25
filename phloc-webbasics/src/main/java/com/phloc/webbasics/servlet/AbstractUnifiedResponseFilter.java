@@ -30,7 +30,7 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareFilter;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
-import com.phloc.webbasics.web.RequestHelper;
+import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**

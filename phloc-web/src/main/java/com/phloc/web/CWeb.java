@@ -15,11 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics;
+package com.phloc.web;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.web.port.DefaultNetworkPorts;
 
 /**
  * Contains some global web constants
@@ -29,10 +30,14 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 @Immutable
 public final class CWeb
 {
+  /** Default FTP port */
+  public static final int DEFAULT_PORT_FTP = DefaultNetworkPorts.TCP_21_ftp.getPort ();
   /** Default HTTP port */
-  public static final int DEFAULT_PORT_HTTP = 80;
+  public static final int DEFAULT_PORT_HTTP = DefaultNetworkPorts.TCP_80_http.getPort ();
   /** Default HTTPS port */
-  public static final int DEFAULT_PORT_HTTPS = 443;
+  public static final int DEFAULT_PORT_HTTPS = DefaultNetworkPorts.TCP_443_https.getPort ();
+  /** Default SMTP port */
+  public static final int DEFAULT_PORT_SMTP = DefaultNetworkPorts.TCP_25_smtp.getPort ();
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")

@@ -28,6 +28,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
+import com.phloc.web.servlet.request.IRequestParamMap;
+import com.phloc.web.servlet.request.RequestParamMap;
 
 public final class RequestParamMapTest
 {

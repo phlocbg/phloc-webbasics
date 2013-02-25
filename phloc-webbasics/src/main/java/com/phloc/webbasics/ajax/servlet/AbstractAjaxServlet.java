@@ -39,13 +39,13 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.CWebCharset;
+import com.phloc.web.CWebCharset;
+import com.phloc.web.servlet.request.RequestHelper;
+import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.webbasics.ajax.IAjaxExceptionHandler;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
-import com.phloc.webbasics.web.RequestHelper;
-import com.phloc.webbasics.web.RequestLogger;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
@@ -130,7 +130,8 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
     // get handler name from request (skipping the leading "/")
-    final String sAjaxFunctionName = StringHelper.trimStart (RequestHelper.getPathWithinServlet (aRequestScope), "/");
+    final String sAjaxFunctionName = StringHelper.trimStart (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()),
+                                                             "/");
 
     try
     {

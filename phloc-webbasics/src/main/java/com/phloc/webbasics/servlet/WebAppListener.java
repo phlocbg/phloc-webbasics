@@ -59,7 +59,7 @@ import com.phloc.commons.url.URLUtils;
 import com.phloc.commons.utils.ClassPathHelper;
 import com.phloc.commons.vminit.VirtualMachineInitializer;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.StaticServerInfo;
+import com.phloc.web.servlet.server.StaticServerInfo;
 
 /**
  * This class is intended to handle the initial application startup and the

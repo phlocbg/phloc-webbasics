@@ -28,10 +28,10 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.webbasics.action.IActionExecutor;
 import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
-import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
