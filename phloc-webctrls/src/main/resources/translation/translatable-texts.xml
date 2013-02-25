@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="139">
+<translationitems count="138">
   <item id="com.phloc.webctrls.colorbox.EColorBoxText.CLOSE">
     <de>Schließen</de>
     <en>close</en>
@@ -56,7 +56,7 @@
     <en>Showing 0 to 0 of 0 entries</en>
   </item>
   <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_FILTERED">
-    <de>(gefiltert von _MAX_  Einträgen)</de>
+    <de>(gefiltert von _MAX_ Einträgen)</de>
     <en>(filtered from _MAX_ total entries)</en>
   </item>
   <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_POSTFIX">
@@ -548,10 +548,6 @@ Valid extension(s): {extensions}.</en>
   <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.NONE_DEFINED">
     <de>keine definiert</de>
     <en>none defined</en>
-  </item>
-  <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.NO_USERS_FOUND">
-    <de>Keine Benutzer gefunden</de>
-    <en>No users found</en>
   </item>
   <item id="com.phloc.webctrls.page.security.BasePageUserManagement$EText.SUCCESS_CREATE">
     <de>Der neue Benutzer wurde erfolgreich angelegt!</de>
