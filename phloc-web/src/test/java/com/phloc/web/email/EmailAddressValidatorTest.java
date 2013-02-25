@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.email.EmailAddressUtils;
 import com.phloc.commons.random.VerySecureRandom;
+import com.phloc.web.smtp.EmailAddressValidator;
 
 public final class EmailAddressValidatorTest
 {
