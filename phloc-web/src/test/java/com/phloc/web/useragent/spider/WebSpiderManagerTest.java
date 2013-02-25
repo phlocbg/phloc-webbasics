@@ -15,30 +15,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.browser;
+package com.phloc.web.useragent.spider;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-
-import java.util.Locale;
 
 import org.junit.Test;
 
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.id.ComparatorHasIDString;
+import com.phloc.commons.mock.AbstractPhlocTestCase;
+import com.phloc.web.useragent.spider.WebSpiderInfo;
+import com.phloc.web.useragent.spider.WebSpiderManager;
+
 /**
- * Test class for class {@link EBrowserType}.
+ * Test class for class {@link WebSpiderManager}.
  * 
  * @author philip
  */
-public final class EBrowserTypeTest
+public final class WebSpiderManagerTest extends AbstractPhlocTestCase
 {
   @Test
   public void testAll ()
   {
-    for (final EBrowserType eBrowserType : EBrowserType.values ())
+    for (final WebSpiderInfo aWSI : ContainerHelper.getSorted (WebSpiderManager.getInstance ().getAllKnownSpiders (),
+                                                               new ComparatorHasIDString <WebSpiderInfo> ()))
     {
-      assertNotNull (eBrowserType.getDisplayText (Locale.GERMAN));
-      assertSame (eBrowserType, EBrowserType.getFromIDOrNull (eBrowserType.getID ()));
-      assertSame (eBrowserType, EBrowserType.valueOf (eBrowserType.name ()));
+      assertNotNull (aWSI);
+      assertNotNull (aWSI.getID ());
+      // name and type may be null
     }
   }
 }

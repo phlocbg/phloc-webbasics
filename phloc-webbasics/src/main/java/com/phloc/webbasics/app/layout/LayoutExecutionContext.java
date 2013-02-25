@@ -28,10 +28,10 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.browser.BrowserInfo;
+import com.phloc.web.useragent.IUserAgent;
+import com.phloc.web.useragent.UserAgentDatabase;
+import com.phloc.web.useragent.browser.BrowserInfo;
 import com.phloc.webbasics.form.RequestFieldBoolean;
-import com.phloc.webbasics.useragent.IUserAgent;
-import com.phloc.webbasics.useragent.UserAgentDatabase;
 import com.phloc.webbasics.web.IRequestParamMap;
 import com.phloc.webbasics.web.RequestHelper;
 
@@ -278,7 +278,7 @@ public class LayoutExecutionContext
   @Nonnull
   public IUserAgent getUserAgent ()
   {
-    return UserAgentDatabase.getUserAgent (m_aRequestScope);
+    return UserAgentDatabase.getUserAgent (m_aRequestScope.getRequest ());
   }
 
   @Nonnull

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.browser;
+package com.phloc.web.useragent.browser;
 
 import java.util.Locale;
 
@@ -23,41 +23,35 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.version.Version;
-import com.phloc.webbasics.spider.WebSpiderInfo;
 
 /**
  * Special browser info for Web Spider user agents.
  * 
  * @author philip
  */
-public final class BrowserInfoSpider extends BrowserInfo
+public final class BrowserInfoMobile extends BrowserInfo
 {
   /** Is it not */
   @SuppressWarnings ("hiding")
-  public static final BrowserInfoSpider IS_IT_NOT = new BrowserInfoSpider ();
+  public static final BrowserInfoMobile IS_IT_NOT = new BrowserInfoMobile ();
 
-  private final WebSpiderInfo m_aWebSpiderInfo;
+  private final String m_sUA;
 
-  private BrowserInfoSpider ()
+  private BrowserInfoMobile ()
   {
-    m_aWebSpiderInfo = null;
+    m_sUA = null;
   }
 
-  public BrowserInfoSpider (final WebSpiderInfo aWebSpiderInfo)
+  public BrowserInfoMobile (final String sUA)
   {
-    super (EBrowserType.SPIDER, new Version (0));
-    m_aWebSpiderInfo = aWebSpiderInfo;
-  }
-
-  public String getSearchEngineName ()
-  {
-    return m_aWebSpiderInfo == null ? null : m_aWebSpiderInfo.getName ();
+    super (EBrowserType.MOBILE, new Version (0));
+    m_sUA = sUA;
   }
 
   @Override
   public String getDisplayText (@Nonnull final Locale aContentLocale)
   {
-    return getSearchEngineName ();
+    return m_sUA;
   }
 
   @Override
@@ -65,6 +59,6 @@ public final class BrowserInfoSpider extends BrowserInfo
   {
     if (isItNot ())
       return new ToStringGenerator (null).append ("isIt", "not").toString ();
-    return ToStringGenerator.getDerived (super.toString ()).appendIfNotNull ("info", m_aWebSpiderInfo).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).appendIfNotNull ("info", m_sUA).toString ();
   }
 }

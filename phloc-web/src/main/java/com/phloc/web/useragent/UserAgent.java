@@ -15,21 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.useragent;
+package com.phloc.web.useragent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.version.Version;
-import com.phloc.webbasics.browser.BrowserInfo;
-import com.phloc.webbasics.browser.BrowserInfoIE;
-import com.phloc.webbasics.browser.BrowserInfoMobile;
-import com.phloc.webbasics.browser.BrowserInfoSpider;
-import com.phloc.webbasics.browser.EBrowserType;
-import com.phloc.webbasics.browser.MobileBrowserManager;
-import com.phloc.webbasics.spider.WebSpiderInfo;
-import com.phloc.webbasics.spider.WebSpiderManager;
+import com.phloc.web.useragent.browser.BrowserInfo;
+import com.phloc.web.useragent.browser.BrowserInfoIE;
+import com.phloc.web.useragent.browser.BrowserInfoMobile;
+import com.phloc.web.useragent.browser.BrowserInfoSpider;
+import com.phloc.web.useragent.browser.EBrowserType;
+import com.phloc.web.useragent.browser.MobileBrowserManager;
+import com.phloc.web.useragent.spider.WebSpiderInfo;
+import com.phloc.web.useragent.spider.WebSpiderManager;
 
 /**
  * Default implementation of the {@link IUserAgent} interface.

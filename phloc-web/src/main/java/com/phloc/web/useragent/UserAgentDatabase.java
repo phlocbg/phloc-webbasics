@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.useragent;
+package com.phloc.web.useragent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,8 +34,6 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.web.http.CHTTPHeader;
 
 /**
@@ -111,30 +109,6 @@ public final class UserAgentDatabase
     {
       s_aRWLock.writeLock ().unlock ();
     }
-  }
-
-  /**
-   * Get the user agent object from the current HTTP request.
-   * 
-   * @return A non-<code>null</code> user agent object.
-   */
-  @Nonnull
-  public static IUserAgent getCurrentUserAgent ()
-  {
-    return getUserAgent (WebScopeManager.getRequestScope ());
-  }
-
-  /**
-   * Get the user agent object from the given HTTP request.
-   * 
-   * @param aRequestScope
-   *        The request scope to extract the information from.
-   * @return A non-<code>null</code> user agent object.
-   */
-  @Nonnull
-  public static IUserAgent getUserAgent (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getUserAgent (aRequestScope.getRequest ());
   }
 
   /**
