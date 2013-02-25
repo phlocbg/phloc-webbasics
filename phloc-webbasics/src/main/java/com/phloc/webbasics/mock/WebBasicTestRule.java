@@ -21,9 +21,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.phloc.scopes.web.mock.MockHttpListener;
-import com.phloc.scopes.web.mock.MockServletRequestListener;
+import com.phloc.scopes.web.mock.MockServletRequestListenerScopeAware;
 import com.phloc.scopes.web.mock.WebScopeTestRule;
+import com.phloc.web.mock.MockHttpListener;
 import com.phloc.webbasics.servlet.WebAppListener;
 
 /**
@@ -48,7 +48,7 @@ public class WebBasicTestRule extends WebScopeTestRule
   {
     MockHttpListener.removeAllDefaultListeners ();
     MockHttpListener.addDefaultListener (new WebAppListener ());
-    MockHttpListener.addDefaultListener (new MockServletRequestListener ());
+    MockHttpListener.addDefaultListener (new MockServletRequestListenerScopeAware ());
     MockHttpListener.setToDefault ();
   }
 }

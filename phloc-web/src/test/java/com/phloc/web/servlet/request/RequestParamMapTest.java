@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.request;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,8 +28,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
-import com.phloc.web.servlet.request.IRequestParamMap;
-import com.phloc.web.servlet.request.RequestParamMap;
 
 public final class RequestParamMapTest
 {

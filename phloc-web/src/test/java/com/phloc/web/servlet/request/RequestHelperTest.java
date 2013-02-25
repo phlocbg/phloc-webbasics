@@ -15,16 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.request;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.phloc.commons.url.SMap;
-import com.phloc.scopes.web.mock.MockHttpServletRequest;
 import com.phloc.web.http.EHTTPMethod;
-import com.phloc.web.servlet.request.RequestHelper;
+import com.phloc.web.mock.MockHttpServletRequest;
 
 /**
  * Test class for class {@link RequestHelper}.
