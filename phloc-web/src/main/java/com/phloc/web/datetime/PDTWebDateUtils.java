@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -130,9 +131,9 @@ public final class PDTWebDateUtils
    *         the string with any of the masks.
    */
   @Nullable
-  private static DateTime _parseUsingMask (@Nonnull final String [] aMasks,
-                                           @Nonnull final String sDate,
-                                           @Nullable final DateTimeZone aDTZ)
+  private static DateTime _parseDateTimeUsingMask (@Nonnull final String [] aMasks,
+                                                   @Nonnull final String sDate,
+                                                   @Nullable final DateTimeZone aDTZ)
   {
     for (final String sMask : aMasks)
     {
@@ -141,6 +142,24 @@ public final class PDTWebDateUtils
       if (aDTZ != null)
         aDTF = aDTF.withZone (aDTZ);
       final DateTime aDT = PDTFromString.getDateTimeFromString (sDate, aDTF);
+      if (aDT != null)
+        return aDT;
+    }
+    return null;
+  }
+
+  @Nullable
+  private static LocalDateTime _parseLocalDateTimeUsingMask (@Nonnull final String [] aMasks,
+                                                             @Nonnull final String sDate,
+                                                             @Nullable final DateTimeZone aDTZ)
+  {
+    for (final String sMask : aMasks)
+    {
+      DateTimeFormatter aDTF = PDTFormatter.getForPattern (sMask, LOCALE_TO_USE)
+                                           .withChronology (PDTConfig.getDefaultChronology ());
+      if (aDTZ != null)
+        aDTF = aDTF.withZone (aDTZ);
+      final LocalDateTime aDT = PDTFromString.getLocalDateTimeFromString (sDate, aDTF);
       if (aDT != null)
         return aDT;
     }
@@ -205,7 +224,43 @@ public final class PDTWebDateUtils
       return null;
 
     final IReadonlyPair <String, DateTimeZone> aPair = _extractDateTimeZone (sDate.trim ());
-    return _parseUsingMask (RFC822_MASKS, aPair.getFirst (), aPair.getSecond ());
+    return _parseDateTimeUsingMask (RFC822_MASKS, aPair.getFirst (), aPair.getSecond ());
+  }
+
+  /**
+   * Parses a Date out of a String with a date in RFC822 format.
+   * <p/>
+   * It parsers the following formats:
+   * <ul>
+   * <li>"EEE, dd MMM yyyy HH:mm:ss z"</li>
+   * <li>"EEE, dd MMM yyyy HH:mm z"</li>
+   * <li>"EEE, dd MMM yy HH:mm:ss z"</li>
+   * <li>"EEE, dd MMM yy HH:mm z"</li>
+   * <li>"dd MMM yyyy HH:mm:ss z"</li>
+   * <li>"dd MMM yyyy HH:mm z"</li>
+   * <li>"dd MMM yy HH:mm:ss z"</li>
+   * <li>"dd MMM yy HH:mm z"</li>
+   * </ul>
+   * <p/>
+   * Refer to the java.text.SimpleDateFormat javadocs for details on the format
+   * of each element.
+   * <p/>
+   * 
+   * @param sDate
+   *        string to parse for a date. May be <code>null</code>.
+   * @return the Date represented by the given RFC822 string. It returns
+   *         <b>null</b> if it was not possible to parse the given string into a
+   *         {@link DateTime} or if the passed {@link String} was
+   *         <code>null</code>.
+   */
+  @Nullable
+  public static LocalDateTime getLocalDateTimeFromRFC822 (@Nullable final String sDate)
+  {
+    if (sDate == null)
+      return null;
+
+    final IReadonlyPair <String, DateTimeZone> aPair = _extractDateTimeZone (sDate.trim ());
+    return _parseLocalDateTimeUsingMask (RFC822_MASKS, aPair.getFirst (), aPair.getSecond ());
   }
 
   /**
@@ -237,7 +292,39 @@ public final class PDTWebDateUtils
       return null;
 
     final IReadonlyPair <String, DateTimeZone> aPair = _extractDateTimeZone (sDate.trim ());
-    return _parseUsingMask (W3CDATETIME_MASKS, aPair.getFirst (), aPair.getSecond ());
+    return _parseDateTimeUsingMask (W3CDATETIME_MASKS, aPair.getFirst (), aPair.getSecond ());
+  }
+
+  /**
+   * Parses a Date out of a String with a date in W3C date-time format.
+   * <p/>
+   * It parsers the following formats:
+   * <ul>
+   * <li>"yyyy-MM-dd'T'HH:mm:ssz"</li>
+   * <li>"yyyy-MM-dd'T'HH:mmz"</li>
+   * <li>"yyyy-MM-dd"</li>
+   * <li>"yyyy-MM"</li>
+   * <li>"yyyy"</li>
+   * </ul>
+   * <p/>
+   * Refer to the java.text.SimpleDateFormat javadocs for details on the format
+   * of each element.
+   * <p/>
+   * 
+   * @param sDate
+   *        string to parse for a date. May be <code>null</code>.
+   * @return the Date represented by the given W3C date-time string. It returns
+   *         <b>null</b> if it was not possible to parse the given string into a
+   *         {@link DateTime} or if the input string was <code>null</code>.
+   */
+  @Nullable
+  public static LocalDateTime getLocalDateTimeFromW3C (@Nullable final String sDate)
+  {
+    if (sDate == null)
+      return null;
+
+    final IReadonlyPair <String, DateTimeZone> aPair = _extractDateTimeZone (sDate.trim ());
+    return _parseLocalDateTimeUsingMask (W3CDATETIME_MASKS, aPair.getFirst (), aPair.getSecond ());
   }
 
   /**
@@ -252,11 +339,31 @@ public final class PDTWebDateUtils
    *         Date.
    */
   @Nullable
-  public static DateTime getDateTimeFromW3COrRFC822 (@Nonnull final String sDate)
+  public static DateTime getDateTimeFromW3COrRFC822 (@Nullable final String sDate)
   {
     DateTime aDateTime = getDateTimeFromW3C (sDate);
     if (aDateTime == null)
       aDateTime = getDateTimeFromRFC822 (sDate);
+    return aDateTime;
+  }
+
+  /**
+   * Parses a Date out of a String with a date in W3C date-time format or in a
+   * RFC822 format.
+   * <p>
+   * 
+   * @param sDate
+   *        string to parse for a date.
+   * @return the Date represented by the given W3C date-time string. It returns
+   *         <b>null</b> if it was not possible to parse the given string into a
+   *         Date.
+   */
+  @Nullable
+  public static LocalDateTime getLocalDateTimeFromW3COrRFC822 (@Nullable final String sDate)
+  {
+    LocalDateTime aDateTime = getLocalDateTimeFromW3C (sDate);
+    if (aDateTime == null)
+      aDateTime = getLocalDateTimeFromRFC822 (sDate);
     return aDateTime;
   }
 
@@ -349,28 +456,48 @@ public final class PDTWebDateUtils
   }
 
   @Nonnull
-  private static DateTimeFormatter _getXSDFormatterDateTime ()
+  private static DateTimeFormatter _getXSDFormatterDateTime (@Nonnull final Chronology aChronology)
   {
-    return ISODateTimeFormat.dateTime ().withChronology (ISOChronology.getInstanceUTC ());
+    return ISODateTimeFormat.dateTime ().withChronology (aChronology);
   }
 
   @Nullable
   public static DateTime getDateTimeFromXSD (@Nullable final String sValue)
   {
-    return PDTFromString.getDateTimeFromString (sValue, _getXSDFormatterDateTime ());
+    return getDateTimeFromXSD (sValue, ISOChronology.getInstanceUTC ());
+  }
+
+  @Nullable
+  public static DateTime getDateTimeFromXSD (@Nullable final String sValue, @Nonnull final Chronology aChronology)
+  {
+    return PDTFromString.getDateTimeFromString (sValue, _getXSDFormatterDateTime (aChronology));
+  }
+
+  @Nullable
+  public static LocalDateTime getLocalDateTimeFromXSD (@Nullable final String sValue)
+  {
+    // For LocalDateTime always use the default chronology
+    return PDTFromString.getLocalDateTimeFromString (sValue,
+                                                     _getXSDFormatterDateTime (PDTConfig.getDefaultChronology ()));
   }
 
   @Nonnull
   public static String getAsStringXSD (@Nullable final DateTime aDateTime)
   {
-    return _getXSDFormatterDateTime ().print (aDateTime);
+    return getAsStringXSD (ISOChronology.getInstanceUTC (), aDateTime);
+  }
+
+  @Nonnull
+  public static String getAsStringXSD (@Nonnull final Chronology aChronology, @Nullable final DateTime aDateTime)
+  {
+    return _getXSDFormatterDateTime (aChronology).print (aDateTime);
   }
 
   @Nonnull
   public static String getAsStringXSD (@Nullable final LocalDateTime aLocalDateTime)
   {
-    return getAsStringXSD (aLocalDateTime == null ? (DateTime) null
-                                                 : aLocalDateTime.toDateTime (PDTConfig.getDateTimeZoneUTC ()));
+    // For LocalDateTime always use the default chronology
+    return _getXSDFormatterDateTime (PDTConfig.getDefaultChronology ()).print (aLocalDateTime);
   }
 
   @Nonnull

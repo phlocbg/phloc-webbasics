@@ -42,24 +42,13 @@ import com.phloc.commons.stats.StatisticsManager;
 @ThreadSafe
 public class FailedMailQueue
 {
-  private static final class SingletonHolder
-  {
-    static final FailedMailQueue s_aInstance = new FailedMailQueue ();
-  }
-
   private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (FailedMailQueue.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, FailedMailData> m_aMap = new LinkedHashMap <String, FailedMailData> ();
 
-  private FailedMailQueue ()
+  public FailedMailQueue ()
   {}
-
-  @Nonnull
-  public static FailedMailQueue getInstance ()
-  {
-    return SingletonHolder.s_aInstance;
-  }
 
   public void add (@Nonnull final FailedMailData aFailedMailData)
   {
@@ -86,7 +75,7 @@ public class FailedMailQueue
    * @return <code>null</code> if no such data exists
    */
   @Nullable
-  public FailedMailData remove (final String sID)
+  public FailedMailData remove (@Nullable final String sID)
   {
     m_aRWLock.writeLock ().lock ();
     try

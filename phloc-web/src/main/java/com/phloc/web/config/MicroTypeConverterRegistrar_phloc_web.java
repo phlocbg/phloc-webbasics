@@ -29,6 +29,8 @@ import com.phloc.web.smtp.attachment.EmailAttachment;
 import com.phloc.web.smtp.attachment.EmailAttachmentList;
 import com.phloc.web.smtp.attachment.EmailAttachmentListMicroTypeConverter;
 import com.phloc.web.smtp.attachment.EmailAttachmentMicroTypeConverter;
+import com.phloc.web.smtp.failed.FailedMailData;
+import com.phloc.web.smtp.failed.FailedMailDataMicroTypeConverter;
 import com.phloc.web.smtp.settings.SMTPSettings;
 import com.phloc.web.smtp.settings.SMTPSettingsMicroTypeConverter;
 
@@ -47,6 +49,7 @@ public final class MicroTypeConverterRegistrar_phloc_web implements IMicroTypeCo
     aRegistry.registerMicroElementTypeConverter (EmailAttachmentList.class,
                                                  new EmailAttachmentListMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (EmailData.class, new EmailDataMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (FailedMailData.class, new FailedMailDataMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (SMTPSettings.class, new SMTPSettingsMicroTypeConverter ());
   }
 }

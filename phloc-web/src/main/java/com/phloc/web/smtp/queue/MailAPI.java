@@ -41,6 +41,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.web.smtp.settings.ISMTPSettings;
 
 /**
@@ -59,9 +60,51 @@ public final class MailAPI
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final Map <ISMTPSettings, MailQueuePerSMTP> s_aQueueCache = new HashMap <ISMTPSettings, MailQueuePerSMTP> ();
   private static final ExecutorService s_aSenderThreadPool = Executors.newCachedThreadPool ();
+  private static FailedMailQueue s_aFailedMailQueue = new FailedMailQueue ();
 
   private MailAPI ()
   {}
+
+  @Nonnull
+  public static FailedMailQueue getFailedMailQueue ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aFailedMailQueue;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set a new global failed mail queue. Updates all existing queues.
+   * 
+   * @param aFailedMailQueue
+   *        The new failed mail queue to set. May not be <code>null</code>.
+   */
+  @Nonnull
+  public static void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    if (aFailedMailQueue == null)
+      throw new NullPointerException ("FailedMailQueue");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aFailedMailQueue = aFailedMailQueue;
+
+      // Update all existing queues
+      for (final MailQueuePerSMTP aMailQueue : s_aQueueCache.values ())
+        aMailQueue.setFailedMailQueue (aFailedMailQueue);
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
 
   @Nonnull
   private static MailQueuePerSMTP _getOrCreateMailQueuePerSMTP (@Nonnull final ISMTPSettings aSettings)
@@ -76,7 +119,7 @@ public final class MailAPI
     if (aSMTPQueue == null)
     {
       // create a new queue
-      aSMTPQueue = new MailQueuePerSMTP (aSettings);
+      aSMTPQueue = new MailQueuePerSMTP (aSettings, s_aFailedMailQueue);
 
       // put queue in cache
       s_aQueueCache.put (aSettings, aSMTPQueue);

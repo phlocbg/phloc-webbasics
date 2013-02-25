@@ -27,6 +27,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 import com.phloc.commons.email.IEmailAddress;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -230,6 +232,34 @@ public final class FailedMailData implements ITypedObject <String>
   public String getMessageDisplayText ()
   {
     return m_aError.getMessage ();
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof FailedMailData))
+      return false;
+    final FailedMailData rhs = (FailedMailData) o;
+    return m_sID.equals (rhs.m_sID) &&
+           m_aErrorDT.equals (rhs.m_aErrorDT) &&
+           m_aSettings.equals (rhs.m_aSettings) &&
+           EqualsUtils.equals (m_aOriginalSentDateTime, rhs.m_aOriginalSentDateTime) &&
+           EqualsUtils.equals (m_aEmailData, rhs.m_aEmailData) &&
+           EqualsUtils.equals (m_aError.getMessage (), rhs.m_aError.getMessage ());
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_sID)
+                                       .append (m_aErrorDT)
+                                       .append (m_aSettings)
+                                       .append (m_aOriginalSentDateTime)
+                                       .append (m_aEmailData)
+                                       .append (m_aError.getMessage ())
+                                       .getHashCode ();
   }
 
   @Override

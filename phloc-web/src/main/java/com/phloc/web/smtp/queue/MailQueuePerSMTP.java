@@ -38,26 +38,39 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
 
 /**
  * This class collects instances of {@link IEmailData} and tries to transmit
- * them using common SMTP settings.
- *
+ * them using the specified SMTP settings.
+ * 
  * @author philip
  */
-final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> implements
-                                                                             IThrowingRunnableWithParameter <List <IEmailData>>
+final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> implements IThrowingRunnableWithParameter <List <IEmailData>>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailQueuePerSMTP.class);
   private final MailTransport m_aTransport;
+  private FailedMailQueue m_aFailedMailQueue;
 
-  public MailQueuePerSMTP (@Nonnull final ISMTPSettings aSettings)
+  public MailQueuePerSMTP (@Nonnull final ISMTPSettings aSettings, @Nonnull final FailedMailQueue aFailedMailQueue)
   {
-    this (DEFAULT_MAX_QUEUE_SIZE, aSettings);
+    this (DEFAULT_MAX_QUEUE_SIZE, aSettings, aFailedMailQueue);
   }
 
-  public MailQueuePerSMTP (@Nonnegative final int nMaxQueueSize, @Nonnull final ISMTPSettings aSettings)
+  public MailQueuePerSMTP (@Nonnegative final int nMaxQueueSize,
+                           @Nonnull final ISMTPSettings aSettings,
+                           @Nonnull final FailedMailQueue aFailedMailQueue)
   {
     super (nMaxQueueSize, nMaxQueueSize / 2, null);
+    if (aSettings == null)
+      throw new NullPointerException ("settings");
+
     m_aTransport = new MailTransport (aSettings);
+    setFailedMailQueue (aFailedMailQueue);
     setPerformer (this);
+  }
+
+  public void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    if (aFailedMailQueue == null)
+      throw new NullPointerException ("failedMailQueue");
+    m_aFailedMailQueue = aFailedMailQueue;
   }
 
   public void run (@Nullable final List <IEmailData> aMessages)
@@ -67,14 +80,14 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
       final ISMTPSettings aSettings = m_aTransport.getSettings ();
       try
       {
-        s_aLogger.info ("Sending " + aMessages.size () + " messages!");
+        s_aLogger.info ("Sending " + aMessages.size () + " mail messages!");
 
         // send messages
         final Map <IEmailData, MessagingException> aFailedMessages = m_aTransport.send (aMessages);
 
         // handle failed messages
         for (final Map.Entry <IEmailData, MessagingException> aEntry : aFailedMessages.entrySet ())
-          FailedMailQueue.getInstance ().add (new FailedMailData (aSettings, aEntry.getKey (), aEntry.getValue ()));
+          m_aFailedMailQueue.add (new FailedMailData (aSettings, aEntry.getKey (), aEntry.getValue ()));
       }
       catch (final MailSendException ex)
       {
@@ -82,13 +95,13 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
 
         // mark all mails as failed
         for (final IEmailData aMessage : aMessages)
-          FailedMailQueue.getInstance ().add (new FailedMailData (aSettings, aMessage, ex));
+          m_aFailedMailQueue.add (new FailedMailData (aSettings, aMessage, ex));
       }
       catch (final Throwable ex)
       {
         // No message specific error, but a settings specific error
         s_aLogger.error ("Error sending mail: " + ex.getMessage (), ex.getCause ());
-        FailedMailQueue.getInstance ().add (new FailedMailData (aSettings, ex));
+        m_aFailedMailQueue.add (new FailedMailData (aSettings, ex));
       }
     }
   }
