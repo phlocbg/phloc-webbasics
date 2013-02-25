@@ -1,0 +1,70 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.phloc.web.smtp.settings;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.convert.IMicroTypeConverter;
+import com.phloc.commons.microdom.impl.MicroElement;
+import com.phloc.commons.string.StringParser;
+import com.phloc.web.CWeb;
+import com.phloc.web.CWebCharset;
+
+public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
+{
+  private static final String ATTR_HOST = "host";
+  private static final String ATTR_PORT = "port";
+  private static final String ATTR_USER = "user";
+  private static final String ATTR_PASSWORD = "password";
+  private static final String ATTR_CHARSET = "charset";
+  private static final String ATTR_SSLENABLED = "sslenabled";
+
+  @Nonnull
+  public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
+                                              @Nullable final String sNamespaceURI,
+                                              @Nonnull final String sTagName)
+  {
+    final ISMTPSettings aSMTPSettings = (ISMTPSettings) aSource;
+    final IMicroElement eSMTPSettings = new MicroElement (sNamespaceURI, sTagName);
+    eSMTPSettings.setAttribute (ATTR_HOST, aSMTPSettings.getHostName ());
+    eSMTPSettings.setAttribute (ATTR_PORT, Integer.toString (aSMTPSettings.getPort ()));
+    eSMTPSettings.setAttribute (ATTR_USER, aSMTPSettings.getUserName ());
+    eSMTPSettings.setAttribute (ATTR_PASSWORD, aSMTPSettings.getPassword ());
+    eSMTPSettings.setAttribute (ATTR_CHARSET, aSMTPSettings.getCharset ());
+    eSMTPSettings.setAttribute (ATTR_SSLENABLED, Boolean.toString (aSMTPSettings.isSSLEnabled ()));
+    return eSMTPSettings;
+  }
+
+  @Nonnull
+  public SMTPSettings convertToNative (@Nonnull final IMicroElement eSMTPSettings)
+  {
+    final String sHost = eSMTPSettings.getAttribute (ATTR_HOST);
+    final String sPort = eSMTPSettings.getAttribute (ATTR_PORT);
+    final int nPort = StringParser.parseInt (sPort, CWeb.DEFAULT_PORT_SMTP);
+    final String sUser = eSMTPSettings.getAttribute (ATTR_USER);
+    final String sPassword = eSMTPSettings.getAttribute (ATTR_PASSWORD);
+    String sCharset = eSMTPSettings.getAttribute (ATTR_CHARSET);
+    if (sCharset == null)
+      sCharset = CWebCharset.CHARSET_SMTP;
+    final String sSSLEnabled = eSMTPSettings.getAttribute (ATTR_SSLENABLED);
+    final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled);
+    return new SMTPSettings (sHost, nPort, sUser, sPassword, sCharset, bSSLEnabled);
+  }
+}
