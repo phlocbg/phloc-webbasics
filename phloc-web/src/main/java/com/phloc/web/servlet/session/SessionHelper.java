@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.session;
+package com.phloc.web.servlet.session;
 
 import java.util.Enumeration;
 
