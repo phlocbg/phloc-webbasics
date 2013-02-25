@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.commons.equals.EqualsUtils;
-import com.phloc.web.http.AcceptCharsetHandler;
-import com.phloc.web.http.AcceptCharsetList;
 
 public final class AcceptCharsetHandlerTest
 {

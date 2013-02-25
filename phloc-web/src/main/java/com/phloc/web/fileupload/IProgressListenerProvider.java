@@ -15,30 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.useragent.browser;
+package com.phloc.web.fileupload;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import javax.annotation.Nullable;
 
-import java.util.Locale;
+import com.phloc.commons.annotations.IsSPIInterface;
 
-import org.junit.Test;
-
-/**
- * Test class for class {@link EBrowserType}.
- * 
- * @author philip
- */
-public final class EBrowserTypeTest
+@IsSPIInterface
+public interface IProgressListenerProvider
 {
-  @Test
-  public void testAll ()
-  {
-    for (final EBrowserType eBrowserType : EBrowserType.values ())
-    {
-      assertNotNull (eBrowserType.getDisplayText (Locale.GERMAN));
-      assertSame (eBrowserType, EBrowserType.getFromIDOrNull (eBrowserType.getID ()));
-      assertSame (eBrowserType, EBrowserType.valueOf (eBrowserType.name ()));
-    }
-  }
+  /**
+   * @return A progress listener instance for handling file uploads
+   */
+  @Nullable
+  IProgressListener getProgressListener ();
 }

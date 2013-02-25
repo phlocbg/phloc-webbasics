@@ -15,30 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.useragent.browser;
+package com.phloc.web.fileupload;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import javax.annotation.Nonnull;
 
-import java.util.Locale;
-
-import org.junit.Test;
+import com.phloc.commons.annotations.IsSPIInterface;
 
 /**
- * Test class for class {@link EBrowserType}.
+ * SPI for a provider of a custom file item factory that should be used instead
+ * of the default one.
  * 
- * @author philip
+ * @author boris
  */
-public final class EBrowserTypeTest
+@IsSPIInterface
+public interface IFileItemFactoryProviderSPI
 {
-  @Test
-  public void testAll ()
-  {
-    for (final EBrowserType eBrowserType : EBrowserType.values ())
-    {
-      assertNotNull (eBrowserType.getDisplayText (Locale.GERMAN));
-      assertSame (eBrowserType, EBrowserType.getFromIDOrNull (eBrowserType.getID ()));
-      assertSame (eBrowserType, EBrowserType.valueOf (eBrowserType.name ()));
-    }
-  }
+  /**
+   * @return Retrieves the custom factory implementation, may not be
+   *         <code>null</code>
+   */
+  @Nonnull
+  IFileItemFactory getCustomFactory ();
 }

@@ -15,30 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.useragent.browser;
+package com.phloc.web.fileupload.util;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-
-import java.util.Locale;
-
-import org.junit.Test;
+import java.io.IOException;
 
 /**
- * Test class for class {@link EBrowserType}.
- * 
- * @author philip
+ * Interface of an object, which may be closed.
  */
-public final class EBrowserTypeTest
+public interface ICloseable
 {
-  @Test
-  public void testAll ()
-  {
-    for (final EBrowserType eBrowserType : EBrowserType.values ())
-    {
-      assertNotNull (eBrowserType.getDisplayText (Locale.GERMAN));
-      assertSame (eBrowserType, EBrowserType.getFromIDOrNull (eBrowserType.getID ()));
-      assertSame (eBrowserType, EBrowserType.valueOf (eBrowserType.name ()));
-    }
-  }
+  /**
+   * Closes the object.
+   * 
+   * @throws IOException
+   *         An I/O error occurred.
+   */
+  void close () throws IOException;
+
+  /**
+   * Returns, whether the object is already closed.
+   * 
+   * @return True, if the object is closed, otherwise false.
+   * @throws IOException
+   *         An I/O error occurred.
+   */
+  boolean isClosed () throws IOException;
 }

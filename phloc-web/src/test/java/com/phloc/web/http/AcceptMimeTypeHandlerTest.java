@@ -24,8 +24,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.commons.equals.EqualsUtils;
-import com.phloc.web.http.AcceptMimeTypeHandler;
-import com.phloc.web.http.AcceptMimeTypeList;
 
 /**
  * Test class for class {@link AcceptMimeTypeHandler}

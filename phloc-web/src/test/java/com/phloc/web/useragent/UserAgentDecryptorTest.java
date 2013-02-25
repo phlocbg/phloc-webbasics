@@ -27,8 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.version.Version;
-import com.phloc.web.useragent.IUserAgent;
-import com.phloc.web.useragent.UserAgentDecryptor;
 
 public final class UserAgentDecryptorTest
 {

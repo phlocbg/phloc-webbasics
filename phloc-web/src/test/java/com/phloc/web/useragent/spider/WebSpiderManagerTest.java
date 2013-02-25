@@ -24,8 +24,6 @@ import org.junit.Test;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.id.ComparatorHasIDString;
 import com.phloc.commons.mock.AbstractPhlocTestCase;
-import com.phloc.web.useragent.spider.WebSpiderInfo;
-import com.phloc.web.useragent.spider.WebSpiderManager;
 
 /**
  * Test class for class {@link WebSpiderManager}.

@@ -22,8 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.phloc.commons.mock.PhlocAssert;
-import com.phloc.web.http.AcceptEncodingHandler;
-import com.phloc.web.http.AcceptEncodingList;
 
 public final class AcceptEncodingHandlerTest
 {
