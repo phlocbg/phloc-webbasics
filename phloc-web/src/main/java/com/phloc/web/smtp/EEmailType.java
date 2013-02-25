@@ -31,6 +31,11 @@ public enum EEmailType implements IHasID <String>
     return m_sID;
   }
 
+  public boolean isText ()
+  {
+    return this == TEXT;
+  }
+
   public boolean isHTML ()
   {
     return this == HTML;

@@ -26,19 +26,21 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.url.EURLProtocol;
 import com.phloc.commons.url.IURLProtocol;
-import com.phloc.web.port.DefaultNetworkPorts;
+import com.phloc.web.CWeb;
 
 /**
  * Proxy type determination.<br>
- * Source: http://java.sun.com/javase/6/docs/technotes/guides/net/proxies.html
+ * Source:
+ * http://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
  * 
  * @author philip
  */
 public enum EHttpProxyType implements IHasID <String>
 {
-  HTTP ("http", EURLProtocol.HTTP, DefaultNetworkPorts.TCP_80_www_http.getPort ()),
-  HTTPS ("https", EURLProtocol.HTTPS, DefaultNetworkPorts.TCP_443_https.getPort ()),
-  FTP ("ftp", EURLProtocol.FTP, DefaultNetworkPorts.TCP_80_www_http.getPort ());
+  HTTP ("http", EURLProtocol.HTTP, CWeb.DEFAULT_PORT_HTTP),
+  HTTPS ("https", EURLProtocol.HTTPS, CWeb.DEFAULT_PORT_HTTPS),
+  // Default proxy port for FTP is also 80! This is not a copy/paste error!
+  FTP ("ftp", EURLProtocol.FTP, CWeb.DEFAULT_PORT_HTTP);
 
   private final String m_sID;
   private final IURLProtocol m_aURLProtocol;
