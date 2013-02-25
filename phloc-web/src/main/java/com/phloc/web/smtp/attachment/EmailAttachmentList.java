@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
@@ -122,6 +123,23 @@ public class EmailAttachmentList implements IEmailAttachmentList
     for (final IEmailAttachment aAttachment : m_aMap.values ())
       ret.add (aAttachment.getAsDataSource ());
     return ret;
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final EmailAttachmentList rhs = (EmailAttachmentList) o;
+    return m_aMap.equals (rhs.m_aMap);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aMap).getHashCode ();
   }
 
   @Override
