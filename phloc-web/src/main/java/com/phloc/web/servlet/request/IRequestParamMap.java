@@ -83,28 +83,12 @@ public interface IRequestParamMap extends IHasSize
   Collection <Object> values ();
 
   /**
-   * @deprecated Use {@link #getAsObjectMap()} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  Map <String, Object> asObjectMap ();
-
-  /**
    * @return A copy of the contained map. For the value types see
    *         {@link #values()}
    */
   @Nonnull
   @ReturnsMutableCopy
   Map <String, Object> getAsObjectMap ();
-
-  /**
-   * @deprecated Use {@link #getAsValueMap()} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  Map <String, String> asValueMap ();
 
   /**
    * @return A key/value map, with enforced values. If this map contains a

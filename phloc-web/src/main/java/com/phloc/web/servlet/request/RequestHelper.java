@@ -372,7 +372,7 @@ public final class RequestHelper
     IRequestParamMap aValue = (IRequestParamMap) aHttpRequest.getAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);
     if (aValue == null)
     {
-      aValue = new RequestParamMap (getParameterMap (aHttpRequest));
+      aValue = RequestParamMap.create (getParameterMap (aHttpRequest));
       aHttpRequest.setAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP, aValue);
     }
     return aValue;

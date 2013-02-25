@@ -109,6 +109,14 @@ public final class CookieHelper
                          bExpireWhenBrowserIsClosed);
   }
 
+  /**
+   * Remove a cookie by setting the max age to 0.
+   * 
+   * @param aHttpResponse
+   *        The HTTP response. May not be <code>null</code>.
+   * @param aCookie
+   *        The cookie to be removed. May not be <code>null</code>.
+   */
   public static void removeCookie (@Nonnull final HttpServletResponse aHttpResponse, @Nonnull final Cookie aCookie)
   {
     if (aHttpResponse == null)

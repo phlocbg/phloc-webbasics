@@ -66,7 +66,14 @@ public final class RequestParamMap implements IRequestParamMap
     m_aMap = new HashMap <String, Object> ();
   }
 
-  public RequestParamMap (@Nonnull final Map <String, Object> aMap)
+  /**
+   * This constructor is private, because it does not call the
+   * {@link #put(String, Object)} method which does the main string parsing!
+   * 
+   * @param aMap
+   *        The map to use. May not be <code>null</code>.
+   */
+  private RequestParamMap (@Nonnull final Map <String, Object> aMap)
   {
     if (aMap == null)
       throw new NullPointerException ("map");
@@ -212,33 +219,11 @@ public final class RequestParamMap implements IRequestParamMap
     return ContainerHelper.newList (m_aMap.values ());
   }
 
-  /**
-   * @deprecated Use {@link #getAsObjectMap()} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  public Map <String, Object> asObjectMap ()
-  {
-    return getAsObjectMap ();
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, Object> getAsObjectMap ()
   {
     return ContainerHelper.newMap (m_aMap);
-  }
-
-  /**
-   * @deprecated Use {@link #getAsValueMap()} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  public Map <String, String> asValueMap ()
-  {
-    return getAsValueMap ();
   }
 
   @Nonnull
@@ -275,9 +260,21 @@ public final class RequestParamMap implements IRequestParamMap
   }
 
   @Nonnull
+  public static IRequestParamMap create (@Nonnull final Map <String, Object> aAttrCont)
+  {
+    final RequestParamMap ret = new RequestParamMap ();
+    for (final Map.Entry <String, Object> aEntry : aAttrCont.entrySet ())
+      ret.put (aEntry.getKey (), aEntry.getValue ());
+    return ret;
+  }
+
+  @Nonnull
   public static IRequestParamMap create (@Nonnull final IReadonlyAttributeContainer aAttrCont)
   {
-    return new RequestParamMap (aAttrCont.getAllAttributes ());
+    final RequestParamMap ret = new RequestParamMap ();
+    for (final String sName : aAttrCont.getAllAttributeNames ())
+      ret.put (sName, aAttrCont.getAttributeObject (sName));
+    return ret;
   }
 
   @Nonnull

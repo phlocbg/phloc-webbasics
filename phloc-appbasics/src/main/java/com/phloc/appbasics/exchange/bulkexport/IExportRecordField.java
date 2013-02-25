@@ -20,7 +20,7 @@ package com.phloc.appbasics.exchange.bulkexport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.types.EBaseType;
+import com.phloc.commons.type.EBaseType;
 
 /**
  * Represents a single field of an {@link IExportRecord} to be exported.

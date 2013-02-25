@@ -41,11 +41,11 @@ import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.page.AbstractWebPageForm;
 

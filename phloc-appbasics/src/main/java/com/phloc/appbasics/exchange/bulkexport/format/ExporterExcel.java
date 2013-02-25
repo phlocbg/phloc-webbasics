@@ -40,11 +40,11 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.iterate.IterableIterator;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.type.EBaseType;
 import com.phloc.datetime.CPDT;
 import com.phloc.poi.excel.EExcelVersion;
 import com.phloc.poi.excel.WorkbookCreationHelper;
 import com.phloc.poi.excel.style.ExcelStyle;
-import com.phloc.types.EBaseType;
 
 /**
  * Export records to Excel workbook.

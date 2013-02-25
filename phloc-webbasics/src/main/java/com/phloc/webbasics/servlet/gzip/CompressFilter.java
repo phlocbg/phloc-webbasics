@@ -22,6 +22,8 @@ import javax.servlet.FilterConfig;
 
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This is a generic filter that first tries to find whether "GZip" is
  * supported, and if this fails, whether "Deflate" is supported. If none is
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author philip
  */
 @Deprecated
+@SuppressFBWarnings ("NM_SAME_SIMPLE_NAME_AS_SUPERCLASS")
 public final class CompressFilter extends com.phloc.web.servlets.filter.CompressFilter
 {
   @Override

@@ -32,7 +32,7 @@ import org.joda.time.LocalTime;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.types.EBaseType;
+import com.phloc.commons.type.EBaseType;
 
 /**
  * A single field for exporting.
