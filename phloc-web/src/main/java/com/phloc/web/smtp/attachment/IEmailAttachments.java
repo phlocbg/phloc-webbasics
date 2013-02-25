@@ -1,4 +1,4 @@
-package com.phloc.web.smtp;
+package com.phloc.web.smtp.attachment;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

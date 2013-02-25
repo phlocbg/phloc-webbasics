@@ -1,4 +1,4 @@
-package com.phloc.web.smtp;
+package com.phloc.web.smtp.attachment;
 
 import java.io.InputStream;
 import java.io.OutputStream;

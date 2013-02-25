@@ -19,6 +19,7 @@ import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.web.smtp.attachment.IEmailAttachments;
 
 /**
  * Default implementation of the {@link IEmailData} interface.

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.email.IEmailAddress;
+import com.phloc.web.smtp.attachment.IEmailAttachments;
 
 /**
  * Contains all possible fields for mail sending
