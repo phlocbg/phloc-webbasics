@@ -32,9 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.webbasics.http.AcceptEncodingHandler;
-import com.phloc.webbasics.http.AcceptEncodingList;
-import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.web.http.AcceptEncodingHandler;
+import com.phloc.web.http.AcceptEncodingList;
+import com.phloc.web.http.CHTTPHeader;
 
 /**
  * Misc. helper methods on {@link HttpServletResponse} objects.<br>

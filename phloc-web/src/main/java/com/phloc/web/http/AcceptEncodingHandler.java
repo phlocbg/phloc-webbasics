@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Handler for the request HTTP header field "Accept-Encoding"
@@ -107,11 +106,5 @@ public final class AcceptEncodingHandler
       aHttpRequest.setAttribute (AcceptEncodingList.class.getName (), aValue);
     }
     return aValue;
-  }
-
-  @Nonnull
-  public static AcceptEncodingList getAcceptEncodings (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getAcceptEncodings (aRequestScope.getRequest ());
   }
 }

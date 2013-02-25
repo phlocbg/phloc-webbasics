@@ -31,9 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
-import com.phloc.webbasics.http.AcceptEncodingHandler;
-import com.phloc.webbasics.http.AcceptEncodingList;
-import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.web.http.AcceptEncodingHandler;
+import com.phloc.web.http.AcceptEncodingList;
+import com.phloc.web.http.CHTTPHeader;
 import com.phloc.webbasics.web.ResponseHelperSettings;
 
 /**

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

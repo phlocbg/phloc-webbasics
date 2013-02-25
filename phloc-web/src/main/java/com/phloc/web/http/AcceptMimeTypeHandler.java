@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,7 +30,6 @@ import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Handler for the request HTTP header field "Accept"
@@ -99,11 +98,5 @@ public final class AcceptMimeTypeHandler
       aHttpRequest.setAttribute (AcceptMimeTypeList.class.getName (), aValue);
     }
     return aValue;
-  }
-
-  @Nonnull
-  public static AcceptMimeTypeList getAcceptMimeTypes (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getAcceptMimeTypes (aRequestScope.getRequest ());
   }
 }

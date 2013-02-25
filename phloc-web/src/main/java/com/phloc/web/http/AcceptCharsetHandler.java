@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Handler for the request HTTP header field "Accept-Charset"
@@ -81,11 +80,5 @@ public final class AcceptCharsetHandler
       aHttpRequest.setAttribute (AcceptCharsetList.class.getName (), aValue);
     }
     return aValue;
-  }
-
-  @Nonnull
-  public static AcceptCharsetList getAcceptCharsets (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {
-    return getAcceptCharsets (aRequestScope.getRequest ());
   }
 }

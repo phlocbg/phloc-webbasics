@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,25 +25,18 @@ import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 
 /**
- * HTTP 1.1 methods.<br>
- * http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
+ * HTTP versions
  * 
  * @author philip
  */
-public enum EHTTPMethod implements IHasName
+public enum EHTTPVersion implements IHasName
 {
-  OPTIONS ("OPTIONS"),
-  GET ("GET"),
-  HEAD ("HEAD"),
-  POST ("POST"),
-  PUT ("PUT"),
-  DELETE ("DELETE"),
-  TRACE ("TRACE"),
-  CONNECT ("CONNECT");
+  HTTP_10 ("HTTP/1.0"),
+  HTTP_11 ("HTTP/1.1");
 
   private final String m_sName;
 
-  private EHTTPMethod (@Nonnull @Nonempty final String sName)
+  private EHTTPVersion (@Nonnull @Nonempty final String sName)
   {
     m_sName = sName;
   }
@@ -55,19 +48,9 @@ public enum EHTTPMethod implements IHasName
     return m_sName;
   }
 
-  public boolean isIdempodent ()
-  {
-    return this != POST && this != CONNECT;
-  }
-
-  public boolean isContentAllowed ()
-  {
-    return this != HEAD;
-  }
-
   @Nullable
-  public static EHTTPMethod getFromNameOrNull (@Nullable final String sName)
+  public static EHTTPVersion getFromNameOrNull (@Nullable final String sName)
   {
-    return EnumHelper.getFromNameOrNull (EHTTPMethod.class, sName);
+    return EnumHelper.getFromNameOrNull (EHTTPVersion.class, sName);
   }
 }

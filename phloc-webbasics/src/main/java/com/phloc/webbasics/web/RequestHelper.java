@@ -37,10 +37,10 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.EHTTPVersion;
+import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.webbasics.CWeb;
-import com.phloc.webbasics.http.CHTTPHeader;
-import com.phloc.webbasics.http.EHTTPVersion;
-import com.phloc.webbasics.http.HTTPHeaderMap;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.

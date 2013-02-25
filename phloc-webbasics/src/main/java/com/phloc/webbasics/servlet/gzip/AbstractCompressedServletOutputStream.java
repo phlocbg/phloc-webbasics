@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.web.http.CHTTPHeader;
 import com.phloc.webbasics.web.ResponseHelper;
 
 /**

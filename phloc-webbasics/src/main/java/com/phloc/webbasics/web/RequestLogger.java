@@ -37,7 +37,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mock.OfflineHttpServletRequest;
-import com.phloc.webbasics.http.HTTPHeaderMap;
+import com.phloc.web.http.HTTPHeaderMap;
 
 /**
  * Helper class to debug information passed to a JSP page or a servlet.

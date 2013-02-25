@@ -15,42 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.lang.EnumHelper;
-import com.phloc.commons.name.IHasName;
+import com.phloc.commons.base64.Base64Helper;
+import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.string.StringHelper;
 
-/**
- * HTTP versions
- * 
- * @author philip
- */
-public enum EHTTPVersion implements IHasName
+@Immutable
+public final class BasicAuth
 {
-  HTTP_10 ("HTTP/1.0"),
-  HTTP_11 ("HTTP/1.1");
+  private static final String HEADER_VALUE_PREFIX_BASIC = "Basic ";
 
-  private final String m_sName;
-
-  private EHTTPVersion (@Nonnull @Nonempty final String sName)
-  {
-    m_sName = sName;
-  }
+  private BasicAuth ()
+  {}
 
   @Nonnull
   @Nonempty
-  public String getName ()
+  public static String getRequestHeaderValue (@Nonnull final String sUsername, @Nullable final String sPassword)
   {
-    return m_sName;
-  }
+    if (StringHelper.hasNoText (sUsername))
+      throw new IllegalArgumentException ("username is missing");
 
-  @Nullable
-  public static EHTTPVersion getFromNameOrNull (@Nullable final String sName)
-  {
-    return EnumHelper.getFromNameOrNull (EHTTPVersion.class, sName);
+    final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ":", sPassword);
+    return HEADER_VALUE_PREFIX_BASIC + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1_OBJ);
   }
 }

@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import com.phloc.commons.url.SMap;
 import com.phloc.scopes.web.mock.MockHttpServletRequest;
-import com.phloc.webbasics.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPMethod;
 
 /**
  * Test class for class {@link RequestHelper}.

@@ -55,16 +55,16 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.http.AcceptCharsetHandler;
-import com.phloc.webbasics.http.AcceptCharsetList;
-import com.phloc.webbasics.http.AcceptMimeTypeHandler;
-import com.phloc.webbasics.http.AcceptMimeTypeList;
-import com.phloc.webbasics.http.CHTTPHeader;
-import com.phloc.webbasics.http.CacheControlBuilder;
-import com.phloc.webbasics.http.EHTTPMethod;
-import com.phloc.webbasics.http.EHTTPVersion;
-import com.phloc.webbasics.http.HTTPHeaderMap;
-import com.phloc.webbasics.http.QValue;
+import com.phloc.web.http.AcceptCharsetHandler;
+import com.phloc.web.http.AcceptCharsetList;
+import com.phloc.web.http.AcceptMimeTypeHandler;
+import com.phloc.web.http.AcceptMimeTypeList;
+import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.CacheControlBuilder;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPVersion;
+import com.phloc.web.http.HTTPHeaderMap;
+import com.phloc.web.http.QValue;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -160,8 +160,8 @@ public class UnifiedResponse
     m_eHTTPVersion = eHTTPVersion;
     m_eHTTPMethod = eHTTPMethod;
     m_aRequestScope = aRequestScope;
-    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope);
-    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequestScope);
+    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope.getRequest ());
+    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequestScope.getRequest ());
     m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aRequestScope);
   }
 

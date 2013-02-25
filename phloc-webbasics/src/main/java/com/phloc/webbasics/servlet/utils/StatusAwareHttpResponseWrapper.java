@@ -25,7 +25,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import com.phloc.webbasics.http.HTTPHeaderMap;
+import com.phloc.web.http.HTTPHeaderMap;
 
 /**
  * A special {@link HttpServletResponseWrapper} that tracks the used status

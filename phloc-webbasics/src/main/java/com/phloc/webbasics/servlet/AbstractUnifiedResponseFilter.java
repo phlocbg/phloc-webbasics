@@ -28,8 +28,8 @@ import com.phloc.commons.state.EContinue;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareFilter;
-import com.phloc.webbasics.http.EHTTPMethod;
-import com.phloc.webbasics.http.EHTTPVersion;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPVersion;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
 

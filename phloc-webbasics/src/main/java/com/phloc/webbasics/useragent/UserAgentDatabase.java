@@ -36,7 +36,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.webbasics.http.CHTTPHeader;
+import com.phloc.web.http.CHTTPHeader;
 
 /**
  * Central cache for known user agents (see HTTP header field

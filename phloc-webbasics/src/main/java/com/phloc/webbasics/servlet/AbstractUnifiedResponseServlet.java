@@ -50,10 +50,10 @@ import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
 import com.phloc.scopes.web.servlet.RequestScopeInitializer;
+import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPVersion;
 import com.phloc.webbasics.StaticServerInfo;
-import com.phloc.webbasics.http.CHTTPHeader;
-import com.phloc.webbasics.http.EHTTPMethod;
-import com.phloc.webbasics.http.EHTTPVersion;
 import com.phloc.webbasics.web.RequestHelper;
 import com.phloc.webbasics.web.UnifiedResponse;
 

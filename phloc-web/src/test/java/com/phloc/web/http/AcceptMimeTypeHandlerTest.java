@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.http;
+package com.phloc.web.http;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -24,6 +24,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.web.http.AcceptMimeTypeHandler;
+import com.phloc.web.http.AcceptMimeTypeList;
 
 /**
  * Test class for class {@link AcceptMimeTypeHandler}
