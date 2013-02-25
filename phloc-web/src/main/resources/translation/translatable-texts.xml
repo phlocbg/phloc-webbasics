@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translationitems count="13">
+  <item id="com.phloc.web.useragent.browser.EBrowserText.APPLICATION">
+    <de>Anwendung oder API</de>
+    <en>Application or API</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.CHROME">
+    <de>Google Chrome</de>
+    <en>Google Chrome</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.FIREFOX">
+    <de>Mozilla Firefox</de>
+    <en>Mozilla Firefox</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.GECKO">
+    <de>Gecko basierend</de>
+    <en>Gecko based</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.IE">
+    <de>Microsoft Internet Explorer</de>
+    <en>Microsoft Internet Explorer</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.IE_COMPATIBILITY_MODE">
+    <de> (Kompatibilitätsmodus)</de>
+    <en> (compatibility mode)</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.KONQUEROR">
+    <de>Konqueror</de>
+    <en>Konqueror</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.LYNX">
+    <de>Lynx</de>
+    <en>Lynx</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.MOBILE">
+    <de>Mobiler Browser</de>
+    <en>Mobile browser</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.OPERA">
+    <de>Opera</de>
+    <en>Opera</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.SAFARI">
+    <de>Apple Safari</de>
+    <en>Apple Safari</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.SPIDER">
+    <de>Web Spieder</de>
+    <en>Web Spider</en>
+  </item>
+  <item id="com.phloc.web.useragent.browser.EBrowserText.WEBKIT">
+    <de>WebKit basierend</de>
+    <en>WebKit based</en>
+  </item>
+</translationitems>

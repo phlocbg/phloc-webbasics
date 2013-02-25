@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="70">
+<translationitems count="57">
   <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
     <de>Download</de>
     <en>Download</en>
@@ -246,57 +246,5 @@
   <item id="com.phloc.webbasics.app.page.system.SystemPageNotFound$ETextBase.TITLE">
     <de>Seite nicht gefunden</de>
     <en>Page not found</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.APPLICATION">
-    <de>Anwendung oder API</de>
-    <en>Application or API</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.CHROME">
-    <de>Google Chrome</de>
-    <en>Google Chrome</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.FIREFOX">
-    <de>Mozilla Firefox</de>
-    <en>Mozilla Firefox</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.GECKO">
-    <de>Gecko basierend</de>
-    <en>Gecko based</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.IE">
-    <de>Microsoft Internet Explorer</de>
-    <en>Microsoft Internet Explorer</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.IE_COMPATIBILITY_MODE">
-    <de> (Kompatibilitätsmodus)</de>
-    <en> (compatibility mode)</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.KONQUEROR">
-    <de>Konqueror</de>
-    <en>Konqueror</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.LYNX">
-    <de>Lynx</de>
-    <en>Lynx</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.MOBILE">
-    <de>Mobiler Browser</de>
-    <en>Mobile browser</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.OPERA">
-    <de>Opera</de>
-    <en>Opera</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.SAFARI">
-    <de>Apple Safari</de>
-    <en>Apple Safari</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.SPIDER">
-    <de>Web Spieder</de>
-    <en>Web Spider</en>
-  </item>
-  <item id="com.phloc.webbasics.browser.EBrowserText.WEBKIT">
-    <de>WebKit basierend</de>
-    <en>WebKit based</en>
   </item>
 </translationitems>
