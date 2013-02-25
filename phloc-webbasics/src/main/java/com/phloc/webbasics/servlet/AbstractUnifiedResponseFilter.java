@@ -31,7 +31,7 @@ import com.phloc.scopes.web.servlet.AbstractScopeAwareFilter;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.servlet.request.RequestHelper;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 /**
  * Abstract base class for a filter performing actions via
@@ -89,7 +89,7 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
       return EContinue.BREAK;
     }
 
-    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aRequestScope);
+    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aHttpRequest);
     if (handleRequest (aRequestScope, aUnifiedResponse).isContinue ())
     {
       // Filter passed, without any output -> continue

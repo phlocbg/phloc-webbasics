@@ -41,7 +41,7 @@ import com.phloc.datetime.PDTFactory;
 import com.phloc.html.CHTMLCharset;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.response.ResponseHelperSettings;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 /**
  * Simple servlet to forward requests to pages normally not visible to the

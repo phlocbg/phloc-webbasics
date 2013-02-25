@@ -25,7 +25,7 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 /**
  * A simple availability-check servlet that responds with a "pong" text message.

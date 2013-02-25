@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 public interface IActionInvoker
 {

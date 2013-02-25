@@ -29,7 +29,7 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.nonweb.singleton.ApplicationSingleton;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 /**
  * This class represents a per-application singleton {@link ActionInvoker}.

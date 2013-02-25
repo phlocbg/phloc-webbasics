@@ -42,11 +42,11 @@ import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
+import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.ajax.IAjaxExceptionHandler;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
-import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Abstract implementation of a servlet that invokes AJAX functions.

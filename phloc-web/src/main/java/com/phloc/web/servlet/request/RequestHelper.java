@@ -35,6 +35,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
+import com.phloc.commons.url.URLUtils;
 import com.phloc.web.CWeb;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPVersion;
@@ -207,7 +208,7 @@ public final class RequestHelper
     final StringBuffer aReqUrl = aHttpRequest.getRequestURL ();
     final String sQueryString = aHttpRequest.getQueryString (); // d=789
     if (sQueryString != null)
-      aReqUrl.append ('?').append (sQueryString);
+      aReqUrl.append (URLUtils.QUESTIONMARK).append (sQueryString);
     return aReqUrl.toString ();
   }
 
@@ -233,7 +234,7 @@ public final class RequestHelper
     final String sReqUrl = getRequestURI (aHttpRequest);
     final String sQueryString = aHttpRequest.getQueryString (); // d=789&x=y
     if (sQueryString != null)
-      return sReqUrl + '?' + sQueryString;
+      return sReqUrl + URLUtils.QUESTIONMARK + sQueryString;
     return sReqUrl;
   }
 
@@ -261,7 +262,7 @@ public final class RequestHelper
       aURL.append (sPath);
     }
     if (sQueryString != null)
-      aURL.append ('?').append (sQueryString);
+      aURL.append (URLUtils.QUESTIONMARK).append (sQueryString);
     return aURL.toString ();
   }
 

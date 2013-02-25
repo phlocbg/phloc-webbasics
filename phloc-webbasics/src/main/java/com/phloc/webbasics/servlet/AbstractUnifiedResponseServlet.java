@@ -55,8 +55,8 @@ import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.servlet.request.RequestHelper;
+import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.web.servlet.server.StaticServerInfo;
-import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Abstract base class for a servlet performing actions via
@@ -337,7 +337,7 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     // modification issues, for performance reasons. If all optimizations fail,
     // perform the regular request.
 
-    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aRequestScope);
+    final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aHttpRequest);
     if (initRequestState (aRequestScope, aUnifiedResponse).isBreak ())
     {
       // May e.g. be an 404 error for some not-found resource

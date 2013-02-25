@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.web;
+package com.phloc.web.servlet.response;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +31,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
@@ -54,7 +55,6 @@ import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.PDTFactory;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.http.AcceptCharsetHandler;
 import com.phloc.web.http.AcceptCharsetList;
 import com.phloc.web.http.AcceptMimeTypeHandler;
@@ -67,10 +67,6 @@ import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
-import com.phloc.web.servlet.response.EContentDispositionType;
-import com.phloc.web.servlet.response.EResponseStreamType;
-import com.phloc.web.servlet.response.ResponseHelper;
-import com.phloc.web.servlet.response.ResponseHelperSettings;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -96,7 +92,7 @@ public class UnifiedResponse
   // Input fields
   private final EHTTPVersion m_eHTTPVersion;
   private final EHTTPMethod m_eHTTPMethod;
-  private final IRequestWebScopeWithoutResponse m_aRequestScope;
+  private final HttpServletRequest m_aHttpRequest;
   private final AcceptCharsetList m_aAcceptCharsetList;
   private final AcceptMimeTypeList m_aAcceptMimeTypeList;
 
@@ -155,20 +151,20 @@ public class UnifiedResponse
 
   public UnifiedResponse (@Nonnull final EHTTPVersion eHTTPVersion,
                           @Nonnull final EHTTPMethod eHTTPMethod,
-                          @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+                          @Nonnull final HttpServletRequest aHttpRequest)
   {
     if (eHTTPVersion == null)
       throw new NullPointerException ("httpVersion");
     if (eHTTPMethod == null)
       throw new NullPointerException ("httpMethod");
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
     m_eHTTPVersion = eHTTPVersion;
     m_eHTTPMethod = eHTTPMethod;
-    m_aRequestScope = aRequestScope;
-    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aRequestScope.getRequest ());
-    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aRequestScope.getRequest ());
-    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aRequestScope.getRequest ());
+    m_aHttpRequest = aHttpRequest;
+    m_aAcceptCharsetList = AcceptCharsetHandler.getAcceptCharsets (aHttpRequest);
+    m_aAcceptMimeTypeList = AcceptMimeTypeHandler.getAcceptMimeTypes (aHttpRequest);
+    m_aRequestHeaderMap = RequestHelper.getRequestHeaderMap (aHttpRequest);
   }
 
   @Nonnull
@@ -176,7 +172,7 @@ public class UnifiedResponse
   private String _getPrefix ()
   {
     if (m_sRequestURL == null)
-      m_sRequestURL = m_aRequestScope.getURL ();
+      m_sRequestURL = RequestHelper.getURL (m_aHttpRequest);
     return "UnifiedResponse[" + m_nID + "] to [" + m_sRequestURL + "]: ";
   }
 
@@ -1030,7 +1026,7 @@ public class UnifiedResponse
       final int nContentLength = m_aContent.length;
 
       // Determine the response stream type to use
-      final EResponseStreamType eResponseStreamType = ResponseHelper.getBestSuitableOutputStreamType (m_aRequestScope.getRequest ());
+      final EResponseStreamType eResponseStreamType = ResponseHelper.getBestSuitableOutputStreamType (m_aHttpRequest);
       if (eResponseStreamType.isUncompressed ())
       {
         // Must be set before the content itself arrives
@@ -1044,8 +1040,7 @@ public class UnifiedResponse
       if (nContentLength > 0 && m_eHTTPMethod.isContentAllowed ())
       {
         // Create the correct stream
-        final OutputStream aOS = ResponseHelper.getBestSuitableOutputStream (m_aRequestScope.getRequest (),
-                                                                             aHttpResponse);
+        final OutputStream aOS = ResponseHelper.getBestSuitableOutputStream (m_aHttpRequest, aHttpResponse);
 
         // Emit main content to stream
         aOS.write (m_aContent, 0, nContentLength);

@@ -41,8 +41,6 @@ import com.phloc.web.http.CHTTPHeader;
  * and the respective servlet and filter.
  * 
  * @author philip
- * @see com.phloc.webbasics.servlet.AbstractUnifiedResponseFilter
- * @see com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet
  */
 @Immutable
 public final class ResponseHelper

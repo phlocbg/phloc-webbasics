@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 /**
  * Base web action executor interface.

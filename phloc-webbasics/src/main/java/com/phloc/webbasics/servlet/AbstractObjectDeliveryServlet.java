@@ -39,7 +39,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.request.RequestHelper;
-import com.phloc.webbasics.web.UnifiedResponse;
+import com.phloc.web.servlet.response.UnifiedResponse;
 
 /**
  * Base class for stream and download servlet.

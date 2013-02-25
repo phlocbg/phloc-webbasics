@@ -37,9 +37,9 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.scopes.web.domain.ISessionWebScope;
 import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
-import com.phloc.webbasics.web.UnifiedResponse;
 
 /**
  * Handle the application login process.
