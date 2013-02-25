@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.email.IEmailAddress;
-import com.phloc.web.smtp.attachment.IEmailAttachments;
+import com.phloc.web.smtp.attachment.IEmailAttachmentList;
 
 /**
  * Contains all possible fields for mail sending
@@ -61,7 +61,7 @@ public interface IEmailData extends IReadonlyEmailData
   void setBody (@Nullable String sBody);
 
   @Nullable
-  IEmailAttachments getAttachments ();
+  IEmailAttachmentList getAttachments ();
 
   /**
    * Specify a set of attachments to be send together with the mail. Pass
@@ -71,5 +71,5 @@ public interface IEmailData extends IReadonlyEmailData
    * @param aAttachments
    *        The attachments to be used. May be <code>null</code> or empty.
    */
-  void setAttachments (@Nullable IEmailAttachments aAttachments);
+  void setAttachments (@Nullable IEmailAttachmentList aAttachments);
 }

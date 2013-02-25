@@ -23,10 +23,12 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistrarSPI;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistry;
+import com.phloc.web.smtp.EmailData;
+import com.phloc.web.smtp.EmailDataMicroTypeConverter;
 import com.phloc.web.smtp.attachment.EmailAttachment;
-import com.phloc.web.smtp.attachment.EmailAttachmentMicroTypeConverter;
 import com.phloc.web.smtp.attachment.EmailAttachmentList;
 import com.phloc.web.smtp.attachment.EmailAttachmentListMicroTypeConverter;
+import com.phloc.web.smtp.attachment.EmailAttachmentMicroTypeConverter;
 import com.phloc.web.smtp.settings.SMTPSettings;
 import com.phloc.web.smtp.settings.SMTPSettingsMicroTypeConverter;
 
@@ -42,7 +44,9 @@ public final class MicroTypeConverterRegistrar_phloc_web implements IMicroTypeCo
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {
     aRegistry.registerMicroElementTypeConverter (EmailAttachment.class, new EmailAttachmentMicroTypeConverter ());
-    aRegistry.registerMicroElementTypeConverter (EmailAttachmentList.class, new EmailAttachmentListMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (EmailAttachmentList.class,
+                                                 new EmailAttachmentListMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (EmailData.class, new EmailDataMicroTypeConverter ());
     aRegistry.registerMicroElementTypeConverter (SMTPSettings.class, new SMTPSettingsMicroTypeConverter ());
   }
 }

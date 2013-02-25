@@ -40,13 +40,13 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This is the default implementation of the {@link IEmailAttachments}
+ * This is the default implementation of the {@link IEmailAttachmentList}
  * interface.
  * 
  * @author philip
  */
 @NotThreadSafe
-public class EmailAttachmentList implements IEmailAttachments
+public class EmailAttachmentList implements IEmailAttachmentList
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (EmailAttachmentList.class);
 

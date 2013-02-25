@@ -15,31 +15,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.smtp.attachment;
+package com.phloc.web.smtp;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.phloc.commons.email.EmailAddress;
 import com.phloc.commons.mock.PhlocTestUtils;
 
-/**
- * Test class for class {@link EmailAttachment}.
- * 
- * @author philip
- */
-public final class EmailAttachmentTest
+public final class EmailDataTest
 {
   @Test
   public void testBasic ()
   {
-    final EmailAttachment a = new EmailAttachment ("test.txt", "Inhalt".getBytes ());
-    assertEquals ("test.txt", a.getFilename ());
-    assertEquals ("text/plain", a.getContentType ());
-    assertNotNull (a.getInputStreamProvider ());
-    assertNotNull (a.getAsDataSource ());
+    final EmailData aEmailData = new EmailData (EEmailType.TEXT);
+    final EmailAddress aMA = new EmailAddress ("ph@phloc.com", "Philip");
 
-    PhlocTestUtils.testMicroTypeConversion (a);
+    aEmailData.setFrom (aMA);
+    assertEquals (aMA, aEmailData.getFrom ());
+
+    aEmailData.setReplyTo (aMA);
+    assertEquals (aMA, aEmailData.getReplyTo ().get (0));
+
+    aEmailData.setTo (aMA);
+    assertEquals (aMA, aEmailData.getTo ().get (0));
+
+    aEmailData.setCc (aMA);
+    assertEquals (aMA, aEmailData.getCc ().get (0));
+
+    aEmailData.setBcc (aMA);
+    assertEquals (aMA, aEmailData.getBcc ().get (0));
+
+    PhlocTestUtils.testMicroTypeConversion (aEmailData);
   }
 }

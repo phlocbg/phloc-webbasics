@@ -35,7 +35,7 @@ import com.phloc.commons.exceptions.LoggedRuntimeException;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.InternetAddressUtils;
-import com.phloc.web.smtp.attachment.IEmailAttachments;
+import com.phloc.web.smtp.attachment.IEmailAttachmentList;
 
 /**
  * Fill a {@link MimeMessage} object with the data of an {@link IEmailData}
@@ -92,7 +92,7 @@ public final class MailConverter
     }
 
     // Does the mail data contain attachments?
-    final IEmailAttachments aAttachments = aMailData.getAttachments ();
+    final IEmailAttachmentList aAttachments = aMailData.getAttachments ();
     if (aAttachments != null)
       for (final DataSource aDS : aAttachments.getAsDataSourceList ())
       {

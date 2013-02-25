@@ -20,7 +20,6 @@ package com.phloc.web.smtp.attachment;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.ContainsSoftMigration;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
@@ -45,7 +44,6 @@ public final class EmailAttachmentListMicroTypeConverter implements IMicroTypeCo
   }
 
   @Nonnull
-  @ContainsSoftMigration
   public EmailAttachmentList convertToNative (@Nonnull final IMicroElement eAttachmentList)
   {
     final EmailAttachmentList ret = new EmailAttachmentList ();

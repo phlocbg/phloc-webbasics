@@ -29,7 +29,7 @@ import com.phloc.commons.state.EChange;
  * 
  * @author philip
  */
-public interface IEmailAttachments extends IReadonlyEmailAttachments
+public interface IEmailAttachmentList extends IReadonlyEmailAttachments
 {
   /**
    * Add an attachment.

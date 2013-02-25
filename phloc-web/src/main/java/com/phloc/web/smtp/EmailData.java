@@ -36,7 +36,7 @@ import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.web.smtp.attachment.IEmailAttachments;
+import com.phloc.web.smtp.attachment.IEmailAttachmentList;
 
 /**
  * Default implementation of the {@link IEmailData} interface.
@@ -55,7 +55,7 @@ public final class EmailData implements IEmailData
   private DateTime m_aSentDate;
   private String m_sSubject;
   private String m_sBody;
-  private IEmailAttachments m_aAttachments;
+  private IEmailAttachmentList m_aAttachments;
 
   public EmailData (@Nonnull final EEmailType eEmailType)
   {
@@ -275,12 +275,12 @@ public final class EmailData implements IEmailData
   }
 
   @Nullable
-  public IEmailAttachments getAttachments ()
+  public IEmailAttachmentList getAttachments ()
   {
     return m_aAttachments;
   }
 
-  public void setAttachments (@Nullable final IEmailAttachments aAttachments)
+  public void setAttachments (@Nullable final IEmailAttachmentList aAttachments)
   {
     if (aAttachments != null && aAttachments.size () > 0)
       m_aAttachments = aAttachments;
@@ -360,7 +360,7 @@ public final class EmailData implements IEmailData
                                             @Nullable final IEmailAddress aReceiver,
                                             @Nullable final String sSubject,
                                             @Nullable final String sBody,
-                                            @Nullable final IEmailAttachments aAttachments)
+                                            @Nullable final IEmailAttachmentList aAttachments)
   {
     final IEmailData aEmailData = new EmailData (eEmailType);
     aEmailData.setFrom (aSender);
