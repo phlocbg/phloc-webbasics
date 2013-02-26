@@ -52,41 +52,16 @@ function FindProxyForURL(url, host)
 
         if (dnsDomainIs(host,".bgbl.at") ||
             dnsDomainIs(host,".cna.at") ||
-            dnsDomainIs(host,".bmf.gv.at") ||
-            dnsDomainIs(host,".brz.gv.at") ||
-            dnsDomainIs(host,".help.gv.at") ||
-            dnsDomainIs(host,".intra.gv.at") ||
-            dnsDomainIs(host,".portal.at") ||
-            dnsDomainIs(host,".elak.gv.at") ||
-            dnsDomainIs(host,".schulbuchaktion.at") ||
-            dnsDomainIs(host,".verlagoesterreich.at") ||
-            dnsDomainIs(host,".screensavergold.com") ||
-            dnsDomainIs(host,".oebthv.gv.at") ||
-            dnsDomainIs(host,".kommunalnet.at") ||
             dnsDomainIs(host,".schulen-online.at") 
         ) {
           return "DIRECT";
-        }
-
-        if (dnsDomainIs(host,".atta.ccncsi.int")
-        ) {
-           return "PROXY 172.18.6.1:1998";
-        }
-        if (dnsDomainIs(host,".ccncsi.int")
-        ) {
-           return "PROXY 193.58.210.253:1998";
         }
         
         hostip=dnsResolve(host); 
         if (isInNet(hostip, "127.0.0.0","255.0.0.0") ||
             isInNet(hostip, "10.0.0.0", "255.0.0.0") ||
             isInNet(hostip, "172.16.0.0","255.240.0.0") ||
-            isInNet(hostip, "193.194.146.0","255.255.255.0") ||
-            isInNet(hostip, "193.58.210.0","255.255.255.0") ||
-            isInNet(hostip, "192.168.2.0","255.255.255.0") ||
-            isInNet(hostip, "193.58.211.0","255.255.255.0") ||
-            isInNet(hostip, "192.168.115.0","255.255.255.0") ||
-            isInNet(hostip, "192.168.116.0","255.255.254.0") ||
+               isInNet(hostip, "192.168.116.0","255.255.254.0") ||
             isInNet(hostip, "192.168.80.0","255.255.240.0")
         ) {
            return "DIRECT";

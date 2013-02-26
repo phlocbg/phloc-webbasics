@@ -20,17 +20,10 @@ function FindProxyForURL(url, host)
 {
   if(isPlainHostName(host) ||
      dnsDomainIs(host,"regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "bbcc.ibc.regione.emilia-romagna.it") && 
-     !localHostOrDomainIs(host, "archivi.ibc.regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "casa.regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "elezioni2009.regione.emilia-romagna.it") &&
-           !localHostOrDomainIs(host, "elezioni2010.regione.emilia-romagna.it") &&
-           !localHostOrDomainIs(host, "aci2.regione.emilia-romagna.it") &&
-           !localHostOrDomainIs(host, "portaeuropa.regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "giunta.regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "newsletter.regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "ufficistampa.regione.emilia-romagna.it") &&
-     !localHostOrDomainIs(host, "salastampa.regione.emilia-romagna.it") ||  
+     !localHostOrDomainIs(host, "bbcc.ibc.rer.it") && 
+     !localHostOrDomainIs(host, "archivi.ibc.rer.it") &&
+     !localHostOrDomainIs(host, "ufficistampa.rer.it") &&
+     !localHostOrDomainIs(host, "salastampa.rer.it") ||  
      dnsDomainIs(host,"dyned.com") ||
      dnsDomainIs(host,"sitar-er.it") ||
            dnsDomainIs(host,"galiano.it") || 
@@ -52,14 +45,7 @@ function FindProxyForURL(url, host)
      isInNet(host,"89.97.58.0","255.255.255.0") ||
      isInNet(host,"10.0.0.0","255.0.0.0") ||
      isInNet(host,"193.43.192.0","255.255.240.0") ||
-     isInNet(host,"195.62.160.32","255.255.255.248") ||
-     isInNet(host,"195.62.160.64","255.255.255.224") ||
-     isInNet(host,"195.62.160.160","255.255.255.240") ||
-     isInNet(host,"195.62.160.184","255.255.255.248") ||
-     isInNet(host,"195.62.160.208","255.255.255.240") ||
-     isInNet(host,"195.62.160.224","255.255.255.240") ||
-     isInNet(host,"195.62.186.224","255.255.255.255") ||
-     isInNet(host,"127.0.0.0","255.0.0.0") ||
+      isInNet(host,"127.0.0.0","255.0.0.0") ||
      dnsDomainIs(host,"ente.regione.emr.it") )
     return "DIRECT";
          else return "PROXY 193.43.193.100:3128; PROXY 193.43.193.101:3128";
