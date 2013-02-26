@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.web.CWeb;
 
 /**
  * This class is not yet working!
@@ -54,10 +55,10 @@ public class MyProxySelector extends ProxySelector
   public List <Proxy> select (@Nonnull final URI aURI)
   {
     if (aURI == null)
-      throw new NullPointerException ("URI can't be null.");
+      throw new NullPointerException ("URI");
 
-    final String protocol = aURI.getScheme ();
-    if ("http".equalsIgnoreCase (protocol) || "https".equalsIgnoreCase (protocol))
+    final String sScheme = aURI.getScheme ();
+    if (CWeb.SCHEME_HTTP.equalsIgnoreCase (sScheme) || CWeb.SCHEME_HTTPS.equalsIgnoreCase (sScheme))
     {
       final ArrayList <Proxy> l = new ArrayList <Proxy> ();
       // TODO Populate the ArrayList with proxies

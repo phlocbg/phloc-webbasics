@@ -17,6 +17,7 @@
  */
 package com.phloc.web.servlet.server;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -27,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.web.CWeb;
+import com.phloc.web.servlet.request.RequestHelper;
 
 /**
  * This singleton instance represents default server information for locations
@@ -61,30 +62,17 @@ public final class StaticServerInfo
     if (sContextPath == null)
       throw new NullPointerException ("contextPath");
 
-    int nDefaultPort = CWeb.DEFAULT_PORT_HTTP;
-    if ("https".equals (sScheme))
-      nDefaultPort = CWeb.DEFAULT_PORT_HTTPS;
-    // URL.getPort() delivers -1 for unspecified ports
-    final int nRealServerPort = nServerPort == -1 ? nDefaultPort : nServerPort;
-
     m_sScheme = sScheme;
     m_sServerName = sServerName;
-    m_nServerPort = nRealServerPort;
+    m_nServerPort = RequestHelper.getServerPortToUse (sScheme, nServerPort);
     m_sContextPath = sContextPath;
 
-    final StringBuilder aSB = new StringBuilder ();
-    aSB.append (sScheme).append ("://").append (sServerName);
-    if (nRealServerPort != nDefaultPort)
-    {
-      // append non-standard port
-      aSB.append (':').append (nRealServerPort);
-    }
-    m_sFullServerPath = aSB.toString ();
+    m_sFullServerPath = RequestHelper.getFullServerName (sScheme, sServerName, nServerPort).toString ();
     m_sFullServerAndContextPath = m_sFullServerPath + sContextPath;
   }
 
   /**
-   * @return The scheme without any trailing "://"
+   * @return The scheme. E.g. "http" or "https".
    */
   @Nonnull
   public String getScheme ()
@@ -93,7 +81,7 @@ public final class StaticServerInfo
   }
 
   /**
-   * @return The server name without scheme
+   * @return The server name without scheme. E.g. "www.phloc.com"
    */
   @Nonnull
   public String getServerName ()
@@ -102,15 +90,17 @@ public final class StaticServerInfo
   }
 
   /**
-   * @return The server port we're running on
+   * @return The server port we're running on. May be -1, if constructed from a
+   *         URL and the passed scheme is neither "http" nor "https".
    */
+  @CheckForSigned
   public int getServerPort ()
   {
     return m_nServerPort;
   }
 
   /**
-   * @return /context
+   * @return <code>/context</code> or <code></code> (empty string)
    */
   @Nonnull
   public String getContextPath ()
@@ -119,7 +109,8 @@ public final class StaticServerInfo
   }
 
   /**
-   * @return http://server:port
+   * @return <code>scheme://server:port</code> or <code>scheme://server</code>
+   *         if the default port was used
    */
   @Nonnull
   public String getFullServerPath ()
@@ -128,7 +119,8 @@ public final class StaticServerInfo
   }
 
   /**
-   * @return http://server:port/context
+   * @return <code>scheme://server:port/context</code> or
+   *         <code>scheme://server:port</code> for the ROOT context.
    */
   @Nonnull
   public String getFullContextPath ()

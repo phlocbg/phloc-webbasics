@@ -45,6 +45,6 @@ public final class RequestHelperTest
   public void testGetRequestString ()
   {
     assertEquals ("http://server:517/context/servlet/index.xyz?x=1",
-                  RequestHelper.getUrlString ("http", "server", 517, "/context/servlet/index.xyz", "x=1"));
+                  RequestHelper.getFullServerNameAndPath ("http", "server", 517, "/context/servlet/index.xyz", "x=1"));
   }
 }

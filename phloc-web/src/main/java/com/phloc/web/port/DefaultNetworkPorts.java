@@ -3920,7 +3920,7 @@ public final class DefaultNetworkPorts
    */
   public static boolean isValidPort (final int nPort)
   {
-    return nPort >= 0 && nPort <= 65535;
+    return nPort >= CNetworkPort.MINIMUM_PORT_NUMBER && nPort <= CNetworkPort.MAXIMUM_PORT_NUMBER;
   }
 
   /**

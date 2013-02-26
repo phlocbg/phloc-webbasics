@@ -59,6 +59,10 @@ import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.system.SystemHelper;
+import com.phloc.web.CWeb;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPVersion;
+import com.phloc.web.servlet.request.RequestHelper;
 
 // ESCA-JAVA0116:
 /**
@@ -70,14 +74,14 @@ import com.phloc.commons.system.SystemHelper;
 public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
 {
   public static final boolean DEFAULT_INVOKE_HTTP_LISTENER = true;
-  public static final String DEFAULT_PROTOCOL = "HTTP/1.1";
-  public static final String DEFAULT_SCHEME = "http";
+  public static final String DEFAULT_PROTOCOL = EHTTPVersion.HTTP_11.getName ();
+  public static final String DEFAULT_SCHEME = CWeb.SCHEME_HTTP;
   public static final String DEFAULT_SERVER_ADDR = "127.0.0.1";
   public static final String DEFAULT_SERVER_NAME = "localhost";
-  public static final int DEFAULT_SERVER_PORT = 80;
+  public static final int DEFAULT_SERVER_PORT = CWeb.DEFAULT_PORT_HTTP;
   public static final String DEFAULT_REMOTE_ADDR = "127.0.0.1";
   public static final String DEFAULT_REMOTE_HOST = "localhost";
-  public static final String DEFAULT_METHOD = "GET";
+  public static final String DEFAULT_METHOD = EHTTPMethod.GET.getName ();
 
   private boolean m_bInvalidated = false;
   private boolean m_bActive = true;
@@ -969,11 +973,8 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   @Nonnull
   public StringBuffer getRequestURL ()
   {
-    return new StringBuffer (m_sScheme).append ("://")
-                                       .append (m_sServerName)
-                                       .append (':')
-                                       .append (m_nServerPort)
-                                       .append (getRequestURI ());
+    return new StringBuffer ().append (RequestHelper.getFullServerName (m_sScheme, m_sServerName, m_nServerPort))
+                              .append (getRequestURI ());
   }
 
   public void setServletPath (@Nullable final String sServletPath)

@@ -41,6 +41,8 @@ import com.phloc.web.CWeb;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.http.HTTPHeaderMap;
+import com.phloc.web.port.CNetworkPort;
+import com.phloc.web.port.DefaultNetworkPorts;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
@@ -234,11 +236,36 @@ public final class RequestHelper
 
     final String sReqUrl = getRequestURI (aHttpRequest);
     final String sQueryString = aHttpRequest.getQueryString (); // d=789&x=y
-    if (sQueryString != null)
+    if (StringHelper.hasText (sQueryString))
       return sReqUrl + URLUtils.QUESTIONMARK + sQueryString;
     return sReqUrl;
   }
 
+  @CheckForSigned
+  public static int getDefaultServerPort (@Nullable final String sScheme)
+  {
+    if (CWeb.SCHEME_HTTP.equalsIgnoreCase (sScheme))
+      return CWeb.DEFAULT_PORT_HTTP;
+    if (CWeb.SCHEME_HTTPS.equalsIgnoreCase (sScheme))
+      return CWeb.DEFAULT_PORT_HTTPS;
+    return CNetworkPort.INVALID_PORT_NUMBER;
+  }
+
+  @CheckForSigned
+  public static int getServerPortToUse (@Nonnull final String sScheme, @CheckForSigned final int nServerPort)
+  {
+    // URL.getPort() delivers -1 for unspecified ports
+    if (!DefaultNetworkPorts.isValidPort (nServerPort))
+      return getDefaultServerPort (sScheme);
+    return nServerPort;
+  }
+
+  /**
+   * @deprecated Use
+   *             {@link #getFullServerNameAndPath(String,String,int,String,String)}
+   *             instead
+   */
+  @Deprecated
   @Nonnull
   @Nonempty
   public static String getUrlString (@Nonnull final String sScheme,
@@ -247,22 +274,43 @@ public final class RequestHelper
                                      @Nullable final String sPath,
                                      @Nullable final String sQueryString)
   {
-    int nDefaultPort = CWeb.DEFAULT_PORT_HTTP;
-    if ("https".equals (sScheme))
-      nDefaultPort = CWeb.DEFAULT_PORT_HTTPS;
+    return getFullServerNameAndPath (sScheme, sServerName, nServerPort, sPath, sQueryString);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static StringBuilder getFullServerName (@Nonnull final String sScheme,
+                                                 @Nonnull final String sServerName,
+                                                 final int nServerPort)
+  {
+    if (sScheme == null)
+      throw new NullPointerException ("scheme");
+    if (sServerName == null)
+      throw new NullPointerException ("serverName");
 
     // Reconstruct URL
-    final StringBuilder aURL = new StringBuilder (sScheme).append ("://").append (sServerName);
-    if (nServerPort != nDefaultPort)
-      aURL.append (':').append (nServerPort);
+    final StringBuilder aSB = new StringBuilder (sScheme).append ("://").append (sServerName);
+    if (DefaultNetworkPorts.isValidPort (nServerPort) && nServerPort != getDefaultServerPort (sScheme))
+      aSB.append (':').append (nServerPort);
+    return aSB;
+  }
 
+  @Nonnull
+  @Nonempty
+  public static String getFullServerNameAndPath (@Nonnull final String sScheme,
+                                                 @Nonnull final String sServerName,
+                                                 final int nServerPort,
+                                                 @Nullable final String sPath,
+                                                 @Nullable final String sQueryString)
+  {
+    final StringBuilder aURL = getFullServerName (sScheme, sServerName, nServerPort);
     if (StringHelper.hasText (sPath))
     {
-      if (!StringHelper.startsWith (sPath, '/'))
+      if (!sPath.startsWith ("/", 0))
         aURL.append ('/');
       aURL.append (sPath);
     }
-    if (sQueryString != null)
+    if (StringHelper.hasText (sQueryString))
       aURL.append (URLUtils.QUESTIONMARK).append (sQueryString);
     return aURL.toString ();
   }

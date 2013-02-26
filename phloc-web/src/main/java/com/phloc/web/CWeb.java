@@ -39,6 +39,11 @@ public final class CWeb
   /** Default SMTP port */
   public static final int DEFAULT_PORT_SMTP = DefaultNetworkPorts.TCP_25_smtp.getPort ();
 
+  /** The scheme for HTTP */
+  public static final String SCHEME_HTTP = "http";
+  /** The scheme for HTTPS */
+  public static final String SCHEME_HTTPS = "https";
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final CWeb s_aInstance = new CWeb ();
