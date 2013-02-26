@@ -19,6 +19,7 @@ package com.phloc.web.smtp.queue;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +29,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
@@ -36,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.email.IEmailAddress;
+import com.phloc.commons.state.EChange;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.vendor.VendorInfo;
@@ -107,27 +111,39 @@ public final class MailAPI
   }
 
   @Nonnull
-  private static MailQueuePerSMTP _getOrCreateMailQueuePerSMTP (@Nonnull final ISMTPSettings aSettings)
+  private static MailQueuePerSMTP _getOrCreateMailQueuePerSMTP (@Nonnull final ISMTPSettings aSMTPSettings)
   {
-    if (aSettings == null)
+    if (aSMTPSettings == null)
       throw new NullPointerException ("smtpSettings");
     if (s_aSenderThreadPool.isShutdown ())
       throw new IllegalStateException ("Cannot submit to mailqueues that are already stopped!");
 
     // get queue per SMTP
-    MailQueuePerSMTP aSMTPQueue = s_aQueueCache.get (aSettings);
+    MailQueuePerSMTP aSMTPQueue = s_aQueueCache.get (aSMTPSettings);
     if (aSMTPQueue == null)
     {
       // create a new queue
-      aSMTPQueue = new MailQueuePerSMTP (aSettings, s_aFailedMailQueue);
+      aSMTPQueue = new MailQueuePerSMTP (aSMTPSettings, s_aFailedMailQueue);
 
       // put queue in cache
-      s_aQueueCache.put (aSettings, aSMTPQueue);
+      s_aQueueCache.put (aSMTPSettings, aSMTPQueue);
 
       // and start running the queue
       s_aSenderThreadPool.submit (aSMTPQueue);
     }
     return aSMTPQueue;
+  }
+
+  public static boolean hasNonVendorEmailAddress (@Nullable final List <? extends IEmailAddress> aAddresses)
+  {
+    if (aAddresses != null)
+    {
+      final String sVendorEmailSuffix = VendorInfo.getVendorEmailSuffix ();
+      for (final IEmailAddress aAddress : aAddresses)
+        if (!aAddress.getAddress ().endsWith (sVendorEmailSuffix))
+          return true;
+    }
+    return false;
   }
 
   /**
@@ -137,10 +153,13 @@ public final class MailAPI
    *        The SMTP settings to be used.
    * @param aMailData
    *        The mail message to queue. May not be <code>null</code>.
+   * @return {@link ESuccess}.
    */
-  public static void queueMail (@Nonnull final ISMTPSettings aSMTPSettings, @Nonnull final IEmailData aMailData)
+  @Nonnull
+  public static ESuccess queueMail (@Nonnull final ISMTPSettings aSMTPSettings, @Nonnull final IEmailData aMailData)
   {
-    queueMails (aSMTPSettings, ContainerHelper.newList (aMailData));
+    final int nQueuedMails = queueMails (aSMTPSettings, ContainerHelper.newList (aMailData));
+    return ESuccess.valueOf (nQueuedMails == 1);
   }
 
   /**
@@ -150,10 +169,15 @@ public final class MailAPI
    *        The SMTP settings to be used.
    * @param aMailDataList
    *        The mail messages to queue. May not be <code>null</code>.
+   * @return The number of queued emails. Always &ge; 0. Maximum value is the
+   *         number of {@link IEmailData} objects in the argument.
    */
-  public static void queueMails (@Nonnull final ISMTPSettings aSMTPSettings,
-                                 @Nonnull final Collection <? extends IEmailData> aMailDataList)
+  @Nonnegative
+  public static int queueMails (@Nonnull final ISMTPSettings aSMTPSettings,
+                                @Nonnull final Collection <? extends IEmailData> aMailDataList)
   {
+    if (aSMTPSettings == null)
+      throw new NullPointerException ("smtpSettings");
     if (aMailDataList == null)
       throw new NullPointerException ("mailDataList");
     if (aMailDataList.isEmpty ())
@@ -170,6 +194,8 @@ public final class MailAPI
     {
       s_aRWLock.writeLock ().unlock ();
     }
+
+    int nQueuedMails = 0;
 
     // submit all messages
     for (final IEmailData aMailData : aMailDataList)
@@ -195,23 +221,37 @@ public final class MailAPI
 
       if (GlobalDebug.isDebugMode ())
       {
-        // In the debug version we can only send to phloc addresses!
-        for (final IEmailAddress aReceiver : aMailData.getTo ())
-          if (!aReceiver.getAddress ().endsWith (VendorInfo.getVendorEmailSuffix ()))
-          {
-            bCanQueue = false;
-            s_aLogger.warn ("Ignoring mail to " + aMailData.getTo ());
-            break;
-          }
+        // In the debug version we can only send to vendor addresses!
+        if (hasNonVendorEmailAddress (aMailData.getTo ()) ||
+            hasNonVendorEmailAddress (aMailData.getCc ()) ||
+            hasNonVendorEmailAddress (aMailData.getBcc ()))
+        {
+          bCanQueue = false;
+          s_aLogger.warn ("Debug mode: ignoring mail TO '" +
+                          aMailData.getTo () +
+                          "'" +
+                          (aMailData.getCcCount () > 0 ? " and CC '" + aMailData.getCc () + "'" : "") +
+                          (aMailData.getBccCount () > 0 ? " and BCC '" + aMailData.getBcc () + "'" : "") +
+                          " because at least one address is not targeted to the vendor domain");
+          break;
+        }
       }
 
       if (bCanQueue)
       {
+        if (GlobalDebug.isDebugMode ())
+        {
+          aMailData.setSubject ("[DEBUG] " + aMailData.getSubject ());
+          s_aLogger.info ("Sending only-to-vendor mail in debug version:\n" + aSMTPSettings + "\n" + aMailData);
+        }
+
         // Uses UTC timezone!
         aMailData.setSentDate (PDTFactory.getCurrentDateTime ());
         aSMTPQueue.queueObject (aMailData);
+        ++nQueuedMails;
       }
     }
+    return nQueuedMails;
   }
 
   @Nonnegative
@@ -235,43 +275,47 @@ public final class MailAPI
   /**
    * Stop taking new mails, and wait until all mails already in the queue are
    * delivered.
+   * 
+   * @return {@link EChange}
    */
-  public static void stop ()
+  @Nonnull
+  public static EChange stop ()
   {
     s_aRWLock.writeLock ().lock ();
     try
     {
       // Check if the thread pool is already shut down
-      if (!s_aSenderThreadPool.isShutdown ())
+      if (s_aSenderThreadPool.isShutdown ())
+        return EChange.UNCHANGED;
+
+      int nTotalMailsQueued = 0;
+      for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
+        nTotalMailsQueued += aQueue.getQueueLength ();
+      s_aLogger.info ("Stopping central mail queues: " +
+                      s_aQueueCache.size () +
+                      " queues with " +
+                      nTotalMailsQueued +
+                      " mails");
+
+      try
       {
-        int nTotalMailsQueued = 0;
+        // don't take any more actions
+        s_aSenderThreadPool.shutdown ();
+
+        // stop all specific queues
         for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
-          nTotalMailsQueued += aQueue.getQueueLength ();
-        s_aLogger.info ("Stopping central mail queues: " +
-                        s_aQueueCache.size () +
-                        " queues with " +
-                        nTotalMailsQueued +
-                        " mails");
+          aQueue.stopQueuingNewObjects ();
 
-        try
+        while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
         {
-          // don't take any more actions
-          s_aSenderThreadPool.shutdown ();
-
-          // stop all specific queues
-          for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
-            aQueue.stopQueuingNewObjects ();
-
-          while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
-          {
-            // wait until we're done
-          }
-        }
-        catch (final InterruptedException ex)
-        {
-          s_aLogger.error ("Error stopping mail queue", ex);
+          // wait until we're done
         }
       }
+      catch (final InterruptedException ex)
+      {
+        s_aLogger.error ("Error stopping mail queue", ex);
+      }
+      return EChange.CHANGED;
     }
     finally
     {

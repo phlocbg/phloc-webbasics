@@ -20,6 +20,21 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <entry date="2013-02-26" category="api" action="update" incompatible="true">
+    <change>
+      <text locale="en">Improved API of MailAPI class</text>
+    </change>
+  </entry>
+  <entry date="2013-02-26" category="api" action="add">
+    <change>
+      <text locale="en">Added some methods to the RequestHelper class</text>
+    </change>
+  </entry>
+  <entry date="2013-02-26" category="api" action="add">
+    <change>
+      <text locale="en">Added support for UAProfiles - for mobile user agents</text>
+    </change>
+  </entry>
   <release date="2012-02-26" version="5.0.0" />
   <!-- changelog started -->
 </changelog>
