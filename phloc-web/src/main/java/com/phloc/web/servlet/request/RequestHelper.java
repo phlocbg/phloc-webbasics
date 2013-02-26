@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.lang.GenericReflection;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.url.URLUtils;
@@ -203,7 +204,7 @@ public final class RequestHelper
   public static String getURL (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
-      throw new NullPointerException ("request");
+      throw new NullPointerException ("httpRequest");
 
     final StringBuffer aReqUrl = aHttpRequest.getRequestURL ();
     final String sQueryString = aHttpRequest.getQueryString (); // d=789
@@ -229,7 +230,7 @@ public final class RequestHelper
   public static String getURI (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
-      throw new NullPointerException ("request");
+      throw new NullPointerException ("httpRequest");
 
     final String sReqUrl = getRequestURI (aHttpRequest);
     final String sQueryString = aHttpRequest.getQueryString (); // d=789&x=y
@@ -302,6 +303,9 @@ public final class RequestHelper
   @ReturnsMutableCopy
   public static HTTPHeaderMap getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
     final HTTPHeaderMap ret = new HTTPHeaderMap ();
     final Enumeration <?> eHeaders = aHttpRequest.getHeaderNames ();
     while (eHeaders.hasMoreElements ())
@@ -322,6 +326,7 @@ public final class RequestHelper
    * an array. Jetty seems to create String arrays out of simple string values
    * 
    * @param aHttpRequest
+   *        The source HTTP request. May not be <code>null</code>.
    * @return A Map containing pure strings instead of string arrays with one
    *         item
    */
@@ -330,7 +335,7 @@ public final class RequestHelper
   public static Map <String, Object> getParameterMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
-      throw new NullPointerException ("request");
+      throw new NullPointerException ("httpRequest");
 
     final Map <String, Object> aResult = new HashMap <String, Object> ();
     @SuppressWarnings ("unchecked")
@@ -368,6 +373,9 @@ public final class RequestHelper
   @Nonnull
   public static IRequestParamMap getRequestParamMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
     // Check if a value is cached in the HTTP request
     IRequestParamMap aValue = (IRequestParamMap) aHttpRequest.getAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);
     if (aValue == null)
@@ -390,6 +398,9 @@ public final class RequestHelper
   @CheckForSigned
   public static long getContentLength (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
     if (false)
     {
       // Missing support > 2GB!!!
@@ -398,5 +409,24 @@ public final class RequestHelper
 
     final String sContentLength = aHttpRequest.getHeader (CHTTPHeader.CONTENT_LENGTH);
     return StringParser.parseLong (sContentLength, -1L);
+  }
+
+  @Nullable
+  public static Enumeration <String> getRequestHeaders (@Nonnull final HttpServletRequest aHttpRequest,
+                                                        @Nullable final String sName)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aHttpRequest.getHeaders (sName));
+  }
+
+  @Nullable
+  public static Enumeration <String> getRequestHeaderNames (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aHttpRequest.getHeaderNames ());
   }
 }
