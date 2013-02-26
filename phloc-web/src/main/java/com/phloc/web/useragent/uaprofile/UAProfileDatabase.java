@@ -78,6 +78,20 @@ public final class UAProfileDatabase
   private UAProfileDatabase ()
   {}
 
+  @Nullable
+  public static INonThrowingRunnableWithParameter <UAProfile> getNewUAProfileCallback ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aNewUAProfileCallback;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
   public static void setNewUAProfileCallback (@Nullable final INonThrowingRunnableWithParameter <UAProfile> aCallback)
   {
     s_aRWLock.writeLock ().lock ();
@@ -120,16 +134,16 @@ public final class UAProfileDatabase
   }
 
   @Nonnull
-  private static Map <Integer, String> _getProfileDiffData (@Nonnull final HttpServletRequest aRequestScope,
+  private static Map <Integer, String> _getProfileDiffData (@Nonnull final HttpServletRequest aHttpRequest,
                                                             final String sExtNSValue)
   {
     // Determine the profile diffs to use
-    Enumeration <String> aProfileDiffs = RequestHelper.getRequestHeaders (aRequestScope, X_WAP_PROFILE_DIFF);
+    Enumeration <String> aProfileDiffs = RequestHelper.getRequestHeaders (aHttpRequest, X_WAP_PROFILE_DIFF);
     if (!aProfileDiffs.hasMoreElements ())
     {
-      aProfileDiffs = RequestHelper.getRequestHeaders (aRequestScope, PROFILE_DIFF);
+      aProfileDiffs = RequestHelper.getRequestHeaders (aHttpRequest, PROFILE_DIFF);
       if (!aProfileDiffs.hasMoreElements ())
-        aProfileDiffs = RequestHelper.getRequestHeaders (aRequestScope, WAP_PROFILE_DIFF);
+        aProfileDiffs = RequestHelper.getRequestHeaders (aHttpRequest, WAP_PROFILE_DIFF);
     }
 
     // Parse the diffs
@@ -165,7 +179,7 @@ public final class UAProfileDatabase
       final String sPrefix = _getUnifiedHeaderName (sExtNSValue + "-Profile-Diff-");
 
       // Extract all matching headers, in case non-consecutive numbers are used
-      final Enumeration <String> aAllHeaders = RequestHelper.getRequestHeaderNames (aRequestScope);
+      final Enumeration <String> aAllHeaders = RequestHelper.getRequestHeaderNames (aHttpRequest);
       while (aAllHeaders.hasMoreElements ())
       {
         final String sHeaderName = _getUnifiedHeaderName (aAllHeaders.nextElement ());
@@ -176,7 +190,7 @@ public final class UAProfileDatabase
           if (nIndex != CGlobal.ILLEGAL_UINT)
           {
             // Handle profile diff
-            String sProfileDiff = aRequestScope.getHeader (sHeaderName);
+            String sProfileDiff = aHttpRequest.getHeader (sHeaderName);
             sProfileDiff = _getCleanedUp (sProfileDiff);
             aProfileDiffData.put (Integer.valueOf (nIndex), sProfileDiff);
           }
@@ -189,29 +203,32 @@ public final class UAProfileDatabase
   }
 
   @Nullable
-  public static UAProfile getUAProfileFromRequest (@Nonnull final HttpServletRequest aRequestScope)
+  public static UAProfile getUAProfileFromRequest (@Nonnull final HttpServletRequest aHttpRequest)
   {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
     // Determine the main profile to use
     String sExtNSValue = null;
-    Enumeration <String> aProfiles = RequestHelper.getRequestHeaders (aRequestScope, X_WAP_PROFILE);
+    Enumeration <String> aProfiles = RequestHelper.getRequestHeaders (aHttpRequest, X_WAP_PROFILE);
     if (!aProfiles.hasMoreElements ())
     {
-      aProfiles = RequestHelper.getRequestHeaders (aRequestScope, PROFILE);
+      aProfiles = RequestHelper.getRequestHeaders (aHttpRequest, PROFILE);
       if (!aProfiles.hasMoreElements ())
       {
-        aProfiles = RequestHelper.getRequestHeaders (aRequestScope, WAP_PROFILE);
+        aProfiles = RequestHelper.getRequestHeaders (aHttpRequest, WAP_PROFILE);
         if (!aProfiles.hasMoreElements ())
         {
           // Check CCPP headers
-          String sExt = aRequestScope.getHeader (OPT);
+          String sExt = aHttpRequest.getHeader (OPT);
           if (sExt == null)
-            sExt = aRequestScope.getHeader (MAN);
+            sExt = aHttpRequest.getHeader (MAN);
           if (sExt != null)
           {
             sExtNSValue = _getExtendedNamespaceValue (sExt);
             if (sExtNSValue != null)
             {
-              aProfiles = RequestHelper.getRequestHeaders (aRequestScope, sExtNSValue + "-Profile");
+              aProfiles = RequestHelper.getRequestHeaders (aHttpRequest, sExtNSValue + "-Profile");
               if (!aProfiles.hasMoreElements ())
                 s_aLogger.warn ("Found CCPP header namespace '" + sExtNSValue + "' but found no profile header!");
             }
@@ -298,7 +315,7 @@ public final class UAProfileDatabase
     }
 
     // Read diffs
-    final Map <Integer, String> aProfileDiffData = _getProfileDiffData (aRequestScope, sExtNSValue);
+    final Map <Integer, String> aProfileDiffData = _getProfileDiffData (aHttpRequest, sExtNSValue);
 
     // Merge data and digest
     final Map <Integer, UAProfileDiff> aProfileDiffs = new HashMap <Integer, UAProfileDiff> ();
@@ -334,22 +351,25 @@ public final class UAProfileDatabase
   /**
    * Get the user agent object from the given HTTP request.
    * 
-   * @param aRequestScope
+   * @param aHttpRequest
    *        The HTTP request to extract the information from.
    * @return A non-<code>null</code> user agent object.
    */
   @Nonnull
-  public static UAProfile getUAProfile (@Nonnull final HttpServletRequest aRequestScope)
+  public static UAProfile getUAProfile (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    UAProfile aUAProfile = (UAProfile) aRequestScope.getAttribute (REQUEST_ATTR);
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    UAProfile aUAProfile = (UAProfile) aHttpRequest.getAttribute (REQUEST_ATTR);
     if (aUAProfile == null)
     {
       // Extract HTTP header from request
-      aUAProfile = getUAProfileFromRequest (aRequestScope);
+      aUAProfile = getUAProfileFromRequest (aHttpRequest);
       if (aUAProfile == null)
         aUAProfile = UAProfile.EMPTY;
 
-      aRequestScope.setAttribute (REQUEST_ATTR, aUAProfile);
+      aHttpRequest.setAttribute (REQUEST_ATTR, aUAProfile);
       if (aUAProfile.isSet ())
       {
         s_aRWLock.writeLock ().lock ();
