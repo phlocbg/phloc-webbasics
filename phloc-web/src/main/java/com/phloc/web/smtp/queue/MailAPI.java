@@ -30,7 +30,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
  * 
  * @author philip
  */
-@Immutable
+@ThreadSafe
 public final class MailAPI
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailAPI.class);
@@ -69,6 +69,9 @@ public final class MailAPI
   private MailAPI ()
   {}
 
+  /**
+   * @return The current failed mail queue. Never <code>null</code>.
+   */
   @Nonnull
   public static FailedMailQueue getFailedMailQueue ()
   {
@@ -89,7 +92,6 @@ public final class MailAPI
    * @param aFailedMailQueue
    *        The new failed mail queue to set. May not be <code>null</code>.
    */
-  @Nonnull
   public static void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
   {
     if (aFailedMailQueue == null)
