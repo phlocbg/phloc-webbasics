@@ -17,13 +17,17 @@
  */
 package com.phloc.webscopes.smtp;
 
+import java.util.Collection;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.web.smtp.queue.MailAPI;
 import com.phloc.web.smtp.settings.ISMTPSettings;
 
@@ -33,6 +37,7 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
  * 
  * @author philip
  */
+@ThreadSafe
 public final class ScopedMailAPI extends GlobalSingleton
 {
   @UsedViaReflection
@@ -44,6 +49,26 @@ public final class ScopedMailAPI extends GlobalSingleton
   public static ScopedMailAPI getInstance ()
   {
     return getGlobalSingleton (ScopedMailAPI.class);
+  }
+
+  /**
+   * @return The current failed mail queue. Never <code>null</code>.
+   */
+  @Nonnull
+  public FailedMailQueue getFailedMailQueue ()
+  {
+    return MailAPI.getFailedMailQueue ();
+  }
+
+  /**
+   * Set a new global failed mail queue. Updates all existing queues.
+   * 
+   * @param aFailedMailQueue
+   *        The new failed mail queue to set. May not be <code>null</code>.
+   */
+  public void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
+  {
+    MailAPI.setFailedMailQueue (aFailedMailQueue);
   }
 
   /**
@@ -59,6 +84,23 @@ public final class ScopedMailAPI extends GlobalSingleton
   public ESuccess queueMail (@Nonnull final ISMTPSettings aSMTPSettings, @Nonnull final IEmailData aMailData)
   {
     return MailAPI.queueMail (aSMTPSettings, aMailData);
+  }
+
+  /**
+   * Queue multiple mails at once.
+   * 
+   * @param aSMTPSettings
+   *        The SMTP settings to be used.
+   * @param aMailDataList
+   *        The mail messages to queue. May not be <code>null</code>.
+   * @return The number of queued emails. Always &ge; 0. Maximum value is the
+   *         number of {@link IEmailData} objects in the argument.
+   */
+  @Nonnegative
+  public static int queueMails (@Nonnull final ISMTPSettings aSMTPSettings,
+                                @Nonnull final Collection <? extends IEmailData> aMailDataList)
+  {
+    return MailAPI.queueMails (aSMTPSettings, aMailDataList);
   }
 
   @Nonnegative

@@ -125,7 +125,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>com.phloc.scopes.*</Export-Package>
+            <Export-Package>com.phloc.webscopes.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>
