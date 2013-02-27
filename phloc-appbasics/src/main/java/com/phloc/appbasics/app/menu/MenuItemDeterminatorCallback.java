@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.menu.ui;
+package com.phloc.appbasics.app.menu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +24,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
-import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;

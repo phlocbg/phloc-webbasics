@@ -28,6 +28,7 @@ import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
