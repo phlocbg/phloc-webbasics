@@ -21,11 +21,19 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.version.Version;
 
+/**
+ * Constants for usage with Bootstrap
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CBootstrap
 {
-  /** The bootstrap version available */
+  /** Bootstrap version 2.2.2 */
   public static final Version BOOTSTRAP_VERSION_222 = new Version (2, 2, 2);
+
+  /** Bootstrap version 2.3.0 */
+  public static final Version BOOTSTRAP_VERSION_230 = new Version (2, 3, 0);
 
   private CBootstrap ()
   {}
