@@ -28,6 +28,7 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 
 /**
  * Handles the log-out of a user. Can be called with a user context and without.

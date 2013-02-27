@@ -26,6 +26,7 @@ import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 
 /**
  * A simple availability-check servlet that responds with a "pong" text message.

@@ -31,8 +31,8 @@ import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.action.IActionExecutor;
 import com.phloc.webbasics.action.IActionInvoker;
-import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 
 /**
  * Abstract action handling servlet
