@@ -30,9 +30,9 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 import com.phloc.webbasics.app.html.InternalErrorHandler;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Main class for creating HTML output

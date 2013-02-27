@@ -25,9 +25,9 @@ import javax.servlet.http.HttpSession;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Handles the log-out of a user. Can be called with a user context and without.

@@ -20,9 +20,9 @@ package com.phloc.webbasics.ajax.servlet;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.ApplicationAjaxManager;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract implementation of a servlet that invokes AJAX functions.

@@ -33,7 +33,7 @@ import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.meta.EStandardMetaElement;
 import com.phloc.html.meta.MetaElement;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Main class for creating HTML output

@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.factory.IFactory;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base interface for an Ajax invoker

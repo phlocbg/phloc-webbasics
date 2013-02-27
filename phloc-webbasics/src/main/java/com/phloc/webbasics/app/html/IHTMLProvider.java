@@ -20,7 +20,7 @@ package com.phloc.webbasics.app.html;
 import javax.annotation.Nonnull;
 
 import com.phloc.html.hc.html.HCHtml;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base interface for an HTML creator

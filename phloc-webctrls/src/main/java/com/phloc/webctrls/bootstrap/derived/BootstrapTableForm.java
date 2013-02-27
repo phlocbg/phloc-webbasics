@@ -40,7 +40,6 @@ import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.form.validation.EFormErrorLevel;
 import com.phloc.webbasics.form.validation.IFormFieldError;
 import com.phloc.webbasics.form.validation.IFormFieldErrorList;
@@ -49,6 +48,7 @@ import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.IFormNote;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 public class BootstrapTableForm extends BootstrapTable
 {

@@ -31,11 +31,11 @@ import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.spi.IApplicationRequestListenerSPI;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base servlet for the main application.

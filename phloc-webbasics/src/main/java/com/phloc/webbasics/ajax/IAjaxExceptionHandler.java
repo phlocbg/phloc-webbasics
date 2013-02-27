@@ -20,8 +20,8 @@ package com.phloc.webbasics.ajax;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.servlet.GlobalAjaxServlet;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Callback interface to handle thrown exception objects from the

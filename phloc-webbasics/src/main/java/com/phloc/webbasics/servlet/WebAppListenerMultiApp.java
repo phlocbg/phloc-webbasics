@@ -44,7 +44,6 @@ import com.phloc.commons.stats.utils.StatisticsExporter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.io.PDTIOHelper;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.web.datetime.PDTWebDateUtils;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
@@ -52,6 +51,7 @@ import com.phloc.webbasics.action.ApplicationActionManager;
 import com.phloc.webbasics.ajax.ApplicationAjaxManager;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
 import com.phloc.webbasics.app.layout.ApplicationLayoutManager;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Callbacks for the application server

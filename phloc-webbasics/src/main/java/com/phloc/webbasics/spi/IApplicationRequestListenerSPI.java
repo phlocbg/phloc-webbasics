@@ -22,7 +22,7 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.IsSPIInterface;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 @IsSPIInterface
 public interface IApplicationRequestListenerSPI extends Serializable

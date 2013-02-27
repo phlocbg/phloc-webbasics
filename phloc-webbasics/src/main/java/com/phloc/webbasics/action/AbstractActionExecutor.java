@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract base class in case there will be some common functionality some

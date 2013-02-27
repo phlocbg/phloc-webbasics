@@ -19,7 +19,7 @@ package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base interface for an AJAX handling function.

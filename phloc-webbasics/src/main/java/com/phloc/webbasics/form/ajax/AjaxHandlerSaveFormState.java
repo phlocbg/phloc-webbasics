@@ -25,12 +25,12 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
 {

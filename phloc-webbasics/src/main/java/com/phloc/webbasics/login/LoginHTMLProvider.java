@@ -40,9 +40,9 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class LoginHTMLProvider extends AbstractHTMLProvider
 {

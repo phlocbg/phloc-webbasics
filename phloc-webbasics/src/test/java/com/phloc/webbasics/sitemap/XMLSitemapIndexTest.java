@@ -35,8 +35,8 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.xml.schema.XMLSchemaValidationHelper;
 import com.phloc.commons.xml.transform.StringStreamSource;
-import com.phloc.scopes.web.mock.AbstractWebScopeAwareTestCase;
 import com.phloc.web.servlet.server.StaticServerInfo;
+import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**
  * Test class for class {@link XMLSitemapIndex}.

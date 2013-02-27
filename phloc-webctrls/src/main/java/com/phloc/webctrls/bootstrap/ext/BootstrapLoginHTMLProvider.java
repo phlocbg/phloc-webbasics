@@ -33,7 +33,6 @@ import com.phloc.html.hc.html.HCH2;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.login.CLogin;
@@ -46,6 +45,7 @@ import com.phloc.webctrls.bootstrap.BootstrapRow;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapSpan;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 {

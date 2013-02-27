@@ -95,6 +95,16 @@
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
+      <artifactId>phloc-scopes</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-appbasics</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
       <artifactId>phloc-json</artifactId>
       <version>2.3.7</version>
     </dependency>
@@ -115,24 +125,19 @@
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-scopes</artifactId>
-      <version>4.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-appbasics</artifactId>
-      <version>1.9.2</version>
+      <artifactId>phloc-webscopes</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
-      <version>1.9.10</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-masterdata</artifactId>
-      <version>3.0.5</version>
+      <version>3.1.0-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
 

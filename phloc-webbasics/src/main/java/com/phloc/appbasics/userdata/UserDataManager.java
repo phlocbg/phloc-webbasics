@@ -29,7 +29,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 public final class UserDataManager
 {

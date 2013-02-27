@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.resource.css.ICSSPathProvider;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * This class keeps track of all the CSS files that must be included for a

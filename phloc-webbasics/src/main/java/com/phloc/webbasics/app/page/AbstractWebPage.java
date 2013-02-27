@@ -38,10 +38,10 @@ import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCForm_FileUpload;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Abstract base implementation for {@link IWebPage}.

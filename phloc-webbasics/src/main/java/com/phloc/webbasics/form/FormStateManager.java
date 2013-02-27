@@ -31,7 +31,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
-import com.phloc.scopes.web.singleton.SessionWebSingleton;
+import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 public class FormStateManager extends SessionWebSingleton
 {

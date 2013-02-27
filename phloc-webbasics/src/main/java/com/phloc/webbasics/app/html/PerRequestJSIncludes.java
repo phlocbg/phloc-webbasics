@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.resource.js.IJSPathProvider;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * This class keeps track of all the JS files that must be included for a single

@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCRequestFieldBoolean;
 import com.phloc.html.hc.html.HCCheckBox;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Special request field specially for check boxes with a fixed value.

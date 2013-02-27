@@ -41,7 +41,7 @@ import com.phloc.commons.type.ObjectType;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.IScopeRenewalAware;
-import com.phloc.scopes.web.singleton.SessionWebSingleton;
+import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

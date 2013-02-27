@@ -38,7 +38,6 @@ import com.phloc.commons.stats.IStatisticsHandlerKeyedTimer;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
@@ -47,6 +46,7 @@ import com.phloc.webbasics.ajax.IAjaxExceptionHandler;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract implementation of a servlet that invokes AJAX functions.

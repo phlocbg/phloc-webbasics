@@ -34,9 +34,9 @@ import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.js.builder.JSPrinter;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.ApplicationWebSettings;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 @Immutable
 public final class WebHTMLCreator

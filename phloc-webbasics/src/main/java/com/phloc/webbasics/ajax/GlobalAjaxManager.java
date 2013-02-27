@@ -27,8 +27,8 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.singleton.GlobalWebSingleton;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.singleton.GlobalWebSingleton;
 
 /**
  * A global AJAX manager.

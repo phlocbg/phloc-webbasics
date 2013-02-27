@@ -37,9 +37,9 @@ import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.response.UnifiedResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Base class for stream and download servlet.

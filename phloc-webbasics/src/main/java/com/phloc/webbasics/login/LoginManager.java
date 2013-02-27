@@ -34,12 +34,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.domain.ISessionWebScope;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.ISessionWebScope;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Handle the application login process.

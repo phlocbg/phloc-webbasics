@@ -36,9 +36,9 @@ import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 public class HCFineUploaderBasic implements IHCNodeBuilder
 {

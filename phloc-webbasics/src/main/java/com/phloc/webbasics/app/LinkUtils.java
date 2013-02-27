@@ -32,7 +32,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
-import com.phloc.scopes.web.mgr.WebScopeManager;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Misc utilities to create link URLs.

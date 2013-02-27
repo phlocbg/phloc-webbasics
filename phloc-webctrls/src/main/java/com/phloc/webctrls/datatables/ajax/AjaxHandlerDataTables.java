@@ -36,7 +36,6 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
@@ -44,6 +43,7 @@ import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {

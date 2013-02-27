@@ -21,10 +21,10 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.phloc.scopes.web.mock.MockServletRequestListenerScopeAware;
-import com.phloc.scopes.web.mock.WebScopeTestRule;
 import com.phloc.web.mock.MockHttpListener;
 import com.phloc.webbasics.servlet.WebAppListener;
+import com.phloc.webscopes.mock.MockServletRequestListenerScopeAware;
+import com.phloc.webscopes.mock.WebScopeTestRule;
 
 /**
  * A JUnit test rule that is suitable for all webbasics projects

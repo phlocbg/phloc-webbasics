@@ -19,9 +19,9 @@ package com.phloc.webbasics.action.servlet;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webbasics.action.GlobalActionManager;
 import com.phloc.webbasics.action.IActionInvoker;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract action handling servlet

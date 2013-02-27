@@ -23,7 +23,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.lang.CGStringHelper;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

@@ -28,8 +28,8 @@ import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
-import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * This class provides some workarounds for known Bootstrap bugs.

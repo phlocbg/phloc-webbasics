@@ -25,13 +25,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.state.EContinue;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.servlet.AbstractScopeAwareFilter;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.response.UnifiedResponse;
+import com.phloc.webscopes.domain.IRequestWebScope;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.servlet.AbstractScopeAwareFilter;
 
 /**
  * Abstract base class for a filter performing actions via

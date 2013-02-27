@@ -46,17 +46,17 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.PDTUtils;
-import com.phloc.scopes.web.domain.IRequestWebScope;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.scopes.web.mgr.WebScopeManager;
-import com.phloc.scopes.web.servlet.AbstractScopeAwareHttpServlet;
-import com.phloc.scopes.web.servlet.RequestScopeInitializer;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.web.servlet.server.StaticServerInfo;
+import com.phloc.webscopes.domain.IRequestWebScope;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mgr.WebScopeManager;
+import com.phloc.webscopes.servlet.AbstractScopeAwareHttpServlet;
+import com.phloc.webscopes.servlet.RequestScopeInitializer;
 
 /**
  * Abstract base class for a servlet performing actions via

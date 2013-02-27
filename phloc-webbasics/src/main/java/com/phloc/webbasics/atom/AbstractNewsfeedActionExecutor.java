@@ -36,9 +36,9 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
-import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.action.AbstractActionExecutor;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Abstract news feed action.
