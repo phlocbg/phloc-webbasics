@@ -24,7 +24,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.userdata.UserDataObject;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.gfx.ImageDataManager;
@@ -55,6 +54,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
+import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
