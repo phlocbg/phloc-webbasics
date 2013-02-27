@@ -170,6 +170,14 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
     return aDeterminator.getAllItemIDs ();
   }
 
+  /**
+   * Get all menu items without a separate {@link MenuItemDeterminatorCallback}
+   * instance.
+   * 
+   * @param aMenuTree
+   *        The menu tree to get all items from. May not be <code>null</code>.
+   * @return A non-<code>null</code> map with all menu item IDs as keys.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public static Map <String, Boolean> getAllMenuItemIDs (@Nonnull final IMenuTree aMenuTree)
@@ -183,7 +191,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
       @Override
       public void onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
       {
-        ret.put (aItem.getID (), Boolean.TRUE);
+        ret.put (aItem.getID (), Boolean.valueOf (aItem.hasChildren ()));
       }
     });
     return ret;
