@@ -32,7 +32,6 @@ import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.security.user.password.PasswordConstraintMinLength;
 import com.phloc.appbasics.security.user.password.PasswordConstraints;
 import com.phloc.appbasics.security.user.password.PasswordUtils;
-import com.phloc.appbasics.userdata.UserDataManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
@@ -51,6 +50,7 @@ import com.phloc.webbasics.action.ApplicationActionManager;
 import com.phloc.webbasics.ajax.ApplicationAjaxManager;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
 import com.phloc.webbasics.app.layout.ApplicationLayoutManager;
+import com.phloc.webbasics.userdata.UserDataManager;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**

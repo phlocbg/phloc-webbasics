@@ -20,7 +20,23 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2013-02-27" version="2.0.2" />
+  <entry date="2013-02-27" category="tech" action="update" incompatible="true">
+    <change>
+      <text locale="en">Restored accidentally deleted class AbstractApplicationServlet</text>
+    </change>
+  </entry>
+  <entry date="2013-02-27" category="api" action="fix">
+    <change>
+      <text locale="en">Fixed package name for userdata stuff</text>
+    </change>
+  </entry>
   <release date="2013-02-27" version="2.0.1" />
+  <entry date="2013-02-27" category="api" action="remove" incompatible="true">
+    <change>
+      <text locale="en">Accidentally deleted class AbstractApplicationServlet</text>
+    </change>
+  </entry>
   <entry date="2013-02-27" category="tech" action="update" incompatible="true">
     <change>
       <text locale="en">Removed abstract stream servlets contained in phloc-webscopes</text>
