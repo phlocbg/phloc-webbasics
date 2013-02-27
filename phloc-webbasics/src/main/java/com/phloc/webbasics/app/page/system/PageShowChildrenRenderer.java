@@ -1,5 +1,6 @@
 package com.phloc.webbasics.app.page.system;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -18,7 +19,7 @@ import com.phloc.webbasics.app.LinkUtils;
  * 
  * @author philip
  */
-public class PageShowChildrenRenderer
+public class PageShowChildrenRenderer implements Serializable
 {
   public PageShowChildrenRenderer ()
   {}
