@@ -180,7 +180,7 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
             m_aMenuItemStack.push (aLI);
           }
           else
-            throw new IllegalStateException ("Unsupported menu object type!");
+            throw new IllegalStateException ("Unsupported menu object type: " + aMenuObj);
       }
       m_aChildCountStack.peek ().incrementAndGet ();
       return EHierarchyCallbackReturn.CONTINUE;

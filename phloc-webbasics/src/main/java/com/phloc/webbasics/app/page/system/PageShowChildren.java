@@ -23,30 +23,42 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItem;
+import com.phloc.appbasics.app.menu.IMenuItemExternal;
+import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
-import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCUL;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 public class PageShowChildren extends AbstractWebPage
 {
-  private static final class ShowChildren extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
+  private static final class ShowChildrenCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
   {
     private final Locale m_aDisplayLocale;
     private final NonBlockingStack <HCUL> m_aStack;
+    private final PageShowChildrenRenderer m_aRenderer;
 
-    private ShowChildren (@Nonnull final HCUL aUL, @Nonnull final Locale aDisplayLocale)
+    ShowChildrenCallback (@Nonnull final HCUL aUL,
+                          @Nonnull final Locale aDisplayLocale,
+                          @Nonnull final PageShowChildrenRenderer aRenderer)
     {
+      if (aUL == null)
+        throw new NullPointerException ("UL");
+      if (aDisplayLocale == null)
+        throw new NullPointerException ("displayLocale");
+      if (aRenderer == null)
+        throw new NullPointerException ("renderer");
       m_aDisplayLocale = aDisplayLocale;
       m_aStack = new NonBlockingStack <HCUL> (aUL);
+      m_aRenderer = aRenderer;
     }
 
     @Override
@@ -80,39 +92,58 @@ public class PageShowChildren extends AbstractWebPage
     public void onItemBeforeChildren (@Nullable final DefaultTreeItemWithID <String, IMenuObject> aTreeItem)
     {
       final IMenuObject aMenuObj = aTreeItem == null ? null : aTreeItem.getData ();
-      if (aMenuObj instanceof IMenuItem)
+      if (aMenuObj != null)
       {
-        final IMenuItem aMenuItem = (IMenuItem) aMenuObj;
-        if (aMenuItem.matchesDisplayFilter ())
-        {
-          // Item as link to menu item
-          m_aStack.peek ()
-                  .addItem (new HCA (LinkUtils.getLinkToMenuItem (aMenuItem.getID ())).addChild (aMenuItem.getDisplayText (m_aDisplayLocale)));
-        }
+        IHCNode aNode;
+        if (aMenuObj instanceof IMenuSeparator)
+          aNode = m_aRenderer.renderMenuSeparator ((IMenuSeparator) aMenuObj, m_aDisplayLocale);
+        else
+          if (aMenuObj instanceof IMenuItemPage)
+            aNode = m_aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj, m_aDisplayLocale);
+          else
+            if (aMenuObj instanceof IMenuItemExternal)
+              aNode = m_aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj, m_aDisplayLocale);
+            else
+              throw new IllegalStateException ("Unsupported menu object type: " + aMenuObj);
+
+        if (aNode != null)
+          m_aStack.peek ().addItem (aNode);
       }
     }
   }
 
   private final IMenuTree m_aMenuTree;
+  private final PageShowChildrenRenderer m_aRenderer;
 
   public PageShowChildren (@Nonnull @Nonempty final String sID,
                            @Nonnull final String sName,
                            @Nonnull final IMenuTree aMenuTree)
   {
+    this (sID, sName, aMenuTree, new PageShowChildrenRenderer ());
+  }
+
+  public PageShowChildren (@Nonnull @Nonempty final String sID,
+                           @Nonnull final String sName,
+                           @Nonnull final IMenuTree aMenuTree,
+                           @Nonnull final PageShowChildrenRenderer aRenderer)
+  {
     super (sID, sName);
     if (aMenuTree == null)
       throw new NullPointerException ("menuTree");
+    if (aRenderer == null)
+      throw new NullPointerException ("renderer");
     m_aMenuTree = aMenuTree;
+    m_aRenderer = aRenderer;
   }
 
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = m_aMenuTree.getItemWithID (getID ());
-    if (aMenuTreeItem != null && (aMenuTreeItem.getData () instanceof IMenuItem))
+    if (aMenuTreeItem != null && aMenuTreeItem.getData () instanceof IMenuItem)
     {
       final HCUL aUL = new HCUL ();
-      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildren (aUL, aWPEC.getDisplayLocale ()));
+      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback (aUL, aWPEC.getDisplayLocale (), m_aRenderer));
       aWPEC.getNodeList ().addChild (aUL);
     }
   }
