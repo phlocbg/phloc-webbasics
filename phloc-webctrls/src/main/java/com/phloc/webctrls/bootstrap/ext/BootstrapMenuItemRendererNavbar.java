@@ -120,6 +120,14 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
   public static HCUL createNavbarMenu (@Nonnull final IMenuTree aMenuTree, @Nonnull final Locale aDisplayLocale)
   {
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllMenuItemIDs (aMenuTree);
+    return createNavbarMenu (aMenuTree, aDisplayLocale, aAllDisplayMenuItemIDs);
+  }
+
+  @Nonnull
+  public static HCUL createNavbarMenu (@Nonnull final IMenuTree aMenuTree,
+                                       @Nonnull final Locale aDisplayLocale,
+                                       @Nonnull final Map <String, Boolean> aAllDisplayMenuItemIDs)
+  {
     final HCUL aUL = MenuRendererCallback.createRenderedMenu (FactoryNewInstance.create (HCUL.class),
                                                               aMenuTree.getRootItem (),
                                                               new BootstrapMenuItemRendererNavbar (aDisplayLocale),
