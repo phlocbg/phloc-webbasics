@@ -32,7 +32,7 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.state.EChange;
 import com.phloc.datetime.PDTFactory;
-import com.phloc.datetime.format.PDTWebDateUtils;
+import com.phloc.web.datetime.PDTWebDateUtils;
 
 /**
  * Contains the settings for the {@link ResponseHelper} class.

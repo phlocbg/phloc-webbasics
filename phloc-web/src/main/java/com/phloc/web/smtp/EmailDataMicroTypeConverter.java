@@ -34,7 +34,7 @@ import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.microdom.utils.MicroUtils;
 import com.phloc.datetime.config.PDTConfig;
-import com.phloc.datetime.format.PDTWebDateUtils;
+import com.phloc.web.datetime.PDTWebDateUtils;
 import com.phloc.web.smtp.attachment.EmailAttachment;
 import com.phloc.web.smtp.attachment.EmailAttachmentList;
 

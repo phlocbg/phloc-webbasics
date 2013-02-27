@@ -36,7 +36,7 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
-import com.phloc.datetime.format.PDTWebDateUtils;
+import com.phloc.web.datetime.PDTWebDateUtils;
 
 /**
  * Abstracts HTTP header interface for external usage.
