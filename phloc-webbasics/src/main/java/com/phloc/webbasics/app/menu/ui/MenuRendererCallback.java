@@ -119,7 +119,19 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
     {
       final T aParent = m_aMenuListStack.peek ();
       final IMenuObject aMenuObj = aItem.getData ();
-      final boolean bHasChildren = aItem.hasChildren ();
+      boolean bHasChildren = aItem.hasChildren ();
+      if (bHasChildren)
+      {
+        // Check if the item has children to be displayed!
+        boolean bHasDisplayChildren = false;
+        for (final IMenuObject aChildMenuObj : aItem.getAllChildDatas ())
+          if (m_aDisplayMenuItemIDs.containsKey (aChildMenuObj.getID ()))
+          {
+            bHasDisplayChildren = true;
+            break;
+          }
+        bHasChildren = bHasDisplayChildren;
+      }
       final boolean bExpanded = aExpandedState.booleanValue ();
       if (aMenuObj instanceof IMenuSeparator)
       {
