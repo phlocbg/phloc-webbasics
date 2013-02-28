@@ -299,9 +299,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected void validateAndSaveInputParameters (final WebPageExecutionContext aWPEC,
-                                                 final IUser aSelectedObject,
-                                                 final FormErrors aFormErrors,
+  protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
+                                                 @Nullable final IUser aSelectedObject,
+                                                 @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -402,12 +402,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected void showInputForm (final WebPageExecutionContext aWPEC,
+  protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
                                 @Nullable final IUser aSelectedObject,
-                                final HCForm aForm,
+                                @Nonnull final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,
-                                final FormErrors aFormErrors)
+                                @Nonnull final FormErrors aFormErrors)
   {
     if (bEdit && !isEditAllowed (aSelectedObject))
       throw new IllegalStateException ("Won't work!");

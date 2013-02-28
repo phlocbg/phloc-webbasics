@@ -283,12 +283,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @param aWPEC
    *        Web page execution context
    * @param aSelectedObject
-   *        The currently selected object
+   *        The currently selected object. May be <code>null</code> when
+   *        creating a new object
    * @param aFormErrors
+   *        Object for storing the validation error
    * @param bEdit
+   *        <code>true</code> if in edit mode, <code>false</code> if in create
+   *        or copy mode
    */
   protected abstract void validateAndSaveInputParameters (@Nonnull WebPageExecutionContext aWPEC,
-                                                          @Nonnull DATATYPE aSelectedObject,
+                                                          @Nullable DATATYPE aSelectedObject,
                                                           @Nonnull FormErrors aFormErrors,
                                                           boolean bEdit);
 
