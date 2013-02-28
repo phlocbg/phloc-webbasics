@@ -246,6 +246,13 @@ public final class User implements IUser
 
   @Nonnull
   @Nonempty
+  public final String getName ()
+  {
+    return getLoginName ();
+  }
+
+  @Nonnull
+  @Nonempty
   public String getLoginName ()
   {
     return m_sLoginName;

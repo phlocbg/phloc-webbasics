@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.auth.subject.IAuthSubject;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -38,13 +39,7 @@ import com.phloc.datetime.IHasLastModificationDateTime;
  * 
  * @author philip
  */
-public interface IUser extends
-                      ITypedObject <String>,
-                      IHasDisplayName,
-                      IHasCreationDateTime,
-                      IHasLastModificationDateTime,
-                      IHasDeletionDateTime,
-                      Serializable
+public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreationDateTime, IHasLastModificationDateTime, IHasDeletionDateTime, Serializable, IAuthSubject
 {
   /**
    * @return <code>true</code> if the user has the ID
