@@ -105,14 +105,20 @@ public final class DataTablesServerData implements IHasUIState
       return m_sTextContent;
     }
 
-    public boolean matchesRegEx (@Nonnull final String sSearchText)
+    public boolean matchesRegEx (@Nonnull final String [] aSearchTexts)
     {
-      return RegExHelper.stringMatchesPattern (sSearchText, m_sTextContent);
+      for (final String sSearchText : aSearchTexts)
+        if (RegExHelper.stringMatchesPattern (sSearchText, m_sTextContent))
+          return true;
+      return false;
     }
 
-    public boolean matchesPlain (@Nonnull final String sSearchText, @Nonnull final Locale aDisplayLocale)
+    public boolean matchesPlain (@Nonnull final String [] aSearchTexts, @Nonnull final Locale aDisplayLocale)
     {
-      return StringHelper.containsIgnoreCase (m_sTextContent, sSearchText, aDisplayLocale);
+      for (final String sSearchText : aSearchTexts)
+        if (StringHelper.containsIgnoreCase (m_sTextContent, sSearchText, aDisplayLocale))
+          return true;
+      return false;
     }
 
     @Override

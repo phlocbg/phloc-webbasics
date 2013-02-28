@@ -33,7 +33,6 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ESortOrder;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
@@ -113,7 +112,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   {
     final Locale aDisplayLocale = aServerData.getDisplayLocale ();
 
-    // Sorting
+    // Sorting possible?
     if (aServerData.getRowCount () > 0)
     {
       final ServerSortState aOldServerSortState = aServerData.getServerSortState ();
@@ -123,11 +122,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       // Must we change the sorting?
       if (!aNewServerSortState.equals (aOldServerSortState))
       {
+        // Yes, change the sorting
         final Comparator <RowData> aComp = new RequestComparator (aNewServerSortState);
 
         // Main sorting
         if (s_aLogger.isDebugEnabled ())
-          s_aLogger.debug ("Sorting " + aServerData.getRowCount () + " rows with " + aComp);
+          s_aLogger.debug ("DataTables sorting " + aServerData.getRowCount () + " rows with " + aComp);
         aServerData.sortAllRows (aComp);
 
         // Remember the new server state
@@ -136,11 +136,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     List <RowData> aResultRows = aServerData.directGetAllRows ();
-    if (aRequestData.hasSearchText ())
+    if (aRequestData.isSearchActive ())
     {
       // filter rows
-      final String sGlobalSearchText = aRequestData.getSearchText ();
-      final boolean bGlobalSearchRegEx = aRequestData.isSearchRegEx ();
+      final RequestDataSearch aGlobalSearch = aRequestData.getSearch ();
+      final String [] aGlobalSearchTexts = aGlobalSearch.getSearchTexts ();
+      final boolean bGlobalSearchRegEx = aGlobalSearch.isRegEx ();
       final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
 
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
@@ -152,17 +153,24 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
           final RequestDataColumn aColumn = aColumns[nCellIndex];
           if (aColumn.isSearchable ())
           {
-            // Determine search text
-            String sSearchText = aColumn.getSearchText ();
-            if (StringHelper.hasNoText (sSearchText))
-              sSearchText = sGlobalSearchText;
-
-            // RegEx search?
-            final boolean bIsRegEx = aColumn.isSearchRegEx () || bGlobalSearchRegEx;
+            // Determine search texts
+            final RequestDataSearch aColumnSearch = aColumn.getSearch ();
+            String [] aColumnSearchTexts;
+            boolean bColumnSearchRegEx;
+            if (aColumnSearch.hasSearchText ())
+            {
+              aColumnSearchTexts = aColumnSearch.getSearchTexts ();
+              bColumnSearchRegEx = aColumnSearch.isRegEx ();
+            }
+            else
+            {
+              aColumnSearchTexts = aGlobalSearchTexts;
+              bColumnSearchRegEx = bGlobalSearchRegEx;
+            }
 
             // Main matching
-            final boolean bIsMatching = bIsRegEx ? aCell.matchesRegEx (sSearchText)
-                                                : aCell.matchesPlain (sSearchText, aDisplayLocale);
+            final boolean bIsMatching = bColumnSearchRegEx ? aCell.matchesRegEx (aColumnSearchTexts)
+                                                          : aCell.matchesPlain (aColumnSearchTexts, aDisplayLocale);
             if (bIsMatching)
             {
               aFilteredRows.add (aRow);
@@ -174,7 +182,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       }
 
       if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Filtered " + aFilteredRows.size () + " rows out of " + aResultRows.size ());
+        s_aLogger.debug ("DataTables filtered " + aFilteredRows.size () + " rows out of " + aResultRows.size ());
 
       // Use the filtered rows
       aResultRows = aFilteredRows;
@@ -211,8 +219,9 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
   protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                              @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
-    if (false)
-      System.out.println (ContainerHelper.getSortedByKey (aParams.getAllAttributes ()));
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("DataTables AJAX request: " + ContainerHelper.getSortedByKey (aParams.getAllAttributes ()));
+
     // Read input parameters
     final int nDisplayStart = aParams.getAttributeAsInt (DISPLAY_START, 0);
     final int nDisplayLength = aParams.getAttributeAsInt (DISPLAY_LENGTH, 0);

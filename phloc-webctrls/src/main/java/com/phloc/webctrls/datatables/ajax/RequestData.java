@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -38,16 +37,15 @@ final class RequestData
 {
   private final int m_nDisplayStart;
   private final int m_nDisplayLength;
-  private final String m_sSearchText;
-  private final boolean m_bRegEx;
+  private final RequestDataSearch m_aSearch;
   private final List <RequestDataColumn> m_aColumnData;
   private final RequestDataSortColumn [] m_aSortColumns;
   private final int m_nEcho;
 
   RequestData (final int nDisplayStart,
                final int nDisplayLength,
-               @Nullable final String sSearch,
-               final boolean bRegEx,
+               @Nullable final String sSearchText,
+               final boolean bSearchRegEx,
                @Nonnull final List <RequestDataColumn> aColumnData,
                @Nonnull final RequestDataSortColumn [] aSortColumns,
                final int nEcho)
@@ -60,8 +58,7 @@ final class RequestData
       throw new IllegalArgumentException ("ColumnData may not contain null elements");
     m_nDisplayStart = nDisplayStart;
     m_nDisplayLength = nDisplayLength;
-    m_sSearchText = sSearch;
-    m_bRegEx = bRegEx;
+    m_aSearch = new RequestDataSearch (sSearchText, bSearchRegEx);
     m_aColumnData = aColumnData;
     m_aSortColumns = aSortColumns;
     m_nEcho = nEcho;
@@ -95,29 +92,30 @@ final class RequestData
   }
 
   /**
-   * @return <code>true</code> if any global search text is present
+   * @return <code>true</code> if either the global search or any column search
+   *         is active.
    */
-  public boolean hasSearchText ()
+  public boolean isSearchActive ()
   {
-    return StringHelper.hasText (m_sSearchText);
+    // Global search text present?
+    if (m_aSearch.hasSearchText ())
+      return true;
+
+    // Per-column search text present?
+    for (final RequestDataColumn aColumn : m_aColumnData)
+      if (aColumn.isSearchable () && aColumn.getSearch ().hasSearchText ())
+        return true;
+
+    return false;
   }
 
   /**
    * @return Global search field
    */
-  @Nullable
-  public String getSearchText ()
+  @Nonnull
+  public RequestDataSearch getSearch ()
   {
-    return m_sSearchText;
-  }
-
-  /**
-   * @return True if the global filter should be treated as a regular expression
-   *         for advanced filtering, false if not.
-   */
-  public boolean isSearchRegEx ()
-  {
-    return m_bRegEx;
+    return m_aSearch;
   }
 
   @Nonnull
@@ -170,8 +168,7 @@ final class RequestData
   {
     return new ToStringGenerator (this).append ("displayStart", m_nDisplayStart)
                                        .append ("displayLength", m_nDisplayLength)
-                                       .append ("search", m_sSearchText)
-                                       .append ("regEx", m_bRegEx)
+                                       .append ("search", m_aSearch)
                                        .append ("sortCols", m_aSortColumns)
                                        .append ("columnData", m_aColumnData)
                                        .append ("echo", m_nEcho)

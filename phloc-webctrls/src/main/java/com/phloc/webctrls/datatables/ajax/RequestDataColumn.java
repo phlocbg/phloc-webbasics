@@ -31,20 +31,18 @@ import com.phloc.commons.string.ToStringGenerator;
 final class RequestDataColumn
 {
   private final boolean m_bSearchable;
-  private final String m_sSearch;
-  private final boolean m_bSearchRegEx;
+  private final RequestDataSearch m_aSearch;
   private final boolean m_bSortable;
   private final String m_sDataProp;
 
   RequestDataColumn (final boolean bSearchable,
-                     @Nullable final String sSearch,
+                     @Nullable final String sSearchText,
                      final boolean bSearchRegEx,
                      final boolean bSortable,
                      @Nullable final String sDataProp)
   {
     m_bSearchable = bSearchable;
-    m_sSearch = sSearch;
-    m_bSearchRegEx = bSearchRegEx;
+    m_aSearch = bSearchable ? new RequestDataSearch (sSearchText, bSearchRegEx) : null;
     m_bSortable = bSortable;
     m_sDataProp = sDataProp;
   }
@@ -59,21 +57,13 @@ final class RequestDataColumn
   }
 
   /**
-   * @return Individual column filter
+   * @return Individual column search object. May be <code>null</code> if column
+   *         is not searchable.
    */
   @Nullable
-  public String getSearchText ()
+  public RequestDataSearch getSearch ()
   {
-    return m_sSearch;
-  }
-
-  /**
-   * @return True if the individual column filter should be treated as a regular
-   *         expression for advanced filtering, false if not
-   */
-  public boolean isSearchRegEx ()
-  {
-    return m_bSearchRegEx;
+    return m_aSearch;
   }
 
   /**
@@ -100,8 +90,7 @@ final class RequestDataColumn
   public String toString ()
   {
     return new ToStringGenerator (this).append ("searchable", m_bSearchable)
-                                       .append ("search", m_sSearch)
-                                       .append ("searchRegEx", m_bSearchRegEx)
+                                       .append ("search", m_aSearch)
                                        .append ("sortable", m_bSortable)
                                        .append ("dataProp", m_sDataProp)
                                        .toString ();
