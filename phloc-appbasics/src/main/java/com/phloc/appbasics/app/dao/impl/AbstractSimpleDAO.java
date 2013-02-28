@@ -117,6 +117,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       if (bIsInitialization)
       {
         // initial setup for non-existing file
+        if (GlobalDebug.isDebugMode ())
+          s_aLogger.info ("Trying to initialize DAO XML file '" + m_aFile + "'");
+
         beginWithoutAutoSave ();
         try
         {
