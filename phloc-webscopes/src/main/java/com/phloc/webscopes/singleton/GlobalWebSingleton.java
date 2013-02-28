@@ -61,17 +61,41 @@ public abstract class GlobalWebSingleton extends AbstractSingleton
     return _getStaticScope (true);
   }
 
+  /**
+   * Get the singleton object in the current global web scope, using the passed
+   * class. If the singleton is not yet instantiated, a new instance is created.
+   * 
+   * @param aClass
+   *        The class to be used. May not be <code>null</code>. The class must
+   *        be public as needs to have a public no-argument constructor.
+   * @return The singleton object and never <code>null</code>.
+   */
   @Nonnull
   protected static final <T extends GlobalWebSingleton> T getGlobalSingleton (@Nonnull final Class <T> aClass)
   {
     return getSingleton (_getStaticScope (true), aClass);
   }
 
+  /**
+   * Check if a singleton is already instantiated inside the current global web
+   * scope
+   * 
+   * @param aClass
+   *        The class to be checked. May not be <code>null</code>.
+   * @return <code>true</code> if the singleton for the specified class is
+   *         already instantiated, <code>false</code> otherwise.
+   */
   public static final boolean isSingletonInstantiated (@Nonnull final Class <? extends GlobalWebSingleton> aClass)
   {
     return isSingletonInstantiated (_getStaticScope (false), aClass);
   }
 
+  /**
+   * Get all singleton objects registered in the current global web scope.
+   * 
+   * @return A non-<code>null</code> list with all instances of this class in
+   *         the current global web scope.
+   */
   @Nonnull
   public static final List <GlobalWebSingleton> getAllSingletons ()
   {
