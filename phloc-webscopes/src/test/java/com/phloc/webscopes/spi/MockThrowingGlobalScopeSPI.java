@@ -17,34 +17,20 @@
  */
 package com.phloc.webscopes.spi;
 
+import com.phloc.commons.annotations.IsSPIImplementation;
+import com.phloc.scopes.domain.IGlobalScope;
+import com.phloc.scopes.spi.IGlobalScopeSPI;
 
-/**
- * Abstract base class for all Mock SPI implementations
- * 
- * @author philip
- */
-public abstract class AbstractWebScopeSPI
+@IsSPIImplementation
+public final class MockThrowingGlobalScopeSPI extends AbstractThrowingWebScopeSPI implements IGlobalScopeSPI
 {
-  private static int s_nBegin = 0;
-  private static int s_nEnd = 0;
-
-  protected static final void onBegin ()
+  public void onGlobalScopeBegin (final IGlobalScope aScope)
   {
-    s_nBegin++;
+    onBegin ();
   }
 
-  public static final int getBegin ()
+  public void onGlobalScopeEnd (final IGlobalScope aScope)
   {
-    return s_nBegin;
-  }
-
-  protected static final void onEnd ()
-  {
-    s_nEnd++;
-  }
-
-  public static final int getEnd ()
-  {
-    return s_nEnd;
+    onEnd ();
   }
 }
