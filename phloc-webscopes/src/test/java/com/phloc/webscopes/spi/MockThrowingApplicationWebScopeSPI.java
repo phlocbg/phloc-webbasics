@@ -22,7 +22,7 @@ import com.phloc.scopes.domain.IApplicationScope;
 import com.phloc.scopes.spi.IApplicationScopeSPI;
 
 @IsSPIImplementation
-public final class MockThrowingApplicationScopeSPI extends AbstractThrowingWebScopeSPI implements IApplicationScopeSPI
+public final class MockThrowingApplicationWebScopeSPI extends AbstractThrowingWebScopeSPI implements IApplicationScopeSPI
 {
   public void onApplicationScopeBegin (final IApplicationScope aScope)
   {

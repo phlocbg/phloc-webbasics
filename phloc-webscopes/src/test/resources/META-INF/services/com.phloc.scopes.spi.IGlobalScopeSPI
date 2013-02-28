@@ -1,2 +1,2 @@
-com.phloc.webscopes.spi.MockGlobalScopeSPI
-com.phloc.webscopes.spi.MockThrowingGlobalScopeSPI
+com.phloc.webscopes.spi.MockGlobalWebScopeSPI
+com.phloc.webscopes.spi.MockThrowingGlobalWebScopeSPI

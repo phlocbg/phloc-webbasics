@@ -22,7 +22,7 @@ import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.spi.ISessionScopeSPI;
 
 @IsSPIImplementation
-public final class MockSessionScopeSPI extends AbstractWebScopeSPI implements ISessionScopeSPI
+public final class MockSessionWebScopeSPI extends AbstractWebScopeSPI implements ISessionScopeSPI
 {
   public void onSessionScopeBegin (final ISessionScope aScope)
   {

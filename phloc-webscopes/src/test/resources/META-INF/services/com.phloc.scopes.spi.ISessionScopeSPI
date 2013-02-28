@@ -1,2 +1,2 @@
-com.phloc.webscopes.spi.MockSessionScopeSPI
-com.phloc.webscopes.spi.MockThrowingSessionScopeSPI
+com.phloc.webscopes.spi.MockSessionWebScopeSPI
+com.phloc.webscopes.spi.MockThrowingSessionWebScopeSPI

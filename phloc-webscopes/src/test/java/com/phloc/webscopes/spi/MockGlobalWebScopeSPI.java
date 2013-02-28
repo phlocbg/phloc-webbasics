@@ -18,18 +18,18 @@
 package com.phloc.webscopes.spi;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
-import com.phloc.scopes.domain.IRequestScope;
-import com.phloc.scopes.spi.IRequestScopeSPI;
+import com.phloc.scopes.domain.IGlobalScope;
+import com.phloc.scopes.spi.IGlobalScopeSPI;
 
 @IsSPIImplementation
-public final class MockThrowingRequestScopeSPI extends AbstractThrowingWebScopeSPI implements IRequestScopeSPI
+public final class MockGlobalWebScopeSPI extends AbstractWebScopeSPI implements IGlobalScopeSPI
 {
-  public void onRequestScopeBegin (final IRequestScope aScope)
+  public void onGlobalScopeBegin (final IGlobalScope aScope)
   {
     onBegin ();
   }
 
-  public void onRequestScopeEnd (final IRequestScope aScope)
+  public void onGlobalScopeEnd (final IGlobalScope aScope)
   {
     onEnd ();
   }
