@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.scopes.ScopeUtils;
-import com.phloc.scopes.nonweb.domain.ISessionApplicationScope;
+import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.webscopes.domain.ISessionWebScope;
 import com.phloc.webscopes.mgr.WebScopeManager;
 

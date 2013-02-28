@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.scopes.nonweb.domain.ISessionScope;
-import com.phloc.scopes.nonweb.mgr.ScopeSessionManager;
+import com.phloc.scopes.domain.ISessionScope;
+import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.webscopes.domain.ISessionWebScope;
 
 /**

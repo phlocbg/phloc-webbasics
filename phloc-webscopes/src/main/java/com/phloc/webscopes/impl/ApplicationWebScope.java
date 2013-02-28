@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.scopes.nonweb.impl.ApplicationScope;
+import com.phloc.scopes.impl.ApplicationScope;
 import com.phloc.webscopes.domain.IApplicationWebScope;
 
 /**

@@ -26,7 +26,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
-import com.phloc.webscopes.singleton.GlobalWebSingleton;
 
 /**
  * Test class for class {@link GlobalWebSingleton}.

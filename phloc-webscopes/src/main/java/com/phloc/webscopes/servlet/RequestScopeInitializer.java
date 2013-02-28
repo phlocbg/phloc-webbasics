@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.scopes.nonweb.mgr.ScopeManager;
+import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.webscopes.domain.IRequestWebScope;
 import com.phloc.webscopes.mgr.WebScopeManager;
 

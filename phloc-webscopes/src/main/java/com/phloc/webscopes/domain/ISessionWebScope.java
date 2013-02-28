@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpSession;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.scopes.nonweb.domain.ISessionScope;
+import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.webscopes.IWebScope;
 
 /**

@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.phloc.scopes.nonweb.domain.IRequestScope;
+import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.webscopes.IWebScope;
 

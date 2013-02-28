@@ -21,7 +21,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.phloc.webscopes.mgr.EWebScope;
 import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**

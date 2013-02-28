@@ -32,11 +32,11 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.scopes.nonweb.domain.IGlobalScope;
-import com.phloc.scopes.nonweb.domain.IRequestScope;
-import com.phloc.scopes.nonweb.domain.ISessionScope;
-import com.phloc.scopes.nonweb.mgr.ScopeManager;
-import com.phloc.scopes.nonweb.mgr.ScopeSessionManager;
+import com.phloc.scopes.domain.IGlobalScope;
+import com.phloc.scopes.domain.IRequestScope;
+import com.phloc.scopes.domain.ISessionScope;
+import com.phloc.scopes.mgr.ScopeManager;
+import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.webscopes.MetaWebScopeFactory;
 import com.phloc.webscopes.domain.IApplicationWebScope;
 import com.phloc.webscopes.domain.IGlobalWebScope;

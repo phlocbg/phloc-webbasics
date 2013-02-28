@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.EChange;
-import com.phloc.scopes.nonweb.impl.SessionApplicationScope;
+import com.phloc.scopes.impl.SessionApplicationScope;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
 
 /**

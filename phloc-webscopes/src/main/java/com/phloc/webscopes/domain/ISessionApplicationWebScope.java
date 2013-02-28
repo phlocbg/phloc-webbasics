@@ -17,7 +17,7 @@
  */
 package com.phloc.webscopes.domain;
 
-import com.phloc.scopes.nonweb.domain.ISessionApplicationScope;
+import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.webscopes.IWebScope;
 
 /**

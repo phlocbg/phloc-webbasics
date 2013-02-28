@@ -27,7 +27,7 @@ import javax.servlet.ServletContext;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.nonweb.impl.GlobalScope;
+import com.phloc.scopes.impl.GlobalScope;
 import com.phloc.webscopes.MetaWebScopeFactory;
 import com.phloc.webscopes.domain.IApplicationWebScope;
 import com.phloc.webscopes.domain.IGlobalWebScope;

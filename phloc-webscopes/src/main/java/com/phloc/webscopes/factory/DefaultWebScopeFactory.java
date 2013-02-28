@@ -37,10 +37,10 @@ import com.phloc.webscopes.domain.ISessionApplicationWebScope;
 import com.phloc.webscopes.domain.ISessionWebScope;
 import com.phloc.webscopes.impl.ApplicationWebScope;
 import com.phloc.webscopes.impl.GlobalWebScope;
+import com.phloc.webscopes.impl.GlobalWebScope.IContextPathProvider;
 import com.phloc.webscopes.impl.RequestWebScope;
 import com.phloc.webscopes.impl.SessionApplicationWebScope;
 import com.phloc.webscopes.impl.SessionWebScope;
-import com.phloc.webscopes.impl.GlobalWebScope.IContextPathProvider;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**

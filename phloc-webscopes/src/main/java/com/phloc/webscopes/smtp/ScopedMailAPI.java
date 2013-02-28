@@ -25,7 +25,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.ESuccess;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.web.smtp.queue.MailAPI;

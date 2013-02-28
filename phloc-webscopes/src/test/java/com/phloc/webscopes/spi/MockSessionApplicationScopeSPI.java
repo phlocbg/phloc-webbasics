@@ -18,7 +18,7 @@
 package com.phloc.webscopes.spi;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
-import com.phloc.scopes.nonweb.domain.ISessionApplicationScope;
+import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.scopes.spi.ISessionApplicationScopeSPI;
 
 @IsSPIImplementation

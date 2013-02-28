@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
 
-import com.phloc.scopes.nonweb.domain.IGlobalScope;
+import com.phloc.scopes.domain.IGlobalScope;
 import com.phloc.webscopes.IWebScope;
 
 /**

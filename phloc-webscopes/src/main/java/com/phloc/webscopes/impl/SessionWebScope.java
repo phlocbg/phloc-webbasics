@@ -32,7 +32,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.nonweb.impl.SessionScope;
+import com.phloc.scopes.impl.SessionScope;
 import com.phloc.webscopes.MetaWebScopeFactory;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
 import com.phloc.webscopes.domain.ISessionWebScope;

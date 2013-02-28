@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 public final class MockSessionWebSingleton extends SessionWebSingleton
 {

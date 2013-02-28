@@ -23,7 +23,6 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
-import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 /**
  * Test class for class {@link SessionWebSingleton}.<br>

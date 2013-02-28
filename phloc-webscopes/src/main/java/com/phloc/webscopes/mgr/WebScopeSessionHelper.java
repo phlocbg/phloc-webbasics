@@ -32,8 +32,8 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.IScopeRenewalAware;
-import com.phloc.scopes.nonweb.domain.ISessionApplicationScope;
-import com.phloc.scopes.nonweb.mgr.ScopeSessionManager;
+import com.phloc.scopes.domain.ISessionApplicationScope;
+import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
 import com.phloc.webscopes.domain.ISessionWebScope;
 

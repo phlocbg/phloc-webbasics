@@ -33,12 +33,10 @@ import javax.servlet.http.HttpSession;
 import org.junit.Test;
 
 import com.phloc.scopes.IScopeRenewalAware;
-import com.phloc.scopes.nonweb.mgr.ScopeSessionManager;
+import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
 import com.phloc.webscopes.domain.ISessionWebScope;
-import com.phloc.webscopes.mgr.WebScopeManager;
-import com.phloc.webscopes.mgr.WebScopeSessionHelper;
 import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**

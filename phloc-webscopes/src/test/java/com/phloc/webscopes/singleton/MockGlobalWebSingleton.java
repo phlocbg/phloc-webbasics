@@ -20,7 +20,6 @@ package com.phloc.webscopes.singleton;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.webscopes.singleton.GlobalWebSingleton;
 
 /**
  * Mock global web singleton
