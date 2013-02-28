@@ -21,7 +21,9 @@ import java.io.File;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
@@ -154,12 +156,20 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   protected final void logInitParameters (@Nonnull final ServletContext aSC)
   {
     s_aLogger.info ("Servlet context init-parameters:");
+
+    // Put them in a sorted map
+    final Map <String, String> aParams = new TreeMap <String, String> ();
     final Enumeration <?> aEnum = aSC.getInitParameterNames ();
     while (aEnum.hasMoreElements ())
     {
       final String sName = (String) aEnum.nextElement ();
-      s_aLogger.info ("  " + sName + "=" + aSC.getInitParameter (sName));
+      final String sValue = aSC.getInitParameter (sName);
+      aParams.put (sName, sValue);
     }
+
+    // Emit them
+    for (final Map.Entry <String, String> aEntry : aParams.entrySet ())
+      s_aLogger.info ("  " + aEntry.getKey () + "=" + aEntry.getValue ());
   }
 
   protected final void logThirdpartyModules ()
