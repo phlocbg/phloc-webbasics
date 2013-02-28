@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.mime.CMimeType;
@@ -45,7 +46,9 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author philip
  */
-public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecutor implements IHasID <String>, IHasDisplayText
+public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecutor implements
+                                                                                   IHasID <String>,
+                                                                                   IHasDisplayText
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractNewsfeedActionExecutor.class);
   private static final IStatisticsHandlerKeyedCounter s_aStatsHdlExecute = StatisticsManager.getKeyedCounterHandler (AbstractNewsfeedActionExecutor.class.getName () +
@@ -79,6 +82,13 @@ public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecu
     return m_aDisplayText.getDisplayText (aContentLocale);
   }
 
+  @Nonnull
+  @OverrideOnDemand
+  protected String getFeedDescription ()
+  {
+    return "phloc-webbasics";
+  }
+
   protected abstract void fillNewsfeed (@Nonnull Feed aFeed);
 
   public final void execute (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
@@ -92,7 +102,7 @@ public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecu
     aFeed.setID ("urn:phloc-webbasics:newsfeed:" + m_sFeedID);
 
     final FeedGenerator aGenerator = new FeedGenerator ("urn:phloc-webbasics");
-    aGenerator.setDescription ("phloc-webbasics");
+    aGenerator.setDescription (getFeedDescription ());
     aFeed.setGenerator (aGenerator);
     aFeed.addLink (new FeedLink (aRequestScope.getFullContextAndServletPath () + m_sFeedID, FeedLink.REL_SELF));
 
