@@ -41,12 +41,25 @@ public enum EWebScope
   /** The request scope. */
   REQUEST;
 
+  /**
+   * @return The current {@link IWebScope} object for this enum. Aequivalent to
+   *         <code>getScope(true)</code> and therefore never <code>null</code>.
+   */
   @Nonnull
   public IWebScope getScope ()
   {
     return getScope (true);
   }
 
+  /**
+   * Get the current web scope object of this enum entry.
+   * 
+   * @param bCreateIfNotExisting
+   *        if <code>true</code> the scope is created if it is not existing.
+   * @return <code>null</code> if the scope is not existing yet and should not
+   *         be created. Always non-<code>null</code> if the parameter is
+   *         <code>true</code>.
+   */
   @Nullable
   public IWebScope getScope (final boolean bCreateIfNotExisting)
   {
@@ -57,8 +70,9 @@ public enum EWebScope
    * Resolve the currently matching web scope of the given {@link EWebScope}
    * value.
    * 
-   * @param eScope
-   *        The scope to resolve to a real scope.
+   * @param eWebScope
+   *        The web scope to resolve to a real scope. May not be
+   *        <code>null</code>.
    * @param bCreateIfNotExisting
    *        if <code>false</code> and the scope is not existing,
    *        <code>null</code> will be returned. This parameter is only used in
@@ -68,9 +82,9 @@ public enum EWebScope
    *         If an illegal enumeration value is passed.
    */
   @Nullable
-  public static IWebScope getScope (@Nonnull final EWebScope eScope, final boolean bCreateIfNotExisting)
+  public static IWebScope getScope (@Nonnull final EWebScope eWebScope, final boolean bCreateIfNotExisting)
   {
-    switch (eScope)
+    switch (eWebScope)
     {
       case GLOBAL:
         return WebScopeManager.getGlobalScope ();
@@ -83,7 +97,7 @@ public enum EWebScope
       case REQUEST:
         return WebScopeManager.getRequestScope ();
       default:
-        throw new IllegalArgumentException ("Unknown web scope: " + eScope);
+        throw new IllegalArgumentException ("Unknown web scope: " + eWebScope);
     }
   }
 }

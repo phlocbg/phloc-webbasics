@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.scopes.domain.IGlobalScope;
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.scopes.domain.ISessionScope;
@@ -58,6 +59,9 @@ public final class WebScopeManager
   private static final String SESSION_ATTR_SESSION_SCOPE_ACTIVATOR = "$phloc.sessionwebscope.activator";
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeManager.class);
   private static final AtomicBoolean s_aSessionPassivationAllowed = new AtomicBoolean (DEFAULT_SESSION_PASSIVATION_ALLOWED);
+
+  @PresentForCodeCoverage
+  private static final WebScopeManager s_aInstance = new WebScopeManager ();
 
   private WebScopeManager ()
   {}
@@ -259,7 +263,8 @@ public final class WebScopeManager
   @Nonnull
   public static ISessionWebScope onSessionBegin (@Nonnull final HttpSession aHttpSession)
   {
-    final ISessionWebScope aSessionWebScope = MetaWebScopeFactory.getWebScopeFactory ().createSessionScope (aHttpSession);
+    final ISessionWebScope aSessionWebScope = MetaWebScopeFactory.getWebScopeFactory ()
+                                                                 .createSessionScope (aHttpSession);
     ScopeSessionManager.getInstance ().onScopeBegin (aSessionWebScope);
     if (isSessionPassivationAllowed ())
     {
@@ -462,7 +467,7 @@ public final class WebScopeManager
                                                  @Nonnull final HttpServletResponse aHttpResponse)
   {
     final IRequestWebScope aRequestScope = MetaWebScopeFactory.getWebScopeFactory ().createRequestScope (aHttpRequest,
-                                                                                                      aHttpResponse);
+                                                                                                         aHttpResponse);
     ScopeManager.setAndInitRequestScope (sApplicationID, aRequestScope);
     return aRequestScope;
   }

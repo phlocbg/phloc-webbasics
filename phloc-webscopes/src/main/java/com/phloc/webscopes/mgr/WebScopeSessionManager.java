@@ -23,13 +23,14 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeSessionManager;
 import com.phloc.webscopes.domain.ISessionWebScope;
@@ -39,13 +40,15 @@ import com.phloc.webscopes.domain.ISessionWebScope;
  * 
  * @author philip
  */
-public final class WebScopeSessionManager extends ScopeSessionManager
+@Immutable
+public final class WebScopeSessionManager
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeSessionManager.class);
 
-  @Deprecated
-  @UsedViaReflection
-  public WebScopeSessionManager ()
+  @PresentForCodeCoverage
+  private static final WebScopeSessionManager s_aInstance = new WebScopeSessionManager ();
+
+  private WebScopeSessionManager ()
   {}
 
   /**

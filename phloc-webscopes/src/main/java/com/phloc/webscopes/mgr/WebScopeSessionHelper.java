@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
@@ -46,6 +47,9 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 public final class WebScopeSessionHelper
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeSessionHelper.class);
+
+  @PresentForCodeCoverage
+  private static final WebScopeSessionHelper s_aInstance = new WebScopeSessionHelper ();
 
   private WebScopeSessionHelper ()
   {}

@@ -35,7 +35,12 @@ public final class EWebScopeTest extends AbstractWebScopeAwareTestCase
   {
     for (final EWebScope eScope : EWebScope.values ())
     {
+      eScope.getScope (false);
       assertNotNull (eScope.getScope (true));
+      assertNotNull (eScope.getScope ());
+      // The scope is already existing
+      assertNotNull (EWebScope.getScope (eScope, false));
+      assertNotNull (EWebScope.getScope (eScope, true));
     }
   }
 }
