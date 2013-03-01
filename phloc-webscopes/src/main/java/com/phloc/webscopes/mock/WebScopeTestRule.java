@@ -35,6 +35,11 @@ import com.phloc.web.mock.MockHttpListener;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockServletContext;
 
+/**
+ * JUnit test rule for unit tests requiring web scopes.
+ * 
+ * @author philip
+ */
 @NotThreadSafe
 public class WebScopeTestRule extends ExternalResource
 {
@@ -94,6 +99,38 @@ public class WebScopeTestRule extends ExternalResource
     WebScopeTestInit.setCoreMockHttpListeners ();
   }
 
+  /**
+   * Create a new mock servlet context
+   * 
+   * @param sContextPath
+   *        The context path to use. May be <code>null</code>.
+   * @param aInitParams
+   *        The initialization context parameters to use. May be
+   *        <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected MockServletContext createMockServletContext (@Nullable final String sContextPath,
+                                                         @Nullable final Map <String, String> aInitParams)
+  {
+    return new MockServletContext (sContextPath, aInitParams);
+  }
+
+  /**
+   * Create a new mock request
+   * 
+   * @param aServletContext
+   *        The servlet context to use. Never <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected MockHttpServletRequest createMockRequest (@Nonnull final MockServletContext aServletContext)
+  {
+    return new MockHttpServletRequest (aServletContext);
+  }
+
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
@@ -103,10 +140,10 @@ public class WebScopeTestRule extends ExternalResource
     initListener ();
 
     // Start global scope -> triggers events
-    m_aServletContext = new MockServletContext (m_sContextPath, m_aServletContextInitParameters);
+    m_aServletContext = createMockServletContext (m_sContextPath, m_aServletContextInitParameters);
 
     // Start request scope -> triggers events
-    m_aRequest = new MockHttpServletRequest (m_aServletContext);
+    m_aRequest = createMockRequest (m_aServletContext);
   }
 
   @Override
