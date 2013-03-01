@@ -44,7 +44,7 @@ public class FailedMailQueue
 {
   private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (FailedMailQueue.class);
 
-  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, FailedMailData> m_aMap = new LinkedHashMap <String, FailedMailData> ();
 
   public FailedMailQueue ()
