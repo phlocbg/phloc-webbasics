@@ -285,7 +285,11 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     if (eHTTPVersion == null)
     {
       // HTTP version disallowed
-      s_aLogger.warn ("Request " + aRequestScope.getURL () + " has no valid HTTP version!");
+      s_aLogger.warn ("Request " +
+                      aRequestScope.getURL () +
+                      " has no valid HTTP version (" +
+                      aHttpRequest.getProtocol () +
+                      ")!");
       aHttpResponse.sendError (HttpServletResponse.SC_HTTP_VERSION_NOT_SUPPORTED);
       return;
     }
