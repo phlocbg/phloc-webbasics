@@ -62,20 +62,20 @@ public class WebScopeTestRule extends ExternalResource
   }
 
   @Nonnull
-  public WebScopeTestRule setContextPath (@Nullable final String sContextPath)
+  public final WebScopeTestRule setContextPath (@Nullable final String sContextPath)
   {
     m_sContextPath = sContextPath;
     return this;
   }
 
   @Nullable
-  public String getContextPath ()
+  public final String getContextPath ()
   {
     return m_sContextPath;
   }
 
   @Nonnull
-  public WebScopeTestRule setServletContextInitParameters (@Nullable final Map <String, String> aServletContextInitParameters)
+  public final WebScopeTestRule setServletContextInitParameters (@Nullable final Map <String, String> aServletContextInitParameters)
   {
     m_aServletContextInitParameters = aServletContextInitParameters;
     return this;
@@ -83,7 +83,7 @@ public class WebScopeTestRule extends ExternalResource
 
   @Nonnull
   @ReturnsMutableCopy
-  public Map <String, String> getServletContextInitParameters ()
+  public final Map <String, String> getServletContextInitParameters ()
   {
     return ContainerHelper.newMap (m_aServletContextInitParameters);
   }
