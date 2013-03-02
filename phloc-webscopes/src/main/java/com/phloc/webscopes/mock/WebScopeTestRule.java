@@ -123,9 +123,10 @@ public class WebScopeTestRule extends ExternalResource
    * 
    * @param aServletContext
    *        The servlet context to use. Never <code>null</code>.
-   * @return Never <code>null</code>.
+   * @return May be <code>null</code> to indicate that the request is added
+   *         manually - this is helpful for servlet testing.
    */
-  @Nonnull
+  @Nullable
   @OverrideOnDemand
   protected MockHttpServletRequest createMockRequest (@Nonnull final MockServletContext aServletContext)
   {
@@ -147,8 +148,6 @@ public class WebScopeTestRule extends ExternalResource
 
     // Start request scope -> triggers HTTP events
     m_aRequest = createMockRequest (m_aServletContext);
-    if (m_aRequest == null)
-      throw new IllegalStateException ("Failed to created MockHttpServletRequest");
   }
 
   @Override
@@ -219,7 +218,7 @@ public class WebScopeTestRule extends ExternalResource
   {
     return new ToStringGenerator (this).appendIfNotNull ("servletContextInitParams", m_aServletContextInitParameters)
                                        .append ("servletContext", m_aServletContext)
-                                       .append ("request", m_aRequest)
+                                       .appendIfNotNull ("request", m_aRequest)
                                        .toString ();
   }
 }

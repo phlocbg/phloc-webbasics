@@ -26,6 +26,7 @@ import org.junit.Rule;
 import com.phloc.commons.mock.AbstractPhlocTestCase;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockServletContext;
+import com.phloc.web.mock.MockServletPool;
 
 /**
  * Base class where the initialization of the scopes happens before each test
@@ -48,6 +49,12 @@ public abstract class AbstractWebScopeAwareTestCase extends AbstractPhlocTestCas
   }
 
   @Nonnull
+  protected final MockServletPool getServletPool ()
+  {
+    return m_aWebScope.getServletPool ();
+  }
+
+  @Nullable
   protected final MockHttpServletRequest getRequest ()
   {
     return m_aWebScope.getRequest ();

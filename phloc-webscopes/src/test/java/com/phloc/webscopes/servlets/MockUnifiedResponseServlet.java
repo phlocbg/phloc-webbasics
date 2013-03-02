@@ -27,9 +27,18 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.mock.MockServletRequestListenerScopeAware;
 
 public final class MockUnifiedResponseServlet extends AbstractUnifiedResponseServlet
 {
+  public static final String RESPONSE_TEXT = "mock";
+
+  @Override
+  protected String getApplicationID ()
+  {
+    return MockServletRequestListenerScopeAware.MOCK_APPLICATION_ID;
+  }
+
   @Override
   @Nonnull
   protected Set <EHTTPMethod> getAllowedHTTPMethods ()
@@ -41,6 +50,8 @@ public final class MockUnifiedResponseServlet extends AbstractUnifiedResponseSer
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
   {
-    aUnifiedResponse.setContentAndCharset ("mock", CCharset.CHARSET_ISO_8859_1_OBJ).setMimeType (CMimeType.TEXT_PLAIN);
+    aUnifiedResponse.setContentAndCharset (RESPONSE_TEXT, CCharset.CHARSET_UTF_8_OBJ)
+                    .setMimeType (CMimeType.TEXT_PLAIN)
+                    .disableCaching ();
   }
 }
