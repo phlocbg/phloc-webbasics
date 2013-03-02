@@ -290,6 +290,18 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return RequestHelper.getPathInfo (m_aHttpRequest);
   }
 
+  @Nonnull
+  public String getPathWithinServletContext ()
+  {
+    return RequestHelper.getPathWithinServletContext (m_aHttpRequest);
+  }
+
+  @Nonnull
+  public String getPathWithinServlet ()
+  {
+    return RequestHelper.getPathWithinServlet (m_aHttpRequest);
+  }
+
   public String getPathTranslated ()
   {
     return m_aHttpRequest.getPathTranslated ();
@@ -328,6 +340,12 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   public long getContentLength ()
   {
     return RequestHelper.getContentLength (m_aHttpRequest);
+  }
+
+  @Nonnull
+  public String getRequestURI ()
+  {
+    return RequestHelper.getRequestURI (m_aHttpRequest);
   }
 
   @Nonnull

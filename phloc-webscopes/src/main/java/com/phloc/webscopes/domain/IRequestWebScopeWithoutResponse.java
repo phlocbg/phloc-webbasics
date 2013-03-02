@@ -151,6 +151,33 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   String getPathInfo ();
 
   /**
+   * Return the URI of the request within the servlet context.
+   * 
+   * @return the path within the web application and never <code>null</code>. By
+   *         default "/" is returned is an empty request URI is determined.
+   */
+  @Nonnull
+  String getPathWithinServletContext ();
+
+  /**
+   * Return the path within the servlet mapping for the given request, i.e. the
+   * part of the request's URL beyond the part that called the servlet, or "" if
+   * the whole URL has been used to identify the servlet.
+   * <p>
+   * Detects include request URL if called within a RequestDispatcher include.
+   * <p>
+   * E.g.: servlet mapping = "/test/*"; request URI = "/test/a" -> "/a".
+   * <p>
+   * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
+   * <p>
+   * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
+   * 
+   * @return the path within the servlet mapping, or ""
+   */
+  @Nonnull
+  String getPathWithinServlet ();
+
+  /**
    * Returns any extra path information after the servlet name but before the
    * query string, and translates it to a real path. Same as the value of the
    * CGI variable PATH_TRANSLATED.
@@ -245,6 +272,34 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    *         length is not known
    */
   long getContentLength ();
+
+  /**
+   * Returns the part of this request's URL from the protocol name up to the
+   * query string in the first line of the HTTP request. The web container does
+   * not decode this String. For example:
+   * <table summary="Examples of Returned Values">
+   * <tr align=left>
+   * <th>First line of HTTP request</th>
+   * <th>Returned Value</th>
+   * </tr>
+   * <tr>
+   * <td>POST /some/path.html HTTP/1.1</td>
+   * <td>/some/path.html</td>
+   * </tr>
+   * <tr>
+   * <td>GET http://foo.bar/a.html HTTP/1.0</td>
+   * <td>/a.html</td>
+   * </tr>
+   * <tr>
+   * <td>HEAD /xyz?a=b HTTP/1.1</td>
+   * <td>/xyz</td>
+   * </tr>
+   * </table>
+   * 
+   * @return a <code>String</code> containing the part of the URL from the
+   *         protocol name up to the query string
+   */
+  String getRequestURI ();
 
   /**
    * Returns the part of this request's URL that calls the servlet. This path
