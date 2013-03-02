@@ -15,7 +15,7 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package com.phloc.web.encoding;
+package com.phloc.web.encoding.i18n;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -32,10 +32,12 @@ import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
  * Represents a single Unicode Codepoint
+ * 
+ * @author Apache Abdera
  */
 public final class Codepoint implements Serializable, Comparable <Codepoint>
 {
-  private static final Charset DEFAULT_ENCODING = CCharset.CHARSET_UTF_8_OBJ;
+  public static final Charset DEFAULT_ENCODING = CCharset.CHARSET_UTF_8_OBJ;
 
   private final int m_nValue;
 

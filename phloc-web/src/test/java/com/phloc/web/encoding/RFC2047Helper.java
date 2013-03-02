@@ -5,6 +5,9 @@ import java.nio.charset.Charset;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
 
+/**
+ * @author Apache Abdera
+ */
 public class RFC2047Helper
 {
   public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;

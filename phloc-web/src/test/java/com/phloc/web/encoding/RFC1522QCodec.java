@@ -77,27 +77,21 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
     PRINTABLE_CHARS.set ('.');
     PRINTABLE_CHARS.set ('/');
     for (int i = '0'; i <= '9'; i++)
-    {
       PRINTABLE_CHARS.set (i);
-    }
     PRINTABLE_CHARS.set (':');
     PRINTABLE_CHARS.set (';');
     PRINTABLE_CHARS.set ('<');
     PRINTABLE_CHARS.set ('>');
     PRINTABLE_CHARS.set ('@');
     for (int i = 'A'; i <= 'Z'; i++)
-    {
       PRINTABLE_CHARS.set (i);
-    }
     PRINTABLE_CHARS.set ('[');
     PRINTABLE_CHARS.set ('\\');
     PRINTABLE_CHARS.set (']');
     PRINTABLE_CHARS.set ('^');
     PRINTABLE_CHARS.set ('`');
     for (int i = 'a'; i <= 'z'; i++)
-    {
       PRINTABLE_CHARS.set (i);
-    }
     PRINTABLE_CHARS.set ('{');
     PRINTABLE_CHARS.set ('|');
     PRINTABLE_CHARS.set ('}');

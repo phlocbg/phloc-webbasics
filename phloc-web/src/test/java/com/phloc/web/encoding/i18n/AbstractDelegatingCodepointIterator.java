@@ -15,11 +15,13 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package com.phloc.web.encoding;
+package com.phloc.web.encoding.i18n;
 
 /**
  * Base implementation of a CodepointIterator that filters the output of another
  * CodpointIterator
+ * 
+ * @author Apache Abdera
  */
 public abstract class AbstractDelegatingCodepointIterator extends AbstractCodepointIterator
 {

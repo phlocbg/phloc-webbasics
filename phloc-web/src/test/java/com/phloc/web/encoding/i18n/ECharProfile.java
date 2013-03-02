@@ -1,8 +1,11 @@
-package com.phloc.web.encoding;
+package com.phloc.web.encoding.i18n;
 
 import javax.annotation.Nonnull;
 
-public enum ECharDenyProfile
+/**
+ * @author Apache Abdera
+ */
+public enum ECharProfile
 {
   NONE (new ICodepointFilter ()
   {
@@ -197,9 +200,10 @@ public enum ECharDenyProfile
              !CharUtils.inRange (codepoint, 0x007B, 0x007F);
     }
   });
+
   private final ICodepointFilter m_aFilter;
 
-  private ECharDenyProfile (final ICodepointFilter aFilter)
+  private ECharProfile (@Nonnull final ICodepointFilter aFilter)
   {
     m_aFilter = aFilter;
   }

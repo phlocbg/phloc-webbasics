@@ -15,7 +15,7 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package com.phloc.web.encoding;
+package com.phloc.web.encoding.i18n;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,6 +34,8 @@ import javax.annotation.Nullable;
 
 /**
  * Provides an iterator over Unicode Codepoints
+ * 
+ * @author Apache Abdera
  */
 public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
 {

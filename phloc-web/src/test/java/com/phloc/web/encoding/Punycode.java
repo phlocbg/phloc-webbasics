@@ -2,8 +2,13 @@ package com.phloc.web.encoding;
 
 import java.io.IOException;
 
+import com.phloc.web.encoding.i18n.AbstractCodepointIterator;
+import com.phloc.web.encoding.i18n.CharUtils;
+
 /**
  * Implementation of the Punycode encoding scheme used by IDNA
+ * 
+ * @author Apache Abdera
  */
 public final class Punycode
 {

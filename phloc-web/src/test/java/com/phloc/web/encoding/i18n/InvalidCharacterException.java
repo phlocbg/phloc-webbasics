@@ -15,12 +15,23 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package com.phloc.web.encoding;
+package com.phloc.web.encoding.i18n;
 
 /**
- * Filters are used in a variety of ways to filter or verify unicode codepoints
+ * @author Apache Abdera
  */
-public interface ICodepointFilter
+public class InvalidCharacterException extends RuntimeException
 {
-  boolean accept (int c);
+  private final int m_nInput;
+
+  public InvalidCharacterException (final int input)
+  {
+    m_nInput = input;
+  }
+
+  @Override
+  public String getMessage ()
+  {
+    return "Invalid Character 0x" + Integer.toHexString (m_nInput) + "(" + (char) m_nInput + ")";
+  }
 }

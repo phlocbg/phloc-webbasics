@@ -15,7 +15,7 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package com.phloc.web.encoding;
+package com.phloc.web.encoding.i18n;
 
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
@@ -27,6 +27,8 @@ import com.phloc.commons.regex.RegExHelper;
 
 /**
  * General utilities for dealing with Unicode characters
+ * 
+ * @author Apache Abdera
  */
 @Immutable
 public final class CharUtils
@@ -711,7 +713,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified filter
    */
-  public static void verify (final AbstractCodepointIterator ci, @Nonnull final ECharDenyProfile profile)
+  public static void verify (final AbstractCodepointIterator ci, @Nonnull final ECharProfile profile)
   {
     verify (ci, profile.getFilter ());
   }
@@ -719,7 +721,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verify (@Nullable final char [] s, @Nonnull final ECharDenyProfile profile)
+  public static void verify (@Nullable final char [] s, @Nonnull final ECharProfile profile)
   {
     if (s == null)
       return;
@@ -729,7 +731,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verify (@Nullable final String s, @Nonnull final ECharDenyProfile profile)
+  public static void verify (@Nullable final String s, @Nonnull final ECharProfile profile)
   {
     if (s == null)
       return;
@@ -749,7 +751,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verifyNot (final AbstractCodepointIterator ci, final ECharDenyProfile profile)
+  public static void verifyNot (final AbstractCodepointIterator ci, final ECharProfile profile)
   {
     final AbstractCodepointIterator rci = ci.restrict (profile.getFilter (), false, true);
     while (rci.hasNext ())
@@ -759,7 +761,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verifyNot (final char [] array, final ECharDenyProfile profile)
+  public static void verifyNot (final char [] array, final ECharProfile profile)
   {
     final AbstractCodepointIterator rci = AbstractCodepointIterator.forCharArray (array)
                                                                    .restrict (profile.getFilter (), false, true);
