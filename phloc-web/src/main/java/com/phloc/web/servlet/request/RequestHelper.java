@@ -39,6 +39,7 @@ import com.phloc.commons.string.StringParser;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.web.CWeb;
 import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.port.CNetworkPort;
@@ -109,7 +110,10 @@ public final class RequestHelper
    * 
    * @param aHttpRequest
    *        The HTTP request
-   * @return The request path info without the optional session ID
+   * @return Returns any extra path information associated with the URL the
+   *         client sent when it made this request. The extra path information
+   *         follows the servlet path but precedes the query string and will
+   *         start with a "/" character. The optional session ID is stripped.
    */
   @Nullable
   public static String getPathInfo (@Nonnull final HttpServletRequest aHttpRequest)
@@ -131,7 +135,8 @@ public final class RequestHelper
    * 
    * @param aHttpRequest
    *        The HTTP request. May not be <code>null</code>.
-   * @return the path within the web application and never <code>null</code>.
+   * @return the path within the web application and never <code>null</code>. By
+   *         default "/" is returned is an empty request URI is determined.
    */
   @Nonnull
   public static String getPathWithinServletContext (@Nonnull final HttpServletRequest aHttpRequest)
@@ -337,7 +342,25 @@ public final class RequestHelper
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
 
-    return EHTTPVersion.getFromNameOrNull (aHttpRequest.getProtocol ());
+    final String sProtocol = aHttpRequest.getProtocol ();
+    return EHTTPVersion.getFromNameOrNull (sProtocol);
+  }
+
+  /**
+   * Get the HTTP method associated with the given HTTP request
+   * 
+   * @param aHttpRequest
+   *        The http request to query. May not be <code>null</code>.
+   * @return <code>null</code> if no supported HTTP method is contained
+   */
+  @Nullable
+  public static EHTTPMethod getHttpMethod (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    final String sMethod = aHttpRequest.getMethod ();
+    return EHTTPMethod.getFromNameOrNull (sMethod);
   }
 
   /**
@@ -459,6 +482,16 @@ public final class RequestHelper
     return StringParser.parseLong (sContentLength, -1L);
   }
 
+  /**
+   * Get all request headers of the passed request in a correctly typed
+   * {@link Enumeration}.
+   * 
+   * @param aHttpRequest
+   *        Source HTTP request. May not be <code>null</code>.
+   * @param sName
+   *        Name of the request header to retrieve.
+   * @return Never <code>null</code>.
+   */
   @Nullable
   public static Enumeration <String> getRequestHeaders (@Nonnull final HttpServletRequest aHttpRequest,
                                                         @Nullable final String sName)
@@ -469,6 +502,14 @@ public final class RequestHelper
     return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aHttpRequest.getHeaders (sName));
   }
 
+  /**
+   * Get all all request header names of the passed request in a correctly typed
+   * {@link Enumeration}.
+   * 
+   * @param aHttpRequest
+   *        Source HTTP request. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
   @Nullable
   public static Enumeration <String> getRequestHeaderNames (@Nonnull final HttpServletRequest aHttpRequest)
   {

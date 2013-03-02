@@ -29,6 +29,8 @@ import com.phloc.web.fileupload.FileUploadException;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.fileupload.IFileItemFactory;
 import com.phloc.web.fileupload.IFileItemIterator;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.servlet.request.RequestHelper;
 
 /**
  * <p>
@@ -68,14 +70,14 @@ public class ServletFileUpload extends FileUpload
    */
   public static final boolean isMultipartContent (@Nonnull final HttpServletRequest request)
   {
-    if (!"post".equals (request.getMethod ().toLowerCase (Locale.US)))
+    if (RequestHelper.getHttpMethod (request) != EHTTPMethod.POST)
       return false;
 
-    final String contentType = request.getContentType ();
-    if (contentType == null)
+    final String sContentType = request.getContentType ();
+    if (sContentType == null)
       return false;
 
-    return contentType.toLowerCase (Locale.US).startsWith (MULTIPART);
+    return sContentType.toLowerCase (Locale.US).startsWith (MULTIPART);
   }
 
   /**
