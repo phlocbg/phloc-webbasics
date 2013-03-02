@@ -17,10 +17,9 @@
  */
 package com.phloc.web.mock;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,8 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.GenericReflection;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * A pool for registered servlets inside a {@link MockServletContext}.
@@ -44,13 +46,73 @@ import com.phloc.commons.string.StringHelper;
 @NotThreadSafe
 public final class MockServletPool
 {
+  /**
+   * Contains a single servlet item
+   * 
+   * @author philip
+   */
+  private static final class ServletItem
+  {
+    private final Servlet m_aServlet;
+    private final String m_sServletPath;
+    private final String m_sServletPathRegEx;
+
+    @Nonnull
+    @Nonempty
+    private static String _getAsRegEx (@Nonnull @Nonempty final String sPath)
+    {
+      return StringHelper.replaceAll (sPath, "*", ".*");
+    }
+
+    public ServletItem (@Nonnull final Servlet aServlet, @Nonnull @Nonempty final String sServletPath)
+    {
+      if (aServlet == null)
+        throw new NullPointerException ("servlet");
+      if (StringHelper.hasNoText (sServletPath))
+        throw new IllegalArgumentException ("servletPath");
+      m_aServlet = aServlet;
+      m_sServletPath = sServletPath;
+      m_sServletPathRegEx = _getAsRegEx (sServletPath);
+    }
+
+    @Nonnull
+    public Servlet getServlet ()
+    {
+      return m_aServlet;
+    }
+
+    @Nonnull
+    @Nonempty
+    public String getServletName ()
+    {
+      return m_aServlet.getServletConfig ().getServletName ();
+    }
+
+    @Nonnull
+    @Nonempty
+    public String getServletPath ()
+    {
+      return m_sServletPath;
+    }
+
+    public boolean matchesPath (@Nonnull final String sServletPath)
+    {
+      return RegExHelper.stringMatchesPattern (m_sServletPathRegEx, sServletPath);
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("servlet", m_aServlet)
+                                         .append ("servletPath", m_sServletPath)
+                                         .toString ();
+    }
+  }
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (MockServletPool.class);
 
   private final MockServletContext m_aSC;
-  // Map from path to servlet
-  private final Map <String, Servlet> m_aServlets = new LinkedHashMap <String, Servlet> ();
-  // All servlet names
-  private final Set <String> m_aServletNames = new HashSet <String> ();
+  private final List <ServletItem> m_aServlets = new ArrayList <ServletItem> ();
   private boolean m_bInvalidated = false;
 
   public MockServletPool (@Nonnull final MockServletContext aSC)
@@ -104,17 +166,21 @@ public final class MockServletPool
     if (StringHelper.hasNoText (sServletPath))
       throw new IllegalArgumentException ("servletPath");
 
-    // Check path uniqueness
-    final Servlet aServletOfSamePath = m_aServlets.get (sServletPath);
-    if (aServletOfSamePath == null)
-      throw new IllegalArgumentException ("Another servlet with the path '" +
-                                          sServletPath +
-                                          "' is already registered: " +
-                                          aServletOfSamePath);
-
-    // Check name uniqueness
-    if (m_aServletNames.contains (sServletName))
-      throw new IllegalArgumentException ("Another servlet with the name '" + sServletName + "' is already registered");
+    for (final ServletItem aItem : m_aServlets)
+    {
+      // Check path uniqueness
+      if (aItem.getServletPath ().equals (sServletPath))
+        throw new IllegalArgumentException ("Another servlet with the path '" +
+                                            sServletPath +
+                                            "' is already registered: " +
+                                            aItem);
+      // Check name uniqueness
+      if (aItem.getServletName ().equals (sServletName))
+        throw new IllegalArgumentException ("Another servlet with the name '" +
+                                            sServletName +
+                                            "' is already registered: " +
+                                            aItem);
+    }
 
     // Instantiate servlet
     final Servlet aServlet = GenericReflection.newInstance (aServletClass);
@@ -136,10 +202,38 @@ public final class MockServletPool
                                        sServletPath +
                                        "'");
     }
-    m_aServlets.put (sServletPath, aServlet);
-    m_aServletNames.add (sServletName);
+    m_aServlets.add (new ServletItem (aServlet, sServletPath));
   }
 
+  /**
+   * Find the servlet matching the specified path.
+   * 
+   * @param sPath
+   *        The path, relative to the servlet context. May be <code>null</code>.
+   * @return <code>null</code> if no {@link Servlet} matching the specified path
+   *         was found. If more than one matching servlet was found, the first
+   *         one is returned.
+   */
+  @Nullable
+  public Servlet getServletOfPath (@Nullable final String sPath)
+  {
+    final List <ServletItem> aMatchingItems = new ArrayList <ServletItem> ();
+    if (StringHelper.hasText (sPath))
+      for (final ServletItem aItem : m_aServlets)
+        if (aItem.matchesPath (sPath))
+          aMatchingItems.add (aItem);
+    final int nMatchingItems = aMatchingItems.size ();
+    if (nMatchingItems == 0)
+      return null;
+    if (nMatchingItems > 1)
+      s_aLogger.warn ("Found more than 1 servlet matching path '" + sPath + "' - using first one: " + aMatchingItems);
+    return ContainerHelper.getFirstElement (aMatchingItems).getServlet ();
+  }
+
+  /**
+   * Invalidate the servlet pool, by destroying all contained servlets. Also the
+   * list of registered servlets is cleared.
+   */
   public void invalidate ()
   {
     if (m_bInvalidated)
@@ -147,14 +241,14 @@ public final class MockServletPool
     m_bInvalidated = true;
 
     // Destroy all servlets
-    for (final Servlet aServlet : m_aServlets.values ())
+    for (final ServletItem aServletItem : m_aServlets)
       try
       {
-        aServlet.destroy ();
+        aServletItem.getServlet ().destroy ();
       }
       catch (final Throwable t)
       {
-        s_aLogger.error ("Failed to destroy servlet " + aServlet, t);
+        s_aLogger.error ("Failed to destroy servlet " + aServletItem, t);
       }
 
     m_aServlets.clear ();
