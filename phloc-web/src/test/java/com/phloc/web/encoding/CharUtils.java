@@ -449,217 +449,6 @@ public final class CharUtils
     return ((s - 1) & 1) == 0;
   }
 
-  public static enum ECharacterProfile
-  {
-    NONE (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return true;
-      }
-    }),
-    ALPHA (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isAlpha (codepoint);
-      }
-    }),
-    ALPHANUM (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isAlphaDigit (codepoint);
-      }
-    }),
-    FRAGMENT (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isFragment (codepoint);
-      }
-    }),
-    IFRAGMENT (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_ifragment (codepoint);
-      }
-    }),
-    PATH (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isPath (codepoint);
-      }
-    }),
-    IPATH (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_ipath (codepoint);
-      }
-    }),
-    IUSERINFO (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_iuserinfo (codepoint);
-      }
-    }),
-    USERINFO (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isUserInfo (codepoint);
-      }
-    }),
-    QUERY (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isQuery (codepoint);
-      }
-    }),
-    IQUERY (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_iquery (codepoint);
-      }
-    }),
-    SCHEME (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isScheme (codepoint);
-      }
-    }),
-    PATHNODELIMS (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isPathNoDelims (codepoint);
-      }
-    }),
-    IPATHNODELIMS (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_ipathnodelims (codepoint);
-      }
-    }),
-    IPATHNODELIMS_SEG (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_ipathnodelims (codepoint) && codepoint != '@' && codepoint != ':';
-      }
-    }),
-    IREGNAME (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_iregname (codepoint);
-      }
-    }),
-    IHOST (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_ihost (codepoint);
-      }
-    }),
-    IPRIVATE (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_iprivate (codepoint);
-      }
-    }),
-    RESERVED (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isReserved (codepoint);
-      }
-    }),
-    IUNRESERVED (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_iunreserved (codepoint);
-      }
-    }),
-    UNRESERVED (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isUnreserved (codepoint);
-      }
-    }),
-    SCHEMESPECIFICPART (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_iunreserved (codepoint) &&
-               !isReserved (codepoint) &&
-               !is_iprivate (codepoint) &&
-               !isPctEnc (codepoint) &&
-               codepoint != '#';
-      }
-    }),
-    AUTHORITY (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !is_regname (codepoint) && !isUserInfo (codepoint) && !isGenDelim (codepoint);
-      }
-    }),
-    ASCIISANSCRLF (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !inRange (codepoint, 1, 9) && !inRange (codepoint, 14, 127);
-      }
-    }),
-    PCT (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !isPctEnc (codepoint);
-      }
-    }),
-    STD3ASCIIRULES (new ICodepointFilter ()
-    {
-      public boolean accept (final int codepoint)
-      {
-        return !inRange (codepoint, 0x0000, 0x002C) &&
-               !inRange (codepoint, 0x002E, 0x002F) &&
-               !inRange (codepoint, 0x003A, 0x0040) &&
-               !inRange (codepoint, 0x005B, 0x005E) &&
-               !inRange (codepoint, 0x0060, 0x0060) &&
-               !inRange (codepoint, 0x007B, 0x007F);
-      }
-    });
-    private final ICodepointFilter m_aFilter;
-
-    ECharacterProfile (final ICodepointFilter filter)
-    {
-      m_aFilter = filter;
-    }
-
-    public ICodepointFilter filter ()
-    {
-      return m_aFilter;
-    }
-
-    public boolean check (final int codepoint)
-    {
-      return m_aFilter.accept (codepoint);
-    }
-  }
-
   public static boolean isPctEnc (final int codepoint)
   {
     return codepoint == '%' || isDigit (codepoint) || inRange (codepoint, 'A', 'F') || inRange (codepoint, 'a', 'f');
@@ -922,17 +711,15 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified filter
    */
-  public static void verify (final AbstractCodepointIterator ci, final ECharacterProfile profile)
+  public static void verify (final AbstractCodepointIterator ci, @Nonnull final ECharDenyProfile profile)
   {
-    final AbstractCodepointIterator rci = AbstractCodepointIterator.restrict (ci, profile.filter ());
-    while (rci.hasNext ())
-      rci.next ();
+    verify (ci, profile.getFilter ());
   }
 
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verify (final char [] s, final ECharacterProfile profile)
+  public static void verify (@Nullable final char [] s, @Nonnull final ECharDenyProfile profile)
   {
     if (s == null)
       return;
@@ -942,7 +729,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verify (final String s, final ECharacterProfile profile)
+  public static void verify (@Nullable final String s, @Nonnull final ECharDenyProfile profile)
   {
     if (s == null)
       return;
@@ -962,9 +749,9 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verifyNot (final AbstractCodepointIterator ci, final ECharacterProfile profile)
+  public static void verifyNot (final AbstractCodepointIterator ci, final ECharDenyProfile profile)
   {
-    final AbstractCodepointIterator rci = ci.restrict (profile.filter (), false, true);
+    final AbstractCodepointIterator rci = ci.restrict (profile.getFilter (), false, true);
     while (rci.hasNext ())
       rci.next ();
   }
@@ -972,11 +759,10 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verifyNot (final char [] array, final ECharacterProfile profile)
+  public static void verifyNot (final char [] array, final ECharDenyProfile profile)
   {
-    final AbstractCodepointIterator rci = AbstractCodepointIterator.forCharArray (array).restrict (profile.filter (),
-                                                                                                   false,
-                                                                                                   true);
+    final AbstractCodepointIterator rci = AbstractCodepointIterator.forCharArray (array)
+                                                                   .restrict (profile.getFilter (), false, true);
     while (rci.hasNext ())
       rci.next ();
   }

@@ -29,6 +29,7 @@ import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -36,11 +37,10 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
 {
-
   /**
    * Get a CodepointIterator for the specified char array
    */
-  public static AbstractCodepointIterator forCharArray (final char [] array)
+  public static CharArrayCodepointIterator forCharArray (final char [] array)
   {
     return new CharArrayCodepointIterator (array);
   }
@@ -48,7 +48,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Get a CodepointIterator for the specified CharSequence
    */
-  public static AbstractCodepointIterator forCharSequence (final CharSequence seq)
+  public static CharSequenceCodepointIterator forCharSequence (final CharSequence seq)
   {
     return new CharSequenceCodepointIterator (seq);
   }
@@ -57,7 +57,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * Get a CodepointIterator for the specified byte array, using the default
    * charset
    */
-  public static AbstractCodepointIterator forByteArray (final byte [] array)
+  public static ByteArrayCodepointIterator forByteArray (final byte [] array)
   {
     return new ByteArrayCodepointIterator (array);
   }
@@ -66,7 +66,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * Get a CodepointIterator for the specified byte array, using the specified
    * charset
    */
-  public static AbstractCodepointIterator forByteArray (final byte [] array, final String charset)
+  public static ByteArrayCodepointIterator forByteArray (final byte [] array, final String charset)
   {
     return new ByteArrayCodepointIterator (array, charset);
   }
@@ -74,7 +74,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Get a CodepointIterator for the specified CharBuffer
    */
-  public static AbstractCodepointIterator forCharBuffer (final CharBuffer buffer)
+  public static CharBufferCodepointIterator forCharBuffer (final CharBuffer buffer)
   {
     return new CharBufferCodepointIterator (buffer);
   }
@@ -82,7 +82,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Get a CodepointIterator for the specified ReadableByteChannel
    */
-  public static AbstractCodepointIterator forReadableByteChannel (final ReadableByteChannel channel)
+  public static ReadableByteChannelCodepointIterator forReadableByteChannel (final ReadableByteChannel channel)
   {
     return new ReadableByteChannelCodepointIterator (channel);
   }
@@ -90,8 +90,8 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Get a CodepointIterator for the specified ReadableByteChannel
    */
-  public static AbstractCodepointIterator forReadableByteChannel (final ReadableByteChannel channel,
-                                                                  final String charset)
+  public static ReadableByteChannelCodepointIterator forReadableByteChannel (final ReadableByteChannel channel,
+                                                                             final String charset)
   {
     return new ReadableByteChannelCodepointIterator (channel, charset);
   }
@@ -99,7 +99,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Get a CodepointIterator for the specified InputStream
    */
-  public static AbstractCodepointIterator forInputStream (final InputStream in)
+  public static ReadableByteChannelCodepointIterator forInputStream (final InputStream in)
   {
     return new ReadableByteChannelCodepointIterator (Channels.newChannel (in));
   }
@@ -108,7 +108,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * Get a CodepointIterator for the specified InputStream using the specified
    * charset
    */
-  public static AbstractCodepointIterator forInputStream (final InputStream in, final String charset)
+  public static ReadableByteChannelCodepointIterator forInputStream (final InputStream in, final String charset)
   {
     return new ReadableByteChannelCodepointIterator (Channels.newChannel (in), charset);
   }
@@ -116,27 +116,27 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Get a CodepointIterator for the specified Reader
    */
-  public static AbstractCodepointIterator forReader (final Reader in)
+  public static ReaderCodepointIterator forReader (final Reader in)
   {
     return new ReaderCodepointIterator (in);
   }
 
-  public static AbstractCodepointIterator restrict (final AbstractCodepointIterator ci, final ICodepointFilter filter)
+  public static RestrictedCodepointIterator restrict (final AbstractCodepointIterator ci, final ICodepointFilter filter)
   {
     return new RestrictedCodepointIterator (ci, filter, false);
   }
 
-  public static AbstractCodepointIterator restrict (final AbstractCodepointIterator ci,
-                                                    final ICodepointFilter filter,
-                                                    final boolean scanning)
+  public static RestrictedCodepointIterator restrict (final AbstractCodepointIterator ci,
+                                                      final ICodepointFilter filter,
+                                                      final boolean scanning)
   {
     return new RestrictedCodepointIterator (ci, filter, scanning);
   }
 
-  public static AbstractCodepointIterator restrict (final AbstractCodepointIterator ci,
-                                                    final ICodepointFilter filter,
-                                                    final boolean scanning,
-                                                    final boolean invert)
+  public static RestrictedCodepointIterator restrict (final AbstractCodepointIterator ci,
+                                                      final ICodepointFilter filter,
+                                                      final boolean scanning,
+                                                      final boolean invert)
   {
     return new RestrictedCodepointIterator (ci, filter, scanning, invert);
   }
@@ -144,16 +144,19 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   protected int m_nPosition = -1;
   protected int m_nLimit = -1;
 
+  @Nonnull
   public AbstractCodepointIterator restrict (final ICodepointFilter filter)
   {
     return restrict (this, filter);
   }
 
+  @Nonnull
   public AbstractCodepointIterator restrict (final ICodepointFilter filter, final boolean scanning)
   {
     return restrict (this, filter, scanning);
   }
 
+  @Nonnull
   public AbstractCodepointIterator restrict (final ICodepointFilter filter, final boolean scanning, final boolean invert)
   {
     return restrict (this, filter, scanning, invert);
