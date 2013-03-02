@@ -57,6 +57,7 @@ import com.phloc.commons.collections.multimap.MultiHashMapLinkedHashSetBased;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.commons.url.URLUtils;
@@ -373,6 +374,11 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public int getContentLength ()
   {
     return m_aContent != null ? m_aContent.length : -1;
+  }
+
+  public void setContentType (@Nullable final IMimeType aContentType)
+  {
+    setContentType (aContentType == null ? null : aContentType.getAsString ());
   }
 
   public void setContentType (@Nullable final String sContentType)
@@ -985,6 +991,8 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
 
   public void setServletPath (@Nullable final String sServletPath)
   {
+    if (sServletPath != null && sServletPath.length () > 0 && !sServletPath.startsWith ("/"))
+      throw new IllegalArgumentException ("servletPath must be empty or start with a slash!");
     m_sServletPath = sServletPath;
   }
 
@@ -1118,7 +1126,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
         }
         else
         {
-          setContextPath (null);
+          setContextPath ("");
         }
 
         // Servlet path
@@ -1130,18 +1138,15 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
         }
         else
         {
-          setServletPath ("");
+          setServletPath (sPath);
+          sPath = "";
         }
 
         // Remaining is the path info:
         setPathInfo (sPath);
 
         // Update request URI
-        String sNewRequestURI = getContextPath () + getServletPath () + getPathInfo ();
-        final String sQueryString = getQueryString ();
-        if (StringHelper.hasText (sQueryString))
-          sNewRequestURI += URLUtils.QUESTIONMARK + sQueryString;
-        setRequestURI (sNewRequestURI);
+        setRequestURI (getContextPath () + getServletPath () + getPathInfo ());
 
         setQueryString (aURI.getQuery ());
         removeAllParameters ();
