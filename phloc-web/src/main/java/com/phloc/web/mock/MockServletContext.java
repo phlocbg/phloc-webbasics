@@ -74,6 +74,7 @@ public final class MockServletContext implements ServletContext
   private final Properties m_aInitParameters = new Properties ();
   private final Map <String, Object> m_aAttributes = new HashMap <String, Object> ();
   private String m_sServletContextName = DEFAULT_SERVLET_CONTEXT_NAME;
+  private final MockServletPool m_aServletPool;
   private boolean m_bInvalidated = false;
 
   /**
@@ -166,6 +167,8 @@ public final class MockServletContext implements ServletContext
     final ServletContextEvent aSCE = new ServletContextEvent (this);
     for (final ServletContextListener aListener : MockHttpListener.getAllServletContextListeners ())
       aListener.contextInitialized (aSCE);
+
+    m_aServletPool = new MockServletPool (this);
   }
 
   /**
@@ -396,19 +399,6 @@ public final class MockServletContext implements ServletContext
     return m_sServletContextName;
   }
 
-  public void invalidate ()
-  {
-    if (m_bInvalidated)
-      throw new IllegalArgumentException ("Servlet context already invalidated!");
-    m_bInvalidated = true;
-
-    final ServletContextEvent aSCE = new ServletContextEvent (this);
-    for (final ServletContextListener aListener : MockHttpListener.getAllServletContextListeners ())
-      aListener.contextDestroyed (aSCE);
-
-    m_aAttributes.clear ();
-  }
-
   /**
    * Create a new {@link MockServletConfig} object without servlet init
    * parameters.
@@ -438,5 +428,31 @@ public final class MockServletContext implements ServletContext
                                                 @Nullable final Map <String, String> aServletInitParams)
   {
     return new MockServletConfig (this, sServletName, aServletInitParams);
+  }
+
+  /**
+   * @return The servlet pool for registering mock servlets.
+   */
+  @Nonnull
+  public MockServletPool getServletPool ()
+  {
+    return m_aServletPool;
+  }
+
+  public void invalidate ()
+  {
+    if (m_bInvalidated)
+      throw new IllegalArgumentException ("Servlet context already invalidated!");
+    m_bInvalidated = true;
+
+    // Destroy all servlets
+    m_aServletPool.invalidate ();
+
+    // Call all HTTP listener
+    final ServletContextEvent aSCE = new ServletContextEvent (this);
+    for (final ServletContextListener aListener : MockHttpListener.getAllServletContextListeners ())
+      aListener.contextDestroyed (aSCE);
+
+    m_aAttributes.clear ();
   }
 }
