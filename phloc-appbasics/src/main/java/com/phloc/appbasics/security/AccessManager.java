@@ -45,7 +45,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
  * This is the central manager that encapsulates all security manages. This

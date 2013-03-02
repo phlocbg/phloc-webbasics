@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.nonweb.singleton.ApplicationSingleton;
+import com.phloc.scopes.singleton.ApplicationSingleton;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 

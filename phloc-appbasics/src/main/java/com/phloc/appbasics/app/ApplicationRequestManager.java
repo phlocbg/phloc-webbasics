@@ -28,9 +28,9 @@ import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.scopes.nonweb.domain.IRequestScope;
-import com.phloc.scopes.nonweb.mgr.ScopeManager;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.domain.IRequestScope;
+import com.phloc.scopes.mgr.ScopeManager;
+import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
  * This class holds the per-request configuration settings.

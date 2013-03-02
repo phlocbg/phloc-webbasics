@@ -21,7 +21,7 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.scopes.nonweb.mock.ScopeTestRule;
+import com.phloc.scopes.mock.ScopeTestRule;
 
 /**
  * Non-web scope aware test rule, with a defined storage root directory

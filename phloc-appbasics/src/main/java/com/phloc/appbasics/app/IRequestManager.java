@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
-import com.phloc.scopes.nonweb.domain.IRequestScope;
+import com.phloc.scopes.domain.IRequestScope;
 
 public interface IRequestManager
 {

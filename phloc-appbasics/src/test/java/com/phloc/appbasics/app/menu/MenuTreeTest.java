@@ -28,7 +28,7 @@ import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.filter.FilterFalse;
 import com.phloc.commons.text.impl.ConstantTextProvider;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.scopes.nonweb.mock.ScopeTestRule;
+import com.phloc.scopes.mock.ScopeTestRule;
 
 /**
  * Test class for class {@link GlobalMenuTree}

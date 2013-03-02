@@ -26,7 +26,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
  * This class handles the mapping of the area ID to a content provider.

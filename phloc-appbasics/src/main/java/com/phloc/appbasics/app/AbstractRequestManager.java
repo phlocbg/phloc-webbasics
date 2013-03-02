@@ -30,9 +30,9 @@ import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.scopes.IScope;
-import com.phloc.scopes.nonweb.domain.IRequestScope;
-import com.phloc.scopes.nonweb.domain.ISessionScope;
-import com.phloc.scopes.nonweb.mgr.ScopeManager;
+import com.phloc.scopes.domain.IRequestScope;
+import com.phloc.scopes.domain.ISessionScope;
+import com.phloc.scopes.mgr.ScopeManager;
 
 /**
  * This class holds the per-request configuration settings.

@@ -27,7 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.EChange;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
  * This class manages the locales available in the application.

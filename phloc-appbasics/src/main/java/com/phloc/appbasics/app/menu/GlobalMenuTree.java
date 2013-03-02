@@ -25,7 +25,7 @@ import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.scopes.nonweb.singleton.tree.GlobalSingletonTreeWithUniqueID;
+import com.phloc.scopes.singleton.tree.GlobalSingletonTreeWithUniqueID;
 
 /**
  * Represents the global menu tree
