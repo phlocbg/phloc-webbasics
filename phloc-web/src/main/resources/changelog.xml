@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <entry date="2013-03-02" category="api" action="add">
+    <change>
+      <text locale="en">Improved MockServletConfig implementation and extended MockServletContext to easily create such implementations</text>
+    </change>
+  </entry>
   <release date="2012-02-27" version="5.0.1" />
   <entry date="2013-02-26" category="api" action="update" incompatible="true">
     <change>

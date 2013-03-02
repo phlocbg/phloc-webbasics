@@ -18,7 +18,7 @@
 package com.phloc.web.mock;
 
 import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -27,7 +27,11 @@ import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Mock implementation of the {@link ServletConfig} interface.
@@ -39,28 +43,49 @@ public class MockServletConfig implements ServletConfig
 {
   private final ServletContext m_aSC;
   private final String m_sServletName;
-  private final Map <String, String> m_aInitParams = new HashMap <String, String> ();
+  private final Map <String, String> m_aServletInitParams = new LinkedHashMap <String, String> ();
 
-  public MockServletConfig (@Nonnull final ServletContext aSC, @Nonnull final String sServletName)
+  /**
+   * Constructor without servlet init parameters.
+   * 
+   * @param aSC
+   *        Base servlet context. May not be <code>null</code>.
+   * @param sServletName
+   *        Name of the servlet. May neither be <code>null</code> nor empty.
+   */
+  public MockServletConfig (@Nonnull final ServletContext aSC, @Nonnull @Nonempty final String sServletName)
   {
     this (aSC, sServletName, null);
   }
 
+  /**
+   * Constructor
+   * 
+   * @param aSC
+   *        Base servlet context. May not be <code>null</code>.
+   * @param sServletName
+   *        Name of the servlet. May neither be <code>null</code> nor empty.
+   * @param aServletInitParams
+   *        The map with all servlet init parameters. May be <code>null</code>
+   *        or empty.
+   */
   public MockServletConfig (@Nonnull final ServletContext aSC,
-                            @Nonnull final String sServletName,
-                            @Nullable final Map <String, String> aInitParams)
+                            @Nonnull @Nonempty final String sServletName,
+                            @Nullable final Map <String, String> aServletInitParams)
   {
     if (aSC == null)
       throw new NullPointerException ("servletContext");
-    if (sServletName == null)
-      throw new NullPointerException ("name");
+    if (StringHelper.hasNoText (sServletName))
+      throw new NullPointerException ("servletName");
+
     m_aSC = aSC;
     m_sServletName = sServletName;
-    if (aInitParams != null)
-      m_aInitParams.putAll (aInitParams);
+    if (aServletInitParams != null)
+      m_aServletInitParams.putAll (aServletInitParams);
   }
 
   @Nonnull
+  @Nonempty
   public String getServletName ()
   {
     return m_sServletName;
@@ -75,12 +100,43 @@ public class MockServletConfig implements ServletConfig
   @Nullable
   public String getInitParameter (@Nullable final String sName)
   {
-    return m_aInitParams.get (sName);
+    return m_aServletInitParams.get (sName);
   }
 
   @Nonnull
   public Enumeration <String> getInitParameterNames ()
   {
-    return ContainerHelper.getEnumeration (m_aInitParams.keySet ());
+    return ContainerHelper.getEnumeration (m_aServletInitParams.keySet ());
+  }
+
+  public void addInitParameter (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
+  {
+    if (StringHelper.hasNoText (sName))
+      throw new IllegalArgumentException ("name");
+    if (sValue == null)
+      throw new NullPointerException ("value");
+    m_aServletInitParams.put (sName, sValue);
+  }
+
+  @Nonnull
+  public EChange removeInitParameter (@Nullable final String sName)
+  {
+    return EChange.valueOf (m_aServletInitParams.remove (sName) != null);
+  }
+
+  @Nonnull
+  @Nonempty
+  public Map <String, String> getAllInitParameters ()
+  {
+    return ContainerHelper.newMap (m_aServletInitParams);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("servletContext", m_aSC)
+                                       .append ("servletName", m_sServletName)
+                                       .append ("servletInitParams", m_aServletInitParams)
+                                       .toString ();
   }
 }

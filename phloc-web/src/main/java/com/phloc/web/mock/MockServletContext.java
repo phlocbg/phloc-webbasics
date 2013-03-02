@@ -408,4 +408,35 @@ public final class MockServletContext implements ServletContext
 
     m_aAttributes.clear ();
   }
+
+  /**
+   * Create a new {@link MockServletConfig} object without servlet init
+   * parameters.
+   * 
+   * @param sServletName
+   *        Name of the servlet. May neither be <code>null</code> nor empty.
+   * @return A new {@link MockServletConfig} object for this servlet context.
+   */
+  @Nonnull
+  public MockServletConfig createServletConfig (@Nonnull @Nonempty final String sServletName)
+  {
+    return createServletConfig (sServletName, null);
+  }
+
+  /**
+   * Create a new {@link MockServletConfig} object.
+   * 
+   * @param sServletName
+   *        Name of the servlet. May neither be <code>null</code> nor empty.
+   * @param aServletInitParams
+   *        The map with all servlet init parameters. May be <code>null</code>
+   *        or empty.
+   * @return A new {@link MockServletConfig} object for this servlet context.
+   */
+  @Nonnull
+  public MockServletConfig createServletConfig (@Nonnull @Nonempty final String sServletName,
+                                                @Nullable final Map <String, String> aServletInitParams)
+  {
+    return new MockServletConfig (this, sServletName, aServletInitParams);
+  }
 }
