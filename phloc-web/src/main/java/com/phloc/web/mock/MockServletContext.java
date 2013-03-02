@@ -36,6 +36,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -437,6 +438,34 @@ public final class MockServletContext implements ServletContext
   public MockServletPool getServletPool ()
   {
     return m_aServletPool;
+  }
+
+  @Nullable
+  public MockHttpServletResponse invoke (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    // Find matching servlet
+    final String sServletPath = aHttpRequest.getServletPath ();
+    final Servlet aServlet = m_aServletPool.getServletOfPath (sServletPath);
+    if (aServlet == null)
+    {
+      s_aLogger.error ("Found no servlet matching '" + sServletPath + "'");
+      return null;
+    }
+
+    // Main invocation
+    final MockHttpServletResponse ret = new MockHttpServletResponse ();
+    try
+    {
+      aServlet.service (aHttpRequest, ret);
+    }
+    catch (final Throwable t)
+    {
+      throw new IllegalStateException ("Failed to invoke servlet " + aServlet + " for request " + aHttpRequest, t);
+    }
+    return ret;
   }
 
   public void invalidate ()

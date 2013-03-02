@@ -65,6 +65,25 @@ public final class RequestHelper
   {}
 
   /**
+   * Get the passed string without an eventually contained session ID like in
+   * "test.html;JSESSIONID=1234".
+   * 
+   * @param sValue
+   *        The value to strip the session ID from
+   * @return The value without a session ID or the original string.
+   */
+  @Nullable
+  public static String getWithoutSessionID (@Nonnull final String sValue)
+  {
+    if (sValue == null)
+      throw new NullPointerException ("value");
+
+    // Strip session ID parameter
+    final int nIndex = sValue.indexOf (';');
+    return nIndex == -1 ? sValue : sValue.substring (0, nIndex);
+  }
+
+  /**
    * Get the request URI without an eventually appended session
    * (";jsessionid=...")
    * <table summary="Examples of Returned Values">
@@ -99,9 +118,7 @@ public final class RequestHelper
     if (StringHelper.hasNoText (sRequestURI))
       return sRequestURI;
 
-    // Strip session ID parameter
-    final int nIndex = sRequestURI.indexOf (';');
-    return nIndex == -1 ? sRequestURI : sRequestURI.substring (0, nIndex);
+    return getWithoutSessionID (sRequestURI);
   }
 
   /**
@@ -125,9 +142,7 @@ public final class RequestHelper
     if (StringHelper.hasNoText (sPathInfo))
       return sPathInfo;
 
-    // Strip session ID parameter
-    final int nIndex = sPathInfo.indexOf (';');
-    return nIndex == -1 ? sPathInfo : sPathInfo.substring (0, nIndex);
+    return getWithoutSessionID (sPathInfo);
   }
 
   /**

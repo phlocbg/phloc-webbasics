@@ -20,6 +20,7 @@ package com.phloc.web.mock;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +57,9 @@ import com.phloc.commons.collections.multimap.MultiHashMapLinkedHashSetBased;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.system.SystemHelper;
+import com.phloc.commons.url.URLUtils;
 import com.phloc.web.CWeb;
 import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.EHTTPMethod;
@@ -277,7 +280,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
    *         reason.). Never <code>null</code>.
    */
   @Nonnull
-  public ServletContext getServletContext ()
+  public final ServletContext getServletContext ()
   {
     if (m_aServletContext == null)
       throw new IllegalStateException ("No servlet context present!");
@@ -301,7 +304,11 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   }
 
   /**
-   * Invalidate this request, clearing its state.
+   * Invalidate this request, clearing its state and invoking all HTTP event
+   * listener.
+   * 
+   * @see #close()
+   * @see #clearAttributes()
    */
   public void invalidate ()
   {
@@ -311,9 +318,9 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
 
     if (m_aServletContext != null)
     {
-      final ServletRequestEvent aHSE = new ServletRequestEvent (getServletContext (), this);
+      final ServletRequestEvent aSRE = new ServletRequestEvent (m_aServletContext, this);
       for (final ServletRequestListener aListener : MockHttpListener.getAllServletRequestListeners ())
-        aListener.requestDestroyed (aHSE);
+        aListener.requestDestroyed (aSRE);
     }
 
     close ();
@@ -439,24 +446,23 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
    * values, use {@link #addParameters(Map)}.
    * 
    * @param aParams
-   *        Parameter name value map
+   *        Parameter name value map. May be <code>null</code>.
    */
-  public void setParameters (@Nonnull final Map <String, ? extends Object> aParams)
+  public void setParameters (@Nullable final Map <String, ? extends Object> aParams)
   {
-    if (aParams == null)
-      throw new NullPointerException ("params");
-
-    for (final Map.Entry <String, ? extends Object> aEntry : aParams.entrySet ())
-    {
-      final Object aValue = aEntry.getValue ();
-      if (aValue instanceof String)
-        setParameter (aEntry.getKey (), (String) aValue);
-      else
-        if (aValue instanceof String [])
-          setParameter (aEntry.getKey (), (String []) aValue);
+    if (aParams != null)
+      for (final Map.Entry <String, ? extends Object> aEntry : aParams.entrySet ())
+      {
+        final Object aValue = aEntry.getValue ();
+        if (aValue instanceof String)
+          setParameter (aEntry.getKey (), (String) aValue);
         else
-          throw new IllegalArgumentException ("Unexpected parameter type: " + CGStringHelper.getSafeClassName (aValue));
-    }
+          if (aValue instanceof String [])
+            setParameter (aEntry.getKey (), (String []) aValue);
+          else
+            throw new IllegalArgumentException ("Unexpected parameter type: " +
+                                                CGStringHelper.getSafeClassName (aValue));
+      }
   }
 
   /**
@@ -1077,6 +1083,81 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   public boolean isRequestedSessionIdFromUrl ()
   {
     return isRequestedSessionIdFromURL ();
+  }
+
+  /**
+   * Set all path related members to the value to be deduced from the request
+   * URI.
+   * 
+   * @return this
+   * @see #setScheme(String)
+   * @see #setServerName(String)
+   * @see #setServerPort(int)
+   * @see #setQueryString(String)
+   * @see #setParameters(Map)
+   */
+  @Nonnull
+  public MockHttpServletRequest setPathsFromRequestURI ()
+  {
+    if (StringHelper.hasText (m_sRequestURI) && m_aServletContext != null)
+    {
+      final URI aURI = URLUtils.getAsURI (RequestHelper.getWithoutSessionID (m_sRequestURI));
+      if (aURI != null)
+      {
+        setScheme (aURI.getScheme ());
+        setServerName (aURI.getHost ());
+        setServerPort (RequestHelper.getServerPortToUse (aURI.getScheme (), aURI.getPort ()));
+        String sPath = aURI.getPath ();
+
+        // Context path
+        final String sServletContextPath = m_aServletContext.getContextPath ();
+        if (sServletContextPath.isEmpty () || StringHelper.startsWith (sPath, sServletContextPath))
+        {
+          setContextPath (sServletContextPath);
+          sPath = sPath.substring (sServletContextPath.length ());
+        }
+        else
+        {
+          setContextPath (null);
+        }
+
+        // Servlet path
+        final int nIndex = sPath.indexOf ('/', 1);
+        if (nIndex >= 0)
+        {
+          setServletPath (sPath.substring (0, nIndex));
+          sPath = sPath.substring (nIndex);
+        }
+        else
+        {
+          setServletPath ("");
+        }
+
+        // Remaining is the path info:
+        setPathInfo (sPath);
+
+        // Update request URI
+        String sNewRequestURI = getContextPath () + getServletPath () + getPathInfo ();
+        final String sQueryString = getQueryString ();
+        if (StringHelper.hasText (sQueryString))
+          sNewRequestURI += URLUtils.QUESTIONMARK + sQueryString;
+        setRequestURI (sNewRequestURI);
+
+        setQueryString (aURI.getQuery ());
+        removeAllParameters ();
+        setParameters (URLUtils.getQueryStringAsMap (aURI.getQuery ()));
+        return this;
+      }
+    }
+    setScheme (null);
+    setServerName (null);
+    setServerPort (DEFAULT_SERVER_PORT);
+    setContextPath (null);
+    setServletPath (null);
+    setPathInfo (null);
+    setQueryString (null);
+    removeAllParameters ();
+    return this;
   }
 
   @Nonnull

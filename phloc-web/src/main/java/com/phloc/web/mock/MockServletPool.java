@@ -61,7 +61,16 @@ public final class MockServletPool
     @Nonempty
     private static String _getAsRegEx (@Nonnull @Nonempty final String sPath)
     {
-      return StringHelper.replaceAll (sPath, "*", ".*");
+      String sPathToUse = sPath;
+      if (sPathToUse.endsWith ("/*"))
+      {
+        // Special handling for trailing "/*" which means that a servlet
+        // registered for "/test/*" can be found with the servlet path "/test".
+        sPathToUse = sPath.substring (0, sPath.length () - 2);
+      }
+
+      // Convert wildcard to regex
+      return StringHelper.replaceAll (sPathToUse, "*", ".*");
     }
 
     public ServletItem (@Nonnull final Servlet aServlet, @Nonnull @Nonempty final String sServletPath)

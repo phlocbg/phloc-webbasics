@@ -20,6 +20,7 @@ package com.phloc.web.mock;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +45,7 @@ import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.system.SystemHelper;
+import com.phloc.web.CWeb;
 
 // ESCA-JAVA0116:
 /**
@@ -54,12 +56,13 @@ import com.phloc.commons.system.SystemHelper;
 @NotThreadSafe
 public final class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 {
-  public static final int DEFAULT_SERVER_PORT = 80;
+  public static final int DEFAULT_SERVER_PORT = CWeb.DEFAULT_PORT_HTTP;
+  public static final String DEFAULT_CHARSET_NAME = CCharset.CHARSET_UTF_8;
   private static final int DEFAULT_BUFFER_SIZE = 4096;
 
   private boolean m_bOutputStreamAccessAllowed = true;
   private boolean m_bWriterAccessAllowed = true;
-  private String m_sCharacterEncoding = CCharset.CHARSET_UTF_8;
+  private String m_sCharacterEncoding = DEFAULT_CHARSET_NAME;
   private final NonBlockingByteArrayOutputStream m_aContent = new NonBlockingByteArrayOutputStream ();
   private final ServletOutputStream m_aOS = new ServletOutputStream ()
   {
@@ -147,7 +150,7 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
   @Nonempty
   public String getCharacterEncodingOrDefault ()
   {
-    String ret = m_sCharacterEncoding;
+    String ret = getCharacterEncoding ();
     if (ret == null)
       ret = SystemHelper.getSystemCharsetName ();
     return ret;
@@ -195,6 +198,13 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
   {
     flushBuffer ();
     return m_aContent.getAsString (sCharset);
+  }
+
+  @Nonnull
+  public String getContentAsString (@Nonnull final Charset aCharset)
+  {
+    flushBuffer ();
+    return m_aContent.getAsString (aCharset);
   }
 
   public void setContentLength (final int nContentLength)
