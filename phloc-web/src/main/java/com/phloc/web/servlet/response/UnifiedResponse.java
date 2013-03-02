@@ -669,12 +669,38 @@ public class UnifiedResponse
     return this;
   }
 
-  @Nonnull
-  public UnifiedResponse setStatus (@Nonnegative final int nStatusCode)
+  private void _setStatus (@Nonnegative final int nStatusCode)
   {
     if (m_nStatusCode != CGlobal.ILLEGAL_UINT)
       _info ("Overwriting status code " + m_nStatusCode + " with " + nStatusCode);
     m_nStatusCode = nStatusCode;
+  }
+
+  @Nonnull
+  public UnifiedResponse setStatus (@Nonnegative final int nStatusCode)
+  {
+    if (nStatusCode == HttpServletResponse.SC_UNAUTHORIZED)
+      _warn ("Use the special setStatusUnauthorized method for this status code to set the " +
+             CHTTPHeader.WWW_AUTHENTICATE +
+             " response header!");
+    _setStatus (nStatusCode);
+    return this;
+  }
+
+  /**
+   * Special handling for returning status code 401 UNAUTHORIZED
+   * 
+   * @param sRealm
+   *        The basic realm to use. May neither be <code>null</code> nor empty.
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setStatusUnauthorized (@Nonnull final String sRealm)
+  {
+    if (StringHelper.hasNoText (sRealm))
+      throw new IllegalArgumentException ("realm");
+    _setStatus (HttpServletResponse.SC_UNAUTHORIZED);
+    m_aResponseHeaderMap.setHeader (CHTTPHeader.WWW_AUTHENTICATE, "Basic realm=\"" + sRealm + "\"");
     return this;
   }
 
