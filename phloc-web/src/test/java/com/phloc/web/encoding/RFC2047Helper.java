@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
 
-public class Rfc2047Helper
+public class RFC2047Helper
 {
   public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
 
@@ -42,10 +42,10 @@ public class Rfc2047Helper
       switch (codec)
       {
         case Q:
-          return (new QCodec (charset)).encode (value);
+          return (new RFC1522QCodec (charset)).encode (value);
         case B:
         default:
-          return (new BCodec (charset)).encode (value);
+          return (new RFC1522BCodec (charset)).encode (value);
       }
     }
     catch (final Exception e)
@@ -67,14 +67,14 @@ public class Rfc2047Helper
     try
     {
       // try BCodec first
-      return new BCodec ().decode (value);
+      return new RFC1522BCodec ().decode (value);
     }
     catch (final DecoderException de)
     {
       // try QCodec next
       try
       {
-        return new QCodec ().decode (value);
+        return new RFC1522QCodec ().decode (value);
       }
       catch (final Exception ex)
       {

@@ -70,7 +70,7 @@ public final class Codepoint implements Serializable, Comparable <Codepoint>
       return s.charAt (0);
     if (s.length () > 2)
       throw new IllegalArgumentException ("Too many chars: " + s);
-    return CharUtils.getSupplementaryValue (s.charAt (0), s.charAt (1));
+    return Character.toCodePoint (s.charAt (0), s.charAt (1));
   }
 
   /**
@@ -86,7 +86,7 @@ public final class Codepoint implements Serializable, Comparable <Codepoint>
    */
   public Codepoint (final char high, final char low)
   {
-    this (CharUtils.getSupplementaryValue (high, low));
+    this (Character.toCodePoint (high, low));
   }
 
   /**
@@ -102,7 +102,7 @@ public final class Codepoint implements Serializable, Comparable <Codepoint>
    */
   public Codepoint (@Nonnegative final int nValue)
   {
-    if (nValue < 0)
+    if (!Character.isValidCodePoint (nValue))
       throw new IllegalArgumentException ("Invalid Codepoint: " + nValue);
     m_nValue = nValue;
   }
@@ -190,7 +190,7 @@ public final class Codepoint implements Serializable, Comparable <Codepoint>
   @ReturnsMutableCopy
   public char [] getAsChars ()
   {
-    return getAsString ().toCharArray ();
+    return CharUtils.getAsCharArray (m_nValue);
   }
 
   /**
@@ -200,7 +200,7 @@ public final class Codepoint implements Serializable, Comparable <Codepoint>
   @Nonnull
   public int getCharCount ()
   {
-    return CharUtils.getStringLength (m_nValue);
+    return Character.charCount (m_nValue);
   }
 
   @Nonnull

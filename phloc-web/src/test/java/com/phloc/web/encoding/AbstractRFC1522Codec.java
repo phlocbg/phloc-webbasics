@@ -17,7 +17,6 @@
 
 package com.phloc.web.encoding;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import com.phloc.commons.charset.CCharset;
@@ -42,7 +41,7 @@ import com.phloc.commons.string.StringHelper;
  * @since 1.3
  * @version $Id: RFC1522Codec.java 1379145 2012-08-30 21:02:52Z tn $
  */
-abstract class AbstractRFC1522Codec
+public abstract class AbstractRFC1522Codec
 {
   /** Separator. */
   protected static final char SEP = '?';
@@ -78,43 +77,14 @@ abstract class AbstractRFC1522Codec
       return null;
     final StringBuilder buffer = new StringBuilder ();
     buffer.append (PREFIX);
-    buffer.append (charset);
+    buffer.append (charset.name ());
     buffer.append (SEP);
-    buffer.append (this.getEncoding ());
+    buffer.append (getRFC1522Encoding ());
     buffer.append (SEP);
-    final byte [] rawData = this.doEncoding (text.getBytes (charset));
+    final byte [] rawData = doEncoding (text.getBytes (charset));
     buffer.append (CharsetManager.getAsString (rawData, CCharset.CHARSET_US_ASCII_OBJ));
     buffer.append (POSTFIX);
     return buffer.toString ();
-  }
-
-  /**
-   * Applies an RFC 1522 compliant encoding scheme to the given string of text
-   * with the given charset.
-   * <p>
-   * This method constructs the "encoded-word" header common to all the RFC 1522
-   * codecs and then invokes {@link #doEncoding(byte [])} method of a concrete
-   * class to perform the specific encoding.
-   * 
-   * @param text
-   *        a string to encode
-   * @param charsetName
-   *        the charset to use
-   * @return RFC 1522 compliant "encoded-word"
-   * @throws EncoderException
-   *         thrown if there is an error condition during the Encoding process.
-   * @throws UnsupportedEncodingException
-   *         if charset is not available
-   * @see <a
-   *      href="http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard
-   *      charsets</a>
-   */
-  protected String encodeText (final String text, final String charsetName) throws EncoderException,
-                                                                           UnsupportedEncodingException
-  {
-    if (text == null)
-      return null;
-    return this.encodeText (text, Charset.forName (charsetName));
   }
 
   /**
@@ -149,7 +119,7 @@ abstract class AbstractRFC1522Codec
     if (to == terminator)
       throw new DecoderException ("RFC 1522 violation: encoding token not found");
     final String encoding = text.substring (from, to);
-    if (!getEncoding ().equalsIgnoreCase (encoding))
+    if (!getRFC1522Encoding ().equalsIgnoreCase (encoding))
       throw new DecoderException ("This codec cannot decode " + encoding + " encoded content");
     from = to + 1;
     to = text.indexOf (SEP, from);
@@ -163,7 +133,7 @@ abstract class AbstractRFC1522Codec
    * 
    * @return name of the codec
    */
-  protected abstract String getEncoding ();
+  protected abstract String getRFC1522Encoding ();
 
   /**
    * Encodes an array of bytes using the defined encoding scheme.

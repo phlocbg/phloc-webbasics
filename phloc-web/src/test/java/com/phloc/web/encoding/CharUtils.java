@@ -17,9 +17,7 @@
  */
 package com.phloc.web.encoding;
 
-import java.io.IOException;
-
-import javax.annotation.Nonnegative;
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -35,22 +33,6 @@ public final class CharUtils
 {
   private CharUtils ()
   {}
-
-  /**
-   * True if the character is a valid unicode codepoint
-   */
-  public static boolean isValid (final int c)
-  {
-    return c >= 0x000000 && c <= 0x10ffff;
-  }
-
-  /**
-   * True if the character is a valid unicode codepoint
-   */
-  public static boolean isValid (final Codepoint c)
-  {
-    return isValid (c.getValue ());
-  }
 
   /**
    * True if all the characters in chars are within the set [low,high]
@@ -71,7 +53,7 @@ public final class CharUtils
     for (int i = 0; i < chars.length; i++)
     {
       final char n = chars[i];
-      final int c = Character.isHighSurrogate (n) && i + 1 < chars.length && Character.isLowSurrogate (chars[i + 1]) ? getSupplementaryValue (n,
+      final int c = Character.isHighSurrogate (n) && i + 1 < chars.length && Character.isLowSurrogate (chars[i + 1]) ? Character.toCodePoint (n,
                                                                                                                                               chars[i++])
                                                                                                                     : (int) n;
       if (c < low || c > high)
@@ -89,43 +71,12 @@ public final class CharUtils
   }
 
   /**
-   * Append the specified codepoint to the buffer, automatically handling
-   * surrogate pairs
-   */
-  public static void append (final Appendable buf, final Codepoint c)
-  {
-    append (buf, c.getValue ());
-  }
-
-  /**
-   * Append the specified codepoint to the buffer, automatically handling
-   * surrogate pairs
-   */
-  public static void append (final Appendable buf, final int c)
-  {
-    try
-    {
-      if (Character.isSupplementaryCodePoint (c))
-      {
-        buf.append (getHighSurrogate (c));
-        buf.append (getLowSurrogate (c));
-      }
-      else
-        buf.append ((char) c);
-    }
-    catch (final IOException e)
-    {
-      throw new RuntimeException (e);
-    }
-  }
-
-  /**
    * Get the high surrogate for a particular unicode codepoint
    */
   public static char getHighSurrogate (final int c)
   {
-    return c >= Character.MIN_SUPPLEMENTARY_CODE_POINT ? (char) ((Character.MIN_HIGH_SURROGATE - (Character.MIN_SUPPLEMENTARY_CODE_POINT >> 10)) + (c >> 10))
-                                                      : 0;
+    return Character.isSupplementaryCodePoint (c) ? (char) ((Character.MIN_HIGH_SURROGATE - (Character.MIN_SUPPLEMENTARY_CODE_POINT >> 10)) + (c >> 10))
+                                                 : 0;
   }
 
   /**
@@ -133,31 +84,7 @@ public final class CharUtils
    */
   public static char getLowSurrogate (final int c)
   {
-    return c >= Character.MIN_SUPPLEMENTARY_CODE_POINT ? (char) (0xDC00 + (c & 0x3FF)) : (char) c;
-  }
-
-  /**
-   * Converts the high and low surrogate into a supplementary codepoint value
-   */
-  @Nonnegative
-  public static int getSupplementaryValue (final char high, final char low)
-  {
-    if (!Character.isHighSurrogate (high))
-      throw new IllegalArgumentException ("Invalid High Surrogate: " + high);
-    if (!Character.isLowSurrogate (low))
-      throw new IllegalArgumentException ("Invalid Low Surrogate: " + low);
-    return ((high - Character.MIN_HIGH_SURROGATE) << 10) +
-           (low - Character.MIN_LOW_SURROGATE) +
-           Character.MIN_SUPPLEMENTARY_CODE_POINT;
-  }
-
-  /**
-   * Converts the high and low surrogate into a supplementary codepoint
-   */
-  @Nonnull
-  public static Codepoint toSupplementary (final char high, final char low)
-  {
-    return new Codepoint (getSupplementaryValue (high, low));
+    return Character.isSupplementaryCodePoint (c) ? (char) (0xDC00 + (c & 0x3FF)) : (char) c;
   }
 
   /**
@@ -176,7 +103,7 @@ public final class CharUtils
       {
         final char low = s.charAt (i + 1);
         if (Character.isLowSurrogate (low))
-          return toSupplementary (c, low);
+          return new Codepoint (c, low);
       }
     }
     else
@@ -186,7 +113,7 @@ public final class CharUtils
         {
           final char high = s.charAt (i - 1);
           if (Character.isHighSurrogate (high))
-            return toSupplementary (high, c);
+            return new Codepoint (high, c);
         }
       }
     return new Codepoint (c);
@@ -224,9 +151,9 @@ public final class CharUtils
         }
       }
       if (s instanceof StringBuffer)
-        ((StringBuffer) s).insert (nI, getAsString (c));
+        ((StringBuffer) s).insert (nI, getAsCharArray (c));
       else
-        ((StringBuilder) s).insert (nI, getAsString (c));
+        ((StringBuilder) s).insert (nI, getAsCharArray (c));
     }
   }
 
@@ -234,7 +161,7 @@ public final class CharUtils
    * Set the character at a given location, automatically dealing with surrogate
    * pairs
    */
-  public static void setChar (final CharSequence s, final int i, @Nonnull final Codepoint c)
+  public static void setChar (@Nonnull final CharSequence s, final int i, @Nonnull final Codepoint c)
   {
     setChar (s, i, c.getValue ());
   }
@@ -277,24 +204,6 @@ public final class CharUtils
   }
 
   /**
-   * Return the number of characters used to represent the codepoint (will
-   * return 1 or 2)
-   */
-  public static int length (@Nonnull final Codepoint c)
-  {
-    return c.getCharCount ();
-  }
-
-  /**
-   * Return the number of characters used to represent the codepoint (will
-   * return 1 or 2)
-   */
-  public static int length (final int c)
-  {
-    return getStringLength (c);
-  }
-
-  /**
    * Return the total number of codepoints in the buffer. Each surrogate pair
    * counts as a single codepoint
    */
@@ -312,7 +221,7 @@ public final class CharUtils
     return _length (AbstractCodepointIterator.forCharArray (c));
   }
 
-  private static int _length (final AbstractCodepointIterator ci)
+  private static int _length (@Nonnull final AbstractCodepointIterator ci)
   {
     int n = 0;
     while (ci.hasNext ())
@@ -323,13 +232,15 @@ public final class CharUtils
     return n;
   }
 
+  /**
+   * Return the char[] representation of the codepoint, automatically dealing
+   * with surrogate pairs
+   */
   @Nonnull
-  private static String _supplementaryToString (final int c)
+  @Nonempty
+  public static char [] getAsCharArray (final int c)
   {
-    final StringBuilder buf = new StringBuilder (2);
-    buf.append (getHighSurrogate (c));
-    buf.append (getLowSurrogate (c));
-    return buf.toString ();
+    return Character.toChars (c);
   }
 
   /**
@@ -340,25 +251,22 @@ public final class CharUtils
   @Nonempty
   public static String getAsString (final int c)
   {
-    return Character.isSupplementaryCodePoint (c) ? _supplementaryToString (c) : String.valueOf ((char) c);
+    return new String (getAsCharArray (c));
   }
 
-  /**
-   * Return the length of the String representation of the codepoint,
-   * automatically dealing with surrogate pairs
-   */
-  @Nonnegative
-  public static int getStringLength (final int c)
-  {
-    return Character.isSupplementaryCodePoint (c) ? 2 : 1;
-  }
-
+  // Left-to-right embedding
   public static final char LRE = 0x202A;
+  // Right-to-left embedding
   public static final char RLE = 0x202B;
+  // Left-to-right override
   public static final char LRO = 0x202D;
+  // Right-to-left override
   public static final char RLO = 0x202E;
+  // Left-to-right mark
   public static final char LRM = 0x200E;
+  // Right-to-left mark
   public static final char RLM = 0x200F;
+  // Pop directional formatting
   public static final char PDF = 0x202C;
 
   /**
@@ -437,7 +345,7 @@ public final class CharUtils
    */
   public static boolean isDigit (final int codepoint)
   {
-    return inRange (codepoint, '0', '9');
+    return Character.isDigit (codepoint);
   }
 
   /**
@@ -453,7 +361,7 @@ public final class CharUtils
    */
   public static boolean isAlpha (final int codepoint)
   {
-    return inRange (codepoint, 'A', 'Z') || inRange (codepoint, 'a', 'z');
+    return Character.isLetter (codepoint);
   }
 
   /**
@@ -469,7 +377,7 @@ public final class CharUtils
    */
   public static boolean isAlphaDigit (final int codepoint)
   {
-    return isDigit (codepoint) || isAlpha (codepoint);
+    return Character.isLetterOrDigit (codepoint);
   }
 
   public static boolean isHex (final int codepoint)
@@ -490,20 +398,16 @@ public final class CharUtils
    */
   public static boolean isBidi (final int codepoint)
   {
-    return codepoint == LRM || // Left-to-right mark
+    return codepoint == LRM ||
            codepoint == RLM ||
-           // Right-to-left mark
            codepoint == LRE ||
-           // Left-to-right embedding
            codepoint == RLE ||
-           // Right-to-left embedding
            codepoint == LRO ||
-           // Left-to-right override
            codepoint == RLO ||
-           // Right-to-left override
-           codepoint == PDF; // Pop directional formatting
+           codepoint == PDF;
   }
 
+  @CheckForSigned
   public static int get_index (@Nonnull final int [] set, final int value)
   {
     int s = 0, e = set.length;

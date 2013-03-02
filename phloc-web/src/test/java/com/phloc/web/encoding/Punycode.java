@@ -19,37 +19,37 @@ public final class Punycode
   Punycode ()
   {}
 
-  private static boolean basic (final int cp)
+  private static boolean _basic (final int cp)
   {
     return cp < 0x80;
   }
 
-  private static boolean delim (final int cp)
+  private static boolean _delim (final int cp)
   {
     return cp == delimiter;
   }
 
-  private static boolean flagged (final int bcp)
+  private static boolean _flagged (final int bcp)
   {
     return (bcp - 65) < 26;
   }
 
-  private static int decode_digit (final int cp)
+  private static int _decode_digit (final int cp)
   {
     return (cp - 48 < 10) ? cp - 22 : (cp - 65 < 26) ? cp - 65 : (cp - 97 < 26) ? cp - 97 : base;
   }
 
-  private static int t (final boolean c)
+  private static int _t (final boolean c)
   {
-    return (c) ? 1 : 0;
+    return c ? 1 : 0;
   }
 
-  private static int encode_digit (final int d, final boolean upper)
+  private static int _encode_digit (final int d, final boolean upper)
   {
-    return (d + 22 + 75 * t (d < 26)) - (t (upper) << 5);
+    return (d + 22 + 75 * _t (d < 26)) - (_t (upper) << 5);
   }
 
-  private static int adapt (final int pdelta, final int numpoints, final boolean firsttime)
+  private static int _adapt (final int pdelta, final int numpoints, final boolean firsttime)
   {
     int delta = pdelta;
     int k;
@@ -74,7 +74,7 @@ public final class Punycode
     while (ci.hasNext ())
     {
       i = ci.next ().getValue ();
-      if (basic (i))
+      if (_basic (i))
       {
         if (case_flags != null)
         {}
@@ -119,11 +119,11 @@ public final class Punycode
             t = k <= bias ? tmin : k >= bias + tmax ? tmax : k - bias;
             if (q < t)
               break;
-            buf.append ((char) encode_digit (t + (q - t) % (base - t), false));
+            buf.append ((char) _encode_digit (t + (q - t) % (base - t), false));
             q = (q - t) / (base - t);
           }
-          buf.append ((char) encode_digit (q, (case_flags != null) ? case_flags[ci.position () - 1] : false));
-          bias = adapt (delta, h + 1, h == b);
+          buf.append ((char) _encode_digit (q, (case_flags != null) ? case_flags[ci.position () - 1] : false));
+          bias = _adapt (delta, h + 1, h == b);
           delta = 0;
           ++h;
         }
@@ -172,13 +172,13 @@ public final class Punycode
     out = i = 0;
     bias = initial_bias;
     for (b = j = 0; j < chars.length; ++j)
-      if (delim (chars[j]))
+      if (_delim (chars[j]))
         b = j;
     for (j = 0; j < b; ++j)
     {
       if (case_flags != null)
-        case_flags[out] = flagged (chars[j]);
-      if (!basic (chars[j]))
+        case_flags[out] = _flagged (chars[j]);
+      if (!_basic (chars[j]))
         throw new IOException ("Bad Input");
       buf.append (chars[j]);
     }
@@ -189,7 +189,7 @@ public final class Punycode
       {
         if (in > chars.length)
           throw new IOException ("Bad input");
-        digit = decode_digit (chars[in++]);
+        digit = _decode_digit (chars[in++]);
         if (digit >= base)
           throw new IOException ("Bad input");
         if (digit > (Integer.MAX_VALUE - i) / w)
@@ -202,19 +202,15 @@ public final class Punycode
           throw new IOException ("Overflow");
         w *= (base - t);
       }
-      bias = adapt (i - oldi, out + 1, oldi == 0);
+      bias = _adapt (i - oldi, out + 1, oldi == 0);
       if (i / (out + 1) > Integer.MAX_VALUE - n)
         throw new IOException ("Overflow");
       n += i / (out + 1);
       i %= (out + 1);
       if (case_flags != null)
       {
-        System.arraycopy ( // not sure if this is right
-        case_flags,
-                          i,
-                          case_flags,
-                          i + CharUtils.length (n),
-                          case_flags.length - i);
+        // not sure if this is right
+        System.arraycopy (case_flags, i, case_flags, i + Character.charCount (n), case_flags.length - i);
       }
       CharUtils.insert (buf, i++, n);
     }

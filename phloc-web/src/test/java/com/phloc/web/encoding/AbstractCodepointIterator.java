@@ -191,20 +191,19 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * will have a single member. If the codepoint is supplemental, the char array
    * will have two members, representing the high and low surrogate chars
    */
+  @Nullable
   public char [] nextChars () throws InvalidCharacterException
   {
     if (hasNext ())
     {
-      if (isNextSurrogate ())
+      if (_isNextSurrogate ())
       {
         final char c1 = get ();
         if (Character.isHighSurrogate (c1) && position () < limit ())
         {
           final char c2 = get ();
           if (Character.isLowSurrogate (c2))
-          {
             return new char [] { c1, c2 };
-          }
           throw new InvalidCharacterException (c2);
         }
         else
@@ -212,9 +211,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
           {
             final char c2 = get (position () - 2);
             if (Character.isHighSurrogate (c2))
-            {
               return new char [] { c1, c2 };
-            }
             throw new InvalidCharacterException (c2);
           }
       }
@@ -231,7 +228,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    */
   public char [] peekChars () throws InvalidCharacterException
   {
-    return peekChars (position ());
+    return _peekChars (position ());
   }
 
   /**
@@ -240,7 +237,8 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * supplemental, the char array will have two members, representing the high
    * and low surrogate chars
    */
-  private char [] peekChars (final int pos) throws InvalidCharacterException
+  @Nullable
+  private char [] _peekChars (final int pos) throws InvalidCharacterException
   {
     if (pos < 0 || pos >= limit ())
       return null;
@@ -249,9 +247,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
     {
       final char c2 = get (pos + 1);
       if (Character.isLowSurrogate (c2))
-      {
         return new char [] { c1, c2 };
-      }
       throw new InvalidCharacterException (c2);
     }
     else
@@ -259,9 +255,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
       {
         final char c2 = get (pos - 1);
         if (Character.isHighSurrogate (c2))
-        {
           return new char [] { c2, c1 };
-        }
         throw new InvalidCharacterException (c2);
       }
       else
@@ -289,15 +283,14 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    */
   public Codepoint peek (final int index) throws InvalidCharacterException
   {
-    return _toCodepoint (peekChars (index));
+    return _toCodepoint (_peekChars (index));
   }
 
   @Nullable
   private Codepoint _toCodepoint (final char [] chars)
   {
-    return chars == null || chars.length == 0 ? null
-                                             : chars.length == 1 ? new Codepoint (chars[0])
-                                                                : CharUtils.toSupplementary (chars[0], chars[1]);
+    return chars == null || chars.length == 0 ? null : chars.length == 1 ? new Codepoint (chars[0])
+                                                                        : new Codepoint (chars[0], chars[1]);
   }
 
   /**
@@ -334,7 +327,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
     return m_nLimit - position ();
   }
 
-  private boolean isNextSurrogate ()
+  private boolean _isNextSurrogate ()
   {
     if (!hasNext ())
       return false;
@@ -611,7 +604,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
         else
           if (chars.length == 2)
           {
-            final int cp = CharUtils.getSupplementaryValue (chars[0], chars[1]);
+            final int cp = Character.toCodePoint (chars[0], chars[1]);
             if (check (cp))
             {
               if (m_bScanningOnly)

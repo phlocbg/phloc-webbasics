@@ -45,7 +45,7 @@ import com.phloc.commons.codec.EncoderException;
  * @since 1.3
  * @version $Id: BCodec.java 1380305 2012-09-03 18:37:21Z tn $
  */
-public class BCodec extends AbstractRFC1522Codec
+public class RFC1522BCodec extends AbstractRFC1522Codec
 {
   /**
    * The default charset used for string decoding and encoding.
@@ -55,7 +55,7 @@ public class BCodec extends AbstractRFC1522Codec
   /**
    * Default constructor.
    */
-  public BCodec ()
+  public RFC1522BCodec ()
   {
     this (CCharset.CHARSET_UTF_8_OBJ);
   }
@@ -70,13 +70,13 @@ public class BCodec extends AbstractRFC1522Codec
    *      charsets</a>
    * @since 1.7
    */
-  public BCodec (@Nonnull final Charset charset)
+  public RFC1522BCodec (@Nonnull final Charset charset)
   {
     m_aCharset = charset;
   }
 
   @Override
-  protected String getEncoding ()
+  protected String getRFC1522Encoding ()
   {
     return "B";
   }
@@ -163,15 +163,5 @@ public class BCodec extends AbstractRFC1522Codec
   public Charset getCharset ()
   {
     return m_aCharset;
-  }
-
-  /**
-   * Gets the default charset name used for string decoding and encoding.
-   * 
-   * @return the default charset name
-   */
-  public String getDefaultCharset ()
-  {
-    return m_aCharset.name ();
   }
 }
