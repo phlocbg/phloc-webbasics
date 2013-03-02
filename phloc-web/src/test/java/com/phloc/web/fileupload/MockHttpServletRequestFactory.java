@@ -28,29 +28,27 @@ final class MockHttpServletRequestFactory
   public static HttpServletRequest createHttpServletRequestWithNullContentType ()
   {
     final byte [] requestData = "foobar".getBytes ();
-    return MockHttpServletRequest.createWithContent (requestData);
+    return new MockHttpServletRequest ().setContent (requestData);
   }
 
-  public static HttpServletRequest createValidHttpServletRequest (final String [] strFileNames)
+  public static HttpServletRequest createValidHttpServletRequest (final String [] aFilenames)
   {
     // todo - provide a real implementation
+    final StringBuilder sbRequestData = new StringBuilder ();
 
-    final StringBuffer sbRequestData = new StringBuffer ();
+    for (final String sFilename : aFilenames)
+      sbRequestData.append (sFilename);
 
-    for (final String strFileName : strFileNames)
-    {
-      sbRequestData.append (strFileName);
-    }
+    final byte [] requestData = sbRequestData.toString ().getBytes ();
 
-    byte [] requestData = null;
-    requestData = sbRequestData.toString ().getBytes ();
-
-    return MockHttpServletRequest.createWithContent (requestData, AbstractFileUploadBase.MULTIPART_FORM_DATA);
+    return new MockHttpServletRequest ().setContent (requestData)
+                                        .setContentType (AbstractFileUploadBase.MULTIPART_FORM_DATA);
   }
 
   public static HttpServletRequest createInvalidHttpServletRequest ()
   {
     final byte [] requestData = "foobar".getBytes ();
-    return MockHttpServletRequest.createWithContent (requestData, AbstractFileUploadBase.MULTIPART_FORM_DATA);
+    return new MockHttpServletRequest ().setContent (requestData)
+                                        .setContentType (AbstractFileUploadBase.MULTIPART_FORM_DATA);
   }
 }

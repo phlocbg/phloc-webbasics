@@ -24,6 +24,7 @@ import org.junit.Test;
 import com.phloc.commons.url.SMap;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.mock.MockHttpServletRequest;
+import com.phloc.web.mock.MockServletContext;
 
 /**
  * Test class for class {@link RequestHelper}.
@@ -35,9 +36,11 @@ public final class RequestHelperTest
   @Test
   public void testGetRequestURI ()
   {
-    final MockHttpServletRequest r = new MockHttpServletRequest (EHTTPMethod.GET, "/context/servlet/index.xyz?x=1");
+    final MockServletContext aSC = new MockServletContext ();
+    final MockHttpServletRequest r = new MockHttpServletRequest (aSC, EHTTPMethod.GET).setAllPaths ("/context/servlet/index.xyz?x=1");
+    assertEquals ("/context/servlet/index.xyz", RequestHelper.getRequestURI (r));
     r.addParameters (new SMap ().add ("abc", "xyz"));
-    assertEquals ("/context/servlet/index.xyz?x=1", RequestHelper.getRequestURI (r));
+    assertEquals ("/context/servlet/index.xyz", RequestHelper.getRequestURI (r));
   }
 
   @Test

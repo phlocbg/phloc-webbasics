@@ -96,8 +96,8 @@ public final class IProgressListenerTest extends AbstractFileUploadTestCase
     baos.write ("-----1234--\r\n".getBytes (US_ASCII));
     final byte [] contents = baos.toByteArray ();
 
-    MockHttpServletRequest request = MockHttpServletRequest.createWithContent (contents,
-                                                                               "multipart/form-data; boundary=---1234");
+    MockHttpServletRequest request = new MockHttpServletRequest ().setContent (contents)
+                                                                  .setContentType ("multipart/form-data; boundary=---1234");
     _runTest (NUM_ITEMS, contents.length, request);
     request = new MockHttpServletRequest ()
     {

@@ -21,7 +21,8 @@ public final class MockHttpServletRequestTest
   {
     final String sContextPath = "/ctx";
     final ServletContext aSC = new MockServletContext (sContextPath);
-    final MockHttpServletRequest c = new MockHttpServletRequest (aSC, EHTTPMethod.GET, sContextPath + "/servlet?x=y").setPathsFromRequestURI ();
+    final MockHttpServletRequest c = new MockHttpServletRequest (aSC, EHTTPMethod.GET).setAllPaths (sContextPath +
+                                                                                                    "/servlet?x=y");
     assertNull (c.getScheme ());
     assertNull (c.getServerName ());
     assertEquals (-1, c.getServerPort ());
@@ -31,8 +32,7 @@ public final class MockHttpServletRequestTest
     assertEquals (sContextPath + "/servlet", c.getRequestURI ());
     assertEquals ("x=y", c.getQueryString ());
 
-    c.setRequestURI (sContextPath + "/servlet/path/in/servlet#anchor");
-    c.setPathsFromRequestURI ();
+    c.setAllPaths (sContextPath + "/servlet/path/in/servlet#anchor");
     assertNull (c.getScheme ());
     assertNull (c.getServerName ());
     assertEquals (-1, c.getServerPort ());

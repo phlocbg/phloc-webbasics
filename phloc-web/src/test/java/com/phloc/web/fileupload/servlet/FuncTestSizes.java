@@ -110,8 +110,8 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
 
     ServletFileUpload upload = new ServletFileUpload (new DiskFileItemFactory (10240));
     upload.setFileSizeMax (-1);
-    HttpServletRequest req = MockHttpServletRequest.createWithContent (request.getBytes (CCharset.CHARSET_US_ASCII),
-                                                                       CONTENT_TYPE);
+    HttpServletRequest req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII))
+                                                          .setContentType (CONTENT_TYPE);
     List <IFileItem> fileItems = upload.parseRequest (req);
     assertEquals (1, fileItems.size ());
     IFileItem item = fileItems.get (0);
@@ -119,7 +119,8 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
 
     upload = new ServletFileUpload (new DiskFileItemFactory (10240));
     upload.setFileSizeMax (40);
-    req = MockHttpServletRequest.createWithContent (request.getBytes (CCharset.CHARSET_US_ASCII), CONTENT_TYPE);
+    req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII))
+                                       .setContentType (CONTENT_TYPE);
     fileItems = upload.parseRequest (req);
     assertEquals (1, fileItems.size ());
     item = fileItems.get (0);
@@ -127,7 +128,8 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
 
     upload = new ServletFileUpload (new DiskFileItemFactory (10240));
     upload.setFileSizeMax (30);
-    req = MockHttpServletRequest.createWithContent (request.getBytes (CCharset.CHARSET_US_ASCII), CONTENT_TYPE);
+    req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII))
+                                       .setContentType (CONTENT_TYPE);
     try
     {
       upload.parseRequest (req);

@@ -41,7 +41,7 @@ public abstract class AbstractFileUploadTestCase
   protected final List <IFileItem> parseUpload (final byte [] bytes, final String contentType) throws FileUploadException
   {
     final ServletFileUpload upload = new ServletFileUpload (new DiskFileItemFactory (10240));
-    final HttpServletRequest request = MockHttpServletRequest.createWithContent (bytes, contentType);
+    final HttpServletRequest request = new MockHttpServletRequest ().setContent (bytes).setContentType (contentType);
 
     final List <IFileItem> fileItems = upload.parseRequest (request);
     return fileItems;

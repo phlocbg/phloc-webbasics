@@ -184,7 +184,7 @@ public final class FuncTestStreaming
     final String contentType = "multipart/form-data; boundary=---1234";
 
     final AbstractFileUploadBase upload = new ServletFileUpload (new DiskFileItemFactory (10240));
-    final HttpServletRequest request = MockHttpServletRequest.createWithContent (aContent, contentType);
+    final HttpServletRequest request = new MockHttpServletRequest ().setContent (aContent).setContentType (contentType);
 
     return upload.getItemIterator (new ServletRequestContext (request));
   }

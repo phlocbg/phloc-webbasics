@@ -54,6 +54,7 @@ public final class CHTTPHeader
   public static final String WARNING = "Warning";
   public static final String AUTHORIZATION = "Authorization";
   public static final String PROXY_AUTHORIZATION = "Proxy-Authorization";
+  public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
   /**
    * The Retry-After response-header field can be used with a 503 (Service

@@ -56,12 +56,9 @@ public final class AbstractUnifiedResponseServletTest
   {
     m_aRule.getServletPool ().registerServlet (MockUnifiedResponseServlet.class, "/mock/*", "MockServlet", null);
 
-    final MockHttpServletRequest req = new MockHttpServletRequest (m_aRule.getServletContext (),
-                                                                   EHTTPMethod.GET,
-                                                                   "http://localhost:1234" +
-                                                                       WebScopeTestRule.MOCK_CONTEXT_PATH +
-                                                                       "/mock/testrequest;JSESSIONID=1234?name=value&name2=value2");
-    req.setPathsFromRequestURI ();
+    final MockHttpServletRequest req = new MockHttpServletRequest (m_aRule.getServletContext (), EHTTPMethod.GET).setAllPaths ("http://localhost:1234" +
+                                                                                                                               WebScopeTestRule.MOCK_CONTEXT_PATH +
+                                                                                                                               "/mock/testrequest;JSESSIONID=1234?name=value&name2=value2");
     try
     {
       final MockHttpServletResponse aResponse = m_aRule.getServletContext ().invoke (req);

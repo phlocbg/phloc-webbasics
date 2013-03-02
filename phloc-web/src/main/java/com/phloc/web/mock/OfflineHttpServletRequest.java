@@ -36,15 +36,9 @@ public final class OfflineHttpServletRequest extends MockHttpServletRequest
     super ();
   }
 
-  @Deprecated
-  public OfflineHttpServletRequest (@Nullable final ServletContext aSC)
-  {
-    super (aSC);
-  }
-
   public OfflineHttpServletRequest (@Nullable final ServletContext aSC, final boolean bInvokeHttpListeners)
   {
-    super (aSC, bInvokeHttpListeners);
+    super (aSC, DEFAULT_METHOD, bInvokeHttpListeners);
   }
 
   @Override
