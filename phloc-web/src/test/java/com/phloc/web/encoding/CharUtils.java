@@ -449,7 +449,7 @@ public final class CharUtils
     return ((s - 1) & 1) == 0;
   }
 
-  public static enum EProfile
+  public static enum ECharacterProfile
   {
     NONE (new ICodepointFilter ()
     {
@@ -644,7 +644,7 @@ public final class CharUtils
     });
     private final ICodepointFilter m_aFilter;
 
-    EProfile (final ICodepointFilter filter)
+    ECharacterProfile (final ICodepointFilter filter)
     {
       m_aFilter = filter;
     }
@@ -912,7 +912,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified filter
    */
-  public static void verify (final AbstractCodepointIterator ci, final ICodepointFilter filter) throws InvalidCharacterException
+  public static void verify (final AbstractCodepointIterator ci, final ICodepointFilter filter)
   {
     final AbstractCodepointIterator rci = AbstractCodepointIterator.restrict (ci, filter);
     while (rci.hasNext ())
@@ -922,7 +922,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified filter
    */
-  public static void verify (final AbstractCodepointIterator ci, final EProfile profile) throws InvalidCharacterException
+  public static void verify (final AbstractCodepointIterator ci, final ECharacterProfile profile)
   {
     final AbstractCodepointIterator rci = AbstractCodepointIterator.restrict (ci, profile.filter ());
     while (rci.hasNext ())
@@ -932,7 +932,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verify (final char [] s, final EProfile profile) throws InvalidCharacterException
+  public static void verify (final char [] s, final ECharacterProfile profile)
   {
     if (s == null)
       return;
@@ -942,7 +942,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verify (final String s, final EProfile profile) throws InvalidCharacterException
+  public static void verify (final String s, final ECharacterProfile profile)
   {
     if (s == null)
       return;
@@ -952,7 +952,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified filter
    */
-  public static void verifyNot (final AbstractCodepointIterator ci, final ICodepointFilter filter) throws InvalidCharacterException
+  public static void verifyNot (final AbstractCodepointIterator ci, final ICodepointFilter filter)
   {
     final AbstractCodepointIterator rci = ci.restrict (filter, false, true);
     while (rci.hasNext ())
@@ -962,7 +962,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verifyNot (final AbstractCodepointIterator ci, final EProfile profile) throws InvalidCharacterException
+  public static void verifyNot (final AbstractCodepointIterator ci, final ECharacterProfile profile)
   {
     final AbstractCodepointIterator rci = ci.restrict (profile.filter (), false, true);
     while (rci.hasNext ())
@@ -972,7 +972,7 @@ public final class CharUtils
   /**
    * Verifies a sequence of codepoints using the specified profile
    */
-  public static void verifyNot (final char [] array, final EProfile profile) throws InvalidCharacterException
+  public static void verifyNot (final char [] array, final ECharacterProfile profile)
   {
     final AbstractCodepointIterator rci = AbstractCodepointIterator.forCharArray (array).restrict (profile.filter (),
                                                                                                    false,

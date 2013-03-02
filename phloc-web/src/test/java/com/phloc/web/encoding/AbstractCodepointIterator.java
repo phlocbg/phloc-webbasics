@@ -192,7 +192,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * will have two members, representing the high and low surrogate chars
    */
   @Nullable
-  public char [] nextChars () throws InvalidCharacterException
+  public char [] nextChars ()
   {
     if (hasNext ())
     {
@@ -226,7 +226,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * the char array will have two members, representing the high and low
    * surrogate chars
    */
-  public char [] peekChars () throws InvalidCharacterException
+  public char [] peekChars ()
   {
     return _peekChars (position ());
   }
@@ -238,7 +238,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
    * and low surrogate chars
    */
   @Nullable
-  private char [] _peekChars (final int pos) throws InvalidCharacterException
+  private char [] _peekChars (final int pos)
   {
     if (pos < 0 || pos >= limit ())
       return null;
@@ -265,7 +265,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Return the next codepoint
    */
-  public Codepoint next () throws InvalidCharacterException
+  public Codepoint next ()
   {
     return _toCodepoint (nextChars ());
   }
@@ -273,7 +273,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Peek the next codepoint
    */
-  public Codepoint peek () throws InvalidCharacterException
+  public Codepoint peek ()
   {
     return _toCodepoint (peekChars ());
   }
@@ -281,7 +281,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
   /**
    * Peek the specified codepoint
    */
-  public Codepoint peek (final int index) throws InvalidCharacterException
+  public Codepoint peek (final int index)
   {
     return _toCodepoint (_peekChars (index));
   }
@@ -564,7 +564,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
     }
 
     @Override
-    public Codepoint next () throws InvalidCharacterException
+    public Codepoint next ()
     {
       final Codepoint cp = super.next ();
       final int v = cp.getValue ();
@@ -587,7 +587,7 @@ public abstract class AbstractCodepointIterator implements Iterator <Codepoint>
     }
 
     @Override
-    public char [] nextChars () throws InvalidCharacterException
+    public char [] nextChars ()
     {
       final char [] chars = super.nextChars ();
       if (chars != null && chars.length > 0)
