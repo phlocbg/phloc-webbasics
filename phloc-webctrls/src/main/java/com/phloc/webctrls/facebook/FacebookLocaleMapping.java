@@ -31,9 +31,9 @@ import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.cache.AbstractNotifyingCache;
 import com.phloc.commons.cache.ISimpleCache;
 import com.phloc.commons.locale.LocaleCache;
-import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.webscopes.singleton.GlobalWebSingleton;
 
-public final class FacebookLocaleMapping extends GlobalSingleton
+public final class FacebookLocaleMapping extends GlobalWebSingleton
 {
   private static final Locale FALLBACK = Locale.US;
   private static final String [] FB_LOCALES = { "af_ZA",
