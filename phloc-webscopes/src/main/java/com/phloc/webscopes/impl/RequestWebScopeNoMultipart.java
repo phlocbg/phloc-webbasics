@@ -44,6 +44,8 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.AbstractMapBasedScope;
 import com.phloc.scopes.ScopeUtils;
 import com.phloc.web.fileupload.IFileItem;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPVersion;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.webscopes.domain.IRequestWebScope;
 
@@ -246,9 +248,24 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return m_aHttpRequest.getServerName ();
   }
 
+  /**
+   * @deprecated Use {@link #getProtocol()} instead
+   */
+  @Deprecated
   public String getServerProtocolVersion ()
   {
+    return getProtocol ();
+  }
+
+  public String getProtocol ()
+  {
     return m_aHttpRequest.getProtocol ();
+  }
+
+  @Nullable
+  public EHTTPVersion getHttpVersion ()
+  {
+    return RequestHelper.getHttpVersion (m_aHttpRequest);
   }
 
   public int getServerPort ()
@@ -259,6 +276,12 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   public String getMethod ()
   {
     return m_aHttpRequest.getMethod ();
+  }
+
+  @Nullable
+  public EHTTPMethod getHttpMethod ()
+  {
+    return RequestHelper.getHttpMethod (m_aHttpRequest);
   }
 
   @Nullable
@@ -307,6 +330,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return RequestHelper.getContentLength (m_aHttpRequest);
   }
 
+  @Nonnull
   public String getServletPath ()
   {
     return m_aHttpRequest.getServletPath ();
@@ -340,7 +364,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @Nonnull
   public String getFullContextPath ()
   {
-    return _getFullServerPath ().append (m_aHttpRequest.getContextPath ()).toString ();
+    return _getFullServerPath ().append (getContextPath ()).toString ();
   }
 
   /**
@@ -353,7 +377,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    * @return <code>true</code> if it is assumed that the request is file based,
    *         <code>false</code> if it can be assumed to be a regular servlet.
    */
-  public boolean isFileBasedRequest (@Nonnull final String sServletPath)
+  public static boolean isFileBasedRequest (@Nonnull final String sServletPath)
   {
     return sServletPath.indexOf ('.') >= 0;
   }
@@ -363,9 +387,9 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   {
     final String sServletPath = getServletPath ();
     if (isFileBasedRequest (sServletPath))
-      return m_aHttpRequest.getContextPath () + sServletPath;
+      return getContextPath () + sServletPath;
     // For servlets that are not files, we need to append a trailing slash
-    return m_aHttpRequest.getContextPath () + sServletPath + '/';
+    return getContextPath () + sServletPath + '/';
   }
 
   @Nonnull
@@ -379,6 +403,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   }
 
   @Nonnull
+  @Nonempty
   public String getURL ()
   {
     return RequestHelper.getURL (m_aHttpRequest);

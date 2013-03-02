@@ -34,6 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.mock.MockHttpListener;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockServletContext;
+import com.phloc.web.mock.MockServletPool;
 
 /**
  * JUnit test rule for unit tests requiring web scopes.
@@ -139,11 +140,15 @@ public class WebScopeTestRule extends ExternalResource
     // init HTTP event listener BEFORE creating the servlet context etc.!
     initListener ();
 
-    // Start global scope -> triggers events
+    // Start global scope -> triggers HTTP events
     m_aServletContext = createMockServletContext (m_sContextPath, m_aServletContextInitParameters);
+    if (m_aServletContext == null)
+      throw new IllegalStateException ("Failed to created MockServletContext");
 
-    // Start request scope -> triggers events
+    // Start request scope -> triggers HTTP events
     m_aRequest = createMockRequest (m_aServletContext);
+    if (m_aRequest == null)
+      throw new IllegalStateException ("Failed to created MockHttpServletRequest");
   }
 
   @Override
@@ -153,31 +158,56 @@ public class WebScopeTestRule extends ExternalResource
   {
     if (m_aRequest != null)
     {
-      // end request -> triggers events
+      // end request -> triggers HTTP events
       m_aRequest.invalidate ();
       m_aRequest = null;
     }
 
     if (m_aServletContext != null)
     {
-      // shutdown global context -> triggers events
+      // shutdown global context -> triggers HTTP events
       m_aServletContext.invalidate ();
       m_aServletContext = null;
     }
   }
 
+  /**
+   * @return The created {@link MockServletContext} or <code>null</code> if non
+   *         has been created yet.
+   */
   @Nullable
   public final MockServletContext getServletContext ()
   {
     return m_aServletContext;
   }
 
+  /**
+   * @return The {@link MockServletPool} of the {@link MockServletContext} or
+   *         <code>null</code> if no servlet context has been created yet.
+   */
+  @Nullable
+  public final MockServletPool getServletPool ()
+  {
+    return m_aServletContext == null ? null : m_aServletContext.getServletPool ();
+  }
+
+  /**
+   * @return The created {@link MockHttpServletRequest} or <code>null</code> if
+   *         non has been created yet.
+   */
   @Nullable
   public final MockHttpServletRequest getRequest ()
   {
     return m_aRequest;
   }
 
+  /**
+   * @param bCreateIfNotExisting
+   *        <code>true</code> to create a new session, if non is existing yet.
+   *        This has only an effect if a request is present.
+   * @return The {@link HttpSession} or <code>null</code> if no session was
+   *         created or if no request is present.
+   */
   @Nullable
   public final HttpSession getSession (final boolean bCreateIfNotExisting)
   {
@@ -187,8 +217,8 @@ public class WebScopeTestRule extends ExternalResource
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).appendIfNotNull ("scInitParams", m_aServletContextInitParameters)
-                                       .append ("sc", m_aServletContext)
+    return new ToStringGenerator (this).appendIfNotNull ("servletContextInitParams", m_aServletContextInitParameters)
+                                       .append ("servletContext", m_aServletContext)
                                        .append ("request", m_aRequest)
                                        .toString ();
   }

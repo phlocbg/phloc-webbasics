@@ -79,7 +79,7 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
     }
 
     // Check HTTP Method
-    final EHTTPMethod eHTTPMethod = EHTTPMethod.getFromNameOrNull (aHttpRequest.getMethod ());
+    final EHTTPMethod eHTTPMethod = RequestHelper.getHttpMethod (aHttpRequest);
     if (eHTTPMethod == null)
     {
       if (eHTTPVersion == EHTTPVersion.HTTP_11)

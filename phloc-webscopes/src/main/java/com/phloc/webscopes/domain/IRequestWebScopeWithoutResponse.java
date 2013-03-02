@@ -28,6 +28,8 @@ import javax.servlet.http.HttpSession;
 
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.web.fileupload.IFileItem;
+import com.phloc.web.http.EHTTPMethod;
+import com.phloc.web.http.EHTTPVersion;
 import com.phloc.webscopes.IWebScope;
 
 /**
@@ -84,8 +86,27 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * 
    * @return a <code>String</code> containing the protocol name and version
    *         number
+   * @deprecated Use {@link #getProtocol()} instead
    */
+  @Deprecated
   String getServerProtocolVersion ();
+
+  /**
+   * Returns the name and version of the protocol the request uses in the form
+   * <i>protocol/majorVersion.minorVersion</i>, for example, HTTP/1.1. For HTTP
+   * servlets, the value returned is the same as the value of the CGI variable
+   * <code>SERVER_PROTOCOL</code>.
+   * 
+   * @return a <code>String</code> containing the protocol name and version
+   *         number
+   */
+  String getProtocol ();
+
+  /**
+   * @return The {@link EHTTPVersion} matching the {@link #getProtocol()}
+   */
+  @Nullable
+  EHTTPVersion getHttpVersion ();
 
   /**
    * Returns the port number to which the request was sent. It is the value of
@@ -105,6 +126,12 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    *         this request was made
    */
   String getMethod ();
+
+  /**
+   * @return The {@link EHTTPMethod} matching the {@link #getMethod()}
+   */
+  @Nullable
+  EHTTPMethod getHttpMethod ();
 
   /**
    * Returns any extra path information associated with the URL the client sent
@@ -233,6 +260,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    *         string if the servlet used to process the request is matched using
    *         the "/*" pattern.
    */
+  @Nonnull
   String getServletPath ();
 
   /**
@@ -263,25 +291,36 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   /**
    * @return Return the absolute server path. E.g. "http://localhost:8080"
    */
+  @Nonnull
   String getFullServerPath ();
 
   /**
-   * @return Return the relative context path. E.g. <code>/context</code> or an
-   *         empty string for the root context. Never with a trailing slash.
+   * @return Returns the portion of the request URI that indicates the context
+   *         of the request. The context path always comes first in a request
+   *         URI. The path starts with a "/" character but does not end with a
+   *         "/" character. For servlets in the default (root) context, this
+   *         method returns "". The container does not decode this string. E.g.
+   *         <code>/context</code> or an empty string for the root context.
+   *         Never with a trailing slash.
+   * @see #getFullContextPath()
    */
+  @Nonnull
   String getContextPath ();
 
   /**
    * @return Return the absolute context path. E.g.
    *         <code>http://localhost:8080/context</code>. Never with a trailing
    *         slash.
+   * @see #getContextPath()
    */
+  @Nonnull
   String getFullContextPath ();
 
   /**
    * @return Return the absolute servlet path. E.g.
    *         <code>/context/config.jsp</code> or <code>/context/action/</code>
    */
+  @Nonnull
   String getContextAndServletPath ();
 
   /**
@@ -289,6 +328,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    *         <code>http://localhost:8080/context/config.jsp</code> or
    *         <code>http://localhost:8080/context/action/</code>
    */
+  @Nonnull
   String getFullContextAndServletPath ();
 
   /**
