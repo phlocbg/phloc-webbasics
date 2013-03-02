@@ -17,15 +17,17 @@
 
 package com.phloc.web.encoding;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.BitSet;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.codec.DecoderException;
-import com.phloc.commons.codec.EncoderException;
+import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 
 /**
  * Codec for the Quoted-Printable section of <a
@@ -56,7 +58,7 @@ import com.phloc.commons.codec.EncoderException;
  *      (Multipurpose Internet Mail Extensions) Part One: Mechanisms for
  *      Specifying and Describing the Format of Internet Message Bodies </a>
  * @since 1.3
- * @version $Id: QuotedPrintableCodec.java 1380305 2012-09-03 18:37:21Z tn $
+ * @version $Id: java 1380305 2012-09-03 18:37:21Z tn $
  */
 public class QuotedPrintableCodec
 {
@@ -96,15 +98,15 @@ public class QuotedPrintableCodec
   /**
    * Constructor which allows for the selection of a default charset.
    * 
-   * @param charset
+   * @param aCharset
    *        the default string charset to use.
    * @throws UnsupportedCharsetException
    *         If the named charset is unavailable
    * @since 1.7
    */
-  public QuotedPrintableCodec (final Charset charset)
+  public QuotedPrintableCodec (@Nonnull final Charset aCharset)
   {
-    m_aCharset = charset;
+    m_aCharset = aCharset;
   }
 
   /**
@@ -115,7 +117,7 @@ public class QuotedPrintableCodec
    * @param buffer
    *        the buffer to write to
    */
-  private static final void encodeQuotedPrintable (final int b, final ByteArrayOutputStream buffer)
+  private static final void _encodeQuotedPrintable (final int b, final NonBlockingByteArrayOutputStream buffer)
   {
     buffer.write (ESCAPE_CHAR);
     final char hex1 = Character.toUpperCase (Character.forDigit ((b >> 4) & 0xF, 16));
@@ -138,12 +140,13 @@ public class QuotedPrintableCodec
    *        array of bytes to be encoded
    * @return array of bytes containing quoted-printable data
    */
-  public static final byte [] encodeQuotedPrintable (final BitSet printable, final byte [] bytes)
+  @Nullable
+  public static final byte [] encodeQuotedPrintable (@Nullable final BitSet printable, @Nullable final byte [] bytes)
   {
     if (bytes == null)
       return null;
     final BitSet aPrintable = printable == null ? PRINTABLE_CHARS : printable;
-    final ByteArrayOutputStream buffer = new ByteArrayOutputStream ();
+    final NonBlockingByteArrayOutputStream buffer = new NonBlockingByteArrayOutputStream ();
     for (final byte c : bytes)
     {
       int b = c;
@@ -153,7 +156,7 @@ public class QuotedPrintableCodec
       if (aPrintable.get (b))
         buffer.write (b);
       else
-        encodeQuotedPrintable (b, buffer);
+        _encodeQuotedPrintable (b, buffer);
     }
     return buffer.toByteArray ();
   }
@@ -168,17 +171,15 @@ public class QuotedPrintableCodec
    * 
    * @param bytes
    *        array of quoted-printable characters
-   * @return array of original bytes
-   * @throws DecoderException
-   *         Thrown if quoted-printable decoding is unsuccessful
+   * @return array of original bytes @ Thrown if quoted-printable decoding is
+   *         unsuccessful
    */
-  public static final byte [] decodeQuotedPrintable (final byte [] bytes) throws DecoderException
+  public static final byte [] decodeQuotedPrintable (@Nullable final byte [] bytes)
   {
     if (bytes == null)
-    {
       return null;
-    }
-    final ByteArrayOutputStream buffer = new ByteArrayOutputStream ();
+
+    final NonBlockingByteArrayOutputStream buffer = new NonBlockingByteArrayOutputStream ();
     for (int i = 0; i < bytes.length; i++)
     {
       final int b = bytes[i];
@@ -186,8 +187,8 @@ public class QuotedPrintableCodec
       {
         try
         {
-          final int u = QuotedPrintableCodec.digit16 (bytes[++i]);
-          final int l = QuotedPrintableCodec.digit16 (bytes[++i]);
+          final int u = _digit16 (bytes[++i]);
+          final int l = _digit16 (bytes[++i]);
           buffer.write ((char) ((u << 4) + l));
         }
         catch (final ArrayIndexOutOfBoundsException e)
@@ -215,7 +216,8 @@ public class QuotedPrintableCodec
    *        array of bytes to be encoded
    * @return array of bytes containing quoted-printable data
    */
-  public byte [] encode (final byte [] bytes)
+  @Nullable
+  public byte [] encode (@Nullable final byte [] bytes)
   {
     return encodeQuotedPrintable (PRINTABLE_CHARS, bytes);
   }
@@ -230,11 +232,10 @@ public class QuotedPrintableCodec
    * 
    * @param bytes
    *        array of quoted-printable characters
-   * @return array of original bytes
-   * @throws DecoderException
-   *         Thrown if quoted-printable decoding is unsuccessful
+   * @return array of original bytes @ Thrown if quoted-printable decoding is
+   *         unsuccessful
    */
-  public byte [] decode (final byte [] bytes) throws DecoderException
+  public byte [] decode (final byte [] bytes)
   {
     return decodeQuotedPrintable (bytes);
   }
@@ -250,11 +251,9 @@ public class QuotedPrintableCodec
    * @param str
    *        string to convert to quoted-printable form
    * @return quoted-printable string
-   * @throws EncoderException
-   *         Thrown if quoted-printable encoding is unsuccessful
    * @see #getCharset()
    */
-  public String encode (final String str) throws EncoderException
+  public String encode (final String str)
   {
     return encode (str, getCharset ());
   }
@@ -268,17 +267,14 @@ public class QuotedPrintableCodec
    *        quoted-printable string to convert into its original form
    * @param charset
    *        the original string charset
-   * @return original string
-   * @throws DecoderException
-   *         Thrown if quoted-printable decoding is unsuccessful
+   * @return original string @ Thrown if quoted-printable decoding is
+   *         unsuccessful
    * @since 1.7
    */
-  public String decode (final String str, final Charset charset) throws DecoderException
+  public String decode (final String str, final Charset charset)
   {
     if (str == null)
-    {
       return null;
-    }
     return new String (decode (CharsetManager.getAsBytes (str, CCharset.CHARSET_US_ASCII_OBJ)), charset);
   }
 
@@ -289,13 +285,11 @@ public class QuotedPrintableCodec
    * 
    * @param str
    *        quoted-printable string to convert into its original form
-   * @return original string
-   * @throws DecoderException
-   *         Thrown if quoted-printable decoding is unsuccessful. Thrown if
-   *         charset is not supported.
+   * @return original string @ Thrown if quoted-printable decoding is
+   *         unsuccessful. Thrown if charset is not supported.
    * @see #getCharset()
    */
-  public String decode (final String str) throws DecoderException
+  public String decode (final String str)
   {
     return decode (str, getCharset ());
   }
@@ -348,12 +342,11 @@ public class QuotedPrintableCodec
    * 
    * @param b
    *        The byte to be converted.
-   * @return The numeric value represented by the character in radix 16.
-   * @throws DecoderException
+   * @return The numeric value represented by the character in radix 16. @
    *         Thrown when the byte is not valid per
    *         {@link Character#digit(char,int)}
    */
-  static int digit16 (final byte b) throws DecoderException
+  private static int _digit16 (final byte b)
   {
     final int i = Character.digit ((char) b, 16);
     if (i == -1)

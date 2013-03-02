@@ -1,7 +1,9 @@
 package com.phloc.web.encoding;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 
+import com.phloc.commons.codec.DecoderException;
+import com.phloc.commons.codec.EncoderException;
 import com.phloc.web.encoding.i18n.AbstractCodepointIterator;
 import com.phloc.web.encoding.i18n.CharUtils;
 
@@ -67,7 +69,7 @@ public final class Punycode
     return k + (base - tmin + 1) * delta / (delta + skew);
   }
 
-  public static String encode (final char [] chars, final boolean [] case_flags) throws IOException
+  public static String encode (final char [] chars, final boolean [] case_flags)
   {
     final StringBuilder buf = new StringBuilder ();
     final AbstractCodepointIterator ci = AbstractCodepointIterator.forCharArray (chars);
@@ -104,7 +106,7 @@ public final class Punycode
           m = i;
       }
       if (m - n > (Integer.MAX_VALUE - delta) / (h + 1))
-        throw new IOException ("Overflow");
+        throw new EncoderException ("Overflow");
       delta += (m - n) * (h + 1);
       n = m;
       ci.position (0);
@@ -115,7 +117,7 @@ public final class Punycode
         if (i < n)
         {
           if (++delta == 0)
-            throw new IOException ("Overflow");
+            throw new EncoderException ("Overflow");
         }
         if (i == n)
         {
@@ -139,37 +141,23 @@ public final class Punycode
     return buf.toString ();
   }
 
-  public static String encode (final String s)
+  @Nullable
+  public static String encode (@Nullable final String s)
   {
-    try
-    {
-      if (s == null)
-        return null;
-      return encode (s.toCharArray (), null).toString ();
-    }
-    catch (final Exception e)
-    {
-      e.printStackTrace ();
+    if (s == null)
       return null;
-    }
+    return encode (s.toCharArray (), null);
   }
 
-  public static String decode (final String s)
+  @Nullable
+  public static String decode (@Nullable final String s)
   {
-    try
-    {
-      if (s == null)
-        return null;
-      return decode (s.toCharArray (), null).toString ();
-    }
-    catch (final Exception e)
-    {
-      e.printStackTrace ();
+    if (s == null)
       return null;
-    }
+    return decode (s.toCharArray (), null);
   }
 
-  public static String decode (final char [] chars, final boolean [] case_flags) throws IOException
+  public static String decode (final char [] chars, final boolean [] case_flags)
   {
     final StringBuilder buf = new StringBuilder ();
     int n, out, i, bias, b, j, in, oldi, w, k, digit, t;
@@ -184,7 +172,7 @@ public final class Punycode
       if (case_flags != null)
         case_flags[out] = _flagged (chars[j]);
       if (!_basic (chars[j]))
-        throw new IOException ("Bad Input");
+        throw new DecoderException ("Bad Input");
       buf.append (chars[j]);
     }
     out = buf.length ();
@@ -193,23 +181,23 @@ public final class Punycode
       for (oldi = i, w = 1, k = base;; k += base)
       {
         if (in > chars.length)
-          throw new IOException ("Bad input");
+          throw new DecoderException ("Bad input");
         digit = _decode_digit (chars[in++]);
         if (digit >= base)
-          throw new IOException ("Bad input");
+          throw new DecoderException ("Bad input");
         if (digit > (Integer.MAX_VALUE - i) / w)
-          throw new IOException ("Overflow");
+          throw new DecoderException ("Overflow");
         i += digit * w;
         t = (k <= bias) ? tmin : (k >= bias + tmax) ? tmax : k - bias;
         if (digit < t)
           break;
         if (w > Integer.MAX_VALUE / (base - t))
-          throw new IOException ("Overflow");
+          throw new DecoderException ("Overflow");
         w *= (base - t);
       }
       bias = _adapt (i - oldi, out + 1, oldi == 0);
       if (i / (out + 1) > Integer.MAX_VALUE - n)
-        throw new IOException ("Overflow");
+        throw new DecoderException ("Overflow");
       n += i / (out + 1);
       i %= (out + 1);
       if (case_flags != null)

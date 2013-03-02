@@ -20,6 +20,7 @@ package com.phloc.web.encoding;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.base64.Base64Helper;
@@ -63,16 +64,16 @@ public class RFC1522BCodec extends AbstractRFC1522Codec
   /**
    * Constructor which allows for the selection of a default charset
    * 
-   * @param charset
+   * @param aCharset
    *        the default string charset to use.
    * @see <a
    *      href="http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard
    *      charsets</a>
    * @since 1.7
    */
-  public RFC1522BCodec (@Nonnull final Charset charset)
+  public RFC1522BCodec (@Nonnull final Charset aCharset)
   {
-    m_aCharset = charset;
+    m_aCharset = aCharset;
   }
 
   @Override
@@ -82,18 +83,16 @@ public class RFC1522BCodec extends AbstractRFC1522Codec
   }
 
   @Override
-  protected byte [] doEncoding (final byte [] bytes)
+  @Nonnull
+  protected byte [] doEncoding (@Nonnull final byte [] bytes)
   {
-    if (bytes == null)
-      return null;
     return Base64.encodeBytesToBytes (bytes);
   }
 
   @Override
-  protected byte [] doDecoding (final byte [] bytes)
+  @Nonnull
+  protected byte [] doDecoding (@Nonnull final byte [] bytes)
   {
-    if (bytes == null)
-      return null;
     return Base64Helper.safeDecode (bytes);
   }
 
@@ -101,9 +100,9 @@ public class RFC1522BCodec extends AbstractRFC1522Codec
    * Encodes a string into its Base64 form using the specified charset. Unsafe
    * characters are escaped.
    * 
-   * @param value
+   * @param sText
    *        string to convert to Base64 form
-   * @param charset
+   * @param aCharset
    *        the charset for <code>value</code>
    * @return Base64 string
    * @throws EncoderException
@@ -111,47 +110,50 @@ public class RFC1522BCodec extends AbstractRFC1522Codec
    *         process.
    * @since 1.7
    */
-  public String encode (final String value, final Charset charset) throws EncoderException
+  @Nullable
+  public String encode (@Nullable final String sText, @Nonnull final Charset aCharset) throws EncoderException
   {
-    if (value == null)
+    if (sText == null)
       return null;
-    return encodeText (value, charset);
+    return encodeText (sText, aCharset);
   }
 
   /**
    * Encodes a string into its Base64 form using the default charset. Unsafe
    * characters are escaped.
    * 
-   * @param value
+   * @param sText
    *        string to convert to Base64 form
    * @return Base64 string
    * @throws EncoderException
    *         thrown if a failure condition is encountered during the encoding
    *         process.
    */
-  public String encode (final String value) throws EncoderException
+  @Nullable
+  public String encode (@Nullable final String sText) throws EncoderException
   {
-    if (value == null)
+    if (sText == null)
       return null;
-    return encode (value, getCharset ());
+    return encode (sText, getCharset ());
   }
 
   /**
    * Decodes a Base64 string into its original form. Escaped characters are
    * converted back to their original representation.
    * 
-   * @param value
+   * @param sText
    *        Base64 string to convert into its original form
    * @return original string
    * @throws DecoderException
    *         A decoder exception is thrown if a failure condition is encountered
    *         during the decode process.
    */
-  public String decode (final String value) throws DecoderException
+  @Nullable
+  public String decode (@Nullable final String sText) throws DecoderException
   {
-    if (value == null)
+    if (sText == null)
       return null;
-    return decodeText (value);
+    return decodeText (sText);
   }
 
   /**
@@ -160,6 +162,7 @@ public class RFC1522BCodec extends AbstractRFC1522Codec
    * @return the default charset name
    * @since 1.7
    */
+  @Nonnull
   public Charset getCharset ()
   {
     return m_aCharset;

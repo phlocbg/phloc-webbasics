@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 import java.util.BitSet;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
@@ -105,7 +106,6 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
    * The default charset used for string decoding and encoding.
    */
   private final Charset m_aCharset;
-
   private boolean m_bEncodeBlanks = false;
 
   /**
@@ -119,17 +119,16 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
   /**
    * Constructor which allows for the selection of a default charset.
    * 
-   * @param charset
+   * @param aCharset
    *        the default string charset to use.
    * @see <a
    *      href="http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard
    *      charsets</a>
    * @since 1.7
    */
-  public RFC1522QCodec (@Nonnull final Charset charset)
+  public RFC1522QCodec (@Nonnull final Charset aCharset)
   {
-    super ();
-    m_aCharset = charset;
+    m_aCharset = aCharset;
   }
 
   @Override
@@ -139,11 +138,9 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
   }
 
   @Override
-  protected byte [] doEncoding (final byte [] bytes)
+  @Nonnull
+  protected byte [] doEncoding (@Nonnull final byte [] bytes)
   {
-    if (bytes == null)
-      return null;
-
     final byte [] data = QuotedPrintableCodec.encodeQuotedPrintable (PRINTABLE_CHARS, bytes);
     if (m_bEncodeBlanks)
       for (int i = 0; i < data.length; i++)
@@ -153,21 +150,18 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
   }
 
   @Override
-  protected byte [] doDecoding (final byte [] bytes) throws DecoderException
+  @Nonnull
+  protected byte [] doDecoding (@Nonnull final byte [] bytes) throws DecoderException
   {
-    if (bytes == null)
-      return null;
-
-    boolean hasUnderscores = false;
+    boolean bHasUnderscores = false;
     for (final byte b : bytes)
-    {
       if (b == UNDERSCORE)
       {
-        hasUnderscores = true;
+        bHasUnderscores = true;
         break;
       }
-    }
-    if (hasUnderscores)
+
+    if (bHasUnderscores)
     {
       final byte [] tmp = new byte [bytes.length];
       for (int i = 0; i < bytes.length; i++)
@@ -187,9 +181,9 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
    * Encodes a string into its quoted-printable form using the specified
    * charset. Unsafe characters are escaped.
    * 
-   * @param str
+   * @param sText
    *        string to convert to quoted-printable form
-   * @param charset
+   * @param aCharset
    *        the charset for str
    * @return quoted-printable string
    * @throws EncoderException
@@ -197,47 +191,50 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
    *         process.
    * @since 1.7
    */
-  public String encode (final String str, final Charset charset) throws EncoderException
+  @Nullable
+  public String encode (@Nullable final String sText, @Nonnull final Charset aCharset) throws EncoderException
   {
-    if (str == null)
+    if (sText == null)
       return null;
-    return encodeText (str, charset);
+    return encodeText (sText, aCharset);
   }
 
   /**
    * Encodes a string into its quoted-printable form using the default charset.
    * Unsafe characters are escaped.
    * 
-   * @param str
+   * @param sText
    *        string to convert to quoted-printable form
    * @return quoted-printable string
    * @throws EncoderException
    *         thrown if a failure condition is encountered during the encoding
    *         process.
    */
-  public String encode (final String str) throws EncoderException
+  @Nullable
+  public String encode (@Nullable final String sText) throws EncoderException
   {
-    if (str == null)
+    if (sText == null)
       return null;
-    return encodeText (str, getCharset ());
+    return encodeText (sText, getCharset ());
   }
 
   /**
    * Decodes a quoted-printable string into its original form. Escaped
    * characters are converted back to their original representation.
    * 
-   * @param str
+   * @param sText
    *        quoted-printable string to convert into its original form
    * @return original string
    * @throws DecoderException
    *         A decoder exception is thrown if a failure condition is encountered
    *         during the decode process.
    */
-  public String decode (final String str) throws DecoderException
+  @Nullable
+  public String decode (@Nullable final String sText) throws DecoderException
   {
-    if (str == null)
+    if (sText == null)
       return null;
-    return decodeText (str);
+    return decodeText (sText);
   }
 
   /**
@@ -246,6 +243,7 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
    * @return the default charset name
    * @since 1.7
    */
+  @Nonnull
   public Charset getCharset ()
   {
     return m_aCharset;
@@ -265,12 +263,12 @@ public class RFC1522QCodec extends AbstractRFC1522Codec
   /**
    * Defines whether optional transformation of SPACE characters is to be used
    * 
-   * @param b
+   * @param bEncodeBlanks
    *        {@code true} if SPACE characters are to be transformed,
    *        {@code false} otherwise
    */
-  public void setEncodeBlanks (final boolean b)
+  public void setEncodeBlanks (final boolean bEncodeBlanks)
   {
-    m_bEncodeBlanks = b;
+    m_bEncodeBlanks = bEncodeBlanks;
   }
 }
