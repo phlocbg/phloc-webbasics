@@ -1,7 +1,11 @@
 #summary Change log of phloc-webscopes
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>2/27/13</td><td colspan="4">_Release *5.0.1*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>3/2/13</td><td colspan="4">_Release *6.0.0*_</td></tr>
+<tr><td>3/2/13</td><td>add</td><td>api</td><td></td><td>Extended IRequestWebScopeWithoutResponse with some additional APIs</td></tr>
+<tr><td>3/1/13</td><td>add</td><td>api</td><td></td><td>Made WebScopeTestRule more flexible</td></tr>
+<tr><td>2/28/13</td><td>change</td><td>api</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-scopes phloc-scopes] 6.0.0</td></tr>
+<tr border="1"><td>2/27/13</td><td colspan="4">_Release *5.0.1*_</td></tr>
 <tr><td>2/27/13</td><td>add</td><td>api</td><td></td><td>Extended scoped mail API</td></tr>
 <tr border="1"><td>2/27/13</td><td colspan="4">_Release *5.0.0*_</td></tr>
 <tr><td>2/27/13</td><td>add</td><td>api</td><td></td><td>Extracted all web scope handling from [http://code.google.com/p/phloc-scopes phloc-scopes] 4.5.0 into this project</td></tr>
