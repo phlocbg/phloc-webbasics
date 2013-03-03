@@ -20,17 +20,11 @@ package com.phloc.webscopes.servlets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.junit.Rule;
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.web.http.EHTTPMethod;
-import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockHttpServletResponse;
-import com.phloc.web.mock.MockServletContext;
 import com.phloc.webscopes.mock.WebScopeTestRule;
 
 /**
@@ -44,32 +38,23 @@ public final class AbstractUnifiedResponseServletTest
   public WebScopeTestRule m_aRule = new WebScopeTestRule ()
   {
     @Override
-    @Nullable
-    protected MockHttpServletRequest createMockRequest (@Nonnull final MockServletContext aServletContext)
+    public void before ()
     {
-      return null;
+      super.before ();
+      getServletPool ().registerServlet (MockUnifiedResponseServlet.class, "/mock/*", "MockServlet", null);
     }
   };
 
   @Test
   public void testBasic ()
   {
-    m_aRule.getServletPool ().registerServlet (MockUnifiedResponseServlet.class, "/mock/*", "MockServlet", null);
-
-    final MockHttpServletRequest req = new MockHttpServletRequest (m_aRule.getServletContext (), EHTTPMethod.GET).setAllPaths ("http://localhost:1234" +
-                                                                                                                               WebScopeTestRule.MOCK_CONTEXT_PATH +
-                                                                                                                               "/mock/testrequest;JSESSIONID=1234?name=value&name2=value2");
-    try
-    {
-      final MockHttpServletResponse aResponse = m_aRule.getServletContext ().invoke (req);
-      assertNotNull (aResponse);
-      final String sResponseContent = aResponse.getContentAsString (CCharset.CHARSET_UTF_8_OBJ);
-      assertNotNull (sResponseContent);
-      assertEquals (MockUnifiedResponseServlet.RESPONSE_TEXT, sResponseContent);
-    }
-    finally
-    {
-      req.invalidate ();
-    }
+    m_aRule.getRequest ().setAllPaths ("http://localhost:1234" +
+                                       WebScopeTestRule.MOCK_CONTEXT_PATH +
+                                       "/mock/testrequest;JSESSIONID=1234?name=value&name2=value2");
+    final MockHttpServletResponse aResponse = m_aRule.getServletContext ().invoke (m_aRule.getRequest ());
+    assertNotNull (aResponse);
+    final String sResponseContent = aResponse.getContentAsString (CCharset.CHARSET_UTF_8_OBJ);
+    assertNotNull (sResponseContent);
+    assertEquals (MockUnifiedResponseServlet.RESPONSE_TEXT, sResponseContent);
   }
 }

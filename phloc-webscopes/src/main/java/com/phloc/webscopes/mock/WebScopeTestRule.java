@@ -31,6 +31,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.mock.MockHttpListener;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockServletContext;
@@ -130,7 +131,7 @@ public class WebScopeTestRule extends ExternalResource
   @OverrideOnDemand
   protected MockHttpServletRequest createMockRequest (@Nonnull final MockServletContext aServletContext)
   {
-    return new MockHttpServletRequest (aServletContext);
+    return new MockHttpServletRequest (aServletContext, EHTTPMethod.GET);
   }
 
   @Override
