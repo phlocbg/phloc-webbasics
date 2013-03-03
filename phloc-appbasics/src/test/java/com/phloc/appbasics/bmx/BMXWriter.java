@@ -94,7 +94,7 @@ public class BMXWriter
         throw new NullPointerException ("OS");
 
       final BMXStringTable aST = _createStringTable (aNode);
-      System.out.println (aST.getStorageCount ());
+      System.out.println (aST.getLengthStorageByteCount ());
       return ESuccess.SUCCESS;
     }
     finally

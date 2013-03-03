@@ -47,9 +47,9 @@ public class BMXStringTable
    *         entry.
    */
   @Nonnegative
-  public int getStorageCount ()
+  public int getLengthStorageByteCount ()
   {
-    return (m_nLongest >> 8) + 1;
+    return 1 + (m_nLongest >> 8);
   }
 
   @Override
