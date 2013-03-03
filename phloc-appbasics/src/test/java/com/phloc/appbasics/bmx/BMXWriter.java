@@ -80,8 +80,7 @@ public class BMXWriter
             break;
           case TEXT:
             final IMicroText aText = (IMicroText) aChildNode;
-            if (!aText.isElementContentWhitespace ())
-              ret.addString (aText.getData ().toString ());
+            ret.addString (aText.getData ().toString ());
             break;
           case CONTAINER:
           case DOCUMENT:
@@ -113,6 +112,28 @@ public class BMXWriter
       m_aST = aST;
       m_aDO = aDO;
       m_nReferenceStorageByteCount = _getStorageByteCount (aST.getReferenceStorageByteCount ());
+    }
+
+    public void writeStringRef (@Nullable final CharSequence aString) throws IOException
+    {
+      writeStringRef (aString == null ? null : aString.toString ());
+    }
+
+    public void writeStringRef (@Nullable final String sString) throws IOException
+    {
+      final int nIndex = m_aST.getIndex (sString);
+      switch (m_nReferenceStorageByteCount)
+      {
+        case 1:
+          m_aDO.writeByte (nIndex);
+          break;
+        case 2:
+          m_aDO.writeShort (nIndex);
+          break;
+        case 4:
+          m_aDO.writeInt (nIndex);
+          break;
+      }
     }
   }
 
@@ -169,22 +190,35 @@ public class BMXWriter
             switch (eNodeType)
             {
               case CDATA:
+                aRW.writeStringRef (((IMicroCDATA) aChildNode).getData ());
                 break;
               case COMMENT:
+                aRW.writeStringRef (((IMicroComment) aChildNode).getData ());
                 break;
               case CONTAINER:
                 break;
               case DOCUMENT:
                 break;
               case DOCUMENT_TYPE:
+                final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
+                aRW.writeStringRef (aDocType.getQualifiedName ());
+                aRW.writeStringRef (aDocType.getPublicID ());
+                aRW.writeStringRef (aDocType.getSystemID ());
                 break;
               case ELEMENT:
                 break;
               case ENTITY_REFERENCE:
+                aRW.writeStringRef (((IMicroEntityReference) aChildNode).getName ());
                 break;
               case PROCESSING_INSTRUCTION:
+                final IMicroProcessingInstruction aPI = (IMicroProcessingInstruction) aChildNode;
+                aRW.writeStringRef (aPI.getTarget ());
+                aRW.writeStringRef (aPI.getData ());
                 break;
               case TEXT:
+                final IMicroText aText = (IMicroText) aChildNode;
+                aRW.writeStringRef (aText.getData ());
+                aDO.writeBoolean (aText.isElementContentWhitespace ());
                 break;
               default:
                 throw new IllegalStateException ("Illegal node type:" + aChildNode);
