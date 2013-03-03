@@ -9,8 +9,14 @@ import javax.annotation.WillClose;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.microdom.IMicroCDATA;
+import com.phloc.commons.microdom.IMicroComment;
+import com.phloc.commons.microdom.IMicroDocumentType;
 import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.IMicroEntityReference;
 import com.phloc.commons.microdom.IMicroNode;
+import com.phloc.commons.microdom.IMicroProcessingInstruction;
+import com.phloc.commons.microdom.IMicroText;
 import com.phloc.commons.microdom.utils.MicroWalker;
 import com.phloc.commons.state.ESuccess;
 
@@ -25,7 +31,7 @@ public class BMXWriter
   {}
 
   @Nonnull
-  private BMXStringTable _buildStringTable (@Nonnull final IMicroNode aNode)
+  private static BMXStringTable _createStringTable (@Nonnull final IMicroNode aNode)
   {
     final BMXStringTable ret = new BMXStringTable ();
     MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
@@ -33,12 +39,44 @@ public class BMXWriter
       @Override
       public void onItemBeforeChildren (final IMicroNode aChildNode)
       {
-        if (aChildNode.isElement ())
+        switch (aChildNode.getType ())
         {
-          final IMicroElement aElement = (IMicroElement) aChildNode;
-          ret.addWord (aElement.getNamespaceURI ());
-          ret.addWord (aElement.getTagName ());
-          ret.addWords (aElement.getAllAttributeNames ());
+          case CDATA:
+            ret.addString (((IMicroCDATA) aChildNode).getData ().toString ());
+            break;
+          case COMMENT:
+            ret.addString (((IMicroComment) aChildNode).getData ().toString ());
+            break;
+          case DOCUMENT_TYPE:
+            final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
+            ret.addString (aDocType.getQualifiedName ());
+            ret.addString (aDocType.getPublicID ());
+            ret.addString (aDocType.getSystemID ());
+            break;
+          case ELEMENT:
+            final IMicroElement aElement = (IMicroElement) aChildNode;
+            ret.addString (aElement.getNamespaceURI ());
+            ret.addString (aElement.getTagName ());
+            ret.addStrings (aElement.getAllAttributeNames ());
+            break;
+          case ENTITY_REFERENCE:
+            ret.addString (((IMicroEntityReference) aChildNode).getName ());
+            break;
+          case PROCESSING_INSTRUCTION:
+            final IMicroProcessingInstruction aPI = (IMicroProcessingInstruction) aChildNode;
+            ret.addString (aPI.getTarget ());
+            ret.addString (aPI.getData ());
+            break;
+          case TEXT:
+            final IMicroText aText = (IMicroText) aChildNode;
+            if (!aText.isElementContentWhitespace ())
+              ret.addString (aText.getData ().toString ());
+            break;
+          case CONTAINER:
+          case DOCUMENT:
+            break;
+          default:
+            throw new IllegalStateException ("Illegal node type:" + aChildNode);
         }
       }
     });
@@ -55,8 +93,8 @@ public class BMXWriter
       if (aOS == null)
         throw new NullPointerException ("OS");
 
-      final BMXStringTable aST = _buildStringTable (aNode);
-      System.out.println (aST);
+      final BMXStringTable aST = _createStringTable (aNode);
+      System.out.println (aST.getStorageCount ());
       return ESuccess.SUCCESS;
     }
     finally
