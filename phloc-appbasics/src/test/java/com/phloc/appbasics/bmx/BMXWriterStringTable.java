@@ -21,6 +21,9 @@ public class BMXWriterStringTable
   /** The storage encoding of all strings in this table */
   public static final Charset ENCODING = CCharset.CHARSET_UTF_8_OBJ;
 
+  /** The index for null strings */
+  public static final int INDEX_NULL_STRING = 0;
+
   private final SortedMap <String, byte []> m_aStrings = new TreeMap <String, byte []> ();
   private Map <String, Integer> m_aIndexMap;
   private int m_nLongest = 0;
@@ -98,7 +101,8 @@ public class BMXWriterStringTable
 
     m_bFinished = true;
     m_aIndexMap = new HashMap <String, Integer> (m_aStrings.size ());
-    int nIndex = 0;
+    // Start with ID 1, as 0 is reserved for null string
+    int nIndex = 1;
     for (final String sString : m_aStrings.keySet ())
       m_aIndexMap.put (sString, Integer.valueOf (nIndex++));
     if (m_aIndexMap.size () != m_aStrings.size ())
@@ -107,10 +111,13 @@ public class BMXWriterStringTable
   }
 
   @Nonnegative
-  public int getIndex (@Nonnull final String sString)
+  public int getIndex (@Nullable final String sString)
   {
     if (!m_bFinished)
       throw new IllegalStateException ("Not yet finished! Call finish first!");
+
+    if (sString == null)
+      return INDEX_NULL_STRING;
 
     final Integer aIndex = m_aIndexMap.get (sString);
     if (aIndex == null)

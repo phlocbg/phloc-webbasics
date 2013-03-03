@@ -68,6 +68,7 @@ public class BMXWriter
             ret.addString (aElement.getNamespaceURI ());
             ret.addString (aElement.getTagName ());
             ret.addStrings (aElement.getAllAttributeNames ());
+            ret.addStrings (aElement.getAllAttributeValues ());
             break;
           case ENTITY_REFERENCE:
             ret.addString (((IMicroEntityReference) aChildNode).getName ());
@@ -101,6 +102,20 @@ public class BMXWriter
     return nByteCount == 3 ? 4 : nByteCount;
   }
 
+  private static final class RefWriter
+  {
+    private final BMXWriterStringTable m_aST;
+    private final DataOutput m_aDO;
+    private final int m_nReferenceStorageByteCount;
+
+    public RefWriter (@Nonnull final BMXWriterStringTable aST, @Nonnull final DataOutput aDO)
+    {
+      m_aST = aST;
+      m_aDO = aDO;
+      m_nReferenceStorageByteCount = _getStorageByteCount (aST.getReferenceStorageByteCount ());
+    }
+  }
+
   @Nonnull
   public ESuccess writeToDataOutput (@Nonnull final IMicroNode aNode, @Nonnull final DataOutput aDO)
   {
@@ -109,13 +124,15 @@ public class BMXWriter
     if (aDO == null)
       throw new NullPointerException ("dataOutput");
 
+    // Create the string table to use
+    final BMXWriterStringTable aST = _createStringTable (aNode);
+
     try
     {
       // Main format version
       aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
 
       // Write string table
-      final BMXWriterStringTable aST = _createStringTable (aNode);
       final int nLengthStorageByteCount = _getStorageByteCount (aST.getLengthStorageByteCount ());
 
       aDO.writeInt (aST.getStringCount ());
@@ -137,7 +154,7 @@ public class BMXWriter
         aDO.write (aStringData);
       }
 
-      final int nReferenceStorageByteCount = _getStorageByteCount (aST.getReferenceStorageByteCount ());
+      final RefWriter aRW = new RefWriter (aST, aDO);
 
       // Write main content
       MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
@@ -172,6 +189,23 @@ public class BMXWriter
               default:
                 throw new IllegalStateException ("Illegal node type:" + aChildNode);
             }
+
+            if (aChildNode.hasChildren ())
+              aDO.writeByte ('{');
+          }
+          catch (final IOException ex)
+          {
+            throw new MicroException ("Failed to write BMX content to output stream", ex);
+          }
+        }
+
+        @Override
+        public void onItemAfterChildren (final IMicroNode aChildNode)
+        {
+          try
+          {
+            if (aChildNode.hasChildren ())
+              aDO.writeByte ('}');
           }
           catch (final IOException ex)
           {
