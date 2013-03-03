@@ -213,8 +213,12 @@ public class BMXWriter
                 aRW.writeStringRef (aElement.getTagName ());
                 final Map <String, String> aAttrs = aElement.getAllAttributes ();
                 aDO.writeInt (ContainerHelper.getSize (aAttrs));
-                // aRW.writeStringRef (aElement.getAllAttributeNames ());
-                // aRW.writeStringRef (aElement.getAllAttributeValues ());
+                if (aAttrs != null)
+                  for (final Map.Entry <String, String> aEntry : aAttrs.entrySet ())
+                  {
+                    aRW.writeStringRef (aEntry.getKey ());
+                    aRW.writeStringRef (aEntry.getValue ());
+                  }
                 break;
               case ENTITY_REFERENCE:
                 aRW.writeStringRef (((IMicroEntityReference) aChildNode).getName ());
