@@ -55,10 +55,10 @@ public class BMXWriter
         switch (aChildNode.getType ())
         {
           case CDATA:
-            ret.addString (((IMicroCDATA) aChildNode).getData ().toString ());
+            ret.addString (((IMicroCDATA) aChildNode).getData ());
             break;
           case COMMENT:
-            ret.addString (((IMicroComment) aChildNode).getData ().toString ());
+            ret.addString (((IMicroComment) aChildNode).getData ());
             break;
           case DOCUMENT_TYPE:
             final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
@@ -82,8 +82,7 @@ public class BMXWriter
             ret.addString (aPI.getData ());
             break;
           case TEXT:
-            final IMicroText aText = (IMicroText) aChildNode;
-            ret.addString (aText.getData ().toString ());
+            ret.addString (((IMicroText) aChildNode).getData ());
             break;
           case CONTAINER:
           case DOCUMENT:

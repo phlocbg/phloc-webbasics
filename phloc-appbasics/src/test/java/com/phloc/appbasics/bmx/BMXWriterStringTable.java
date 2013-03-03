@@ -32,15 +32,21 @@ public class BMXWriterStringTable
   public BMXWriterStringTable ()
   {}
 
-  public void addString (@Nullable final String sWord)
+  public void addString (@Nullable final CharSequence aString)
+  {
+    if (aString != null)
+      addString (aString.toString ());
+  }
+
+  public void addString (@Nullable final String sString)
   {
     if (m_bFinished)
       throw new IllegalStateException ("Already finished");
-    if (sWord != null)
-      if (!m_aStrings.containsKey (sWord))
+    if (sString != null)
+      if (!m_aStrings.containsKey (sString))
       {
-        final byte [] aBytes = CharsetManager.getAsBytes (sWord, ENCODING);
-        m_aStrings.put (sWord, aBytes);
+        final byte [] aBytes = CharsetManager.getAsBytes (sString, ENCODING);
+        m_aStrings.put (sString, aBytes);
         m_nLongest = Math.max (m_nLongest, aBytes.length);
       }
   }
