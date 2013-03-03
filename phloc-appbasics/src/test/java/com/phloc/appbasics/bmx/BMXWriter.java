@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
@@ -13,6 +14,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.microdom.EMicroNodeType;
 import com.phloc.commons.microdom.IMicroCDATA;
 import com.phloc.commons.microdom.IMicroComment;
 import com.phloc.commons.microdom.IMicroDocumentType;
@@ -88,7 +90,15 @@ public class BMXWriter
         }
       }
     });
-    return ret;
+    return ret.finish ();
+  }
+
+  @Nonnegative
+  private static int _getStorageByteCount (final int nByteCount)
+  {
+    if (nByteCount < 1 || nByteCount > 4)
+      throw new IllegalStateException ("Internal error: " + nByteCount);
+    return nByteCount == 3 ? 4 : nByteCount;
   }
 
   @Nonnull
@@ -104,12 +114,9 @@ public class BMXWriter
       // Main format version
       aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
 
+      // Write string table
       final BMXWriterStringTable aST = _createStringTable (aNode);
-      int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
-      if (nLengthStorageByteCount < 1 || nLengthStorageByteCount > 4)
-        throw new IllegalStateException ("Internal error: " + nLengthStorageByteCount);
-      if (nLengthStorageByteCount == 3)
-        nLengthStorageByteCount = 4;
+      final int nLengthStorageByteCount = _getStorageByteCount (aST.getLengthStorageByteCount ());
 
       aDO.writeInt (aST.getStringCount ());
       aDO.writeByte (nLengthStorageByteCount);
@@ -129,6 +136,50 @@ public class BMXWriter
         }
         aDO.write (aStringData);
       }
+
+      final int nReferenceStorageByteCount = _getStorageByteCount (aST.getReferenceStorageByteCount ());
+
+      // Write main content
+      MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
+      {
+        @Override
+        public void onItemBeforeChildren (final IMicroNode aChildNode)
+        {
+          try
+          {
+            final EMicroNodeType eNodeType = aChildNode.getType ();
+            aDO.writeByte (eNodeType.getID ());
+            switch (eNodeType)
+            {
+              case CDATA:
+                break;
+              case COMMENT:
+                break;
+              case CONTAINER:
+                break;
+              case DOCUMENT:
+                break;
+              case DOCUMENT_TYPE:
+                break;
+              case ELEMENT:
+                break;
+              case ENTITY_REFERENCE:
+                break;
+              case PROCESSING_INSTRUCTION:
+                break;
+              case TEXT:
+                break;
+              default:
+                throw new IllegalStateException ("Illegal node type:" + aChildNode);
+            }
+          }
+          catch (final IOException ex)
+          {
+            throw new MicroException ("Failed to write BMX content to output stream", ex);
+          }
+        }
+      });
+
       return ESuccess.SUCCESS;
     }
     catch (final IOException ex)
