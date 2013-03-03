@@ -1,5 +1,7 @@
 package com.phloc.appbasics.bmx;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 
 import org.junit.Test;
@@ -18,6 +20,8 @@ public final class BMXWriterTest
   public void testBasic ()
   {
     final IMicroDocument aDoc = MicroReader.readMicroXML (new File ("pom.xml"));
-    new BMXWriter ().getAsBytes (aDoc);
+    final byte [] ret = new BMXWriter ().getAsBytes (aDoc);
+    assertNotNull (ret);
+    System.out.println (ret.length);
   }
 }

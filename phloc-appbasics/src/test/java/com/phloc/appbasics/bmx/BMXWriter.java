@@ -1,11 +1,15 @@
 package com.phloc.appbasics.bmx;
 
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -17,6 +21,7 @@ import com.phloc.commons.microdom.IMicroEntityReference;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.IMicroProcessingInstruction;
 import com.phloc.commons.microdom.IMicroText;
+import com.phloc.commons.microdom.MicroException;
 import com.phloc.commons.microdom.utils.MicroWalker;
 import com.phloc.commons.state.ESuccess;
 
@@ -27,6 +32,9 @@ import com.phloc.commons.state.ESuccess;
  */
 public class BMXWriter
 {
+  /** Version number of format v1 - must be 4 bytes, all ASCII! */
+  public static final String VERSION1 = "BMX1";
+
   public BMXWriter ()
   {}
 
@@ -84,18 +92,60 @@ public class BMXWriter
   }
 
   @Nonnull
-  public ESuccess writeToStream (@Nonnull final IMicroNode aNode, @Nonnull @WillClose final OutputStream aOS)
+  public ESuccess writeToDataOutput (@Nonnull final IMicroNode aNode, @Nonnull final DataOutput aDO)
   {
+    if (aNode == null)
+      throw new NullPointerException ("node");
+    if (aDO == null)
+      throw new NullPointerException ("dataOutput");
+
     try
     {
-      if (aNode == null)
-        throw new NullPointerException ("node");
-      if (aOS == null)
-        throw new NullPointerException ("OS");
+      // Main format version
+      aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
 
       final BMXStringTable aST = _createStringTable (aNode);
-      System.out.println (aST.getLengthStorageByteCount ());
+      int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
+      if (nLengthStorageByteCount < 1 || nLengthStorageByteCount > 4)
+        throw new IllegalStateException ("Internal error: " + nLengthStorageByteCount);
+      if (nLengthStorageByteCount == 3)
+        nLengthStorageByteCount = 4;
+
+      aDO.writeInt (aST.getStringCount ());
+      aDO.writeByte (nLengthStorageByteCount);
+      for (final byte [] aStringData : aST.getAllByteArrays ())
+      {
+        switch (nLengthStorageByteCount)
+        {
+          case 1:
+            aDO.writeByte (aStringData.length);
+            break;
+          case 2:
+            aDO.writeShort (aStringData.length);
+            break;
+          case 4:
+            aDO.writeInt (aStringData.length);
+            break;
+        }
+        aDO.write (aStringData);
+      }
       return ESuccess.SUCCESS;
+    }
+    catch (final IOException ex)
+    {
+      throw new MicroException ("Failed to write BMX content to output stream", ex);
+    }
+  }
+
+  @Nonnull
+  public ESuccess writeToOutputStream (@Nonnull final IMicroNode aNode, @Nonnull @WillClose final OutputStream aOS)
+  {
+    if (aOS == null)
+      throw new NullPointerException ("OS");
+
+    try
+    {
+      return writeToDataOutput (aNode, new DataOutputStream (aOS));
     }
     finally
     {
@@ -107,7 +157,7 @@ public class BMXWriter
   public byte [] getAsBytes (@Nonnull final IMicroNode aNode)
   {
     final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
-    if (writeToStream (aNode, aBAOS).isFailure ())
+    if (writeToOutputStream (aNode, aBAOS).isFailure ())
       return null;
     return aBAOS.toByteArray ();
   }
