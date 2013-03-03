@@ -4,6 +4,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -206,6 +208,13 @@ public class BMXWriter
                 aRW.writeStringRef (aDocType.getSystemID ());
                 break;
               case ELEMENT:
+                final IMicroElement aElement = (IMicroElement) aChildNode;
+                aRW.writeStringRef (aElement.getNamespaceURI ());
+                aRW.writeStringRef (aElement.getTagName ());
+                final Map <String, String> aAttrs = aElement.getAllAttributes ();
+                aDO.writeInt (ContainerHelper.getSize (aAttrs));
+                // aRW.writeStringRef (aElement.getAllAttributeNames ());
+                // aRW.writeStringRef (aElement.getAllAttributeValues ());
                 break;
               case ENTITY_REFERENCE:
                 aRW.writeStringRef (((IMicroEntityReference) aChildNode).getName ());
