@@ -14,7 +14,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.string.ToStringGenerator;
 
-public class BMXStringTable
+public class BMXWriterStringTable
 {
   /** The storage encoding of all strings in this table */
   public static final Charset ENCODING = CCharset.CHARSET_UTF_8_OBJ;
@@ -22,7 +22,7 @@ public class BMXStringTable
   private final SortedMap <String, byte []> m_aStrings = new TreeMap <String, byte []> ();
   private int m_nLongest = 0;
 
-  public BMXStringTable ()
+  public BMXWriterStringTable ()
   {}
 
   public void addString (@Nullable final String sWord)

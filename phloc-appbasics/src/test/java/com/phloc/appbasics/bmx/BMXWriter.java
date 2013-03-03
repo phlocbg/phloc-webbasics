@@ -39,9 +39,9 @@ public class BMXWriter
   {}
 
   @Nonnull
-  private static BMXStringTable _createStringTable (@Nonnull final IMicroNode aNode)
+  private static BMXWriterStringTable _createStringTable (@Nonnull final IMicroNode aNode)
   {
-    final BMXStringTable ret = new BMXStringTable ();
+    final BMXWriterStringTable ret = new BMXWriterStringTable ();
     MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
     {
       @Override
@@ -104,7 +104,7 @@ public class BMXWriter
       // Main format version
       aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
 
-      final BMXStringTable aST = _createStringTable (aNode);
+      final BMXWriterStringTable aST = _createStringTable (aNode);
       int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
       if (nLengthStorageByteCount < 1 || nLengthStorageByteCount > 4)
         throw new IllegalStateException ("Internal error: " + nLengthStorageByteCount);
