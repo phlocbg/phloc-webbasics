@@ -72,7 +72,12 @@ public class BMXWriterStringTable
   @Nonnegative
   public int getReferenceStorageByteCount ()
   {
-    return 1 + (getStringCount () >> 8);
+    final int n = getStringCount ();
+    if (n > 0xffff)
+      return 4;
+    if (n > 0xff)
+      return 2;
+    return 1;
   }
 
   @Nonnegative
@@ -89,7 +94,12 @@ public class BMXWriterStringTable
   @Nonnegative
   public int getLengthStorageByteCount ()
   {
-    return 1 + (getLongestWordByteCount () >> 8);
+    final int n = getLongestWordByteCount ();
+    if (n > 0xffff)
+      return 4;
+    if (n > 0xff)
+      return 2;
+    return 1;
   }
 
   @Nonnull

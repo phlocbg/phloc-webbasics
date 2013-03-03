@@ -99,7 +99,7 @@ public class BMXWriter
   private static int _getStorageByteCount (final int nByteCount)
   {
     if (nByteCount < 1 || nByteCount > 4)
-      throw new IllegalStateException ("Internal error: " + nByteCount);
+      throw new IllegalStateException ("Internal error byte count is too huge: " + nByteCount);
     return nByteCount == 3 ? 4 : nByteCount;
   }
 
