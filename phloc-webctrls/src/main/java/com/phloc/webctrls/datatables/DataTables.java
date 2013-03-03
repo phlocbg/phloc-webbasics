@@ -723,8 +723,8 @@ public class DataTables implements IHCNodeBuilder
                                                @Nullable final ICSSClassProvider aCellClass)
   {
     final DataTablesColumn aColumn = getColumn (nColumnIndexWithDetails);
-    if (aColumn != null)
-    {}
+    if (aColumn != null && aColumn.isVisible ())
+      s_aLogger.warn ("The column with the expand text, should not be visible!");
 
     final JSRef jsTable = JSExpr.ref (m_sGeneratedJSVariableName);
 
