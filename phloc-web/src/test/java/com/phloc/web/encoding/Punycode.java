@@ -1,11 +1,12 @@
 package com.phloc.web.encoding;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.EncoderException;
-import com.phloc.web.encoding.i18n.AbstractCodepointIterator;
-import com.phloc.web.encoding.i18n.CharUtils;
+import com.phloc.commons.i18n.CodepointUtils;
+import com.phloc.commons.i18n.CodepointIteratorCharArray;
 
 /**
  * Implementation of the Punycode encoding scheme used by IDNA
@@ -69,10 +70,18 @@ public final class Punycode
     return k + (base - tmin + 1) * delta / (delta + skew);
   }
 
-  public static String encode (final char [] chars, final boolean [] case_flags)
+  @Nullable
+  public static String encode (@Nullable final String s)
+  {
+    if (s == null)
+      return null;
+    return encode (s.toCharArray (), null);
+  }
+
+  public static String encode (@Nonnull final char [] chars, @Nullable final boolean [] case_flags)
   {
     final StringBuilder buf = new StringBuilder ();
-    final AbstractCodepointIterator ci = AbstractCodepointIterator.forCharArray (chars);
+    final CodepointIteratorCharArray ci = new CodepointIteratorCharArray (chars);
     int n, delta, h, b, bias, m, q, k, t;
     n = initial_n;
     delta = 0;
@@ -83,9 +92,7 @@ public final class Punycode
       i = ci.next ().getValue ();
       if (_basic (i))
       {
-        if (case_flags != null)
-        {}
-        else
+        if (case_flags == null)
         {
           buf.append ((char) i);
         }
@@ -142,14 +149,6 @@ public final class Punycode
   }
 
   @Nullable
-  public static String encode (@Nullable final String s)
-  {
-    if (s == null)
-      return null;
-    return encode (s.toCharArray (), null);
-  }
-
-  @Nullable
   public static String decode (@Nullable final String s)
   {
     if (s == null)
@@ -157,7 +156,8 @@ public final class Punycode
     return decode (s.toCharArray (), null);
   }
 
-  public static String decode (final char [] chars, final boolean [] case_flags)
+  @Nonnull
+  public static String decode (@Nonnull final char [] chars, @Nullable final boolean [] case_flags)
   {
     final StringBuilder buf = new StringBuilder ();
     int n, out, i, bias, b, j, in, oldi, w, k, digit, t;
@@ -205,7 +205,7 @@ public final class Punycode
         // not sure if this is right
         System.arraycopy (case_flags, i, case_flags, i + Character.charCount (n), case_flags.length - i);
       }
-      CharUtils.insert (buf, i++, n);
+      CodepointUtils.insert (buf, i++, n);
     }
     return buf.toString ();
   }
