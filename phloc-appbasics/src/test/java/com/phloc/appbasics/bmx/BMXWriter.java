@@ -2,6 +2,8 @@ package com.phloc.appbasics.bmx;
 
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
@@ -15,6 +17,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.LZWCodec;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.EMicroNodeType;
@@ -332,7 +335,7 @@ public class BMXWriter
   }
 
   @Nonnull
-  public ESuccess writeToOutputStream (@Nonnull final IMicroNode aNode, @Nonnull @WillClose final OutputStream aOS)
+  public ESuccess writeToStream (@Nonnull final IMicroNode aNode, @Nonnull @WillClose final OutputStream aOS)
   {
     if (aOS == null)
       throw new NullPointerException ("OS");
@@ -347,11 +350,24 @@ public class BMXWriter
     }
   }
 
+  @Nonnull
+  public ESuccess writeToFile (@Nonnull final IMicroNode aNode, @Nonnull final File aFile)
+  {
+    if (aFile == null)
+      throw new NullPointerException ("file");
+
+    final FileOutputStream aFOS = FileUtils.getOutputStream (aFile);
+    if (aFOS == null)
+      return ESuccess.FAILURE;
+
+    return writeToStream (aNode, aFOS);
+  }
+
   @Nullable
   public byte [] getAsBytes (@Nonnull final IMicroNode aNode)
   {
     final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
-    if (writeToOutputStream (aNode, aBAOS).isFailure ())
+    if (writeToStream (aNode, aBAOS).isFailure ())
       return null;
     return aBAOS.toByteArray ();
   }

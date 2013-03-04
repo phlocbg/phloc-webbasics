@@ -4,8 +4,6 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -24,7 +22,7 @@ public class BMXWriterStringTable
   /** The index for null strings */
   public static final int INDEX_NULL_STRING = 0;
 
-  private final SortedMap <String, byte []> m_aStrings = new TreeMap <String, byte []> ();
+  private final Map <String, byte []> m_aStrings = new HashMap <String, byte []> ();
   private Map <String, Integer> m_aIndexMap;
   private int m_nLongest = 0;
   private boolean m_bFinished = false;

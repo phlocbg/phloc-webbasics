@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.ICloneable;
-import com.phloc.commons.state.EChange;
 
 public class BMXSettings implements ICloneable <BMXSettings>
 {
@@ -34,17 +33,19 @@ public class BMXSettings implements ICloneable <BMXSettings>
   }
 
   @Nonnull
-  public EChange set (@Nonnull final EBMXSetting eSetting)
+  public BMXSettings set (@Nonnull final EBMXSetting eSetting)
   {
     if (eSetting == null)
       throw new NullPointerException ("setting");
-    return EChange.valueOf (m_aSettings.add (eSetting));
+    m_aSettings.add (eSetting);
+    return this;
   }
 
   @Nonnull
-  public EChange unset (@Nullable final EBMXSetting eSetting)
+  public BMXSettings unset (@Nullable final EBMXSetting eSetting)
   {
-    return EChange.valueOf (m_aSettings.remove (eSetting));
+    m_aSettings.remove (eSetting);
+    return this;
   }
 
   public boolean isSet (@Nullable final EBMXSetting eSetting)
