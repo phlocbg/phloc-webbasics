@@ -33,7 +33,6 @@ import javax.annotation.WillClose;
 import com.phloc.appbasics.bmx.BMXWriterStringTable.Entry;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.LZWCodec;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
@@ -119,13 +118,17 @@ public class BMXWriter
               aDOS.writeInt (aST.addString (aElement.getNamespaceURI ()));
               aDOS.writeInt (aST.addString (aElement.getTagName ()));
               final Map <String, String> aAttrs = aElement.getAllAttributes ();
-              aDOS.writeInt (ContainerHelper.getSize (aAttrs));
-              if (aAttrs != null)
+              if (aAttrs == null || aAttrs.isEmpty ())
+                aDOS.writeInt (0);
+              else
+              {
+                aDOS.writeInt (aAttrs.size ());
                 for (final Map.Entry <String, String> aEntry : aAttrs.entrySet ())
                 {
                   aDOS.writeInt (aST.addString (aEntry.getKey ()));
                   aDOS.writeInt (aST.addString (aEntry.getValue ()));
                 }
+              }
               break;
             case ENTITY_REFERENCE:
               final IMicroEntityReference aER = (IMicroEntityReference) aChildNode;
@@ -183,8 +186,8 @@ public class BMXWriter
     aDOS.writeByte (nLengthStorageByteCount);
     for (final Entry aEntry : aST.getAllEntries ())
     {
-      final byte [] aStringData = aEntry.m_aBytes;
-      final int nDataLength = aStringData.length;
+      final byte [] aStringBytes = aEntry.m_aBytes;
+      final int nDataLength = aStringBytes.length;
       switch (nLengthStorageByteCount)
       {
         case 1:
@@ -201,7 +204,7 @@ public class BMXWriter
           aDOS.writeInt (nDataLength);
           break;
       }
-      aDOS.write (aStringData);
+      aDOS.write (aStringBytes, 0, aStringBytes.length);
     }
     aDOS.close ();
 

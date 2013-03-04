@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.string.ToStringGenerator;
 
 public class BMXWriterStringTable
@@ -49,9 +48,9 @@ public class BMXWriterStringTable
     final byte [] m_aBytes;
     final int m_nIndex;
 
-    public Entry (@Nonnull final String sString, @Nonnegative final int nIndex)
+    public Entry (@Nonnull final byte [] aBytes, @Nonnegative final int nIndex)
     {
-      m_aBytes = CharsetManager.getAsBytes (sString, ENCODING);
+      m_aBytes = aBytes;
       m_nIndex = nIndex;
     }
 
@@ -82,9 +81,10 @@ public class BMXWriterStringTable
     Entry aEntry = m_aStrings.get (sString);
     if (aEntry == null)
     {
-      aEntry = new Entry (sString, ++m_nLastUsedIndex);
+      final byte [] aBytes = sString.getBytes (ENCODING);
+      aEntry = new Entry (aBytes, ++m_nLastUsedIndex);
       m_aStrings.put (sString, aEntry);
-      m_nLongest = Math.max (m_nLongest, aEntry.m_aBytes.length);
+      m_nLongest = Math.max (m_nLongest, aBytes.length);
     }
     return aEntry.m_nIndex;
   }
