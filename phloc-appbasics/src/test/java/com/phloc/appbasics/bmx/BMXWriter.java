@@ -186,7 +186,8 @@ public class BMXWriter
     aDOS.writeByte (nLengthStorageByteCount);
     for (final Entry aEntry : aST.getAllEntries ())
     {
-      final byte [] aStringBytes = aEntry.m_aBytes;
+      aDOS.writeInt (aEntry.getIndex ());
+      final byte [] aStringBytes = aEntry.getBytes ();
       final int nDataLength = aStringBytes.length;
       switch (nLengthStorageByteCount)
       {
@@ -197,7 +198,7 @@ public class BMXWriter
           break;
         case 2:
           if (nDataLength > 0xffff)
-            throw new IllegalStateException ("Data is too long to fit into a ushort: " + nDataLength);
+            throw new IllegalStateException ("Data is too long to fit into an ushort: " + nDataLength);
           aDOS.writeShort (nDataLength);
           break;
         case 4:

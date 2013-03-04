@@ -60,8 +60,7 @@ public final class BMXWriterTest
     System.out.println ("Writing via MicroWriter took " + aSW.stopAndGetMillis () + "ms");
 
     aSW.restart ();
-    final BMXSettings aSettings = BMXSettings.createDefault ().unset (EBMXSetting.LZW_ENCODING);
-    final BMXWriter aWriter = new BMXWriter (aSettings);
+    final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ().unset (EBMXSetting.LZW_ENCODING));
     aWriter.writeToFile (aDoc, new File (ScopeTestRule.STORAGE_PATH, "standard.bmx"));
     System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
   }

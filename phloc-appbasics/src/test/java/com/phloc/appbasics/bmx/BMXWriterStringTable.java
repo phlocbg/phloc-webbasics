@@ -45,13 +45,26 @@ public class BMXWriterStringTable
    */
   public static final class Entry
   {
-    final byte [] m_aBytes;
-    final int m_nIndex;
+    private final byte [] m_aBytes;
+    private final int m_nIndex;
 
     public Entry (@Nonnull final byte [] aBytes, @Nonnegative final int nIndex)
     {
       m_aBytes = aBytes;
       m_nIndex = nIndex;
+    }
+
+    @Nonnull
+    @ReturnsMutableObject (reason = "speed")
+    public byte [] getBytes ()
+    {
+      return m_aBytes;
+    }
+
+    @Nonnegative
+    public int getIndex ()
+    {
+      return m_nIndex;
     }
 
     @Override
