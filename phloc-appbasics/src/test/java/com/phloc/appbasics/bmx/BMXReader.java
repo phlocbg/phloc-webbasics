@@ -16,8 +16,17 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.IMicroNode;
+import com.phloc.commons.microdom.impl.MicroCDATA;
+import com.phloc.commons.microdom.impl.MicroComment;
+import com.phloc.commons.microdom.impl.MicroContainer;
 import com.phloc.commons.microdom.impl.MicroDocument;
+import com.phloc.commons.microdom.impl.MicroDocumentType;
+import com.phloc.commons.microdom.impl.MicroElement;
+import com.phloc.commons.microdom.impl.MicroEntityReference;
+import com.phloc.commons.microdom.impl.MicroProcessingInstruction;
+import com.phloc.commons.microdom.impl.MicroText;
 
 public final class BMXReader
 {
@@ -68,10 +77,16 @@ public final class BMXReader
       final int nSettings = aDIS.readInt ();
       final BMXSettings aSettings = BMXSettings.createFromStorageValue (nSettings);
 
+      if (aSettings.isSet (EBMXSetting.DEFLATE))
+      {
+        // FIXME
+      }
+
       // Start iterating the main content
       IMicroNode aResultNode = null;
       final NonBlockingStack <IMicroNode> aNodeStack = new NonBlockingStack <IMicroNode> ();
       IMicroNode aLastNode = null;
+      final BMXReaderStringTable aST = new BMXReaderStringTable ();
 
       int nNodeType;
       while ((nNodeType = aDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)
@@ -79,14 +94,71 @@ public final class BMXReader
         IMicroNode aCreatedNode = null;
         switch (nNodeType)
         {
+          case CBMXIO.NODETYPE_CDATA:
+            aCreatedNode = new MicroCDATA (aST.get (aDIS.readInt ()));
+            break;
+          case CBMXIO.NODETYPE_COMMENT:
+            aCreatedNode = new MicroComment (aST.get (aDIS.readInt ()));
+            break;
+          case CBMXIO.NODETYPE_CONTAINER:
+            aCreatedNode = new MicroContainer ();
+            break;
           case CBMXIO.NODETYPE_DOCUMENT:
             aCreatedNode = new MicroDocument ();
             break;
+          case CBMXIO.NODETYPE_DOCUMENT_TYPE:
+          {
+            final String sQualifiedName = aST.get (aDIS.readInt ());
+            final String sPublicID = aST.get (aDIS.readInt ());
+            final String sSystemID = aST.get (aDIS.readInt ());
+            aCreatedNode = new MicroDocumentType (sQualifiedName, sPublicID, sSystemID);
+            break;
+          }
+          case CBMXIO.NODETYPE_ELEMENT:
+          {
+            final String sNamespaceURI = aST.get (aDIS.readInt ());
+            final String sTagName = aST.get (aDIS.readInt ());
+            final IMicroElement aElement = new MicroElement (sNamespaceURI, sTagName);
+            final int nAttrCount = aDIS.readInt ();
+            for (int i = 0; i < nAttrCount; ++i)
+            {
+              final String sAttrName = aST.get (aDIS.readInt ());
+              final String sAttrValue = aST.get (aDIS.readInt ());
+              aElement.setAttribute (sAttrName, sAttrValue);
+            }
+            aCreatedNode = aElement;
+            break;
+          }
+          case CBMXIO.NODETYPE_ENTITY_REFERENCE:
+            aCreatedNode = new MicroEntityReference (aST.get (aDIS.readInt ()));
+            break;
+          case CBMXIO.NODETYPE_PROCESSING_INSTRUCTION:
+          {
+            final String sTarget = aST.get (aDIS.readInt ());
+            final String sData = aST.get (aDIS.readInt ());
+            aCreatedNode = new MicroProcessingInstruction (sTarget, sData);
+            break;
+          }
+          case CBMXIO.NODETYPE_TEXT:
+          {
+            final String sText = aST.get (aDIS.readInt ());
+            final boolean bIgnorableWhitespace = aDIS.readBoolean ();
+            aCreatedNode = new MicroText (sText, bIgnorableWhitespace);
+            break;
+          }
+          case CBMXIO.NODETYPE_STRING:
+          {
+            final int nLength = aDIS.readInt ();
+            final byte [] aString = new byte [nLength];
+            aDIS.readFully (aString);
+            aST.add (new String (aString, CBMXIO.ENCODING));
+            break;
+          }
           case CBMXIO.SPECIAL_CHILDREN_START:
             aNodeStack.push (aLastNode);
             break;
           case CBMXIO.SPECIAL_CHILDREN_END:
-            aNodeStack.pop ();
+            aCreatedNode = aNodeStack.pop ();
             break;
           default:
             throw new BMXReadException ("Unsupported node type " + nNodeType);

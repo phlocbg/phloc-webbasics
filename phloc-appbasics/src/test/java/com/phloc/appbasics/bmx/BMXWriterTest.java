@@ -19,7 +19,6 @@ package com.phloc.appbasics.bmx;
 
 import java.io.File;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.phloc.commons.io.resource.ClassPathResource;
@@ -50,7 +49,6 @@ public final class BMXWriterTest
     BMXReader.readFromFile (aFile1);
   }
 
-  @Ignore
   @Test
   public void testStandardXML ()
   {
@@ -63,8 +61,13 @@ public final class BMXWriterTest
     System.out.println ("Writing via MicroWriter took " + aSW.stopAndGetMillis () + "ms");
 
     aSW.restart ();
+    final File aFile = new File (ScopeTestRule.STORAGE_PATH, "standard.bmx");
     final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ());
-    aWriter.writeToFile (aDoc, new File (ScopeTestRule.STORAGE_PATH, "standard.bmx"));
+    aWriter.writeToFile (aDoc, aFile);
     System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
+
+    aSW.restart ();
+    BMXReader.readFromFile (aFile);
+    System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
   }
 }
