@@ -416,11 +416,11 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     // Shutdown global scope and destroy all singletons
     WebScopeManager.onGlobalEnd ();
 
-    // Reset base path - mainly for testing
-    WebFileIO.resetPaths ();
-
     // Callback after
     afterContextDestroyed (aSC);
+
+    // Reset base path - mainly for testing
+    WebFileIO.resetPaths ();
 
     // Clear commons cache also manually - but after destroy because it
     // is used in equals and hashCode implementations
