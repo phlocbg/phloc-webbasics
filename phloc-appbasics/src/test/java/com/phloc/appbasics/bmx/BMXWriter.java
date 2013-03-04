@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
 import com.phloc.appbasics.bmx.BMXWriterStringTable.Entry;
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.LZWCodec;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
@@ -60,7 +61,7 @@ public class BMXWriter
   /** Version number of format v1 - must be 4 bytes, all ASCII! */
   public static final String VERSION1 = "BMX1";
 
-  /** EOF marker to be printed at the end of the stream */
+  /** End of file marker to be printed at the end of the stream */
   public static final int EOF_MARKER = 0xff;
 
   private final BMXSettings m_aSettings;
@@ -77,12 +78,10 @@ public class BMXWriter
     m_aSettings = aSettings.getClone ();
   }
 
-  @Nonnull
-  private static byte [] _getContentBytes (@Nonnull final BMXWriterStringTable aST, @Nonnull final IMicroNode aNode)
+  private static void _writeContent (@Nonnull final BMXWriterStringTable aST,
+                                     @Nonnull final IMicroNode aNode,
+                                     @Nonnull final DataOutput aDOS)
   {
-    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
-    final DataOutputStream aDOS = new DataOutputStream (aBAOS);
-
     // Write main content
     MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
     {
@@ -92,6 +91,7 @@ public class BMXWriter
         try
         {
           final EMicroNodeType eNodeType = aChildNode.getType ();
+          // Indicator of the Object type to come
           aDOS.writeByte (eNodeType.getID ());
           switch (eNodeType)
           {
@@ -171,8 +171,6 @@ public class BMXWriter
         }
       }
     });
-
-    return aBAOS.toByteArray ();
   }
 
   @Nonnull
@@ -180,7 +178,7 @@ public class BMXWriter
   {
     final int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
 
-    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
+    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream (16 * CGlobal.BYTES_PER_KILOBYTE);
     final DataOutputStream aDOS = new DataOutputStream (aBAOS);
     aDOS.writeInt (aST.getStringCount ());
     aDOS.writeByte (nLengthStorageByteCount);
@@ -232,7 +230,10 @@ public class BMXWriter
       final BMXWriterStringTable aST = new BMXWriterStringTable ();
 
       // Write the main content and filling the string table
-      byte [] aContentBytes = _getContentBytes (aST, aNode);
+      final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream (16 * CGlobal.BYTES_PER_KILOBYTE);
+      final DataOutputStream aDOS = new DataOutputStream (aBAOS);
+      _writeContent (aST, aNode, aDOS);
+      byte [] aContentBytes = aBAOS.toByteArray ();
       if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
       {
         final byte [] aEncodedContent = LZWCodec.encodeLZW (aContentBytes);

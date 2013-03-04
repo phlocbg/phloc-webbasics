@@ -102,7 +102,7 @@ public class BMXWriterStringTable
       m_aStrings.put (sString, aEntry);
       m_nLongest = Math.max (m_nLongest, aBytes.length);
     }
-    return aEntry.m_nIndex;
+    return aEntry.getIndex ();
   }
 
   @Nonnegative

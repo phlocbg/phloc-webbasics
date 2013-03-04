@@ -25,10 +25,19 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.string.ToStringGenerator;
 
-public class BMXSettings implements ICloneable <BMXSettings>
+/**
+ * Settings for Binary Micro XML (BMX) handling.
+ * 
+ * @author philip
+ */
+@NotThreadSafe
+public final class BMXSettings implements ICloneable <BMXSettings>
 {
   private final Set <EBMXSetting> m_aSettings = EnumSet.noneOf (EBMXSetting.class);
 
@@ -83,6 +92,29 @@ public class BMXSettings implements ICloneable <BMXSettings>
   public BMXSettings getClone ()
   {
     return new BMXSettings (this);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof BMXSettings))
+      return false;
+    final BMXSettings rhs = (BMXSettings) o;
+    return m_aSettings.equals (rhs.m_aSettings);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aSettings).getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("settings", m_aSettings).toString ();
   }
 
   @Nonnull

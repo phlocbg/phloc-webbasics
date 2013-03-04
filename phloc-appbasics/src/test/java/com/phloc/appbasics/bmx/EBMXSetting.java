@@ -25,6 +25,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
+/**
+ * Contains all the available Binary Micro XML (BMX) settings.
+ * 
+ * @author philip
+ */
 public enum EBMXSetting
 {
   LZW_ENCODING (0x0001, true);
@@ -48,6 +53,10 @@ public enum EBMXSetting
     return m_bEnabledByDefault;
   }
 
+  /**
+   * @return A list with all flags that are enabled by default. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public static List <EBMXSetting> getAllEnabledByDefault ()
