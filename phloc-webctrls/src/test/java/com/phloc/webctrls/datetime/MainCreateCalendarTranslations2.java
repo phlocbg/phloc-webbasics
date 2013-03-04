@@ -50,7 +50,7 @@ public final class MainCreateCalendarTranslations2
                .append ("\n\n");
     final String sBaseTemplate = aFileHeader.toString () +
                                  StreamUtils.getAllBytesAsString (new ClassPathResource ("calendar/calendar-lang-template.js"),
-                                                                  CCharset.CHARSET_UTF_8);
+                                                                  CCharset.CHARSET_UTF_8_OBJ);
 
     for (final String sLocale : new String [] { "hu_HU", "cs_CZ", "sk_SK", "de", "en" })
     {
@@ -70,7 +70,7 @@ public final class MainCreateCalendarTranslations2
 
       SimpleFileIO.writeFile (new File ("src/main/resources/datetime/lang/calendar-" + aLocale.getLanguage () + ".js"),
                               sJSCode,
-                              CCharset.CHARSET_UTF_8);
+                              CCharset.CHARSET_UTF_8_OBJ);
     }
   }
 }
