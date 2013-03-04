@@ -79,9 +79,8 @@ public class BMXWriter
   }
 
   @Nonnull
-  private static BMXWriterStringTable _createStringTable (@Nonnull final IMicroNode aNode)
+  private static void _createStringTable (@Nonnull final BMXWriterStringTable aST, @Nonnull final IMicroNode aNode)
   {
-    final BMXWriterStringTable ret = new BMXWriterStringTable ();
     MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
     {
       @Override
@@ -90,34 +89,34 @@ public class BMXWriter
         switch (aChildNode.getType ())
         {
           case CDATA:
-            ret.addString (((IMicroCDATA) aChildNode).getData ());
+            aST.addString (((IMicroCDATA) aChildNode).getData ());
             break;
           case COMMENT:
-            ret.addString (((IMicroComment) aChildNode).getData ());
+            aST.addString (((IMicroComment) aChildNode).getData ());
             break;
           case DOCUMENT_TYPE:
             final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
-            ret.addString (aDocType.getQualifiedName ());
-            ret.addString (aDocType.getPublicID ());
-            ret.addString (aDocType.getSystemID ());
+            aST.addString (aDocType.getQualifiedName ());
+            aST.addString (aDocType.getPublicID ());
+            aST.addString (aDocType.getSystemID ());
             break;
           case ELEMENT:
             final IMicroElement aElement = (IMicroElement) aChildNode;
-            ret.addString (aElement.getNamespaceURI ());
-            ret.addString (aElement.getTagName ());
-            ret.addStrings (aElement.getAllAttributeNames ());
-            ret.addStrings (aElement.getAllAttributeValues ());
+            aST.addString (aElement.getNamespaceURI ());
+            aST.addString (aElement.getTagName ());
+            aST.addStrings (aElement.getAllAttributeNames ());
+            aST.addStrings (aElement.getAllAttributeValues ());
             break;
           case ENTITY_REFERENCE:
-            ret.addString (((IMicroEntityReference) aChildNode).getName ());
+            aST.addString (((IMicroEntityReference) aChildNode).getName ());
             break;
           case PROCESSING_INSTRUCTION:
             final IMicroProcessingInstruction aPI = (IMicroProcessingInstruction) aChildNode;
-            ret.addString (aPI.getTarget ());
-            ret.addString (aPI.getData ());
+            aST.addString (aPI.getTarget ());
+            aST.addString (aPI.getData ());
             break;
           case TEXT:
-            ret.addString (((IMicroText) aChildNode).getData ());
+            aST.addString (((IMicroText) aChildNode).getData ());
             break;
           case CONTAINER:
           case DOCUMENT:
@@ -127,7 +126,6 @@ public class BMXWriter
         }
       }
     });
-    return ret;
   }
 
   @Nonnull
@@ -261,9 +259,6 @@ public class BMXWriter
     if (aDO == null)
       throw new NullPointerException ("dataOutput");
 
-    // Create the string table to use
-    final BMXWriterStringTable aST = _createStringTable (aNode);
-
     try
     {
       // Main format version
@@ -272,7 +267,9 @@ public class BMXWriter
       // Write settings
       aDO.writeInt (m_aSettings.getStorageValue ());
 
-      // Write the string table content LZW encoded
+      // Write the string table
+      final BMXWriterStringTable aST = new BMXWriterStringTable ();
+      _createStringTable (aST, aNode);
       byte [] aSTBytes = _getStringTableBytes (aST);
       if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
       {
@@ -283,7 +280,7 @@ public class BMXWriter
       aDO.writeInt (aSTBytes.length);
       aDO.write (aSTBytes);
 
-      // Write the main content LZW encoded
+      // Write the main content
       byte [] aContentBytes = _getContentBytes (aST, aNode);
       if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
       {
