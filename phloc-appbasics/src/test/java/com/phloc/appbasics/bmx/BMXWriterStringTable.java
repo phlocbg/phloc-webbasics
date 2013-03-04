@@ -39,31 +39,48 @@ public class BMXWriterStringTable
   /** The index for null strings */
   public static final int INDEX_NULL_STRING = 0;
 
-  private final Map <String, byte []> m_aStrings = new HashMap <String, byte []> ();
-  private Map <String, Integer> m_aIndexMap;
+  /**
+   * Represents a single entry in the string table
+   * 
+   * @author philip
+   */
+  public static final class Entry
+  {
+    final byte [] m_aBytes;
+    final int m_nIndex;
+
+    public Entry (@Nonnull final String sString, @Nonnegative final int nIndex)
+    {
+      m_aBytes = CharsetManager.getAsBytes (sString, ENCODING);
+      m_nIndex = nIndex;
+    }
+  }
+
+  private final Map <String, Entry> m_aStrings = new HashMap <String, Entry> ();
   private int m_nLongest = 0;
-  private boolean m_bFinished = false;
+  private int m_nLastUsedIndex = INDEX_NULL_STRING;
 
   public BMXWriterStringTable ()
   {}
 
-  public void addString (@Nullable final CharSequence aString)
+  public int addString (@Nullable final CharSequence aString)
   {
-    if (aString != null)
-      addString (aString.toString ());
+    return addString (aString == null ? null : aString.toString ());
   }
 
-  public void addString (@Nullable final String sString)
+  public int addString (@Nullable final String sString)
   {
-    if (m_bFinished)
-      throw new IllegalStateException ("Already finished");
-    if (sString != null)
-      if (!m_aStrings.containsKey (sString))
-      {
-        final byte [] aBytes = CharsetManager.getAsBytes (sString, ENCODING);
-        m_aStrings.put (sString, aBytes);
-        m_nLongest = Math.max (m_nLongest, aBytes.length);
-      }
+    if (sString == null)
+      return INDEX_NULL_STRING;
+
+    Entry aEntry = m_aStrings.get (sString);
+    if (aEntry == null)
+    {
+      aEntry = new Entry (sString, ++m_nLastUsedIndex);
+      m_aStrings.put (sString, aEntry);
+      m_nLongest = Math.max (m_nLongest, aEntry.m_aBytes.length);
+    }
+    return aEntry.m_nIndex;
   }
 
   public void addStrings (@Nullable final Iterable <String> aStrings)
@@ -119,41 +136,21 @@ public class BMXWriterStringTable
 
   @Nonnull
   @ReturnsMutableObject (reason = "speed")
-  public Collection <byte []> getAllByteArrays ()
+  public Collection <Entry> getAllEntries ()
   {
     return m_aStrings.values ();
-  }
-
-  @Nonnull
-  public BMXWriterStringTable finish ()
-  {
-    if (m_bFinished)
-      throw new IllegalStateException ("Already finished");
-
-    m_bFinished = true;
-    m_aIndexMap = new HashMap <String, Integer> (m_aStrings.size ());
-    // Start with ID 1, as 0 is reserved for null string
-    int nIndex = 1;
-    for (final String sString : m_aStrings.keySet ())
-      m_aIndexMap.put (sString, Integer.valueOf (nIndex++));
-    if (m_aIndexMap.size () != m_aStrings.size ())
-      throw new IllegalStateException ();
-    return this;
   }
 
   @Nonnegative
   public int getIndex (@Nullable final String sString)
   {
-    if (!m_bFinished)
-      throw new IllegalStateException ("Not yet finished! Call finish first!");
-
     if (sString == null)
       return INDEX_NULL_STRING;
 
-    final Integer aIndex = m_aIndexMap.get (sString);
-    if (aIndex == null)
+    final Entry aEntry = m_aStrings.get (sString);
+    if (aEntry == null)
       throw new IllegalArgumentException ("Failed to resolve string in index map: '" + sString + "'");
-    return aIndex.intValue ();
+    return aEntry.m_nIndex;
   }
 
   @Override

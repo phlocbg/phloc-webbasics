@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
+import com.phloc.appbasics.bmx.BMXWriterStringTable.Entry;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.LZWCodec;
 import com.phloc.commons.collections.ContainerHelper;
@@ -126,7 +127,7 @@ public class BMXWriter
         }
       }
     });
-    return ret.finish ();
+    return ret;
   }
 
   @Nonnull
@@ -138,8 +139,9 @@ public class BMXWriter
     final DataOutputStream aDOS = new DataOutputStream (aBAOS);
     aDOS.writeInt (aST.getStringCount ());
     aDOS.writeByte (nLengthStorageByteCount);
-    for (final byte [] aStringData : aST.getAllByteArrays ())
+    for (final Entry aEntry : aST.getAllEntries ())
     {
+      final byte [] aStringData = aEntry.m_aBytes;
       switch (nLengthStorageByteCount)
       {
         case 1:
