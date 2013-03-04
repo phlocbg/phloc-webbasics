@@ -54,6 +54,12 @@ public class BMXWriterStringTable
       m_aBytes = CharsetManager.getAsBytes (sString, ENCODING);
       m_nIndex = nIndex;
     }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("byteCount", m_aBytes.length).append ("index", m_nIndex).toString ();
+    }
   }
 
   private final Map <String, Entry> m_aStrings = new HashMap <String, Entry> ();
@@ -83,33 +89,10 @@ public class BMXWriterStringTable
     return aEntry.m_nIndex;
   }
 
-  public void addStrings (@Nullable final Iterable <String> aStrings)
-  {
-    if (aStrings != null)
-      for (final String sString : aStrings)
-        addString (sString);
-  }
-
   @Nonnegative
   public int getStringCount ()
   {
     return m_aStrings.size ();
-  }
-
-  /**
-   * @return The number of bytes necessary to store the reference to an entry. A
-   *         value between 1 and 4, as the length of m_aStrings can have at last
-   *         32 bits (int).
-   */
-  @Nonnegative
-  public int getReferenceStorageByteCount ()
-  {
-    final int n = getStringCount ();
-    if (n > 0xffff)
-      return 4;
-    if (n > 0xff)
-      return 2;
-    return 1;
   }
 
   @Nonnegative

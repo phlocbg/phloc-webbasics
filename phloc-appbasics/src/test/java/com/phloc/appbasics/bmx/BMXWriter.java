@@ -79,92 +79,10 @@ public class BMXWriter
   }
 
   @Nonnull
-  private static void _createStringTable (@Nonnull final BMXWriterStringTable aST, @Nonnull final IMicroNode aNode)
-  {
-    MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
-    {
-      @Override
-      public void onItemBeforeChildren (@Nonnull final IMicroNode aChildNode)
-      {
-        switch (aChildNode.getType ())
-        {
-          case CDATA:
-            aST.addString (((IMicroCDATA) aChildNode).getData ());
-            break;
-          case COMMENT:
-            aST.addString (((IMicroComment) aChildNode).getData ());
-            break;
-          case DOCUMENT_TYPE:
-            final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
-            aST.addString (aDocType.getQualifiedName ());
-            aST.addString (aDocType.getPublicID ());
-            aST.addString (aDocType.getSystemID ());
-            break;
-          case ELEMENT:
-            final IMicroElement aElement = (IMicroElement) aChildNode;
-            aST.addString (aElement.getNamespaceURI ());
-            aST.addString (aElement.getTagName ());
-            aST.addStrings (aElement.getAllAttributeNames ());
-            aST.addStrings (aElement.getAllAttributeValues ());
-            break;
-          case ENTITY_REFERENCE:
-            aST.addString (((IMicroEntityReference) aChildNode).getName ());
-            break;
-          case PROCESSING_INSTRUCTION:
-            final IMicroProcessingInstruction aPI = (IMicroProcessingInstruction) aChildNode;
-            aST.addString (aPI.getTarget ());
-            aST.addString (aPI.getData ());
-            break;
-          case TEXT:
-            aST.addString (((IMicroText) aChildNode).getData ());
-            break;
-          case CONTAINER:
-          case DOCUMENT:
-            break;
-          default:
-            throw new IllegalStateException ("Illegal node type:" + aChildNode);
-        }
-      }
-    });
-  }
-
-  @Nonnull
-  private static byte [] _getStringTableBytes (@Nonnull final BMXWriterStringTable aST) throws IOException
-  {
-    final int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
-
-    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
-    final DataOutputStream aDOS = new DataOutputStream (aBAOS);
-    aDOS.writeInt (aST.getStringCount ());
-    aDOS.writeByte (nLengthStorageByteCount);
-    for (final Entry aEntry : aST.getAllEntries ())
-    {
-      final byte [] aStringData = aEntry.m_aBytes;
-      switch (nLengthStorageByteCount)
-      {
-        case 1:
-          aDOS.writeByte (aStringData.length);
-          break;
-        case 2:
-          aDOS.writeShort (aStringData.length);
-          break;
-        case 4:
-          aDOS.writeInt (aStringData.length);
-          break;
-      }
-      aDOS.write (aStringData);
-    }
-    aDOS.close ();
-
-    return aBAOS.toByteArray ();
-  }
-
-  @Nonnull
   private static byte [] _getContentBytes (@Nonnull final BMXWriterStringTable aST, @Nonnull final IMicroNode aNode)
   {
     final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
     final DataOutputStream aDOS = new DataOutputStream (aBAOS);
-    final BMStringTableRefWriter aRW = new BMStringTableRefWriter (aST, aDOS);
 
     // Write main content
     MicroWalker.walkNode (aNode, new DefaultHierarchyWalkerCallback <IMicroNode> ()
@@ -179,10 +97,12 @@ public class BMXWriter
           switch (eNodeType)
           {
             case CDATA:
-              aRW.writeStringRef (((IMicroCDATA) aChildNode).getData ());
+              final IMicroCDATA aCDATA = (IMicroCDATA) aChildNode;
+              aDOS.writeInt (aST.addString (aCDATA.getData ()));
               break;
             case COMMENT:
-              aRW.writeStringRef (((IMicroComment) aChildNode).getData ());
+              final IMicroComment aComment = (IMicroComment) aChildNode;
+              aDOS.writeInt (aST.addString (aComment.getData ()));
               break;
             case CONTAINER:
               break;
@@ -190,34 +110,35 @@ public class BMXWriter
               break;
             case DOCUMENT_TYPE:
               final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
-              aRW.writeStringRef (aDocType.getQualifiedName ());
-              aRW.writeStringRef (aDocType.getPublicID ());
-              aRW.writeStringRef (aDocType.getSystemID ());
+              aDOS.writeInt (aST.addString (aDocType.getQualifiedName ()));
+              aDOS.writeInt (aST.addString (aDocType.getPublicID ()));
+              aDOS.writeInt (aST.addString (aDocType.getSystemID ()));
               break;
             case ELEMENT:
               final IMicroElement aElement = (IMicroElement) aChildNode;
-              aRW.writeStringRef (aElement.getNamespaceURI ());
-              aRW.writeStringRef (aElement.getTagName ());
+              aDOS.writeInt (aST.addString (aElement.getNamespaceURI ()));
+              aDOS.writeInt (aST.addString (aElement.getTagName ()));
               final Map <String, String> aAttrs = aElement.getAllAttributes ();
               aDOS.writeInt (ContainerHelper.getSize (aAttrs));
               if (aAttrs != null)
                 for (final Map.Entry <String, String> aEntry : aAttrs.entrySet ())
                 {
-                  aRW.writeStringRef (aEntry.getKey ());
-                  aRW.writeStringRef (aEntry.getValue ());
+                  aDOS.writeInt (aST.addString (aEntry.getKey ()));
+                  aDOS.writeInt (aST.addString (aEntry.getValue ()));
                 }
               break;
             case ENTITY_REFERENCE:
-              aRW.writeStringRef (((IMicroEntityReference) aChildNode).getName ());
+              final IMicroEntityReference aER = (IMicroEntityReference) aChildNode;
+              aDOS.writeInt (aST.addString (aER.getName ()));
               break;
             case PROCESSING_INSTRUCTION:
               final IMicroProcessingInstruction aPI = (IMicroProcessingInstruction) aChildNode;
-              aRW.writeStringRef (aPI.getTarget ());
-              aRW.writeStringRef (aPI.getData ());
+              aDOS.writeInt (aST.addString (aPI.getTarget ()));
+              aDOS.writeInt (aST.addString (aPI.getData ()));
               break;
             case TEXT:
               final IMicroText aText = (IMicroText) aChildNode;
-              aRW.writeStringRef (aText.getData ());
+              aDOS.writeInt (aST.addString (aText.getData ()));
               aDOS.writeBoolean (aText.isElementContentWhitespace ());
               break;
             default:
@@ -252,6 +173,42 @@ public class BMXWriter
   }
 
   @Nonnull
+  private static byte [] _getStringTableBytes (@Nonnull final BMXWriterStringTable aST) throws IOException
+  {
+    final int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
+
+    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
+    final DataOutputStream aDOS = new DataOutputStream (aBAOS);
+    aDOS.writeInt (aST.getStringCount ());
+    aDOS.writeByte (nLengthStorageByteCount);
+    for (final Entry aEntry : aST.getAllEntries ())
+    {
+      final byte [] aStringData = aEntry.m_aBytes;
+      final int nDataLength = aStringData.length;
+      switch (nLengthStorageByteCount)
+      {
+        case 1:
+          if (nDataLength > 0xff)
+            throw new IllegalStateException ("Data is too long to fit into a byte: " + nDataLength);
+          aDOS.writeByte (nDataLength);
+          break;
+        case 2:
+          if (nDataLength > 0xffff)
+            throw new IllegalStateException ("Data is too long to fit into a ushort: " + nDataLength);
+          aDOS.writeShort (nDataLength);
+          break;
+        case 4:
+          aDOS.writeInt (nDataLength);
+          break;
+      }
+      aDOS.write (aStringData);
+    }
+    aDOS.close ();
+
+    return aBAOS.toByteArray ();
+  }
+
+  @Nonnull
   public ESuccess writeToDataOutput (@Nonnull final IMicroNode aNode, @Nonnull final DataOutput aDO)
   {
     if (aNode == null)
@@ -267,25 +224,15 @@ public class BMXWriter
       // Write settings
       aDO.writeInt (m_aSettings.getStorageValue ());
 
-      // Write the string table
+      // The string table to be filled
       final BMXWriterStringTable aST = new BMXWriterStringTable ();
-      _createStringTable (aST, aNode);
-      byte [] aSTBytes = _getStringTableBytes (aST);
-      if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
-      {
-        final byte [] aEncodedST = LZWCodec.encodeLZW (aSTBytes);
-        System.out.println ("ST saved " + (aSTBytes.length - aEncodedST.length) + " of " + aSTBytes.length + " bytes");
-        aSTBytes = aEncodedST;
-      }
-      aDO.writeInt (aSTBytes.length);
-      aDO.write (aSTBytes);
 
-      // Write the main content
+      // Write the main content and filling the string table
       byte [] aContentBytes = _getContentBytes (aST, aNode);
       if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
       {
         final byte [] aEncodedContent = LZWCodec.encodeLZW (aContentBytes);
-        System.out.println ("Content saved " +
+        System.out.println ("LZW encoding of content saved " +
                             (aContentBytes.length - aEncodedContent.length) +
                             " of " +
                             aContentBytes.length +
@@ -294,6 +241,21 @@ public class BMXWriter
       }
       aDO.writeInt (aContentBytes.length);
       aDO.write (aContentBytes);
+
+      // Write the string table
+      byte [] aSTBytes = _getStringTableBytes (aST);
+      if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
+      {
+        final byte [] aEncodedST = LZWCodec.encodeLZW (aSTBytes);
+        System.out.println ("LZW encoding of string table saved " +
+                            (aSTBytes.length - aEncodedST.length) +
+                            " of " +
+                            aSTBytes.length +
+                            " bytes");
+        aSTBytes = aEncodedST;
+      }
+      aDO.writeInt (aSTBytes.length);
+      aDO.write (aSTBytes);
 
       // Write EOF marker
       aDO.writeByte (EOF_MARKER);
