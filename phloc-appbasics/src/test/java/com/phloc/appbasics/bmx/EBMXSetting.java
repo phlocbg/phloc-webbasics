@@ -32,7 +32,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  */
 public enum EBMXSetting
 {
-  LZW_ENCODING (0x0001, true);
+  DEFLATE (0x0001, false);
 
   private final int m_nValue;
   private final boolean m_bEnabledByDefault;

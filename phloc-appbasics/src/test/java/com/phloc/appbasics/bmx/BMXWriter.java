@@ -24,10 +24,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.zip.DeflaterOutputStream;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
@@ -57,12 +56,6 @@ import com.phloc.commons.state.ESuccess;
  */
 public class BMXWriter
 {
-  /** The storage encoding of all strings in this table */
-  public static final Charset ENCODING = CCharset.CHARSET_UTF_8_OBJ;
-
-  /** Version number of format v1 - must be 4 bytes, all ASCII! */
-  public static final String VERSION1 = "BMX1";
-
   private final BMXSettings m_aSettings;
 
   public BMXWriter ()
@@ -77,7 +70,7 @@ public class BMXWriter
     m_aSettings = aSettings.getClone ();
   }
 
-  private static void _writeContent (@Nonnull final AbstractBMXWriterStringTable aST,
+  private static void _writeContent (@Nonnull final BMXWriterStringTable aST,
                                      @Nonnull final IMicroNode aNode,
                                      @Nonnull final DataOutput aDOS)
   {
@@ -166,7 +159,7 @@ public class BMXWriter
       }
 
       @Override
-      public void onItemAfterChildren (final IMicroNode aChildNode)
+      public void onItemAfterChildren (@Nonnull final IMicroNode aChildNode)
       {
         try
         {
@@ -182,39 +175,42 @@ public class BMXWriter
   }
 
   @Nonnull
-  public ESuccess writeToDataOutput (@Nonnull final IMicroNode aNode, @Nonnull final DataOutput aDO)
+  public ESuccess writeToDataOutput (@Nonnull final IMicroNode aNode, @Nonnull final DataOutputStream aDOS)
   {
     if (aNode == null)
       throw new NullPointerException ("node");
-    if (aDO == null)
+    if (aDOS == null)
       throw new NullPointerException ("dataOutput");
 
     try
     {
       // Main format version
-      aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
+      aDOS.write (CBMXIO.VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
 
       // Write settings
-      aDO.writeInt (m_aSettings.getStorageValue ());
+      aDOS.writeInt (m_aSettings.getStorageValue ());
+
+      DataOutputStream aContentDOS = aDOS;
+      DeflaterOutputStream aDeflaterOS = null;
+      if (m_aSettings.isSet (EBMXSetting.DEFLATE))
+      {
+        aDeflaterOS = new DeflaterOutputStream (aDOS);
+        aContentDOS = new DataOutputStream (aDeflaterOS);
+      }
 
       // The string table to be filled
-      final AbstractBMXWriterStringTable aST = new AbstractBMXWriterStringTable ()
-      {
-        @Override
-        protected void onNewString (@Nonnull final String sString, @Nonnegative final int nIndex) throws IOException
-        {
-          aDO.writeByte (CBMXIO.NODETYPE_STRING);
-          final byte [] aBytes = sString.getBytes (ENCODING);
-          aDO.writeInt (aBytes.length);
-          aDO.write (aBytes, 0, aBytes.length);
-        }
-      };
+      final BMXWriterStringTable aST = new BMXWriterStringTable (aContentDOS);
 
       // Write the main content and filling the string table
-      _writeContent (aST, aNode, aDO);
+      _writeContent (aST, aNode, aContentDOS);
 
       // Write EOF marker
-      aDO.writeByte (CBMXIO.NODETYPE_EOF);
+      aContentDOS.writeByte (CBMXIO.NODETYPE_EOF);
+
+      // Finish deflate
+      if (aDeflaterOS != null)
+        aDeflaterOS.finish ();
+      aContentDOS.flush ();
 
       return ESuccess.SUCCESS;
     }

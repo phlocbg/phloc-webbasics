@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.bmx;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,16 +28,19 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
 
-abstract class AbstractBMXWriterStringTable
+final class BMXWriterStringTable
 {
   /** The index for null strings */
   public static final int INDEX_NULL_STRING = 0;
 
+  private final DataOutputStream m_aDOS;
   private final Map <String, Integer> m_aStrings = new HashMap <String, Integer> (1000);
   private int m_nLastUsedIndex = INDEX_NULL_STRING;
 
-  public AbstractBMXWriterStringTable ()
-  {}
+  public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS)
+  {
+    m_aDOS = aDOS;
+  }
 
   public int addString (@Nullable final CharSequence aString) throws IOException
   {
@@ -46,7 +50,13 @@ abstract class AbstractBMXWriterStringTable
     return addString (aString.toString ());
   }
 
-  protected abstract void onNewString (@Nonnull String sString, @Nonnegative int nIndex) throws IOException;
+  private void _onNewString (@Nonnull final String sString) throws IOException
+  {
+    m_aDOS.writeByte (CBMXIO.NODETYPE_STRING);
+    final byte [] aBytes = sString.getBytes (CBMXIO.ENCODING);
+    m_aDOS.writeInt (aBytes.length);
+    m_aDOS.write (aBytes, 0, aBytes.length);
+  }
 
   public int addString (@Nullable final String sString) throws IOException
   {
@@ -58,7 +68,7 @@ abstract class AbstractBMXWriterStringTable
     {
       aIndex = Integer.valueOf (++m_nLastUsedIndex);
       m_aStrings.put (sString, aIndex);
-      onNewString (sString, aIndex.intValue ());
+      _onNewString (sString);
     }
     return aIndex.intValue ();
   }

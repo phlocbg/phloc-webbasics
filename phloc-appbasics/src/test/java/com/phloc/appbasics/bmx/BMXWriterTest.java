@@ -42,7 +42,7 @@ public final class BMXWriterTest
   public void testBasic ()
   {
     final IMicroDocument aDoc = MicroReader.readMicroXML (new File ("pom.xml"));
-    final byte [] ret = new BMXWriter ().getAsBytes (aDoc);
+    final byte [] ret = new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.DEFLATE)).getAsBytes (aDoc);
     assertNotNull (ret);
     SimpleFileIO.writeFile (new File (ScopeTestRule.STORAGE_PATH, "test.bmx"), ret);
     System.out.println (ret.length);
@@ -60,7 +60,7 @@ public final class BMXWriterTest
     System.out.println ("Writing via MicroWriter took " + aSW.stopAndGetMillis () + "ms");
 
     aSW.restart ();
-    final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ().unset (EBMXSetting.LZW_ENCODING));
+    final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ());
     aWriter.writeToFile (aDoc, new File (ScopeTestRule.STORAGE_PATH, "standard.bmx"));
     System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
   }
