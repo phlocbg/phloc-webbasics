@@ -40,6 +40,9 @@ public class BMXWriter
   /** Version number of format v1 - must be 4 bytes, all ASCII! */
   public static final String VERSION1 = "BMX1";
 
+  /** EOF marker to be printed at the end of the stream */
+  public static final int EOF_MARKER = 0xff;
+
   private final BMXSettings m_aSettings;
 
   public BMXWriter ()
@@ -287,6 +290,8 @@ public class BMXWriter
     {
       // Main format version
       aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
+
+      // Write settings
       aDO.writeInt (m_aSettings.getStorageValue ());
 
       // Write the string table content LZW encoded
@@ -314,6 +319,9 @@ public class BMXWriter
       }
       aDO.writeInt (aContentBytes.length);
       aDO.write (aContentBytes);
+
+      // Write EOF marker
+      aDO.writeByte (EOF_MARKER);
 
       return ESuccess.SUCCESS;
     }
