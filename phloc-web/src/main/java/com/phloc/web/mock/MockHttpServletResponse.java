@@ -37,6 +37,7 @@ import com.phloc.commons.IHasLocale;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.multimap.IMultiMapSetBased;
@@ -58,11 +59,12 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
 {
   public static final int DEFAULT_SERVER_PORT = CWeb.DEFAULT_PORT_HTTP;
   public static final String DEFAULT_CHARSET_NAME = CCharset.CHARSET_UTF_8;
+  public static final Charset DEFAULT_CHARSET_OBJ = CCharset.CHARSET_UTF_8_OBJ;
   private static final int DEFAULT_BUFFER_SIZE = 4096;
 
   private boolean m_bOutputStreamAccessAllowed = true;
   private boolean m_bWriterAccessAllowed = true;
-  private String m_sCharacterEncoding = DEFAULT_CHARSET_NAME;
+  private Charset m_aCharacterEncoding = DEFAULT_CHARSET_OBJ;
   private final NonBlockingByteArrayOutputStream m_aContent = new NonBlockingByteArrayOutputStream ();
   private final ServletOutputStream m_aOS = new ServletOutputStream ()
   {
@@ -137,22 +139,43 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
 
   public void setCharacterEncoding (@Nullable final String sCharacterEncoding)
   {
-    m_sCharacterEncoding = sCharacterEncoding;
+    setCharacterEncoding (sCharacterEncoding == null ? null : CharsetManager.getCharsetFromName (sCharacterEncoding));
+  }
+
+  public void setCharacterEncoding (@Nullable final Charset aCharacterEncoding)
+  {
+    m_aCharacterEncoding = aCharacterEncoding;
   }
 
   @Nullable
   public String getCharacterEncoding ()
   {
-    return m_sCharacterEncoding;
+    return m_aCharacterEncoding == null ? null : m_aCharacterEncoding.name ();
+  }
+
+  @Nullable
+  public Charset getCharacterEncodingObj ()
+  {
+    return m_aCharacterEncoding;
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public String getCharacterEncodingOrDefault ()
   {
     String ret = getCharacterEncoding ();
     if (ret == null)
       ret = SystemHelper.getSystemCharsetName ();
+    return ret;
+  }
+
+  @Nonnull
+  public Charset getCharacterEncodingObjOrDefault ()
+  {
+    Charset ret = getCharacterEncodingObj ();
+    if (ret == null)
+      ret = SystemHelper.getSystemCharset ();
     return ret;
   }
 
@@ -173,7 +196,7 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
 
     if (m_aWriter == null)
     {
-      final Writer aWriter = StreamUtils.createWriter (m_aContent, getCharacterEncodingOrDefault ());
+      final Writer aWriter = StreamUtils.createWriter (m_aContent, getCharacterEncodingObjOrDefault ());
       m_aWriter = new ResponsePrintWriter (aWriter);
     }
     return m_aWriter;
@@ -194,6 +217,7 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
   }
 
   @Nonnull
+  @Deprecated
   public String getContentAsString (@Nonnull @Nonempty final String sCharset)
   {
     flushBuffer ();
@@ -286,7 +310,7 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
   public void reset ()
   {
     resetBuffer ();
-    m_sCharacterEncoding = null;
+    m_aCharacterEncoding = null;
     m_nContentLength = 0;
     m_sContentType = null;
     m_aLocale = null;

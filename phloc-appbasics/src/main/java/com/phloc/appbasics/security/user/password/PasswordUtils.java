@@ -83,7 +83,7 @@ public final class PasswordUtils
 
     final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (CSecurity.USER_PASSWORD_ALGO,
                                                                     sPlainTextPassword,
-                                                                    CCharset.CHARSET_UTF_8);
+                                                                    CCharset.CHARSET_UTF_8_OBJ);
     return MessageDigestGeneratorHelper.getHexValueFromDigest (aDigest);
   }
 }

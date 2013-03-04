@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.string.StringParser;
@@ -274,6 +275,7 @@ public abstract class AbstractFileUploadBase
    *         if there are problems reading/parsing the request or storing files.
    */
   @Nonnull
+  @ReturnsMutableCopy
   public List <IFileItem> parseRequest (final IRequestContext ctx) throws FileUploadException
   {
     final List <IFileItem> items = new ArrayList <IFileItem> ();

@@ -224,6 +224,7 @@ public final class PathRelativeFileIO
    * @see #getBasePathFile()
    */
   @Nullable
+  @Deprecated
   public Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
   {
     return getResource (sRelativePath).getReader (sCharset);
@@ -278,6 +279,7 @@ public final class PathRelativeFileIO
    * @see #getBasePathFile()
    */
   @Nullable
+  @Deprecated
   public Writer getWriter (@Nonnull final String sRelativePath,
                            @Nonnull final String sCharset,
                            @Nonnull final EAppend eAppend)

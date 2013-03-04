@@ -119,6 +119,7 @@ public abstract class AbstractRFC1522Codec
     final String sCharset = sText.substring (from, to);
     if (StringHelper.hasNoText (sCharset))
       throw new DecoderException ("RFC 1522 violation: charset not specified");
+    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
     from = to + 1;
     to = sText.indexOf (SEP, from);
     if (to == terminator)
@@ -130,7 +131,7 @@ public abstract class AbstractRFC1522Codec
     to = sText.indexOf (SEP, from);
     byte [] data = CharsetManager.getAsBytes (sText.substring (from, to), CCharset.CHARSET_US_ASCII_OBJ);
     data = doDecoding (data);
-    return CharsetManager.getAsString (data, sCharset);
+    return CharsetManager.getAsString (data, aCharset);
   }
 
   /**

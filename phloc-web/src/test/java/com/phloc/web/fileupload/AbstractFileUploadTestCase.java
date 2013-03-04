@@ -17,11 +17,11 @@
  */
 package com.phloc.web.fileupload;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.web.fileupload.io.DiskFileItemFactory;
 import com.phloc.web.fileupload.servlet.ServletFileUpload;
 import com.phloc.web.mock.MockHttpServletRequest;
@@ -47,10 +47,9 @@ public abstract class AbstractFileUploadTestCase
     return fileItems;
   }
 
-  protected final List <IFileItem> parseUpload (final String content) throws UnsupportedEncodingException,
-                                                                     FileUploadException
+  protected final List <IFileItem> parseUpload (final String content) throws FileUploadException
   {
-    final byte [] bytes = content.getBytes ("US-ASCII");
+    final byte [] bytes = content.getBytes (CCharset.CHARSET_US_ASCII_OBJ);
     return parseUpload (bytes, CONTENT_TYPE);
   }
 }

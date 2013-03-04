@@ -82,6 +82,13 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
   public static final String DEFAULT_CHARSET = CCharset.CHARSET_ISO_8859_1;
 
   /**
+   * Default content charset to be used when no explicit charset parameter is
+   * provided by the sender. Media subtypes of the "text" type are defined to
+   * have a default charset value of "ISO-8859-1" when received via HTTP.
+   */
+  public static final Charset DEFAULT_CHARSET_OBJ = CCharset.CHARSET_ISO_8859_1_OBJ;
+
+  /**
    * UID used in unique file name generation.
    */
   private static final String UID = UUID.randomUUID ().toString ().replace (':', '_').replace ('-', '_');
@@ -351,12 +358,9 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
   public String getString ()
   {
     final byte [] rawdata = get ();
-    String charset = getCharSet ();
-    if (charset == null)
-    {
-      charset = DEFAULT_CHARSET;
-    }
-    return CharsetManager.getAsString (rawdata, charset);
+    final String charset = getCharSet ();
+    final Charset aCharset = charset == null ? DEFAULT_CHARSET_OBJ : CharsetManager.getCharsetFromName (charset);
+    return CharsetManager.getAsString (rawdata, aCharset);
   }
 
   /**

@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.web.fileupload.util.ICloseable;
@@ -353,6 +354,7 @@ public final class MultipartStream
    * 
    * @return The encoding used to read part headers.
    */
+  @Nullable
   public String getHeaderEncoding ()
   {
     return m_sHeaderEncoding;
@@ -366,7 +368,7 @@ public final class MultipartStream
    * @param encoding
    *        The encoding used to read part headers.
    */
-  public void setHeaderEncoding (final String encoding)
+  public void setHeaderEncoding (@Nullable final String encoding)
   {
     m_sHeaderEncoding = encoding;
   }
@@ -532,11 +534,11 @@ public final class MultipartStream
       String headers = null;
       if (m_sHeaderEncoding != null)
       {
-        headers = baos.getAsString (m_sHeaderEncoding);
+        headers = baos.getAsString (CharsetManager.getCharsetFromName (m_sHeaderEncoding));
       }
       else
       {
-        headers = baos.getAsString (SystemHelper.getSystemCharsetName ());
+        headers = baos.getAsString (SystemHelper.getSystemCharset ());
       }
 
       return headers;

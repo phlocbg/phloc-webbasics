@@ -361,6 +361,7 @@ public final class WebIO
    * @return {@link ESuccess}
    */
   @Nonnull
+  @Deprecated
   public static ESuccess saveFile (@Nonnull final String sFilename,
                                    @Nonnull final String sContent,
                                    @Nonnull final String sCharset)
@@ -414,6 +415,7 @@ public final class WebIO
    * @return {@link ESuccess}
    */
   @Nonnull
+  @Deprecated
   public static ESuccess appendFile (@Nonnull final String sFilename,
                                      @Nonnull final String sContent,
                                      @Nonnull final String sCharset)

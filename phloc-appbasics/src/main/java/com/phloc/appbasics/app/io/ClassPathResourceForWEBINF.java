@@ -97,6 +97,7 @@ public final class ClassPathResourceForWEBINF implements IReadableResource
   }
 
   @Nullable
+  @Deprecated
   public Reader getReader (@Nonnull final String sCharset)
   {
     return StreamUtils.createReader (getInputStream (), sCharset);

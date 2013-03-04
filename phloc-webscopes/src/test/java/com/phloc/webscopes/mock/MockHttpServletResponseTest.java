@@ -72,6 +72,6 @@ public final class MockHttpServletResponseTest
     // It will fail in the selected charset
     assertFalse (TEST_STRING.equals (aResp.getContentAsString ()));
     // Retrieving in the system charset will succeed
-    assertTrue (TEST_STRING.equals (aResp.getContentAsString (SystemHelper.getSystemCharsetName ())));
+    assertTrue (TEST_STRING.equals (aResp.getContentAsString (SystemHelper.getSystemCharset ())));
   }
 }

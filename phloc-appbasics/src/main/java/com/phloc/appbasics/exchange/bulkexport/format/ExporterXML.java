@@ -18,6 +18,7 @@
 package com.phloc.appbasics.exchange.bulkexport.format;
 
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,25 +54,25 @@ public final class ExporterXML implements IExporterFile
   private static final String ELEMENT_FIELD = "field";
   private static final String ATTR_TYPE = "type";
 
-  private String m_sCharset = XMLWriterSettings.DEFAULT_XML_CHARSET;
+  private Charset m_aCharset = XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ;
   private boolean m_bEmitTypeAttr = true;
 
   public ExporterXML ()
   {}
 
   @Nonnull
-  public ExporterXML setCharset (@Nonnull final String sCharset)
+  public ExporterXML setCharset (@Nonnull final Charset aCharset)
   {
-    if (sCharset == null)
+    if (aCharset == null)
       throw new NullPointerException ("charset");
-    m_sCharset = sCharset;
+    m_aCharset = aCharset;
     return this;
   }
 
   @Nonnull
-  public String getCharset ()
+  public Charset getCharset ()
   {
-    return m_sCharset;
+    return m_aCharset;
   }
 
   @Nonnull
@@ -136,7 +137,7 @@ public final class ExporterXML implements IExporterFile
       if (aDoc == null)
         return ESuccess.FAILURE;
 
-      MicroWriter.writeToStream (aDoc, aOS, new XMLWriterSettings ().setCharset (m_sCharset));
+      MicroWriter.writeToStream (aDoc, aOS, new XMLWriterSettings ().setCharset (m_aCharset));
       return ESuccess.SUCCESS;
     }
     finally

@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +53,7 @@ import com.phloc.commons.IHasLocale;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UnsupportedOperation;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.multimap.IMultiMapSetBased;
@@ -94,7 +96,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
   private boolean m_bInvalidated = false;
   private boolean m_bActive = true;
   private final Map <String, Object> m_aAttributes = new HashMap <String, Object> ();
-  private String m_sCharacterEncoding;
+  private Charset m_aCharacterEncoding;
   private byte [] m_aContent;
   private String m_sContentType;
   private final Map <String, String []> m_aParameters = new LinkedHashMap <String, String []> (16);
@@ -283,15 +285,35 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
     return ContainerHelper.getEnumeration (m_aAttributes.keySet ());
   }
 
+  public void setCharacterEncoding (@Nullable final String sCharacterEncoding)
+  {
+    setCharacterEncoding (sCharacterEncoding == null ? null : CharsetManager.getCharsetFromName (sCharacterEncoding));
+  }
+
+  public void setCharacterEncoding (@Nullable final Charset aCharacterEncoding)
+  {
+    m_aCharacterEncoding = aCharacterEncoding;
+  }
+
   @Nullable
   public String getCharacterEncoding ()
   {
-    return m_sCharacterEncoding;
+    return m_aCharacterEncoding == null ? null : m_aCharacterEncoding.name ();
   }
 
-  public void setCharacterEncoding (@Nullable final String sCharacterEncoding)
+  @Nullable
+  public Charset getCharacterEncodingObj ()
   {
-    m_sCharacterEncoding = sCharacterEncoding;
+    return m_aCharacterEncoding;
+  }
+
+  @Nonnull
+  public Charset getCharacterEncodingObjOrDefault ()
+  {
+    Charset ret = getCharacterEncodingObj ();
+    if (ret == null)
+      ret = SystemHelper.getSystemCharset ();
+    return ret;
   }
 
   @Nonnull
@@ -602,9 +624,7 @@ public class MockHttpServletRequest implements HttpServletRequest, IHasLocale
       return null;
 
     final InputStream aIS = new NonBlockingByteArrayInputStream (m_aContent);
-    final Reader aReader = m_sCharacterEncoding != null ? StreamUtils.createReader (aIS, m_sCharacterEncoding)
-                                                       : StreamUtils.createReader (aIS,
-                                                                                   SystemHelper.getSystemCharsetName ());
+    final Reader aReader = StreamUtils.createReader (aIS, getCharacterEncodingObjOrDefault ());
     return new BufferedReader (aReader);
   }
 

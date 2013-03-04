@@ -30,11 +30,14 @@ import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.mock.MockIOException;
 import com.phloc.web.fileupload.AbstractFileUploadBase.IOFileUploadException;
 import com.phloc.web.fileupload.io.DiskFileItemFactory;
@@ -194,6 +197,8 @@ public final class FuncTestStreaming
     return _parseUploadToList (new ByteArrayInputStream (bytes), bytes.length);
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
   private List <IFileItem> _parseUploadToList (final InputStream pStream, final int pLength) throws FileUploadException
   {
     final String contentType = "multipart/form-data; boundary=---1234";
@@ -300,7 +305,7 @@ public final class FuncTestStreaming
                            "\r\n" +
                            "value2\r\n" +
                            "-----1234--\r\n";
-    final byte [] reqBytes = request.getBytes ("US-ASCII");
+    final byte [] reqBytes = request.getBytes (CCharset.CHARSET_US_ASCII_OBJ);
 
     final IFileItemIterator fileItemIter = _parseUploadToIterator (reqBytes);
     final IFileItemStream fileItemStream = fileItemIter.next ();

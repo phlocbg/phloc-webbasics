@@ -22,12 +22,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.junit.Test;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.web.fileupload.AbstractFileUploadTestCase;
 import com.phloc.web.fileupload.FileUploadException;
 import com.phloc.web.fileupload.IFileItem;
@@ -41,7 +40,7 @@ import com.phloc.web.fileupload.IFileItem;
 public final class ServletFileUploadTest extends AbstractFileUploadTestCase
 {
   @Test
-  public void testFileUpload () throws IOException, FileUploadException
+  public void testFileUpload () throws FileUploadException
   {
     final List <IFileItem> fileItems = parseUpload ("-----1234\r\n"
                                                     + "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"
@@ -88,7 +87,7 @@ public final class ServletFileUploadTest extends AbstractFileUploadTestCase
   }
 
   @Test
-  public void testFilenameCaseSensitivity () throws IOException, FileUploadException
+  public void testFilenameCaseSensitivity () throws FileUploadException
   {
     final List <IFileItem> fileItems = parseUpload ("-----1234\r\n"
                                                     + "Content-Disposition: form-data; name=\"FiLe\"; filename=\"FOO.tab\"\r\n"
@@ -109,7 +108,7 @@ public final class ServletFileUploadTest extends AbstractFileUploadTestCase
    * file.
    */
   @Test
-  public void testEmptyFile () throws UnsupportedEncodingException, FileUploadException
+  public void testEmptyFile () throws FileUploadException
   {
     final List <IFileItem> fileItems = parseUpload ("-----1234\r\n"
                                                     + "Content-Disposition: form-data; name=\"file\"; filename=\"\"\r\n"
@@ -130,7 +129,7 @@ public final class ServletFileUploadTest extends AbstractFileUploadTestCase
    * type=image. (type=submit does not have the bug.)
    */
   @Test
-  public void testIE5MacBug () throws UnsupportedEncodingException, FileUploadException
+  public void testIE5MacBug () throws FileUploadException
   {
     final List <IFileItem> fileItems = parseUpload ("-----1234\r\n"
                                                     + "Content-Disposition: form-data; name=\"field1\"\r\n"
@@ -204,7 +203,7 @@ public final class ServletFileUploadTest extends AbstractFileUploadTestCase
                            + "...contents of file2.gif...\r\n"
                            + "--BbC04y--\r\n"
                            + "--AaB03x--";
-    final List <IFileItem> fileItems = parseUpload (request.getBytes ("US-ASCII"), contentType);
+    final List <IFileItem> fileItems = parseUpload (request.getBytes (CCharset.CHARSET_US_ASCII_OBJ), contentType);
     assertEquals (3, fileItems.size ());
     final IFileItem item0 = fileItems.get (0);
     assertEquals ("field1", item0.getFieldName ());
@@ -226,7 +225,7 @@ public final class ServletFileUploadTest extends AbstractFileUploadTestCase
    * -111</a>
    */
   @Test
-  public void testFoldedHeaders () throws IOException, FileUploadException
+  public void testFoldedHeaders () throws FileUploadException
   {
     final List <IFileItem> fileItems = parseUpload ("-----1234\r\n"
                                                     + "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"

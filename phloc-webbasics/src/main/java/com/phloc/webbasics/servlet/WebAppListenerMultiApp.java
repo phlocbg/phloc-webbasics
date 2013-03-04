@@ -148,7 +148,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
       aDoc.getDocumentElement ().setAttribute ("location", "shutdown");
       aDoc.getDocumentElement ().setAttribute ("datetime",
                                                PDTWebDateUtils.getAsStringXSD (PDTFactory.getCurrentDateTime ()));
-      SimpleFileIO.writeFile (aDestPath, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET);
+      SimpleFileIO.writeFile (aDestPath, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
     }
   }
 }

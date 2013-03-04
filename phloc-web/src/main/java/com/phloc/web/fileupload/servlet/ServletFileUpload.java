@@ -24,6 +24,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.servlet.http.HttpServletRequest;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.web.fileupload.FileUpload;
 import com.phloc.web.fileupload.FileUploadException;
 import com.phloc.web.fileupload.IFileItem;
@@ -104,6 +105,7 @@ public class ServletFileUpload extends FileUpload
    *         if there are problems reading/parsing the request or storing files.
    */
   @Nonnull
+  @ReturnsMutableCopy
   public List <IFileItem> parseRequest (@Nonnull final HttpServletRequest request) throws FileUploadException
   {
     return parseRequest (new ServletRequestContext (request));

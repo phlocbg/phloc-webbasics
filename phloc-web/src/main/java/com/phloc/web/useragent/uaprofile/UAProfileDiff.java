@@ -70,7 +70,7 @@ public final class UAProfileDiff
       // Verify MD5 digest
       final byte [] aCalcedDigest = MessageDigestGeneratorHelper.getDigest (EMessageDigestAlgorithm.MD5,
                                                                             sData,
-                                                                            CCharset.CHARSET_UTF_8);
+                                                                            CCharset.CHARSET_UTF_8_OBJ);
       if (!Arrays.equals (m_aMD5Digest, aCalcedDigest))
         s_aLogger.warn ("MD5 digest mismatch of profile diff data! Expected: " + Base64.encodeBytes (aCalcedDigest));
     }

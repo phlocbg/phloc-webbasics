@@ -231,7 +231,8 @@ public final class XMLSitemapIndex
       final String sFilename = getSitemapFilename (nIndex);
       final File aFile = new File (aBaseDir, sFilename);
       final OutputStream aOS = _createOutputStream (aFile);
-      if (StreamUtils.writeStream (aOS, aURLSet.getAsXMLString (), XMLWriterSettings.DEFAULT_XML_CHARSET).isFailure ())
+      if (StreamUtils.writeStream (aOS, aURLSet.getAsXMLString (), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                     .isFailure ())
       {
         s_aLogger.error ("Failed to write single sitemap file " + aFile);
         return ESuccess.FAILURE;

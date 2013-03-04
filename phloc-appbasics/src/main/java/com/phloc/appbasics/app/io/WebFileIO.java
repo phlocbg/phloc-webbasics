@@ -337,6 +337,7 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
+  @Deprecated
   public static Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
   {
     return getDataIO ().getReader (sRelativePath, sCharset);
@@ -391,6 +392,7 @@ public final class WebFileIO
    * @see #getBasePathFile()
    */
   @Nullable
+  @Deprecated
   public static Writer getWriter (@Nonnull final String sRelativePath,
                                   @Nonnull final String sCharset,
                                   @Nonnull final EAppend eAppend)

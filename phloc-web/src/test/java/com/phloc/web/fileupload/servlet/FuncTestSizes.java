@@ -63,14 +63,14 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
                             (num++) +
                             "\"\r\n" +
                             "\r\n";
-      baos.write (header.getBytes ("US-ASCII"));
+      baos.write (header.getBytes (CCharset.CHARSET_US_ASCII_OBJ));
       for (int j = 0; j < i; j++)
       {
         baos.write ((byte) j);
       }
-      baos.write ("\r\n".getBytes ("US-ASCII"));
+      baos.write ("\r\n".getBytes (CCharset.CHARSET_US_ASCII_OBJ));
     }
-    baos.write ("-----1234--\r\n".getBytes ("US-ASCII"));
+    baos.write ("-----1234--\r\n".getBytes (CCharset.CHARSET_US_ASCII_OBJ));
 
     final List <IFileItem> fileItems = parseUpload (baos.toByteArray ());
     final Iterator <IFileItem> fileIter = fileItems.iterator ();
@@ -98,7 +98,7 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
    * Checks, whether limiting the file size works.
    */
   @Test
-  public void testFileSizeLimit () throws IOException, FileUploadException
+  public void testFileSizeLimit () throws FileUploadException
   {
     final String request = "-----1234\r\n"
                            + "Content-Disposition: form-data; name=\"file\"; filename=\"foo.tab\"\r\n"
@@ -110,7 +110,7 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
 
     ServletFileUpload upload = new ServletFileUpload (new DiskFileItemFactory (10240));
     upload.setFileSizeMax (-1);
-    HttpServletRequest req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII))
+    HttpServletRequest req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII_OBJ))
                                                           .setContentType (CONTENT_TYPE);
     List <IFileItem> fileItems = upload.parseRequest (req);
     assertEquals (1, fileItems.size ());
@@ -119,7 +119,7 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
 
     upload = new ServletFileUpload (new DiskFileItemFactory (10240));
     upload.setFileSizeMax (40);
-    req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII))
+    req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII_OBJ))
                                        .setContentType (CONTENT_TYPE);
     fileItems = upload.parseRequest (req);
     assertEquals (1, fileItems.size ());
@@ -128,7 +128,7 @@ public final class FuncTestSizes extends AbstractFileUploadTestCase
 
     upload = new ServletFileUpload (new DiskFileItemFactory (10240));
     upload.setFileSizeMax (30);
-    req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII))
+    req = new MockHttpServletRequest ().setContent (request.getBytes (CCharset.CHARSET_US_ASCII_OBJ))
                                        .setContentType (CONTENT_TYPE);
     try
     {

@@ -83,6 +83,7 @@ public final class FileItemResource implements IReadableResource
   }
 
   @Nullable
+  @Deprecated
   public Reader getReader (@Nonnull final String sCharset)
   {
     final InputStream aIS = getInputStream ();
