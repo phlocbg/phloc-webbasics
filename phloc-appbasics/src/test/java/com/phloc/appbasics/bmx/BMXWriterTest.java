@@ -1,15 +1,18 @@
 package com.phloc.appbasics.bmx;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
 import org.junit.Test;
 
+import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.serialize.MicroReader;
+import com.phloc.commons.timing.StopWatch;
 import com.phloc.scopes.mock.ScopeTestRule;
 
 /**
@@ -37,5 +40,35 @@ public final class BMXWriterTest
     assertNotNull (ret);
     SimpleFileIO.writeFile (new File (ScopeTestRule.STORAGE_PATH, "standard.bmx"), ret);
     System.out.println (ret.length);
+  }
+
+  @Test
+  public void testSpeed ()
+  {
+    final File aSrcFile = ClassPathResource.getAsFile ("bmx/standard.xml");
+    final File aDestFile = new File (ScopeTestRule.STORAGE_PATH, "copy");
+
+    // Warmup
+    assertTrue (SimpleFileIO.copyFile (aSrcFile, aDestFile).isSuccess ());
+    FileOperations.deleteFile (aDestFile);
+    assertTrue (FileOperations.copyFile (aSrcFile, aDestFile).isSuccess ());
+    FileOperations.deleteFile (aDestFile);
+    StopWatch aSW;
+
+    aSW = new StopWatch (true);
+    for (int i = 0; i < 10; ++i)
+    {
+      assertTrue (FileOperations.copyFile (aSrcFile, aDestFile).isSuccess ());
+      FileOperations.deleteFile (aDestFile);
+    }
+    System.out.println ("FileOperations.copyFile: " + aSW.stopAndGetNanos ());
+
+    aSW = new StopWatch (true);
+    for (int i = 0; i < 10; ++i)
+    {
+      assertTrue (SimpleFileIO.copyFile (aSrcFile, aDestFile).isSuccess ());
+      FileOperations.deleteFile (aDestFile);
+    }
+    System.out.println ("SimpleFileIO.copyFile:   " + aSW.stopAndGetNanos ());
   }
 }
