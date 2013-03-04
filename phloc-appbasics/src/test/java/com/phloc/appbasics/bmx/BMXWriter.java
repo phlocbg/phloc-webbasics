@@ -91,29 +91,33 @@ public class BMXWriter
         try
         {
           final EMicroNodeType eNodeType = aChildNode.getType ();
-          // Indicator of the Object type to come
-          aDOS.writeByte (eNodeType.getID ());
           switch (eNodeType)
           {
             case CDATA:
+              aDOS.writeByte (CBMXIO.NODETYPE_CDATA);
               final IMicroCDATA aCDATA = (IMicroCDATA) aChildNode;
               aDOS.writeInt (aST.addString (aCDATA.getData ()));
               break;
             case COMMENT:
+              aDOS.writeByte (CBMXIO.NODETYPE_COMMENT);
               final IMicroComment aComment = (IMicroComment) aChildNode;
               aDOS.writeInt (aST.addString (aComment.getData ()));
               break;
             case CONTAINER:
+              aDOS.writeByte (CBMXIO.NODETYPE_CONTAINER);
               break;
             case DOCUMENT:
+              aDOS.writeByte (CBMXIO.NODETYPE_DOCUMENT);
               break;
             case DOCUMENT_TYPE:
+              aDOS.writeByte (CBMXIO.NODETYPE_DOCUMENT_TYPE);
               final IMicroDocumentType aDocType = (IMicroDocumentType) aChildNode;
               aDOS.writeInt (aST.addString (aDocType.getQualifiedName ()));
               aDOS.writeInt (aST.addString (aDocType.getPublicID ()));
               aDOS.writeInt (aST.addString (aDocType.getSystemID ()));
               break;
             case ELEMENT:
+              aDOS.writeByte (CBMXIO.NODETYPE_ELEMENT);
               final IMicroElement aElement = (IMicroElement) aChildNode;
               aDOS.writeInt (aST.addString (aElement.getNamespaceURI ()));
               aDOS.writeInt (aST.addString (aElement.getTagName ()));
@@ -131,15 +135,18 @@ public class BMXWriter
               }
               break;
             case ENTITY_REFERENCE:
+              aDOS.writeByte (CBMXIO.NODETYPE_ENTITY_REFERENCE);
               final IMicroEntityReference aER = (IMicroEntityReference) aChildNode;
               aDOS.writeInt (aST.addString (aER.getName ()));
               break;
             case PROCESSING_INSTRUCTION:
+              aDOS.writeByte (CBMXIO.NODETYPE_PROCESSING_INSTRUCTION);
               final IMicroProcessingInstruction aPI = (IMicroProcessingInstruction) aChildNode;
               aDOS.writeInt (aST.addString (aPI.getTarget ()));
               aDOS.writeInt (aST.addString (aPI.getData ()));
               break;
             case TEXT:
+              aDOS.writeByte (CBMXIO.NODETYPE_TEXT);
               final IMicroText aText = (IMicroText) aChildNode;
               aDOS.writeInt (aST.addString (aText.getData ()));
               aDOS.writeBoolean (aText.isElementContentWhitespace ());
@@ -149,7 +156,7 @@ public class BMXWriter
           }
 
           if (aChildNode.hasChildren ())
-            aDOS.writeByte ('{');
+            aDOS.writeByte (CBMXIO.SPECIAL_CHILDREN_START);
         }
         catch (final IOException ex)
         {
@@ -163,7 +170,7 @@ public class BMXWriter
         try
         {
           if (aChildNode.hasChildren ())
-            aDOS.writeByte ('}');
+            aDOS.writeByte (CBMXIO.SPECIAL_CHILDREN_END);
         }
         catch (final IOException ex)
         {
