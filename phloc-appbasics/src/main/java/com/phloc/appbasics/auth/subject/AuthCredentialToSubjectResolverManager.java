@@ -17,15 +17,14 @@
  */
 package com.phloc.appbasics.auth.subject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ServiceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.appbasics.auth.credentials.IAuthCredentials;
+import com.phloc.commons.lang.ServiceLoaderUtils;
 
 /**
  * This handler is used to resolve a subject from validated credentials. This is
@@ -41,10 +40,7 @@ public final class AuthCredentialToSubjectResolverManager
 
   static
   {
-    s_aHdlList = new ArrayList <IAuthCredentialToSubjectResolverSPI> ();
-    for (final IAuthCredentialToSubjectResolverSPI aACTSR : ServiceLoader.load (IAuthCredentialToSubjectResolverSPI.class))
-      s_aHdlList.add (aACTSR);
-
+    s_aHdlList = ServiceLoaderUtils.getAllSPIImplementations (IAuthCredentialToSubjectResolverSPI.class);
     // list may be empty...
   }
 

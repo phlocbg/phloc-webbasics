@@ -19,12 +19,12 @@ package com.phloc.appbasics.auth.credentials;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ServiceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.exceptions.InitializationException;
+import com.phloc.commons.lang.ServiceLoaderUtils;
 import com.phloc.commons.string.StringHelper;
 
 @Immutable
@@ -34,10 +34,7 @@ public final class AuthCredentialValidatorManager
 
   static
   {
-    s_aHdlList = new ArrayList <IAuthCredentialValidatorSPI> ();
-    for (final IAuthCredentialValidatorSPI aACV : ServiceLoader.load (IAuthCredentialValidatorSPI.class))
-      s_aHdlList.add (aACV);
-
+    s_aHdlList = ServiceLoaderUtils.getAllSPIImplementations (IAuthCredentialValidatorSPI.class);
     if (s_aHdlList.isEmpty ())
       throw new InitializationException ("No class implementing " + IAuthCredentialValidatorSPI.class + " was found!");
   }

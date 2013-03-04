@@ -18,7 +18,6 @@
 package com.phloc.webbasics.servlet;
 
 import java.util.List;
-import java.util.ServiceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -29,8 +28,8 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.lang.ServiceLoaderUtils;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
@@ -51,7 +50,7 @@ public abstract class AbstractApplicationServlet extends AbstractUnifiedResponse
 
   public AbstractApplicationServlet ()
   {
-    m_aListeners = ContainerHelper.newList (ServiceLoader.load (IApplicationRequestListenerSPI.class));
+    m_aListeners = ServiceLoaderUtils.getAllSPIImplementations (IApplicationRequestListenerSPI.class);
   }
 
   @Override
