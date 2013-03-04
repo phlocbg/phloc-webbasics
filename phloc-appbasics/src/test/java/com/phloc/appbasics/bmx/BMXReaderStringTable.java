@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 final class BMXReaderStringTable
 {
@@ -18,9 +19,12 @@ final class BMXReaderStringTable
     aStringTable.put (Integer.valueOf (++nLastUsedStringTableIndex), s);
   }
 
-  @Nonnull
+  @Nullable
   public String get (final int nIndex)
   {
+    if (nIndex == CBMXIO.INDEX_NULL_STRING)
+      return null;
+
     final String ret = aStringTable.get (Integer.valueOf (nIndex));
     if (ret == null)
       throw new IllegalArgumentException ("Failed to resolve index " + nIndex);

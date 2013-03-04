@@ -33,6 +33,9 @@ public final class CBMXIO
   @PresentForCodeCoverage
   private static final CBMXIO s_aInstance = new CBMXIO ();
 
+  /** The string table index for null strings */
+  public static final int INDEX_NULL_STRING = 0;
+
   private CBMXIO ()
   {}
 }

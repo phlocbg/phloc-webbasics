@@ -30,12 +30,9 @@ import com.phloc.commons.string.ToStringGenerator;
 
 final class BMXWriterStringTable
 {
-  /** The index for null strings */
-  public static final int INDEX_NULL_STRING = 0;
-
   private final DataOutputStream m_aDOS;
   private final Map <String, Integer> m_aStrings = new HashMap <String, Integer> (1000);
-  private int m_nLastUsedIndex = INDEX_NULL_STRING;
+  private int m_nLastUsedIndex = CBMXIO.INDEX_NULL_STRING;
 
   public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS)
   {
@@ -45,7 +42,7 @@ final class BMXWriterStringTable
   public int addString (@Nullable final CharSequence aString) throws IOException
   {
     if (aString == null)
-      return INDEX_NULL_STRING;
+      return CBMXIO.INDEX_NULL_STRING;
 
     return addString (aString.toString ());
   }
@@ -61,7 +58,7 @@ final class BMXWriterStringTable
   public int addString (@Nullable final String sString) throws IOException
   {
     if (sString == null)
-      return INDEX_NULL_STRING;
+      return CBMXIO.INDEX_NULL_STRING;
 
     Integer aIndex = m_aStrings.get (sString);
     if (aIndex == null)
