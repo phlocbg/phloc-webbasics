@@ -158,7 +158,7 @@ public final class BMXReader
             aNodeStack.push (aLastNode);
             break;
           case CBMXIO.SPECIAL_CHILDREN_END:
-            aCreatedNode = aNodeStack.pop ();
+            aLastNode = aNodeStack.pop ();
             break;
           default:
             throw new BMXReadException ("Unsupported node type " + nNodeType);
@@ -168,6 +168,8 @@ public final class BMXReader
         {
           if (aResultNode == null)
             aResultNode = aCreatedNode;
+          else
+            aNodeStack.peek ().appendChild (aCreatedNode);
           aLastNode = aCreatedNode;
         }
       }

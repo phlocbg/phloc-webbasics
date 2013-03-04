@@ -17,12 +17,16 @@
  */
 package com.phloc.appbasics.bmx;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 
 import org.junit.Test;
 
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.timing.StopWatch;
@@ -46,7 +50,10 @@ public final class BMXWriterTest
     final File aFile2 = new File (ScopeTestRule.STORAGE_PATH, "test.deflate.bmx");
     new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.DEFLATE)).writeToFile (aDoc, aFile2);
 
-    BMXReader.readFromFile (aFile1);
+    final IMicroNode aNode = BMXReader.readFromFile (aFile1);
+    assertNotNull (aNode);
+
+    assertTrue (aDoc.isEqualContent (aNode));
   }
 
   @Test
@@ -67,7 +74,10 @@ public final class BMXWriterTest
     System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
 
     aSW.restart ();
-    BMXReader.readFromFile (aFile);
+    final IMicroNode aNode = BMXReader.readFromFile (aFile);
+    assertNotNull (aNode);
     System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
+
+    assertTrue (aDoc.isEqualContent (aNode));
   }
 }
