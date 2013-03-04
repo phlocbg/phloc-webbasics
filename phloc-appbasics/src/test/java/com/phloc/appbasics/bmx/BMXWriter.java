@@ -120,17 +120,19 @@ public class BMXWriter
               final IMicroElement aElement = (IMicroElement) aChildNode;
               aDOS.writeInt (aST.addString (aElement.getNamespaceURI ()));
               aDOS.writeInt (aST.addString (aElement.getTagName ()));
-              final Map <String, String> aAttrs = aElement.getAllAttributes ();
-              if (aAttrs == null || aAttrs.isEmpty ())
-                aDOS.writeInt (0);
-              else
+              if (aElement.hasAttributes ())
               {
+                final Map <String, String> aAttrs = aElement.getAllAttributes ();
                 aDOS.writeInt (aAttrs.size ());
                 for (final Map.Entry <String, String> aEntry : aAttrs.entrySet ())
                 {
                   aDOS.writeInt (aST.addString (aEntry.getKey ()));
                   aDOS.writeInt (aST.addString (aEntry.getValue ()));
                 }
+              }
+              else
+              {
+                aDOS.writeInt (0);
               }
               break;
             case ENTITY_REFERENCE:
