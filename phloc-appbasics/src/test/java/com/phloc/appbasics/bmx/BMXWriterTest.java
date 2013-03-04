@@ -17,13 +17,11 @@
  */
 package com.phloc.appbasics.bmx;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.serialize.MicroReader;
@@ -42,12 +40,17 @@ public final class BMXWriterTest
   public void testBasic ()
   {
     final IMicroDocument aDoc = MicroReader.readMicroXML (new File ("pom.xml"));
-    final byte [] ret = new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.DEFLATE)).getAsBytes (aDoc);
-    assertNotNull (ret);
-    SimpleFileIO.writeFile (new File (ScopeTestRule.STORAGE_PATH, "test.bmx"), ret);
-    System.out.println (ret.length);
+
+    final File aFile1 = new File (ScopeTestRule.STORAGE_PATH, "test.bmx");
+    new BMXWriter ().writeToFile (aDoc, aFile1);
+
+    final File aFile2 = new File (ScopeTestRule.STORAGE_PATH, "test.deflate.bmx");
+    new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.DEFLATE)).writeToFile (aDoc, aFile2);
+
+    BMXReader.readFromFile (aFile1);
   }
 
+  @Ignore
   @Test
   public void testStandardXML ()
   {
