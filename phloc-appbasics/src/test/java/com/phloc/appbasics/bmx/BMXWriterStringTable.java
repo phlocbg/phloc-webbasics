@@ -83,7 +83,10 @@ public class BMXWriterStringTable
 
   public int addString (@Nullable final CharSequence aString)
   {
-    return addString (aString == null ? null : aString.toString ());
+    if (aString == null)
+      return INDEX_NULL_STRING;
+
+    return addString (aString.toString ());
   }
 
   public int addString (@Nullable final String sString)
