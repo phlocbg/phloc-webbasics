@@ -24,16 +24,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
-import com.phloc.appbasics.bmx.BMXWriterStringTable.Entry;
-import com.phloc.commons.CGlobal;
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.codec.LZWCodec;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
@@ -58,11 +57,11 @@ import com.phloc.commons.state.ESuccess;
  */
 public class BMXWriter
 {
+  /** The storage encoding of all strings in this table */
+  public static final Charset ENCODING = CCharset.CHARSET_UTF_8_OBJ;
+
   /** Version number of format v1 - must be 4 bytes, all ASCII! */
   public static final String VERSION1 = "BMX1";
-
-  /** End of file marker to be printed at the end of the stream */
-  public static final int EOF_MARKER = 0xff;
 
   private final BMXSettings m_aSettings;
 
@@ -78,7 +77,7 @@ public class BMXWriter
     m_aSettings = aSettings.getClone ();
   }
 
-  private static void _writeContent (@Nonnull final BMXWriterStringTable aST,
+  private static void _writeContent (@Nonnull final AbstractBMXWriterStringTable aST,
                                      @Nonnull final IMicroNode aNode,
                                      @Nonnull final DataOutput aDOS)
   {
@@ -181,43 +180,6 @@ public class BMXWriter
   }
 
   @Nonnull
-  private static byte [] _getStringTableBytes (@Nonnull final BMXWriterStringTable aST) throws IOException
-  {
-    final int nLengthStorageByteCount = aST.getLengthStorageByteCount ();
-
-    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream (16 * CGlobal.BYTES_PER_KILOBYTE);
-    final DataOutputStream aDOS = new DataOutputStream (aBAOS);
-    aDOS.writeInt (aST.getStringCount ());
-    aDOS.writeByte (nLengthStorageByteCount);
-    for (final Entry aEntry : aST.getAllEntries ())
-    {
-      aDOS.writeInt (aEntry.getIndex ());
-      final byte [] aStringBytes = aEntry.getBytes ();
-      final int nDataLength = aStringBytes.length;
-      switch (nLengthStorageByteCount)
-      {
-        case 1:
-          if (nDataLength > 0xff)
-            throw new IllegalStateException ("Data is too long to fit into a byte: " + nDataLength);
-          aDOS.writeByte (nDataLength);
-          break;
-        case 2:
-          if (nDataLength > 0xffff)
-            throw new IllegalStateException ("Data is too long to fit into an ushort: " + nDataLength);
-          aDOS.writeShort (nDataLength);
-          break;
-        case 4:
-          aDOS.writeInt (nDataLength);
-          break;
-      }
-      aDOS.write (aStringBytes, 0, aStringBytes.length);
-    }
-    aDOS.close ();
-
-    return aBAOS.toByteArray ();
-  }
-
-  @Nonnull
   public ESuccess writeToDataOutput (@Nonnull final IMicroNode aNode, @Nonnull final DataOutput aDO)
   {
     if (aNode == null)
@@ -234,43 +196,23 @@ public class BMXWriter
       aDO.writeInt (m_aSettings.getStorageValue ());
 
       // The string table to be filled
-      final BMXWriterStringTable aST = new BMXWriterStringTable ();
+      final AbstractBMXWriterStringTable aST = new AbstractBMXWriterStringTable ()
+      {
+        @Override
+        protected void onNewString (@Nonnull final String sString, @Nonnegative final int nIndex) throws IOException
+        {
+          aDO.writeByte (CBMXIO.NODETYPE_STRING);
+          final byte [] aBytes = sString.getBytes (ENCODING);
+          aDO.writeInt (aBytes.length);
+          aDO.write (aBytes, 0, aBytes.length);
+        }
+      };
 
       // Write the main content and filling the string table
-      final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream (16 * CGlobal.BYTES_PER_KILOBYTE);
-      final DataOutputStream aDOS = new DataOutputStream (aBAOS);
-      _writeContent (aST, aNode, aDOS);
-      byte [] aContentBytes = aBAOS.toByteArray ();
-      if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
-      {
-        final byte [] aEncodedContent = LZWCodec.encodeLZW (aContentBytes);
-        System.out.println ("LZW encoding of content saved " +
-                            (aContentBytes.length - aEncodedContent.length) +
-                            " of " +
-                            aContentBytes.length +
-                            " bytes");
-        aContentBytes = aEncodedContent;
-      }
-      aDO.writeInt (aContentBytes.length);
-      aDO.write (aContentBytes);
-
-      // Write the string table
-      byte [] aSTBytes = _getStringTableBytes (aST);
-      if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
-      {
-        final byte [] aEncodedST = LZWCodec.encodeLZW (aSTBytes);
-        System.out.println ("LZW encoding of string table saved " +
-                            (aSTBytes.length - aEncodedST.length) +
-                            " of " +
-                            aSTBytes.length +
-                            " bytes");
-        aSTBytes = aEncodedST;
-      }
-      aDO.writeInt (aSTBytes.length);
-      aDO.write (aSTBytes);
+      _writeContent (aST, aNode, aDO);
 
       // Write EOF marker
-      aDO.writeByte (EOF_MARKER);
+      aDO.writeByte (CBMXIO.NODETYPE_EOF);
 
       return ESuccess.SUCCESS;
     }
