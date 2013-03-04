@@ -40,8 +40,19 @@ public class BMXWriter
   /** Version number of format v1 - must be 4 bytes, all ASCII! */
   public static final String VERSION1 = "BMX1";
 
+  private final BMXSettings m_aSettings;
+
   public BMXWriter ()
-  {}
+  {
+    this (BMXSettings.createDefault ());
+  }
+
+  public BMXWriter (@Nonnull final BMXSettings aSettings)
+  {
+    if (aSettings == null)
+      throw new NullPointerException ("settings");
+    m_aSettings = aSettings.getClone ();
+  }
 
   @Nonnull
   private static BMXWriterStringTable _createStringTable (@Nonnull final IMicroNode aNode)
@@ -276,24 +287,33 @@ public class BMXWriter
     {
       // Main format version
       aDO.write (VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
+      aDO.writeInt (m_aSettings.getStorageValue ());
 
       // Write the string table content LZW encoded
-      final byte [] aSTBytes = _getStringTableBytes (aST);
-      final byte [] aEncodedST = LZWCodec.encodeLZW (aSTBytes);
-      System.out.println ("ST saved " + (aSTBytes.length - aEncodedST.length) + " of " + aSTBytes.length + " bytes");
-      aDO.writeInt (aEncodedST.length);
-      aDO.write (aEncodedST);
+      byte [] aSTBytes = _getStringTableBytes (aST);
+      if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
+      {
+        final byte [] aEncodedST = LZWCodec.encodeLZW (aSTBytes);
+        System.out.println ("ST saved " + (aSTBytes.length - aEncodedST.length) + " of " + aSTBytes.length + " bytes");
+        aSTBytes = aEncodedST;
+      }
+      aDO.writeInt (aSTBytes.length);
+      aDO.write (aSTBytes);
 
       // Write the main content LZW encoded
-      final byte [] aContentBytes = _getContentBytes (aST, aNode);
-      final byte [] aEncodedContent = LZWCodec.encodeLZW (aContentBytes);
-      System.out.println ("Content saved " +
-                          (aContentBytes.length - aEncodedContent.length) +
-                          " of " +
-                          aContentBytes.length +
-                          " bytes");
-      aDO.writeInt (aEncodedContent.length);
-      aDO.write (aEncodedContent);
+      byte [] aContentBytes = _getContentBytes (aST, aNode);
+      if (m_aSettings.isSet (EBMXSetting.LZW_ENCODING))
+      {
+        final byte [] aEncodedContent = LZWCodec.encodeLZW (aContentBytes);
+        System.out.println ("Content saved " +
+                            (aContentBytes.length - aEncodedContent.length) +
+                            " of " +
+                            aContentBytes.length +
+                            " bytes");
+        aContentBytes = aEncodedContent;
+      }
+      aDO.writeInt (aContentBytes.length);
+      aDO.write (aContentBytes);
 
       return ESuccess.SUCCESS;
     }
