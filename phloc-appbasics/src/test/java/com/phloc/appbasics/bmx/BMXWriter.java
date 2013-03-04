@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.bmx;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -312,13 +313,20 @@ public class BMXWriter
     if (aOS == null)
       throw new NullPointerException ("OS");
 
+    // Wrap the passed output stream in a buffered output stream
+    OutputStream aOSToUse;
+    if (aOS instanceof BufferedOutputStream)
+      aOSToUse = aOS;
+    else
+      aOSToUse = new BufferedOutputStream (aOS);
+
     try
     {
-      return writeToDataOutput (aNode, new DataOutputStream (aOS));
+      return writeToDataOutput (aNode, new DataOutputStream (aOSToUse));
     }
     finally
     {
-      StreamUtils.close (aOS);
+      StreamUtils.close (aOSToUse);
     }
   }
 

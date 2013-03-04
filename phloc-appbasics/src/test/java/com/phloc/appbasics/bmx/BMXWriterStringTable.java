@@ -66,11 +66,11 @@ public class BMXWriterStringTable
       }
   }
 
-  public void addStrings (@Nullable final Iterable <String> aWords)
+  public void addStrings (@Nullable final Iterable <String> aStrings)
   {
-    if (aWords != null)
-      for (final String sWord : aWords)
-        addString (sWord);
+    if (aStrings != null)
+      for (final String sString : aStrings)
+        addString (sString);
   }
 
   @Nonnegative
