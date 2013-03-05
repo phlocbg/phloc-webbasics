@@ -60,6 +60,7 @@ public final class WebScopeManager
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeManager.class);
   private static final AtomicBoolean s_aSessionPassivationAllowed = new AtomicBoolean (DEFAULT_SESSION_PASSIVATION_ALLOWED);
 
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final WebScopeManager s_aInstance = new WebScopeManager ();
 

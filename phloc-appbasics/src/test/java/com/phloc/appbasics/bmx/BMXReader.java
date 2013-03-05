@@ -32,6 +32,7 @@ import com.phloc.commons.microdom.impl.MicroText;
 
 public final class BMXReader
 {
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final BMXReader s_aInstance = new BMXReader ();
 

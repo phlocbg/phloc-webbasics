@@ -30,6 +30,7 @@ public final class CBMXIO
   public static final int SPECIAL_CHILDREN_END = 0x7d;
   public static final int NODETYPE_EOF = 0xff;
 
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final CBMXIO s_aInstance = new CBMXIO ();
 

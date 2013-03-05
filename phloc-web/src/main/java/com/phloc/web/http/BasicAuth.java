@@ -37,6 +37,7 @@ public final class BasicAuth
 {
   public static final String HEADER_VALUE_PREFIX_BASIC = "Basic ";
 
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final BasicAuth s_aInstance = new BasicAuth ();
 

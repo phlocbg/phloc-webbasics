@@ -48,6 +48,7 @@ public final class WebScopeSessionHelper
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeSessionHelper.class);
 
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final WebScopeSessionHelper s_aInstance = new WebScopeSessionHelper ();
 
