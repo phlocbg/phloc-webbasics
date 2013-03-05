@@ -96,7 +96,6 @@ public final class BMXReader
       final BMXReaderStringTable aST = new BMXReaderStringTable ();
 
       int nNodeType;
-      final int x = 0;
       while ((nNodeType = aContentDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)
       {
         IMicroNode aCreatedNode = null;

@@ -39,6 +39,11 @@ import com.phloc.scopes.mock.ScopeTestRule;
  */
 public final class BMXWriterTest
 {
+  static
+  {
+    TroveInit.init ();
+  }
+
   @Test
   public void testBasic ()
   {
@@ -58,7 +63,7 @@ public final class BMXWriterTest
     final StopWatch aSW = new StopWatch ();
     IMicroDocument aDoc = null;
     final File aFile = new File (ScopeTestRule.STORAGE_PATH, "standard.bmx");
-    final int nMax = 10;
+    final int nMax = 1;
 
     for (int i = 0; i < nMax; ++i)
     {

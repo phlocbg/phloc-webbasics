@@ -1,14 +1,14 @@
 package com.phloc.appbasics.bmx;
 
-import java.util.HashMap;
-import java.util.Map;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 final class BMXReaderStringTable
 {
-  private final Map <Integer, String> aStringTable = new HashMap <Integer, String> ();
+  private final TIntObjectMap <String> aStringTable = new TIntObjectHashMap <String> ();
   private int nLastUsedStringTableIndex = 0;
 
   public BMXReaderStringTable ()
@@ -16,7 +16,7 @@ final class BMXReaderStringTable
 
   public void add (@Nonnull final String s)
   {
-    aStringTable.put (Integer.valueOf (++nLastUsedStringTableIndex), s);
+    aStringTable.put (++nLastUsedStringTableIndex, s);
   }
 
   @Nullable
@@ -25,7 +25,7 @@ final class BMXReaderStringTable
     if (nIndex == CBMXIO.INDEX_NULL_STRING)
       return null;
 
-    final String ret = aStringTable.get (Integer.valueOf (nIndex));
+    final String ret = aStringTable.get (nIndex);
     if (ret == null)
       throw new IllegalArgumentException ("Failed to resolve index " + nIndex);
     return ret;

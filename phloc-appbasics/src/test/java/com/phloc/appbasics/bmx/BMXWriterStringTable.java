@@ -17,10 +17,12 @@
  */
 package com.phloc.appbasics.bmx;
 
+import gnu.trove.impl.Constants;
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -31,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
 final class BMXWriterStringTable
 {
   private final DataOutputStream m_aDOS;
-  private final Map <String, Integer> m_aStrings = new HashMap <String, Integer> (1000);
+  private final TObjectIntMap <String> m_aStrings = new TObjectIntHashMap <String> (1000);
   private int m_nLastUsedIndex = CBMXIO.INDEX_NULL_STRING;
 
   public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS)
@@ -60,14 +62,14 @@ final class BMXWriterStringTable
     if (sString == null)
       return CBMXIO.INDEX_NULL_STRING;
 
-    Integer aIndex = m_aStrings.get (sString);
-    if (aIndex == null)
+    int nIndex = m_aStrings.get (sString);
+    if (nIndex == Constants.DEFAULT_INT_NO_ENTRY_VALUE)
     {
-      aIndex = Integer.valueOf (++m_nLastUsedIndex);
-      m_aStrings.put (sString, aIndex);
+      nIndex = ++m_nLastUsedIndex;
+      m_aStrings.put (sString, nIndex);
       _onNewString (sString);
     }
-    return aIndex.intValue ();
+    return nIndex;
   }
 
   @Nonnegative
