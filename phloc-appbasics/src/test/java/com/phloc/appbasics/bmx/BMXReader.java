@@ -1,11 +1,12 @@
 package com.phloc.appbasics.bmx;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -55,16 +56,9 @@ public final class BMXReader
     if (aIS == null)
       throw new NullPointerException ("inputStream");
 
-    // Wrap the passed input stream in a buffered input stream
-    InputStream aISToUse;
-    if (aIS instanceof BufferedInputStream)
-      aISToUse = aIS;
-    else
-      aISToUse = new BufferedInputStream (aIS);
-
     try
     {
-      final DataInputStream aDIS = new DataInputStream (aISToUse);
+      final DataInputStream aDIS = new DataInputStream (aIS);
 
       // Read version
       final byte [] aVersion = new byte [4];
@@ -77,9 +71,17 @@ public final class BMXReader
       final int nSettings = aDIS.readInt ();
       final BMXSettings aSettings = BMXSettings.createFromStorageValue (nSettings);
 
-      if (aSettings.isSet (EBMXSetting.DEFLATE))
+      aIS.mark (0);
+      aIS.reset ();
+
+      DataInputStream aContentDIS = aDIS;
+      Inflater aInflater = null;
+      InflaterInputStream aInflaterIS = null;
+      if (false)
       {
-        // FIXME
+        aInflater = new Inflater ();
+        aInflaterIS = new InflaterInputStream (aDIS, aInflater);
+        aContentDIS = new DataInputStream (aInflaterIS);
       }
 
       // Start iterating the main content
@@ -89,16 +91,17 @@ public final class BMXReader
       final BMXReaderStringTable aST = new BMXReaderStringTable ();
 
       int nNodeType;
-      while ((nNodeType = aDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)
+      final int x = 0;
+      while ((nNodeType = aContentDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)
       {
         IMicroNode aCreatedNode = null;
         switch (nNodeType)
         {
           case CBMXIO.NODETYPE_CDATA:
-            aCreatedNode = new MicroCDATA (aST.get (aDIS.readInt ()));
+            aCreatedNode = new MicroCDATA (aST.get (aContentDIS.readInt ()));
             break;
           case CBMXIO.NODETYPE_COMMENT:
-            aCreatedNode = new MicroComment (aST.get (aDIS.readInt ()));
+            aCreatedNode = new MicroComment (aST.get (aContentDIS.readInt ()));
             break;
           case CBMXIO.NODETYPE_CONTAINER:
             aCreatedNode = new MicroContainer ();
@@ -108,49 +111,49 @@ public final class BMXReader
             break;
           case CBMXIO.NODETYPE_DOCUMENT_TYPE:
           {
-            final String sQualifiedName = aST.get (aDIS.readInt ());
-            final String sPublicID = aST.get (aDIS.readInt ());
-            final String sSystemID = aST.get (aDIS.readInt ());
+            final String sQualifiedName = aST.get (aContentDIS.readInt ());
+            final String sPublicID = aST.get (aContentDIS.readInt ());
+            final String sSystemID = aST.get (aContentDIS.readInt ());
             aCreatedNode = new MicroDocumentType (sQualifiedName, sPublicID, sSystemID);
             break;
           }
           case CBMXIO.NODETYPE_ELEMENT:
           {
-            final String sNamespaceURI = aST.get (aDIS.readInt ());
-            final String sTagName = aST.get (aDIS.readInt ());
+            final String sNamespaceURI = aST.get (aContentDIS.readInt ());
+            final String sTagName = aST.get (aContentDIS.readInt ());
             final IMicroElement aElement = new MicroElement (sNamespaceURI, sTagName);
-            final int nAttrCount = aDIS.readInt ();
+            final int nAttrCount = aContentDIS.readInt ();
             for (int i = 0; i < nAttrCount; ++i)
             {
-              final String sAttrName = aST.get (aDIS.readInt ());
-              final String sAttrValue = aST.get (aDIS.readInt ());
+              final String sAttrName = aST.get (aContentDIS.readInt ());
+              final String sAttrValue = aST.get (aContentDIS.readInt ());
               aElement.setAttribute (sAttrName, sAttrValue);
             }
             aCreatedNode = aElement;
             break;
           }
           case CBMXIO.NODETYPE_ENTITY_REFERENCE:
-            aCreatedNode = new MicroEntityReference (aST.get (aDIS.readInt ()));
+            aCreatedNode = new MicroEntityReference (aST.get (aContentDIS.readInt ()));
             break;
           case CBMXIO.NODETYPE_PROCESSING_INSTRUCTION:
           {
-            final String sTarget = aST.get (aDIS.readInt ());
-            final String sData = aST.get (aDIS.readInt ());
+            final String sTarget = aST.get (aContentDIS.readInt ());
+            final String sData = aST.get (aContentDIS.readInt ());
             aCreatedNode = new MicroProcessingInstruction (sTarget, sData);
             break;
           }
           case CBMXIO.NODETYPE_TEXT:
           {
-            final String sText = aST.get (aDIS.readInt ());
-            final boolean bIgnorableWhitespace = aDIS.readBoolean ();
+            final String sText = aST.get (aContentDIS.readInt ());
+            final boolean bIgnorableWhitespace = aContentDIS.readBoolean ();
             aCreatedNode = new MicroText (sText, bIgnorableWhitespace);
             break;
           }
           case CBMXIO.NODETYPE_STRING:
           {
-            final int nLength = aDIS.readInt ();
+            final int nLength = aContentDIS.readInt ();
             final byte [] aString = new byte [nLength];
-            aDIS.readFully (aString);
+            aContentDIS.readFully (aString);
             aST.add (new String (aString, CBMXIO.ENCODING));
             break;
           }
@@ -173,6 +176,10 @@ public final class BMXReader
           aLastNode = aCreatedNode;
         }
       }
+
+      if (aInflater != null)
+        aInflater.end ();
+
       return aResultNode;
     }
     catch (final IOException ex)
@@ -181,7 +188,7 @@ public final class BMXReader
     }
     finally
     {
-      StreamUtils.close (aISToUse);
+      StreamUtils.close (aIS);
     }
   }
 }

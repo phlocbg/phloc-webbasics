@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 import javax.annotation.Nonnull;
@@ -231,10 +232,12 @@ public class BMXWriter
       aDOS.writeInt (m_aSettings.getStorageValue ());
 
       DataOutputStream aContentDOS = aDOS;
+      Deflater aDeflater = null;
       DeflaterOutputStream aDeflaterOS = null;
-      if (m_aSettings.isSet (EBMXSetting.DEFLATE))
+      if (false)
       {
-        aDeflaterOS = new DeflaterOutputStream (aDOS);
+        aDeflater = new Deflater ();
+        aDeflaterOS = new DeflaterOutputStream (aDOS, aDeflater);
         aContentDOS = new DataOutputStream (aDeflaterOS);
       }
 
@@ -249,7 +252,10 @@ public class BMXWriter
 
       // Finish deflate
       if (aDeflaterOS != null)
+      {
         aDeflaterOS.finish ();
+        aDeflater.end ();
+      }
       aContentDOS.flush ();
 
       return ESuccess.SUCCESS;

@@ -47,12 +47,8 @@ public final class BMXWriterTest
     final File aFile1 = new File (ScopeTestRule.STORAGE_PATH, "test.bmx");
     new BMXWriter ().writeToFile (aDoc, aFile1);
 
-    final File aFile2 = new File (ScopeTestRule.STORAGE_PATH, "test.deflate.bmx");
-    new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.DEFLATE)).writeToFile (aDoc, aFile2);
-
     final IMicroNode aNode = BMXReader.readFromFile (aFile1);
     assertNotNull (aNode);
-
     assertTrue (aDoc.isEqualContent (aNode));
   }
 
