@@ -34,31 +34,44 @@ import com.phloc.web.smtp.attachment.IEmailAttachmentList;
  */
 public interface IEmailData extends IReadonlyEmailData
 {
-  void setEmailType (@Nonnull EEmailType eType);
+  @Nonnull
+  IEmailData setEmailType (@Nonnull EEmailType eType);
 
-  void setFrom (@Nullable IEmailAddress aFrom);
+  @Nonnull
+  IEmailData setFrom (@Nullable IEmailAddress aFrom);
 
-  void setReplyTo (@Nullable IEmailAddress aReplyTo);
+  @Nonnull
+  IEmailData setReplyTo (@Nullable IEmailAddress aReplyTo);
 
-  void setReplyTo (@Nullable List <? extends IEmailAddress> aTo);
+  @Nonnull
+  IEmailData setReplyTo (@Nullable List <? extends IEmailAddress> aTo);
 
-  void setTo (@Nullable IEmailAddress aTo);
+  @Nonnull
+  IEmailData setTo (@Nullable IEmailAddress aTo);
 
-  void setTo (@Nullable List <? extends IEmailAddress> aTo);
+  @Nonnull
+  IEmailData setTo (@Nullable List <? extends IEmailAddress> aTo);
 
-  void setCc (@Nullable IEmailAddress aCc);
+  @Nonnull
+  IEmailData setCc (@Nullable IEmailAddress aCc);
 
-  void setCc (@Nullable List <? extends IEmailAddress> aCc);
+  @Nonnull
+  IEmailData setCc (@Nullable List <? extends IEmailAddress> aCc);
 
-  void setBcc (@Nullable IEmailAddress aBcc);
+  @Nonnull
+  IEmailData setBcc (@Nullable IEmailAddress aBcc);
 
-  void setBcc (@Nullable List <? extends IEmailAddress> aBcc);
+  @Nonnull
+  IEmailData setBcc (@Nullable List <? extends IEmailAddress> aBcc);
 
-  void setSentDate (@Nullable DateTime aDate);
+  @Nonnull
+  IEmailData setSentDate (@Nullable DateTime aDate);
 
-  void setSubject (@Nullable String sSubject);
+  @Nonnull
+  IEmailData setSubject (@Nullable String sSubject);
 
-  void setBody (@Nullable String sBody);
+  @Nonnull
+  IEmailData setBody (@Nullable String sBody);
 
   @Nullable
   IEmailAttachmentList getAttachments ();
@@ -70,6 +83,8 @@ public interface IEmailData extends IReadonlyEmailData
    * 
    * @param aAttachments
    *        The attachments to be used. May be <code>null</code> or empty.
+   * @return this
    */
-  void setAttachments (@Nullable IEmailAttachmentList aAttachments);
+  @Nonnull
+  IEmailData setAttachments (@Nullable IEmailAttachmentList aAttachments);
 }

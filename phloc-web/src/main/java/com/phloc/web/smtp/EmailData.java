@@ -30,7 +30,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.joda.time.DateTime;
 
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.equals.EqualsUtils;
@@ -63,21 +63,25 @@ public final class EmailData implements IEmailData
   }
 
   @Nonnull
+  public EmailData setEmailType (@Nonnull final EEmailType eEmailType)
+  {
+    if (eEmailType == null)
+      throw new NullPointerException ("emailType");
+    m_eEmailType = eEmailType;
+    return this;
+  }
+
+  @Nonnull
   public EEmailType getEmailType ()
   {
     return m_eEmailType;
   }
 
-  public void setEmailType (@Nonnull final EEmailType eEmailType)
-  {
-    if (eEmailType == null)
-      throw new NullPointerException ("emailType");
-    m_eEmailType = eEmailType;
-  }
-
-  public void setFrom (@Nullable final IEmailAddress sFrom)
+  @Nonnull
+  public EmailData setFrom (@Nullable final IEmailAddress sFrom)
   {
     m_aFrom = sFrom;
+    return this;
   }
 
   @Nullable
@@ -86,30 +90,35 @@ public final class EmailData implements IEmailData
     return m_aFrom;
   }
 
-  public void setReplyTo (@Nullable final IEmailAddress aReplyTo)
+  @Nonnull
+  public EmailData setReplyTo (@Nullable final IEmailAddress aReplyTo)
   {
     m_aReplyTo.clear ();
     if (aReplyTo != null)
       m_aReplyTo.add (aReplyTo);
+    return this;
   }
 
-  public void setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
+  @Nonnull
+  public EmailData setReplyTo (@Nullable final List <? extends IEmailAddress> aReplyTos)
   {
     m_aReplyTo.clear ();
     if (aReplyTos != null)
       for (final IEmailAddress aReplyTo : aReplyTos)
         if (aReplyTo != null)
           m_aReplyTo.add (aReplyTo);
+    return this;
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <? extends IEmailAddress> getReplyTo ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aReplyTo);
+    return ContainerHelper.newList (m_aReplyTo);
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   private static InternetAddress [] _asArray (@Nonnull final List <IEmailAddress> aList, @Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                                                                          AddressException
   {
@@ -121,6 +130,7 @@ public final class EmailData implements IEmailData
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public InternetAddress [] getReplyToArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                              AddressException
   {
@@ -133,30 +143,35 @@ public final class EmailData implements IEmailData
     return m_aReplyTo.size ();
   }
 
-  public void setTo (@Nullable final IEmailAddress aTo)
+  @Nonnull
+  public EmailData setTo (@Nullable final IEmailAddress aTo)
   {
     m_aTo.clear ();
     if (aTo != null)
       m_aTo.add (aTo);
+    return this;
   }
 
-  public void setTo (@Nullable final List <? extends IEmailAddress> aTos)
+  @Nonnull
+  public EmailData setTo (@Nullable final List <? extends IEmailAddress> aTos)
   {
     m_aTo.clear ();
     if (aTos != null)
       for (final IEmailAddress aTo : aTos)
         if (aTo != null)
           m_aTo.add (aTo);
+    return this;
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <? extends IEmailAddress> getTo ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aTo);
+    return ContainerHelper.newList (m_aTo);
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public InternetAddress [] getToArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                         AddressException
   {
@@ -169,30 +184,35 @@ public final class EmailData implements IEmailData
     return m_aTo.size ();
   }
 
-  public void setCc (@Nullable final IEmailAddress aCc)
+  @Nonnull
+  public EmailData setCc (@Nullable final IEmailAddress aCc)
   {
     m_aCc.clear ();
     if (aCc != null)
       m_aCc.add (aCc);
+    return this;
   }
 
-  public void setCc (@Nullable final List <? extends IEmailAddress> aCcs)
+  @Nonnull
+  public EmailData setCc (@Nullable final List <? extends IEmailAddress> aCcs)
   {
     m_aCc.clear ();
     if (aCcs != null)
       for (final IEmailAddress aCc : aCcs)
         if (aCc != null)
           m_aCc.add (aCc);
+    return this;
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <? extends IEmailAddress> getCc ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aCc);
+    return ContainerHelper.newList (m_aCc);
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public InternetAddress [] getCcArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                         AddressException
   {
@@ -205,30 +225,35 @@ public final class EmailData implements IEmailData
     return m_aCc.size ();
   }
 
-  public void setBcc (@Nullable final IEmailAddress aBcc)
+  @Nonnull
+  public EmailData setBcc (@Nullable final IEmailAddress aBcc)
   {
     m_aBcc.clear ();
     if (aBcc != null)
       m_aBcc.add (aBcc);
+    return this;
   }
 
-  public void setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
+  @Nonnull
+  public EmailData setBcc (@Nullable final List <? extends IEmailAddress> aBccs)
   {
     m_aBcc.clear ();
     if (aBccs != null)
       for (final IEmailAddress aBcc : aBccs)
         if (aBcc != null)
           m_aBcc.add (aBcc);
+    return this;
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <? extends IEmailAddress> getBcc ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aBcc);
+    return ContainerHelper.newList (m_aBcc);
   }
 
   @Nonnull
+  @ReturnsMutableCopy
   public InternetAddress [] getBccArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                          AddressException
   {
@@ -241,9 +266,11 @@ public final class EmailData implements IEmailData
     return m_aBcc.size ();
   }
 
-  public void setSentDate (@Nullable final DateTime aSentDate)
+  @Nonnull
+  public EmailData setSentDate (@Nullable final DateTime aSentDate)
   {
     m_aSentDate = aSentDate;
+    return this;
   }
 
   @Nullable
@@ -252,9 +279,11 @@ public final class EmailData implements IEmailData
     return m_aSentDate;
   }
 
-  public void setSubject (@Nullable final String sSubject)
+  @Nonnull
+  public EmailData setSubject (@Nullable final String sSubject)
   {
     m_sSubject = sSubject;
+    return this;
   }
 
   @Nullable
@@ -263,9 +292,11 @@ public final class EmailData implements IEmailData
     return m_sSubject;
   }
 
-  public void setBody (@Nullable final String sBody)
+  @Nonnull
+  public EmailData setBody (@Nullable final String sBody)
   {
     m_sBody = sBody;
+    return this;
   }
 
   @Nullable
@@ -280,12 +311,14 @@ public final class EmailData implements IEmailData
     return m_aAttachments;
   }
 
-  public void setAttachments (@Nullable final IEmailAttachmentList aAttachments)
+  @Nonnull
+  public EmailData setAttachments (@Nullable final IEmailAttachmentList aAttachments)
   {
     if (aAttachments != null && aAttachments.size () > 0)
       m_aAttachments = aAttachments;
     else
       m_aAttachments = null;
+    return this;
   }
 
   @Override
