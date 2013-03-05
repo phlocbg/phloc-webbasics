@@ -1,5 +1,6 @@
 package com.phloc.appbasics.bmx;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,9 +57,16 @@ public final class BMXReader
     if (aIS == null)
       throw new NullPointerException ("inputStream");
 
+    // Ensure stream is buffered!
+    InputStream aISToUse;
+    if (aIS instanceof BufferedInputStream)
+      aISToUse = aIS;
+    else
+      aISToUse = new BufferedInputStream (aIS);
+
     try
     {
-      final DataInputStream aDIS = new DataInputStream (aIS);
+      final DataInputStream aDIS = new DataInputStream (aISToUse);
 
       // Read version
       final byte [] aVersion = new byte [4];
@@ -185,7 +193,7 @@ public final class BMXReader
     }
     finally
     {
-      StreamUtils.close (aIS);
+      StreamUtils.close (aISToUse);
     }
   }
 }
