@@ -41,7 +41,7 @@ public final class BMXWriterTest
 {
   static
   {
-    TroveInit.init ();
+    TroveUtils.init (true);
   }
 
   @Test
