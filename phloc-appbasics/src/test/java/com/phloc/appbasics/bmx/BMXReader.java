@@ -71,9 +71,6 @@ public final class BMXReader
       final int nSettings = aDIS.readInt ();
       final BMXSettings aSettings = BMXSettings.createFromStorageValue (nSettings);
 
-      aIS.mark (0);
-      aIS.reset ();
-
       DataInputStream aContentDIS = aDIS;
       Inflater aInflater = null;
       InflaterInputStream aInflaterIS = null;

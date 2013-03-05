@@ -55,25 +55,40 @@ public final class BMXWriterTest
   @Test
   public void testStandardXML ()
   {
-    final StopWatch aSW = new StopWatch (true);
-    final IMicroDocument aDoc = MicroReader.readMicroXML (new ClassPathResource ("bmx/standard.xml"));
-    System.out.println ("Reading via SAX took " + aSW.stopAndGetMillis () + "ms");
-
-    aSW.restart ();
-    MicroWriter.writeToFile (aDoc, new File (ScopeTestRule.STORAGE_PATH, "standard.xml"));
-    System.out.println ("Writing via MicroWriter took " + aSW.stopAndGetMillis () + "ms");
-
-    aSW.restart ();
+    final StopWatch aSW = new StopWatch ();
+    IMicroDocument aDoc = null;
     final File aFile = new File (ScopeTestRule.STORAGE_PATH, "standard.bmx");
-    final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ());
-    aWriter.writeToFile (aDoc, aFile);
-    System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
+    final int nMax = 10;
 
-    aSW.restart ();
-    final IMicroNode aNode = BMXReader.readFromFile (aFile);
-    assertNotNull (aNode);
-    System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      aDoc = MicroReader.readMicroXML (new ClassPathResource ("bmx/standard.xml"));
+      System.out.println ("Reading via SAX took " + aSW.stopAndGetMillis () + "ms");
+    }
 
-    assertTrue (aDoc.isEqualContent (aNode));
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      MicroWriter.writeToFile (aDoc, new File (ScopeTestRule.STORAGE_PATH, "standard.xml"));
+      System.out.println ("Writing via MicroWriter took " + aSW.stopAndGetMillis () + "ms");
+    }
+
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ());
+      aWriter.writeToFile (aDoc, aFile);
+      System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
+    }
+
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      final IMicroNode aNode = BMXReader.readFromFile (aFile);
+      assertNotNull (aNode);
+      System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
+      assertTrue (aDoc.isEqualContent (aNode));
+    }
   }
 }
