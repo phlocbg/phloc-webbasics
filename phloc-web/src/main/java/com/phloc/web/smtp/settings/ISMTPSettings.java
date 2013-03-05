@@ -17,7 +17,6 @@
  */
 package com.phloc.web.smtp.settings;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -38,25 +37,24 @@ public interface ISMTPSettings
   String getHostName ();
 
   /**
-   * @return The SMTP server port to use
+   * @return The SMTP server port to use. May be -1 to use the default port.
    */
-  @Nonnegative
   int getPort ();
 
   /**
-   * @return The server user name.
+   * @return The server user name. May be <code>null</code>.
    */
   @Nullable
   String getUserName ();
 
   /**
-   * @return The server user's password.
+   * @return The server user's password. May be <code>null</code>.
    */
   @Nullable
   String getPassword ();
 
   /**
-   * @return The mail encoding to be used.
+   * @return The mail encoding to be used. May be <code>null</code>.
    */
   @Nonnull
   String getCharset ();

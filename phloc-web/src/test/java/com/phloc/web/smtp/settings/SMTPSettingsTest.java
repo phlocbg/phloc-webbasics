@@ -18,6 +18,8 @@
 package com.phloc.web.smtp.settings;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -35,17 +37,25 @@ public final class SMTPSettingsTest
   @Test
   public void testConvert ()
   {
-    final ISMTPSettings aSettings = new SMTPSettings ("mail.example.com",
-                                                      19,
-                                                      "anyuser",
-                                                      "secret",
-                                                      CCharset.CHARSET_UTF_8,
-                                                      true);
+    ISMTPSettings aSettings = new SMTPSettings ("mail.example.com",
+                                                19,
+                                                "anyuser",
+                                                "secret",
+                                                CCharset.CHARSET_UTF_8,
+                                                true);
     assertEquals ("mail.example.com", aSettings.getHostName ());
     assertEquals (19, aSettings.getPort ());
     assertEquals ("anyuser", aSettings.getUserName ());
     assertEquals ("secret", aSettings.getPassword ());
     assertTrue (aSettings.isSSLEnabled ());
+    PhlocTestUtils.testMicroTypeConversion (aSettings);
+
+    aSettings = new SMTPSettings ("mail.example.com");
+    assertEquals ("mail.example.com", aSettings.getHostName ());
+    assertEquals (-1, aSettings.getPort ());
+    assertNull (aSettings.getUserName ());
+    assertNull (aSettings.getPassword ());
+    assertFalse (aSettings.isSSLEnabled ());
     PhlocTestUtils.testMicroTypeConversion (aSettings);
   }
 }
