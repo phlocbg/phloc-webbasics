@@ -17,6 +17,9 @@
  */
 package com.phloc.appbasics.bmx;
 
+import gnu.trove.list.TIntList;
+import gnu.trove.list.array.TIntArrayList;
+
 import java.io.BufferedOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -31,8 +34,6 @@ import java.util.zip.DeflaterOutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
-
-import org.apache.commons.collections.primitives.ArrayIntList;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
@@ -118,7 +119,7 @@ public class BMXWriter
         }
         case ELEMENT:
           final IMicroElement aElement = (IMicroElement) aChildNode;
-          final ArrayIntList aIntList = new ArrayIntList ();
+          final TIntList aIntList = new TIntArrayList ();
           aIntList.add (aST.addString (aElement.getNamespaceURI ()));
           aIntList.add (aST.addString (aElement.getTagName ()));
           if (aElement.hasAttributes ())
