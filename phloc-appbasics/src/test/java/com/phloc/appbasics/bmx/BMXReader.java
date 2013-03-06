@@ -1,13 +1,12 @@
 package com.phloc.appbasics.bmx;
 
 import java.io.BufferedInputStream;
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,7 +44,7 @@ public final class BMXReader
     if (aFile == null)
       throw new NullPointerException ("file");
 
-    final InputStream aFIS = FileUtils.getMappedInputStream (aFile);
+    final InputStream aFIS = FileUtils.getInputStream (aFile);
     if (aFIS == null)
       return null;
 
@@ -60,15 +59,30 @@ public final class BMXReader
 
     // Ensure stream is buffered!
     InputStream aISToUse;
-    if (aIS instanceof BufferedInputStream)
+    if (StreamUtils.isBuffered (aIS))
       aISToUse = aIS;
     else
       aISToUse = new BufferedInputStream (aIS);
 
     try
     {
-      final DataInputStream aDIS = new DataInputStream (aISToUse);
+      final DataInput aDIS = new DataInputStream (aISToUse);
+      return readFromDataInput (aDIS);
+    }
+    finally
+    {
+      StreamUtils.close (aISToUse);
+    }
+  }
 
+  @Nullable
+  public static IMicroNode readFromDataInput (@Nonnull @WillClose final DataInput aDIS)
+  {
+    if (aDIS == null)
+      throw new NullPointerException ("dataInput");
+
+    try
+    {
       // Read version
       final byte [] aVersion = new byte [4];
       aDIS.readFully (aVersion);
@@ -79,15 +93,7 @@ public final class BMXReader
       final int nSettings = aDIS.readInt ();
       final BMXSettings aSettings = BMXSettings.createFromStorageValue (nSettings);
 
-      DataInputStream aContentDIS = aDIS;
-      Inflater aInflater = null;
-      InflaterInputStream aInflaterIS = null;
-      if (false)
-      {
-        aInflater = new Inflater ();
-        aInflaterIS = new InflaterInputStream (aDIS, aInflater);
-        aContentDIS = new DataInputStream (aInflaterIS);
-      }
+      final DataInput aContentDIS = aDIS;
 
       // Start iterating the main content
       IMicroNode aResultNode = null;
@@ -184,18 +190,11 @@ public final class BMXReader
         }
       }
 
-      if (aInflater != null)
-        aInflater.end ();
-
       return aResultNode;
     }
     catch (final IOException ex)
     {
       throw new BMXReadException ("Failed to read from InputStream", ex);
-    }
-    finally
-    {
-      StreamUtils.close (aISToUse);
     }
   }
 
