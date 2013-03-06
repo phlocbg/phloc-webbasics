@@ -23,29 +23,19 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.state.EChange;
-import com.phloc.commons.state.ESuccess;
 
 /**
  * Interface for a manager that can handle audit items.
  * 
  * @author philip
  */
-public interface IAuditManager extends IAuditor
+public interface IAuditManager
 {
   /**
-   * Create a new audit item.
-   * 
-   * @param eType
-   *        The audit action type. May not be <code>null</code>.
-   * @param eSuccess
-   *        Was the action successful? May not be <code>null</code>.
-   * @param sAction
-   *        The performed action. May not be <code>null</code>.
-   * @return {@link EChange}.
+   * @return The underlying auditor. Never <code>null</code>.
    */
   @Nonnull
-  EChange createAuditItem (@Nonnull EAuditActionType eType, @Nonnull ESuccess eSuccess, @Nonnull String sAction);
+  IAuditor getAuditor ();
 
   /**
    * @return All available audit items. Never <code>null</code>.

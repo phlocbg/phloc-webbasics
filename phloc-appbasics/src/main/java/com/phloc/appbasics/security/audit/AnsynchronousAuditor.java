@@ -15,24 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.bmx;
+package com.phloc.appbasics.security.audit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
+
+import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 
 /**
- * Exceptions that can occur when reading BMX files.
+ * The class handles all audit items
  * 
  * @author philip
  */
-public class BMXReadException extends RuntimeException
+@ThreadSafe
+public final class AnsynchronousAuditor extends AbstractAuditor
 {
-  public BMXReadException (@Nonnull final String sMessage)
+  public AnsynchronousAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
   {
-    super (sMessage);
+    super (aUserIDProvider);
   }
 
-  public BMXReadException (@Nonnull final String sMessage, @Nonnull final Throwable t)
+  @Override
+  protected void handleAuditItem (@Nonnull final IAuditItem aAuditItem)
   {
-    super (sMessage, t);
+    // TODO
+
   }
 }

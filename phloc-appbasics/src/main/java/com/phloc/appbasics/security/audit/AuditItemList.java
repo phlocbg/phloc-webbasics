@@ -24,14 +24,11 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.state.EChange;
-import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -43,14 +40,9 @@ import com.phloc.commons.string.ToStringGenerator;
 final class AuditItemList
 {
   private final List <IAuditItem> m_aItems = new ArrayList <IAuditItem> ();
-  private final ICurrentUserIDProvider m_aUserIDProvider;
 
-  public AuditItemList (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
-  {
-    if (aUserIDProvider == null)
-      throw new NullPointerException ("userIDProvider");
-    m_aUserIDProvider = aUserIDProvider;
-  }
+  public AuditItemList ()
+  {}
 
   void internalKeepOnlyLast ()
   {
@@ -65,16 +57,6 @@ final class AuditItemList
       throw new NullPointerException ("item");
 
     m_aItems.add (aItem);
-  }
-
-  @Nonnull
-  public EChange createItem (@Nonnull final EAuditActionType eType,
-                             @Nonnull final ESuccess eSuccess,
-                             @Nonnull final String sAction)
-  {
-    final String sUserID = m_aUserIDProvider.getCurrentUserID ();
-    internalAddItem (new AuditItem (sUserID != null ? sUserID : CAudit.GUEST_USERID, eType, eSuccess, sAction));
-    return EChange.CHANGED;
   }
 
   @Nonnull

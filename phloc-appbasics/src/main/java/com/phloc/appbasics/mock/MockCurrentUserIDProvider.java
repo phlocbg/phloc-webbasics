@@ -18,9 +18,9 @@
 package com.phloc.appbasics.mock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
-import com.phloc.commons.annotations.Nonempty;
 
 /**
  * Mock implementation of {@link ICurrentUserIDProvider}.
@@ -38,7 +38,7 @@ public final class MockCurrentUserIDProvider implements ICurrentUserIDProvider
     this ("unittest");
   }
 
-  public MockCurrentUserIDProvider (@Nonnull @Nonempty final String sUserID)
+  public MockCurrentUserIDProvider (@Nullable final String sUserID)
   {
     m_sUserID = sUserID;
   }
@@ -49,8 +49,7 @@ public final class MockCurrentUserIDProvider implements ICurrentUserIDProvider
     return s_aInstance;
   }
 
-  @Nonnull
-  @Nonempty
+  @Nullable
   public String getCurrentUserID ()
   {
     return m_sUserID;

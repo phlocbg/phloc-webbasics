@@ -18,6 +18,7 @@
 package com.phloc.appbasics.security.audit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.joda.time.DateTime;
@@ -42,19 +43,19 @@ final class AuditItem implements IAuditItem
   private final ESuccess m_eSuccess;
   private final String m_sAction;
 
-  public AuditItem (@Nonnull final String sUserID,
+  public AuditItem (@Nullable final String sUserID,
                     @Nonnull final EAuditActionType eType,
                     @Nonnull final ESuccess eSuccess,
                     @Nonnull final String sAction)
   {
-    this (PDTFactory.getCurrentDateTime (), sUserID, eType, eSuccess, sAction);
+    this (PDTFactory.getCurrentDateTime (), sUserID != null ? sUserID : CAudit.GUEST_USERID, eType, eSuccess, sAction);
   }
 
-  public AuditItem (@Nonnull final DateTime aDateTime,
-                    @Nonnull final String sUserID,
-                    @Nonnull final EAuditActionType eType,
-                    @Nonnull final ESuccess eSuccess,
-                    @Nonnull final String sAction)
+  AuditItem (@Nonnull final DateTime aDateTime,
+             @Nonnull final String sUserID,
+             @Nonnull final EAuditActionType eType,
+             @Nonnull final ESuccess eSuccess,
+             @Nonnull final String sAction)
   {
     if (aDateTime == null)
       throw new NullPointerException ("dateTime");
@@ -100,6 +101,16 @@ final class AuditItem implements IAuditItem
   public ESuccess getSuccess ()
   {
     return m_eSuccess;
+  }
+
+  public boolean isSuccess ()
+  {
+    return m_eSuccess.isSuccess ();
+  }
+
+  public boolean isFailure ()
+  {
+    return m_eSuccess.isFailure ();
   }
 
   @Nonnull

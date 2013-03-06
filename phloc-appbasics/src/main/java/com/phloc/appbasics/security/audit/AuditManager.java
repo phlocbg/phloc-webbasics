@@ -31,14 +31,10 @@ import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.state.EChange;
-import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.commons.type.ObjectType;
 import com.phloc.datetime.io.PDTIOHelper;
 
 /**
@@ -92,18 +88,44 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
   }
 
   private final AuditItemList m_aItems;
+  private final IAuditor m_aAuditor;
 
   public AuditManager (@Nullable final String sBaseDir, @Nonnull final ICurrentUserIDProvider aUserIDProvider) throws DAOException
   {
     super (new AuditHasFilename (sBaseDir));
+    if (aUserIDProvider == null)
+      throw new NullPointerException ("userIDProvider");
 
     // Ensure base path is present
     if (StringHelper.hasText (sBaseDir))
       WebIO.createDirRecursiveIfNotExisting (sBaseDir);
 
-    m_aItems = new AuditItemList (aUserIDProvider);
+    m_aItems = new AuditItemList ();
+    m_aAuditor = new AbstractAuditor (aUserIDProvider)
+    {
+      @Override
+      protected void handleAuditItem (@Nonnull final IAuditItem aAuditItem)
+      {
+        m_aRWLock.writeLock ().lock ();
+        try
+        {
+          m_aItems.internalAddItem (aAuditItem);
+        }
+        finally
+        {
+          m_aRWLock.writeLock ().unlock ();
+        }
+        markAsChanged ();
+      }
+    };
     setXMLDataProvider (new AuditManagerXMLDAO (this));
     readFromFile ();
+  }
+
+  @Nonnull
+  public IAuditor getAuditor ()
+  {
+    return m_aAuditor;
   }
 
   @Override
@@ -126,27 +148,6 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     return m_aItems.getAllItems ();
   }
 
-  @Override
-  @Nonnull
-  public EChange createAuditItem (@Nonnull final EAuditActionType eType,
-                                  @Nonnull final ESuccess eSuccess,
-                                  @Nonnull final String sAction)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (m_aItems.createItem (eType, eSuccess, sAction).isUnchanged ())
-        return EChange.UNCHANGED;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-    markAsChanged ();
-    return EChange.CHANGED;
-  }
-
-  @Override
   @Nonnull
   @ReturnsMutableCopy
   @Deprecated
@@ -176,121 +177,6 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     {
       m_aRWLock.readLock ().unlock ();
     }
-  }
-
-  @Nonnull
-  private static String _createAuditString (@Nonnull final String sObjectType, @Nullable final String [] aArgs)
-  {
-    if (ArrayHelper.isEmpty (aArgs))
-      return sObjectType;
-    final StringBuilder aSB = new StringBuilder (sObjectType).append ('(');
-    for (int i = 0; i < aArgs.length; ++i)
-    {
-      if (i > 0)
-        aSB.append (',');
-      aSB.append (aArgs[i]);
-    }
-    return aSB.append (')').toString ();
-  }
-
-  @Nonnull
-  private static String _createAuditStringWithWhat (@Nonnull final String sObjectType,
-                                                    @Nonnull final String sWhat,
-                                                    @Nullable final String [] aArgs)
-  {
-    final StringBuilder aSB = new StringBuilder (sObjectType).append ('(').append (sWhat);
-    if (aArgs != null)
-      for (final String sArg : aArgs)
-        aSB.append (',').append (sArg);
-    return aSB.append (')').toString ();
-  }
-
-  public void onCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.CREATE,
-                     ESuccess.SUCCESS,
-                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
-  }
-
-  public void onCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.CREATE,
-                     ESuccess.FAILURE,
-                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
-  }
-
-  public void onModifySuccess (@Nonnull final ObjectType aObjectType,
-                               final String sWhat,
-                               @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.MODIFY,
-                     ESuccess.SUCCESS,
-                     _createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
-  }
-
-  public void onModifyFailure (@Nonnull final ObjectType aObjectType,
-                               final String sWhat,
-                               @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.MODIFY,
-                     ESuccess.FAILURE,
-                     _createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
-  }
-
-  public void onDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.DELETE,
-                     ESuccess.SUCCESS,
-                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
-  }
-
-  public void onDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.DELETE,
-                     ESuccess.FAILURE,
-                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
-  }
-
-  public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.UNDELETE,
-                     ESuccess.SUCCESS,
-                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
-  }
-
-  public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.UNDELETE,
-                     ESuccess.FAILURE,
-                     _createAuditString (aObjectType.getObjectTypeName (), aArgs));
-  }
-
-  public void onExecuteSuccess (@Nonnull final String sWhat, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.EXECUTE, ESuccess.SUCCESS, _createAuditString (sWhat, aArgs));
-  }
-
-  public void onExecuteFailure (@Nonnull final String sWhat, @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.EXECUTE, ESuccess.FAILURE, _createAuditString (sWhat, aArgs));
-  }
-
-  public void onExecuteSuccess (@Nonnull final ObjectType aObjectType,
-                                @Nonnull final String sWhat,
-                                @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.EXECUTE,
-                     ESuccess.SUCCESS,
-                     _createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
-  }
-
-  public void onExecuteFailure (@Nonnull final ObjectType aObjectType,
-                                @Nonnull final String sWhat,
-                                @Nullable final String... aArgs)
-  {
-    createAuditItem (EAuditActionType.EXECUTE,
-                     ESuccess.FAILURE,
-                     _createAuditStringWithWhat (aObjectType.getObjectTypeName (), sWhat, aArgs));
   }
 
   @Override

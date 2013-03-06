@@ -23,6 +23,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.state.ISuccessIndicator;
 
 /**
  * Base interface for a single audit item
@@ -30,7 +31,7 @@ import com.phloc.commons.state.ESuccess;
  * @author philip
  */
 @MustImplementEqualsAndHashcode
-public interface IAuditItem
+public interface IAuditItem extends ISuccessIndicator
 {
   /**
    * @return The date and time when the audit item was created

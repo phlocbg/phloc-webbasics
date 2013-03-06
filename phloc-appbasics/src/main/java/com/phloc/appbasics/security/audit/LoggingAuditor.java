@@ -18,130 +18,38 @@
 package com.phloc.appbasics.security.audit;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.type.ObjectType;
+import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 
 /**
  * An implementation of {@link IAuditor} using SLF4J logging.
  * 
  * @author philip
  */
-public final class LoggingAuditor implements IAuditor
+public class LoggingAuditor extends AbstractAuditor
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingAuditor.class);
-  private static final LoggingAuditor s_aInstance = new LoggingAuditor ();
 
-  private LoggingAuditor ()
-  {}
-
-  @Nonnull
-  public static LoggingAuditor getInstance ()
+  public LoggingAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
   {
-    return s_aInstance;
+    super (aUserIDProvider);
   }
 
-  public void onCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
+  @Override
+  protected void handleAuditItem (@Nonnull final IAuditItem aAuditItem)
   {
-    s_aLogger.info ("create.success(" + aObjectType.getObjectTypeName () + "," + ContainerHelper.newList (aArgs) + ")");
-  }
-
-  public void onCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("create.failure(" + aObjectType.getObjectTypeName () + "," + ContainerHelper.newList (aArgs) + ")");
-  }
-
-  public void onModifySuccess (@Nonnull final ObjectType aObjectType,
-                               final String sWhat,
-                               @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("modify.success(" +
-                    aObjectType.getObjectTypeName () +
-                    "," +
-                    sWhat +
-                    "," +
-                    ContainerHelper.newList (aArgs) +
-                    ")");
-  }
-
-  public void onModifyFailure (@Nonnull final ObjectType aObjectType,
-                               final String sWhat,
-                               @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("modify.failure(" +
-                    aObjectType.getObjectTypeName () +
-                    "," +
-                    sWhat +
-                    "," +
-                    ContainerHelper.newList (aArgs) +
-                    ")");
-  }
-
-  public void onDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("delete.success(" + aObjectType.getObjectTypeName () + "," + ContainerHelper.newList (aArgs) + ")");
-  }
-
-  public void onDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("delete.failure(" + aObjectType.getObjectTypeName () + "," + ContainerHelper.newList (aArgs) + ")");
-  }
-
-  public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("undelete.success(" +
-                    aObjectType.getObjectTypeName () +
-                    "," +
-                    ContainerHelper.newList (aArgs) +
-                    ")");
-  }
-
-  public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("undelete.failure(" +
-                    aObjectType.getObjectTypeName () +
-                    "," +
-                    ContainerHelper.newList (aArgs) +
-                    ")");
-  }
-
-  public void onExecuteSuccess (final String sWhat, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("execute.success(" + sWhat + "," + ContainerHelper.newList (aArgs) + ")");
-  }
-
-  public void onExecuteFailure (final String sWhat, @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("execute.failure(" + sWhat + "," + ContainerHelper.newList (aArgs) + ")");
-  }
-
-  public void onExecuteSuccess (@Nonnull final ObjectType aObjectType,
-                                final String sWhat,
-                                @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("execute.success(" +
-                    aObjectType.getObjectTypeName () +
-                    "," +
-                    sWhat +
-                    "," +
-                    ContainerHelper.newList (aArgs) +
-                    ")");
-  }
-
-  public void onExecuteFailure (@Nonnull final ObjectType aObjectType,
-                                final String sWhat,
-                                @Nullable final String... aArgs)
-  {
-    s_aLogger.info ("execute.failure(" +
-                    aObjectType.getObjectTypeName () +
-                    "," +
-                    sWhat +
-                    "," +
-                    ContainerHelper.newList (aArgs) +
-                    ")");
+    s_aLogger.info (ISODateTimeFormat.basicDateTime ().print (aAuditItem.getDateTime ()) +
+                    " " +
+                    aAuditItem.getUserID () +
+                    " " +
+                    aAuditItem.getType ().getID () +
+                    " " +
+                    (aAuditItem.isSuccess () ? "success" : "failure") +
+                    " " +
+                    aAuditItem.getAction ());
   }
 }
