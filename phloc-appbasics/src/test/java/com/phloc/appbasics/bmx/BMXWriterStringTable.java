@@ -20,7 +20,7 @@ package com.phloc.appbasics.bmx;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
-import java.io.DataOutputStream;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -34,13 +34,13 @@ import com.phloc.commons.string.ToStringGenerator;
 
 final class BMXWriterStringTable
 {
-  private final DataOutputStream m_aDOS;
+  private final DataOutput m_aDOS;
   private final TObjectIntMap <String> m_aStrings;
   private int m_nLastUsedIndex = CBMXIO.INDEX_NULL_STRING;
   private final boolean m_bReUseStrings;
   private final StringEncoder s_aEncoder = new StringEncoder (CBMXIO.ENCODING);
 
-  public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS, final boolean bReUseStrings)
+  public BMXWriterStringTable (@Nonnull final DataOutput aDOS, final boolean bReUseStrings)
   {
     m_aDOS = aDOS;
     m_bReUseStrings = bReUseStrings;

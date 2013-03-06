@@ -43,7 +43,7 @@ public final class BMXReader
     if (aFile == null)
       throw new NullPointerException ("file");
 
-    final InputStream aFIS = FileUtils.getInputStream (aFile);
+    final InputStream aFIS = FileUtils.getMappedInputStream (aFile);
     if (aFIS == null)
       return null;
 

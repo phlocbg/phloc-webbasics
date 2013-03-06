@@ -27,8 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -230,34 +228,15 @@ public class BMXWriter
       // Write settings
       aDOS.writeInt (m_aSettings.getStorageValue ());
 
-      DataOutputStream aContentDOS = aDOS;
-      Deflater aDeflater = null;
-      DeflaterOutputStream aDeflaterOS = null;
-      if (false)
-      {
-        aDeflater = new Deflater ();
-        aDeflaterOS = new DeflaterOutputStream (aDOS, aDeflater);
-        aContentDOS = new DataOutputStream (aDeflaterOS);
-      }
-
       // The string table to be filled
-      final BMXWriterStringTable aST = new BMXWriterStringTable (aContentDOS,
-                                                                 !m_aSettings.isSet (EBMXSetting.NO_STRINGTABLE));
+      final BMXWriterStringTable aST = new BMXWriterStringTable (aDOS, !m_aSettings.isSet (EBMXSetting.NO_STRINGTABLE));
 
       // Write the main content and filling the string table
-      _writeContent (aST, aNode, aContentDOS);
+      _writeContent (aST, aNode, aDOS);
 
       // Write EOF marker
-      aContentDOS.writeByte (CBMXIO.NODETYPE_EOF);
-
-      // Finish deflate
-      if (aDeflaterOS != null)
-      {
-        aDeflaterOS.finish ();
-        aDeflater.end ();
-      }
-      aContentDOS.flush ();
-
+      aDOS.writeByte (CBMXIO.NODETYPE_EOF);
+      aDOS.flush ();
       return ESuccess.SUCCESS;
     }
     catch (final IOException ex)
