@@ -18,7 +18,6 @@
 package com.phloc.web.fileupload.io;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -37,6 +36,7 @@ import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.file.FileOperations;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -213,7 +213,7 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
   public InputStream getInputStream () throws IOException
   {
     if (!isInMemory ())
-      return new FileInputStream (m_aDfos.getFile ());
+      return FileUtils.getInputStream (m_aDfos.getFile ());
 
     if (m_aCachedContent == null)
       m_aCachedContent = m_aDfos.getData ();
@@ -653,7 +653,7 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
     }
     else
     {
-      final FileInputStream input = new FileInputStream (m_aDfosFile);
+      final InputStream input = FileUtils.getInputStream (m_aDfosFile);
       StreamUtils.copyInputStreamToOutputStream (input, output);
       FileOperations.deleteFile (m_aDfosFile);
       m_aDfosFile = null;
