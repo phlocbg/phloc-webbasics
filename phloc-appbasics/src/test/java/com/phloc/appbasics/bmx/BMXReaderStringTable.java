@@ -8,15 +8,29 @@ import javax.annotation.Nullable;
 
 final class BMXReaderStringTable
 {
-  private final TIntObjectMap <String> aStringTable = new TIntObjectHashMap <String> ();
-  private int nLastUsedStringTableIndex = 0;
+  private final boolean m_bReUseStrings;
+  private final TIntObjectMap <String> m_aStringTable;
+  private String m_sLastString;
+  private int m_nLastUsedStringTableIndex = 0;
 
-  public BMXReaderStringTable ()
-  {}
+  public BMXReaderStringTable (final boolean bReUseStrings)
+  {
+    m_bReUseStrings = bReUseStrings;
+    m_aStringTable = bReUseStrings ? new TIntObjectHashMap <String> (1000) : null;
+  }
 
   public void add (@Nonnull final String s)
   {
-    aStringTable.put (++nLastUsedStringTableIndex, s);
+    if (m_bReUseStrings)
+    {
+      m_aStringTable.put (++m_nLastUsedStringTableIndex, s);
+    }
+    else
+    {
+      if (m_sLastString != null)
+        throw new NullPointerException ("Internal inconsistency");
+      m_sLastString = s;
+    }
   }
 
   @Nullable
@@ -25,9 +39,16 @@ final class BMXReaderStringTable
     if (nIndex == CBMXIO.INDEX_NULL_STRING)
       return null;
 
-    final String ret = aStringTable.get (nIndex);
-    if (ret == null)
-      throw new IllegalArgumentException ("Failed to resolve index " + nIndex);
+    if (m_bReUseStrings)
+    {
+      final String ret = m_aStringTable.get (nIndex);
+      if (ret == null)
+        throw new IllegalArgumentException ("Failed to resolve index " + nIndex);
+      return ret;
+    }
+
+    final String ret = m_sLastString;
+    m_sLastString = null;
     return ret;
   }
 }

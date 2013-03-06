@@ -243,7 +243,8 @@ public class BMXWriter
       }
 
       // The string table to be filled
-      final BMXWriterStringTable aST = new BMXWriterStringTable (aContentDOS);
+      final BMXWriterStringTable aST = new BMXWriterStringTable (aContentDOS,
+                                                                 !m_aSettings.isSet (EBMXSetting.NO_STRINGTABLE));
 
       // Write the main content and filling the string table
       _writeContent (aST, aNode, aContentDOS);

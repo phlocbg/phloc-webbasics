@@ -33,20 +33,15 @@ import com.phloc.commons.string.ToStringGenerator;
 final class BMXWriterStringTable
 {
   private final DataOutputStream m_aDOS;
-  private final TObjectIntMap <String> m_aStrings = new TObjectIntHashMap <String> (1000);
+  private final TObjectIntMap <String> m_aStrings;
   private int m_nLastUsedIndex = CBMXIO.INDEX_NULL_STRING;
+  private final boolean m_bReUseStrings;
 
-  public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS)
+  public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS, final boolean bReUseStrings)
   {
     m_aDOS = aDOS;
-  }
-
-  public int addString (@Nullable final CharSequence aString) throws IOException
-  {
-    if (aString == null)
-      return CBMXIO.INDEX_NULL_STRING;
-
-    return addString (aString.toString ());
+    m_bReUseStrings = bReUseStrings;
+    m_aStrings = bReUseStrings ? new TObjectIntHashMap <String> (1000) : null;
   }
 
   private void _onNewString (@Nonnull final String sString) throws IOException
@@ -57,19 +52,35 @@ final class BMXWriterStringTable
     m_aDOS.write (aBytes, 0, aBytes.length);
   }
 
+  public int addString (@Nullable final CharSequence aString) throws IOException
+  {
+    if (aString == null)
+      return CBMXIO.INDEX_NULL_STRING;
+
+    return addString (aString.toString ());
+  }
+
+  @Nonnegative
   public int addString (@Nullable final String sString) throws IOException
   {
     if (sString == null)
       return CBMXIO.INDEX_NULL_STRING;
 
-    int nIndex = m_aStrings.get (sString);
-    if (TroveUtils.isNotContained (nIndex))
+    if (m_bReUseStrings)
     {
-      nIndex = ++m_nLastUsedIndex;
-      m_aStrings.put (sString, nIndex);
-      _onNewString (sString);
+      int nIndex = m_aStrings.get (sString);
+      if (TroveUtils.isNotContained (nIndex))
+      {
+        nIndex = ++m_nLastUsedIndex;
+        m_aStrings.put (sString, nIndex);
+        _onNewString (sString);
+      }
+      return nIndex;
     }
-    return nIndex;
+
+    // Write String where it occurs!
+    _onNewString (sString);
+    return ++m_nLastUsedIndex;
   }
 
   @Nonnegative

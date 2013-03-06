@@ -32,7 +32,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  */
 public enum EBMXSetting
 {
-  _DUMMY (0x0000, false);
+  NO_STRINGTABLE (0x0001, false);
 
   private final int m_nValue;
   private final boolean m_bEnabledByDefault;

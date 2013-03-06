@@ -94,7 +94,7 @@ public final class BMXReader
       IMicroNode aResultNode = null;
       final NonBlockingStack <IMicroNode> aNodeStack = new NonBlockingStack <IMicroNode> ();
       IMicroNode aLastNode = null;
-      final BMXReaderStringTable aST = new BMXReaderStringTable ();
+      final BMXReaderStringTable aST = new BMXReaderStringTable (!aSettings.isSet (EBMXSetting.NO_STRINGTABLE));
 
       int nNodeType;
       while ((nNodeType = aContentDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)

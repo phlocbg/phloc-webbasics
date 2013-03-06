@@ -53,7 +53,14 @@ public final class BMXWriterTest
     final File aFile1 = new File (ScopeTestRule.STORAGE_PATH, "test.bmx");
     new BMXWriter ().writeToFile (aDoc, aFile1);
 
-    final IMicroNode aNode = BMXReader.readFromFile (aFile1);
+    IMicroNode aNode = BMXReader.readFromFile (aFile1);
+    assertNotNull (aNode);
+    assertTrue (aDoc.isEqualContent (aNode));
+
+    final File aFile2 = new File (ScopeTestRule.STORAGE_PATH, "test.nost.bmx");
+    new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.NO_STRINGTABLE)).writeToFile (aDoc, aFile2);
+
+    aNode = BMXReader.readFromFile (aFile2);
     assertNotNull (aNode);
     assertTrue (aDoc.isEqualContent (aNode));
   }
@@ -94,6 +101,23 @@ public final class BMXWriterTest
       final IMicroNode aNode = BMXReader.readFromFile (aFile);
       assertNotNull (aNode);
       System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
+      assertTrue (aDoc.isEqualContent (aNode));
+    }
+
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.NO_STRINGTABLE));
+      aWriter.writeToFile (aDoc, aFile);
+      System.out.println ("Writing BMX without ST took " + aSW.stopAndGetMillis () + "ms");
+    }
+
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      final IMicroNode aNode = BMXReader.readFromFile (aFile);
+      assertNotNull (aNode);
+      System.out.println ("Reading BMX without ST took " + aSW.stopAndGetMillis () + "ms");
       assertTrue (aDoc.isEqualContent (aNode));
     }
   }
