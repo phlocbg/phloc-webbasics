@@ -24,7 +24,6 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
@@ -296,7 +295,7 @@ public class BMXWriter
     if (aFile == null)
       throw new NullPointerException ("file");
 
-    final FileOutputStream aFOS = FileUtils.getOutputStream (aFile);
+    final OutputStream aFOS = FileUtils.getMappedOutputStream (aFile);
     if (aFOS == null)
       return ESuccess.FAILURE;
 
