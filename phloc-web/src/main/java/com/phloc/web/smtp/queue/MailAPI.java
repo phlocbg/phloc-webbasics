@@ -42,11 +42,13 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.web.smtp.settings.ISMTPSettings;
+import com.phloc.web.smtp.settings.ReadonlySMTPSettings;
 
 /**
  * This class simplifies the task of sending an email.<br>
@@ -120,15 +122,18 @@ public final class MailAPI
     if (s_aSenderThreadPool.isShutdown ())
       throw new IllegalStateException ("Cannot submit to mailqueues that are already stopped!");
 
+    // Ensure that always the same type is used!
+    final ReadonlySMTPSettings aRealSMTPSettings = new ReadonlySMTPSettings (aSMTPSettings);
+
     // get queue per SMTP
-    MailQueuePerSMTP aSMTPQueue = s_aQueueCache.get (aSMTPSettings);
+    MailQueuePerSMTP aSMTPQueue = s_aQueueCache.get (aRealSMTPSettings);
     if (aSMTPQueue == null)
     {
       // create a new queue
-      aSMTPQueue = new MailQueuePerSMTP (aSMTPSettings, s_aFailedMailQueue);
+      aSMTPQueue = new MailQueuePerSMTP (aRealSMTPSettings, s_aFailedMailQueue);
 
       // put queue in cache
-      s_aQueueCache.put (aSMTPSettings, aSMTPQueue);
+      s_aQueueCache.put (aRealSMTPSettings, aSMTPQueue);
 
       // and start running the queue
       s_aSenderThreadPool.submit (aSMTPQueue);
@@ -198,6 +203,7 @@ public final class MailAPI
     }
 
     int nQueuedMails = 0;
+    final boolean bSendVendorOnlyMails = GlobalDebug.isDebugMode ();
 
     // submit all messages
     for (final IEmailData aMailData : aMailDataList)
@@ -211,17 +217,23 @@ public final class MailAPI
 
       if (aMailData.getFrom () == null)
       {
-        s_aLogger.warn ("Mail data has no sender address: " + aMailData);
+        s_aLogger.error ("Mail data has no sender address: " + aMailData + " - not queuing!");
         bCanQueue = false;
       }
 
       if (aMailData.getToCount () == 0)
       {
-        s_aLogger.warn ("Mail data has no receiver address: " + aMailData);
+        s_aLogger.error ("Mail data has no receiver address: " + aMailData + " - not queuing!");
         bCanQueue = false;
       }
 
-      if (GlobalDebug.isDebugMode ())
+      if (StringHelper.hasNoText (aMailData.getSubject ()))
+        s_aLogger.warn ("Mail data has no subject: " + aMailData);
+
+      if (StringHelper.hasNoText (aMailData.getBody ()))
+        s_aLogger.warn ("Mail data has no body: " + aMailData);
+
+      if (bSendVendorOnlyMails)
       {
         // In the debug version we can only send to vendor addresses!
         if (hasNonVendorEmailAddress (aMailData.getTo ()) ||
@@ -241,7 +253,7 @@ public final class MailAPI
 
       if (bCanQueue)
       {
-        if (GlobalDebug.isDebugMode ())
+        if (bSendVendorOnlyMails)
         {
           aMailData.setSubject ("[DEBUG] " + aMailData.getSubject ());
           s_aLogger.info ("Sending only-to-vendor mail in debug version:\n" + aSMTPSettings + "\n" + aMailData);
@@ -249,8 +261,9 @@ public final class MailAPI
 
         // Uses UTC timezone!
         aMailData.setSentDate (PDTFactory.getCurrentDateTime ());
-        aSMTPQueue.queueObject (aMailData);
-        ++nQueuedMails;
+        if (aSMTPQueue.queueObject (aMailData).isSuccess ())
+          ++nQueuedMails;
+        // else an error message was already logged
       }
     }
     return nQueuedMails;

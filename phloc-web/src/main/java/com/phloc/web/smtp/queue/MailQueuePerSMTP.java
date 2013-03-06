@@ -73,8 +73,15 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
     m_aFailedMailQueue = aFailedMailQueue;
   }
 
+  /**
+   * This is the callback to be invoked everytime something is in the queue.
+   * 
+   * @param aMessages
+   *        The non-null and non-empty list of messages to be send
+   */
   public void run (@Nullable final List <IEmailData> aMessages)
   {
+    // Expect the worst
     if (ContainerHelper.isNotEmpty (aMessages))
     {
       final ISMTPSettings aSettings = m_aTransport.getSettings ();
