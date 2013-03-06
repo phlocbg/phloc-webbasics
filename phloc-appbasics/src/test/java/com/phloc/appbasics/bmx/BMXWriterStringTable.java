@@ -22,6 +22,7 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -49,9 +50,9 @@ final class BMXWriterStringTable
   private void _onNewString (@Nonnull final String sString) throws IOException
   {
     m_aDOS.writeByte (CBMXIO.NODETYPE_STRING);
-    final byte [] aBytes = s_aEncoder.getAsNewArray (sString);
-    m_aDOS.writeInt (aBytes.length);
-    m_aDOS.write (aBytes, 0, aBytes.length);
+    final ByteBuffer aBytes = s_aEncoder.getAsNewByteBuffer (sString);
+    m_aDOS.writeInt (aBytes.limit ());
+    m_aDOS.write (aBytes.array (), aBytes.arrayOffset (), aBytes.limit ());
   }
 
   public int addString (@Nullable final CharSequence aString) throws IOException
