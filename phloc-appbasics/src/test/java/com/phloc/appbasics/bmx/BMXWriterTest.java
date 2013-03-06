@@ -24,6 +24,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.phloc.commons.collections.trove.TroveInit;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.IMicroNode;
@@ -41,7 +42,7 @@ public final class BMXWriterTest
 {
   static
   {
-    TroveUtils.init (true);
+    TroveInit.initTrove (true);
   }
 
   @Test

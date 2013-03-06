@@ -21,27 +21,45 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ICloneable;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.port.DefaultNetworkPorts;
 
 /**
- * Default implementation of the {@link ISMTPSettings} interface.
+ * Writable implementation of the {@link ISMTPSettings} interface.
  * 
  * @author philip
  */
 @Immutable
-public final class SMTPSettings implements ISMTPSettings
+public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettings>
 {
-  private final String m_sHost;
-  private final int m_nPort;
-  private final String m_sUser;
-  private final String m_sPassword;
-  private final String m_sCharset;
-  private final boolean m_bSSLEnabled;
+  private String m_sHostName;
+  private int m_nPort;
+  private String m_sUserName;
+  private String m_sPassword;
+  private String m_sCharset;
+  private boolean m_bSSLEnabled;
+
+  /**
+   * Constructor which copies settings from another object
+   * 
+   * @param aOther
+   *        The settings to use. May not be <code>null</code>.
+   */
+  public SMTPSettings (@Nonnull final ISMTPSettings aOther)
+  {
+    this (aOther.getHostName (),
+          aOther.getPort (),
+          aOther.getUserName (),
+          aOther.getPassword (),
+          aOther.getCharset (),
+          aOther.isSSLEnabled ());
+  }
 
   /**
    * Constructor with default port, and no authentication
@@ -58,12 +76,12 @@ public final class SMTPSettings implements ISMTPSettings
   /**
    * Constructor
    * 
-   * @param sHost
+   * @param sHostName
    *        SMTP server name or IP address. May neither be <code>null</code> nor
    *        empty.
    * @param nPort
    *        Port to use. May be <code>-1</code> for the default port.
-   * @param sUser
+   * @param sUserName
    *        The username to use. May be <code>null</code>.
    * @param sPassword
    *        The password to use. May be <code>null</code>.
@@ -72,29 +90,37 @@ public final class SMTPSettings implements ISMTPSettings
    * @param bSSLEnabled
    *        <code>true</code> to enable SSL communications
    */
-  public SMTPSettings (@Nonnull final String sHost,
+  public SMTPSettings (@Nonnull final String sHostName,
                        final int nPort,
-                       @Nullable final String sUser,
+                       @Nullable final String sUserName,
                        @Nullable final String sPassword,
                        @Nullable final String sCharset,
                        final boolean bSSLEnabled)
   {
-    if (sHost == null)
-      throw new NullPointerException ("host");
-    if (nPort != -1 && !DefaultNetworkPorts.isValidPort (nPort))
-      throw new IllegalArgumentException ("Port must either be -1 or must be in the valid range!");
-    m_sHost = sHost;
-    m_nPort = nPort;
-    m_sUser = StringHelper.hasNoText (sUser) ? null : sUser;
-    m_sPassword = StringHelper.hasNoText (sPassword) ? null : sPassword;
-    m_sCharset = StringHelper.hasNoText (sCharset) ? CWebCharset.CHARSET_SMTP : sCharset;
-    m_bSSLEnabled = bSSLEnabled;
+    setHostName (sHostName);
+    setPort (nPort);
+    setUserName (sUserName);
+    setPassword (sPassword);
+    setCharset (sCharset);
+    setSSLEnabled (bSSLEnabled);
   }
 
   @Nonnull
   public String getHostName ()
   {
-    return m_sHost;
+    return m_sHostName;
+  }
+
+  @Nonnull
+  public EChange setHostName (@Nonnull final String sHostName)
+  {
+    if (sHostName == null)
+      throw new NullPointerException ("host");
+
+    if (sHostName.equals (m_sHostName))
+      return EChange.UNCHANGED;
+    m_sHostName = sHostName;
+    return EChange.CHANGED;
   }
 
   public int getPort ()
@@ -102,10 +128,32 @@ public final class SMTPSettings implements ISMTPSettings
     return m_nPort;
   }
 
+  @Nonnull
+  public EChange setPort (final int nPort)
+  {
+    if (nPort != -1 && !DefaultNetworkPorts.isValidPort (nPort))
+      throw new IllegalArgumentException ("Port must either be -1 or must be in the valid range!");
+
+    if (nPort == m_nPort)
+      return EChange.UNCHANGED;
+    m_nPort = nPort;
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public String getUserName ()
   {
-    return m_sUser;
+    return m_sUserName;
+  }
+
+  @Nonnull
+  public EChange setUserName (@Nullable final String sUserName)
+  {
+    final String sRealUserName = StringHelper.hasNoText (sUserName) ? null : sUserName;
+    if (EqualsUtils.equals (sRealUserName, m_sUserName))
+      return EChange.UNCHANGED;
+    m_sUserName = sRealUserName;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -115,9 +163,29 @@ public final class SMTPSettings implements ISMTPSettings
   }
 
   @Nonnull
+  public EChange setPassword (@Nullable final String sPassword)
+  {
+    final String sRealPassword = StringHelper.hasNoText (sPassword) ? null : sPassword;
+    if (EqualsUtils.equals (sRealPassword, m_sPassword))
+      return EChange.UNCHANGED;
+    m_sPassword = sRealPassword;
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   public String getCharset ()
   {
     return m_sCharset;
+  }
+
+  @Nonnull
+  public EChange setCharset (@Nullable final String sCharset)
+  {
+    final String sRealCharset = StringHelper.hasNoText (sCharset) ? CWebCharset.CHARSET_SMTP : sCharset;
+    if (EqualsUtils.equals (sRealCharset, m_sCharset))
+      return EChange.UNCHANGED;
+    m_sCharset = sRealCharset;
+    return EChange.CHANGED;
   }
 
   public boolean isSSLEnabled ()
@@ -125,9 +193,24 @@ public final class SMTPSettings implements ISMTPSettings
     return m_bSSLEnabled;
   }
 
+  @Nonnull
+  public EChange setSSLEnabled (final boolean bSSLEnabled)
+  {
+    if (m_bSSLEnabled == bSSLEnabled)
+      return EChange.UNCHANGED;
+    m_bSSLEnabled = bSSLEnabled;
+    return EChange.CHANGED;
+  }
+
   public boolean areRequiredFieldsSet ()
   {
-    return StringHelper.hasText (m_sHost);
+    return StringHelper.hasText (m_sHostName);
+  }
+
+  @Nonnull
+  public SMTPSettings getClone ()
+  {
+    return new SMTPSettings (this);
   }
 
   @Override
@@ -138,9 +221,9 @@ public final class SMTPSettings implements ISMTPSettings
     if (!(o instanceof SMTPSettings))
       return false;
     final SMTPSettings rhs = (SMTPSettings) o;
-    return m_sHost.equals (rhs.m_sHost) &&
+    return m_sHostName.equals (rhs.m_sHostName) &&
            m_nPort == rhs.m_nPort &&
-           EqualsUtils.equals (m_sUser, rhs.m_sUser) &&
+           EqualsUtils.equals (m_sUserName, rhs.m_sUserName) &&
            EqualsUtils.equals (m_sPassword, rhs.m_sPassword) &&
            m_sCharset.equals (rhs.m_sCharset) &&
            m_bSSLEnabled == rhs.m_bSSLEnabled;
@@ -149,9 +232,9 @@ public final class SMTPSettings implements ISMTPSettings
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sHost)
+    return new HashCodeGenerator (this).append (m_sHostName)
                                        .append (m_nPort)
-                                       .append (m_sUser)
+                                       .append (m_sUserName)
                                        .append (m_sPassword)
                                        .append (m_sCharset)
                                        .append (m_bSSLEnabled)
@@ -161,9 +244,9 @@ public final class SMTPSettings implements ISMTPSettings
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("host", m_sHost)
+    return new ToStringGenerator (this).append ("hostName", m_sHostName)
                                        .append ("port", m_nPort)
-                                       .append ("user", m_sUser)
+                                       .append ("userName", m_sUserName)
                                        .appendPassword ("password")
                                        .append ("charset", m_sCharset)
                                        .append ("useSSL", m_bSSLEnabled)

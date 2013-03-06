@@ -17,7 +17,6 @@
  */
 package com.phloc.appbasics.bmx;
 
-import gnu.trove.impl.Constants;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -28,6 +27,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.collections.trove.TroveUtils;
 import com.phloc.commons.string.ToStringGenerator;
 
 final class BMXWriterStringTable
@@ -63,7 +63,7 @@ final class BMXWriterStringTable
       return CBMXIO.INDEX_NULL_STRING;
 
     int nIndex = m_aStrings.get (sString);
-    if (nIndex == Constants.DEFAULT_INT_NO_ENTRY_VALUE)
+    if (TroveUtils.isNotContained (nIndex))
     {
       nIndex = ++m_nLastUsedIndex;
       m_aStrings.put (sString, nIndex);
