@@ -3,9 +3,10 @@ package com.phloc.appbasics.bmx;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
@@ -14,7 +15,6 @@ import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -45,7 +45,7 @@ public final class BMXReader
     if (aFile == null)
       throw new NullPointerException ("file");
 
-    final FileInputStream aFIS = FileUtils.getInputStream (aFile);
+    final InputStream aFIS = FileUtils.getMappedInputStream (aFile);
     if (aFIS == null)
       return null;
 
@@ -72,8 +72,7 @@ public final class BMXReader
       // Read version
       final byte [] aVersion = new byte [4];
       aDIS.readFully (aVersion);
-      final String sVersion = new String (aVersion, CCharset.CHARSET_ISO_8859_1_OBJ);
-      if (!sVersion.equals (CBMXIO.VERSION1))
+      if (!Arrays.equals (CBMXIO.VERSION1, aVersion))
         throw new BMXReadException ("This is not a BMX file!");
 
       // Read settings
@@ -95,6 +94,7 @@ public final class BMXReader
       final NonBlockingStack <IMicroNode> aNodeStack = new NonBlockingStack <IMicroNode> ();
       IMicroNode aLastNode = null;
       final BMXReaderStringTable aST = new BMXReaderStringTable (!aSettings.isSet (EBMXSetting.NO_STRINGTABLE));
+      byte [] aBuf = new byte [1024];
 
       int nNodeType;
       while ((nNodeType = aContentDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)
@@ -103,10 +103,10 @@ public final class BMXReader
         switch (nNodeType)
         {
           case CBMXIO.NODETYPE_CDATA:
-            aCreatedNode = new MicroCDATA (aST.get (aContentDIS.readInt ()));
+            aCreatedNode = new MicroCDATA (aST.getString (aContentDIS.readInt ()));
             break;
           case CBMXIO.NODETYPE_COMMENT:
-            aCreatedNode = new MicroComment (aST.get (aContentDIS.readInt ()));
+            aCreatedNode = new MicroComment (aST.getString (aContentDIS.readInt ()));
             break;
           case CBMXIO.NODETYPE_CONTAINER:
             aCreatedNode = new MicroContainer ();
@@ -116,40 +116,40 @@ public final class BMXReader
             break;
           case CBMXIO.NODETYPE_DOCUMENT_TYPE:
           {
-            final String sQualifiedName = aST.get (aContentDIS.readInt ());
-            final String sPublicID = aST.get (aContentDIS.readInt ());
-            final String sSystemID = aST.get (aContentDIS.readInt ());
+            final String sQualifiedName = aST.getString (aContentDIS.readInt ());
+            final String sPublicID = aST.getString (aContentDIS.readInt ());
+            final String sSystemID = aST.getString (aContentDIS.readInt ());
             aCreatedNode = new MicroDocumentType (sQualifiedName, sPublicID, sSystemID);
             break;
           }
           case CBMXIO.NODETYPE_ELEMENT:
           {
-            final String sNamespaceURI = aST.get (aContentDIS.readInt ());
-            final String sTagName = aST.get (aContentDIS.readInt ());
+            final String sNamespaceURI = aST.getString (aContentDIS.readInt ());
+            final String sTagName = aST.getString (aContentDIS.readInt ());
             final IMicroElement aElement = new MicroElement (sNamespaceURI, sTagName);
             final int nAttrCount = aContentDIS.readInt ();
             for (int i = 0; i < nAttrCount; ++i)
             {
-              final String sAttrName = aST.get (aContentDIS.readInt ());
-              final String sAttrValue = aST.get (aContentDIS.readInt ());
+              final String sAttrName = aST.getString (aContentDIS.readInt ());
+              final String sAttrValue = aST.getString (aContentDIS.readInt ());
               aElement.setAttribute (sAttrName, sAttrValue);
             }
             aCreatedNode = aElement;
             break;
           }
           case CBMXIO.NODETYPE_ENTITY_REFERENCE:
-            aCreatedNode = new MicroEntityReference (aST.get (aContentDIS.readInt ()));
+            aCreatedNode = new MicroEntityReference (aST.getString (aContentDIS.readInt ()));
             break;
           case CBMXIO.NODETYPE_PROCESSING_INSTRUCTION:
           {
-            final String sTarget = aST.get (aContentDIS.readInt ());
-            final String sData = aST.get (aContentDIS.readInt ());
+            final String sTarget = aST.getString (aContentDIS.readInt ());
+            final String sData = aST.getString (aContentDIS.readInt ());
             aCreatedNode = new MicroProcessingInstruction (sTarget, sData);
             break;
           }
           case CBMXIO.NODETYPE_TEXT:
           {
-            final String sText = aST.get (aContentDIS.readInt ());
+            final String sText = aST.getString (aContentDIS.readInt ());
             final boolean bIgnorableWhitespace = aContentDIS.readBoolean ();
             aCreatedNode = new MicroText (sText, bIgnorableWhitespace);
             break;
@@ -157,9 +157,10 @@ public final class BMXReader
           case CBMXIO.NODETYPE_STRING:
           {
             final int nLength = aContentDIS.readInt ();
-            final byte [] aString = new byte [nLength];
-            aContentDIS.readFully (aString);
-            aST.add (new String (aString, CBMXIO.ENCODING));
+            if (nLength > aBuf.length)
+              aBuf = new byte [Math.max (nLength, aBuf.length * 2)];
+            aContentDIS.readFully (aBuf, 0, nLength);
+            aST.add (CBMXIO.ENCODING.decode (ByteBuffer.wrap (aBuf, 0, nLength)));
             break;
           }
           case CBMXIO.SPECIAL_CHILDREN_START:

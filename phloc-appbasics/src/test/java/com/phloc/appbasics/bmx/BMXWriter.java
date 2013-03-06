@@ -35,7 +35,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
@@ -227,7 +226,7 @@ public class BMXWriter
     try
     {
       // Main format version
-      aDOS.write (CBMXIO.VERSION1.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
+      aDOS.write (CBMXIO.VERSION1);
 
       // Write settings
       aDOS.writeInt (m_aSettings.getStorageValue ());

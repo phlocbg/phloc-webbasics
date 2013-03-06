@@ -14,7 +14,7 @@ public final class CBMXIO
   public static final Charset ENCODING = CCharset.CHARSET_UTF_8_OBJ;
 
   /** Version number of format v1 - must be 4 bytes, all ASCII! */
-  public static final String VERSION1 = "BMX1";
+  public static final byte [] VERSION1 = new byte [] { 'B', 'M', 'X', '1' };
 
   public static final int NODETYPE_CDATA = 0x01;
   public static final int NODETYPE_COMMENT = 0x02;
