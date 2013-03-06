@@ -72,65 +72,37 @@ public final class BMXWriterTest
     final File aFile1 = new File (ScopeTestRule.STORAGE_PATH, "standard.bmx");
     final File aFile2 = new File (ScopeTestRule.STORAGE_PATH, "standard2.bmx");
     final int nMax = 1;
+    IMicroDocument aDoc = null;
 
     for (int i = 0; i < nMax; ++i)
     {
       aSW.restart ();
-      IMicroDocument aDoc = MicroReader.readMicroXML (new ClassPathResource ("bmx/standard.xml"));
+      aDoc = MicroReader.readMicroXML (new ClassPathResource ("bmx/standard.xml"));
       assertNotNull (aDoc);
       System.out.println ("Reading via SAX took " + aSW.stopAndGetMillis () + "ms");
+    }
 
+    for (int i = 0; i < nMax; ++i)
+    {
       aSW.restart ();
       MicroWriter.writeToFile (aDoc, new File (ScopeTestRule.STORAGE_PATH, "standard.xml"));
       System.out.println ("Writing via MicroWriter took " + aSW.stopAndGetMillis () + "ms");
+    }
 
+    for (int i = 0; i < nMax; ++i)
+    {
       aSW.restart ();
-      BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ());
+      final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ());
       aWriter.writeToFile (aDoc, aFile1);
       System.out.println ("Writing BMX took " + aSW.stopAndGetMillis () + "ms");
+    }
 
+    for (int i = 0; i < nMax; ++i)
+    {
       aSW.restart ();
-      aWriter = new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.NO_STRINGTABLE));
+      final BMXWriter aWriter = new BMXWriter (BMXSettings.createDefault ().set (EBMXSetting.NO_STRINGTABLE));
       aWriter.writeToFile (aDoc, aFile2);
       System.out.println ("Writing BMX without ST took " + aSW.stopAndGetMillis () + "ms");
-
-      aDoc = null;
-      System.gc ();
-    }
-    System.gc ();
-    System.out.println ("Start reading");
-
-    for (int i = 0; i < nMax; ++i)
-    {
-      aSW.restart ();
-      final IMicroNode aNode = BMXReader.readFromFile (aFile1);
-      assertNotNull (aNode);
-      System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
-    }
-
-    for (int i = 0; i < nMax; ++i)
-    {
-      aSW.restart ();
-      final IMicroNode aNode = BMXReader.readFromFile (aFile2);
-      assertNotNull (aNode);
-      System.out.println ("Reading BMX without ST took " + aSW.stopAndGetMillis () + "ms");
-    }
-  }
-
-  @Test
-  public void testStandardReadXML ()
-  {
-    final StopWatch aSW = new StopWatch ();
-    final File aFile1 = new File (ScopeTestRule.STORAGE_PATH, "standard.bmx");
-    final File aFile2 = new File (ScopeTestRule.STORAGE_PATH, "standard2.bmx");
-    final int nMax = 5;
-
-    for (int i = 0; i < nMax; ++i)
-    {
-      aSW.restart ();
-      final IMicroNode aNode = BMXReader.readFromFile (aFile2);
-      assertNotNull (aNode);
-      System.out.println ("Reading BMX without ST took " + aSW.stopAndGetMillis () + "ms");
     }
 
     for (int i = 0; i < nMax; ++i)
@@ -139,6 +111,16 @@ public final class BMXWriterTest
       final IMicroNode aNode = BMXReader.readFromFile (aFile1);
       assertNotNull (aNode);
       System.out.println ("Reading BMX took " + aSW.stopAndGetMillis () + "ms");
+      assertTrue (aDoc.isEqualContent (aNode));
+    }
+
+    for (int i = 0; i < nMax; ++i)
+    {
+      aSW.restart ();
+      final IMicroNode aNode = BMXReader.readFromFile (aFile2);
+      assertNotNull (aNode);
+      System.out.println ("Reading BMX without ST took " + aSW.stopAndGetMillis () + "ms");
+      assertTrue (aDoc.isEqualContent (aNode));
     }
   }
 }

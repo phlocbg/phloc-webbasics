@@ -27,6 +27,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.charset.StringEncoder;
 import com.phloc.commons.collections.trove.TroveUtils;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -36,6 +37,7 @@ final class BMXWriterStringTable
   private final TObjectIntMap <String> m_aStrings;
   private int m_nLastUsedIndex = CBMXIO.INDEX_NULL_STRING;
   private final boolean m_bReUseStrings;
+  private final StringEncoder s_aEncoder = new StringEncoder (CBMXIO.ENCODING);
 
   public BMXWriterStringTable (@Nonnull final DataOutputStream aDOS, final boolean bReUseStrings)
   {
@@ -47,7 +49,7 @@ final class BMXWriterStringTable
   private void _onNewString (@Nonnull final String sString) throws IOException
   {
     m_aDOS.writeByte (CBMXIO.NODETYPE_STRING);
-    final byte [] aBytes = sString.getBytes (CBMXIO.ENCODING);
+    final byte [] aBytes = s_aEncoder.getAsNewArray (sString);
     m_aDOS.writeInt (aBytes.length);
     m_aDOS.write (aBytes, 0, aBytes.length);
   }

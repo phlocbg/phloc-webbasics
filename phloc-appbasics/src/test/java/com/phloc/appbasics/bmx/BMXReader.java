@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
@@ -15,6 +14,7 @@ import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.charset.StringDecoder;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -95,6 +95,7 @@ public final class BMXReader
       IMicroNode aLastNode = null;
       final BMXReaderStringTable aST = new BMXReaderStringTable (!aSettings.isSet (EBMXSetting.NO_STRINGTABLE));
       byte [] aBuf = new byte [1024];
+      final StringDecoder aDecoder = new StringDecoder (CBMXIO.ENCODING);
 
       int nNodeType;
       while ((nNodeType = aContentDIS.readByte () & 0xff) != CBMXIO.NODETYPE_EOF)
@@ -160,7 +161,7 @@ public final class BMXReader
             if (nLength > aBuf.length)
               aBuf = new byte [Math.max (nLength, aBuf.length * 2)];
             aContentDIS.readFully (aBuf, 0, nLength);
-            aST.add (CBMXIO.ENCODING.decode (ByteBuffer.wrap (aBuf, 0, nLength)));
+            aST.add (aDecoder.finish (aBuf, 0, nLength));
             break;
           }
           case CBMXIO.SPECIAL_CHILDREN_START:
