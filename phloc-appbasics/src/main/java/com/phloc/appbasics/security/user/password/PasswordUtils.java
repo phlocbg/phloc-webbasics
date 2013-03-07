@@ -23,6 +23,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
@@ -31,7 +34,9 @@ import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 @ThreadSafe
 public final class PasswordUtils
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordUtils.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
   private static IPasswordConstraints s_aPasswordConstraints = new PasswordConstraints ();
 
   private PasswordUtils ()
@@ -65,6 +70,7 @@ public final class PasswordUtils
     {
       s_aRWLock.writeLock ().unlock ();
     }
+    s_aLogger.info ("Set global password constraints to " + aPasswordConstraints);
   }
 
   /**
