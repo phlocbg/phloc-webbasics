@@ -46,14 +46,17 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.cleanup.CommonsCleanup;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.gfx.ImageDataManager;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.lang.ClassHierarchyCache;
 import com.phloc.commons.name.ComparatorHasDisplayName;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.system.EJVMVendor;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.commons.text.resource.ResourceBundleUtils;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.ThirdPartyModuleRegistry;
 import com.phloc.commons.url.URLUtils;
@@ -424,7 +427,12 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
     // Clear commons cache also manually - but after destroy because it
     // is used in equals and hashCode implementations
-    CommonsCleanup.cleanup ();
+    ImageDataManager.clearCache ();
+    DefaultTextResolver.clearCache ();
+    ResourceBundleUtils.clearCache ();
+
+    // Clean this one last as it is used in equals and hashCode implementations!
+    ClassHierarchyCache.clearClassHierarchyCache ();
 
     // De-init
     s_aInited.set (false);
