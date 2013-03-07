@@ -51,12 +51,22 @@ public class BootstrapTabBox implements IHCNodeBuilder
   public static final class Tab implements IHasID <String>, Serializable
   {
     private final String m_sID;
+    private final boolean m_bHasGeneratedID;
     private final IHCNode m_aLabel;
     private final IHCNode m_aContent;
 
     public Tab (@Nullable final String sID, @Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
     {
-      m_sID = StringHelper.hasText (sID) ? sID : GlobalIDFactory.getNewStringID ();
+      if (StringHelper.hasText (sID))
+      {
+        m_sID = sID;
+        m_bHasGeneratedID = false;
+      }
+      else
+      {
+        m_sID = GlobalIDFactory.getNewStringID ();
+        m_bHasGeneratedID = true;
+      }
       m_aLabel = aLabel;
       m_aContent = aContent;
     }
@@ -66,6 +76,11 @@ public class BootstrapTabBox implements IHCNodeBuilder
     public String getID ()
     {
       return m_sID;
+    }
+
+    public boolean isGeneratedID ()
+    {
+      return m_bHasGeneratedID;
     }
 
     @Nonnull
