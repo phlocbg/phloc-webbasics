@@ -32,17 +32,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.security.AccessManager;
+import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.scopes.singleton.SessionSingleton;
 
 /**
  * This class manages all logged-in users.
- *
+ * 
  * @author philip
  */
 @ThreadSafe
@@ -50,7 +52,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 {
   /**
    * This class manages the user ID of the current session
-   *
+   * 
    * @author philip
    */
   public static final class SessionUserHolder extends SessionSingleton
@@ -155,24 +157,40 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     if (aUser == null)
       return ELoginResult.USER_NOT_EXISTING;
 
+    final String sUserID = aUser.getID ();
+
     // Deleted user?
     if (aUser.isDeleted ())
+    {
+      AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-is-deleted");
       return ELoginResult.USER_IS_DELETED;
+    }
 
     // Disabled user?
     if (aUser.isDisabled ())
+    {
+      AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-is-disabled");
       return ELoginResult.USER_IS_DISABLED;
+    }
 
-    final String sUserID = aUser.getID ();
     final AccessManager aAM = AccessManager.getInstance ();
 
     // Are all roles present?
     if (!aAM.hasUserAllRoles (sUserID, aRequiredRoleIDs))
+    {
+      AuditUtils.onAuditExecuteFailure ("login",
+                                        sUserID,
+                                        "user-is-missing-required-roles",
+                                        StringHelper.getToString (aRequiredRoleIDs));
       return ELoginResult.USER_IS_MISSING_ROLE;
+    }
 
     // Check the password
     if (!aAM.areUserIDAndPasswordValid (sUserID, sPlainTextPassword))
+    {
+      AuditUtils.onAuditExecuteFailure ("login", sUserID, "invalid-password");
       return ELoginResult.INVALID_PASSWORD;
+    }
 
     // All checks done!
     m_aRWLock.writeLock ().lock ();
@@ -181,6 +199,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       if (!m_aLoggedInUsers.add (sUserID))
       {
         // The user is already logged in
+        AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-already-logged-in");
         return ELoginResult.USER_ALREADY_LOGGED_IN;
       }
 
@@ -188,21 +207,23 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       {
         // Another user is already in the current session
         m_aLoggedInUsers.remove (sUserID);
+        AuditUtils.onAuditExecuteFailure ("login", sUserID, "session-already-has-user");
         return ELoginResult.SESSION_ALREADY_HAS_USER;
       }
-
-      s_aLogger.info ("Logged in user '" + sUserID + "'");
-      return ELoginResult.SUCCESS;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+
+    s_aLogger.info ("Logged in user '" + sUserID + "'");
+    AuditUtils.onAuditExecuteSuccess ("login", sUserID);
+    return ELoginResult.SUCCESS;
   }
 
   /**
    * Manually log out the current user
-   *
+   * 
    * @param sUserID
    *        The user to log out
    * @param aSessionUserHolder
@@ -217,20 +238,24 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     try
     {
       if (!m_aLoggedInUsers.remove (sUserID))
+      {
+        AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
         return EChange.UNCHANGED;
+      }
       aSessionUserHolder._reset ();
-      s_aLogger.info ("Logged out user '" + sUserID + "'");
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    s_aLogger.info ("Logged out user '" + sUserID + "'");
+    AuditUtils.onAuditExecuteSuccess ("logout", sUserID);
+    return EChange.CHANGED;
   }
 
   /**
    * Manually log out the specified user
-   *
+   * 
    * @param sUserID
    *        The user ID to log out
    * @return {@link EChange} if something changed
@@ -243,7 +268,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   /**
    * Manually log out the current user
-   *
+   * 
    * @return {@link EChange} if something changed
    */
   @Nonnull
@@ -254,7 +279,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   /**
    * Check if the specified user is logged in or not
-   *
+   * 
    * @param sUserID
    *        The user ID to check. May be <code>null</code>.
    * @return <code>true</code> if the user is logged in, <code>false</code>
