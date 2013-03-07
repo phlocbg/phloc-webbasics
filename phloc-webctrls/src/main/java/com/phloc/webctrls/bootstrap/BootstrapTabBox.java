@@ -18,13 +18,15 @@
 package com.phloc.webctrls.bootstrap;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -46,7 +48,7 @@ import com.phloc.html.hc.impl.HCTextNode;
  */
 public class BootstrapTabBox implements IHCNodeBuilder
 {
-  private static final class Tab implements IHasID <String>, Serializable
+  public static final class Tab implements IHasID <String>, Serializable
   {
     private final String m_sID;
     private final IHCNode m_aLabel;
@@ -89,7 +91,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
   public static final boolean DEFAULT_ACTIVE = false;
 
   private EBootstrapTabBoxType m_eType = EBootstrapTabBoxType.TOP;
-  private final List <Tab> m_aTabs = new ArrayList <Tab> ();
+  private final Map <String, Tab> m_aTabs = new LinkedHashMap <String, Tab> ();
   private String m_sActiveTabID;
 
   public BootstrapTabBox ()
@@ -165,10 +167,25 @@ public class BootstrapTabBox implements IHCNodeBuilder
                                  final boolean bActive)
   {
     final Tab aTab = new Tab (sID, aLabel, aContent);
-    m_aTabs.add (aTab);
+    // Tab ID may be generated, if null was provided
+    final String sTabID = aTab.getID ();
+    m_aTabs.put (sTabID, aTab);
     if (bActive)
-      m_sActiveTabID = aTab.getID ();
+      m_sActiveTabID = sTabID;
     return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Tab> getAllTabs ()
+  {
+    return ContainerHelper.newList (m_aTabs.values ());
+  }
+
+  @Nullable
+  public Tab getTabOfID (@Nullable final String sID)
+  {
+    return m_aTabs.get (sID);
   }
 
   @Nullable
@@ -183,13 +200,13 @@ public class BootstrapTabBox implements IHCNodeBuilder
     if (StringHelper.hasNoText (sActiveTabID))
     {
       // Activate first tab by default
-      sActiveTabID = ContainerHelper.getFirstElement (m_aTabs).getID ();
+      sActiveTabID = ContainerHelper.getFirstValue (m_aTabs).getID ();
     }
 
     // Build code for tabs and content
     final HCUL aTabs = new HCUL ().addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_TABS);
     final HCDiv aContent = new HCDiv ().addClass (CBootstrapCSS.TAB_CONTENT);
-    for (final Tab aTab : m_aTabs)
+    for (final Tab aTab : m_aTabs.values ())
     {
       final boolean bIsActiveTab = aTab.getID ().equals (sActiveTabID);
 
