@@ -32,8 +32,8 @@ public final class CBootstrap
   /** Bootstrap version 2.2.2 */
   public static final Version BOOTSTRAP_VERSION_222 = new Version (2, 2, 2);
 
-  /** Bootstrap version 2.3.0 */
-  public static final Version BOOTSTRAP_VERSION_230 = new Version (2, 3, 0);
+  /** Bootstrap version 2.3.1 */
+  public static final Version BOOTSTRAP_VERSION_231 = new Version (2, 3, 1);
 
   private CBootstrap ()
   {}
