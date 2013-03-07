@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <entry date="2013-03-05" category="api" action="add" incompatible="true">
+    <change>
+      <text locale="en">IEmailData now has a fluent API</text>
+    </change>
+  </entry>
+  <entry date="2013-03-05" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Added new implementation ReadonlySMTPSetting and made SMTPSettings mutable</text>
+    </change>
+  </entry>
   <entry date="2013-03-05" category="api" action="change">
     <change>
       <text locale="en">Allowing to pass a negative port number in SMTPSettings constructor to use the default port</text>

@@ -22,8 +22,8 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.EncoderException;
-import com.phloc.commons.i18n.CodepointUtils;
-import com.phloc.commons.i18n.CodepointIteratorCharArray;
+import com.phloc.web.encoding.tmp.CodepointIteratorCharArray;
+import com.phloc.web.encoding.tmp.CodepointUtils;
 
 /**
  * Implementation of the Punycode encoding scheme used by IDNA
@@ -99,10 +99,9 @@ public final class Punycode
   {
     final StringBuilder buf = new StringBuilder ();
     final CodepointIteratorCharArray ci = new CodepointIteratorCharArray (chars);
-    int n, delta, h, b, bias, m, q, k, t;
-    n = initial_n;
-    delta = 0;
-    bias = initial_bias;
+    int n = initial_n;
+    int delta = 0;
+    int bias = initial_bias;
     int i = -1;
     while (ci.hasNext ())
     {
@@ -115,6 +114,7 @@ public final class Punycode
         }
       }
     }
+    int h, b, m, q, k, t;
     h = b = buf.length ();
     if (b > 0)
       buf.append ((char) delimiter);
