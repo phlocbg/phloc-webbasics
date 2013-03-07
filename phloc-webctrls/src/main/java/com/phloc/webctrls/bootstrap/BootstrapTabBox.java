@@ -202,7 +202,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
   }
 
   @Nullable
-  public IHCNode build ()
+  public HCDiv build ()
   {
     if (m_aTabs.isEmpty ())
       return null;
