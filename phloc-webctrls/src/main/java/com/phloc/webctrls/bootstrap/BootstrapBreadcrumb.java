@@ -25,7 +25,9 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCUL;
+import com.phloc.html.hc.htmlext.HCA_JS;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.html.js.IJSCodeProvider;
 
 /**
  * Breadcrumbs
@@ -43,6 +45,13 @@ public class BootstrapBreadcrumb extends HCUL
   public BootstrapBreadcrumb addLink (@Nonnull final ISimpleURL aURL, @Nonnull final String sText)
   {
     addItem (new HCA (aURL).addChild (sText));
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapBreadcrumb addLink (@Nonnull final IJSCodeProvider aJSCodeProvider, @Nonnull final String sText)
+  {
+    addItem (new HCA_JS (aJSCodeProvider).addChild (sText));
     return this;
   }
 
