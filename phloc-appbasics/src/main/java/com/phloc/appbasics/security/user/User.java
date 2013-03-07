@@ -114,6 +114,9 @@ public final class User implements IUser
         @Nonnull @Nonempty final String sEmailAddress,
         @Nonnull @Nonempty final String sPasswordHash,
         @Nullable final String sFirstName,
+        @Nullable final String sLastName,
+        @Nullable final Locale aDesiredLocale,
+        @Nullable final Map <String, String> aCustomAttrs,
         final boolean bDisabled)
   {
     this (sID,
@@ -124,9 +127,9 @@ public final class User implements IUser
           sEmailAddress,
           sPasswordHash,
           sFirstName,
-          (String) null,
-          (Locale) null,
-          (Map <String, String>) null,
+          sLastName,
+          aDesiredLocale,
+          aCustomAttrs,
           false,
           bDisabled);
   }

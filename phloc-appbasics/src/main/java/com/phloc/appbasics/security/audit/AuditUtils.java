@@ -38,9 +38,7 @@ public final class AuditUtils
 {
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
-  // This is the default dummy auditor that should be replaced with something
-  // meaningful!
-  private static IAuditor s_aAuditor = new LoggingAuditor (new MockCurrentUserIDProvider (null))
+  private static final IAuditor DEFAULT_AUDITOR = new LoggingAuditor (new MockCurrentUserIDProvider (null))
   {
     @Override
     protected String getAuditItemString (@Nonnull final IAuditItem aAuditItem)
@@ -48,6 +46,10 @@ public final class AuditUtils
       return "!DEFAULT-AUDITOR! " + super.getAuditItemString (aAuditItem);
     }
   };
+
+  // This is the default dummy auditor that should be replaced with something
+  // meaningful!
+  private static IAuditor s_aAuditor = DEFAULT_AUDITOR;
 
   private AuditUtils ()
   {}
@@ -86,6 +88,16 @@ public final class AuditUtils
     {
       s_aRWLock.writeLock ().unlock ();
     }
+  }
+
+  /**
+   * Set the default auditor again. This may be helpful when shutting down the
+   * main auditor, and at least want some prove, when something auditible
+   * happens.
+   */
+  public static void setDefaultAuditor ()
+  {
+    setAuditor (DEFAULT_AUDITOR);
   }
 
   public static void onAuditCreateSuccess (@Nonnull final ObjectType aObjectType)

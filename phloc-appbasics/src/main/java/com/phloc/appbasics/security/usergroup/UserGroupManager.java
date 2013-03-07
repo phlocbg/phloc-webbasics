@@ -30,6 +30,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.user.IUserManager;
 import com.phloc.commons.annotations.Nonempty;
@@ -174,6 +175,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_USERGROUP, aUserGroup.getID (), sName);
     return aUserGroup;
   }
 
@@ -195,6 +197,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_USERGROUP, aUserGroup.getID (), "predefined-usergroup", sName);
     return aUserGroup;
   }
 
@@ -275,14 +278,18 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     try
     {
       if (m_aUserGroups.remove (sUserGroupID) == null)
+      {
+        AuditUtils.onAuditDeleteFailure (CSecurity.TYPE_USERGROUP, "no-such-usergroup-id", sUserGroupID);
         return EChange.UNCHANGED;
+      }
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditDeleteSuccess (CSecurity.TYPE_USERGROUP, sUserGroupID);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -291,7 +298,10 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     // Resolve user group
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "name", "no-such-usergroup-id", sUserGroupID);
       return EChange.UNCHANGED;
+    }
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -299,12 +309,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
       if (aUserGroup.setName (sNewName).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "name", sUserGroupID, sNewName);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -313,7 +324,10 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     // Resolve user group
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "assign-user", "no-such-usergroup-id", sUserGroupID);
       return EChange.UNCHANGED;
+    }
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -321,12 +335,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
       if (aUserGroup.assignUser (sUserID).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "assign-user", sUserGroupID, sUserID);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -335,7 +350,10 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     // Resolve user group
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "unassign-user", "no-such-usergroup-id", sUserGroupID);
       return EChange.UNCHANGED;
+    }
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -343,12 +361,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
       if (aUserGroup.unassignUser (sUserID).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "unassign-user", sUserGroupID, sUserID);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -367,12 +386,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
         return EChange.UNCHANGED;
 
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "unassign-user-from-all-usergroups", sUserID);
+    return EChange.CHANGED;
   }
 
   public boolean isUserAssignedToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
@@ -430,7 +450,10 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     // Resolve user group
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "assign-role", "no-such-usergroup-id", sUserGroupID);
       return EChange.UNCHANGED;
+    }
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -438,12 +461,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
       if (aUserGroup.assignRole (sRoleID).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "assign-role", sUserGroupID, sRoleID);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -452,7 +476,10 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     // Resolve user group
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "unassign-role", "no-such-usergroup-id", sUserGroupID);
       return EChange.UNCHANGED;
+    }
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -460,12 +487,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
       if (aUserGroup.unassignRole (sRoleID).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "unassign-role", sUserGroupID, sRoleID);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -484,12 +512,13 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
         return EChange.UNCHANGED;
 
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP, "unassign-role-from-all-usergroups", sRoleID);
+    return EChange.CHANGED;
   }
 
   @Nonnull

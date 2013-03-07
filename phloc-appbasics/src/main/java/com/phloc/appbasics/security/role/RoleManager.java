@@ -28,6 +28,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -138,6 +139,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_ROLE, aRole.getID ());
     return aRole;
   }
 
@@ -158,6 +160,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_ROLE, aRole.getID (), "predefind-role");
     return aRole;
   }
 
@@ -235,14 +238,18 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     try
     {
       if (m_aRoles.remove (sRoleID) == null)
+      {
+        AuditUtils.onAuditDeleteFailure (CSecurity.TYPE_ROLE, "no-such-role-id", sRoleID);
         return EChange.UNCHANGED;
+      }
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditDeleteSuccess (CSecurity.TYPE_ROLE, sRoleID);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -251,7 +258,10 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     // Resolve user group
     final Role aRole = getRoleOfID (sRoleID);
     if (aRole == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_ROLE, "name", "no-such-role-id", sRoleID);
       return EChange.UNCHANGED;
+    }
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -259,11 +269,12 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
       if (aRole.setName (sNewName).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
-      return EChange.CHANGED;
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_ROLE, "name", sRoleID);
+    return EChange.CHANGED;
   }
 }
