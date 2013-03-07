@@ -189,6 +189,19 @@ public class BootstrapTabBox implements IHCNodeBuilder
   }
 
   @Nullable
+  public Tab getActiveTab ()
+  {
+    Tab aTab = null;
+    // Any active tab set?
+    if (m_sActiveTabID != null)
+      aTab = getTabOfID (m_sActiveTabID);
+    // Invalid or no active tab -> use first tab (as done below in build)
+    if (aTab == null && !m_aTabs.isEmpty ())
+      aTab = ContainerHelper.getFirstValue (m_aTabs);
+    return aTab;
+  }
+
+  @Nullable
   public IHCNode build ()
   {
     if (m_aTabs.isEmpty ())
