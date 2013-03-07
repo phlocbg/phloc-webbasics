@@ -100,9 +100,11 @@ public class BootstrapTabBox implements IHCNodeBuilder
       return m_aLabel;
     }
 
-    public void setLabel (@Nullable final IHCNode aLabel)
+    @Nonnull
+    public Tab setLabel (@Nullable final IHCNode aLabel)
     {
       m_aLabel = aLabel;
+      return this;
     }
 
     @Nullable
@@ -111,9 +113,11 @@ public class BootstrapTabBox implements IHCNodeBuilder
       return m_aContent;
     }
 
-    public void setContent (@Nullable final IHCNode aContent)
+    @Nonnull
+    public Tab setContent (@Nullable final IHCNode aContent)
     {
       m_aContent = aContent;
+      return this;
     }
 
     @Override
@@ -217,6 +221,20 @@ public class BootstrapTabBox implements IHCNodeBuilder
     if (bActive)
       m_sActiveTabID = sTabID;
     return aTab;
+  }
+
+  @Nonnull
+  public BootstrapTabBox addTab (@Nonnull final Tab aTab, final boolean bActive)
+  {
+    if (aTab == null)
+      throw new NullPointerException ("tab");
+
+    // Tab ID may be generated, if null was provided
+    final String sTabID = aTab.getID ();
+    m_aTabs.put (sTabID, aTab);
+    if (bActive)
+      m_sActiveTabID = sTabID;
+    return this;
   }
 
   @Nonnull
