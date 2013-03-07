@@ -25,12 +25,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -52,8 +57,8 @@ public class BootstrapTabBox implements IHCNodeBuilder
   {
     private final String m_sID;
     private final boolean m_bHasGeneratedID;
-    private final IHCNode m_aLabel;
-    private final IHCNode m_aContent;
+    private IHCNode m_aLabel;
+    private IHCNode m_aContent;
 
     public Tab (@Nullable final String sID, @Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
     {
@@ -95,15 +100,37 @@ public class BootstrapTabBox implements IHCNodeBuilder
       return m_aLabel;
     }
 
+    public void setLabel (@Nullable final IHCNode aLabel)
+    {
+      m_aLabel = aLabel;
+    }
+
     @Nullable
     public IHCNode getContent ()
     {
       return m_aContent;
     }
+
+    public void setContent (@Nullable final IHCNode aContent)
+    {
+      m_aContent = aContent;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("ID", m_sID)
+                                         .append ("generatedID", m_bHasGeneratedID)
+                                         .append ("label", m_aLabel)
+                                         .append ("content", m_aContent)
+                                         .toString ();
+    }
   }
 
   /** By default a tab is not active */
   public static final boolean DEFAULT_ACTIVE = false;
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (BootstrapTabBox.class);
 
   private EBootstrapTabBoxType m_eType = EBootstrapTabBoxType.TOP;
   private final Map <String, Tab> m_aTabs = new LinkedHashMap <String, Tab> ();
@@ -139,47 +166,49 @@ public class BootstrapTabBox implements IHCNodeBuilder
   public BootstrapTabBox setActiveTabID (@Nullable final String sID)
   {
     m_sActiveTabID = sID;
+    if (StringHelper.hasText (sID) && !m_aTabs.containsKey (sID))
+      s_aLogger.warn ("No tab with ID '" + sID + "' to be set active!");
     return this;
   }
 
   @Nonnull
-  public BootstrapTabBox addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent)
+  public Tab addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent)
   {
     return addTab (null, new HCTextNode (sLabel), aContent, DEFAULT_ACTIVE);
   }
 
   @Nonnull
-  public BootstrapTabBox addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent, final boolean bActive)
+  public Tab addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent, final boolean bActive)
   {
     return addTab (null, new HCTextNode (sLabel), aContent, bActive);
   }
 
   @Nonnull
-  public BootstrapTabBox addTab (@Nullable final String sID,
-                                 @Nullable final String sLabel,
-                                 @Nullable final IHCNode aContent,
-                                 final boolean bActive)
+  public Tab addTab (@Nullable final String sID,
+                     @Nullable final String sLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive)
   {
     return addTab (sID, new HCTextNode (sLabel), aContent, bActive);
   }
 
   @Nonnull
-  public BootstrapTabBox addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
+  public Tab addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
   {
     return addTab (null, aLabel, aContent, DEFAULT_ACTIVE);
   }
 
   @Nonnull
-  public BootstrapTabBox addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent, final boolean bActive)
+  public Tab addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent, final boolean bActive)
   {
     return addTab (null, aLabel, aContent, bActive);
   }
 
   @Nonnull
-  public BootstrapTabBox addTab (@Nullable final String sID,
-                                 @Nullable final IHCNode aLabel,
-                                 @Nullable final IHCNode aContent,
-                                 final boolean bActive)
+  public Tab addTab (@Nullable final String sID,
+                     @Nullable final IHCNode aLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive)
   {
     final Tab aTab = new Tab (sID, aLabel, aContent);
     // Tab ID may be generated, if null was provided
@@ -187,7 +216,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
     m_aTabs.put (sTabID, aTab);
     if (bActive)
       m_sActiveTabID = sTabID;
-    return this;
+    return aTab;
   }
 
   @Nonnull
@@ -203,6 +232,10 @@ public class BootstrapTabBox implements IHCNodeBuilder
     return m_aTabs.get (sID);
   }
 
+  /**
+   * @return The tab marked as active or <code>null</code> if no tab is marked
+   *         as active.
+   */
   @Nullable
   public Tab getActiveTab ()
   {
@@ -210,10 +243,31 @@ public class BootstrapTabBox implements IHCNodeBuilder
     // Any active tab set?
     if (m_sActiveTabID != null)
       aTab = getTabOfID (m_sActiveTabID);
+    return aTab;
+  }
+
+  /**
+   * @return The tab marked as active, or the first tab which will be active by
+   *         default. May be <code>null</code> if no tab is contained
+   */
+  @Nullable
+  public Tab getActiveTabOrDefault ()
+  {
+    Tab aTab = getActiveTab ();
     // Invalid or no active tab -> use first tab (as done below in build)
-    if (aTab == null && !m_aTabs.isEmpty ())
+    if (aTab == null)
       aTab = ContainerHelper.getFirstValue (m_aTabs);
     return aTab;
+  }
+
+  @Nonnull
+  public EChange removeTab (@Nullable final String sTabID)
+  {
+    if (m_aTabs.remove (sTabID) == null)
+      return EChange.UNCHANGED;
+    if (m_sActiveTabID != null && m_sActiveTabID.equals (sTabID))
+      m_sActiveTabID = null;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -228,7 +282,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
     if (StringHelper.hasNoText (sActiveTabID))
     {
       // Activate first tab by default
-      sActiveTabID = ContainerHelper.getFirstValue (m_aTabs).getID ();
+      sActiveTabID = ContainerHelper.getFirstKey (m_aTabs);
     }
 
     // Build code for tabs and content

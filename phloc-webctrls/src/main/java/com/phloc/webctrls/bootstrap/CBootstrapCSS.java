@@ -24,6 +24,7 @@ import com.phloc.commons.error.EErrorLevel;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.webbasics.form.validation.EFormErrorLevel;
+import com.phloc.webctrls.Since;
 
 // ESCA-JAVA0116:
 /**
@@ -85,6 +86,8 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider CAROUSEL = DefaultCSSClassProvider.create ("carousel");
   public static final ICSSClassProvider CAROUSEL_CAPTION = DefaultCSSClassProvider.create ("carousel-caption");
   public static final ICSSClassProvider CAROUSEL_CONTROL = DefaultCSSClassProvider.create ("carousel-control");
+  @Since ("2.3.1")
+  public static final ICSSClassProvider CAROUSEL_INDICATORS = DefaultCSSClassProvider.create ("carousel-indicators");
   public static final ICSSClassProvider CAROUSEL_INNER = DefaultCSSClassProvider.create ("carousel-inner");
   public static final ICSSClassProvider CHECKBOX = DefaultCSSClassProvider.create ("checkbox");
   public static final ICSSClassProvider CLEARFIX = DefaultCSSClassProvider.create ("clearfix");
@@ -387,8 +390,14 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider TABS_LEFT = DefaultCSSClassProvider.create ("tabs-left");
   public static final ICSSClassProvider TABS_RIGHT = DefaultCSSClassProvider.create ("tabs-right");
   public static final ICSSClassProvider TABS_STACKED = DefaultCSSClassProvider.create ("tabs-stacked");
+  @Since ("2.3.0")
+  public static final ICSSClassProvider TEXT_CENTER = DefaultCSSClassProvider.create ("text-center");
   public static final ICSSClassProvider TEXT_ERROR = DefaultCSSClassProvider.create ("text-error");
   public static final ICSSClassProvider TEXT_INFO = DefaultCSSClassProvider.create ("text-info");
+  @Since ("2.3.0")
+  public static final ICSSClassProvider TEXT_LEFT = DefaultCSSClassProvider.create ("text-left");
+  @Since ("2.3.0")
+  public static final ICSSClassProvider TEXT_RIGHT = DefaultCSSClassProvider.create ("text-right");
   public static final ICSSClassProvider TEXT_SUCCESS = DefaultCSSClassProvider.create ("text-success");
   public static final ICSSClassProvider TEXT_WARNING = DefaultCSSClassProvider.create ("text-warning");
   public static final ICSSClassProvider THUMBNAIL = DefaultCSSClassProvider.create ("thumbnail");
