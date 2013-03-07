@@ -67,6 +67,7 @@ public final class MailAPI
   private static final Map <ISMTPSettings, MailQueuePerSMTP> s_aQueueCache = new HashMap <ISMTPSettings, MailQueuePerSMTP> ();
   private static final ExecutorService s_aSenderThreadPool = Executors.newCachedThreadPool ();
   private static FailedMailQueue s_aFailedMailQueue = new FailedMailQueue ();
+  private static int s_nMaxMailQueueLen = 500;
 
   private MailAPI ()
   {}
@@ -130,7 +131,7 @@ public final class MailAPI
     if (aSMTPQueue == null)
     {
       // create a new queue
-      aSMTPQueue = new MailQueuePerSMTP (aRealSMTPSettings, s_aFailedMailQueue);
+      aSMTPQueue = new MailQueuePerSMTP (s_nMaxMailQueueLen, aRealSMTPSettings, s_aFailedMailQueue);
 
       // put queue in cache
       s_aQueueCache.put (aRealSMTPSettings, aSMTPQueue);
@@ -270,21 +271,27 @@ public final class MailAPI
   }
 
   @Nonnegative
-  public static int getTotalQueueLength ()
+  private static int _getTotalQueueLength ()
   {
     int ret = 0;
+    // count over all queues
+    for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
+      ret += aQueue.getQueueLength ();
+    return ret;
+  }
+
+  @Nonnegative
+  public static int getTotalQueueLength ()
+  {
     s_aRWLock.readLock ().lock ();
     try
     {
-      // count over all queues
-      for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
-        ret += aQueue.getQueueLength ();
+      return _getTotalQueueLength ();
     }
     finally
     {
       s_aRWLock.readLock ().unlock ();
     }
-    return ret;
   }
 
   /**
@@ -303,15 +310,6 @@ public final class MailAPI
       if (s_aSenderThreadPool.isShutdown ())
         return EChange.UNCHANGED;
 
-      int nTotalMailsQueued = 0;
-      for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
-        nTotalMailsQueued += aQueue.getQueueLength ();
-      s_aLogger.info ("Stopping central mail queues: " +
-                      s_aQueueCache.size () +
-                      " queues with " +
-                      nTotalMailsQueued +
-                      " mails");
-
       try
       {
         // don't take any more actions
@@ -320,6 +318,12 @@ public final class MailAPI
         // stop all specific queues
         for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
           aQueue.stopQueuingNewObjects ();
+
+        s_aLogger.info ("Stopping central mail queues: " +
+                        s_aQueueCache.size () +
+                        " queues with " +
+                        _getTotalQueueLength () +
+                        " mails");
 
         while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
         {
