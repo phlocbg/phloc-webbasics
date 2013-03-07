@@ -89,6 +89,15 @@ public class EmailAttachmentList implements IEmailAttachmentList
     return EChange.valueOf (m_aMap.remove (sFilename) != null);
   }
 
+  @Nonnull
+  public EChange clear ()
+  {
+    if (m_aMap.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMap.clear ();
+    return EChange.CHANGED;
+  }
+
   public boolean containsAttachment (@Nullable final String sFilename)
   {
     return m_aMap.containsKey (sFilename);

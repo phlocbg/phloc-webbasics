@@ -31,7 +31,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * 
  * @author philip
  */
-public interface IReadonlyEmailAttachments extends IHasSize
+public interface IReadonlyEmailAttachmentList extends IHasSize
 {
   /**
    * Check if an attachment for the passed file name is contained.

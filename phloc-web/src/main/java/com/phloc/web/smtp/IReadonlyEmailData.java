@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.email.IEmailAddress;
-import com.phloc.web.smtp.attachment.IReadonlyEmailAttachments;
+import com.phloc.web.smtp.attachment.IReadonlyEmailAttachmentList;
 
 /**
  * Contains all possible fields for mail sending in a read-only fashion.
@@ -141,5 +141,5 @@ public interface IReadonlyEmailData
    *         container if no attachments are required.
    */
   @Nullable
-  IReadonlyEmailAttachments getAttachments ();
+  IReadonlyEmailAttachmentList getAttachments ();
 }

@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.state.IClearable;
 
 /**
  * This interface represents attachments to be added to a mail message. Messages
@@ -29,7 +30,7 @@ import com.phloc.commons.state.EChange;
  * 
  * @author philip
  */
-public interface IEmailAttachmentList extends IReadonlyEmailAttachments
+public interface IEmailAttachmentList extends IReadonlyEmailAttachmentList, IClearable
 {
   /**
    * Add an attachment.
