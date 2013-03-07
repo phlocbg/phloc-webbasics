@@ -22,8 +22,8 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.EncoderException;
-import com.phloc.web.encoding.tmp.CodepointIteratorCharArray;
-import com.phloc.web.encoding.tmp.CodepointUtils;
+import com.phloc.commons.i18n.CodepointIteratorCharArray;
+import com.phloc.commons.i18n.CodepointUtils;
 
 /**
  * Implementation of the Punycode encoding scheme used by IDNA
