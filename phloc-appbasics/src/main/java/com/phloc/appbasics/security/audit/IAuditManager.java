@@ -53,4 +53,10 @@ public interface IAuditManager
   @Nonnull
   @ReturnsMutableCopy
   List <IAuditItem> getLastAuditItems (@Nonnegative int nMaxItems);
+
+  /**
+   * Stop taking new audits. Call this upon shutdown for correct cleanup!
+   * Consecutive calls to this method have no further effect.
+   */
+  void stop ();
 }

@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
+import com.phloc.commons.annotations.OverrideOnDemand;
 
 /**
  * An implementation of {@link IAuditor} using SLF4J logging.
@@ -39,17 +40,24 @@ public class LoggingAuditor extends AbstractAuditor
     super (aUserIDProvider);
   }
 
+  @Nonnull
+  @OverrideOnDemand
+  protected String getAuditItemString (@Nonnull final IAuditItem aAuditItem)
+  {
+    return ISODateTimeFormat.basicDateTime ().print (aAuditItem.getDateTime ()) +
+           " " +
+           aAuditItem.getUserID () +
+           " " +
+           aAuditItem.getType ().getID () +
+           " " +
+           (aAuditItem.isSuccess () ? "success" : "failure") +
+           " " +
+           aAuditItem.getAction ();
+  }
+
   @Override
   protected void handleAuditItem (@Nonnull final IAuditItem aAuditItem)
   {
-    s_aLogger.info (ISODateTimeFormat.basicDateTime ().print (aAuditItem.getDateTime ()) +
-                    " " +
-                    aAuditItem.getUserID () +
-                    " " +
-                    aAuditItem.getType ().getID () +
-                    " " +
-                    (aAuditItem.isSuccess () ? "success" : "failure") +
-                    " " +
-                    aAuditItem.getAction ());
+    s_aLogger.info (getAuditItemString (aAuditItem));
   }
 }

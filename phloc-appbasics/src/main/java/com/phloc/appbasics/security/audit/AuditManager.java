@@ -31,6 +31,7 @@ import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.callback.IThrowingRunnableWithParameter;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
@@ -87,8 +88,8 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     }
   }
 
-  private final AuditItemList m_aItems;
-  private final IAuditor m_aAuditor;
+  private final AuditItemList m_aItems = new AuditItemList ();
+  private final AsynchronousAuditor m_aAuditor;
 
   public AuditManager (@Nullable final String sBaseDir, @Nonnull final ICurrentUserIDProvider aUserIDProvider) throws DAOException
   {
@@ -100,24 +101,28 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     if (StringHelper.hasText (sBaseDir))
       WebIO.createDirRecursiveIfNotExisting (sBaseDir);
 
-    m_aItems = new AuditItemList ();
-    m_aAuditor = new AbstractAuditor (aUserIDProvider)
+    final IThrowingRunnableWithParameter <List <IAuditItem>> aPerformer = new IThrowingRunnableWithParameter <List <IAuditItem>> ()
     {
-      @Override
-      protected void handleAuditItem (@Nonnull final IAuditItem aAuditItem)
+      public void run (@Nonnull final List <IAuditItem> aAuditItems) throws Exception
       {
-        m_aRWLock.writeLock ().lock ();
-        try
+        if (!aAuditItems.isEmpty ())
         {
-          m_aItems.internalAddItem (aAuditItem);
+          m_aRWLock.writeLock ().lock ();
+          try
+          {
+            for (final IAuditItem aItem : aAuditItems)
+              m_aItems.internalAddItem (aItem);
+          }
+          finally
+          {
+            m_aRWLock.writeLock ().unlock ();
+          }
+          markAsChanged ();
         }
-        finally
-        {
-          m_aRWLock.writeLock ().unlock ();
-        }
-        markAsChanged ();
       }
     };
+
+    m_aAuditor = new AsynchronousAuditor (aUserIDProvider, aPerformer);
     setXMLDataProvider (new AuditManagerXMLDAO (this));
     readFromFile ();
   }
@@ -176,6 +181,19 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     finally
     {
       m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public void stop ()
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aAuditor.stop ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
     }
   }
 
