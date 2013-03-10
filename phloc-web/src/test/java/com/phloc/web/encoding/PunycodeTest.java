@@ -26,7 +26,7 @@ import org.junit.Test;
  * 
  * @author philip
  */
-public final class TestPunycode
+public final class PunycodeTest
 {
   private static enum ETest
   {
