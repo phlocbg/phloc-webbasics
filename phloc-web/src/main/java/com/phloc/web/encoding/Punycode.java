@@ -19,29 +19,38 @@ package com.phloc.web.encoding;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.EncoderException;
 import com.phloc.commons.i18n.CodepointIteratorCharArray;
 import com.phloc.commons.i18n.CodepointUtils;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Implementation of the Punycode encoding scheme used by IDNA
  * 
  * @author Apache Abdera
  */
+@Immutable
 public final class Punycode
 {
-  static final int base = 0x24; // 36
-  static final int tmin = 0x01; // 1
-  static final int tmax = 0x1A; // 26
-  static final int skew = 0x26; // 38
-  static final int damp = 0x02BC; // 700
-  static final int initial_bias = 0x48; // 72
-  static final int initial_n = 0x80; // 0x80
-  static final int delimiter = 0x2D; // 0x2D
+  private static final int base = 0x24; // 36
+  private static final int tmin = 0x01; // 1
+  private static final int tmax = 0x1A; // 26
+  private static final int skew = 0x26; // 38
+  private static final int damp = 0x02BC; // 700
+  private static final int initial_bias = 0x48; // 72
+  private static final int initial_n = 0x80; // 0x80
+  private static final int delimiter = 0x2D; // 0x2D
 
-  Punycode ()
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final Punycode s_aInstance = new Punycode ();
+
+  private Punycode ()
   {}
 
   private static boolean _basic (final int cp)
@@ -97,35 +106,35 @@ public final class Punycode
 
   public static String encode (@Nonnull final char [] chars, @Nullable final boolean [] case_flags)
   {
-    final StringBuilder buf = new StringBuilder ();
-    final CodepointIteratorCharArray ci = new CodepointIteratorCharArray (chars);
+    final StringBuilder aSB = new StringBuilder ();
+    final CodepointIteratorCharArray aIter = new CodepointIteratorCharArray (chars);
     int n = initial_n;
     int delta = 0;
     int bias = initial_bias;
     int i = -1;
-    while (ci.hasNext ())
+    while (aIter.hasNext ())
     {
-      i = ci.next ().getValue ();
+      i = aIter.next ().getValue ();
       if (_basic (i))
       {
         if (case_flags == null)
         {
-          buf.append ((char) i);
+          aSB.append ((char) i);
         }
       }
     }
     int h, b, m, q, k, t;
-    h = b = buf.length ();
+    h = b = aSB.length ();
     if (b > 0)
-      buf.append ((char) delimiter);
+      aSB.append ((char) delimiter);
     while (h < chars.length)
     {
-      ci.position (0);
+      aIter.position (0);
       i = -1;
       m = Integer.MAX_VALUE;
-      while (ci.hasNext ())
+      while (aIter.hasNext ())
       {
-        i = ci.next ().getValue ();
+        i = aIter.next ().getValue ();
         if (i >= n && i < m)
           m = i;
       }
@@ -133,11 +142,11 @@ public final class Punycode
         throw new EncoderException ("Overflow");
       delta += (m - n) * (h + 1);
       n = m;
-      ci.position (0);
+      aIter.position (0);
       i = -1;
-      while (ci.hasNext ())
+      while (aIter.hasNext ())
       {
-        i = ci.next ().getValue ();
+        i = aIter.next ().getValue ();
         if (i < n)
         {
           if (++delta == 0)
@@ -150,10 +159,10 @@ public final class Punycode
             t = k <= bias ? tmin : k >= bias + tmax ? tmax : k - bias;
             if (q < t)
               break;
-            buf.append ((char) _encode_digit (t + (q - t) % (base - t), false));
+            aSB.append ((char) _encode_digit (t + (q - t) % (base - t), false));
             q = (q - t) / (base - t);
           }
-          buf.append ((char) _encode_digit (q, (case_flags != null) ? case_flags[ci.position () - 1] : false));
+          aSB.append ((char) _encode_digit (q, (case_flags != null) ? case_flags[aIter.position () - 1] : false));
           bias = _adapt (delta, h + 1, h == b);
           delta = 0;
           ++h;
@@ -162,7 +171,7 @@ public final class Punycode
       ++delta;
       ++n;
     }
-    return buf.toString ();
+    return aSB.toString ();
   }
 
   @Nullable
@@ -173,10 +182,11 @@ public final class Punycode
     return decode (s.toCharArray (), null);
   }
 
+  @SuppressFBWarnings ("QF_QUESTIONABLE_FOR_LOOP")
   @Nonnull
   public static String decode (@Nonnull final char [] chars, @Nullable final boolean [] case_flags)
   {
-    final StringBuilder buf = new StringBuilder ();
+    final StringBuilder aSB = new StringBuilder ();
     int n, out, i, bias, b, j, in, oldi, w, k, digit, t;
     n = initial_n;
     out = i = 0;
@@ -190,9 +200,9 @@ public final class Punycode
         case_flags[out] = _flagged (chars[j]);
       if (!_basic (chars[j]))
         throw new DecoderException ("Bad Input");
-      buf.append (chars[j]);
+      aSB.append (chars[j]);
     }
-    out = buf.length ();
+    out = aSB.length ();
     for (in = (b > 0) ? b + 1 : 0; in < chars.length; ++out)
     {
       for (oldi = i, w = 1, k = base;; k += base)
@@ -222,8 +232,8 @@ public final class Punycode
         // not sure if this is right
         System.arraycopy (case_flags, i, case_flags, i + Character.charCount (n), case_flags.length - i);
       }
-      CodepointUtils.insert (buf, i++, n);
+      CodepointUtils.insert (aSB, i++, n);
     }
-    return buf.toString ();
+    return aSB.toString ();
   }
 }

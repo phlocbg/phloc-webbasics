@@ -169,39 +169,46 @@ public class QuotedPrintableCodec
    * This function implements a subset of quoted-printable encoding
    * specification (rule #1 and rule #2) as defined in RFC 1521.
    * 
-   * @param bytes
+   * @param aBytes
    *        array of quoted-printable characters
    * @return array of original bytes @ Thrown if quoted-printable decoding is
    *         unsuccessful
    */
-  public static final byte [] decodeQuotedPrintable (@Nullable final byte [] bytes)
+  public static final byte [] decodeQuotedPrintable (@Nullable final byte [] aBytes)
   {
-    if (bytes == null)
+    if (aBytes == null)
       return null;
 
-    final NonBlockingByteArrayOutputStream buffer = new NonBlockingByteArrayOutputStream ();
-    for (int i = 0; i < bytes.length; i++)
+    final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ();
+    try
     {
-      final int b = bytes[i];
-      if (b == ESCAPE_CHAR)
+      for (int i = 0; i < aBytes.length; i++)
       {
-        try
+        final int b = aBytes[i];
+        if (b == ESCAPE_CHAR)
         {
-          final int u = _digit16 (bytes[++i]);
-          final int l = _digit16 (bytes[++i]);
-          buffer.write ((char) ((u << 4) + l));
+          try
+          {
+            final int u = _digit16 (aBytes[++i]);
+            final int l = _digit16 (aBytes[++i]);
+            aBAOS.write ((char) ((u << 4) + l));
+          }
+          catch (final ArrayIndexOutOfBoundsException e)
+          {
+            throw new DecoderException ("Invalid quoted-printable encoding", e);
+          }
         }
-        catch (final ArrayIndexOutOfBoundsException e)
+        else
         {
-          throw new DecoderException ("Invalid quoted-printable encoding", e);
+          aBAOS.write (b);
         }
       }
-      else
-      {
-        buffer.write (b);
-      }
+      return aBAOS.toByteArray ();
     }
-    return buffer.toByteArray ();
+    finally
+    {
+      aBAOS.close ();
+    }
   }
 
   /**
