@@ -17,7 +17,6 @@
  */
 package com.phloc.web.smtp.queue;
 
-import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -43,6 +42,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
+import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.settings.ESMTPTransportProperty;
 import com.phloc.web.smtp.settings.ISMTPSettings;
@@ -182,7 +182,7 @@ final class MailTransport
       }
       catch (final MessagingException ex)
       {
-        if (ex.getCause () instanceof ConnectException)
+        if (WebExceptionHelper.isServerNotReachableConnection (ex.getCause ()))
           throw new MailSendException ("Failed to connect to mail server: " + ex.getCause ().getMessage ());
         throw new MailSendException ("Mail server connection failed", ex);
       }
