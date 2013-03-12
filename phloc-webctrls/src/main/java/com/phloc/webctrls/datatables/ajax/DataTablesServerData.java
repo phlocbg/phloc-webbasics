@@ -19,6 +19,7 @@ package com.phloc.webctrls.datatables.ajax;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -105,20 +106,36 @@ public final class DataTablesServerData implements IHasUIState
       return m_sTextContent;
     }
 
-    public boolean matchesAnyRegEx (@Nonnull final String [] aSearchTexts)
+    public void matchRegEx (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
     {
-      for (final String sSearchText : aSearchTexts)
+      for (int i = 0; i < aSearchTexts.length; ++i)
+      {
+        final String sSearchText = aSearchTexts[i];
         if (RegExHelper.stringMatchesPattern (sSearchText, m_sTextContent))
-          return true;
-      return false;
+          aMatchingWords.set (i);
+      }
     }
 
-    public boolean matchesAnyPlain (@Nonnull final String [] aSearchTexts, @Nonnull final Locale aDisplayLocale)
+    public void matchPlainTextCaseSensitive (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
     {
-      for (final String sSearchText : aSearchTexts)
+      for (int i = 0; i < aSearchTexts.length; ++i)
+      {
+        final String sSearchText = aSearchTexts[i];
+        if (StringHelper.contains (m_sTextContent, sSearchText))
+          aMatchingWords.set (i);
+      }
+    }
+
+    public void matchPlainTextIgnoreCase (@Nonnull final String [] aSearchTexts,
+                                          @Nonnull final Locale aDisplayLocale,
+                                          @Nonnull final BitSet aMatchingWords)
+    {
+      for (int i = 0; i < aSearchTexts.length; ++i)
+      {
+        final String sSearchText = aSearchTexts[i];
         if (StringHelper.containsIgnoreCase (m_sTextContent, sSearchText, aDisplayLocale))
-          return true;
-      return false;
+          aMatchingWords.set (i);
+      }
     }
 
     @Override

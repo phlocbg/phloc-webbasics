@@ -18,6 +18,7 @@
 package com.phloc.webctrls.datatables.ajax;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
+import com.phloc.webctrls.datatables.EDataTablesSearchType;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -144,41 +146,108 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       final boolean bGlobalSearchRegEx = aGlobalSearch.isRegEx ();
       final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
 
-      // For all rows
-      final List <RowData> aFilteredRows = new ArrayList <RowData> ();
-      for (final RowData aRow : aResultRows)
-      {
-        // For all cells in row
-        int nCellIndex = 0;
-        for (final CellData aCell : aRow.directGetAllCells ())
+      boolean bContainsAnyColumnSpecificSearch = false;
+      for (final RequestDataColumn aColumn : aColumns)
+        if (aColumn.isSearchable () && aColumn.getSearch ().hasSearchText ())
         {
-          final RequestDataColumn aColumn = aColumns[nCellIndex];
-          if (aColumn.isSearchable ())
-          {
-            // Determine search texts
-            final RequestDataSearch aColumnSearch = aColumn.getSearch ();
-            String [] aColumnSearchTexts;
-            boolean bColumnSearchRegEx;
-            if (aColumnSearch.hasSearchText ())
-            {
-              aColumnSearchTexts = aColumnSearch.getSearchTexts ();
-              bColumnSearchRegEx = aColumnSearch.isRegEx ();
-            }
-            else
-            {
-              aColumnSearchTexts = aGlobalSearchTexts;
-              bColumnSearchRegEx = bGlobalSearchRegEx;
-            }
+          bContainsAnyColumnSpecificSearch = true;
+          s_aLogger.info ("DataTables has column specific search term - this is not fully implemented!");
+        }
 
-            // Main matching
-            final boolean bIsMatching = bColumnSearchRegEx ? aCell.matchesAnyRegEx (aColumnSearchTexts)
-                                                          : aCell.matchesAnyPlain (aColumnSearchTexts, aDisplayLocale);
-            if (bIsMatching)
+      final EDataTablesSearchType eSearchType = EDataTablesSearchType.ALL_TERMS_PER_ROW;
+
+      final List <RowData> aFilteredRows = new ArrayList <RowData> ();
+      if (bContainsAnyColumnSpecificSearch)
+      {
+        // For all rows
+        for (final RowData aRow : aResultRows)
+        {
+          // For all cells in row
+          int nSearchableCellIndex = 0;
+          for (final CellData aCell : aRow.directGetAllCells ())
+          {
+            final RequestDataColumn aColumn = aColumns[nSearchableCellIndex];
+            if (aColumn.isSearchable ())
             {
-              aFilteredRows.add (aRow);
-              break;
+              // Determine search texts
+              final RequestDataSearch aColumnSearch = aColumn.getSearch ();
+              String [] aColumnSearchTexts;
+              boolean bColumnSearchRegEx;
+              if (aColumnSearch.hasSearchText ())
+              {
+                aColumnSearchTexts = aColumnSearch.getSearchTexts ();
+                bColumnSearchRegEx = aColumnSearch.isRegEx ();
+              }
+              else
+              {
+                aColumnSearchTexts = aGlobalSearchTexts;
+                bColumnSearchRegEx = bGlobalSearchRegEx;
+              }
+              final BitSet aMatchingWords = new BitSet (aColumnSearchTexts.length);
+
+              // Main matching
+              if (bColumnSearchRegEx)
+                aCell.matchRegEx (aColumnSearchTexts, aMatchingWords);
+              else
+                aCell.matchPlainTextIgnoreCase (aColumnSearchTexts, aDisplayLocale, aMatchingWords);
+              if (!aMatchingWords.isEmpty ())
+              {
+                aFilteredRows.add (aRow);
+                break;
+              }
+              nSearchableCellIndex++;
             }
-            nCellIndex++;
+          }
+        }
+      }
+      else
+      {
+        // For all rows
+        for (final RowData aRow : aResultRows)
+        {
+          // Only global search provided
+          final BitSet aMatchingWords = new BitSet (aGlobalSearchTexts.length);
+
+          // For all cells in row
+          int nSearchableCellIndex = 0;
+          perrow: for (final CellData aCell : aRow.directGetAllCells ())
+          {
+            final RequestDataColumn aColumn = aColumns[nSearchableCellIndex];
+            if (aColumn.isSearchable ())
+            {
+              // Main matching
+              if (bGlobalSearchRegEx)
+                aCell.matchRegEx (aGlobalSearchTexts, aMatchingWords);
+              else
+                aCell.matchPlainTextIgnoreCase (aGlobalSearchTexts, aDisplayLocale, aMatchingWords);
+
+              switch (eSearchType)
+              {
+                case ALL_TERMS_PER_ROW:
+                  if (aMatchingWords.cardinality () == aGlobalSearchTexts.length)
+                  {
+                    // Row matched all criteria
+                    aFilteredRows.add (aRow);
+
+                    // Goto next row
+                    break perrow;
+                  }
+                  break;
+                case ANY_TERM_PER_ROW:
+                  if (!aMatchingWords.isEmpty ())
+                  {
+                    // Row matched any search word
+                    aFilteredRows.add (aRow);
+
+                    // Goto next row
+                    break perrow;
+                  }
+                  // Clear again for next cell
+                  aMatchingWords.clear ();
+                  break;
+              }
+            }
+            nSearchableCellIndex++;
           }
         }
       }
