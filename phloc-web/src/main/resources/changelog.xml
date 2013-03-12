@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <entry date="2013-03-12" category="tech" action="update" >
+    <change>
+      <text locale="en">Updated to javax.mail 1.4.7</text>
+    </change>
+  </entry>
   <entry date="2013-03-10" category="api" action="add">
     <change>
       <text locale="en">Added new package encoding with support for Punycode, RFC 1522 encoding and RFC 2047 encoding</text>

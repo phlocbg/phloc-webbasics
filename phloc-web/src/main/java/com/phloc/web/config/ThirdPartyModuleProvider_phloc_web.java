@@ -42,10 +42,9 @@ public final class ThirdPartyModuleProvider_phloc_web implements IThirdPartyModu
                                                                          "http://www.xbill.org/dnsjava/",
                                                                          true);
 
-  // XXX update to MPL 2.0 in phloc-commons > 3.9.6
   private static final IThirdPartyModule RHINO = new ThirdPartyModule ("Rhino",
                                                                        "Mozilla",
-                                                                       ELicense.MPL11,
+                                                                       ELicense.MPL20,
                                                                        new Version ("1.7R4"),
                                                                        "https://developer.mozilla.org/de/docs/Rhino",
                                                                        true);
@@ -53,13 +52,20 @@ public final class ThirdPartyModuleProvider_phloc_web implements IThirdPartyModu
   private static final IThirdPartyModule JAVAX_MAIL = new ThirdPartyModule ("JavaMail",
                                                                             "Oracle",
                                                                             ELicense.BSD,
-                                                                            new Version (1, 4, 6),
+                                                                            new Version (1, 4, 7),
                                                                             "http://www.oracle.com/technetwork/java/javamail/index.html",
                                                                             true);
+
+  private static final IThirdPartyModule JSCH = new ThirdPartyModule ("JSch",
+                                                                      "JCraft Inc.",
+                                                                      ELicense.BSD,
+                                                                      new Version (0, 1, 49),
+                                                                      "http://www.jcraft.com/jsch/",
+                                                                      true);
 
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
   {
-    return new IThirdPartyModule [] { DNSJAVA, RHINO, JAVAX_MAIL };
+    return new IThirdPartyModule [] { DNSJAVA, RHINO, JAVAX_MAIL, JSCH };
   }
 }
