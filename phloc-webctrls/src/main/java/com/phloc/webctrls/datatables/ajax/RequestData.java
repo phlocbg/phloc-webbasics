@@ -75,11 +75,21 @@ final class RequestData
   /**
    * @return Number of records that the table can display in the current draw.
    *         It is expected that the number of records returned will be equal to
-   *         this number, unless the server has fewer records to return.
+   *         this number, unless the server has fewer records to return. If this
+   *         value is -1 it means show all entries.
    */
-  public int getDisplayEnd ()
+  public int getDisplayLength ()
   {
     return m_nDisplayLength;
+  }
+
+  /**
+   * @return <code>true</code> if all entries should be shown,
+   *         <code>false</code> if the number is limited
+   */
+  public boolean showAllEntries ()
+  {
+    return m_nDisplayLength == -1;
   }
 
   /**

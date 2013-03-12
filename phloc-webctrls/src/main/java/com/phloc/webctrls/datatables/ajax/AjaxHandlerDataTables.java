@@ -263,11 +263,17 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
     // Build the resulting array
     final List <Map <String, String>> aData = new ArrayList <Map <String, String>> ();
-    for (int i = 0; i < aRequestData.getDisplayEnd (); ++i)
+    int nResultRowCount = 0;
+    final boolean bAllEntries = aRequestData.showAllEntries ();
+    final int nMaxResultRows = aRequestData.getDisplayLength ();
+    while (bAllEntries || nResultRowCount < nMaxResultRows)
     {
-      final int nRealIndex = aRequestData.getDisplayStart () + i;
-      if (aResultRows.size () <= nRealIndex)
+      final int nRealIndex = aRequestData.getDisplayStart () + nResultRowCount;
+      if (nRealIndex >= aResultRows.size ())
+      {
+        // No more matching rows available
         break;
+      }
 
       final RowData aRow = aResultRows.get (nRealIndex);
       final Map <String, String> aRowData = new HashMap <String, String> ();
@@ -279,6 +285,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       for (final CellData aCell : aRow.directGetAllCells ())
         aRowData.put (Integer.toString (nCellIndex++), aCell.getHTML ());
       aData.add (aRowData);
+      ++nResultRowCount;
     }
 
     // Main response

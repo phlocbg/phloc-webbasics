@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webctrls">
+  <entry date="2013-03-12" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed showing all entries in a DataTable when display length is -1</text>
+    </change>
+  </entry>
   <entry date="2013-03-12" category="tech" action="add">
     <change>
       <text locale="en">Added possibility to determine the server-side filter type for DataTables</text>
