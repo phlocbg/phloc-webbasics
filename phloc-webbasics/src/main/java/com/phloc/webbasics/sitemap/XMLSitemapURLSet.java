@@ -48,10 +48,10 @@ public final class XMLSitemapURLSet implements IHasLastModificationDateTime
   public static final int MAX_URLS_PER_FILE = 50000;
   public static final int MAX_FILE_SIZE = 10 * CGlobal.BYTES_PER_MEGABYTE;
 
-  // 55: ?XML header
+  // 38: ?XML header
   // 60: <urlset xmlns...> element
   // 9: </urlset> element
-  private static final int XML_HEADER_LENGTH = 55 + CGlobal.LINE_SEPARATOR.length () + 60 + 9;
+  private static final int XML_HEADER_LENGTH = 38 + CGlobal.LINE_SEPARATOR.length () + 60 + 9;
 
   private int m_nOutputLength = XML_HEADER_LENGTH;
   private final List <XMLSitemapURL> m_aURLs = new ArrayList <XMLSitemapURL> ();
