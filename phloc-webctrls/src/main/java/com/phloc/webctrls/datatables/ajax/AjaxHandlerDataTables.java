@@ -247,6 +247,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                   // Clear again for next cell
                   aMatchingWords.clear ();
                   break;
+                default:
+                  throw new IllegalStateException ("Unhandled filter type: " + eFilterType);
               }
             }
             nSearchableCellIndex++;
