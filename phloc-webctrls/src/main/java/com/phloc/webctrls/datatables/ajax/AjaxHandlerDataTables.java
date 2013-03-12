@@ -144,9 +144,11 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       final boolean bGlobalSearchRegEx = aGlobalSearch.isRegEx ();
       final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
 
+      // For all rows
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
       for (final RowData aRow : aResultRows)
       {
+        // For all cells in row
         int nCellIndex = 0;
         for (final CellData aCell : aRow.directGetAllCells ())
         {
@@ -169,8 +171,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
             }
 
             // Main matching
-            final boolean bIsMatching = bColumnSearchRegEx ? aCell.matchesRegEx (aColumnSearchTexts)
-                                                          : aCell.matchesPlain (aColumnSearchTexts, aDisplayLocale);
+            final boolean bIsMatching = bColumnSearchRegEx ? aCell.matchesAnyRegEx (aColumnSearchTexts)
+                                                          : aCell.matchesAnyPlain (aColumnSearchTexts, aDisplayLocale);
             if (bIsMatching)
             {
               aFilteredRows.add (aRow);

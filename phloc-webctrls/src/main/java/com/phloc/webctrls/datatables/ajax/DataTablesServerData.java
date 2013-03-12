@@ -105,7 +105,7 @@ public final class DataTablesServerData implements IHasUIState
       return m_sTextContent;
     }
 
-    public boolean matchesRegEx (@Nonnull final String [] aSearchTexts)
+    public boolean matchesAnyRegEx (@Nonnull final String [] aSearchTexts)
     {
       for (final String sSearchText : aSearchTexts)
         if (RegExHelper.stringMatchesPattern (sSearchText, m_sTextContent))
@@ -113,7 +113,7 @@ public final class DataTablesServerData implements IHasUIState
       return false;
     }
 
-    public boolean matchesPlain (@Nonnull final String [] aSearchTexts, @Nonnull final Locale aDisplayLocale)
+    public boolean matchesAnyPlain (@Nonnull final String [] aSearchTexts, @Nonnull final Locale aDisplayLocale)
     {
       for (final String sSearchText : aSearchTexts)
         if (StringHelper.containsIgnoreCase (m_sTextContent, sSearchText, aDisplayLocale))
