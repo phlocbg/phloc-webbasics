@@ -56,3 +56,33 @@ function setupServerLogForWindow(){
     }
   }
 }
+
+// Requires stacktrace.js
+function getStackTraceString(ex) {
+  if (!ex)
+    return null;
+  if (typeof printStackTrace == "function")
+    return printStackTrace({e:ex,guess:true}).join("\n");
+  return ex.message;
+}
+
+//by Nicholas C. Zakas (MIT Licensed)
+//http://www.nczonline.net/blog/2009/04/28/javascript-error-handling-anti-pattern/
+function addExceptionHandlers(object) {
+  var name, method;
+  for (name in object) {
+    method = object[name];
+    if (typeof method == "function") {
+      object[name] = function(name, method) {
+        return function() {
+          try {
+            return method.apply(this, arguments);
+          }
+          catch (ex) {
+            serverLog("error", name + "(): " + getStackTraceString(ex));
+          }
+        };
+      }(name, method);
+    }
+  }
+}
