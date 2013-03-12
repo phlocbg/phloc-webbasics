@@ -16,15 +16,15 @@
  * limitations under the License.
  */
 .left {
-  text-align: left;
+  text-align: left !important;
 }
 
 .center {
-  text-align: center;
+  text-align: center !important;
 }
 
 .right {
-  text-align: right;
+  text-align: right !important;
 }
 
 /* Special row only present for IE9 fix */
