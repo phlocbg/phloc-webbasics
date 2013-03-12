@@ -22,8 +22,13 @@ package com.phloc.webctrls.datatables;
  * 
  * @author philip
  */
-public enum EDataTablesSearchType
+public enum EDataTablesFilterType
 {
+  /** A row matches the filter, if at least one search term is contained. */
   ANY_TERM_PER_ROW,
+  /** A row matches the filter, if all search terms are contained */
   ALL_TERMS_PER_ROW;
+
+  /** Default type: {@link #ALL_TERMS_PER_ROW} */
+  public static final EDataTablesFilterType DEFAULT = ALL_TERMS_PER_ROW;
 }

@@ -106,6 +106,7 @@ public class DataTables implements IHCNodeBuilder
   private EHTTPMethod m_eServerMethod;
   private Map <String, String> m_aServerParams;
   private boolean m_bUseJQueryAjax = DEFAULT_USER_JQUERY_AJAX;
+  private EDataTablesFilterType m_eServerFilterType = EDataTablesFilterType.DEFAULT;
   private boolean m_bDeferRender = DEFAULT_DEFER_RENDER;
   private final String m_sGeneratedJSVariableName = "oTable" + GlobalIDFactory.getNewIntID ();
 
@@ -481,6 +482,21 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  public EDataTablesFilterType getServerFilterType ()
+  {
+    return m_eServerFilterType;
+  }
+
+  @Nonnull
+  public DataTables setServerFilterType (@Nonnull final EDataTablesFilterType eServerFilterType)
+  {
+    if (eServerFilterType == null)
+      throw new NullPointerException ("serverFilterType");
+    m_eServerFilterType = eServerFilterType;
+    return this;
+  }
+
   public boolean isDeferRender ()
   {
     return m_bDeferRender;
@@ -587,7 +603,10 @@ public class DataTables implements IHCNodeBuilder
     {
       aParams.add ("bServerSide", true);
       // This copies the content of the table
-      final DataTablesServerData aServerData = new DataTablesServerData (m_aTable, m_aColumns, m_aDisplayLocale);
+      final DataTablesServerData aServerData = new DataTablesServerData (m_aTable,
+                                                                         m_aColumns,
+                                                                         m_aDisplayLocale,
+                                                                         m_eServerFilterType);
       UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
       // Remove all body rows to avoid initial double painting
       m_aTable.removeAllBodyRows ();

@@ -50,6 +50,7 @@ import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.webbasics.state.IHasUIState;
 import com.phloc.webctrls.datatables.DataTablesColumn;
+import com.phloc.webctrls.datatables.EDataTablesFilterType;
 
 public final class DataTablesServerData implements IHasUIState
 {
@@ -229,10 +230,12 @@ public final class DataTablesServerData implements IHasUIState
   private final List <RowData> m_aRows;
   private final Locale m_aDisplayLocale;
   private ServerSortState m_aServerSortState;
+  private final EDataTablesFilterType m_eFilterType;
 
   public DataTablesServerData (@Nonnull final AbstractHCBaseTable <?> aTable,
                                @Nonnull final List <DataTablesColumn> aColumns,
-                               @Nonnull final Locale aDisplayLocale)
+                               @Nonnull final Locale aDisplayLocale,
+                               @Nonnull final EDataTablesFilterType eFilterType)
   {
     if (aTable == null)
       throw new NullPointerException ("table");
@@ -240,6 +243,8 @@ public final class DataTablesServerData implements IHasUIState
       throw new NullPointerException ("columns");
     if (aDisplayLocale == null)
       throw new NullPointerException ("displayLocale");
+    if (eFilterType == null)
+      throw new NullPointerException ("searchType");
 
     // Column data
     final int nColumns = aTable.getColumnCount ();
@@ -265,6 +270,7 @@ public final class DataTablesServerData implements IHasUIState
       m_aRows.add (new RowData (aRow, aCS));
     m_aDisplayLocale = aDisplayLocale;
     m_aServerSortState = new ServerSortState (this, aDisplayLocale);
+    m_eFilterType = eFilterType;
   }
 
   @Nonnull
@@ -318,9 +324,18 @@ public final class DataTablesServerData implements IHasUIState
     return aColumnData == null ? null : aColumnData.getComparator ();
   }
 
+  @Nonnull
+  public EDataTablesFilterType getFilterType ()
+  {
+    return m_eFilterType;
+  }
+
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("serverSortState", m_aServerSortState).toString ();
+    return new ToStringGenerator (this).append ("displayLocale", m_aDisplayLocale)
+                                       .append ("serverSortState", m_aServerSortState)
+                                       .append ("filterType", m_eFilterType)
+                                       .toString ();
   }
 }

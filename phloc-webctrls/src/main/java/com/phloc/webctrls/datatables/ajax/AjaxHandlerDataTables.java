@@ -41,7 +41,7 @@ import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
-import com.phloc.webctrls.datatables.EDataTablesSearchType;
+import com.phloc.webctrls.datatables.EDataTablesFilterType;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -145,16 +145,16 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       final String [] aGlobalSearchTexts = aGlobalSearch.getSearchTexts ();
       final boolean bGlobalSearchRegEx = aGlobalSearch.isRegEx ();
       final RequestDataColumn [] aColumns = aRequestData.getColumnDataArray ();
+      final EDataTablesFilterType eFilterType = aServerData.getFilterType ();
 
       boolean bContainsAnyColumnSpecificSearch = false;
       for (final RequestDataColumn aColumn : aColumns)
         if (aColumn.isSearchable () && aColumn.getSearch ().hasSearchText ())
         {
           bContainsAnyColumnSpecificSearch = true;
-          s_aLogger.info ("DataTables has column specific search term - this is not fully implemented!");
+          if (eFilterType == EDataTablesFilterType.ALL_TERMS_PER_ROW)
+            s_aLogger.error ("DataTables has column specific search term - this is not implemented for filter type ALL_TERMS_PER_ROW!");
         }
-
-      final EDataTablesSearchType eSearchType = EDataTablesSearchType.ALL_TERMS_PER_ROW;
 
       final List <RowData> aFilteredRows = new ArrayList <RowData> ();
       if (bContainsAnyColumnSpecificSearch)
@@ -202,10 +202,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       }
       else
       {
+        // Only global search is relevant
+
         // For all rows
         for (final RowData aRow : aResultRows)
         {
-          // Only global search provided
+          // Each matching search term is represented as a bit in here
           final BitSet aMatchingWords = new BitSet (aGlobalSearchTexts.length);
 
           // For all cells in row
@@ -221,12 +223,12 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
               else
                 aCell.matchPlainTextIgnoreCase (aGlobalSearchTexts, aDisplayLocale, aMatchingWords);
 
-              switch (eSearchType)
+              switch (eFilterType)
               {
                 case ALL_TERMS_PER_ROW:
                   if (aMatchingWords.cardinality () == aGlobalSearchTexts.length)
                   {
-                    // Row matched all criteria
+                    // Row matched all search terms
                     aFilteredRows.add (aRow);
 
                     // Goto next row
@@ -236,7 +238,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
                 case ANY_TERM_PER_ROW:
                   if (!aMatchingWords.isEmpty ())
                   {
-                    // Row matched any search word
+                    // Row matched any search term
                     aFilteredRows.add (aRow);
 
                     // Goto next row
