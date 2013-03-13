@@ -37,6 +37,7 @@ import com.phloc.commons.string.StringHelper;
 public final class HTTPBasicAuth
 {
   public static final String HEADER_VALUE_PREFIX_BASIC = "Basic";
+  private static final char USERNAME_PASSWORD_SEPARATOR = ':';
 
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
@@ -62,7 +63,7 @@ public final class HTTPBasicAuth
     if (StringHelper.hasNoText (sUsername))
       throw new IllegalArgumentException ("username is missing");
 
-    final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ':', sPassword);
+    final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, USERNAME_PASSWORD_SEPARATOR, sPassword);
     return HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1_OBJ);
   }
 
@@ -103,7 +104,7 @@ public final class HTTPBasicAuth
     }
 
     // Do we have a username/password separator?
-    final int nIndex = sUsernamePassword.indexOf (':');
+    final int nIndex = sUsernamePassword.indexOf (USERNAME_PASSWORD_SEPARATOR);
     if (nIndex >= 0)
       return new String [] { sUsernamePassword.substring (0, nIndex), sUsernamePassword.substring (nIndex + 1) };
     return new String [] { sUsernamePassword };
@@ -122,9 +123,13 @@ public final class HTTPBasicAuth
   @Nonempty
   public static String createWWWAuthenticate (@Nonnull @Nonempty final String sRealm)
   {
-    if (StringHelper.hasNoText (sRealm))
-      throw new IllegalArgumentException ("realm");
+    if (!HTTPStringHelper.isQuotedTextContent (sRealm))
+      throw new IllegalArgumentException ("realm is invalid: " + sRealm);
 
-    return HEADER_VALUE_PREFIX_BASIC + " realm=\"" + sRealm + "\"";
+    return HEADER_VALUE_PREFIX_BASIC +
+           " realm=" +
+           HTTPStringHelper.QUOTEDTEXT_START +
+           sRealm +
+           HTTPStringHelper.QUOTEDTEXT_END;
   }
 }

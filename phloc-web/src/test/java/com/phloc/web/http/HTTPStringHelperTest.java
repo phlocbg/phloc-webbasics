@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Test class for class {@link HTTPStringHelper}.
  * 
@@ -239,7 +241,7 @@ public final class HTTPStringHelperTest
   {
     assertFalse (HTTPStringHelper.isCommentChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if ((!HTTPStringHelper.isControlChar (i) && i != '(' && i != ')') ||
+      if ((!HTTPStringHelper.isControlChar (i) && i != HTTPStringHelper.COMMENT_START && i != HTTPStringHelper.COMMENT_END) ||
           HTTPStringHelper.isCRChar (i) ||
           HTTPStringHelper.isLFChar (i) ||
           HTTPStringHelper.isTabChar (i) ||
@@ -274,11 +276,12 @@ public final class HTTPStringHelperTest
   }
 
   @Test
+  @SuppressFBWarnings ("RpC_REPEATED_CONDITIONAL_TEST")
   public void testQuotedTextChar ()
   {
     assertFalse (HTTPStringHelper.isQuotedTextChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if ((!HTTPStringHelper.isControlChar (i) && i != '"') ||
+      if ((!HTTPStringHelper.isControlChar (i) && i != HTTPStringHelper.QUOTEDTEXT_START && i != HTTPStringHelper.QUOTEDTEXT_END) ||
           HTTPStringHelper.isCRChar (i) ||
           HTTPStringHelper.isLFChar (i) ||
           HTTPStringHelper.isTabChar (i) ||
@@ -306,5 +309,24 @@ public final class HTTPStringHelperTest
     assertFalse (HTTPStringHelper.isQuotedText ("\"bla\" "));
     assertTrue (HTTPStringHelper.isQuotedText ("\"bla\""));
     assertTrue (HTTPStringHelper.isQuotedText ("\"bla foo fasel\""));
+  }
+
+  @Test
+  public void testIsQuotedTextContent ()
+  {
+    assertFalse (HTTPStringHelper.isQuotedTextContent ((String) null));
+    assertFalse (HTTPStringHelper.isQuotedTextContent ((char []) null));
+    assertTrue (HTTPStringHelper.isQuotedTextContent (new char [0]));
+    assertFalse (HTTPStringHelper.isQuotedTextContent (new char [10]));
+    assertTrue (HTTPStringHelper.isQuotedTextContent (""));
+    assertTrue (HTTPStringHelper.isQuotedTextContent (" "));
+    assertTrue (HTTPStringHelper.isQuotedTextContent ("bla bla"));
+    assertTrue (HTTPStringHelper.isQuotedTextContent ("bla"));
+    assertFalse (HTTPStringHelper.isQuotedTextContent ("bl\u0000a"));
+    assertFalse (HTTPStringHelper.isQuotedTextContent ("bl\"a"));
+    assertTrue (HTTPStringHelper.isQuotedTextContent (" bla"));
+    assertTrue (HTTPStringHelper.isQuotedTextContent ("bla "));
+    assertTrue (HTTPStringHelper.isQuotedTextContent ("bla"));
+    assertTrue (HTTPStringHelper.isQuotedTextContent ("bla foo fasel"));
   }
 }

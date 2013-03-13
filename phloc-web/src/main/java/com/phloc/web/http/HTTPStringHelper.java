@@ -38,6 +38,11 @@ public final class HTTPStringHelper
   /** Maximum index (inclusive) */
   public static final int MAX_INDEX = 127;
 
+  public static final char COMMENT_START = '(';
+  public static final char COMMENT_END = ')';
+  public static final char QUOTEDTEXT_START = '"';
+  public static final char QUOTEDTEXT_END = '"';
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final HTTPStringHelper s_aInstance = new HTTPStringHelper ();
@@ -205,6 +210,11 @@ public final class HTTPStringHelper
     return n >= MIN_INDEX && n <= MAX_INDEX;
   }
 
+  public static boolean isOctet (final int n)
+  {
+    return n >= MIN_INDEX && n < 256;
+  }
+
   public static boolean isUpperAlphaChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & UALPHA) == UALPHA;
@@ -313,7 +323,7 @@ public final class HTTPStringHelper
 
   public static boolean isComment (@Nullable final char [] aChars)
   {
-    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != '(' || aChars[aChars.length - 1] != ')')
+    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != COMMENT_START || aChars[aChars.length - 1] != COMMENT_END)
       return false;
     for (int i = 1; i < aChars.length - 1; ++i)
       if (!isCommentChar (aChars[i]))
@@ -338,7 +348,9 @@ public final class HTTPStringHelper
 
   public static boolean isQuotedText (@Nullable final char [] aChars)
   {
-    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != '"' || aChars[aChars.length - 1] != '"')
+    if (ArrayHelper.getSize (aChars) < 2 ||
+        aChars[0] != QUOTEDTEXT_START ||
+        aChars[aChars.length - 1] != QUOTEDTEXT_END)
       return false;
     for (int i = 1; i < aChars.length - 1; ++i)
       if (!isQuotedTextChar (aChars[i]))
@@ -351,6 +363,23 @@ public final class HTTPStringHelper
     if (StringHelper.getLength (sStr) < 2)
       return false;
     return isQuotedText (sStr.toCharArray ());
+  }
+
+  public static boolean isQuotedTextContent (@Nullable final char [] aChars)
+  {
+    if (aChars == null)
+      return false;
+    for (final char c : aChars)
+      if (!isQuotedTextChar (c))
+        return false;
+    return true;
+  }
+
+  public static boolean isQuotedTextContent (@Nullable final String sStr)
+  {
+    if (sStr == null)
+      return false;
+    return isQuotedTextContent (sStr.toCharArray ());
   }
 
   public static boolean isWord (@Nullable final char [] aChars)
