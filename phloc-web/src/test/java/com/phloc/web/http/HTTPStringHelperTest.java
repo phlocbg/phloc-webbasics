@@ -329,4 +329,72 @@ public final class HTTPStringHelperTest
     assertTrue (HTTPStringHelper.isQuotedTextContent ("bla"));
     assertTrue (HTTPStringHelper.isQuotedTextContent ("bla foo fasel"));
   }
+
+  @Test
+  public void testReservedChar ()
+  {
+    assertFalse (HTTPStringHelper.isReservedChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (i == ';' || i == '/' || i == '?' || i == ':' || i == '@' || i == '&' || i == '=' || i == '+')
+        assertTrue (HTTPStringHelper.isReservedChar (i));
+      else
+        assertFalse (HTTPStringHelper.isReservedChar (i));
+    assertFalse (HTTPStringHelper.isReservedChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
+  public void testExtraChar ()
+  {
+    assertFalse (HTTPStringHelper.isExtraChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (i == '!' || i == '*' || i == '\'' || i == '(' || i == ')' || i == ',')
+        assertTrue (HTTPStringHelper.isExtraChar (i));
+      else
+        assertFalse (HTTPStringHelper.isExtraChar (i));
+    assertFalse (HTTPStringHelper.isExtraChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
+  public void testSafeChar ()
+  {
+    assertFalse (HTTPStringHelper.isSafeChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (i == '$' || i == '-' || i == '_' || i == '.')
+        assertTrue (HTTPStringHelper.isSafeChar (i));
+      else
+        assertFalse (HTTPStringHelper.isSafeChar (i));
+    assertFalse (HTTPStringHelper.isSafeChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
+  public void testUnsafeChar ()
+  {
+    assertFalse (HTTPStringHelper.isUnsafeChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (HTTPStringHelper.isControlChar (i) || i == ' ' || i == '"' || i == '#' || i == '%' || i == '<' || i == '>')
+        assertTrue (HTTPStringHelper.isUnsafeChar (i));
+      else
+        assertFalse (HTTPStringHelper.isUnsafeChar (i));
+    assertFalse (HTTPStringHelper.isUnsafeChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
+  public void testNationalChar ()
+  {
+    assertFalse (HTTPStringHelper.isNationalChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (HTTPStringHelper.isAlphaChar (i) ||
+          HTTPStringHelper.isDigitChar (i) ||
+          HTTPStringHelper.isReservedChar (i) ||
+          HTTPStringHelper.isExtraChar (i) ||
+          HTTPStringHelper.isSafeChar (i) ||
+          HTTPStringHelper.isUnsafeChar (i))
+        assertFalse (HTTPStringHelper.isNationalChar (i));
+      else
+        assertTrue (HTTPStringHelper.isNationalChar (i));
+    // Any other octet is valid!
+    assertTrue (HTTPStringHelper.isNationalChar (HTTPStringHelper.MAX_INDEX + 1));
+    assertTrue (HTTPStringHelper.isNationalChar (255));
+    assertFalse (HTTPStringHelper.isNationalChar (256));
+  }
 }

@@ -37,10 +37,13 @@ public final class HTTPStringHelper
   public static final int MIN_INDEX = 0;
   /** Maximum index (inclusive) */
   public static final int MAX_INDEX = 127;
-
+  /** Comment start character */
   public static final char COMMENT_START = '(';
+  /** Comment end character */
   public static final char COMMENT_END = ')';
+  /** Quoted text start character */
   public static final char QUOTEDTEXT_START = '"';
+  /** Quoted text end character */
   public static final char QUOTEDTEXT_END = '"';
 
   @PresentForCodeCoverage
@@ -53,63 +56,67 @@ public final class HTTPStringHelper
   private static final int DIGIT = 0x0008;
   private static final int CTL = 0x0010;
   private static final int HEX = 0x0020;
-  private static final int NONTOKEN = 0x0040;
-  private static final int NONTEXT = 0x0080;
-  private static final int NONCOMMENT = 0x0100;
-  private static final int NONQUOTEDTEXT = 0x0200;
+  private static final int NON_TOKEN = 0x0040;
+  private static final int NON_TEXT = 0x0080;
+  private static final int NON_COMMENT = 0x0100;
+  private static final int NON_QUOTEDTEXT = 0x0200;
+  private static final int RESERVED = 0x0400;
+  private static final int EXTRA = 0x0800;
+  private static final int SAFE = 0x1000;
+  private static final int UNSAFE = 0x2000;
 
   private static final char [] MAPPINGS = new char [] {
                                                        // 0x00
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTOKEN,
-                                                       CTL,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TOKEN | UNSAFE,
+                                                       CTL | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
                                                        // 0x10
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
-                                                       CTL | NONTEXT,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
+                                                       CTL | NON_TEXT | UNSAFE,
                                                        // 0x20
-                                                       NONTOKEN,
-                                                       0,
-                                                       NONTOKEN | NONQUOTEDTEXT,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       NONTOKEN | NONCOMMENT,
-                                                       NONTOKEN | NONCOMMENT,
-                                                       0,
-                                                       0,
-                                                       NONTOKEN,
-                                                       0,
-                                                       0,
-                                                       NONTOKEN,
+                                                       NON_TOKEN | UNSAFE,
+                                                       EXTRA,
+                                                       NON_TOKEN | NON_QUOTEDTEXT | UNSAFE,
+                                                       UNSAFE,
+                                                       SAFE,
+                                                       UNSAFE,
+                                                       RESERVED,
+                                                       EXTRA,
+                                                       NON_TOKEN | NON_COMMENT | EXTRA,
+                                                       NON_TOKEN | NON_COMMENT | EXTRA,
+                                                       EXTRA,
+                                                       RESERVED,
+                                                       NON_TOKEN | EXTRA,
+                                                       SAFE,
+                                                       SAFE,
+                                                       NON_TOKEN | RESERVED,
                                                        // 0x30
                                                        DIGIT | HEX,
                                                        DIGIT | HEX,
@@ -121,14 +128,14 @@ public final class HTTPStringHelper
                                                        DIGIT | HEX,
                                                        DIGIT | HEX,
                                                        DIGIT | HEX,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
+                                                       NON_TOKEN | RESERVED,
+                                                       NON_TOKEN | RESERVED,
+                                                       NON_TOKEN | UNSAFE,
+                                                       NON_TOKEN | RESERVED,
+                                                       NON_TOKEN | UNSAFE,
+                                                       NON_TOKEN | RESERVED,
                                                        // 0x40
-                                                       NONTOKEN,
+                                                       NON_TOKEN | RESERVED,
                                                        UALPHA | ALPHA | HEX,
                                                        UALPHA | ALPHA | HEX,
                                                        UALPHA | ALPHA | HEX,
@@ -156,11 +163,11 @@ public final class HTTPStringHelper
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
-                                                       NONTOKEN,
+                                                       NON_TOKEN,
+                                                       NON_TOKEN,
+                                                       NON_TOKEN,
                                                        0,
-                                                       0,
+                                                       SAFE,
                                                        // 0x60
                                                        0,
                                                        LALPHA | ALPHA | HEX,
@@ -190,11 +197,11 @@ public final class HTTPStringHelper
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
-                                                       NONTOKEN,
+                                                       NON_TOKEN,
                                                        0,
-                                                       NONTOKEN,
+                                                       NON_TOKEN,
                                                        0,
-                                                       CTL | NONTEXT };
+                                                       CTL | NON_TEXT | UNSAFE };
 
   static
   {
@@ -272,7 +279,7 @@ public final class HTTPStringHelper
 
   public static boolean isNonTokenChar (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & NONTOKEN) == NONTOKEN;
+    return isChar (n) && (MAPPINGS[n] & NON_TOKEN) == NON_TOKEN;
   }
 
   public static boolean isTokenChar (final int n)
@@ -280,7 +287,7 @@ public final class HTTPStringHelper
     if (!isChar (n))
       return false;
     final int nMapping = MAPPINGS[n];
-    return (nMapping & CTL) == 0 && (nMapping & NONTOKEN) == 0;
+    return (nMapping & CTL) == 0 && (nMapping & NON_TOKEN) == 0;
   }
 
   public static boolean isToken (@Nullable final char [] aChars)
@@ -307,7 +314,7 @@ public final class HTTPStringHelper
     // Any octet allowed!
     if (n > MAX_INDEX)
       return n < 256;
-    return (MAPPINGS[n] & NONTEXT) == 0;
+    return (MAPPINGS[n] & NON_TEXT) == 0;
   }
 
   public static boolean isCommentChar (final int n)
@@ -318,7 +325,7 @@ public final class HTTPStringHelper
     if (n > MAX_INDEX)
       return n < 256;
     final int nMapping = MAPPINGS[n];
-    return (nMapping & NONTEXT) == 0 && (nMapping & NONCOMMENT) == 0;
+    return (nMapping & NON_TEXT) == 0 && (nMapping & NON_COMMENT) == 0;
   }
 
   public static boolean isComment (@Nullable final char [] aChars)
@@ -343,7 +350,7 @@ public final class HTTPStringHelper
     if (!isChar (n))
       return false;
     final int nMapping = MAPPINGS[n];
-    return (nMapping & NONTEXT) == 0 && (nMapping & NONQUOTEDTEXT) == 0;
+    return (nMapping & NON_TEXT) == 0 && (nMapping & NON_QUOTEDTEXT) == 0;
   }
 
   public static boolean isQuotedText (@Nullable final char [] aChars)
@@ -392,5 +399,54 @@ public final class HTTPStringHelper
     if (StringHelper.hasNoText (sStr))
       return false;
     return isWord (sStr.toCharArray ());
+  }
+
+  public static boolean isReservedChar (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & RESERVED) == RESERVED;
+  }
+
+  public static boolean isExtraChar (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & EXTRA) == EXTRA;
+  }
+
+  public static boolean isSafeChar (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & SAFE) == SAFE;
+  }
+
+  public static boolean isUnsafeChar (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & UNSAFE) == UNSAFE;
+  }
+
+  public static boolean isNationalChar (final int n)
+  {
+    if (n < MIN_INDEX)
+      return false;
+    // Any octet allowed!
+    if (n > MAX_INDEX)
+      return n < 256;
+    final int nMapping = MAPPINGS[n];
+    return (nMapping & ALPHA) == 0 &&
+           (nMapping & DIGIT) == 0 &&
+           (nMapping & RESERVED) == 0 &&
+           (nMapping & EXTRA) == 0 &&
+           (nMapping & SAFE) == 0 &&
+           (nMapping & UNSAFE) == 0;
+  }
+
+  public static boolean isUnreservedChar (final int n)
+  {
+    if (!isChar (n))
+      return false;
+    final int nMapping = MAPPINGS[n];
+    if ((nMapping & RESERVED) == RESERVED || (nMapping & UNSAFE) == UNSAFE)
+      return false;
+    return (nMapping & ALPHA) == ALPHA ||
+           (nMapping & DIGIT) == DIGIT ||
+           (nMapping & EXTRA) == EXTRA ||
+           (nMapping & SAFE) == SAFE;
   }
 }
