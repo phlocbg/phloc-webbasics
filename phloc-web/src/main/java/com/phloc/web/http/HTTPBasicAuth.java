@@ -29,7 +29,7 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Basic handling for HTTP Basic Auth
+ * Handling for HTTP Basic Authentication
  * 
  * @author philip
  */
