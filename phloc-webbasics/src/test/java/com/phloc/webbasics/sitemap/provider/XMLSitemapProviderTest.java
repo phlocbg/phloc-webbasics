@@ -30,14 +30,13 @@ import com.phloc.commons.io.file.FileUtils;
 import com.phloc.web.servlet.server.StaticServerInfo;
 import com.phloc.webbasics.sitemap.CXMLSitemap;
 import com.phloc.webbasics.sitemap.XMLSitemapIndex;
-import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**
  * Test class for class {@link XMLSitemapProvider}.
  * 
  * @author philip
  */
-public final class XMLSitemapProviderTest extends AbstractWebScopeAwareTestCase
+public final class XMLSitemapProviderTest
 {
   static
   {

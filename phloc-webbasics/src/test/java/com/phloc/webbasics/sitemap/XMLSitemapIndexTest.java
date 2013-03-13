@@ -36,14 +36,13 @@ import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.xml.schema.XMLSchemaValidationHelper;
 import com.phloc.commons.xml.transform.StringStreamSource;
 import com.phloc.web.servlet.server.StaticServerInfo;
-import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**
  * Test class for class {@link XMLSitemapIndex}.
  * 
  * @author philip
  */
-public final class XMLSitemapIndexTest extends AbstractWebScopeAwareTestCase
+public final class XMLSitemapIndexTest
 {
   static
   {
