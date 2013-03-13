@@ -96,7 +96,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-scopes</artifactId>
-      <version>6.1.0</version>
+      <version>6.1.1</version>
     </dependency>
     <dependency>
       <groupId>net.sf.trove4j</groupId>
