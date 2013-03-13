@@ -19,6 +19,8 @@ package com.phloc.web.http;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
+
 // ESCA-JAVA0116:
 /**
  * HTTP header constants.
@@ -90,6 +92,14 @@ public final class CHTTPHeader
   public static final String ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method";
   public static final String ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
   public static final String ORIGIN = "Origin";
+
+  // Authentication schemes
+  public static final String AUTH_BASIC = "Basic";
+  public static final String AUTH_DIGEST = "Digest";
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CHTTPHeader s_aInstance = new CHTTPHeader ();
 
   private CHTTPHeader ()
   {}

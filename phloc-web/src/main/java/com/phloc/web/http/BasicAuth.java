@@ -25,6 +25,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -35,7 +36,7 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class BasicAuth
 {
-  public static final String HEADER_VALUE_PREFIX_BASIC = "Basic ";
+  public static final String HEADER_VALUE_PREFIX_BASIC = CHTTPHeader.AUTH_BASIC;
 
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
@@ -61,8 +62,8 @@ public final class BasicAuth
     if (StringHelper.hasNoText (sUsername))
       throw new IllegalArgumentException ("username is missing");
 
-    final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ":", sPassword);
-    return HEADER_VALUE_PREFIX_BASIC + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1_OBJ);
+    final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ':', sPassword);
+    return HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1_OBJ);
   }
 
   /**
@@ -78,11 +79,19 @@ public final class BasicAuth
   @Nullable
   public static String [] getBasicAuthValues (@Nullable final String sAuthHeader)
   {
-    if (!StringHelper.startsWith (sAuthHeader, HEADER_VALUE_PREFIX_BASIC))
+    final String sRealHeader = StringHelper.trim (sAuthHeader);
+    if (StringHelper.hasNoText (sRealHeader))
+      return null;
+
+    final String [] aElements = RegExHelper.getSplitToArray (sRealHeader, "\\s+", 2);
+    if (aElements.length != 2)
+      return null;
+
+    if (!aElements[0].equals (HEADER_VALUE_PREFIX_BASIC))
       return null;
 
     // Remove the auth prefix
-    final String sEncodedCredentials = sAuthHeader.substring (HEADER_VALUE_PREFIX_BASIC.length ());
+    final String sEncodedCredentials = aElements[1];
 
     // Apply Base64 decoding
     final String sUsernamePassword = Base64Helper.safeDecodeAsString (sEncodedCredentials,

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.mime.EMimeContentType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
@@ -41,7 +42,12 @@ public final class AcceptMimeTypeHandler
 {
   /** Any MIME type */
   public static final IMimeType ANY_MIMETYPE = new MimeType (EMimeContentType._STAR, "*");
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (AcceptMimeTypeHandler.class);
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final AcceptMimeTypeHandler s_aInstance = new AcceptMimeTypeHandler ();
 
   private AcceptMimeTypeHandler ()
   {}

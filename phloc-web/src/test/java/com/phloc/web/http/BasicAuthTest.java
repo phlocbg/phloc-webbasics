@@ -19,6 +19,7 @@ package com.phloc.web.http;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -60,5 +61,28 @@ public final class BasicAuthTest
     assertNotNull (aDecoded);
     assertEquals (1, aDecoded.length);
     assertEquals (sUsername, aDecoded[0]);
+  }
+
+  @Test
+  public void testGetBasicAuthValues ()
+  {
+    assertNull (BasicAuth.getBasicAuthValues (null));
+    assertNull (BasicAuth.getBasicAuthValues (""));
+    assertNull (BasicAuth.getBasicAuthValues ("bla"));
+    assertNull (BasicAuth.getBasicAuthValues ("bla foor"));
+    assertNull (BasicAuth.getBasicAuthValues ("Basic"));
+    assertNull (BasicAuth.getBasicAuthValues ("  Basic  "));
+    // Base64 with blanks is OK!
+    String [] aUP = BasicAuth.getBasicAuthValues ("  Basic  QWxsYW  Rp   bjpvcG  VuIH Nlc2F tZQ   =  =   ");
+    assertNotNull (aUP);
+    assertEquals (2, aUP.length);
+    assertEquals ("Alladin", aUP[0]);
+    assertEquals ("open sesame", aUP[1]);
+
+    aUP = BasicAuth.getBasicAuthValues ("  Basic  QWxsYWRpbjpvcGVuIHNlc2FtZQ==   ");
+    assertNotNull (aUP);
+    assertEquals (2, aUP.length);
+    assertEquals ("Alladin", aUP[0]);
+    assertEquals ("open sesame", aUP[1]);
   }
 }

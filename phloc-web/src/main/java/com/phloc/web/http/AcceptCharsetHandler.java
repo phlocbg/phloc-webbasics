@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
@@ -38,6 +39,10 @@ public final class AcceptCharsetHandler
   public static final String ANY_CHARSET = "*";
   /** Default charset iso-8859-1 */
   public static final String DEFAULT_CHARSET = CCharset.CHARSET_ISO_8859_1;
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final AcceptCharsetHandler s_aInstance = new AcceptCharsetHandler ();
 
   private AcceptCharsetHandler ()
   {}

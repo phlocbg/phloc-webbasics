@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
@@ -35,6 +36,10 @@ public final class AcceptLanguageHandler
 {
   /** Any language */
   public static final String ANY_LANGUAGE = "*";
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final AcceptLanguageHandler s_aInstance = new AcceptLanguageHandler ();
 
   private AcceptLanguageHandler ()
   {}

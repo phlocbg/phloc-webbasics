@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
@@ -53,6 +54,10 @@ public final class AcceptEncodingHandler
   public static final String X_COMPRESS_ENCODING = "x-compress";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (AcceptEncodingHandler.class);
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final AcceptEncodingHandler s_aInstance = new AcceptEncodingHandler ();
 
   private AcceptEncodingHandler ()
   {}
