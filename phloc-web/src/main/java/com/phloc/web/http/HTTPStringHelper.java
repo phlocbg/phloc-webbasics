@@ -17,10 +17,13 @@
  */
 package com.phloc.web.http;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.exceptions.InitializationException;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * HTTP string utils. Based on RFC 1945 http://tools.ietf.org/html/rfc1945
@@ -45,7 +48,7 @@ public final class HTTPStringHelper
   private static final int DIGIT = 0x0008;
   private static final int CTL = 0x0010;
   private static final int HEX = 0x0020;
-  private static final int TSPECIAL = 0x0040;
+  private static final int NONTOKEN = 0x0040;
   private static final int NONTEXT = 0x0080;
   private static final int NONCOMMENT = 0x0100;
   private static final int NONQUOTEDTEXT = 0x0200;
@@ -61,7 +64,7 @@ public final class HTTPStringHelper
                                                        CTL | NONTEXT,
                                                        CTL | NONTEXT,
                                                        CTL | NONTEXT,
-                                                       CTL | TSPECIAL,
+                                                       CTL | NONTOKEN,
                                                        CTL,
                                                        CTL | NONTEXT,
                                                        CTL | NONTEXT,
@@ -86,22 +89,22 @@ public final class HTTPStringHelper
                                                        CTL | NONTEXT,
                                                        CTL | NONTEXT,
                                                        // 0x20
-                                                       TSPECIAL,
+                                                       NONTOKEN,
                                                        0,
-                                                       TSPECIAL | NONQUOTEDTEXT,
-                                                       0,
-                                                       0,
+                                                       NONTOKEN | NONQUOTEDTEXT,
                                                        0,
                                                        0,
                                                        0,
-                                                       TSPECIAL | NONCOMMENT,
-                                                       TSPECIAL | NONCOMMENT,
                                                        0,
                                                        0,
-                                                       TSPECIAL,
+                                                       NONTOKEN | NONCOMMENT,
+                                                       NONTOKEN | NONCOMMENT,
                                                        0,
                                                        0,
-                                                       TSPECIAL,
+                                                       NONTOKEN,
+                                                       0,
+                                                       0,
+                                                       NONTOKEN,
                                                        // 0x30
                                                        DIGIT | HEX,
                                                        DIGIT | HEX,
@@ -113,14 +116,14 @@ public final class HTTPStringHelper
                                                        DIGIT | HEX,
                                                        DIGIT | HEX,
                                                        DIGIT | HEX,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
                                                        // 0x40
-                                                       TSPECIAL,
+                                                       NONTOKEN,
                                                        UALPHA | ALPHA | HEX,
                                                        UALPHA | ALPHA | HEX,
                                                        UALPHA | ALPHA | HEX,
@@ -148,9 +151,9 @@ public final class HTTPStringHelper
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
-                                                       TSPECIAL,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
+                                                       NONTOKEN,
                                                        0,
                                                        0,
                                                        // 0x60
@@ -182,9 +185,9 @@ public final class HTTPStringHelper
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
-                                                       TSPECIAL,
+                                                       NONTOKEN,
                                                        0,
-                                                       TSPECIAL,
+                                                       NONTOKEN,
                                                        0,
                                                        CTL | NONTEXT };
 
@@ -202,90 +205,163 @@ public final class HTTPStringHelper
     return n >= MIN_INDEX && n <= MAX_INDEX;
   }
 
-  public static boolean isUpperAlpha (final int n)
+  public static boolean isUpperAlphaChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & UALPHA) == UALPHA;
   }
 
-  public static boolean isLowerAlpha (final int n)
+  public static boolean isLowerAlphaChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & LALPHA) == LALPHA;
   }
 
-  public static boolean isAlpha (final int n)
+  public static boolean isAlphaChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & ALPHA) == ALPHA;
   }
 
-  public static boolean isDigit (final int n)
+  public static boolean isDigitChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & DIGIT) == DIGIT;
   }
 
-  public static boolean isControl (final int n)
+  public static boolean isControlChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & CTL) == CTL;
   }
 
-  public static boolean isCR (final int n)
+  public static boolean isCRChar (final int n)
   {
     return n == 13;
   }
 
-  public static boolean isLF (final int n)
+  public static boolean isLFChar (final int n)
   {
     return n == 10;
   }
 
-  public static boolean isSpace (final int n)
+  public static boolean isSpaceChar (final int n)
   {
     return n == 32;
   }
 
-  public static boolean isTab (final int n)
+  public static boolean isTabChar (final int n)
   {
     return n == 9;
   }
 
-  public static boolean isQuote (final int n)
+  public static boolean isQuoteChar (final int n)
   {
     return n == 34;
   }
 
-  public static boolean isHex (final int n)
+  public static boolean isHexChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & HEX) == HEX;
   }
 
-  public static boolean isTokenSpecial (final int n)
+  public static boolean isNonTokenChar (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & TSPECIAL) == TSPECIAL;
+    return isChar (n) && (MAPPINGS[n] & NONTOKEN) == NONTOKEN;
   }
 
-  public static boolean isText (final int n)
+  public static boolean isTokenChar (final int n)
+  {
+    if (!isChar (n))
+      return false;
+    final int nMapping = MAPPINGS[n];
+    return (nMapping & CTL) == 0 && (nMapping & NONTOKEN) == 0;
+  }
+
+  public static boolean isToken (@Nullable final char [] aChars)
+  {
+    if (ArrayHelper.isEmpty (aChars))
+      return false;
+    for (final char c : aChars)
+      if (!isTokenChar (c))
+        return false;
+    return true;
+  }
+
+  public static boolean isToken (@Nullable final String sStr)
+  {
+    if (StringHelper.hasNoText (sStr))
+      return false;
+    return isToken (sStr.toCharArray ());
+  }
+
+  public static boolean isTextChar (final int n)
   {
     if (n < MIN_INDEX)
       return false;
+    // Any octet allowed!
     if (n > MAX_INDEX)
       return n < 256;
     return (MAPPINGS[n] & NONTEXT) == 0;
   }
 
-  public static boolean isComment (final int n)
+  public static boolean isCommentChar (final int n)
   {
     if (n < MIN_INDEX)
       return false;
+    // Any octet allowed!
     if (n > MAX_INDEX)
       return n < 256;
     final int nMapping = MAPPINGS[n];
     return (nMapping & NONTEXT) == 0 && (nMapping & NONCOMMENT) == 0;
   }
 
-  public static boolean isQuotedText (final int n)
+  public static boolean isComment (@Nullable final char [] aChars)
+  {
+    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != '(' || aChars[aChars.length - 1] != ')')
+      return false;
+    for (int i = 1; i < aChars.length - 1; ++i)
+      if (!isCommentChar (aChars[i]))
+        return false;
+    return true;
+  }
+
+  public static boolean isComment (@Nullable final String sStr)
+  {
+    if (StringHelper.getLength (sStr) < 2)
+      return false;
+    return isComment (sStr.toCharArray ());
+  }
+
+  public static boolean isQuotedTextChar (final int n)
   {
     if (!isChar (n))
       return false;
     final int nMapping = MAPPINGS[n];
     return (nMapping & NONTEXT) == 0 && (nMapping & NONQUOTEDTEXT) == 0;
+  }
+
+  public static boolean isQuotedText (@Nullable final char [] aChars)
+  {
+    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != '"' || aChars[aChars.length - 1] != '"')
+      return false;
+    for (int i = 1; i < aChars.length - 1; ++i)
+      if (!isQuotedTextChar (aChars[i]))
+        return false;
+    return true;
+  }
+
+  public static boolean isQuotedText (@Nullable final String sStr)
+  {
+    if (StringHelper.getLength (sStr) < 2)
+      return false;
+    return isQuotedText (sStr.toCharArray ());
+  }
+
+  public static boolean isWord (@Nullable final char [] aChars)
+  {
+    return isToken (aChars) || isQuotedText (aChars);
+  }
+
+  public static boolean isWord (@Nullable final String sStr)
+  {
+    if (StringHelper.hasNoText (sStr))
+      return false;
+    return isWord (sStr.toCharArray ());
   }
 }

@@ -22,141 +22,141 @@ public final class HTTPStringHelperTest
   }
 
   @Test
-  public void testUpperAlpha ()
+  public void testUpperAlphaChar ()
   {
-    assertFalse (HTTPStringHelper.isUpperAlpha (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isUpperAlphaChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i >= 'A' && i <= 'Z')
-        assertTrue (HTTPStringHelper.isUpperAlpha (i));
+        assertTrue (HTTPStringHelper.isUpperAlphaChar (i));
       else
-        assertFalse (HTTPStringHelper.isUpperAlpha (i));
-    assertFalse (HTTPStringHelper.isUpperAlpha (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isUpperAlphaChar (i));
+    assertFalse (HTTPStringHelper.isUpperAlphaChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testLowerAlpha ()
+  public void testLowerAlphaChar ()
   {
-    assertFalse (HTTPStringHelper.isLowerAlpha (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isLowerAlphaChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i >= 'a' && i <= 'z')
-        assertTrue (HTTPStringHelper.isLowerAlpha (i));
+        assertTrue (HTTPStringHelper.isLowerAlphaChar (i));
       else
-        assertFalse (HTTPStringHelper.isLowerAlpha (i));
-    assertFalse (HTTPStringHelper.isLowerAlpha (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isLowerAlphaChar (i));
+    assertFalse (HTTPStringHelper.isLowerAlphaChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testAlpha ()
+  public void testAlphaChar ()
   {
-    assertFalse (HTTPStringHelper.isAlpha (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isAlphaChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if ((i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z'))
-        assertTrue (HTTPStringHelper.isAlpha (i));
+        assertTrue (HTTPStringHelper.isAlphaChar (i));
       else
-        assertFalse (HTTPStringHelper.isAlpha (i));
-    assertFalse (HTTPStringHelper.isAlpha (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isAlphaChar (i));
+    assertFalse (HTTPStringHelper.isAlphaChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testDigit ()
+  public void testDigitChar ()
   {
-    assertFalse (HTTPStringHelper.isDigit (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isDigitChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i >= '0' && i <= '9')
-        assertTrue (HTTPStringHelper.isDigit (i));
+        assertTrue (HTTPStringHelper.isDigitChar (i));
       else
-        assertFalse (HTTPStringHelper.isDigit (i));
-    assertFalse (HTTPStringHelper.isDigit (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isDigitChar (i));
+    assertFalse (HTTPStringHelper.isDigitChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testControl ()
+  public void testControlChar ()
   {
-    assertFalse (HTTPStringHelper.isControl (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isControlChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i < ' ' || i == 127)
-        assertTrue (HTTPStringHelper.isControl (i));
+        assertTrue (HTTPStringHelper.isControlChar (i));
       else
-        assertFalse (HTTPStringHelper.isControl (i));
-    assertFalse (HTTPStringHelper.isControl (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isControlChar (i));
+    assertFalse (HTTPStringHelper.isControlChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testCR ()
+  public void testCRChar ()
   {
-    assertFalse (HTTPStringHelper.isCR (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isCRChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i == '\r')
-        assertTrue (HTTPStringHelper.isCR (i));
+        assertTrue (HTTPStringHelper.isCRChar (i));
       else
-        assertFalse (HTTPStringHelper.isCR (i));
-    assertFalse (HTTPStringHelper.isCR (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isCRChar (i));
+    assertFalse (HTTPStringHelper.isCRChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testLF ()
+  public void testLFChar ()
   {
-    assertFalse (HTTPStringHelper.isLF (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isLFChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i == '\n')
-        assertTrue (HTTPStringHelper.isLF (i));
+        assertTrue (HTTPStringHelper.isLFChar (i));
       else
-        assertFalse (HTTPStringHelper.isLF (i));
-    assertFalse (HTTPStringHelper.isLF (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isLFChar (i));
+    assertFalse (HTTPStringHelper.isLFChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testSpace ()
+  public void testSpaceChar ()
   {
-    assertFalse (HTTPStringHelper.isSpace (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isSpaceChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i == ' ')
-        assertTrue (HTTPStringHelper.isSpace (i));
+        assertTrue (HTTPStringHelper.isSpaceChar (i));
       else
-        assertFalse (HTTPStringHelper.isSpace (i));
-    assertFalse (HTTPStringHelper.isSpace (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isSpaceChar (i));
+    assertFalse (HTTPStringHelper.isSpaceChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testTab ()
+  public void testTabChar ()
   {
-    assertFalse (HTTPStringHelper.isTab (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isTabChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i == '\t')
-        assertTrue (HTTPStringHelper.isTab (i));
+        assertTrue (HTTPStringHelper.isTabChar (i));
       else
-        assertFalse (HTTPStringHelper.isTab (i));
-    assertFalse (HTTPStringHelper.isTab (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isTabChar (i));
+    assertFalse (HTTPStringHelper.isTabChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testQuote ()
+  public void testQuoteChar ()
   {
-    assertFalse (HTTPStringHelper.isQuote (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isQuoteChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i == '"')
-        assertTrue (HTTPStringHelper.isQuote (i));
+        assertTrue (HTTPStringHelper.isQuoteChar (i));
       else
-        assertFalse (HTTPStringHelper.isQuote (i));
-    assertFalse (HTTPStringHelper.isQuote (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isQuoteChar (i));
+    assertFalse (HTTPStringHelper.isQuoteChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testHex ()
+  public void testHexChar ()
   {
-    assertFalse (HTTPStringHelper.isHex (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isHexChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if ((i >= 'A' && i <= 'F') || (i >= 'a' && i <= 'f') || (i >= '0' && i <= '9'))
-        assertTrue (HTTPStringHelper.isHex (i));
+        assertTrue (HTTPStringHelper.isHexChar (i));
       else
-        assertFalse (HTTPStringHelper.isHex (i));
-    assertFalse (HTTPStringHelper.isHex (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isHexChar (i));
+    assertFalse (HTTPStringHelper.isHexChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testTokenSpecial ()
+  public void testNonTokenChar ()
   {
-    assertFalse (HTTPStringHelper.isTokenSpecial (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isNonTokenChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
       if (i == '(' ||
           i == ')' ||
@@ -177,63 +177,134 @@ public final class HTTPStringHelperTest
           i == '}' ||
           i == ' ' ||
           i == '\t')
-        assertTrue (HTTPStringHelper.isTokenSpecial (i));
+        assertTrue (HTTPStringHelper.isNonTokenChar (i));
       else
-        assertFalse (HTTPStringHelper.isTokenSpecial (i));
-    assertFalse (HTTPStringHelper.isHex (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isNonTokenChar (i));
+    assertFalse (HTTPStringHelper.isNonTokenChar (HTTPStringHelper.MAX_INDEX + 1));
   }
 
   @Test
-  public void testText ()
+  public void testTokenChar ()
   {
-    assertFalse (HTTPStringHelper.isText (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isTokenChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if (!HTTPStringHelper.isControl (i) ||
-          HTTPStringHelper.isCR (i) ||
-          HTTPStringHelper.isLF (i) ||
-          HTTPStringHelper.isTab (i) ||
-          HTTPStringHelper.isSpace (i))
-        assertTrue (HTTPStringHelper.isText (i));
+      if (!HTTPStringHelper.isControlChar (i) && !HTTPStringHelper.isNonTokenChar (i))
+        assertTrue (HTTPStringHelper.isTokenChar (i));
       else
-        assertFalse (HTTPStringHelper.isText (i));
+        assertFalse (HTTPStringHelper.isTokenChar (i));
+    assertFalse (HTTPStringHelper.isTokenChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
+  public void testIsToken ()
+  {
+    assertFalse (HTTPStringHelper.isToken ((String) null));
+    assertFalse (HTTPStringHelper.isToken ((char []) null));
+    assertFalse (HTTPStringHelper.isToken (new char [0]));
+    assertFalse (HTTPStringHelper.isToken (new char [10]));
+    assertFalse (HTTPStringHelper.isToken (""));
+    assertFalse (HTTPStringHelper.isToken (" "));
+    assertFalse (HTTPStringHelper.isToken ("bla bla"));
+    assertFalse (HTTPStringHelper.isToken ("(bla"));
+    assertFalse (HTTPStringHelper.isToken ("bl(a"));
+    assertFalse (HTTPStringHelper.isToken ("bl)a"));
+    assertFalse (HTTPStringHelper.isToken ("bl<a"));
+    assertFalse (HTTPStringHelper.isToken ("bl>a"));
+    assertTrue (HTTPStringHelper.isToken ("bla"));
+    assertTrue (HTTPStringHelper.isToken ("bla_foo_fasel"));
+    assertTrue (HTTPStringHelper.isToken ("0123435678"));
+  }
+
+  @Test
+  public void testTextChar ()
+  {
+    assertFalse (HTTPStringHelper.isTextChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (!HTTPStringHelper.isControlChar (i) ||
+          HTTPStringHelper.isCRChar (i) ||
+          HTTPStringHelper.isLFChar (i) ||
+          HTTPStringHelper.isTabChar (i) ||
+          HTTPStringHelper.isSpaceChar (i))
+        assertTrue (HTTPStringHelper.isTextChar (i));
+      else
+        assertFalse (HTTPStringHelper.isTextChar (i));
     // Any other octet is valid!
-    assertTrue (HTTPStringHelper.isText (HTTPStringHelper.MAX_INDEX + 1));
-    assertTrue (HTTPStringHelper.isText (255));
-    assertFalse (HTTPStringHelper.isText (256));
+    assertTrue (HTTPStringHelper.isTextChar (HTTPStringHelper.MAX_INDEX + 1));
+    assertTrue (HTTPStringHelper.isTextChar (255));
+    assertFalse (HTTPStringHelper.isTextChar (256));
   }
 
   @Test
-  public void testComment ()
+  public void testCommentChar ()
   {
-    assertFalse (HTTPStringHelper.isComment (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isCommentChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if ((!HTTPStringHelper.isControl (i) && i != '(' && i != ')') ||
-          HTTPStringHelper.isCR (i) ||
-          HTTPStringHelper.isLF (i) ||
-          HTTPStringHelper.isTab (i) ||
-          HTTPStringHelper.isSpace (i))
-        assertTrue (HTTPStringHelper.isComment (i));
+      if ((!HTTPStringHelper.isControlChar (i) && i != '(' && i != ')') ||
+          HTTPStringHelper.isCRChar (i) ||
+          HTTPStringHelper.isLFChar (i) ||
+          HTTPStringHelper.isTabChar (i) ||
+          HTTPStringHelper.isSpaceChar (i))
+        assertTrue (HTTPStringHelper.isCommentChar (i));
       else
-        assertFalse (HTTPStringHelper.isComment (i));
+        assertFalse (HTTPStringHelper.isCommentChar (i));
     // Any other octet is valid!
-    assertTrue (HTTPStringHelper.isComment (HTTPStringHelper.MAX_INDEX + 1));
-    assertTrue (HTTPStringHelper.isComment (255));
-    assertFalse (HTTPStringHelper.isComment (256));
+    assertTrue (HTTPStringHelper.isCommentChar (HTTPStringHelper.MAX_INDEX + 1));
+    assertTrue (HTTPStringHelper.isCommentChar (255));
+    assertFalse (HTTPStringHelper.isCommentChar (256));
   }
 
   @Test
-  public void testQuotedChar ()
+  public void testIsComment ()
   {
-    assertFalse (HTTPStringHelper.isQuotedText (HTTPStringHelper.MIN_INDEX - 1));
+    assertFalse (HTTPStringHelper.isComment ((String) null));
+    assertFalse (HTTPStringHelper.isComment ((char []) null));
+    assertFalse (HTTPStringHelper.isComment (new char [0]));
+    assertFalse (HTTPStringHelper.isComment (new char [10]));
+    assertFalse (HTTPStringHelper.isComment (""));
+    assertFalse (HTTPStringHelper.isComment (" "));
+    assertFalse (HTTPStringHelper.isComment ("bla bla"));
+    assertFalse (HTTPStringHelper.isComment ("(bla"));
+    assertFalse (HTTPStringHelper.isComment ("(bl\u0000a)"));
+    assertFalse (HTTPStringHelper.isComment ("(bl(a)"));
+    assertFalse (HTTPStringHelper.isComment ("(bl)a)"));
+    assertFalse (HTTPStringHelper.isComment (" (bla)"));
+    assertFalse (HTTPStringHelper.isComment ("(bla) "));
+    assertTrue (HTTPStringHelper.isComment ("(bla)"));
+    assertTrue (HTTPStringHelper.isComment ("(bla foo fasel)"));
+  }
+
+  @Test
+  public void testQuotedTextChar ()
+  {
+    assertFalse (HTTPStringHelper.isQuotedTextChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if ((!HTTPStringHelper.isControl (i) && i != '"') ||
-          HTTPStringHelper.isCR (i) ||
-          HTTPStringHelper.isLF (i) ||
-          HTTPStringHelper.isTab (i) ||
-          HTTPStringHelper.isSpace (i))
-        assertTrue (Integer.toHexString (i), HTTPStringHelper.isQuotedText (i));
+      if ((!HTTPStringHelper.isControlChar (i) && i != '"') ||
+          HTTPStringHelper.isCRChar (i) ||
+          HTTPStringHelper.isLFChar (i) ||
+          HTTPStringHelper.isTabChar (i) ||
+          HTTPStringHelper.isSpaceChar (i))
+        assertTrue (Integer.toHexString (i), HTTPStringHelper.isQuotedTextChar (i));
       else
-        assertFalse (HTTPStringHelper.isQuotedText (i));
-    assertFalse (HTTPStringHelper.isQuotedText (HTTPStringHelper.MAX_INDEX + 1));
+        assertFalse (HTTPStringHelper.isQuotedTextChar (i));
+    assertFalse (HTTPStringHelper.isQuotedTextChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
+  public void testIsQuotedText ()
+  {
+    assertFalse (HTTPStringHelper.isQuotedText ((String) null));
+    assertFalse (HTTPStringHelper.isQuotedText ((char []) null));
+    assertFalse (HTTPStringHelper.isQuotedText (new char [0]));
+    assertFalse (HTTPStringHelper.isQuotedText (new char [10]));
+    assertFalse (HTTPStringHelper.isQuotedText (""));
+    assertFalse (HTTPStringHelper.isQuotedText (" "));
+    assertFalse (HTTPStringHelper.isQuotedText ("bla bla"));
+    assertFalse (HTTPStringHelper.isQuotedText ("\"bla"));
+    assertFalse (HTTPStringHelper.isQuotedText ("\"bl\u0000a\""));
+    assertFalse (HTTPStringHelper.isQuotedText ("\"bl\"a\""));
+    assertFalse (HTTPStringHelper.isQuotedText (" \"bla\""));
+    assertFalse (HTTPStringHelper.isQuotedText ("\"bla\" "));
+    assertTrue (HTTPStringHelper.isQuotedText ("\"bla\""));
+    assertTrue (HTTPStringHelper.isQuotedText ("\"bla foo fasel\""));
   }
 }
