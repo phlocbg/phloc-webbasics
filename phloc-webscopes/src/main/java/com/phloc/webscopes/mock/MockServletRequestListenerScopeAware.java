@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.scopes.mock.ScopeAwareTestSetup;
 import com.phloc.web.mock.MockServletRequestListener;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -36,7 +37,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 public class MockServletRequestListenerScopeAware extends MockServletRequestListener
 {
   /** The application ID to use. */
-  public static final String MOCK_APPLICATION_ID = "mock.appid";
+  public static final String MOCK_APPLICATION_ID = ScopeAwareTestSetup.MOCK_APPLICATION_SCOPE_ID;
 
   private final String m_sApplicationID;
 
