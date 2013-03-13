@@ -19,12 +19,17 @@ package com.phloc.webscopes.mock;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.web.mock.MockHttpListener;
 import com.phloc.webscopes.servlet.WebScopeListener;
 
 @Immutable
 public final class WebScopeTestInit
 {
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final WebScopeTestInit s_aInstance = new WebScopeTestInit ();
+
   private WebScopeTestInit ()
   {}
 

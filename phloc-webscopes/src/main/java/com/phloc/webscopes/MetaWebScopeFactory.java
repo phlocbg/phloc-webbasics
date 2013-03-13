@@ -20,6 +20,7 @@ package com.phloc.webscopes;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.webscopes.factory.DefaultWebScopeFactory;
 import com.phloc.webscopes.factory.IWebScopeFactory;
 
@@ -32,6 +33,10 @@ import com.phloc.webscopes.factory.IWebScopeFactory;
 @NotThreadSafe
 public final class MetaWebScopeFactory
 {
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final MetaWebScopeFactory s_aInstance = new MetaWebScopeFactory ();
+
   private static IWebScopeFactory s_aWebScopeFactory = new DefaultWebScopeFactory ();
 
   private MetaWebScopeFactory ()
