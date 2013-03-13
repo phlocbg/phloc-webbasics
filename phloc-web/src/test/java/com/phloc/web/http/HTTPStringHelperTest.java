@@ -397,4 +397,23 @@ public final class HTTPStringHelperTest
     assertTrue (HTTPStringHelper.isNationalChar (255));
     assertFalse (HTTPStringHelper.isNationalChar (256));
   }
+
+  @Test
+  public void testUnreservedChar ()
+  {
+    assertFalse (HTTPStringHelper.isUnreservedChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (HTTPStringHelper.isAlphaChar (i) ||
+          HTTPStringHelper.isDigitChar (i) ||
+          HTTPStringHelper.isSafeChar (i) ||
+          HTTPStringHelper.isExtraChar (i) ||
+          HTTPStringHelper.isNationalChar (i))
+        assertTrue (HTTPStringHelper.isUnreservedChar (i));
+      else
+        assertFalse (HTTPStringHelper.isUnreservedChar (i));
+    // Any other octet is valid!
+    assertTrue (HTTPStringHelper.isUnreservedChar (HTTPStringHelper.MAX_INDEX + 1));
+    assertTrue (HTTPStringHelper.isUnreservedChar (255));
+    assertFalse (HTTPStringHelper.isUnreservedChar (256));
+  }
 }

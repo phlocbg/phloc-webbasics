@@ -284,10 +284,7 @@ public final class HTTPStringHelper
 
   public static boolean isTokenChar (final int n)
   {
-    if (!isChar (n))
-      return false;
-    final int nMapping = MAPPINGS[n];
-    return (nMapping & CTL) == 0 && (nMapping & NON_TOKEN) == 0;
+    return isChar (n) && (MAPPINGS[n] & (CTL | NON_TOKEN)) == 0;
   }
 
   public static boolean isToken (@Nullable final char [] aChars)
@@ -324,8 +321,7 @@ public final class HTTPStringHelper
     // Any octet allowed!
     if (n > MAX_INDEX)
       return n < 256;
-    final int nMapping = MAPPINGS[n];
-    return (nMapping & NON_TEXT) == 0 && (nMapping & NON_COMMENT) == 0;
+    return (MAPPINGS[n] & (NON_TEXT | NON_COMMENT)) == 0;
   }
 
   public static boolean isComment (@Nullable final char [] aChars)
@@ -347,10 +343,7 @@ public final class HTTPStringHelper
 
   public static boolean isQuotedTextChar (final int n)
   {
-    if (!isChar (n))
-      return false;
-    final int nMapping = MAPPINGS[n];
-    return (nMapping & NON_TEXT) == 0 && (nMapping & NON_QUOTEDTEXT) == 0;
+    return isChar (n) && (MAPPINGS[n] & (NON_TEXT | NON_QUOTEDTEXT)) == 0;
   }
 
   public static boolean isQuotedText (@Nullable final char [] aChars)
@@ -403,50 +396,49 @@ public final class HTTPStringHelper
 
   public static boolean isReservedChar (final int n)
   {
+    // ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+"
     return isChar (n) && (MAPPINGS[n] & RESERVED) == RESERVED;
   }
 
   public static boolean isExtraChar (final int n)
   {
+    // "!" | "*" | "'" | "(" | ")" | ","
     return isChar (n) && (MAPPINGS[n] & EXTRA) == EXTRA;
   }
 
   public static boolean isSafeChar (final int n)
   {
+    // "$" | "-" | "_" | "."
     return isChar (n) && (MAPPINGS[n] & SAFE) == SAFE;
   }
 
   public static boolean isUnsafeChar (final int n)
   {
+    // CTL | SP | <"> | "#" | "%" | "<" | ">"
     return isChar (n) && (MAPPINGS[n] & UNSAFE) == UNSAFE;
   }
 
   public static boolean isNationalChar (final int n)
   {
+    // <any OCTET excluding ALPHA, DIGIT, reserved, extra, safe, and unsafe>
+    if (n < MIN_INDEX)
+      return false;
+    // Any octet allowed!
+    if (n > MAX_INDEX)
+      return n < 256;
+    return (MAPPINGS[n] & (ALPHA | DIGIT | RESERVED | EXTRA | SAFE | UNSAFE)) == 0;
+  }
+
+  public static boolean isUnreservedChar (final int n)
+  {
+    // ALPHA | DIGIT | safe | extra | national
     if (n < MIN_INDEX)
       return false;
     // Any octet allowed!
     if (n > MAX_INDEX)
       return n < 256;
     final int nMapping = MAPPINGS[n];
-    return (nMapping & ALPHA) == 0 &&
-           (nMapping & DIGIT) == 0 &&
-           (nMapping & RESERVED) == 0 &&
-           (nMapping & EXTRA) == 0 &&
-           (nMapping & SAFE) == 0 &&
-           (nMapping & UNSAFE) == 0;
-  }
-
-  public static boolean isUnreservedChar (final int n)
-  {
-    if (!isChar (n))
-      return false;
-    final int nMapping = MAPPINGS[n];
-    if ((nMapping & RESERVED) == RESERVED || (nMapping & UNSAFE) == UNSAFE)
-      return false;
-    return (nMapping & ALPHA) == ALPHA ||
-           (nMapping & DIGIT) == DIGIT ||
-           (nMapping & EXTRA) == EXTRA ||
-           (nMapping & SAFE) == SAFE;
+    return (nMapping & (ALPHA | DIGIT | RESERVED | EXTRA | SAFE | UNSAFE)) == 0 ||
+           (nMapping & (ALPHA | DIGIT | EXTRA | SAFE)) > 0;
   }
 }
