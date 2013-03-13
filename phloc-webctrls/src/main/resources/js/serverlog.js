@@ -69,20 +69,23 @@ function getStackTraceString(ex) {
 //by Nicholas C. Zakas (MIT Licensed)
 //http://www.nczonline.net/blog/2009/04/28/javascript-error-handling-anti-pattern/
 function addExceptionHandlers(object) {
-  var name, method;
-  for (name in object) {
-    method = object[name];
-    if (typeof method == "function") {
-      object[name] = function(name, method) {
-        return function() {
-          try {
-            return method.apply(this, arguments);
-          }
-          catch (ex) {
-            serverLog("error", name + "(): " + getStackTraceString(ex));
-          }
-        };
-      }(name, method);
+  if (object && typeof object._exceptionHandlersAdded == "undefined"){
+    var name, method;
+    for (name in object) {
+      method = object[name];
+      if (typeof method == "function") {
+        object[name] = function(name, method) {
+          return function() {
+            try {
+              return method.apply(this, arguments);
+            }
+            catch (ex) {
+              serverLog("error", name + "(): " + getStackTraceString(ex));
+            }
+          };
+        }(name, method);
+      }
     }
+    object._exceptionHandlersAdded = true;    
   }
 }
