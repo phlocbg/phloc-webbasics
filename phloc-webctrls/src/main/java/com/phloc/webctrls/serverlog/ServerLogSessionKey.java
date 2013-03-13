@@ -1,6 +1,7 @@
 package com.phloc.webctrls.serverlog;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.random.VerySecureRandom;
@@ -31,6 +32,13 @@ public final class ServerLogSessionKey extends SessionWebSingleton
   public String getKey ()
   {
     return m_sKey;
+  }
+
+  @Nullable
+  public static String getSessionKey ()
+  {
+    final ServerLogSessionKey aObj = (ServerLogSessionKey) getSingletonIfInstantiated (ServerLogSessionKey.class);
+    return aObj == null ? null : aObj.m_sKey;
   }
 
   @Override
