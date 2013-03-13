@@ -93,10 +93,6 @@ public final class CHTTPHeader
   public static final String ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
   public static final String ORIGIN = "Origin";
 
-  // Authentication schemes
-  public static final String AUTH_BASIC = "Basic";
-  public static final String AUTH_DIGEST = "Digest";
-
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final CHTTPHeader s_aInstance = new CHTTPHeader ();

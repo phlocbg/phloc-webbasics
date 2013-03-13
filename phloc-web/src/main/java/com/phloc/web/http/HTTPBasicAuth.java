@@ -29,22 +29,20 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Basic handling for HTTP Basic Auth. Use the new {@link HTTPBasicAuth}
- * instead!
+ * Basic handling for HTTP Basic Auth
  * 
  * @author philip
  */
-@Deprecated
 @Immutable
-public final class BasicAuth
+public final class HTTPBasicAuth
 {
   public static final String HEADER_VALUE_PREFIX_BASIC = "Basic";
 
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
-  private static final BasicAuth s_aInstance = new BasicAuth ();
+  private static final HTTPBasicAuth s_aInstance = new HTTPBasicAuth ();
 
-  private BasicAuth ()
+  private HTTPBasicAuth ()
   {}
 
   /**
@@ -109,5 +107,24 @@ public final class BasicAuth
     if (nIndex >= 0)
       return new String [] { sUsernamePassword.substring (0, nIndex), sUsernamePassword.substring (nIndex + 1) };
     return new String [] { sUsernamePassword };
+  }
+
+  /**
+   * Create the HTTP response header value to be used with the
+   * {@link CHTTPHeader#WWW_AUTHENTICATE} header.
+   * 
+   * @param sRealm
+   *        The realm to be used. May neither be <code>null</code> nor empty.
+   * @return The HTTP header value to be used. Neither <code>null</code> nor
+   *         empty.
+   */
+  @Nonnull
+  @Nonempty
+  public static String createWWWAuthenticate (@Nonnull @Nonempty final String sRealm)
+  {
+    if (StringHelper.hasNoText (sRealm))
+      throw new IllegalArgumentException ("realm");
+
+    return HEADER_VALUE_PREFIX_BASIC + " realm=\"" + sRealm + "\"";
   }
 }

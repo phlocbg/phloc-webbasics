@@ -63,6 +63,7 @@ import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.CacheControlBuilder;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
+import com.phloc.web.http.HTTPBasicAuth;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
 import com.phloc.web.servlet.request.RequestHelper;
@@ -676,31 +677,42 @@ public class UnifiedResponse
     m_nStatusCode = nStatusCode;
   }
 
+  /**
+   * Set the status code to be returned from the response.<br>
+   * <ul>
+   * <li>If the status code is {@link HttpServletResponse#SC_UNAUTHORIZED} (401)
+   * than the {@link CHTTPHeader#WWW_AUTHENTICATE} header should be set
+   * accordingly!</li>
+   * </ul>
+   * 
+   * @param nStatusCode
+   *        The status code to be set. Must be a valid HTTP response code.
+   * @return this
+   */
   @Nonnull
   public UnifiedResponse setStatus (@Nonnegative final int nStatusCode)
   {
-    if (nStatusCode == HttpServletResponse.SC_UNAUTHORIZED)
-      _warn ("Use the special setStatusUnauthorized method for this status code to set the " +
-             CHTTPHeader.WWW_AUTHENTICATE +
-             " response header!");
     _setStatus (nStatusCode);
     return this;
   }
 
   /**
-   * Special handling for returning status code 401 UNAUTHORIZED
+   * Special handling for returning status code 401 UNAUTHORIZED. Always writes
+   * a basic real, so it's deprecated because there are many HTTP authentication
+   * schemes out there
    * 
    * @param sRealm
    *        The basic realm to use. May neither be <code>null</code> nor empty.
    * @return this
    */
+  @Deprecated
   @Nonnull
   public UnifiedResponse setStatusUnauthorized (@Nonnull final String sRealm)
   {
     if (StringHelper.hasNoText (sRealm))
       throw new IllegalArgumentException ("realm");
     _setStatus (HttpServletResponse.SC_UNAUTHORIZED);
-    m_aResponseHeaderMap.setHeader (CHTTPHeader.WWW_AUTHENTICATE, "Basic realm=\"" + sRealm + "\"");
+    m_aResponseHeaderMap.setHeader (CHTTPHeader.WWW_AUTHENTICATE, HTTPBasicAuth.createWWWAuthenticate (sRealm));
     return this;
   }
 
@@ -885,6 +897,11 @@ public class UnifiedResponse
         if (hasContent ())
           _warn ("Ignoring provided content because a status code is specified!");
       }
+      if (m_nStatusCode == HttpServletResponse.SC_UNAUTHORIZED &&
+          !m_aRequestHeaderMap.containsHeaders (CHTTPHeader.WWW_AUTHENTICATE))
+        _warn ("Status code UNAUTHORIZED (401) is returned, but no " +
+               CHTTPHeader.WWW_AUTHENTICATE +
+               " HTTP response header is set!");
 
       if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
       {
