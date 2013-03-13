@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.web.mock.MockHttpServletResponse;
-import com.phloc.webscopes.mock.WebScopeTestInit;
+import com.phloc.webscopes.mock.WebScopeAwareTestSetup;
 import com.phloc.webscopes.mock.WebScopeTestRule;
 
 /**
@@ -50,7 +50,7 @@ public final class AbstractUnifiedResponseServletTest
   public void testBasic ()
   {
     m_aRule.getRequest ().setAllPaths ("http://localhost:1234" +
-                                       WebScopeTestInit.MOCK_CONTEXT_PATH +
+                                       WebScopeAwareTestSetup.MOCK_CONTEXT_PATH +
                                        "/mock/testrequest;JSESSIONID=1234?name=value&name2=value2");
     final MockHttpServletResponse aResponse = m_aRule.getServletContext ().invoke (m_aRule.getRequest ());
     assertNotNull (aResponse);

@@ -25,7 +25,7 @@ import com.phloc.scopes.ScopeUtils;
 import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.scopes.spi.ScopeSPIManager;
-import com.phloc.webscopes.mock.WebScopeTestInit;
+import com.phloc.webscopes.mock.WebScopeAwareTestSetup;
 
 /**
  * Test class for class {@link ScopeSPIManager}.
@@ -36,7 +36,7 @@ public final class WebScopeSPIManagerTest
 {
   static
   {
-    WebScopeTestInit.setCoreMockHttpListeners ();
+    WebScopeAwareTestSetup.setCoreMockHttpListeners ();
     ScopeUtils.setLifeCycleDebuggingEnabled (true);
   }
 

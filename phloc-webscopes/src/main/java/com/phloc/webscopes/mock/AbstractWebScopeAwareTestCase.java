@@ -36,7 +36,7 @@ import com.phloc.web.mock.MockServletPool;
  */
 public abstract class AbstractWebScopeAwareTestCase extends AbstractPhlocTestCase
 {
-  protected static final String MOCK_CONTEXT = WebScopeTestInit.MOCK_CONTEXT_PATH;
+  protected static final String MOCK_CONTEXT = WebScopeAwareTestSetup.MOCK_CONTEXT_PATH;
 
   /** JUnit test rule */
   @Rule

@@ -45,7 +45,7 @@ import com.phloc.web.mock.MockServletPool;
 public class WebScopeTestRule extends ExternalResource
 {
   /** Mock servlet context name */
-  public static final String MOCK_CONTEXT_PATH = WebScopeTestInit.MOCK_CONTEXT_PATH;
+  public static final String MOCK_CONTEXT_PATH = WebScopeAwareTestSetup.MOCK_CONTEXT_PATH;
 
   private String m_sContextPath = MOCK_CONTEXT_PATH;
   private Map <String, String> m_aServletContextInitParameters;
@@ -97,7 +97,7 @@ public class WebScopeTestRule extends ExternalResource
   protected void initListener ()
   {
     // Ensure that the default-default listeners are present
-    WebScopeTestInit.setCoreMockHttpListeners ();
+    WebScopeAwareTestSetup.setCoreMockHttpListeners ();
   }
 
   /**
@@ -115,7 +115,7 @@ public class WebScopeTestRule extends ExternalResource
   protected MockServletContext createMockServletContext (@Nullable final String sContextPath,
                                                          @Nullable final Map <String, String> aInitParams)
   {
-    return WebScopeTestInit.createDefaultMockServletContext (sContextPath, aInitParams);
+    return WebScopeAwareTestSetup.createDefaultMockServletContext (sContextPath, aInitParams);
   }
 
   /**
@@ -130,7 +130,7 @@ public class WebScopeTestRule extends ExternalResource
   @OverrideOnDemand
   protected MockHttpServletRequest createMockRequest (@Nonnull final MockServletContext aServletContext)
   {
-    return WebScopeTestInit.createDefaultMockRequest (aServletContext);
+    return WebScopeAwareTestSetup.createDefaultMockRequest (aServletContext);
   }
 
   @Override
@@ -155,7 +155,7 @@ public class WebScopeTestRule extends ExternalResource
   @OverridingMethodsMustInvokeSuper
   public void after ()
   {
-    WebScopeTestInit.shutdownWebScopeTests (m_aRequest, m_aServletContext);
+    WebScopeAwareTestSetup.shutdownWebScopeTests (m_aRequest, m_aServletContext);
     m_aRequest = null;
     m_aServletContext = null;
   }
@@ -206,7 +206,8 @@ public class WebScopeTestRule extends ExternalResource
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).appendIfNotNull ("servletContextInitParams", m_aServletContextInitParameters)
+    return new ToStringGenerator (this).appendIfNotNull ("contextPath", m_sContextPath)
+                                       .appendIfNotNull ("servletContextInitParams", m_aServletContextInitParameters)
                                        .append ("servletContext", m_aServletContext)
                                        .appendIfNotNull ("request", m_aRequest)
                                        .toString ();

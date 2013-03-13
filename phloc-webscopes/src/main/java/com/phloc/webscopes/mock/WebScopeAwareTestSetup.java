@@ -33,24 +33,21 @@ import com.phloc.webscopes.servlet.WebScopeListener;
 
 /**
  * Contains static initialization methods for web scope tests, that makes it a
- * bit easier to use them without JUnit.<br>
- * Deprecated in favor of {@link WebScopeAwareTestSetup} to that the name is
- * similar to the one from phloc-scopes (ScopeAwareTestSetup).
+ * bit easier to use them without JUnit.
  * 
  * @author philip
  */
-@Deprecated
 @Immutable
-public final class WebScopeTestInit
+public final class WebScopeAwareTestSetup
 {
   /** Mock servlet context name */
-  public static final String MOCK_CONTEXT_PATH = WebScopeAwareTestSetup.MOCK_CONTEXT_PATH;
+  public static final String MOCK_CONTEXT_PATH = "/MockContext";
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
-  private static final WebScopeTestInit s_aInstance = new WebScopeTestInit ();
+  private static final WebScopeAwareTestSetup s_aInstance = new WebScopeAwareTestSetup ();
 
-  private WebScopeTestInit ()
+  private WebScopeAwareTestSetup ()
   {}
 
   /**
