@@ -20,12 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
-  <entry date="2013-03-13" category="api" action="change" >
+  <entry date="2013-03-13" category="api" action="add">
+    <change>
+      <text locale="en">Added new class HTTPStringHelper</text>
+    </change>
+  </entry>
+  <entry date="2013-03-13" category="api" action="change">
     <change>
       <text locale="en">Deprecated class BasicAuth in favor of new name HTTPBasicAuth</text>
     </change>
   </entry>
-  <entry date="2013-03-12" category="tech" action="update" >
+  <entry date="2013-03-12" category="tech" action="update">
     <change>
       <text locale="en">Updated to javax.mail 1.4.7</text>
     </change>
