@@ -62,7 +62,7 @@ public final class HTTPBasicAuthTest
   @Test
   public void testGetBasicAuthValues ()
   {
-    assertNull (HTTPBasicAuth.getBasicAuthCredentials (null));
+    assertNull (HTTPBasicAuth.getBasicAuthCredentials ((String) null));
     assertNull (HTTPBasicAuth.getBasicAuthCredentials (""));
     assertNull (HTTPBasicAuth.getBasicAuthCredentials ("bla"));
     assertNull (HTTPBasicAuth.getBasicAuthCredentials ("bla foor"));

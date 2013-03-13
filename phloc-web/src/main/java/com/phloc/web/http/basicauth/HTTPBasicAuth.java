@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
@@ -70,6 +71,25 @@ public final class HTTPBasicAuth
                                                                    USERNAME_PASSWORD_SEPARATOR,
                                                                    aCredentials.getPassword ());
     return HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, CHARSET);
+  }
+
+  /**
+   * Get the Basic authentication credentials from the passed HTTP servlet
+   * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
+   * 
+   * @param aHttpRequest
+   *        The HTTP request to be interpreted. May be <code>null</code>.
+   * @return <code>null</code> if the passed request does not contain a valid
+   *         HTTP Basic Authentication header value.
+   */
+  @Nullable
+  public static BasicAuthCredentials getBasicAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
+    return getBasicAuthCredentials (sHeaderValue);
   }
 
   /**
