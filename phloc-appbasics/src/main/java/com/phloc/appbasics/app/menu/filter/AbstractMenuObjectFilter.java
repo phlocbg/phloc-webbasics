@@ -15,19 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.app.menu;
+package com.phloc.appbasics.app.menu.filter;
 
 import java.io.Serializable;
 
+import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.commons.filter.IFilter;
 
 /**
- * Abstract base class for a menu object filter.<br>
- * Deprecated. Use the one in the filter package
+ * Abstract base class for a menu object filter.
  * 
  * @author philip
  */
-@Deprecated
 public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>, Serializable
 {
   /* empty */
