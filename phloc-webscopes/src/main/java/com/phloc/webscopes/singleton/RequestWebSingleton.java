@@ -78,7 +78,7 @@ public abstract class RequestWebSingleton extends AbstractSingleton
    *         <code>null</code> otherwise.
    */
   @Nullable
-  public static final RequestWebSingleton getSingletonIfInstantiated (@Nonnull final Class <? extends RequestWebSingleton> aClass)
+  public static final <T extends RequestWebSingleton> T getSingletonIfInstantiated (@Nonnull final Class <T> aClass)
   {
     return getSingletonIfInstantiated (_getStaticScope (false), aClass);
   }

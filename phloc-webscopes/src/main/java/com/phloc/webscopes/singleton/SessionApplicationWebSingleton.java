@@ -79,7 +79,7 @@ public abstract class SessionApplicationWebSingleton extends AbstractSingleton i
    *         <code>null</code> otherwise.
    */
   @Nullable
-  public static final SessionApplicationWebSingleton getSingletonIfInstantiated (@Nonnull final Class <? extends SessionApplicationWebSingleton> aClass)
+  public static final <T extends SessionApplicationWebSingleton> T getSingletonIfInstantiated (@Nonnull final Class <T> aClass)
   {
     return getSingletonIfInstantiated (_getStaticScope (false), aClass);
   }
