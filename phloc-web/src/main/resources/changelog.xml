@@ -22,6 +22,11 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
   <entry date="2013-03-13" category="api" action="add">
     <change>
+      <text locale="en">Extended HTTPHeaderMap API</text>
+    </change>
+  </entry>
+  <entry date="2013-03-13" category="api" action="add">
+    <change>
       <text locale="en">Added new class BasicAuthCredentials and using it in HTTPBasicAuth</text>
     </change>
   </entry>

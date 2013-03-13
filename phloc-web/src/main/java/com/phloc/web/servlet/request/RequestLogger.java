@@ -127,16 +127,38 @@ public final class RequestLogger
     s_aLogger.info (getRequestFields (aHttpRequest).toString ());
   }
 
+  /**
+   * @deprecated Use {@link #getHTTPHeaderMap(HttpServletRequest)} instead
+   */
+  @Deprecated
   @Nonnull
   @ReturnsMutableCopy
   public static Map <String, String> getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    return getRequestHeaderMap (RequestHelper.getRequestHeaderMap (aHttpRequest));
+    return getHTTPHeaderMap (aHttpRequest);
   }
 
   @Nonnull
   @ReturnsMutableCopy
+  public static Map <String, String> getHTTPHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    return getHTTPHeaderMap (RequestHelper.getRequestHeaderMap (aHttpRequest));
+  }
+
+  /**
+   * @deprecated Use {@link #getHTTPHeaderMap(HTTPHeaderMap)} instead
+   */
+  @Deprecated
+  @Nonnull
+  @ReturnsMutableCopy
   public static Map <String, String> getRequestHeaderMap (@Nonnull final HTTPHeaderMap aMap)
+  {
+    return getHTTPHeaderMap (aMap);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public static Map <String, String> getHTTPHeaderMap (@Nonnull final HTTPHeaderMap aMap)
   {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
     for (final Map.Entry <String, List <String>> aEntry : aMap)
@@ -154,7 +176,7 @@ public final class RequestLogger
   @Nonnull
   public static StringBuilder getRequestHeader (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    return getRequestHeader (getRequestHeaderMap (aHttpRequest));
+    return getRequestHeader (getHTTPHeaderMap (aHttpRequest));
   }
 
   @Nonnull

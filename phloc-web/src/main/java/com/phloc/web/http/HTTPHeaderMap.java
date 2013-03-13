@@ -23,12 +23,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.IHasSize;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -44,7 +46,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
  * @author philip
  */
 @NotThreadSafe
-public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>>>
+public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, List <String>>>
 {
   private final Map <String, List <String>> m_aHeaders = new LinkedHashMap <String, List <String>> ();
 
@@ -177,6 +179,17 @@ public class HTTPHeaderMap implements Iterable <Map.Entry <String, List <String>
   public Iterator <Map.Entry <String, List <String>>> iterator ()
   {
     return m_aHeaders.entrySet ().iterator ();
+  }
+
+  public boolean isEmpty ()
+  {
+    return m_aHeaders.isEmpty ();
+  }
+
+  @Nonnegative
+  public int size ()
+  {
+    return m_aHeaders.size ();
   }
 
   @Override
