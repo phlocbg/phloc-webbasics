@@ -23,6 +23,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,6 +54,7 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
  * 
  * @author philip
  */
+@ThreadSafe
 public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractAjaxServlet.class);
@@ -62,7 +64,7 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
   private static final IStatisticsHandlerKeyedCounter s_aStatsCounterError = StatisticsManager.getKeyedCounterHandler (AbstractAjaxServlet.class +
                                                                                                                        "$error");
 
-  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  protected static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static IAjaxExceptionHandler s_aCustomExceptionHandler;
 
   /**
@@ -154,14 +156,15 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
           final StopWatch aSW = new StopWatch (true);
 
           // E.g. for keep-alive
-          final IAjaxResponse aResult = getAjaxInvoker (aRequestScope).invokeFunction (sAjaxFunctionName, aRequestScope);
+          final IAjaxInvoker aInvoker = getAjaxInvoker (aRequestScope);
+          final IAjaxResponse aResult = aInvoker.invokeFunction (sAjaxFunctionName, aRequestScope);
           if (s_aLogger.isTraceEnabled ())
             s_aLogger.trace ("  AJAX Result: " + aResult);
 
           // Do not cache the result!
+          final String sResultJSON = aResult.getSerializedAsJSON (GlobalDebug.isDebugMode ());
           aUnifiedResponse.disableCaching ()
-                          .setContentAndCharset (aResult.getSerializedAsJSON (GlobalDebug.isDebugMode ()),
-                                                 CWebCharset.CHARSET_XML_OBJ)
+                          .setContentAndCharset (sResultJSON, CWebCharset.CHARSET_XML_OBJ)
                           .setMimeType (CMimeType.APPLICATION_JSON);
 
           // Remember the time

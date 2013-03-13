@@ -19,6 +19,11 @@ package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Base interface for an Ajax response with a JSON representation.
+ * 
+ * @author philip
+ */
 public interface IAjaxResponse
 {
   /**

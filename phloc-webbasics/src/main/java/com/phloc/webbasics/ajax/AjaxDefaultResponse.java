@@ -48,10 +48,12 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
   public static final String PROPERTY_ERRORMESSAGE = "errormessage";
   /** Response value property */
   public static final String PROPERTY_VALUE = "value";
-  /** Additional CSS property */
+  /** Additional CSS files */
   public static final String PROPERTY_EXTERNAL_CSS = "externalcss";
-  /** Additional JS property */
+  /** Additional JS files */
   public static final String PROPERTY_EXTERNAL_JS = "externaljs";
+  /** Additional inline JS */
+  public static final String PROPERTY_INLINE_JS = "inlinejs";
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;

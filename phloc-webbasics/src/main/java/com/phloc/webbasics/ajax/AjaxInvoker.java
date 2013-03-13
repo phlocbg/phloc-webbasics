@@ -37,6 +37,7 @@ import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedCounter;
+import com.phloc.commons.stats.IStatisticsHandlerKeyedTimer;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -56,12 +57,21 @@ public class AjaxInvoker implements IAjaxInvoker
                                                                                                              "$invocations");
   private static final IStatisticsHandlerKeyedCounter s_aStatsFunctionInvoke = StatisticsManager.getKeyedCounterHandler (AjaxInvoker.class.getName () +
                                                                                                                          "$func");
+  private static final IStatisticsHandlerKeyedTimer s_aStatsFunctionTimer = StatisticsManager.getKeyedTimerHandler (AjaxInvoker.class.getName () +
+                                                                                                                    "$timer");
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, IFactory <? extends IAjaxHandler>> m_aMap = new HashMap <String, IFactory <? extends IAjaxHandler>> ();
 
   public AjaxInvoker ()
   {}
+
+  public static boolean isValidFunctionName (@Nullable final String sFunctionName)
+  {
+    // All characters allowed should be valid in URLs without masking
+    return StringHelper.hasText (sFunctionName) &&
+           RegExHelper.stringMatchesPattern ("^[a-zA-Z0-9\\-_]+$", sFunctionName);
+  }
 
   @Nonnull
   @ReturnsMutableCopy
@@ -176,11 +186,13 @@ public class AjaxInvoker implements IAjaxInvoker
     s_aStatsFunctionInvoke.increment (sFunctionName);
 
     // Extremely long running AJAX request?
-    if (aSW.stopAndGetMillis () > CGlobal.MILLISECONDS_PER_SECOND)
+    final long nExecutionMillis = aSW.stopAndGetMillis ();
+    s_aStatsFunctionTimer.addTime (sFunctionName, nExecutionMillis);
+    if (nExecutionMillis > CGlobal.MILLISECONDS_PER_SECOND)
       s_aLogger.warn ("Finished invoking AJAX function '" +
                       sFunctionName +
                       "' which took " +
-                      aSW.getMillis () +
+                      nExecutionMillis +
                       " milliseconds (which is too long)");
     return aReturnValue;
   }
@@ -189,12 +201,5 @@ public class AjaxInvoker implements IAjaxInvoker
   public String toString ()
   {
     return new ToStringGenerator (this).append ("map", m_aMap).toString ();
-  }
-
-  public static boolean isValidFunctionName (@Nullable final String sFunctionName)
-  {
-    // All characters allowed should be valid in URLs without masking
-    return StringHelper.hasText (sFunctionName) &&
-           RegExHelper.stringMatchesPattern ("^[a-zA-Z0-9\\-_]+$", sFunctionName);
   }
 }
