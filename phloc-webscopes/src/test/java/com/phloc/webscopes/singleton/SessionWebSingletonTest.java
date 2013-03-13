@@ -18,10 +18,14 @@
 package com.phloc.webscopes.singleton;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**
@@ -35,10 +39,20 @@ public final class SessionWebSingletonTest extends AbstractWebScopeAwareTestCase
   @Test
   public void testSerialize () throws Exception
   {
+    assertTrue (SessionWebSingleton.getAllSingletons ().isEmpty ());
+    assertFalse (SessionWebSingleton.isSingletonInstantiated (MockSessionWebSingleton.class));
+    assertNull (SessionWebSingleton.getSingletonIfInstantiated (MockSessionWebSingleton.class));
+
     final MockSessionWebSingleton a = MockSessionWebSingleton.getInstance ();
+    assertTrue (SessionWebSingleton.isSingletonInstantiated (MockSessionWebSingleton.class));
+    assertSame (a, SessionWebSingleton.getSingletonIfInstantiated (MockSessionWebSingleton.class));
     assertEquals (0, a.get ());
     a.inc ();
     assertEquals (1, a.get ());
-    assertSame (a, MockSessionWebSingleton.getInstance ());
+
+    final MockSessionWebSingleton b = MockSessionWebSingleton.getInstance ();
+    assertSame (a, b);
+
+    PhlocTestUtils.testDefaultSerialization (a);
   }
 }

@@ -18,8 +18,11 @@
 package com.phloc.webscopes.singleton;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -51,8 +54,16 @@ public final class GlobalWebSingletonTest extends AbstractWebScopeAwareTestCase
   @Test
   public void testAll ()
   {
-    assertNotNull (MockGlobalWebSingleton.getInstance ());
-    assertNotNull (MockGlobalWebSingleton.getInstance ());
-    assertSame (MockGlobalWebSingleton.getInstance (), MockGlobalWebSingleton.getInstance ());
+    assertTrue (GlobalWebSingleton.getAllSingletons ().isEmpty ());
+    assertFalse (GlobalWebSingleton.isSingletonInstantiated (MockGlobalWebSingleton.class));
+    assertNull (GlobalWebSingleton.getSingletonIfInstantiated (MockGlobalWebSingleton.class));
+
+    final MockGlobalWebSingleton a = MockGlobalWebSingleton.getInstance ();
+    assertTrue (GlobalWebSingleton.isSingletonInstantiated (MockGlobalWebSingleton.class));
+    assertSame (a, GlobalWebSingleton.getSingletonIfInstantiated (MockGlobalWebSingleton.class));
+    assertNotNull (a);
+
+    final MockGlobalWebSingleton b = MockGlobalWebSingleton.getInstance ();
+    assertSame (a, b);
   }
 }

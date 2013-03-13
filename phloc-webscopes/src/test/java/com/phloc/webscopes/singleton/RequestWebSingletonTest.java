@@ -18,7 +18,10 @@
 package com.phloc.webscopes.singleton;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -35,7 +38,13 @@ public final class RequestWebSingletonTest extends AbstractWebScopeAwareTestCase
   @Test
   public void testSerialize () throws Exception
   {
+    assertTrue (RequestWebSingleton.getAllSingletons ().isEmpty ());
+    assertFalse (RequestWebSingleton.isSingletonInstantiated (MockRequestWebSingleton.class));
+    assertNull (RequestWebSingleton.getSingletonIfInstantiated (MockRequestWebSingleton.class));
+
     final MockRequestWebSingleton a = MockRequestWebSingleton.getInstance ();
+    assertTrue (RequestWebSingleton.isSingletonInstantiated (MockRequestWebSingleton.class));
+    assertSame (a, RequestWebSingleton.getSingletonIfInstantiated (MockRequestWebSingleton.class));
     assertEquals (0, a.get ());
     a.inc ();
     assertEquals (1, a.get ());

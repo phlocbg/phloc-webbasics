@@ -18,10 +18,14 @@
 package com.phloc.webscopes.singleton;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 
 /**
@@ -35,10 +39,20 @@ public final class SessionApplicationWebSingletonTest extends AbstractWebScopeAw
   @Test
   public void testSerialize () throws Exception
   {
+    assertTrue (SessionApplicationWebSingleton.getAllSingletons ().isEmpty ());
+    assertFalse (SessionApplicationWebSingleton.isSingletonInstantiated (MockSessionApplicationWebSingleton.class));
+    assertNull (SessionApplicationWebSingleton.getSingletonIfInstantiated (MockSessionApplicationWebSingleton.class));
+
     final MockSessionApplicationWebSingleton a = MockSessionApplicationWebSingleton.getInstance ();
+    assertTrue (SessionApplicationWebSingleton.isSingletonInstantiated (MockSessionApplicationWebSingleton.class));
+    assertSame (a, SessionApplicationWebSingleton.getSingletonIfInstantiated (MockSessionApplicationWebSingleton.class));
     assertEquals (0, a.get ());
     a.inc ();
     assertEquals (1, a.get ());
-    assertSame (a, MockSessionApplicationWebSingleton.getInstance ());
+
+    final MockSessionApplicationWebSingleton b = MockSessionApplicationWebSingleton.getInstance ();
+    assertSame (a, b);
+
+    PhlocTestUtils.testDefaultSerialization (a);
   }
 }
