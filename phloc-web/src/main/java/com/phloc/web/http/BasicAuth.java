@@ -23,10 +23,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
-import com.phloc.commons.base64.Base64Helper;
-import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.regex.RegExHelper;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.web.http.basicauth.BasicAuthCredentials;
 import com.phloc.web.http.basicauth.HTTPBasicAuth;
 
 /**
@@ -39,7 +36,7 @@ import com.phloc.web.http.basicauth.HTTPBasicAuth;
 @Immutable
 public final class BasicAuth
 {
-  public static final String HEADER_VALUE_PREFIX_BASIC = "Basic";
+  public static final String HEADER_VALUE_PREFIX_BASIC = HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC;
 
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
@@ -62,11 +59,7 @@ public final class BasicAuth
   @Nonempty
   public static String getRequestHeaderValue (@Nonnull final String sUsername, @Nullable final String sPassword)
   {
-    if (StringHelper.hasNoText (sUsername))
-      throw new IllegalArgumentException ("username is missing");
-
-    final String sCombined = StringHelper.getConcatenatedOnDemand (sUsername, ':', sPassword);
-    return HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, CCharset.CHARSET_ISO_8859_1_OBJ);
+    return HTTPBasicAuth.getRequestHeaderValue (new BasicAuthCredentials (sUsername, sPassword));
   }
 
   /**
@@ -82,33 +75,11 @@ public final class BasicAuth
   @Nullable
   public static String [] getBasicAuthValues (@Nullable final String sAuthHeader)
   {
-    final String sRealHeader = StringHelper.trim (sAuthHeader);
-    if (StringHelper.hasNoText (sRealHeader))
+    final BasicAuthCredentials aCredentials = HTTPBasicAuth.getBasicAuthCredentials (sAuthHeader);
+    if (aCredentials == null)
       return null;
-
-    final String [] aElements = RegExHelper.getSplitToArray (sRealHeader, "\\s+", 2);
-    if (aElements.length != 2)
-      return null;
-
-    if (!aElements[0].equals (HEADER_VALUE_PREFIX_BASIC))
-      return null;
-
-    // Remove the auth prefix
-    final String sEncodedCredentials = aElements[1];
-
-    // Apply Base64 decoding
-    final String sUsernamePassword = Base64Helper.safeDecodeAsString (sEncodedCredentials,
-                                                                      CCharset.CHARSET_ISO_8859_1_OBJ);
-    if (sUsernamePassword == null)
-    {
-      // Illegal base64 encoded value
-      return null;
-    }
-
-    // Do we have a username/password separator?
-    final int nIndex = sUsernamePassword.indexOf (':');
-    if (nIndex >= 0)
-      return new String [] { sUsernamePassword.substring (0, nIndex), sUsernamePassword.substring (nIndex + 1) };
-    return new String [] { sUsernamePassword };
+    if (!aCredentials.hasPassword ())
+      return new String [] { aCredentials.getUserName () };
+    return new String [] { aCredentials.getUserName (), aCredentials.getPassword () };
   }
 }
