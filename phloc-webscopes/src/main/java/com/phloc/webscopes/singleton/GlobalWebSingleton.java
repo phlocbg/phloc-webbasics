@@ -20,6 +20,7 @@ package com.phloc.webscopes.singleton;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.scopes.AbstractSingleton;
 import com.phloc.webscopes.domain.IGlobalWebScope;
@@ -52,16 +53,6 @@ public abstract class GlobalWebSingleton extends AbstractSingleton
   }
 
   /**
-   * @return The scope to be used for this type of singleton.
-   */
-  @Override
-  @Nonnull
-  protected final IGlobalWebScope getScope ()
-  {
-    return _getStaticScope (true);
-  }
-
-  /**
    * Get the singleton object in the current global web scope, using the passed
    * class. If the singleton is not yet instantiated, a new instance is created.
    * 
@@ -74,6 +65,21 @@ public abstract class GlobalWebSingleton extends AbstractSingleton
   protected static final <T extends GlobalWebSingleton> T getGlobalSingleton (@Nonnull final Class <T> aClass)
   {
     return getSingleton (_getStaticScope (true), aClass);
+  }
+
+  /**
+   * Get the singleton object if it is already instantiated inside the current
+   * global web scope or <code>null</code> if it is not instantiated.
+   * 
+   * @param aClass
+   *        The class to be checked. May not be <code>null</code>.
+   * @return The singleton for the specified class is already instantiated,
+   *         <code>null</code> otherwise.
+   */
+  @Nullable
+  public static final GlobalWebSingleton getSingletonIfInstantiated (@Nonnull final Class <? extends GlobalWebSingleton> aClass)
+  {
+    return getSingletonIfInstantiated (_getStaticScope (false), aClass);
   }
 
   /**

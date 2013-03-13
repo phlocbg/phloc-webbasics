@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.scopes.AbstractSingleton;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
@@ -52,16 +53,6 @@ public abstract class SessionApplicationWebSingleton extends AbstractSingleton i
   }
 
   /**
-   * @return The scope to be used for this type of singleton.
-   */
-  @Override
-  @Nonnull
-  protected final ISessionApplicationWebScope getScope ()
-  {
-    return _getStaticScope (true);
-  }
-
-  /**
    * Get the singleton object in the current session application web scope,
    * using the passed class. If the singleton is not yet instantiated, a new
    * instance is created.
@@ -75,6 +66,22 @@ public abstract class SessionApplicationWebSingleton extends AbstractSingleton i
   protected static final <T extends SessionApplicationWebSingleton> T getSessionApplicationSingleton (@Nonnull final Class <T> aClass)
   {
     return getSingleton (_getStaticScope (true), aClass);
+  }
+
+  /**
+   * Get the singleton object if it is already instantiated inside the current
+   * session application web scope or <code>null</code> if it is not
+   * instantiated.
+   * 
+   * @param aClass
+   *        The class to be checked. May not be <code>null</code>.
+   * @return The singleton for the specified class is already instantiated,
+   *         <code>null</code> otherwise.
+   */
+  @Nullable
+  public static final SessionApplicationWebSingleton getSingletonIfInstantiated (@Nonnull final Class <? extends SessionApplicationWebSingleton> aClass)
+  {
+    return getSingletonIfInstantiated (_getStaticScope (false), aClass);
   }
 
   /**

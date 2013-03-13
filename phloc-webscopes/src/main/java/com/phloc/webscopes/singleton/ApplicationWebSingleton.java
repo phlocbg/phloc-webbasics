@@ -54,16 +54,6 @@ public abstract class ApplicationWebSingleton extends AbstractSingleton
   }
 
   /**
-   * @return The scope to be used for this type of singleton.
-   */
-  @Override
-  @Nonnull
-  protected final IApplicationWebScope getScope ()
-  {
-    return _getStaticScope (true);
-  }
-
-  /**
    * Get the singleton object in the current application web scope, using the
    * passed class. If the singleton is not yet instantiated, a new instance is
    * created.
@@ -77,6 +67,21 @@ public abstract class ApplicationWebSingleton extends AbstractSingleton
   protected static final <T extends ApplicationWebSingleton> T getApplicationSingleton (@Nonnull final Class <T> aClass)
   {
     return getSingleton (_getStaticScope (true), aClass);
+  }
+
+  /**
+   * Get the singleton object if it is already instantiated inside the current
+   * application web scope or <code>null</code> if it is not instantiated.
+   * 
+   * @param aClass
+   *        The class to be checked. May not be <code>null</code>.
+   * @return The singleton for the specified class is already instantiated,
+   *         <code>null</code> otherwise.
+   */
+  @Nullable
+  public static final ApplicationWebSingleton getSingletonIfInstantiated (@Nonnull final Class <? extends ApplicationWebSingleton> aClass)
+  {
+    return getSingletonIfInstantiated (_getStaticScope (false), aClass);
   }
 
   /**
