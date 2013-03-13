@@ -44,89 +44,89 @@ public final class HTTPStringHelper
   private static final int ALPHA = 0x0004;
   private static final int DIGIT = 0x0008;
   private static final int CTL = 0x0010;
-  private static final int CR = 0x0020;
-  private static final int LF = 0x0040;
-  private static final int SP = 0x0080;
-  private static final int HTAB = 0x0100;
-  private static final int QUOTE = 0x0200;
+  private static final int HEX = 0x0020;
+  private static final int TSPECIAL = 0x0040;
+  private static final int NONTEXT = 0x0080;
+  private static final int NONCOMMENT = 0x0100;
+  private static final int NONQUOTEDTEXT = 0x0200;
 
   private static final char [] MAPPINGS = new char [] {
                                                        // 0x00
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | TSPECIAL,
                                                        CTL,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
                                                        CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL | HTAB,
-                                                       CTL | LF,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL | CR,
-                                                       CTL,
-                                                       CTL,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
                                                        // 0x10
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
-                                                       CTL,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
+                                                       CTL | NONTEXT,
                                                        // 0x20
-                                                       SP,
+                                                       TSPECIAL,
                                                        0,
-                                                       QUOTE,
-                                                       0,
-                                                       0,
+                                                       TSPECIAL | NONQUOTEDTEXT,
                                                        0,
                                                        0,
                                                        0,
                                                        0,
                                                        0,
+                                                       TSPECIAL | NONCOMMENT,
+                                                       TSPECIAL | NONCOMMENT,
                                                        0,
                                                        0,
+                                                       TSPECIAL,
                                                        0,
                                                        0,
-                                                       0,
-                                                       0,
+                                                       TSPECIAL,
                                                        // 0x30
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       DIGIT,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       0,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       DIGIT | HEX,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
                                                        // 0x40
-                                                       0,
-                                                       UALPHA | ALPHA,
-                                                       UALPHA | ALPHA,
-                                                       UALPHA | ALPHA,
-                                                       UALPHA | ALPHA,
-                                                       UALPHA | ALPHA,
-                                                       UALPHA | ALPHA,
+                                                       TSPECIAL,
+                                                       UALPHA | ALPHA | HEX,
+                                                       UALPHA | ALPHA | HEX,
+                                                       UALPHA | ALPHA | HEX,
+                                                       UALPHA | ALPHA | HEX,
+                                                       UALPHA | ALPHA | HEX,
+                                                       UALPHA | ALPHA | HEX,
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
@@ -148,19 +148,19 @@ public final class HTTPStringHelper
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
                                                        UALPHA | ALPHA,
-                                                       0,
-                                                       0,
-                                                       0,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
+                                                       TSPECIAL,
                                                        0,
                                                        0,
                                                        // 0x60
                                                        0,
-                                                       LALPHA | ALPHA,
-                                                       LALPHA | ALPHA,
-                                                       LALPHA | ALPHA,
-                                                       LALPHA | ALPHA,
-                                                       LALPHA | ALPHA,
-                                                       LALPHA | ALPHA,
+                                                       LALPHA | ALPHA | HEX,
+                                                       LALPHA | ALPHA | HEX,
+                                                       LALPHA | ALPHA | HEX,
+                                                       LALPHA | ALPHA | HEX,
+                                                       LALPHA | ALPHA | HEX,
+                                                       LALPHA | ALPHA | HEX,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
@@ -182,11 +182,11 @@ public final class HTTPStringHelper
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
+                                                       TSPECIAL,
                                                        0,
+                                                       TSPECIAL,
                                                        0,
-                                                       0,
-                                                       0,
-                                                       CTL };
+                                                       CTL | NONTEXT };
 
   static
   {
@@ -197,19 +197,9 @@ public final class HTTPStringHelper
   private HTTPStringHelper ()
   {}
 
-  public static boolean isChar (final byte b)
-  {
-    return isChar (b & 0xff);
-  }
-
   public static boolean isChar (final int n)
   {
     return n >= MIN_INDEX && n <= MAX_INDEX;
-  }
-
-  public static boolean isUpperAlpha (final byte b)
-  {
-    return isUpperAlpha (b & 0xff);
   }
 
   public static boolean isUpperAlpha (final int n)
@@ -217,19 +207,9 @@ public final class HTTPStringHelper
     return isChar (n) && (MAPPINGS[n] & UALPHA) == UALPHA;
   }
 
-  public static boolean isLowerAlpha (final byte b)
-  {
-    return isLowerAlpha (b & 0xff);
-  }
-
   public static boolean isLowerAlpha (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & LALPHA) == LALPHA;
-  }
-
-  public static boolean isAlpha (final byte b)
-  {
-    return isAlpha (b & 0xff);
   }
 
   public static boolean isAlpha (final int n)
@@ -237,19 +217,9 @@ public final class HTTPStringHelper
     return isChar (n) && (MAPPINGS[n] & ALPHA) == ALPHA;
   }
 
-  public static boolean isDigit (final byte b)
-  {
-    return isDigit (b & 0xff);
-  }
-
   public static boolean isDigit (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & DIGIT) == DIGIT;
-  }
-
-  public static boolean isControl (final byte b)
-  {
-    return isControl (b & 0xff);
   }
 
   public static boolean isControl (final int n)
@@ -257,53 +227,65 @@ public final class HTTPStringHelper
     return isChar (n) && (MAPPINGS[n] & CTL) == CTL;
   }
 
-  public static boolean isCR (final byte b)
-  {
-    return isCR (b & 0xff);
-  }
-
   public static boolean isCR (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & CR) == CR;
-  }
-
-  public static boolean isLF (final byte b)
-  {
-    return isLF (b & 0xff);
+    return n == 13;
   }
 
   public static boolean isLF (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & LF) == LF;
-  }
-
-  public static boolean isSpace (final byte b)
-  {
-    return isSpace (b & 0xff);
+    return n == 10;
   }
 
   public static boolean isSpace (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & SP) == SP;
-  }
-
-  public static boolean isTab (final byte b)
-  {
-    return isTab (b & 0xff);
+    return n == 32;
   }
 
   public static boolean isTab (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & HTAB) == HTAB;
-  }
-
-  public static boolean isQuote (final byte b)
-  {
-    return isQuote (b & 0xff);
+    return n == 9;
   }
 
   public static boolean isQuote (final int n)
   {
-    return isChar (n) && (MAPPINGS[n] & QUOTE) == QUOTE;
+    return n == 34;
+  }
+
+  public static boolean isHex (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & HEX) == HEX;
+  }
+
+  public static boolean isTokenSpecial (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & TSPECIAL) == TSPECIAL;
+  }
+
+  public static boolean isText (final int n)
+  {
+    if (n < MIN_INDEX)
+      return false;
+    if (n > MAX_INDEX)
+      return n < 256;
+    return (MAPPINGS[n] & NONTEXT) == 0;
+  }
+
+  public static boolean isComment (final int n)
+  {
+    if (n < MIN_INDEX)
+      return false;
+    if (n > MAX_INDEX)
+      return n < 256;
+    final int nMapping = MAPPINGS[n];
+    return (nMapping & NONTEXT) == 0 && (nMapping & NONCOMMENT) == 0;
+  }
+
+  public static boolean isQuotedText (final int n)
+  {
+    if (!isChar (n))
+      return false;
+    final int nMapping = MAPPINGS[n];
+    return (nMapping & NONTEXT) == 0 && (nMapping & NONQUOTEDTEXT) == 0;
   }
 }
