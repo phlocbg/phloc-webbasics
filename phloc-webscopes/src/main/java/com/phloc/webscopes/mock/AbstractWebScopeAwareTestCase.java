@@ -29,16 +29,16 @@ import com.phloc.web.mock.MockServletContext;
 import com.phloc.web.mock.MockServletPool;
 
 /**
- * Base class where the initialization of the scopes happens before each test
- * execution.
+ * Base class for JUnit tests where the initialization of the scopes happens
+ * before each test execution.
  * 
  * @author philip
  */
 public abstract class AbstractWebScopeAwareTestCase extends AbstractPhlocTestCase
 {
-  protected static final String MOCK_CONTEXT = WebScopeTestRule.MOCK_CONTEXT_PATH;
+  protected static final String MOCK_CONTEXT = WebScopeTestInit.MOCK_CONTEXT_PATH;
 
-  /** JUNit test rule */
+  /** JUnit test rule */
   @Rule
   public final WebScopeTestRule m_aWebScope = new WebScopeTestRule ();
 

@@ -20,6 +20,26 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
+  <entry date="2013-03-13" category="api" action="add">
+    <change>
+      <text locale="en">Extended API of WebScopeTestInit so that a usage with something other than JUnit is easier</text>
+    </change>
+  </entry>
+  <entry date="2013-03-13" category="api" action="remove">
+    <change>
+      <text locale="en">Removed deprecated class WebScopeAwareTestSetup</text>
+    </change>
+  </entry>
+  <entry date="2013-03-13" category="tech" action="add">
+    <change>
+      <text locale="en">Added call to CommonsCleanup in WebScopeTestRule</text>
+    </change>
+  </entry>
+  <entry date="2013-03-13" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-commons 4.0.0</text>
+    </change>
+  </entry>
   <release date="2013-03-13" version="6.1.1" />
   <entry date="2013-03-13" category="api" action="fix">
     <change>

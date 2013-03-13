@@ -31,7 +31,6 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.mock.MockHttpListener;
 import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockServletContext;
@@ -46,7 +45,7 @@ import com.phloc.web.mock.MockServletPool;
 public class WebScopeTestRule extends ExternalResource
 {
   /** Mock servlet context name */
-  public static final String MOCK_CONTEXT_PATH = "/MockContext";
+  public static final String MOCK_CONTEXT_PATH = WebScopeTestInit.MOCK_CONTEXT_PATH;
 
   private String m_sContextPath = MOCK_CONTEXT_PATH;
   private Map <String, String> m_aServletContextInitParameters;
@@ -116,7 +115,7 @@ public class WebScopeTestRule extends ExternalResource
   protected MockServletContext createMockServletContext (@Nullable final String sContextPath,
                                                          @Nullable final Map <String, String> aInitParams)
   {
-    return new MockServletContext (sContextPath, aInitParams);
+    return WebScopeTestInit.createDefaultMockServletContext (sContextPath, aInitParams);
   }
 
   /**
@@ -131,7 +130,7 @@ public class WebScopeTestRule extends ExternalResource
   @OverrideOnDemand
   protected MockHttpServletRequest createMockRequest (@Nonnull final MockServletContext aServletContext)
   {
-    return new MockHttpServletRequest (aServletContext, EHTTPMethod.GET);
+    return WebScopeTestInit.createDefaultMockRequest (aServletContext);
   }
 
   @Override
@@ -156,19 +155,9 @@ public class WebScopeTestRule extends ExternalResource
   @OverridingMethodsMustInvokeSuper
   public void after ()
   {
-    if (m_aRequest != null)
-    {
-      // end request -> triggers HTTP events
-      m_aRequest.invalidate ();
-      m_aRequest = null;
-    }
-
-    if (m_aServletContext != null)
-    {
-      // shutdown global context -> triggers HTTP events
-      m_aServletContext.invalidate ();
-      m_aServletContext = null;
-    }
+    WebScopeTestInit.shutdownWebScopeTests (m_aRequest, m_aServletContext);
+    m_aRequest = null;
+    m_aServletContext = null;
   }
 
   /**
