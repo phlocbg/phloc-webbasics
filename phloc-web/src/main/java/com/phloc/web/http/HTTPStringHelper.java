@@ -439,6 +439,6 @@ public final class HTTPStringHelper
       return n < 256;
     final int nMapping = MAPPINGS[n];
     return (nMapping & (ALPHA | DIGIT | RESERVED | EXTRA | SAFE | UNSAFE)) == 0 ||
-           (nMapping & (ALPHA | DIGIT | EXTRA | SAFE)) > 0;
+           (nMapping & (ALPHA | DIGIT | EXTRA | SAFE)) != 0;
   }
 }
