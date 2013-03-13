@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.http;
+package com.phloc.web.http.basicauth;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,6 +27,8 @@ import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.HTTPStringHelper;
 
 /**
  * Handling for HTTP Basic Authentication

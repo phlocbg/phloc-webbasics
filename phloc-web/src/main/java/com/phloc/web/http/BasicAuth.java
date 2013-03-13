@@ -27,6 +27,7 @@ import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.web.http.basicauth.HTTPBasicAuth;
 
 /**
  * Basic handling for HTTP Basic Auth. Use the new {@link HTTPBasicAuth}

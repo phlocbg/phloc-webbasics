@@ -15,13 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.http;
+package com.phloc.web.http.basicauth;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
+
+import com.phloc.web.http.basicauth.HTTPBasicAuth;
 
 /**
  * Test class for class {@link HTTPBasicAuth}.

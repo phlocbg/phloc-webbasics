@@ -63,9 +63,9 @@ import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.http.CacheControlBuilder;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
-import com.phloc.web.http.HTTPBasicAuth;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
+import com.phloc.web.http.basicauth.HTTPBasicAuth;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
 
