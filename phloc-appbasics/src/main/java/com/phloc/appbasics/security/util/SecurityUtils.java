@@ -49,4 +49,15 @@ public final class SecurityUtils
     }
     return AccessManager.getInstance ().isUserAssignedToUserGroup (sUserGroupID, sUserID);
   }
+
+  public static boolean hasCurrentUserRole (@Nullable final String sRoleID)
+  {
+    final String sUserID = LoggedInUserManager.getInstance ().getCurrentUserID ();
+    if (sUserID == null)
+    {
+      // No user logged in
+      return false;
+    }
+    return AccessManager.getInstance ().hasUserRole (sUserID, sRoleID);
+  }
 }
