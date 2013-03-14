@@ -31,7 +31,6 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.CHTTPHeader;
-import com.phloc.web.http.HTTPStringHelper;
 
 /**
  * Handling for HTTP Basic Authentication
@@ -138,21 +137,15 @@ public final class HTTPBasicAuth
    * {@link CHTTPHeader#WWW_AUTHENTICATE} header.
    * 
    * @param sRealm
-   *        The realm to be used. May neither be <code>null</code> nor empty.
+   *        The realm to be used. May not be <code>null</code> and should not be
+   *        empty.
    * @return The HTTP header value to be used. Neither <code>null</code> nor
    *         empty.
    */
   @Nonnull
   @Nonempty
-  public static String createWWWAuthenticate (@Nonnull @Nonempty final String sRealm)
+  public static String createWWWAuthenticate (@Nonnull final String sRealm)
   {
-    if (!HTTPStringHelper.isQuotedTextContent (sRealm))
-      throw new IllegalArgumentException ("realm is invalid: " + sRealm);
-
-    return HEADER_VALUE_PREFIX_BASIC +
-           " realm=" +
-           HTTPStringHelper.QUOTEDTEXT_START +
-           sRealm +
-           HTTPStringHelper.QUOTEDTEXT_END;
+    return new BasicAuthBuilder ().setRealm (sRealm).build ();
   }
 }
