@@ -1,15 +1,15 @@
-package com.phloc.web.http.basicauth;
+package com.phloc.web.http.digestauth;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.web.http.HTTPStringHelper;
 
-public final class BasicAuthBuilder
+public final class DigestAuthResponseBuilder
 {
   private String m_sRealm;
 
-  public BasicAuthBuilder ()
+  public DigestAuthResponseBuilder ()
   {}
 
   /**
@@ -21,7 +21,7 @@ public final class BasicAuthBuilder
    * @return this
    */
   @Nonnull
-  public BasicAuthBuilder setRealm (@Nonnull final String sRealm)
+  public DigestAuthResponseBuilder setRealm (@Nonnull final String sRealm)
   {
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);
@@ -41,7 +41,7 @@ public final class BasicAuthBuilder
   {
     if (!isValid ())
       throw new IllegalStateException ("Built basic auth is not valid!");
-    final StringBuilder ret = new StringBuilder (HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC);
+    final StringBuilder ret = new StringBuilder (HTTPDigestAuth.HEADER_VALUE_PREFIX_DIGEST);
     if (m_sRealm != null)
       ret.append (" realm=").append (m_sRealm);
     return ret.toString ();

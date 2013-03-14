@@ -146,6 +146,6 @@ public final class HTTPBasicAuth
   @Nonempty
   public static String createWWWAuthenticate (@Nonnull final String sRealm)
   {
-    return new BasicAuthBuilder ().setRealm (sRealm).build ();
+    return new BasicAuthResponseBuilder ().setRealm (sRealm).build ();
   }
 }

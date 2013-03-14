@@ -15,13 +15,6 @@ import com.phloc.commons.charset.CCharset;
 @Immutable
 public final class HTTPDigestAuth
 {
-  public static final class DigestAuthBuilder
-  {
-    public DigestAuthBuilder ()
-    {}
-
-  }
-
   public static final String HEADER_VALUE_PREFIX_DIGEST = "Digest";
   private static final char USERNAME_PASSWORD_SEPARATOR = ':';
   private static final Charset CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
