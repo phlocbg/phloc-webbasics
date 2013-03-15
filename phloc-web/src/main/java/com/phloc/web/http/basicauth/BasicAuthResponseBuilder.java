@@ -1,10 +1,12 @@
 package com.phloc.web.http.basicauth;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.web.http.HTTPStringHelper;
 
+@NotThreadSafe
 public final class BasicAuthResponseBuilder
 {
   private String m_sRealm;
@@ -26,7 +28,7 @@ public final class BasicAuthResponseBuilder
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);
 
-    m_sRealm = HTTPStringHelper.QUOTEDTEXT_START + sRealm + HTTPStringHelper.QUOTEDTEXT_END;
+    m_sRealm = HTTPStringHelper.QUOTEDTEXT_BEGIN + sRealm + HTTPStringHelper.QUOTEDTEXT_END;
     return this;
   }
 

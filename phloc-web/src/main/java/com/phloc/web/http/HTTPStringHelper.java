@@ -38,11 +38,11 @@ public final class HTTPStringHelper
   /** Maximum index (inclusive) */
   public static final int MAX_INDEX = 127;
   /** Comment start character */
-  public static final char COMMENT_START = '(';
+  public static final char COMMENT_BEGIN = '(';
   /** Comment end character */
   public static final char COMMENT_END = ')';
   /** Quoted text start character */
-  public static final char QUOTEDTEXT_START = '"';
+  public static final char QUOTEDTEXT_BEGIN = '"';
   /** Quoted text end character */
   public static final char QUOTEDTEXT_END = '"';
 
@@ -326,7 +326,7 @@ public final class HTTPStringHelper
 
   public static boolean isComment (@Nullable final char [] aChars)
   {
-    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != COMMENT_START || aChars[aChars.length - 1] != COMMENT_END)
+    if (ArrayHelper.getSize (aChars) < 2 || aChars[0] != COMMENT_BEGIN || aChars[aChars.length - 1] != COMMENT_END)
       return false;
     for (int i = 1; i < aChars.length - 1; ++i)
       if (!isCommentChar (aChars[i]))
@@ -349,7 +349,7 @@ public final class HTTPStringHelper
   public static boolean isQuotedText (@Nullable final char [] aChars)
   {
     if (ArrayHelper.getSize (aChars) < 2 ||
-        aChars[0] != QUOTEDTEXT_START ||
+        aChars[0] != QUOTEDTEXT_BEGIN ||
         aChars[aChars.length - 1] != QUOTEDTEXT_END)
       return false;
     for (int i = 1; i < aChars.length - 1; ++i)

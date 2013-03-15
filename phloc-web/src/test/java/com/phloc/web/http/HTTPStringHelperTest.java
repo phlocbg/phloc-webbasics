@@ -258,7 +258,7 @@ public final class HTTPStringHelperTest
   {
     assertFalse (HTTPStringHelper.isCommentChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if ((!HTTPStringHelper.isControlChar (i) && i != HTTPStringHelper.COMMENT_START && i != HTTPStringHelper.COMMENT_END) ||
+      if ((!HTTPStringHelper.isControlChar (i) && i != HTTPStringHelper.COMMENT_BEGIN && i != HTTPStringHelper.COMMENT_END) ||
           HTTPStringHelper.isCRChar (i) ||
           HTTPStringHelper.isLFChar (i) ||
           HTTPStringHelper.isTabChar (i) ||
@@ -298,7 +298,7 @@ public final class HTTPStringHelperTest
   {
     assertFalse (HTTPStringHelper.isQuotedTextChar (HTTPStringHelper.MIN_INDEX - 1));
     for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
-      if ((!HTTPStringHelper.isControlChar (i) && i != HTTPStringHelper.QUOTEDTEXT_START && i != HTTPStringHelper.QUOTEDTEXT_END) ||
+      if ((!HTTPStringHelper.isControlChar (i) && i != HTTPStringHelper.QUOTEDTEXT_BEGIN && i != HTTPStringHelper.QUOTEDTEXT_END) ||
           HTTPStringHelper.isCRChar (i) ||
           HTTPStringHelper.isLFChar (i) ||
           HTTPStringHelper.isTabChar (i) ||
