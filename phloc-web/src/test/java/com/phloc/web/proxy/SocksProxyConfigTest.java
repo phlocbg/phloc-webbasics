@@ -43,8 +43,8 @@ public final class SocksProxyConfigTest
       assertEquals ("myserver", aPC.getHost ());
       assertEquals (SocksProxyConfig.DEFAULT_SOCKS_PROXY_PORT, aPC.getPort ());
       aPC.activateGlobally ();
-      assertNotNull (aPC.asProxy ());
-      assertEquals (Proxy.Type.SOCKS, aPC.asProxy ().type ());
+      assertNotNull (aPC.getAsProxy ());
+      assertEquals (Proxy.Type.SOCKS, aPC.getAsProxy ().type ());
 
       aPC = new SocksProxyConfig ("myserver", 4711);
       assertEquals ("myserver", aPC.getHost ());

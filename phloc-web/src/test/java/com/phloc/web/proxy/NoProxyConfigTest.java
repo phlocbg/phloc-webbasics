@@ -36,8 +36,8 @@ public final class NoProxyConfigTest
   {
     final NoProxyConfig aPC = NoProxyConfig.getInstance ();
     aPC.activateGlobally ();
-    assertNotNull (aPC.asProxy ());
-    assertEquals (Proxy.Type.DIRECT, aPC.asProxy ().type ());
+    assertNotNull (aPC.getAsProxy ());
+    assertEquals (Proxy.Type.DIRECT, aPC.getAsProxy ().type ());
     assertNotNull (aPC.toString ());
   }
 }

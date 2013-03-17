@@ -49,8 +49,8 @@ public final class HttpProxyConfigTest
       assertEquals (8080, aPC.getPort ());
       assertNotNull (aPC.getNonProxyHosts ());
       assertTrue (aPC.getNonProxyHosts ().isEmpty ());
-      assertNotNull (aPC.asProxy ());
-      assertEquals (Proxy.Type.HTTP, aPC.asProxy ().type ());
+      assertNotNull (aPC.getAsProxy ());
+      assertEquals (Proxy.Type.HTTP, aPC.getAsProxy ().type ());
       aPC.activateGlobally ();
     }
     finally

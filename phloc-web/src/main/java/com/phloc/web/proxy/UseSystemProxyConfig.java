@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Proxy configuration that uses the system default proxy settings.
@@ -59,9 +60,25 @@ public final class UseSystemProxyConfig implements IProxyConfig
     SystemProperties.removePropertyValue (SYSPROP_JAVA_NET_USE_SYSTEM_PROXIES);
   }
 
+  /**
+   * @deprecated Use {@link #getAsProxy()} instead
+   */
+  @Deprecated
   @Nullable
   public Proxy asProxy ()
   {
+    return getAsProxy ();
+  }
+
+  @Nullable
+  public Proxy getAsProxy ()
+  {
     return null;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

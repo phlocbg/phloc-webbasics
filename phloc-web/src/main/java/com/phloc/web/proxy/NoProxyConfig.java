@@ -51,8 +51,18 @@ public final class NoProxyConfig implements IProxyConfig
     UseSystemProxyConfig.deactivateGlobally ();
   }
 
+  /**
+   * @deprecated Use {@link #getAsProxy()} instead
+   */
+  @Deprecated
   @Nonnull
   public Proxy asProxy ()
+  {
+    return getAsProxy ();
+  }
+
+  @Nonnull
+  public Proxy getAsProxy ()
   {
     return Proxy.NO_PROXY;
   }

@@ -29,7 +29,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -65,7 +65,7 @@ public final class HttpProxyConfig implements IProxyConfig
     if (StringHelper.hasNoText (sHost))
       throw new IllegalArgumentException ("host may not empty");
     if (!DefaultNetworkPorts.isValidPort (nPort))
-      throw new IllegalArgumentException ("The passed port is invalid");
+      throw new IllegalArgumentException ("The passed port is invalid: " + nPort);
     m_eProxyType = eProxyType;
     m_sHost = sHost;
     m_nPort = nPort;
@@ -94,10 +94,10 @@ public final class HttpProxyConfig implements IProxyConfig
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getNonProxyHosts ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aNonProxyHosts);
+    return ContainerHelper.newList (m_aNonProxyHosts);
   }
 
   public void activateGlobally ()
@@ -122,8 +122,18 @@ public final class HttpProxyConfig implements IProxyConfig
     }
   }
 
+  /**
+   * @deprecated Use {@link #getAsProxy()} instead
+   */
+  @Deprecated
   @Nonnull
   public Proxy asProxy ()
+  {
+    return getAsProxy ();
+  }
+
+  @Nonnull
+  public Proxy getAsProxy ()
   {
     return new Proxy (Proxy.Type.HTTP, new InetSocketAddress (m_sHost, m_nPort));
   }
