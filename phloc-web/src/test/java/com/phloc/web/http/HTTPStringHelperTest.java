@@ -149,6 +149,18 @@ public final class HTTPStringHelperTest
   }
 
   @Test
+  public void testLinearWhitespaceChar ()
+  {
+    assertFalse (HTTPStringHelper.isLinearWhitespaceChar (HTTPStringHelper.MIN_INDEX - 1));
+    for (int i = HTTPStringHelper.MIN_INDEX; i <= HTTPStringHelper.MAX_INDEX; ++i)
+      if (i == ' ' || i == '\t' || i == '\r' || i == '\n')
+        assertTrue (HTTPStringHelper.isLinearWhitespaceChar (i));
+      else
+        assertFalse (HTTPStringHelper.isLinearWhitespaceChar (i));
+    assertFalse (HTTPStringHelper.isSpaceChar (HTTPStringHelper.MAX_INDEX + 1));
+  }
+
+  @Test
   public void testQuoteChar ()
   {
     assertFalse (HTTPStringHelper.isQuoteChar (HTTPStringHelper.MIN_INDEX - 1));

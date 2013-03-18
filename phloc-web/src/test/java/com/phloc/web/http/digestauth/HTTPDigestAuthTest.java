@@ -1,0 +1,60 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.phloc.web.http.digestauth;
+
+import static org.junit.Assert.assertNull;
+
+import org.junit.Test;
+
+/**
+ * Test class for class {@link HTTPDigestAuth}.
+ * 
+ * @author philip
+ */
+public final class HTTPDigestAuthTest
+{
+  @Test
+  public void testGetDigestAuthValues ()
+  {
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ((String) null));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials (""));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("bla"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("bla foo"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("Basic"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Basic  "));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username="));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=ä"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=abc x"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=abc ,"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\""));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\"abc"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\"abc\" ,"));
+    assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\"abc\" , "));
+    // Base64 with blanks is OK!
+    final DigestAuthCredentials aUP = HTTPDigestAuth.getDigestAuthCredentials ("Digest username=\"Mufasa\",\r\n"
+                                                                               + "                     realm=\"testrealm@host.com\",\r\n"
+                                                                               + "                     nonce=\"dcd98b7102dd2f0e8b11d0f600bfb0c093\",\r\n"
+                                                                               + "                     uri=\"/dir/index.html\",\r\n"
+                                                                               + "                     qop=auth,\r\n"
+                                                                               + "                     nc=00000001,\r\n"
+                                                                               + "                     cnonce=\"0a4f113b\",\r\n"
+                                                                               + "                     response=\"6629fae49393a05397450978507c4ef1\",\r\n"
+                                                                               + "                     opaque=\"5ccc069c403ebaf9f0171e9517f40e41\"");
+  }
+}

@@ -55,15 +55,16 @@ public final class HTTPStringHelper
   private static final int ALPHA = 0x0004;
   private static final int DIGIT = 0x0008;
   private static final int CTL = 0x0010;
-  private static final int HEX = 0x0020;
-  private static final int NON_TOKEN = 0x0040;
-  private static final int NON_TEXT = 0x0080;
-  private static final int NON_COMMENT = 0x0100;
-  private static final int NON_QUOTEDTEXT = 0x0200;
-  private static final int RESERVED = 0x0400;
-  private static final int EXTRA = 0x0800;
-  private static final int SAFE = 0x1000;
-  private static final int UNSAFE = 0x2000;
+  private static final int LWS = 0x0020;
+  private static final int HEX = 0x0040;
+  private static final int NON_TOKEN = 0x0080;
+  private static final int NON_TEXT = 0x0100;
+  private static final int NON_COMMENT = 0x0200;
+  private static final int NON_QUOTEDTEXT = 0x0400;
+  private static final int RESERVED = 0x0800;
+  private static final int EXTRA = 0x1000;
+  private static final int SAFE = 0x2000;
+  private static final int UNSAFE = 0x4000;
 
   private static final char [] MAPPINGS = new char [] {
                                                        // 0x00
@@ -76,11 +77,11 @@ public final class HTTPStringHelper
                                                        CTL | NON_TEXT | UNSAFE,
                                                        CTL | NON_TEXT | UNSAFE,
                                                        CTL | NON_TEXT | UNSAFE,
-                                                       CTL | NON_TOKEN | UNSAFE,
-                                                       CTL | UNSAFE,
+                                                       CTL | NON_TOKEN | UNSAFE | LWS,
+                                                       CTL | UNSAFE | LWS,
                                                        CTL | NON_TEXT | UNSAFE,
                                                        CTL | NON_TEXT | UNSAFE,
-                                                       CTL | UNSAFE,
+                                                       CTL | UNSAFE | LWS,
                                                        CTL | NON_TEXT | UNSAFE,
                                                        CTL | NON_TEXT | UNSAFE,
                                                        // 0x10
@@ -101,7 +102,7 @@ public final class HTTPStringHelper
                                                        CTL | NON_TEXT | UNSAFE,
                                                        CTL | NON_TEXT | UNSAFE,
                                                        // 0x20
-                                                       NON_TOKEN | UNSAFE,
+                                                       NON_TOKEN | UNSAFE | LWS,
                                                        EXTRA,
                                                        NON_TOKEN | NON_QUOTEDTEXT | UNSAFE,
                                                        UNSAFE,
@@ -265,6 +266,11 @@ public final class HTTPStringHelper
   public static boolean isTabChar (final int n)
   {
     return n == 9;
+  }
+
+  public static boolean isLinearWhitespaceChar (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & LWS) == LWS;
   }
 
   public static boolean isQuoteChar (final int n)
