@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
@@ -57,7 +58,10 @@ public class FormStateManager extends SessionWebSingleton
       throw new NullPointerException ("formState");
     m_aMap.put (aFormState.getFlowID (), aFormState);
     m_bAtLeastOnceAFormState = true;
-    s_aLogger.info ("Saved form state for page " + aFormState.getPageID ());
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.info ("Saved form state: " + aFormState.toString ());
+    else
+      s_aLogger.info ("Saved form state for page " + aFormState.getPageID ());
   }
 
   public boolean containedOnceAFormState ()
