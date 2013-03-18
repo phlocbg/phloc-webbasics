@@ -24,6 +24,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.base64.Base64Helper;
@@ -31,6 +34,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.digestauth.HTTPDigestAuth;
 
 /**
  * Handling for HTTP Basic Authentication
@@ -41,6 +45,8 @@ import com.phloc.web.http.CHTTPHeader;
 public final class HTTPBasicAuth
 {
   public static final String HEADER_VALUE_PREFIX_BASIC = "Basic";
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (HTTPDigestAuth.class);
   private static final char USERNAME_PASSWORD_SEPARATOR = ':';
   private static final Charset CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
 
@@ -108,19 +114,23 @@ public final class HTTPBasicAuth
 
     final String [] aElements = RegExHelper.getSplitToArray (sRealHeader, "\\s+", 2);
     if (aElements.length != 2)
+    {
+      s_aLogger.error ("String is not Basic Auth");
       return null;
+    }
 
     if (!aElements[0].equals (HEADER_VALUE_PREFIX_BASIC))
+    {
+      s_aLogger.error ("String does not start with 'Basic'");
       return null;
-
-    // Remove the auth prefix
-    final String sEncodedCredentials = aElements[1];
+    }
 
     // Apply Base64 decoding
+    final String sEncodedCredentials = aElements[1];
     final String sUsernamePassword = Base64Helper.safeDecodeAsString (sEncodedCredentials, CHARSET);
     if (sUsernamePassword == null)
     {
-      // Illegal base64 encoded value
+      s_aLogger.error ("Illegal Base64 encoded value '" + sEncodedCredentials + "'");
       return null;
     }
 

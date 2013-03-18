@@ -55,13 +55,13 @@ public final class DigestAuthResponseBuilderTest
     b.setStale (ETriState.FALSE);
     assertEquals ("Digest realm=\"xyz\", domain=\"/config\", nonce=\"blanonce\", opaque=\"opaque\", stale=false",
                   b.build ());
-    b.setAlgorithm (DigestAuthResponseBuilder.ALGORITHM_MD5_SESS);
+    b.setAlgorithm (HTTPDigestAuth.ALGORITHM_MD5_SESS);
     assertEquals ("Digest realm=\"xyz\", domain=\"/config\", nonce=\"blanonce\", opaque=\"opaque\", stale=false, algorithm=MD5-sess",
                   b.build ());
-    b.addQOP (DigestAuthResponseBuilder.QOP_AUTH);
+    b.addQOP (HTTPDigestAuth.QOP_AUTH);
     assertEquals ("Digest realm=\"xyz\", domain=\"/config\", nonce=\"blanonce\", opaque=\"opaque\", stale=false, algorithm=MD5-sess, qop=\"auth\"",
                   b.build ());
-    b.addQOP (DigestAuthResponseBuilder.QOP_AUTH_INT);
+    b.addQOP (HTTPDigestAuth.QOP_AUTH_INT);
     assertEquals ("Digest realm=\"xyz\", domain=\"/config\", nonce=\"blanonce\", opaque=\"opaque\", stale=false, algorithm=MD5-sess, qop=\"auth,auth-int\"",
                   b.build ());
   }

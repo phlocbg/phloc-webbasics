@@ -39,11 +39,6 @@ import com.phloc.web.http.HTTPStringHelper;
 @NotThreadSafe
 public final class DigestAuthResponseBuilder
 {
-  public static final String ALGORITHM_MD5 = "MD5";
-  public static final String ALGORITHM_MD5_SESS = "MD5-sess";
-  public static final String QOP_AUTH = "auth";
-  public static final String QOP_AUTH_INT = "auth-int";
-
   private String m_sRealm;
   private final Set <String> m_aDomains = new LinkedHashSet <String> ();
   private String m_sNonce;
