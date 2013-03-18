@@ -251,7 +251,7 @@ public final class DigestAuthServerBuilder
 
   public boolean isValid ()
   {
-    return m_sRealm != null;
+    return m_sRealm != null && m_sNonce != null;
   }
 
   @Nonnull
@@ -261,48 +261,25 @@ public final class DigestAuthServerBuilder
     if (!isValid ())
       throw new IllegalStateException ("Built Digest auth is not valid!");
 
-    final StringBuilder ret = new StringBuilder ();
-    if (m_sRealm != null)
-      ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
+    final StringBuilder ret = new StringBuilder (HTTPDigestAuth.HEADER_VALUE_PREFIX_DIGEST);
+    // Realm is required
+    ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
     if (!m_aDomains.isEmpty ())
     {
-      if (ret.length () > 0)
-        ret.append (',');
-      ret.append (" domain=")
+      ret.append (", domain=")
          .append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (' ', m_aDomains)));
     }
-    if (m_sNonce != null)
-    {
-      if (ret.length () > 0)
-        ret.append (',');
-      ret.append (" nonce=").append (HTTPStringHelper.getQuotedTextString (m_sNonce));
-    }
+    // Nonce is required
+    ret.append (", nonce=").append (HTTPStringHelper.getQuotedTextString (m_sNonce));
     if (m_sOpaque != null)
-    {
-      if (ret.length () > 0)
-        ret.append (',');
-      ret.append (" opaque=").append (HTTPStringHelper.getQuotedTextString (m_sOpaque));
-    }
+      ret.append (", opaque=").append (HTTPStringHelper.getQuotedTextString (m_sOpaque));
     if (!m_eStale.isUndefined ())
-    {
-      if (ret.length () > 0)
-        ret.append (',');
-      ret.append (" stale=").append (m_eStale.isTrue () ? "true" : "false");
-    }
+      ret.append (", stale=").append (m_eStale.isTrue () ? "true" : "false");
     if (m_sAlgorithm != null)
-    {
-      if (ret.length () > 0)
-        ret.append (',');
-      ret.append (" algorithm=").append (m_sAlgorithm);
-    }
+      ret.append (", algorithm=").append (m_sAlgorithm);
     if (!m_aQOPs.isEmpty ())
-    {
-      if (ret.length () > 0)
-        ret.append (',');
-      ret.append (" qop=").append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (',', m_aQOPs)));
-    }
+      ret.append (", qop=").append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (',', m_aQOPs)));
 
-    // Add main prefix
-    return ret.insert (0, HTTPDigestAuth.HEADER_VALUE_PREFIX_DIGEST).toString ();
+    return ret.toString ();
   }
 }

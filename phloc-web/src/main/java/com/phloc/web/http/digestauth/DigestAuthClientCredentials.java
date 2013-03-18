@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -83,9 +84,9 @@ public final class DigestAuthClientCredentials
     if (StringHelper.hasNoText (sMessageQOP) && StringHelper.hasText (sNonceCount))
       throw new IllegalArgumentException ("If 'qop' is not present 'nc' must also not be present!");
     if (sNonceCount != null && sNonceCount.length () != 8)
-      throw new IllegalArgumentException ("The 'nonceCount' value must be a 8-byte hex string!");
+      throw new IllegalArgumentException ("The 'nonce-count' value must be a 8-byte hex string!");
     if (sNonceCount != null && !HTTPStringHelper.isHexNotEmpty (sNonceCount))
-      throw new IllegalArgumentException ("The 'nonceCount' value must consist only of hex chars!");
+      throw new IllegalArgumentException ("The 'nonce-count' value must consist only of hex chars!");
     m_sUserName = sUserName;
     m_sRealm = sRealm;
     m_sServerNonce = sServerNonce;
@@ -95,7 +96,7 @@ public final class DigestAuthClientCredentials
     m_sClientNonce = sClientNonce;
     m_sOpaque = sOpaque;
     m_sMessageQOP = sMessageQOP;
-    m_nNonceCount = sNonceCount == null ? -1 : StringParser.parseInt (sNonceCount, 16, -1);
+    m_nNonceCount = sNonceCount == null ? -1 : StringParser.parseInt (sNonceCount, CGlobal.HEX_RADIX, -1);
     if (sNonceCount != null && m_nNonceCount == -1)
       throw new IllegalArgumentException ("The 'nonce-count' parameter is invalid: '" + sNonceCount + "'");
   }

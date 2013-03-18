@@ -63,9 +63,8 @@ public class FuncTestReadWPAD
   public void testReadWPAD () throws IOException
   {
     // Works for Intercent-ER
-    final String sAutoProxyConfig = false
-                                         ? getProxyAutoConfigFunction (new URLResource ("http://wpad.ente.regione.emr.it/wpad.dat"),
-                                                                       CCharset.CHARSET_ISO_8859_1)
+    final String sAutoProxyConfig = false ? getProxyAutoConfigFunction (new URLResource ("http://wpad.ente.regione.emr.it/wpad.dat"),
+                                                                        CCharset.CHARSET_ISO_8859_1)
                                          : getProxyAutoConfigFunction (new URLResource ("http://wpad/wpad.dat"),
                                                                        CCharset.CHARSET_ISO_8859_1);
     if (sAutoProxyConfig != null)

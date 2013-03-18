@@ -45,10 +45,17 @@ public final class DigestAuthServerBuilderTest
     catch (final IllegalStateException ex)
     {}
     b.setRealm ("xyz");
-    assertEquals ("Digest realm=\"xyz\"", b.build ());
-    b.addDomain (new SimpleURL ("/config"));
-    assertEquals ("Digest realm=\"xyz\", domain=\"/config\"", b.build ());
+    try
+    {
+      // Mandatory nonce not present
+      b.build ();
+      fail ();
+    }
+    catch (final IllegalStateException ex)
+    {}
     b.setNonce ("blanonce");
+    assertEquals ("Digest realm=\"xyz\", nonce=\"blanonce\"", b.build ());
+    b.addDomain (new SimpleURL ("/config"));
     assertEquals ("Digest realm=\"xyz\", domain=\"/config\", nonce=\"blanonce\"", b.build ());
     b.setOpaque ("opaque");
     assertEquals ("Digest realm=\"xyz\", domain=\"/config\", nonce=\"blanonce\", opaque=\"opaque\"", b.build ());
