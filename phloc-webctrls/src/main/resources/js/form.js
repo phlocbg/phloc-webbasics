@@ -22,7 +22,10 @@ FormHelperClass.prototype =
     var vals={};
     var elems=$('#'+formid).find('*');
     // Prefix each array item for identification in AJAX handler
-    elems.filter ('input[type="checkbox"]:checked, input[type="radio"]:checked, input[type="text"], input[type="hidden"], select').each(
+    elems.filter ('input[type="checkbox"], input[type="radio"], select[multiple="multiple"]').each(
+      function(){ vals[fieldPrefix+this.name+'[]']=$(this).val(); }
+    );
+    elems.filter ('input[type="text"], input[type="hidden"], select[multiple!="multiple"], textarea').each(
       function(){ vals[fieldPrefix+this.name]=$(this).val(); }
     );
     return vals;

@@ -67,9 +67,10 @@ public class AjaxHandlerSaveFormState extends AbstractAjaxHandler
       if (aEntry.getKey ().startsWith (PREFIX_FIELD))
       {
         // Skip the prefix
-        String sFieldName = aEntry.getKey ().substring (PREFIX_FIELD.length ());
-        // Skip the potential array suffix (for multi selects)
-        sFieldName = StringHelper.trimEnd (sFieldName, "[]");
+        final String sFieldName = aEntry.getKey ().substring (PREFIX_FIELD.length ());
+        // Array value are suffixes with "[]" which is important, as they must
+        // be restored as array values!
+        // This affects checkboxes, radio buttons and multi selects
         if (StringHelper.hasText (sFieldName))
           aFieldCont.setAttribute (sFieldName, aEntry.getValue ());
       }
