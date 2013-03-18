@@ -39,22 +39,22 @@ public final class DigestAuthCredentials
 {
   private final String m_sUserName;
   private final String m_sRealm;
-  private final String m_sNonce;
+  private final String m_sServerNonce;
   private final String m_sDigestURI;
   private final String m_sResponse;
   private final String m_sAlgorithm;
-  private final String m_sCNonce;
+  private final String m_sClientNonce;
   private final String m_sOpaque;
   private final String m_sMessageQOP;
   private final int m_nNonceCount;
 
   public DigestAuthCredentials (@Nonnull @Nonempty final String sUserName,
                                 @Nonnull @Nonempty final String sRealm,
-                                @Nonnull @Nonempty final String sNonce,
+                                @Nonnull @Nonempty final String sServerNonce,
                                 @Nonnull @Nonempty final String sDigestURI,
                                 @Nullable final String sResponse,
                                 @Nullable final String sAlgorithm,
-                                @Nullable final String sCNonce,
+                                @Nullable final String sClientNonce,
                                 @Nullable final String sOpaque,
                                 @Nullable final String sMessageQOP,
                                 @Nullable final String sNonceCount)
@@ -63,23 +63,27 @@ public final class DigestAuthCredentials
       throw new IllegalArgumentException ("UserName");
     if (StringHelper.hasNoText (sRealm))
       throw new IllegalArgumentException ("Realm");
-    if (StringHelper.hasNoText (sNonce))
+    if (StringHelper.hasNoText (sServerNonce))
       throw new IllegalArgumentException ("Nonce");
     if (StringHelper.hasNoText (sUserName))
       throw new IllegalArgumentException ("DigestURI");
     if (StringHelper.hasText (sResponse) && sResponse.length () != 32)
       throw new IllegalArgumentException ("The 'response' value must be a 32-bit hex string!");
-    if (StringHelper.hasText (sMessageQOP) && StringHelper.hasNoText (sCNonce))
+    if (StringHelper.hasText (sMessageQOP) && StringHelper.hasNoText (sClientNonce))
       throw new IllegalArgumentException ("If 'qop' is present 'cnonce' must also be present!");
+    if (StringHelper.hasNoText (sMessageQOP) && StringHelper.hasText (sClientNonce))
+      throw new IllegalArgumentException ("If 'qop' is not present 'cnonce' must also not be present!");
     if (StringHelper.hasText (sMessageQOP) && StringHelper.hasNoText (sNonceCount))
       throw new IllegalArgumentException ("If 'qop' is present 'nc' must also be present!");
+    if (StringHelper.hasNoText (sMessageQOP) && StringHelper.hasText (sNonceCount))
+      throw new IllegalArgumentException ("If 'qop' is not present 'nc' must also not be present!");
     m_sUserName = sUserName;
     m_sRealm = sRealm;
-    m_sNonce = sNonce;
+    m_sServerNonce = sServerNonce;
     m_sDigestURI = sDigestURI;
     m_sResponse = sResponse;
     m_sAlgorithm = sAlgorithm;
-    m_sCNonce = sCNonce;
+    m_sClientNonce = sClientNonce;
     m_sOpaque = sOpaque;
     m_sMessageQOP = sMessageQOP;
     m_nNonceCount = sNonceCount == null ? -1 : StringParser.parseInt (sNonceCount, 16, -1);
@@ -112,9 +116,9 @@ public final class DigestAuthCredentials
    */
   @Nonnull
   @Nonempty
-  public String getNonce ()
+  public String getServerNonce ()
   {
-    return m_sNonce;
+    return m_sServerNonce;
   }
 
   /**
@@ -140,9 +144,9 @@ public final class DigestAuthCredentials
   }
 
   @Nullable
-  public String getCNonce ()
+  public String getClientNonce ()
   {
-    return m_sCNonce;
+    return m_sClientNonce;
   }
 
   @Nullable
@@ -173,11 +177,11 @@ public final class DigestAuthCredentials
     final DigestAuthCredentials rhs = (DigestAuthCredentials) o;
     return m_sUserName.equals (rhs.m_sUserName) &&
            m_sRealm.equals (rhs.m_sRealm) &&
-           m_sNonce.equals (rhs.m_sNonce) &&
+           m_sServerNonce.equals (rhs.m_sServerNonce) &&
            m_sDigestURI.equals (rhs.m_sDigestURI) &&
            EqualsUtils.equals (m_sResponse, rhs.m_sResponse) &&
            EqualsUtils.equals (m_sAlgorithm, rhs.m_sAlgorithm) &&
-           EqualsUtils.equals (m_sCNonce, rhs.m_sCNonce) &&
+           EqualsUtils.equals (m_sClientNonce, rhs.m_sClientNonce) &&
            EqualsUtils.equals (m_sOpaque, rhs.m_sOpaque) &&
            EqualsUtils.equals (m_sMessageQOP, rhs.m_sMessageQOP) &&
            m_nNonceCount == rhs.m_nNonceCount;
@@ -188,11 +192,11 @@ public final class DigestAuthCredentials
   {
     return new HashCodeGenerator (this).append (m_sUserName)
                                        .append (m_sRealm)
-                                       .append (m_sNonce)
+                                       .append (m_sServerNonce)
                                        .append (m_sDigestURI)
                                        .append (m_sResponse)
                                        .append (m_sAlgorithm)
-                                       .append (m_sCNonce)
+                                       .append (m_sClientNonce)
                                        .append (m_sOpaque)
                                        .append (m_sMessageQOP)
                                        .append (m_nNonceCount)
@@ -204,11 +208,11 @@ public final class DigestAuthCredentials
   {
     return new ToStringGenerator (this).append ("userName", m_sUserName)
                                        .append ("realm", m_sRealm)
-                                       .append ("nonce", m_sNonce)
+                                       .append ("serverNonce", m_sServerNonce)
                                        .append ("digestUri", m_sDigestURI)
                                        .appendIfNotNull ("response", m_sResponse)
                                        .appendIfNotNull ("algorithm", m_sAlgorithm)
-                                       .appendIfNotNull ("cnonce", m_sCNonce)
+                                       .appendIfNotNull ("clientNonce", m_sClientNonce)
                                        .appendIfNotNull ("opaque", m_sOpaque)
                                        .appendIfNotNull ("messageQop", m_sMessageQOP)
                                        .append ("noncecount", m_nNonceCount)

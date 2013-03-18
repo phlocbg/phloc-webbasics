@@ -59,7 +59,7 @@ public final class BasicAuth
   @Nonempty
   public static String getRequestHeaderValue (@Nonnull final String sUsername, @Nullable final String sPassword)
   {
-    return HTTPBasicAuth.getRequestHeaderValue (new BasicAuthCredentials (sUsername, sPassword));
+    return new BasicAuthCredentials (sUsername, sPassword).getRequestValue ();
   }
 
   /**

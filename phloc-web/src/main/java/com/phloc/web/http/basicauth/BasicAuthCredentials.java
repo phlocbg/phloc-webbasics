@@ -22,10 +22,12 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.web.http.CHTTPHeader;
 
 /**
  * Credentials for HTTP basic authentication
@@ -93,6 +95,22 @@ public final class BasicAuthCredentials
   public boolean hasPassword ()
   {
     return m_sPassword != null;
+  }
+
+  /**
+   * Create the request HTTP header value for use with the
+   * {@link CHTTPHeader#AUTHORIZATION} header name.
+   * 
+   * @return The HTTP header value to use. Neither <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  public String getRequestValue ()
+  {
+    final String sCombined = StringHelper.getConcatenatedOnDemand (m_sUserName,
+                                                                   HTTPBasicAuth.USERNAME_PASSWORD_SEPARATOR,
+                                                                   m_sPassword);
+    return HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, HTTPBasicAuth.CHARSET);
   }
 
   @Override

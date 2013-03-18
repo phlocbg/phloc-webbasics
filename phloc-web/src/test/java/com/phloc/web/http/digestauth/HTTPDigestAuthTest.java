@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import com.phloc.web.http.EHTTPMethod;
+
 /**
  * Test class for class {@link HTTPDigestAuth}.
  * 
@@ -60,13 +62,31 @@ public final class HTTPDigestAuthTest
     assertNotNull (aUP);
     assertEquals ("Mufasa", aUP.getUserName ());
     assertEquals ("testrealm@host.com", aUP.getRealm ());
-    assertEquals ("dcd98b7102dd2f0e8b11d0f600bfb0c093", aUP.getNonce ());
+    assertEquals ("dcd98b7102dd2f0e8b11d0f600bfb0c093", aUP.getServerNonce ());
     assertEquals ("/dir/index.html", aUP.getDigestURI ());
     assertEquals ("auth", aUP.getMessageQOP ());
     assertEquals (1, aUP.getNonceCount ());
-    assertEquals ("0a4f113b", aUP.getCNonce ());
+    assertEquals ("0a4f113b", aUP.getClientNonce ());
     assertEquals ("6629fae49393a05397450978507c4ef1", aUP.getResponse ());
     assertEquals ("5ccc069c403ebaf9f0171e9517f40e41", aUP.getOpaque ());
     assertNull (aUP.getAlgorithm ());
+  }
+
+  @Test
+  public void testCreate ()
+  {
+    final DigestAuthCredentials aUP = HTTPDigestAuth.createDigestAuthRequest (EHTTPMethod.GET,
+                                                                              "/dir/index.html",
+                                                                              "Mufasa",
+                                                                              "Circle Of Life",
+                                                                              "testrealm@host.com",
+                                                                              "dcd98b7102dd2f0e8b11d0f600bfb0c093",
+                                                                              null,
+                                                                              "0a4f113b",
+                                                                              "5ccc069c403ebaf9f0171e9517f40e41",
+                                                                              HTTPDigestAuth.QOP_AUTH,
+                                                                              1);
+    assertNotNull (aUP);
+    assertEquals ("6629fae49393a05397450978507c4ef1", aUP.getResponse ());
   }
 }

@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -29,10 +30,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
+import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.CHTTPHeader;
+import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.HTTPStringHelper;
 
 /**
@@ -63,25 +68,6 @@ public final class HTTPDigestAuth
 
   private HTTPDigestAuth ()
   {}
-
-  /**
-   * Get the Digest authentication credentials from the passed HTTP servlet
-   * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
-   * 
-   * @param aHttpRequest
-   *        The HTTP request to be interpreted. May be <code>null</code>.
-   * @return <code>null</code> if the passed request does not contain a valid
-   *         HTTP Digest Authentication header value.
-   */
-  @Nullable
-  public static DigestAuthCredentials getDigestAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
-  {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
-
-    final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
-    return getDigestAuthCredentials (sHeaderValue);
-  }
 
   /**
    * Get the parameters of a Digest authentication string. It may be used for
@@ -233,6 +219,25 @@ public final class HTTPDigestAuth
   }
 
   /**
+   * Get the Digest authentication credentials from the passed HTTP servlet
+   * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
+   * 
+   * @param aHttpRequest
+   *        The HTTP request to be interpreted. May be <code>null</code>.
+   * @return <code>null</code> if the passed request does not contain a valid
+   *         HTTP Digest Authentication header value.
+   */
+  @Nullable
+  public static DigestAuthCredentials getDigestAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
+    return getDigestAuthCredentials (sHeaderValue);
+  }
+
+  /**
    * Get the Digest authentication credentials from the passed HTTP header
    * value.
    * 
@@ -293,6 +298,171 @@ public final class HTTPDigestAuth
                                       sResponse,
                                       sAlgorithm,
                                       sCNonce,
+                                      sOpaque,
+                                      sMessageQOP,
+                                      sNonceCount);
+  }
+
+  private static String _md5 (@Nonnull final String s)
+  {
+    final byte [] aHA1 = MessageDigestGeneratorHelper.getDigest (s, CHARSET, EMessageDigestAlgorithm.MD5);
+    return MessageDigestGeneratorHelper.getHexValueFromDigest (aHA1);
+
+  }
+
+  /**
+   * Create HTTP Digest auth credentials for a client
+   * 
+   * @param eMethod
+   *        The HTTP method of the request. May not be <code>null</code>.
+   * @param sDigestURI
+   *        The URI from Request-URI of the Request-Line; duplicated here
+   *        because proxies are allowed to change the Request-Line in transit.
+   *        May neither be <code>null</code> nor empty.
+   * @param sUserName
+   *        User name to use. May neither be <code>null</code> nor empty.
+   * @param sPassword
+   *        The user's password. May not be <code>null</code>.
+   * @param sRealm
+   *        The realm as provided by the server. May neither be
+   *        <code>null</code> nor empty.
+   * @param sServerNonce
+   *        The nonce as supplied by the server. May neither be
+   *        <code>null</code> nor empty.
+   * @param sAlgorithm
+   *        The algorithm as provided by the server. Currently only
+   *        {@link #ALGORITHM_MD5} and {@link #ALGORITHM_MD5_SESS} is supported.
+   *        If it is <code>null</code> than {@link #ALGORITHM_MD5} is used as
+   *        default.
+   * @param sClientNonce
+   *        The client nonce to be used. Must be present if message QOP is
+   *        specified or if algorithm is {@link #ALGORITHM_MD5_SESS}.<br>
+   *        This MUST be specified if a qop directive is sent, and MUST NOT be
+   *        specified if the server did not send a qop directive in the
+   *        WWW-Authenticate header field. The cnonce-value is an opaque quoted
+   *        string value provided by the client and used by both client and
+   *        server to avoid chosen plain text attacks, to provide mutual
+   *        authentication, and to provide some message integrity protection.
+   *        See the descriptions below of the calculation of the response-
+   *        digest and request-digest values.
+   * @param sOpaque
+   *        The opaque value as supplied by the server. May be <code>null</code>
+   *        .
+   * @param sMessageQOP
+   *        The message QOP. Currently only {@link #QOP_AUTH} is supported. If
+   *        <code>null</code> is passed, than {@link #QOP_AUTH} with backward
+   *        compatibility handling for RFC 2069 is applied.<br>
+   *        Indicates what "quality of protection" the client has applied to the
+   *        message. If present, its value MUST be one of the alternatives the
+   *        server indicated it supports in the WWW-Authenticate header. These
+   *        values affect the computation of the request-digest. Note that this
+   *        is a single token, not a quoted list of alternatives as in WWW-
+   *        Authenticate. This directive is optional in order to preserve
+   *        backward compatibility with a minimal implementation of RFC 2069
+   *        [6], but SHOULD be used if the server indicated that qop is
+   *        supported by providing a qop directive in the WWW-Authenticate
+   *        header field.
+   * @param nNonceCount
+   *        This MUST be specified if a qop directive is sent (see above), and
+   *        MUST NOT be specified if the server did not send a qop directive in
+   *        the WWW-Authenticate header field. The nc-value is the hexadecimal
+   *        count of the number of requests (including the current request) that
+   *        the client has sent with the nonce value in this request. For
+   *        example, in the first request sent in response to a given nonce
+   *        value, the client sends "nc=00000001". The purpose of this directive
+   *        is to allow the server to detect request replays by maintaining its
+   *        own copy of this count - if the same nc-value is seen twice, then
+   *        the request is a replay.
+   * @return The created DigestAuthCredentials
+   */
+  @Nonnull
+  public static DigestAuthCredentials createDigestAuthRequest (@Nonnull final EHTTPMethod eMethod,
+                                                               @Nonnull @Nonempty final String sDigestURI,
+                                                               @Nonnull @Nonempty final String sUserName,
+                                                               @Nonnull final String sPassword,
+                                                               @Nonnull @Nonempty final String sRealm,
+                                                               @Nonnull @Nonempty final String sServerNonce,
+                                                               @Nullable final String sAlgorithm,
+                                                               @Nullable final String sClientNonce,
+                                                               @Nullable final String sOpaque,
+                                                               @Nullable final String sMessageQOP,
+                                                               @CheckForSigned final int nNonceCount)
+  {
+    if (eMethod == null)
+      throw new NullPointerException ("method");
+    if (StringHelper.hasNoText (sDigestURI))
+      throw new IllegalArgumentException ("DigestURI");
+    if (StringHelper.hasNoText (sUserName))
+      throw new IllegalArgumentException ("UserName");
+    if (sPassword == null)
+      throw new NullPointerException ("Password");
+    if (StringHelper.hasNoText (sRealm))
+      throw new IllegalArgumentException ("Realm");
+    if (StringHelper.hasNoText (sServerNonce))
+      throw new IllegalArgumentException ("ServerNonce");
+    if (sMessageQOP != null && StringHelper.hasNoText (sClientNonce))
+      throw new IllegalArgumentException ("If a QOP is defined, client nonce must be set!");
+    if (sMessageQOP != null && nNonceCount <= 0)
+      throw new IllegalArgumentException ("If a QOP is defined, nonce count must be positive!");
+
+    final String sRealAlgorithm = sAlgorithm == null ? DEFAULT_ALGORITHM : sAlgorithm;
+    if (!sRealAlgorithm.equals (ALGORITHM_MD5) && !sRealAlgorithm.equals (ALGORITHM_MD5_SESS))
+      throw new IllegalArgumentException ("Currently only '" +
+                                          ALGORITHM_MD5 +
+                                          "' and '" +
+                                          ALGORITHM_MD5_SESS +
+                                          "' algorithms are supported!");
+
+    if (sMessageQOP != null && !sMessageQOP.equals (QOP_AUTH))
+      throw new IllegalArgumentException ("Currently only '" + QOP_AUTH + "' QOP is supported!");
+
+    // Nonce must always by 8 chars long
+    final String sNonceCount = nNonceCount <= 0 ? null
+                                               : StringHelper.getLeadingZero (StringHelper.getHexString (nNonceCount),
+                                                                              8);
+
+    // Create HA1
+    String sHA1 = _md5 (sUserName + SEPARATOR + sRealm + SEPARATOR + sPassword);
+    if (sRealAlgorithm.equals (ALGORITHM_MD5_SESS))
+    {
+      if (StringHelper.hasNoText (sClientNonce))
+        throw new IllegalArgumentException ("Algorithm requires client nonce!");
+      sHA1 = _md5 (sHA1 + SEPARATOR + sServerNonce + SEPARATOR + sClientNonce);
+    }
+
+    // Create HA2
+    // Method name must be upper-case!
+    final String sHA2 = _md5 (eMethod.getName () + SEPARATOR + sDigestURI);
+
+    // Create the request digest - result must be all lowercase hex chars!
+    String sRequestDigest;
+    if (sMessageQOP == null)
+    {
+      // RFC 2069 backwards compatibility
+      sRequestDigest = _md5 (sHA1 + SEPARATOR + sServerNonce + SEPARATOR + sHA2);
+    }
+    else
+    {
+      sRequestDigest = _md5 (sHA1 +
+                             SEPARATOR +
+                             sServerNonce +
+                             SEPARATOR +
+                             sNonceCount +
+                             SEPARATOR +
+                             sClientNonce +
+                             SEPARATOR +
+                             sMessageQOP +
+                             SEPARATOR +
+                             sHA2);
+    }
+
+    return new DigestAuthCredentials (sUserName,
+                                      sRealm,
+                                      sServerNonce,
+                                      sDigestURI,
+                                      sRequestDigest,
+                                      sAlgorithm,
+                                      sClientNonce,
                                       sOpaque,
                                       sMessageQOP,
                                       sNonceCount);

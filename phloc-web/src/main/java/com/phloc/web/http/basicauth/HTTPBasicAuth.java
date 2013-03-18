@@ -45,10 +45,9 @@ import com.phloc.web.http.digestauth.HTTPDigestAuth;
 public final class HTTPBasicAuth
 {
   public static final String HEADER_VALUE_PREFIX_BASIC = "Basic";
-
+  static final char USERNAME_PASSWORD_SEPARATOR = ':';
+  static final Charset CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTTPDigestAuth.class);
-  private static final char USERNAME_PASSWORD_SEPARATOR = ':';
-  private static final Charset CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
 
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
@@ -56,27 +55,6 @@ public final class HTTPBasicAuth
 
   private HTTPBasicAuth ()
   {}
-
-  /**
-   * Create the request HTTP header value for use with the
-   * {@link CHTTPHeader#AUTHORIZATION} header name.
-   * 
-   * @param aCredentials
-   *        The credentials to use. May not be <code>null</code>.
-   * @return The HTTP header value to use. Neither <code>null</code> nor empty.
-   */
-  @Nonnull
-  @Nonempty
-  public static String getRequestHeaderValue (@Nonnull final BasicAuthCredentials aCredentials)
-  {
-    if (aCredentials == null)
-      throw new NullPointerException ("credentials");
-
-    final String sCombined = StringHelper.getConcatenatedOnDemand (aCredentials.getUserName (),
-                                                                   USERNAME_PASSWORD_SEPARATOR,
-                                                                   aCredentials.getPassword ());
-    return HEADER_VALUE_PREFIX_BASIC + " " + Base64Helper.safeEncode (sCombined, CHARSET);
-  }
 
   /**
    * Get the Basic authentication credentials from the passed HTTP servlet
@@ -154,7 +132,7 @@ public final class HTTPBasicAuth
    */
   @Nonnull
   @Nonempty
-  public static String createWWWAuthenticate (@Nonnull final String sRealm)
+  public static String createBasicAuthResponse (@Nonnull final String sRealm)
   {
     return new BasicAuthResponseBuilder ().setRealm (sRealm).build ();
   }

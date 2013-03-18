@@ -34,7 +34,7 @@ public final class HTTPBasicAuthTest
   public void testBasic ()
   {
     final BasicAuthCredentials aCredentials = new BasicAuthCredentials ("Alladin", "open sesame");
-    final String sValue = HTTPBasicAuth.getRequestHeaderValue (aCredentials);
+    final String sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     final BasicAuthCredentials aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
     assertNotNull (aDecoded);
@@ -45,14 +45,14 @@ public final class HTTPBasicAuthTest
   public void testUserNameOnly ()
   {
     BasicAuthCredentials aCredentials = new BasicAuthCredentials ("Alladin");
-    String sValue = HTTPBasicAuth.getRequestHeaderValue (aCredentials);
+    String sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     BasicAuthCredentials aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
     assertNotNull (aDecoded);
     assertEquals (aCredentials, aDecoded);
 
     aCredentials = new BasicAuthCredentials ("Alladin", "");
-    sValue = HTTPBasicAuth.getRequestHeaderValue (aCredentials);
+    sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
     assertNotNull (aDecoded);
