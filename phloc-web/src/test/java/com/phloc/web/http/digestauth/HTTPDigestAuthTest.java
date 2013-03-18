@@ -50,7 +50,7 @@ public final class HTTPDigestAuthTest
     assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\"abc"));
     assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\"abc\","));
     assertNull (HTTPDigestAuth.getDigestAuthCredentials ("  Digest  username=\"abc\" , "));
-    final DigestAuthCredentials aUP = HTTPDigestAuth.getDigestAuthCredentials ("Digest username=\"Mufasa\",\r\n"
+    final DigestAuthClientCredentials aUP = HTTPDigestAuth.getDigestAuthCredentials ("Digest username=\"Mufasa\",\r\n"
                                                                                + "     realm=\"testrealm@host.com\",\r\n"
                                                                                + "     nonce=\"dcd98b7102dd2f0e8b11d0f600bfb0c093\",\r\n"
                                                                                + "     uri=\"/dir/index.html\",\r\n"
@@ -75,7 +75,7 @@ public final class HTTPDigestAuthTest
   @Test
   public void testCreate ()
   {
-    final DigestAuthCredentials aUP = HTTPDigestAuth.createDigestAuthRequest (EHTTPMethod.GET,
+    final DigestAuthClientCredentials aUP = HTTPDigestAuth.createDigestAuthRequest (EHTTPMethod.GET,
                                                                               "/dir/index.html",
                                                                               "Mufasa",
                                                                               "Circle Of Life",

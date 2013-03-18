@@ -24,11 +24,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.web.http.HTTPStringHelper;
 
 @NotThreadSafe
-public final class BasicAuthResponseBuilder
+public final class BasicAuthServerBuilder
 {
   private String m_sRealm;
 
-  public BasicAuthResponseBuilder ()
+  public BasicAuthServerBuilder ()
   {}
 
   /**
@@ -40,7 +40,7 @@ public final class BasicAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public BasicAuthResponseBuilder setRealm (@Nonnull final String sRealm)
+  public BasicAuthServerBuilder setRealm (@Nonnull final String sRealm)
   {
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);

@@ -23,7 +23,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
-import com.phloc.web.http.basicauth.BasicAuthCredentials;
+import com.phloc.web.http.basicauth.BasicAuthClientCredentials;
 import com.phloc.web.http.basicauth.HTTPBasicAuth;
 
 /**
@@ -59,7 +59,7 @@ public final class BasicAuth
   @Nonempty
   public static String getRequestHeaderValue (@Nonnull final String sUsername, @Nullable final String sPassword)
   {
-    return new BasicAuthCredentials (sUsername, sPassword).getRequestValue ();
+    return new BasicAuthClientCredentials (sUsername, sPassword).getRequestValue ();
   }
 
   /**
@@ -75,7 +75,7 @@ public final class BasicAuth
   @Nullable
   public static String [] getBasicAuthValues (@Nullable final String sAuthHeader)
   {
-    final BasicAuthCredentials aCredentials = HTTPBasicAuth.getBasicAuthCredentials (sAuthHeader);
+    final BasicAuthClientCredentials aCredentials = HTTPBasicAuth.getBasicAuthCredentials (sAuthHeader);
     if (aCredentials == null)
       return null;
     if (!aCredentials.hasPassword ())

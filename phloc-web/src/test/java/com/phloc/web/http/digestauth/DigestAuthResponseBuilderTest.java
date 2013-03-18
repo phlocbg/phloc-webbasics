@@ -26,7 +26,7 @@ import com.phloc.commons.state.ETriState;
 import com.phloc.commons.url.SimpleURL;
 
 /**
- * Test class for class {@link DigestAuthResponseBuilder}.
+ * Test class for class {@link DigestAuthServerBuilder}.
  * 
  * @author philip
  */
@@ -35,7 +35,7 @@ public final class DigestAuthResponseBuilderTest
   @Test
   public void testBasic ()
   {
-    final DigestAuthResponseBuilder b = new DigestAuthResponseBuilder ();
+    final DigestAuthServerBuilder b = new DigestAuthServerBuilder ();
     try
     {
       // Mandatory realm not present

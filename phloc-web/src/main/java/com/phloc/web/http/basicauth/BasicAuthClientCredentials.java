@@ -35,7 +35,7 @@ import com.phloc.web.http.CHTTPHeader;
  * @author philip
  */
 @Immutable
-public final class BasicAuthCredentials
+public final class BasicAuthClientCredentials
 {
   private final String m_sUserName;
   private final String m_sPassword;
@@ -46,7 +46,7 @@ public final class BasicAuthCredentials
    * @param sUserName
    *        The user name to use. May neither be <code>null</code> nor empty.
    */
-  public BasicAuthCredentials (@Nonnull @Nonempty final String sUserName)
+  public BasicAuthClientCredentials (@Nonnull @Nonempty final String sUserName)
   {
     this (sUserName, null);
   }
@@ -60,7 +60,7 @@ public final class BasicAuthCredentials
    *        The password to use. May be <code>null</code> or empty to indicate
    *        that no password is present.
    */
-  public BasicAuthCredentials (@Nonnull @Nonempty final String sUserName, @Nullable final String sPassword)
+  public BasicAuthClientCredentials (@Nonnull @Nonempty final String sUserName, @Nullable final String sPassword)
   {
     if (StringHelper.hasNoText (sUserName))
       throw new IllegalArgumentException ("UserName may not be empty!");
@@ -118,9 +118,9 @@ public final class BasicAuthCredentials
   {
     if (o == this)
       return true;
-    if (!(o instanceof BasicAuthCredentials))
+    if (!(o instanceof BasicAuthClientCredentials))
       return false;
-    final BasicAuthCredentials rhs = (BasicAuthCredentials) o;
+    final BasicAuthClientCredentials rhs = (BasicAuthClientCredentials) o;
     return m_sUserName.equals (rhs.m_sUserName) && EqualsUtils.equals (m_sPassword, rhs.m_sPassword);
   }
 

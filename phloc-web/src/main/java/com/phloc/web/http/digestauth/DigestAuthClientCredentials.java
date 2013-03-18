@@ -35,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @Immutable
-public final class DigestAuthCredentials
+public final class DigestAuthClientCredentials
 {
   private final String m_sUserName;
   private final String m_sRealm;
@@ -48,7 +48,7 @@ public final class DigestAuthCredentials
   private final String m_sMessageQOP;
   private final int m_nNonceCount;
 
-  public DigestAuthCredentials (@Nonnull @Nonempty final String sUserName,
+  public DigestAuthClientCredentials (@Nonnull @Nonempty final String sUserName,
                                 @Nonnull @Nonempty final String sRealm,
                                 @Nonnull @Nonempty final String sServerNonce,
                                 @Nonnull @Nonempty final String sDigestURI,
@@ -172,9 +172,9 @@ public final class DigestAuthCredentials
   {
     if (o == this)
       return true;
-    if (!(o instanceof DigestAuthCredentials))
+    if (!(o instanceof DigestAuthClientCredentials))
       return false;
-    final DigestAuthCredentials rhs = (DigestAuthCredentials) o;
+    final DigestAuthClientCredentials rhs = (DigestAuthClientCredentials) o;
     return m_sUserName.equals (rhs.m_sUserName) &&
            m_sRealm.equals (rhs.m_sRealm) &&
            m_sServerNonce.equals (rhs.m_sServerNonce) &&

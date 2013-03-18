@@ -33,10 +33,10 @@ public final class HTTPBasicAuthTest
   @Test
   public void testBasic ()
   {
-    final BasicAuthCredentials aCredentials = new BasicAuthCredentials ("Alladin", "open sesame");
+    final BasicAuthClientCredentials aCredentials = new BasicAuthClientCredentials ("Alladin", "open sesame");
     final String sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
-    final BasicAuthCredentials aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
+    final BasicAuthClientCredentials aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
     assertNotNull (aDecoded);
     assertEquals (aCredentials, aDecoded);
   }
@@ -44,14 +44,14 @@ public final class HTTPBasicAuthTest
   @Test
   public void testUserNameOnly ()
   {
-    BasicAuthCredentials aCredentials = new BasicAuthCredentials ("Alladin");
+    BasicAuthClientCredentials aCredentials = new BasicAuthClientCredentials ("Alladin");
     String sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
-    BasicAuthCredentials aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
+    BasicAuthClientCredentials aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
     assertNotNull (aDecoded);
     assertEquals (aCredentials, aDecoded);
 
-    aCredentials = new BasicAuthCredentials ("Alladin", "");
+    aCredentials = new BasicAuthClientCredentials ("Alladin", "");
     sValue = aCredentials.getRequestValue ();
     assertNotNull (sValue);
     aDecoded = HTTPBasicAuth.getBasicAuthCredentials (sValue);
@@ -69,7 +69,7 @@ public final class HTTPBasicAuthTest
     assertNull (HTTPBasicAuth.getBasicAuthCredentials ("Basic"));
     assertNull (HTTPBasicAuth.getBasicAuthCredentials ("  Basic  "));
     // Base64 with blanks is OK!
-    BasicAuthCredentials aUP = HTTPBasicAuth.getBasicAuthCredentials ("  Basic  QWxsYW  Rp   bjpvcG  VuIH Nlc2F tZQ   =  =   ");
+    BasicAuthClientCredentials aUP = HTTPBasicAuth.getBasicAuthCredentials ("  Basic  QWxsYW  Rp   bjpvcG  VuIH Nlc2F tZQ   =  =   ");
     assertNotNull (aUP);
     assertEquals ("Alladin", aUP.getUserName ());
     assertEquals ("open sesame", aUP.getPassword ());

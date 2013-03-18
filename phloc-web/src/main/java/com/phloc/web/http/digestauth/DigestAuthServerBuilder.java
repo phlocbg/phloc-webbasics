@@ -37,7 +37,7 @@ import com.phloc.web.http.HTTPStringHelper;
  * @author philip
  */
 @NotThreadSafe
-public final class DigestAuthResponseBuilder
+public final class DigestAuthServerBuilder
 {
   private String m_sRealm;
   private final Set <String> m_aDomains = new LinkedHashSet <String> ();
@@ -47,7 +47,7 @@ public final class DigestAuthResponseBuilder
   private String m_sAlgorithm;
   private final Set <String> m_aQOPs = new LinkedHashSet <String> ();
 
-  public DigestAuthResponseBuilder ()
+  public DigestAuthServerBuilder ()
   {}
 
   /**
@@ -63,7 +63,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder setRealm (@Nonnull final String sRealm)
+  public DigestAuthServerBuilder setRealm (@Nonnull final String sRealm)
   {
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);
@@ -92,7 +92,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder addDomain (@Nonnull final ISimpleURL aURL)
+  public DigestAuthServerBuilder addDomain (@Nonnull final ISimpleURL aURL)
   {
     if (aURL == null)
       throw new NullPointerException ("url");
@@ -139,7 +139,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder setNonce (@Nonnull final String sNonce)
+  public DigestAuthServerBuilder setNonce (@Nonnull final String sNonce)
   {
     if (!HTTPStringHelper.isQuotedTextContent (sNonce))
       throw new IllegalArgumentException ("nonce is invalid: " + sNonce);
@@ -159,7 +159,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder setOpaque (@Nonnull final String sOpaque)
+  public DigestAuthServerBuilder setOpaque (@Nonnull final String sOpaque)
   {
     if (!HTTPStringHelper.isQuotedTextContent (sOpaque))
       throw new IllegalArgumentException ("opaque is invalid: " + sOpaque);
@@ -184,7 +184,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder setStale (@Nonnull final ETriState eStale)
+  public DigestAuthServerBuilder setStale (@Nonnull final ETriState eStale)
   {
     if (eStale == null)
       throw new NullPointerException ("stale");
@@ -216,7 +216,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder setAlgorithm (@Nonnull final String sAlgorithm)
+  public DigestAuthServerBuilder setAlgorithm (@Nonnull final String sAlgorithm)
   {
     if (!HTTPStringHelper.isToken (sAlgorithm))
       throw new IllegalArgumentException ("The passed algorithm is not a valid token: " + sAlgorithm);
@@ -240,7 +240,7 @@ public final class DigestAuthResponseBuilder
    * @return this
    */
   @Nonnull
-  public DigestAuthResponseBuilder addQOP (@Nonnull final String sQOP)
+  public DigestAuthServerBuilder addQOP (@Nonnull final String sQOP)
   {
     if (!HTTPStringHelper.isToken (sQOP))
       throw new IllegalArgumentException ("The passed qop-option is not a token: " + sQOP);

@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
- * Test class for class {@link BasicAuthResponseBuilder}.
+ * Test class for class {@link BasicAuthServerBuilder}.
  * 
  * @author philip
  */
@@ -32,7 +32,7 @@ public final class BasicAuthResponseBuilderTest
   @Test
   public void testBasic ()
   {
-    final BasicAuthResponseBuilder b = new BasicAuthResponseBuilder ();
+    final BasicAuthServerBuilder b = new BasicAuthServerBuilder ();
     try
     {
       // Mandatory realm not present

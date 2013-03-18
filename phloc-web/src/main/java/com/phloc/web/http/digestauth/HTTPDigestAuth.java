@@ -228,7 +228,7 @@ public final class HTTPDigestAuth
    *         HTTP Digest Authentication header value.
    */
   @Nullable
-  public static DigestAuthCredentials getDigestAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
+  public static DigestAuthClientCredentials getDigestAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
@@ -247,7 +247,7 @@ public final class HTTPDigestAuth
    *         Authentication header value.
    */
   @Nullable
-  public static DigestAuthCredentials getDigestAuthCredentials (@Nullable final String sAuthHeader)
+  public static DigestAuthClientCredentials getDigestAuthCredentials (@Nullable final String sAuthHeader)
   {
     final Map <String, String> aParams = getDigestAuthParams (sAuthHeader);
     if (aParams == null)
@@ -291,7 +291,7 @@ public final class HTTPDigestAuth
     if (!aParams.isEmpty ())
       s_aLogger.warn ("Digest Auth contains unhandled parameters: " + aParams.toString ());
 
-    return new DigestAuthCredentials (sUserName,
+    return new DigestAuthClientCredentials (sUserName,
                                       sRealm,
                                       sNonce,
                                       sDigestURI,
@@ -376,7 +376,7 @@ public final class HTTPDigestAuth
    * @return The created DigestAuthCredentials
    */
   @Nonnull
-  public static DigestAuthCredentials createDigestAuthRequest (@Nonnull final EHTTPMethod eMethod,
+  public static DigestAuthClientCredentials createDigestAuthRequest (@Nonnull final EHTTPMethod eMethod,
                                                                @Nonnull @Nonempty final String sDigestURI,
                                                                @Nonnull @Nonempty final String sUserName,
                                                                @Nonnull final String sPassword,
@@ -456,7 +456,7 @@ public final class HTTPDigestAuth
                              sHA2);
     }
 
-    return new DigestAuthCredentials (sUserName,
+    return new DigestAuthClientCredentials (sUserName,
                                       sRealm,
                                       sServerNonce,
                                       sDigestURI,

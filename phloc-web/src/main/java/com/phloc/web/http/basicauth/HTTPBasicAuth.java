@@ -66,7 +66,7 @@ public final class HTTPBasicAuth
    *         HTTP Basic Authentication header value.
    */
   @Nullable
-  public static BasicAuthCredentials getBasicAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
+  public static BasicAuthClientCredentials getBasicAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
@@ -84,7 +84,7 @@ public final class HTTPBasicAuth
    *         Authentication header value.
    */
   @Nullable
-  public static BasicAuthCredentials getBasicAuthCredentials (@Nullable final String sAuthHeader)
+  public static BasicAuthClientCredentials getBasicAuthCredentials (@Nullable final String sAuthHeader)
   {
     final String sRealHeader = StringHelper.trim (sAuthHeader);
     if (StringHelper.hasNoText (sRealHeader))
@@ -115,9 +115,9 @@ public final class HTTPBasicAuth
     // Do we have a username/password separator?
     final int nIndex = sUsernamePassword.indexOf (USERNAME_PASSWORD_SEPARATOR);
     if (nIndex >= 0)
-      return new BasicAuthCredentials (sUsernamePassword.substring (0, nIndex),
+      return new BasicAuthClientCredentials (sUsernamePassword.substring (0, nIndex),
                                        sUsernamePassword.substring (nIndex + 1));
-    return new BasicAuthCredentials (sUsernamePassword);
+    return new BasicAuthClientCredentials (sUsernamePassword);
   }
 
   /**
@@ -134,6 +134,6 @@ public final class HTTPBasicAuth
   @Nonempty
   public static String createBasicAuthResponse (@Nonnull final String sRealm)
   {
-    return new BasicAuthResponseBuilder ().setRealm (sRealm).build ();
+    return new BasicAuthServerBuilder ().setRealm (sRealm).build ();
   }
 }
