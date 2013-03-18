@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.web.http.digestauth;
 
 import java.nio.charset.Charset;
@@ -27,7 +44,7 @@ import com.phloc.web.http.HTTPStringHelper;
 public final class HTTPDigestAuth
 {
   public static final String HEADER_VALUE_PREFIX_DIGEST = "Digest";
-  private static final char USERNAME_PASSWORD_SEPARATOR = ':';
+  private static final char SEPARATOR = ':';
   private static final Charset CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTTPDigestAuth.class);
 
