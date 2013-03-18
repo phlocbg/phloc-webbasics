@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
@@ -66,13 +65,13 @@ public final class HTTPBasicAuth
    *         HTTP Basic Authentication header value.
    */
   @Nullable
-  public static BasicAuthClientCredentials getBasicAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
+  public static BasicAuthClientCredentials getBasicAuthClientCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
 
     final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
-    return getBasicAuthCredentials (sHeaderValue);
+    return getBasicAuthClientCredentials (sHeaderValue);
   }
 
   /**
@@ -84,7 +83,7 @@ public final class HTTPBasicAuth
    *         Authentication header value.
    */
   @Nullable
-  public static BasicAuthClientCredentials getBasicAuthCredentials (@Nullable final String sAuthHeader)
+  public static BasicAuthClientCredentials getBasicAuthClientCredentials (@Nullable final String sAuthHeader)
   {
     final String sRealHeader = StringHelper.trim (sAuthHeader);
     if (StringHelper.hasNoText (sRealHeader))
@@ -116,24 +115,7 @@ public final class HTTPBasicAuth
     final int nIndex = sUsernamePassword.indexOf (USERNAME_PASSWORD_SEPARATOR);
     if (nIndex >= 0)
       return new BasicAuthClientCredentials (sUsernamePassword.substring (0, nIndex),
-                                       sUsernamePassword.substring (nIndex + 1));
+                                             sUsernamePassword.substring (nIndex + 1));
     return new BasicAuthClientCredentials (sUsernamePassword);
-  }
-
-  /**
-   * Create the HTTP response header value to be used with the
-   * {@link CHTTPHeader#WWW_AUTHENTICATE} header.
-   * 
-   * @param sRealm
-   *        The realm to be used. May not be <code>null</code> and should not be
-   *        empty.
-   * @return The HTTP header value to be used. Neither <code>null</code> nor
-   *         empty.
-   */
-  @Nonnull
-  @Nonempty
-  public static String createBasicAuthResponse (@Nonnull final String sRealm)
-  {
-    return new BasicAuthServerBuilder ().setRealm (sRealm).build ();
   }
 }

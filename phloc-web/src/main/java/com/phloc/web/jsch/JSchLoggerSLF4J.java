@@ -28,7 +28,7 @@ import com.phloc.commons.annotations.Nonempty;
 
 /**
  * JSch logger implementation on top of SLF4J.
- *
+ * 
  * @author philip
  */
 @Immutable

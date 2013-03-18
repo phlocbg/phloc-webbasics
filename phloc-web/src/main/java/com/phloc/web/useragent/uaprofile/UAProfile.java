@@ -60,8 +60,7 @@ public final class UAProfile
     if (nUrls > 1)
       s_aLogger.warn ("Found more than one profile URL: " + aProfileUrls);
     m_sProfileUrl = ContainerHelper.getFirstElement (aProfileUrls);
-    m_aProfileDiffData = ContainerHelper.isEmpty (aProfileDiffData)
-                                                                   ? null
+    m_aProfileDiffData = ContainerHelper.isEmpty (aProfileDiffData) ? null
                                                                    : new TreeMap <Integer, UAProfileDiff> (aProfileDiffData);
   }
 

@@ -50,21 +50,22 @@ public final class HTTPStringHelper
   @SuppressWarnings ("unused")
   private static final HTTPStringHelper s_aInstance = new HTTPStringHelper ();
 
-  private static final int UALPHA = 0x0001;
-  private static final int LALPHA = 0x0002;
-  private static final int ALPHA = 0x0004;
-  private static final int DIGIT = 0x0008;
-  private static final int CTL = 0x0010;
-  private static final int LWS = 0x0020;
-  private static final int HEX = 0x0040;
-  private static final int NON_TOKEN = 0x0080;
-  private static final int NON_TEXT = 0x0100;
-  private static final int NON_COMMENT = 0x0200;
-  private static final int NON_QUOTEDTEXT = 0x0400;
-  private static final int RESERVED = 0x0800;
-  private static final int EXTRA = 0x1000;
-  private static final int SAFE = 0x2000;
-  private static final int UNSAFE = 0x4000;
+  private static final int UALPHA = 0x00000001;
+  private static final int LALPHA = 0x00000002;
+  private static final int ALPHA = 0x00000004;
+  private static final int DIGIT = 0x00000008;
+  private static final int CTL = 0x00000010;
+  private static final int LWS = 0x00000020;
+  private static final int HEX = 0x00000040;
+  private static final int LHEX = 0x00000080;
+  private static final int NON_TOKEN = 0x00000100;
+  private static final int NON_TEXT = 0x00000200;
+  private static final int NON_COMMENT = 0x00000400;
+  private static final int NON_QUOTEDTEXT = 0x00000800;
+  private static final int RESERVED = 0x00001000;
+  private static final int EXTRA = 0x00002000;
+  private static final int SAFE = 0x00004000;
+  private static final int UNSAFE = 0x00008000;
 
   private static final char [] MAPPINGS = new char [] {
                                                        // 0x00
@@ -119,16 +120,16 @@ public final class HTTPStringHelper
                                                        SAFE,
                                                        NON_TOKEN | RESERVED,
                                                        // 0x30
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
-                                                       DIGIT | HEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
+                                                       DIGIT | HEX | LHEX,
                                                        NON_TOKEN | RESERVED,
                                                        NON_TOKEN | RESERVED,
                                                        NON_TOKEN | UNSAFE,
@@ -171,12 +172,12 @@ public final class HTTPStringHelper
                                                        SAFE,
                                                        // 0x60
                                                        0,
-                                                       LALPHA | ALPHA | HEX,
-                                                       LALPHA | ALPHA | HEX,
-                                                       LALPHA | ALPHA | HEX,
-                                                       LALPHA | ALPHA | HEX,
-                                                       LALPHA | ALPHA | HEX,
-                                                       LALPHA | ALPHA | HEX,
+                                                       LALPHA | ALPHA | HEX | LHEX,
+                                                       LALPHA | ALPHA | HEX | LHEX,
+                                                       LALPHA | ALPHA | HEX | LHEX,
+                                                       LALPHA | ALPHA | HEX | LHEX,
+                                                       LALPHA | ALPHA | HEX | LHEX,
+                                                       LALPHA | ALPHA | HEX | LHEX,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
                                                        LALPHA | ALPHA,
@@ -283,6 +284,45 @@ public final class HTTPStringHelper
     return isChar (n) && (MAPPINGS[n] & HEX) == HEX;
   }
 
+  public static boolean isHexNotEmpty (@Nullable final char [] aChars)
+  {
+    if (ArrayHelper.isEmpty (aChars))
+      return false;
+    for (final char c : aChars)
+      if (!isHexChar (c))
+        return false;
+    return true;
+  }
+
+  public static boolean isHexNotEmpty (@Nullable final String sStr)
+  {
+    if (StringHelper.hasNoText (sStr))
+      return false;
+    return isHexNotEmpty (sStr.toCharArray ());
+  }
+
+  public static boolean isLowerHexChar (final int n)
+  {
+    return isChar (n) && (MAPPINGS[n] & LHEX) == LHEX;
+  }
+
+  public static boolean isLowerHexNotEmpty (@Nullable final char [] aChars)
+  {
+    if (ArrayHelper.isEmpty (aChars))
+      return false;
+    for (final char c : aChars)
+      if (!isLowerHexChar (c))
+        return false;
+    return true;
+  }
+
+  public static boolean isLowerHexNotEmpty (@Nullable final String sStr)
+  {
+    if (StringHelper.hasNoText (sStr))
+      return false;
+    return isLowerHexNotEmpty (sStr.toCharArray ());
+  }
+
   public static boolean isNonTokenChar (final int n)
   {
     return isChar (n) && (MAPPINGS[n] & NON_TOKEN) == NON_TOKEN;
@@ -369,6 +409,14 @@ public final class HTTPStringHelper
     if (StringHelper.getLength (sStr) < 2)
       return false;
     return isQuotedText (sStr.toCharArray ());
+  }
+
+  @Nullable
+  public static String getQuotedTextString (@Nullable final String sStr)
+  {
+    if (sStr == null)
+      return null;
+    return QUOTEDTEXT_BEGIN + sStr + QUOTEDTEXT_END;
   }
 
   public static boolean isQuotedTextContent (@Nullable final char [] aChars)

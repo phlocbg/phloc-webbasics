@@ -45,7 +45,7 @@ public final class BasicAuthServerBuilder
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);
 
-    m_sRealm = HTTPStringHelper.QUOTEDTEXT_BEGIN + sRealm + HTTPStringHelper.QUOTEDTEXT_END;
+    m_sRealm = sRealm;
     return this;
   }
 
@@ -62,7 +62,7 @@ public final class BasicAuthServerBuilder
       throw new IllegalStateException ("Built Basic auth is not valid!");
     final StringBuilder ret = new StringBuilder (HTTPBasicAuth.HEADER_VALUE_PREFIX_BASIC);
     if (m_sRealm != null)
-      ret.append (" realm=").append (m_sRealm);
+      ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
     return ret.toString ();
   }
 }

@@ -68,7 +68,7 @@ public final class DigestAuthServerBuilder
     if (!HTTPStringHelper.isQuotedTextContent (sRealm))
       throw new IllegalArgumentException ("realm is invalid: " + sRealm);
 
-    m_sRealm = HTTPStringHelper.QUOTEDTEXT_BEGIN + sRealm + HTTPStringHelper.QUOTEDTEXT_END;
+    m_sRealm = sRealm;
     return this;
   }
 
@@ -144,7 +144,7 @@ public final class DigestAuthServerBuilder
     if (!HTTPStringHelper.isQuotedTextContent (sNonce))
       throw new IllegalArgumentException ("nonce is invalid: " + sNonce);
 
-    m_sNonce = HTTPStringHelper.QUOTEDTEXT_BEGIN + sNonce + HTTPStringHelper.QUOTEDTEXT_END;
+    m_sNonce = sNonce;
     return this;
   }
 
@@ -164,7 +164,7 @@ public final class DigestAuthServerBuilder
     if (!HTTPStringHelper.isQuotedTextContent (sOpaque))
       throw new IllegalArgumentException ("opaque is invalid: " + sOpaque);
 
-    m_sOpaque = HTTPStringHelper.QUOTEDTEXT_BEGIN + sOpaque + HTTPStringHelper.QUOTEDTEXT_END;
+    m_sOpaque = sOpaque;
     return this;
   }
 
@@ -263,27 +263,25 @@ public final class DigestAuthServerBuilder
 
     final StringBuilder ret = new StringBuilder ();
     if (m_sRealm != null)
-      ret.append (" realm=").append (m_sRealm);
+      ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
     if (!m_aDomains.isEmpty ())
     {
       if (ret.length () > 0)
         ret.append (',');
       ret.append (" domain=")
-         .append (HTTPStringHelper.QUOTEDTEXT_BEGIN)
-         .append (StringHelper.getImploded (' ', m_aDomains))
-         .append (HTTPStringHelper.QUOTEDTEXT_END);
+         .append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (' ', m_aDomains)));
     }
     if (m_sNonce != null)
     {
       if (ret.length () > 0)
         ret.append (',');
-      ret.append (" nonce=").append (m_sNonce);
+      ret.append (" nonce=").append (HTTPStringHelper.getQuotedTextString (m_sNonce));
     }
     if (m_sOpaque != null)
     {
       if (ret.length () > 0)
         ret.append (',');
-      ret.append (" opaque=").append (m_sOpaque);
+      ret.append (" opaque=").append (HTTPStringHelper.getQuotedTextString (m_sOpaque));
     }
     if (!m_eStale.isUndefined ())
     {
@@ -301,10 +299,7 @@ public final class DigestAuthServerBuilder
     {
       if (ret.length () > 0)
         ret.append (',');
-      ret.append (" qop=")
-         .append (HTTPStringHelper.QUOTEDTEXT_BEGIN)
-         .append (StringHelper.getImploded (',', m_aQOPs))
-         .append (HTTPStringHelper.QUOTEDTEXT_END);
+      ret.append (" qop=").append (HTTPStringHelper.getQuotedTextString (StringHelper.getImploded (',', m_aQOPs)));
     }
 
     // Add main prefix

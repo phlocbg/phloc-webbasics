@@ -228,13 +228,13 @@ public final class HTTPDigestAuth
    *         HTTP Digest Authentication header value.
    */
   @Nullable
-  public static DigestAuthClientCredentials getDigestAuthCredentials (@Nonnull final HttpServletRequest aHttpRequest)
+  public static DigestAuthClientCredentials getDigestAuthClientCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
 
     final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
-    return getDigestAuthCredentials (sHeaderValue);
+    return getDigestAuthClientCredentials (sHeaderValue);
   }
 
   /**
@@ -247,7 +247,7 @@ public final class HTTPDigestAuth
    *         Authentication header value.
    */
   @Nullable
-  public static DigestAuthClientCredentials getDigestAuthCredentials (@Nullable final String sAuthHeader)
+  public static DigestAuthClientCredentials getDigestAuthClientCredentials (@Nullable final String sAuthHeader)
   {
     final Map <String, String> aParams = getDigestAuthParams (sAuthHeader);
     if (aParams == null)
@@ -292,22 +292,28 @@ public final class HTTPDigestAuth
       s_aLogger.warn ("Digest Auth contains unhandled parameters: " + aParams.toString ());
 
     return new DigestAuthClientCredentials (sUserName,
-                                      sRealm,
-                                      sNonce,
-                                      sDigestURI,
-                                      sResponse,
-                                      sAlgorithm,
-                                      sCNonce,
-                                      sOpaque,
-                                      sMessageQOP,
-                                      sNonceCount);
+                                            sRealm,
+                                            sNonce,
+                                            sDigestURI,
+                                            sResponse,
+                                            sAlgorithm,
+                                            sCNonce,
+                                            sOpaque,
+                                            sMessageQOP,
+                                            sNonceCount);
   }
 
+  @Nullable
+  public static String getNonceCountString (@CheckForSigned final int nNonceCount)
+  {
+    return nNonceCount <= 0 ? null : StringHelper.getLeadingZero (StringHelper.getHexString (nNonceCount), 8);
+  }
+
+  @Nonnull
   private static String _md5 (@Nonnull final String s)
   {
     final byte [] aHA1 = MessageDigestGeneratorHelper.getDigest (s, CHARSET, EMessageDigestAlgorithm.MD5);
     return MessageDigestGeneratorHelper.getHexValueFromDigest (aHA1);
-
   }
 
   /**
@@ -376,17 +382,17 @@ public final class HTTPDigestAuth
    * @return The created DigestAuthCredentials
    */
   @Nonnull
-  public static DigestAuthClientCredentials createDigestAuthRequest (@Nonnull final EHTTPMethod eMethod,
-                                                               @Nonnull @Nonempty final String sDigestURI,
-                                                               @Nonnull @Nonempty final String sUserName,
-                                                               @Nonnull final String sPassword,
-                                                               @Nonnull @Nonempty final String sRealm,
-                                                               @Nonnull @Nonempty final String sServerNonce,
-                                                               @Nullable final String sAlgorithm,
-                                                               @Nullable final String sClientNonce,
-                                                               @Nullable final String sOpaque,
-                                                               @Nullable final String sMessageQOP,
-                                                               @CheckForSigned final int nNonceCount)
+  public static DigestAuthClientCredentials createDigestAuthClientCredentials (@Nonnull final EHTTPMethod eMethod,
+                                                                               @Nonnull @Nonempty final String sDigestURI,
+                                                                               @Nonnull @Nonempty final String sUserName,
+                                                                               @Nonnull final String sPassword,
+                                                                               @Nonnull @Nonempty final String sRealm,
+                                                                               @Nonnull @Nonempty final String sServerNonce,
+                                                                               @Nullable final String sAlgorithm,
+                                                                               @Nullable final String sClientNonce,
+                                                                               @Nullable final String sOpaque,
+                                                                               @Nullable final String sMessageQOP,
+                                                                               @CheckForSigned final int nNonceCount)
   {
     if (eMethod == null)
       throw new NullPointerException ("method");
@@ -417,9 +423,7 @@ public final class HTTPDigestAuth
       throw new IllegalArgumentException ("Currently only '" + QOP_AUTH + "' QOP is supported!");
 
     // Nonce must always by 8 chars long
-    final String sNonceCount = nNonceCount <= 0 ? null
-                                               : StringHelper.getLeadingZero (StringHelper.getHexString (nNonceCount),
-                                                                              8);
+    final String sNonceCount = getNonceCountString (nNonceCount);
 
     // Create HA1
     String sHA1 = _md5 (sUserName + SEPARATOR + sRealm + SEPARATOR + sPassword);
@@ -457,14 +461,14 @@ public final class HTTPDigestAuth
     }
 
     return new DigestAuthClientCredentials (sUserName,
-                                      sRealm,
-                                      sServerNonce,
-                                      sDigestURI,
-                                      sRequestDigest,
-                                      sAlgorithm,
-                                      sClientNonce,
-                                      sOpaque,
-                                      sMessageQOP,
-                                      sNonceCount);
+                                            sRealm,
+                                            sServerNonce,
+                                            sDigestURI,
+                                            sRequestDigest,
+                                            sAlgorithm,
+                                            sClientNonce,
+                                            sOpaque,
+                                            sMessageQOP,
+                                            sNonceCount);
   }
 }

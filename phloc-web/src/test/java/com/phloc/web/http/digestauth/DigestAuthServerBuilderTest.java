@@ -30,7 +30,7 @@ import com.phloc.commons.url.SimpleURL;
  * 
  * @author philip
  */
-public final class DigestAuthResponseBuilderTest
+public final class DigestAuthServerBuilderTest
 {
   @Test
   public void testBasic ()

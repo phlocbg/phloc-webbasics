@@ -27,7 +27,7 @@ import org.junit.Test;
  * 
  * @author philip
  */
-public final class BasicAuthResponseBuilderTest
+public final class BasicAuthServerBuilderTest
 {
   @Test
   public void testBasic ()

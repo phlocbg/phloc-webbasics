@@ -75,7 +75,7 @@ public final class BasicAuth
   @Nullable
   public static String [] getBasicAuthValues (@Nullable final String sAuthHeader)
   {
-    final BasicAuthClientCredentials aCredentials = HTTPBasicAuth.getBasicAuthCredentials (sAuthHeader);
+    final BasicAuthClientCredentials aCredentials = HTTPBasicAuth.getBasicAuthClientCredentials (sAuthHeader);
     if (aCredentials == null)
       return null;
     if (!aCredentials.hasPassword ())

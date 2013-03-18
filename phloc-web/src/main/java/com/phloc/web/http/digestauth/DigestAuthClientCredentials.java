@@ -28,6 +28,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.web.http.HTTPStringHelper;
 
 /**
  * Credentials for HTTP digest authentication
@@ -49,15 +50,15 @@ public final class DigestAuthClientCredentials
   private final int m_nNonceCount;
 
   public DigestAuthClientCredentials (@Nonnull @Nonempty final String sUserName,
-                                @Nonnull @Nonempty final String sRealm,
-                                @Nonnull @Nonempty final String sServerNonce,
-                                @Nonnull @Nonempty final String sDigestURI,
-                                @Nullable final String sResponse,
-                                @Nullable final String sAlgorithm,
-                                @Nullable final String sClientNonce,
-                                @Nullable final String sOpaque,
-                                @Nullable final String sMessageQOP,
-                                @Nullable final String sNonceCount)
+                                      @Nonnull @Nonempty final String sRealm,
+                                      @Nonnull @Nonempty final String sServerNonce,
+                                      @Nonnull @Nonempty final String sDigestURI,
+                                      @Nonnull @Nonempty final String sResponse,
+                                      @Nullable final String sAlgorithm,
+                                      @Nullable final String sClientNonce,
+                                      @Nullable final String sOpaque,
+                                      @Nullable final String sMessageQOP,
+                                      @Nullable final String sNonceCount)
   {
     if (StringHelper.hasNoText (sUserName))
       throw new IllegalArgumentException ("UserName");
@@ -67,8 +68,12 @@ public final class DigestAuthClientCredentials
       throw new IllegalArgumentException ("Nonce");
     if (StringHelper.hasNoText (sUserName))
       throw new IllegalArgumentException ("DigestURI");
-    if (StringHelper.hasText (sResponse) && sResponse.length () != 32)
-      throw new IllegalArgumentException ("The 'response' value must be a 32-bit hex string!");
+    if (StringHelper.hasNoText (sResponse))
+      throw new IllegalArgumentException ("Response");
+    if (sResponse.length () != 32)
+      throw new IllegalArgumentException ("The 'response' value must be a 32-byte hex string!");
+    if (!HTTPStringHelper.isLowerHexNotEmpty (sResponse))
+      throw new IllegalArgumentException ("The 'response' value must consist of all lowercase hex chars!");
     if (StringHelper.hasText (sMessageQOP) && StringHelper.hasNoText (sClientNonce))
       throw new IllegalArgumentException ("If 'qop' is present 'cnonce' must also be present!");
     if (StringHelper.hasNoText (sMessageQOP) && StringHelper.hasText (sClientNonce))
@@ -77,6 +82,10 @@ public final class DigestAuthClientCredentials
       throw new IllegalArgumentException ("If 'qop' is present 'nc' must also be present!");
     if (StringHelper.hasNoText (sMessageQOP) && StringHelper.hasText (sNonceCount))
       throw new IllegalArgumentException ("If 'qop' is not present 'nc' must also not be present!");
+    if (sNonceCount != null && sNonceCount.length () != 8)
+      throw new IllegalArgumentException ("The 'nonceCount' value must be a 8-byte hex string!");
+    if (sNonceCount != null && !HTTPStringHelper.isHexNotEmpty (sNonceCount))
+      throw new IllegalArgumentException ("The 'nonceCount' value must consist only of hex chars!");
     m_sUserName = sUserName;
     m_sRealm = sRealm;
     m_sServerNonce = sServerNonce;
@@ -167,6 +176,34 @@ public final class DigestAuthClientCredentials
     return m_nNonceCount;
   }
 
+  @Nonnull
+  @Nonempty
+  public String getRequestValue ()
+  {
+    final StringBuilder aSB = new StringBuilder (HTTPDigestAuth.HEADER_VALUE_PREFIX_DIGEST);
+    aSB.append (" username=")
+       .append (HTTPStringHelper.getQuotedTextString (m_sUserName))
+       .append (", realm=")
+       .append (HTTPStringHelper.getQuotedTextString (m_sRealm))
+       .append (", nonce=")
+       .append (HTTPStringHelper.getQuotedTextString (m_sServerNonce))
+       .append (", uri=")
+       .append (HTTPStringHelper.getQuotedTextString (m_sDigestURI))
+       .append (", response=")
+       .append (HTTPStringHelper.getQuotedTextString (m_sResponse));
+    if (m_sAlgorithm != null)
+      aSB.append (", algorithm=").append (m_sAlgorithm);
+    if (m_sClientNonce != null)
+      aSB.append (", cnonce=").append (HTTPStringHelper.getQuotedTextString (m_sClientNonce));
+    if (m_sOpaque != null)
+      aSB.append (", opaque=").append (HTTPStringHelper.getQuotedTextString (m_sOpaque));
+    if (m_sMessageQOP != null)
+      aSB.append (", qop=").append (m_sMessageQOP);
+    if (m_nNonceCount > 0)
+      aSB.append (", nc=").append (HTTPDigestAuth.getNonceCountString (m_nNonceCount));
+    return aSB.toString ();
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -179,7 +216,7 @@ public final class DigestAuthClientCredentials
            m_sRealm.equals (rhs.m_sRealm) &&
            m_sServerNonce.equals (rhs.m_sServerNonce) &&
            m_sDigestURI.equals (rhs.m_sDigestURI) &&
-           EqualsUtils.equals (m_sResponse, rhs.m_sResponse) &&
+           m_sResponse.equals (rhs.m_sResponse) &&
            EqualsUtils.equals (m_sAlgorithm, rhs.m_sAlgorithm) &&
            EqualsUtils.equals (m_sClientNonce, rhs.m_sClientNonce) &&
            EqualsUtils.equals (m_sOpaque, rhs.m_sOpaque) &&
@@ -210,7 +247,7 @@ public final class DigestAuthClientCredentials
                                        .append ("realm", m_sRealm)
                                        .append ("serverNonce", m_sServerNonce)
                                        .append ("digestUri", m_sDigestURI)
-                                       .appendIfNotNull ("response", m_sResponse)
+                                       .append ("response", m_sResponse)
                                        .appendIfNotNull ("algorithm", m_sAlgorithm)
                                        .appendIfNotNull ("clientNonce", m_sClientNonce)
                                        .appendIfNotNull ("opaque", m_sOpaque)
