@@ -20,13 +20,9 @@ package com.phloc.webctrls.bootstrap.derived;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webctrls.custom.EDefaultIcon;
 
 /**
  * Bootstrap block help.
@@ -53,28 +49,21 @@ public class BootstrapToolbarAdvanced extends BootstrapToolbar
   @Nonnull
   public BootstrapToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
   {
-    addButton (EWebBasicsText.MSG_BUTTON_BACK.getDisplayText (aDisplayLocale), m_aSelfHref, EDefaultIcon.BACK);
+    addButtonBack (aDisplayLocale, m_aSelfHref);
     return this;
   }
 
   @Nonnull
   public BootstrapToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
   {
-    addButton (EWebBasicsText.MSG_BUTTON_CANCEL.getDisplayText (aDisplayLocale), m_aSelfHref, EDefaultIcon.CANCEL);
+    addButtonCancel (aDisplayLocale, m_aSelfHref);
     return this;
   }
 
   @Nonnull
   public BootstrapToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
   {
-    addButton (EWebBasicsText.MSG_BUTTON_NO.getDisplayText (aDisplayLocale), m_aSelfHref, EDefaultIcon.NO);
-    return this;
-  }
-
-  @Nonnull
-  public BootstrapToolbarAdvanced addButtonNew (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
-  {
-    addButton (sCaption, aURL, EDefaultIcon.NEW);
+    addButtonNo (aDisplayLocale, m_aSelfHref);
     return this;
   }
 }

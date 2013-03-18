@@ -100,9 +100,37 @@ public class BootstrapToolbar extends AbstractHCDiv <BootstrapToolbar>
   }
 
   @Nonnull
+  public BootstrapToolbar addButtonBack (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
+  {
+    addButton (EWebBasicsText.MSG_BUTTON_BACK.getDisplayText (aDisplayLocale), aURL, EDefaultIcon.BACK);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapToolbar addButtonCancel (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
+  {
+    addButton (EWebBasicsText.MSG_BUTTON_CANCEL.getDisplayText (aDisplayLocale), aURL, EDefaultIcon.CANCEL);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapToolbar addButtonNo (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
+  {
+    addButton (EWebBasicsText.MSG_BUTTON_NO.getDisplayText (aDisplayLocale), aURL, EDefaultIcon.NO);
+    return this;
+  }
+
+  @Nonnull
   public BootstrapToolbar addButtonEdit (@Nonnull final Locale aDisplayLocale, @Nonnull final ISimpleURL aURL)
   {
     return addButton (EWebBasicsText.MSG_BUTTON_EDIT.getDisplayText (aDisplayLocale), aURL, EDefaultIcon.EDIT);
+  }
+
+  @Nonnull
+  public BootstrapToolbar addButtonNew (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
+  {
+    addButton (sCaption, aURL, EDefaultIcon.NEW);
+    return this;
   }
 
   @Nonnull

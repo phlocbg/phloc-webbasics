@@ -30,6 +30,8 @@ import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.MustBeLocked;
+import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.IReadableResource;
@@ -304,6 +306,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    * This method must be called everytime something changed in the DAO. This
    * method must be called within a write-lock as it is not locked!
    */
+  @MustBeLocked (ELockType.WRITE)
   protected final void markAsChanged ()
   {
     // Just remember that something changed
