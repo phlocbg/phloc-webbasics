@@ -20,10 +20,11 @@ FormHelperClass.prototype =
 {
   getAllFormValues : function(formid,fieldPrefix) {
     var vals={};
-    $('#'+formid+' :input').each(function(){
-      // Prefix for identification in AJAX handler
-      vals[fieldPrefix+this.name]=$(this).val();
-    });
+    var elems=$('#'+formid).find('*');
+    // Prefix each array item for identification in AJAX handler
+    elems.filter ('input[type="checkbox"]:checked, input[type="radio"]:checked, input[type="text"], input[type="hidden"], select').each(
+      function(){ alert(this.name+"="+$(this).val()); vals[fieldPrefix+this.name]=$(this).val(); }
+    );
     return vals;
   },
 
