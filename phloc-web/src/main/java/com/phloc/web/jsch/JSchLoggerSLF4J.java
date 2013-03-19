@@ -23,8 +23,9 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * JSch logger implementation on top of SLF4J.
@@ -46,6 +47,12 @@ public final class JSchLoggerSLF4J implements com.jcraft.jsch.Logger
     if (StringHelper.hasNoText (sLoggerName))
       throw new IllegalArgumentException ("loggerName");
     m_aLogger = LoggerFactory.getLogger (sLoggerName);
+  }
+
+  @Nonnull
+  public Logger getLogger ()
+  {
+    return m_aLogger;
   }
 
   public boolean isEnabled (final int nLevel)
@@ -71,5 +78,11 @@ public final class JSchLoggerSLF4J implements com.jcraft.jsch.Logger
           m_aLogger.info (sMessage);
         else
           m_aLogger.debug (sMessage);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("logger", m_aLogger).toString ();
   }
 }

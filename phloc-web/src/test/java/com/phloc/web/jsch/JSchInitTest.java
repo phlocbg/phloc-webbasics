@@ -17,35 +17,19 @@
  */
 package com.phloc.web.jsch;
 
-import javax.annotation.concurrent.Immutable;
-
-import com.jcraft.jsch.JSch;
-import com.phloc.commons.annotations.PresentForCodeCoverage;
+import org.junit.Test;
 
 /**
- * Initialize JSch with some suggested settings.
+ * Test class for class {@link JSchInit}.
  * 
  * @author philip
  */
-@Immutable
-public final class JSchInit
+public final class JSchInitTest
 {
-  @PresentForCodeCoverage
-  @SuppressWarnings ("unused")
-  private static final JSchInit s_aInstance = new JSchInit ();
-
-  private JSchInit ()
-  {}
-
-  public static void init ()
+  @Test
+  public void testBasic ()
   {
-    // Set static logger
-    JSch.setLogger (new JSchLoggerSLF4J (JSch.class));
-  }
-
-  public static void shutdown ()
-  {
-    // Set null logger
-    JSch.setLogger (null);
+    JSchInit.init ();
+    JSchInit.shutdown ();
   }
 }
