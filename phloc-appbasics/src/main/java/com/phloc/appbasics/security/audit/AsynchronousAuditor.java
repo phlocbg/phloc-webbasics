@@ -101,37 +101,38 @@ public class AsynchronousAuditor extends AbstractAuditor
   @Nonnull
   public EChange stop ()
   {
+    // Check if the thread pool is already shut down
+    if (s_aSenderThreadPool.isShutdown ())
+      return EChange.UNCHANGED;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
-      // Check if the thread pool is already shut down
-      if (s_aSenderThreadPool.isShutdown ())
-        return EChange.UNCHANGED;
+      // don't take any more actions
+      s_aSenderThreadPool.shutdown ();
 
-      try
-      {
-        // don't take any more actions
-        s_aSenderThreadPool.shutdown ();
+      // stop all specific queues
+      m_aCollector.stopQueuingNewObjects ();
 
-        // stop all specific queues
-        m_aCollector.stopQueuingNewObjects ();
-
-        s_aLogger.info ("Stopping auditor queues with " + m_aCollector.getQueueLength () + " items");
-
-        while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
-        {
-          // wait until we're done
-        }
-      }
-      catch (final InterruptedException ex)
-      {
-        s_aLogger.error ("Error stopping auditor queue", ex);
-      }
-      return EChange.CHANGED;
+      s_aLogger.info ("Stopping auditor queues with " + m_aCollector.getQueueLength () + " items");
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+
+    // Don't wait in a writeLock!
+    try
+    {
+      while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
+      {
+        // wait until we're done
+      }
+    }
+    catch (final InterruptedException ex)
+    {
+      s_aLogger.error ("Error stopping auditor queue", ex);
+    }
+    return EChange.CHANGED;
   }
 }
