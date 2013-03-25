@@ -1,10 +1,13 @@
 package com.phloc.webscopes.util;
 
+import java.util.concurrent.Callable;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.callback.INonThrowingRunnable;
+import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.mock.MockHttpServletResponse;
@@ -12,21 +15,23 @@ import com.phloc.web.mock.OfflineHttpServletRequest;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
- * Abstract implementation of {@link Runnable} that handles WebScopes correctly.
+ * Abstract implementation of {@link Callable} that handles WebScopes correctly.
  * 
  * @author philip
+ * @param <DATATYPE>
+ *        The return type of the function.
  */
-public abstract class AbstractWebScopeRunnable implements INonThrowingRunnable
+public abstract class AbstractWebScopeAwareCallable <DATATYPE> implements INonThrowingCallable <DATATYPE>
 {
   private final ServletContext m_aSC;
   private final String m_sApplicationID;
 
-  public AbstractWebScopeRunnable ()
+  public AbstractWebScopeAwareCallable ()
   {
     this (WebScopeManager.getGlobalScope ().getServletContext (), WebScopeManager.getApplicationScope ().getID ());
   }
 
-  public AbstractWebScopeRunnable (@Nonnull final ServletContext aSC, @Nonnull @Nonempty final String sApplicationID)
+  public AbstractWebScopeAwareCallable (@Nonnull final ServletContext aSC, @Nonnull @Nonempty final String sApplicationID)
   {
     if (aSC == null)
       throw new NullPointerException ("servletContext");
@@ -38,18 +43,23 @@ public abstract class AbstractWebScopeRunnable implements INonThrowingRunnable
   }
 
   /**
-   * Implement your code in here.
+   * Implement your code in here
+   * 
+   * @return The return value of the {@link #call()} method.
    */
-  protected abstract void scopedRun ();
+  @Nullable
+  protected abstract DATATYPE scopedRun ();
 
-  public final void run ()
+  @Nullable
+  public final DATATYPE call ()
   {
     WebScopeManager.onRequestBegin (m_sApplicationID,
                                     new OfflineHttpServletRequest (m_aSC, false),
                                     new MockHttpServletResponse ());
     try
     {
-      scopedRun ();
+      final DATATYPE ret = scopedRun ();
+      return ret;
     }
     finally
     {
