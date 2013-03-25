@@ -101,13 +101,13 @@ public class AsynchronousAuditor extends AbstractAuditor
   @Nonnull
   public EChange stop ()
   {
-    // Check if the thread pool is already shut down
-    if (s_aSenderThreadPool.isShutdown ())
-      return EChange.UNCHANGED;
-
     m_aRWLock.writeLock ().lock ();
     try
     {
+      // Check if the thread pool is already shut down
+      if (s_aSenderThreadPool.isShutdown ())
+        return EChange.UNCHANGED;
+
       // don't take any more actions
       s_aSenderThreadPool.shutdown ();
 

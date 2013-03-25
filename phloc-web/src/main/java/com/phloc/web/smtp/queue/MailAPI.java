@@ -310,35 +310,36 @@ public final class MailAPI
       if (s_aSenderThreadPool.isShutdown ())
         return EChange.UNCHANGED;
 
-      try
-      {
-        // don't take any more actions
-        s_aSenderThreadPool.shutdown ();
+      // don't take any more actions
+      s_aSenderThreadPool.shutdown ();
 
-        // stop all specific queues
-        for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
-          aQueue.stopQueuingNewObjects ();
+      // stop all specific queues
+      for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
+        aQueue.stopQueuingNewObjects ();
 
-        s_aLogger.info ("Stopping central mail queues: " +
-                        s_aQueueCache.size () +
-                        " queues with " +
-                        _getTotalQueueLength () +
-                        " mails");
-
-        while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
-        {
-          // wait until we're done
-        }
-      }
-      catch (final InterruptedException ex)
-      {
-        s_aLogger.error ("Error stopping mail queue", ex);
-      }
-      return EChange.CHANGED;
+      s_aLogger.info ("Stopping central mail queues: " +
+                      s_aQueueCache.size () +
+                      " queues with " +
+                      _getTotalQueueLength () +
+                      " mails");
     }
     finally
     {
       s_aRWLock.writeLock ().unlock ();
     }
+
+    // Don't wait in a writeLock!
+    try
+    {
+      while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
+      {
+        // wait until we're done
+      }
+    }
+    catch (final InterruptedException ex)
+    {
+      s_aLogger.error ("Error stopping mail queue", ex);
+    }
+    return EChange.CHANGED;
   }
 }
