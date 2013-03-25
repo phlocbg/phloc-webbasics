@@ -2,6 +2,7 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>3/25/13</td><td>add</td><td>api</td><td></td><td>Added new classes AbstractWebScopeAwareCallable and AbstractWebScopeAwareRunnable</td></tr>
 <tr><td>3/13/13</td><td>change</td><td>api</td><td></td><td>Deprecated WebScopeTestInit in favor of WebScopeAwareTestSetup so that the name is comparable to ScopeAwareTestSetup from [http://code.google.com/p/phloc-scopes phloc-scopes]</td></tr>
 <tr><td>3/13/13</td><td>add</td><td>api</td><td></td><td>Extended API of WebScopeTestInit so that a usage with something other than JUnit is easier</td></tr>
 <tr><td>3/13/13</td><td>remove</td><td>api</td><td></td><td>Removed deprecated class WebScopeAwareTestSetup</td></tr>
