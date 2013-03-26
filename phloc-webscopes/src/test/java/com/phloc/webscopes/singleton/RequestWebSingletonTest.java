@@ -38,13 +38,13 @@ public final class RequestWebSingletonTest extends AbstractWebScopeAwareTestCase
   @Test
   public void testSerialize () throws Exception
   {
-    assertTrue (RequestWebSingleton.getAllSingletons ().isEmpty ());
-    assertFalse (RequestWebSingleton.isSingletonInstantiated (MockRequestWebSingleton.class));
-    assertNull (RequestWebSingleton.getSingletonIfInstantiated (MockRequestWebSingleton.class));
+    assertTrue (RequestWebSingleton.getAllRequestSingletons ().isEmpty ());
+    assertFalse (RequestWebSingleton.isRequestSingletonInstantiated (MockRequestWebSingleton.class));
+    assertNull (RequestWebSingleton.getRequestSingletonIfInstantiated (MockRequestWebSingleton.class));
 
     final MockRequestWebSingleton a = MockRequestWebSingleton.getInstance ();
-    assertTrue (RequestWebSingleton.isSingletonInstantiated (MockRequestWebSingleton.class));
-    assertSame (a, RequestWebSingleton.getSingletonIfInstantiated (MockRequestWebSingleton.class));
+    assertTrue (RequestWebSingleton.isRequestSingletonInstantiated (MockRequestWebSingleton.class));
+    assertSame (a, RequestWebSingleton.getRequestSingletonIfInstantiated (MockRequestWebSingleton.class));
     assertEquals (0, a.get ());
     a.inc ();
     assertEquals (1, a.get ());

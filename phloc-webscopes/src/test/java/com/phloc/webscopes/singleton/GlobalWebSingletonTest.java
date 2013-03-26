@@ -54,13 +54,13 @@ public final class GlobalWebSingletonTest extends AbstractWebScopeAwareTestCase
   @Test
   public void testAll ()
   {
-    assertTrue (GlobalWebSingleton.getAllSingletons ().isEmpty ());
-    assertFalse (GlobalWebSingleton.isSingletonInstantiated (MockGlobalWebSingleton.class));
-    assertNull (GlobalWebSingleton.getSingletonIfInstantiated (MockGlobalWebSingleton.class));
+    assertTrue (GlobalWebSingleton.getAllGlobalSingletons ().isEmpty ());
+    assertFalse (GlobalWebSingleton.isGlobalSingletonInstantiated (MockGlobalWebSingleton.class));
+    assertNull (GlobalWebSingleton.getGlobalSingletonIfInstantiated (MockGlobalWebSingleton.class));
 
     final MockGlobalWebSingleton a = MockGlobalWebSingleton.getInstance ();
-    assertTrue (GlobalWebSingleton.isSingletonInstantiated (MockGlobalWebSingleton.class));
-    assertSame (a, GlobalWebSingleton.getSingletonIfInstantiated (MockGlobalWebSingleton.class));
+    assertTrue (GlobalWebSingleton.isGlobalSingletonInstantiated (MockGlobalWebSingleton.class));
+    assertSame (a, GlobalWebSingleton.getGlobalSingletonIfInstantiated (MockGlobalWebSingleton.class));
     assertNotNull (a);
 
     final MockGlobalWebSingleton b = MockGlobalWebSingleton.getInstance ();

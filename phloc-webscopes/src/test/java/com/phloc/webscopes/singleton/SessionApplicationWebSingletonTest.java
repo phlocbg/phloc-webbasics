@@ -39,13 +39,13 @@ public final class SessionApplicationWebSingletonTest extends AbstractWebScopeAw
   @Test
   public void testSerialize () throws Exception
   {
-    assertTrue (SessionApplicationWebSingleton.getAllSingletons ().isEmpty ());
-    assertFalse (SessionApplicationWebSingleton.isSingletonInstantiated (MockSessionApplicationWebSingleton.class));
-    assertNull (SessionApplicationWebSingleton.getSingletonIfInstantiated (MockSessionApplicationWebSingleton.class));
+    assertTrue (SessionApplicationWebSingleton.getAllSessionApplicationSingletons ().isEmpty ());
+    assertFalse (SessionApplicationWebSingleton.isSessionApplicationSingletonInstantiated (MockSessionApplicationWebSingleton.class));
+    assertNull (SessionApplicationWebSingleton.getSessionApplicationSingletonIfInstantiated (MockSessionApplicationWebSingleton.class));
 
     final MockSessionApplicationWebSingleton a = MockSessionApplicationWebSingleton.getInstance ();
-    assertTrue (SessionApplicationWebSingleton.isSingletonInstantiated (MockSessionApplicationWebSingleton.class));
-    assertSame (a, SessionApplicationWebSingleton.getSingletonIfInstantiated (MockSessionApplicationWebSingleton.class));
+    assertTrue (SessionApplicationWebSingleton.isSessionApplicationSingletonInstantiated (MockSessionApplicationWebSingleton.class));
+    assertSame (a, SessionApplicationWebSingleton.getSessionApplicationSingletonIfInstantiated (MockSessionApplicationWebSingleton.class));
     assertEquals (0, a.get ());
     a.inc ();
     assertEquals (1, a.get ());
