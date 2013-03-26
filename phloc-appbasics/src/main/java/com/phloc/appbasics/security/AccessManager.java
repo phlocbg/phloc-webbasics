@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.impl.DAOException;
+import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.role.RoleManager;
@@ -122,12 +123,14 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                             bDisabled);
   }
 
-  /*
-   * TODO Ensure to have a check, that no logged in user is deleted!
-   */
   @Nonnull
   public EChange deleteUser (@Nullable final String sUserID)
   {
+    if (LoggedInUserManager.getInstance ().isUserLoggedIn (sUserID))
+    {
+      s_aLogger.warn ("Cannot delete user " + sUserID + " as the user is currently logged in!");
+      return EChange.UNCHANGED;
+    }
     return m_aUserMgr.deleteUser (sUserID);
   }
 
