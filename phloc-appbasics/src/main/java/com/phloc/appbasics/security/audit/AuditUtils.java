@@ -55,7 +55,7 @@ public final class AuditUtils
   {}
 
   @Nonnull
-  private static IAuditor _getAuditor ()
+  public static IAuditor getAuditor ()
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -102,12 +102,12 @@ public final class AuditUtils
 
   public static void onAuditCreateSuccess (@Nonnull final ObjectType aObjectType)
   {
-    _getAuditor ().onCreateSuccess (aObjectType);
+    getAuditor ().onCreateSuccess (aObjectType);
   }
 
   public static void onAuditCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    _getAuditor ().onCreateSuccess (aObjectType, aArgs);
+    getAuditor ().onCreateSuccess (aObjectType, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -120,7 +120,7 @@ public final class AuditUtils
 
   public static void onAuditCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    _getAuditor ().onCreateFailure (aObjectType, aArgs);
+    getAuditor ().onCreateFailure (aObjectType, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -135,7 +135,7 @@ public final class AuditUtils
                                            @Nonnull final String sWhat,
                                            @Nullable final String... aArgs)
   {
-    _getAuditor ().onModifySuccess (aObjectType, sWhat, aArgs);
+    getAuditor ().onModifySuccess (aObjectType, sWhat, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -150,7 +150,7 @@ public final class AuditUtils
                                            @Nonnull final String sWhat,
                                            @Nullable final String... aArgs)
   {
-    _getAuditor ().onModifyFailure (aObjectType, sWhat, aArgs);
+    getAuditor ().onModifyFailure (aObjectType, sWhat, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -163,7 +163,7 @@ public final class AuditUtils
 
   public static void onAuditDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    _getAuditor ().onDeleteSuccess (aObjectType, aArgs);
+    getAuditor ().onDeleteSuccess (aObjectType, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -176,7 +176,7 @@ public final class AuditUtils
 
   public static void onAuditDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    _getAuditor ().onDeleteFailure (aObjectType, aArgs);
+    getAuditor ().onDeleteFailure (aObjectType, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -189,7 +189,7 @@ public final class AuditUtils
 
   public static void onAuditUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    _getAuditor ().onUndeleteSuccess (aObjectType, aArgs);
+    getAuditor ().onUndeleteSuccess (aObjectType, aArgs);
   }
 
   @SuppressWarnings ("unused")
@@ -202,30 +202,30 @@ public final class AuditUtils
 
   public static void onAuditUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    _getAuditor ().onUndeleteFailure (aObjectType, aArgs);
+    getAuditor ().onUndeleteFailure (aObjectType, aArgs);
   }
 
   public static void onAuditExecuteSuccess (@Nonnull final String sWhat, @Nullable final String... aArgs)
   {
-    _getAuditor ().onExecuteSuccess (sWhat, aArgs);
+    getAuditor ().onExecuteSuccess (sWhat, aArgs);
   }
 
   public static void onAuditExecuteFailure (@Nonnull final String sWhat, @Nullable final String... aArgs)
   {
-    _getAuditor ().onExecuteFailure (sWhat, aArgs);
+    getAuditor ().onExecuteFailure (sWhat, aArgs);
   }
 
   public static void onAuditExecuteSuccess (@Nonnull final ObjectType aObjectType,
                                             @Nonnull final String sWhat,
                                             @Nullable final String... aArgs)
   {
-    _getAuditor ().onExecuteSuccess (aObjectType, sWhat, aArgs);
+    getAuditor ().onExecuteSuccess (aObjectType, sWhat, aArgs);
   }
 
   public static void onAuditExecuteFailure (@Nonnull final ObjectType aObjectType,
                                             @Nonnull final String sWhat,
                                             @Nullable final String... aArgs)
   {
-    _getAuditor ().onExecuteFailure (aObjectType, sWhat, aArgs);
+    getAuditor ().onExecuteFailure (aObjectType, sWhat, aArgs);
   }
 }

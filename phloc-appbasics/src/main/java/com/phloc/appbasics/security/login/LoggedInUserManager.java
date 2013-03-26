@@ -74,6 +74,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       return getSessionSingleton (SessionUserHolder.class);
     }
 
+    @Nullable
+    public static SessionUserHolder getInstanceIfInstantiated ()
+    {
+      return getSingletonIfInstantiated (SessionUserHolder.class);
+    }
+
     @Nonnull
     public EChange setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
     {
@@ -341,7 +347,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nullable
   public String getCurrentUserID ()
   {
-    return SessionUserHolder.getInstance ().m_sUserID;
+    final SessionUserHolder aSUH = SessionUserHolder.getInstanceIfInstantiated ();
+    return aSUH == null ? null : aSUH.m_sUserID;
   }
 
   /**
