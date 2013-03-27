@@ -29,25 +29,6 @@ public final class CDemoAppMenuConfig
   public static final String MENU_ADMIN_MONITORING = "admin_monitoring";
   public static final String MENU_ADMIN_MONITORING_AUDIT = "admin_audit";
 
-  // Person management
-  public static final String MENU_BASEPERSONMGMT = "person_basegmt";
-  public static final String MENU_PERSONMGMT = "person_personmgmt";
-  public static final String MENU_COMPANYMGMT = "person_companymgmt";
-
-  public static final String MENU_CONFIG = "config";
-  public static final String MENU_CONFIG_MASTERDATA = "config_masterdata";
-  public static final String MENU_CONFIG_PERSONCATEGORYMGMT = "config_categorymgmt";
-  public static final String MENU_CONFIG_BANKACCOUNTMGMT = "config_bankaccountmgmt";
-
-  public static final String MENU_SHOP = "shop";
-  public static final String MENU_SHOP_CONFIG = "shop_config";
-  public static final String MENU_SHOP_ORDERWORKFLOWMGMT = "shop_orderworkflowmgmt";
-  public static final String MENU_SHOP_ARTICLECATALOGUEMGMT = "shop_articlecataloguemgmt";
-  public static final String MENU_SHOP_ARTICLEMGMT = "shop_articlemgmt";
-  public static final String MENU_SHOP_ARTICLE_EXPORT = "shop_article_export";
-  public static final String MENU_SHOP_ARTICLE_IMPORT = "shop_article_import";
-  public static final String MENU_SHOP_ORDERMGMT = "shop_ordermgmt";
-
   public static final String MENU_SAVED_STATES = "saved_states";
 
   private CDemoAppMenuConfig ()
