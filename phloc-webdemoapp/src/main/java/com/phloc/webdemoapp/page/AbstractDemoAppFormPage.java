@@ -43,9 +43,9 @@ import com.phloc.webctrls.page.JSFormHelper;
 import com.phloc.webdemoapp.app.ajax.config.CDemoAppAjaxConfig;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 
-public abstract class AbstractEcowareFormPage <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE>
+public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE>
 {
-  public AbstractEcowareFormPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public AbstractDemoAppFormPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
@@ -70,11 +70,11 @@ public abstract class AbstractEcowareFormPage <DATATYPE extends IHasID <String>>
                                                          CDemoAppAjaxConfig.CONFIG_UPDATE_MENU_VIEW));
 
     // Update special area directly with code
-    IHCNode aSpecialNode = BootstrapInfoBox.create ("Die Daten wurden erfolgreich gemerkt!");
+    IHCNode aSpecialNode = BootstrapInfoBox.create ("Data was successfully saved!");
     aSuccessUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_SPECIAL, aSpecialNode));
     final JSArray aFailureUpdates = new JSArray ();
     // Update special area directly with code
-    aSpecialNode = BootstrapErrorBox.create ("Fehler beim Merken der Daten!");
+    aSpecialNode = BootstrapErrorBox.create ("Error saving the data!");
     aFailureUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_SPECIAL, aSpecialNode));
     aToolbar.addButton ("Merken", JSFormHelper.saveFormData (INPUT_FORM_ID,
                                                              AjaxHandlerSaveFormState.PREFIX_FIELD,

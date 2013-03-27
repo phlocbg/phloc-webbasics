@@ -27,13 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
-import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.state.EContinue;
-import com.phloc.web.http.basicauth.BasicAuthClientCredentials;
-import com.phloc.web.http.basicauth.BasicAuthServerBuilder;
-import com.phloc.web.http.basicauth.HTTPBasicAuth;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.login.LoginManager;
@@ -64,7 +60,7 @@ public final class DemoAppConfigLoginFilter extends AbstractUnifiedResponseFilte
       @Override
       protected IHTMLProvider createLoginScreen (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
       {
-        return new BootstrapLoginHTMLProvider (bLoginError, eLoginResult, "ECOWARE Administration - Login");
+        return new BootstrapLoginHTMLProvider (bLoginError, eLoginResult, "DemoApp Administration - Login");
       }
 
       @Override
@@ -82,33 +78,6 @@ public final class DemoAppConfigLoginFilter extends AbstractUnifiedResponseFilte
   protected EContinue handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                      @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException
   {
-    // FIXME always login default user
-    if (GlobalDebug.isDebugMode ())
-    {
-      if (!LoggedInUserManager.getInstance ().isUserLoggedInInCurrentSession ())
-      {
-        if (true)
-        {
-          // Use HTTP basic auth
-          final BasicAuthClientCredentials aCredentials = HTTPBasicAuth.getBasicAuthClientCredentials (aRequestScope.getRequest ());
-          if (aCredentials == null)
-          {
-            // No credentials provided
-            aUnifiedResponse.setStatusUnauthorized (new BasicAuthServerBuilder ().setRealm ("Ecoware").build ());
-            return EContinue.BREAK;
-          }
-
-          // Try to login with supplied credentials
-          LoggedInUserManager.getInstance ().loginUser (aCredentials.getUserName (), aCredentials.getPassword ());
-        }
-        else
-        {
-          // Fixed user login
-          LoggedInUserManager.getInstance ().loginUser ("admin@phloc.com", "password");
-        }
-      }
-    }
-
     if (m_aLogin.checkUserAndShowLogin (aRequestScope, aUnifiedResponse).isBreak ())
     {
       // Show login screen
