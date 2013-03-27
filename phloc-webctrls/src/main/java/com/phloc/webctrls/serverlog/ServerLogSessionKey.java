@@ -67,7 +67,7 @@ public final class ServerLogSessionKey extends SessionWebSingleton
   @Nullable
   public static String getGeneratedSessionKey ()
   {
-    final ServerLogSessionKey aObj = getSingletonIfInstantiated (ServerLogSessionKey.class);
+    final ServerLogSessionKey aObj = getSessionSingletonIfInstantiated (ServerLogSessionKey.class);
     return aObj == null ? null : aObj.m_sGeneratedKey;
   }
 

@@ -77,7 +77,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     @Nullable
     public static SessionUserHolder getInstanceIfInstantiated ()
     {
-      return getSingletonIfInstantiated (SessionUserHolder.class);
+      return getSessionSingletonIfInstantiated (SessionUserHolder.class);
     }
 
     @Nonnull
