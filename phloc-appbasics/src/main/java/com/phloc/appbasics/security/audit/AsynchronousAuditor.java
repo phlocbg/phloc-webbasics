@@ -93,7 +93,7 @@ public class AsynchronousAuditor extends AbstractAuditor
   /**
    * When using this auditor, it is important to call this stop method before
    * shutdown. It avoids further queuing of objects and waits until all items
-   * are handled
+   * are handled. This method blocks until all remaining objects are handled.
    * 
    * @return {@link EChange#CHANGED} if the shutdown was performed,
    *         {@link EChange#UNCHANGED} if the auditor was already shut down.

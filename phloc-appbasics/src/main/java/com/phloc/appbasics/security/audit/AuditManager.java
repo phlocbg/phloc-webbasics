@@ -186,15 +186,9 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
 
   public void stop ()
   {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      m_aAuditor.stop ();
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
+    // Do not call in write-lock as this call blocks until the auditor is
+    // stopped
+    m_aAuditor.stop ();
   }
 
   @Override
