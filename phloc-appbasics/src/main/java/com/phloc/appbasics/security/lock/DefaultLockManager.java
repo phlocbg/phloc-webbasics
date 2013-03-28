@@ -37,6 +37,7 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -130,7 +131,9 @@ public class DefaultLockManager
     if (sObjID == null)
       throw new NullPointerException ("objID");
 
-    final String sUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    if (StringHelper.hasNoText (sCurrentUserID))
+      return ELocked.NOT_LOCKED;
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -140,11 +143,11 @@ public class DefaultLockManager
       {
         // Object is already locked.
         // Check whether the current user locked the object
-        return ELocked.valueOf (aCurrentLock.getLockUserID ().equals (sUserID));
+        return ELocked.valueOf (aCurrentLock.getLockUserID ().equals (sCurrentUserID));
       }
 
       // Overwrite any existing lock!
-      m_aLockedObjs.put (sObjID, new LockInfo (sUserID));
+      m_aLockedObjs.put (sObjID, new LockInfo (sCurrentUserID));
     }
     finally
     {
@@ -152,7 +155,7 @@ public class DefaultLockManager
     }
 
     if (s_aLogger.isInfoEnabled ())
-      s_aLogger.info ("User '" + sUserID + "' locked object '" + sObjID + "'");
+      s_aLogger.info ("User '" + sCurrentUserID + "' locked object '" + sObjID + "'");
     return ELocked.LOCKED;
   }
 
@@ -169,7 +172,11 @@ public class DefaultLockManager
   @Nonnull
   public final EChange unlockObject (@Nonnull final String sObjID)
   {
-    return unlockObject (m_aCurrentUserIDProvider.getCurrentUserID (), sObjID);
+    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    if (StringHelper.hasNoText (sCurrentUserID))
+      return EChange.UNCHANGED;
+
+    return unlockObject (sCurrentUserID, sObjID);
   }
 
   /**
@@ -232,34 +239,82 @@ public class DefaultLockManager
     return EChange.CHANGED;
   }
 
+  /**
+   * Unlock all objects of the current user.
+   * 
+   * @return The list of all unlocked object IDs. Never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfCurrentUser ()
   {
-    return unlockAllObjectsOfUser (m_aCurrentUserIDProvider.getCurrentUserID ());
+    return unlockAllObjectsOfCurrentUserExcept (null);
   }
 
   /**
-   * Unlock all objects of the current user.
+   * Unlock all objects of the current user except for the passed objects.
+   * 
+   * @param aObjectsToKeepLocked
+   *        An optional set of objects which should not be unlocked. May be
+   *        <code>null</code> or empty.
+   * @return The list of all unlocked object IDs. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public final List <String> unlockAllObjectsOfCurrentUserExcept (@Nullable final Set <String> aObjectsToKeepLocked)
+  {
+    return unlockAllObjectsOfUserExcept (m_aCurrentUserIDProvider.getCurrentUserID (), aObjectsToKeepLocked);
+  }
+
+  /**
+   * Unlock all objects of the passed user.
    * 
    * @param sUserID
-   *        The user ID who's object are to be unlocked.
-   * @return The list of all unlocked object IDs.
+   *        The user ID who's object are to be unlocked. May be
+   *        <code>null</code> or empty.
+   * @return The list of all unlocked object IDs. Never <code>null</code>.
    */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfUser (@Nullable final String sUserID)
   {
+    return unlockAllObjectsOfUserExcept (sUserID, null);
+  }
+
+  /**
+   * Unlock all objects of the passed user except for the passed objects.
+   * 
+   * @param sUserID
+   *        The user ID who's object are to be unlocked. May be
+   *        <code>null</code> or empty.
+   * @param aObjectsToKeepLocked
+   *        An optional set of objects which should not be unlocked. May be
+   *        <code>null</code> or empty.
+   * @return The list of all unlocked object IDs. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public final List <String> unlockAllObjectsOfUserExcept (@Nullable final String sUserID,
+                                                           @Nullable final Set <String> aObjectsToKeepLocked)
+  {
     final List <String> aObjectsToUnlock = new ArrayList <String> ();
-    if (sUserID != null)
+    if (StringHelper.hasText (sUserID))
     {
       m_aRWLock.writeLock ().lock ();
       try
       {
         // determine objects to be removed
         for (final Map.Entry <String, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
-          if (aEntry.getValue ().getLockUserID ().equals (sUserID))
-            aObjectsToUnlock.add (aEntry.getKey ());
+        {
+          final String sLockUserID = aEntry.getValue ().getLockUserID ();
+          if (sLockUserID.equals (sUserID))
+          {
+            // Object is locked by current user
+            final String sObjID = aEntry.getKey ();
+            if (aObjectsToKeepLocked == null || !aObjectsToKeepLocked.contains (sObjID))
+              aObjectsToUnlock.add (sObjID);
+          }
+        }
 
         // remove locks
         for (final String sObjectID : aObjectsToUnlock)
@@ -289,8 +344,14 @@ public class DefaultLockManager
    */
   public final boolean isObjectLockedByCurrentUser (@Nullable final String sObjID)
   {
+    final String sLockUserID = getLockUserID (sObjID);
+    if (sLockUserID == null)
+    {
+      // Object is not locked at all
+      return false;
+    }
     final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
-    return sCurrentUserID.equals (getLockUserID (sObjID));
+    return sLockUserID.equals (sCurrentUserID);
   }
 
   /**
@@ -306,7 +367,13 @@ public class DefaultLockManager
   public final boolean isObjectLockedByOtherUser (@Nullable final String sObjID)
   {
     final String sLockUser = getLockUserID (sObjID);
-    return sLockUser != null && !m_aCurrentUserIDProvider.getCurrentUserID ().equals (sLockUser);
+    if (sLockUser == null)
+    {
+      // Object is not locked at all
+      return false;
+    }
+    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    return !sLockUser.equals (sCurrentUserID);
   }
 
   /**
