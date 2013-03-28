@@ -238,7 +238,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * @return {@link EChange} if something changed
    */
   @Nonnull
-  private EChange _logoutUser (@Nullable final String sUserID, @Nonnull final SessionUserHolder aSessionUserHolder)
+  private EChange _logoutUser (@Nullable final String sUserID, @Nullable final SessionUserHolder aSessionUserHolder)
   {
     m_aRWLock.writeLock ().lock ();
     try
@@ -248,7 +248,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
         return EChange.UNCHANGED;
       }
-      aSessionUserHolder._reset ();
+      if (aSessionUserHolder != null)
+        aSessionUserHolder._reset ();
     }
     finally
     {
@@ -269,7 +270,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnull
   public EChange logoutUser (@Nullable final String sUserID)
   {
-    return _logoutUser (sUserID, SessionUserHolder.getInstance ());
+    return _logoutUser (sUserID, SessionUserHolder.getInstanceIfInstantiated ());
   }
 
   /**
@@ -367,7 +368,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nullable
   public IUser getCurrentUser ()
   {
-    return SessionUserHolder.getInstance ().m_aUser;
+    final SessionUserHolder aSUH = SessionUserHolder.getInstanceIfInstantiated ();
+    return aSUH == null ? null : aSUH.m_aUser;
   }
 
   /**
