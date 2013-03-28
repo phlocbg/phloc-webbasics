@@ -45,6 +45,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCColGroup;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.js.IJSCodeProvider;
@@ -242,14 +243,16 @@ public class DataTables implements IHCNodeBuilder
       throw new NullPointerException ("table");
     // Add all columns
     int nColIndex = 0;
-    for (final HCCol aCol : aTable.getColGroup ().getAllColumns ())
-    {
-      final DataTablesColumn aColumn = new DataTablesColumn (nColIndex);
-      if (!aCol.isStar ())
-        aColumn.setWidth (aCol.getWidth ());
-      addColumn (aColumn);
-      ++nColIndex;
-    }
+    final HCColGroup aColGroup = aTable.getColGroup ();
+    if (aColGroup != null)
+      for (final HCCol aCol : aColGroup.getAllColumns ())
+      {
+        final DataTablesColumn aColumn = new DataTablesColumn (nColIndex);
+        if (!aCol.isStar ())
+          aColumn.setWidth (aCol.getWidth ());
+        addColumn (aColumn);
+        ++nColIndex;
+      }
     return this;
   }
 
