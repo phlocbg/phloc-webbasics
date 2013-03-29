@@ -142,6 +142,7 @@ public class RequestWebScope extends RequestWebScopeNoMultipart
     return !(m_aHttpRequest instanceof MockHttpServletRequest) && ServletFileUpload.isMultipartContent (m_aHttpRequest);
   }
 
+  @Nonnull
   private IFileItemFactory _getFactory ()
   {
     if (s_aFIFP != null)
