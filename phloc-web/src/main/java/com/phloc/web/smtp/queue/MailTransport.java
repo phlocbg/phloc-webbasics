@@ -30,6 +30,7 @@ import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.event.ConnectionListener;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -44,6 +45,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.listener.DoNothingConnectionListener;
 import com.phloc.web.smtp.settings.ESMTPTransportProperty;
 import com.phloc.web.smtp.settings.ISMTPSettings;
 
@@ -55,13 +57,14 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
 final class MailTransport
 {
   private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (MailTransport.class);
-  private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
+  static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
   private static final String SMTP_PROTOCOL = "smtp";
   private static final String HEADER_MESSAGE_ID = "Message-ID";
 
   private final ISMTPSettings m_aSettings;
   private final Properties m_aMailProperties = new Properties ();
   private final Session m_aSession;
+  private final ConnectionListener m_aConnectionListener = new DoNothingConnectionListener ();
 
   public MailTransport (@Nonnull final ISMTPSettings aSettings)
   {
@@ -120,6 +123,7 @@ final class MailTransport
       try
       {
         final Transport aTransport = m_aSession.getTransport (SMTP_PROTOCOL);
+        aTransport.addConnectionListener (m_aConnectionListener);
         aTransport.connect (m_aSettings.getHostName (),
                             m_aSettings.getPort (),
                             m_aSettings.getUserName (),
