@@ -22,7 +22,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import javax.mail.event.ConnectionListener;
+import javax.mail.event.TransportListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +48,8 @@ public final class MailTransportSettings
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static long s_nConnectTimeoutMilliSecs = DEFAULT_CONNECT_TIMEOUT_MILLISECS;
   private static long s_nTimeoutMilliSecs = DEFAULT_TIMEOUT_MILLISECS;
+  private static ConnectionListener s_aConnectionListener = null;
+  private static TransportListener s_aTransportListener = null;
 
   private MailTransportSettings ()
   {}
@@ -138,6 +143,60 @@ public final class MailTransportSettings
     try
     {
       return s_nTimeoutMilliSecs;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setConnectionListener (@Nullable final ConnectionListener aConnectionListener)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aConnectionListener = aConnectionListener;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public static ConnectionListener getConnectionListener ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aConnectionListener;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setTransportListener (@Nullable final TransportListener aTransportListener)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aTransportListener = aTransportListener;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public static TransportListener getTransportListener ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aTransportListener;
     }
     finally
     {

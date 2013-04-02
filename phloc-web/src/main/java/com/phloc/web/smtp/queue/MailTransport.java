@@ -31,6 +31,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.event.ConnectionListener;
+import javax.mail.event.TransportListener;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -45,7 +46,6 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.IEmailData;
-import com.phloc.web.smtp.listener.DoNothingConnectionListener;
 import com.phloc.web.smtp.settings.ESMTPTransportProperty;
 import com.phloc.web.smtp.settings.ISMTPSettings;
 
@@ -64,7 +64,6 @@ final class MailTransport
   private final ISMTPSettings m_aSettings;
   private final Properties m_aMailProperties = new Properties ();
   private final Session m_aSession;
-  private final ConnectionListener m_aConnectionListener = new DoNothingConnectionListener ();
 
   public MailTransport (@Nonnull final ISMTPSettings aSettings)
   {
@@ -123,7 +122,16 @@ final class MailTransport
       try
       {
         final Transport aTransport = m_aSession.getTransport (SMTP_PROTOCOL);
-        aTransport.addConnectionListener (m_aConnectionListener);
+
+        // Add listener
+        final ConnectionListener aConnectionListener = MailTransportSettings.getConnectionListener ();
+        if (aConnectionListener != null)
+          aTransport.addConnectionListener (aConnectionListener);
+        final TransportListener aTransportListener = MailTransportSettings.getTransportListener ();
+        if (aTransportListener != null)
+          aTransport.addTransportListener (aTransportListener);
+
+        // Connect
         aTransport.connect (m_aSettings.getHostName (),
                             m_aSettings.getPort (),
                             m_aSettings.getUserName (),
@@ -139,17 +147,14 @@ final class MailTransport
               final MimeMessage aMimeMessage = new MimeMessage (m_aSession);
               MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSettings.getCharset ());
 
-              s_aLogger.info ("Delivering mail to " +
-                              Arrays.toString (aMimeMessage.getRecipients (RecipientType.TO)) +
-                              " with subject '" +
-                              aMimeMessage.getSubject () +
-                              "'");
-
               // Ensure a sent date is present
               if (aMimeMessage.getSentDate () == null)
                 aMimeMessage.setSentDate (PDTFactory.getCurrentDateTime ().toDate ());
 
+              // Get an explicitly specified message ID
               final String sMessageID = aMimeMessage.getMessageID ();
+
+              // This creates a new message ID (besides other things)
               aMimeMessage.saveChanges ();
 
               if (sMessageID != null)
@@ -157,7 +162,18 @@ final class MailTransport
                 // Preserve explicitly specified message id...
                 aMimeMessage.setHeader (HEADER_MESSAGE_ID, sMessageID);
               }
+
+              s_aLogger.info ("Delivering mail to " +
+                              Arrays.toString (aMimeMessage.getRecipients (RecipientType.TO)) +
+                              " with subject '" +
+                              aMimeMessage.getSubject () +
+                              "' and message ID '" +
+                              aMimeMessage.getMessageID () +
+                              "'");
+
+              // Start transmitting
               aTransport.sendMessage (aMimeMessage, aMimeMessage.getAllRecipients ());
+
               s_aStatsCount.increment ();
             }
             catch (final MessagingException ex)
