@@ -34,7 +34,8 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.state.EChange;
 
 /**
- * Settings for the mail transport.
+ * Global settings for the mail transport. The values of this class are applied
+ * to all instances of javax.mail.Transport in the correct order.
  * 
  * @author philip
  */
@@ -150,6 +151,12 @@ public final class MailTransportSettings
     }
   }
 
+  /**
+   * Set a new mail connection listener.
+   * 
+   * @param aConnectionListener
+   *        The new connection listener to set. May be <code>null</code>.
+   */
   public static void setConnectionListener (@Nullable final ConnectionListener aConnectionListener)
   {
     s_aRWLock.writeLock ().lock ();
@@ -163,6 +170,9 @@ public final class MailTransportSettings
     }
   }
 
+  /**
+   * @return The default mail connection listener. May be <code>null</code>.
+   */
   @Nullable
   public static ConnectionListener getConnectionListener ()
   {
@@ -177,6 +187,12 @@ public final class MailTransportSettings
     }
   }
 
+  /**
+   * Set a new mail transport listener.
+   * 
+   * @param aTransportListener
+   *        The new transport listener to set. May be <code>null</code>.
+   */
   public static void setTransportListener (@Nullable final TransportListener aTransportListener)
   {
     s_aRWLock.writeLock ().lock ();
@@ -190,6 +206,9 @@ public final class MailTransportSettings
     }
   }
 
+  /**
+   * @return The default mail transport listener. May be <code>null</code>.
+   */
   @Nullable
   public static TransportListener getTransportListener ()
   {
