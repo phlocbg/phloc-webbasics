@@ -17,7 +17,10 @@
  */
 package com.phloc.webbasics.ajax;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -53,15 +56,29 @@ public class DefaultAjaxFunction extends AbstractAjaxFunction
 
   @Nonnull
   @Nonempty
+  public final String getPathWithoutContext ()
+  {
+    return getAjaxServletPath () + getName ();
+  }
+
+  @Nonnull
+  @Nonempty
   public String getInvocationURI ()
   {
-    return LinkUtils.getURIWithContext (getAjaxServletPath () + getName ());
+    return LinkUtils.getURIWithContext (getPathWithoutContext ());
   }
 
   @Nonnull
   @Nonempty
   public ISimpleURL getInvocationURL ()
   {
-    return LinkUtils.getURLWithContext (getAjaxServletPath () + getName ());
+    return getInvocationURL (null);
+  }
+
+  @Nonnull
+  @Nonempty
+  public ISimpleURL getInvocationURL (@Nullable final Map <String, String> aParams)
+  {
+    return LinkUtils.getURLWithContext (getPathWithoutContext (), aParams);
   }
 }
