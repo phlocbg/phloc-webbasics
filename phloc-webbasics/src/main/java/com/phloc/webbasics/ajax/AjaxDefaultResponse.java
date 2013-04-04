@@ -25,12 +25,15 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
@@ -40,7 +43,7 @@ import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
-public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
+public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
@@ -60,10 +63,11 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
   private final IJSONObject m_aSuccessValue;
   private final List <String> m_aExternalCSSs = new ArrayList <String> ();
   private final List <String> m_aExternalJSs = new ArrayList <String> ();
+  private IJSCodeProvider m_aInlineJS;
 
-  private AjaxDefaultResponse (final boolean bSuccess,
-                               @Nullable final String sErrorMessage,
-                               @Nullable final IJSONObject aSuccessValue)
+  protected AjaxDefaultResponse (final boolean bSuccess,
+                                 @Nullable final String sErrorMessage,
+                                 @Nullable final IJSONObject aSuccessValue)
   {
     m_bSuccess = bSuccess;
     m_sErrorMessage = sErrorMessage;
@@ -91,6 +95,7 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
 
   /**
    * @return In case this is a failure, this field contains the error message.
+   *         May be <code>null</code>.
    */
   @Nullable
   public String getErrorMessage ()
@@ -99,12 +104,22 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
   }
 
   /**
-   * @return In case this is a success, this field contains the success object
+   * @return In case this is a success, this field contains the success object.
+   *         May be <code>null</code>.
    */
   @Nullable
   public IJSON getSuccessValue ()
   {
     return m_aSuccessValue;
+  }
+
+  @Nonnull
+  public AjaxDefaultResponse addExternalCSS (@Nonnull @Nonempty final String sCSSPath)
+  {
+    if (StringHelper.hasNoText (sCSSPath))
+      throw new IllegalArgumentException ("CSSPath");
+    m_aExternalCSSs.add (sCSSPath);
+    return this;
   }
 
   /**
@@ -117,6 +132,15 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
   public List <String> getAllExternalCSSs ()
   {
     return ContainerHelper.newList (m_aExternalCSSs);
+  }
+
+  @Nonnull
+  public AjaxDefaultResponse addExternalJS (@Nonnull @Nonempty final String sJSPath)
+  {
+    if (StringHelper.hasNoText (sJSPath))
+      throw new IllegalArgumentException ("JSPath");
+    m_aExternalJSs.add (sJSPath);
+    return this;
   }
 
   /**
@@ -132,6 +156,23 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
   }
 
   @Nonnull
+  public AjaxDefaultResponse setInlineJS (@Nonnull final IJSCodeProvider aJSCodeProvider)
+  {
+    if (aJSCodeProvider == null)
+      throw new NullPointerException ("JSCodeProvider");
+    if (m_aInlineJS != null)
+      throw new IllegalStateException ("Another JSCodeProvider is already set!");
+    m_aInlineJS = aJSCodeProvider;
+    return this;
+  }
+
+  @Nullable
+  public IJSCodeProvider getInlineJS ()
+  {
+    return m_aInlineJS;
+  }
+
+  @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
     final JSONObject aAssocArray = new JSONObject ();
@@ -142,11 +183,11 @@ public final class AjaxDefaultResponse implements ISuccessIndicator, IAjaxRespon
         aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
       aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, m_aExternalCSSs);
       aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, m_aExternalJSs);
+      aAssocArray.setStringProperty (PROPERTY_INLINE_JS, m_aInlineJS != null ? m_aInlineJS.getJSCode () : "");
     }
     else
     {
-      if (m_sErrorMessage != null)
-        aAssocArray.setStringProperty (PROPERTY_ERRORMESSAGE, m_sErrorMessage);
+      aAssocArray.setStringProperty (PROPERTY_ERRORMESSAGE, m_sErrorMessage != null ? m_sErrorMessage : "");
     }
     return aAssocArray.getJSONString (bIndentAndAlign);
   }
