@@ -42,7 +42,7 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
-import com.phloc.commons.xml.serialize.IXMLWriterSettings;
+import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
@@ -69,11 +69,7 @@ public final class DataTablesServerData implements IHasUIState
         s_aLogger.warn ("Cell has classes assigned which will be lost: " + aCell.getAllClasses ());
 
       final IMicroNode aNode = aCell.getAllChildrenAsNodeList ().convertToNode (aCS);
-      final IXMLWriterSettings aXWS = aCS.getXMLWriterSettings ();
-      final String sHTML = MicroWriter.getNodeAsString (aNode, aXWS);
-      final char cSep = aXWS.isUseDoubleQuotesForAttributes () ? '"' : '\'';
-      final String sNamespaceToRemove = " xmlns=" + cSep + aCS.getHTMLVersion ().getNamespaceURI () + cSep;
-      m_sHTML = StringHelper.replaceAll (sHTML, sNamespaceToRemove, "");
+      m_sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
 
       if (aNode instanceof IMicroNodeWithChildren)
         m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
@@ -265,9 +261,13 @@ public final class DataTablesServerData implements IHasUIState
 
     // Row data
     final IHCConversionSettings aCS = HCSettings.getConversionSettings (GlobalDebug.isDebugMode ());
+    // Create HTML without namespaces
+    final HCConversionSettings aRealCS = new HCConversionSettings (aCS);
+    aRealCS.getXMLWriterSettings ().setEmitNamespaces (false);
+
     m_aRows = new ArrayList <RowData> (aTable.getBodyRowCount ());
     for (final HCRow aRow : aTable.getAllBodyRows ())
-      m_aRows.add (new RowData (aRow, aCS));
+      m_aRows.add (new RowData (aRow, aRealCS));
     m_aDisplayLocale = aDisplayLocale;
     m_aServerSortState = new ServerSortState (this, aDisplayLocale);
     m_eFilterType = eFilterType;
