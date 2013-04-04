@@ -55,7 +55,7 @@ public class HCTextAreaAutosize extends HCTextArea
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutosizeJSPathProvider.AUTOSIZE_115);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutosizeJSPathProvider.AUTOSIZE_1167);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutosizeJSPathProvider.AUTOSIZE_ALL);
   }
 }

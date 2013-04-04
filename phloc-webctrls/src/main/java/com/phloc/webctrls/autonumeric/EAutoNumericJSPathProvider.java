@@ -25,7 +25,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EAutoNumericJSPathProvider implements IJSPathProvider
 {
-  AUTONUMERIC_191 ("autonumeric/191/autonumeric.js");
+  AUTONUMERIC_192 ("autonumeric/192/autonumeric.js");
 
   private final String m_sPath;
 
