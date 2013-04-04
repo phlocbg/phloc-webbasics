@@ -119,7 +119,7 @@
 <tr border="1"><td>5/18/12</td><td colspan="4">_Release *1.4.2*_</td></tr>
 <tr><td>5/18/12</td><td>fix</td><td>tech</td><td></td><td>Fixed determination of menu items, if a displayFilter is set</td></tr>
 <tr border="1"><td>5/16/12</td><td colspan="4">_Release *1.4.1*_</td></tr>
-<tr><td>5/15/12</td><td>update</td><td>tech</td><td></td><td>Updated [http://code.google.com/p/phloc-commons phloc-commons], [http://code.google.com/p/phloc-html phloc-html] and [http://code.google.com/p/phloc-json phloc-json]</td></tr>
+<tr><td>5/15/12</td><td>update</td><td>tech</td><td></td><td>Updated [http://code.google.com/p/phloc-commons phloc-commons] and [http://code.google.com/p/phloc-html phloc-html] and [http://code.google.com/p/phloc-json phloc-json]</td></tr>
 <tr border="1"><td>4/26/12</td><td colspan="4">_Release *1.4.0*_</td></tr>
 <tr><td>4/26/12</td><td>add</td><td>api</td><td></td><td>Added new classes RequestField and SessionBackedRequestField</td></tr>
 <tr><td>4/26/12</td><td>update</td><td>tech</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-scopes phloc-scopes] 3.9.2 and [http://code.google.com/p/phloc-html phloc-html] 3.1.1</td></tr>
