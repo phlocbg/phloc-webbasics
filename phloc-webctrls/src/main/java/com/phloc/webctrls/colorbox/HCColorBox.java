@@ -169,6 +169,8 @@ public class HCColorBox implements IHCNodeBuilder
       aArgs.add ("close", EColorBoxText.CLOSE.getDisplayText (m_aDisplayLocale));
       aArgs.add ("xhrError", EColorBoxText.XHR_ERROR.getDisplayText (m_aDisplayLocale));
       aArgs.add ("imgError", EColorBoxText.IMG_ERROR.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("slideshowStart", EColorBoxText.SLIDESHOW_START.getDisplayText (m_aDisplayLocale));
+      aArgs.add ("slideshowStop", EColorBoxText.SLIDESHOW_STOP.getDisplayText (m_aDisplayLocale));
     }
 
     return HCNodeList.create (m_aElement, new HCScriptOnDocumentReady (JQuery.select (aSelector)
@@ -178,7 +180,7 @@ public class HCColorBox implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorBoxCSSPathProvider.COLORBOX_1320);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorBoxJSPathProvider.COLORBOX_1320);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorBoxCSSPathProvider.COLORBOX_11410);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorBoxJSPathProvider.COLORBOX_1410);
   }
 }

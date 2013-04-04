@@ -35,7 +35,9 @@ public enum EColorBoxText implements IHasDisplayText
   NEXT ("Nächstes", "next"),
   CLOSE ("Schließen", "close"),
   XHR_ERROR ("Fehler beim Laden des Inhalts", "This content failed to load."),
-  IMG_ERROR ("Fehler beim Laden des Bildes", "This image failed to load.");
+  IMG_ERROR ("Fehler beim Laden des Bildes", "This image failed to load."),
+  SLIDESHOW_START ("Slideshow starten", "start slideshow"),
+  SLIDESHOW_STOP ("Slideshow anhalten", "stop slideshow");
 
   private final ITextProvider m_aTP;
 
