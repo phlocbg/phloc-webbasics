@@ -638,23 +638,13 @@ public class DataTables implements IHCNodeBuilder
       final JSVar aoData = aAF.param ("t");
       final JSVar fnCallback = aAF.param ("u");
       final JSVar oSettings = aAF.param ("v");
-      // Success callback, to take out the "value" parameter from the AJAX
-      // default response object
-      final JSAnonymousFunction aSuccess = new JSAnonymousFunction ();
-      final JSVar aData = aSuccess.param ("a");
-      final JSVar aTextStatus = aSuccess.param ("b");
-      final JSVar aJQXHR = aSuccess.param ("c");
-      aSuccess.body ()
-              .invoke (fnCallback.name ())
-              .arg (aData.ref (AjaxDefaultResponse.PROPERTY_VALUE))
-              .arg (aTextStatus)
-              .arg (aJQXHR);
       final JQueryAjaxBuilder aAjaxBuilder = new JQueryAjaxBuilder ().dataType ("json")
                                                                      .type (m_eServerMethod == null ? null
                                                                                                    : m_eServerMethod.getName ())
                                                                      .url (sSource)
                                                                      .data (aoData)
-                                                                     .success (AjaxDefaultResponse.createDefaultSuccessFunction (aSuccess));
+                                                                     .success (AjaxDefaultResponse.createDefaultSuccessFunction (fnCallback.name (),
+                                                                                                                                 true));
       aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
     }

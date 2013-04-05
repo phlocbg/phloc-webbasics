@@ -32,6 +32,7 @@ import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.security.user.password.PasswordConstraintMinLength;
 import com.phloc.appbasics.security.user.password.PasswordConstraints;
 import com.phloc.appbasics.security.user.password.PasswordUtils;
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
@@ -43,6 +44,7 @@ import com.phloc.commons.stats.utils.StatisticsExporter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.io.PDTIOHelper;
+import com.phloc.html.js.builder.JSPrinter;
 import com.phloc.web.datetime.PDTWebDateUtils;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
@@ -83,6 +85,12 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
 
     // Define the password constrains
     PasswordUtils.setPasswordConstraints (new PasswordConstraints (new PasswordConstraintMinLength (6)));
+
+    // Global JS formatting stuff :(
+    JSPrinter.setGenerateComments (false);
+    JSPrinter.setGenerateTypeNames (false);
+    JSPrinter.setIndentAndAlign (GlobalDebug.isDebugMode ());
+    JSPrinter.setMinimumCodeSize (!GlobalDebug.isDebugMode ());
   }
 
   @Override

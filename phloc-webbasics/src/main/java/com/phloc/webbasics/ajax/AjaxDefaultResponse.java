@@ -28,10 +28,12 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.EHTMLElement;
+import com.phloc.html.hc.api.EHCLinkType;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSBlock;
 import com.phloc.html.js.builder.JSForIn;
+import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.html.JSHtml;
 import com.phloc.html.js.builder.jquery.JQuery;
@@ -191,40 +193,69 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   }
 
   @Nonnull
-  public static JSAnonymousFunction createDefaultSuccessFunction (@Nonnull final JSAnonymousFunction aHandler)
+  public static JSAnonymousFunction createDefaultSuccessFunction (@Nonnull final String sHandler,
+                                                                  final boolean bInvokeHandlerFirst)
   {
-    if (aHandler == null)
+    if (sHandler == null)
       throw new NullPointerException ("handler");
-    if (aHandler.getParamCount () < 3)
-      throw new IllegalArgumentException ("Success function must have at least 3 arguments");
 
     final JSAnonymousFunction ret = new JSAnonymousFunction ();
     final JSVar aData = ret.param ("a");
-    final JSVar aStatus = ret.param ("b");
+    final JSVar aTextStatus = ret.param ("b");
     final JSVar aXHR = ret.param ("c");
+    final JSInvocation aHandlerInvocation = new JSInvocation (sHandler).arg (aData.ref (PROPERTY_VALUE))
+                                                                       .arg (aTextStatus)
+                                                                       .arg (aXHR);
+
     final JSBlock aBody = ret.body ();
 
     // Overall success?
     final JSBlock aIfSuccess = aBody._if (aData.ref (PROPERTY_SUCCESS))._then ();
-    // Invoke the main handler
-    aIfSuccess.invoke (aHandler).arg (aData).arg (aStatus).arg (aXHR);
-    // add all external scripts to the head
+    if (bInvokeHandlerFirst)
+    {
+      // Invoke the main handler first
+      aIfSuccess.add (aHandlerInvocation);
+    }
+    // add all external JS
     {
       final JSBlock aIfExternalJS = aIfSuccess._if (aData.ref (PROPERTY_EXTERNAL_JS))._then ();
-      final JSVar aFirstScript = aIfExternalJS.var ("s", JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT)
-                                                               .component0 ());
+      final JSVar aFirstJS = aIfExternalJS.var ("fj", JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT)
+                                                            .component0 ());
       final JSVar aJS = new JSVar ("js");
       final JSForIn aJSLoop = new JSForIn (aJS, aData.ref (PROPERTY_EXTERNAL_JS));
       final JSVar aJSNode = aJSLoop.body ().var ("jsNode", JSHtml.documentCreateElement (EHTMLElement.SCRIPT));
       aJSLoop.body ().assign (aJSNode.ref ("type"), CMimeType.TEXT_JAVASCRIPT.getAsString ());
       aJSLoop.body ().assign (aJSNode.ref ("src"), aJS);
-      aJSLoop.body ().invoke (aFirstScript.ref ("parentNode"), "insertBefore").arg (aJSNode).arg (aFirstScript);
+      aJSLoop.body ().assign (aJSNode.ref ("title"), "dynamicallyLoadedJS");
+      aJSLoop.body ().invoke (aFirstJS.ref ("parentNode"), "insertBefore").arg (aJSNode).arg (aFirstJS);
       aIfExternalJS.add (aJSLoop);
     }
+    // add all external CSS
+    {
+      final JSBlock aIfExternalCSS = aIfSuccess._if (aData.ref (PROPERTY_EXTERNAL_CSS))._then ();
+      final JSVar aFirstCSS = aIfExternalCSS.var ("fc", JSHtml.documentGetElementsByTagName (EHTMLElement.LINK)
+                                                              .component0 ());
+      final JSVar aCSS = new JSVar ("css");
+      final JSForIn aCSSLoop = new JSForIn (aCSS, aData.ref (PROPERTY_EXTERNAL_CSS));
+      final JSVar aCSSNode = aCSSLoop.body ().var ("cssNode", JSHtml.documentCreateElement (EHTMLElement.LINK));
+      aCSSLoop.body ().assign (aCSSNode.ref ("type"), CMimeType.TEXT_CSS.getAsString ());
+      aCSSLoop.body ().assign (aCSSNode.ref ("rel"), EHCLinkType.STYLESHEET.getAttrValue ());
+      aCSSLoop.body ().assign (aCSSNode.ref ("src"), aCSS);
+      aCSSLoop.body ().assign (aCSSNode.ref ("title"), "dynamicallyLoadedCSS");
+      aCSSLoop.body ().invoke (aFirstCSS.ref ("parentNode"), "insertBefore").arg (aCSSNode).arg (aFirstCSS);
+      aIfExternalCSS.add (aCSSLoop);
+    }
     // evaluate the inline script (if any)
-    aIfSuccess._if (aData.ref (PROPERTY_INLINE_JS))
-              ._then ()
-              .addStatement (JQuery.globalEval (aData.ref (PROPERTY_INLINE_JS)));
+    {
+      aIfSuccess._if (aData.ref (PROPERTY_INLINE_JS))
+                ._then ()
+                .addStatement (JQuery.globalEval (aData.ref (PROPERTY_INLINE_JS)));
+    }
+    if (!bInvokeHandlerFirst)
+    {
+      // Invoke the main handler last
+      aIfSuccess.add (aHandlerInvocation);
+    }
     return ret;
   }
 }
