@@ -28,6 +28,8 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.hc.utils.IHCSpecialNodes;
+import com.phloc.json.IJSONConvertible;
 import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 
@@ -36,27 +38,47 @@ import com.phloc.json.impl.JSONObject;
  * 
  * @author philip
  */
-final class ResponseData
+final class ResponseData implements IJSONConvertible
 {
   private final int m_nTotalRecords;
   private final int m_nTotalDisplayRecords;
   private final int m_nEcho;
   private final String m_sColumns;
   private final List <Map <String, String>> m_aData;
+  private final IHCSpecialNodes m_aSpecialNodes;
 
+  /**
+   * @param nTotalRecords
+   *        Unfiltered number of records
+   * @param nTotalDisplayRecords
+   *        Total number of records after filtering
+   * @param nEcho
+   *        As sent by the request
+   * @param sColumns
+   *        Column names
+   * @param aData
+   *        Main data, where each list item represents a single row (as map from
+   *        column-index to HTML content)
+   * @param aSpecialNodes
+   *        Special nodes for the AJAX response
+   */
   ResponseData (final int nTotalRecords,
                 final int nTotalDisplayRecords,
                 final int nEcho,
                 @Nullable final String sColumns,
-                @Nonnull final List <Map <String, String>> aData)
+                @Nonnull final List <Map <String, String>> aData,
+                @Nonnull final IHCSpecialNodes aSpecialNodes)
   {
     if (aData == null)
-      throw new NullPointerException ("data");
+      throw new NullPointerException ("Data");
+    if (aSpecialNodes == null)
+      throw new NullPointerException ("SpecialNodes");
     m_nTotalRecords = nTotalRecords;
     m_nTotalDisplayRecords = nTotalDisplayRecords;
     m_nEcho = nEcho;
     m_sColumns = sColumns;
     m_aData = aData;
+    m_aSpecialNodes = aSpecialNodes;
   }
 
   /**
@@ -131,6 +153,12 @@ final class ResponseData
     }
     ret.setObjectListProperty ("aaData", aObjs);
     return ret;
+  }
+
+  @Nonnull
+  public IHCSpecialNodes getSpecialNodes ()
+  {
+    return m_aSpecialNodes;
   }
 
   @Override

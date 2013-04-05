@@ -42,7 +42,6 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
@@ -50,7 +49,9 @@ import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.html.hc.utils.HCOutOfBandHandler;
+import com.phloc.html.hc.utils.HCSpecialNodeHandler;
+import com.phloc.html.hc.utils.HCSpecialNodes;
+import com.phloc.html.hc.utils.IHCSpecialNodes;
 import com.phloc.webbasics.state.IHasUIState;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
@@ -61,6 +62,7 @@ public final class DataTablesServerData implements IHasUIState
   {
     private static final Logger s_aLogger = LoggerFactory.getLogger (CellData.class);
 
+    private final HCSpecialNodes m_aSpecialNodes = new HCSpecialNodes ();
     private final String m_sHTML;
     private final String m_sTextContent;
 
@@ -71,15 +73,12 @@ public final class DataTablesServerData implements IHasUIState
       if (aCell.hasAnyClass ())
         s_aLogger.warn ("Cell has classes assigned which will be lost: " + aCell.getAllClasses ());
 
-      final HCNodeList aCellContent = aCell.getAllChildrenAsNodeList ();
+      HCNodeList aCellContent = aCell.getAllChildrenAsNodeList ();
 
-      if (false)
-      {
-        // FIXME handle out of band nodes correctly
-        final List <IHCNode> aExtractedOutOfBandNodes = new ArrayList <IHCNode> ();
-        HCOutOfBandHandler.recursiveExtractOutOfBandNodes (aCellContent, aExtractedOutOfBandNodes);
-      }
+      // Add the content without the out-of-band nodes
+      aCellContent = HCSpecialNodeHandler.extractSpecialContent (aCellContent, m_aSpecialNodes);
 
+      // Convert to IMicroNode and to String
       final IMicroNode aNode = aCellContent.convertToNode (aCS);
       m_sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
 
@@ -113,6 +112,12 @@ public final class DataTablesServerData implements IHasUIState
     public String getTextContent ()
     {
       return m_sTextContent;
+    }
+
+    @Nonnull
+    public IHCSpecialNodes getSpecialNodes ()
+    {
+      return m_aSpecialNodes;
     }
 
     public void matchRegEx (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
@@ -255,18 +260,18 @@ public final class DataTablesServerData implements IHasUIState
       throw new NullPointerException ("searchType");
 
     // Column data
-    final int nColumns = aTable.getColumnCount ();
-    m_aColumns = new ColumnData [nColumns];
+    final int nColumnCount = aTable.getColumnCount ();
+    m_aColumns = new ColumnData [nColumnCount];
     for (final DataTablesColumn aColumn : aColumns)
     {
       final ColumnData aColumnData = ColumnData.create (aColumn.getComparator ());
       for (final int nTarget : aColumn.getAllTargets ())
       {
-        if (nTarget < 0 || nTarget >= nColumns)
+        if (nTarget < 0 || nTarget >= nColumnCount)
           throw new IllegalArgumentException ("DataTablesColumn is targeting illegal column index " +
                                               nTarget +
                                               "; must be >= 0 and < " +
-                                              nColumns);
+                                              nColumnCount);
         m_aColumns[nTarget] = aColumnData;
       }
     }

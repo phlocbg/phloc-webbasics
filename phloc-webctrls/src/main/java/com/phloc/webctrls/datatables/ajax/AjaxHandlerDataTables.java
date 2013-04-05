@@ -36,6 +36,7 @@ import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.utils.HCSpecialNodes;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
@@ -264,6 +265,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     // Build the resulting array
+    final HCSpecialNodes aSpecialNodes = new HCSpecialNodes ();
     final List <Map <String, String>> aData = new ArrayList <Map <String, String>> ();
     int nResultRowCount = 0;
     final boolean bAllEntries = aRequestData.showAllEntries ();
@@ -285,7 +287,10 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         aRowData.put (DT_ROW_CLASS, aRow.getRowClass ());
       int nCellIndex = 0;
       for (final CellData aCell : aRow.directGetAllCells ())
+      {
         aRowData.put (Integer.toString (nCellIndex++), aCell.getHTML ());
+        aSpecialNodes.addAll (aCell.getSpecialNodes ());
+      }
       aData.add (aRowData);
       ++nResultRowCount;
     }
@@ -293,7 +298,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     // Main response
     final int nTotalRecords = aServerData.getRowCount ();
     final int nTotalDisplayRecords = aResultRows.size ();
-    return new ResponseData (nTotalRecords, nTotalDisplayRecords, aRequestData.getEcho (), null, aData);
+    return new ResponseData (nTotalRecords, nTotalDisplayRecords, aRequestData.getEcho (), null, aData, aSpecialNodes);
   }
 
   @Override
@@ -350,6 +355,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
 
     // Main request handling
     final ResponseData aResponseData = _handleRequest (aRequestData, aServerData);
+    System.out.println (aResponseData.getSpecialNodes ());
+
     // Convert the response to JSON
     return AjaxDefaultResponse.createSuccess (aResponseData.getAsJSON ());
   }
