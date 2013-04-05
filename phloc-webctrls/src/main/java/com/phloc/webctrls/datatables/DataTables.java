@@ -58,6 +58,7 @@ import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSRef;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.html.js.builder.jquery.JQueryAjaxBuilder;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuerySelectorList;
 import com.phloc.web.http.EHTTPMethod;
@@ -637,9 +638,6 @@ public class DataTables implements IHCNodeBuilder
       final JSVar aoData = aAF.param ("t");
       final JSVar fnCallback = aAF.param ("u");
       final JSVar oSettings = aAF.param ("v");
-      final JSAssocArray aAjax = new JSAssocArray ().add ("dataType", "json");
-      if (m_eServerMethod != null)
-        aAjax.add ("type", m_eServerMethod.getName ());
       // Success callback, to take out the "value" parameter from the AJAX
       // default response object
       final JSAnonymousFunction aCB = new JSAnonymousFunction ();
@@ -651,8 +649,13 @@ public class DataTables implements IHCNodeBuilder
          .arg (aData.ref (AjaxDefaultResponse.PROPERTY_VALUE))
          .arg (aTextStatus)
          .arg (aJQXHR);
-      aAjax.add ("url", sSource).add ("data", aoData).add ("success", aCB);
-      aAF.body ().assign (oSettings.ref ("jqXHR"), JQuery.ajax (aAjax));
+      final JQueryAjaxBuilder aAjaxBuilder = new JQueryAjaxBuilder ().dataType ("json")
+                                                                     .type (m_eServerMethod == null ? null
+                                                                                                   : m_eServerMethod.getName ())
+                                                                     .url (sSource)
+                                                                     .data (aoData)
+                                                                     .success (aCB);
+      aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
     }
     if (m_bDeferRender != DEFAULT_DEFER_RENDER)
