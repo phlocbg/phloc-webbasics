@@ -15,25 +15,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-function FormHelperClass(){}
+function FormHelperClass(){
+}
 FormHelperClass.prototype = 
 {
+  patternProp : /\(\)$/,
+  patternArray : /\[\]$/,
+  
+  /**
+   * Get all form values
+   * @param formid ID of the form to save the value - String
+   * @param fieldPrefix the prefix to be appended to all array keys - String
+   * @return a map where the key is prefix combined with the field name and the value is the field value 
+   */
   getAllFormValues : function(formid,fieldPrefix) {
     var vals={};
     var elems=$('#'+formid).find('*');
-    // Prefix each array item for identification in AJAX handler
-    elems.filter ('input[type="checkbox"], input[type="radio"], select[multiple="multiple"]').each(
+    // Checkbox and array need "prop"
+    elems.filter ('input[type="checkbox"], input[type="radio"]').each(
+      function(){ vals[fieldPrefix+this.name+'()']=$(this).prop('checked'); }
+    );
+    // Value is an array
+    elems.filter ('select[multiple="multiple"]').each(
       function(){ vals[fieldPrefix+this.name+'[]']=$(this).val(); }
     );
+    // Regular string value
     elems.filter ('input[type="text"], input[type="hidden"], select[multiple!="multiple"], textarea').each(
       function(){ vals[fieldPrefix+this.name]=$(this).val(); }
     );
+    // var i = 0; for (var x in vals) console.log(++i+" - "+x+"="+vals[x]);
     return vals;
   },
 
   setAllFormValues : function(formid,vals) {
+    var val;
     for (var name in vals) {
-      $('#'+formid+' [name='+name+']').val(vals[name]);
+      val = vals[name];
+      if (this.patternProp.test (name))
+        $('#'+formid+' [name='+name.substring(0,name.length-2)+']').prop('checked', val);
+      else
+        if (this.patternArray.test (name))
+          $('#'+formid+' [name='+name.substring(0,name.length-2)+']').val(val);
+        else
+          $('#'+formid+' [name='+name+']').val(val);
     }
   },
  
