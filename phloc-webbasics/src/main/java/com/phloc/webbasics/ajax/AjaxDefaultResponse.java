@@ -24,12 +24,16 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSBlock;
+import com.phloc.html.js.builder.JSForIn;
 import com.phloc.html.js.builder.JSVar;
+import com.phloc.html.js.builder.html.JSHtml;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
@@ -204,6 +208,19 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     final JSBlock aIfSuccess = aBody._if (aData.ref (PROPERTY_SUCCESS))._then ();
     // Invoke the main handler
     aIfSuccess.invoke (aHandler).arg (aData).arg (aStatus).arg (aXHR);
+    // add all external scripts to the head
+    {
+      final JSBlock aIfExternalJS = aIfSuccess._if (aData.ref (PROPERTY_EXTERNAL_JS))._then ();
+      final JSVar aFirstScript = aIfExternalJS.var ("s", JSHtml.documentGetElementsByTagName (EHTMLElement.SCRIPT)
+                                                               .component0 ());
+      final JSVar aJS = new JSVar ("js");
+      final JSForIn aJSLoop = new JSForIn (aJS, aData.ref (PROPERTY_EXTERNAL_JS));
+      final JSVar aJSNode = aJSLoop.body ().var ("jsNode", JSHtml.documentCreateElement (EHTMLElement.SCRIPT));
+      aJSLoop.body ().assign (aJSNode.ref ("type"), CMimeType.TEXT_JAVASCRIPT.getAsString ());
+      aJSLoop.body ().assign (aJSNode.ref ("src"), aJS);
+      aJSLoop.body ().invoke (aFirstScript.ref ("parentNode"), "insertBefore").arg (aJSNode).arg (aFirstScript);
+      aIfExternalJS.add (aJSLoop);
+    }
     // evaluate the inline script (if any)
     aIfSuccess._if (aData.ref (PROPERTY_INLINE_JS))
               ._then ()
