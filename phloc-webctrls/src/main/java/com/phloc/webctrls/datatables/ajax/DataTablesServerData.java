@@ -75,8 +75,9 @@ public final class DataTablesServerData implements IHasUIState
 
       HCNodeList aCellContent = aCell.getAllChildrenAsNodeList ();
 
-      // Add the content without the out-of-band nodes
-      aCellContent = HCSpecialNodeHandler.extractSpecialContent (aCellContent, m_aSpecialNodes);
+      // Add the content without the out-of-band nodes (but no document.ready()
+      // because this is invoked per AJAX)
+      aCellContent = HCSpecialNodeHandler.extractSpecialContent (aCellContent, m_aSpecialNodes, false);
 
       // Convert to IMicroNode and to String
       final IMicroNode aNode = aCellContent.convertToNode (aCS);

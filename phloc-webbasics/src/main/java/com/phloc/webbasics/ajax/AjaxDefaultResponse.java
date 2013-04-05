@@ -27,6 +27,10 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
+import com.phloc.html.js.builder.JSAnonymousFunction;
+import com.phloc.html.js.builder.JSBlock;
+import com.phloc.html.js.builder.JSVar;
+import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
@@ -40,16 +44,21 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
-  /** Error message property */
-  public static final String PROPERTY_ERRORMESSAGE = "errormessage";
-  /** Response value property */
+  /**
+   * Response value property - only in case of success - contains the response
+   * data as object
+   */
   public static final String PROPERTY_VALUE = "value";
-  /** Additional CSS files */
+  /**
+   * Additional CSS files - only in case of success - contains a list of strings
+   */
   public static final String PROPERTY_EXTERNAL_CSS = "externalcss";
-  /** Additional JS files */
+  /** Additional JS files - only in case of success - contains a list of strings */
   public static final String PROPERTY_EXTERNAL_JS = "externaljs";
-  /** Additional inline JS */
+  /** Additional inline JS - only in case of success - contains a string */
   public static final String PROPERTY_INLINE_JS = "inlinejs";
+  /** Error message property - only in case of error */
+  public static final String PROPERTY_ERRORMESSAGE = "errormessage";
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
@@ -112,9 +121,12 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     {
       if (m_aSuccessValue != null)
         aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
-      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
-      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, getAllExternalJSs ());
-      aAssocArray.setStringProperty (PROPERTY_INLINE_JS, getInlineJS ().getJSCode ());
+      if (hasExternalCSSs ())
+        aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
+      if (hasExternalJSs ())
+        aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, getAllExternalJSs ());
+      if (hasInlineJS ())
+        aAssocArray.setStringProperty (PROPERTY_INLINE_JS, getInlineJS ().getJSCode ());
     }
     else
     {
@@ -172,5 +184,30 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   public static AjaxDefaultResponse createError (@Nullable final String sErrorMessage)
   {
     return new AjaxDefaultResponse (false, sErrorMessage, null);
+  }
+
+  @Nonnull
+  public static JSAnonymousFunction createDefaultSuccessFunction (@Nonnull final JSAnonymousFunction aHandler)
+  {
+    if (aHandler == null)
+      throw new NullPointerException ("handler");
+    if (aHandler.getParamCount () < 3)
+      throw new IllegalArgumentException ("Success function must have at least 3 arguments");
+
+    final JSAnonymousFunction ret = new JSAnonymousFunction ();
+    final JSVar aData = ret.param ("a");
+    final JSVar aStatus = ret.param ("b");
+    final JSVar aXHR = ret.param ("c");
+    final JSBlock aBody = ret.body ();
+
+    // Overall success?
+    final JSBlock aIfSuccess = aBody._if (aData.ref (PROPERTY_SUCCESS))._then ();
+    // Invoke the main handler
+    aIfSuccess.invoke (aHandler).arg (aData).arg (aStatus).arg (aXHR);
+    // evaluate the inline script (if any)
+    aIfSuccess._if (aData.ref (PROPERTY_INLINE_JS))
+              ._then ()
+              .addStatement (JQuery.globalEval (aData.ref (PROPERTY_INLINE_JS)));
+    return ret;
   }
 }
