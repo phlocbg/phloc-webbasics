@@ -17,23 +17,16 @@
  */
 package com.phloc.webbasics.ajax;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.GlobalDebug;
-import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.html.js.IJSCodeProvider;
+import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
@@ -43,7 +36,7 @@ import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
-public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
+public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements ISuccessIndicator, IAjaxResponse
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
@@ -61,9 +54,6 @@ public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
   private final IJSONObject m_aSuccessValue;
-  private final List <String> m_aExternalCSSs = new ArrayList <String> ();
-  private final List <String> m_aExternalJSs = new ArrayList <String> ();
-  private IJSCodeProvider m_aInlineJS;
 
   protected AjaxDefaultResponse (final boolean bSuccess,
                                  @Nullable final String sErrorMessage,
@@ -77,9 +67,9 @@ public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
       // Grab per-request CSS/JS only in success case!
       final boolean bRegularFiles = GlobalDebug.isDebugMode ();
       for (final ICSSPathProvider aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ())
-        m_aExternalCSSs.add (aCSSPath.getCSSItemPath (bRegularFiles));
+        addExternalCSS (aCSSPath.getCSSItemPath (bRegularFiles));
       for (final IJSPathProvider aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludesForThisRequest ())
-        m_aExternalJSs.add (aJSPath.getJSItemPath (bRegularFiles));
+        addExternalJS (aJSPath.getJSItemPath (bRegularFiles));
     }
   }
 
@@ -114,65 +104,6 @@ public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
   }
 
   @Nonnull
-  public AjaxDefaultResponse addExternalCSS (@Nonnull @Nonempty final String sCSSPath)
-  {
-    if (StringHelper.hasNoText (sCSSPath))
-      throw new IllegalArgumentException ("CSSPath");
-    m_aExternalCSSs.add (sCSSPath);
-    return this;
-  }
-
-  /**
-   * @return In case this is a success, this list contains all CSS files that
-   *         were requested by elements created inside the handler. Never
-   *         <code>null</code> but maybe empty.
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <String> getAllExternalCSSs ()
-  {
-    return ContainerHelper.newList (m_aExternalCSSs);
-  }
-
-  @Nonnull
-  public AjaxDefaultResponse addExternalJS (@Nonnull @Nonempty final String sJSPath)
-  {
-    if (StringHelper.hasNoText (sJSPath))
-      throw new IllegalArgumentException ("JSPath");
-    m_aExternalJSs.add (sJSPath);
-    return this;
-  }
-
-  /**
-   * @return In case this is a success, this list contains all JS files that
-   *         were requested by elements created inside the handler. Never
-   *         <code>null</code> but maybe empty.
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <String> getAllExternalJSs ()
-  {
-    return ContainerHelper.newList (m_aExternalJSs);
-  }
-
-  @Nonnull
-  public AjaxDefaultResponse setInlineJS (@Nonnull final IJSCodeProvider aJSCodeProvider)
-  {
-    if (aJSCodeProvider == null)
-      throw new NullPointerException ("JSCodeProvider");
-    if (m_aInlineJS != null)
-      throw new IllegalStateException ("Another JSCodeProvider is already set!");
-    m_aInlineJS = aJSCodeProvider;
-    return this;
-  }
-
-  @Nullable
-  public IJSCodeProvider getInlineJS ()
-  {
-    return m_aInlineJS;
-  }
-
-  @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
     final JSONObject aAssocArray = new JSONObject ();
@@ -181,9 +112,9 @@ public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
     {
       if (m_aSuccessValue != null)
         aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
-      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, m_aExternalCSSs);
-      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, m_aExternalJSs);
-      aAssocArray.setStringProperty (PROPERTY_INLINE_JS, m_aInlineJS != null ? m_aInlineJS.getJSCode () : "");
+      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
+      aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_JS, getAllExternalJSs ());
+      aAssocArray.setStringProperty (PROPERTY_INLINE_JS, getInlineJS ().getJSCode ());
     }
     else
     {
@@ -197,52 +128,48 @@ public class AjaxDefaultResponse implements ISuccessIndicator, IAjaxResponse
   {
     if (o == this)
       return true;
-    if (!(o instanceof AjaxDefaultResponse))
+    if (!super.equals (o))
       return false;
     final AjaxDefaultResponse rhs = (AjaxDefaultResponse) o;
     return m_bSuccess == rhs.m_bSuccess &&
            EqualsUtils.equals (m_sErrorMessage, rhs.m_sErrorMessage) &&
-           EqualsUtils.equals (m_aSuccessValue, rhs.m_aSuccessValue) &&
-           m_aExternalCSSs.equals (rhs.m_aExternalCSSs) &&
-           m_aExternalJSs.equals (rhs.m_aExternalJSs);
+           EqualsUtils.equals (m_aSuccessValue, rhs.m_aSuccessValue);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_bSuccess)
-                                       .append (m_sErrorMessage)
-                                       .append (m_aSuccessValue)
-                                       .append (m_aExternalCSSs)
-                                       .append (m_aExternalJSs)
-                                       .getHashCode ();
+    return HashCodeGenerator.getDerived (super.hashCode ())
+                            .append (m_bSuccess)
+                            .append (m_sErrorMessage)
+                            .append (m_aSuccessValue)
+                            .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("success", m_bSuccess)
-                                       .append ("errorMsg", m_sErrorMessage)
-                                       .append ("successValue", m_aSuccessValue)
-                                       .append ("externalCSSs", m_aExternalCSSs)
-                                       .append ("externalJSs", m_aExternalJSs)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("success", m_bSuccess)
+                            .append ("errorMsg", m_sErrorMessage)
+                            .append ("successValue", m_aSuccessValue)
+                            .toString ();
   }
 
   @Nonnull
-  public static IAjaxResponse createSuccess ()
+  public static AjaxDefaultResponse createSuccess ()
   {
     return createSuccess (null);
   }
 
   @Nonnull
-  public static IAjaxResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
+  public static AjaxDefaultResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
   {
     return new AjaxDefaultResponse (true, null, aSuccessValue);
   }
 
   @Nonnull
-  public static IAjaxResponse createError (@Nullable final String sErrorMessage)
+  public static AjaxDefaultResponse createError (@Nullable final String sErrorMessage)
   {
     return new AjaxDefaultResponse (false, sErrorMessage, null);
   }
