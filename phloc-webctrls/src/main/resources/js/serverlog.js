@@ -26,10 +26,18 @@ var g_bServerLogDebugMode = false;
  * @param key The internal key for validation. Only valid keys should log something. Typically a string.
  * @param debugMode <code>true</code> for debug mode, meaning events are browser handled. Must be a boolean.
  */
-function serverLogInit(uri,key,debugMode) {
+function serverLogInit(uri,key,debugMode,setWindowOnerror) {
   g_sServerLogURI = uri;
   g_sServerLogKey = key;
   g_bServerLogDebugMode = debugMode;
+  if (setWindowOnerror){
+    // IE and Firefox only
+    window.onerror = function(msg,url,line) {
+      serverLog(1,url+" ("+line+"): " + msg);
+      // Return true to indicate not to respond
+      return true;
+    }
+  }
 }
 
 /**
@@ -43,17 +51,6 @@ function serverLog(severity,message){
     img.src = g_sServerLogURI + "?severity=" + encodeURIComponent(severity)
                               + "&message=" + encodeURIComponent(message)
                               + "&key=" + encodeURIComponent(g_sServerLogKey);
-  }
-}
-
-function setupServerLogForWindow(){
-  if (!g_bServerLogDebugMode){
-    // IE and Firefox only
-    window.onerror = function(msg,url,line) {
-      serverLog(1,url+" ("+line+"): " + msg);
-      // Return true to indicate not to respond
-      return true;
-    }
   }
 }
 

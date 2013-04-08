@@ -72,7 +72,7 @@ FormHelperClass.prototype =
     $.ajax({
       url:ajaxUrl,
       success:function(data){
-        if (data.success) 
+        if (data.success && data.value) 
           FormHelper.updateElementDirect (updateFieldId,data.value.html);
       }
     });
@@ -105,7 +105,7 @@ FormHelperClass.prototype =
     });
   },
   
-  // jQuery-select-obj,map<value,text>
+  // jQuery-select-obj, map<value,text>
   setSelectOptions : function ($select,newOptions) {
     $select.empty(); // remove old options
     $.each(newOptions, function(value,text) {

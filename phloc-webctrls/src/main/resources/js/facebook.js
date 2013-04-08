@@ -36,17 +36,16 @@
 function facebookLoadSDKAsync (sAppID, sLang, sContainerID, bCheckLoginStatus, bEnableCookies, bUseXFBML, fnOnLoad)
 {
   /* workaround since it is currently not possible to set the namespace for metatags on the server side */
- var aHead = document.getElementsByTagName("head")[0];
- if (aHead)
- {
-   aHead.setAttribute("xmlns:og", "http://ogp.me/ns#");
- }
+  var aHead = document.getElementsByTagName("head")[0];
+  if (aHead)
+  {
+    aHead.setAttribute("xmlns:og", "http://ogp.me/ns#");
+  }
   
   /* All Facebook functions should be included in this function, or at least initiated from here */
   window.fbAsyncInit = function() 
   {
-    FB.init(
-    {
+    FB.init({
       appId: sAppID, 
       status: !!bCheckLoginStatus, 
       cookie: !!bEnableCookies,
