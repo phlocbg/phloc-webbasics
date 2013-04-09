@@ -268,6 +268,22 @@ public class DataTables implements IHCNodeBuilder
     return m_aColumns.size ();
   }
 
+  @Nonnull
+  public DataTables setAllColumnsSortable (final boolean bSortable)
+  {
+    for (final DataTablesColumn aColumn : m_aColumns)
+      aColumn.setSortable (bSortable);
+    return this;
+  }
+
+  @Nonnull
+  public DataTables setAllColumnsSearchable (final boolean bSearchable)
+  {
+    for (final DataTablesColumn aColumn : m_aColumns)
+      aColumn.setSearchable (bSearchable);
+    return this;
+  }
+
   @Nullable
   public DataTablesSorting getInitialSorting ()
   {
