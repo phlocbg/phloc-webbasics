@@ -645,26 +645,28 @@ public class DataTables implements IHCNodeBuilder
       UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
       // Remove all body rows to avoid initial double painting
       m_aTable.removeAllBodyRows ();
-      if (true)
-      {
-        // Remove all columns as this breaks the rendering
-        m_aTable.removeAllColumns ();
-      }
-      else
-      {
-        // Delete all columns from the colgroup that are invisible, because this
-        // will break the rendered layout
-        // Note: back to front, so that the index does not need to be modified
-        final HCColGroup aColGroup = m_aTable.getColGroup ();
-        if (aColGroup != null)
-          for (int i = m_aColumns.size () - 1; i >= 0; --i)
-          {
-            final DataTablesColumn aColumn = m_aColumns.get (i);
-            if (!aColumn.isVisible ())
-              aColGroup.removeColumnAtIndex (i);
-          }
-      }
     }
+
+    if (true)
+    {
+      // Remove all columns as this breaks the rendering
+      m_aTable.removeAllColumns ();
+    }
+    else
+    {
+      // Delete all columns from the colgroup that are invisible, because this
+      // will break the rendered layout
+      // Note: back to front, so that the index does not need to be modified
+      final HCColGroup aColGroup = m_aTable.getColGroup ();
+      if (aColGroup != null)
+        for (int i = m_aColumns.size () - 1; i >= 0; --i)
+        {
+          final DataTablesColumn aColumn = m_aColumns.get (i);
+          if (!aColumn.isVisible ())
+            aColGroup.removeColumnAtIndex (i);
+        }
+    }
+
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
     if (m_eServerMethod != null)
@@ -817,37 +819,79 @@ public class DataTables implements IHCNodeBuilder
     return getWrapped (aPackage);
   }
 
+  /**
+   * @param aRowSelect
+   *        E.g. <code>JQuery.jQueryThis ().parents (EHTMLElement.TR)</code>
+   * @param bSwapUsingJQuery
+   *        Use it only, if if no actions can be performed on the table! This is
+   *        much quicker.
+   * @return The created JS code
+   */
   @Nonnull
-  public IJSCodeProvider getMoveRowUpCode (@Nonnegative final int nRowIndex)
+  public IJSCodeProvider getMoveRowUpCode (@Nonnull final JQueryInvocation aRowSelect, final boolean bSwapUsingJQuery)
   {
-    if (nRowIndex < 0)
-      throw new IllegalArgumentException ("rowIndex");
-
     final JSRef jsTable = JSExpr.ref (m_sGeneratedJSVariableName);
 
     final JSPackage aPackage = new JSPackage ();
-    final JQueryInvocation aRowSelect = JQuery.select (JQuerySelector.id (m_aTable.getID ())
-                                                                     .descendant (JQuerySelector.elementName (EHTMLElement.TBODY))
-                                                                     .descendant (JQuerySelector.elementName (EHTMLElement.TR)
-                                                                                                .chain (JQuerySelector.eq (nRowIndex))));
     final JSVar aRow = aPackage.var ("row", aRowSelect);
-    final JSVar aPrevRow = aPackage.var ("prevrow", aRowSelect.prev ());
-    final JSBlock aIfPrev = aPackage._if (aPrevRow)._then ();
+    final JSVar aPrevRow = aPackage.var ("prow", aRow.invoke ("prev"));
+    final JSBlock aIfPrev = aPackage._if (aPrevRow.ref ("length").gt (0))._then ();
 
-    final JSVar aData = aIfPrev.var ("data", jsTable.invoke ("fnGetData").arg (aRow.component0 ()));
-    final JSVar aPrevData = aIfPrev.var ("prevdata", jsTable.invoke ("fnGetData").arg (aPrevRow.component0 ()));
+    if (bSwapUsingJQuery)
+    {
+      // This is much quicker, if sorting and searching is disabled
+      aIfPrev.add (aRow.invoke ("detach"));
+      aIfPrev.add (aPrevRow.invoke ("before").arg (aRow));
+    }
+    else
+    {
+      final JSVar aRow0 = aIfPrev.var ("row0", aRow.invoke ("get").arg (0));
+      final JSVar aPrevRow0 = aIfPrev.var ("prow0", aPrevRow.invoke ("get").arg (0));
 
-    aIfPrev.invoke (jsTable, "fnUpdate").arg (aPrevData.invoke ("slice").arg (0)).arg (aRow.component0 ());
-    aIfPrev.invoke (jsTable, "fnUpdate").arg (aData.invoke ("slice").arg (0)).arg (aPrevRow.component0 ());
+      final JSVar aData = aIfPrev.var ("data", jsTable.invoke ("fnGetData").arg (aRow0));
+      final JSVar aPrevData = aIfPrev.var ("prevdata", jsTable.invoke ("fnGetData").arg (aPrevRow0));
+
+      aIfPrev.invoke (jsTable, "fnUpdate").arg (aPrevData).arg (aRow0);
+      aIfPrev.invoke (jsTable, "fnUpdate").arg (aData).arg (aPrevRow0);
+    }
     return aPackage;
   }
 
+  /**
+   * @param aRowSelect
+   *        E.g. <code>JQuery.jQueryThis ().parents (EHTMLElement.TR)</code>
+   * @param bSwapUsingJQuery
+   *        Use it only, if if no actions can be performed on the table! This is
+   *        much quicker.
+   * @return The created JS code
+   */
   @Nonnull
-  public IJSCodeProvider getMoveRowDownCode (@Nonnegative final int nRowIndex)
+  public IJSCodeProvider getMoveRowDownCode (@Nonnull final JQueryInvocation aRowSelect, final boolean bSwapUsingJQuery)
   {
-    if (nRowIndex < 0)
-      throw new IllegalArgumentException ("rowIndex");
+    final JSRef jsTable = JSExpr.ref (m_sGeneratedJSVariableName);
+
     final JSPackage aPackage = new JSPackage ();
+    final JSVar aRow = aPackage.var ("row", aRowSelect);
+    final JSVar aNextRow = aPackage.var ("nrow", aRow.invoke ("next"));
+    final JSBlock aIfNext = aPackage._if (aNextRow.ref ("length").gt (0))._then ();
+
+    if (bSwapUsingJQuery)
+    {
+      // This is much quicker, if sorting and searching is disabled
+      aIfNext.add (aRow.invoke ("detach"));
+      aIfNext.add (aNextRow.invoke ("after").arg (aRow));
+    }
+    else
+    {
+      final JSVar aRow0 = aIfNext.var ("row0", aRow.invoke ("get").arg (0));
+      final JSVar aNextRow0 = aIfNext.var ("nrow0", aNextRow.invoke ("get").arg (0));
+
+      final JSVar aData = aIfNext.var ("data", jsTable.invoke ("fnGetData").arg (aRow0));
+      final JSVar aNextData = aIfNext.var ("nextdata", jsTable.invoke ("fnGetData").arg (aNextRow0));
+
+      aIfNext.invoke (jsTable, "fnUpdate").arg (aNextData).arg (aRow0);
+      aIfNext.invoke (jsTable, "fnUpdate").arg (aData).arg (aNextRow0);
+    }
     return aPackage;
   }
 
