@@ -1,7 +1,7 @@
 /** Source: http://www.datatables.net/blog/Twitter_Bootstrap */
 
 div.dataTables_length label {
-  width: 460px;
+ /* width: 460px;*/
   float: left;
   text-align: left;
 }
@@ -12,7 +12,7 @@ div.dataTables_length select {
 
 div.dataTables_filter label {
   float: right;
-  width: 460px;
+/* width: 460px;*/
 }
 
 div.dataTables_info {
@@ -32,4 +32,4 @@ div.dataTables_paginate {
 .dataTables_scrollHeadInner table,
 .dataTables_scrollBody table {
   margin: 0;
-} 
+}
