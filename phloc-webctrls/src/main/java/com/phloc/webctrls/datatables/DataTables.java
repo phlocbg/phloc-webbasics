@@ -614,9 +614,17 @@ public class DataTables implements IHCNodeBuilder
       UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
       // Remove all body rows to avoid initial double painting
       m_aTable.removeAllBodyRows ();
-      // Remove all columns, because with hidden columns, this will break the
-      // layout!
-      m_aTable.removeAllColumns ();
+      // Delete all columns from the colgroup that are invisible, because this
+      // will break the rendered layout
+      // Note: back to front, so that the index does not need to be modified
+      final HCColGroup aColGroup = m_aTable.getColGroup ();
+      if (aColGroup != null)
+        for (int i = m_aColumns.size () - 1; i >= 0; --i)
+        {
+          final DataTablesColumn aColumn = m_aColumns.get (i);
+          if (!aColumn.isVisible ())
+            aColGroup.removeColumnAtIndex (i);
+        }
     }
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());
