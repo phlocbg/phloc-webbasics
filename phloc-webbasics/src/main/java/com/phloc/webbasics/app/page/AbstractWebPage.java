@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.AbstractPage;
-import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EValidity;
@@ -185,14 +184,6 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
     aHelpNode.addChild (new HCSpan ().addClass (CSS_PAGE_HELP_ICON));
     aHelpNode.setTarget (new HCA_Target (HELP_WINDOW_NAME));
     return aHelpNode;
-  }
-
-  @Override
-  @Deprecated
-  @DevelopersNote ("Use the one with the WebPageExecutionContext instead")
-  public final boolean isHelpAvailable ()
-  {
-    return super.isHelpAvailable ();
   }
 
   /**

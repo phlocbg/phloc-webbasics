@@ -31,6 +31,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.bootstrap.BootstrapButton;
 import com.phloc.webctrls.bootstrap.BootstrapButton_Submit;
 import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.IIcon;
 
 /**
  * Bootstrap button toolbar
@@ -84,9 +85,27 @@ public class BootstrapToolbar extends AbstractHCDiv <BootstrapToolbar>
   @Nonnull
   public final BootstrapToolbar addButton (@Nullable final String sCaption,
                                            @Nonnull final IJSCodeProvider aJSCode,
+                                           @Nullable final IIcon aIcon)
+  {
+    addChild (BootstrapButton.create (sCaption, aJSCode, aIcon));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapToolbar addButton (@Nullable final String sCaption,
+                                           @Nonnull final IJSCodeProvider aJSCode,
                                            @Nullable final EDefaultIcon eIcon)
   {
     addChild (BootstrapButton.create (sCaption, aJSCode, eIcon));
+    return this;
+  }
+
+  @Nonnull
+  public final BootstrapToolbar addButton (@Nullable final String sCaption,
+                                           @Nonnull final ISimpleURL aURL,
+                                           @Nullable final IIcon aIcon)
+  {
+    addChild (BootstrapButton.create (sCaption, aURL, aIcon));
     return this;
   }
 
