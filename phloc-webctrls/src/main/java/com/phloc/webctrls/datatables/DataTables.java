@@ -614,6 +614,9 @@ public class DataTables implements IHCNodeBuilder
       UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
       // Remove all body rows to avoid initial double painting
       m_aTable.removeAllBodyRows ();
+      // Remove all columns, because with hidden columns, this will break the
+      // layout!
+      m_aTable.removeAllColumns ();
     }
     if (m_aAjaxSource != null)
       aParams.add ("sAjaxSource", m_aAjaxSource.getAsString ());

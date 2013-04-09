@@ -326,6 +326,9 @@ public final class DataTablesServerData implements IHasUIState
 
   public void sortAllRows (@Nonnull final Comparator <RowData> aComp)
   {
+    if (aComp == null)
+      throw new NullPointerException ("comp");
+
     Collections.sort (m_aRows, aComp);
   }
 
