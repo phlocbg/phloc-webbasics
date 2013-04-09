@@ -52,6 +52,7 @@ import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSBlock;
 import com.phloc.html.js.builder.JSConditional;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSPackage;
@@ -59,6 +60,7 @@ import com.phloc.html.js.builder.JSRef;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQueryAjaxBuilder;
+import com.phloc.html.js.builder.jquery.JQueryInvocation;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuerySelectorList;
 import com.phloc.web.http.EHTTPMethod;
@@ -439,11 +441,16 @@ public class DataTables implements IHCNodeBuilder
     return m_nDisplayLength;
   }
 
+  /**
+   * Set to -1 to show all
+   * 
+   * @param nDisplayLength
+   *        Number of items to display per page
+   * @return this
+   */
   @Nonnull
-  public DataTables setDisplayLength (@Nonnegative final int nDisplayLength)
+  public DataTables setDisplayLength (final int nDisplayLength)
   {
-    if (nDisplayLength < 1)
-      throw new IllegalArgumentException ("displayLength is too small!");
     m_nDisplayLength = nDisplayLength;
     return this;
   }
@@ -564,6 +571,14 @@ public class DataTables implements IHCNodeBuilder
   @Nullable
   public IHCNode build ()
   {
+    if (m_bScrollInfinite)
+    {
+      // When infinite scrolling is active, the length menu is not displayed and
+      // therefore the settings may not be present as well!
+      m_aLengthMenu = null;
+      m_nDisplayLength = -1;
+    }
+
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
     if (m_bPaginate != DEFAULT_PAGINATE)
@@ -800,6 +815,40 @@ public class DataTables implements IHCNodeBuilder
                                                       JQuerySelector.elementName (EHTMLElement.IMG)))
                         .arg (aOpenCloseCallback));
     return getWrapped (aPackage);
+  }
+
+  @Nonnull
+  public IJSCodeProvider getMoveRowUpCode (@Nonnegative final int nRowIndex)
+  {
+    if (nRowIndex < 0)
+      throw new IllegalArgumentException ("rowIndex");
+
+    final JSRef jsTable = JSExpr.ref (m_sGeneratedJSVariableName);
+
+    final JSPackage aPackage = new JSPackage ();
+    final JQueryInvocation aRowSelect = JQuery.select (JQuerySelector.id (m_aTable.getID ())
+                                                                     .descendant (JQuerySelector.elementName (EHTMLElement.TBODY))
+                                                                     .descendant (JQuerySelector.elementName (EHTMLElement.TR)
+                                                                                                .chain (JQuerySelector.eq (nRowIndex))));
+    final JSVar aRow = aPackage.var ("row", aRowSelect);
+    final JSVar aPrevRow = aPackage.var ("prevrow", aRowSelect.prev ());
+    final JSBlock aIfPrev = aPackage._if (aPrevRow)._then ();
+
+    final JSVar aData = aIfPrev.var ("data", jsTable.invoke ("fnGetData").arg (aRow.component0 ()));
+    final JSVar aPrevData = aIfPrev.var ("prevdata", jsTable.invoke ("fnGetData").arg (aPrevRow.component0 ()));
+
+    aIfPrev.invoke (jsTable, "fnUpdate").arg (aPrevData.invoke ("slice").arg (0)).arg (aRow.component0 ());
+    aIfPrev.invoke (jsTable, "fnUpdate").arg (aData.invoke ("slice").arg (0)).arg (aPrevRow.component0 ());
+    return aPackage;
+  }
+
+  @Nonnull
+  public IJSCodeProvider getMoveRowDownCode (@Nonnegative final int nRowIndex)
+  {
+    if (nRowIndex < 0)
+      throw new IllegalArgumentException ("rowIndex");
+    final JSPackage aPackage = new JSPackage ();
+    return aPackage;
   }
 
   public static void registerExternalResources ()
