@@ -26,6 +26,8 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
@@ -36,7 +38,9 @@ import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
-public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements ISuccessIndicator, IAjaxResponse
+public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements
+                                                                                     ISuccessIndicator,
+                                                                                     IAjaxResponse
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
@@ -167,13 +171,22 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public static AjaxDefaultResponse createSuccess ()
   {
-    return createSuccess (null);
+    return createSuccess ((IJSONObject) null);
   }
 
   @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
   {
     return new AjaxDefaultResponse (true, null, aSuccessValue);
+  }
+
+  @Nonnull
+  public static AjaxDefaultResponse createSuccess (@Nullable final IHCNode aNode)
+  {
+    final JSONObject aObj = new JSONObject ();
+    if (aNode != null)
+      aObj.setStringProperty ("html", HCSettings.getAsHTMLStringWithoutNamespaces (aNode));
+    return createSuccess (aObj);
   }
 
   @Nonnull
