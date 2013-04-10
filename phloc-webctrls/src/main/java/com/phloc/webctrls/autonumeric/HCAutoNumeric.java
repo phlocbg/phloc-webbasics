@@ -104,6 +104,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   private BigDecimal m_aMin;
   private BigDecimal m_aMax;
   private ELeadingZero m_eLeadingZero;
+  private IHCAutoNumericEditCustomizer m_aEditCustomizer;
 
   public HCAutoNumeric ()
   {
@@ -153,6 +154,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     return this;
   }
 
+  @Nullable
+  public BigDecimal getInitialValue ()
+  {
+    return m_aInitialValue;
+  }
+
   @Nonnull
   public HCAutoNumeric setInitialValue (final long nInitialValue)
   {
@@ -172,11 +179,23 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     return this;
   }
 
+  @Nullable
+  public String getThousandSeparator ()
+  {
+    return m_sThousandSeparator;
+  }
+
   @Nonnull
   public HCAutoNumeric setThousandSeparator (@Nullable final String sThousandSeparator)
   {
     m_sThousandSeparator = sThousandSeparator;
     return this;
+  }
+
+  @Nullable
+  public String getDecimalSeparator ()
+  {
+    return m_sDecimalSeparator;
   }
 
   @Nonnull
@@ -186,11 +205,23 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     return this;
   }
 
+  @Nullable
+  public Integer getDecimalPlaces ()
+  {
+    return m_aDecimalPlaces;
+  }
+
   @Nonnull
   public HCAutoNumeric setDecimalPlaces (final int nDecimalPlaces)
   {
     m_aDecimalPlaces = Integer.valueOf (nDecimalPlaces);
     return this;
+  }
+
+  @Nullable
+  public BigDecimal getMin ()
+  {
+    return m_aMin;
   }
 
   @Nonnull
@@ -212,6 +243,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     return this;
   }
 
+  @Nullable
+  public BigDecimal getMax ()
+  {
+    return m_aMax;
+  }
+
   @Nonnull
   public HCAutoNumeric setMax (final long nMax)
   {
@@ -231,6 +268,12 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     return this;
   }
 
+  @Nullable
+  public ELeadingZero getLeadingZero ()
+  {
+    return m_eLeadingZero;
+  }
+
   @Nonnull
   public HCAutoNumeric setLeadingZero (@Nullable final ELeadingZero eLeadingZero)
   {
@@ -238,39 +281,93 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     return this;
   }
 
+  @Nullable
+  public final IHCAutoNumericEditCustomizer getEditCustomizer ()
+  {
+    return m_aEditCustomizer;
+  }
+
   @Nonnull
-  private static JSInvocation _invoke (@Nonnull final IJSExpression aExpr)
+  public HCAutoNumeric setEditCustomizer (@Nullable final IHCAutoNumericEditCustomizer aEditCustomizer)
+  {
+    m_aEditCustomizer = aEditCustomizer;
+    return this;
+  }
+
+  @Nonnull
+  public static JSInvocation invoke (@Nonnull final IJSExpression aExpr)
   {
     return aExpr.invoke ("autoNumeric");
   }
 
   @Nonnull
-  private JSInvocation _invoke ()
+  public JSInvocation invoke ()
   {
-    return _invoke (JQuery.idRef (m_sID));
+    return invoke (JQuery.idRef (m_sID));
   }
 
   @Nonnull
-  public JSInvocation autoNumericGet ()
+  public JSInvocation autoNumericInit ()
   {
-    return _invoke ().arg ("get");
+    return invoke ().arg ("init");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericDestroy ()
+  {
+    return invoke ().arg ("destroy");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericUpdate ()
+  {
+    return invoke ().arg ("update");
   }
 
   @Nonnull
   public JSInvocation autoNumericSet ()
   {
-    return _invoke ().arg ("set");
+    return invoke ().arg ("set");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGet ()
+  {
+    return invoke ().arg ("get");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGetString ()
+  {
+    return invoke ().arg ("getString");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGetArray ()
+  {
+    return invoke ().arg ("getArray");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGetSettings ()
+  {
+    return invoke ().arg ("getSettings");
   }
 
   /**
-   * Customize the edit
+   * Customize the edit. By default the edit customizer from
+   * {@link #getEditCustomizer()} is used.
    * 
    * @param aEdit
    *        The edit to be customized
    */
   @OverrideOnDemand
   protected void customizeEdit (@Nonnull final HCEdit aEdit)
-  {}
+  {
+    final IHCAutoNumericEditCustomizer aEditCustomizer = getEditCustomizer ();
+    if (aEditCustomizer != null)
+      aEditCustomizer.customize (aEdit);
+  }
 
   @Nonnull
   public IHCNode build ()
@@ -309,7 +406,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     registerExternalResources ();
     final JSPackage aPkg = new JSPackage ();
     final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
-    aPkg.add (_invoke (e).arg ("init").arg (aArgs));
+    aPkg.add (invoke (e).arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
     {
       String sInitialValue;
@@ -320,7 +417,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       }
       else
         sInitialValue = m_aInitialValue.toString ();
-      aPkg.add (_invoke (e).arg ("set").arg (sInitialValue));
+      aPkg.add (invoke (e).arg ("set").arg (sInitialValue));
     }
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
