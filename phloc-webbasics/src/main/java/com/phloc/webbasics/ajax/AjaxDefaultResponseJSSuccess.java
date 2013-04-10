@@ -39,31 +39,37 @@ import com.phloc.html.js.builder.jquery.JQuery;
  */
 public class AjaxDefaultResponseJSSuccess extends JSAnonymousFunction
 {
+  public AjaxDefaultResponseJSSuccess (@Nonnull final JSAnonymousFunction aAnonFunc, final boolean bInvokeHandlerFirst)
+  {
+    this (aAnonFunc.invoke (), bInvokeHandlerFirst);
+  }
+
   /**
    * Ctor
    * 
-   * @param sHandler
-   *        The name of the main handler function for the "value" property. Must
-   *        take 3 parameters: data, textStatus and xhr
+   * @param aHandler
+   *        The main handler function for the "value" property. The first 3
+   *        parameters are: data, textStatus and xhr
    * @param bInvokeHandlerFirst
    *        <code>true</code> if the handler should be invoked before the CSS/JS
    *        are included/evaluated, <code>false</code> if it should occur after
    *        the inclusion.
    */
-  public AjaxDefaultResponseJSSuccess (@Nonnull final String sHandler, final boolean bInvokeHandlerFirst)
+  public AjaxDefaultResponseJSSuccess (@Nonnull final JSInvocation aHandler, final boolean bInvokeHandlerFirst)
   {
-    if (sHandler == null)
+    if (aHandler == null)
       throw new NullPointerException ("handler");
+    if (aHandler.hasArgs ())
+      throw new IllegalArgumentException ("Handler may not have arguments assigned so far!");
 
-    final JSAnonymousFunction ret = new JSAnonymousFunction ();
-    final JSVar aData = ret.param ("a");
-    final JSVar aTextStatus = ret.param ("b");
-    final JSVar aXHR = ret.param ("c");
-    final JSInvocation aHandlerInvocation = new JSInvocation (sHandler).arg (aData.ref (AjaxDefaultResponse.PROPERTY_VALUE))
-                                                                       .arg (aTextStatus)
-                                                                       .arg (aXHR);
+    final JSVar aData = param ("a");
+    final JSVar aTextStatus = param ("b");
+    final JSVar aXHR = param ("c");
+    final JSInvocation aHandlerInvocation = aHandler.arg (aData.ref (AjaxDefaultResponse.PROPERTY_VALUE))
+                                                    .arg (aTextStatus)
+                                                    .arg (aXHR);
 
-    final JSBlock aBody = ret.body ();
+    final JSBlock aBody = body ();
 
     // Overall success?
     final JSConditional aIf = aBody._if (aData.ref (AjaxDefaultResponse.PROPERTY_SUCCESS));
@@ -113,5 +119,10 @@ public class AjaxDefaultResponseJSSuccess extends JSAnonymousFunction
       // Invoke the main handler last
       aIfSuccess.add (aHandlerInvocation);
     }
+
+    final JSBlock aIfError = aIf._else ();
+    final JSConditional aIfErrorMsg = aIfError._if (aData.ref (AjaxDefaultResponse.PROPERTY_ERRORMESSAGE));
+    aIfErrorMsg._then ().add (JSHtml.windowAlert (aData.ref (AjaxDefaultResponse.PROPERTY_ERRORMESSAGE)));
+    aIfErrorMsg._else ().add (JSHtml.windowAlert ("Error invoking action function!"));
   }
 }
