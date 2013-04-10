@@ -64,7 +64,7 @@ import com.phloc.html.js.builder.jquery.JQueryInvocation;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuerySelectorList;
 import com.phloc.web.http.EHTTPMethod;
-import com.phloc.webbasics.ajax.AjaxDefaultResponse;
+import com.phloc.webbasics.ajax.AjaxDefaultResponseJSSuccess;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.state.UIStateRegistry;
@@ -708,8 +708,8 @@ public class DataTables implements IHCNodeBuilder
                                                                                                    : m_eServerMethod.getName ())
                                                                      .url (sSource)
                                                                      .data (aoData)
-                                                                     .success (AjaxDefaultResponse.createDefaultSuccessFunction (fnCallback.name (),
-                                                                                                                                 true));
+                                                                     .success (new AjaxDefaultResponseJSSuccess (fnCallback.name (),
+                                                                                                                 true));
       aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
     }
