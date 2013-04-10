@@ -121,8 +121,11 @@ public class AjaxDefaultResponseJSSuccess extends JSAnonymousFunction
     }
 
     final JSBlock aIfError = aIf._else ();
+    final JSVar aErrorMsg = aIfError.var ("msg", "Error invoking AJAX function!");
     final JSConditional aIfErrorMsg = aIfError._if (aData.ref (AjaxDefaultResponse.PROPERTY_ERRORMESSAGE));
-    aIfErrorMsg._then ().add (JSHtml.windowAlert (aData.ref (AjaxDefaultResponse.PROPERTY_ERRORMESSAGE)));
-    aIfErrorMsg._else ().add (JSHtml.windowAlert ("Error invoking action function!"));
+    aIfErrorMsg._then ()
+               .add (JSHtml.windowAlert (aErrorMsg.plus (" ")
+                                                  .plus (aData.ref (AjaxDefaultResponse.PROPERTY_ERRORMESSAGE))));
+    aIfErrorMsg._else ().add (JSHtml.windowAlert (aErrorMsg));
   }
 }
