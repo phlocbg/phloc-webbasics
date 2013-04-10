@@ -55,6 +55,7 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSBlock;
 import com.phloc.html.js.builder.JSConditional;
 import com.phloc.html.js.builder.JSExpr;
+import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSRef;
 import com.phloc.html.js.builder.JSVar;
@@ -708,7 +709,7 @@ public class DataTables implements IHCNodeBuilder
                                                                                                    : m_eServerMethod.getName ())
                                                                      .url (sSource)
                                                                      .data (aoData)
-                                                                     .success (new AjaxDefaultResponseJSSuccess (fnCallback.name (),
+                                                                     .success (new AjaxDefaultResponseJSSuccess (new JSInvocation (fnCallback.name ()),
                                                                                                                  true));
       aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
