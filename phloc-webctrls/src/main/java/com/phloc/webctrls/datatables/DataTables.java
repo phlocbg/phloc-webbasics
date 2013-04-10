@@ -286,6 +286,14 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  public boolean hasAnyInvisibleColumn ()
+  {
+    for (final DataTablesColumn aColumn : m_aColumns)
+      if (!aColumn.isVisible ())
+        return true;
+    return false;
+  }
+
   @Nullable
   public DataTablesSorting getInitialSorting ()
   {
@@ -643,28 +651,33 @@ public class DataTables implements IHCNodeBuilder
                                                                          m_aDisplayLocale,
                                                                          m_eServerFilterType);
       UIStateRegistry.getCurrent ().registerState (m_aTable.getID (), aServerData);
-      // Remove all body rows to avoid initial double painting
+      // Remove all body rows to avoid initial double painting, as the most
+      // reasonable state is retrieved from the server!
       m_aTable.removeAllBodyRows ();
     }
 
-    if (true)
+    if (hasAnyInvisibleColumn ())
     {
-      // Remove all columns as this breaks the rendering
-      m_aTable.removeAllColumns ();
-    }
-    else
-    {
-      // Delete all columns from the colgroup that are invisible, because this
-      // will break the rendered layout
-      // Note: back to front, so that the index does not need to be modified
-      final HCColGroup aColGroup = m_aTable.getColGroup ();
-      if (aColGroup != null)
-        for (int i = m_aColumns.size () - 1; i >= 0; --i)
-        {
-          final DataTablesColumn aColumn = m_aColumns.get (i);
-          if (!aColumn.isVisible ())
-            aColGroup.removeColumnAtIndex (i);
-        }
+      if (true)
+      {
+        // Remove all columns as this breaks the rendering
+        m_aTable.removeAllColumns ();
+      }
+      else
+      {
+        // Delete all columns from the colgroup that are invisible, because this
+        // will break the rendered layout
+        // Note: back to front, so that the index does not need to be modified
+        // Note: disabled, as this may lead to HC table consistency warnings
+        final HCColGroup aColGroup = m_aTable.getColGroup ();
+        if (aColGroup != null)
+          for (int i = m_aColumns.size () - 1; i >= 0; --i)
+          {
+            final DataTablesColumn aColumn = m_aColumns.get (i);
+            if (!aColumn.isVisible ())
+              aColGroup.removeColumnAtIndex (i);
+          }
+      }
     }
 
     if (m_aAjaxSource != null)

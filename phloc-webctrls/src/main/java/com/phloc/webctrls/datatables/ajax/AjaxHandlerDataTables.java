@@ -289,6 +289,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       for (final CellData aCell : aRow.directGetAllCells ())
       {
         aRowData.put (Integer.toString (nCellIndex++), aCell.getHTML ());
+
+        // Merge all special nodes into the global ones
         aSpecialNodes.addAll (aCell.getSpecialNodes ());
       }
       aData.add (aRowData);
