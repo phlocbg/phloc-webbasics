@@ -33,7 +33,6 @@ import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCLegend;
 import com.phloc.html.js.EJSEvent;
 import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.EWebBasicsText;
@@ -87,11 +86,12 @@ public final class DemoAppAccessUI
     // Login button
     final BootstrapToolbar aToolbar = aFieldSet.addAndReturnChild (new BootstrapToolbar ());
     final JSPackage aOnClick = new JSPackage ();
-    aOnClick.invoke (JSExpr.ref ("DemoApp"), "viewLogin")
-            .arg (CDemoAppAjaxView.VIEW_LOGIN.getInvocationURI ())
-            .arg (new JSAssocArray ().add (CLogin.REQUEST_ATTR_USERID, JQuery.idRef (sIDUserName).val ())
-                                     .add (CLogin.REQUEST_ATTR_PASSWORD, JQuery.idRef (sIDPassword).val ()))
-            .arg (sIDErrorField);
+    aOnClick.add (DemoAppJS.viewLogin ()
+                           .arg (CDemoAppAjaxView.VIEW_LOGIN.getInvocationURI ())
+                           .arg (new JSAssocArray ().add (CLogin.REQUEST_ATTR_USERID, JQuery.idRef (sIDUserName).val ())
+                                                    .add (CLogin.REQUEST_ATTR_PASSWORD,
+                                                          JQuery.idRef (sIDPassword).val ()))
+                           .arg (sIDErrorField));
     aOnClick._return (false);
     aToolbar.addChild (new BootstrapButton_Submit ().addChild (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale))
                                                     .setEventHandler (EJSEvent.ONCLICK, aOnClick));
