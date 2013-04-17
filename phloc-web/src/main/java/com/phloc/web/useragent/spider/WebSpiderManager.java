@@ -70,7 +70,7 @@ public final class WebSpiderManager
   private void _readSpiderList (final String sPath)
   {
     final IMicroDocument aDoc = MicroReader.readMicroXML (new ClassPathResource (sPath));
-    for (final IMicroElement eSpider : aDoc.getDocumentElement ().getChildElements ("spider"))
+    for (final IMicroElement eSpider : aDoc.getDocumentElement ().getAllChildElements ("spider"))
     {
       final WebSpiderInfo aSpider = new WebSpiderInfo (eSpider.getAttribute ("ident"));
       aSpider.setName (MicroUtils.getChildTextContent (eSpider, "name"));
@@ -87,7 +87,7 @@ public final class WebSpiderManager
   private void _readSearchSpiders (final String sPath)
   {
     final IMicroDocument aDoc = MicroReader.readMicroXML (new ClassPathResource (sPath));
-    for (final IMicroElement eSpider : aDoc.getDocumentElement ().getChildElements ("spider"))
+    for (final IMicroElement eSpider : aDoc.getDocumentElement ().getAllChildElements ("spider"))
     {
       final String sID = eSpider.getAttribute ("ident");
       WebSpiderInfo aSpider = m_aMap.get (_getUnifiedID (sID));

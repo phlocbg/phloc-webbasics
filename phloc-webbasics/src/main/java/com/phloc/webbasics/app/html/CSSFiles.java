@@ -136,7 +136,7 @@ public class CSSFiles
       else
       {
         // New style
-        for (final IMicroElement eChild : eRoot.getChildElements ("css"))
+        for (final IMicroElement eChild : eRoot.getAllChildElements ("css"))
         {
           final String sCondComment = eChild.getAttribute ("condcomment");
           final String sPath = eChild.getAttribute ("path");

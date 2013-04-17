@@ -132,7 +132,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   protected EChange onRead (@Nonnull final IMicroDocument aDoc)
   {
-    for (final IMicroElement eUserGroup : aDoc.getDocumentElement ().getChildElements ())
+    for (final IMicroElement eUserGroup : aDoc.getDocumentElement ().getAllChildElements ())
       _addUserGroup (MicroTypeConverter.convertToNative (eUserGroup, UserGroup.class));
     return EChange.UNCHANGED;
   }

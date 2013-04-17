@@ -98,7 +98,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   @Nonnull
   protected EChange onRead (@Nonnull final IMicroDocument aDoc)
   {
-    for (final IMicroElement eRole : aDoc.getDocumentElement ().getChildElements ())
+    for (final IMicroElement eRole : aDoc.getDocumentElement ().getAllChildElements ())
       _addRole (MicroTypeConverter.convertToNative (eRole, Role.class));
     return EChange.UNCHANGED;
   }

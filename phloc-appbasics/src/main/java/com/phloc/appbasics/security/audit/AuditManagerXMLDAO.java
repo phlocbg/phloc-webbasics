@@ -58,7 +58,7 @@ final class AuditManagerXMLDAO extends AbstractXMLDAODataProvider
     // No clearing of existing items!!!
 
     if (aDoc != null)
-      for (final IMicroElement eItem : aDoc.getDocumentElement ().getChildElements (ELEMENT_ITEM))
+      for (final IMicroElement eItem : aDoc.getDocumentElement ().getAllChildElements (ELEMENT_ITEM))
       {
         final String sDT = eItem.getAttribute (ATTR_DT);
         final Long aDT = StringParser.parseLongObj (sDT);

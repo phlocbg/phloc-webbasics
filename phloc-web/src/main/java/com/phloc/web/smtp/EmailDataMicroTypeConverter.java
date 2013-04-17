@@ -118,22 +118,22 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     aEmailData.setFrom (_readEmailAddress (eFrom));
 
     final List <IEmailAddress> aReplyTos = new ArrayList <IEmailAddress> ();
-    for (final IMicroElement eReplyTo : eEmailData.getChildElements (ELEMENT_REPLYTO))
+    for (final IMicroElement eReplyTo : eEmailData.getAllChildElements (ELEMENT_REPLYTO))
       aReplyTos.add (_readEmailAddress (eReplyTo));
     aEmailData.setReplyTo (aReplyTos);
 
     final List <IEmailAddress> aTos = new ArrayList <IEmailAddress> ();
-    for (final IMicroElement eTo : eEmailData.getChildElements (ELEMENT_TO))
+    for (final IMicroElement eTo : eEmailData.getAllChildElements (ELEMENT_TO))
       aTos.add (_readEmailAddress (eTo));
     aEmailData.setTo (aTos);
 
     final List <IEmailAddress> aCcs = new ArrayList <IEmailAddress> ();
-    for (final IMicroElement eCc : eEmailData.getChildElements (ELEMENT_CC))
+    for (final IMicroElement eCc : eEmailData.getAllChildElements (ELEMENT_CC))
       aCcs.add (_readEmailAddress (eCc));
     aEmailData.setCc (aCcs);
 
     final List <IEmailAddress> aBccs = new ArrayList <IEmailAddress> ();
-    for (final IMicroElement eBcc : eEmailData.getChildElements (ELEMENT_BCC))
+    for (final IMicroElement eBcc : eEmailData.getAllChildElements (ELEMENT_BCC))
       aBccs.add (_readEmailAddress (eBcc));
     aEmailData.setBcc (aBccs);
 
@@ -158,7 +158,7 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     {
       // For legacy stuff:
       final EmailAttachmentList aAttachments = new EmailAttachmentList ();
-      for (final IMicroElement eAttachment : eEmailData.getChildElements ("attachment"))
+      for (final IMicroElement eAttachment : eEmailData.getAllChildElements ("attachment"))
         aAttachments.addAttachment (MicroTypeConverter.convertToNative (eAttachment, EmailAttachment.class));
       if (!aAttachments.isEmpty ())
         aEmailData.setAttachments (aAttachments);

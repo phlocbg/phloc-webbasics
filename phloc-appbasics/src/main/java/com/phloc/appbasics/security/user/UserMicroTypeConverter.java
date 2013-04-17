@@ -103,7 +103,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final String sDesiredLocale = eUser.getAttribute (ATTR_DESIREDLOCALE);
     final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.getLocale (sDesiredLocale);
     final Map <String, String> aCustomAttrs = new LinkedHashMap <String, String> ();
-    for (final IMicroElement eCustom : eUser.getChildElements (ELEMENT_CUSTOM))
+    for (final IMicroElement eCustom : eUser.getAllChildElements (ELEMENT_CUSTOM))
       aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
     final String sDeleted = eUser.getAttribute (ATTR_DELETED);
     final boolean bDeleted = StringParser.parseBool (sDeleted);

@@ -47,7 +47,7 @@ public final class EmailAttachmentListMicroTypeConverter implements IMicroTypeCo
   public EmailAttachmentList convertToNative (@Nonnull final IMicroElement eAttachmentList)
   {
     final EmailAttachmentList ret = new EmailAttachmentList ();
-    for (final IMicroElement eAttachment : eAttachmentList.getChildElements (ELEMENT_ATTACHMENT))
+    for (final IMicroElement eAttachment : eAttachmentList.getAllChildElements (ELEMENT_ATTACHMENT))
       ret.addAttachment (MicroTypeConverter.convertToNative (eAttachment, EmailAttachment.class));
     return ret;
   }

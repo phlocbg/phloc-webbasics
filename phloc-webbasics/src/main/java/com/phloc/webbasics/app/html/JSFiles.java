@@ -113,7 +113,7 @@ public class JSFiles
       else
       {
         // New style
-        for (final IMicroElement eChild : eRoot.getChildElements ("js"))
+        for (final IMicroElement eChild : eRoot.getAllChildElements ("js"))
         {
           final String sCondComment = eChild.getAttribute ("condcomment");
           final String sPath = eChild.getAttribute ("path");

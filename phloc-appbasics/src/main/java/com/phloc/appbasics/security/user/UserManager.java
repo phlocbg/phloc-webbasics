@@ -126,7 +126,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   @Nonnull
   protected EChange onRead (@Nonnull final IMicroDocument aDoc)
   {
-    for (final IMicroElement eUser : aDoc.getDocumentElement ().getChildElements ())
+    for (final IMicroElement eUser : aDoc.getDocumentElement ().getAllChildElements ())
       _addUser (MicroTypeConverter.convertToNative (eUser, User.class));
     return EChange.UNCHANGED;
   }

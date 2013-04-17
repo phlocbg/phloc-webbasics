@@ -54,9 +54,9 @@ public final class UserGroupMicroTypeConverter implements IMicroTypeConverter
     final String sID = eUserGroup.getAttribute (ATTR_ID);
     final String sName = eUserGroup.getAttribute (ATTR_NAME);
     final UserGroup aUserGroup = new UserGroup (sID, sName);
-    for (final IMicroElement eUser : eUserGroup.getChildElements (ELEMENT_USER))
+    for (final IMicroElement eUser : eUserGroup.getAllChildElements (ELEMENT_USER))
       aUserGroup.assignUser (eUser.getAttribute (ATTR_ID));
-    for (final IMicroElement eRole : eUserGroup.getChildElements (ELEMENT_ROLE))
+    for (final IMicroElement eRole : eUserGroup.getAllChildElements (ELEMENT_ROLE))
       aUserGroup.assignRole (eRole.getAttribute (ATTR_ID));
     return aUserGroup;
   }
