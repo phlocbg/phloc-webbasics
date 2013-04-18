@@ -27,6 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.CHCParam;
+import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.servlet.request.IRequestParamMap;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.useragent.IUserAgent;
@@ -251,6 +252,21 @@ public class LayoutExecutionContext
   public boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
   {
     return StringHelper.hasNoText (sName) ? bDefaultValue : RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
+  }
+
+  /**
+   * Get the uploaded file with the specified request parameter.
+   * 
+   * @param sName
+   *        The parameter name.
+   * @return <code>null</code> if no such uploaded file is present.
+   * @throws ClassCastException
+   *         if the passed request parameter is not a file
+   */
+  @Nullable
+  public IFileItem getFileItem (@Nullable final String sName)
+  {
+    return m_aRequestScope.getCastedAttribute (sName);
   }
 
   @Nonnull
