@@ -49,6 +49,18 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     super (sID, sName);
   }
 
+  /**
+   * @return <code>true</code> if the form for
+   *         {@link #showInputForm(WebPageExecutionContext, IHasID, HCForm, boolean, boolean, FormErrors)}
+   *         should be a file-upload form, <code>false</code> if a regular form
+   *         is sufficient.
+   */
+  @OverrideOnDemand
+  protected boolean isFileUploadForm ()
+  {
+    return false;
+  }
+
   @Nullable
   protected final String getSelectedObjectID (@Nonnull final WebPageExecutionContext aWPEC)
   {
@@ -431,7 +443,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           // Show the input form. Either for the first time or because of form
           // errors a n-th time
           bShowList = false;
-          final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
+          final HCForm aForm = isFileUploadForm () ? createFormFileUploadSelf () : createFormSelf ();
+          aWPEC.getNodeList ().addChild (aForm);
           aForm.setID (INPUT_FORM_ID);
 
           // The unique form ID, that allows to identify on "transaction"

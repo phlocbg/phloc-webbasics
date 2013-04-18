@@ -116,7 +116,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  public static final HCForm createFormFileUploadSelf ()
+  public static final HCForm_FileUpload createFormFileUploadSelf ()
   {
     return new HCForm_FileUpload (LinkUtils.getSelfHref ());
   }
