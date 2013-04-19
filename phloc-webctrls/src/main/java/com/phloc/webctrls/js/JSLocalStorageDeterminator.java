@@ -17,6 +17,9 @@
  */
 package com.phloc.webctrls.js;
 
+import javax.annotation.Nonnull;
+
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.hc.html.HCScript;
 
 /**
@@ -30,11 +33,16 @@ public class JSLocalStorageDeterminator extends HCScript
 
   public JSLocalStorageDeterminator ()
   {
+    this (VARNAME);
+  }
+
+  public JSLocalStorageDeterminator (@Nonnull @Nonempty final String sVarName)
+  {
     super ("var " +
-           VARNAME +
-           "=(function() {var uid=new Date,storage,result;try {" +
-           "(storage = window.localStorage).setItem(uid, uid);" +
-           "result = storage.getItem(uid) == uid;" +
+           sVarName +
+           "=(function(){var uid=new Date,storage,result;try {" +
+           "(storage=window.localStorage).setItem(uid, uid);" +
+           "result=storage.getItem(uid)==uid;" +
            "storage.removeItem(uid);" +
            "return result && storage;" +
            "} catch(e) {}" +
