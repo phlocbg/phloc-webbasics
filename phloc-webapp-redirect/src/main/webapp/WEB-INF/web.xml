@@ -22,10 +22,15 @@
   <display-name>phloc-webapp-redirect</display-name>
   <description>Redirect all requests to a new server</description>
   <context-param>
-    <description>Base URL where to redirect</description>
+    <description>
+      Base URL where to redirect.
+      Should not end with a slash.
+      May contain nested directories.
+    </description>
     <param-name>target</param-name>
     <param-value>http://www.phloc.com</param-value>
   </context-param>
+  
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>

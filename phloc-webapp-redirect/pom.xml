@@ -132,43 +132,5 @@
         <targetPath>${project.build.directory}/webapp-classes</targetPath>
       </resource>
     </resources>
-    
-    <plugins>
-      <plugin>
-        <groupId>com.phloc.maven</groupId>
-        <artifactId>closure-maven-plugin</artifactId>
-        <version>1.0.7</version><!--$NO-MVN-MAN-VER$-->
-        <executions>
-          <execution>
-            <goals>
-              <goal>compressjs</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <forceCreation>false</forceCreation>
-          <sourceDirectory>${basedir}/src/main/webapp</sourceDirectory>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.phloc.maven</groupId>
-        <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.12</version><!--$NO-MVN-MAN-VER$-->
-        <executions>
-          <execution>
-            <goals>
-              <goal>csscompress</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <forceCompress>false</forceCompress>
-          <removeUnnecessaryCode>true</removeUnnecessaryCode>
-          <quoteURLs>true</quoteURLs>
-          <verbose>true</verbose>
-          <sourceDirectory>${basedir}/src/main/webapp</sourceDirectory>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 </project>
