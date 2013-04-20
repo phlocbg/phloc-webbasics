@@ -132,7 +132,29 @@ public class DefaultLockManager
       throw new NullPointerException ("objID");
 
     final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
-    if (StringHelper.hasNoText (sCurrentUserID))
+    return lockObject (sObjID, sCurrentUserID);
+  }
+
+  /**
+   * Lock the object with the given ID. If the passed object is already locked
+   * by this user, this method has no effect. This is an atomic action.
+   * 
+   * @param sObjID
+   *        The object ID to lock. May not be <code>null</code>.
+   * @param sUserID
+   *        The id of the user who locked the object. May be <code>null</code>.
+   * @return {@link ELocked#LOCKED} if the object is locked by the specified
+   *         user after the call to this method, {@link ELocked#NOT_LOCKED} if
+   *         the object was already locked by another user or no user ID was
+   *         provided.
+   */
+  @Nonnull
+  public final ELocked lockObject (@Nonnull final String sObjID, @Nullable final String sUserID)
+  {
+    if (sObjID == null)
+      throw new NullPointerException ("objID");
+
+    if (StringHelper.hasNoText (sUserID))
       return ELocked.NOT_LOCKED;
 
     m_aRWLock.writeLock ().lock ();
@@ -143,11 +165,11 @@ public class DefaultLockManager
       {
         // Object is already locked.
         // Check whether the current user locked the object
-        return ELocked.valueOf (aCurrentLock.getLockUserID ().equals (sCurrentUserID));
+        return ELocked.valueOf (aCurrentLock.getLockUserID ().equals (sUserID));
       }
 
       // Overwrite any existing lock!
-      m_aLockedObjs.put (sObjID, new LockInfo (sCurrentUserID));
+      m_aLockedObjs.put (sObjID, new LockInfo (sUserID));
     }
     finally
     {
@@ -155,7 +177,7 @@ public class DefaultLockManager
     }
 
     if (s_aLogger.isInfoEnabled ())
-      s_aLogger.info ("User '" + sCurrentUserID + "' locked object '" + sObjID + "'");
+      s_aLogger.info ("User '" + sUserID + "' locked object '" + sObjID + "'");
     return ELocked.LOCKED;
   }
 
