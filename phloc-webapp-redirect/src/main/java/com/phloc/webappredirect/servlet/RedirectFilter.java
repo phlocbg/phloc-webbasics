@@ -1,0 +1,60 @@
+package com.phloc.webappredirect.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.string.StringHelper;
+import com.phloc.web.http.CHTTPHeader;
+
+public class RedirectFilter implements Filter
+{
+  private static final Logger s_aLogger = LoggerFactory.getLogger (RedirectFilter.class);
+
+  @Override
+  public void init (final FilterConfig aFilterConfig) throws ServletException
+  {}
+
+  @Override
+  public void doFilter (final ServletRequest aRequest, final ServletResponse aResponse, final FilterChain aChain) throws IOException,
+                                                                                                                 ServletException
+  {
+    if (aRequest instanceof HttpServletRequest && aResponse instanceof HttpServletResponse)
+    {
+      final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
+      final HttpServletResponse aHttpResponse = (HttpServletResponse) aResponse;
+
+      // Build including any session ID!
+      String sRelativeURI = aHttpRequest.getRequestURI ();
+      final String sQueryString = aHttpRequest.getQueryString ();
+      if (StringHelper.hasText (sQueryString))
+        sRelativeURI += '?' + sQueryString;
+
+      final String sServletContextPath = aHttpRequest.getContextPath ();
+      if (StringHelper.hasText (sServletContextPath))
+        if (sRelativeURI.startsWith (sServletContextPath))
+          sRelativeURI = sRelativeURI.substring (sServletContextPath.length ());
+
+      final String sTarget = RedirectListener.getTargetURL ().toExternalForm () + sRelativeURI;
+      s_aLogger.info ("Redirecting to " + sTarget);
+      aHttpResponse.setHeader (CHTTPHeader.LOCATION, sTarget);
+      aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_PERMANENTLY);
+    }
+    else
+      aChain.doFilter (aRequest, aResponse);
+  }
+
+  @Override
+  public void destroy ()
+  {}
+}
