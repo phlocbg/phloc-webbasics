@@ -19,8 +19,6 @@ package com.phloc.webappredirect.jetty;
 
 import java.io.File;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
@@ -29,15 +27,12 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.SystemProperties;
-
 /**
  * Run ebiz4all as a standalone web application in Jetty on port 8080.<br>
- * http://localhost:8080/kb
+ * http://localhost:8080/
  * 
  * @author philip
  */
-@Immutable
 public final class RunInJettyREDIRECT
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RunInJettyREDIRECT.class);
@@ -66,7 +61,9 @@ public final class RunInJettyREDIRECT
     aWebAppCtx.setDescriptor (RESOURCE_PREFIX + "/WEB-INF/web.xml");
     aWebAppCtx.setResourceBase (RESOURCE_PREFIX);
     aWebAppCtx.setContextPath ("/");
-    aWebAppCtx.setTempDirectory (new File (SystemProperties.getTmpDir () + '/' + RunInJettyREDIRECT.class.getName ()));
+    aWebAppCtx.setTempDirectory (new File (System.getProperty ("java.io.tmpdir") +
+                                           '/' +
+                                           RunInJettyREDIRECT.class.getName ()));
     aWebAppCtx.setParentLoaderPriority (true);
     aServer.setHandler (aWebAppCtx);
     final ServletContextHandler aCtx = aWebAppCtx;

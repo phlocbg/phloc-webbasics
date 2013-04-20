@@ -31,8 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.string.StringHelper;
-
 public class RedirectFilter implements Filter
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RedirectFilter.class);
@@ -53,11 +51,11 @@ public class RedirectFilter implements Filter
       // Build including any session ID!
       String sRelativeURI = aHttpRequest.getRequestURI ();
       final String sQueryString = aHttpRequest.getQueryString ();
-      if (StringHelper.hasText (sQueryString))
+      if (sQueryString != null && sQueryString.length () > 0)
         sRelativeURI += '?' + sQueryString;
 
       final String sServletContextPath = aHttpRequest.getContextPath ();
-      if (StringHelper.hasText (sServletContextPath))
+      if (sServletContextPath != null && sServletContextPath.length () > 0)
         if (sRelativeURI.startsWith (sServletContextPath))
           sRelativeURI = sRelativeURI.substring (sServletContextPath.length ());
 

@@ -27,8 +27,6 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.DevelopersNote;
-
 public final class JettyMonitor extends Thread
 {
   public static final int STOP_PORT = 8079;
@@ -56,7 +54,6 @@ public final class JettyMonitor extends Thread
   }
 
   @Override
-  @DevelopersNote ("Consider throwing a runtime exception instead of System.exit (find bugs)")
   public void run ()
   {
     while (true)

@@ -17,18 +17,15 @@
  */
 package com.phloc.webappredirect.servlet;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.url.URLUtils;
 
 /**
  * Servlet context listener
@@ -38,9 +35,8 @@ import com.phloc.commons.url.URLUtils;
 public final class RedirectListener implements ServletContextListener
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RedirectListener.class);
-  private static URL s_aURL;
+  private static URL s_aURL = null;
 
-  @Nonnull
   public static URL getTargetURL ()
   {
     return s_aURL;
@@ -50,15 +46,26 @@ public final class RedirectListener implements ServletContextListener
   public void contextInitialized (final ServletContextEvent aSCE)
   {
     final ServletContext aSC = aSCE.getServletContext ();
-    final String sTarget = StringHelper.trimEnd (aSC.getInitParameter ("target"), "/");
-    if (StringHelper.hasNoText (sTarget))
+    String sTarget = aSC.getInitParameter ("target");
+    if (sTarget == null)
       throw new IllegalStateException ("ServletContext init-parameter 'target' is missing or empty!");
-    final URL aURL = URLUtils.getAsURL (sTarget);
-    if (aURL == null)
+    if (sTarget.endsWith ("/"))
+      sTarget = sTarget.substring (0, sTarget.length () - 1);
+    if (sTarget.length () == 0)
+      throw new IllegalStateException ("ServletContext init-parameter 'target' is empty!");
+    try
+    {
+      final URL aURL = new URL (sTarget);
+
+      // Save in static field :)
+      s_aURL = aURL;
+    }
+    catch (final MalformedURLException ex)
+    {
       throw new IllegalStateException ("Failed to convert ServletContext init-parameter 'target' to a URL: '" +
                                        sTarget +
                                        "'");
-    s_aURL = aURL;
+    }
     s_aLogger.info ("Redirect servlet listener initialized: " + s_aURL.toExternalForm ());
   }
 
