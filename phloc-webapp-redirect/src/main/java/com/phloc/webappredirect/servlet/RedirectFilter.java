@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.string.StringHelper;
-import com.phloc.web.http.CHTTPHeader;
 
 public class RedirectFilter implements Filter
 {
@@ -64,7 +63,7 @@ public class RedirectFilter implements Filter
 
       final String sTarget = RedirectListener.getTargetURL ().toExternalForm () + sRelativeURI;
       s_aLogger.info ("Redirecting to " + sTarget);
-      aHttpResponse.setHeader (CHTTPHeader.LOCATION, sTarget);
+      aHttpResponse.setHeader ("Location", sTarget);
       aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_PERMANENTLY);
     }
     else
