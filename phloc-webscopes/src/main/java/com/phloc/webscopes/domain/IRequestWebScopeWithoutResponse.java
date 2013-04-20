@@ -59,6 +59,19 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   List <IFileItem> getAllUploadedFileItemValues ();
 
   /**
+   * Get the request attribute denoted by the specified attribute name as an
+   * uploaded file item. In case the specified parameter is present but not a
+   * file item, the method returns <code>null</code>.
+   * 
+   * @param sAttrName
+   *        The attribute name to resolved. May be <code>null</code>.
+   * @return <code>null</code> if no such attribute is present, or if the
+   *         attribute is not a file item.
+   */
+  @Nullable
+  IFileItem getAttributeAsFileItem (@Nullable String sAttrName);
+
+  /**
    * Returns the name of the scheme used to make this request, for example,
    * <code>http</code>, <code>https</code>, or <code>ftp</code>. Different
    * schemes have different rules for constructing URLs, as noted in RFC 1738.

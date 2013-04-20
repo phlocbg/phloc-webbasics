@@ -238,6 +238,13 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return ret;
   }
 
+  @Nullable
+  public IFileItem getAttributeAsFileItem (@Nullable final String sAttrName)
+  {
+    final Object aObject = getAttributeObject (sAttrName);
+    return aObject instanceof IFileItem ? (IFileItem) aObject : null;
+  }
+
   public String getScheme ()
   {
     return m_aHttpRequest.getScheme ();
