@@ -62,7 +62,7 @@ public class RedirectFilter implements Filter
       final String sTarget = RedirectListener.getTargetURL ().toExternalForm () + sRelativeURI;
       s_aLogger.info ("Redirecting to " + sTarget);
       aHttpResponse.setHeader ("Location", sTarget);
-      aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_PERMANENTLY);
+      aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_TEMPORARILY);
     }
     else
       aChain.doFilter (aRequest, aResponse);
