@@ -52,8 +52,8 @@ public final class ThirdPartyModuleProvider_phloc_web implements IThirdPartyModu
   private static final IThirdPartyModule JAVAX_MAIL = new ThirdPartyModule ("JavaMail",
                                                                             "Oracle",
                                                                             ELicense.BSD,
-                                                                            new Version (1, 4, 7),
-                                                                            "http://www.oracle.com/technetwork/java/javamail/index.html",
+                                                                            new Version (1, 5, 0),
+                                                                            "http://javamail.java.net/",
                                                                             true);
 
   private static final IThirdPartyModule JSCH = new ThirdPartyModule ("JSch",

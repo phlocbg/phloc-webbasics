@@ -20,12 +20,23 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2013-04-22" version="5.0.5" />
+  <entry date="2013-04-22" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to com.sun.mail:javax.mail 1.5.0</text>
+    </change>
+  </entry>
   <entry date="2013-04-17" category="tech" action="update">
     <change>
       <text locale="en">Updated to phloc-commons 4.0.3</text>
     </change>
   </entry>
-  <entry date="2013-04-17" category="api" action="add">
+  <entry date="2013-04-08" category="api" action="add">
+    <change>
+      <text locale="en">Added new class ComparatorNetworkInterfaceName</text>
+    </change>
+  </entry>
+  <entry date="2013-04-02" category="api" action="add">
     <change>
       <text locale="en">Added possibility to set SMTP ConnectionListener and TransportListener</text>
     </change>

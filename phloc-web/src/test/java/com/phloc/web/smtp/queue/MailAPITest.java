@@ -17,11 +17,10 @@
  */
 package com.phloc.web.smtp.queue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.phloc.commons.email.EmailAddress;
-import com.phloc.commons.idfactory.GlobalIDFactory;
-import com.phloc.commons.idfactory.MemoryIntIDFactory;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
@@ -40,11 +39,7 @@ import com.phloc.web.smtp.settings.SMTPSettings;
  */
 public final class MailAPITest
 {
-  static
-  {
-    GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
-  }
-
+  @Ignore ("to avoid spamming my mailbox")
   @Test
   public void testBasic ()
   {

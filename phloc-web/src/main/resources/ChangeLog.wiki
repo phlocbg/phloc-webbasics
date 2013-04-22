@@ -2,7 +2,11 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>4/22/13</td><td colspan="4">_Release *5.0.5*_</td></tr>
+<tr><td>4/22/13</td><td>update</td><td>tech</td><td></td><td>Updated to com.sun.mail:javax.mail 1.5.0</td></tr>
 <tr><td>4/17/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.0.3</td></tr>
+<tr><td>4/8/13</td><td>add</td><td>api</td><td></td><td>Added new class ComparatorNetworkInterfaceName</td></tr>
+<tr><td>4/2/13</td><td>add</td><td>api</td><td></td><td>Added possibility to set SMTP ConnectionListener and TransportListener</td></tr>
 <tr border="1"><td>3/25/13</td><td colspan="4">_Release *5.0.4*_</td></tr>
 <tr><td>3/25/13</td><td>fix</td><td>tech</td><td></td><td>Fixed potential deadlock in MailAPI</td></tr>
 <tr border="1"><td>3/19/13</td><td colspan="4">_Release *5.0.3*_</td></tr>
