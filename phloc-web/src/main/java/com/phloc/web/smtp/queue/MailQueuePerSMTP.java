@@ -87,7 +87,8 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
       final ISMTPSettings aSettings = m_aTransport.getSettings ();
       try
       {
-        s_aLogger.info ("Sending " + aMessages.size () + " mail messages!");
+        final int nMessages = aMessages.size ();
+        s_aLogger.info ("Sending " + nMessages + " mail message" + (nMessages == 1 ? "" : "s") + "!");
 
         // send messages
         final Map <IEmailData, MessagingException> aFailedMessages = m_aTransport.send (aMessages);

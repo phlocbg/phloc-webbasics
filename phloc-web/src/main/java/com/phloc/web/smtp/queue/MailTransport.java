@@ -123,7 +123,7 @@ final class MailTransport
       {
         final Transport aTransport = m_aSession.getTransport (SMTP_PROTOCOL);
 
-        // Add listener
+        // Add global listeners (if present)
         final ConnectionListener aConnectionListener = MailTransportSettings.getConnectionListener ();
         if (aConnectionListener != null)
           aTransport.addConnectionListener (aConnectionListener);

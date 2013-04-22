@@ -317,11 +317,16 @@ public final class MailAPI
       for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
         aQueue.stopQueuingNewObjects ();
 
+      final int nQueues = s_aQueueCache.size ();
+      final int nQueueLength = _getTotalQueueLength ();
       s_aLogger.info ("Stopping central mail queues: " +
-                      s_aQueueCache.size () +
-                      " queues with " +
-                      _getTotalQueueLength () +
-                      " mails");
+                      nQueues +
+                      " queue" +
+                      (nQueues == 1 ? "" : "s") +
+                      " with " +
+                      nQueueLength +
+                      " mail" +
+                      (nQueueLength == 1 ? "" : "s"));
     }
     finally
     {
