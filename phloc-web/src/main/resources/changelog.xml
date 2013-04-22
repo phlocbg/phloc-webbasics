@@ -25,6 +25,11 @@
       <text locale="en">Updated to phloc-commons 4.0.3</text>
     </change>
   </entry>
+  <entry date="2013-04-17" category="api" action="add">
+    <change>
+      <text locale="en">Added possibility to set SMTP ConnectionListener and TransportListener</text>
+    </change>
+  </entry>
   <release date="2013-03-25" version="5.0.4" />
   <entry date="2013-03-25" category="tech" action="fix">
     <change>

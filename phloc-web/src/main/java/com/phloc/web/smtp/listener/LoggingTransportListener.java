@@ -44,7 +44,7 @@ public class LoggingTransportListener implements TransportListener
   {
     if (aAddresses == null || aAddresses.length == 0)
       return "[]";
-    final StringBuilder aSB = new StringBuilder ().append (']');
+    final StringBuilder aSB = new StringBuilder ().append ('[');
     for (final Address aAddress : aAddresses)
     {
       if (aSB.length () > 1)
