@@ -76,7 +76,7 @@ import com.phloc.web.servlet.request.RequestHelper;
 /**
  * Mock implementation of {@link HttpServletRequest}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class MockHttpServletRequest implements HttpServletRequest, IHasLocale

@@ -25,7 +25,7 @@ import com.phloc.commons.filter.IFilter;
 /**
  * Interface for a menu item separator.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IMenuSeparator extends IMenuObject
 {

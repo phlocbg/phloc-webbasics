@@ -39,7 +39,7 @@ import com.phloc.web.smtp.settings.SMTPSettingsMicroTypeConverter;
 /**
  * Register all MicroTypeConverter implementations of this project.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 @IsSPIImplementation

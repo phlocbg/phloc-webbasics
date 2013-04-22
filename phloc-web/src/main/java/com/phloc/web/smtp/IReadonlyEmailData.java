@@ -34,7 +34,7 @@ import com.phloc.web.smtp.attachment.IReadonlyEmailAttachmentList;
 /**
  * Contains all possible fields for mail sending in a read-only fashion.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IReadonlyEmailData
 {

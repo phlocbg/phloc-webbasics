@@ -13,7 +13,7 @@ import com.phloc.commons.log.LogUtils;
 /**
  * An implementation of {@link ConnectionListener} that logs stuff to a logger.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class LoggingConnectionListener implements ConnectionListener
 {

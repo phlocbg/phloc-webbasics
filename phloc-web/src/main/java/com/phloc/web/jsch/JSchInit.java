@@ -25,7 +25,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 /**
  * Initialize JSch with some suggested settings.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class JSchInit

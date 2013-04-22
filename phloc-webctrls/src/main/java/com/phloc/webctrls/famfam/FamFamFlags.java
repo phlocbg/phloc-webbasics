@@ -30,7 +30,7 @@ import com.phloc.html.hc.IHCElement;
 /**
  * A wrapper around the FamFam flags icon set
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class FamFamFlags

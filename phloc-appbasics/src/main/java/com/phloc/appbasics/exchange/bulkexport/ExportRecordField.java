@@ -37,7 +37,7 @@ import com.phloc.commons.type.EBaseType;
 /**
  * A single field for exporting.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class ExportRecordField implements IExportRecordField

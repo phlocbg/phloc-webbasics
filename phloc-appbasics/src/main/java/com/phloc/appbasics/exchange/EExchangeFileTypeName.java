@@ -30,7 +30,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 /**
  * Exchange file type names.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum EExchangeFileTypeName implements IHasDisplayText

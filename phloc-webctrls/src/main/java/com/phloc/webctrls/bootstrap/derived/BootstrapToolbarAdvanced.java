@@ -27,7 +27,7 @@ import com.phloc.webbasics.app.LinkUtils;
 /**
  * Bootstrap block help.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapToolbarAdvanced extends BootstrapToolbar
 {

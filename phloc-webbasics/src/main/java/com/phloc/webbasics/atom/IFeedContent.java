@@ -24,7 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 /**
  * Base interface for the content element.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFeedContent extends IFeedElement
 {

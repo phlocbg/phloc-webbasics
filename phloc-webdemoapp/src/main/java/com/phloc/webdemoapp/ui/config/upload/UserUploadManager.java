@@ -39,7 +39,7 @@ import com.phloc.webscopes.singleton.SessionWebSingleton;
  * A per-session manager, that handles all the uploaded files while the process
  * to which the files belong is still in process.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class UserUploadManager extends SessionWebSingleton
 {

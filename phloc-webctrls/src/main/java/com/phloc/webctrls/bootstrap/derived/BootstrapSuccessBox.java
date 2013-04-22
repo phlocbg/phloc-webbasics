@@ -28,7 +28,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 /**
  * Bootstrap error box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapSuccessBox extends AbstractBootstrapAlert <BootstrapSuccessBox>
 {

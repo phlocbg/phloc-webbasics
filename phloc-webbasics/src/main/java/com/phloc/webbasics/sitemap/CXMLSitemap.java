@@ -27,7 +27,7 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 /**
  * Constants for handling sitemaps.org sitemaps consistently.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CXMLSitemap

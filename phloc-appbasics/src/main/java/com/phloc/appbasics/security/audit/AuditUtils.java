@@ -31,7 +31,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Simplify auditing calls.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class AuditUtils

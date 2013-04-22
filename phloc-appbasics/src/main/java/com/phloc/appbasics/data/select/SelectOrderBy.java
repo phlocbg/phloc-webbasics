@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Represents the sorting of a specific column, and the sort order
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class SelectOrderBy

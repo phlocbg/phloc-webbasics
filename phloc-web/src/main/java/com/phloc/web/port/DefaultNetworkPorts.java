@@ -31,7 +31,7 @@ import com.phloc.commons.collections.ContainerHelper;
  * A list of default ports between 0 and 1024. Created from the IANA port list.
  * http://www.iana.org/assignments/port-numbers
  * 
- * @author philip
+ * @author Philip Helger
  */
 @CodingStyleguideUnaware ("Concerning the constants used in this class")
 public final class DefaultNetworkPorts

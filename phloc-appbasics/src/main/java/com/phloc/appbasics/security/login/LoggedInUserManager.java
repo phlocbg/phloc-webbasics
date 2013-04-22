@@ -45,7 +45,7 @@ import com.phloc.scopes.singleton.SessionSingleton;
 /**
  * This class manages all logged-in users.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class LoggedInUserManager extends GlobalSingleton implements ICurrentUserIDProvider
@@ -53,7 +53,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   /**
    * This class manages the user ID of the current session
    * 
-   * @author philip
+   * @author Philip Helger
    */
   public static final class SessionUserHolder extends SessionSingleton
   {

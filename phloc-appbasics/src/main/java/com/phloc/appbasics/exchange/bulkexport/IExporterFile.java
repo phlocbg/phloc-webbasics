@@ -25,7 +25,7 @@ import com.phloc.appbasics.exchange.EExchangeFileType;
  * A specialized exporter that exports to a file. This interface provides
  * additional meta information.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IExporterFile extends IExporter
 {

@@ -28,7 +28,7 @@ import com.phloc.web.useragent.spider.WebSpiderInfo;
 /**
  * Special browser info for Web Spider user agents.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class BrowserInfoSpider extends BrowserInfo
 {

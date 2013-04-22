@@ -39,7 +39,7 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * Note: each date element requires a unique ID since the external calendar
  * requires the ID.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCDateEdit implements IHCNodeBuilder
 {

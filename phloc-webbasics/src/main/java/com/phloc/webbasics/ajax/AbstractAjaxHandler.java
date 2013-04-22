@@ -31,7 +31,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * Provides a common implementation of the {@link IAjaxHandler} interface for as
  * easy reuse as possible.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public abstract class AbstractAjaxHandler implements IAjaxHandler

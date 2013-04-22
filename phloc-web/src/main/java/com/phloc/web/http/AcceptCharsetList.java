@@ -27,7 +27,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Represents a list of Accept-Charset values as specified in the HTTP header
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class AcceptCharsetList extends AbstractQValueList <String>
 {

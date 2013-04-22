@@ -33,7 +33,7 @@ import com.phloc.html.hc.html.AbstractHCCell;
 /**
  * This comparator is responsible for sorting cells by BigInteger
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorCellBigInteger extends AbstractComparator <AbstractHCCell>
 {

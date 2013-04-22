@@ -36,7 +36,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * Renders a page with HTML code that is provided from an external resource
  * (e.g. for static pages)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class PageViewExternal extends AbstractWebPageExt
 {

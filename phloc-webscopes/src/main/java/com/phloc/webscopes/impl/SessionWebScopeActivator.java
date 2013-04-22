@@ -42,7 +42,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * The passivation itself is empty, because everything is done in the serialzing
  * code
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class SessionWebScopeActivator implements Serializable, HttpSessionActivationListener
 {

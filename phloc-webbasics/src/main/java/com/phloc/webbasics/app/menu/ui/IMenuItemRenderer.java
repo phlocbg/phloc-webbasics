@@ -29,7 +29,7 @@ import com.phloc.html.hc.html.HCLI;
 /**
  * Interface for rendering menu objects
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IMenuItemRenderer <T extends AbstractHCList <?>>
 {

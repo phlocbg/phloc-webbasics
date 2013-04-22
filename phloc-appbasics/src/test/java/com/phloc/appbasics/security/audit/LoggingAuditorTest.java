@@ -25,7 +25,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Test class for class {@link LoggingAuditor}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class LoggingAuditorTest
 {

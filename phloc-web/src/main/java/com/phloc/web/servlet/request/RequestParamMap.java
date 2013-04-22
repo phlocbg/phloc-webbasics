@@ -52,7 +52,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Having only <code>struct[key1][key2][key3]=value</code> results in
  * <code>map{struct=map{key1=map{key2=map{key3=value}}}}</code>
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class RequestParamMap implements IRequestParamMap

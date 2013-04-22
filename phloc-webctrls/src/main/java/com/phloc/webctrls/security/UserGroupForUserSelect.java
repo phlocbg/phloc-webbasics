@@ -34,7 +34,7 @@ import com.phloc.webctrls.custom.HCExtSelect;
 /**
  * Select user groups a user should be assigned to
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class UserGroupForUserSelect extends HCExtSelect
 {

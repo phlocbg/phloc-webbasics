@@ -33,7 +33,7 @@ import com.phloc.web.CWeb;
  * Source:
  * http://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EHttpProxyType implements IHasID <String>
 {

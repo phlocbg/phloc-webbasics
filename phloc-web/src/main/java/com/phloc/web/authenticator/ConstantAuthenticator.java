@@ -31,7 +31,7 @@ import com.phloc.commons.string.StringHelper;
  * Call to enable:
  * <code>Authenticator.setDefault (new ConstantAuthenticator (user, pw));</code>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ConstantAuthenticator extends Authenticator
 {

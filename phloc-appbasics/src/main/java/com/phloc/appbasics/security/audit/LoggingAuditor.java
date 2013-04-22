@@ -29,7 +29,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 /**
  * An implementation of {@link IAuditor} using SLF4J logging.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class LoggingAuditor extends AbstractAuditor
 {

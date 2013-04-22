@@ -38,7 +38,7 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 /**
  * This is a specialization of {@link ScopeSessionManager} for web scopes.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class WebScopeSessionManager

@@ -40,7 +40,7 @@ import com.phloc.web.http.CHTTPHeader;
  * Most method got deprecated by the activation of the {@link UnifiedResponse}
  * and the respective servlet and filter.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class ResponseHelper

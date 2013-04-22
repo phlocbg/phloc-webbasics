@@ -22,7 +22,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * Facebook SDK constants
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CFacebook

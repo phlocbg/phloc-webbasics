@@ -28,7 +28,7 @@ import com.phloc.commons.collections.ContainerHelper;
  * A special implementation of {@link IExportRecordProvider} delivering an empty
  * set.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class EmptyExportRecordProvider implements IExportRecordProvider
 {

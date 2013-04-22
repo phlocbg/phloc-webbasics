@@ -35,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Base implementation for interface {@link IEmailAttachment}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class EmailAttachment implements IEmailAttachment
 {

@@ -32,7 +32,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 /**
  * Password constraint texts
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum EPasswordConstraintText implements IHasDisplayText, IHasDisplayTextWithArgs

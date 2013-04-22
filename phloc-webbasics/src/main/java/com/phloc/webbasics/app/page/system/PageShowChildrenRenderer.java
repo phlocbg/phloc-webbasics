@@ -34,7 +34,7 @@ import com.phloc.webbasics.app.LinkUtils;
 /**
  * The default renderer used for {@link PageShowChildren}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class PageShowChildrenRenderer implements Serializable
 {

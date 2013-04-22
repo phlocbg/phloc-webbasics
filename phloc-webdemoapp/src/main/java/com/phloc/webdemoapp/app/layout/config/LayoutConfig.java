@@ -34,14 +34,14 @@ import com.phloc.webctrls.bootstrap.EBootstrapSpan;
 /**
  * This class registers the renderer for the layout areas.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class LayoutConfig
 {
   /**
    * The header renderer.
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class AreaHeader implements ILayoutAreaContentProvider
   {
@@ -54,7 +54,7 @@ public final class LayoutConfig
   /**
    * The navigation bar renderer.
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class AreaNavBar implements ILayoutAreaContentProvider
   {
@@ -67,7 +67,7 @@ public final class LayoutConfig
   /**
    * The viewport renderer (menu + content area)
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class AreaViewPort implements ILayoutAreaContentProvider
   {

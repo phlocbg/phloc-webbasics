@@ -37,7 +37,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
 /**
  * Contains the settings for the {@link ResponseHelper} class.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class ResponseHelperSettings

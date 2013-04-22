@@ -32,7 +32,7 @@ import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
  * Test class for class {@link SessionWebSingleton}.<br>
  * Note: must reside here for Mock* stuff!
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class SessionWebSingletonTest extends AbstractWebScopeAwareTestCase
 {

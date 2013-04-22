@@ -33,7 +33,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * This class encapsulates the the file IO base directory for the current user
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class LoggedInUserStorage

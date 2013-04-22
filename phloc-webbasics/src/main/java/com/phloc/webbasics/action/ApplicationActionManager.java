@@ -34,7 +34,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * This class represents a per-application singleton {@link ActionInvoker}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class ApplicationActionManager extends ApplicationSingleton implements IActionInvoker

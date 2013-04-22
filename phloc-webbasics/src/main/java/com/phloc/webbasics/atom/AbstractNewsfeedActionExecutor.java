@@ -44,7 +44,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Abstract news feed action.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecutor implements
                                                                                    IHasID <String>,

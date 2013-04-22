@@ -20,7 +20,7 @@ package com.phloc.appbasics.data.select;
 /**
  * Base interface for {@link ISelectFilter} and {@link ISelectFilterChain}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ISelectFilterable
 {

@@ -32,7 +32,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * A request parameter map. It handles complex request parameters and lets you
  * iterate the structure.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IRequestParamMap extends IHasSize
 {

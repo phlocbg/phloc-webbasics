@@ -27,7 +27,7 @@ import com.phloc.webscopes.IWebScope;
 /**
  * Interface for a global web scope.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IGlobalWebScope extends IGlobalScope, IWebScope
 {

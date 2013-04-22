@@ -50,14 +50,14 @@ import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
 /**
  * This class registers the renderer for the layout areas.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class LayoutView
 {
   /**
    * The header renderer.
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class AreaHeader implements ILayoutAreaContentProvider
   {
@@ -70,7 +70,7 @@ public final class LayoutView
   /**
    * The navigation bar renderer.
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class AreaNavBar implements ILayoutAreaContentProvider
   {
@@ -83,7 +83,7 @@ public final class LayoutView
   /**
    * The viewport renderer (menu + content area)
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class AreaViewPort implements ILayoutAreaContentProvider
   {

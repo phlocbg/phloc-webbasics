@@ -25,7 +25,7 @@ import com.phloc.commons.type.EBaseType;
 /**
  * Represents a single field of an {@link IExportRecord} to be exported.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IExportRecordField
 {

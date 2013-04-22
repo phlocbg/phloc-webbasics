@@ -24,7 +24,7 @@ import com.phloc.html.hc.IHCNode;
  * fields (the comment) or to show hints. There are several ways on how to
  * represents a note: plain text, icon with mouse-over, tiptip tooltip etc.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFormNote extends IHCNode
 {

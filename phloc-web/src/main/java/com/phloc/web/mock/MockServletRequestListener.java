@@ -26,7 +26,7 @@ import javax.servlet.ServletRequestListener;
 /**
  * This mock listeners is responsible for creating
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class MockServletRequestListener implements ServletRequestListener

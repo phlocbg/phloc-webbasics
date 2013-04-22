@@ -36,7 +36,7 @@ import com.phloc.json.impl.JSONObject;
 /**
  * Encapsulates the response to a single DataTables AJAX request
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class ResponseData implements IJSONConvertible
 {

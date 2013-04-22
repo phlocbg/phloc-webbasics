@@ -28,7 +28,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Base web action executor interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IActionExecutor
 {

@@ -26,7 +26,7 @@ import com.phloc.commons.filter.IFilter;
 /**
  * Base interface for a single menu item referencing an internal page.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IMenuItemPage extends IMenuItem
 {

@@ -32,7 +32,7 @@ import com.phloc.web.http.CHTTPHeader;
 /**
  * Credentials for HTTP basic authentication
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class BasicAuthClientCredentials

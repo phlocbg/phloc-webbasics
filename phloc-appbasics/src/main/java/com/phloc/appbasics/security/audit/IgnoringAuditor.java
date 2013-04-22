@@ -24,7 +24,7 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 /**
  * An implementation of {@link IAuditor} that does nothing
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class IgnoringAuditor extends AbstractAuditor
 {

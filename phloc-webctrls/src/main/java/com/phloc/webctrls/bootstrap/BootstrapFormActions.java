@@ -22,7 +22,7 @@ import com.phloc.html.hc.html.AbstractHCDiv;
 /**
  * Bootstrap form actions.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapFormActions extends AbstractHCDiv <BootstrapFormActions>
 {

@@ -31,7 +31,7 @@ import com.phloc.commons.idfactory.MemoryIntIDFactory;
 /**
  * Static appbasics test init and shutdown code
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class AppBasicTestInit
 {

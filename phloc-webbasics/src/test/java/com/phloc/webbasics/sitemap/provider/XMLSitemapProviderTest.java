@@ -34,7 +34,7 @@ import com.phloc.webbasics.sitemap.XMLSitemapIndex;
 /**
  * Test class for class {@link XMLSitemapProvider}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class XMLSitemapProviderTest
 {

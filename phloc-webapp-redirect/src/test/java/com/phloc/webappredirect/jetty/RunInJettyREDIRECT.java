@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * Run ebiz4all as a standalone web application in Jetty on port 8080.<br>
  * http://localhost:8080/
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class RunInJettyREDIRECT
 {

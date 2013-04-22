@@ -27,7 +27,7 @@ import javax.net.ssl.SSLSocketFactory;
  * http://java.sun.com/products/javamail/javadocs/com/sun/mail/smtp/package
  * -summary.html
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ESMTPTransportProperty
 {

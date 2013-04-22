@@ -43,7 +43,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Default implementation of a locking manager.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class DefaultLockManager

@@ -34,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Abstract base class for form error lists
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public abstract class AbstractFormErrorList <T extends IFormError>

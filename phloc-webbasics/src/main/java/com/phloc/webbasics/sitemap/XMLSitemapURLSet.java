@@ -40,7 +40,7 @@ import com.phloc.datetime.PDTUtils;
 /**
  * Represents a set of {@link XMLSitemapURL} objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class XMLSitemapURLSet implements IHasLastModificationDateTime

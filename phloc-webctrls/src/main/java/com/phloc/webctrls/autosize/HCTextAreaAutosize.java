@@ -31,7 +31,7 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * http://www.jacklmoore.com/autosize
  * </pre>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCTextAreaAutosize extends HCTextArea
 {

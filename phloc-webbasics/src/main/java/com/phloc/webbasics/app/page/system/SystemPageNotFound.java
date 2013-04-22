@@ -37,7 +37,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 /**
  * Default page showing a very rudimentary "page not found"
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class SystemPageNotFound extends AbstractWebPage
 {

@@ -28,7 +28,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * Abstract base class in case there will be some common functionality some
  * time.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractActionExecutor implements IActionExecutor
 {

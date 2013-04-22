@@ -23,7 +23,7 @@ import com.phloc.webscopes.IWebScope;
 /**
  * Interface for a single session application scope object.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ISessionApplicationWebScope extends ISessionApplicationScope, IWebScope
 {

@@ -40,7 +40,7 @@ import com.phloc.json.impl.JSONObject;
 /**
  * Wrapper for Fineuploader 3.1.1
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class FineUploaderBasic
 {

@@ -30,7 +30,7 @@ import com.phloc.webctrls.bootstrap.ext.BootstrapBreadcrumbProvider;
 /**
  * The content provider for the navigation bar area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class ViewNavbarProvider
 {

@@ -35,7 +35,7 @@ import com.phloc.commons.url.SimpleURL;
  * Think of this as a file descriptor. A {@link UserDataObject} lies directly
  * within a web application and can be accessed by regular file IO.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class UserDataObject
 {

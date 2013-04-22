@@ -24,7 +24,7 @@ import com.phloc.commons.version.Version;
 /**
  * Web feature detection based on user interface
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EWebFeature
 {

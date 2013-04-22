@@ -26,7 +26,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Create authentication token IDs.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 final class AuthTokenIDGenerator

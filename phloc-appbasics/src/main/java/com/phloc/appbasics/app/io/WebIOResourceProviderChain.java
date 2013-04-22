@@ -34,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Specialized resource provider for testing, that only delivers a resource when
  * it exists!
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebIOResourceProviderChain implements IWritableResourceProvider
 {

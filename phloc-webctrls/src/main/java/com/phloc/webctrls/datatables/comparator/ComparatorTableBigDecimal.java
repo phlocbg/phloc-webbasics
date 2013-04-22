@@ -30,7 +30,7 @@ import com.phloc.commons.locale.LocaleFormatter;
 /**
  * This comparator is responsible for sorting cells by BigDecimal
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorTableBigDecimal extends AbstractComparatorTable
 {

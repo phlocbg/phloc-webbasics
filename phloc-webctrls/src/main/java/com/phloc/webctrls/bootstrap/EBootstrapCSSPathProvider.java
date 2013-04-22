@@ -26,7 +26,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 /**
  * Contains default CSS paths within this library.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapCSSPathProvider implements ICSSPathProvider
 {

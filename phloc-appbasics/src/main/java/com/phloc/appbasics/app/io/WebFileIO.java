@@ -43,7 +43,7 @@ import com.phloc.commons.state.ISuccessIndicator;
 /**
  * Abstract for accessing files inside the web application.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class WebFileIO

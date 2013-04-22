@@ -27,7 +27,7 @@ import com.phloc.commons.id.IHasID;
 /**
  * Interface for an auth token.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAuthToken extends IHasID <String>
 {

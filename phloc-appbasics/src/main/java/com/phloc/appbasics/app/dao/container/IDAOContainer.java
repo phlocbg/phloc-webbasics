@@ -27,7 +27,7 @@ import com.phloc.appbasics.app.dao.IDAO;
 /**
  * A marker interface for objects containing other DAOs.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IDAOContainer extends IAutoSaveAware
 {

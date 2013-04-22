@@ -74,7 +74,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * This class encapsulates all things required to build a HTTP response. It
  * offer warnings and consistency checks if something is missing.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class UnifiedResponse
 {

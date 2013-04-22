@@ -29,7 +29,7 @@ import com.phloc.html.hc.html.HCDiv;
 /**
  * Bootstrap spans
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapSpan implements ICSSClassProvider
 {

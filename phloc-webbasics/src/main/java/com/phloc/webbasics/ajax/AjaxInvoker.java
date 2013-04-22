@@ -47,7 +47,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * The default implementation of {@link IAjaxInvoker}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class AjaxInvoker implements IAjaxInvoker

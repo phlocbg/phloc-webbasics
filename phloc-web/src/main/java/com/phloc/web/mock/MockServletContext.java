@@ -57,7 +57,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Mock implementation of the {@link ServletContext} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class MockServletContext implements ServletContext

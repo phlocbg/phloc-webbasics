@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Central exception in case something's wrong with mail sending.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MailSendException extends Exception
 {

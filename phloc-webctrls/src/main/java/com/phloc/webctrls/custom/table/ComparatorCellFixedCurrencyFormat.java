@@ -28,7 +28,7 @@ import com.phloc.masterdata.currency.ECurrency;
  * A cell comparator that handles currency formatted cells that all use the same
  * currency.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ComparatorCellFixedCurrencyFormat extends ComparatorCellDouble
 {

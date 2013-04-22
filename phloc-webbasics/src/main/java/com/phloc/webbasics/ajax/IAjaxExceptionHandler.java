@@ -27,7 +27,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * Callback interface to handle thrown exception objects from the
  * {@link GlobalAjaxServlet}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAjaxExceptionHandler
 {

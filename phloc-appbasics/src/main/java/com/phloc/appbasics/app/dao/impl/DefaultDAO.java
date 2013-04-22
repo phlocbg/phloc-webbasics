@@ -48,7 +48,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * This is the base class for all kind of data access managers that are file
  * based.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class DefaultDAO extends AbstractDAO

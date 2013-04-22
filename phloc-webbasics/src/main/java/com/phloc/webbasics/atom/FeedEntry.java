@@ -41,7 +41,7 @@ import com.phloc.commons.xml.CXML;
  * Represents a single entry within an ATOM 1.0 feed.<br>
  * Specs: http://atompub.org/rfc4287.html#element.entry
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FeedEntry extends AbstractFeedElement
 {

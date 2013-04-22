@@ -37,7 +37,7 @@ import com.phloc.webscopes.domain.IGlobalWebScope;
  * Note: for synchronization issues, this class does not store the attributes in
  * the passed {@link ServletContext} but in a separate map.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class GlobalWebScope extends GlobalScope implements IGlobalWebScope

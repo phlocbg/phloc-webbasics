@@ -33,7 +33,7 @@ import com.phloc.datetime.format.SerializableDateTimeFormatter.EFormatStyle;
 /**
  * This comparator is responsible for sorting cells by date and/or time.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorTableDateTime extends AbstractComparatorTable
 {

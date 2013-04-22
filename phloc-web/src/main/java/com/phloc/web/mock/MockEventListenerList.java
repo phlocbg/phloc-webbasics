@@ -43,7 +43,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * {@link HttpSessionListener} and {@link ServletRequestListener}) used by
  * {@link MockHttpListener}
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class MockEventListenerList

@@ -39,7 +39,7 @@ import com.phloc.commons.state.EChange;
 /**
  * The class handles all audit items
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class AsynchronousAuditor extends AbstractAuditor

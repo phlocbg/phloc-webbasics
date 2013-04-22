@@ -32,7 +32,7 @@ import com.phloc.html.js.IJSCodeProvider;
 /**
  * Breadcrumbs
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapBreadcrumb extends HCUL
 {

@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Type of well size
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapWellType implements ICSSClassProvider
 {

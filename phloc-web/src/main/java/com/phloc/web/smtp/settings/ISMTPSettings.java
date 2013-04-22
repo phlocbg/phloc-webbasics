@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 /**
  * Interface representing the basic SMTP settings required to login to a user.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ISMTPSettings
 {

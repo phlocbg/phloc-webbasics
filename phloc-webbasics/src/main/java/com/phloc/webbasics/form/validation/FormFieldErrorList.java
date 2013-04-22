@@ -31,7 +31,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Handles form field specific error messages.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> implements IFormFieldErrorList

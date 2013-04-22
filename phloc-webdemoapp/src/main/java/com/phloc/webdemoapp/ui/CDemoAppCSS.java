@@ -25,7 +25,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Contains constant CSS classes
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CDemoAppCSS

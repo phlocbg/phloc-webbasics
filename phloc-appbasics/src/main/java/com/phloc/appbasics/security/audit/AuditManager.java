@@ -41,7 +41,7 @@ import com.phloc.datetime.io.PDTIOHelper;
 /**
  * The class handles all audit items
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class AuditManager extends AbstractXMLDAO implements IAuditManager

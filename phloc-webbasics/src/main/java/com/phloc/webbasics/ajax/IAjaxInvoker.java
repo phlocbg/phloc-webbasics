@@ -29,7 +29,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Base interface for an Ajax invoker
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAjaxInvoker
 {

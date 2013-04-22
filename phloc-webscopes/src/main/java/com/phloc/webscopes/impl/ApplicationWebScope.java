@@ -29,7 +29,7 @@ import com.phloc.webscopes.domain.IApplicationWebScope;
  * compared to the regular {@link ApplicationScope} but implements the specific
  * {@link IApplicationWebScope} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class ApplicationWebScope extends ApplicationScope implements IApplicationWebScope

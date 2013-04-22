@@ -29,7 +29,7 @@ import com.phloc.commons.state.EChange;
 /**
  * The external data provider for a DAO
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface IDAODataProvider

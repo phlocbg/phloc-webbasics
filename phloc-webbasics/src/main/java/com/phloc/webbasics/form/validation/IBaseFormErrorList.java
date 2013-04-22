@@ -28,7 +28,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 /**
  * A simple read only form error list interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IBaseFormErrorList <T extends IFormError>
 {

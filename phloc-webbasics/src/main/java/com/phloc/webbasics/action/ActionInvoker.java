@@ -44,7 +44,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * This class maps action names to callback objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class ActionInvoker implements IActionInvoker

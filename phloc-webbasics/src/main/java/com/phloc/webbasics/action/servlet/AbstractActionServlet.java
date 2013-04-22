@@ -37,7 +37,7 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 /**
  * Abstract action handling servlet
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractActionServlet extends AbstractUnifiedResponseServlet
 {

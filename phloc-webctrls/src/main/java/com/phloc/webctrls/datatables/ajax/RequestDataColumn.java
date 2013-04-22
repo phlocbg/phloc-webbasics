@@ -25,7 +25,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Encapsulates the request data for a single column
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 final class RequestDataColumn

@@ -37,7 +37,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Test class for class {@link AsynchronousAuditor}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class AsynchronousAuditorTest
 {

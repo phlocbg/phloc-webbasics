@@ -37,7 +37,7 @@ import com.phloc.commons.string.StringParser;
  * Special servlet filter that applies a certain encoding to a request and a
  * response.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CharacterEncodingFilter implements Filter
 {

@@ -41,7 +41,7 @@ import com.phloc.web.mock.OfflineHttpServletRequest;
 /**
  * Helper class to debug information passed to a JSP page or a servlet.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class RequestLogger

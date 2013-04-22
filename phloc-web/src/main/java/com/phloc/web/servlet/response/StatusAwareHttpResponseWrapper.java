@@ -31,7 +31,7 @@ import com.phloc.web.http.HTTPHeaderMap;
  * A special {@link HttpServletResponseWrapper} that tracks the used status
  * codes as well as the set HTTP response headers.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class StatusAwareHttpResponseWrapper extends HttpServletResponseWrapper

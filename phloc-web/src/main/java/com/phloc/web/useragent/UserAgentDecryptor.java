@@ -34,7 +34,7 @@ import com.phloc.commons.url.URLProtocolRegistry;
  * This class converts an user agent string to an {@link IUserAgent} object if
  * possible.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class UserAgentDecryptor

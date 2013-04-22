@@ -32,7 +32,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 /**
  * Contains some web page base class texts.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs

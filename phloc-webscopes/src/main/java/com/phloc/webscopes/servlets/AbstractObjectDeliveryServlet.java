@@ -44,7 +44,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Base class for stream and download servlet.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedResponseServlet
 {

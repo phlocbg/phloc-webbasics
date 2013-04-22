@@ -40,7 +40,7 @@ import com.phloc.web.servlet.server.StaticServerInfo;
 /**
  * Test class for class {@link XMLSitemapIndex}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class XMLSitemapIndexTest
 {

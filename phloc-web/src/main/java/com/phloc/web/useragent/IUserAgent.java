@@ -29,7 +29,7 @@ import com.phloc.web.useragent.browser.BrowserInfoSpider;
 /**
  * Represents a single parsed user agent.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IUserAgent extends IHasStringRepresentation
 {

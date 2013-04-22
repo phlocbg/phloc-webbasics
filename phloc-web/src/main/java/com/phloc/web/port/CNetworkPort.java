@@ -22,7 +22,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * Constants for network port handling.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CNetworkPort

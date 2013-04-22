@@ -35,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * sorting. So the number of sort columns is always &ge; as the number of
  * overall columns.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 final class RequestDataSortColumn implements Serializable

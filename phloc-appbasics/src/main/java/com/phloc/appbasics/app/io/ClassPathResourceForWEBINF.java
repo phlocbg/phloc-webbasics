@@ -42,7 +42,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Specialized internal class path input stream provider, that looks both in the
  * passed directory and optionally in a sub-folder of "WEB-INF".
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ClassPathResourceForWEBINF implements IReadableResource
 {

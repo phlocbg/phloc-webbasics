@@ -31,7 +31,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * This mock listeners is responsible for creating
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class MockServletRequestListenerScopeAware extends MockServletRequestListener

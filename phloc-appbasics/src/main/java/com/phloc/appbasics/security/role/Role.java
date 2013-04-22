@@ -32,7 +32,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Default implementation of the {@link IRole} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class Role implements IRole

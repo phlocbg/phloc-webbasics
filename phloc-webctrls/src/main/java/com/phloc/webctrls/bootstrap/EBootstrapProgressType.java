@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Type of progress
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapProgressType implements ICSSClassProvider
 {

@@ -51,7 +51,7 @@ import com.phloc.datetime.format.PDTFromString;
  * Original work Copyright 2004 Sun Microsystems, Inc.
  * 
  * @author Alejandro Abdelnur (original; mainly the formatting masks)
- * @author philip (major modification)
+ * @author Philip Helger (major modification)
  */
 @Immutable
 public final class PDTWebDateUtils

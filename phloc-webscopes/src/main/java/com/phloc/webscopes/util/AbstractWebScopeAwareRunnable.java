@@ -14,7 +14,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Abstract implementation of {@link Runnable} that handles WebScopes correctly.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractWebScopeAwareRunnable implements INonThrowingRunnable
 {

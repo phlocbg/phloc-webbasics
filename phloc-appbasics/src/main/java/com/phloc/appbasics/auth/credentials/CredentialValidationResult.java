@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class represents the result of a credential validation.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CredentialValidationResult implements ISuccessIndicator
 {

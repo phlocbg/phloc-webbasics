@@ -35,7 +35,7 @@ import com.phloc.commons.string.StringParser;
 /**
  * Handler for the request HTTP header field "Accept"
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class AcceptMimeTypeHandler

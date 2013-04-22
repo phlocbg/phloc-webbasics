@@ -31,7 +31,7 @@ import com.phloc.commons.collections.ContainerHelper;
  * An implementation of {@link IExportRecordProvider} that uses a constant list
  * of records.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public class ConstantExportRecordProvider implements IExportRecordProvider

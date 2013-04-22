@@ -49,7 +49,7 @@ import com.phloc.html.hc.impl.HCTextNode;
 /**
  * Represent a single tab box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapTabBox implements IHCNodeBuilder
 {

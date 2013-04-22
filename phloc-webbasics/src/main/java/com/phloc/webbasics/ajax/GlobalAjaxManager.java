@@ -33,7 +33,7 @@ import com.phloc.webscopes.singleton.GlobalWebSingleton;
 /**
  * A global AJAX manager.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjaxInvoker

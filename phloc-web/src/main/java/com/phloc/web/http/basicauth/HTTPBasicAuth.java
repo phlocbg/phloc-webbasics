@@ -38,7 +38,7 @@ import com.phloc.web.http.digestauth.HTTPDigestAuth;
 /**
  * Handling for HTTP Basic Authentication
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class HTTPBasicAuth

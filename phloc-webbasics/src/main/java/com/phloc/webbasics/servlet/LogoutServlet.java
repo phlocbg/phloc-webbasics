@@ -33,7 +33,7 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 /**
  * Handles the log-out of a user. Can be called with a user context and without.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class LogoutServlet extends AbstractUnifiedResponseServlet
 {

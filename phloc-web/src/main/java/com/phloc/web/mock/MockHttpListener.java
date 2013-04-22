@@ -33,7 +33,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * , {@link HttpSessionListener} and {@link ServletRequestListener}) that are
  * triggered in tests.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class MockHttpListener

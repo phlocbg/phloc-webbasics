@@ -42,7 +42,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * This class manages the available roles.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class RoleManager extends AbstractSimpleDAO implements IRoleManager

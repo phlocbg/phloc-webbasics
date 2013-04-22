@@ -30,7 +30,7 @@ import com.phloc.webscopes.singleton.SessionWebSingleton;
  * Session singleton to create unique keys for server logging. Each generated
  * String has a length of 16.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ServerLogSessionKey extends SessionWebSingleton
 {

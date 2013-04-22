@@ -50,7 +50,7 @@ import com.phloc.webctrls.custom.IIcon;
 /**
  * Contains all free FamFam 0.13 icons
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EFamFamFlagIcon implements IIcon, IHasID <String>
 {

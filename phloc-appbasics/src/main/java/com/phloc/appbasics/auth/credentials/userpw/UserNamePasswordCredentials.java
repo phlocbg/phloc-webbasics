@@ -27,7 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Default implementation of the {@link IUserNamePasswordCredentials} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class UserNamePasswordCredentials implements IUserNamePasswordCredentials

@@ -33,7 +33,7 @@ import com.phloc.commons.state.EChange;
  * This class represents an abstract version of a common DAO. This kind of DAO
  * is based upon an XML file that is read on startup.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public abstract class AbstractXMLDAO extends DefaultDAO

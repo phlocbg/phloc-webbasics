@@ -29,7 +29,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * supported, and if this fails, whether "Deflate" is supported. If none is
  * supported, no compression will happen in this filter.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Deprecated
 @SuppressFBWarnings ("NM_SAME_SIMPLE_NAME_AS_SUPERCLASS")

@@ -29,7 +29,7 @@ import com.phloc.webctrls.bootstrap.ext.BootstrapMenuItemRendererWell;
 /**
  * The content provider for the menu area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ConfigMenuProvider
 {

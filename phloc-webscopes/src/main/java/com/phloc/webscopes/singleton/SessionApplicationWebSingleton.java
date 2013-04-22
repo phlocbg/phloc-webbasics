@@ -32,7 +32,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * session-application scope.
  * 
  * @see com.phloc.webscopes.mgr.EWebScope#SESSION_APPLICATION
- * @author philip
+ * @author Philip Helger
  */
 public abstract class SessionApplicationWebSingleton extends AbstractSingleton implements Serializable
 {

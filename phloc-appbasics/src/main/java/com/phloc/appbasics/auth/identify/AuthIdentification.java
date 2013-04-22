@@ -32,7 +32,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Default implementation of the {@link IAuthIdentification} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class AuthIdentification implements IAuthIdentification

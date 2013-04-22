@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * implemented by using a writable version and only accessing the read-methods.
  * THis is done to avoid code duplication.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class ReadonlySMTPSettings implements ISMTPSettings

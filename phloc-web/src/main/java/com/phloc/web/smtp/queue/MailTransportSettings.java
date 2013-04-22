@@ -37,7 +37,7 @@ import com.phloc.commons.state.EChange;
  * Global settings for the mail transport. The values of this class are applied
  * to all instances of javax.mail.Transport in the correct order.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class MailTransportSettings

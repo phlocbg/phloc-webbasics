@@ -28,7 +28,7 @@ import com.phloc.webscopes.domain.IRequestWebScope;
  * A simple Servlet filter that surrounds each and every call with the necessary
  * scope begin and end calls.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class DefaultScopeAwareFilter extends AbstractScopeAwareFilter
 {

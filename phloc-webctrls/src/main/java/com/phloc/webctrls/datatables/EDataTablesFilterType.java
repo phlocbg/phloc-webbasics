@@ -20,7 +20,7 @@ package com.phloc.webctrls.datatables;
 /**
  * Search type
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EDataTablesFilterType
 {

@@ -32,7 +32,7 @@ import com.phloc.html.hc.html.AbstractHCCell;
 /**
  * This comparator is responsible for sorting cells by BigDecimal
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorCellBigDecimal extends AbstractComparator <AbstractHCCell>
 {

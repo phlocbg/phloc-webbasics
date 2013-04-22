@@ -24,7 +24,7 @@ import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 /**
  * Interface for objects providing a filename
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface IHasFilename

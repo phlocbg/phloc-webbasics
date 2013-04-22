@@ -42,7 +42,7 @@ import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 /**
  * Test class for class {@link WebScopeSessionHelper}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebScopeSessionHelperTest extends AbstractWebScopeAwareTestCase
 {

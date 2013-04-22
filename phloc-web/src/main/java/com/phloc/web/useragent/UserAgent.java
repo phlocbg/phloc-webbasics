@@ -34,7 +34,7 @@ import com.phloc.web.useragent.spider.WebSpiderManager;
 /**
  * Default implementation of the {@link IUserAgent} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class UserAgent implements IUserAgent
 {

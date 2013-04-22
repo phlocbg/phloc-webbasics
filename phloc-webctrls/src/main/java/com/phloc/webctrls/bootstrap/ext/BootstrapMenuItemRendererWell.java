@@ -45,7 +45,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 /**
  * Default implementation of {@link IMenuItemRenderer}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCUL>
 {

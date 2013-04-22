@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Type of badge
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapBadgeType implements ICSSClassProvider
 {

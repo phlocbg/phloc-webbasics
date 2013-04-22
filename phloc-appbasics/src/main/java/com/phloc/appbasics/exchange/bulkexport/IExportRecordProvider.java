@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 /**
  * The main record provider.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IExportRecordProvider
 {

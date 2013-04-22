@@ -28,7 +28,7 @@ import com.phloc.commons.microdom.convert.MicroTypeConverter;
 /**
  * Test class for class {@link Role}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class RoleTest
 {

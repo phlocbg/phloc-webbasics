@@ -33,7 +33,7 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 /**
  * Interface for a web scope factory.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IWebScopeFactory
 {

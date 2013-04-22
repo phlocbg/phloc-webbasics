@@ -59,7 +59,7 @@ import com.phloc.webbasics.form.RequestField;
  * http://www.decorplanit.com/plugin/
  * </pre>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 {

@@ -29,7 +29,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Contains a list of Accept-Encoding values as specified by the HTTP header
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class AcceptEncodingList extends AbstractQValueList <String>

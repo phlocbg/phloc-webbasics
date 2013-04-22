@@ -45,7 +45,7 @@ import com.phloc.web.servlet.response.gzip.GZIPResponse;
  * supported, and if this fails, whether "Deflate" is supported. If none is
  * supported, no compression will happen in this filter.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CompressFilter implements Filter
 {

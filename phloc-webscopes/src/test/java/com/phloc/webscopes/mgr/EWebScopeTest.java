@@ -26,7 +26,7 @@ import com.phloc.webscopes.mock.AbstractWebScopeAwareTestCase;
 /**
  * Test class for class {@link EWebScope}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class EWebScopeTest extends AbstractWebScopeAwareTestCase
 {

@@ -22,7 +22,7 @@ import com.phloc.commons.name.IHasDisplayText;
 /**
  * Base interface for a single menu item.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IMenuItem extends IMenuObject, IHasDisplayText
 {

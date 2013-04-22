@@ -52,7 +52,7 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
 /**
  * The wrapper around the main javax.mail transport
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class MailTransport
 {

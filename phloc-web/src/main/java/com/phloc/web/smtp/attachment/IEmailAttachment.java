@@ -28,7 +28,7 @@ import com.phloc.commons.io.IInputStreamProvider;
  * This interface represents attachments to be added to a mail message. Messages
  * with attachments are always send as MIME messages.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IEmailAttachment extends IInputStreamProvider
 {

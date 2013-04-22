@@ -33,7 +33,7 @@ import com.phloc.webctrls.bootstrap.BootstrapPageHeader;
 /**
  * The content provider for the content area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class ViewContentProvider
 {

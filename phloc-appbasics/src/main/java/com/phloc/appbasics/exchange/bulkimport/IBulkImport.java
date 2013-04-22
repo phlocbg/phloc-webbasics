@@ -30,7 +30,7 @@ import com.phloc.commons.io.IInputStreamProvider;
 /**
  * Base interface for a bulk import action.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IBulkImport
 {

@@ -24,7 +24,7 @@ import com.phloc.webbasics.ajax.IAjaxFunction;
 /**
  * This class defines the available ajax functions
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CDemoAppAjaxView

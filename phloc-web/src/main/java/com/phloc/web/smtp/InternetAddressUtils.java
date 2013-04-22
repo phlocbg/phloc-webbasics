@@ -32,7 +32,7 @@ import com.phloc.commons.email.IEmailAddress;
  * and an optional name. The personal name is optional and may be
  * <code>null</code>.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class InternetAddressUtils

@@ -34,7 +34,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * This class represents a global singleton {@link ActionInvoker}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class GlobalActionManager extends GlobalSingleton implements IActionInvoker

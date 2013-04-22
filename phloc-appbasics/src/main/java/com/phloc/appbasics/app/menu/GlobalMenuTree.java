@@ -30,7 +30,7 @@ import com.phloc.scopes.singleton.tree.GlobalSingletonTreeWithUniqueID;
 /**
  * Represents the global menu tree
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
 {

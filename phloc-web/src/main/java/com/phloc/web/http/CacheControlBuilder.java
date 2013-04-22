@@ -37,7 +37,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * This class is used to build the response HTTP header field Cache-Control
  * value in a structured way. This header field is only applicable for HTTP/1.1
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 {

@@ -35,7 +35,7 @@ import com.phloc.html.js.builder.jquery.JQuery;
  * The default JQuery AJAX success to be used, that handles external JS/CSS
  * files and inline JS correctly.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class AjaxDefaultResponseJSSuccess extends JSAnonymousFunction
 {

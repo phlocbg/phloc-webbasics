@@ -34,7 +34,7 @@ import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 /**
  * Abstract base implementation for {@link IPage}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractPage implements IPage
 {

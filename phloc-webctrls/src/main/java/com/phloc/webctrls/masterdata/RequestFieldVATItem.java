@@ -28,7 +28,7 @@ import com.phloc.webbasics.form.RequestField;
  * Special {@link RequestField} child class, that handles {@link IVATItem}
  * objects, and falls back to the 0% item if nothing is selected.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class RequestFieldVATItem extends RequestField
 {

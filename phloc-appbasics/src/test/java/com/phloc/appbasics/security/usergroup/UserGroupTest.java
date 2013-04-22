@@ -29,7 +29,7 @@ import com.phloc.commons.microdom.convert.MicroTypeConverter;
 /**
  * Test class for class {@link UserGroup}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class UserGroupTest
 {

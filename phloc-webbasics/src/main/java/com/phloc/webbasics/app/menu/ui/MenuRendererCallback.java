@@ -42,7 +42,7 @@ import com.phloc.html.hc.html.HCLI;
 /**
  * Renders menu item nodes.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class MenuRendererCallback <T extends AbstractHCList <?>> extends DefaultHierarchyWalkerDynamicCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {

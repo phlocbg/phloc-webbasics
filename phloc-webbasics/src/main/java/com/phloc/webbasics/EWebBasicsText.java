@@ -32,7 +32,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 /**
  * Contains some global texts.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs

@@ -31,7 +31,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Default implementation of the {@link ILockInfo} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class LockInfo implements ILockInfo

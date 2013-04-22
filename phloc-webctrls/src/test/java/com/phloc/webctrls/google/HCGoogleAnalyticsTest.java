@@ -28,7 +28,7 @@ import com.phloc.html.hc.html.HCScript.EMode;
 /**
  * Test class for class {@link HCGoogleAnalytics}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class HCGoogleAnalyticsTest
 {

@@ -38,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * This class manages the implementations of {@link IXMLSitemapProviderSPI}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class XMLSitemapProvider

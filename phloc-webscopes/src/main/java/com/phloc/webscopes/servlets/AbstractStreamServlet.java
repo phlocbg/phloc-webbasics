@@ -48,7 +48,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * Web-Server. It simply reads the content of a file and passes it to an output
  * stream.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServlet
 {

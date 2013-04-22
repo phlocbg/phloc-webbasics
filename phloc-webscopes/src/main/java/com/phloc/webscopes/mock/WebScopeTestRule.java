@@ -39,7 +39,7 @@ import com.phloc.web.mock.MockServletPool;
 /**
  * JUnit test rule for unit tests requiring web scopes.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class WebScopeTestRule extends ExternalResource

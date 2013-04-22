@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Servlet context listener
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class RedirectListener implements ServletContextListener
 {

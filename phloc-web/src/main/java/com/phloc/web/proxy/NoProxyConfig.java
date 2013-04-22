@@ -27,7 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Class for indicating direct Internet access (no proxy needed).
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class NoProxyConfig implements IProxyConfig

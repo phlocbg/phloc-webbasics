@@ -27,7 +27,7 @@ import com.phloc.webctrls.bootstrap.AbstractBootstrapAlert;
 /**
  * Bootstrap warning box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapWarnBox extends AbstractBootstrapAlert <BootstrapWarnBox>
 {

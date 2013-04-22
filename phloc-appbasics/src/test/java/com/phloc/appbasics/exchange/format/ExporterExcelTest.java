@@ -37,7 +37,7 @@ import com.phloc.poi.excel.EExcelVersion;
 /**
  * Test class for class {@link ExporterExcel}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ExporterExcelTest
 {

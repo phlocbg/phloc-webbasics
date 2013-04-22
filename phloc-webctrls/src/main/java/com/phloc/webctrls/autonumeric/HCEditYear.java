@@ -25,7 +25,7 @@ import com.phloc.webbasics.form.RequestField;
  * Special numeric edit for years from {@value #DEFAULT_MIN} to
  * {@value #DEFAULT_MAX}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCEditYear extends HCAutoNumeric
 {

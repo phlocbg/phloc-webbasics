@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 /**
  * Security utility methods
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class SecurityUtils

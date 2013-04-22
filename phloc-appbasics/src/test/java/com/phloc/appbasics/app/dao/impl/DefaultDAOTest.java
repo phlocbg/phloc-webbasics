@@ -45,7 +45,7 @@ import com.phloc.commons.string.StringParser;
 /**
  * Test class for class {@link DefaultDAO}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DefaultDAOTest
 {

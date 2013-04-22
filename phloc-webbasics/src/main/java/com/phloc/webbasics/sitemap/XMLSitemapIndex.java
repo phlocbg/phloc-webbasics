@@ -54,7 +54,7 @@ import com.phloc.web.servlet.server.StaticServerInfo;
  * multiple sitemaps when the number of URLs or the total size of a single URL
  * set is exceeded.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class XMLSitemapIndex

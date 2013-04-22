@@ -36,7 +36,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Mock implementation of the {@link ServletConfig} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class MockServletConfig implements ServletConfig

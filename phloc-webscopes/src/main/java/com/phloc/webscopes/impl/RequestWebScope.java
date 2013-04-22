@@ -57,7 +57,7 @@ import com.phloc.webscopes.singleton.GlobalWebSingleton;
 /**
  * The default request web scope that also tries to parse multi part requests.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class RequestWebScope extends RequestWebScopeNoMultipart
 {
@@ -65,7 +65,7 @@ public class RequestWebScope extends RequestWebScopeNoMultipart
    * Wrapper around a {@link DiskFileItemFactory}, that is correctly cleaning
    * up, when the servlet context is destroyed.
    * 
-   * @author philip
+   * @author Philip Helger
    */
   @IsSPIImplementation
   public static final class GlobalDiskFileItemFactory extends GlobalWebSingleton implements IFileItemFactory

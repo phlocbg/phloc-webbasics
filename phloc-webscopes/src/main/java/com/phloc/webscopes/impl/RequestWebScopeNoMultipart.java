@@ -52,7 +52,7 @@ import com.phloc.webscopes.domain.IRequestWebScope;
 /**
  * A request web scopes that does not parse multipart requests.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements IRequestWebScope
 {

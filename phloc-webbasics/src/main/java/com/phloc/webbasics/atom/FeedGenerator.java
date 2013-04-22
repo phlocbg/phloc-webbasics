@@ -29,7 +29,7 @@ import com.phloc.commons.xml.CXML;
 /**
  * Represents the generator of a feed.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FeedGenerator extends AbstractFeedElement implements IHasDescription
 {

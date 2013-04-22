@@ -25,7 +25,7 @@ import com.phloc.appbasics.auth.credentials.IAuthCredentials;
  * This interface represents username and password credentials passed from a
  * login page.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IUserNamePasswordCredentials extends IAuthCredentials
 {

@@ -27,7 +27,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Network protocol enumeration.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ENetworkProtocol implements IHasID <String>
 {

@@ -28,7 +28,7 @@ import com.phloc.commons.format.IFormatter;
 /**
  * This comparator is responsible for sorting cells by BigInteger
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorTableBigInteger extends ComparatorTableBigDecimal
 {

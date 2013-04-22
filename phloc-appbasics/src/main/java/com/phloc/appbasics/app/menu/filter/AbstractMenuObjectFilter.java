@@ -25,7 +25,7 @@ import com.phloc.commons.filter.IFilter;
 /**
  * Abstract base class for a menu object filter.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>, Serializable
 {

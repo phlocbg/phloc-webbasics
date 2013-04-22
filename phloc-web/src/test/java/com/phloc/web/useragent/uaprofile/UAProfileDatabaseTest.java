@@ -30,7 +30,7 @@ import com.phloc.web.mock.MockHttpServletRequest;
 /**
  * Test class for class {@link UAProfileDatabase}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class UAProfileDatabaseTest
 {

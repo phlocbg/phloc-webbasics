@@ -30,7 +30,7 @@ import com.phloc.web.smtp.attachment.IEmailAttachmentList;
 /**
  * Contains all possible fields for mail sending
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IEmailData extends IReadonlyEmailData
 {

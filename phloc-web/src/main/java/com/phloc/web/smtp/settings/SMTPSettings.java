@@ -33,7 +33,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 /**
  * Writable implementation of the {@link ISMTPSettings} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettings>

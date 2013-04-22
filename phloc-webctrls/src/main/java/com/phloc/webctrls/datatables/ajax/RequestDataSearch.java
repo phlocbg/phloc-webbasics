@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Represents search settings, either for the global request or per-column.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class RequestDataSearch
 {

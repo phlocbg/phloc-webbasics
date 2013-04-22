@@ -35,7 +35,7 @@ import com.phloc.commons.microdom.impl.MicroDocument;
 /**
  * Main ATOM 1.0 Feed
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class Feed extends FeedSource
 {

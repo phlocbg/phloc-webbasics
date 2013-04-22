@@ -30,7 +30,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 /**
  * Login result explanations
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum ELoginResultText implements IHasDisplayText

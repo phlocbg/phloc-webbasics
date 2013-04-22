@@ -36,7 +36,7 @@ import com.phloc.commons.url.ISimpleURL;
  * Represents a proxy for the menu tree to avoid code duplication for the
  * different IMenuTree implementations
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class MenuTreeProxy
 {

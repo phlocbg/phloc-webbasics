@@ -31,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Encapsulates the request data to a single DataTables AJAX request
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class RequestData
 {

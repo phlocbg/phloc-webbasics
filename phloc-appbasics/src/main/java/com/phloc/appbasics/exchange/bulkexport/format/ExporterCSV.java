@@ -49,7 +49,7 @@ import com.phloc.commons.typeconvert.TypeConverter;
 /**
  * Implementation of {@link IExporterFile} for CSV files.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ExporterCSV implements IExporterFile
 {

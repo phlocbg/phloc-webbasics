@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Standard implementation of {@link IHasFilename} returning a constant but
  * potentially <code>null</code> filename.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ConstantHasFilename implements IHasFilename
 {

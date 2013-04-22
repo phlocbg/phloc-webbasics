@@ -41,7 +41,7 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 /**
  * Some utility methods to handle complex actions in session scopes.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class WebScopeSessionHelper

@@ -36,7 +36,7 @@ import com.phloc.webscopes.IWebScope;
  * Interface for a single web request scope object that does not offer access to
  * the HTTP response.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScope
 {

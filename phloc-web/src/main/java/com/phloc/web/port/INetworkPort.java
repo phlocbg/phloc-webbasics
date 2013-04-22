@@ -28,7 +28,7 @@ import com.phloc.commons.name.IHasName;
 /**
  * Interface describing a single network port.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface INetworkPort extends IHasName, IHasDescription, Serializable
 {

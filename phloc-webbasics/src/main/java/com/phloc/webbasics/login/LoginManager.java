@@ -44,7 +44,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Handle the application login process.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class LoginManager
 {

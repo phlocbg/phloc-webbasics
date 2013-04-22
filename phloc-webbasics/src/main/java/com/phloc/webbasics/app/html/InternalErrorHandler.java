@@ -43,7 +43,7 @@ import com.phloc.html.hc.htmlext.HCUtils;
 /**
  * Handle internal errors.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class InternalErrorHandler

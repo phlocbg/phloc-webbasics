@@ -24,7 +24,7 @@ import com.phloc.commons.annotations.UsedViaReflection;
 /**
  * Mock global web singleton
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MockGlobalWebSingleton extends GlobalWebSingleton
 {

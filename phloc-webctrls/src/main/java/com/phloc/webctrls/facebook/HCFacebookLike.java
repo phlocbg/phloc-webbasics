@@ -32,7 +32,7 @@ import com.phloc.html.hc.html.HCIFrame;
  * Small control for liking the current page on Facebook.<br>
  * Source: http://developers.facebook.com/docs/reference/plugins/like
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Deprecated
 public final class HCFacebookLike extends HCIFrame

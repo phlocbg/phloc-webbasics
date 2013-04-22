@@ -17,7 +17,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Abstract implementation of {@link Callable} that handles WebScopes correctly.
  * 
- * @author philip
+ * @author Philip Helger
  * @param <DATATYPE>
  *        The return type of the function.
  */

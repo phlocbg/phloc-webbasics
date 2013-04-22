@@ -23,7 +23,7 @@ import com.phloc.scopes.IScope;
  * Base interface for web scopes. This is only a marker interface and offers no
  * additional logic.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IWebScope extends IScope
 {

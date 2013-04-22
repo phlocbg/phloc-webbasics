@@ -32,7 +32,7 @@ import com.phloc.webbasics.app.LinkUtils;
  * Default AjaxFunction implementation assuming that the Ajax servlet is
  * listening on "/ajax/"
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public class DefaultAjaxFunction extends AbstractAjaxFunction

@@ -39,7 +39,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * <li>Display locale</li>
  * </ul>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ApplicationRequestManager extends GlobalSingleton implements IRequestManager
 {

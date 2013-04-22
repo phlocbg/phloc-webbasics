@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Locked enumeration
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ELocked
 {

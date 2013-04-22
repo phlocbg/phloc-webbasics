@@ -28,7 +28,7 @@ import com.phloc.commons.state.ISuccessIndicator;
 /**
  * Base interface for a single audit item
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface IAuditItem extends ISuccessIndicator

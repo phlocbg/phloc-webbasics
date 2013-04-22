@@ -25,7 +25,7 @@ import com.phloc.commons.idfactory.FileIntIDFactory;
 /**
  * P3 file based persisting int id provider.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class WebIOIntIDFactory extends FileIntIDFactory

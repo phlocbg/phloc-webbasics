@@ -43,7 +43,7 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * http://www.jacklmoore.com/colorbox
  * </pre>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCColorBox implements IHCNodeBuilder
 {

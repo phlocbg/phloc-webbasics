@@ -22,7 +22,7 @@ import com.phloc.html.hc.html.AbstractHCSpan;
 /**
  * Bootstrap block help.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock> implements
                                                                            IBootstrapHelpItem <BootstrapHelpBlock>

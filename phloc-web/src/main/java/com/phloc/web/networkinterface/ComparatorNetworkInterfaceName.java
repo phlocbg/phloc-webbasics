@@ -26,7 +26,7 @@ import com.phloc.commons.compare.AbstractComparator;
 /**
  * Comparator to compare {@link NetworkInterface} objects by their name.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ComparatorNetworkInterfaceName extends AbstractComparator <NetworkInterface>
 {

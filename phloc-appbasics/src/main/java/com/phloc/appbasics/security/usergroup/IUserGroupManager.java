@@ -29,7 +29,7 @@ import com.phloc.commons.state.EChange;
 /**
  * Interface for a user group manager
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IUserGroupManager
 {

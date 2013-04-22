@@ -33,7 +33,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * This class keeps track of all the CSS files that must be included for a
  * single request, so that the controls are working properly.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class PerRequestCSSIncludes
 {

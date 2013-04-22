@@ -39,7 +39,7 @@ import com.phloc.commons.xml.CXML;
 /**
  * ATOM 1.0 feed source.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class FeedSource extends AbstractFeedElement
 {

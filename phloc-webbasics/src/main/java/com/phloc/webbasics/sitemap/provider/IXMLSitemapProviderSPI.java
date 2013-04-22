@@ -25,7 +25,7 @@ import com.phloc.webbasics.sitemap.XMLSitemapURLSet;
 /**
  * SPI interface for components that offer sitemap entries.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @IsSPIInterface
 public interface IXMLSitemapProviderSPI

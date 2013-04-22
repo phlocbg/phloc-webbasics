@@ -31,7 +31,7 @@ import com.phloc.commons.io.resource.FileSystemResource;
 /**
  * Wrapper around the registry file handling.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class WebIORegistry

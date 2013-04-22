@@ -22,7 +22,7 @@ import com.phloc.html.hc.html.AbstractHCDiv;
 /**
  * Bootstrap page header.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapPageHeader extends AbstractHCDiv <BootstrapPageHeader>
 {

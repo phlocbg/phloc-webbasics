@@ -31,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Implementation base class for menu items.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <IMPLTYPE>> extends FlagContainer implements IMenuObject

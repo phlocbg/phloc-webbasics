@@ -21,7 +21,7 @@ package com.phloc.webscopes.spi;
 /**
  * Abstract base class for all Mock SPI implementations
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractWebScopeSPI
 {

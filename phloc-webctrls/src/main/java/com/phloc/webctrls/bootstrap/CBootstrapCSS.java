@@ -30,7 +30,7 @@ import com.phloc.webbasics.form.validation.EFormErrorLevel;
 /**
  * CSS Constants for the Twitter Bootstrap framework
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CBootstrapCSS

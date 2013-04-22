@@ -25,7 +25,7 @@ import com.phloc.commons.name.IHasDisplayText;
 /**
  * The base interface for a single page of content.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IPage extends IHasID <String>, IHasDisplayText, Serializable
 {

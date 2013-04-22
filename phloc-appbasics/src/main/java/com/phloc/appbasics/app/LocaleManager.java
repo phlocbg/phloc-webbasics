@@ -34,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class manages the locales available in the application.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class LocaleManager implements ILocaleManager

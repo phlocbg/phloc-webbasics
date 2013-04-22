@@ -29,7 +29,7 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 /**
  * Contains the preferred charsets to be used for web stuff.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CWebCharset

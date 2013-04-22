@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Represents a base class for all QValue'd stuff
  * 
- * @author philip
+ * @author Philip Helger
  * @param <KEYTYPE>
  *        the key type for the map.
  */

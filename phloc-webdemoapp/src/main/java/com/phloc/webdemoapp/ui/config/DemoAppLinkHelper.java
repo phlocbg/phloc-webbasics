@@ -32,7 +32,7 @@ import com.phloc.webdemoapp.servlet.DemoAppStreamServlet;
 /**
  * Several helper methods for consistently creating links.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class DemoAppLinkHelper

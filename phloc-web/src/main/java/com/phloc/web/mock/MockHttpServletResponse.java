@@ -52,7 +52,7 @@ import com.phloc.web.CWeb;
 /**
  * Mock implementation of {@link HttpServletResponse}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class MockHttpServletResponse implements HttpServletResponse, IHasLocale

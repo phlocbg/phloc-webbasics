@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * A single error that is specific to a field within a form.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFormFieldError extends IFormError
 {

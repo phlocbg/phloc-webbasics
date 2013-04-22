@@ -26,7 +26,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 /**
  * Default implementation of the {@link IMenuSeparator} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class MenuSeparator extends AbstractMenuObject <MenuSeparator> implements IMenuSeparator

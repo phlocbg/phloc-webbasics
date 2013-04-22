@@ -7,7 +7,7 @@ import javax.mail.event.TransportListener;
 /**
  * An implementation of {@link TransportListener} that does nothing.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class DoNothingTransportListener implements TransportListener
 {

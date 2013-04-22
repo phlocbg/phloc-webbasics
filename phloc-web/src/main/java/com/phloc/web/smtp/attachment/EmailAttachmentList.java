@@ -44,7 +44,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * This is the default implementation of the {@link IEmailAttachmentList}
  * interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class EmailAttachmentList implements IEmailAttachmentList

@@ -35,7 +35,7 @@ import com.phloc.webscopes.servlet.WebScopeListener;
  * Contains static initialization methods for web scope tests, that makes it a
  * bit easier to use them without JUnit.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class WebScopeAwareTestSetup

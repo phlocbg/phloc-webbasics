@@ -35,7 +35,7 @@ import com.phloc.commons.name.IHasDisplayText;
 /**
  * Base class for {@link IBulkImport} implementations.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractBulkImport implements IBulkImport
 {

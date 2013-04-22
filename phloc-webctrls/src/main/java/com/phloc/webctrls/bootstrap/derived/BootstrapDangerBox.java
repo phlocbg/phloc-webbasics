@@ -28,7 +28,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 /**
  * Bootstrap danger box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapDangerBox extends AbstractBootstrapAlert <BootstrapDangerBox>
 {

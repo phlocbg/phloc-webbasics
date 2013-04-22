@@ -28,7 +28,7 @@ import com.phloc.webctrls.famfam.EFamFamIcon;
 /**
  * This class maintains the actual icon objects to the different default icons.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DefaultIcons
 {

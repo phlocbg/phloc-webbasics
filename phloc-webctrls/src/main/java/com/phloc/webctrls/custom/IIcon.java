@@ -26,7 +26,7 @@ import com.phloc.html.hc.IHCNode;
 /**
  * A base interface for icons
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IIcon extends ICSSClassProvider
 {

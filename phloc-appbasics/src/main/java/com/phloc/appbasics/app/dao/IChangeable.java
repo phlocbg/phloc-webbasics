@@ -20,7 +20,7 @@ package com.phloc.appbasics.app.dao;
 /**
  * Interface for object that can collect changes
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IChangeable
 {

@@ -46,7 +46,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Web version of the scope factory.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class DefaultWebScopeFactory implements IWebScopeFactory

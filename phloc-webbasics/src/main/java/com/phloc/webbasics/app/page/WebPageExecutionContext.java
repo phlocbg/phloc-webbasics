@@ -27,7 +27,7 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
  * This page is instantiated per page view, so that the thread safety of the
  * execution parameters is more clear.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class WebPageExecutionContext extends LayoutExecutionContext

@@ -29,7 +29,7 @@ import com.phloc.appbasics.security.role.Role;
 /**
  * Test class for class {@link Role}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class AccessManagerTest
 {

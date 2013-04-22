@@ -26,7 +26,7 @@ import com.phloc.commons.url.ISimpleURL;
 /**
  * Interface for all ajax function declarations
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAjaxFunction extends IHasName
 {

@@ -32,7 +32,7 @@ import com.phloc.commons.url.ISimpleURL;
 /**
  * Default implementation of the {@link IMenuItemExternal} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class MenuItemExternal extends AbstractMenuObject <MenuItemExternal> implements IMenuItemExternal

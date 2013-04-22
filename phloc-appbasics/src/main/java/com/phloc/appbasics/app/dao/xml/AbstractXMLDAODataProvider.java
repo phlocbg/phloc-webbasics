@@ -25,7 +25,7 @@ import com.phloc.commons.state.EChange;
 /**
  * Abstract XML DAO provider
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractXMLDAODataProvider implements IXMLDAODataProvider
 {

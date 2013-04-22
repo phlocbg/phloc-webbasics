@@ -26,7 +26,7 @@ import com.phloc.appbasics.security.login.LoggedInUserManager;
 /**
  * This filter matches any menu item if no user is logged in.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MenuItemFilterNotLoggedIn extends AbstractMenuObjectFilter
 {

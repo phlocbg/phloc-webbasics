@@ -32,7 +32,7 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
  * A simple availability-check servlet that responds with a "pong" text message.
  * Usually this servlet should be called "ping".
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class PingPongServlet extends AbstractUnifiedResponseServlet
 {

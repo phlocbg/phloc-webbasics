@@ -31,7 +31,7 @@ import com.phloc.webscopes.mock.WebScopeTestRule;
 /**
  * Test class for class {@link AbstractUnifiedResponseServlet}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class AbstractUnifiedResponseServletTest
 {

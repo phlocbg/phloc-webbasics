@@ -41,7 +41,7 @@ import com.phloc.webscopes.domain.ISessionWebScope;
  * Default implementation of the {@link ISessionWebScope} interface. It is
  * serializable in general, but just don't do it :)
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class SessionWebScope extends SessionScope implements ISessionWebScope

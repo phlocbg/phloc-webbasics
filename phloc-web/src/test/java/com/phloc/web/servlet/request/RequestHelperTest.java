@@ -29,7 +29,7 @@ import com.phloc.web.mock.MockServletContext;
 /**
  * Test class for class {@link RequestHelper}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class RequestHelperTest
 {

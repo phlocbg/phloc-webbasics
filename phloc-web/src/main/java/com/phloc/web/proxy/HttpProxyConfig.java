@@ -38,7 +38,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 /**
  * HTTP proxy configuration.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class HttpProxyConfig implements IProxyConfig

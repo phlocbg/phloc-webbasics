@@ -36,7 +36,7 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
  * Determine all menu items to show, depending on the currently selected menu
  * item.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>>
 {

@@ -30,7 +30,7 @@ import com.phloc.commons.name.IHasDisplayText;
 /**
  * Contains the major web browsers on the market.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBrowserType implements IHasID <String>, IHasDisplayText
 {

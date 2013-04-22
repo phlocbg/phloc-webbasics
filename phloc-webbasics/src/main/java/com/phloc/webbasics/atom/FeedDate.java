@@ -33,7 +33,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
 /**
  * ATOM date construct.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FeedDate extends AbstractFeedElement
 {

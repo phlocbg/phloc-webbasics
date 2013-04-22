@@ -43,7 +43,7 @@ import com.phloc.commons.microdom.reader.XMLMapHandler;
  * <li>All global meta tags</li>
  * </ul>
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class HTMLConfigManager

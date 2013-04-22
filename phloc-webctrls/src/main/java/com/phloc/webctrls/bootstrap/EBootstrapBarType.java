@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Type of bar
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapBarType implements ICSSClassProvider
 {

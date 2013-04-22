@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Provider interface for SMTP settings.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ISMTPSettingsProvider
 {

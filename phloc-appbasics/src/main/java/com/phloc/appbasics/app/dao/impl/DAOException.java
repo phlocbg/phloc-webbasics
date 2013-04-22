@@ -22,7 +22,7 @@ import com.phloc.commons.exceptions.LoggedException;
 /**
  * Special exception class for DAO read/write errors.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DAOException extends LoggedException
 {

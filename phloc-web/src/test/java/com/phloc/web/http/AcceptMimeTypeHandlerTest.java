@@ -28,7 +28,7 @@ import com.phloc.commons.equals.EqualsUtils;
 /**
  * Test class for class {@link AcceptMimeTypeHandler}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class AcceptMimeTypeHandlerTest
 {

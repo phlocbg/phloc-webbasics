@@ -43,7 +43,7 @@ import com.phloc.poi.excel.ExcelReadUtils;
 /**
  * Abstract base implementation of a bulk import based on MS Excel files.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractBulkImportExcel extends AbstractBulkImport
 {

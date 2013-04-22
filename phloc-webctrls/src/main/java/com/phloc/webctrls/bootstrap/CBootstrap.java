@@ -24,7 +24,7 @@ import com.phloc.commons.version.Version;
 /**
  * Constants for usage with Bootstrap
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CBootstrap

@@ -25,7 +25,7 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 /**
  * Mock implementation of {@link ICurrentUserIDProvider}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MockCurrentUserIDProvider implements ICurrentUserIDProvider
 {

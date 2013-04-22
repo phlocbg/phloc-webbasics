@@ -36,7 +36,7 @@ import com.phloc.html.hc.IHCNode;
 /**
  * This class handles the mapping of the area ID to a content provider.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class LayoutManagerProxy implements ILayoutManager

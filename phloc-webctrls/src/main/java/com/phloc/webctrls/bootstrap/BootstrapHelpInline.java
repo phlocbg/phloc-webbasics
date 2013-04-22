@@ -22,7 +22,7 @@ import com.phloc.html.hc.html.AbstractHCSpan;
 /**
  * Bootstrap inline help.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapHelpInline extends AbstractHCSpan <BootstrapHelpInline> implements
                                                                              IBootstrapHelpItem <BootstrapHelpInline>

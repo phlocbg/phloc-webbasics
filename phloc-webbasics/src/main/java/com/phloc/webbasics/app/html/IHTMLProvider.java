@@ -25,7 +25,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Base interface for an HTML creator
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IHTMLProvider
 {

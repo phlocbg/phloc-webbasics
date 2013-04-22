@@ -34,7 +34,7 @@ import com.phloc.html.hc.impl.HCTextNode;
 /**
  * Bootstrap Navbar
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapNavbar extends AbstractHCDiv <BootstrapNavbar>
 {

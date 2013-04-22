@@ -33,7 +33,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Default implementation of the {@link IAuthToken} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class AuthToken implements IAuthToken

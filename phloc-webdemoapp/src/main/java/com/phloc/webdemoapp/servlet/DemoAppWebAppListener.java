@@ -35,7 +35,7 @@ import com.phloc.webdemoapp.app.init.InitializerView;
 /**
  * Callbacks for the application server
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
 {

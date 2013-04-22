@@ -28,7 +28,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 /**
  * Bootstrap info box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapInfoBox extends AbstractBootstrapAlert <BootstrapInfoBox>
 {

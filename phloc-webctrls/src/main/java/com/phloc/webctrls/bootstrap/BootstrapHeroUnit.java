@@ -22,7 +22,7 @@ import com.phloc.html.hc.html.AbstractHCDiv;
 /**
  * Bootstrap hero unit.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapHeroUnit extends AbstractHCDiv <BootstrapHeroUnit>
 {

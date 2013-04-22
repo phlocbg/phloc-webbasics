@@ -33,7 +33,7 @@ import com.phloc.scopes.mock.ScopeTestRule;
 /**
  * Test class for class {@link GlobalMenuTree}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MenuTreeTest
 {

@@ -26,7 +26,7 @@ import com.phloc.html.hc.conversion.HCSettings;
 /**
  * Test class for class {@link OpenGraphMetaElement}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class OpenGraphMetaElementTest
 {

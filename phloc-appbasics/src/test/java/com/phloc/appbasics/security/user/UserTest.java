@@ -35,7 +35,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Test class for class {@link User}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class UserTest
 {

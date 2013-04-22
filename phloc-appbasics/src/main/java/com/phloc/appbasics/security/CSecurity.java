@@ -26,7 +26,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Constants for user handling
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSecurity

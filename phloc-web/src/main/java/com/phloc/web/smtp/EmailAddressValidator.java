@@ -34,7 +34,7 @@ import com.phloc.commons.email.EmailAddressUtils;
 /**
  * Perform email address validations.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class EmailAddressValidator

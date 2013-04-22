@@ -29,7 +29,7 @@ import com.phloc.commons.string.StringHelper;
  * This filter matches any menu item if a user is logged in and if the user is
  * assigned to the specified user group ID.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MenuItemFilterUserAssignedToUserGroup extends AbstractMenuObjectFilter
 {

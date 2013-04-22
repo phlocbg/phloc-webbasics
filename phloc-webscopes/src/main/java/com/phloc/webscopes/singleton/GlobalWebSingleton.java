@@ -31,7 +31,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * The global scope is identical for web scope and non-web scope applications.
  * 
  * @see com.phloc.webscopes.mgr.EWebScope#GLOBAL
- * @author philip
+ * @author Philip Helger
  */
 public abstract class GlobalWebSingleton extends AbstractSingleton
 {

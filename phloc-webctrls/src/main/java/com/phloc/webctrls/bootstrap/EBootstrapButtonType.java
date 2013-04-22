@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Button type
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapButtonType implements ICSSClassProvider
 {

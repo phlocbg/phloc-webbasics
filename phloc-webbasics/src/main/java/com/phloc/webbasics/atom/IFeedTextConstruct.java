@@ -20,7 +20,7 @@ package com.phloc.webbasics.atom;
 /**
  * Base interface for the text construct.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFeedTextConstruct extends IFeedElement
 {

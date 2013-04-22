@@ -26,7 +26,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 /**
  * Contains default CSS paths for the datetime component
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EDateTimeCSSPathProvider implements ICSSPathProvider
 {

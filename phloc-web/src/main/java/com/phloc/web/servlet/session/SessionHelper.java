@@ -35,7 +35,7 @@ import com.phloc.commons.state.EChange;
 /**
  * HTTP session utilities.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class SessionHelper

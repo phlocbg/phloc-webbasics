@@ -34,7 +34,7 @@ import com.phloc.web.CWeb;
 /**
  * This class is not yet working!
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Deprecated
 public class MyProxySelector extends ProxySelector

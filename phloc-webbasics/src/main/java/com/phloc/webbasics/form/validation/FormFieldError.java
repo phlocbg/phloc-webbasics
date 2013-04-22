@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Contains the description of a single form field error. Default implementation
  * of {@link IFormFieldError}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class FormFieldError implements IFormFieldError

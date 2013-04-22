@@ -23,7 +23,7 @@ import com.phloc.webscopes.IWebScope;
 /**
  * Interface for an application web scope.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IApplicationWebScope extends IApplicationScope, IWebScope
 {

@@ -24,7 +24,7 @@ import com.phloc.commons.io.IReadableResource;
 /**
  * Callback interface to handle thrown exception objects in DAO write actions.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IDAOWriteExceptionHandler
 {

@@ -45,7 +45,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Mock implementation of {@link HttpSession}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @SuppressWarnings ("deprecation")
 @NotThreadSafe

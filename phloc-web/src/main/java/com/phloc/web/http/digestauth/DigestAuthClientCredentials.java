@@ -34,7 +34,7 @@ import com.phloc.web.http.HTTPStringHelper;
 /**
  * Credentials for HTTP digest authentication
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class DigestAuthClientCredentials

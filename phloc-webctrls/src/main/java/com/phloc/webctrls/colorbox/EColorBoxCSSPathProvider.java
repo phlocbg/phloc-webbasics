@@ -26,7 +26,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 /**
  * Contains default CSS paths for this package.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EColorBoxCSSPathProvider implements ICSSPathProvider
 {

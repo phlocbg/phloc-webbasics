@@ -40,7 +40,7 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 /**
  * Base servlet for the main application.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractApplicationServlet extends AbstractUnifiedResponseServlet
 {

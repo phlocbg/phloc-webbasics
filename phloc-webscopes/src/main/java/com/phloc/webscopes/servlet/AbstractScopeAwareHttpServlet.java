@@ -49,7 +49,7 @@ import com.phloc.webscopes.domain.IRequestWebScope;
  * default operations of the "on*" methods is to call the original "do*"
  * functionality from the parent class.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractScopeAwareHttpServlet extends HttpServlet
 {

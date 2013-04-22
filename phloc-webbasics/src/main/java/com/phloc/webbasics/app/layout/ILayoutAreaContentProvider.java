@@ -25,7 +25,7 @@ import com.phloc.html.hc.IHCNode;
 /**
  * Interface for an object that provides content to an application layout area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ILayoutAreaContentProvider
 {

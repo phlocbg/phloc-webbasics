@@ -34,7 +34,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * This class provides some workarounds for known Bootstrap bugs.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapWorkarounds
 {

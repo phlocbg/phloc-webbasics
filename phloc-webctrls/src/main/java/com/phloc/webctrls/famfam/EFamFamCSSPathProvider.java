@@ -26,7 +26,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 /**
  * Contains default CSS paths for fam fam stuff.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EFamFamCSSPathProvider implements ICSSPathProvider
 {

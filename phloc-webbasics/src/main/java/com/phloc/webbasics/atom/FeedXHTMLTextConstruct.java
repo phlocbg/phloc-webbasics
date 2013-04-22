@@ -24,7 +24,7 @@ import com.phloc.html.hc.html.HCDiv;
 /**
  * XHTML text construct.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FeedXHTMLTextConstruct extends AbstractFeedXHTML implements IFeedTextConstruct
 {

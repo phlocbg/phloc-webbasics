@@ -35,7 +35,7 @@ import com.phloc.commons.SystemProperties;
  * Run ebiz4all as a standalone web application in Jetty on port 8080.<br>
  * http://localhost:8080/kb
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class RunInJettyDEMOAPP

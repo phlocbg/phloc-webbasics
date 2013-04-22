@@ -27,7 +27,7 @@ import com.phloc.html.hc.html.HCLI;
 /**
  * Abstract base implementation of {@link IMenuItemRenderer}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractMenuItemRenderer <T extends AbstractHCList <?>> implements IMenuItemRenderer <T>
 {

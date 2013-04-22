@@ -30,7 +30,7 @@ import com.phloc.webscopes.mock.WebScopeAwareTestSetup;
 /**
  * Test class for class {@link ScopeSPIManager}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebScopeSPIManagerTest
 {

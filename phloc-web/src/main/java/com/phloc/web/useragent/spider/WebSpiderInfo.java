@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Contains information about a single web spider.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebSpiderInfo implements IHasID <String>
 {

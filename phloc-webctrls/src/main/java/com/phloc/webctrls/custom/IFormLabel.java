@@ -24,7 +24,7 @@ import com.phloc.html.hc.IHCNode;
 /**
  * Represents the base interface for a single label (text field)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFormLabel extends IHCNode
 {

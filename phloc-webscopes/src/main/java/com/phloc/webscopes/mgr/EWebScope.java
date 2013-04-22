@@ -26,7 +26,7 @@ import com.phloc.webscopes.IWebScope;
  * This enumeration defines all the possible web scopes including some utility
  * methods on it.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EWebScope
 {

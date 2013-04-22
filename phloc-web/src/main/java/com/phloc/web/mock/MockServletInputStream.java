@@ -29,7 +29,7 @@ import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
  * A {@link ServletInputStream} for testing based on a predefined byte array or
  * an existing {@link InputStream}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class MockServletInputStream extends ServletInputStream
 {

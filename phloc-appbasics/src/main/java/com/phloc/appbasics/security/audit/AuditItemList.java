@@ -34,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Manages a list of {@link IAuditItem} objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 final class AuditItemList

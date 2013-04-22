@@ -27,7 +27,7 @@ import com.phloc.commons.version.Version;
 /**
  * Special browser info for Web Spider user agents.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class BrowserInfoMobile extends BrowserInfo
 {

@@ -62,7 +62,7 @@ import com.phloc.webscopes.servlet.RequestScopeInitializer;
  * Abstract base class for a servlet performing actions via
  * {@link UnifiedResponse}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareHttpServlet
 {

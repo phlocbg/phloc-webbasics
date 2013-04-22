@@ -26,7 +26,7 @@ import com.phloc.commons.url.ISimpleURL;
 /**
  * Base interface for a single menu item referencing an arbitrary URL.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IMenuItemExternal extends IMenuItem
 {

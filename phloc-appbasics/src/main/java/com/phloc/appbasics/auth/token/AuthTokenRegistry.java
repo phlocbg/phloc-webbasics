@@ -36,7 +36,7 @@ import com.phloc.commons.state.ESuccess;
 /**
  * This class manages all the currently available authentications tokens.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class AuthTokenRegistry

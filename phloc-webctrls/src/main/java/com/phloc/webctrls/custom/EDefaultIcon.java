@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Contains all default icon types
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EDefaultIcon
 {

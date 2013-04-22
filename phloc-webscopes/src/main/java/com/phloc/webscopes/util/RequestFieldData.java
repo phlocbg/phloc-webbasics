@@ -37,7 +37,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * Represents a wrapper around a single request value. It allows gathering the
  * current value, optionally using a default value.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public class RequestFieldData

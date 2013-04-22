@@ -44,7 +44,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Wraps an XML DAO data provider into an {@link IDAODataProvider}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class DefaultDAODataProviderXML implements IDAODataProvider
 {

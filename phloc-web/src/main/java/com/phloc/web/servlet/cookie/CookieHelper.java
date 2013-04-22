@@ -31,7 +31,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Misc. helper methods on HTTP cookies.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CookieHelper

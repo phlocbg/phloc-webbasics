@@ -32,7 +32,7 @@ import com.phloc.scopes.singleton.ApplicationSingleton;
 /**
  * This class manages the locales available in the application.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class ApplicationLocaleManager extends ApplicationSingleton implements ILocaleManager

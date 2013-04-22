@@ -25,7 +25,7 @@ import com.phloc.html.EHTMLVersion;
 /**
  * Contains settings for the HTML output.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class ApplicationWebSettings

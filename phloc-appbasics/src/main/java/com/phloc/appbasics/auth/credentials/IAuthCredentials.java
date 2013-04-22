@@ -21,7 +21,7 @@ package com.phloc.appbasics.auth.credentials;
  * This interface is the base interface for credentials to check against a
  * principal. This is the stuff passed from a login-action.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAuthCredentials
 {

@@ -54,7 +54,7 @@ import com.phloc.web.smtp.settings.ReadonlySMTPSettings;
  * This class simplifies the task of sending an email.<br>
  * Note: do NOT use directly in pDAF3 - use the ScopedMailAPI instead.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class MailAPI

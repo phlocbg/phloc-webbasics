@@ -31,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * <li>Limit</li>
  * </ul>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class SelectConstraints implements IHasOrderAndLimit
 {

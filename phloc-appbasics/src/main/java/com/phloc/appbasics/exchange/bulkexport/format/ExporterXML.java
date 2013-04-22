@@ -42,7 +42,7 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 /**
  * Implementation of {@link IExporterFile} for XML files
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ExporterXML implements IExporterFile
 {

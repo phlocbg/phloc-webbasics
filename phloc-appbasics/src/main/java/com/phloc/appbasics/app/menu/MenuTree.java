@@ -29,7 +29,7 @@ import com.phloc.commons.url.ISimpleURL;
 /**
  * Represents a single menu tree
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject> implements IMenuTree
 {

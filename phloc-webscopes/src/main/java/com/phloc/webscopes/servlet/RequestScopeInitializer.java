@@ -34,7 +34,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Internal class from scope aware filter and servlets.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class RequestScopeInitializer

@@ -32,7 +32,7 @@ import com.phloc.html.hc.html.HCParam;
  * Embeds YouTube videos!<br>
  * Example code: <code>new YouTubeEmbed (640, 385, "93RkWNK3BZc")</code>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCYouTubeEmbed extends HCObject
 {

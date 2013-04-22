@@ -27,7 +27,7 @@ import com.phloc.commons.microdom.IMicroElement;
 /**
  * Base interface for all ATOM feeds
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFeedElement
 {

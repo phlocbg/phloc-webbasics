@@ -27,7 +27,7 @@ import com.phloc.commons.version.Version;
 /**
  * Special browser info for Internet Explorer.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class BrowserInfoIE extends BrowserInfo
 {

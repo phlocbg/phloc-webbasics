@@ -53,7 +53,7 @@ import com.phloc.web.servlet.request.RequestHelper;
 /**
  * Central cache for known UAProfiles.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class UAProfileDatabase

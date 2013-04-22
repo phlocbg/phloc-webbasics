@@ -25,7 +25,7 @@ import com.phloc.html.hc.html.HCScript;
 /**
  * A Script to determine, if local storage is available.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class JSLocalStorageDeterminator extends HCScript
 {

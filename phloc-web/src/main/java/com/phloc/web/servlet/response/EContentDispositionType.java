@@ -27,7 +27,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Determine the content disposition type to be used.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EContentDispositionType implements IHasID <String>
 {

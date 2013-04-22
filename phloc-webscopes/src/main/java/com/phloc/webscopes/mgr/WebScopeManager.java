@@ -49,7 +49,7 @@ import com.phloc.webscopes.impl.SessionWebScopeActivator;
 /**
  * This is the main manager class for web scope handling.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class WebScopeManager

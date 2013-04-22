@@ -31,7 +31,7 @@ import com.phloc.html.hc.html.AbstractHCDiv;
  * Wrapper for a Bootstrap well.
  * http://twitter.github.com/bootstrap/components.html#misc
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 {

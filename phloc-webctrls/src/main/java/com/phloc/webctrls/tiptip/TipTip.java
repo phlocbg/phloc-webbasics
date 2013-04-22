@@ -47,7 +47,7 @@ import com.phloc.webctrls.custom.EDefaultIcon;
  * http://code.drewwilson.com/entry/tiptip-jquery-plugin
  * </pre>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class TipTip implements IHCNodeBuilder
 {

@@ -31,7 +31,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
  * Contains multilingual texts for the JS calendar. Only used by a tool for
  * creating the JS files.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum EDateEditText implements IHasDisplayText

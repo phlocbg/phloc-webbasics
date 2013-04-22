@@ -27,7 +27,7 @@ import com.phloc.commons.id.IHasID;
 /**
  * Base interface for menu items and menu separators.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IMenuObject extends IHasID <String>, IFlagContainer
 {

@@ -25,7 +25,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Main interface for an auditing service.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAuditor
 {

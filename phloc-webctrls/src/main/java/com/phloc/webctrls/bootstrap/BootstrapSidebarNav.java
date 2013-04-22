@@ -22,7 +22,7 @@ import com.phloc.html.hc.html.HCUL;
 /**
  * Navigation items
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapSidebarNav extends HCUL
 {

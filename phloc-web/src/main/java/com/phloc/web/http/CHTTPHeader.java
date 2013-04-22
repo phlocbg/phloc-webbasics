@@ -25,7 +25,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 /**
  * HTTP header constants.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CHTTPHeader

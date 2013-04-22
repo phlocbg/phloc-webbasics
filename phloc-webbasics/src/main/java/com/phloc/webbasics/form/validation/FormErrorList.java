@@ -22,7 +22,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 /**
  * Handles form field specific error messages.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class FormErrorList extends AbstractFormErrorList <IFormError> implements IFormErrorList

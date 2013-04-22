@@ -58,7 +58,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Callbacks for the application server
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class WebAppListenerMultiApp extends WebAppListener
 {

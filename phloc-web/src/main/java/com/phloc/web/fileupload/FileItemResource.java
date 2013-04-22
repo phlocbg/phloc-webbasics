@@ -40,7 +40,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Implementation of the {@link IReadableResource} interface for uploaded
  * {@link IFileItem} objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FileItemResource implements IReadableResource
 {

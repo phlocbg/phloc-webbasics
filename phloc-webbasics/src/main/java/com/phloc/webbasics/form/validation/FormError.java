@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * Represents an overall form error. Default implementation of
  * {@link IFormError}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class FormError implements IFormError

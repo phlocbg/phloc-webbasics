@@ -41,7 +41,7 @@ import com.phloc.web.smtp.attachment.IEmailAttachmentList;
  * Fill a {@link MimeMessage} object with the data of an {@link IEmailData}
  * object.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class MailConverter

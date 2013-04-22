@@ -25,7 +25,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Login constants
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CLogin

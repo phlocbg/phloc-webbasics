@@ -27,7 +27,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Generic access enum
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EAccess implements IHasID <String>
 {

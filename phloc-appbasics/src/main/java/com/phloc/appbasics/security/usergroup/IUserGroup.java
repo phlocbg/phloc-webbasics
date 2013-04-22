@@ -27,7 +27,7 @@ import com.phloc.commons.type.ITypedObject;
 /**
  * Represents a single user group encapsulating 0-n users.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IUserGroup extends ITypedObject <String>, IHasName, IUserContainer, IRoleContainer, Serializable
 {

@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.IsSPIInterface;
  * This interface needs to be implemented by all classes that are used for
  * resolving credentials to a certain subject.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @IsSPIInterface
 public interface IAuthCredentialToSubjectResolverSPI

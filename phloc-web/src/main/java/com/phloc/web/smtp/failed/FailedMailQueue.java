@@ -37,7 +37,7 @@ import com.phloc.commons.stats.StatisticsManager;
 /**
  * This is a singleton object that keeps all the mails that could not be send.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class FailedMailQueue

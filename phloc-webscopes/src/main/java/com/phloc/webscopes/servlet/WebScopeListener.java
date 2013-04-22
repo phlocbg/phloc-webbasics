@@ -30,7 +30,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * and {@link HttpSessionListener}. Manages global web scopes and session web
  * scopes.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class WebScopeListener implements ServletContextListener, HttpSessionListener
 {

@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 /**
  * Interface for a manager that can handle audit items.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAuditManager
 {

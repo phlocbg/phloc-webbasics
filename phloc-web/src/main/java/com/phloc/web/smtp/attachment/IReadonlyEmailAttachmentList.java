@@ -29,7 +29,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 /**
  * This interface represents attachments to be added to a mail message.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IReadonlyEmailAttachmentList extends IHasSize
 {

@@ -37,7 +37,7 @@ import com.phloc.webscopes.servlet.WebScopeListener;
  * Deprecated in favor of {@link WebScopeAwareTestSetup} to that the name is
  * similar to the one from phloc-scopes (ScopeAwareTestSetup).
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Deprecated
 @Immutable

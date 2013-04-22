@@ -34,7 +34,7 @@ import com.phloc.appbasics.auth.token.IAuthToken;
 /**
  * This is the main class for creating an {@link IAuthToken} from credentials.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class AuthIdentificationManager

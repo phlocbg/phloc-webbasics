@@ -27,7 +27,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Determines the type of an email.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EEmailType implements IHasID <String>
 {

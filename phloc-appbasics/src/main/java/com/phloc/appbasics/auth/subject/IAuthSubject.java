@@ -24,7 +24,7 @@ import com.phloc.commons.name.IHasName;
  * Represents a user or any other subject that uses an application. A subject
  * has at least a name and some additional properties.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface IAuthSubject extends IHasName

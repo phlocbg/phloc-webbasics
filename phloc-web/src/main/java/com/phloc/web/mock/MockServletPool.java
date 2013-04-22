@@ -41,7 +41,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * A pool for registered servlets inside a {@link MockServletContext}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class MockServletPool
@@ -49,7 +49,7 @@ public final class MockServletPool
   /**
    * Contains a single servlet item
    * 
-   * @author philip
+   * @author Philip Helger
    */
   private static final class ServletItem
   {

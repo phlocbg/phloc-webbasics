@@ -29,7 +29,7 @@ import com.phloc.commons.string.StringParser;
 /**
  * Handler for the request HTTP header field "Accept-Language"
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class AcceptLanguageHandler

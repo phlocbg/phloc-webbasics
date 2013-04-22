@@ -31,7 +31,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
  * Resolves the current display locale of the application and passes the request
  * on to the {@link DefaultTextResolver}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class DisplayLocaleTextResolver

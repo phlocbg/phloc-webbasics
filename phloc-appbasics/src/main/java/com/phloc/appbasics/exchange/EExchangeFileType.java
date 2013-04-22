@@ -33,7 +33,7 @@ import com.phloc.poi.excel.EExcelVersion;
 /**
  * Defines common file types for import/export.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EExchangeFileType implements IHasID <String>, IHasDisplayText
 {

@@ -25,7 +25,7 @@ import com.phloc.commons.type.ITypedObject;
 /**
  * Represents a single role that can be assigned to user groups.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IRole extends ITypedObject <String>, IHasName, Serializable
 {

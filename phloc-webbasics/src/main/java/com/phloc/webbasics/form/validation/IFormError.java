@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
  * Base interface for a global error in a form. A global error is not field
  * specific.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFormError
 {

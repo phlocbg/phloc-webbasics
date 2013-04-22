@@ -31,7 +31,7 @@ import com.phloc.commons.lang.ServiceLoaderUtils;
  * necessary because the {@link IAuthCredentials} interface does not state
  * anything about the subject by default.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class AuthCredentialToSubjectResolverManager

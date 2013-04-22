@@ -29,7 +29,7 @@ import com.phloc.html.hc.html.HCA;
 /**
  * A bootstrap button that has a target URL if you click it.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapButton_Link extends HCA
 {

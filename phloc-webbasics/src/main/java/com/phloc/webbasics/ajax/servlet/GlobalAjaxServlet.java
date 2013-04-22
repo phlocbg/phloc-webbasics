@@ -26,7 +26,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Abstract implementation of a servlet that invokes AJAX functions.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class GlobalAjaxServlet extends AbstractAjaxServlet
 {

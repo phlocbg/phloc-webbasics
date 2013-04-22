@@ -44,7 +44,7 @@ import com.phloc.webscopes.domain.IRequestWebScope;
  * filter invoked first creates the request scope. Succeeding scope aeware
  * filters wont create a request scope.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractScopeAwareFilter implements Filter
 {

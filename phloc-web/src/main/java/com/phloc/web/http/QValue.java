@@ -33,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Represents the quality value of an HTTP Accept* header.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class QValue implements Comparable <QValue>, Serializable

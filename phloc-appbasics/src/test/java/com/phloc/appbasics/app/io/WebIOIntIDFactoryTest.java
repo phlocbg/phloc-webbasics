@@ -31,7 +31,7 @@ import com.phloc.commons.idfactory.IIntIDFactory;
 /**
  * Test class for class {@link WebIOIntIDFactory}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebIOIntIDFactoryTest
 {

@@ -32,7 +32,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * in the same object.
  * 
  * @see com.phloc.webscopes.mgr.EWebScope#REQUEST
- * @author philip
+ * @author Philip Helger
  */
 public abstract class RequestWebSingleton extends AbstractSingleton
 {

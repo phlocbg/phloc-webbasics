@@ -38,7 +38,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
 /**
  * Represents a single URL within an XML URL set.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class XMLSitemapURL implements IHasLastModificationDateTime

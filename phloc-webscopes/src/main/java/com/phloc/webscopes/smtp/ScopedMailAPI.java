@@ -35,7 +35,7 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
  * Scope aware wrapper around {@link MailAPI} class so that it is gracefully
  * stopped when the global scope is stopped.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class ScopedMailAPI extends GlobalSingleton

@@ -27,7 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Test class for class {@link HTTPStringHelper}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class HTTPStringHelperTest
 {

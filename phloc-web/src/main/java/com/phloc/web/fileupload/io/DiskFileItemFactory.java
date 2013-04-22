@@ -61,7 +61,7 @@ import com.phloc.web.fileupload.IFileItemFactory;
  * </p>
  * 
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public class DiskFileItemFactory implements IFileItemFactory

@@ -32,7 +32,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Test class for class {@link PDTWebDateUtils}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class PDTWebDateUtilsTest
 {

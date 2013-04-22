@@ -7,7 +7,7 @@ import javax.mail.event.ConnectionListener;
 /**
  * An implementation of {@link ConnectionListener} that does nothing.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class DoNothingConnectionListener implements ConnectionListener
 {

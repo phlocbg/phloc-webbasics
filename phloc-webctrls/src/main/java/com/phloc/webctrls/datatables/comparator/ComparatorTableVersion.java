@@ -29,7 +29,7 @@ import com.phloc.commons.version.Version;
 /**
  * This comparator is responsible for sorting cells by {@link Version}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorTableVersion extends AbstractComparatorTable
 {

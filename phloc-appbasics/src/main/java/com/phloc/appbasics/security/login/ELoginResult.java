@@ -28,7 +28,7 @@ import com.phloc.commons.state.ISuccessIndicator;
 /**
  * Represents the different login results.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ELoginResult implements ISuccessIndicator, IHasDisplayText
 {

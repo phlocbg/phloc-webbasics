@@ -49,7 +49,7 @@ import com.phloc.commons.state.ISuccessIndicator;
  * The path may be relative in case when the application resides in a JAR file
  * or a WAR file.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebIO
 {

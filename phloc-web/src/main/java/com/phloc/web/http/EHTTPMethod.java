@@ -28,7 +28,7 @@ import com.phloc.commons.name.IHasName;
  * HTTP 1.1 methods.<br>
  * http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EHTTPMethod implements IHasName
 {

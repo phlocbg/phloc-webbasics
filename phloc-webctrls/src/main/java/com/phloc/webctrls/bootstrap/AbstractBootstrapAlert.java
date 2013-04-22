@@ -30,7 +30,7 @@ import com.phloc.html.hc.impl.HCEntityNode;
 /**
  * Bootstrap alert box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends
                                                                                                   AbstractHCDiv <THISTYPE>

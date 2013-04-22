@@ -34,7 +34,7 @@ import com.phloc.web.http.HTTPStringHelper;
  * Helper class to build the value of the {@link CHTTPHeader#WWW_AUTHENTICATE}
  * value send from the server to client.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class DigestAuthServerBuilder

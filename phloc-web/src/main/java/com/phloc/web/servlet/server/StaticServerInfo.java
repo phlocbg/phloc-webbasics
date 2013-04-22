@@ -34,7 +34,7 @@ import com.phloc.web.servlet.request.RequestHelper;
  * This singleton instance represents default server information for locations
  * where no request context is available (e.g. in scheduled tasks)
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class StaticServerInfo

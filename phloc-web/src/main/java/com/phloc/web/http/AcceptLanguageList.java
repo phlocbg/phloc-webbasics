@@ -27,7 +27,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Represents a list of Accept-Language values as specified in the HTTP header
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class AcceptLanguageList extends AbstractQValueList <String>
 {

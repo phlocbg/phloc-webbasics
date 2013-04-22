@@ -30,7 +30,7 @@ import com.phloc.web.servlet.response.ResponseHelperSettings;
 /**
  * Test class for class {@link ResponseHelperSettings}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ResponseHelperSettingsTest
 {

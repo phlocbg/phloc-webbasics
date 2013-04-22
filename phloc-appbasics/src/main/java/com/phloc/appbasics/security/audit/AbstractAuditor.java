@@ -30,7 +30,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Abstract base class for interface {@link IAuditor}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public abstract class AbstractAuditor implements IAuditor

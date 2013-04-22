@@ -29,7 +29,7 @@ import com.phloc.web.servlet.response.gzip.CompressFilterSettings;
 /**
  * Test class for class {@link CompressFilterSettings}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CompressFilterSettingsTest
 {

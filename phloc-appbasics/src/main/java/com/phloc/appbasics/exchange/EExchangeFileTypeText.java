@@ -31,7 +31,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 /**
  * File type texts
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Translatable
 public enum EExchangeFileTypeText implements IHasDisplayTextWithArgs

@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * JSch logger implementation on top of SLF4J.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class JSchLoggerSLF4J implements com.jcraft.jsch.Logger

@@ -31,7 +31,7 @@ import com.phloc.commons.name.IHasDisplayText;
 /**
  * See RFC 821 for details
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ESMTPErrorCode implements IHasDisplayText, IHasSimpleIntID
 {

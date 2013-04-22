@@ -31,7 +31,7 @@ import com.phloc.commons.version.Version;
 /**
  * Represents information about a certain browser.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public class BrowserInfo implements IHasDisplayText

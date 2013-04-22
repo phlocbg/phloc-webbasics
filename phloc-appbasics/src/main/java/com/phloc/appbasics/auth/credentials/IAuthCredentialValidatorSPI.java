@@ -28,7 +28,7 @@ import com.phloc.commons.annotations.IsSPIInterface;
  * called
  * <code>/META-INF/services/com.phloc.auth.core.credentials.IAuthCredentialValidatorSPI</code>
  * 
- * @author philip
+ * @author Philip Helger
  */
 @IsSPIInterface
 public interface IAuthCredentialValidatorSPI

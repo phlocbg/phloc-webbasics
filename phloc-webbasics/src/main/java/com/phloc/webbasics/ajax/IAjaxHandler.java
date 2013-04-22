@@ -24,7 +24,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Base interface for an AJAX handling function.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAjaxHandler
 {

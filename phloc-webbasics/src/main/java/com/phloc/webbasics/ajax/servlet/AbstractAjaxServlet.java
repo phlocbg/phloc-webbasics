@@ -52,7 +52,7 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 /**
  * Abstract implementation of a servlet that invokes AJAX functions.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet

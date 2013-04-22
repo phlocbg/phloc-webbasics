@@ -37,7 +37,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapSpan;
 /**
  * The content provider for the navigation bar area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ConfigNavbarProvider
 {

@@ -37,7 +37,7 @@ import com.phloc.html.js.builder.html.JSHtml;
 /**
  * Control for emitting Google Analytics code.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCGoogleAnalytics extends HCScript
 {

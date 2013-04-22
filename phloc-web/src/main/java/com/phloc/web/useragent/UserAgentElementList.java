@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class wraps the basic elements of a user agent string.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 final class UserAgentElementList

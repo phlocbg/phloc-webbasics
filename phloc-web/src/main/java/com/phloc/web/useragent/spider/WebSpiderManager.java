@@ -42,7 +42,7 @@ import com.phloc.commons.microdom.utils.MicroUtils;
 /**
  * Provides a list of known web spiders.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebSpiderManager
 {

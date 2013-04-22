@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Mock implementation of the {@link RequestDispatcher} interface
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class MockRequestDispatcher implements RequestDispatcher

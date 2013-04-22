@@ -40,7 +40,7 @@ import com.phloc.webdemoapp.ui.CDemoAppCSS;
 /**
  * The content provider for the header area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ConfigHeaderProvider
 {

@@ -35,7 +35,7 @@ import com.phloc.webctrls.bootstrap.ext.BootstrapCustomizer;
 /**
  * Bootstrap specific initialization listener
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class WebAppListenerMultiAppBootstrap extends WebAppListenerMultiApp
 {

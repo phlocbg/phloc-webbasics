@@ -45,7 +45,7 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * initialization. Note: each date element requires a unique ID since the
  * external calendar requires the ID.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class HCDateEditTriggered extends HCTable
 {

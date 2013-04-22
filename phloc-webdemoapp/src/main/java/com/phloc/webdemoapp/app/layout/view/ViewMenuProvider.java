@@ -33,7 +33,7 @@ import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
 /**
  * The content provider for the menu area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ViewMenuProvider
 {

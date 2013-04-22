@@ -36,7 +36,7 @@ import com.phloc.webctrls.custom.IIcon;
 /**
  * Bootstrap button toolbar
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapToolbar extends AbstractHCDiv <BootstrapToolbar>
 {

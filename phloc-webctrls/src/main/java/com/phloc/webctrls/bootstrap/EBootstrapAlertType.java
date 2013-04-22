@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Type of alert
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapAlertType implements ICSSClassProvider
 {

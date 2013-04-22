@@ -22,7 +22,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * This class defines the available actions
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CDemoAppActionConfig

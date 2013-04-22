@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 /**
  * Callback interface for resolving the current user ID.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICurrentUserIDProvider
 {

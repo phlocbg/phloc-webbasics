@@ -21,7 +21,7 @@ package com.phloc.webbasics.form.validation;
  * A simple read only form error list interface. For a field specific list look
  * at {@link IFormFieldErrorList}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IFormErrorList extends IBaseFormErrorList <IFormError>
 {

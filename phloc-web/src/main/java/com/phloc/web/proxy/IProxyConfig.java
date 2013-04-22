@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 /**
  * Base interface for the proxy configuration.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IProxyConfig extends Serializable
 {

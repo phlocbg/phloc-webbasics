@@ -31,7 +31,7 @@ import com.phloc.commons.annotations.UsedViaReflection;
 /**
  * A simple DNS resolver, using the dnsjava library.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class DNSResolver

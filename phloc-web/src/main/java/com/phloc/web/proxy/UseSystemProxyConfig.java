@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Proxy configuration that uses the system default proxy settings.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class UseSystemProxyConfig implements IProxyConfig

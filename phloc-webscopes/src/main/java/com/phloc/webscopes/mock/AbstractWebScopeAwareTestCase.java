@@ -32,7 +32,7 @@ import com.phloc.web.mock.MockServletPool;
  * Base class for JUnit tests where the initialization of the scopes happens
  * before each test execution.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractWebScopeAwareTestCase extends AbstractPhlocTestCase
 {

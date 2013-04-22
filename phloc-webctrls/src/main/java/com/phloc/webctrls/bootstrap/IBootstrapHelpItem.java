@@ -22,7 +22,7 @@ import com.phloc.html.hc.IHCElement;
 /**
  * Marker interface for all bootstrap help elements
  * 
- * @author philip
+ * @author Philip Helger
  * @param <IMPLTYPE>
  */
 public interface IBootstrapHelpItem <IMPLTYPE extends IBootstrapHelpItem <IMPLTYPE>> extends IHCElement <IMPLTYPE>

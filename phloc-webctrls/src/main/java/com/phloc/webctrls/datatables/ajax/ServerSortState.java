@@ -36,7 +36,7 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableString;
 /**
  * The current sort state of a {@link DataTables} object.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class ServerSortState implements Serializable
 {

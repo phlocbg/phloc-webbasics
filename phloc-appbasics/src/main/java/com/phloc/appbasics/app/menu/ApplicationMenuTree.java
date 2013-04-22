@@ -30,7 +30,7 @@ import com.phloc.scopes.singleton.tree.ApplicationSingletonTreeWithUniqueID;
 /**
  * Represents a per-application menu tree
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ApplicationMenuTree extends ApplicationSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
 {

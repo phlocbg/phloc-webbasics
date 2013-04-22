@@ -37,7 +37,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Misc utilities to create link URLs.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class LinkUtils

@@ -27,7 +27,7 @@ import com.phloc.commons.format.IFormatter;
 /**
  * Base class for all table comparators
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractComparatorTable extends AbstractComparator <String>
 {

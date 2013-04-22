@@ -33,7 +33,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * and non-web scopes.
  * 
  * @see com.phloc.webscopes.mgr.EWebScope#APPLICATION
- * @author philip
+ * @author Philip Helger
  */
 public abstract class ApplicationWebSingleton extends AbstractSingleton
 {

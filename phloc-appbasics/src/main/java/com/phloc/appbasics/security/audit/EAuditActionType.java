@@ -27,7 +27,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Determines the different types of actions of an audit item.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EAuditActionType implements IHasID <String>
 {

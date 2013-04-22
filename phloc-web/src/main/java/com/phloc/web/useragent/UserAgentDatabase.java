@@ -40,7 +40,7 @@ import com.phloc.web.http.CHTTPHeader;
  * Central cache for known user agents (see HTTP header field
  * {@link CHTTPHeader#USER_AGENT}).
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class UserAgentDatabase

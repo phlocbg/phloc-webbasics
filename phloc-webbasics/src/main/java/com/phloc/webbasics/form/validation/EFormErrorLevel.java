@@ -32,7 +32,7 @@ import com.phloc.commons.state.ISuccessIndicator;
 /**
  * A special error level enum for form errors.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EFormErrorLevel implements IHasID <String>, ISuccessIndicator, IErrorIndicator, IHasErrorLevel, ISeverityComparable <EFormErrorLevel>
 {

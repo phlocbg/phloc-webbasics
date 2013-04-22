@@ -43,7 +43,7 @@ import com.phloc.web.http.HTTPStringHelper;
 /**
  * Handling for HTTP Digest Authentication
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class HTTPDigestAuth

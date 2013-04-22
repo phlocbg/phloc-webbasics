@@ -40,7 +40,7 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
  * This class collects instances of {@link IEmailData} and tries to transmit
  * them using the specified SMTP settings.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> implements IThrowingRunnableWithParameter <List <IEmailData>>
 {

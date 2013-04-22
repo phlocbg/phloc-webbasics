@@ -41,7 +41,7 @@ import com.phloc.scopes.mgr.ScopeManager;
  * <li>Display locale</li>
  * </ul>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractRequestManager implements IRequestManager
 {

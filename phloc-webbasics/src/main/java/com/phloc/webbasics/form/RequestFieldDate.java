@@ -36,7 +36,7 @@ import com.phloc.datetime.xml.PDTXMLConverter;
 /**
  * Special request field specially for dates.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class RequestFieldDate extends RequestField
 {

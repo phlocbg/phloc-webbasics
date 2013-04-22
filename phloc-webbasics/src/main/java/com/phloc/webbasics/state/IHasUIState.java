@@ -24,7 +24,7 @@ import com.phloc.commons.type.IHasType;
 /**
  * Marker interface for object that can fit into {@link UIStateRegistry}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IHasUIState extends IHasType, Serializable
 {

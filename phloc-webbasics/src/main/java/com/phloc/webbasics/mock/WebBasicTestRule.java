@@ -29,7 +29,7 @@ import com.phloc.webscopes.mock.WebScopeTestRule;
 /**
  * A JUnit test rule that is suitable for all webbasics projects
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class WebBasicTestRule extends WebScopeTestRule
 {

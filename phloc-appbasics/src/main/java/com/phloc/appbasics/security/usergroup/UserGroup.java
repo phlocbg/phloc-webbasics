@@ -37,7 +37,7 @@ import com.phloc.commons.type.ObjectType;
 /**
  * Default implementation of the {@link IUserGroup} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class UserGroup implements IUserGroup

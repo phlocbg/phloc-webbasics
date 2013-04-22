@@ -20,7 +20,7 @@ package com.phloc.webbasics.app.layout;
 /**
  * Contains some predefined layout area IDs
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CLayout
 {

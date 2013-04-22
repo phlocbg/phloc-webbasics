@@ -46,7 +46,7 @@ import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
  * some responses. Checked things are status code, character encoding, content
  * type and some headers.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CheckResponseFilter implements Filter
 {

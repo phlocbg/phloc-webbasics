@@ -67,7 +67,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * final shutdown. It is also responsible for creating the global and session
  * scopes.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class WebAppListener implements ServletContextListener, HttpSessionListener
 {

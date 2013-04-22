@@ -28,7 +28,7 @@ import com.phloc.webctrls.bootstrap.EBootstrapAlertType;
 /**
  * Bootstrap question box
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapQuestionBox extends AbstractBootstrapAlert <BootstrapQuestionBox>
 {

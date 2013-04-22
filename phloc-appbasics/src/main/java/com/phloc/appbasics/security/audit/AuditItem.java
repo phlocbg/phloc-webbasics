@@ -32,7 +32,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Represents a single change item
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 final class AuditItem implements IAuditItem

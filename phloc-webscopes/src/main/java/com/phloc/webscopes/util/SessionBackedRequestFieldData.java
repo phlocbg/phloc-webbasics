@@ -29,7 +29,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * default, in case no parameter is passed. If no value is in the session either
  * the hard coded default value is used.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class SessionBackedRequestFieldData extends RequestFieldData
 {

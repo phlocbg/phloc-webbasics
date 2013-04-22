@@ -34,7 +34,7 @@ import com.phloc.web.smtp.settings.SMTPSettings;
 /**
  * Test class for class {@link FailedMailData}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FailedMailDataTest
 {

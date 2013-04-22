@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 /**
  * Base read-only interface for objects containing users.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IUserContainer
 {

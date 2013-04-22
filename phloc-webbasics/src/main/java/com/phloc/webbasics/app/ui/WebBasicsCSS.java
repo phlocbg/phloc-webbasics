@@ -25,7 +25,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * WebBasics predefined CSS classes
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class WebBasicsCSS

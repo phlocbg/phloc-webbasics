@@ -36,7 +36,7 @@ import com.phloc.commons.state.EChange;
 /**
  * Base implementation of {@link IDAO}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractDAO implements IDAO
 {

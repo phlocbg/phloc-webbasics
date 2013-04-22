@@ -33,7 +33,7 @@ import com.phloc.webscopes.singleton.ApplicationWebSingleton;
 /**
  * A per-application AJAX manager.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class ApplicationAjaxManager extends ApplicationWebSingleton implements IAjaxInvoker

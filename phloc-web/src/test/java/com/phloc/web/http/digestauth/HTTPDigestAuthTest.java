@@ -28,7 +28,7 @@ import com.phloc.web.http.EHTTPMethod;
 /**
  * Test class for class {@link HTTPDigestAuth}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class HTTPDigestAuthTest
 {

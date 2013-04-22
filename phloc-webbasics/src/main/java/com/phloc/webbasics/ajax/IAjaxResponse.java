@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Base interface for an Ajax response with a JSON representation.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAjaxResponse
 {

@@ -25,7 +25,7 @@ import com.phloc.html.hc.html.HCEdit;
  * Special callback interface to modify the {@link HCEdit} used by
  * {@link HCAutoNumeric}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IHCAutoNumericEditCustomizer
 {

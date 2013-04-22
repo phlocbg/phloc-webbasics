@@ -35,7 +35,7 @@ import com.phloc.datetime.format.PDTFormatPatterns;
 /**
  * Test class for class {@link DateFormatBuilder}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DateFormatBuilderTest extends AbstractPhlocTestCase
 {

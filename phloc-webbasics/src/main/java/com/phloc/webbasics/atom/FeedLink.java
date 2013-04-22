@@ -32,7 +32,7 @@ import com.phloc.commons.xml.CXML;
 /**
  * Represents a link in the ATOM feed
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FeedLink extends AbstractFeedElement
 {

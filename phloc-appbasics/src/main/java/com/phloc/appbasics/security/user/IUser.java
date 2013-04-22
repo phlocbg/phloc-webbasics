@@ -37,7 +37,7 @@ import com.phloc.datetime.IHasLastModificationDateTime;
 /**
  * Interface for a single user
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreationDateTime, IHasLastModificationDateTime, IHasDeletionDateTime, Serializable, IAuthSubject
 {

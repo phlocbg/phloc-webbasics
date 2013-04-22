@@ -36,7 +36,7 @@ import com.phloc.html.hc.html.AbstractHCCell;
 /**
  * This comparator is responsible for sorting cells by date and/or time.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorCellDateTime extends AbstractComparator <AbstractHCCell>
 {

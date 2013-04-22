@@ -32,7 +32,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Default implementation of the {@link IMenuItemPage} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class MenuItemPage extends AbstractMenuObject <MenuItemPage> implements IMenuItemPage

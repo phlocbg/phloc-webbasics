@@ -27,7 +27,7 @@ import com.phloc.commons.state.EChange;
 /**
  * Abstraction layer around auto save stuff.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAutoSaveAware
 {

@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Button size
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapButtonSize implements ICSSClassProvider
 {

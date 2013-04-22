@@ -42,7 +42,7 @@ import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
  * Abstract output stream switching
  * {@link javax.servlet.http.HttpServletResponseWrapper}
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpResponseWrapper

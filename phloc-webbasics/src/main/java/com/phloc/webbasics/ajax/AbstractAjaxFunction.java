@@ -25,7 +25,7 @@ import com.phloc.commons.annotations.Nonempty;
 /**
  * Abstract base implementation of {@link IAjaxFunction}
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public abstract class AbstractAjaxFunction implements IAjaxFunction

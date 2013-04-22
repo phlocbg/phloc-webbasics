@@ -48,7 +48,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class RequestHelper

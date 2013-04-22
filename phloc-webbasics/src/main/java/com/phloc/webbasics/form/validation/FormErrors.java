@@ -32,7 +32,7 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 /**
  * Handles form field specific and form global error messages.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class FormErrors

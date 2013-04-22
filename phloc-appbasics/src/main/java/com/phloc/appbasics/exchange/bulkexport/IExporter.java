@@ -27,7 +27,7 @@ import com.phloc.commons.state.ESuccess;
 /**
  * Generic interface for exporting records to an OutputStream.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IExporter
 {

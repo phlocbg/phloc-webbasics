@@ -31,7 +31,7 @@ import com.phloc.scopes.singleton.ApplicationSingleton;
 /**
  * This class handles the mapping of the area ID to a content provider.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class ApplicationLayoutManager extends ApplicationSingleton implements ILayoutManager

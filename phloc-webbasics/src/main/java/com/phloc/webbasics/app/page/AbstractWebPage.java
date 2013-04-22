@@ -45,7 +45,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * Abstract base implementation for {@link IWebPage}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractWebPage extends AbstractPage implements IWebPage
 {

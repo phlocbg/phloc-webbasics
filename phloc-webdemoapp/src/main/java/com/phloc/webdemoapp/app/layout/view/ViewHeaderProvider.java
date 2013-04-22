@@ -44,7 +44,7 @@ import com.phloc.webdemoapp.ui.DemoAppAccessUI;
 /**
  * The content provider for the header area.
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class ViewHeaderProvider
 {

@@ -28,7 +28,7 @@ import com.phloc.appbasics.auth.subject.IAuthSubject;
  * The interface representing the successful login of a subject (e.g. user) at a
  * given time.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IAuthIdentification
 {

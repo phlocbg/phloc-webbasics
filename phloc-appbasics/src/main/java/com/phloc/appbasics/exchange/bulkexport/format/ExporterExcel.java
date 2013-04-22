@@ -49,7 +49,7 @@ import com.phloc.poi.excel.style.ExcelStyle;
 /**
  * Export records to Excel workbook.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ExporterExcel implements IExporterFile
 {

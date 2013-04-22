@@ -24,7 +24,7 @@ import com.phloc.html.css.ICSSClassProvider;
 /**
  * Type of tab box tab position
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EBootstrapTabBoxType implements ICSSClassProvider
 {

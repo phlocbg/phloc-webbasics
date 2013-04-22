@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Represents the possible label states.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ELabelType
 {

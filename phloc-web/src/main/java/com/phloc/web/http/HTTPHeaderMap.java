@@ -43,7 +43,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
 /**
  * Abstracts HTTP header interface for external usage.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, List <String>>>

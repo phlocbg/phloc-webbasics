@@ -32,7 +32,7 @@ import com.phloc.commons.state.EChange;
 /**
  * Contains the settings for the CompressFilter class.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class CompressFilterSettings

@@ -28,7 +28,7 @@ import com.phloc.html.hc.html.AbstractHCCell;
 /**
  * This comparator is responsible for sorting cells by {@link Version}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class ComparatorCellVersion extends AbstractComparator <AbstractHCCell>
 {

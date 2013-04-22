@@ -29,7 +29,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 /**
  * SimpleWeb action servlet
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DemoAppViewActionServlet extends AbstractApplicationActionServlet
 {

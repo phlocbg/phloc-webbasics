@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Default implementation of the {@link IAuthSubject} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class AuthSubject implements IAuthSubject

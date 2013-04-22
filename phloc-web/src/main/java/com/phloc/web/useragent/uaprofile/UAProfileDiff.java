@@ -42,7 +42,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Represents a single UA profile diff.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class UAProfileDiff

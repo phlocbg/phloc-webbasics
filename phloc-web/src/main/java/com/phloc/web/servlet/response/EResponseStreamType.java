@@ -27,7 +27,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Determine the response stream type to be used.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EResponseStreamType implements IHasID <String>
 {

@@ -26,7 +26,7 @@ import javax.servlet.ServletContext;
  * {@link UnsupportedOperationException} exceptions for server or path related
  * queries. So it is "offline" only :)
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class OfflineHttpServletRequest extends MockHttpServletRequest

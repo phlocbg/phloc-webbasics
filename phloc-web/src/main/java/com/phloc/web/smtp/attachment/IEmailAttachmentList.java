@@ -28,7 +28,7 @@ import com.phloc.commons.state.IClearable;
  * This interface represents attachments to be added to a mail message. Messages
  * with attachments are always send as MIME messages.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IEmailAttachmentList extends IReadonlyEmailAttachmentList, IClearable
 {

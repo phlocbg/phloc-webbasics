@@ -46,7 +46,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * This class manages the available users.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager

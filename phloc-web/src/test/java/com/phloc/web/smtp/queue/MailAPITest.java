@@ -35,7 +35,7 @@ import com.phloc.web.smtp.settings.SMTPSettings;
 /**
  * Test class for class {@link MailAPI}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MailAPITest
 {

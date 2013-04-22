@@ -27,7 +27,7 @@ import com.phloc.commons.name.IHasName;
 /**
  * HTTP versions
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EHTTPVersion implements IHasName
 {

@@ -33,7 +33,7 @@ import com.phloc.commons.locale.LocaleCache;
 /**
  * Test class for class {@link GlobalLocaleManager}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class GlobalLocaleManagerTest
 {

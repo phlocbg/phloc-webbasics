@@ -32,7 +32,7 @@ import com.phloc.appbasics.security.CSecurity;
 /**
  * Test class for class {@link LoggedInUserManager}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class LoggedInUserManagerTest
 {

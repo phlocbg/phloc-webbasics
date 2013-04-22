@@ -39,7 +39,7 @@ import com.phloc.web.servlet.response.ResponseHelper;
 /**
  * Special {@link ServletOutputStream} that knows whether it is closed or not
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractCompressedServletOutputStream extends ServletOutputStream
 {

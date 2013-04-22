@@ -37,7 +37,7 @@ import com.phloc.webscopes.servlet.AbstractScopeAwareFilter;
  * Abstract base class for a filter performing actions via
  * {@link UnifiedResponse}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFilter
 {

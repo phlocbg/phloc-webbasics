@@ -29,7 +29,7 @@ import com.phloc.commons.state.ESuccess;
 /**
  * The DAO file IO API
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IDAOIO
 {

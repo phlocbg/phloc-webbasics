@@ -26,7 +26,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Abstract action handling servlet
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class GlobalActionServlet extends AbstractActionServlet
 {

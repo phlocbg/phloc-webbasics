@@ -42,7 +42,7 @@ import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 /**
  * Implementation of {@link IMenuItemRenderer} creating a Navbar compliant menu
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <HCUL>
 {

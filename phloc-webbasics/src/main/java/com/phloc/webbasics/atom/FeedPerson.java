@@ -31,7 +31,7 @@ import com.phloc.commons.xml.CXML;
 /**
  * Represents a person within a feed.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FeedPerson extends AbstractFeedElement
 {

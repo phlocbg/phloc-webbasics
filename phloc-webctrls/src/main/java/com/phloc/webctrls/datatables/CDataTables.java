@@ -22,7 +22,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * This class contains constants for DataTables.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CDataTables

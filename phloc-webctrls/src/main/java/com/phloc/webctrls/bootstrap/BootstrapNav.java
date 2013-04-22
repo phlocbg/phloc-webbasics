@@ -33,7 +33,7 @@ import com.phloc.webctrls.custom.IIcon;
 /**
  * Navigation items
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapNav extends HCUL
 {

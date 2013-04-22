@@ -24,7 +24,7 @@ import com.phloc.html.hc.html.HCButton;
 /**
  * Represents a Bootstrap label
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapLabel extends HCButton
 {

@@ -32,7 +32,7 @@ import com.phloc.webscopes.singleton.GlobalWebSingleton;
 /**
  * SPI handler for {@link IProgressListenerProvider} implementations
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class ProgressListenerProvider extends GlobalWebSingleton
 {

@@ -53,7 +53,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * class is thread-safe under the assumption that the implementing managers are
  * thread-safe.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class AccessManager extends GlobalSingleton implements IAccessManager

@@ -30,7 +30,7 @@ import com.phloc.webctrls.bootstrap.CBootstrapCSS;
  * A special menu item renderer for the footer area, where the items are
  * displayed horizontally
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapMenuItemRendererWellHorz extends BootstrapMenuItemRendererWell
 {

@@ -33,7 +33,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * scope.
  * 
  * @see com.phloc.webscopes.mgr.EWebScope#SESSION
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public abstract class SessionWebSingleton extends AbstractSingleton implements Serializable

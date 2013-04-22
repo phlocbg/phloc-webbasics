@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
 /**
  * A single lock information object.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ILockInfo extends Serializable
 {

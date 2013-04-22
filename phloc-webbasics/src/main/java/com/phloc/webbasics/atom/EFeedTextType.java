@@ -24,7 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 /**
  * Text identification type
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum EFeedTextType
 {

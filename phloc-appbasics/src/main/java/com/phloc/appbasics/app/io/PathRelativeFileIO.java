@@ -45,7 +45,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Abstract for accessing files inside a specific path.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class PathRelativeFileIO

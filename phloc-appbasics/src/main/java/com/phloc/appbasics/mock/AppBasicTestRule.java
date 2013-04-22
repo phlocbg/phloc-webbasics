@@ -26,7 +26,7 @@ import com.phloc.scopes.mock.ScopeTestRule;
 /**
  * Non-web scope aware test rule, with a defined storage root directory
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class AppBasicTestRule extends ScopeTestRule
 {

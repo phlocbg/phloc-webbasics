@@ -24,7 +24,7 @@ import com.phloc.html.hc.html.AbstractHCDiv;
 /**
  * Bootstrap block help.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class BootstrapButtonGroup extends AbstractHCDiv <BootstrapButtonGroup>
 {

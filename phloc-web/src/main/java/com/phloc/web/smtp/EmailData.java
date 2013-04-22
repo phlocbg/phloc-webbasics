@@ -41,7 +41,7 @@ import com.phloc.web.smtp.attachment.IEmailAttachmentList;
 /**
  * Default implementation of the {@link IEmailData} interface.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class EmailData implements IEmailData

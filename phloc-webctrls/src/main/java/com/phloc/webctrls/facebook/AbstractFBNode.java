@@ -32,7 +32,7 @@ import com.phloc.html.hc.impl.AbstractHCNode;
 /**
  * Abstract base class for FB nodes
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractFBNode extends AbstractHCNode
 {

@@ -28,7 +28,7 @@ import com.phloc.commons.url.SimpleURL;
 /**
  * Test class for class {@link DigestAuthServerBuilder}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DigestAuthServerBuilderTest
 {

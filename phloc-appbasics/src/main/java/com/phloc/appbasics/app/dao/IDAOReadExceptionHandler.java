@@ -25,7 +25,7 @@ import com.phloc.commons.io.IReadableResource;
 /**
  * Callback interface to handle thrown exception objects on DAO reading.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IDAOReadExceptionHandler
 {

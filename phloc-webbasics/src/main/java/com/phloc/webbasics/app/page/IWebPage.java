@@ -25,7 +25,7 @@ import com.phloc.appbasics.app.page.IPage;
 /**
  * The base interface for a single page of content.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IWebPage extends IPage
 {

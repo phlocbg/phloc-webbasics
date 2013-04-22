@@ -48,7 +48,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Global registry for UI control state data.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @ThreadSafe
 public final class UIStateRegistry extends SessionWebSingleton implements IScopeRenewalAware

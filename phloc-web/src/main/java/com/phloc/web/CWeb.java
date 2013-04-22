@@ -25,7 +25,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 /**
  * Contains some global web constants
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CWeb

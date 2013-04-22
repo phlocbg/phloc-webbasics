@@ -28,7 +28,7 @@ import com.phloc.commons.mock.AbstractPhlocTestCase;
 /**
  * Test class for class {@link WebSpiderManager}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WebSpiderManagerTest extends AbstractPhlocTestCase
 {

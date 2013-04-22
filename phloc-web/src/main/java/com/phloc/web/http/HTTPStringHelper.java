@@ -28,7 +28,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * HTTP string utils. Based on RFC 1945 http://tools.ietf.org/html/rfc1945
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class HTTPStringHelper

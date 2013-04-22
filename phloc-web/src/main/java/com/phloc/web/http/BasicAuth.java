@@ -30,7 +30,7 @@ import com.phloc.web.http.basicauth.HTTPBasicAuth;
  * Basic handling for HTTP Basic Auth. Use the new {@link HTTPBasicAuth}
  * instead!
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Deprecated
 @Immutable

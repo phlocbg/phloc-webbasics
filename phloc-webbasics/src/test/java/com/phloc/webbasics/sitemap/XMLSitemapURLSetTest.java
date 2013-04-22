@@ -34,7 +34,7 @@ import com.phloc.datetime.PDTFactory;
 /**
  * Test class for class {@link XMLSitemapURLSet}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class XMLSitemapURLSetTest
 {

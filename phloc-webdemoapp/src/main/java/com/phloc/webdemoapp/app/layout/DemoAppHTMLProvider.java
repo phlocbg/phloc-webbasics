@@ -39,7 +39,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * Main class for creating HTML output
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class DemoAppHTMLProvider extends LayoutHTMLProvider
 {

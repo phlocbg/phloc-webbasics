@@ -32,7 +32,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 /**
  * SOCKS proxy configuration.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class SocksProxyConfig implements IProxyConfig

@@ -29,7 +29,7 @@ import com.phloc.commons.collections.ContainerHelper;
 /**
  * Handles the application of object filters.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class SelectUtils

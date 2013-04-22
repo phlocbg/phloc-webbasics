@@ -27,7 +27,7 @@ import com.phloc.commons.mime.MimeType;
 /**
  * Represents a list of Accept HTTP header values
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
