@@ -66,6 +66,12 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
     setPerformer (this);
   }
 
+  @Nonnull
+  public ISMTPSettings getSMTPSettings ()
+  {
+    return m_aTransport.getSettings ();
+  }
+
   public void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)
   {
     if (aFailedMailQueue == null)

@@ -22,7 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -37,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.concurrent.ExtendedDefaultThreadFactory;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
@@ -65,7 +68,14 @@ public final class MailAPI
 
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final Map <ISMTPSettings, MailQueuePerSMTP> s_aQueueCache = new HashMap <ISMTPSettings, MailQueuePerSMTP> ();
-  private static final ExecutorService s_aSenderThreadPool = Executors.newCachedThreadPool ();
+  // Just to have custom named threads....
+  private static final ThreadFactory s_aThreadFactory = new ExtendedDefaultThreadFactory ("MailAPI");
+  private static final ExecutorService s_aSenderThreadPool = new ThreadPoolExecutor (0,
+                                                                                     Integer.MAX_VALUE,
+                                                                                     60L,
+                                                                                     TimeUnit.SECONDS,
+                                                                                     new SynchronousQueue <Runnable> (),
+                                                                                     s_aThreadFactory);
   private static FailedMailQueue s_aFailedMailQueue = new FailedMailQueue ();
   private static int s_nMaxMailQueueLen = 500;
 
