@@ -20,6 +20,7 @@ package com.phloc.appbasics.security.audit;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.callback.IThrowingRunnableWithParameter;
+import com.phloc.commons.concurrent.ExtendedDefaultThreadFactory;
 import com.phloc.commons.concurrent.collector.ConcurrentCollectorMultiple;
 import com.phloc.commons.state.EChange;
 
@@ -48,6 +50,8 @@ public class AsynchronousAuditor extends AbstractAuditor
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final ConcurrentCollectorMultiple <IAuditItem> m_aCollector;
+  // Just to have custom named threads....
+  private static final ThreadFactory s_aThreadFactory = new ExtendedDefaultThreadFactory ("AsyncAuditor");
   private final ExecutorService s_aSenderThreadPool;
 
   public AsynchronousAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider,
@@ -58,7 +62,7 @@ public class AsynchronousAuditor extends AbstractAuditor
       throw new NullPointerException ("performer");
 
     m_aCollector = new ConcurrentCollectorMultiple <IAuditItem> (aPerformer);
-    s_aSenderThreadPool = Executors.newSingleThreadExecutor ();
+    s_aSenderThreadPool = Executors.newSingleThreadExecutor (s_aThreadFactory);
     s_aSenderThreadPool.submit (m_aCollector);
   }
 
