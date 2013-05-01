@@ -48,6 +48,11 @@ import com.phloc.commons.microdom.reader.XMLMapHandler;
 @Immutable
 public class HTMLConfigManager
 {
+  private static final class SingletonHolder
+  {
+    static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
+  }
+
   public static final String DEFAULT_BASE_PATH = "html/";
   /** Filename containing the CSS includes */
   public static final String FILENAME_CSS_XML = "css.xml";
@@ -63,7 +68,7 @@ public class HTMLConfigManager
   private final List <JSFiles.Item> m_aAllJSItems;
   private final Map <String, String> m_aAllMetaTags = new LinkedHashMap <String, String> ();
 
-  public HTMLConfigManager ()
+  private HTMLConfigManager ()
   {
     this (DEFAULT_BASE_PATH);
   }
@@ -88,6 +93,15 @@ public class HTMLConfigManager
     if (aIS != null)
       if (XMLMapHandler.readMap (aIS, m_aAllMetaTags).isFailure ())
         s_aLogger.error ("Failed to read " + sBasePath + FILENAME_METATAGS_XML);
+  }
+
+  /**
+   * @return The default {@link HTMLConfigManager} instance.
+   */
+  @Nonnull
+  public static final HTMLConfigManager getInstance ()
+  {
+    return SingletonHolder.s_aInstance;
   }
 
   /**

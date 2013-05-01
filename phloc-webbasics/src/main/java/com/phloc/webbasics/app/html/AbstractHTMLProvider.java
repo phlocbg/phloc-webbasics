@@ -42,8 +42,6 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  */
 public abstract class AbstractHTMLProvider implements IHTMLProvider
 {
-  private HTMLConfigManager m_aHTMLConfigMgr;
-
   public AbstractHTMLProvider ()
   {}
 
@@ -51,9 +49,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @OverrideOnDemand
   protected HTMLConfigManager getHTMLConfigMgr ()
   {
-    if (m_aHTMLConfigMgr == null)
-      m_aHTMLConfigMgr = new HTMLConfigManager ();
-    return m_aHTMLConfigMgr;
+    return HTMLConfigManager.getInstance ();
   }
 
   @Nonnull
