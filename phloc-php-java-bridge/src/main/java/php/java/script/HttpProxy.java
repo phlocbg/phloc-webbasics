@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -34,33 +51,56 @@ import php.java.bridge.Util.Process.PhpException;
 import php.java.bridge.http.HeaderParser;
 
 /**
- * Represents the script continuation.
- * This class can be used to allocate php scripts on a HTTP server.
- * Although this class accidentally inherits from <code>CGIRunner</code> it doesn't necessarily run CGI binaries.
- * If you pass a URLReader, it calls its read method which opens a URLConnection to the remote server
- * and holds the allocated remote script instance hostage until release is called.
+ * Represents the script continuation. This class can be used to allocate php
+ * scripts on a HTTP server. Although this class accidentally inherits from
+ * <code>CGIRunner</code> it doesn't necessarily run CGI binaries. If you pass a
+ * URLReader, it calls its read method which opens a URLConnection to the remote
+ * server and holds the allocated remote script instance hostage until release
+ * is called.
+ * 
  * @author jostb
- *
  */
-public class HttpProxy extends CGIRunner {
-    /**
-     * Create a HTTP proxy which can be used to allocate a php script from a HTTP server
-     * @param reader - The reader, for example a URLReader
-     * @param env - The environment, must contain values for X_JAVABRIDGE_CONTEXT. It may contain X_JAVABRIDGE_OVERRIDE_HOSTS.
-     * @param out - The OutputStream
-     * @param err The error stream
-     * @param headerParser The header parser
-     * @param resultProxy The return value proxy
-     */
-    public HttpProxy(Reader reader, Map env, OutputStream out, OutputStream err, HeaderParser headerParser, ResultProxy resultProxy, ILogger logger) {
-	super(reader, env, out, err, headerParser, resultProxy, logger);
+public class HttpProxy extends CGIRunner
+{
+  /**
+   * Create a HTTP proxy which can be used to allocate a php script from a HTTP
+   * server
+   * 
+   * @param reader
+   *        - The reader, for example a URLReader
+   * @param env
+   *        - The environment, must contain values for X_JAVABRIDGE_CONTEXT. It
+   *        may contain X_JAVABRIDGE_OVERRIDE_HOSTS.
+   * @param out
+   *        - The OutputStream
+   * @param err
+   *        The error stream
+   * @param headerParser
+   *        The header parser
+   * @param resultProxy
+   *        The return value proxy
+   */
+  public HttpProxy (final Reader reader,
+                    final Map env,
+                    final OutputStream out,
+                    final OutputStream err,
+                    final HeaderParser headerParser,
+                    final ResultProxy resultProxy,
+                    final ILogger logger)
+  {
+    super (reader, env, out, err, headerParser, resultProxy, logger);
+  }
+
+  @Override
+  protected void doRun () throws IOException, PhpException
+  {
+    if (reader instanceof URLReader)
+    {
+      ((URLReader) reader).read (env, out, headerParser);
     }
-    
-    protected void doRun() throws IOException, PhpException {
-    	if(reader instanceof URLReader) {
-	    ((URLReader)reader).read(env, out, headerParser);
-     	} else {
-	    super.doRun();
-     	}
+    else
+    {
+      super.doRun ();
     }
+  }
 }

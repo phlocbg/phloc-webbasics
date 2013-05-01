@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package php.java.script.servlet;
 
 /*-*- mode: Java; tab-width:8 -*-*/
@@ -27,8 +44,6 @@ import php.java.script.IPhpScriptContext;
 import php.java.script.PhpScriptContextDecorator;
 import php.java.script.PhpScriptWriter;
 import php.java.script.ResultProxy;
-import php.java.script.servlet.HttpFastCGIProxy;
-import php.java.script.servlet.PhpScriptLogWriter;
 import php.java.servlet.ContextLoaderListener;
 import php.java.servlet.ServletUtil;
 
@@ -54,261 +69,393 @@ import php.java.servlet.ServletUtil;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 /**
- * An example decorator for compiled script engines running in a servlet environment.
- * Use
- * <blockquote>
- * <code>
+ * An example decorator for compiled script engines running in a servlet
+ * environment. Use <blockquote> <code>
  * static final CompiledScript script = ((Compilable)(new ScriptEngineManager().getEngineByName("php-invocable"))).compile("<?php ...?>");<br>
  * <br>
  * script.eval(new php.java.script.servlet.PhpCompiledHttpScriptContext(script.getEngine().getContext(),this,application,request,response));
- * </code>
- * </blockquote>
+ * </code> </blockquote>
  * 
  * @author jostb
- *
  */
-public class PhpHttpScriptContext extends PhpScriptContextDecorator {
+public class PhpHttpScriptContext extends PhpScriptContextDecorator
+{
 
-    /**
-     * Create a new PhpCompiledScriptContext using an existing
-     * PhpScriptContext
-     * @param ctx the script context to be decorated
-     */
-    public PhpHttpScriptContext(ScriptContext ctx, Servlet servlet, ServletContext context, HttpServletRequest request, HttpServletResponse response) {
-	super((IPhpScriptContext)ctx);
-	this.request = request;
-	this.response = response;
-	this.context = context;
-	this.servlet = servlet;
-    }
-    /**{@inheritDoc}*/
-    public Continuation createContinuation(Reader reader, Map env,
-            OutputStream out, OutputStream err, HeaderParser headerParser, ResultProxy result,
-            ILogger logger, boolean isCompiled) {
-		Continuation cont;
-		if (isCompiled) {
-		    ContextLoaderListener listener = ContextLoaderListener.getContextLoaderListener((ServletContext) getServletContext());
-		    cont = new HttpFastCGIProxy(env, out,  err, headerParser, result, listener.getConnectionPool());
-		} else 
-		    cont = super.createContinuation(reader, env, out, err, headerParser, result, logger, isCompiled);
+  /**
+   * Create a new PhpCompiledScriptContext using an existing PhpScriptContext
+   * 
+   * @param ctx
+   *        the script context to be decorated
+   */
+  public PhpHttpScriptContext (final ScriptContext ctx,
+                               final Servlet servlet,
+                               final ServletContext context,
+                               final HttpServletRequest request,
+                               final HttpServletResponse response)
+  {
+    super ((IPhpScriptContext) ctx);
+    this.request = request;
+    this.response = response;
+    this.context = context;
+    this.servlet = servlet;
+  }
 
-		return cont;
+  /** {@inheritDoc} */
+  @Override
+  public Continuation createContinuation (final Reader reader,
+                                          final Map env,
+                                          final OutputStream out,
+                                          final OutputStream err,
+                                          final HeaderParser headerParser,
+                                          final ResultProxy result,
+                                          final ILogger logger,
+                                          final boolean isCompiled)
+  {
+    Continuation cont;
+    if (isCompiled)
+    {
+      final ContextLoaderListener listener = ContextLoaderListener.getContextLoaderListener ((ServletContext) getServletContext ());
+      cont = new HttpFastCGIProxy (env, out, err, headerParser, result, listener.getConnectionPool ());
     }
-    public void startContinuation() {
-	ContextLoaderListener listener = ContextLoaderListener.getContextLoaderListener((ServletContext) getServletContext());
-	listener.getThreadPool().start(getContinuation());
-    }
-    
-    /** Integer value for the level of SCRIPT_SCOPE */
-    public static final int REQUEST_SCOPE = 0;
+    else
+      cont = super.createContinuation (reader, env, out, err, headerParser, result, logger, isCompiled);
 
-    /** Integer value for the level of SESSION_SCOPE */   
-    public static final int SESSION_SCOPE = 150;
+    return cont;
+  }
 
-    /** Integer value for the level of APPLICATION_SCOPE */
-    public static final int APPLICATION_SCOPE = 175;
+  @Override
+  public void startContinuation ()
+  {
+    final ContextLoaderListener listener = ContextLoaderListener.getContextLoaderListener ((ServletContext) getServletContext ());
+    listener.getThreadPool ().start (getContinuation ());
+  }
 
+  /** Integer value for the level of SCRIPT_SCOPE */
+  public static final int REQUEST_SCOPE = 0;
 
-    protected HttpServletRequest request;
-    protected HttpServletResponse response;
-    protected ServletContext context;
-    protected Servlet servlet;
+  /** Integer value for the level of SESSION_SCOPE */
+  public static final int SESSION_SCOPE = 150;
 
-    /**{@inheritDoc}*/
-    public Object getAttribute(String key, int scope){
-	if(scope == REQUEST_SCOPE){
-	    return request.getAttribute(key);
-	}else if(scope == SESSION_SCOPE){
-	    return request.getSession().getAttribute(key);
-	}else if(scope == APPLICATION_SCOPE){
-	    return context.getAttribute(key);	                        
-	}else{
-	    return super.getAttribute(key, scope);
-	}
-    }
-    /**{@inheritDoc}*/
-    public Object getAttribute(String name) throws IllegalArgumentException{
-	Object result;
-	if (name == null) {
-	    throw new IllegalArgumentException("name cannot be null");
-	}
-	if ((result = super.getAttribute(name))!=null) return result;
+  /** Integer value for the level of APPLICATION_SCOPE */
+  public static final int APPLICATION_SCOPE = 175;
 
-	if ((result=request.getAttribute(name)) != null)  {
-	    return result;
-	} else if ((result=request.getSession().getAttribute(name)) != null)  {
-	    return result;
-	} else if ((result=context.getAttribute(name)) != null) {
-	    return result;
-	}
-	return null;
-    }
+  protected HttpServletRequest request;
+  protected HttpServletResponse response;
+  protected ServletContext context;
+  protected Servlet servlet;
 
-    /**{@inheritDoc}*/
-    public void setAttribute(String key, Object value, int scope)
-    throws IllegalArgumentException {    	
-	if(scope == REQUEST_SCOPE){
-	    request.setAttribute(key, value);
-	}else if(scope == SESSION_SCOPE){
-	    request.getSession().setAttribute(key, value);
-	}else if(scope == APPLICATION_SCOPE){
-	    context.setAttribute(key, value);
-	}else{
-	    super.setAttribute(key, value, scope);    
-	}
+  /** {@inheritDoc} */
+  @Override
+  public Object getAttribute (final String key, final int scope)
+  {
+    if (scope == REQUEST_SCOPE)
+    {
+      return request.getAttribute (key);
     }
-
-    /**
-     * Get the servlet response
-     * @return The HttpServletResponse
-     */
-    public HttpServletResponse getResponse() {
-	return response;
-    }
-
-    /**
-     * Get the HttpServletRequest
-     * @return The HttpServletRequest
-     */
-    public HttpServletRequest getRequest() {
-	return request;
-    }
-
-    /**
-     * Get the ServletContext
-     * @return The current ServletContext
-     */
-    public ServletContext getContext() {
-	return context;
-    }
-    
-    protected Writer writer;
-    /** {@inheritDoc} */
-    public Writer getWriter() {
-	if(writer == null) {
-	    try {
-	        setWriter(response.getWriter());
-            } catch (IOException e) {
-        	Util.printStackTrace(e);
-            }
-	}
-	return writer;
-    }
-    /** {@inheritDoc} */
-    public void setWriter(Writer writer) {
-	if(! (writer instanceof PhpScriptWriter)) {
-	    writer = new PhpScriptWriter(new WriterOutputStream(writer));
-	}
-	super.setWriter(this.writer = writer);
-    }
-    protected Writer errorWriter;
-    /** {@inheritDoc} */
-    public Writer getErrorWriter() {
-	if(errorWriter == null) {
-	    setErrorWriter(PhpScriptLogWriter.getWriter(new php.java.servlet.Logger()));
-	}
-	return errorWriter;	
-    }
-    /**{@inheritDoc}*/
-    public void setErrorWriter(Writer errorWriter) {
-	if(! (errorWriter instanceof PhpScriptWriter)) {
-	    errorWriter = new PhpScriptWriter(new WriterOutputStream(errorWriter));
-	}
-	super.setErrorWriter(this.errorWriter = errorWriter);
-    }
-    protected Reader reader;
-    /**{@inheritDoc}*/
-    public Reader getReader() {
-	if(reader == null) {
-	    try {
-		reader =  request.getReader();
-            } catch (IOException e) {
-        	Util.printStackTrace(e);
-            }
-	}
-	return reader;
-    }
-    public void setReader(Reader reader) {
-	super.setReader(this.reader = reader);
-    }
-    /**{@inheritDoc}*/
-    public Object init(Object callable) throws Exception {
-	return php.java.bridge.http.Context.getManageable(callable);
-    }
-    /**{@inheritDoc}*/
-    public void onShutdown(Object closeable) {
-	php.java.servlet.HttpContext.handleManaged(closeable, context);
-    }
-
-    /**
-     * Return the http servlet response
-     * @return The http servlet reponse
-     */
-    public Object getHttpServletResponse() {
-	return response;
-    }
-    /**
-     * Return the http servlet request
-     * @return The http servlet request
-     */
-    public Object getHttpServletRequest() {
-	return request;
-    }
-    /**
-     * Return the http servlet
-     * @return The http servlet
-     */
-    public Object getServlet() {
-	return servlet;
-    }
-    /**
-     * Return the servlet config
-     * @return The servlet config
-     */
-    public Object getServletConfig() {
-	return servlet.getServletConfig();
-    }
-    /**
-     * Return the servlet context
-     * @return The servlet context
-     */
-    public Object getServletContext() {
-	return context;
-    }
-    /**{@inheritDoc}*/
-    public String getRealPath(String path) {
-	return ServletUtil.getRealPath(context, path);
-    }
-    /**@deprecated*/
-    public String getRedirectString(String webPath) {
-	throw new NotImplementedException();
-    }
-    /**@deprecated*/
-    public String getRedirectString() {
-	throw new NotImplementedException();
-    }
-    /**{@inheritDoc}*/
-    public String getRedirectURL(String webPath) {
-	 StringBuffer buf = new StringBuffer();
-	 buf.append(getSocketName());
-	 buf.append("/");
-	 buf.append(webPath);
-        try {
-            URI uri = new URI(request.isSecure()?"https:127.0.0.1":"http:127.0.0.1", buf.toString(), null);
-	    return uri.toASCIIString();
-        } catch (URISyntaxException e) {
-            Util.printStackTrace(e);
-            throw new RuntimeException(e);
+    else
+      if (scope == SESSION_SCOPE)
+      {
+        return request.getSession ().getAttribute (key);
+      }
+      else
+        if (scope == APPLICATION_SCOPE)
+        {
+          return context.getAttribute (key);
         }
+        else
+        {
+          return super.getAttribute (key, scope);
+        }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public Object getAttribute (final String name) throws IllegalArgumentException
+  {
+    Object result;
+    if (name == null)
+    {
+      throw new IllegalArgumentException ("name cannot be null");
     }
-    /**{@inheritDoc}*/
-    public String getSocketName() {
-	return String.valueOf(ServletUtil.getLocalPort(request));
+    if ((result = super.getAttribute (name)) != null)
+      return result;
+
+    if ((result = request.getAttribute (name)) != null)
+    {
+      return result;
     }
-    /**{@inheritDoc}*/
-    public ContextServer getContextServer() {
-	return ContextLoaderListener.getContextLoaderListener(context).getContextServer();
+    else
+      if ((result = request.getSession ().getAttribute (name)) != null)
+      {
+        return result;
+      }
+      else
+        if ((result = context.getAttribute (name)) != null)
+        {
+          return result;
+        }
+    return null;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void setAttribute (final String key, final Object value, final int scope) throws IllegalArgumentException
+  {
+    if (scope == REQUEST_SCOPE)
+    {
+      request.setAttribute (key, value);
     }
+    else
+      if (scope == SESSION_SCOPE)
+      {
+        request.getSession ().setAttribute (key, value);
+      }
+      else
+        if (scope == APPLICATION_SCOPE)
+        {
+          context.setAttribute (key, value);
+        }
+        else
+        {
+          super.setAttribute (key, value, scope);
+        }
+  }
+
+  /**
+   * Get the servlet response
+   * 
+   * @return The HttpServletResponse
+   */
+  public HttpServletResponse getResponse ()
+  {
+    return response;
+  }
+
+  /**
+   * Get the HttpServletRequest
+   * 
+   * @return The HttpServletRequest
+   */
+  public HttpServletRequest getRequest ()
+  {
+    return request;
+  }
+
+  /**
+   * Get the ServletContext
+   * 
+   * @return The current ServletContext
+   */
+  public ServletContext getContext ()
+  {
+    return context;
+  }
+
+  protected Writer writer;
+
+  /** {@inheritDoc} */
+  @Override
+  public Writer getWriter ()
+  {
+    if (writer == null)
+    {
+      try
+      {
+        setWriter (response.getWriter ());
+      }
+      catch (final IOException e)
+      {
+        Util.printStackTrace (e);
+      }
+    }
+    return writer;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void setWriter (Writer writer)
+  {
+    if (!(writer instanceof PhpScriptWriter))
+    {
+      writer = new PhpScriptWriter (new WriterOutputStream (writer));
+    }
+    super.setWriter (this.writer = writer);
+  }
+
+  protected Writer errorWriter;
+
+  /** {@inheritDoc} */
+  @Override
+  public Writer getErrorWriter ()
+  {
+    if (errorWriter == null)
+    {
+      setErrorWriter (PhpScriptLogWriter.getWriter (new php.java.servlet.Logger ()));
+    }
+    return errorWriter;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void setErrorWriter (Writer errorWriter)
+  {
+    if (!(errorWriter instanceof PhpScriptWriter))
+    {
+      errorWriter = new PhpScriptWriter (new WriterOutputStream (errorWriter));
+    }
+    super.setErrorWriter (this.errorWriter = errorWriter);
+  }
+
+  protected Reader reader;
+
+  /** {@inheritDoc} */
+  @Override
+  public Reader getReader ()
+  {
+    if (reader == null)
+    {
+      try
+      {
+        reader = request.getReader ();
+      }
+      catch (final IOException e)
+      {
+        Util.printStackTrace (e);
+      }
+    }
+    return reader;
+  }
+
+  @Override
+  public void setReader (final Reader reader)
+  {
+    super.setReader (this.reader = reader);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public Object init (final Object callable) throws Exception
+  {
+    return php.java.bridge.http.Context.getManageable (callable);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void onShutdown (final Object closeable)
+  {
+    php.java.servlet.HttpContext.handleManaged (closeable, context);
+  }
+
+  /**
+   * Return the http servlet response
+   * 
+   * @return The http servlet reponse
+   */
+  @Override
+  public Object getHttpServletResponse ()
+  {
+    return response;
+  }
+
+  /**
+   * Return the http servlet request
+   * 
+   * @return The http servlet request
+   */
+  @Override
+  public Object getHttpServletRequest ()
+  {
+    return request;
+  }
+
+  /**
+   * Return the http servlet
+   * 
+   * @return The http servlet
+   */
+  @Override
+  public Object getServlet ()
+  {
+    return servlet;
+  }
+
+  /**
+   * Return the servlet config
+   * 
+   * @return The servlet config
+   */
+  @Override
+  public Object getServletConfig ()
+  {
+    return servlet.getServletConfig ();
+  }
+
+  /**
+   * Return the servlet context
+   * 
+   * @return The servlet context
+   */
+  @Override
+  public Object getServletContext ()
+  {
+    return context;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getRealPath (final String path)
+  {
+    return ServletUtil.getRealPath (context, path);
+  }
+
+  /** @deprecated */
+  @Deprecated
+  @Override
+  public String getRedirectString (final String webPath)
+  {
+    throw new NotImplementedException ();
+  }
+
+  /** @deprecated */
+  @Deprecated
+  @Override
+  public String getRedirectString ()
+  {
+    throw new NotImplementedException ();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getRedirectURL (final String webPath)
+  {
+    final StringBuffer buf = new StringBuffer ();
+    buf.append (getSocketName ());
+    buf.append ("/");
+    buf.append (webPath);
+    try
+    {
+      final URI uri = new URI (request.isSecure () ? "https:127.0.0.1" : "http:127.0.0.1", buf.toString (), null);
+      return uri.toASCIIString ();
+    }
+    catch (final URISyntaxException e)
+    {
+      Util.printStackTrace (e);
+      throw new RuntimeException (e);
+    }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getSocketName ()
+  {
+    return String.valueOf (ServletUtil.getLocalPort (request));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public ContextServer getContextServer ()
+  {
+    return ContextLoaderListener.getContextLoaderListener (context).getContextServer ();
+  }
 }

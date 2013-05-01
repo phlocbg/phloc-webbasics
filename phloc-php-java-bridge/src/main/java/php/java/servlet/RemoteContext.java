@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.servlet;
@@ -30,51 +47,73 @@ import javax.servlet.http.HttpServletResponse;
 
 import php.java.bridge.http.IContext;
 
-
 /**
- * A custom context, used when remote PHP scripts access the servlet. In this case the HttpServletRequest, HttpServletResponse and ServletContext
- * objects are not available. However, the session object <em>is</em> available through the RemoteHttpSession.
+ * A custom context, used when remote PHP scripts access the servlet. In this
+ * case the HttpServletRequest, HttpServletResponse and ServletContext objects
+ * are not available. However, the session object <em>is</em> available through
+ * the RemoteHttpSession.
  * 
  * @author jostb
- *
  */
-public class RemoteContext extends HttpContext {
-    protected RemoteContext(ServletContext kontext, HttpServletRequest req, HttpServletResponse res) {
-	super(kontext, req, res);
-    }
-    /**
-     * Return the response object
-     * @return The response
-     */
-    public Object getHttpServletResponse() {
-	return getAttribute(IContext.SERVLET_RESPONSE);
-    }
-    /**
-     * Return the request object
-     * @return The request
-     */
-    public Object getHttpServletRequest() {
-	return getAttribute(IContext.SERVLET_REQUEST);
-    }
-    /**
-     * Return the servlet
-     * @return the servlet
-     */
-    public Object getServlet() {
-	return getAttribute(IContext.SERVLET);
-    }
-    /**
-     * Return the servlet config
-     * @return the servlet config
-     */
-     public Object getServletConfig() {
- 	return getAttribute(IContext.SERVLET_CONFIG);
-     }
-     /**
-      * Return the servlet context
-      * @return the servlet context
-      */
-      public Object getServletContext() {
-  	return getAttribute(IContext.SERVLET_CONTEXT);
-      }
+public class RemoteContext extends HttpContext
+{
+  protected RemoteContext (final ServletContext kontext, final HttpServletRequest req, final HttpServletResponse res)
+  {
+    super (kontext, req, res);
+  }
+
+  /**
+   * Return the response object
+   * 
+   * @return The response
+   */
+  @Override
+  public Object getHttpServletResponse ()
+  {
+    return getAttribute (IContext.SERVLET_RESPONSE);
+  }
+
+  /**
+   * Return the request object
+   * 
+   * @return The request
+   */
+  @Override
+  public Object getHttpServletRequest ()
+  {
+    return getAttribute (IContext.SERVLET_REQUEST);
+  }
+
+  /**
+   * Return the servlet
+   * 
+   * @return the servlet
+   */
+  @Override
+  public Object getServlet ()
+  {
+    return getAttribute (IContext.SERVLET);
+  }
+
+  /**
+   * Return the servlet config
+   * 
+   * @return the servlet config
+   */
+  @Override
+  public Object getServletConfig ()
+  {
+    return getAttribute (IContext.SERVLET_CONFIG);
+  }
+
+  /**
+   * Return the servlet context
+   * 
+   * @return the servlet context
+   */
+  @Override
+  public Object getServletContext ()
+  {
+    return getAttribute (IContext.SERVLET_CONTEXT);
+  }
 }

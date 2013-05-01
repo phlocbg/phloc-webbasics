@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -26,29 +43,31 @@ import php.java.bridge.ILogger;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 /**
  * The interface that all ContextServers must implement.
  * 
  * @author jostb
  */
-public interface IContextServer {
-     /**
-     * Destroy the server
-     *
-     */
-    public void destroy();
+public interface IContextServer
+{
+  /**
+   * Destroy the server
+   */
+  public void destroy ();
 
-    /**
-     * Check if the ContextServer is ready, i.e. it has created a server socket.
-     * @return true if there's a server socket listening, false otherwise.
-     */
-    public boolean isAvailable();
-    
-    /**
-     * Start the runner.
-     * @param channel The channel name
-     * @return true on success, false otherwise
-     */
-    public boolean start(AbstractChannelName channel, ILogger logger);
+  /**
+   * Check if the ContextServer is ready, i.e. it has created a server socket.
+   * 
+   * @return true if there's a server socket listening, false otherwise.
+   */
+  public boolean isAvailable ();
+
+  /**
+   * Start the runner.
+   * 
+   * @param channel
+   *        The channel name
+   * @return true on success, false otherwise
+   */
+  public boolean start (AbstractChannelName channel, ILogger logger);
 }

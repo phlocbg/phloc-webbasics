@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
@@ -29,9 +46,9 @@ import php.java.bridge.http.IContext;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 /**
  * Create new JavaBridge instances
+ * 
  * @see php.java.bridge.Session
  * @see php.java.bridge.http.Context
  * @see php.java.servlet.HttpContext
@@ -39,70 +56,89 @@ import php.java.bridge.http.IContext;
  * @see php.java.servlet.ServletContextFactory
  * @see php.java.script.PhpScriptContextFactory
  * @author jostb
- *
  */
-public abstract class JavaBridgeFactory implements IJavaBridgeFactory {
-    
-    protected JavaBridge bridge = null;
+public abstract class JavaBridgeFactory implements IJavaBridgeFactory
+{
 
-    /**
-     * Return a session for the JavaBridge
-     * @param name The session name. If name is null, the name PHPSESSION will be used.
-     * @param clientIsNew one of {@link ISession#SESSION_CREATE_NEW} {@link ISession#SESSION_GET_OR_CREATE} or {@link ISession#SESSION_GET}
-     * @param timeout timeout in seconds. If 0 the session does not expire.
-     * @return The session
-     * @see php.java.bridge.ISession
-     */
-    public abstract ISession getSession(String name, short clientIsNew, int timeout);
+  protected JavaBridge bridge = null;
 
-    /**
-     * Return the associated JSR223 context
-     * @return Always null
-     * @see php.java.bridge.http.ContextFactory#getContext()
-     */
-    public abstract IContext getContext();
+  /**
+   * Return a session for the JavaBridge
+   * 
+   * @param name
+   *        The session name. If name is null, the name PHPSESSION will be used.
+   * @param clientIsNew
+   *        one of {@link ISession#SESSION_CREATE_NEW}
+   *        {@link ISession#SESSION_GET_OR_CREATE} or
+   *        {@link ISession#SESSION_GET}
+   * @param timeout
+   *        timeout in seconds. If 0 the session does not expire.
+   * @return The session
+   * @see php.java.bridge.ISession
+   */
+  public abstract ISession getSession (String name, short clientIsNew, int timeout);
 
-    protected JavaBridge checkBridge() {
-	return bridge;
-    }
-    /**
-     * Return the JavaBridge.
-     * @return Returns the bridge.
-     */
-    public JavaBridge getBridge() {
-	if(bridge != null) return bridge;
-	bridge=new JavaBridge(this);
-	if(Util.logLevel>=4) Util.logDebug("created new bridge: " + bridge);
-	return bridge;
-    }
-    /**{@inheritDoc}*/
-    public boolean isNew() {
-	return bridge==null;
-    }
-    
-    /**
-     * Recycle the factory for new reqests.
-     */
-    public void recycle() {
-    }
+  /**
+   * Return the associated JSR223 context
+   * 
+   * @return Always null
+   * @see php.java.bridge.http.ContextFactory#getContext()
+   */
+  public abstract IContext getContext ();
 
-    /**
-     * Destroy the factory
-     */
-    public void destroy() {
-	this.bridge = null;
-    }
+  protected JavaBridge checkBridge ()
+  {
+    return bridge;
+  }
 
-    /**
-     * {@inheritDoc}
-     * @throws IOException 
-     */
-    public void parseHeader (Request req, InputStream in) throws IOException {
-	
-	in.read();
-	
-	byte option = (byte)(0xFF&in.read());
-	if (option==(byte)0xFF) throw new IllegalStateException("not within a JEE environment");
-	req.init(option);
-    }
+  /**
+   * Return the JavaBridge.
+   * 
+   * @return Returns the bridge.
+   */
+  public JavaBridge getBridge ()
+  {
+    if (bridge != null)
+      return bridge;
+    bridge = new JavaBridge (this);
+    if (Util.logLevel >= 4)
+      Util.logDebug ("created new bridge: " + bridge);
+    return bridge;
+  }
+
+  /** {@inheritDoc} */
+  public boolean isNew ()
+  {
+    return bridge == null;
+  }
+
+  /**
+   * Recycle the factory for new reqests.
+   */
+  public void recycle ()
+  {}
+
+  /**
+   * Destroy the factory
+   */
+  public void destroy ()
+  {
+    this.bridge = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @throws IOException
+   */
+  public void parseHeader (final Request req, final InputStream in) throws IOException
+  {
+
+    in.read ();
+
+    final byte option = (byte) (0xFF & in.read ());
+    if (option == (byte) 0xFF)
+      throw new IllegalStateException ("not within a JEE environment");
+    req.init (option);
+  }
 }

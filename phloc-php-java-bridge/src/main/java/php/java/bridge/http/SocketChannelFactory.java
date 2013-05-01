@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -37,143 +54,238 @@ import php.java.bridge.Util.Process;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-class SocketChannelFactory extends FCGIConnectionFactory {
-    public static final String LOCAL_HOST = "127.0.0.1";
-    private int port;
+class SocketChannelFactory extends FCGIConnectionFactory
+{
+  public static final String LOCAL_HOST = "127.0.0.1";
+  private int port;
 
-    private  ServerSocket fcgiTestSocket = null;
-    private  int fcgiTestPort;
-    
-    public SocketChannelFactory (IFCGIProcessFactory processFactory, boolean promiscuous) {
-	super(processFactory);
-	this.promiscuous = promiscuous;
-    }
-    public void test() throws FCGIConnectException {
-        Socket testSocket;
-	try {
-	    testSocket = new Socket(InetAddress.getByName(getName()), port);
-	    testSocket.close();
-	} catch (IOException e) {
-	    if (lastException != null) {
-		throw new FCGIConnectException(String.valueOf(e), lastException);
-	    }
-	    throw new FCGIConnectException(e);
-	}
-    }
-    /**
-     * Create a new socket and connect
-     * it to the given host/port
-     * @param host The host, for example 127.0.0.1
-     * @param port The port, for example 9667
-     * @return The socket
-     * @throws UnknownHostException
-     * @throws FCGIConnectionException
-     */
-    private Socket doConnect(String host, int port) throws FCGIConnectException {
-        Socket s = null;
-	try {
-            s = new Socket(InetAddress.getByName(host), port);
-	} catch (IOException e) {
-	    throw new FCGIConnectException(e);
-	}
-	try {
-	    s.setTcpNoDelay(true);
-	} catch (SocketException e) {
-	    Util.printStackTrace(e);
-	}
-	return s;
-    }
+  private ServerSocket fcgiTestSocket = null;
+  private int fcgiTestPort;
 
-    public FCGIConnection connect() throws FCGIConnectException {
-	Socket s = doConnect(getName(), getPort());
-	return new SocketChannel(s); 	
+  public SocketChannelFactory (final IFCGIProcessFactory processFactory, final boolean promiscuous)
+  {
+    super (processFactory);
+    this.promiscuous = promiscuous;
+  }
+
+  @Override
+  public void test () throws FCGIConnectException
+  {
+    Socket testSocket;
+    try
+    {
+      testSocket = new Socket (InetAddress.getByName (getName ()), port);
+      testSocket.close ();
     }
-    
-    protected void waitForDaemon() throws UnknownHostException, InterruptedException {
-	long T0 = System.currentTimeMillis();
-	int count = 15;
-	InetAddress addr = InetAddress.getByName(LOCAL_HOST);
-	if(Util.logLevel>3) Util.logDebug("Waiting for PHP FastCGI daemon");
-	while(count-->0) {
-	    try {
-		Socket s = new Socket(addr, getPort());
-		s.close();
-		break;
-	    } catch (IOException e) {/*ignore*/}
-	    if(System.currentTimeMillis()-16000>T0) break;
-	    Thread.sleep(1000);
-	}
-	if(count==-1) Util.logError("Timeout waiting for PHP FastCGI daemon");
-	if(Util.logLevel>3) Util.logDebug("done waiting for PHP FastCGI daemon");
+    catch (final IOException e)
+    {
+      if (lastException != null)
+      {
+        throw new FCGIConnectException (String.valueOf (e), lastException);
+      }
+      throw new FCGIConnectException (e);
     }
-	    
-    /* Start a fast CGI Server process on this computer. Switched off per default. */
-    protected Process doBind(Map env, String php, boolean includeJava) throws IOException {
-	if(proc!=null) return null;
-	StringBuffer buf = new StringBuffer((Util.JAVABRIDGE_PROMISCUOUS || promiscuous) ? "" : LOCAL_HOST); // bind to all available or loopback only
-	buf.append(':');
-	buf.append(String.valueOf(getPort()));
-	String port = buf.toString();
-	        
-	// Set override hosts so that php does not try to start a VM.
-	// The value itself doesn't matter, we'll pass the real value
-	// via the (HTTP_)X_JAVABRIDGE_OVERRIDE_HOSTS header field
-	// later.
-	File home = null;
-	if(php!=null) try { home = ((new File(php)).getParentFile()); } catch (Exception e) {Util.printStackTrace(e);}
-	proc = processFactory.createFCGIProcess(new String[]{php, "-b", port}, includeJava, home, env);
-	proc.start();
-	return (Process)proc;
+  }
+
+  /**
+   * Create a new socket and connect it to the given host/port
+   * 
+   * @param host
+   *        The host, for example 127.0.0.1
+   * @param port
+   *        The port, for example 9667
+   * @return The socket
+   * @throws UnknownHostException
+   * @throws FCGIConnectionException
+   */
+  private Socket doConnect (final String host, final int port) throws FCGIConnectException
+  {
+    Socket s = null;
+    try
+    {
+      s = new Socket (InetAddress.getByName (host), port);
     }
-    protected int getPort() {
-	return port;
+    catch (final IOException e)
+    {
+      throw new FCGIConnectException (e);
     }
-    protected String getName() {
-	return LOCAL_HOST;
+    try
+    {
+      s.setTcpNoDelay (true);
     }
-    public String getFcgiStartCommand(String base, String php_fcgi_max_requests) {
-	String msg=
-	    "cd " + base + File.separator + Util.osArch + "-" + Util.osName+ "\n" + 
-	    "REDIRECT_STATUS=200 " +
-	    "X_JAVABRIDGE_OVERRIDE_HOSTS=\"/\" " +
-	    "PHP_FCGI_CHILDREN=\"5\" " +
-	    "PHP_FCGI_MAX_REQUESTS=\""+php_fcgi_max_requests+"\" /usr/bin/php-cgi -b 127.0.0.1:" +
-	    getPort()+"\n\n";
-	return msg;
+    catch (final SocketException e)
+    {
+      Util.printStackTrace (e);
     }
-    protected void bind(ILogger logger) throws InterruptedException, IOException {
-	if(fcgiTestSocket!=null) { fcgiTestSocket.close(); fcgiTestSocket=null; }// replace the allocated socket# with the real fcgi server
-	super.bind(logger);
+    return s;
+  }
+
+  @Override
+  public FCGIConnection connect () throws FCGIConnectException
+  {
+    final Socket s = doConnect (getName (), getPort ());
+    return new SocketChannel (s);
+  }
+
+  @Override
+  protected void waitForDaemon () throws UnknownHostException, InterruptedException
+  {
+    final long T0 = System.currentTimeMillis ();
+    int count = 15;
+    final InetAddress addr = InetAddress.getByName (LOCAL_HOST);
+    if (Util.logLevel > 3)
+      Util.logDebug ("Waiting for PHP FastCGI daemon");
+    while (count-- > 0)
+    {
+      try
+      {
+        final Socket s = new Socket (addr, getPort ());
+        s.close ();
+        break;
+      }
+      catch (final IOException e)
+      {/* ignore */}
+      if (System.currentTimeMillis () - 16000 > T0)
+        break;
+      Thread.sleep (1000);
     }
-		
-    public void findFreePort(boolean select) {
-	fcgiTestPort=FCGIUtil.FCGI_PORT; 
-	fcgiTestSocket=null;
-	for(int i=FCGIUtil.FCGI_PORT+1; select && (i<FCGIUtil.FCGI_PORT+100); i++) {
-	    try {
-		ServerSocket s = new ServerSocket(i, Util.BACKLOG, InetAddress.getByName(LOCAL_HOST));
-		fcgiTestPort = i;
-		fcgiTestSocket = s;
-		break;
-	    } catch (IOException e) {/*ignore*/}
-	}
+    if (count == -1)
+      Util.logError ("Timeout waiting for PHP FastCGI daemon");
+    if (Util.logLevel > 3)
+      Util.logDebug ("done waiting for PHP FastCGI daemon");
+  }
+
+  /* Start a fast CGI Server process on this computer. Switched off per default. */
+  @Override
+  protected Process doBind (final Map env, final String php, final boolean includeJava) throws IOException
+  {
+    if (proc != null)
+      return null;
+    final StringBuffer buf = new StringBuffer ((Util.JAVABRIDGE_PROMISCUOUS || promiscuous) ? "" : LOCAL_HOST); // bind
+                                                                                                                // to
+                                                                                                                // all
+                                                                                                                // available
+                                                                                                                // or
+                                                                                                                // loopback
+                                                                                                                // only
+    buf.append (':');
+    buf.append (String.valueOf (getPort ()));
+    final String port = buf.toString ();
+
+    // Set override hosts so that php does not try to start a VM.
+    // The value itself doesn't matter, we'll pass the real value
+    // via the (HTTP_)X_JAVABRIDGE_OVERRIDE_HOSTS header field
+    // later.
+    File home = null;
+    if (php != null)
+      try
+      {
+        home = ((new File (php)).getParentFile ());
+      }
+      catch (final Exception e)
+      {
+        Util.printStackTrace (e);
+      }
+    proc = processFactory.createFCGIProcess (new String [] { php, "-b", port }, includeJava, home, env);
+    proc.start ();
+    return (Process) proc;
+  }
+
+  protected int getPort ()
+  {
+    return port;
+  }
+
+  protected String getName ()
+  {
+    return LOCAL_HOST;
+  }
+
+  @Override
+  public String getFcgiStartCommand (final String base, final String php_fcgi_max_requests)
+  {
+    final String msg = "cd " +
+                       base +
+                       File.separator +
+                       Util.osArch +
+                       "-" +
+                       Util.osName +
+                       "\n" +
+                       "REDIRECT_STATUS=200 " +
+                       "X_JAVABRIDGE_OVERRIDE_HOSTS=\"/\" " +
+                       "PHP_FCGI_CHILDREN=\"5\" " +
+                       "PHP_FCGI_MAX_REQUESTS=\"" +
+                       php_fcgi_max_requests +
+                       "\" /usr/bin/php-cgi -b 127.0.0.1:" +
+                       getPort () +
+                       "\n\n";
+    return msg;
+  }
+
+  @Override
+  protected void bind (final ILogger logger) throws InterruptedException, IOException
+  {
+    if (fcgiTestSocket != null)
+    {
+      fcgiTestSocket.close ();
+      fcgiTestSocket = null;
+    }// replace the allocated socket# with the real fcgi server
+    super.bind (logger);
+  }
+
+  @Override
+  public void findFreePort (final boolean select)
+  {
+    fcgiTestPort = FCGIUtil.FCGI_PORT;
+    fcgiTestSocket = null;
+    for (int i = FCGIUtil.FCGI_PORT + 1; select && (i < FCGIUtil.FCGI_PORT + 100); i++)
+    {
+      try
+      {
+        final ServerSocket s = new ServerSocket (i, Util.BACKLOG, InetAddress.getByName (LOCAL_HOST));
+        fcgiTestPort = i;
+        fcgiTestSocket = s;
+        break;
+      }
+      catch (final IOException e)
+      {/* ignore */}
     }
-    public void setDefaultPort() {
-	port = FCGIUtil.FCGI_PORT;
-    }
-    protected void setDynamicPort() {
-	port = fcgiTestPort;
-    }
-    public void destroy() {
-	super.destroy();
-	if(fcgiTestSocket!=null) try { fcgiTestSocket.close(); fcgiTestSocket=null;} catch (Exception e) {/*ignore*/}
-    }	  
-    /** 
-     * Return the channel name 
-     * @return the channel name
-     * 
-     */
-    public String toString() {
-	return "ChannelName@127.0.0.1:" + port;
-    }
+  }
+
+  @Override
+  public void setDefaultPort ()
+  {
+    port = FCGIUtil.FCGI_PORT;
+  }
+
+  @Override
+  protected void setDynamicPort ()
+  {
+    port = fcgiTestPort;
+  }
+
+  @Override
+  public void destroy ()
+  {
+    super.destroy ();
+    if (fcgiTestSocket != null)
+      try
+      {
+        fcgiTestSocket.close ();
+        fcgiTestSocket = null;
+      }
+      catch (final Exception e)
+      {/* ignore */}
+  }
+
+  /**
+   * Return the channel name
+   * 
+   * @return the channel name
+   */
+  @Override
+  public String toString ()
+  {
+    return "ChannelName@127.0.0.1:" + port;
+  }
 }

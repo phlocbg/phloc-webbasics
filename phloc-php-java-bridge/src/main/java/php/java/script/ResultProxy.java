@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -29,75 +46,103 @@ import php.java.bridge.Util;
  */
 
 /**
- * Returned by {@link javax.script.ScriptEngine#eval(java.io.Reader)} this class holds a proxy
- * for the result code returned by PHP. Invoke any of its procedures to terminate the script
- * engine to receive its result code.
+ * Returned by {@link javax.script.ScriptEngine#eval(java.io.Reader)} this class
+ * holds a proxy for the result code returned by PHP. Invoke any of its
+ * procedures to terminate the script engine to receive its result code.
+ * 
  * @author jostb
  */
-public class ResultProxy extends Number {
-    private static final long serialVersionUID = 9126953496638654790L;
-    private int result;
-    private IPhpScriptEngine engine;
-    ResultProxy(IPhpScriptEngine engine) {
-	this.engine = engine;
-    }
-    void setResult(int result) {
-	this.result = result;
-    }
-    /**
-     * Release the script engine and return the result code
-     * @return the result code from PHP
-     */
-    public int getResult() {
-	engine.release();
-	return result;
-    }
-    /**
-     * Release the script engine and return the result code
-     * @return the result code from PHP
-     */
-    public String toString() {
-	if (Util.logLevel>3) return "DEBUG WARNING: toString() did not terminate script because logLevel > 3!";
-	return String.valueOf(getResult());
-    }
+public class ResultProxy extends Number
+{
+  private static final long serialVersionUID = 9126953496638654790L;
+  private int result;
+  private final IPhpScriptEngine engine;
 
-    /**
-     * Release the script engine and return the result code
-     * @return the result code from PHP
-     */
-    public double doubleValue() {
-	return (double)getResult();
-    }
+  ResultProxy (final IPhpScriptEngine engine)
+  {
+    this.engine = engine;
+  }
 
-    /**
-     * Release the script engine and return the result code
-     * @return the result code from PHP
-     */
-    public float floatValue() {
-	return (float)getResult();
-    }
+  void setResult (final int result)
+  {
+    this.result = result;
+  }
 
-    /**
-     * Release the script engine and return the result code
-     * @return the result code from PHP
-     */
-    public int intValue() {
-	return (int)getResult();
-    }
+  /**
+   * Release the script engine and return the result code
+   * 
+   * @return the result code from PHP
+   */
+  public int getResult ()
+  {
+    engine.release ();
+    return result;
+  }
 
-    /**
-     * Release the script engine and return the result code
-     * @return the result code from PHP
-     */
-    public long longValue() {
-	return (long)getResult();
-    }
+  /**
+   * Release the script engine and return the result code
+   * 
+   * @return the result code from PHP
+   */
+  @Override
+  public String toString ()
+  {
+    if (Util.logLevel > 3)
+      return "DEBUG WARNING: toString() did not terminate script because logLevel > 3!";
+    return String.valueOf (getResult ());
+  }
 
-    /**
-     * Release the script engine
-     * @throws IOException 
-     */
-    public void close() throws IOException {
-	engine.release();
-    }
+  /**
+   * Release the script engine and return the result code
+   * 
+   * @return the result code from PHP
+   */
+  @Override
+  public double doubleValue ()
+  {
+    return getResult ();
+  }
+
+  /**
+   * Release the script engine and return the result code
+   * 
+   * @return the result code from PHP
+   */
+  @Override
+  public float floatValue ()
+  {
+    return getResult ();
+  }
+
+  /**
+   * Release the script engine and return the result code
+   * 
+   * @return the result code from PHP
+   */
+  @Override
+  public int intValue ()
+  {
+    return getResult ();
+  }
+
+  /**
+   * Release the script engine and return the result code
+   * 
+   * @return the result code from PHP
+   */
+  @Override
+  public long longValue ()
+  {
+    return getResult ();
+  }
+
+  /**
+   * Release the script engine
+   * 
+   * @throws IOException
+   */
+  public void close () throws IOException
+  {
+    engine.release ();
+  }
 }

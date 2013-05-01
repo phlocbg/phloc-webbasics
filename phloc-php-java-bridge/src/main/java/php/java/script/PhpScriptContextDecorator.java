@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -38,189 +55,257 @@ import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.HeaderParser;
 
 /**
- * Abstract class for IPhpScriptContexts. The abstract class itself provides default methods that pass 
- * all requests to the contained IPhpScriptContext. Subclasses of PhpScriptContextDecoratorDecorator should 
- * override some of these methods and may also provide additional methods and fields.  
+ * Abstract class for IPhpScriptContexts. The abstract class itself provides
+ * default methods that pass all requests to the contained IPhpScriptContext.
+ * Subclasses of PhpScriptContextDecoratorDecorator should override some of
+ * these methods and may also provide additional methods and fields.
  * 
  * @author jostb
  */
-public abstract class PhpScriptContextDecorator implements IPhpScriptContext {
+public abstract class PhpScriptContextDecorator implements IPhpScriptContext
+{
 
-    private IPhpScriptContext ctx;
+  private final IPhpScriptContext ctx;
 
-    /**
-     * Create a new PhpScriptContextDecorator
-     * @param ctx the PhpScriptContext to decorate.
-     */
-    public PhpScriptContextDecorator (IPhpScriptContext ctx) {
-	this.ctx = ctx;
-    }
-    /**{@inheritDoc}*/
-    public Object getAttribute(String name) throws IllegalArgumentException {
-	return ctx.getAttribute(name);
-    }
+  /**
+   * Create a new PhpScriptContextDecorator
+   * 
+   * @param ctx
+   *        the PhpScriptContext to decorate.
+   */
+  public PhpScriptContextDecorator (final IPhpScriptContext ctx)
+  {
+    this.ctx = ctx;
+  }
 
-    /**{@inheritDoc}*/
-    public Object getAttribute(String name, int scope)
-	    throws IllegalArgumentException {
-	return ctx.getAttribute(name, scope);
-    }
+  /** {@inheritDoc} */
+  public Object getAttribute (final String name) throws IllegalArgumentException
+  {
+    return ctx.getAttribute (name);
+  }
 
-    /**{@inheritDoc}*/
-    public int getAttributesScope(String name) {
-	return ctx.getAttributesScope(name);
-    }
+  /** {@inheritDoc} */
+  public Object getAttribute (final String name, final int scope) throws IllegalArgumentException
+  {
+    return ctx.getAttribute (name, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public Bindings getBindings(int scope) {
-	return ctx.getBindings(scope);
-    }
+  /** {@inheritDoc} */
+  public int getAttributesScope (final String name)
+  {
+    return ctx.getAttributesScope (name);
+  }
 
-    /**{@inheritDoc}*/
-    public Writer getErrorWriter() {
-	return ctx.getErrorWriter();
-    }
+  /** {@inheritDoc} */
+  public Bindings getBindings (final int scope)
+  {
+    return ctx.getBindings (scope);
+  }
 
-    /**{@inheritDoc}*/
-    public Reader getReader() {
-	return ctx.getReader();
-    }
+  /** {@inheritDoc} */
+  public Writer getErrorWriter ()
+  {
+    return ctx.getErrorWriter ();
+  }
 
-    /**{@inheritDoc}*/
-    public List getScopes() {
-	return ctx.getScopes();
-    }
+  /** {@inheritDoc} */
+  public Reader getReader ()
+  {
+    return ctx.getReader ();
+  }
 
-    /**{@inheritDoc}*/
-    public Writer getWriter() {
-	return ctx.getWriter();
-    }
+  /** {@inheritDoc} */
+  public List getScopes ()
+  {
+    return ctx.getScopes ();
+  }
 
-    /**{@inheritDoc}*/
-    public Object removeAttribute(String name, int scope)
-	    throws IllegalArgumentException {
-	return ctx.removeAttribute(name, scope);
-    }
+  /** {@inheritDoc} */
+  public Writer getWriter ()
+  {
+    return ctx.getWriter ();
+  }
 
-    /**{@inheritDoc}*/
-    public void setAttribute(String key, Object value, int scope)
-	    throws IllegalArgumentException {
-	ctx.setAttribute(key, value, scope);
-    }
+  /** {@inheritDoc} */
+  public Object removeAttribute (final String name, final int scope) throws IllegalArgumentException
+  {
+    return ctx.removeAttribute (name, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public void setBindings(Bindings namespace, int scope)
-	    throws IllegalArgumentException {
-	ctx.setBindings(namespace, scope);
-    }
+  /** {@inheritDoc} */
+  public void setAttribute (final String key, final Object value, final int scope) throws IllegalArgumentException
+  {
+    ctx.setAttribute (key, value, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public void setErrorWriter(Writer writer) {
-	ctx.setErrorWriter(writer);
-    }
+  /** {@inheritDoc} */
+  public void setBindings (final Bindings namespace, final int scope) throws IllegalArgumentException
+  {
+    ctx.setBindings (namespace, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public void setReader(Reader reader) {
-	ctx.setReader(reader);
-    }
+  /** {@inheritDoc} */
+  public void setErrorWriter (final Writer writer)
+  {
+    ctx.setErrorWriter (writer);
+  }
 
-    /**{@inheritDoc}*/
-    public void setWriter(Writer writer) {
-	ctx.setWriter(writer);
-    }
+  /** {@inheritDoc} */
+  public void setReader (final Reader reader)
+  {
+    ctx.setReader (reader);
+  }
 
-    /**{@inheritDoc}*/
-    public Continuation getContinuation() {
-	return ctx.getContinuation();
-    }
-    /**{@inheritDoc}*/
-    public void setContinuation(Continuation kont) {
-	ctx.setContinuation(kont);
-    }
-    /**{@inheritDoc}*/
-    public Object init(Object callable) throws Exception {
-	return ctx.init(callable);
-    }
-    /**{@inheritDoc}*/
-    public void onShutdown(Object closeable) {
-	ctx.onShutdown(closeable);
-    }
-    /**{@inheritDoc}*/
-    public boolean call(Object kont) throws Exception {
-	return ctx.call(kont);
-    }
-    /**{@inheritDoc}*/
-    public Object get(String key) {
-	return ctx.get(key);
-    }
-    /**{@inheritDoc}*/
-    public Map getAll() {
-	return ctx.getAll();
-    }
-    /**{@inheritDoc}*/
-    public Object getHttpServletRequest() {
-	return ctx.getHttpServletRequest();
-    }
-    /**{@inheritDoc}*/
-    public Object getHttpServletResponse() {
-	return ctx.getHttpServletResponse();
-    }
-    /**{@inheritDoc}*/
-    public String getRealPath(String path) {
-	return ctx.getRealPath(path);
-    }
-    /**{@inheritDoc}*/
-    public Object getServlet() {
-	return ctx.getServlet();
-    }
-    /**{@inheritDoc}*/
-    public Object getServletConfig() {
-	return ctx.getServletConfig();
-    }
-    /**{@inheritDoc}*/
-    public Object getServletContext() {
-	return ctx.getServletContext();
-    }
-    /**{@inheritDoc}*/
-    public void put(String key, Object val) {
-	ctx.put(key, val);
-    }
-    /**{@inheritDoc}*/
-    public void putAll(Map map) {
-	ctx.putAll(map);
-    }
-    /**{@inheritDoc}*/
-    public void remove(String key) {
-	ctx.remove(key);
-    }
-    /**{@inheritDoc}*/
-    public Continuation createContinuation(Reader reader, Map env,
-            OutputStream out, OutputStream err, HeaderParser headerParser,
-            ResultProxy result, ILogger logger, boolean isCompiled) {
-	return ctx.createContinuation(reader, env, out, err, headerParser, result, logger, isCompiled);
-    }
-    /**@deprecated*/
-    public String getRedirectString(String webPath) {
-	throw new NotImplementedException();
-    }
-    /**@deprecated*/
-    public String getRedirectString() {
-	throw new NotImplementedException();
-    }
-    /**{@inheritDoc}*/
-    public String getSocketName() {
-	return ctx.getSocketName();
-    }
-    /**{@inheritDoc}*/
-    public String getRedirectURL(String webPath) {
-	return ctx.getRedirectURL(webPath);
-    }
-    /**{@inheritDoc}*/
-    public ContextServer getContextServer() {
-	return ctx.getContextServer();
-    }
-    /**{@inheritDoc}*/
-    public void startContinuation() {
-	ctx.startContinuation();
-    }
+  /** {@inheritDoc} */
+  public void setWriter (final Writer writer)
+  {
+    ctx.setWriter (writer);
+  }
+
+  /** {@inheritDoc} */
+  public Continuation getContinuation ()
+  {
+    return ctx.getContinuation ();
+  }
+
+  /** {@inheritDoc} */
+  public void setContinuation (final Continuation kont)
+  {
+    ctx.setContinuation (kont);
+  }
+
+  /** {@inheritDoc} */
+  public Object init (final Object callable) throws Exception
+  {
+    return ctx.init (callable);
+  }
+
+  /** {@inheritDoc} */
+  public void onShutdown (final Object closeable)
+  {
+    ctx.onShutdown (closeable);
+  }
+
+  /** {@inheritDoc} */
+  public boolean call (final Object kont) throws Exception
+  {
+    return ctx.call (kont);
+  }
+
+  /** {@inheritDoc} */
+  public Object get (final String key)
+  {
+    return ctx.get (key);
+  }
+
+  /** {@inheritDoc} */
+  public Map getAll ()
+  {
+    return ctx.getAll ();
+  }
+
+  /** {@inheritDoc} */
+  public Object getHttpServletRequest ()
+  {
+    return ctx.getHttpServletRequest ();
+  }
+
+  /** {@inheritDoc} */
+  public Object getHttpServletResponse ()
+  {
+    return ctx.getHttpServletResponse ();
+  }
+
+  /** {@inheritDoc} */
+  public String getRealPath (final String path)
+  {
+    return ctx.getRealPath (path);
+  }
+
+  /** {@inheritDoc} */
+  public Object getServlet ()
+  {
+    return ctx.getServlet ();
+  }
+
+  /** {@inheritDoc} */
+  public Object getServletConfig ()
+  {
+    return ctx.getServletConfig ();
+  }
+
+  /** {@inheritDoc} */
+  public Object getServletContext ()
+  {
+    return ctx.getServletContext ();
+  }
+
+  /** {@inheritDoc} */
+  public void put (final String key, final Object val)
+  {
+    ctx.put (key, val);
+  }
+
+  /** {@inheritDoc} */
+  public void putAll (final Map map)
+  {
+    ctx.putAll (map);
+  }
+
+  /** {@inheritDoc} */
+  public void remove (final String key)
+  {
+    ctx.remove (key);
+  }
+
+  /** {@inheritDoc} */
+  public Continuation createContinuation (final Reader reader,
+                                          final Map env,
+                                          final OutputStream out,
+                                          final OutputStream err,
+                                          final HeaderParser headerParser,
+                                          final ResultProxy result,
+                                          final ILogger logger,
+                                          final boolean isCompiled)
+  {
+    return ctx.createContinuation (reader, env, out, err, headerParser, result, logger, isCompiled);
+  }
+
+  /** @deprecated */
+  @Deprecated
+  public String getRedirectString (final String webPath)
+  {
+    throw new NotImplementedException ();
+  }
+
+  /** @deprecated */
+  @Deprecated
+  public String getRedirectString ()
+  {
+    throw new NotImplementedException ();
+  }
+
+  /** {@inheritDoc} */
+  public String getSocketName ()
+  {
+    return ctx.getSocketName ();
+  }
+
+  /** {@inheritDoc} */
+  public String getRedirectURL (final String webPath)
+  {
+    return ctx.getRedirectURL (webPath);
+  }
+
+  /** {@inheritDoc} */
+  public ContextServer getContextServer ()
+  {
+    return ctx.getContextServer ();
+  }
+
+  /** {@inheritDoc} */
+  public void startContinuation ()
+  {
+    ctx.startContinuation ();
+  }
 }

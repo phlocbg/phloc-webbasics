@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -34,126 +51,169 @@ import php.java.bridge.Request;
 import php.java.bridge.Util;
 
 /**
- * The ContextRunner usually represents the physical connection, it
- * manages the "high speed" communication link.  It pulls a
- * ContextFactory and executes it.  After execution the context is
- * destroyed.  <p>ContextRunners are kept in a per-loader map and each
- * client may refer to its runner by keeping a persistent connection to it. The ContextFactory may ignore this
- * and prepare for a new physical connection by sending back the ID of a new ContextServer.
- * This usually happens when there are two separate
- * bridges installed in context A and context B and the client uses a
- * persistent connection to context A. An attempt to re-use the same
- * connection for B fails because the classes are loaded via two
- * separate class loaders.  For named pipes this means
- * that the connection should have been prepared and sent via
- * X_JAVABRIDGE_CHANNEL, as usual. Otherwise the bridge will use the
- * SocketContextServer instead. -- The client may destroy the new
- * pipe if the server has accepted the previous ID, of
- * course.  </p>
+ * The ContextRunner usually represents the physical connection, it manages the
+ * "high speed" communication link. It pulls a ContextFactory and executes it.
+ * After execution the context is destroyed.
  * <p>
- * Example: Two web apps WA1 and WA2, two ContextServers, @9667 and @9668. Client has persistent connection to @9667, sends
- * initial HTTP PUT request to WA2. WA2 responds with a redirect to @9668. Client uses this new persistent connection (but keeps persistent
- * connection to @9667, of course).
+ * ContextRunners are kept in a per-loader map and each client may refer to its
+ * runner by keeping a persistent connection to it. The ContextFactory may
+ * ignore this and prepare for a new physical connection by sending back the ID
+ * of a new ContextServer. This usually happens when there are two separate
+ * bridges installed in context A and context B and the client uses a persistent
+ * connection to context A. An attempt to re-use the same connection for B fails
+ * because the classes are loaded via two separate class loaders. For named
+ * pipes this means that the connection should have been prepared and sent via
+ * X_JAVABRIDGE_CHANNEL, as usual. Otherwise the bridge will use the
+ * SocketContextServer instead. -- The client may destroy the new pipe if the
+ * server has accepted the previous ID, of course.
+ * </p>
+ * <p>
+ * Example: Two web apps WA1 and WA2, two ContextServers, @9667 and @9668.
+ * Client has persistent connection to @9667, sends initial HTTP PUT request to
+ * WA2. WA2 responds with a redirect to @9668. Client uses this new persistent
+ * connection (but keeps persistent connection to @9667, of course).
  * </p>
  */
-public class ContextRunner implements Runnable {
-    
-    protected IContextFactory ctx; /* the persistent ContextFactory */
-    protected Request request;
-    protected InputStream in;
-    protected OutputStream out;
-    protected AbstractChannel channel;
-    protected ILogger logger;
-    
-    /**
-     * Create a new ContextRunner from a ThreadPool
-     * @param channel the communication channel
-     * @param logger the current logger
-     */
-    public ContextRunner(AbstractChannel channel, ILogger logger) {
-	this.channel = channel;
-	this.logger = logger;
-    }
-    protected byte shortPathHeader;
-    protected int readLength() throws IOException{
-	byte buf[] = new byte[1];
-	in.read(buf);
-	shortPathHeader = (byte) (0xFF&buf[0]);
-	
-	buf = new byte[2];
-	in.read(buf);
-	return (0xFF&buf[0]) | (0xFF00&(buf[1]<<8));
-    }
-    protected String readString(int length) throws IOException {
-	byte buf[] = new byte[length];
-	in.read(buf);
-	return new String(buf, Util.ASCII);
-    }
+public class ContextRunner implements Runnable
+{
 
-    protected String readName() throws IOException {
-	return readString(readLength());
-    }
-    /**
-     * Sets a new Input/OutputStream into the bridge
-     * @param bridge the JavaBridge
-     * @param in the new InputStream
-     * @param out the new OutputStream
-     */
-    protected void setIO(JavaBridge bridge, InputStream in, OutputStream out) {
-	bridge.request.reset();
-    	bridge.in=in;
-    	bridge.out=out;	
-    }
+  protected IContextFactory ctx; /* the persistent ContextFactory */
+  protected Request request;
+  protected InputStream in;
+  protected OutputStream out;
+  protected AbstractChannel channel;
+  protected ILogger logger;
 
-    protected boolean init() throws IOException {
-	if(Util.logLevel>4) Util.logDebug("starting a new ContextRunner " + this);
-	out = channel.getOuptutStream();
-	in = channel.getInputStream();
+  /**
+   * Create a new ContextRunner from a ThreadPool
+   * 
+   * @param channel
+   *        the communication channel
+   * @param logger
+   *        the current logger
+   */
+  public ContextRunner (final AbstractChannel channel, final ILogger logger)
+  {
+    this.channel = channel;
+    this.logger = logger;
+  }
 
-	int c = in.read();
-	if(c!=0177) {
-	    
-	    if(c==-1) return false; // client has closed the connection
-	    
-	    try {out.write(0); }catch(IOException e){}
-	    throw new IOException("Protocol violation");
-	}
-	out.write(0); out.flush(); // dummy write: avoid ack delay
-	String name = readName();
-    	ctx = (IContextFactory) ContextFactory.get(name);
-    	if(ctx == null) 
-    	    throw new IOException("No context available for: " + name + ". Please make sure that your script does not exceed php.java.bridge.max_wait, currently set to: "+Util.MAX_WAIT);
-    	JavaBridge bridge = ctx.getBridge();
-	if(Util.logLevel>4) Util.logDebug(ctx + " created new thread" );
-	
-	if (shortPathHeader != (byte) 0xFF) { // short path S1: no PUT request
-	    bridge.request = new Request(bridge);
-	    bridge.request.init(shortPathHeader);
-	}
-	setIO(bridge, in, out);
-	this.request = bridge.request;
-	
-	ctx.initialize();
-	return true;
+  protected byte shortPathHeader;
+
+  protected int readLength () throws IOException
+  {
+    byte buf[] = new byte [1];
+    in.read (buf);
+    shortPathHeader = (byte) (0xFF & buf[0]);
+
+    buf = new byte [2];
+    in.read (buf);
+    return (0xFF & buf[0]) | (0xFF00 & (buf[1] << 8));
+  }
+
+  protected String readString (final int length) throws IOException
+  {
+    final byte buf[] = new byte [length];
+    in.read (buf);
+    return new String (buf, Util.ASCII);
+  }
+
+  protected String readName () throws IOException
+  {
+    return readString (readLength ());
+  }
+
+  /**
+   * Sets a new Input/OutputStream into the bridge
+   * 
+   * @param bridge
+   *        the JavaBridge
+   * @param in
+   *        the new InputStream
+   * @param out
+   *        the new OutputStream
+   */
+  protected void setIO (final JavaBridge bridge, final InputStream in, final OutputStream out)
+  {
+    bridge.request.reset ();
+    bridge.in = in;
+    bridge.out = out;
+  }
+
+  protected boolean init () throws IOException
+  {
+    if (Util.logLevel > 4)
+      Util.logDebug ("starting a new ContextRunner " + this);
+    out = channel.getOuptutStream ();
+    in = channel.getInputStream ();
+
+    final int c = in.read ();
+    if (c != 0177)
+    {
+
+      if (c == -1)
+        return false; // client has closed the connection
+
+      try
+      {
+        out.write (0);
+      }
+      catch (final IOException e)
+      {}
+      throw new IOException ("Protocol violation");
     }
+    out.write (0);
+    out.flush (); // dummy write: avoid ack delay
+    final String name = readName ();
+    ctx = ContextFactory.get (name);
+    if (ctx == null)
+      throw new IOException ("No context available for: " +
+                             name +
+                             ". Please make sure that your script does not exceed php.java.bridge.max_wait, currently set to: " +
+                             Util.MAX_WAIT);
+    final JavaBridge bridge = ctx.getBridge ();
+    if (Util.logLevel > 4)
+      Util.logDebug (ctx + " created new thread");
 
-    /**{@inheritDoc}*/  
-    public void run() {
-	try {
-
-	    if(init())
-		request.handleRequests();
-	    else
-		Util.warn("context runner init failed");
-	} catch (IOException e) {
-	    if(Util.logLevel>4) Util.printStackTrace(e);
-        } catch (Exception e) {
-    	    Util.printStackTrace(e);
-        } finally {
-	    if(ctx!=null) {
-		ctx.destroy();
-	    }
-	    channel.shutdown();
-	}
+    if (shortPathHeader != (byte) 0xFF)
+    { // short path S1: no PUT request
+      bridge.request = new Request (bridge);
+      bridge.request.init (shortPathHeader);
     }
+    setIO (bridge, in, out);
+    this.request = bridge.request;
+
+    ctx.initialize ();
+    return true;
+  }
+
+  /** {@inheritDoc} */
+  public void run ()
+  {
+    try
+    {
+
+      if (init ())
+        request.handleRequests ();
+      else
+        Util.warn ("context runner init failed");
+    }
+    catch (final IOException e)
+    {
+      if (Util.logLevel > 4)
+        Util.printStackTrace (e);
+    }
+    catch (final Exception e)
+    {
+      Util.printStackTrace (e);
+    }
+    finally
+    {
+      if (ctx != null)
+      {
+        ctx.destroy ();
+      }
+      channel.shutdown ();
+    }
+  }
 }

@@ -1,7 +1,23 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
-
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -26,101 +42,134 @@ package php.java.bridge;
  */
 
 /**
- * Exposes the request options. There is one Options instance for each request, but certain options may change for each packet.
- * For example if a user calls java_set_file_encoding(enc), the new file encoding becomes available in the next packet.
+ * Exposes the request options. There is one Options instance for each request,
+ * but certain options may change for each packet. For example if a user calls
+ * java_set_file_encoding(enc), the new file encoding becomes available in the
+ * next packet.
+ * 
  * @author jostb
- *
  */
-class Options {
+class Options
+{
 
-    protected byte options = 0;
-    
-    /**
-     * Default encoding: UTF-8
-     */
-    private String encoding = null;
+  protected byte options = 0;
 
-    /**
-     * Returns the file encoding, see java_set_file_encoding(). This option may change for each packet.
-     * @return The file encoding
-     */
-    public String getEncoding() {
-	if(encoding!=null) return encoding;
-	return encoding=Util.DEFAULT_ENCODING;
-    }
-    
-    /**
-     * Return a byte array using the current file encoding (see java_set_file_encoding()).
-     * @param s The string
-     * @return The encoded bytes.
-     */
-    public byte[] getBytes(String s) { 
-        try { 
-	    return s.getBytes(getEncoding());
-        } catch (java.io.UnsupportedEncodingException e) { 
-	    Util.printStackTrace(e);
-	    return s.getBytes();
-	}
-    }
-   
-    private boolean valuesCache, valuesCacheSet=false;
-    /**
-     * Returns true when the bridge must destroy object identity (see PROTOCOL.TXT) due 
-     * to limitations in the client (for PHP4 for example). 
-     * This option stays the same for all packets.
-     * @return the appropriate value from the request header.
-     */
-    public boolean preferValues() {
-	if(!valuesCacheSet) {
-	    int options = 3 & this.options;
-	    valuesCacheSet = true;
-	    return valuesCache = options==2 || options==1;
-	}
-	return valuesCache;
-    }
- 
-    /** re-initialize for keep alive */
-    protected void recycle() {
-        encoding = null;
-     }
+  /**
+   * Default encoding: UTF-8
+   */
+  private String encoding = null;
 
-     /**
-     * Set the new file encoding.
-     * @param symbol The new file encoding, for example "UTF-8".
-     */
-    public void setEncoding(String symbol) {
-	this.encoding = symbol;
-    }
+  /**
+   * Returns the file encoding, see java_set_file_encoding(). This option may
+   * change for each packet.
+   * 
+   * @return The file encoding
+   */
+  public String getEncoding ()
+  {
+    if (encoding != null)
+      return encoding;
+    return encoding = Util.DEFAULT_ENCODING;
+  }
 
-    /**
-     * Update the current request options
-     * @param b The options from the request header.
-     */
-    public void updateOptions(byte b) {
-	encoding = null;
-	this.options = b;
+  /**
+   * Return a byte array using the current file encoding (see
+   * java_set_file_encoding()).
+   * 
+   * @param s
+   *        The string
+   * @return The encoded bytes.
+   */
+  public byte [] getBytes (final String s)
+  {
+    try
+    {
+      return s.getBytes (getEncoding ());
     }
-    private boolean base64Cache, base64CacheSet=false;
-    /**
-     * Return true if we must return a base 64 encoded string
-     * due to limitations in the client's XML parser.
-     * This option stays the same for all packets.
-     * @return true if the bridge must return strings as cdata, false otherwise.
-     */
-    public boolean base64Data() {
-	if(!base64CacheSet) {
-	    int options = 2 & this.options;
-	    base64CacheSet = true;
-	    return base64Cache = options==2;
-	}
-	return base64Cache;
+    catch (final java.io.UnsupportedEncodingException e)
+    {
+      Util.printStackTrace (e);
+      return s.getBytes ();
     }
-    /**
-     * Return true, if the client cannot keep a back-pointer to its own data structures.
-     * This option stays the same for all packets.
-     * @return true if the bridge must accept and pass a context ID, false otherwise.
-     */
-    public boolean passContext() {
-	return false;
+  }
+
+  private boolean valuesCache, valuesCacheSet = false;
+
+  /**
+   * Returns true when the bridge must destroy object identity (see
+   * PROTOCOL.TXT) due to limitations in the client (for PHP4 for example). This
+   * option stays the same for all packets.
+   * 
+   * @return the appropriate value from the request header.
+   */
+  public boolean preferValues ()
+  {
+    if (!valuesCacheSet)
+    {
+      final int options = 3 & this.options;
+      valuesCacheSet = true;
+      return valuesCache = options == 2 || options == 1;
     }
+    return valuesCache;
+  }
+
+  /** re-initialize for keep alive */
+  protected void recycle ()
+  {
+    encoding = null;
+  }
+
+  /**
+   * Set the new file encoding.
+   * 
+   * @param symbol
+   *        The new file encoding, for example "UTF-8".
+   */
+  public void setEncoding (final String symbol)
+  {
+    this.encoding = symbol;
+  }
+
+  /**
+   * Update the current request options
+   * 
+   * @param b
+   *        The options from the request header.
+   */
+  public void updateOptions (final byte b)
+  {
+    encoding = null;
+    this.options = b;
+  }
+
+  private boolean base64Cache, base64CacheSet = false;
+
+  /**
+   * Return true if we must return a base 64 encoded string due to limitations
+   * in the client's XML parser. This option stays the same for all packets.
+   * 
+   * @return true if the bridge must return strings as cdata, false otherwise.
+   */
+  public boolean base64Data ()
+  {
+    if (!base64CacheSet)
+    {
+      final int options = 2 & this.options;
+      base64CacheSet = true;
+      return base64Cache = options == 2;
+    }
+    return base64Cache;
+  }
+
+  /**
+   * Return true, if the client cannot keep a back-pointer to its own data
+   * structures. This option stays the same for all packets.
+   * 
+   * @return true if the bridge must accept and pass a context ID, false
+   *         otherwise.
+   */
+  public boolean passContext ()
+  {
+    return false;
+  }
 }

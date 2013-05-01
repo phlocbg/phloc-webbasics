@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script.servlet;
@@ -33,31 +50,46 @@ import php.java.script.PhpScriptWriter;
 
 /**
  * A PrintWriter which uses the JavaBridge logger.
- *
  */
-public class PhpScriptLogWriter extends PhpScriptWriter {
+public class PhpScriptLogWriter extends PhpScriptWriter
+{
 
-    private PhpScriptLogWriter(OutputStream out) {
-	super(out);
+  private PhpScriptLogWriter (final OutputStream out)
+  {
+    super (out);
+  }
+
+  /**
+   * Get a new log writer
+   * 
+   * @param logger
+   *        The logger
+   * @return The log writer
+   */
+  public static final PhpScriptLogWriter getWriter (final ILogger logger)
+  {
+    return new PhpScriptLogWriter (new LogOutputStream (logger));
+  }
+
+  static class LogOutputStream extends OutputStream
+  {
+    private final ILogger logger;
+
+    public LogOutputStream (final ILogger logger)
+    {
+      this.logger = logger;
     }
-    /**
-     * Get a new log writer
-     * @param logger The logger
-     * @return The log writer
-     */
-    public static final PhpScriptLogWriter getWriter (ILogger logger) {
-	    return new PhpScriptLogWriter (new LogOutputStream(logger));
+
+    @Override
+    public void write (final int b) throws IOException
+    {
+      throw new NotImplementedException ();
     }
-    static class LogOutputStream extends OutputStream {
-	private ILogger logger;
-	public LogOutputStream(ILogger logger) {
-	    this.logger = logger;
-	}
-	    public void write(int b) throws IOException {
-		throw new NotImplementedException();
-	    }
-	    public void write(byte b[], int off, int len) throws IOException {
-		logger.log(ILogger.INFO, new String(b, off, len));
-	    }
+
+    @Override
+    public void write (final byte b[], final int off, final int len) throws IOException
+    {
+      logger.log (ILogger.INFO, new String (b, off, len));
     }
+  }
 }

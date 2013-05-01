@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -32,89 +49,104 @@ import javax.script.Bindings;
 import javax.script.ScriptContext;
 
 /**
- * Abstract class for ScriptContexts. The abstract class itself provides default methods that pass 
- * all requests to the contained ScriptContext. Subclasses of ScriptContextDecorator should override some of
- * these methods and may also provide additional methods and fields. 
+ * Abstract class for ScriptContexts. The abstract class itself provides default
+ * methods that pass all requests to the contained ScriptContext. Subclasses of
+ * ScriptContextDecorator should override some of these methods and may also
+ * provide additional methods and fields.
  * 
  * @author jostb
  */
-public abstract class ScriptContextDecorator implements ScriptContext {
+public abstract class ScriptContextDecorator implements ScriptContext
+{
 
-    protected ScriptContext ctx;
+  protected ScriptContext ctx;
 
-    public ScriptContextDecorator(ScriptContext ctx) {
-	this.ctx = ctx;
-    }
-    /**{@inheritDoc}*/
-    public Object getAttribute(String name) throws IllegalArgumentException {
-	return ctx.getAttribute(name);
-    }
+  public ScriptContextDecorator (final ScriptContext ctx)
+  {
+    this.ctx = ctx;
+  }
 
-    /**{@inheritDoc}*/
-    public Object getAttribute(String name, int scope)
-	    throws IllegalArgumentException {
-	return ctx.getAttribute(name, scope);
-    }
+  /** {@inheritDoc} */
+  public Object getAttribute (final String name) throws IllegalArgumentException
+  {
+    return ctx.getAttribute (name);
+  }
 
-    /**{@inheritDoc}*/
-    public int getAttributesScope(String name) {
-	return ctx.getAttributesScope(name);
-    }
+  /** {@inheritDoc} */
+  public Object getAttribute (final String name, final int scope) throws IllegalArgumentException
+  {
+    return ctx.getAttribute (name, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public Bindings getBindings(int scope) {
-	return ctx.getBindings(scope);
-    }
+  /** {@inheritDoc} */
+  public int getAttributesScope (final String name)
+  {
+    return ctx.getAttributesScope (name);
+  }
 
-    /**{@inheritDoc}*/
-    public Writer getErrorWriter() {
-	return ctx.getErrorWriter();
-    }
+  /** {@inheritDoc} */
+  public Bindings getBindings (final int scope)
+  {
+    return ctx.getBindings (scope);
+  }
 
-    /**{@inheritDoc}*/
-    public Reader getReader() {
-	return ctx.getReader();
-    }
+  /** {@inheritDoc} */
+  public Writer getErrorWriter ()
+  {
+    return ctx.getErrorWriter ();
+  }
 
-    /**{@inheritDoc}*/
-    public List getScopes() {
-	return ctx.getScopes();
-    }
+  /** {@inheritDoc} */
+  public Reader getReader ()
+  {
+    return ctx.getReader ();
+  }
 
-    /**{@inheritDoc}*/
-    public Writer getWriter() {
-	return ctx.getWriter();
-    }
+  /** {@inheritDoc} */
+  public List getScopes ()
+  {
+    return ctx.getScopes ();
+  }
 
-    /**{@inheritDoc}*/
-    public Object removeAttribute(String name, int scope) {
-    	return ctx.removeAttribute(name, scope);
-    }
+  /** {@inheritDoc} */
+  public Writer getWriter ()
+  {
+    return ctx.getWriter ();
+  }
 
-    /**{@inheritDoc}*/
-    public void setAttribute(String key, Object value, int scope)
-	    throws IllegalArgumentException {
-	ctx.setAttribute(key, value, scope);
-    }
+  /** {@inheritDoc} */
+  public Object removeAttribute (final String name, final int scope)
+  {
+    return ctx.removeAttribute (name, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public void setBindings(Bindings namespace, int scope)
-	    throws IllegalArgumentException {
-	ctx.setBindings(namespace, scope);
-    }
+  /** {@inheritDoc} */
+  public void setAttribute (final String key, final Object value, final int scope) throws IllegalArgumentException
+  {
+    ctx.setAttribute (key, value, scope);
+  }
 
-    /**{@inheritDoc}*/
-    public void setErrorWriter(Writer writer) {
-	ctx.setErrorWriter(writer);
-    }
+  /** {@inheritDoc} */
+  public void setBindings (final Bindings namespace, final int scope) throws IllegalArgumentException
+  {
+    ctx.setBindings (namespace, scope);
+  }
 
-    /**{@inheritDoc}*/    
-    public void setReader(Reader reader) {
-	ctx.setReader(reader);
-    }
+  /** {@inheritDoc} */
+  public void setErrorWriter (final Writer writer)
+  {
+    ctx.setErrorWriter (writer);
+  }
 
-    /**{@inheritDoc}*/    
-    public void setWriter(Writer writer) {
-	ctx.setWriter(writer);
-    }
+  /** {@inheritDoc} */
+  public void setReader (final Reader reader)
+  {
+    ctx.setReader (reader);
+  }
+
+  /** {@inheritDoc} */
+  public void setWriter (final Writer writer)
+  {
+    ctx.setWriter (writer);
+  }
 }

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -29,33 +46,42 @@ import java.io.PrintWriter;
 
 /**
  * A PrintWriter backed by an OutputStream.
+ * 
  * @author jostb
- *
  */
-public class PhpScriptWriter extends PrintWriter {
+public class PhpScriptWriter extends PrintWriter
+{
 
-    OutputStream out;
-	
-    /**
-     * Create a new PhpScriptWriter.
-     * @param out The OutputStream
-     */
-    public PhpScriptWriter(OutputStream out) {
-        super(out);
-        if(out==null) throw new NullPointerException("out");
-	this.out = out;
-    }
-	
-    /**
-     * Returns the OutputStream.
-     * @return The OutputStream.
-     */
-    public OutputStream getOutputStream() {
-	return out;
-    }
-    
-    /**{@inheritDoc}*/
-   public void close () {
-	flush ();
-    }
+  OutputStream out;
+
+  /**
+   * Create a new PhpScriptWriter.
+   * 
+   * @param out
+   *        The OutputStream
+   */
+  public PhpScriptWriter (final OutputStream out)
+  {
+    super (out);
+    if (out == null)
+      throw new NullPointerException ("out");
+    this.out = out;
+  }
+
+  /**
+   * Returns the OutputStream.
+   * 
+   * @return The OutputStream.
+   */
+  public OutputStream getOutputStream ()
+  {
+    return out;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void close ()
+  {
+    flush ();
+  }
 }

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
@@ -30,257 +47,394 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.SocketException;
 
-class Parser {
-    static final int RECV_SIZE = 8192; // initial size of the receive buffer
-    static final int MAX_ARGS = 100; // max # of method arguments
-    static final int SLEN = 256; // initial length of the parser string
+class Parser
+{
+  static final int RECV_SIZE = 8192; // initial size of the receive buffer
+  static final int MAX_ARGS = 100; // max # of method arguments
+  static final int SLEN = 256; // initial length of the parser string
 
-    static final short OK=0, PING=1, EOF=2, IO_ERROR=3;    // parse return codes
+  static final short OK = 0, PING = 1, EOF = 2, IO_ERROR = 3; // parse return
+                                                              // codes
 
-    IDocHandler handler;
-    JavaBridge bridge;
-    Parser(JavaBridge bridge, IDocHandler handler) {
-        this.bridge = bridge;
-	this.handler=handler;
-	tag=new ParserTag[]{new ParserTag(1), new ParserTag(MAX_ARGS), new ParserTag(MAX_ARGS) };
-    }
-    void initOptions (byte ch) {
-	bridge.options = new Options();
-        if((ch&64)!=0) bridge.options.updateOptions((byte) (ch&3));
-    	if((ch&128)!=0) {
-    	    if(bridge.logLevel>3 && (bridge.logLevel!=((ch>>2)&7)))
-	        bridge.logDebug("Client changed its request log level to: " + ((ch>>2)&7));
-	            
-    	    bridge.logLevel = (ch>>2)&7;
-    	}
-    }
-    short initOptions(InputStream in, OutputStream out) throws IOException {
-	if((clen=read(in)) >0) { 
+  IDocHandler handler;
+  JavaBridge bridge;
 
-	    /*
-	     * Special handling if the first byte is neither a space nor "<"
-	     * 
-	     */
-	    switch(ch=buf[c]) {
-	    case '<': case '\t': case '\f': case '\n': case '\r': case ' ':
-		bridge.options = new DefaultOptions();
-	    	break;
-	    case 0:	
-		// PING
-		return PING;
+  Parser (final JavaBridge bridge, final IDocHandler handler)
+  {
+    this.bridge = bridge;
+    this.handler = handler;
+    tag = new ParserTag [] { new ParserTag (1), new ParserTag (MAX_ARGS), new ParserTag (MAX_ARGS) };
+  }
 
-		// OPTIONS
-	    default:
-	    	if(ch==0177) { // extended header
-	    	    if (++c==clen) {
-	    		if((clen=read(in)) <= 0) throw new IllegalArgumentException ("Illegal header length");
-	    		ch = buf[c = 0];
-	    	    } else {
-	    		ch = buf[c];
-	    	    }
-	    	} else {
-	    	    throw new IllegalArgumentException ("Illegal header.");
-	    	}
-	    	initOptions (ch);
-	    	c++;
-	    }
-	} else {
-	    return EOF;
-	}
-	return OK; 
-    }
-     private int read(InputStream in) throws IOException {
-	try {
-	    return in.read(buf, 0, RECV_SIZE);
-	} catch (SocketException e) {
-	    // may happen if we reload the context and destroy the socket
-	    if(Util.logLevel>5) Util.printStackTrace(e);
-	    return -1;
-	} catch (InterruptedIOException e) {
-	    if(Util.logLevel>5) Util.printStackTrace(e);
-	    return -1;
-	} catch (IOException e) {
-	    Util.printStackTrace(e);
-	    throw e;
-	}
-    }
-    private boolean response = true;
-    private ParserTag tag[] = null;
-    private byte buf[] = new byte[RECV_SIZE];
-    private int len=SLEN;
-    private byte s[]= new byte[len];
-    private byte ch;
-    // VOJD is VOID for f... windows (VOID is in winsock2.h)
-    private static final short BEGIN=0, KEY=1, VAL=2, ENTITY=3, VOJD=5, END=6; short type=VOJD;
-    private short level=0, eof=0, eor=0; boolean in_dquote, eot=false;
-    private int clen=0, c=0, i=0, i0=0, e;
+  void initOptions (final byte ch)
+  {
+    bridge.options = new Options ();
+    if ((ch & 64) != 0)
+      bridge.options.updateOptions ((byte) (ch & 3));
+    if ((ch & 128) != 0)
+    {
+      if (bridge.logLevel > 3 && (bridge.logLevel != ((ch >> 2) & 7)))
+        bridge.logDebug ("Client changed its request log level to: " + ((ch >> 2) & 7));
 
-    void RESET() {
-    	type=VOJD;
-    	level=0;
-    	eor=0;
-    	in_dquote=false;
-    	i=0;
-    	i0=0;
+      bridge.logLevel = (ch >> 2) & 7;
     }
-    void APPEND(byte c) {
-	if(i>=len-1) {
-	    int newlen=len*2;
-	    byte[] s1=new byte[newlen];
-	    System.arraycopy(s, 0, s1, 0, len);
-	    len=newlen;
-	    s=s1;
-	} 
-	s[i++]=c; 
-    }
-    void CALL_BEGIN() {
-    	if(bridge.logLevel>=4) {
-	    StringBuffer buf=new StringBuffer("--> <");   
-	    buf.append(tag[0].strings[0].getUTF8StringValue());
-	    buf.append(" ");
-    		
-	    for(int i=0; i<tag[1].n; i++) {
-		buf.append(tag[1].strings[i].getUTF8StringValue()); buf.append("=\""); buf.append(tag[2].strings[i].getUTF8StringValue());buf.append("\" ");
-	    }
-	    buf.append(eot?"/>":">"); eot=false;
-	    bridge.logDebug(buf.toString());
-    	}
-	response = handler.begin(tag);
-    }
-    void CALL_END() {
-    	if(bridge.logLevel>=4) {
-	    StringBuffer buf=new StringBuffer("--> </");   
-	    buf.append(tag[0].strings[0].getUTF8StringValue());
-	    buf.append(">");
-	    bridge.logDebug(buf.toString());
-    	}
-	handler.end(tag[0].strings);
-    }
-    void PUSH(int t) { 
-	ParserString str[] = tag[t].strings;
-	short n = tag[t].n;
-	s[i]=0;
-	if(str[n]==null) str[n]=createParserString();
-	str[n].string=s;
-	str[n].off=i0;
-	str[n].length=i-i0;
-	++tag[t].n;
-	APPEND((byte)0);
-	i0=i;
-    }
-    short parse(final InputStream in) throws IOException {
-    	if(eof!=0) return EOF;
-    	
-    	while(eor==0) {
-	    if(c==clen) { 
-	    	clen=read(in); 
-		if(clen<=0) return eof=EOF;
-		c=0; 
+  }
 
-	    }
-	    switch((ch=buf[c])) 
-		{/* --- This block must be compilable with an ansi C compiler or javac --- */
-		case '<': if(in_dquote) {APPEND(ch); break;}
-		    level++;
-		    type=BEGIN;
-		    break;
-		case '\t': case '\f': case '\n': case '\r': case ' ': if(in_dquote) {APPEND(ch); break;}
-		    if(type==BEGIN) {
-			PUSH(type); 
-			type = KEY; 
-		    }
-		    break;
-		case '=': if(in_dquote) {APPEND(ch); break;}
-		    PUSH(type);
-		    type=VAL;
-		    break;
-		case '/': if(in_dquote) {APPEND(ch); break;}
-		    if(type==BEGIN) { type=END; level--; }
-		    level--;
-		    eot=true; // used for debugging only
-		    break;
-		case '>': if(in_dquote) {APPEND(ch); break;}
-		    if(type==END){
-			PUSH(BEGIN);
-			CALL_END();
-		    } else {
-			if(type==VAL) PUSH(type);
-			CALL_BEGIN();
-		    }
-		    tag[0].n=tag[1].n=tag[2].n=0; i0=i=0;      		/* RESET */
-		    type=VOJD;
-		    if(level==0 && response) eor=1; 
-		    break;
-		case ';':
-		    if(type==ENTITY) {
-			switch (s[e+1]) {
-			case 'l': s[e]='<'; i=e+1; break; /* lt */
-			case 'g': s[e]='>'; i=e+1; break; /* gt */
-			case 'a': s[e]=(byte) (s[e+2]=='m'?'&':'\''); i=e+1; break; /* amp, apos */
-			case 'q': s[e]='"'; i=e+1; break; /* quot */
-			default: APPEND(ch);
-			}
-			type=VAL; //& escapes may only appear in values
-		    } else {
-		    	APPEND(ch);
-		    }
-		    break;
-		case '&': 
-		    type = ENTITY;
-		    e=i;
-		    APPEND(ch);
-		    break;
-		case '"':
-		    in_dquote = !in_dquote;
-		    if(!in_dquote && type==VAL) {
-			PUSH(type);
-			type = KEY;
-		    }
-		    break;
-		case 0177: if(in_dquote) {APPEND(ch); break;}
-		    // handled differently by socket- and JEE implementation
-		    handler.parseHeader(new InputStream() {
-                       public int read() throws IOException {
-                	   if (c==clen) {
-                	       clen = Parser.this.read(in);
-                	       if(clen<=0) throw new IOException("parse header");
-                	       c=0;
-                	   }
-                	   return buf[c++];
-                       }
-		    });
-		    c--;
-		    break;
-		default:
-		    APPEND(ch);
-		} /* ------------------ End of ansi C block ---------------- */
-	    c++;
-	}
-   	RESET();
-  
-   	return OK;
-    }
+  short initOptions (final InputStream in, final OutputStream out) throws IOException
+  {
+    if ((clen = read (in)) > 0)
+    {
 
-    /**
-     * Reset the internal state. Useful if you want to switch the
-     * input stream for the next packet.
-     */
-    public void reset() {
-	eof=0;
-	clen=0;
-	c=0;
-	len=SLEN;
-	s=new byte[len];
+      /*
+       * Special handling if the first byte is neither a space nor "<"
+       */
+      switch (ch = buf[c])
+      {
+        case '<':
+        case '\t':
+        case '\f':
+        case '\n':
+        case '\r':
+        case ' ':
+          bridge.options = new DefaultOptions ();
+          break;
+        case 0:
+          // PING
+          return PING;
+
+          // OPTIONS
+        default:
+          if (ch == 0177)
+          { // extended header
+            if (++c == clen)
+            {
+              if ((clen = read (in)) <= 0)
+                throw new IllegalArgumentException ("Illegal header length");
+              ch = buf[c = 0];
+            }
+            else
+            {
+              ch = buf[c];
+            }
+          }
+          else
+          {
+            throw new IllegalArgumentException ("Illegal header.");
+          }
+          initOptions (ch);
+          c++;
+      }
     }
-    /**
-     * Set the current bridge object
-     * @param bridge The bridge
-     */
-    public void setBridge(JavaBridge bridge) {
-	this.bridge = bridge;
+    else
+    {
+      return EOF;
     }
-    
-    private ParserString createParserString () {
-	return new ParserString(bridge);
+    return OK;
+  }
+
+  private int read (final InputStream in) throws IOException
+  {
+    try
+    {
+      return in.read (buf, 0, RECV_SIZE);
     }
+    catch (final SocketException e)
+    {
+      // may happen if we reload the context and destroy the socket
+      if (Util.logLevel > 5)
+        Util.printStackTrace (e);
+      return -1;
+    }
+    catch (final InterruptedIOException e)
+    {
+      if (Util.logLevel > 5)
+        Util.printStackTrace (e);
+      return -1;
+    }
+    catch (final IOException e)
+    {
+      Util.printStackTrace (e);
+      throw e;
+    }
+  }
+
+  private boolean response = true;
+  private ParserTag tag[] = null;
+  private final byte buf[] = new byte [RECV_SIZE];
+  private int len = SLEN;
+  private byte s[] = new byte [len];
+  private byte ch;
+  // VOJD is VOID for f... windows (VOID is in winsock2.h)
+  private static final short BEGIN = 0, KEY = 1, VAL = 2, ENTITY = 3, VOJD = 5, END = 6;
+  short type = VOJD;
+  private short level = 0, eof = 0, eor = 0;
+  boolean in_dquote, eot = false;
+  private int clen = 0, c = 0, i = 0, i0 = 0, e;
+
+  void RESET ()
+  {
+    type = VOJD;
+    level = 0;
+    eor = 0;
+    in_dquote = false;
+    i = 0;
+    i0 = 0;
+  }
+
+  void APPEND (final byte c)
+  {
+    if (i >= len - 1)
+    {
+      final int newlen = len * 2;
+      final byte [] s1 = new byte [newlen];
+      System.arraycopy (s, 0, s1, 0, len);
+      len = newlen;
+      s = s1;
+    }
+    s[i++] = c;
+  }
+
+  void CALL_BEGIN ()
+  {
+    if (bridge.logLevel >= 4)
+    {
+      final StringBuffer buf = new StringBuffer ("--> <");
+      buf.append (tag[0].strings[0].getUTF8StringValue ());
+      buf.append (" ");
+
+      for (int i = 0; i < tag[1].n; i++)
+      {
+        buf.append (tag[1].strings[i].getUTF8StringValue ());
+        buf.append ("=\"");
+        buf.append (tag[2].strings[i].getUTF8StringValue ());
+        buf.append ("\" ");
+      }
+      buf.append (eot ? "/>" : ">");
+      eot = false;
+      bridge.logDebug (buf.toString ());
+    }
+    response = handler.begin (tag);
+  }
+
+  void CALL_END ()
+  {
+    if (bridge.logLevel >= 4)
+    {
+      final StringBuffer buf = new StringBuffer ("--> </");
+      buf.append (tag[0].strings[0].getUTF8StringValue ());
+      buf.append (">");
+      bridge.logDebug (buf.toString ());
+    }
+    handler.end (tag[0].strings);
+  }
+
+  void PUSH (final int t)
+  {
+    final ParserString str[] = tag[t].strings;
+    final short n = tag[t].n;
+    s[i] = 0;
+    if (str[n] == null)
+      str[n] = createParserString ();
+    str[n].string = s;
+    str[n].off = i0;
+    str[n].length = i - i0;
+    ++tag[t].n;
+    APPEND ((byte) 0);
+    i0 = i;
+  }
+
+  short parse (final InputStream in) throws IOException
+  {
+    if (eof != 0)
+      return EOF;
+
+    while (eor == 0)
+    {
+      if (c == clen)
+      {
+        clen = read (in);
+        if (clen <= 0)
+          return eof = EOF;
+        c = 0;
+
+      }
+      switch ((ch = buf[c]))
+      {/* --- This block must be compilable with an ansi C compiler or javac --- */
+        case '<':
+          if (in_dquote)
+          {
+            APPEND (ch);
+            break;
+          }
+          level++;
+          type = BEGIN;
+          break;
+        case '\t':
+        case '\f':
+        case '\n':
+        case '\r':
+        case ' ':
+          if (in_dquote)
+          {
+            APPEND (ch);
+            break;
+          }
+          if (type == BEGIN)
+          {
+            PUSH (type);
+            type = KEY;
+          }
+          break;
+        case '=':
+          if (in_dquote)
+          {
+            APPEND (ch);
+            break;
+          }
+          PUSH (type);
+          type = VAL;
+          break;
+        case '/':
+          if (in_dquote)
+          {
+            APPEND (ch);
+            break;
+          }
+          if (type == BEGIN)
+          {
+            type = END;
+            level--;
+          }
+          level--;
+          eot = true; // used for debugging only
+          break;
+        case '>':
+          if (in_dquote)
+          {
+            APPEND (ch);
+            break;
+          }
+          if (type == END)
+          {
+            PUSH (BEGIN);
+            CALL_END ();
+          }
+          else
+          {
+            if (type == VAL)
+              PUSH (type);
+            CALL_BEGIN ();
+          }
+          tag[0].n = tag[1].n = tag[2].n = 0;
+          i0 = i = 0; /* RESET */
+          type = VOJD;
+          if (level == 0 && response)
+            eor = 1;
+          break;
+        case ';':
+          if (type == ENTITY)
+          {
+            switch (s[e + 1])
+            {
+              case 'l':
+                s[e] = '<';
+                i = e + 1;
+                break; /* lt */
+              case 'g':
+                s[e] = '>';
+                i = e + 1;
+                break; /* gt */
+              case 'a':
+                s[e] = (byte) (s[e + 2] == 'm' ? '&' : '\'');
+                i = e + 1;
+                break; /* amp, apos */
+              case 'q':
+                s[e] = '"';
+                i = e + 1;
+                break; /* quot */
+              default:
+                APPEND (ch);
+            }
+            type = VAL; // & escapes may only appear in values
+          }
+          else
+          {
+            APPEND (ch);
+          }
+          break;
+        case '&':
+          type = ENTITY;
+          e = i;
+          APPEND (ch);
+          break;
+        case '"':
+          in_dquote = !in_dquote;
+          if (!in_dquote && type == VAL)
+          {
+            PUSH (type);
+            type = KEY;
+          }
+          break;
+        case 0177:
+          if (in_dquote)
+          {
+            APPEND (ch);
+            break;
+          }
+          // handled differently by socket- and JEE implementation
+          handler.parseHeader (new InputStream ()
+          {
+            @Override
+            public int read () throws IOException
+            {
+              if (c == clen)
+              {
+                clen = Parser.this.read (in);
+                if (clen <= 0)
+                  throw new IOException ("parse header");
+                c = 0;
+              }
+              return buf[c++];
+            }
+          });
+          c--;
+          break;
+        default:
+          APPEND (ch);
+      } /* ------------------ End of ansi C block ---------------- */
+      c++;
+    }
+    RESET ();
+
+    return OK;
+  }
+
+  /**
+   * Reset the internal state. Useful if you want to switch the input stream for
+   * the next packet.
+   */
+  public void reset ()
+  {
+    eof = 0;
+    clen = 0;
+    c = 0;
+    len = SLEN;
+    s = new byte [len];
+  }
+
+  /**
+   * Set the current bridge object
+   * 
+   * @param bridge
+   *        The bridge
+   */
+  public void setBridge (final JavaBridge bridge)
+  {
+    this.bridge = bridge;
+  }
+
+  private ParserString createParserString ()
+  {
+    return new ParserString (bridge);
+  }
 }

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -37,110 +54,145 @@ import php.java.bridge.Util;
  * @author jostb
  */
 
-public class ChunkedInputStream extends FilterInputStream {
+public class ChunkedInputStream extends FilterInputStream
+{
 
-    /**
-     * Maps ASCII to HEX code.
-     */
-    public static final int[] ASCII_HEX = getAscii();
-    private boolean eof = false;
-    
-    private static int[] getAscii() {
-	int[] ascii = new int[103];
-	for (int i=48; i<58; i++) {
-	    ascii[i]=i-48;
-	};
-	for (int i=65; i<71; i++) {
-	    ascii[i]=i-55;
-	};
-	for (int i=97; i<103; i++) {
-	    ascii[i]=i-87;
-	};
-	return ascii;
+  /**
+   * Maps ASCII to HEX code.
+   */
+  public static final int [] ASCII_HEX = getAscii ();
+  private boolean eof = false;
+
+  private static int [] getAscii ()
+  {
+    final int [] ascii = new int [103];
+    for (int i = 48; i < 58; i++)
+    {
+      ascii[i] = i - 48;
     }
-    /**
-     * Create a new chunked input stream
-     * @param in The input stream
-     */
-    public ChunkedInputStream(InputStream in) {
-	super(new BufferedInputStream(in));
+    ;
+    for (int i = 65; i < 71; i++)
+    {
+      ascii[i] = i - 55;
     }
-    private byte[] rn = new byte[2];
-    private byte[] remaining;
-    private int remainPos, remainLen;
-   
-    /**{@inheritDoc}*/
-   public int read(byte[] buf, int pos, int len) throws IOException {
-	int c, i;
-	int count;
-
-	if (len <= 0) return len;
-	if (eof) return -1;
-
-	// check remaining
-	if (remaining != null) {
-	    if (len < remainLen) {
-		System.arraycopy(remaining, remainPos, buf, pos, len);
-		remainPos += len;
-		remainLen -= len;
-		return len;
-	    } else {
-		System.arraycopy(remaining, remainPos, buf, pos, remainLen);
-            remaining = null;
-            return remainLen;
-	    }
-	}
-
-	// read next packet
-	int packetLen = readPacketLength();
-	if (packetLen == 0) eof = true;
-	
-	
-	remaining = new byte[packetLen]; remainLen = 0;
-	for(c=0; (i=in.read(remaining, c, packetLen-c)) > 0; c+=i)
-	    ;
-	if ((c != packetLen)) throw new IOException("read chunked");
-
-	for(c=0; (i=in.read(rn, c, 2-c)) > 0; c+=i)
-	    ;
-	if ((c != 2)) throw new IOException("read \r\n");
-
-	
-	// store remaining
-	if (len >= packetLen) {
-	    count = packetLen;
-	    System.arraycopy(remaining, 0, buf, pos, packetLen);
-	    remaining = null;
-	} else {
-	    count = len;
-	    System.arraycopy(remaining, 0, buf, pos, len);
-	    remainPos = len;
-	    remainLen = packetLen - len;
-	}
-	return count;
+    ;
+    for (int i = 97; i < 103; i++)
+    {
+      ascii[i] = i - 87;
     }
-    private int readPacketLength() throws IOException {
-	int n = 0;
-	int c;
-	
-	while ((c = in.read()) != '\r') {
-	    if (c == -1) throw new IllegalStateException ("read chunked packet length");
-	    if (c == 32) continue; // skip white space
-	    n <<= 4;
-	    n += ASCII_HEX[c];
-	}
-	if (in.read() == -1) throw new IOException ("read chunked packet length");
+    ;
+    return ascii;
+  }
 
-	return n;
-    }
-    private byte[] buf = new byte[Util.BUF_SIZE];
+  /**
+   * Create a new chunked input stream
+   * 
+   * @param in
+   *        The input stream
+   */
+  public ChunkedInputStream (final InputStream in)
+  {
+    super (new BufferedInputStream (in));
+  }
 
-    /**
-     * read trailing 0\r\n
-     * @throws IOException
-     */
-    public void eof() throws IOException {
-	// consume remaining 0\r\n
-	read(buf, 0, buf.length);
+  private final byte [] rn = new byte [2];
+  private byte [] remaining;
+  private int remainPos, remainLen;
+
+  /** {@inheritDoc} */
+  @Override
+  public int read (final byte [] buf, final int pos, final int len) throws IOException
+  {
+    int c, i;
+    int count;
+
+    if (len <= 0)
+      return len;
+    if (eof)
+      return -1;
+
+    // check remaining
+    if (remaining != null)
+    {
+      if (len < remainLen)
+      {
+        System.arraycopy (remaining, remainPos, buf, pos, len);
+        remainPos += len;
+        remainLen -= len;
+        return len;
+      }
+      else
+      {
+        System.arraycopy (remaining, remainPos, buf, pos, remainLen);
+        remaining = null;
+        return remainLen;
+      }
     }
+
+    // read next packet
+    final int packetLen = readPacketLength ();
+    if (packetLen == 0)
+      eof = true;
+
+    remaining = new byte [packetLen];
+    remainLen = 0;
+    for (c = 0; (i = in.read (remaining, c, packetLen - c)) > 0; c += i)
+      ;
+    if ((c != packetLen))
+      throw new IOException ("read chunked");
+
+    for (c = 0; (i = in.read (rn, c, 2 - c)) > 0; c += i)
+      ;
+    if ((c != 2))
+      throw new IOException ("read \r\n");
+
+    // store remaining
+    if (len >= packetLen)
+    {
+      count = packetLen;
+      System.arraycopy (remaining, 0, buf, pos, packetLen);
+      remaining = null;
+    }
+    else
+    {
+      count = len;
+      System.arraycopy (remaining, 0, buf, pos, len);
+      remainPos = len;
+      remainLen = packetLen - len;
+    }
+    return count;
+  }
+
+  private int readPacketLength () throws IOException
+  {
+    int n = 0;
+    int c;
+
+    while ((c = in.read ()) != '\r')
+    {
+      if (c == -1)
+        throw new IllegalStateException ("read chunked packet length");
+      if (c == 32)
+        continue; // skip white space
+      n <<= 4;
+      n += ASCII_HEX[c];
+    }
+    if (in.read () == -1)
+      throw new IOException ("read chunked packet length");
+
+    return n;
+  }
+
+  private final byte [] buf = new byte [Util.BUF_SIZE];
+
+  /**
+   * read trailing 0\r\n
+   * 
+   * @throws IOException
+   */
+  public void eof () throws IOException
+  {
+    // consume remaining 0\r\n
+    read (buf, 0, buf.length);
+  }
 }

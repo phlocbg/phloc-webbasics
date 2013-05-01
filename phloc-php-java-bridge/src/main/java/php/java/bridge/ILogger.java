@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
@@ -26,46 +43,55 @@ package php.java.bridge;
 
 /**
  * The log interface for the PHP/Java Bridge log.
+ * 
  * @see php.java.bridge.FileLogger
  * @see php.java.bridge.ChainsawLogger
  * @see php.java.bridge.SimpleLog4jLogger
  * @author jostb
- *
  */
-public interface ILogger {
+public interface ILogger
+{
 
-    /** 
-     * fatal log level
-     */
-    public static final int FATAL=1;
-    /** 
-     * error log level
-     */
-    public static final int ERROR=2;
-    /** 
-     * info log level
-     */
-    public static final int INFO=3;
-    /** 
-     * debug log level
-     */
-    public static final int DEBUG=4;
-    /**
-     * Log a stack trace
-     * @param t The Throwable
-     */
-    public void printStackTrace(Throwable t);
+  /**
+   * fatal log level
+   */
+  public static final int FATAL = 1;
+  /**
+   * error log level
+   */
+  public static final int ERROR = 2;
+  /**
+   * info log level
+   */
+  public static final int INFO = 3;
+  /**
+   * debug log level
+   */
+  public static final int DEBUG = 4;
 
-    /**
-     * Log a message.
-     * @param level The log level 0: FATAL, 1:ERROR, 2: INFO, 3: DEBUG
-     * @param msg The message
-     */
-    public void log(int level, String msg);
+  /**
+   * Log a stack trace
+   * 
+   * @param t
+   *        The Throwable
+   */
+  public void printStackTrace (Throwable t);
 
-    /**
-     * Display a warning if logLevel >= 1
-     * @param msg The warn message
-     */
-    public void warn(String msg);
+  /**
+   * Log a message.
+   * 
+   * @param level
+   *        The log level 0: FATAL, 1:ERROR, 2: INFO, 3: DEBUG
+   * @param msg
+   *        The message
+   */
+  public void log (int level, String msg);
+
+  /**
+   * Display a warning if logLevel >= 1
+   * 
+   * @param msg
+   *        The warn message
+   */
+  public void warn (String msg);
 }

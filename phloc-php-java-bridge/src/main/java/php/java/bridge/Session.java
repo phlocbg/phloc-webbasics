@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
@@ -29,118 +46,145 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-class Session implements ISession {
-  
-    protected Map map;
-    protected String name;
-    private static int sessionCount=0;
-    boolean isNew=true;
-    protected long creationTime, lastAccessedTime, timeout;
-	
-    public Object get(Object ob) {
-	this.lastAccessedTime=System.currentTimeMillis();
-	return map.get(ob);
+class Session implements ISession
+{
+
+  protected Map map;
+  protected String name;
+  private static int sessionCount = 0;
+  boolean isNew = true;
+  protected long creationTime, lastAccessedTime, timeout;
+
+  public Object get (final Object ob)
+  {
+    this.lastAccessedTime = System.currentTimeMillis ();
+    return map.get (ob);
+  }
+
+  public void put (final Object ob1, final Object ob2)
+  {
+    this.lastAccessedTime = System.currentTimeMillis ();
+    map.put (ob1, ob2);
+  }
+
+  public Object remove (final Object ob)
+  {
+    this.lastAccessedTime = System.currentTimeMillis ();
+    return map.remove (ob);
+  }
+
+  Session (final String name)
+  {
+    this.name = name;
+    Session.sessionCount++;
+    this.map = Collections.synchronizedMap (new HashMap ());
+    this.creationTime = this.lastAccessedTime = System.currentTimeMillis ();
+    this.timeout = 1440000;
+  }
+
+  public void setTimeout (final int timeout)
+  {
+    this.timeout = timeout * 1000;
+    this.lastAccessedTime = System.currentTimeMillis ();
+  }
+
+  public int getTimeout ()
+  {
+    return (int) (timeout / 1000);
+  }
+
+  public int getSessionCount ()
+  {
+    return sessionCount;
+  }
+
+  public boolean isNew ()
+  {
+    return isNew;
+  }
+
+  public void destroy ()
+  {
+    sessionCount--;
+    synchronized (JavaBridge.sessionHash)
+    {
+      if (JavaBridge.sessionHash != null)
+        JavaBridge.sessionHash.remove (name);
     }
-	
-    public void put(Object ob1, Object ob2) {
-	this.lastAccessedTime=System.currentTimeMillis();
-	map.put(ob1, ob2);
+  }
+
+  public void invalidate ()
+  {
+    destroy ();
+  }
+
+  public void putAll (final Map vars)
+  {
+    this.lastAccessedTime = System.currentTimeMillis ();
+    map.putAll (vars);
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see php.java.bridge.ISession#getAll()
+   */
+  public Map getAll ()
+  {
+    this.lastAccessedTime = System.currentTimeMillis ();
+    return new HashMap (map); // unshare the map
+  }
+
+  /**
+   * Check for expired sessions every 10 minutes see #CHECK_SESSION_TIMEOUT
+   */
+  static synchronized void expire ()
+  {
+    if (JavaBridge.sessionHash == null)
+      return;
+    synchronized (JavaBridge.sessionHash)
+    {
+      for (final Iterator e = JavaBridge.sessionHash.values ().iterator (); e.hasNext ();)
+      {
+        final Session ref = (Session) e.next ();
+        if ((ref.timeout > 0) && (ref.lastAccessedTime + ref.timeout <= System.currentTimeMillis ()))
+        {
+          sessionCount--;
+          e.remove ();
+          if (Util.logLevel > 3)
+            Util.logDebug ("Session " + ref.name + " expired.");
+        }
+      }
     }
-	
-    public Object remove(Object ob) {
-	this.lastAccessedTime=System.currentTimeMillis();
-	return map.remove(ob);
-    }
-	
-    Session(String name) {
-	this.name=name;
-	Session.sessionCount++;
-	this.map=Collections.synchronizedMap(new HashMap());
-	this.creationTime = this.lastAccessedTime=System.currentTimeMillis();
-	this.timeout=1440000;
+  }
+
+  /**
+   * Expires all sessions immediately.
+   */
+  public static void reset ()
+  {
+    if (JavaBridge.sessionHash == null)
+      return;
+    synchronized (JavaBridge.sessionHash)
+    {
+      for (final Iterator e = JavaBridge.sessionHash.values ().iterator (); e.hasNext ();)
+      {
+        final Session ref = (Session) e.next ();
+        sessionCount--;
+        e.remove ();
+        if (Util.logLevel > 3)
+          Util.logDebug ("Session " + ref.name + " destroyed.");
+      }
     }
 
-    public void setTimeout(int timeout) {
-	this.timeout=timeout*1000;
-	this.lastAccessedTime=System.currentTimeMillis();
-    }
-	
-    public int getTimeout() {
-	return (int)(timeout/1000);
-    }
-	
-    public int getSessionCount() {
-	return sessionCount;
-    }
-	
-    public boolean isNew() {
-	return isNew;
-    }
-	
-    public void destroy() {
-	sessionCount--;
-	synchronized(JavaBridge.sessionHash) {
-	    if(JavaBridge.sessionHash!=null)
-		JavaBridge.sessionHash.remove(name);
-	}
-    }
-	
-    public void invalidate() {
-	destroy();
-    }
+  }
 
-    public void putAll(Map vars) {
-	this.lastAccessedTime=System.currentTimeMillis();
-	map.putAll(vars);
-    }
+  public long getCreationTime ()
+  {
+    return creationTime;
+  }
 
-    /* (non-Javadoc)
-     * @see php.java.bridge.ISession#getAll()
-     */
-	public Map getAll() {
-	this.lastAccessedTime=System.currentTimeMillis();
-	return new HashMap(map); // unshare the map 
-    }
-
-    /** Check for expired sessions every 10 minutes 
-     * see #CHECK_SESSION_TIMEOUT
-     */
-    static synchronized void expire() {
-	if(JavaBridge.sessionHash==null) return;
-    	synchronized(JavaBridge.sessionHash) {
-	    for(Iterator e = JavaBridge.sessionHash.values().iterator(); e.hasNext(); ) {
-		Session ref = (Session)e.next();
-		if((ref.timeout >0) && (ref.lastAccessedTime+ref.timeout<=System.currentTimeMillis())) {
-		    sessionCount--;
-		    e.remove();
-		    if(Util.logLevel>3) Util.logDebug("Session " + ref.name + " expired.");
-		}
-	    }
-	}
-    }
-    
-    /**
-     * Expires all sessions immediately.
-     *
-     */
-    public static void reset() {
-	if(JavaBridge.sessionHash==null) return;
-    	synchronized(JavaBridge.sessionHash) {
-	    for(Iterator e = JavaBridge.sessionHash.values().iterator(); e.hasNext(); ) {
-		Session ref = (Session)e.next();
-		sessionCount--;
-		e.remove();
-		if(Util.logLevel>3) Util.logDebug("Session " + ref.name + " destroyed.");
-	    }
-	}
-  	
-    }
-
-    public long getCreationTime() {
-      return creationTime;
-    }
-
-    public long getLastAccessedTime() {
-      return lastAccessedTime;
-    }
+  public long getLastAccessedTime ()
+  {
+    return lastAccessedTime;
+  }
 }

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -27,40 +44,45 @@ package php.java.bridge.http;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-
 /**
- * FastCGI In-/OutputStream factory.
- * 
- * Override this class if you want to use your own streams.
+ * FastCGI In-/OutputStream factory. Override this class if you want to use your
+ * own streams.
  * 
  * @author jostb
- *
  */
-public abstract class FCGIIOFactory {
-    /**
-     * Create a new socket and connect
-     * it to the given host/port
-     * @param name The channel name.
-     * @return The socket
-     * @throws FCGIConnectException
-     */
-    public abstract FCGIConnection connect(FCGIConnectionFactory name) throws FCGIConnectException;
-    /** 
-     * Create a new InputStream.
-     * @return The input stream. 
-     * @throws FCGIConnectionException 
-     */
-    public InputStream createInputStream() throws FCGIConnectionException {
-	FCGIConnectionInputStream in = new FCGIConnectionInputStream();
-	return in;
-    }
-    /**
-     * Create a new OutputStream.
-     * @return The output stream.
-     * @throws FCGIConnectionException
-     */
-    public OutputStream createOutputStream() throws FCGIConnectionException {
-        FCGIConnectionOutputStream out = new FCGIConnectionOutputStream();
-        return out;
-    }
+public abstract class FCGIIOFactory
+{
+  /**
+   * Create a new socket and connect it to the given host/port
+   * 
+   * @param name
+   *        The channel name.
+   * @return The socket
+   * @throws FCGIConnectException
+   */
+  public abstract FCGIConnection connect (FCGIConnectionFactory name) throws FCGIConnectException;
+
+  /**
+   * Create a new InputStream.
+   * 
+   * @return The input stream.
+   * @throws FCGIConnectionException
+   */
+  public InputStream createInputStream () throws FCGIConnectionException
+  {
+    final FCGIConnectionInputStream in = new FCGIConnectionInputStream ();
+    return in;
+  }
+
+  /**
+   * Create a new OutputStream.
+   * 
+   * @return The output stream.
+   * @throws FCGIConnectionException
+   */
+  public OutputStream createOutputStream () throws FCGIConnectionException
+  {
+    final FCGIConnectionOutputStream out = new FCGIConnectionOutputStream ();
+    return out;
+  }
 }

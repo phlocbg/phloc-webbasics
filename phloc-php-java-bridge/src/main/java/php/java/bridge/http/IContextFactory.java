@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -31,92 +48,108 @@ import php.java.bridge.ISession;
  * Interface that the ContextFactories must implement.
  * 
  * @author jostb
- *
  */
-public interface IContextFactory extends IJavaBridgeFactory {
+public interface IContextFactory extends IJavaBridgeFactory
+{
 
   /**
    * <p>
-   * Update the context factory with the new JavaBridge obtained from the servlet
+   * Update the context factory with the new JavaBridge obtained from the
+   * servlet
    * </p>
-   * @param id The fresh id
+   * 
+   * @param id
+   *        The fresh id
    * @see php.java.bridge.http.ContextFactory#recycle()
    * @see php.java.bridge.Request#setBridge(php.java.bridge.JavaBridge)
    * @see php.java.bridge.Request#recycle()
    */
-    public void recycle(String id);
-
+  public void recycle (String id);
 
   /**
-   * Releases the context factory. This method should be called when the
-   * factory is not needed anymore.
-   * Implementations could then remove any unused context factory from the 
-   * classloader's list of context factories.
+   * Releases the context factory. This method should be called when the factory
+   * is not needed anymore. Implementations could then remove any unused context
+   * factory from the classloader's list of context factories.
    */
-  public void release();
+  public void release ();
 
   /**
-   * Wait until this context is finished and release/destroy it. This method returns immediately if this context
-   * is not in use yet or it is no longer in use. Call this method only if Java has initiated the communication and
-   * Java have full control over the connection, for example via a ScriptEngine's URLReader or CGIRunner. 
-   * For Apache/PHP initiated requests use a combination of #waitFor(long) and #release() instead.
+   * Wait until this context is finished and release/destroy it. This method
+   * returns immediately if this context is not in use yet or it is no longer in
+   * use. Call this method only if Java has initiated the communication and Java
+   * have full control over the connection, for example via a ScriptEngine's
+   * URLReader or CGIRunner. For Apache/PHP initiated requests use a combination
+   * of #waitFor(long) and #release() instead.
+   * 
    * @throws InterruptedException
    * @see php.java.bridge.http.ContextRunner
    */
-  public void releaseManaged() throws InterruptedException;
- 
+  public void releaseManaged () throws InterruptedException;
+
   /**
    * Wait until this context is finished.
-   * @param timeout The timeout
+   * 
+   * @param timeout
+   *        The timeout
    * @throws InterruptedException
    * @see php.java.bridge.http.ContextRunner
    */
-  public void waitFor(long timeout) throws InterruptedException;
+  public void waitFor (long timeout) throws InterruptedException;
 
   /**
    * Return the serializable ID of the context factory
+   * 
    * @return The ID
    */
-  public String getId();
+  public String getId ();
 
   /**
    * Return a JSR223 context
+   * 
    * @return The context
    * @see php.java.servlet.ServletContextFactory#getContext()
    * @see php.java.bridge.http.Context
    */
-  public IContext getContext();
+  public IContext getContext ();
 
   /**
-   * Set the Context into this factory.
-   * Should be called by Context.addNew() only.
+   * Set the Context into this factory. Should be called by Context.addNew()
+   * only.
+   * 
    * @param context
    * @see php.java.bridge.http.ContextFactory#addNew()
    */
-  public void setContext(IContext context);
-  
+  public void setContext (IContext context);
+
   /**
-   * @param name The session name. If name is null, the name PHPSESSION will be used.
-   * @param clientIsNew true if the client wants a new session
-   * @param timeout timeout in seconds. If 0 the session does not expire.
+   * @param name
+   *        The session name. If name is null, the name PHPSESSION will be used.
+   * @param clientIsNew
+   *        true if the client wants a new session
+   * @param timeout
+   *        timeout in seconds. If 0 the session does not expire.
    * @return The session
    * @see php.java.bridge.ISession
    */
-   public ISession getSession(String name, short clientIsNew, int timeout);
+  public ISession getSession (String name, short clientIsNew, int timeout);
 
-   /**
-    * @param name The session name. If name is null, the name PHPSESSION will be used.
-    * @param clientIsNew true if the client wants a new session
-    * @param timeout timeout in seconds. If 0 the session does not expire.
-    * @return The session
-    * @see php.java.bridge.ISession
-    */
-    public ISession getSimpleSession(String name, short clientIsNew, int timeout);
+  /**
+   * @param name
+   *        The session name. If name is null, the name PHPSESSION will be used.
+   * @param clientIsNew
+   *        true if the client wants a new session
+   * @param timeout
+   *        timeout in seconds. If 0 the session does not expire.
+   * @return The session
+   * @see php.java.bridge.ISession
+   */
+  public ISession getSimpleSession (String name, short clientIsNew, int timeout);
 
-   /**
-    * Called when the context runner starts
-    * @see IContextFactory#releaseManaged()
-    * @see IContextFactory#destroy()
-    */
-   public void initialize ();
+  /**
+   * Called when the context runner starts
+   * 
+   * @see IContextFactory#releaseManaged()
+   * @see IContextFactory#destroy()
+   */
+  public void initialize ();
 }

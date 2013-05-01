@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.servlet;
@@ -36,140 +53,217 @@ import php.java.bridge.http.IContext;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-
 /**
- * A custom context which keeps the HttpServletResponse. Used when JSR223 is not available.
+ * A custom context which keeps the HttpServletResponse. Used when JSR223 is not
+ * available.
  * 
  * @author jostb
- *
  */
-public class HttpContext extends php.java.bridge.http.Context {
-    protected HttpServletResponse response;
-    protected ServletContext context;
-    protected HttpServletRequest request;
+public class HttpContext extends php.java.bridge.http.Context
+{
+  protected HttpServletResponse response;
+  protected ServletContext context;
+  protected HttpServletRequest request;
 
-  /**{@inheritDoc}*/  
-  public Object getAttribute(String name) throws IllegalArgumentException{
-	Object result;
-	if (name == null) {
-	    throw new IllegalArgumentException("name cannot be null");
-	}
-	          
-	if ((getEngineScope()!=null) && (result=getEngineScope().get(name)) != null) {
-	    return result;
-	} else if ((getGlobalScope()!=null) && (result=getGlobalScope().get(name)) != null) {
-	    return result;
-	} else if ((result=request.getAttribute(name)) != null)  {
-	    return result;
-	} else if ((result=request.getSession().getAttribute(name)) != null)  {
-	    return result;
-	} else if ((result=context.getAttribute(name)) != null) {
-	    return result;
-	}
-	return null;
-  }
-	
-    /**
-     * Create a new context.
-     * @param kontext The servlet context
-     * @param req The servlet request
-     * @param res The HttpServletResponse
-     */
-    public HttpContext(ServletContext kontext, HttpServletRequest req, HttpServletResponse res) {
-      this.context = kontext;
-      this.response = res;
-      this.request = req;
+  /** {@inheritDoc} */
+  @Override
+  public Object getAttribute (final String name) throws IllegalArgumentException
+  {
+    Object result;
+    if (name == null)
+    {
+      throw new IllegalArgumentException ("name cannot be null");
     }
-	
-    /**{@inheritDoc}*/  
-    public Writer getWriter() throws IOException {
-	return response.getWriter();
+
+    if ((getEngineScope () != null) && (result = getEngineScope ().get (name)) != null)
+    {
+      return result;
     }
-    /**
-     * Return the http servlet response
-     * @return The http servlet reponse
-     */
-     public Object getHttpServletResponse() {
- 	return getAttribute(IContext.SERVLET_RESPONSE);
-     }
-     /**
-      * Return the http servlet request
-      * @return The http servlet request
-      */
-     public Object getHttpServletRequest() {
- 	return getAttribute(IContext.SERVLET_REQUEST);
-     }
-     /**
-      * Return the http servlet
-      * @return The http servlet
-      */
-     public Object getServlet() {
- 	return getAttribute(IContext.SERVLET);
-     }
-     /**
-      * Return the servlet config
-      * @return The servlet config
-      */
-      public Object getServletConfig() {
-  	return getAttribute(IContext.SERVLET_CONFIG);
+    else
+      if ((getGlobalScope () != null) && (result = getGlobalScope ().get (name)) != null)
+      {
+        return result;
       }
-      /**
-       * Return the servlet context
-       * @return The servlet context
-       */
-       public Object getServletContext() {
-   	return getAttribute(IContext.SERVLET_CONTEXT);
-       }
+      else
+        if ((result = request.getAttribute (name)) != null)
+        {
+          return result;
+        }
+        else
+          if ((result = request.getSession ().getAttribute (name)) != null)
+          {
+            return result;
+          }
+          else
+            if ((result = context.getAttribute (name)) != null)
+            {
+              return result;
+            }
+    return null;
+  }
 
-       /**
-        * Only for internal use. <br><br>
-        * Used when scripts are running within of a servlet environment:
-        * Either php.java.servlet.Context or the JSR223 Context (see PhpSimpleHttpScriptContext).<br>
-        * Outside of a servlet environment use the ContextLoaderListener instead:
-        * Either the Standalone or the JSR223 Standalone (see PhpScriptContext).
-        * @param closeable The manageable beforeShutdown(), will be called by the {@link ContextLoaderListener#contextDestroyed(javax.servlet.ServletContextEvent)}
-        * @param ctx The ServletContext
-        */
-       public static void handleManaged(Object closeable, ServletContext ctx) {
-	 List list = (List) ContextLoaderListener.getContextLoaderListener(ctx).getCloseables();
-	 list.add(closeable);
-       }
-       /**{@inheritDoc}*/
-       public Object init(Object callable) throws Exception {
-	 if(Util.logLevel>3) Util.logDebug("calling servlet context init");
-	 return php.java.bridge.http.Context.getManageable(callable);
-       }
-       /**{@inheritDoc}*/
-       public void onShutdown(Object closeable) {
-	 if(Util.logLevel>3) Util.logDebug("calling servlet context register shutdown ");
-	 handleManaged(closeable, context);
-       }
+  /**
+   * Create a new context.
+   * 
+   * @param kontext
+   *        The servlet context
+   * @param req
+   *        The servlet request
+   * @param res
+   *        The HttpServletResponse
+   */
+  public HttpContext (final ServletContext kontext, final HttpServletRequest req, final HttpServletResponse res)
+  {
+    this.context = kontext;
+    this.response = res;
+    this.request = req;
+  }
 
-       /** Only for internal use
-        * @param path the path
-        * @param ctx the servlet context 
-        * @return the real path
-        * @deprecated Use {@link php.java.servlet.ServletUtil#getRealPath(ServletContext, String)}
-        */
-       public static String getRealPathInternal(String path, ServletContext ctx) {
-	   return ServletUtil.getRealPath(ctx, path);
-       }
-       /**{@inheritDoc}*/
-       public String getRealPath(String path) {
-   	return ServletUtil.getRealPath(context, path);
-       }
-       /**@deprecated*/
-       public String getRedirectString() {
-	   throw new NotImplementedException();
-       }
-       /**@deprecated*/
-       public String getRedirectString(String webPath) {
-	   throw new NotImplementedException();
-       }
+  /** {@inheritDoc} */
+  @Override
+  public Writer getWriter () throws IOException
+  {
+    return response.getWriter ();
+  }
 
-       /**{@inheritDoc}*/
-       public String getSocketName() {
-   	return String.valueOf(ServletUtil.getLocalPort(request));
-       }
+  /**
+   * Return the http servlet response
+   * 
+   * @return The http servlet reponse
+   */
+  @Override
+  public Object getHttpServletResponse ()
+  {
+    return getAttribute (IContext.SERVLET_RESPONSE);
+  }
+
+  /**
+   * Return the http servlet request
+   * 
+   * @return The http servlet request
+   */
+  @Override
+  public Object getHttpServletRequest ()
+  {
+    return getAttribute (IContext.SERVLET_REQUEST);
+  }
+
+  /**
+   * Return the http servlet
+   * 
+   * @return The http servlet
+   */
+  @Override
+  public Object getServlet ()
+  {
+    return getAttribute (IContext.SERVLET);
+  }
+
+  /**
+   * Return the servlet config
+   * 
+   * @return The servlet config
+   */
+  @Override
+  public Object getServletConfig ()
+  {
+    return getAttribute (IContext.SERVLET_CONFIG);
+  }
+
+  /**
+   * Return the servlet context
+   * 
+   * @return The servlet context
+   */
+  @Override
+  public Object getServletContext ()
+  {
+    return getAttribute (IContext.SERVLET_CONTEXT);
+  }
+
+  /**
+   * Only for internal use. <br>
+   * <br>
+   * Used when scripts are running within of a servlet environment: Either
+   * php.java.servlet.Context or the JSR223 Context (see
+   * PhpSimpleHttpScriptContext).<br>
+   * Outside of a servlet environment use the ContextLoaderListener instead:
+   * Either the Standalone or the JSR223 Standalone (see PhpScriptContext).
+   * 
+   * @param closeable
+   *        The manageable beforeShutdown(), will be called by the
+   *        {@link ContextLoaderListener#contextDestroyed(javax.servlet.ServletContextEvent)}
+   * @param ctx
+   *        The ServletContext
+   */
+  public static void handleManaged (final Object closeable, final ServletContext ctx)
+  {
+    final List list = ContextLoaderListener.getContextLoaderListener (ctx).getCloseables ();
+    list.add (closeable);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public Object init (final Object callable) throws Exception
+  {
+    if (Util.logLevel > 3)
+      Util.logDebug ("calling servlet context init");
+    return php.java.bridge.http.Context.getManageable (callable);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void onShutdown (final Object closeable)
+  {
+    if (Util.logLevel > 3)
+      Util.logDebug ("calling servlet context register shutdown ");
+    handleManaged (closeable, context);
+  }
+
+  /**
+   * Only for internal use
+   * 
+   * @param path
+   *        the path
+   * @param ctx
+   *        the servlet context
+   * @return the real path
+   * @deprecated Use
+   *             {@link php.java.servlet.ServletUtil#getRealPath(ServletContext, String)}
+   */
+  @Deprecated
+  public static String getRealPathInternal (final String path, final ServletContext ctx)
+  {
+    return ServletUtil.getRealPath (ctx, path);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getRealPath (final String path)
+  {
+    return ServletUtil.getRealPath (context, path);
+  }
+
+  /** @deprecated */
+  @Deprecated
+  @Override
+  public String getRedirectString ()
+  {
+    throw new NotImplementedException ();
+  }
+
+  /** @deprecated */
+  @Deprecated
+  @Override
+  public String getRedirectString (final String webPath)
+  {
+    throw new NotImplementedException ();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getSocketName ()
+  {
+    return String.valueOf (ServletUtil.getLocalPort (request));
+  }
 }

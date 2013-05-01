@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 /*
@@ -29,33 +46,40 @@ import java.io.InputStream;
 
 /**
  * Defines the parser callbacks.
+ * 
  * @author jostb
- *
  */
-public interface IDocHandler {
-    
-    /**
-     * Called for each &lt;tag arg1 ... argn&gt;
-     * @param tag The tag and the args.
-     * @return true, if the parser should stop after reading the top-level end tag, false otherwise. 
-     * Implements a short path: Set this to true, if you already know that the current top-level request doesn't need a reply. 
-     */
-    public boolean begin(ParserTag[] tag);
-    
-    /**
-     * Called for each &lt;/tag&gt;
-     * @param strings The tag and the args.
-     * @see IDocHandler#begin(ParserTag[])
-     */
-    public void end(ParserString[] strings);
+public interface IDocHandler
+{
 
-    /**
-     * Called for the header
-     * 
-     * @param in the input stream
-     * @throws IOException
-     */
-    public void parseHeader(InputStream in) throws IOException;
-    
+  /**
+   * Called for each &lt;tag arg1 ... argn&gt;
+   * 
+   * @param tag
+   *        The tag and the args.
+   * @return true, if the parser should stop after reading the top-level end
+   *         tag, false otherwise. Implements a short path: Set this to true, if
+   *         you already know that the current top-level request doesn't need a
+   *         reply.
+   */
+  public boolean begin (ParserTag [] tag);
+
+  /**
+   * Called for each &lt;/tag&gt;
+   * 
+   * @param strings
+   *        The tag and the args.
+   * @see IDocHandler#begin(ParserTag[])
+   */
+  public void end (ParserString [] strings);
+
+  /**
+   * Called for the header
+   * 
+   * @param in
+   *        the input stream
+   * @throws IOException
+   */
+  public void parseHeader (InputStream in) throws IOException;
+
 }
- 

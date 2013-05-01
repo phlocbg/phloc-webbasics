@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -24,134 +41,174 @@ package php.java.bridge.http;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+
 import php.java.bridge.ISession;
 import php.java.bridge.Request;
 import php.java.bridge.SessionFactory;
 
 /**
- * Create session contexts for servlets.<p> 
- * This ContextFactory can be used in environments where no custom class loaders and no threads are allowed.
- *
+ * Create session contexts for servlets.
+ * <p>
+ * This ContextFactory can be used in environments where no custom class loaders
+ * and no threads are allowed.
+ * 
  * @see php.java.bridge.http.ContextFactory
  * @see php.java.bridge.http.ContextServer
  * @author jostb
  */
-public class RemoteHttpContextFactory extends SessionFactory implements IContextFactory, Serializable {
-     
-    /** The response */
-    private HttpResponse out;
+public class RemoteHttpContextFactory extends SessionFactory implements IContextFactory, Serializable
+{
 
-    private static final long serialVersionUID = -7009009517347609467L;
-    private IContext context;
-    private IContextFactoryVisitor impl;
-    private String id;
-    
-    public RemoteHttpContextFactory(HttpRequest req, HttpResponse res) {
-    	super();
-    	this.out = res;
-    	
-    	this.id = ContextFactory.EMPTY_CONTEXT_NAME; // dummy
-    }
-    protected void accept (IContextFactoryVisitor impl) {
-	this.impl = impl;
-	impl.visit(this);
-    }
-    
-    /**
-     * Create and add a new ContextFactory.
-     * @param req The HttpRequest
-     * @param res The HttpResponse
-     * @return The created ContextFactory
-     */
-    public static IContextFactory addNew(HttpRequest req, HttpResponse res, IContextFactoryVisitor impl) {
-	RemoteHttpContextFactory factory = new RemoteHttpContextFactory(req, res);
-	factory.accept(impl);
-	return factory;
-    }
-    /**{@inheritDoc}*/
-    public String getId() {
-	return id;
-    }
-    /**{@inheritDoc}*/
-    public void initialize() {/*empty*/}
+  /** The response */
+  private HttpResponse out;
 
-    /**{@inheritDoc}*/
-    public void invalidate() {/*empty*/}
+  private static final long serialVersionUID = -7009009517347609467L;
+  private IContext context;
+  private IContextFactoryVisitor impl;
+  private final String id;
 
-    /**{@inheritDoc}*/
-    public void recycle(String id) {/*empty*/}
+  public RemoteHttpContextFactory (final HttpRequest req, final HttpResponse res)
+  {
+    super ();
+    this.out = res;
 
-    /**{@inheritDoc}*/
-    public void release() {
-	if (impl != null) impl.release();
-    }
+    this.id = ContextFactory.EMPTY_CONTEXT_NAME; // dummy
+  }
 
-    /**{@inheritDoc}*/
-    public void releaseManaged() throws InterruptedException {
-	if (impl != null) impl.releaseManaged();
-    }
+  protected void accept (final IContextFactoryVisitor impl)
+  {
+    this.impl = impl;
+    impl.visit (this);
+  }
 
-    /**{@inheritDoc}*/
-    public void waitFor(long timeout) throws InterruptedException {}
+  /**
+   * Create and add a new ContextFactory.
+   * 
+   * @param req
+   *        The HttpRequest
+   * @param res
+   *        The HttpResponse
+   * @return The created ContextFactory
+   */
+  public static IContextFactory addNew (final HttpRequest req, final HttpResponse res, final IContextFactoryVisitor impl)
+  {
+    final RemoteHttpContextFactory factory = new RemoteHttpContextFactory (req, res);
+    factory.accept (impl);
+    return factory;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void parseHeader(Request req, InputStream in) throws IOException {
-	throw new IllegalStateException("parseHeader");
-    }
+  /** {@inheritDoc} */
+  public String getId ()
+  {
+    return id;
+  }
 
-    /**{@inheritDoc}*/
-    public void setContext(IContext context) {
-	if (impl != null) impl.setContext(context);
-	this.context = context;
-    }
+  /** {@inheritDoc} */
+  public void initialize ()
+  {/* empty */}
 
-    /**{@inheritDoc}*/
-    public IContext getContext() {
-	if (context != null) return context;
-	if(impl != null) context = impl.getContext();
-	else setContext(createContext());
-	
-	context.setAttribute(IContext.JAVA_BRIDGE, getBridge(), IContext.ENGINE_SCOPE);
+  /** {@inheritDoc} */
+  @Override
+  public void invalidate ()
+  {/* empty */}
 
-        return context;
-    }
+  /** {@inheritDoc} */
+  public void recycle (final String id)
+  {/* empty */}
 
-    /**{@inheritDoc}*/
-   public void destroy() {
-	super.destroy();
-   }
+  /** {@inheritDoc} */
+  public void release ()
+  {
+    if (impl != null)
+      impl.release ();
+  }
 
-    /**
-     * Return an emulated JSR223 context.
-     * @return The context.
-     * @see php.java.servlet.HttpContext
-     */
-    private IContext createContext() {
-	return new Context();
-    }
+  /** {@inheritDoc} */
+  public void releaseManaged () throws InterruptedException
+  {
+    if (impl != null)
+      impl.releaseManaged ();
+  }
 
-    /**{@inheritDoc}*/
-   public void flushBuffer() throws IOException {
-       out.flushBuffer();
-   }
+  /** {@inheritDoc} */
+  public void waitFor (final long timeout) throws InterruptedException
+  {}
 
-   /**
-    * Set the current response 
-    * @param out the PhpJavaServlet response
-    */
-   public void setResponse(HttpResponse out) {
-       this.out = out;
-   }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void parseHeader (final Request req, final InputStream in) throws IOException
+  {
+    throw new IllegalStateException ("parseHeader");
+  }
 
-   /**{@inheritDoc}*/
-   public ISession getSimpleSession(String name, short clientIsNew,
-           int timeout) {
-	return super.getSession(name, clientIsNew, timeout);
-   }
+  /** {@inheritDoc} */
+  public void setContext (final IContext context)
+  {
+    if (impl != null)
+      impl.setContext (context);
+    this.context = context;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public IContext getContext ()
+  {
+    if (context != null)
+      return context;
+    if (impl != null)
+      context = impl.getContext ();
+    else
+      setContext (createContext ());
+
+    context.setAttribute (IContext.JAVA_BRIDGE, getBridge (), IContext.ENGINE_SCOPE);
+
+    return context;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void destroy ()
+  {
+    super.destroy ();
+  }
+
+  /**
+   * Return an emulated JSR223 context.
+   * 
+   * @return The context.
+   * @see php.java.servlet.HttpContext
+   */
+  private IContext createContext ()
+  {
+    return new Context ();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void flushBuffer () throws IOException
+  {
+    out.flushBuffer ();
+  }
+
+  /**
+   * Set the current response
+   * 
+   * @param out
+   *        the PhpJavaServlet response
+   */
+  public void setResponse (final HttpResponse out)
+  {
+    this.out = out;
+  }
+
+  /** {@inheritDoc} */
+  public ISession getSimpleSession (final String name, final short clientIsNew, final int timeout)
+  {
+    return super.getSession (name, clientIsNew, timeout);
+  }
 }

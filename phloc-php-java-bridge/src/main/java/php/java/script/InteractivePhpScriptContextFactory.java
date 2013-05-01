@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -29,26 +46,32 @@ import php.java.bridge.http.IContext;
 import php.java.bridge.http.IContextFactory;
 
 /**
- * A custom context factory, creates a ContextFactory for JSR223 contexts.  sessions do not expire.
+ * A custom context factory, creates a ContextFactory for JSR223 contexts.
+ * sessions do not expire.
+ * 
  * @author jostb
- *
  */
-public class InteractivePhpScriptContextFactory extends PhpScriptContextFactory {
+public class InteractivePhpScriptContextFactory extends PhpScriptContextFactory
+{
 
-    /**
-     * Add the PhpScriptContext
-     * @param context
-     * @return The ContextFactory.
-     */
-    public static IContextFactory addNew(IContext context) {
-	InteractivePhpScriptContextFactory ctx = new InteractivePhpScriptContextFactory();
-	ctx.setContext(context);
-	return ctx;
-    }
-    /**{@inheritDoc}*/
-    public ISession getSession(String name, short clientIsNew, int timeout) {
-	// ignore timeout
-	return super.getSession(name, clientIsNew, 0);
-    }
+  /**
+   * Add the PhpScriptContext
+   * 
+   * @param context
+   * @return The ContextFactory.
+   */
+  public static IContextFactory addNew (final IContext context)
+  {
+    final InteractivePhpScriptContextFactory ctx = new InteractivePhpScriptContextFactory ();
+    ctx.setContext (context);
+    return ctx;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public ISession getSession (final String name, final short clientIsNew, final int timeout)
+  {
+    // ignore timeout
+    return super.getSession (name, clientIsNew, 0);
+  }
 }
-

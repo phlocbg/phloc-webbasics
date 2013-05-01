@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -32,165 +49,221 @@ import php.java.bridge.JavaBridge;
 import php.java.bridge.Request;
 import php.java.bridge.Util;
 
-
 /**
  * Base of a set of visitors which can extend the standard ContextFactory.
+ * Instances of this class are thrown away at the end of the request.
  * 
- * Instances of this class are thrown away at the end of the request. 
- *
  * @see php.java.servlet.ServletContextFactory
  * @see php.java.script.PhpScriptContextFactory
  */
-public class SimpleContextFactory implements IContextFactoryVisitor {
-    
-    /**
-     * The session object
-     */
-    protected ISession session;
-    
-    /**
-     * The visited ContextFactory
-     */
-    protected IContextFactory visited;
+public class SimpleContextFactory implements IContextFactoryVisitor
+{
 
-    /**
-     * The jsr223 context or the emulated jsr223 context.
-     */
-    protected IContext context;
-    
-    private boolean isContextRunnerRunning = false;
-    private boolean isValid = true;
-    private boolean isManaged;
-    
-    protected SimpleContextFactory(String webContext, boolean isManaged) {
-	this.isManaged = isManaged;
-  	ContextFactory visited = new ContextFactory(webContext, isManaged);
-  	visited.accept(this);
-    	this.visited = visited;
-    }
-    
-    /**{@inheritDoc}*/
-   public void recycle(String id) {
-        visited.recycle(id);
-    }
+  /**
+   * The session object
+   */
+  protected ISession session;
 
-   /**{@inheritDoc}*/
-    public void destroy() {
-        visited.destroy();
-        session = null;
-    }
-    
-    /**{@inheritDoc}*/
-    public synchronized void invalidate() {
-	    isValid = false;
-	    notifyAll(); // notify waitForContextRunner() and waitFor()
-    }
-    /**{@inheritDoc}*/
-    public synchronized void initialize () {
-	isContextRunnerRunning = true;
-        getContext().setAttribute(IContext.JAVA_BRIDGE, getBridge(), IContext.ENGINE_SCOPE);
-    }
-    /**
-     * Wait for the context factory to finish, then release
-     * @throws InterruptedException 
-     */
-    public synchronized void releaseManaged() throws InterruptedException {
-	if(Util.logLevel>4) Util.logDebug("contextfactory: servlet is waiting for ContextRunner " +System.identityHashCode(this));
-	if (isContextRunnerRunning) {
-	    while(isValid) wait();
-	    if(Util.logLevel>4) Util.logDebug("contextfactory: servlet done waiting for ContextRunner " +System.identityHashCode(this));
-	} else {
-	    if(Util.logLevel>4) Util.logDebug("contextfactory: servlet done w/o ContextRunner " +System.identityHashCode(this));
-	    if (isManaged)
-		destroy();
-	    else
-		release();
-	}
-    }
-    /**
-     * Wait for the context factory to finish. 
-     * @param timeout The timeout
-     * @throws InterruptedException 
-     */
-    public synchronized void waitFor(long timeout) throws InterruptedException {
-	if(Util.logLevel>4) Util.logDebug("contextfactory: servlet waitFor() ContextFactory " +System.identityHashCode(this) + " for " +timeout+" ms");
-	if (isValid) wait(timeout);
-	if(Util.logLevel>4) Util.logDebug("contextfactory: servlet waitFor() ContextRunner " +System.identityHashCode(this));
-	if (isContextRunnerRunning && isValid) wait();
-	if(Util.logLevel>4) Util.logDebug("contextfactory: servlet done waitFor() ContextRunner " +System.identityHashCode(this));
-    }    
-    /**{@inheritDoc}*/
-    public String getId() { 
-        return visited.getId();
-    }
-    /**{@inheritDoc}*/
-    public String toString() {
-	return "ContextFactory: " + visited + ", SimpleContextFactory: " +getClass();
-    }
-    /**
-     * Create a new context. The default implementation
-     * creates a dummy context which emulates the JSR223 context.
-     * @return The context.
-     */
-    protected IContext createContext() {
-      return new Context();
-    }
-    /**{@inheritDoc}*/
-    public IContext getContext() {
-	if(context==null) setContext(createContext());
-        return context;
-    }
+  /**
+   * The visited ContextFactory
+   */
+  protected IContextFactory visited;
 
-    /**{@inheritDoc}*/
-    public boolean isNew () {
-	return visited.isNew();
-    }
-    /**{@inheritDoc}*/
-    public JavaBridge getBridge() {
-        return visited.getBridge();
-    }
-    /**{@inheritDoc}*/
-    public void visit(IContextFactory visited) {
-        this.visited=visited;
-    }
-    /**{@inheritDoc}*/
-    public ISession getSession(String name, short clientIsNew, int timeout) {
-	return getSimpleSession(name, clientIsNew, timeout);
-    }
-    /**{@inheritDoc}*/
-    public ISession getSimpleSession(String name, short clientIsNew, int timeout) {
-	if (name!=null) return visited.getSimpleSession(name, clientIsNew, timeout);
-	if(session != null) return session;
-	return session = visited.getSimpleSession(name, clientIsNew, timeout);
-    }
-    /**{@inheritDoc}*/
-    public void setContext(IContext context) {
-        this.context = context;
-    }
-    /**{@inheritDoc}*/
-    public void release() {
-        visited.release();
-    }
+  /**
+   * The jsr223 context or the emulated jsr223 context.
+   */
+  protected IContext context;
 
-    /**
-     * Called by recycle at the end of the script
-     */
-    public void recycle() {
-	visited.recycle();
-    }
+  private boolean isContextRunnerRunning = false;
+  private boolean isValid = true;
+  private final boolean isManaged;
 
-    /**
-     * {@inheritDoc}
-     */
-    public void flushBuffer() throws IOException {
-	visited.flushBuffer();
-    }
+  protected SimpleContextFactory (final String webContext, final boolean isManaged)
+  {
+    this.isManaged = isManaged;
+    final ContextFactory visited = new ContextFactory (webContext, isManaged);
+    visited.accept (this);
+    this.visited = visited;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-   public void parseHeader(Request req, InputStream in)
-            throws IOException {
-	visited.parseHeader(req, in);
+  /** {@inheritDoc} */
+  public void recycle (final String id)
+  {
+    visited.recycle (id);
+  }
+
+  /** {@inheritDoc} */
+  public void destroy ()
+  {
+    visited.destroy ();
+    session = null;
+  }
+
+  /** {@inheritDoc} */
+  public synchronized void invalidate ()
+  {
+    isValid = false;
+    notifyAll (); // notify waitForContextRunner() and waitFor()
+  }
+
+  /** {@inheritDoc} */
+  public synchronized void initialize ()
+  {
+    isContextRunnerRunning = true;
+    getContext ().setAttribute (IContext.JAVA_BRIDGE, getBridge (), IContext.ENGINE_SCOPE);
+  }
+
+  /**
+   * Wait for the context factory to finish, then release
+   * 
+   * @throws InterruptedException
+   */
+  public synchronized void releaseManaged () throws InterruptedException
+  {
+    if (Util.logLevel > 4)
+      Util.logDebug ("contextfactory: servlet is waiting for ContextRunner " + System.identityHashCode (this));
+    if (isContextRunnerRunning)
+    {
+      while (isValid)
+        wait ();
+      if (Util.logLevel > 4)
+        Util.logDebug ("contextfactory: servlet done waiting for ContextRunner " + System.identityHashCode (this));
     }
+    else
+    {
+      if (Util.logLevel > 4)
+        Util.logDebug ("contextfactory: servlet done w/o ContextRunner " + System.identityHashCode (this));
+      if (isManaged)
+        destroy ();
+      else
+        release ();
+    }
+  }
+
+  /**
+   * Wait for the context factory to finish.
+   * 
+   * @param timeout
+   *        The timeout
+   * @throws InterruptedException
+   */
+  public synchronized void waitFor (final long timeout) throws InterruptedException
+  {
+    if (Util.logLevel > 4)
+      Util.logDebug ("contextfactory: servlet waitFor() ContextFactory " +
+                     System.identityHashCode (this) +
+                     " for " +
+                     timeout +
+                     " ms");
+    if (isValid)
+      wait (timeout);
+    if (Util.logLevel > 4)
+      Util.logDebug ("contextfactory: servlet waitFor() ContextRunner " + System.identityHashCode (this));
+    if (isContextRunnerRunning && isValid)
+      wait ();
+    if (Util.logLevel > 4)
+      Util.logDebug ("contextfactory: servlet done waitFor() ContextRunner " + System.identityHashCode (this));
+  }
+
+  /** {@inheritDoc} */
+  public String getId ()
+  {
+    return visited.getId ();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString ()
+  {
+    return "ContextFactory: " + visited + ", SimpleContextFactory: " + getClass ();
+  }
+
+  /**
+   * Create a new context. The default implementation creates a dummy context
+   * which emulates the JSR223 context.
+   * 
+   * @return The context.
+   */
+  protected IContext createContext ()
+  {
+    return new Context ();
+  }
+
+  /** {@inheritDoc} */
+  public IContext getContext ()
+  {
+    if (context == null)
+      setContext (createContext ());
+    return context;
+  }
+
+  /** {@inheritDoc} */
+  public boolean isNew ()
+  {
+    return visited.isNew ();
+  }
+
+  /** {@inheritDoc} */
+  public JavaBridge getBridge ()
+  {
+    return visited.getBridge ();
+  }
+
+  /** {@inheritDoc} */
+  public void visit (final IContextFactory visited)
+  {
+    this.visited = visited;
+  }
+
+  /** {@inheritDoc} */
+  public ISession getSession (final String name, final short clientIsNew, final int timeout)
+  {
+    return getSimpleSession (name, clientIsNew, timeout);
+  }
+
+  /** {@inheritDoc} */
+  public ISession getSimpleSession (final String name, final short clientIsNew, final int timeout)
+  {
+    if (name != null)
+      return visited.getSimpleSession (name, clientIsNew, timeout);
+    if (session != null)
+      return session;
+    return session = visited.getSimpleSession (name, clientIsNew, timeout);
+  }
+
+  /** {@inheritDoc} */
+  public void setContext (final IContext context)
+  {
+    this.context = context;
+  }
+
+  /** {@inheritDoc} */
+  public void release ()
+  {
+    visited.release ();
+  }
+
+  /**
+   * Called by recycle at the end of the script
+   */
+  public void recycle ()
+  {
+    visited.recycle ();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void flushBuffer () throws IOException
+  {
+    visited.flushBuffer ();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void parseHeader (final Request req, final InputStream in) throws IOException
+  {
+    visited.parseHeader (req, in);
+  }
 }

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 package php.java.script;
 
@@ -34,127 +51,160 @@ import php.java.bridge.Util;
 /**
  * Create a standalone PHP script engines.
  */
-public class PhpScriptEngineFactory implements ScriptEngineFactory {
+public class PhpScriptEngineFactory implements ScriptEngineFactory
+{
 
-    protected class Factory {
-	protected boolean hasCloseable;
-	public Factory (boolean hasCloseable) {
-	    this.hasCloseable = hasCloseable;
-	}
-	public ScriptEngine create () {
-	    if (hasCloseable) {
-		return new CloseablePhpScriptEngine(PhpScriptEngineFactory.this);	    }
-	    else {
-		return new PhpScriptEngine(PhpScriptEngineFactory.this);
-	    }
-	}
-    }
-    protected Factory factory;
-    
-    /**
-     * Create a new EngineFactory
-     */
-    public PhpScriptEngineFactory () {
-	try {
-	    Class.forName("java.io.Closeable");
-	    factory = new Factory(true);
-	} catch (ClassNotFoundException e) {
-	    factory = new Factory(false);
-	}
-    }
-    private static final String ENGINE_NAME=Util.EXTENSION_NAME + " php script engine for Java";
-    /**{@inheritDoc}*/
-    public String getEngineName() {
-	return ENGINE_NAME;
+  protected class Factory
+  {
+    protected boolean hasCloseable;
+
+    public Factory (final boolean hasCloseable)
+    {
+      this.hasCloseable = hasCloseable;
     }
 
-    /**{@inheritDoc}*/
-    public String getEngineVersion() {
-	return Util.VERSION;
+    public ScriptEngine create ()
+    {
+      if (hasCloseable)
+      {
+        return new CloseablePhpScriptEngine (PhpScriptEngineFactory.this);
+      }
+      else
+      {
+        return new PhpScriptEngine (PhpScriptEngineFactory.this);
+      }
     }
+  }
 
-    /**{@inheritDoc}*/
-    public String getLanguageName() {
-	return "php";
-    }
+  protected Factory factory;
 
-    /**{@inheritDoc}*/
-    public String getLanguageVersion() {
-	return "6";
+  /**
+   * Create a new EngineFactory
+   */
+  public PhpScriptEngineFactory ()
+  {
+    try
+    {
+      Class.forName ("java.io.Closeable");
+      factory = new Factory (true);
     }
+    catch (final ClassNotFoundException e)
+    {
+      factory = new Factory (false);
+    }
+  }
 
-    /**{@inheritDoc}*/
-    public List getExtensions() {
-	return getNames();
-    }
+  private static final String ENGINE_NAME = Util.EXTENSION_NAME + " php script engine for Java";
 
-    /**{@inheritDoc}*/
-    public List getMimeTypes() {
-	return Arrays.asList(new String[]{});
-    }
-    List names;
-    /**{@inheritDoc}*/
-    public List getNames() {
-	if(names==null) names = Arrays.asList(new String[]{getLanguageName(), "phtml", "php4", "php5", "php6"});
-	return names;
-    }
+  /** {@inheritDoc} */
+  public String getEngineName ()
+  {
+    return ENGINE_NAME;
+  }
 
-    /**{@inheritDoc}*/
-    public ScriptEngine getScriptEngine() {
-	return factory.create();
-    }
+  /** {@inheritDoc} */
+  public String getEngineVersion ()
+  {
+    return Util.VERSION;
+  }
 
-    /**{@inheritDoc}*/
-    public Object getParameter(String key) {
-        if(key.equals("javax.script.name"))
-            return getLanguageName();
-        if(key.equals("javax.script.engine"))
-            return getEngineName();
-        if(key.equals("javax.script.engine_version"))
-            return getEngineVersion();
-        if(key.equals("javax.script.language"))
-            return getLanguageName();
-        if(key.equals("javax.script.language_version"))
-            return getLanguageVersion();
-        if(key.equals("THREADING"))
-            return "STATELESS";
-        else
-            throw new IllegalArgumentException("key");
-    }
+  /** {@inheritDoc} */
+  public String getLanguageName ()
+  {
+    return "php";
+  }
 
-    /**{@inheritDoc}*/
-    public String getMethodCallSyntax(String obj, String m, String[] args) {
-	StringBuffer b = new StringBuffer();
-	b.append("$");
-	b.append(obj);
-	b.append("->");
-	b.append(m);
-	b.append("(");
-	int i;
-	for(i=0; i<args.length-1; i++) {
-	    b.append(args[i]);
-	    b.append(",");
-	}
-	b.append(args[i]);
-	b.append(")");
-	return b.toString();
-    }
+  /** {@inheritDoc} */
+  public String getLanguageVersion ()
+  {
+    return "6";
+  }
 
-    /**{@inheritDoc}*/
-    public String getOutputStatement(String toDisplay) {
-	return "echo("+toDisplay+")";
-    }
+  /** {@inheritDoc} */
+  public List getExtensions ()
+  {
+    return getNames ();
+  }
 
-    /**{@inheritDoc}*/
-    public String getProgram(String[] statements) {
-	int i=0;
-	StringBuffer b = new StringBuffer("<?php ");
-      
-	for(i=0; i<statements.length; i++) {
-	    b.append(statements[i]);
-	    b.append(";");
-	}
-	b.append("?>");
-	return b.toString();
+  /** {@inheritDoc} */
+  public List getMimeTypes ()
+  {
+    return Arrays.asList (new String [] {});
+  }
+
+  List names;
+
+  /** {@inheritDoc} */
+  public List getNames ()
+  {
+    if (names == null)
+      names = Arrays.asList (new String [] { getLanguageName (), "phtml", "php4", "php5", "php6" });
+    return names;
+  }
+
+  /** {@inheritDoc} */
+  public ScriptEngine getScriptEngine ()
+  {
+    return factory.create ();
+  }
+
+  /** {@inheritDoc} */
+  public Object getParameter (final String key)
+  {
+    if (key.equals ("javax.script.name"))
+      return getLanguageName ();
+    if (key.equals ("javax.script.engine"))
+      return getEngineName ();
+    if (key.equals ("javax.script.engine_version"))
+      return getEngineVersion ();
+    if (key.equals ("javax.script.language"))
+      return getLanguageName ();
+    if (key.equals ("javax.script.language_version"))
+      return getLanguageVersion ();
+    if (key.equals ("THREADING"))
+      return "STATELESS";
+    else
+      throw new IllegalArgumentException ("key");
+  }
+
+  /** {@inheritDoc} */
+  public String getMethodCallSyntax (final String obj, final String m, final String [] args)
+  {
+    final StringBuffer b = new StringBuffer ();
+    b.append ("$");
+    b.append (obj);
+    b.append ("->");
+    b.append (m);
+    b.append ("(");
+    int i;
+    for (i = 0; i < args.length - 1; i++)
+    {
+      b.append (args[i]);
+      b.append (",");
     }
+    b.append (args[i]);
+    b.append (")");
+    return b.toString ();
+  }
+
+  /** {@inheritDoc} */
+  public String getOutputStatement (final String toDisplay)
+  {
+    return "echo(" + toDisplay + ")";
+  }
+
+  /** {@inheritDoc} */
+  public String getProgram (final String [] statements)
+  {
+    int i = 0;
+    final StringBuffer b = new StringBuffer ("<?php ");
+
+    for (i = 0; i < statements.length; i++)
+    {
+      b.append (statements[i]);
+      b.append (";");
+    }
+    b.append ("?>");
+    return b.toString ();
+  }
 }

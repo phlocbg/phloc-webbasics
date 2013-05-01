@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -29,31 +46,41 @@ import php.java.bridge.http.ContextServer;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 /**
- * A decorator which enables secure (HTTPS) connections. 
- * Call <code>engine.setContext(new PhpSecureScriptContext(engine.getContext()))</code> before executing the engine.
+ * A decorator which enables secure (HTTPS) connections. Call
+ * <code>engine.setContext(new PhpSecureScriptContext(engine.getContext()))</code>
+ * before executing the engine.
+ * 
  * @author jostb
- *
  */
-public class PhpJavaBridgeRunnerScriptContext extends PhpScriptContextDecorator {
+public class PhpJavaBridgeRunnerScriptContext extends PhpScriptContextDecorator
+{
 
-    protected JavaBridgeRunner httpServer;
-    /**
-     * Create a new PhpCompiledScriptContext using an existing
-     * PhpScriptContext
-     * @param ctx the script context to be decorated
-     */
-    public PhpJavaBridgeRunnerScriptContext(ScriptContext ctx, JavaBridgeRunner httpServer) {
-	super((IPhpScriptContext)ctx);
-	this.httpServer = httpServer;
-    }
-    /**{@inheritDoc}*/
-    public String getSocketName() {
-	return httpServer.getSocket().getSocketName();
-    }
-    /**{@inheritDoc}*/
-    public ContextServer getContextServer() {
-	return httpServer.getContextServer();
-    }
+  protected JavaBridgeRunner httpServer;
+
+  /**
+   * Create a new PhpCompiledScriptContext using an existing PhpScriptContext
+   * 
+   * @param ctx
+   *        the script context to be decorated
+   */
+  public PhpJavaBridgeRunnerScriptContext (final ScriptContext ctx, final JavaBridgeRunner httpServer)
+  {
+    super ((IPhpScriptContext) ctx);
+    this.httpServer = httpServer;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getSocketName ()
+  {
+    return httpServer.getSocket ().getSocketName ();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public ContextServer getContextServer ()
+  {
+    return httpServer.getContextServer ();
+  }
 }

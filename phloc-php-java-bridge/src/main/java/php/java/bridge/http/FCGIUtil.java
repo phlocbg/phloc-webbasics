@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -24,116 +41,120 @@ package php.java.bridge.http;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 /**
  * Constants and common procedures for FastCGI
+ * 
  * @author jostb
- *
  */
-public class FCGIUtil {
+public class FCGIUtil
+{
 
-    /**
-     * IO buffer size
-     */
-    public static final int FCGI_BUF_SIZE = 65535;
+  /**
+   * IO buffer size
+   */
+  public static final int FCGI_BUF_SIZE = 65535;
 
-    /**
-     * header length
-     */
-    public static final int FCGI_HEADER_LEN = 8;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_BEGIN_REQUEST =      1;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_ABORT_REQUEST =      2;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_END_REQUEST   =      3;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_PARAMS        =      4;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_STDIN         =      5;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_STDOUT        =      6;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_STDERR        =      7;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_DATA          =      8;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_GET_VALUES    =      9;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_GET_VALUES_RESULT = 10;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final int FCGI_UNKNOWN_TYPE      = 11;
-    /**
-     * Values for type component of FCGI_Header
-     */
-    public static final byte[] FCGI_EMPTY_RECORD = new byte[0];
-    
-    /**
-     * Mask for flags component of FCGI_BeginRequestBody
-     */
-    public static final int FCGI_KEEP_CONN  = 1;
+  /**
+   * header length
+   */
+  public static final int FCGI_HEADER_LEN = 8;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_BEGIN_REQUEST = 1;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_ABORT_REQUEST = 2;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_END_REQUEST = 3;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_PARAMS = 4;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_STDIN = 5;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_STDOUT = 6;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_STDERR = 7;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_DATA = 8;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_GET_VALUES = 9;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_GET_VALUES_RESULT = 10;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final int FCGI_UNKNOWN_TYPE = 11;
+  /**
+   * Values for type component of FCGI_Header
+   */
+  public static final byte [] FCGI_EMPTY_RECORD = new byte [0];
 
-    /**
-     * Values for role component of FCGI_BeginRequestBody
-     */
-    public static final int FCGI_RESPONDER  = 1;
-    /**
-     * Values for role component of FCGI_BeginRequestBody
-     */
-    public static final int FCGI_AUTHORIZER = 2;
-    /**
-     * Values for role component of FCGI_BeginRequestBody
-     */
-    public static final int FCGI_FILTER     = 3;
+  /**
+   * Mask for flags component of FCGI_BeginRequestBody
+   */
+  public static final int FCGI_KEEP_CONN = 1;
 
-    /**
-     * The Fast CGI default port
-     */ 
-    public static final int FCGI_PORT = 9667;
+  /**
+   * Values for role component of FCGI_BeginRequestBody
+   */
+  public static final int FCGI_RESPONDER = 1;
+  /**
+   * Values for role component of FCGI_BeginRequestBody
+   */
+  public static final int FCGI_AUTHORIZER = 2;
+  /**
+   * Values for role component of FCGI_BeginRequestBody
+   */
+  public static final int FCGI_FILTER = 3;
 
-    /**
-     * This controls how many child processes the PHP process spawns.
-     * Default is 5. The value should be less than THREAD_POOL_MAX_SIZE
-     * @see php.java.bridge.Util#THREAD_POOL_MAX_SIZE
-     */
-    public static final String PHP_FCGI_CONNECTION_POOL_SIZE = "5"; // should be less than Util.THREAD_POOL_MAX_SIZE;
+  /**
+   * The Fast CGI default port
+   */
+  public static final int FCGI_PORT = 9667;
 
-    /**
-     * This controls how long the pool waits for a PHP script to terminate.
-     * Default is -1, which means: "wait forever".
-     */
-    public static final String PHP_FCGI_CONNECTION_POOL_TIMEOUT = "-1"; // no timeout
+  /**
+   * This controls how many child processes the PHP process spawns. Default is
+   * 5. The value should be less than THREAD_POOL_MAX_SIZE
+   * 
+   * @see php.java.bridge.Util#THREAD_POOL_MAX_SIZE
+   */
+  public static final String PHP_FCGI_CONNECTION_POOL_SIZE = "5"; // should be
+                                                                  // less than
+                                                                  // Util.THREAD_POOL_MAX_SIZE;
 
-    /**
-     * This controls how many requests each child process will handle before
-     * exitting. When one process exits, another will be created. Default is 5000.
-     */
-    public static final String PHP_FCGI_MAX_REQUESTS = "5000";
+  /**
+   * This controls how long the pool waits for a PHP script to terminate.
+   * Default is -1, which means: "wait forever".
+   */
+  public static final String PHP_FCGI_CONNECTION_POOL_TIMEOUT = "-1"; // no
+                                                                      // timeout
 
-    /**
-     * The default channel name on Windows
-     */
-    public static final String FCGI_PIPE = NPChannelFactory.PREFIX +"JavaBridge@9667";
+  /**
+   * This controls how many requests each child process will handle before
+   * exitting. When one process exits, another will be created. Default is 5000.
+   */
+  public static final String PHP_FCGI_MAX_REQUESTS = "5000";
+
+  /**
+   * The default channel name on Windows
+   */
+  public static final String FCGI_PIPE = NPChannelFactory.PREFIX + "JavaBridge@9667";
 }

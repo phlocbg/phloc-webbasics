@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -30,42 +47,52 @@ import java.io.RandomAccessFile;
 
 import php.java.bridge.NotImplementedException;
 
-class RandomAccessFileOutputStream extends OutputStream {
-    private final NPChannel channel;
-    private RandomAccessFile raFile;
+class RandomAccessFileOutputStream extends OutputStream
+{
+  private final NPChannel channel;
+  private final RandomAccessFile raFile;
 
-    RandomAccessFileOutputStream(NPChannel channel, RandomAccessFile file) {
-        this.channel = channel;
-        this.raFile = file;
-    }
+  RandomAccessFileOutputStream (final NPChannel channel, final RandomAccessFile file)
+  {
+    this.channel = channel;
+    this.raFile = file;
+  }
 
-    /**
-     * @see java.io.OutputStream#close()
-     */
-    public void close() throws IOException {
-        if(this.channel.readIsClosed)
-	    this.raFile.close();
-        this.channel.writeIsClosed=true;	
-    }
+  /**
+   * @see java.io.OutputStream#close()
+   */
+  @Override
+  public void close () throws IOException
+  {
+    if (this.channel.readIsClosed)
+      this.raFile.close ();
+    this.channel.writeIsClosed = true;
+  }
 
-    /**
-     * @see java.io.OutputStream#write(byte[])
-     */
-    public void write(byte[] b) throws IOException {
-        this.raFile.write(b);
-    }
+  /**
+   * @see java.io.OutputStream#write(byte[])
+   */
+  @Override
+  public void write (final byte [] b) throws IOException
+  {
+    this.raFile.write (b);
+  }
 
-    /**
-     * @see java.io.OutputStream#write(byte[], int, int)
-     */
-    public void write(byte[] b, int off, int len) throws IOException {
-        this.raFile.write(b, off, len);
-    }
+  /**
+   * @see java.io.OutputStream#write(byte[], int, int)
+   */
+  @Override
+  public void write (final byte [] b, final int off, final int len) throws IOException
+  {
+    this.raFile.write (b, off, len);
+  }
 
-    /**
-     * @see java.io.OutputStream#write(int)
-     */
-    public void write(int b) throws IOException {
-	throw new NotImplementedException();
-    }
+  /**
+   * @see java.io.OutputStream#write(int)
+   */
+  @Override
+  public void write (final int b) throws IOException
+  {
+    throw new NotImplementedException ();
+  }
 }

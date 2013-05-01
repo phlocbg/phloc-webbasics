@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -36,51 +53,71 @@ import php.java.bridge.Util;
  * 
  * @author jostb
  */
-public class ChunkedOutputStream extends FilterOutputStream {
+public class ChunkedOutputStream extends FilterOutputStream
+{
 
-    /**
-     * Create new new chunked output stream
-     * @param out
-     */
-    public ChunkedOutputStream(OutputStream out) {
-	super(new BufferedOutputStream(out));
+  /**
+   * Create new new chunked output stream
+   * 
+   * @param out
+   */
+  public ChunkedOutputStream (final OutputStream out)
+  {
+    super (new BufferedOutputStream (out));
+  }
+
+  private static final byte [] RN0 = "0\r\n\r\n".getBytes ();
+
+  private void writeEOF () throws IOException
+  {
+    out.write (RN0);
+  }
+
+  private final byte [] buf = new byte [8];
+
+  /**
+   * Write a length as hex digits.
+   * 
+   * @param length
+   *        the length, must be > 0
+   * @throws IOException
+   */
+  private void writeHex (int length) throws IOException
+  {
+    int i = buf.length - 1;
+    for (; length > 0; i--)
+    {
+      buf[i] = Util.HEX_DIGITS[0xF & length];
+      length >>>= 4;
     }
-    private static final byte[] RN0 = "0\r\n\r\n".getBytes();
-    private void writeEOF() throws IOException {
-	out.write(RN0);
+    i++;
+    out.write (buf, i, buf.length - i);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void write (final byte [] buf, final int pos, final int len) throws IOException
+  {
+    if (len == 0)
+    {
+      writeEOF ();
     }
-    private byte[] buf = new byte[8];
-    /**
-     * Write a length as hex digits.
-     * @param length the length, must be > 0
-     * @throws IOException
-     */
-    private void writeHex(int length) throws IOException {
-	int i = buf.length -1;
-	for (; length > 0; i--) {
-	    buf[i] = Util.HEX_DIGITS[0xF & length];
-	    length >>>= 4;
-	}
-	i++;
-	out.write(buf, i, buf.length-i);
+    else
+    {
+      writeHex (len);
+      out.write (Util.RN);
+      out.write (buf, pos, len);
+      out.write (Util.RN);
     }
-    /**{@inheritDoc}*/
-    public void write(byte[] buf, int pos, int len) throws IOException {
-    	if (len==0) { 
-    	    writeEOF();
-    	} else {
-    	    writeHex(len);
-    	    out.write(Util.RN);
-    	    out.write(buf, pos, len);
-    	    out.write(Util.RN);
-    	}
-	out.flush();
-    }
-    /**
-     * Write trailing 0\r\n and flush the underlying output stream 
-     */
-    public void eof() throws IOException {
-	writeEOF();
-	super.flush();
-    }
+    out.flush ();
+  }
+
+  /**
+   * Write trailing 0\r\n and flush the underlying output stream
+   */
+  public void eof () throws IOException
+  {
+    writeEOF ();
+    super.flush ();
+  }
 }

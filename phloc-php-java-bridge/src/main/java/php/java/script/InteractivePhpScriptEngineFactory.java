@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 package php.java.script;
 
@@ -29,38 +46,50 @@ import javax.script.ScriptEngine;
  * Create a standalone interactive PHP script engines.
  */
 
-public class InteractivePhpScriptEngineFactory extends InvocablePhpScriptEngineFactory {
+public class InteractivePhpScriptEngineFactory extends InvocablePhpScriptEngineFactory
+{
 
-    protected class Factory extends PhpScriptEngineFactory.Factory {
-	public Factory(boolean hasCloseable) {
-	    super(hasCloseable);
-        }
-
-	public ScriptEngine create () {
-	    if (hasCloseable) {
-		return new CloseableInteractivePhpScriptEngine(InteractivePhpScriptEngineFactory.this);
-	    }
-	    else {
-		return new InteractivePhpScriptEngine(InteractivePhpScriptEngineFactory.this);
-	    }
-	}
-    }
-    
-    /**
-     * Create a new EngineFactory
-     */
-    public InteractivePhpScriptEngineFactory () {
-	try {
-	    Class.forName("java.io.Closeable");
-	    factory = new Factory(true);
-	} catch (ClassNotFoundException e) {
-	    factory = new Factory(false);
-	}
+  protected class Factory extends PhpScriptEngineFactory.Factory
+  {
+    public Factory (final boolean hasCloseable)
+    {
+      super (hasCloseable);
     }
 
+    @Override
+    public ScriptEngine create ()
+    {
+      if (hasCloseable)
+      {
+        return new CloseableInteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
+      }
+      else
+      {
+        return new InteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
+      }
+    }
+  }
 
-  /**{@inheritDoc}*/
-  public String getLanguageName() {
+  /**
+   * Create a new EngineFactory
+   */
+  public InteractivePhpScriptEngineFactory ()
+  {
+    try
+    {
+      Class.forName ("java.io.Closeable");
+      factory = new Factory (true);
+    }
+    catch (final ClassNotFoundException e)
+    {
+      factory = new Factory (false);
+    }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getLanguageName ()
+  {
     return "php-interactive";
   }
 }

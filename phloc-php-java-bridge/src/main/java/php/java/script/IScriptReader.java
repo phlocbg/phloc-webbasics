@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -24,7 +41,6 @@ package php.java.script;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
@@ -33,26 +49,35 @@ import php.java.bridge.Util;
 import php.java.bridge.http.HeaderParser;
 
 /**
- * Read data from a URL or from a servlet and write the result to the output stream and a header parser.
+ * Read data from a URL or from a servlet and write the result to the output
+ * stream and a header parser.
  * 
  * @author jostb
- *
  */
-public interface IScriptReader {
+public interface IScriptReader
+{
 
-    /** These header values appear in the environment map passed to PHP */
-    public static final String[] HEADER = new String[]{Util.X_JAVABRIDGE_CONTEXT, Util.X_JAVABRIDGE_OVERRIDE_HOSTS, 
-	Util.X_JAVABRIDGE_INCLUDE_ONLY, Util.X_JAVABRIDGE_INCLUDE, Util.X_JAVABRIDGE_REDIRECT, Util.X_JAVABRIDGE_OVERRIDE_HOSTS_REDIRECT};
+  /** These header values appear in the environment map passed to PHP */
+  public static final String [] HEADER = new String [] { Util.X_JAVABRIDGE_CONTEXT,
+                                                        Util.X_JAVABRIDGE_OVERRIDE_HOSTS,
+                                                        Util.X_JAVABRIDGE_INCLUDE_ONLY,
+                                                        Util.X_JAVABRIDGE_INCLUDE,
+                                                        Util.X_JAVABRIDGE_REDIRECT,
+                                                        Util.X_JAVABRIDGE_OVERRIDE_HOSTS_REDIRECT };
 
-    /**
-     * Read from the URL and write the data to out.
-     * @param env The environment, must contain values for X_JAVABRIDGE_CONTEXT. It may contain X_JAVABRIDGE_OVERRIDE_HOSTS.
-     * @param out The OutputStream.
-     * @param headerParser The header parser
-     * @throws IOException
-     * @throws ServletException 
-     */
-    public abstract void read(Map env, OutputStream out,
-	    HeaderParser headerParser) throws IOException;
+  /**
+   * Read from the URL and write the data to out.
+   * 
+   * @param env
+   *        The environment, must contain values for X_JAVABRIDGE_CONTEXT. It
+   *        may contain X_JAVABRIDGE_OVERRIDE_HOSTS.
+   * @param out
+   *        The OutputStream.
+   * @param headerParser
+   *        The header parser
+   * @throws IOException
+   * @throws ServletException
+   */
+  public abstract void read (Map env, OutputStream out, HeaderParser headerParser) throws IOException;
 
 }

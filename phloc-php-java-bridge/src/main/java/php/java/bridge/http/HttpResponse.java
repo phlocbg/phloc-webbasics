@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge.http;
@@ -36,107 +53,148 @@ import php.java.bridge.Util;
 
 /**
  * A simple HTTP response implementation.
+ * 
  * @author jostb
- *
  */
-public class HttpResponse {
-	
-    private HashMap headers;
-    private OutputStream outputStream;
-	
-    private boolean headersWritten;
+public class HttpResponse
+{
 
-    /**
-     * Create a new HTTP response with the given OutputStream
-     * @param outputStream The OutputStream.
-   	/*  */
-    public HttpResponse(OutputStream outputStream) {
-	this.headers = new HashMap();
-	
-	this.outputStream = new BufferedOutputStream (outputStream){ 
-	    public void write (byte buf[], int pos, int len) throws IOException {
-		if (!headersWritten) {
-		    headersWritten = true;
-		    writeHeaders();
-		}
-		super.write(buf, pos, len);
-	    }
-	};
-    }
-    /**
-     * Set the response header
-     * @param string The header key
-     * @param val The header value.
-     */
-    public void setHeader(String string, String val) {
-	headers.put(string, val);
-    }
+  private final HashMap headers;
+  private OutputStream outputStream;
 
-    /**
-     * Returns the OutputStream of the response. setContentLength() must be called before.
-     * @return The OutputStream
-     * @see HttpRequest#setContentLength(int)
-     */
-    public OutputStream getOutputStream() {
-	return outputStream;
-    }
+  private boolean headersWritten;
 
-    /**
-     * Set the response status. Not implemented.
-     * @param code
-     */
-    public void setStatus(int code) {
-	throw new NotImplementedException();
-    }
+  /**
+   * Create a new HTTP response with the given OutputStream
+   * 
+   * @param outputStream
+   *        The OutputStream. /*
+   */
+  public HttpResponse (final OutputStream outputStream)
+  {
+    this.headers = new HashMap ();
 
-    /**
-     * Add a response header, in this implementation identical to setHeader
-     * @param string The header
-     * @param string2 The header value
-     * @see HttpResponse#setHeader(String, String)
-     */
-    public void addHeader(String string, String string2) {
-	setHeader(string, string2);
-    }
+    this.outputStream = new BufferedOutputStream (outputStream)
+    {
+      @Override
+      public void write (final byte buf[], final int pos, final int len) throws IOException
+      {
+        if (!headersWritten)
+        {
+          headersWritten = true;
+          writeHeaders ();
+        }
+        super.write (buf, pos, len);
+      }
+    };
+  }
 
-    private final byte[] h1 = Util.toBytes("HTTP/1.0 200 OK\r\n"); 
-    private final byte[] h2 = Util.toBytes("Host: localhost\r\nConnection: close\r\n"); 
-    private final byte[] h4 = Util.toBytes(": ");
-    private void writeHeaders() throws IOException {
-    	java.io.ByteArrayOutputStream out = new ByteArrayOutputStream();
-    	out.write(h1);
-    	out.write(h2);
-    	for(Iterator ii = headers.keySet().iterator(); ii.hasNext(); ) {
-	    Object key = ii.next();
-	    Object val = headers.get(key);
-	    out.write(Util.toBytes((String)key));
-	    out.write(h4);
-	    out.write(Util.toBytes((String)val));
-	    out.write(Util.RN);
-    	}
-    	out.write(Util.RN);
-    	out.writeTo(outputStream);
-    }
-    /**
-     * Set the content length of the response. Sets the "Content-Length" header value.
-     * @param length The content length
-     * @throws IOException
-     * @see HttpResponse#getOutputStream()
-     */
-    public void setContentLength(int length) throws IOException {
-	setHeader("Content-Length", String.valueOf(length));
-    }
+  /**
+   * Set the response header
+   * 
+   * @param string
+   *        The header key
+   * @param val
+   *        The header value.
+   */
+  public void setHeader (final String string, final String val)
+  {
+    headers.put (string, val);
+  }
 
-    /** Close the response 
-     * @throws IOException */
-    public void close() throws IOException {
-	try {
-	    if(outputStream!=null) outputStream.close();
-	} finally {
-	    outputStream = null;
-	}
+  /**
+   * Returns the OutputStream of the response. setContentLength() must be called
+   * before.
+   * 
+   * @return The OutputStream
+   * @see HttpRequest#setContentLength(int)
+   */
+  public OutputStream getOutputStream ()
+  {
+    return outputStream;
+  }
+
+  /**
+   * Set the response status. Not implemented.
+   * 
+   * @param code
+   */
+  public void setStatus (final int code)
+  {
+    throw new NotImplementedException ();
+  }
+
+  /**
+   * Add a response header, in this implementation identical to setHeader
+   * 
+   * @param string
+   *        The header
+   * @param string2
+   *        The header value
+   * @see HttpResponse#setHeader(String, String)
+   */
+  public void addHeader (final String string, final String string2)
+  {
+    setHeader (string, string2);
+  }
+
+  private final byte [] h1 = Util.toBytes ("HTTP/1.0 200 OK\r\n");
+  private final byte [] h2 = Util.toBytes ("Host: localhost\r\nConnection: close\r\n");
+  private final byte [] h4 = Util.toBytes (": ");
+
+  private void writeHeaders () throws IOException
+  {
+    final java.io.ByteArrayOutputStream out = new ByteArrayOutputStream ();
+    out.write (h1);
+    out.write (h2);
+    for (final Iterator ii = headers.keySet ().iterator (); ii.hasNext ();)
+    {
+      final Object key = ii.next ();
+      final Object val = headers.get (key);
+      out.write (Util.toBytes ((String) key));
+      out.write (h4);
+      out.write (Util.toBytes ((String) val));
+      out.write (Util.RN);
     }
-    public void flushBuffer() throws IOException {
-	if (outputStream != null) outputStream.flush();
+    out.write (Util.RN);
+    out.writeTo (outputStream);
+  }
+
+  /**
+   * Set the content length of the response. Sets the "Content-Length" header
+   * value.
+   * 
+   * @param length
+   *        The content length
+   * @throws IOException
+   * @see HttpResponse#getOutputStream()
+   */
+  public void setContentLength (final int length) throws IOException
+  {
+    setHeader ("Content-Length", String.valueOf (length));
+  }
+
+  /**
+   * Close the response
+   * 
+   * @throws IOException
+   */
+  public void close () throws IOException
+  {
+    try
+    {
+      if (outputStream != null)
+        outputStream.close ();
     }
+    finally
+    {
+      outputStream = null;
+    }
+  }
+
+  public void flushBuffer () throws IOException
+  {
+    if (outputStream != null)
+      outputStream.flush ();
+  }
 }

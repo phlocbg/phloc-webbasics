@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
@@ -25,24 +42,28 @@ package php.java.bridge;
  */
 
 /**
- * Classes which implement this interface are able to call php code.
- * Invocable PHP scripts must end with the line:<br>
+ * Classes which implement this interface are able to call php code. Invocable
+ * PHP scripts must end with the line:<br>
  * <code>
  * java_context()-&gt;call(java_closure());
- * </code>
- * <br>
+ * </code> <br>
+ * 
  * @see php.java.bridge.PhpProcedure#invoke(Object, String, Object[])
- * @see php.java.bridge.PhpProcedure#invoke(Object, java.lang.reflect.Method, Object[])
+ * @see php.java.bridge.PhpProcedure#invoke(Object, java.lang.reflect.Method,
+ *      Object[])
  * @author jostb
- *
  */
-public interface Invocable {
-	
-    /**
-     * Call the java continuation with the current continuation <code>kont</code> as its argument.
-     * @param kont The continuation.
-     * @return True on success, false otherwise.
-     * @throws Exception
-     */
-    public boolean call(Object kont) throws Exception;
+public interface Invocable
+{
+
+  /**
+   * Call the java continuation with the current continuation <code>kont</code>
+   * as its argument.
+   * 
+   * @param kont
+   *        The continuation.
+   * @return True on success, false otherwise.
+   * @throws Exception
+   */
+  public boolean call (Object kont) throws Exception;
 }

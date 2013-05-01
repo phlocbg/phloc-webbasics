@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 package php.java.servlet.fastcgi;
 
@@ -35,36 +52,59 @@ import php.java.bridge.http.IFCGIProcess;
  * Represents the FastCGI process.
  * 
  * @author jostb
- *
  */
-public class FCGIProcess extends Util.Process implements IFCGIProcess {
-    String realPath;
-    public FCGIProcess(String[] args, boolean includeJava, String cgiDir, String pearDir, String webInfDir, File homeDir, Map env, String realPath, boolean tryOtherLocations, boolean preferSystemPhp) throws IOException {
-	super(args, includeJava, cgiDir, pearDir, webInfDir, homeDir, env, tryOtherLocations, preferSystemPhp);
-	this.realPath = realPath;
+public class FCGIProcess extends Util.Process implements IFCGIProcess
+{
+  String realPath;
+
+  public FCGIProcess (final String [] args,
+                      final boolean includeJava,
+                      final String cgiDir,
+                      final String pearDir,
+                      final String webInfDir,
+                      final File homeDir,
+                      final Map env,
+                      final String realPath,
+                      final boolean tryOtherLocations,
+                      final boolean preferSystemPhp) throws IOException
+  {
+    super (args, includeJava, cgiDir, pearDir, webInfDir, homeDir, env, tryOtherLocations, preferSystemPhp);
+    this.realPath = realPath;
+  }
+
+  @Override
+  protected String [] getArgumentArray (final String [] php, final String [] args)
+  {
+    final LinkedList buf = new LinkedList ();
+    if (Util.USE_SH_WRAPPER)
+    {
+      buf.add ("/bin/sh");
+      buf.add (realPath + File.separator + Util.osArch + "-" + Util.osName + File.separator + "launcher.sh");
+      buf.addAll (java.util.Arrays.asList (php));
+      for (int i = 1; i < args.length; i++)
+      {
+        buf.add (args[i]);
+      }
     }
-    protected String[] getArgumentArray(String[] php, String[] args) {
-        LinkedList buf = new LinkedList();
-        if(Util.USE_SH_WRAPPER) {
-	    buf.add("/bin/sh");
-	    buf.add(realPath+File.separator+Util.osArch+"-"+Util.osName+File.separator+"launcher.sh");
-	    buf.addAll(java.util.Arrays.asList(php));
-	    for(int i=1; i<args.length; i++) {
-		buf.add(args[i]);
-	    }
-        } else {
-	    buf.add(realPath+File.separator+Util.osArch+"-"+Util.osName+File.separator+"launcher.exe");
-	    buf.addAll(java.util.Arrays.asList(php));
-	    for(int i=1; i<args.length; i++) {
-		buf.add(args[i]);
-	    }
-	}
-        return (String[]) buf.toArray(new String[buf.size()]);
+    else
+    {
+      buf.add (realPath + File.separator + Util.osArch + "-" + Util.osName + File.separator + "launcher.exe");
+      buf.addAll (java.util.Arrays.asList (php));
+      for (int i = 1; i < args.length; i++)
+      {
+        buf.add (args[i]);
+      }
     }
-    /* (non-Javadoc)
-     * @see php.java.servlet.fastcgi.IFCGIProcess#start()
-     */
-    public void start() throws NullPointerException, IOException {
-        super.start();
-    }
+    return (String []) buf.toArray (new String [buf.size ()]);
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see php.java.servlet.fastcgi.IFCGIProcess#start()
+   */
+  @Override
+  public void start () throws NullPointerException, IOException
+  {
+    super.start ();
+  }
 }

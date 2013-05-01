@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 /*
@@ -29,130 +46,185 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Cache [Entry(method, parameters) -> Method].  No
- * synchronization, so use this class per thread or per request
- * only.
+ * Cache [Entry(method, parameters) -> Method]. No synchronization, so use this
+ * class per thread or per request only.
  */
-final class ConstructorCache {
-    Map map;
-    static final Entry noCache = new NoCache();
-    
-    private void init() {
-        map = new HashMap();
-    }
-    /**
-     * Create a new ConstructorCache
-     */
-    public ConstructorCache() {
-        init();
-    }
-    private static class CachedConstructor {
-      private Constructor method;
-      private Class[] typeCache;
-      public CachedConstructor(Constructor method) {
-          this.method = method;
-      }
-      public Constructor get() {
-          return method;
-      }
-      public Class[] getParameterTypes() {
-          if(typeCache!=null) return typeCache;
-          return typeCache = method.getParameterTypes();
-      }
-    }
-     /**
-     * A cache entry
-     */
-    public static class Entry {
-	String name;
-	Class params[];
-		
-	protected Entry () {}
+final class ConstructorCache
+{
+  Map map;
+  static final Entry noCache = new NoCache ();
 
-	protected Entry (String name, Class params[]) {
-	    this.name = name; // intern() is ~10% slower than lazy string comparison
-	    this.params = params;
-	}
-	private boolean hasResult = false;
-	private int result = 1;
-	public int hashCode() {
-	    if(hasResult) return result;
-	    for(int i=0; i<params.length; i++) {
-		result = result * 31 + (params[i] == null ? 0 : params[i].hashCode());
-	    }
-	    result = result * 31 + name.hashCode();
-	    hasResult = true;
-	    return result;
-	}
-	public boolean equals(Object o) {
-	    Entry that = (Entry) o;
-	    if(params.length != that.params.length) return false;
-	    if(!name.equals(that.name)) return false;
-	    for(int i=0; i<params.length; i++) {
-		if(params[i] != that.params[i]) return false;
-	    }
-	    return true;
-	}
-	private CachedConstructor cache;
-	public void setMethod(CachedConstructor cache) {
-	    this.cache = cache;
-	}
-	public Class[] getParameterTypes(Constructor method) {
-	    return cache.getParameterTypes();
-	}
-    }
-    private static final class NoCache extends Entry {
-	public Class[] getParameterTypes(Constructor method) {
-	    return method.getParameterTypes();
-	}        
+  private void init ()
+  {
+    map = new HashMap ();
+  }
+
+  /**
+   * Create a new ConstructorCache
+   */
+  public ConstructorCache ()
+  {
+    init ();
+  }
+
+  private static class CachedConstructor
+  {
+    private final Constructor method;
+    private Class [] typeCache;
+
+    public CachedConstructor (final Constructor method)
+    {
+      this.method = method;
     }
 
-    /**
-     * Get the constructor for the entry
-     * @param entry The entry
-     * @return The constructor
-     */
-    public Constructor get(Entry entry) {
-  	if(entry==noCache) return null;
-	CachedConstructor cache = (CachedConstructor)map.get(entry);
-	if(cache==null) return null;
-	entry.setMethod(cache);
-	return cache.get();
-    }
-    
-    /**
-     * Store a constructor with an entry
-     * @param entry The cache entry
-     * @param method The constructor
-     */
-    public void put(Entry entry, Constructor method) {
-  	if(entry!=noCache) {
-  	    CachedConstructor cache = new CachedConstructor(method);
-  	    entry.setMethod(cache);
-  	    map.put(entry, cache);
-  	}
-    }
-    
-    /**
-     * Get a cache entry from a name args pair
-     * @param name The constructor name
-     * @param args The arguments
-     * @return A cache entry.
-     */
-    public Entry getEntry (String name, Object args[]){
-    	Class params[] = new Class[args.length];
-    	for (int i=0; i<args.length; i++) {
-	    Class c = args[i] == null ? null : args[i].getClass();
-	    if(c == PhpArray.class) return noCache;
-	    params[i] = c;
-    	}
-	return new Entry(name, params);
+    public Constructor get ()
+    {
+      return method;
     }
 
-    /**
-     * Removes all mappings from this cache.
-     */
-    public void clear() {
-       init();
+    public Class [] getParameterTypes ()
+    {
+      if (typeCache != null)
+        return typeCache;
+      return typeCache = method.getParameterTypes ();
     }
+  }
+
+  /**
+   * A cache entry
+   */
+  public static class Entry
+  {
+    String name;
+    Class params[];
+
+    protected Entry ()
+    {}
+
+    protected Entry (final String name, final Class params[])
+    {
+      this.name = name; // intern() is ~10% slower than lazy string comparison
+      this.params = params;
+    }
+
+    private boolean hasResult = false;
+    private int result = 1;
+
+    @Override
+    public int hashCode ()
+    {
+      if (hasResult)
+        return result;
+      for (final Class param : params)
+      {
+        result = result * 31 + (param == null ? 0 : param.hashCode ());
+      }
+      result = result * 31 + name.hashCode ();
+      hasResult = true;
+      return result;
+    }
+
+    @Override
+    public boolean equals (final Object o)
+    {
+      final Entry that = (Entry) o;
+      if (params.length != that.params.length)
+        return false;
+      if (!name.equals (that.name))
+        return false;
+      for (int i = 0; i < params.length; i++)
+      {
+        if (params[i] != that.params[i])
+          return false;
+      }
+      return true;
+    }
+
+    private CachedConstructor cache;
+
+    public void setMethod (final CachedConstructor cache)
+    {
+      this.cache = cache;
+    }
+
+    public Class [] getParameterTypes (final Constructor method)
+    {
+      return cache.getParameterTypes ();
+    }
+  }
+
+  private static final class NoCache extends Entry
+  {
+    @Override
+    public Class [] getParameterTypes (final Constructor method)
+    {
+      return method.getParameterTypes ();
+    }
+  }
+
+  /**
+   * Get the constructor for the entry
+   * 
+   * @param entry
+   *        The entry
+   * @return The constructor
+   */
+  public Constructor get (final Entry entry)
+  {
+    if (entry == noCache)
+      return null;
+    final CachedConstructor cache = (CachedConstructor) map.get (entry);
+    if (cache == null)
+      return null;
+    entry.setMethod (cache);
+    return cache.get ();
+  }
+
+  /**
+   * Store a constructor with an entry
+   * 
+   * @param entry
+   *        The cache entry
+   * @param method
+   *        The constructor
+   */
+  public void put (final Entry entry, final Constructor method)
+  {
+    if (entry != noCache)
+    {
+      final CachedConstructor cache = new CachedConstructor (method);
+      entry.setMethod (cache);
+      map.put (entry, cache);
+    }
+  }
+
+  /**
+   * Get a cache entry from a name args pair
+   * 
+   * @param name
+   *        The constructor name
+   * @param args
+   *        The arguments
+   * @return A cache entry.
+   */
+  public Entry getEntry (final String name, final Object args[])
+  {
+    final Class params[] = new Class [args.length];
+    for (int i = 0; i < args.length; i++)
+    {
+      final Class c = args[i] == null ? null : args[i].getClass ();
+      if (c == PhpArray.class)
+        return noCache;
+      params[i] = c;
+    }
+    return new Entry (name, params);
+  }
+
+  /**
+   * Removes all mappings from this cache.
+   */
+  public void clear ()
+  {
+    init ();
+  }
 }

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.bridge;
@@ -29,30 +46,45 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-final class PhpArray extends AbstractMap { // for PHP's array()
-    private static final long serialVersionUID = 3905804162838115892L;
-    private TreeMap t = new TreeMap(Request.PHP_ARRAY_KEY_COMPARATOR);
-    private HashMap m = null;
-    public Object put(Object key, Object value) {
-        if(m!=null) return m.put(key, value);
-        try {
-            return t.put((Integer)key, value);
-        } catch (ClassCastException e) {
-            m = new HashMap(t);
-            t = null;
-            return m.put(key, value);
-        }
-    }
-    public Set entrySet() {
-        if(t!=null) return t.entrySet();
-        return m.entrySet();
-    }
+final class PhpArray extends AbstractMap
+{ // for PHP's array()
+  private static final long serialVersionUID = 3905804162838115892L;
+  private TreeMap t = new TreeMap (Request.PHP_ARRAY_KEY_COMPARATOR);
+  private HashMap m = null;
 
-    public int arraySize() {
-        if(t!=null) {
-    	if(t.size()==0) return 0;
-    	return 1+((Integer)t.lastKey()).intValue();
-        }
-        throw new IllegalArgumentException("The passed PHP \"array\" is not a sequence but a dictionary");
+  @Override
+  public Object put (final Object key, final Object value)
+  {
+    if (m != null)
+      return m.put (key, value);
+    try
+    {
+      return t.put (key, value);
     }
+    catch (final ClassCastException e)
+    {
+      m = new HashMap (t);
+      t = null;
+      return m.put (key, value);
+    }
+  }
+
+  @Override
+  public Set entrySet ()
+  {
+    if (t != null)
+      return t.entrySet ();
+    return m.entrySet ();
+  }
+
+  public int arraySize ()
+  {
+    if (t != null)
+    {
+      if (t.size () == 0)
+        return 0;
+      return 1 + ((Integer) t.lastKey ()).intValue ();
+    }
+    throw new IllegalArgumentException ("The passed PHP \"array\" is not a sequence but a dictionary");
+  }
 }

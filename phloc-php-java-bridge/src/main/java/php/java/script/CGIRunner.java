@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.script;
@@ -39,75 +56,134 @@ import php.java.bridge.http.HeaderParser;
 import php.java.bridge.http.OutputStreamFactory;
 
 /**
- * This class can be used to run a PHP CGI binary. Used only when
- * running local php scripts.  To allocate and invoke remote scripts
- * please use a HttpProxy and a URLReader instead.
- *  
+ * This class can be used to run a PHP CGI binary. Used only when running local
+ * php scripts. To allocate and invoke remote scripts please use a HttpProxy and
+ * a URLReader instead.
+ * 
  * @author jostb
- *
  * @see php.java.bridge.http.HttpServer
  * @see php.java.script.URLReader
  * @see php.java.script.HttpProxy
  */
 
-public class CGIRunner extends Continuation {
+public class CGIRunner extends Continuation
+{
 
-    protected Reader reader;
-    protected CGIRunner(Reader reader, Map env, OutputStream out,
-            OutputStream err, HeaderParser headerParser,
-            ResultProxy resultProxy, ILogger logger) {
-	super(env, out, err, headerParser, resultProxy);
-	this.reader = reader;
+  protected Reader reader;
+
+  protected CGIRunner (final Reader reader,
+                       final Map env,
+                       final OutputStream out,
+                       final OutputStream err,
+                       final HeaderParser headerParser,
+                       final ResultProxy resultProxy,
+                       final ILogger logger)
+  {
+    super (env, out, err, headerParser, resultProxy);
+    this.reader = reader;
+  }
+
+  private Writer writer;
+
+  @Override
+  protected void doRun () throws IOException, Util.Process.PhpException
+  {
+    final Util.Process proc = Util.ProcessWithErrorHandler.start (new String [] { null },
+                                                                  false,
+                                                                  null,
+                                                                  null,
+                                                                  null,
+                                                                  null,
+                                                                  env,
+                                                                  true,
+                                                                  true,
+                                                                  err);
+
+    InputStream natIn = null;
+    try
+    {
+      natIn = proc.getInputStream ();
+      final OutputStream natOut = proc.getOutputStream ();
+      writer = new BufferedWriter (new OutputStreamWriter (natOut));
+
+      (new Thread ()
+      { // write the script asynchronously to avoid deadlock
+        public void doRun () throws IOException
+        {
+          final char [] cbuf = new char [Util.BUF_SIZE];
+          int n;
+          while ((n = reader.read (cbuf)) != -1)
+          {
+            // System.err.println("SCRIPT:::"+new String(cbuf, 0, n));
+            writer.write (cbuf, 0, n);
+          }
+        }
+
+        @Override
+        public void run ()
+        {
+          try
+          {
+            doRun ();
+          }
+          catch (final IOException e)
+          {
+            Util.printStackTrace (e);
+          }
+          finally
+          {
+            try
+            {
+              writer.close ();
+            }
+            catch (final IOException ex)
+            {
+              /* ignore */
+            }
+          }
+        }
+      }).start ();
+
+      final byte [] buf = new byte [Util.BUF_SIZE];
+      HeaderParser.parseBody (buf, natIn, new OutputStreamFactory ()
+      {
+        @Override
+        public OutputStream getOutputStream () throws IOException
+        {
+          return out;
+        }
+      }, headerParser);
+      proc.waitFor ();
+      resultProxy.setResult (proc.exitValue ());
+    }
+    catch (final IOException e)
+    {
+      Util.printStackTrace (e);
+      throw e;
+    }
+    catch (final InterruptedException e)
+    {
+      /* ignore */
+    }
+    finally
+    {
+      if (natIn != null)
+        try
+        {
+          natIn.close ();
+        }
+        catch (final IOException ex)
+        {/* ignore */}
+      try
+      {
+        proc.destroy ();
+      }
+      catch (final Exception e)
+      {
+        Util.printStackTrace (e);
+      }
     }
 
-    private Writer writer;
-    protected void doRun() throws IOException, Util.Process.PhpException {
-        Util.Process proc = Util.ProcessWithErrorHandler.start(new String[] {null}, false, null, null, null, null, env, true, true, err);
-
-	InputStream natIn = null;
-	try {
-	natIn = proc.getInputStream();
-	OutputStream natOut = proc.getOutputStream();
-	writer = new BufferedWriter(new OutputStreamWriter(natOut));
-
-	(new Thread() { // write the script asynchronously to avoid deadlock
-	    public void doRun() throws IOException {
-		char[] cbuf = new char[Util.BUF_SIZE]; 
-		int n;    
-		while((n = reader.read(cbuf))!=-1) {
-		    //System.err.println("SCRIPT:::"+new String(cbuf, 0, n));
-		    writer.write(cbuf, 0, n);
-		}
-	    }
-	    public void run() { 
-		    try {
-			    doRun(); 
-		    } catch (IOException e) {
-			    Util.printStackTrace(e);
-		    } finally {
-			    try {
-				    writer.close();
-			    } catch (IOException ex) {
-				    /*ignore*/
-			    }
-		    }
-	    }
-	}).start();
-
-	byte[] buf = new byte[Util.BUF_SIZE];
-	HeaderParser.parseBody(buf, natIn, new OutputStreamFactory() { public OutputStream getOutputStream() throws IOException {return out;}}, headerParser);
-	proc.waitFor();
-	resultProxy.setResult(proc.exitValue());
-	} catch (IOException e) {
-	    Util.printStackTrace(e);
-	    throw e;
-	} catch (InterruptedException e) {
-		/*ignore*/
-	} finally {
-	    if(natIn!=null) try {natIn.close();} catch (IOException ex) {/*ignore*/}
-	    try {proc.destroy(); } catch (Exception e) { Util.printStackTrace(e); }
-	}
-	
-	proc.checkError();
-    }
+    proc.checkError ();
+  }
 }

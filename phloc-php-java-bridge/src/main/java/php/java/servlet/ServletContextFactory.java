@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.servlet;
@@ -33,34 +50,61 @@ import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.IContextFactory;
 
 /**
- * Create session contexts for servlets.<p> In addition to the
- * standard ContextFactory this factory keeps a reference to the
- * HttpServletRequest.
- *
+ * Create session contexts for servlets.
+ * <p>
+ * In addition to the standard ContextFactory this factory keeps a reference to
+ * the HttpServletRequest.
+ * 
  * @see php.java.bridge.http.ContextFactory
  * @see php.java.bridge.http.ContextServer
  */
-public class ServletContextFactory extends SimpleServletContextFactory {
-    protected ServletContextFactory(Servlet servlet, ServletContext ctx,
-                        HttpServletRequest proxy, HttpServletRequest req,HttpServletResponse res) { 
-	super(servlet, ctx, proxy, req, res, true); 
-    }
-    /**{@inheritDoc}*/
-    public synchronized void waitFor(long timeout) throws InterruptedException {}
-    /**
-     * Create and add a new ContextFactory.
-     * @param servlet The servlet
-     * @param kontext The servlet context
-     * @param proxy The proxied request
-     * @param req The HttpServletRequest
-     * @param res The HttpServletResponse
-     * @return The created ContextFactory
-     */
-    public static IContextFactory addNew(ContextServer server, Servlet servlet, ServletContext kontext, HttpServletRequest proxy, HttpServletRequest req, HttpServletResponse res) {
-        if (server.isAvailable(PhpJavaServlet.getHeader("X_JAVABRIDGE_CHANNEL", req)))
-            return new ServletContextFactory(servlet, kontext, proxy, req, res);
-        else 
-           return RemoteHttpServletContextFactory.addNew(servlet, kontext, proxy, req, res, new ServletContextFactory(servlet, kontext, proxy, req, res));
-            
-    }	
+public class ServletContextFactory extends SimpleServletContextFactory
+{
+  protected ServletContextFactory (final Servlet servlet,
+                                   final ServletContext ctx,
+                                   final HttpServletRequest proxy,
+                                   final HttpServletRequest req,
+                                   final HttpServletResponse res)
+  {
+    super (servlet, ctx, proxy, req, res, true);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public synchronized void waitFor (final long timeout) throws InterruptedException
+  {}
+
+  /**
+   * Create and add a new ContextFactory.
+   * 
+   * @param servlet
+   *        The servlet
+   * @param kontext
+   *        The servlet context
+   * @param proxy
+   *        The proxied request
+   * @param req
+   *        The HttpServletRequest
+   * @param res
+   *        The HttpServletResponse
+   * @return The created ContextFactory
+   */
+  public static IContextFactory addNew (final ContextServer server,
+                                        final Servlet servlet,
+                                        final ServletContext kontext,
+                                        final HttpServletRequest proxy,
+                                        final HttpServletRequest req,
+                                        final HttpServletResponse res)
+  {
+    if (server.isAvailable (PhpJavaServlet.getHeader ("X_JAVABRIDGE_CHANNEL", req)))
+      return new ServletContextFactory (servlet, kontext, proxy, req, res);
+    else
+      return RemoteHttpServletContextFactory.addNew (servlet,
+                                                     kontext,
+                                                     proxy,
+                                                     req,
+                                                     res,
+                                                     new ServletContextFactory (servlet, kontext, proxy, req, res));
+
+  }
 }

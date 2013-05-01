@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /*-*- mode: Java; tab-width:8 -*-*/
 
 package php.java.servlet;
@@ -33,64 +50,98 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
- * A servlet response which writes its output to an internal buffer. The buffer can be fetched using
- * "getBufferContents()". May be used by remote PHP scripts (those accessing PhpJavaServlet) through the "java_context()->getHttpServletResponse()" API. 
- * Also used by the "java_virtual()" API.
+ * A servlet response which writes its output to an internal buffer. The buffer
+ * can be fetched using "getBufferContents()". May be used by remote PHP scripts
+ * (those accessing PhpJavaServlet) through the
+ * "java_context()->getHttpServletResponse()" API. Also used by the
+ * "java_virtual()" API.
  * 
  * @author jostb
- *
  */
-public class RemoteHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse {
-    
-    private ByteArrayOutputStream buffer;
+public class RemoteHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse
+{
 
-    public RemoteHttpServletResponse(HttpServletResponse res) {
-	super(res);
-	this.buffer = new ByteArrayOutputStream();
-    }
-    public byte[] getBufferContents() throws IOException {
-	committed = true;
-	flushBuffer();
-	return buffer.toByteArray();
-    }
-    public void flushBuffer() throws IOException {
-	getWriter().flush();
-    }
+  private final ByteArrayOutputStream buffer;
 
-    public int getBufferSize() {
-	return buffer.size();
-    }
+  public RemoteHttpServletResponse (final HttpServletResponse res)
+  {
+    super (res);
+    this.buffer = new ByteArrayOutputStream ();
+  }
 
-    private ServletOutputStream out = null;
-    public ServletOutputStream getOutputStream() throws IOException {
-	if (out!=null) return out;
-	return out = new ServletOutputStream() {
-	    public void write(byte[] arg0, int arg1, int arg2) throws IOException {
-		buffer.write(arg0, arg1, arg2);
-	    }
-	    public void write(int arg0) throws IOException {
-		buffer.write(arg0);
-	    }};
-    }
-    private PrintWriter writer = null;
-    public PrintWriter getWriter() throws IOException {
-	if (writer != null) return writer;
-        return writer = new PrintWriter(getOutputStream());
-    }
+  public byte [] getBufferContents () throws IOException
+  {
+    committed = true;
+    flushBuffer ();
+    return buffer.toByteArray ();
+  }
 
-    private boolean committed; 
-    public boolean isCommitted() {
-	return committed;
-    }
+  @Override
+  public void flushBuffer () throws IOException
+  {
+    getWriter ().flush ();
+  }
 
-    public void reset() {
-	buffer.reset();
-    }
+  @Override
+  public int getBufferSize ()
+  {
+    return buffer.size ();
+  }
 
-    public void resetBuffer() {
-	reset();
-    }
+  private ServletOutputStream out = null;
 
-    public void setBufferSize(int arg0) {
-    }
+  @Override
+  public ServletOutputStream getOutputStream () throws IOException
+  {
+    if (out != null)
+      return out;
+    return out = new ServletOutputStream ()
+    {
+      @Override
+      public void write (final byte [] arg0, final int arg1, final int arg2) throws IOException
+      {
+        buffer.write (arg0, arg1, arg2);
+      }
+
+      @Override
+      public void write (final int arg0) throws IOException
+      {
+        buffer.write (arg0);
+      }
+    };
+  }
+
+  private PrintWriter writer = null;
+
+  @Override
+  public PrintWriter getWriter () throws IOException
+  {
+    if (writer != null)
+      return writer;
+    return writer = new PrintWriter (getOutputStream ());
+  }
+
+  private boolean committed;
+
+  @Override
+  public boolean isCommitted ()
+  {
+    return committed;
+  }
+
+  @Override
+  public void reset ()
+  {
+    buffer.reset ();
+  }
+
+  @Override
+  public void resetBuffer ()
+  {
+    reset ();
+  }
+
+  @Override
+  public void setBufferSize (final int arg0)
+  {}
 }
