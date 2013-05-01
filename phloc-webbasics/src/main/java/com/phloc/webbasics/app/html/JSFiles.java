@@ -96,7 +96,7 @@ public class JSFiles
 
   public JSFiles (@Nonnull final IReadableResource aFile)
   {
-    final IMicroDocument aDoc = MicroReader.readMicroXML (aFile);
+    final IMicroDocument aDoc = aFile.exists () ? MicroReader.readMicroXML (aFile) : null;
     if (aDoc != null)
     {
       final IMicroElement eRoot = aDoc.getDocumentElement ();
