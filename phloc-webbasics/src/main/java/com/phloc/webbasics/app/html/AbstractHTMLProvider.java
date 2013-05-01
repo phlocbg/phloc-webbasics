@@ -49,17 +49,10 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
 
   @Nonnull
   @OverrideOnDemand
-  protected String getHTMLConfigMgrBasePath ()
-  {
-    return HTMLConfigManager.DEFAULT_BASE_PATH;
-  }
-
-  @Nonnull
-  @OverrideOnDemand
-  protected final HTMLConfigManager getHTMLConfigMgr ()
+  protected HTMLConfigManager getHTMLConfigMgr ()
   {
     if (m_aHTMLConfigMgr == null)
-      m_aHTMLConfigMgr = new HTMLConfigManager (getHTMLConfigMgrBasePath ());
+      m_aHTMLConfigMgr = new HTMLConfigManager (HTMLConfigManager.DEFAULT_BASE_PATH);
     return m_aHTMLConfigMgr;
   }
 
