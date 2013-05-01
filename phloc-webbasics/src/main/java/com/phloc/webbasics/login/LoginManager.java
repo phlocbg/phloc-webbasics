@@ -89,6 +89,20 @@ public class LoginManager
   {}
 
   /**
+   * Get the user instance of the specified login name.
+   * 
+   * @param sLoginName
+   *        The login name to use. May be <code>null</code>.
+   * @return <code>null</code> if no such user exists.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected IUser getUserOfLoginName (@Nullable final String sLoginName)
+  {
+    return AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+  }
+
+  /**
    * Main login
    * 
    * @param aRequestScope
@@ -118,7 +132,7 @@ public class LoginManager
         final String sLoginName = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
         final String sPassword = aRequestScope.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
 
-        final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+        final IUser aUser = getUserOfLoginName (sLoginName);
 
         // Try main login
         eLoginResult = aLUM.loginUser (aUser, sPassword, getAllRequiredRoleIDs ());
