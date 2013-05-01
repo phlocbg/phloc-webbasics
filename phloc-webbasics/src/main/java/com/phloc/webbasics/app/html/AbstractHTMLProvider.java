@@ -42,8 +42,26 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  */
 public abstract class AbstractHTMLProvider implements IHTMLProvider
 {
+  private HTMLConfigManager m_aHTMLConfigMgr;
+
   public AbstractHTMLProvider ()
   {}
+
+  @Nonnull
+  @OverrideOnDemand
+  protected HTMLConfigManager createHTMLConfigMgr ()
+  {
+    return new HTMLConfigManager (HTMLConfigManager.DEFAULT_BASE_PATH);
+  }
+
+  @Nonnull
+  @OverrideOnDemand
+  protected final HTMLConfigManager getHTMLConfigMgr ()
+  {
+    if (m_aHTMLConfigMgr == null)
+      m_aHTMLConfigMgr = createHTMLConfigMgr ();
+    return m_aHTMLConfigMgr;
+  }
 
   @Nonnull
   @OverrideOnDemand
@@ -64,7 +82,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @OverrideOnDemand
   protected Map <String, String> getAllMetaTags ()
   {
-    return HTMLConfigManager.getInstance ().getAllMetaTags ();
+    return getHTMLConfigMgr ().getAllMetaTags ();
   }
 
   @Nonnull
@@ -72,7 +90,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @OverrideOnDemand
   protected List <CSSFiles.Item> getAllCSSItems ()
   {
-    return HTMLConfigManager.getInstance ().getAllCSSItems ();
+    return getHTMLConfigMgr ().getAllCSSItems ();
   }
 
   @Nonnull
@@ -80,7 +98,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @OverrideOnDemand
   protected List <JSFiles.Item> getAllJSItems ()
   {
-    return HTMLConfigManager.getInstance ().getAllJSItems ();
+    return getHTMLConfigMgr ().getAllJSItems ();
   }
 
   /**

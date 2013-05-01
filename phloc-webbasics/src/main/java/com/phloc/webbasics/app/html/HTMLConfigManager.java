@@ -46,44 +46,52 @@ import com.phloc.commons.microdom.reader.XMLMapHandler;
  * @author Philip Helger
  */
 @Immutable
-public final class HTMLConfigManager
+public class HTMLConfigManager
 {
+  public static final String DEFAULT_BASE_PATH = "html/";
   /** Filename containing the CSS includes */
-  public static final String FILENAME_CSS_XML = "html/css.xml";
+  public static final String FILENAME_CSS_XML = "css.xml";
   /** Filename containing the JS includes */
-  public static final String FILENAME_JS_XML = "html/js.xml";
+  public static final String FILENAME_JS_XML = "js.xml";
   /** Filename containing the meta elements */
-  public static final String FILENAME_METATAGS_XML = "html/metatags.xml";
+  public static final String FILENAME_METATAGS_XML = "metatags.xml";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (HTMLConfigManager.class);
-  private static final HTMLConfigManager s_aInstance = new HTMLConfigManager ();
 
+  private final String m_sBasePath;
   private final List <CSSFiles.Item> m_aAllCSSItems;
   private final List <JSFiles.Item> m_aAllJSItems;
   private final Map <String, String> m_aAllMetaTags = new LinkedHashMap <String, String> ();
 
-  /**
-   * Do not call manually! Use {@link #getInstance()} instead.
-   */
-  private HTMLConfigManager ()
+  public HTMLConfigManager (@Nonnull final String sBasePath)
   {
+    if (sBasePath == null)
+      throw new NullPointerException ("basePath");
+    if (sBasePath.length () > 0 && sBasePath.endsWith ("/"))
+      throw new IllegalArgumentException ("BasePath must end with a '/'!");
+
+    m_sBasePath = sBasePath;
+
     // read all CSS files
-    m_aAllCSSItems = new CSSFiles (WebFileIO.getResource (FILENAME_CSS_XML)).getAllItems ();
+    m_aAllCSSItems = new CSSFiles (WebFileIO.getResource (sBasePath + FILENAME_CSS_XML)).getAllItems ();
 
     // read all JS files
-    m_aAllJSItems = new JSFiles (WebFileIO.getResource (FILENAME_JS_XML)).getAllItems ();
+    m_aAllJSItems = new JSFiles (WebFileIO.getResource (sBasePath + FILENAME_JS_XML)).getAllItems ();
 
     // read all static MetaTags
-    final InputStream aIS = WebFileIO.getInputStream (FILENAME_METATAGS_XML);
+    final InputStream aIS = WebFileIO.getInputStream (sBasePath + FILENAME_METATAGS_XML);
     if (aIS != null)
       if (XMLMapHandler.readMap (aIS, m_aAllMetaTags).isFailure ())
-        s_aLogger.error ("Failed to read " + FILENAME_METATAGS_XML);
+        s_aLogger.error ("Failed to read " + sBasePath + FILENAME_METATAGS_XML);
   }
 
+  /**
+   * @return The base path. Either empty, or ending with a "/".
+   */
   @Nonnull
-  public static HTMLConfigManager getInstance ()
+  public String getBasePath ()
   {
-    return s_aInstance;
+    return m_sBasePath;
   }
 
   @Nonnull
