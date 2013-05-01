@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-php-java-brdige</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>bundle</packaging>
   <name>phloc-ubl-php</name>
   <inceptionYear>2013</inceptionYear>
@@ -22,9 +22,9 @@
   </licenses>
   
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-php-java-bridge</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-php-java-bridge</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/tags/phloc-php-java-brdige-1.0.0</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/phloc-php-java-brdige-1.0.0</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/phloc-php-java-brdige-1.0.0</developerConnection>
   </scm>
 
   <organization>
