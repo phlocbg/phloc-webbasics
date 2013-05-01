@@ -58,6 +58,11 @@ import com.phloc.scopes.singleton.GlobalSingleton;
 @ThreadSafe
 public final class AccessManager extends GlobalSingleton implements IAccessManager
 {
+  public static final String DEFAULT_BASE_PATH = "security/";
+  public static final String FILENAME_USERS_XML = "users.xml";
+  public static final String FILENAME_ROLES_XML = "roles.xml";
+  public static final String FILENAME_USERGROUPS_XML = "usergroups.xml";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessManager.class);
 
   private final IUserManager m_aUserMgr;
@@ -68,9 +73,9 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   @UsedViaReflection
   public AccessManager () throws DAOException
   {
-    m_aUserMgr = new UserManager ("security/users.xml");
-    m_aRoleMgr = new RoleManager ("security/roles.xml");
-    m_aUserGroupMgr = new UserGroupManager ("security/usergroups.xml", m_aUserMgr, m_aRoleMgr);
+    m_aUserMgr = new UserManager (DEFAULT_BASE_PATH + FILENAME_USERS_XML);
+    m_aRoleMgr = new RoleManager (DEFAULT_BASE_PATH + FILENAME_ROLES_XML);
+    m_aUserGroupMgr = new UserGroupManager (DEFAULT_BASE_PATH + FILENAME_USERGROUPS_XML, m_aUserMgr, m_aRoleMgr);
   }
 
   @Nonnull
