@@ -63,6 +63,11 @@ public class HTMLConfigManager
   private final List <JSFiles.Item> m_aAllJSItems;
   private final Map <String, String> m_aAllMetaTags = new LinkedHashMap <String, String> ();
 
+  public HTMLConfigManager ()
+  {
+    this (DEFAULT_BASE_PATH);
+  }
+
   public HTMLConfigManager (@Nonnull final String sBasePath)
   {
     if (sBasePath == null)

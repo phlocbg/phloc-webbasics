@@ -52,7 +52,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   protected HTMLConfigManager getHTMLConfigMgr ()
   {
     if (m_aHTMLConfigMgr == null)
-      m_aHTMLConfigMgr = new HTMLConfigManager (HTMLConfigManager.DEFAULT_BASE_PATH);
+      m_aHTMLConfigMgr = new HTMLConfigManager ();
     return m_aHTMLConfigMgr;
   }
 
