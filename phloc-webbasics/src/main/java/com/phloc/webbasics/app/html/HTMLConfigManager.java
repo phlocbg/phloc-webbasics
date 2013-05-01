@@ -67,7 +67,7 @@ public class HTMLConfigManager
   {
     if (sBasePath == null)
       throw new NullPointerException ("basePath");
-    if (sBasePath.length () > 0 && sBasePath.endsWith ("/"))
+    if (sBasePath.length () > 0 && !sBasePath.endsWith ("/"))
       throw new IllegalArgumentException ("BasePath must end with a '/'!");
 
     m_sBasePath = sBasePath;
