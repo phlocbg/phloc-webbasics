@@ -46,11 +46,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import php.java.bridge.ILogger;
 import php.java.bridge.Util;
 import php.java.bridge.code.LauncherUnix;
 import php.java.bridge.code.LauncherWindows;
@@ -86,13 +84,11 @@ public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFa
   private static final String CGI_DIR = Util.TMPDIR.getAbsolutePath ();
   private static final boolean PHP_INCLUDE_JAVA = false; // servlet option
 
-  public FastCGIProxy (final Reader reader,
-                       final Map <String, String> env,
+  public FastCGIProxy (final Map <String, String> env,
                        final OutputStream out,
                        final OutputStream err,
                        final AbstractHeaderParser headerParser,
-                       final ResultProxy resultProxy,
-                       final ILogger logger)
+                       final ResultProxy resultProxy)
   {
     super (env, out, err, headerParser, resultProxy);
   }

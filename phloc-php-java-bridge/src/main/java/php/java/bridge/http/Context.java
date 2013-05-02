@@ -41,6 +41,7 @@ package php.java.bridge.http;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -74,7 +75,6 @@ import php.java.bridge.Util;
  */
 public class Context implements IManaged, IInvocable, IContext
 {
-
   /** Map of the scope of level GLOBAL_SCOPE */
   private Map <String, Object> globalScope;
 
@@ -87,35 +87,23 @@ public class Context implements IManaged, IInvocable, IContext
   /** {@inheritDoc} */
   public Object getAttribute (final String name) throws IllegalArgumentException
   {
-
     if (name == null)
-    {
       throw new IllegalArgumentException ("name cannot be null");
-    }
 
     if (getEngineScope ().get (name) != null)
-    {
       return getEngineScope ().get (name);
-    }
-    else
-      if (getGlobalScope ().get (name) != null)
-      {
-        return getGlobalScope ().get (name);
-      }
-      else
-      {
-        return null;
-      }
+
+    if (getGlobalScope ().get (name) != null)
+      return getGlobalScope ().get (name);
+
+    return null;
   }
 
   /** {@inheritDoc} */
   public Object getAttribute (final String name, final int scope) throws IllegalArgumentException
   {
-
     if (name == null)
-    {
       throw new IllegalArgumentException ("name cannot be null");
-    }
 
     switch (scope)
     {
@@ -132,14 +120,10 @@ public class Context implements IManaged, IInvocable, IContext
   public int getAttributesScope (final String name)
   {
     if (getEngineScope ().containsKey (name))
-    {
       return ENGINE_SCOPE;
-    }
-    else
-      if (getGlobalScope ().containsKey (name))
-      {
-        return GLOBAL_SCOPE;
-      }
+
+    if (getGlobalScope ().containsKey (name))
+      return GLOBAL_SCOPE;
 
     return -1;
   }
@@ -155,11 +139,8 @@ public class Context implements IManaged, IInvocable, IContext
   /** {@inheritDoc} */
   public Object removeAttribute (final String name, final int scope) throws IllegalArgumentException
   {
-
     if (name == null)
-    {
       throw new IllegalArgumentException ("name is null");
-    }
 
     switch (scope)
     {
@@ -175,11 +156,8 @@ public class Context implements IManaged, IInvocable, IContext
   /** {@inheritDoc} */
   public void setAttribute (final String name, final Object value, final int scope) throws IllegalArgumentException
   {
-
     if (name == null)
-    {
       throw new IllegalArgumentException ("name is null");
-    }
 
     switch (scope)
     {
@@ -365,7 +343,7 @@ public class Context implements IManaged, IInvocable, IContext
   }
 
   /** {@inheritDoc} */
-  public void onShutdown (final Object closeable)
+  public void onShutdown (final Closeable closeable)
   {
     php.java.bridge.http.Context.handleManaged (closeable);
   }

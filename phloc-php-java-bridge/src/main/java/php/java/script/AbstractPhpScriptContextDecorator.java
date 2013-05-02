@@ -41,6 +41,7 @@ package php.java.script;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.io.Closeable;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -51,8 +52,8 @@ import javax.script.Bindings;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.NotImplementedException;
-import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.ContextServer;
 
 /**
  * Abstract class for IPhpScriptContexts. The abstract class itself provides
@@ -181,7 +182,7 @@ public abstract class AbstractPhpScriptContextDecorator implements IPhpScriptCon
   }
 
   /** {@inheritDoc} */
-  public void onShutdown (final Object closeable)
+  public void onShutdown (final Closeable closeable)
   {
     ctx.onShutdown (closeable);
   }
@@ -260,13 +261,13 @@ public abstract class AbstractPhpScriptContextDecorator implements IPhpScriptCon
 
   /** {@inheritDoc} */
   public AbstractContinuation createContinuation (final Reader reader,
-                                          final Map <String, String> env,
-                                          final OutputStream out,
-                                          final OutputStream err,
-                                          final AbstractHeaderParser headerParser,
-                                          final ResultProxy result,
-                                          final ILogger logger,
-                                          final boolean isCompiled)
+                                                  final Map <String, String> env,
+                                                  final OutputStream out,
+                                                  final OutputStream err,
+                                                  final AbstractHeaderParser headerParser,
+                                                  final ResultProxy result,
+                                                  final ILogger logger,
+                                                  final boolean isCompiled)
   {
     return ctx.createContinuation (reader, env, out, err, headerParser, result, logger, isCompiled);
   }

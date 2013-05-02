@@ -19,12 +19,12 @@
 
 package php.java.servlet;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +32,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.ThreadPool;
@@ -87,39 +88,37 @@ import php.java.servlet.fastcgi.FCGIProcess;
  * &lt;/listener&gt;
  * </code> </blockquote>
  */
-public class ContextLoaderListener implements javax.servlet.ServletContextListener, IFCGIProcessFactory
+public final class ContextLoaderListener implements ServletContextListener, IFCGIProcessFactory
 {
-  private final List <Object> closeables = new ArrayList <Object> ();
+  private final List <Closeable> closeables = new ArrayList <Closeable> ();
 
   public static final String PEAR_DIR = "/WEB-INF/pear";
   public static final String CGI_DIR = "/WEB-INF/cgi";
   public static final String WEB_INF_DIR = "/WEB-INF";
 
-  protected ServletContext context;
+  private ServletContext context;
 
-  protected AbstractFCGIConnectionFactory channelName;
+  private AbstractFCGIConnectionFactory channelName;
 
-  protected String php = null;
+  private String php;
   /** default: true. Switched off when fcgi is not configured */
-  protected boolean fcgiIsConfigured;
+  @SuppressWarnings ("unused")
+  private boolean fcgiIsConfigured;
 
-  protected boolean canStartFCGI = false;
-  protected boolean override_hosts = true;
+  private boolean canStartFCGI = false;
 
-  protected String php_fcgi_connection_pool_size = FCGIUtil.PHP_FCGI_CONNECTION_POOL_SIZE;
-  protected String php_fcgi_connection_pool_timeout = FCGIUtil.PHP_FCGI_CONNECTION_POOL_TIMEOUT;
-  protected boolean php_include_java;
-  protected int php_fcgi_connection_pool_size_number = Integer.parseInt (FCGIUtil.PHP_FCGI_CONNECTION_POOL_SIZE);
-  protected long php_fcgi_connection_pool_timeout_number = Long.parseLong (FCGIUtil.PHP_FCGI_CONNECTION_POOL_TIMEOUT);
-  protected String php_fcgi_max_requests = FCGIUtil.PHP_FCGI_MAX_REQUESTS;
-  protected int php_fcgi_max_requests_number = Integer.parseInt (FCGIUtil.PHP_FCGI_MAX_REQUESTS);
+  private String php_fcgi_connection_pool_size = FCGIUtil.PHP_FCGI_CONNECTION_POOL_SIZE;
+  @SuppressWarnings ("unused")
+  private String php_fcgi_connection_pool_timeout = FCGIUtil.PHP_FCGI_CONNECTION_POOL_TIMEOUT;
+  private boolean php_include_java;
+  private int php_fcgi_connection_pool_size_number = Integer.parseInt (FCGIUtil.PHP_FCGI_CONNECTION_POOL_SIZE);
+  private long php_fcgi_connection_pool_timeout_number = Long.parseLong (FCGIUtil.PHP_FCGI_CONNECTION_POOL_TIMEOUT);
+  private String php_fcgi_max_requests = FCGIUtil.PHP_FCGI_MAX_REQUESTS;
+  private int php_fcgi_max_requests_number = Integer.parseInt (FCGIUtil.PHP_FCGI_MAX_REQUESTS);
 
-  protected ILogger logger;
+  private ILogger logger;
 
-  protected boolean promiscuous = true;
-  protected ContextLoaderListener listener;
-
-  private FCGIConnectionPool fcgiConnectionPool = null;
+  private FCGIConnectionPool fcgiConnectionPool;
 
   // workaround for a bug in jboss server, which uses the log4j port 4445 for
   // its internal purposes(!)
@@ -139,29 +138,23 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
    */
   public void destroyCloseables (final ServletContext ctx)
   {
-    final List <Object> list = closeables;
+    final List <Closeable> list = closeables;
     if (list == null)
       return;
 
     try
     {
-      for (final Object c : list)
+      for (final Closeable c : list)
       {
         try
         {
-          final Method close = c.getClass ().getMethod ("close");
-          close.setAccessible (true);
-          close.invoke (c);
+          c.close ();
         }
         catch (final Exception e)
         {
           e.printStackTrace ();
         }
       }
-    }
-    catch (final Throwable t)
-    {
-      t.printStackTrace ();
     }
     finally
     {
@@ -254,8 +247,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       value = context.getInitParameter ("prefer_system_php_exec");
       if (value == null)
         value = "";
-      value = value.trim ();
-      value = value.toLowerCase ();
+      value = value.trim ().toLowerCase ();
       if (value.equals ("on") || value.equals ("true"))
         preferSystemPhp = true;
     }
@@ -809,7 +801,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     return channelName;
   }
 
-  public List <Object> getCloseables ()
+  public List <Closeable> getCloseables ()
   {
     return closeables;
   }

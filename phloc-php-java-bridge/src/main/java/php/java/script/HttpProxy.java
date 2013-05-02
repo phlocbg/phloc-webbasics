@@ -46,7 +46,6 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Map;
 
-import php.java.bridge.ILogger;
 import php.java.bridge.Util.UtilProcess.PhpException;
 import php.java.bridge.http.AbstractHeaderParser;
 
@@ -85,8 +84,7 @@ public class HttpProxy extends CGIRunner
                     final OutputStream out,
                     final OutputStream err,
                     final AbstractHeaderParser headerParser,
-                    final ResultProxy resultProxy,
-                    final ILogger logger)
+                    final ResultProxy resultProxy)
   {
     super (reader, env, out, err, headerParser, resultProxy);
   }

@@ -41,6 +41,7 @@ package php.java.script;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -53,8 +54,8 @@ import php.java.bridge.ILogger;
 import php.java.bridge.JavaBridgeRunner;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
-import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.IContext;
 
 /**
@@ -83,7 +84,7 @@ public final class PhpScriptContext extends AbstractPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public void onShutdown (final Object closeable)
+  public void onShutdown (final Closeable closeable)
   {
     php.java.bridge.http.Context.handleManaged (closeable);
   }
@@ -176,20 +177,20 @@ public final class PhpScriptContext extends AbstractPhpScriptContext
 
   /** {@inheritDoc} */
   public AbstractContinuation createContinuation (final Reader reader,
-                                          final Map <String, String> env,
-                                          final OutputStream out,
-                                          final OutputStream err,
-                                          final AbstractHeaderParser headerParser,
-                                          final ResultProxy result,
-                                          final ILogger logger,
-                                          final boolean isCompiled)
+                                                  final Map <String, String> env,
+                                                  final OutputStream out,
+                                                  final OutputStream err,
+                                                  final AbstractHeaderParser headerParser,
+                                                  final ResultProxy result,
+                                                  final ILogger logger,
+                                                  final boolean isCompiled)
   {
     AbstractContinuation cont;
 
     if (isCompiled)
-      cont = new FastCGIProxy (reader, env, out, err, headerParser, result, logger);
+      cont = new FastCGIProxy (env, out, err, headerParser, result);
     else
-      cont = new HttpProxy (reader, env, out, err, headerParser, result, logger);
+      cont = new HttpProxy (reader, env, out, err, headerParser, result);
 
     return cont;
   }

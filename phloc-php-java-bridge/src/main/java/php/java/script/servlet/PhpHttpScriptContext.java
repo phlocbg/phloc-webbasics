@@ -19,6 +19,7 @@ package php.java.script.servlet;
 
 /*-*- mode: Java; tab-width:8 -*-*/
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -36,12 +37,12 @@ import javax.servlet.http.HttpServletResponse;
 import php.java.bridge.ILogger;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
-import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.WriterOutputStream;
 import php.java.script.AbstractContinuation;
-import php.java.script.IPhpScriptContext;
 import php.java.script.AbstractPhpScriptContextDecorator;
+import php.java.script.IPhpScriptContext;
 import php.java.script.PhpScriptWriter;
 import php.java.script.ResultProxy;
 import php.java.servlet.ContextLoaderListener;
@@ -104,13 +105,13 @@ public class PhpHttpScriptContext extends AbstractPhpScriptContextDecorator
   /** {@inheritDoc} */
   @Override
   public AbstractContinuation createContinuation (final Reader reader,
-                                          final Map <String, String> env,
-                                          final OutputStream out,
-                                          final OutputStream err,
-                                          final AbstractHeaderParser headerParser,
-                                          final ResultProxy result,
-                                          final ILogger logger,
-                                          final boolean isCompiled)
+                                                  final Map <String, String> env,
+                                                  final OutputStream out,
+                                                  final OutputStream err,
+                                                  final AbstractHeaderParser headerParser,
+                                                  final ResultProxy result,
+                                                  final ILogger logger,
+                                                  final boolean isCompiled)
   {
     AbstractContinuation cont;
     if (isCompiled)
@@ -346,7 +347,7 @@ public class PhpHttpScriptContext extends AbstractPhpScriptContextDecorator
 
   /** {@inheritDoc} */
   @Override
-  public void onShutdown (final Object closeable)
+  public void onShutdown (final Closeable closeable)
   {
     php.java.servlet.HttpContext.handleManaged (closeable, context);
   }

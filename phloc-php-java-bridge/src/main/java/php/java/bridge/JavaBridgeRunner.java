@@ -516,8 +516,6 @@ public class JavaBridgeRunner extends AbstractHttpServer
     handleDoGet (req, res);
   }
 
-  private byte [] cache;
-
   /**
    * Handle doGet requests. For example
    * java_require("http://localhost:8080/JavaBridge/java/Java.inc");
@@ -531,10 +529,8 @@ public class JavaBridgeRunner extends AbstractHttpServer
   {
 
     byte [] buf;
-    OutputStream out;
     int c;
     String name = req.getRequestURI ();
-
     if (name == null)
     {
       super.doGet (req, res);
@@ -569,31 +565,22 @@ public class JavaBridgeRunner extends AbstractHttpServer
       showTextFile (name, params, f, length, req, res, (!name.endsWith (".html")) || "show".equals (params));
       return;
     }
-    if (cache != null && name.endsWith ("Java.inc"))
-    {
-      res.setContentLength (cache.length);
-      res.getOutputStream ().write (cache);
-      return;
-    }
 
     if (name.endsWith ("Java.inc"))
     {
       try
       {
-        cache = buf = JavaInc.bytes;
-        res.setContentLength (buf.length);
-        out = res.getOutputStream ();
-        out.write (buf);
+        res.setContentLength (JavaInc.bytes.length);
+        res.getOutputStream ().write (JavaInc.bytes);
         return;
-      }
-      catch (final SecurityException e)
-      {/* ignore */
       }
       catch (final Exception e)
       {
         Util.printStackTrace (e);
       }
+      return;
     }
+
     name = name.replaceFirst ("/JavaBridge", "META-INF");
     InputStream in = JavaBridgeRunner.class.getClassLoader ().getResourceAsStream (name);
     if (in == null)
@@ -619,8 +606,7 @@ public class JavaBridgeRunner extends AbstractHttpServer
         bout.write (buf, 0, c);
       res.addHeader ("Last-Modified", "Wed, 17 Jan 2007 19:52:43 GMT"); // bogus
       res.setContentLength (bout.size ());
-      out = res.getOutputStream ();
-      out.write (bout.toByteArray ());
+      res.getOutputStream ().write (bout.toByteArray ());
     }
     catch (final IOException e)
     {

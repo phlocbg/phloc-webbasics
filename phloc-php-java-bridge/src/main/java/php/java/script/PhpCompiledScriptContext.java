@@ -81,7 +81,7 @@ public class PhpCompiledScriptContext extends AbstractPhpScriptContextDecorator
     AbstractContinuation cont;
     if (isCompiled)
     {
-      cont = new FastCGIProxy (reader, env, out, err, headerParser, result, logger);
+      cont = new FastCGIProxy (env, out, err, headerParser, result);
     }
     else
     {

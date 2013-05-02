@@ -19,9 +19,9 @@
 
 package php.java.servlet;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -196,10 +196,9 @@ public class HttpContext extends php.java.bridge.http.Context
    * @param ctx
    *        The ServletContext
    */
-  public static void handleManaged (final Object closeable, final ServletContext ctx)
+  public static void handleManaged (final Closeable closeable, final ServletContext ctx)
   {
-    final List <Object> list = ContextLoaderListener.getContextLoaderListener (ctx).getCloseables ();
-    list.add (closeable);
+    ContextLoaderListener.getContextLoaderListener (ctx).getCloseables ().add (closeable);
   }
 
   /** {@inheritDoc} */
@@ -213,7 +212,7 @@ public class HttpContext extends php.java.bridge.http.Context
 
   /** {@inheritDoc} */
   @Override
-  public void onShutdown (final Object closeable)
+  public void onShutdown (final Closeable closeable)
   {
     if (Util.logLevel > 3)
       Util.logDebug ("calling servlet context register shutdown ");
