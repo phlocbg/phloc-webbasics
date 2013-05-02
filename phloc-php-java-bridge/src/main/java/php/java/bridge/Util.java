@@ -125,11 +125,7 @@ public final class Util
   public static int MAX_WAIT;
 
   /** The java/Java.inc code */
-  public static Class <?> JAVA_INC;
-  /** The java/Java.inc code */
   public static Class <?> PHPDEBUGGER_PHP;
-  /** The java/JavaProxy.php code */
-  public static Class <?> JAVA_PROXY;
   /** The launcher.sh code */
   public static Class <?> LAUNCHER_UNIX;
   /** The launcher.exe code */
@@ -179,7 +175,7 @@ public final class Util
    * Only for internal use. Use Util.getLogger() instread. A bridge which uses
    * log4j or the default logger.
    */
-  public static class Logger implements ILogger
+  public static class UtilLogger implements ILogger
   {
     protected ChainsawLogger clogger = null;
     protected ILogger logger;
@@ -187,7 +183,7 @@ public final class Util
     /**
      * Use chainsaw, if available or a default logger.
      */
-    public Logger ()
+    public UtilLogger ()
     {
       logger = new FileLogger (); // log to logStream
     }
@@ -198,12 +194,12 @@ public final class Util
      * @param logger
      *        The specified logger.
      */
-    public Logger (final ILogger logger)
+    public UtilLogger (final ILogger logger)
     {
       this (!DEFAULT_LOG_FILE_SET, logger);
     }
 
-    public Logger (final boolean useChainsaw, final ILogger logger)
+    public UtilLogger (final boolean useChainsaw, final ILogger logger)
     {
       if (useChainsaw)
         try
@@ -414,22 +410,9 @@ public final class Util
 
   private static void initGlobals ()
   {
-
-    try
-    {
-      JAVA_INC = Class.forName ("php.java.bridge.JavaInc");
-    }
-    catch (final Exception e)
-    {/* ignore */}
     try
     {
       PHPDEBUGGER_PHP = Class.forName ("php.java.bridge.PhpDebuggerPHP");
-    }
-    catch (final Exception e)
-    {/* ignore */}
-    try
-    {
-      JAVA_PROXY = Class.forName ("php.java.bridge.JavaProxy");
     }
     catch (final Exception e)
     {/* ignore */}
@@ -664,7 +647,7 @@ public final class Util
    */
   static PrintStream logStream;
 
-  private static ILogger defaultLogger = new Logger (new FileLogger ());
+  private static ILogger defaultLogger = new UtilLogger (new FileLogger ());
 
   /**
    * The loglevel:<br>
@@ -1152,10 +1135,10 @@ public final class Util
   /**
    * Convenience daemon thread class
    */
-  public static class Thread extends java.lang.Thread
+  public static class UtilThread extends java.lang.Thread
   {
     /** Create a new thread */
-    public Thread ()
+    public UtilThread ()
     {
       super ();
       initThread ();
@@ -1166,7 +1149,7 @@ public final class Util
      * 
      * @param name
      */
-    public Thread (final String name)
+    public UtilThread (final String name)
     {
       super (name);
       initThread ();
@@ -1177,7 +1160,7 @@ public final class Util
      * 
      * @param target
      */
-    public Thread (final Runnable target)
+    public UtilThread (final Runnable target)
     {
       super (target);
       initThread ();
@@ -1189,7 +1172,7 @@ public final class Util
      * @param group
      * @param target
      */
-    public Thread (final ThreadGroup group, final Runnable target)
+    public UtilThread (final ThreadGroup group, final Runnable target)
     {
       super (group, target);
       initThread ();
@@ -1201,7 +1184,7 @@ public final class Util
      * @param group
      * @param name
      */
-    public Thread (final ThreadGroup group, final String name)
+    public UtilThread (final ThreadGroup group, final String name)
     {
       super (group, name);
       initThread ();
@@ -1213,7 +1196,7 @@ public final class Util
      * @param target
      * @param name
      */
-    public Thread (final Runnable target, final String name)
+    public UtilThread (final Runnable target, final String name)
     {
       super (target, name);
       initThread ();
@@ -1226,7 +1209,7 @@ public final class Util
      * @param target
      * @param name
      */
-    public Thread (final ThreadGroup group, final Runnable target, final String name)
+    public UtilThread (final ThreadGroup group, final Runnable target, final String name)
     {
       super (group, target, name);
       initThread ();
@@ -1240,7 +1223,7 @@ public final class Util
      * @param name
      * @param stackSize
      */
-    public Thread (final ThreadGroup group, final Runnable target, final String name, final long stackSize)
+    public UtilThread (final ThreadGroup group, final Runnable target, final String name, final long stackSize)
     {
       super (group, target, name, stackSize);
       initThread ();
@@ -1255,7 +1238,7 @@ public final class Util
   /**
    * Starts a CGI process and returns the process handle.
    */
-  public static class CGIProcess extends Process
+  public static class UtilProcess extends Process
   {
     protected Process proc;
     private String [] args;
@@ -1600,15 +1583,15 @@ public final class Util
                                " ");
     }
 
-    protected CGIProcess (final String [] args,
-                          final boolean includeJava,
-                          final String cgiDir,
-                          final String pearDir,
-                          final String webInfDir,
-                          final File homeDir,
-                          final Map <String, String> env,
-                          final boolean tryOtherLocations,
-                          final boolean preferSystemPhp)
+    protected UtilProcess (final String [] args,
+                           final boolean includeJava,
+                           final String cgiDir,
+                           final String pearDir,
+                           final String webInfDir,
+                           final File homeDir,
+                           final Map <String, String> env,
+                           final boolean tryOtherLocations,
+                           final boolean preferSystemPhp)
     {
       this.args = args;
       this.homeDir = homeDir;
@@ -1644,26 +1627,26 @@ public final class Util
      * @throws IOException
      * @see Util#checkCgiBinary(String)
      */
-    public static CGIProcess start (final String [] args,
-                                    final boolean includeJava,
-                                    final String cgiDir,
-                                    final String pearDir,
-                                    final String webInfDir,
-                                    final File homeDir,
-                                    final Map <String, String> env,
-                                    final boolean tryOtherLocations,
-                                    final boolean preferSystemPhp,
-                                    final OutputStream err) throws IOException
+    public static UtilProcess start (final String [] args,
+                                     final boolean includeJava,
+                                     final String cgiDir,
+                                     final String pearDir,
+                                     final String webInfDir,
+                                     final File homeDir,
+                                     final Map <String, String> env,
+                                     final boolean tryOtherLocations,
+                                     final boolean preferSystemPhp,
+                                     final OutputStream err) throws IOException
     {
-      final CGIProcess proc = new CGIProcess (args,
-                                              includeJava,
-                                              cgiDir,
-                                              pearDir,
-                                              webInfDir,
-                                              homeDir,
-                                              env,
-                                              tryOtherLocations,
-                                              preferSystemPhp);
+      final UtilProcess proc = new UtilProcess (args,
+                                                includeJava,
+                                                cgiDir,
+                                                pearDir,
+                                                webInfDir,
+                                                homeDir,
+                                                env,
+                                                tryOtherLocations,
+                                                preferSystemPhp);
       proc.start ();
       return proc;
     }
@@ -1753,22 +1736,22 @@ public final class Util
    * Starts a CGI process with an error handler attached and returns the process
    * handle.
    */
-  public static class ProcessWithErrorHandler extends CGIProcess
+  public static class UtilProcessWithErrorHandler extends UtilProcess
   {
-    StringBuilder error = null;
-    InputStream in = null;
-    OutputStream err = null;
+    StringBuilder error;
+    InputStream in;
+    OutputStream err;
 
-    protected ProcessWithErrorHandler (final String [] args,
-                                       final boolean includeJava,
-                                       final String cgiDir,
-                                       final String pearDir,
-                                       final String webInfDir,
-                                       final File homeDir,
-                                       final Map <String, String> env,
-                                       final boolean tryOtherLocations,
-                                       final boolean preferSystemPhp,
-                                       final OutputStream err)
+    protected UtilProcessWithErrorHandler (final String [] args,
+                                           final boolean includeJava,
+                                           final String cgiDir,
+                                           final String pearDir,
+                                           final String webInfDir,
+                                           final File homeDir,
+                                           final Map <String, String> env,
+                                           final boolean tryOtherLocations,
+                                           final boolean preferSystemPhp,
+                                           final OutputStream err)
     {
       super (args, includeJava, cgiDir, pearDir, webInfDir, homeDir, env, tryOtherLocations, preferSystemPhp);
       this.err = err;
@@ -1778,14 +1761,14 @@ public final class Util
     protected void start () throws IOException
     {
       super.start ();
-      (new Util.Thread ("CGIErrorReader")
+      new UtilThread ("CGIErrorReader")
       {
         @Override
         public void run ()
         {
           readErrorStream ();
         }
-      }).start ();
+      }.start ();
     }
 
     /** {@inheritDoc} */
@@ -1867,27 +1850,27 @@ public final class Util
      * @throws IOException
      * @see Util#checkCgiBinary(String)
      */
-    public static CGIProcess start (final String [] args,
-                                    final boolean includeJava,
-                                    final String cgiDir,
-                                    final String pearDir,
-                                    final String webInfDir,
-                                    final File homeDir,
-                                    final Map <String, String> env,
-                                    final boolean tryOtherLocations,
-                                    final boolean preferSystemPhp,
-                                    final OutputStream err) throws IOException
+    public static UtilProcess start (final String [] args,
+                                     final boolean includeJava,
+                                     final String cgiDir,
+                                     final String pearDir,
+                                     final String webInfDir,
+                                     final File homeDir,
+                                     final Map <String, String> env,
+                                     final boolean tryOtherLocations,
+                                     final boolean preferSystemPhp,
+                                     final OutputStream err) throws IOException
     {
-      final CGIProcess proc = new ProcessWithErrorHandler (args,
-                                                           includeJava,
-                                                           cgiDir,
-                                                           pearDir,
-                                                           webInfDir,
-                                                           homeDir,
-                                                           env,
-                                                           tryOtherLocations,
-                                                           preferSystemPhp,
-                                                           err);
+      final UtilProcess proc = new UtilProcessWithErrorHandler (args,
+                                                                includeJava,
+                                                                cgiDir,
+                                                                pearDir,
+                                                                webInfDir,
+                                                                homeDir,
+                                                                env,
+                                                                tryOtherLocations,
+                                                                preferSystemPhp,
+                                                                err);
       proc.start ();
       return proc;
     }

@@ -35,6 +35,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import php.java.bridge.ILogger;
+import php.java.bridge.JavaInc;
+import php.java.bridge.JavaProxy;
 import php.java.bridge.ThreadPool;
 import php.java.bridge.Util;
 import php.java.bridge.http.AbstractFCGIConnection;
@@ -217,7 +219,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     final String name = context.getServerInfo ();
     if (name != null && (name.startsWith ("JBoss")))
       isJBoss = true;
-    logger = new Util.Logger (!isJBoss, new Logger ());
+    logger = new Util.UtilLogger (!isJBoss, new Logger ());
     Util.setDefaultLogger (logger);
 
     String servletContextName = ServletUtil.getRealPath (context, "");
@@ -450,8 +452,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       {
         if (!javaIncFile.exists ())
         {
-          final Field f = Util.JAVA_INC.getField ("bytes");
-          final byte [] buf = (byte []) f.get (Util.JAVA_INC);
+          final byte [] buf = JavaInc.bytes;
           final OutputStream out = new FileOutputStream (javaIncFile);
           out.write (buf);
           out.close ();
@@ -474,8 +475,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       {
         if (!javaProxyFile.exists ())
         {
-          final Field f = Util.JAVA_PROXY.getField ("bytes");
-          final byte [] buf = (byte []) f.get (Util.JAVA_PROXY);
+          final byte [] buf = JavaProxy.bytes;
           final OutputStream out = new FileOutputStream (javaProxyFile);
           out.write (buf);
           out.close ();

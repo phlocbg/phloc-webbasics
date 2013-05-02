@@ -78,7 +78,7 @@ public class HttpFastCGIProxy extends AbstractContinuation
   }
 
   @Override
-  protected void doRun () throws IOException, Util.CGIProcess.PhpException
+  protected void doRun () throws IOException, Util.UtilProcess.PhpException
   {
     final byte [] buf = new byte [FCGIUtil.FCGI_BUF_SIZE];
 

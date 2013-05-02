@@ -165,7 +165,7 @@ public final class SocketContextServer implements Runnable, IContextServer
       final SecurityManager sec = System.getSecurityManager ();
       if (sec != null)
         sec.checkAccept ("127.0.0.1", Integer.parseInt (serverSocket.getSocketName ()));
-      final Thread t = new Util.Thread (this, "JavaBridgeSocketContextServer(" + serverSocket.getSocketName () + ")");
+      final Thread t = new Util.UtilThread (this, "JavaBridgeSocketContextServer(" + serverSocket.getSocketName () + ")");
       t.start ();
     }
     catch (final Throwable t)
@@ -209,7 +209,7 @@ public final class SocketContextServer implements Runnable, IContextServer
       }
       else
       {
-        final Thread t = new Util.Thread (runner, "JavaBridgeContextRunner(" + contextName + ")");
+        final Thread t = new Util.UtilThread (runner, "JavaBridgeContextRunner(" + contextName + ")");
         t.start ();
       }
     }

@@ -87,7 +87,7 @@ public/* singleton */class PhpJavaServlet extends HttpServlet
 
   private ContextServer contextServer;
   protected int logLevel = -1;
-  private Util.Logger logger;
+  private Util.UtilLogger logger;
   protected boolean promiscuous = false;
 
   // workaround for a bug in jboss server, which uses the log4j port 4445 for
@@ -136,7 +136,7 @@ public/* singleton */class PhpJavaServlet extends HttpServlet
     if (name != null && (name.startsWith ("JBoss")))
       isJBoss = true;
 
-    logger = new Util.Logger (!isJBoss, new Logger ());
+    logger = new Util.UtilLogger (!isJBoss, new Logger ());
     Util.setDefaultLogger (logger);
 
     if (Util.VERSION != null)

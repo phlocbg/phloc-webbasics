@@ -50,10 +50,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.List;
+
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
 
 import php.java.bridge.http.AbstractHttpServer;
 import php.java.bridge.http.ChunkedInputStream;
@@ -391,36 +391,23 @@ public class JavaBridgeRunner extends AbstractHttpServer
     out.println ("<h4>Available script engines</h4><ul>");
     try
     {
-      final Class <?> c = Class.forName ("javax.script.ScriptEngineManager");
-      Object o = c.newInstance ();
-      final Method ex = c.getMethod ("getEngineByExtension", String.class);
-      if (ex.invoke (o, "php") == null)
-      {
+      final ScriptEngineManager o = new ScriptEngineManager ();
+      if (o.getEngineByExtension ("php") == null)
         out.println ("Warning: required jar for PHP ScriptEngineManager not found.<br><br>");
-      }
 
-      final Method e = c.getMethod ("getEngineFactories");
-      final List <?> factories = (List <?>) e.invoke (o);
+      final List <ScriptEngineFactory> factories = o.getEngineFactories ();
       final StringBuilder buf = new StringBuilder ();
-      for (final Iterator <?> ii = factories.iterator (); ii.hasNext ();)
+      for (final ScriptEngineFactory sef : factories)
       {
-        o = ii.next ();
-        final Method getName = o.getClass ().getMethod ("getEngineName");
-        final Method getVersion = o.getClass ().getMethod ("getEngineVersion");
-        final Method getNames = o.getClass ().getMethod ("getNames");
-        final Method getExtensions = o.getClass ().getMethod ("getExtensions");
-        buf.append ("<li>");
-        buf.append (getName.invoke (o));
-        buf.append (", ");
-        buf.append ("ver.: ");
-        buf.append (getVersion.invoke (o));
-        buf.append (", ");
-        buf.append ("alias: ");
-        buf.append (getNames.invoke (o));
-        buf.append (", ");
-        buf.append (".ext: ");
-        buf.append (getExtensions.invoke (o));
-        buf.append ("</li>");
+        buf.append ("<li>")
+           .append (sef.getEngineName ())
+           .append (", ver.: ")
+           .append (sef.getEngineVersion ())
+           .append (", alias: ")
+           .append (sef.getNames ())
+           .append (", .ext: ")
+           .append (sef.getExtensions ())
+           .append ("</li>");
         out.println (buf);
         buf.setLength (0);
       }
@@ -588,12 +575,11 @@ public class JavaBridgeRunner extends AbstractHttpServer
       return;
     }
 
-    if (Util.JAVA_INC != null && name.endsWith ("Java.inc"))
+    if (name.endsWith ("Java.inc"))
     {
       try
       {
-        final Field f = Util.JAVA_INC.getField ("bytes");
-        cache = buf = (byte []) f.get (Util.JAVA_INC);
+        cache = buf = JavaInc.bytes;
         res.setContentLength (buf.length);
         out = res.getOutputStream ();
         out.write (buf);

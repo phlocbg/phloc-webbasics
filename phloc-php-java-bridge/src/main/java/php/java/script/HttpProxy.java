@@ -47,7 +47,7 @@ import java.io.Reader;
 import java.util.Map;
 
 import php.java.bridge.ILogger;
-import php.java.bridge.Util.CGIProcess.PhpException;
+import php.java.bridge.Util.UtilProcess.PhpException;
 import php.java.bridge.http.AbstractHeaderParser;
 
 /**

@@ -83,9 +83,9 @@ public class CGIRunner extends AbstractContinuation
   private Writer writer;
 
   @Override
-  protected void doRun () throws IOException, Util.CGIProcess.PhpException
+  protected void doRun () throws IOException, Util.UtilProcess.PhpException
   {
-    final Util.CGIProcess proc = Util.ProcessWithErrorHandler.start (new String [] { null },
+    final Util.UtilProcess proc = Util.UtilProcessWithErrorHandler.start (new String [] { null },
                                                                   false,
                                                                   null,
                                                                   null,

@@ -143,7 +143,7 @@ public abstract class AbstractContinuation implements IContinuation, Runnable
     {
       phpScript.val = e;
     }
-    catch (final Util.CGIProcess.PhpException e1)
+    catch (final Util.UtilProcess.PhpException e1)
     {
       phpScript.val = e1;
     }
@@ -159,7 +159,7 @@ public abstract class AbstractContinuation implements IContinuation, Runnable
     }
   }
 
-  protected abstract void doRun () throws IOException, Util.CGIProcess.PhpException;
+  protected abstract void doRun () throws IOException, Util.UtilProcess.PhpException;
 
   private final Object lockObject = new Object ();
 

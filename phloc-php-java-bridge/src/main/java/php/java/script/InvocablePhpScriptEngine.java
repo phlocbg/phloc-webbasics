@@ -433,7 +433,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
         registeredHook = true;
         try
         {
-          Runtime.getRuntime ().addShutdownHook (new Util.Thread ()
+          Runtime.getRuntime ().addShutdownHook (new Util.UtilThread ()
           {
             @Override
             public void run ()

@@ -53,43 +53,11 @@ import php.java.bridge.Util;
  */
 public class PhpScriptEngineFactory implements ScriptEngineFactory
 {
-
-  protected class Factory
-  {
-    protected boolean hasCloseable;
-
-    public Factory (final boolean hasCloseable)
-    {
-      this.hasCloseable = hasCloseable;
-    }
-
-    public ScriptEngine create ()
-    {
-      if (hasCloseable)
-      {
-        return new CloseablePhpScriptEngine (PhpScriptEngineFactory.this);
-      }
-      return new PhpScriptEngine (PhpScriptEngineFactory.this);
-    }
-  }
-
-  protected Factory factory;
-
   /**
    * Create a new EngineFactory
    */
   public PhpScriptEngineFactory ()
-  {
-    try
-    {
-      Class.forName ("java.io.Closeable");
-      factory = new Factory (true);
-    }
-    catch (final ClassNotFoundException e)
-    {
-      factory = new Factory (false);
-    }
-  }
+  {}
 
   private static final String ENGINE_NAME = Util.EXTENSION_NAME + " php script engine for Java";
 
@@ -129,7 +97,7 @@ public class PhpScriptEngineFactory implements ScriptEngineFactory
     return Arrays.asList (new String [] {});
   }
 
-  List <String> names;
+  private List <String> names;
 
   /** {@inheritDoc} */
   public List <String> getNames ()
@@ -142,44 +110,36 @@ public class PhpScriptEngineFactory implements ScriptEngineFactory
   /** {@inheritDoc} */
   public ScriptEngine getScriptEngine ()
   {
-    return factory.create ();
+    return new PhpScriptEngine (this);
   }
 
   /** {@inheritDoc} */
   public Object getParameter (final String key)
   {
-    if (key.equals ("javax.script.name"))
+    if (key.equals (ScriptEngine.NAME))
       return getLanguageName ();
-    if (key.equals ("javax.script.engine"))
+    if (key.equals (ScriptEngine.ENGINE))
       return getEngineName ();
-    if (key.equals ("javax.script.engine_version"))
+    if (key.equals (ScriptEngine.ENGINE_VERSION))
       return getEngineVersion ();
-    if (key.equals ("javax.script.language"))
+    if (key.equals (ScriptEngine.LANGUAGE))
       return getLanguageName ();
-    if (key.equals ("javax.script.language_version"))
+    if (key.equals (ScriptEngine.LANGUAGE_VERSION))
       return getLanguageVersion ();
     if (key.equals ("THREADING"))
       return "STATELESS";
-    throw new IllegalArgumentException ("key");
+    throw new IllegalArgumentException ("key: '" + key + "'");
   }
 
   /** {@inheritDoc} */
   public String getMethodCallSyntax (final String obj, final String m, final String... args)
   {
     final StringBuilder b = new StringBuilder ();
-    b.append ("$");
-    b.append (obj);
-    b.append ("->");
-    b.append (m);
-    b.append ("(");
+    b.append ('$').append (obj).append ("->").append (m).append ('(');
     int i;
     for (i = 0; i < args.length - 1; i++)
-    {
-      b.append (args[i]);
-      b.append (",");
-    }
-    b.append (args[i]);
-    b.append (")");
+      b.append (args[i]).append (',');
+    b.append (args[i]).append (')');
     return b.toString ();
   }
 

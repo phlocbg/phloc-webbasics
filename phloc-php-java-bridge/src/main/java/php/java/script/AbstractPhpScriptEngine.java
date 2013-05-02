@@ -49,7 +49,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,10 +62,11 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 
+import php.java.bridge.JavaInc;
 import php.java.bridge.Util;
 import php.java.bridge.http.AbstractChannelName;
-import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.IContext;
 import php.java.bridge.http.IContextFactory;
 import php.java.bridge.http.WriterOutputStream;
@@ -290,10 +290,10 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
   protected AbstractContinuation getContinuation (final Reader reader, final ScriptContext context) throws IOException
   {
     AbstractHeaderParser headerParser = AbstractHeaderParser.DEFAULT_HEADER_PARSER; // ignore
-                                                                    // encoding,
-                                                                    // we pass
-                                                                    // everything
-                                                                    // directly
+    // encoding,
+    // we pass
+    // everything
+    // directly
     final IPhpScriptContext phpScriptContext = (IPhpScriptContext) context;
     updateGlobalEnvironment ();
     final OutputStream out = ((PhpScriptWriter) (context.getWriter ())).getOutputStream ();
@@ -306,13 +306,13 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
       headerParser = new SimpleHeaderParser ((WriterOutputStream) out);
 
     final AbstractContinuation kont = phpScriptContext.createContinuation (reader,
-                                                                   env,
-                                                                   out,
-                                                                   err,
-                                                                   headerParser,
-                                                                   resultProxy = new ResultProxy (this),
-                                                                   Util.getLogger (),
-                                                                   isCompiled);
+                                                                           env,
+                                                                           out,
+                                                                           err,
+                                                                           headerParser,
+                                                                           resultProxy = new ResultProxy (this),
+                                                                           Util.getLogger (),
+                                                                           isCompiled);
 
     phpScriptContext.setContinuation (kont);
     phpScriptContext.startContinuation ();
@@ -570,9 +570,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
     try
     {
       final ByteArrayOutputStream out = new ByteArrayOutputStream ();
-      final Field f = Util.JAVA_INC.getField ("bytes");
-      final byte [] buf = (byte []) f.get (Util.JAVA_INC);
-      out.write (buf);
+      out.write (JavaInc.bytes);
 
       final OutputStreamWriter writer = new OutputStreamWriter (out);
       writer.write (STANDARD_HEADER_EMBEDDED);

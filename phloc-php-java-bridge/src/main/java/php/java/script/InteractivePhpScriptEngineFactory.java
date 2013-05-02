@@ -18,6 +18,8 @@
 /*-*- mode: Java; tab-width:8 -*-*/
 package php.java.script;
 
+import javax.script.ScriptEngine;
+
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
  *
@@ -40,53 +42,28 @@ package php.java.script;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import javax.script.ScriptEngine;
-
 /**
  * Create a standalone interactive PHP script engines.
  */
 
 public class InteractivePhpScriptEngineFactory extends InvocablePhpScriptEngineFactory
 {
-
-  protected class Factory extends PhpScriptEngineFactory.Factory
-  {
-    public Factory (final boolean hasCloseable)
-    {
-      super (hasCloseable);
-    }
-
-    @Override
-    public ScriptEngine create ()
-    {
-      if (hasCloseable)
-      {
-        return new CloseableInteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
-      }
-      return new InteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
-    }
-  }
-
   /**
    * Create a new EngineFactory
    */
   public InteractivePhpScriptEngineFactory ()
-  {
-    try
-    {
-      Class.forName ("java.io.Closeable");
-      factory = new Factory (true);
-    }
-    catch (final ClassNotFoundException e)
-    {
-      factory = new Factory (false);
-    }
-  }
+  {}
 
   /** {@inheritDoc} */
   @Override
   public String getLanguageName ()
   {
     return "php-interactive";
+  }
+
+  @Override
+  public ScriptEngine getScriptEngine ()
+  {
+    return new InteractivePhpScriptEngine (this);
   }
 }

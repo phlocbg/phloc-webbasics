@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 
 import php.java.bridge.Util;
-import php.java.bridge.Util.CGIProcess;
+import php.java.bridge.Util.UtilProcess;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -119,7 +119,7 @@ public class NPChannelFactory extends AbstractFCGIConnectionFactory
   }
 
   @Override
-  protected CGIProcess doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
+  protected UtilProcess doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
   {
     if (proc != null)
       return null;
@@ -141,7 +141,7 @@ public class NPChannelFactory extends AbstractFCGIConnectionFactory
       }
     proc = processFactory.createFCGIProcess (new String [] { php, raPath }, includeJava, home, env);
     proc.start ();
-    return (CGIProcess) proc;
+    return (UtilProcess) proc;
   }
 
   @Override

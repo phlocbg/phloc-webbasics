@@ -27,7 +27,7 @@ import java.util.Map;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.Util;
-import php.java.bridge.Util.CGIProcess;
+import php.java.bridge.Util.UtilProcess;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -122,7 +122,7 @@ public abstract class AbstractFCGIConnectionFactory
     final byte buf[] = new byte [Util.BUF_SIZE];
     try
     {
-      final CGIProcess proc = doBind (env, php, includeJava);
+      final UtilProcess proc = doBind (env, php, includeJava);
       if (proc == null || proc.getInputStream () == null)
         return;
       // / make sure that the wrapper script launcher.sh does not output to
@@ -147,11 +147,11 @@ public abstract class AbstractFCGIConnectionFactory
     }
   }
 
-  protected abstract CGIProcess doBind (Map <String, String> env, String php, boolean includeJava) throws IOException;
+  protected abstract UtilProcess doBind (Map <String, String> env, String php, boolean includeJava) throws IOException;
 
   protected void bind (@SuppressWarnings ("unused") final ILogger logger) throws InterruptedException, IOException
   {
-    final Thread t = (new Util.Thread ("JavaBridgeFastCGIRunner")
+    final Thread t = (new Util.UtilThread ("JavaBridgeFastCGIRunner")
     {
       @Override
       public void run ()

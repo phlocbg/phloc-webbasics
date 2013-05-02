@@ -205,7 +205,7 @@ public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFa
   }
 
   @Override
-  protected void doRun () throws IOException, Util.CGIProcess.PhpException
+  protected void doRun () throws IOException, Util.UtilProcess.PhpException
   {
     final byte [] buf = new byte [FCGIUtil.FCGI_BUF_SIZE];
     setupFastCGIServer ();

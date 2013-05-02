@@ -22,8 +22,6 @@ package php.java.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -32,6 +30,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.management.MBeanServer;
+import javax.management.MBeanServerFactory;
+import javax.management.ObjectInstance;
+import javax.management.ObjectName;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -193,30 +195,14 @@ public class ServletUtil
   {
     try
     {
-      final Class <?> objectNameClazz = Class.forName ("javax.management.ObjectName");
-      final Constructor <?> constructor = objectNameClazz.getConstructor (new Class [] { String.class });
-      Object objectName = constructor.newInstance (new Object [] { pattern });
-
-      Class <?> clazz = Class.forName ("javax.management.MBeanServerFactory");
-      Method method = clazz.getMethod ("findMBeanServer", String.class);
-      final List <?> servers = (List <?>) method.invoke (clazz, (Object) null);
-      final Object server = servers.get (0);
-
-      final Class <?> mBeanServerClazz = Class.forName ("javax.management.MBeanServer");
-      clazz = Class.forName ("javax.management.QueryExp");
-      method = mBeanServerClazz.getMethod ("queryMBeans", objectNameClazz, clazz);
-
-      final Set <?> s = (Set <?>) method.invoke (server, objectName, null);
-      final Iterator <?> ii = s.iterator ();
-
+      final List <MBeanServer> servers = MBeanServerFactory.findMBeanServer (null);
+      final MBeanServer server = servers.get (0);
+      final Set <ObjectInstance> s = server.queryMBeans (new ObjectName (pattern), null);
+      final Iterator <ObjectInstance> ii = s.iterator ();
       if (ii.hasNext ())
       {
-        clazz = Class.forName ("javax.management.ObjectInstance");
-        method = clazz.getMethod ("getObjectName");
-        objectName = method.invoke (ii.next ());
-
-        method = mBeanServerClazz.getMethod ("getAttribute", objectNameClazz, String.class);
-        final Object result = method.invoke (server, objectName, property);
+        final ObjectName objectName = ii.next ().getObjectName ();
+        final Object result = server.getAttribute (objectName, property);
         return Integer.parseInt (String.valueOf (result));
       }
     }

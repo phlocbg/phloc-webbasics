@@ -40,9 +40,9 @@ package php.java.script;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptEngine;
@@ -52,40 +52,11 @@ import javax.script.ScriptEngine;
  */
 public class InvocablePhpScriptEngineFactory extends PhpScriptEngineFactory
 {
-
-  protected class Factory extends PhpScriptEngineFactory.Factory
-  {
-    public Factory (final boolean hasCloseable)
-    {
-      super (hasCloseable);
-    }
-
-    @Override
-    public ScriptEngine create ()
-    {
-      if (hasCloseable)
-      {
-        return new CloseableInvocablePhpScriptEngine (InvocablePhpScriptEngineFactory.this);
-      }
-      return new InvocablePhpScriptEngine (InvocablePhpScriptEngineFactory.this);
-    }
-  }
-
   /**
    * Create a new EngineFactory
    */
   public InvocablePhpScriptEngineFactory ()
-  {
-    try
-    {
-      Class.forName ("java.io.Closeable");
-      factory = new Factory (true);
-    }
-    catch (final ClassNotFoundException e)
-    {
-      factory = new Factory (false);
-    }
-  }
+  {}
 
   /** {@inheritDoc} */
   @Override
@@ -112,5 +83,11 @@ public class InvocablePhpScriptEngineFactory extends PhpScriptEngineFactory
   public List <String> getExtensions ()
   {
     return ext;
+  }
+
+  @Override
+  public ScriptEngine getScriptEngine ()
+  {
+    return new InvocablePhpScriptEngine (this);
   }
 }

@@ -43,6 +43,7 @@ package php.java.script;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -69,7 +70,7 @@ import php.java.bridge.http.IContext;
  * 
  * @author jostb
  */
-public class PhpScriptEngine extends AbstractPhpScriptEngine
+public class PhpScriptEngine extends AbstractPhpScriptEngine implements Closeable
 {
 
   /**
