@@ -124,12 +124,6 @@ public final class Util
    */
   public static int MAX_WAIT;
 
-  /** The java/Java.inc code */
-  public static Class <?> PHPDEBUGGER_PHP;
-  /** The launcher.sh code */
-  public static Class <?> LAUNCHER_UNIX;
-  /** The launcher.exe code */
-  public static Class <?> LAUNCHER_WINDOWS, LAUNCHER_WINDOWS2, LAUNCHER_WINDOWS3, LAUNCHER_WINDOWS4;
   /** Only for internal use */
   public static final byte HEX_DIGITS[] = { '0',
                                            '1',
@@ -410,28 +404,6 @@ public final class Util
 
   private static void initGlobals ()
   {
-    try
-    {
-      PHPDEBUGGER_PHP = Class.forName ("php.java.bridge.PhpDebuggerPHP");
-    }
-    catch (final Exception e)
-    {/* ignore */}
-    try
-    {
-      LAUNCHER_UNIX = Class.forName ("php.java.bridge.LauncherUnix");
-    }
-    catch (final Exception e)
-    {/* ignore */}
-    try
-    {
-      LAUNCHER_WINDOWS = Class.forName ("php.java.bridge.LauncherWindows");
-      LAUNCHER_WINDOWS2 = Class.forName ("php.java.bridge.LauncherWindows2");
-      LAUNCHER_WINDOWS3 = Class.forName ("php.java.bridge.LauncherWindows3");
-      LAUNCHER_WINDOWS4 = Class.forName ("php.java.bridge.LauncherWindows4");
-    }
-    catch (final Exception e)
-    {/* ignore */}
-
     final Properties p = new Properties ();
     try
     {

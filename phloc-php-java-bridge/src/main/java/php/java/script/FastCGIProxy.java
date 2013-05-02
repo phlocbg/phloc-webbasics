@@ -47,24 +47,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.Util;
-import php.java.bridge.http.FCGIConnectException;
+import php.java.bridge.code.LauncherUnix;
+import php.java.bridge.code.LauncherWindows;
+import php.java.bridge.code.LauncherWindows2;
+import php.java.bridge.code.LauncherWindows3;
+import php.java.bridge.code.LauncherWindows4;
 import php.java.bridge.http.AbstractFCGIConnection;
 import php.java.bridge.http.AbstractFCGIConnectionFactory;
-import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.AbstractFCGIIOFactory;
+import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.AbstractOutputStreamFactory;
+import php.java.bridge.http.FCGIConnectException;
+import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
-import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IFCGIProcess;
 import php.java.bridge.http.IFCGIProcessFactory;
-import php.java.bridge.http.AbstractOutputStreamFactory;
 
 /**
  * This class can be used to run (and to connect to) a FastCGI server.
@@ -135,8 +139,7 @@ public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFa
       {
         if (!javaIncFile.exists ())
         {
-          final Field f = Util.LAUNCHER_UNIX.getField ("bytes");
-          final byte [] buf = (byte []) f.get (Util.LAUNCHER_UNIX);
+          final byte [] buf = LauncherUnix.bytes;
           final OutputStream out = new FileOutputStream (javaIncFile);
           out.write (buf);
           out.close ();
@@ -154,14 +157,10 @@ public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFa
       {
         if (!javaProxyFile.exists ())
         {
-          final Field f = Util.LAUNCHER_WINDOWS.getField ("bytes");
-          final Field f2 = Util.LAUNCHER_WINDOWS2.getField ("bytes");
-          final Field f3 = Util.LAUNCHER_WINDOWS3.getField ("bytes");
-          final Field f4 = Util.LAUNCHER_WINDOWS4.getField ("bytes");
-          final byte [] buf = (byte []) f.get (Util.LAUNCHER_WINDOWS);
-          final byte [] buf2 = (byte []) f2.get (Util.LAUNCHER_WINDOWS2);
-          final byte [] buf3 = (byte []) f3.get (Util.LAUNCHER_WINDOWS3);
-          final byte [] buf4 = (byte []) f4.get (Util.LAUNCHER_WINDOWS4);
+          final byte [] buf = LauncherWindows.bytes;
+          final byte [] buf2 = LauncherWindows2.bytes;
+          final byte [] buf3 = LauncherWindows3.bytes;
+          final byte [] buf4 = LauncherWindows4.bytes;
           final OutputStream out = new FileOutputStream (javaProxyFile);
           out.write (buf);
           out.write (buf2);

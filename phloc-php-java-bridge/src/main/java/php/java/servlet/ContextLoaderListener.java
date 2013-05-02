@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +34,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import php.java.bridge.ILogger;
-import php.java.bridge.JavaInc;
-import php.java.bridge.JavaProxy;
 import php.java.bridge.ThreadPool;
 import php.java.bridge.Util;
+import php.java.bridge.code.JavaInc;
+import php.java.bridge.code.JavaProxy;
+import php.java.bridge.code.LauncherUnix;
+import php.java.bridge.code.LauncherWindows;
+import php.java.bridge.code.LauncherWindows2;
+import php.java.bridge.code.LauncherWindows3;
+import php.java.bridge.code.LauncherWindows4;
 import php.java.bridge.http.AbstractFCGIConnection;
 import php.java.bridge.http.AbstractFCGIConnectionFactory;
 import php.java.bridge.http.AbstractFCGIIOFactory;
@@ -550,8 +554,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       {
         if (!javaIncFile.exists ())
         {
-          final Field f = Util.LAUNCHER_UNIX.getField ("bytes");
-          final byte [] buf = (byte []) f.get (Util.LAUNCHER_UNIX);
+          final byte [] buf = LauncherUnix.bytes;
           final OutputStream out = new FileOutputStream (javaIncFile);
           out.write (buf);
           out.close ();
@@ -569,14 +572,10 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       {
         if (!javaProxyFile.exists ())
         {
-          final Field f = Util.LAUNCHER_WINDOWS.getField ("bytes");
-          final Field f2 = Util.LAUNCHER_WINDOWS2.getField ("bytes");
-          final Field f3 = Util.LAUNCHER_WINDOWS3.getField ("bytes");
-          final Field f4 = Util.LAUNCHER_WINDOWS4.getField ("bytes");
-          final byte [] buf = (byte []) f.get (Util.LAUNCHER_WINDOWS);
-          final byte [] buf2 = (byte []) f2.get (Util.LAUNCHER_WINDOWS2);
-          final byte [] buf3 = (byte []) f3.get (Util.LAUNCHER_WINDOWS3);
-          final byte [] buf4 = (byte []) f4.get (Util.LAUNCHER_WINDOWS4);
+          final byte [] buf = LauncherWindows.bytes;
+          final byte [] buf2 = LauncherWindows2.bytes;
+          final byte [] buf3 = LauncherWindows3.bytes;
+          final byte [] buf4 = LauncherWindows4.bytes;
           final OutputStream out = new FileOutputStream (javaProxyFile);
           out.write (buf);
           out.write (buf2);

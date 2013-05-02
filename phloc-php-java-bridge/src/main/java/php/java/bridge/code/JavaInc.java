@@ -15,7 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package php.java.bridge;
+package php.java.bridge.code;
+
+import php.java.bridge.Util;
 
 public final class JavaInc
 {

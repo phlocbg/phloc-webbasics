@@ -55,6 +55,7 @@ import java.util.List;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
+import php.java.bridge.code.JavaInc;
 import php.java.bridge.http.AbstractHttpServer;
 import php.java.bridge.http.ChunkedInputStream;
 import php.java.bridge.http.ChunkedOutputStream;

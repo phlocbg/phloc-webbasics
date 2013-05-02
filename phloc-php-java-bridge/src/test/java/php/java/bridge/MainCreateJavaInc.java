@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import php.java.bridge.code.JavaInc;
+
 public class MainCreateJavaInc
 {
   public static void main (final String [] args) throws IOException

@@ -62,8 +62,8 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 
-import php.java.bridge.JavaInc;
 import php.java.bridge.Util;
+import php.java.bridge.code.JavaInc;
 import php.java.bridge.http.AbstractChannelName;
 import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.ContextServer;
