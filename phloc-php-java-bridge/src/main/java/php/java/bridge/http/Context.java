@@ -58,6 +58,7 @@ import php.java.bridge.IInvocable;
 import php.java.bridge.IManaged;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
+import php.java.bridge.Util.UtilThread;
 
 /**
  * Emulates a JSR223 script context when the JSR223 classes are not available.
@@ -282,7 +283,7 @@ public class Context implements IManaged, IInvocable, IContext
         registeredHook = true;
         try
         {
-          Runtime.getRuntime ().addShutdownHook (new Util.UtilThread ()
+          Runtime.getRuntime ().addShutdownHook (new UtilThread ()
           {
             @Override
             public void run ()

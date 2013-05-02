@@ -51,6 +51,8 @@ import java.io.Writer;
 import java.util.Map;
 
 import php.java.bridge.Util;
+import php.java.bridge.Util.UtilProcess;
+import php.java.bridge.Util.UtilProcessWithErrorHandler;
 import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.AbstractOutputStreamFactory;
 
@@ -85,16 +87,16 @@ public class CGIRunner extends AbstractContinuation
   @Override
   protected void doRun () throws IOException, Util.UtilProcess.PhpException
   {
-    final Util.UtilProcess proc = Util.UtilProcessWithErrorHandler.start (new String [] { null },
-                                                                  false,
-                                                                  null,
-                                                                  null,
-                                                                  null,
-                                                                  null,
-                                                                  env,
-                                                                  true,
-                                                                  true,
-                                                                  err);
+    final UtilProcess proc = UtilProcessWithErrorHandler.start (new String [] { null },
+                                                                false,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                env,
+                                                                true,
+                                                                true,
+                                                                err);
 
     InputStream natIn = null;
     try
@@ -103,7 +105,7 @@ public class CGIRunner extends AbstractContinuation
       final OutputStream natOut = proc.getOutputStream ();
       writer = new BufferedWriter (new OutputStreamWriter (natOut));
 
-      (new Thread ()
+      new Thread ()
       { // write the script asynchronously to avoid deadlock
         public void doRun () throws IOException
         {
@@ -139,7 +141,7 @@ public class CGIRunner extends AbstractContinuation
             }
           }
         }
-      }).start ();
+      }.start ();
 
       final byte [] buf = new byte [Util.BUF_SIZE];
       AbstractHeaderParser.parseBody (buf, natIn, new AbstractOutputStreamFactory ()

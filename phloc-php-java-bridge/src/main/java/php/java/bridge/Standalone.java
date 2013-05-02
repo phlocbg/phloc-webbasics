@@ -47,6 +47,8 @@ import java.net.ServerSocket;
 
 import javax.swing.JOptionPane;
 
+import php.java.bridge.Util.UtilThread;
+
 /**
  * This is the standalone container of the PHP/Java Bridge. It starts the
  * standalone back-end, listenes for protocol requests and handles
@@ -367,7 +369,7 @@ public final class Standalone
         System.exit (12);
       }
 
-      new Util.UtilThread (new Runnable ()
+      new UtilThread (new Runnable ()
       {
         public void run ()
         {

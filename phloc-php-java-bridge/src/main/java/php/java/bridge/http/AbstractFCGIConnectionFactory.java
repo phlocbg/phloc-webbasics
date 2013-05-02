@@ -28,6 +28,7 @@ import java.util.Map;
 import php.java.bridge.ILogger;
 import php.java.bridge.Util;
 import php.java.bridge.Util.UtilProcess;
+import php.java.bridge.Util.UtilThread;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -151,7 +152,7 @@ public abstract class AbstractFCGIConnectionFactory
 
   protected void bind (@SuppressWarnings ("unused") final ILogger logger) throws InterruptedException, IOException
   {
-    final Thread t = (new Util.UtilThread ("JavaBridgeFastCGIRunner")
+    final Thread t = new UtilThread ("JavaBridgeFastCGIRunner")
     {
       @Override
       public void run ()
@@ -161,7 +162,7 @@ public abstract class AbstractFCGIConnectionFactory
         env.put ("PHP_FCGI_MAX_REQUESTS", processFactory.getPhpMaxRequests ());
         runFcgi (env, processFactory.getPhp (), processFactory.getPhpIncludeJava ());
       }
-    });
+    };
     t.start ();
     waitForDaemon ();
   }
@@ -249,7 +250,7 @@ public abstract class AbstractFCGIConnectionFactory
    * @return The concrete ChannelFactory (NP or Socket channel factory).
    */
   public static AbstractFCGIConnectionFactory createChannelFactory (final IFCGIProcessFactory processFactory,
-                                                            final boolean promiscuous)
+                                                                    final boolean promiscuous)
   {
     if (Util.USE_SH_WRAPPER)
       return new SocketChannelFactory (processFactory, promiscuous);

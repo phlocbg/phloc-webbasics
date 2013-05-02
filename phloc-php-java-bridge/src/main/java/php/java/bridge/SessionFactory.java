@@ -157,7 +157,7 @@ public class SessionFactory extends AbstractJavaBridgeFactory
     getTimer ().interrupt ();
   }
 
-  protected static class SessionTimer implements Runnable
+  protected static final class SessionTimer implements Runnable
   {
     private final List <Runnable> jobs = new Vector <Runnable> ();
     private final UtilThread thread;
@@ -172,7 +172,7 @@ public class SessionFactory extends AbstractJavaBridgeFactory
        * (SessionFactory.class));
        */
 
-      thread = (new Util.UtilThread (this, "JavaBridgeSessionTimer"));
+      thread = new UtilThread (this, "JavaBridgeSessionTimer");
       thread.start ();
     }
 

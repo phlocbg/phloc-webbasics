@@ -1103,7 +1103,7 @@ public final class Util
   /**
    * Convenience daemon thread class
    */
-  public static class UtilThread extends java.lang.Thread
+  public static class UtilThread extends Thread
   {
     /** Create a new thread */
     public UtilThread ()
@@ -2173,7 +2173,7 @@ public final class Util
     ClassLoader loader = null;
     try
     {
-      loader = java.lang.Thread.currentThread ().getContextClassLoader ();
+      loader = Thread.currentThread ().getContextClassLoader ();
     }
     catch (final SecurityException ex)
     {/* ignore */}

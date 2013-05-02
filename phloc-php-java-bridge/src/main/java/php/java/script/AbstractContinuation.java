@@ -46,6 +46,7 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import php.java.bridge.Util;
+import php.java.bridge.Util.UtilProcess;
 import php.java.bridge.http.AbstractHeaderParser;
 
 /**
@@ -121,10 +122,10 @@ public abstract class AbstractContinuation implements IContinuation, Runnable
   }
 
   protected AbstractContinuation (final Map <String, String> env,
-                          final OutputStream out,
-                          final OutputStream err,
-                          final AbstractHeaderParser headerParser,
-                          final ResultProxy resultProxy)
+                                  final OutputStream out,
+                                  final OutputStream err,
+                                  final AbstractHeaderParser headerParser,
+                                  final ResultProxy resultProxy)
   {
     this.env = env;
     this.out = out;
@@ -143,7 +144,7 @@ public abstract class AbstractContinuation implements IContinuation, Runnable
     {
       phpScript.val = e;
     }
-    catch (final Util.UtilProcess.PhpException e1)
+    catch (final UtilProcess.PhpException e1)
     {
       phpScript.val = e1;
     }
@@ -159,7 +160,7 @@ public abstract class AbstractContinuation implements IContinuation, Runnable
     }
   }
 
-  protected abstract void doRun () throws IOException, Util.UtilProcess.PhpException;
+  protected abstract void doRun () throws IOException, UtilProcess.PhpException;
 
   private final Object lockObject = new Object ();
 

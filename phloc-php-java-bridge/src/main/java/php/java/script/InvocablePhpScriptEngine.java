@@ -61,6 +61,7 @@ import javax.script.ScriptException;
 
 import php.java.bridge.PhpProcedure;
 import php.java.bridge.Util;
+import php.java.bridge.Util.UtilThread;
 import php.java.bridge.http.IContext;
 
 /**
@@ -433,7 +434,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
         registeredHook = true;
         try
         {
-          Runtime.getRuntime ().addShutdownHook (new Util.UtilThread ()
+          Runtime.getRuntime ().addShutdownHook (new UtilThread ()
           {
             @Override
             public void run ()

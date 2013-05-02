@@ -45,13 +45,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import php.java.bridge.Util;
+import php.java.bridge.Util.UtilProcess;
+import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.AbstractOutputStreamFactory;
 import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
-import php.java.bridge.http.AbstractHeaderParser;
-import php.java.bridge.http.AbstractOutputStreamFactory;
 import php.java.script.AbstractContinuation;
 import php.java.script.ResultProxy;
 
@@ -78,7 +78,7 @@ public class HttpFastCGIProxy extends AbstractContinuation
   }
 
   @Override
-  protected void doRun () throws IOException, Util.UtilProcess.PhpException
+  protected void doRun () throws IOException, UtilProcess.PhpException
   {
     final byte [] buf = new byte [FCGIUtil.FCGI_BUF_SIZE];
 

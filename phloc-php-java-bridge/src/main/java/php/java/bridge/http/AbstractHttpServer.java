@@ -50,6 +50,7 @@ import java.net.Socket;
 import php.java.bridge.AppThreadPool;
 import php.java.bridge.ISocketFactory;
 import php.java.bridge.Util;
+import php.java.bridge.Util.UtilThread;
 
 /**
  * This class can be used to create a simple HTTP server. It is used when
@@ -134,7 +135,7 @@ public abstract class AbstractHttpServer implements Runnable
     }
     catch (final SecurityException e)
     {/* ignore */}
-    httpServer = new Util.UtilThread (this, "JavaBridgeHttpServer");
+    httpServer = new UtilThread (this, "JavaBridgeHttpServer");
     httpServer.start ();
   }
 
@@ -330,7 +331,7 @@ public abstract class AbstractHttpServer implements Runnable
       if (pool == null)
       {
         Util.logDebug ("Starting new HTTP server thread");
-        (new Util.UtilThread (new Runner (sock), Util.EXTENSION_NAME + "HttpServerRunner")).start ();
+        new UtilThread (new Runner (sock), Util.EXTENSION_NAME + "HttpServerRunner").start ();
       }
       else
       {

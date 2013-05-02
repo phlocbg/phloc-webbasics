@@ -66,6 +66,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import php.java.bridge.Util.UtilThread;
+
 /**
  * This is the main interface of the PHP/Java Bridge. It contains utility
  * methods which can be used by clients.
@@ -398,7 +400,7 @@ public class JavaBridge implements Runnable
         else
         {
           Util.logDebug ("Starting new bridge thread");
-          final Thread t = new Util.UtilThread (bridge);
+          final Thread t = new UtilThread (bridge);
           t.start ();
         }
       }

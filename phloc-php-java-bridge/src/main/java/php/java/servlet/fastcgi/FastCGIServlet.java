@@ -58,13 +58,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import php.java.bridge.Util;
 import php.java.bridge.http.AbstractChannelName;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.FCGIConnectException;
 import php.java.bridge.http.FCGIConnectionException;
 import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
-import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IContextFactory;
 import php.java.servlet.ContextLoaderListener;
 import php.java.servlet.PhpJavaServlet;
@@ -416,7 +416,7 @@ public final class FastCGIServlet extends HttpServlet
         in = null;
         final FCGIOutputStream natOutputStream = natOut;
         natOut = null;
-        (new Thread ()
+        new Thread ()
         {
           @Override
           public void run ()
@@ -444,7 +444,7 @@ public final class FastCGIServlet extends HttpServlet
               {}
             }
           }
-        }).start ();
+        }.start ();
       }
       else
       {
