@@ -43,6 +43,7 @@ import php.java.bridge.code.LauncherWindows;
 import php.java.bridge.code.LauncherWindows2;
 import php.java.bridge.code.LauncherWindows3;
 import php.java.bridge.code.LauncherWindows4;
+import php.java.bridge.code.PhpDebuggerPHP;
 import php.java.bridge.http.AbstractFCGIConnection;
 import php.java.bridge.http.AbstractFCGIConnectionFactory;
 import php.java.bridge.http.AbstractFCGIIOFactory;
@@ -436,7 +437,6 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
 
   private void createPhpFiles ()
   {
-
     final String javaDir = ServletUtil.getRealPath (context, "java");
     if (javaDir != null)
     {
@@ -466,14 +466,27 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       {
         e.printStackTrace ();
       }
-      /*
-       * no longer part of the PHP/Java Bridge File phpDebuggerFile = new File
-       * (javaDir, "PHPDebugger.php"); try { if (!phpDebuggerFile.exists()) {
-       * Field f = Util.PHPDEBUGGER_PHP.getField("bytes"); byte[] buf = (byte[])
-       * f.get(Util.PHPDEBUGGER_PHP); OutputStream out = new FileOutputStream
-       * (phpDebuggerFile); out.write(buf); out.close(); } } catch (Exception e)
-       * { e.printStackTrace(); }
-       */
+
+      // no longer part of the PHP/Java Bridge
+      if (false)
+      {
+        final File phpDebuggerFile = new File (javaDir, "PHPDebugger.php");
+        try
+        {
+          if (!phpDebuggerFile.exists ())
+          {
+            final byte [] buf = PhpDebuggerPHP.bytes;
+            final OutputStream out = new FileOutputStream (phpDebuggerFile);
+            out.write (buf);
+            out.close ();
+          }
+        }
+        catch (final Exception e)
+        {
+          e.printStackTrace ();
+        }
+      }
+
       final File javaProxyFile = new File (javaDir, "JavaProxy.php");
       try
       {
@@ -613,7 +626,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
                                   "/php-cgi -c ./" +
                                   Util.osArch +
                                   "-" +
-                                  Util.osName + "/php-cgi.ini \"$@\"").getBytes ();
+                                  Util.osName + "/php-cgi.ini \"$@\"").getBytes (Util.ASCII);
             final OutputStream out = new FileOutputStream (wrapper);
             out.write (data);
             out.close ();
@@ -633,7 +646,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
                                   ext +
                                   "\"\n" +
                                   "include_path=\"" +
-                                  pearDir + ":/usr/share/pear:.\"\n").getBytes ();
+                                  pearDir + ":/usr/share/pear:.\"\n").getBytes (Util.ASCII);
             final OutputStream out = new FileOutputStream (ini);
             out.write (data);
             out.close ();
@@ -645,7 +658,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
           final File readme = new File (cgiOsDir, "php-cgi.MISSING.README.txt");
           if (!readme.exists ())
           {
-            final byte [] data = ("You can add \"php-cgi\" to this directory and re-deploy your web application.\n").getBytes ();
+            final byte [] data = "You can add \"php-cgi\" to this directory and re-deploy your web application.\n".getBytes (Util.ASCII);
             final OutputStream out = new FileOutputStream (readme);
             out.write (data);
             out.close ();
@@ -692,7 +705,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
           final File readme = new File (cgiOsDir, "php-cgi.exe.MISSING.README.txt");
           if (!readme.exists ())
           {
-            final byte [] data = ("You can add \"php-cgi.exe\" to this directory and re-deploy your web application.\r\n").getBytes ();
+            final byte [] data = "You can add \"php-cgi.exe\" to this directory and re-deploy your web application.\r\n".getBytes (Util.ASCII);
             final OutputStream out = new FileOutputStream (readme);
             out.write (data);
             out.close ();
@@ -723,7 +736,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
               + ";; Copy the correct version (see phpinfo()) of the PHP extension \"php_mysql.dll\" to the .\\..\\ext directory and uncomment the following line\r\n"
               + "; extension = php_mysql.dll\r\n";
       }
-      final byte [] data = str.getBytes ();
+      final byte [] data = str.getBytes (Util.ASCII);
       try
       {
         final OutputStream out = new FileOutputStream (tmpl);
