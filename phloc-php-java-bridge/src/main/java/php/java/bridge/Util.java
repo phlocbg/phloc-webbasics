@@ -80,6 +80,11 @@ public final class Util
   public static final Charset ASCII = Charset.forName ("ASCII");
 
   /**
+   * ASCII encoding
+   */
+  public static final Charset ISO88591 = Charset.forName ("ISO-8859-1");
+
+  /**
    * UTF8 encoding
    */
   public static final Charset UTF8 = Charset.forName ("UTF-8");
@@ -796,25 +801,22 @@ public final class Util
     if (obj == null)
     {
       buf.append ("null");
-      return;
-    }
-
-    if (obj instanceof Class <?>)
-    {
-      if (((Class <?>) obj).isInterface ())
-        buf.append ("[i:");
-      else
-        buf.append ("[c:");
     }
     else
     {
-      buf.append ("[o:");
+      if (obj instanceof Class <?>)
+      {
+        if (((Class <?>) obj).isInterface ())
+          buf.append ("[i:");
+        else
+          buf.append ("[c:");
+      }
+      else
+      {
+        buf.append ("[o:");
+      }
+      buf.append (getShortClassName (obj)).append ("]:\"").append (Util.stringValueOf (obj)).append ('"');
     }
-    buf.append (getShortClassName (obj));
-    buf.append ("]:");
-    buf.append ("\"");
-    buf.append (Util.stringValueOf (obj));
-    buf.append ("\"");
   }
 
   /**
@@ -830,15 +832,11 @@ public final class Util
   public static void appendTrace (final Throwable throwable, final String trace, final StringBuilder buf)
   {
     buf.append (" at:\n");
-    final StackTraceElement stack[] = throwable.getStackTrace ();
+    final StackTraceElement [] stack = throwable.getStackTrace ();
     final int top = stack.length;
     for (int i = 0; i < top; i++)
     {
-      buf.append ("#-");
-      buf.append (top - i);
-      buf.append (" ");
-      buf.append (stack[i].toString ());
-      buf.append ("\n");
+      buf.append ("#-").append (top - i).append (" ").append (stack[i].toString ()).append ("\n");
     }
     buf.append (trace);
   }
@@ -870,8 +868,7 @@ public final class Util
     {
       buf.append ("[o:");
     }
-    buf.append (getShortClassName (obj));
-    buf.append ("]");
+    buf.append (getShortClassName (obj)).append (']');
   }
 
   /**
@@ -887,12 +884,11 @@ public final class Util
     if (c.isInterface ())
       buf.append ("(i:");
     else
-      if (c == java.lang.Class.class)
+      if (c == Class.class)
         buf.append ("(c:");
       else
         buf.append ("(o:");
-    buf.append (getShortClassName (c));
-    buf.append (")");
+    buf.append (getShortClassName (c)).append (')');
   }
 
   /**

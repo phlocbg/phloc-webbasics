@@ -66,7 +66,7 @@ public class ChunkedOutputStream extends FilterOutputStream
     super (new BufferedOutputStream (out));
   }
 
-  private static final byte [] RN0 = "0\r\n\r\n".getBytes ();
+  private static final byte [] RN0 = "0\r\n\r\n".getBytes (Util.ISO88591);
 
   private void writeEOF () throws IOException
   {

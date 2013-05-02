@@ -34,6 +34,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import php.java.bridge.CBridge;
 import php.java.bridge.ILogger;
 import php.java.bridge.ThreadPool;
 import php.java.bridge.Util;
@@ -552,7 +553,7 @@ public final class ContextLoaderListener implements ServletContextListener, IFCG
       e.printStackTrace ();
     }
 
-    final File javaIncFile = new File (cgiOsDir, "launcher.sh");
+    final File javaIncFile = new File (cgiOsDir, CBridge.LAUNCHER_SH);
     if (Util.USE_SH_WRAPPER)
     {
       try
@@ -570,7 +571,7 @@ public final class ContextLoaderListener implements ServletContextListener, IFCG
         e.printStackTrace ();
       }
     }
-    final File javaProxyFile = new File (cgiOsDir, "launcher.exe");
+    final File javaProxyFile = new File (cgiOsDir, CBridge.LAUNCHER_EXE);
     if (!Util.USE_SH_WRAPPER)
     {
       try
@@ -618,7 +619,7 @@ public final class ContextLoaderListener implements ServletContextListener, IFCG
                                   "/php-cgi -c ./" +
                                   Util.osArch +
                                   "-" +
-                                  Util.osName + "/php-cgi.ini \"$@\"").getBytes (Util.ASCII);
+                                  Util.osName + "/php-cgi.ini \"$@\"").getBytes (Util.ISO88591);
             final OutputStream out = new FileOutputStream (wrapper);
             out.write (data);
             out.close ();
@@ -638,7 +639,7 @@ public final class ContextLoaderListener implements ServletContextListener, IFCG
                                   ext +
                                   "\"\n" +
                                   "include_path=\"" +
-                                  pearDir + ":/usr/share/pear:.\"\n").getBytes (Util.ASCII);
+                                  pearDir + ":/usr/share/pear:.\"\n").getBytes (Util.ISO88591);
             final OutputStream out = new FileOutputStream (ini);
             out.write (data);
             out.close ();
@@ -685,7 +686,7 @@ public final class ContextLoaderListener implements ServletContextListener, IFCG
                                   ext +
                                   "\"\r\n" +
                                   "include_path=\"" +
-                                  pearDir + ";.\"\r\n").getBytes ();
+                                  pearDir + ";.\"\r\n").getBytes (Util.ISO88591);
             final OutputStream out = new FileOutputStream (ini);
             out.write (data);
             out.close ();

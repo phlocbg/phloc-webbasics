@@ -17,6 +17,8 @@
  */
 package php.java.bridge.code;
 
+import php.java.bridge.Util;
+
 public class PhpDebuggerPHP
 {
   private static final String data = "<?php /*-*- mode: php; tab-width:4 -*-*/\n"
@@ -2203,5 +2205,5 @@ public class PhpDebuggerPHP
                                      + "}\n"
                                      + "?>\n"
                                      + "";
-  public static final byte [] bytes = data.getBytes ();
+  public static final byte [] bytes = data.getBytes (Util.ISO88591);
 }

@@ -17,6 +17,8 @@
  */
 package php.java.bridge.code;
 
+import php.java.bridge.Util;
+
 public class LauncherUnix
 {
   private static final String data = "#!/bin/sh\n"
@@ -28,5 +30,5 @@ public class LauncherUnix
                                      + "read result 1>&2\n"
                                      + "kill $!\n"
                                      + "";
-  public static final byte [] bytes = data.getBytes ();
+  public static final byte [] bytes = data.getBytes (Util.ISO88591);
 }

@@ -49,6 +49,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import php.java.bridge.CBridge;
 import php.java.bridge.Util;
 import php.java.bridge.code.LauncherUnix;
 import php.java.bridge.code.LauncherWindows;
@@ -128,7 +129,7 @@ public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFa
     channelName.findFreePort (true);
     channelName.initialize ();
     final File cgiOsDir = Util.TMPDIR;
-    final File javaIncFile = new File (cgiOsDir, "launcher.sh");
+    final File javaIncFile = new File (cgiOsDir, CBridge.LAUNCHER_SH);
     if (Util.USE_SH_WRAPPER)
     {
       try
@@ -146,7 +147,7 @@ public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFa
         e.printStackTrace ();
       }
     }
-    final File javaProxyFile = new File (cgiOsDir, "launcher.exe");
+    final File javaProxyFile = new File (cgiOsDir, CBridge.LAUNCHER_EXE);
     if (!Util.USE_SH_WRAPPER)
     {
       try

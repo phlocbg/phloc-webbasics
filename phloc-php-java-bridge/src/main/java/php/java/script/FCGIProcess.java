@@ -47,12 +47,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import php.java.bridge.CBridge;
 import php.java.bridge.Util;
 import php.java.bridge.http.IFCGIProcess;
 
 /**
  * Represents the FastCGI process.
- *
+ * 
  * @author jostb
  */
 class FCGIProcess extends Util.UtilProcess implements IFCGIProcess
@@ -81,7 +82,7 @@ class FCGIProcess extends Util.UtilProcess implements IFCGIProcess
     if (Util.USE_SH_WRAPPER)
     {
       buf.add ("/bin/sh");
-      buf.add (realPath + File.separator + "launcher.sh");
+      buf.add (realPath + File.separator + CBridge.LAUNCHER_SH);
       buf.addAll (java.util.Arrays.asList (php));
       for (int i = 1; i < args.length; i++)
       {
@@ -91,7 +92,7 @@ class FCGIProcess extends Util.UtilProcess implements IFCGIProcess
     }
     else
     {
-      buf.add (realPath + File.separator + "launcher.exe");
+      buf.add (realPath + File.separator + CBridge.LAUNCHER_EXE);
       buf.addAll (java.util.Arrays.asList (php));
       for (int i = 1; i < args.length; i++)
       {

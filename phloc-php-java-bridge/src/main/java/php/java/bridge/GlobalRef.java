@@ -147,7 +147,11 @@ final class GlobalRef
       if (globalRef[i] != null)
       {
         for (Entry e = globalRef[i]; e != null; e = e.next)
-          result.append ("globalRef[" + i + "]=" + JavaBridge.objectDebugDescription (e.value) + "\n");
+          result.append ("globalRef[")
+                .append (i)
+                .append ("]=")
+                .append (JavaBridge.objectDebugDescription (e.value))
+                .append ('\n');
       }
     }
     return result.toString ();
@@ -200,7 +204,7 @@ final class GlobalRef
     final Entry oldTable[] = globalRef;
 
     final int newCapacity = (oldCapacity << 1) + 1;
-    final Entry newTable[] = new Entry [newCapacity];
+    final Entry [] newTable = new Entry [newCapacity];
 
     threshold = (newCapacity >>> 2) * 3;
     globalRef = newTable;

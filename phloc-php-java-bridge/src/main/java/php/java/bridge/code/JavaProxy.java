@@ -17,6 +17,8 @@
  */
 package php.java.bridge.code;
 
+import php.java.bridge.Util;
+
 public class JavaProxy
 {
   private static final String data = "<?php \n"
@@ -39,5 +41,5 @@ public class JavaProxy
                                      + "}\n"
                                      + "?>\n"
                                      + "";
-  public static final byte [] bytes = data.getBytes ();
+  public static final byte [] bytes = data.getBytes (Util.ISO88591);
 }

@@ -54,6 +54,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -1677,7 +1678,7 @@ public class JavaBridge implements Runnable
   private static String firstChars (final Object o)
   {
     String append = "";
-    String s = o instanceof java.lang.reflect.Proxy ? o.getClass ().getName () : String.valueOf (o);
+    String s = o instanceof Proxy ? o.getClass ().getName () : String.valueOf (o);
     int len = s.length ();
     if (len > DISPLAY_MAX_CHARS)
     {
@@ -1719,11 +1720,10 @@ public class JavaBridge implements Runnable
         obj = ((Map <?, ?>) obj).values ().toArray ();
     if (level < DISPLAY_MAX_ELEMENTS && obj.getClass ().isArray ())
     {
-      final StringBuilder buf = new StringBuilder ("[Object " +
-                                                   System.identityHashCode (ob) +
-                                                   " - Class: " +
-                                                   classDebugDescription (ob.getClass ()) +
-                                                   "]: ");
+      final StringBuilder buf = new StringBuilder ("[Object ").append (System.identityHashCode (ob))
+                                                              .append (" - Class: ")
+                                                              .append (classDebugDescription (ob.getClass ()))
+                                                              .append ("]: ");
       buf.append ("{\n");
       final int length = Array.getLength (obj);
       for (int i = 0; i < length; i++)
