@@ -75,10 +75,10 @@ public class Context implements IManaged, Invocable, IContext
 {
 
   /** Map of the scope of level GLOBAL_SCOPE */
-  private Map globalScope;
+  private Map <String, Object> globalScope;
 
   /** Map of the scope of level ENGINE_SCOPE */
-  private Map engineScope;
+  private Map <String, Object> engineScope;
 
   protected Context ()
   {}
@@ -253,32 +253,32 @@ public class Context implements IManaged, Invocable, IContext
     return false;
   }
 
-  protected void setGlobalScope (final Map globalScope)
+  protected void setGlobalScope (final Map <String, Object> globalScope)
   {
     this.globalScope = globalScope;
   }
 
-  protected Map getGlobalScope ()
+  protected Map <String, Object> getGlobalScope ()
   {
     if (globalScope == null)
-      globalScope = new HashMap ();
+      globalScope = new HashMap <String, Object> ();
     return globalScope;
   }
 
-  protected void setEngineScope (final Map engineScope)
+  protected void setEngineScope (final Map <String, Object> engineScope)
   {
     this.engineScope = engineScope;
   }
 
-  protected Map getEngineScope ()
+  protected Map <String, Object> getEngineScope ()
   {
     if (engineScope == null)
-      engineScope = new HashMap ();
+      engineScope = new HashMap <String, Object> ();
     return engineScope;
   }
 
   private static boolean registeredHook = false;
-  private static LinkedList closeables = new LinkedList ();
+  private static LinkedList <Object> closeables = new LinkedList <Object> ();
   private static Object lockObject = new Object ();
 
   /**
@@ -312,7 +312,7 @@ public class Context implements IManaged, Invocable, IContext
                 return;
               synchronized (closeables)
               {
-                for (final Iterator ii = closeables.iterator (); ii.hasNext (); ii.remove ())
+                for (final Iterator <Object> ii = closeables.iterator (); ii.hasNext (); ii.remove ())
                 {
                   final Object c = ii.next ();
                   try
@@ -419,7 +419,7 @@ public class Context implements IManaged, Invocable, IContext
   }
 
   /** {@inheritDoc} */
-  public Map getAll ()
+  public Map <String, Object> getAll ()
   {
     return Collections.unmodifiableMap (getEngineScope ());
   }

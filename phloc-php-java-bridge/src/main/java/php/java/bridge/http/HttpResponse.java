@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
@@ -59,7 +59,7 @@ import php.java.bridge.Util;
 public class HttpResponse
 {
 
-  private final HashMap headers;
+  private final Map <String, String> headers;
   private OutputStream outputStream;
 
   private boolean headersWritten;
@@ -72,12 +72,12 @@ public class HttpResponse
    */
   public HttpResponse (final OutputStream outputStream)
   {
-    this.headers = new HashMap ();
+    this.headers = new HashMap <String, String> ();
 
     this.outputStream = new BufferedOutputStream (outputStream)
     {
       @Override
-      public void write (final byte buf[], final int pos, final int len) throws IOException
+      public synchronized void write (final byte [] buf, final int pos, final int len) throws IOException
       {
         if (!headersWritten)
         {
@@ -147,9 +147,9 @@ public class HttpResponse
     final java.io.ByteArrayOutputStream out = new ByteArrayOutputStream ();
     out.write (h1);
     out.write (h2);
-    for (final Iterator ii = headers.keySet ().iterator (); ii.hasNext ();)
+    for (final String string : headers.keySet ())
     {
-      final Object key = ii.next ();
+      final Object key = string;
       final Object val = headers.get (key);
       out.write (Util.toBytes ((String) key));
       out.write (h4);

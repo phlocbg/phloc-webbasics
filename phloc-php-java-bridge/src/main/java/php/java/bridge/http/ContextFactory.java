@@ -47,6 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import php.java.bridge.ISession;
 import php.java.bridge.JavaBridge;
@@ -127,8 +128,8 @@ public final class ContextFactory extends SessionFactory implements IContextFact
     }
   }
 
-  private static final HashMap contexts = new HashMap ();
-  private static final HashMap liveContexts = new HashMap ();
+  private static final Map <String, ContextFactory> contexts = new HashMap <String, ContextFactory> ();
+  private static final Map <String, Object> liveContexts = new HashMap <String, Object> ();
 
   private final String id;
   private final long timestamp;
@@ -138,8 +139,11 @@ public final class ContextFactory extends SessionFactory implements IContextFact
 
   private static long counter = 0;
 
-  private static synchronized String addNext (String webContext, final ContextFactory thiz, final boolean isManaged)
+  private static synchronized String addNext (final String pwebContext,
+                                              final ContextFactory thiz,
+                                              final boolean isManaged)
   {
+    String webContext = pwebContext;
     String id;
     counter++;
     try
@@ -255,7 +259,7 @@ public final class ContextFactory extends SessionFactory implements IContextFact
     ContextFactory factory = ((ContextFactory) liveContexts.get (id));
     if (factory == null)
     {
-      factory = ((ContextFactory) contexts.get (id));
+      factory = contexts.get (id);
       contextIsManaged = false;
     }
     // May only happen if this is a simple ContextFactory outside of a J2EE
@@ -347,9 +351,9 @@ public final class ContextFactory extends SessionFactory implements IContextFact
   {
     final long timestamp = System.currentTimeMillis ();
 
-    for (final Iterator ii = contexts.values ().iterator (); ii.hasNext ();)
+    for (final Iterator <ContextFactory> ii = contexts.values ().iterator (); ii.hasNext ();)
     {
-      final ContextFactory ctx = ((ContextFactory) ii.next ());
+      final ContextFactory ctx = ii.next ();
       if (ctx.timestamp + Util.MAX_WAIT < timestamp)
       {
         ctx.visitor.invalidate ();
@@ -367,17 +371,17 @@ public final class ContextFactory extends SessionFactory implements IContextFact
    */
   public static synchronized void destroyAll ()
   {
-    for (final Iterator ii = contexts.values ().iterator (); ii.hasNext ();)
+    for (final Iterator <ContextFactory> ii = contexts.values ().iterator (); ii.hasNext ();)
     {
-      final ContextFactory ctx = ((ContextFactory) ii.next ());
+      final ContextFactory ctx = ii.next ();
       ctx.visitor.invalidate ();
       if (Util.logLevel > 4)
         Util.logDebug ("contextfactory: Orphaned context: " + ctx.visitor + " removed.");
       ii.remove ();
     }
-    for (final Iterator ii = contexts.values ().iterator (); ii.hasNext ();)
+    for (final Iterator <ContextFactory> ii = contexts.values ().iterator (); ii.hasNext ();)
     {
-      final ContextFactory ctx = ((ContextFactory) ii.next ());
+      final ContextFactory ctx = ii.next ();
       ctx.visitor.invalidate ();
       ii.remove ();
     }
@@ -485,7 +489,7 @@ public final class ContextFactory extends SessionFactory implements IContextFact
   /** {@inheritDoc} */
   public synchronized void release ()
   {
-    final ContextFactory ob = (ContextFactory) contexts.remove (id);
+    final ContextFactory ob = contexts.remove (id);
     if (Util.logLevel > 4)
       Util.logDebug ("contextfactory: released empty context: " +
                      (ob != null ? String.valueOf (ob.visitor) : "<already handled>") +

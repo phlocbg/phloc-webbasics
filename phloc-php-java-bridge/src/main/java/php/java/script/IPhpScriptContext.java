@@ -68,14 +68,14 @@ public interface IPhpScriptContext extends IManaged, Invocable, IContext, Script
    * @param kont
    *        The continuation.
    */
-  public void setContinuation (Continuation kont);
+  void setContinuation (Continuation kont);
 
   /**
    * Get the php continuation
    * 
    * @return The HttpProxy
    */
-  public Continuation getContinuation ();
+  Continuation getContinuation ();
 
   /**
    * Create a continuation
@@ -98,19 +98,19 @@ public interface IPhpScriptContext extends IManaged, Invocable, IContext, Script
    *        create a continuation for a compiled or non-compiled script engine
    * @return the Continuation
    */
-  public Continuation createContinuation (Reader reader,
-                                          Map env,
-                                          OutputStream out,
-                                          OutputStream err,
-                                          HeaderParser headerParser,
-                                          ResultProxy result,
-                                          ILogger logger,
-                                          boolean isCompiled);
+  Continuation createContinuation (Reader reader,
+                                   Map <String, String> env,
+                                   OutputStream out,
+                                   OutputStream err,
+                                   HeaderParser headerParser,
+                                   ResultProxy result,
+                                   ILogger logger,
+                                   boolean isCompiled);
 
   /**
    * Start the current continuation using a context-specific thread pool
    */
-  public void startContinuation ();
+  void startContinuation ();
 
   /**
    * Get the context server associated with this context, usually a HttpServer
@@ -118,5 +118,5 @@ public interface IPhpScriptContext extends IManaged, Invocable, IContext, Script
    * 
    * @return the ContextServer
    */
-  public ContextServer getContextServer ();
+  ContextServer getContextServer ();
 }

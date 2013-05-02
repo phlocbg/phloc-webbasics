@@ -46,6 +46,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -62,6 +64,7 @@ import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
+import php.java.bridge.http.HeaderParser;
 import php.java.bridge.http.IContextFactory;
 import php.java.servlet.ContextLoaderListener;
 import php.java.servlet.PhpJavaServlet;
@@ -107,9 +110,9 @@ public class FastCGIServlet extends HttpServlet
     public String servletPath;
     public String queryString;
     public String requestUri;
-    public HashMap <String, String> environment;
+    public Map <String, String> environment;
     public boolean includedJava;
-    public ArrayList <String> allHeaders;
+    public List <String> allHeaders;
   }
 
   protected ServletContext context;
@@ -213,9 +216,8 @@ public class FastCGIServlet extends HttpServlet
   }
 
   /** calculate PATH_INFO, PATH_TRANSLATED and SCRIPT_FILENAME */
-  protected void setPathInfo (final HttpServletRequest req, final HashMap <String, String> envp, final Environment env)
+  protected void setPathInfo (final HttpServletRequest req, final Map <String, String> envp, final Environment env)
   {
-
     final String pathInfo = env.pathInfo;
     if (pathInfo != null)
     {
@@ -230,9 +232,9 @@ public class FastCGIServlet extends HttpServlet
 
   }
 
-  protected void setupCGIEnvironment (final HttpServletRequest req, final HttpServletResponse res, final Environment env) throws ServletException
+  protected void setupCGIEnvironment (final HttpServletRequest req, final HttpServletResponse res, final Environment env)
   {
-    final HashMap <String, String> envp = (HashMap <String, String>) contextLoaderListener.getEnvironment ().clone ();
+    final HashMap <String, String> envp = new HashMap <String, String> (contextLoaderListener.getEnvironment ());
 
     envp.put ("SERVER_SOFTWARE", serverInfo);
     envp.put ("SERVER_NAME", ServletUtil.nullsToBlanks (req.getServerName ()));
@@ -257,12 +259,12 @@ public class FastCGIServlet extends HttpServlet
      * is no content, so we cannot put 0 or -1 in as per the Servlet API spec.
      */
     final int contentLength = req.getContentLength ();
-    final String sContentLength = (contentLength <= 0 ? "" : (new Integer (contentLength)).toString ());
+    final String sContentLength = (contentLength <= 0 ? "" : Integer.toString (contentLength));
     envp.put ("CONTENT_LENGTH", sContentLength);
 
-    final Enumeration headers = req.getHeaderNames ();
+    final Enumeration <?> headers = req.getHeaderNames ();
     String header = null;
-    final StringBuffer buffer = new StringBuffer ();
+    final StringBuilder buffer = new StringBuilder ();
 
     while (headers.hasMoreElements ())
     {
@@ -303,7 +305,7 @@ public class FastCGIServlet extends HttpServlet
 
     final String sPort = env.environment.get ("SERVER_PORT");
     final String standardPort = req.isSecure () ? _443 : _80;
-    final StringBuffer httpHost = new StringBuffer (env.environment.get ("SERVER_NAME"));
+    final StringBuilder httpHost = new StringBuilder (env.environment.get ("SERVER_NAME"));
     if (!standardPort.equals (sPort))
     { // append port only if necessary, see Patch#3040838
       httpHost.append (":");
@@ -518,7 +520,7 @@ public class FastCGIServlet extends HttpServlet
       }
       natIn.close ();
       final String phpFatalError = natIn.checkError ();
-      final StringBuffer phpError = natIn.getError ();
+      final StringBuilder phpError = natIn.getError ();
       if ((phpError != null) && (Util.logLevel > 4))
         Util.logDebug (phpError.toString ());
       natIn = null;
@@ -609,7 +611,6 @@ public class FastCGIServlet extends HttpServlet
         env.ctx.releaseManaged ();
       env.ctx = null;
     }
-
   }
 
   protected void addHeader (final HttpServletResponse response, String line, final Environment env)
@@ -656,7 +657,7 @@ public class FastCGIServlet extends HttpServlet
       }
       catch (final Exception ex)
       {/* ignore */}
-      final StringBuffer buf = new StringBuffer ("PHP FastCGI server not running. Please see server log for details.");
+      final StringBuilder buf = new StringBuilder ("PHP FastCGI server not running. Please see server log for details.");
       if (contextLoaderListener.getChannelName () != null && context != null)
       {
         buf.append (" Or start a PHP FastCGI server using the command:\n");

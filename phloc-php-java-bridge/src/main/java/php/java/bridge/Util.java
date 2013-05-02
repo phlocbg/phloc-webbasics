@@ -57,12 +57,10 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -317,7 +315,7 @@ public final class Util
    * <code>java -DPATH="$PATH" -DHOME="$HOME" -jar JavaBridge.jar</code> or
    * <code>java -DPATH="%PATH%" -jar JavaBridge.jar</code>.
    */
-  public static HashMap <String, String> COMMON_ENVIRONMENT;
+  public static Map <String, String> COMMON_ENVIRONMENT;
 
   /**
    * The default extension directories. If one of the directories
@@ -838,14 +836,14 @@ public final class Util
   }
 
   /**
-   * Append an object to a StringBuffer
+   * Append an object to a StringBuilder
    * 
    * @param obj
    *        The object
    * @param buf
-   *        The StringBuffer
+   *        The StringBuilder
    */
-  public static void appendObject (final Object obj, final StringBuffer buf)
+  public static void appendObject (final Object obj, final StringBuilder buf)
   {
     if (obj == null)
     {
@@ -881,7 +879,7 @@ public final class Util
    * @param buf
    *        The current buffer.
    */
-  public static void appendTrace (final Throwable throwable, final String trace, final StringBuffer buf)
+  public static void appendTrace (final Throwable throwable, final String trace, final StringBuilder buf)
   {
     buf.append (" at:\n");
     final StackTraceElement stack[] = throwable.getStackTrace ();
@@ -898,14 +896,14 @@ public final class Util
   }
 
   /**
-   * Append a parameter object to a StringBuffer
+   * Append a parameter object to a StringBuilder
    * 
    * @param obj
    *        The object
    * @param buf
-   *        The StringBuffer
+   *        The StringBuilder
    */
-  public static void appendShortObject (final Object obj, final StringBuffer buf)
+  public static void appendShortObject (final Object obj, final StringBuilder buf)
   {
     if (obj == null)
     {
@@ -929,14 +927,14 @@ public final class Util
   }
 
   /**
-   * Append a function parameter to a StringBuffer
+   * Append a function parameter to a StringBuilder
    * 
    * @param c
    *        The parameter
    * @param buf
-   *        The StringBuffer
+   *        The StringBuilder
    */
-  public static void appendParam (final Class <?> c, final StringBuffer buf)
+  public static void appendParam (final Class <?> c, final StringBuilder buf)
   {
     if (c.isInterface ())
       buf.append ("(i:");
@@ -950,14 +948,14 @@ public final class Util
   }
 
   /**
-   * Append a function parameter to a StringBuffer
+   * Append a function parameter to a StringBuilder
    * 
    * @param obj
    *        The parameter object
    * @param buf
-   *        The StringBuffer
+   *        The StringBuilder
    */
-  public static void appendParam (final Object obj, final StringBuffer buf)
+  public static void appendParam (final Object obj, final StringBuilder buf)
   {
     if (obj instanceof Class <?>)
     {
@@ -984,22 +982,22 @@ public final class Util
    */
   public static String argsToString (final Object args[], final Class <?> [] params)
   {
-    final StringBuffer buffer = new StringBuffer ("");
+    final StringBuilder buffer = new StringBuilder ("");
     appendArgs (args, params, buffer);
     return buffer.toString ();
   }
 
   /**
-   * Append function arguments and their types to a StringBuffer
+   * Append function arguments and their types to a StringBuilder
    * 
    * @param args
    *        The args
    * @param params
    *        The associated types
    * @param buf
-   *        The StringBuffer
+   *        The StringBuilder
    */
-  public static void appendArgs (final Object args[], final Class <?> [] params, final StringBuffer buf)
+  public static void appendArgs (final Object args[], final Class <?> [] params, final StringBuilder buf)
   {
     if (args != null)
     {
@@ -1107,7 +1105,7 @@ public final class Util
     final String path = phpFile.getParent ();
     final String file = phpFile.getName ();
 
-    final StringBuffer buf = new StringBuffer ();
+    final StringBuilder buf = new StringBuilder ();
     if (path != null)
     {
       buf.append (path);
@@ -1270,7 +1268,7 @@ public final class Util
     protected java.lang.Process proc;
     private String [] args;
     private File homeDir;
-    private final Map env;
+    private final Map <String, String> env;
     private final boolean tryOtherLocations;
     private final boolean preferSystemPhp;
     private boolean isOldPhpVersion = false; // php < 5.3
@@ -1283,7 +1281,7 @@ public final class Util
     {
       if (isOldPhpVersion)
         return key + val;
-      final StringBuffer buf = new StringBuffer (key);
+      final StringBuilder buf = new StringBuilder (key);
       buf.append ("'");
       buf.append (val);
       buf.append ("'");
@@ -1307,10 +1305,11 @@ public final class Util
      */
     private String [] getPhpArgs (final String [] args,
                                   final boolean includeJava,
-                                  String cgiDir,
+                                  final String pcgiDir,
                                   final String pearDir,
                                   final String webInfDir)
     {
+      String cgiDir = pcgiDir;
       final String [] allArgs = new String [args.length +
                                             PHP_ARGS.length +
                                             ((sessionSavePath != null) ? 2 : 0) +
@@ -1619,7 +1618,7 @@ public final class Util
                        final String pearDir,
                        final String webInfDir,
                        final File homeDir,
-                       final Map env,
+                       final Map <String, String> env,
                        final boolean tryOtherLocations,
                        final boolean preferSystemPhp)
     {
@@ -1663,7 +1662,7 @@ public final class Util
                                  final String pearDir,
                                  final String webInfDir,
                                  final File homeDir,
-                                 final Map env,
+                                 final Map <String, String> env,
                                  final boolean tryOtherLocations,
                                  final boolean preferSystemPhp,
                                  final OutputStream err) throws IOException
@@ -1708,7 +1707,7 @@ public final class Util
       {
         return errorString;
       }
-    };
+    }
 
     /**
      * Check for a PHP fatal error and throw a PHP exception if necessary.
@@ -1768,7 +1767,7 @@ public final class Util
    */
   public static class ProcessWithErrorHandler extends Process
   {
-    StringBuffer error = null;
+    StringBuilder error = null;
     InputStream in = null;
     OutputStream err = null;
 
@@ -1778,10 +1777,10 @@ public final class Util
                                        final String pearDir,
                                        final String webInfDir,
                                        final File homeDir,
-                                       final Map env,
+                                       final Map <String, String> env,
                                        final boolean tryOtherLocations,
                                        final boolean preferSystemPhp,
-                                       final OutputStream err) throws IOException
+                                       final OutputStream err)
     {
       super (args, includeJava, cgiDir, pearDir, webInfDir, homeDir, env, tryOtherLocations, preferSystemPhp);
       this.err = err;
@@ -1824,7 +1823,7 @@ public final class Util
           if (Util.logLevel > 4)
             Util.logError (s);
           if (error == null)
-            error = new StringBuffer (s);
+            error = new StringBuilder (s);
           else
             error.append (s);
         }
@@ -1886,7 +1885,7 @@ public final class Util
                                  final String pearDir,
                                  final String webInfDir,
                                  final File homeDir,
-                                 final Map env,
+                                 final Map <String, String> env,
                                  final boolean tryOtherLocations,
                                  final boolean preferSystemPhp,
                                  final OutputStream err) throws IOException
@@ -2053,12 +2052,11 @@ public final class Util
     try
     {
       m = System.class.getMethod ("getenv", ZERO_PARAM);
-      final Map map = (Map) m.invoke (System.class, ZERO_ARG);
-      for (final Iterator ii = map.entrySet ().iterator (); ii.hasNext ();)
+      final Map <String, String> map = (Map <String, String>) m.invoke (System.class, ZERO_ARG);
+      for (final Map.Entry <String, String> entry : map.entrySet ())
       {
-        final Entry entry = (Entry) ii.next ();
-        key = (String) entry.getKey ();
-        val = (String) entry.getValue ();
+        key = entry.getKey ();
+        val = entry.getValue ();
 
         if (!blacklist.contains (key))
           defaultEnv.put (key, val);
@@ -2157,11 +2155,9 @@ public final class Util
     }
 
     @Override
-    public void configure (String host, int port) throws Exception
+    public void configure (final String host, final int port) throws Exception
     {
-      host = this.host != null ? this.host : host;
-      port = this.port > 0 ? this.port : port;
-      super.configure (host, port);
+      super.configure (this.host != null ? this.host : host, this.port > 0 ? this.port : port);
     }
   }
 
@@ -2173,8 +2169,9 @@ public final class Util
    * @return true, if we can use the log4j logger, false otherwise.
    * @throws Exception
    */
-  private static boolean tryConfiguredChainsawLogger (String logFile) throws Exception
+  private static boolean tryConfiguredChainsawLogger (final String plogFile) throws Exception
   {
+    String logFile = plogFile;
     if (logFile != null && logFile.length () > 0 && logFile.charAt (0) == '@')
     {
       logFile = logFile.substring (1, logFile.length ());
@@ -2256,7 +2253,7 @@ public final class Util
   {
     try
     {
-      final StringBuffer buf = new StringBuffer ();
+      final StringBuilder buf = new StringBuilder ();
       buf.append (socketName);
       buf.append ("/");
       buf.append (webPath);
@@ -2267,7 +2264,7 @@ public final class Util
     {
       Util.printStackTrace (e);
     }
-    final StringBuffer buf = new StringBuffer (isSecure ? "s:127.0.0.1" : "h:127.0.0.1:");
+    final StringBuilder buf = new StringBuilder (isSecure ? "s:127.0.0.1" : "h:127.0.0.1:");
     buf.append (socketName);
     buf.append ('/');
     buf.append (webPath);

@@ -70,17 +70,14 @@ public class ChunkedInputStream extends FilterInputStream
     {
       ascii[i] = i - 48;
     }
-    ;
     for (int i = 65; i < 71; i++)
     {
       ascii[i] = i - 55;
     }
-    ;
     for (int i = 97; i < 103; i++)
     {
       ascii[i] = i - 87;
     }
-    ;
     return ascii;
   }
 
@@ -121,12 +118,9 @@ public class ChunkedInputStream extends FilterInputStream
         remainLen -= len;
         return len;
       }
-      else
-      {
-        System.arraycopy (remaining, remainPos, buf, pos, remainLen);
-        remaining = null;
-        return remainLen;
-      }
+      System.arraycopy (remaining, remainPos, buf, pos, remainLen);
+      remaining = null;
+      return remainLen;
     }
 
     // read next packet
@@ -137,12 +131,12 @@ public class ChunkedInputStream extends FilterInputStream
     remaining = new byte [packetLen];
     remainLen = 0;
     for (c = 0; (i = in.read (remaining, c, packetLen - c)) > 0; c += i)
-      ;
+    {}
     if ((c != packetLen))
       throw new IOException ("read chunked");
 
     for (c = 0; (i = in.read (rn, c, 2 - c)) > 0; c += i)
-      ;
+    {}
     if ((c != 2))
       throw new IOException ("read \r\n");
 

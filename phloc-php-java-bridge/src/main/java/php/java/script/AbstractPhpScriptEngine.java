@@ -56,7 +56,6 @@ import java.util.Map;
 
 import javax.script.AbstractScriptEngine;
 import javax.script.Bindings;
-import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngineFactory;
@@ -79,29 +78,29 @@ import php.java.bridge.http.WriterOutputStream;
  * @see php.java.script.InvocablePhpScriptEngine
  * @see php.java.script.PhpScriptEngine
  */
-abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements IPhpScriptEngine, Compilable, java.io.FileFilter, CloneableScript
+abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements IPhpScriptEngine, CloneableScript
 {
 
   /**
    * The allocated script
    */
-  protected Object script = null;
-  protected Object scriptClosure = null;
+  protected Object script;
+  protected Object scriptClosure;
 
   /**
    * The continuation of the script
    */
-  protected Continuation continuation = null;
-  protected Map env = null;
-  protected IContextFactory ctx = null;
+  protected Continuation continuation;
+  protected Map <String, String> env;
+  protected IContextFactory ctx;
 
-  private ScriptEngineFactory factory = null;
+  private final ScriptEngineFactory factory;
   protected ResultProxy resultProxy;
   protected File compilerOutputFile;
 
   private boolean isCompiled;
 
-  static HashMap getProcessEnvironment ()
+  static Map <String, String> getProcessEnvironment ()
   {
     return Util.COMMON_ENVIRONMENT;
   }
@@ -127,7 +126,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
    * @param env
    *        the environment which will be passed to PHP
    */
-  protected void setStandardEnvironmentValues (final Map env)
+  protected void setStandardEnvironmentValues (final Map <String, String> env)
   {
     /*
      * send the session context now, otherwise the client has to call
@@ -151,7 +150,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
    */
   protected void setNewContextFactory ()
   {
-    env = (Map) getProcessEnvironment ().clone ();
+    env = new HashMap <String, String> (getProcessEnvironment ());
 
     addNewContextFactory ();
 
@@ -194,8 +193,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
       {
         setContext (current);
       }
-    else
-      return doEvalPhp (reader, current);
+    return doEvalPhp (reader, current);
   }
 
   protected Object evalCompiledPhp (final Reader reader, final ScriptContext context) throws ScriptException
@@ -212,8 +210,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
       {
         setContext (current);
       }
-    else
-      return doEvalCompiledPhp (reader, current);
+    return doEvalCompiledPhp (reader, current);
   }
 
   protected void compilePhp (final Reader reader) throws IOException

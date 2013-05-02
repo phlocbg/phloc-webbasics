@@ -198,7 +198,7 @@ public class HttpContext extends php.java.bridge.http.Context
    */
   public static void handleManaged (final Object closeable, final ServletContext ctx)
   {
-    final List list = ContextLoaderListener.getContextLoaderListener (ctx).getCloseables ();
+    final List <Object> list = ContextLoaderListener.getContextLoaderListener (ctx).getCloseables ();
     list.add (closeable);
   }
 

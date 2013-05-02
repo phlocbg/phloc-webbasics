@@ -78,12 +78,13 @@ public class ChunkedOutputStream extends FilterOutputStream
   /**
    * Write a length as hex digits.
    * 
-   * @param length
+   * @param plength
    *        the length, must be > 0
    * @throws IOException
    */
-  private void writeHex (int length) throws IOException
+  private void writeHex (final int plength) throws IOException
   {
+    int length = plength;
     int i = buf.length - 1;
     for (; length > 0; i--)
     {

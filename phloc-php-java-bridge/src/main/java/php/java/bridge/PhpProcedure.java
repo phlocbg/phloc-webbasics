@@ -56,10 +56,10 @@ public final class PhpProcedure implements InvocationHandler
 
   private final IJavaBridgeFactory bridge;
   private final long object;
-  private final Map names;
+  private final Map <?, ?> names;
   protected String name;
 
-  protected PhpProcedure (final IJavaBridgeFactory bridge, final long object, final String name, final Map names)
+  protected PhpProcedure (final IJavaBridgeFactory bridge, final long object, final String name, final Map <?, ?> names)
   {
     this.bridge = bridge;
     this.object = object;
@@ -87,8 +87,8 @@ public final class PhpProcedure implements InvocationHandler
    */
   protected static Object createProxy (final IJavaBridgeFactory bridge,
                                        final String name,
-                                       final Map names,
-                                       final Class interfaces[],
+                                       final Map <?, ?> names,
+                                       final Class <?> interfaces[],
                                        final long object)
   {
     final PhpProcedure handler = new PhpProcedure (bridge, object, name, names);
@@ -108,12 +108,12 @@ public final class PhpProcedure implements InvocationHandler
    *        - A procedure obtained from java_closure().
    * @return A new proxy instance.
    */
-  public static Object createProxy (final Class interfaces[], final PhpProcedure proc)
+  public static Object createProxy (final Class <?> interfaces[], final PhpProcedure proc)
   {
     return createProxy (proc.bridge, proc.name, proc.names, interfaces, proc.object);
   }
 
-  private Object invoke (final Object proxy, final String method, final Class returnType, final Object [] args) throws Throwable
+  private Object invoke (final Object proxy, final String method, final Class <?> returnType, final Object [] args) throws Throwable
   {
     final JavaBridge bridge = this.bridge.getBridge ();
     if (bridge.logLevel > 3)

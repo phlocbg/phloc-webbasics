@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +82,7 @@ import php.java.servlet.fastcgi.FCGIProcess;
  */
 public class ContextLoaderListener implements javax.servlet.ServletContextListener, IFCGIProcessFactory
 {
-  private final LinkedList closeables = new LinkedList ();
+  private final LinkedList <Object> closeables = new LinkedList <Object> ();
 
   public static final String PEAR_DIR = "/WEB-INF/pear";
   public static final String CGI_DIR = "/WEB-INF/cgi";
@@ -133,15 +132,14 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
    */
   public void destroyCloseables (final ServletContext ctx)
   {
-    final List list = closeables;
+    final List <Object> list = closeables;
     if (list == null)
       return;
 
     try
     {
-      for (final Iterator ii = list.iterator (); ii.hasNext ();)
+      for (final Object c : list)
       {
-        final Object c = ii.next ();
         try
         {
           final Method close = c.getClass ().getMethod ("close", Util.ZERO_PARAM);
@@ -410,7 +408,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     return false;
   }
 
-  static final HashMap PROCESS_ENVIRONMENT = getProcessEnvironment ();
+  static final Map <String, String> PROCESS_ENVIRONMENT = getProcessEnvironment ();
 
   private static void updateProcessEnvironment (final File conf)
   {
@@ -425,10 +423,9 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     }
   }
 
-  private static HashMap getProcessEnvironment ()
+  private static Map <String, String> getProcessEnvironment ()
   {
-    final HashMap map = new HashMap (Util.COMMON_ENVIRONMENT);
-    return map;
+    return new HashMap <String, String> (Util.COMMON_ENVIRONMENT);
   }
 
   private void createPhpFiles ()
@@ -800,7 +797,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     return channelName;
   }
 
-  public List getCloseables ()
+  public List <Object> getCloseables ()
   {
     return closeables;
   }
@@ -821,7 +818,10 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
   protected boolean phpTryOtherLocations = false;
 
   /** {@inheritDoc} */
-  public IFCGIProcess createFCGIProcess (final String [] args, final boolean includeJava, final File home, final Map env) throws IOException
+  public IFCGIProcess createFCGIProcess (final String [] args,
+                                         final boolean includeJava,
+                                         final File home,
+                                         final Map <String, String> env) throws IOException
   {
     return new FCGIProcess (args,
                             includeJava,
@@ -860,7 +860,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
   }
 
   /** {@inheritDoc} */
-  public HashMap getEnvironment ()
+  public Map <String, String> getEnvironment ()
   {
     return getProcessEnvironment ();
   }

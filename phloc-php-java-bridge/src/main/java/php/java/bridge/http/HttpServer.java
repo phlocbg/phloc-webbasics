@@ -239,18 +239,15 @@ public abstract class HttpServer implements Runnable
         req.pushBack (buf, i, N - i);
         return true;
       }
+      if (remain != null)
+      {
+        remain += new String (buf, s, i - s, Util.ASCII);
+      }
       else
       {
-        if (remain != null)
-        {
-          remain += new String (buf, s, i - s, Util.ASCII);
-        }
-        else
-        {
-          remain = new String (buf, s, i - s, Util.ASCII);
-        }
-        s = i = 0;
+        remain = new String (buf, s, i - s, Util.ASCII);
       }
+      s = i = 0;
     }
     return false;
   }

@@ -176,7 +176,7 @@ public final class PhpScriptContext extends AbstractPhpScriptContext
 
   /** {@inheritDoc} */
   public Continuation createContinuation (final Reader reader,
-                                          final Map env,
+                                          final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
                                           final HeaderParser headerParser,

@@ -66,7 +66,7 @@ public class HttpFastCGIProxy extends Continuation
 {
   private final FCGIConnectionPool fcgiConnectionPool;
 
-  public HttpFastCGIProxy (final Map env,
+  public HttpFastCGIProxy (final Map <String, String> env,
                            final OutputStream out,
                            final OutputStream err,
                            final HeaderParser headerParser,

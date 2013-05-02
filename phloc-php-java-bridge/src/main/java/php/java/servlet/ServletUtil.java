@@ -149,7 +149,7 @@ public class ServletUtil
     return (couldBeNull == null ? subForNulls : couldBeNull);
   }
 
-  public static String getHeaders (final StringBuffer buf, final Enumeration <?> enumeration)
+  public static String getHeaders (final StringBuilder buf, final Enumeration <?> enumeration)
   {
     while (enumeration.hasMoreElements ())
     {

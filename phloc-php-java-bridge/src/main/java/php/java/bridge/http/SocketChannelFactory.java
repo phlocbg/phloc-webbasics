@@ -157,17 +157,12 @@ class SocketChannelFactory extends FCGIConnectionFactory
 
   /* Start a fast CGI Server process on this computer. Switched off per default. */
   @Override
-  protected Process doBind (final Map env, final String php, final boolean includeJava) throws IOException
+  protected Process doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
   {
     if (proc != null)
       return null;
-    final StringBuffer buf = new StringBuffer ((Util.JAVABRIDGE_PROMISCUOUS || promiscuous) ? "" : LOCAL_HOST); // bind
-                                                                                                                // to
-                                                                                                                // all
-                                                                                                                // available
-                                                                                                                // or
-                                                                                                                // loopback
-                                                                                                                // only
+    // bind to all available or loopback only
+    final StringBuilder buf = new StringBuilder ((Util.JAVABRIDGE_PROMISCUOUS || promiscuous) ? "" : LOCAL_HOST);
     buf.append (':');
     buf.append (String.valueOf (getPort ()));
     final String port = buf.toString ();

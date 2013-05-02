@@ -109,13 +109,6 @@ public class FCGIConnectionInputStream extends InputStream
   {
     connection.state |= 1;
     if (connection.state == connection.ostate)
-      try
-      {
-        connection.close ();
-      }
-      catch (final IOException e)
-      {
-        throw new FCGIConnectionException (connection, e);
-      }
+      connection.close ();
   }
 }

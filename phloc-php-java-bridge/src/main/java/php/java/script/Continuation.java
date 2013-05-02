@@ -60,8 +60,7 @@ import php.java.bridge.http.HeaderParser;
 
 public abstract class Continuation implements IContinuation, Runnable
 {
-
-  protected Map env;
+  protected Map <String, String> env;
   protected OutputStream out, err;
   // protected Reader reader;
   protected HeaderParser headerParser;
@@ -121,7 +120,7 @@ public abstract class Continuation implements IContinuation, Runnable
     }
   }
 
-  protected Continuation (final Map env,
+  protected Continuation (final Map <String, String> env,
                           final OutputStream out,
                           final OutputStream err,
                           final HeaderParser headerParser,

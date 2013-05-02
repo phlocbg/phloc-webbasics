@@ -51,7 +51,6 @@ import php.java.bridge.ISession;
  */
 public interface IContextFactory extends IJavaBridgeFactory
 {
-
   /**
    * <p>
    * Update the context factory with the new JavaBridge obtained from the
@@ -64,14 +63,14 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @see php.java.bridge.Request#setBridge(php.java.bridge.JavaBridge)
    * @see php.java.bridge.Request#recycle()
    */
-  public void recycle (String id);
+  void recycle (String id);
 
   /**
    * Releases the context factory. This method should be called when the factory
    * is not needed anymore. Implementations could then remove any unused context
    * factory from the classloader's list of context factories.
    */
-  public void release ();
+  void release ();
 
   /**
    * Wait until this context is finished and release/destroy it. This method
@@ -84,7 +83,7 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @throws InterruptedException
    * @see php.java.bridge.http.ContextRunner
    */
-  public void releaseManaged () throws InterruptedException;
+  void releaseManaged () throws InterruptedException;
 
   /**
    * Wait until this context is finished.
@@ -94,14 +93,14 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @throws InterruptedException
    * @see php.java.bridge.http.ContextRunner
    */
-  public void waitFor (long timeout) throws InterruptedException;
+  void waitFor (long timeout) throws InterruptedException;
 
   /**
    * Return the serializable ID of the context factory
    * 
    * @return The ID
    */
-  public String getId ();
+  String getId ();
 
   /**
    * Return a JSR223 context
@@ -110,7 +109,7 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @see php.java.servlet.ServletContextFactory#getContext()
    * @see php.java.bridge.http.Context
    */
-  public IContext getContext ();
+  IContext getContext ();
 
   /**
    * Set the Context into this factory. Should be called by Context.addNew()
@@ -119,7 +118,7 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @param context
    * @see php.java.bridge.http.ContextFactory#addNew()
    */
-  public void setContext (IContext context);
+  void setContext (IContext context);
 
   /**
    * @param name
@@ -131,7 +130,7 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @return The session
    * @see php.java.bridge.ISession
    */
-  public ISession getSession (String name, short clientIsNew, int timeout);
+  ISession getSession (String name, short clientIsNew, int timeout);
 
   /**
    * @param name
@@ -143,7 +142,7 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @return The session
    * @see php.java.bridge.ISession
    */
-  public ISession getSimpleSession (String name, short clientIsNew, int timeout);
+  ISession getSimpleSession (String name, short clientIsNew, int timeout);
 
   /**
    * Called when the context runner starts
@@ -151,5 +150,5 @@ public interface IContextFactory extends IJavaBridgeFactory
    * @see IContextFactory#releaseManaged()
    * @see IContextFactory#destroy()
    */
-  public void initialize ();
+  void initialize ();
 }

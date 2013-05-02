@@ -67,10 +67,7 @@ public class InvocablePhpScriptEngineFactory extends PhpScriptEngineFactory
       {
         return new CloseableInvocablePhpScriptEngine (InvocablePhpScriptEngineFactory.this);
       }
-      else
-      {
-        return new InvocablePhpScriptEngine (InvocablePhpScriptEngineFactory.this);
-      }
+      return new InvocablePhpScriptEngine (InvocablePhpScriptEngineFactory.this);
     }
   }
 
@@ -97,22 +94,22 @@ public class InvocablePhpScriptEngineFactory extends PhpScriptEngineFactory
     return "php-invocable";
   }
 
-  private List names;
+  private List <String> nnames;
 
   /** {@inheritDoc} */
   @Override
-  public List getNames ()
+  public List <String> getNames ()
   {
-    if (names != null)
-      return names;
-    return names = Arrays.asList (new String [] { getLanguageName () });
+    if (nnames != null)
+      return nnames;
+    return nnames = Arrays.asList (new String [] { getLanguageName () });
   }
 
-  private static final List ext = Collections.unmodifiableList (new LinkedList ());
+  private static final List <String> ext = Collections.unmodifiableList (new LinkedList <String> ());
 
   /** {@inheritDoc} */
   @Override
-  public List getExtensions ()
+  public List <String> getExtensions ()
   {
     return ext;
   }

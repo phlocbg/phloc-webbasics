@@ -104,7 +104,7 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
   /** {@inheritDoc} */
   @Override
   public Continuation createContinuation (final Reader reader,
-                                          final Map env,
+                                          final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
                                           final HeaderParser headerParser,
@@ -280,7 +280,8 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
     {
       writer = new PhpScriptWriter (new WriterOutputStream (writer));
     }
-    super.setWriter (this.writer = writer);
+    this.writer = writer;
+    super.setWriter (writer);
   }
 
   protected Writer errorWriter;
@@ -304,7 +305,8 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
     {
       errorWriter = new PhpScriptWriter (new WriterOutputStream (errorWriter));
     }
-    super.setErrorWriter (this.errorWriter = errorWriter);
+    this.errorWriter = errorWriter;
+    super.setErrorWriter (errorWriter);
   }
 
   protected Reader reader;
@@ -429,7 +431,7 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
   @Override
   public String getRedirectURL (final String webPath)
   {
-    final StringBuffer buf = new StringBuffer ();
+    final StringBuilder buf = new StringBuilder ();
     buf.append (getSocketName ());
     buf.append ("/");
     buf.append (webPath);

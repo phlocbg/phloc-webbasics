@@ -58,13 +58,13 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * This is the main interface of the PHP/Java Bridge. It contains utility
@@ -88,7 +88,7 @@ public class JavaBridge implements Runnable
   // array of objects in use in the current script
   GlobalRef globalRef = new GlobalRef ();
 
-  static HashMap sessionHash = new HashMap ();
+  static Map <String, Session> sessionHash = new HashMap <String, Session> ();
 
   /**
    * For internal use only. The input stream for the current channel.
@@ -357,7 +357,7 @@ public class JavaBridge implements Runnable
   }
 
   // called by Standalone.init()
-  static void init (final ISocketFactory socket, final int logLevel, final String s[])
+  static void init (final ISocketFactory socket, final int logLevel, final String [] s)
   {
     try
     {
@@ -514,8 +514,8 @@ public class JavaBridge implements Runnable
                      final String method,
                      final Object obj,
                      final String name,
-                     final Object args[],
-                     final Class params[],
+                     final Object [] args,
+                     final Class <?> [] params,
                      final boolean hasDeclaredExceptions)
   {
     if (e instanceof InvocationTargetException)
@@ -531,7 +531,7 @@ public class JavaBridge implements Runnable
       printStackTrace (e);
     }
 
-    final StringBuffer buf = new StringBuffer (method);
+    final StringBuilder buf = new StringBuilder (method);
     buf.append (" failed: ");
     if (obj != null)
     {
@@ -593,25 +593,25 @@ public class JavaBridge implements Runnable
                             final Object args[],
                             final Response response)
   {
-    Class params[] = null;
-    final LinkedList candidates = new LinkedList ();
-    final LinkedList matches = new LinkedList ();
+    Class <?> params[] = null;
+    final LinkedList <Constructor <?>> candidates = new LinkedList <Constructor <?>> ();
+    final LinkedList <AccessibleObject> matches = new LinkedList <AccessibleObject> ();
     boolean hasDeclaredExceptions = true;
 
     try
     {
-      Constructor selected = null;
+      Constructor <?> selected = null;
       ConstructorCache.Entry entry = null;
 
-      final Class clazz = Util.classForName (name);
+      final Class <?> clazz = Util.classForName (name);
       if (createInstance)
       {
         entry = constructorCache.getEntry (name, args);
         selected = constructorCache.get (entry);
         if (selected == null)
         {
-          final Constructor cons[] = clazz.getConstructors ();
-          for (final Constructor con : cons)
+          final Constructor <?> cons[] = clazz.getConstructors ();
+          for (final Constructor <?> con : cons)
           {
             candidates.add (con);
             if (con.getParameterTypes ().length == args.length)
@@ -620,7 +620,7 @@ public class JavaBridge implements Runnable
             }
           }
 
-          selected = (Constructor) select (matches, args);
+          selected = (Constructor <?>) select (matches, args);
           if (selected != null)
             constructorCache.put (entry, selected);
         }
@@ -639,21 +639,19 @@ public class JavaBridge implements Runnable
                                                                                     name +
                                                                                     "\", args...).");
         }
-        else
+
+        // for classes which have no visible constructor, return the class
+        // useful for classes like java.lang.System and java.util.Calendar.
+        if (createInstance && logLevel > 2)
         {
-          // for classes which have no visible constructor, return the class
-          // useful for classes like java.lang.System and java.util.Calendar.
-          if (createInstance && logLevel > 2)
-          {
-            logMessage ("No visible constructor found in: " +
-                        name +
-                        ", returning the class instead of an instance; this may not be what you want. Please correct this error or please use the function java(\"" +
-                        name +
-                        "\") instead.");
-          }
-          response.setResultClass (clazz);
-          return;
+          logMessage ("No visible constructor found in: " +
+                      name +
+                      ", returning the class instead of an instance; this may not be what you want. Please correct this error or please use the function java(\"" +
+                      name +
+                      "\") instead.");
         }
+        response.setResultClass (clazz);
+        return;
       }
 
       final Object coercedArgs[] = coerce (params = entry.getParameterTypes (selected), args, response);
@@ -700,17 +698,17 @@ public class JavaBridge implements Runnable
     }
   }
 
-  private static final Iterator EMPTY_ITERATOR = (new LinkedList ()).iterator ();
+  private static final Iterator <Object> EMPTY_ITERATOR = Collections.<Object> emptyList ().iterator ();
 
   //
   // Select the best match from a list of methods
   //
-  private int weight (final Class param, final Class arg, final Object phpArrayValue)
+  private int weight (final Class <?> param, final Class <?> arg, final Object phpArrayValue)
   {
     int w = 0;
     if (param.isAssignableFrom (arg))
     {
-      for (Class c = arg; (c = c.getSuperclass ()) != null;)
+      for (Class <?> c = arg; (c = c.getSuperclass ()) != null;)
       {
         if (!param.isAssignableFrom (c))
         {
@@ -735,7 +733,7 @@ public class JavaBridge implements Runnable
         {
           if (PhpString.class.isAssignableFrom (arg))
           {
-            final Class c = param.getComponentType ();
+            final Class <?> c = param.getComponentType ();
             if (c == byte.class)
               w += 32;
             else
@@ -744,12 +742,13 @@ public class JavaBridge implements Runnable
           else
             if (arg == PhpArray.class)
             {
-              final Iterator iterator = phpArrayValue == null ? EMPTY_ITERATOR : ((Map) phpArrayValue).values ()
-                                                                                                      .iterator ();
+              final Iterator <Object> iterator = phpArrayValue == null ? EMPTY_ITERATOR
+                                                                      : ((Map <Object, Object>) phpArrayValue).values ()
+                                                                                                              .iterator ();
               if (iterator.hasNext ())
               {
                 final Object elem = iterator.next ();
-                final Class ptype = param.getComponentType (), atype = elem.getClass ();
+                final Class <?> ptype = param.getComponentType (), atype = elem.getClass ();
                 if (ptype != atype)
                 {
                   w += (ptype == Object.class ? 10 : 8200) + weight (ptype, atype, null);
@@ -759,7 +758,7 @@ public class JavaBridge implements Runnable
             else
               if (arg.isArray ())
               {
-                final Class ptype = param.getComponentType (), atype = arg.getComponentType ();
+                final Class <?> ptype = param.getComponentType (), atype = arg.getComponentType ();
                 if (ptype != atype)
                 {
                   w += (ptype == Object.class ? 10 : 8200) + weight (ptype, atype, null);
@@ -780,7 +779,7 @@ public class JavaBridge implements Runnable
           else
             if (param.isPrimitive ())
             {
-              final Class c = param;
+              final Class <?> c = param;
               if (Number.class.isAssignableFrom (arg))
               {
                 if (Double.class.isAssignableFrom (arg))
@@ -859,21 +858,21 @@ public class JavaBridge implements Runnable
     return w;
   }
 
-  private Object select (final LinkedList methods, final Object args[])
+  private Object select (final List <AccessibleObject> methods, final Object args[])
   {
     if (methods.size () == 1)
-      return methods.getFirst ();
+      return methods.get (0);
     Object similar = null, selected = null;
     int best = Integer.MAX_VALUE;
     int n = 0;
 
-    for (final Iterator e = methods.iterator (); e.hasNext (); n++)
+    for (final Iterator <AccessibleObject> e = methods.iterator (); e.hasNext (); n++)
     {
       final Object element = e.next ();
       int w = 0;
 
-      final Class parms[] = (element instanceof Method) ? ((Method) element).getParameterTypes ()
-                                                       : ((Constructor) element).getParameterTypes ();
+      final Class <?> parms[] = (element instanceof Method) ? ((Method) element).getParameterTypes ()
+                                                           : ((Constructor <?>) element).getParameterTypes ();
 
       for (int i = 0; i < parms.length; i++)
       {
@@ -911,7 +910,7 @@ public class JavaBridge implements Runnable
     }
     if (logLevel > 2 && similar != null)
     {
-      final StringBuffer buf = new StringBuffer ();
+      final StringBuilder buf = new StringBuilder ();
       for (final Object arg : args)
       {
         Util.appendParam (arg, buf);
@@ -923,10 +922,10 @@ public class JavaBridge implements Runnable
     return selected;
   }
 
-  private final Object o[] = new Object [1];
-  private final Class c[] = new Class [1];
+  private final Object [] o = new Object [1];
+  private final Class <?> [] c = new Class [1];
 
-  Object coerce (final Class param, final Object arg, final Response response)
+  Object coerce (final Class <?> param, final Object arg, final Response response)
   {
     o[0] = arg;
     c[0] = param;
@@ -939,7 +938,7 @@ public class JavaBridge implements Runnable
   // unfortunately PHP only supports wide formats, so to be practical
   // some (possibly lossy) conversions are required.
   //
-  Object [] coerce (final Class parms[], final Object args[], final Response response)
+  Object [] coerce (final Class <?> parms[], final Object args[], final Response response)
   {
     Object arg;
     final Object result[] = args;
@@ -962,7 +961,7 @@ public class JavaBridge implements Runnable
         {
           if (!parms[i].isArray ())
           {
-            final Class c = parms[i];
+            final Class <?> c = parms[i];
             final String s = (arg instanceof String) ? (String) arg : ((PhpString) arg).getString ();
             result[i] = s;
             try
@@ -1007,42 +1006,42 @@ public class JavaBridge implements Runnable
           {
             if (parms[i].isPrimitive ())
             {
-              final Class c = parms[i];
+              final Class <?> c = parms[i];
               final Number n = (Number) arg;
               if (c == Boolean.TYPE)
-                result[i] = new Boolean (0.0 != n.floatValue ());
+                result[i] = Boolean.valueOf (0.0 != n.floatValue ());
               else
                 if (c == Byte.TYPE)
-                  result[i] = new Byte (n.byteValue ());
+                  result[i] = Byte.valueOf (n.byteValue ());
                 else
                   if (c == Short.TYPE)
-                    result[i] = new Short (n.shortValue ());
+                    result[i] = Short.valueOf (n.shortValue ());
                   else
                     if (c == Integer.TYPE)
-                      result[i] = new Integer (n.intValue ());
+                      result[i] = Integer.valueOf (n.intValue ());
                     else
                       if (c == Float.TYPE)
-                        result[i] = new Float (n.floatValue ());
+                        result[i] = Float.valueOf (n.floatValue ());
                       else
                         if (c == Double.TYPE)
-                          result[i] = new Double (n.doubleValue ());
+                          result[i] = Double.valueOf (n.doubleValue ());
                         else
                           if (c == Long.TYPE && !(n instanceof Long))
-                            result[i] = new Long (n.longValue ());
+                            result[i] = Long.valueOf (n.longValue ());
             }
             else
             {
               if (arg.getClass () == PhpExactNumber.class)
               {
                 {
-                  final Class c = parms[i];
+                  final Class <?> c = parms[i];
                   if (c.isAssignableFrom (Integer.class))
                   {
-                    result[i] = new Integer (((Number) arg).intValue ());
+                    result[i] = Integer.valueOf (((Number) arg).intValue ());
                   }
                   else
                   {
-                    result[i] = new Long (((Number) arg).longValue ());
+                    result[i] = Long.valueOf (((Number) arg).longValue ());
                   }
                 }
               }
@@ -1053,10 +1052,10 @@ public class JavaBridge implements Runnable
             {
               if (parms[i].isArray ())
               {
-                Map.Entry e = null;
+                Map.Entry <?, ?> e = null;
                 Object tempArray = null;
                 PhpArray ht = null;
-                Class targetType = parms[i].getComponentType ();
+                Class <?> targetType = parms[i].getComponentType ();
                 try
                 {
                   ht = (PhpArray) arg;
@@ -1075,9 +1074,9 @@ public class JavaBridge implements Runnable
                 }
                 try
                 {
-                  for (final Iterator ii = ht.entrySet ().iterator (); ii.hasNext ();)
+                  for (final Iterator <Map.Entry <?, ?>> ii = ht.entrySet ().iterator (); ii.hasNext ();)
                   {
-                    e = (Entry) ii.next ();
+                    e = ii.next ();
                     Array.set (tempArray,
                                ((Number) (e.getKey ())).intValue (),
                                coerce (targetType, e.getValue (), response));
@@ -1104,8 +1103,8 @@ public class JavaBridge implements Runnable
                 {
                   try
                   {
-                    final Map m = (Map) arg;
-                    Collection c = m.values ();
+                    final Map <?, ?> m = (Map <?, ?>) arg;
+                    Collection <?> c = m.values ();
                     if (!parms[i].isInstance (c))
                       try
                       { // could be a concrete class, for example LinkedList.
@@ -1117,7 +1116,7 @@ public class JavaBridge implements Runnable
                       { // it was an interface, try some concrete class
                         try
                         {
-                          c = new ArrayList (c);
+                          c = new ArrayList <Object> (c);
                         }
                         catch (final Exception ex)
                         {/* we've tried */}
@@ -1137,9 +1136,8 @@ public class JavaBridge implements Runnable
                   {
                     try
                     {
-                      final Map ht = (Map) arg;
-                      Hashtable res;
-                      res = (Hashtable) parms[i].newInstance ();
+                      final Map <?, ?> ht = (Map <?, ?>) arg;
+                      final Hashtable res = (Hashtable) parms[i].newInstance ();
                       res.putAll (ht);
 
                       result[i] = res;
@@ -1159,16 +1157,13 @@ public class JavaBridge implements Runnable
                     {
                       result[i] = arg;
                     }
-                    else
-                      if (arg instanceof PhpString)
-                      {
-                        result[i] = ((PhpString) arg).getString (); // always
-                                                                    // prefer
-                                                                    // strings
-                                                                    // over
-                                                                    // byte[]
-                      }
             }
+            else
+              if (arg instanceof PhpString)
+              {
+                // always prefer strings over byte[]
+                result[i] = ((PhpString) arg).getString ();
+              }
     }
     return result;
   }
@@ -1191,7 +1186,7 @@ public class JavaBridge implements Runnable
       this.ignoreCase = ignoreCase;
     }
 
-    abstract Class findMatchingInterface (Class jclass);
+    abstract Class <?> findMatchingInterface (Class <?> jclass);
 
     public boolean checkAccessible (final AccessibleObject o)
     {
@@ -1210,7 +1205,7 @@ public class JavaBridge implements Runnable
     }
 
     @Override
-    Class findMatchingInterface (final Class jclass)
+    Class <?> findMatchingInterface (final Class <?> jclass)
     {
       return jclass;
     }
@@ -1251,26 +1246,24 @@ public class JavaBridge implements Runnable
     {
       if (canModifySecurityPermission)
         return ignoreCase ? MATCH_VOID_ICASE : MATCH_VOID_CASE;
-      else
-        return new FindMatchingInterfaceForInvoke (bridge, name, args, ignoreCase);
+      return new FindMatchingInterfaceForInvoke (bridge, name, args, ignoreCase);
     }
 
     @Override
-    Class findMatchingInterface (Class jclass)
+    Class <?> findMatchingInterface (Class <?> jclass)
     {
       if (jclass == null)
         return jclass;
       if (bridge.logLevel > 3)
-        if (bridge.logLevel > 3)
-          bridge.logDebug ("searching for matching interface for Invoke for class " + jclass);
+        bridge.logDebug ("searching for matching interface for Invoke for class " + jclass);
       while (!Modifier.isPublic (jclass.getModifiers ()))
       {
         // OK, some joker gave us an instance of a non-public class
         // This often occurs in the case of enumerators
         // Substitute the matching first public interface in its place,
         // and barring that, try the superclass
-        final Class interfaces[] = jclass.getInterfaces ();
-        final Class superclass = jclass.getSuperclass ();
+        final Class <?> [] interfaces = jclass.getInterfaces ();
+        final Class <?> superclass = jclass.getSuperclass ();
         for (int i = interfaces.length; i-- > 0;)
         {
           if (Modifier.isPublic (interfaces[i].getModifiers ()))
@@ -1316,26 +1309,24 @@ public class JavaBridge implements Runnable
     {
       if (canModifySecurityPermission)
         return ignoreCase ? MATCH_VOID_ICASE : MATCH_VOID_CASE;
-      else
-        return new FindMatchingInterfaceForGetSetProp (bridge, name, args, ignoreCase);
+      return new FindMatchingInterfaceForGetSetProp (bridge, name, args, ignoreCase);
     }
 
     @Override
-    Class findMatchingInterface (Class jclass)
+    Class <?> findMatchingInterface (Class <?> jclass)
     {
       if (jclass == null)
         return jclass;
       if (bridge.logLevel > 3)
-        if (bridge.logLevel > 3)
-          bridge.logDebug ("searching for matching interface for GetSetProp for class " + jclass);
+        bridge.logDebug ("searching for matching interface for GetSetProp for class " + jclass);
       while (!Modifier.isPublic (jclass.getModifiers ()))
       {
         // OK, some joker gave us an instance of a non-public class
         // This often occurs in the case of enumerators
         // Substitute the matching first public interface in its place,
         // and barring that, try the superclass
-        final Class interfaces[] = jclass.getInterfaces ();
-        final Class superclass = jclass.getSuperclass ();
+        final Class <?> [] interfaces = jclass.getInterfaces ();
+        final Class <?> superclass = jclass.getSuperclass ();
         for (int i = interfaces.length; i-- > 0;)
         {
           if (Modifier.isPublic (interfaces[i].getModifiers ()))
@@ -1363,7 +1354,7 @@ public class JavaBridge implements Runnable
     }
   }
 
-  private static ClassIterator getClassClassIterator (final Class clazz)
+  private static ClassIterator getClassClassIterator (final Class <?> clazz)
   {
     if (clazz == Class.class)
       return new MetaClassIterator ();
@@ -1373,14 +1364,14 @@ public class JavaBridge implements Runnable
   private static abstract class ClassIterator
   {
     Object object;
-    Class current;
+    Class <?> current;
     FindMatchingInterface match;
 
     public static ClassIterator getInstance (final Object object, final FindMatchingInterface match)
     {
       ClassIterator c;
-      if (object instanceof Class)
-        c = getClassClassIterator ((Class) object);
+      if (object instanceof Class <?>)
+        c = getClassClassIterator ((Class <?>) object);
       else
         c = new ObjectClassIterator ();
 
@@ -1390,7 +1381,7 @@ public class JavaBridge implements Runnable
       return c;
     }
 
-    public abstract Class getNext ();
+    public abstract Class <?> getNext ();
 
     public abstract boolean checkAccessible (AccessibleObject o);
 
@@ -1399,7 +1390,7 @@ public class JavaBridge implements Runnable
 
   static class ObjectClassIterator extends ClassIterator
   {
-    private Class next ()
+    private Class <?> next ()
     {
       if (current == null)
         return current = object.getClass ();
@@ -1407,7 +1398,7 @@ public class JavaBridge implements Runnable
     }
 
     @Override
-    public Class getNext ()
+    public Class <?> getNext ()
     {
       return match.findMatchingInterface (next ());
     }
@@ -1429,13 +1420,13 @@ public class JavaBridge implements Runnable
   {
     boolean hasNext = false;
 
-    private Class next ()
+    private Class <?> next ()
     {
       // check the class first, then the class class.
       if (current == null)
       {
         hasNext = true;
-        return current = (Class) object;
+        return current = (Class <?>) object;
       }
       if (hasNext)
       {
@@ -1446,7 +1437,7 @@ public class JavaBridge implements Runnable
     }
 
     @Override
-    public Class getNext ()
+    public Class <?> getNext ()
     {
       return next ();
     }
@@ -1467,18 +1458,18 @@ public class JavaBridge implements Runnable
 
   static class MetaClassIterator extends ClassIterator
   {
-    private Class next ()
+    private Class <?> next ()
     {
       // The ClassClass has the ClassClass as its class
       if (current == null)
       {
-        return current = (Class) object;
+        return current = (Class <?>) object;
       }
       return null;
     }
 
     @Override
-    public Class getNext ()
+    public Class <?> getNext ()
     {
       return next ();
     }
@@ -1532,12 +1523,12 @@ public class JavaBridge implements Runnable
    */
   public void Invoke (Object object, final String method, final Object args[], final Response response)
   {
-    Class jclass;
+    Class <?> jclass;
     boolean again;
-    Object coercedArgs[] = null;
-    Class params[] = null;
-    final LinkedList candidates = new LinkedList ();
-    final LinkedList matches = new LinkedList ();
+    Object [] coercedArgs = null;
+    Class <?> [] params = null;
+    final List <Method> candidates = new LinkedList <Method> ();
+    final List <AccessibleObject> matches = new LinkedList <AccessibleObject> ();
     Method selected = null;
     boolean hasDeclaredExceptions = true;
 
@@ -1647,7 +1638,7 @@ public class JavaBridge implements Runnable
         {
           String errMsg = "\nInvoked " + method + " on " + objectDebugDescription (object) + "\n";
           errMsg += " Expected Arguments for this Method:\n";
-          final Class paramTypes[] = selected.getParameterTypes ();
+          final Class <?> paramTypes[] = selected.getParameterTypes ();
           for (int k = 0; k < paramTypes.length; k++)
           {
             errMsg += "   (" + k + ") " + classDebugDescription (paramTypes[k]) + "\n";
@@ -1676,8 +1667,7 @@ public class JavaBridge implements Runnable
   {
     if (object instanceof Class)
       throw new NoSuchProcedureException (string);
-    else
-      throw new NoSuchMethodException (string);
+    throw new NoSuchMethodException (string);
   }
 
   static private final int DISPLAY_MAX_ELEMENTS = 10;
@@ -1721,21 +1711,18 @@ public class JavaBridge implements Runnable
     if (ob == null)
       return "[Object null]";
     Object obj = ob;
-    if (obj instanceof Collection)
-      obj = ((Collection) obj).toArray ();
+    if (obj instanceof Collection <?>)
+      obj = ((Collection <?>) obj).toArray ();
     else
-      if (obj instanceof List)
-        obj = ((List) obj).toArray ();
-      else
-        if (obj instanceof Map)
-          obj = ((Map) obj).values ().toArray ();
+      if (obj instanceof Map <?, ?>)
+        obj = ((Map <?, ?>) obj).values ().toArray ();
     if (level < DISPLAY_MAX_ELEMENTS && obj.getClass ().isArray ())
     {
-      final StringBuffer buf = new StringBuffer ("[Object " +
-                                                 System.identityHashCode (ob) +
-                                                 " - Class: " +
-                                                 classDebugDescription (ob.getClass ()) +
-                                                 "]: ");
+      final StringBuilder buf = new StringBuilder ("[Object " +
+                                                   System.identityHashCode (ob) +
+                                                   " - Class: " +
+                                                   classDebugDescription (ob.getClass ()) +
+                                                   "]: ");
       buf.append ("{\n");
       final int length = Array.getLength (obj);
       for (int i = 0; i < length; i++)
@@ -1751,10 +1738,7 @@ public class JavaBridge implements Runnable
       buf.append ("}");
       return buf.toString ();
     }
-    else
-    {
-      return "[Object " + System.identityHashCode (obj) + " - Class: " + classDebugDescription (obj.getClass ()) + "]";
-    }
+    return "[Object " + System.identityHashCode (obj) + " - Class: " + classDebugDescription (obj.getClass ()) + "]";
   }
 
   /**
@@ -1764,7 +1748,7 @@ public class JavaBridge implements Runnable
    *        The class
    * @return A debug description.
    */
-  public static String classDebugDescription (final Class cls)
+  public static String classDebugDescription (final Class <?> cls)
   {
     return cls.getName () +
            ":ID" +
@@ -1789,14 +1773,14 @@ public class JavaBridge implements Runnable
    */
   public void GetSetProp (Object object, final String prop, Object args[], final Response response) throws NullPointerException
   {
-    final LinkedList matches = new LinkedList ();
+    final LinkedList <Object> matches = new LinkedList <Object> ();
     final boolean set = (args != null && args.length > 0);
-    Class params[] = null;
+    Class <?> [] params = null;
     boolean hasDeclaredExceptions = true;
 
     try
     {
-      Class jclass;
+      Class <?> jclass;
       if (object == null)
       {
         object = Request.PHPNULL;
@@ -1831,7 +1815,7 @@ public class JavaBridge implements Runnable
                 matches.clear ();
                 break again2;
               }
-              final Class ctype = fld.getType ();
+              final Class <?> ctype = fld.getType ();
               if (set)
               {
                 args = coerce (params = new Class [] { ctype }, args, response);
@@ -1872,7 +1856,8 @@ public class JavaBridge implements Runnable
               if (set)
               {
                 method = props[i].getWriteMethod ();
-                args = coerce (params = method.getParameterTypes (), args, response);
+                params = method.getParameterTypes ();
+                args = coerce (params, args, response);
               }
               else
               {
@@ -1923,7 +1908,7 @@ public class JavaBridge implements Runnable
                 matches.clear ();
                 break again0;
               }
-              final Class ctype = fld.getType ();
+              final Class <?> ctype = fld.getType ();
               if (set)
               {
                 args = coerce (params = new Class [] { ctype }, args, response);
@@ -1975,8 +1960,7 @@ public class JavaBridge implements Runnable
   {
     if (object instanceof Class)
       throw new NoSuchConstantException (string);
-    else
-      throw new NoSuchFieldException (string);
+    throw new NoSuchFieldException (string);
   }
 
   /**
@@ -2019,7 +2003,7 @@ public class JavaBridge implements Runnable
    * @return The passed <code>ob</code>, will be coerced by the appropriate
    *         writer.
    */
-  public Object cast (final Object ob, final Class type)
+  public Object cast (final Object ob, final Class <?> type)
   {
     final Response res = request.response;
     res.setCoerceWriter ().setType (type);
@@ -2051,7 +2035,7 @@ public class JavaBridge implements Runnable
    */
   public Object castToString (final Exception throwable, final String trace)
   {
-    final StringBuffer buf = new StringBuffer ();
+    final StringBuilder buf = new StringBuilder ();
     Util.appendObject (throwable, buf);
     Util.appendTrace (throwable, trace, buf);
     return castToString (buf);
@@ -2145,15 +2129,15 @@ public class JavaBridge implements Runnable
    */
   public String inspect (final Object object)
   {
-    Class jclass;
+    Class <?> jclass;
     ClassIterator iter;
-    final StringBuffer buf = new StringBuffer ("[");
+    final StringBuilder buf = new StringBuilder ("[");
     buf.append (String.valueOf (Util.getClass (object)));
     buf.append (":\nConstructors:\n");
     for (iter = ClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
     {
-      final Constructor [] constructors = jclass.getConstructors ();
-      for (final Constructor constructor : constructors)
+      final Constructor <?> [] constructors = jclass.getConstructors ();
+      for (final Constructor <?> constructor : constructors)
       {
         buf.append (String.valueOf (constructor));
         buf.append ("\n");
@@ -2182,8 +2166,8 @@ public class JavaBridge implements Runnable
     buf.append ("\nClasses:\n");
     for (iter = ClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
     {
-      final Class jclasses[] = jclass.getClasses ();
-      for (final Class jclasse : jclasses)
+      final Class <?> jclasses[] = jclass.getClasses ();
+      for (final Class <?> jclasse : jclasses)
       {
         buf.append (String.valueOf (jclasse.getName ()));
         buf.append ("\n");
@@ -2216,7 +2200,7 @@ public class JavaBridge implements Runnable
    */
   public boolean InstanceOf (final Object ob, final Object claz)
   {
-    final Class clazz = Util.getClass (claz);
+    final Class <?> clazz = Util.getClass (claz);
     return clazz.isInstance (castToBoolean (ob));
   }
 
@@ -2287,7 +2271,7 @@ public class JavaBridge implements Runnable
    */
   public Object ObjectToString (final Throwable ob, final String trace)
   {
-    final StringBuffer buf = new StringBuffer ("[");
+    final StringBuilder buf = new StringBuilder ("[");
     try
     {
       Util.appendObject (ob, buf);
@@ -2368,7 +2352,7 @@ public class JavaBridge implements Runnable
    *        maps java to php names
    * @return the proxy
    */
-  public Object makeClosure (final long object, final Map names)
+  public Object makeClosure (final long object, final Map <?, ?> names)
   {
     if (names == null)
       return makeClosure (object);
@@ -2388,7 +2372,7 @@ public class JavaBridge implements Runnable
    *        list of interfaces which the PHP environment must implement
    * @return the proxy
    */
-  public Object makeClosure (final long object, Map names, final Class interfaces[])
+  public Object makeClosure (final long object, Map <?, ?> names, final Class <?> interfaces[])
   {
     if (names == null)
       names = emptyMap;
@@ -2408,9 +2392,9 @@ public class JavaBridge implements Runnable
    *        interface which the PHP environment must implement
    * @return the proxy
    */
-  public Object makeClosure (final long object, final String name, final Class iface)
+  public Object makeClosure (final long object, final String name, final Class <?> iface)
   {
-    final Class [] interfaces = iface == null ? null : new Class [] { iface };
+    final Class <?> [] interfaces = iface == null ? null : new Class <?> [] { iface };
     return makeClosure (object, name, interfaces);
   }
 
@@ -2427,9 +2411,9 @@ public class JavaBridge implements Runnable
    *        interface which the PHP environment must implement
    * @return the proxy
    */
-  public Object makeClosure (final long object, final Map names, final Class iface)
+  public Object makeClosure (final long object, final Map <?, ?> names, final Class <?> iface)
   {
-    final Class [] interfaces = iface == null ? null : new Class [] { iface };
+    final Class <?> [] interfaces = iface == null ? null : new Class <?> [] { iface };
     return makeClosure (object, names, interfaces);
   }
 
@@ -2464,14 +2448,14 @@ public class JavaBridge implements Runnable
    *        list of interfaces which the PHP environment must implement
    * @return the proxy
    */
-  public Object makeClosure (final long object, final String name, final Class interfaces[])
+  public Object makeClosure (final long object, final String name, final Class <?> [] interfaces)
   {
     if (name == null)
       return makeClosure (object, emptyMap, interfaces);
     return PhpProcedure.createProxy (getFactory (), name, null, interfaces, object);
   }
 
-  private static final HashMap emptyMap = new HashMap ();
+  private static final Map <?, ?> emptyMap = new HashMap <Object, Object> ();
 
   /**
    * Create a dynamic proxy proxy for calling PHP code.<br>
@@ -2570,7 +2554,7 @@ public class JavaBridge implements Runnable
    *        The position
    * @return true if an element exists at this position, false otherwise.
    */
-  private boolean offsetExists (final Map value, final Object pos)
+  private boolean _mapOffsetExists (final Map <?, ?> value, final Object pos)
   {
     castToBoolean (null);
     return value.containsKey (pos);
@@ -2585,7 +2569,7 @@ public class JavaBridge implements Runnable
    *        The position.
    * @return The object at the given position.
    */
-  private Object offsetGet (final Map value, final Object pos)
+  private Object _mapOffsetGet (final Map <?, ?> value, final Object pos)
   {
     return value.get (pos);
   }
@@ -2600,14 +2584,14 @@ public class JavaBridge implements Runnable
    * @param val
    *        The object.
    */
-  private void offsetSet (final Map value, Object pos, Object val)
+  private void _mapOffsetSet (final Map <Object, Object> value, Object pos, Object val)
   {
-    final Class type = value.getClass ().getComponentType ();
+    final Class <?> type = value.getClass ().getComponentType ();
     if (type != null)
       val = coerce (type, val, request.response);
     if (pos == null)
     {
-      pos = new Integer (value.size ());
+      pos = Integer.valueOf (value.size ());
     }
     value.put (pos, val);
   }
@@ -2620,7 +2604,7 @@ public class JavaBridge implements Runnable
    * @param pos
    *        The position.
    */
-  private void offsetUnset (final Map value, final Object pos)
+  private void _mapOffsetUnset (final Map <?, ?> value, final Object pos)
   {
     value.remove (pos);
   }
@@ -2634,12 +2618,12 @@ public class JavaBridge implements Runnable
    *        The position
    * @return true if an element exists at this position, false otherwise.
    */
-  private boolean offsetExists (final List value, final int pos)
+  private boolean _listOffsetExists (final List <?> value, final int pos)
   {
     castToBoolean (null);
     try
     {
-      offsetGet (value, pos);
+      _listOffsetGet (value, pos);
       return true;
     }
     catch (final IndexOutOfBoundsException ex)
@@ -2657,7 +2641,7 @@ public class JavaBridge implements Runnable
    *        The position.
    * @return The object at the given position.
    */
-  private Object offsetGet (final List value, final int pos)
+  private Object _listOffsetGet (final List <?> value, final int pos)
   {
     return value.get (pos);
   }
@@ -2672,7 +2656,7 @@ public class JavaBridge implements Runnable
    * @param val
    *        The object.
    */
-  private void offsetSet (final List value, final Number off, final Object val)
+  private void _listOffsetSet (final List <Object> value, final Number off, final Object val)
   {
     if (off == null)
       value.add (val);
@@ -2691,7 +2675,7 @@ public class JavaBridge implements Runnable
    * @param pos
    *        The position.
    */
-  private void offsetUnset (final List value, final int pos)
+  private void _listOffsetUnset (final List <?> value, final int pos)
   {
     value.remove (pos);
   }
@@ -2712,7 +2696,7 @@ public class JavaBridge implements Runnable
    *        The position
    * @return true if an element exists at this position, false otherwise.
    */
-  private boolean offsetExists (final Object value, final int pos)
+  private boolean _arrayOffsetExists (final Object value, final int pos)
   {
     return offsetExists (Array.getLength (value), pos);
   }
@@ -2729,10 +2713,10 @@ public class JavaBridge implements Runnable
   public boolean offsetExists (final Object table, final Object off)
   {
     if (table.getClass ().isArray ())
-      return offsetExists (table, ((Number) off).intValue ());
+      return _arrayOffsetExists (table, ((Number) off).intValue ());
     if (table instanceof List)
-      return offsetExists ((List) table, ((Number) off).intValue ());
-    return offsetExists ((Map) table, off);
+      return _listOffsetExists ((List <?>) table, ((Number) off).intValue ());
+    return _mapOffsetExists ((Map <?, ?>) table, off);
   }
 
   /**
@@ -2744,7 +2728,7 @@ public class JavaBridge implements Runnable
    *        The position.
    * @return The object at the given position.
    */
-  private Object offsetGet (final Object value, final int pos)
+  private Object _arrayOffsetGet (final Object value, final int pos)
   {
     final int i = pos;
     final Object o = Array.get (value, i);
@@ -2763,10 +2747,10 @@ public class JavaBridge implements Runnable
   public Object offsetGet (final Object table, final Object off)
   {
     if (table.getClass ().isArray ())
-      return offsetGet (table, ((Number) off).intValue ());
+      return _arrayOffsetGet (table, ((Number) off).intValue ());
     if (table instanceof List)
-      return offsetGet ((List) table, ((Number) off).intValue ());
-    return offsetGet ((Map) table, off);
+      return _listOffsetGet ((List <?>) table, ((Number) off).intValue ());
+    return _mapOffsetGet ((Map <?, ?>) table, off);
   }
 
   /**
@@ -2802,7 +2786,7 @@ public class JavaBridge implements Runnable
    * @param val
    *        The object.
    */
-  private void offsetSet (final Object value, final int pos, final Object val)
+  private void _arrayOffsetSet (final Object value, final int pos, final Object val)
   {
     Array.set (value, pos, coerce (value.getClass ().getComponentType (), val, request.response));
   }
@@ -2820,12 +2804,12 @@ public class JavaBridge implements Runnable
   public void offsetSet (final Object table, final Object off, final Object val)
   {
     if (table.getClass ().isArray ())
-      offsetSet (table, ((Number) off).intValue (), val);
+      _arrayOffsetSet (table, ((Number) off).intValue (), val);
     else
-      if (table instanceof List)
-        offsetSet ((List) table, ((Number) off), val);
+      if (table instanceof List <?>)
+        _listOffsetSet ((List <Object>) table, ((Number) off), val);
       else
-        offsetSet ((Map) table, off, val);
+        _mapOffsetSet ((Map <Object, Object>) table, off, val);
   }
 
   /**
@@ -2856,9 +2840,9 @@ public class JavaBridge implements Runnable
       offsetUnset (table, ((Number) off).intValue ());
     else
       if (table instanceof List)
-        offsetUnset ((List) table, ((Number) off).intValue ());
+        _listOffsetUnset ((List <?>) table, ((Number) off).intValue ());
       else
-        offsetUnset ((Map) table, off);
+        _mapOffsetUnset ((Map <?, ?>) table, off);
   }
 
   /**

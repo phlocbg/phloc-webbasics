@@ -106,7 +106,7 @@ class HexOutputBuffer extends ByteArrayOutputStream
     appendQuoted (bridge.options.getBytes (s));
   }
 
-  private final byte [] buf = new byte [16];
+  private final byte [] nbuf = new byte [16];
 
   /** append an unsigned long number */
   protected void append (long i)
@@ -114,10 +114,10 @@ class HexOutputBuffer extends ByteArrayOutputStream
     int pos = 16;
     do
     {
-      buf[--pos] = Util.HEX_DIGITS[(int) (i & 0xF)];
+      nbuf[--pos] = Util.HEX_DIGITS[(int) (i & 0xF)];
       i >>>= 4;
     } while (i != 0);
-    write (buf, pos, 16 - pos);
+    write (nbuf, pos, 16 - pos);
   }
 
   /**

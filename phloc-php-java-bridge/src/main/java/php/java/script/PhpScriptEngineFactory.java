@@ -69,10 +69,7 @@ public class PhpScriptEngineFactory implements ScriptEngineFactory
       {
         return new CloseablePhpScriptEngine (PhpScriptEngineFactory.this);
       }
-      else
-      {
-        return new PhpScriptEngine (PhpScriptEngineFactory.this);
-      }
+      return new PhpScriptEngine (PhpScriptEngineFactory.this);
     }
   }
 
@@ -121,21 +118,21 @@ public class PhpScriptEngineFactory implements ScriptEngineFactory
   }
 
   /** {@inheritDoc} */
-  public List getExtensions ()
+  public List <String> getExtensions ()
   {
     return getNames ();
   }
 
   /** {@inheritDoc} */
-  public List getMimeTypes ()
+  public List <String> getMimeTypes ()
   {
     return Arrays.asList (new String [] {});
   }
 
-  List names;
+  List <String> names;
 
   /** {@inheritDoc} */
-  public List getNames ()
+  public List <String> getNames ()
   {
     if (names == null)
       names = Arrays.asList (new String [] { getLanguageName (), "phtml", "php4", "php5", "php6" });
@@ -163,14 +160,13 @@ public class PhpScriptEngineFactory implements ScriptEngineFactory
       return getLanguageVersion ();
     if (key.equals ("THREADING"))
       return "STATELESS";
-    else
-      throw new IllegalArgumentException ("key");
+    throw new IllegalArgumentException ("key");
   }
 
   /** {@inheritDoc} */
-  public String getMethodCallSyntax (final String obj, final String m, final String [] args)
+  public String getMethodCallSyntax (final String obj, final String m, final String... args)
   {
-    final StringBuffer b = new StringBuffer ();
+    final StringBuilder b = new StringBuilder ();
     b.append ("$");
     b.append (obj);
     b.append ("->");
@@ -194,10 +190,10 @@ public class PhpScriptEngineFactory implements ScriptEngineFactory
   }
 
   /** {@inheritDoc} */
-  public String getProgram (final String [] statements)
+  public String getProgram (final String... statements)
   {
     int i = 0;
-    final StringBuffer b = new StringBuffer ("<?php ");
+    final StringBuilder b = new StringBuilder ("<?php ");
 
     for (i = 0; i < statements.length; i++)
     {

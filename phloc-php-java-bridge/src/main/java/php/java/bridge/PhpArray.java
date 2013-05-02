@@ -49,7 +49,6 @@ import java.util.TreeMap;
 final class PhpArray extends AbstractMap <Object, Object>
 {
   // for PHP's array()
-  private static final long serialVersionUID = 3905804162838115892L;
   private TreeMap <Integer, Object> t = new TreeMap <Integer, Object> (Request.PHP_ARRAY_KEY_COMPARATOR);
   private HashMap <Object, Object> m = null;
 

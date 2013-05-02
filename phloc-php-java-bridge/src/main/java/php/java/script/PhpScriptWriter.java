@@ -52,7 +52,7 @@ import java.io.PrintWriter;
 public class PhpScriptWriter extends PrintWriter
 {
 
-  OutputStream out;
+  OutputStream nout;
 
   /**
    * Create a new PhpScriptWriter.
@@ -65,7 +65,7 @@ public class PhpScriptWriter extends PrintWriter
     super (out);
     if (out == null)
       throw new NullPointerException ("out");
-    this.out = out;
+    this.nout = out;
   }
 
   /**
@@ -75,7 +75,7 @@ public class PhpScriptWriter extends PrintWriter
    */
   public OutputStream getOutputStream ()
   {
-    return out;
+    return nout;
   }
 
   /** {@inheritDoc} */

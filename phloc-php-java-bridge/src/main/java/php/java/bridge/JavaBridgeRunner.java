@@ -343,7 +343,7 @@ public class JavaBridgeRunner extends HttpServer
     out.println ("</tr>");
     final File [] dir = f.listFiles ();
     int count = 0;
-    final StringBuffer b = new StringBuffer ();
+    final StringBuilder b = new StringBuilder ();
     for (final File file : dir)
     {
       if (file.isHidden ())
@@ -389,7 +389,7 @@ public class JavaBridgeRunner extends HttpServer
     out.println ("<h4>Available script engines</h4><ul>");
     try
     {
-      final Class c = Class.forName ("javax.script.ScriptEngineManager");
+      final Class <?> c = Class.forName ("javax.script.ScriptEngineManager");
       Object o = c.newInstance ();
       final Method ex = c.getMethod ("getEngineByExtension", new Class [] { String.class });
       if (ex.invoke (o, (Object []) new String [] { "php" }) == null)
@@ -398,9 +398,9 @@ public class JavaBridgeRunner extends HttpServer
       }
 
       final Method e = c.getMethod ("getEngineFactories", new Class [] {});
-      final List factories = (List) e.invoke (o, new Object [] {});
-      final StringBuffer buf = new StringBuffer ();
-      for (final Iterator ii = factories.iterator (); ii.hasNext ();)
+      final List <?> factories = (List <?>) e.invoke (o, new Object [] {});
+      final StringBuilder buf = new StringBuilder ();
+      for (final Iterator <?> ii = factories.iterator (); ii.hasNext ();)
       {
         o = ii.next ();
         final Method getName = o.getClass ().getMethod ("getEngineName", new Class [] {});
@@ -564,7 +564,7 @@ public class JavaBridgeRunner extends HttpServer
       File f = Standalone.getCanonicalWindowsFile (name);
       if (f == null || !f.exists ())
         f = new File (Util.HOME_DIR, name);
-      if (f == null || !f.exists ())
+      if (!f.exists ())
         return;
       if (f.isHidden ())
         return;
@@ -618,11 +618,8 @@ public class JavaBridgeRunner extends HttpServer
         res.getOutputStream ().write (ERROR);
         return;
       }
-      else
-      {
-        if (Util.logLevel > 4)
-          Util.logDebug ("Java.inc not found, using JavaBridge.inc instead");
-      }
+      if (Util.logLevel > 4)
+        Util.logDebug ("Java.inc not found, using JavaBridge.inc instead");
     }
     try
     {

@@ -179,12 +179,12 @@ abstract class PhpMap
       {
         int i;
         boolean valid;
-        Iterator iter;
+        Iterator <?> iter;
 
         @Override
         protected void init ()
         {
-          iter = ((Collection) (this.value)).iterator ();
+          iter = ((Collection <?>) (this.value)).iterator ();
           i = 0;
           valid = false;
           if (iter.hasNext ())
@@ -213,12 +213,13 @@ abstract class PhpMap
           {
             i++;
             this.value = iter.next ();
-            return valid = true;
+            valid = true;
           }
           else
           {
-            return valid = false;
+            valid = false;
           }
+          return valid;
         }
 
         @Override
@@ -233,12 +234,12 @@ abstract class PhpMap
       return new PhpMap (bridge, value, true)
       {
         Object currentKey;
-        Iterator iter;
+        Iterator <?> iter;
 
         @Override
         protected void init ()
         {
-          iter = ((Map) (this.value)).keySet ().iterator ();
+          iter = ((Map <?, ?>) (this.value)).keySet ().iterator ();
           currentKey = null;
           if (iter.hasNext ())
           {
@@ -251,7 +252,7 @@ abstract class PhpMap
         {
           if (currentKey == null)
             return null;
-          return ((Map) (this.value)).get (currentKey);
+          return ((Map <?, ?>) (this.value)).get (currentKey);
         }
 
         @Override

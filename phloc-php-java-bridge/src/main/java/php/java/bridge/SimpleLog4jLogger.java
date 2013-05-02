@@ -53,15 +53,15 @@ public abstract class SimpleLog4jLogger implements ILogger
 
   protected class LoggerProxy
   {
-    Object logger;
-    protected Class priority;
+    protected Object nlogger;
+    protected Class <?> priority;
     protected Object fatal, error, warn, info, debug;
 
     protected LoggerProxy () throws Exception
     {
-      Class c = Class.forName ("org.apache.log4j.Logger");
+      Class <?> c = Class.forName ("org.apache.log4j.Logger");
       final Method m = c.getMethod ("getLogger", new Class [] { String.class });
-      logger = m.invoke (c, new Object [] { "php.java.bridge.JavaBridge" });
+      nlogger = m.invoke (c, new Object [] { "php.java.bridge.JavaBridge" });
       c = priority = Class.forName ("org.apache.log4j.Priority");
       fatal = c.getField ("FATAL").get (c);
       error = c.getField ("ERROR").get (c);
@@ -75,8 +75,8 @@ public abstract class SimpleLog4jLogger implements ILogger
     public synchronized void error (final String string, final Throwable t) throws Exception
     {
       if (errorMethod == null)
-        errorMethod = logger.getClass ().getMethod ("error", new Class [] { Object.class, Throwable.class });
-      errorMethod.invoke (logger, new Object [] { string, t });
+        errorMethod = nlogger.getClass ().getMethod ("error", new Class [] { Object.class, Throwable.class });
+      errorMethod.invoke (nlogger, new Object [] { string, t });
     }
 
     private Method logMethod;
@@ -84,23 +84,23 @@ public abstract class SimpleLog4jLogger implements ILogger
     public synchronized void log (final int level, final String msg) throws Exception
     {
       if (logMethod == null)
-        logMethod = logger.getClass ().getMethod ("log", new Class [] { priority, Object.class });
+        logMethod = nlogger.getClass ().getMethod ("log", new Class [] { priority, Object.class });
       switch (level)
       {
         case 1:
-          logMethod.invoke (logger, new Object [] { fatal, msg });
+          logMethod.invoke (nlogger, new Object [] { fatal, msg });
           break;
         case 2:
-          logMethod.invoke (logger, new Object [] { error, msg });
+          logMethod.invoke (nlogger, new Object [] { error, msg });
           break;
         case 3:
-          logMethod.invoke (logger, new Object [] { info, msg });
+          logMethod.invoke (nlogger, new Object [] { info, msg });
           break;
         case 4:
-          logMethod.invoke (logger, new Object [] { debug, msg });
+          logMethod.invoke (nlogger, new Object [] { debug, msg });
           break;
         default:
-          logMethod.invoke (logger, new Object [] { warn, msg });
+          logMethod.invoke (nlogger, new Object [] { warn, msg });
           break;
       }
     }

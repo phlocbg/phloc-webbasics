@@ -44,7 +44,6 @@ package php.java.bridge.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,8 +86,8 @@ public class FCGIConnectionPool
   private final int limit;
   private long timeout;
   private int connections = 0;
-  private final List freeList = new LinkedList ();
-  private final List connectionList = new LinkedList ();
+  private final List <Connection> freeList = new LinkedList <Connection> ();
+  private final List <Connection> connectionList = new LinkedList <Connection> ();
   private final FCGIIOFactory factory;
   private final int maxRequests;
   private final FCGIConnectionFactory channelName;
@@ -101,13 +100,13 @@ public class FCGIConnectionPool
   public final class Connection
   {
     protected int ostate, state; // bit0: input closed, bit1: output closed
-    protected FCGIConnectionFactory channelName;
+    protected FCGIConnectionFactory nchannelName;
     protected FCGIConnection channel;
     private FCGIConnectionOutputStream outputStream;
     private FCGIConnectionInputStream inputStream;
     private boolean isClosed;
-    private final FCGIIOFactory factory;
-    private final int maxRequests;
+    private final FCGIIOFactory nfactory;
+    private final int nmaxRequests;
     private int counter;
 
     protected void reset ()
@@ -119,24 +118,24 @@ public class FCGIConnectionPool
     {
       inputStream = null;
       outputStream = null;
-      counter = maxRequests;
+      counter = nmaxRequests;
       reset ();
     }
 
     protected Connection reopen () throws FCGIConnectException
     {
       if (isClosed)
-        this.channel = factory.connect (channelName);
+        this.channel = nfactory.connect (nchannelName);
       this.isClosed = false;
       return this;
     }
 
     protected Connection (final FCGIConnectionFactory channelName, final int maxRequests, final FCGIIOFactory factory)
     {
-      this.channelName = channelName;
-      this.factory = factory;
+      this.nchannelName = channelName;
+      this.nfactory = factory;
       this.isClosed = true;
-      this.maxRequests = maxRequests;
+      this.nmaxRequests = maxRequests;
       init ();
     }
 
@@ -146,11 +145,11 @@ public class FCGIConnectionPool
       isClosed = true;
     }
 
-    protected void close () throws FCGIConnectException
+    protected void close ()
     {
       // PHP child terminated: mark as closed, so that reopen() can allocate
       // a new connection for the new PHP child
-      if (maxRequests > 0 && --counter == 0)
+      if (nmaxRequests > 0 && --counter == 0)
         isClosed = true;
 
       if (isClosed)
@@ -181,7 +180,7 @@ public class FCGIConnectionPool
     {
       if (outputStream != null)
         return outputStream;
-      final FCGIConnectionOutputStream outputStream = (FCGIConnectionOutputStream) factory.createOutputStream ();
+      final FCGIConnectionOutputStream outputStream = (FCGIConnectionOutputStream) nfactory.createOutputStream ();
       outputStream.setConnection (this);
       ostate |= 2;
       return outputStream;
@@ -197,7 +196,7 @@ public class FCGIConnectionPool
     {
       if (inputStream != null)
         return inputStream;
-      final FCGIConnectionInputStream inputStream = (FCGIConnectionInputStream) factory.createInputStream ();
+      final FCGIConnectionInputStream inputStream = (FCGIConnectionInputStream) nfactory.createInputStream ();
       inputStream.setConnection (this);
       ostate |= 1;
       return inputStream;
@@ -298,7 +297,7 @@ public class FCGIConnectionPool
           wait ();
         }
       }
-      connection = (Connection) freeList.remove (0);
+      connection = freeList.remove (0);
       connection.reset ();
     }
     return connection.reopen ();
@@ -315,9 +314,8 @@ public class FCGIConnectionPool
    */
   public synchronized void destroy ()
   {
-    for (final Iterator ii = connectionList.iterator (); ii.hasNext ();)
+    for (final Connection connection : connectionList)
     {
-      final Connection connection = (Connection) ii.next ();
       connection.destroy ();
     }
 

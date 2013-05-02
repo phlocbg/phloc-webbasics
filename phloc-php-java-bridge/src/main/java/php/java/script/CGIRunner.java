@@ -72,7 +72,7 @@ public class CGIRunner extends Continuation
   protected Reader reader;
 
   protected CGIRunner (final Reader reader,
-                       final Map env,
+                       final Map <String, String> env,
                        final OutputStream out,
                        final OutputStream err,
                        final HeaderParser headerParser,

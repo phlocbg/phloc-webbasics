@@ -63,10 +63,7 @@ public class InteractivePhpScriptEngineFactory extends InvocablePhpScriptEngineF
       {
         return new CloseableInteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
       }
-      else
-      {
-        return new InteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
-      }
+      return new InteractivePhpScriptEngine (InteractivePhpScriptEngineFactory.this);
     }
   }
 

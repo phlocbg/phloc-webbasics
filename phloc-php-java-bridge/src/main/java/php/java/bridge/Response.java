@@ -44,7 +44,6 @@ package php.java.bridge;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -99,41 +98,34 @@ public final class Response
   private static final class UndeclaredThrowableErrorMarker extends RuntimeException
   {
     private static final long serialVersionUID = -578332461418889089L;
-    private final Throwable e;
 
     public UndeclaredThrowableErrorMarker (final Throwable e)
     {
-      this.e = e;
+      super (MSG, e);
     }
 
     @Override
     public String toString ()
     {
-      return MSG + " " + String.valueOf (e);
-    }
-
-    @Override
-    public Throwable getCause ()
-    {
-      return this.e;
+      return MSG + " " + String.valueOf (getCause ());
     }
 
     @Override
     public String getMessage ()
     {
-      return e.getMessage ();
+      return getCause ().getMessage ();
     }
 
     @Override
     public String getLocalizedMessage ()
     {
-      return e.getLocalizedMessage ();
+      return getCause ().getLocalizedMessage ();
     }
 
     @Override
     public StackTraceElement [] getStackTrace ()
     {
-      return e.getStackTrace ();
+      return getCause ().getStackTrace ();
     }
   }
 
@@ -148,7 +140,7 @@ public final class Response
 
   protected abstract class DelegateWriter
   {
-    protected Class staticType;
+    protected Class <?> staticType;
 
     public abstract boolean setResult (Object value);
 
@@ -156,7 +148,7 @@ public final class Response
      * @param type
      *        - The result type
      */
-    public void setType (final Class type)
+    public void setType (final Class <?> type)
     {
       this.staticType = type;
     }
@@ -200,12 +192,12 @@ public final class Response
       writeObject (value);
     }
 
-    public void setResultClass (final Class value)
+    public void setResultClass (final Class <?> value)
     {
       writeClass (value);
     }
 
-    public void setResult (final Object value, final Class type, final boolean hasDeclaredExceptions)
+    public void setResult (final Object value, final Class <?> type, final boolean hasDeclaredExceptions)
     {
       this.hasDeclaredExceptions = hasDeclaredExceptions;
       setType (type);
@@ -246,7 +238,7 @@ public final class Response
     protected DelegateWriter delegate;
 
     @Override
-    public void setType (final Class type)
+    public void setType (final Class <?> type)
     {
       super.setType (type);
       delegate.setType (type);
@@ -282,11 +274,10 @@ public final class Response
       else
         if (value instanceof java.util.Map)
         {
-          final Map ht = (Map) value;
+          final Map <?, ?> ht = (Map <?, ?>) value;
           writeCompositeBegin_h ();
-          for (final Iterator e = ht.entrySet ().iterator (); e.hasNext ();)
+          for (final Map.Entry <?, ?> entry : ht.entrySet ())
           {
-            final Map.Entry entry = (Map.Entry) e.next ();
             final Object key = entry.getKey ();
             final Object val = entry.getValue ();
             if (key instanceof Number && !(key instanceof Double || key instanceof Float))
@@ -304,14 +295,13 @@ public final class Response
           writeCompositeEnd ();
         }
         else
-          if (value instanceof java.util.Collection)
+          if (value instanceof Collection)
           {
-            final Collection ht = (Collection) value;
+            final Collection <?> ht = (Collection <?>) value;
             writeCompositeBegin_h ();
             int counter = 0;
-            for (final Iterator e = ht.iterator (); e.hasNext ();)
+            for (final Object val : ht)
             {
-              final Object val = e.next ();
               writePairBegin_n (counter++);
               writer.setResult (val);
               writePairEnd ();
@@ -472,7 +462,7 @@ public final class Response
   protected class ArrayValueWriter extends IncompleteArrayValueWriter
   {
     @Override
-    public void setResult (final Object value, final Class type, final boolean hasDeclaredExceptions)
+    public void setResult (final Object value, final Class <?> type, final boolean hasDeclaredExceptions)
     {
       if (!delegate.setResult (value))
         setResultArray (value);
@@ -506,7 +496,7 @@ public final class Response
   protected class DefaultObjectWriter extends Writer
   {
     @Override
-    public void setResultObject (Object value)
+    public void setResultObject (final Object value)
     {
       if (staticType == java.lang.Void.TYPE)
       {
@@ -514,17 +504,13 @@ public final class Response
         return;
       }
 
-      if (value == null)
-        value = Request.PHPNULL;
-      writeObject (value, hasDeclaredExceptions);
+      writeObject (value == null ? Request.PHPNULL : value, hasDeclaredExceptions);
     }
 
     @Override
-    public void setResultClass (Class value)
+    public void setResultClass (final Class <?> value)
     {
-      if (value == null)
-        value = Request.PhpNull.class; // shouldn't happen
-      writeClass (value, hasDeclaredExceptions);
+      writeClass (value == null ? Request.PhpNull.class : value, hasDeclaredExceptions);
     }
 
     @Override
@@ -589,7 +575,7 @@ public final class Response
     }
 
     @Override
-    public void setResultClass (Class value)
+    public void setResultClass (Class <?> value)
     {
       if (value == null)
         value = Request.PhpNull.class;
@@ -656,7 +642,7 @@ public final class Response
     {}
 
     @Override
-    public void setResultClass (final Class value)
+    public void setResultClass (final Class <?> value)
     {}
 
     @Override
@@ -679,7 +665,7 @@ public final class Response
   protected final class CoerceWriter extends Writer
   {
     @Override
-    public void setResult (final Object value, final Class resultType, final boolean hasDeclaredExceptions)
+    public void setResult (final Object value, final Class <?> resultType, final boolean hasDeclaredExceptions)
     {
       // ignore resultType and use the coerce type
       setResult (value);
@@ -841,8 +827,7 @@ public final class Response
   {
     if (bridge.options.base64Data ())
       return createBase64OutputBuffer ();
-    else
-      return new HexOutputBuffer (bridge);
+    return new HexOutputBuffer (bridge);
   }
 
   /**
@@ -915,7 +900,7 @@ public final class Response
    * @param value
    *        The result object.
    */
-  public void setResultClass (final Class value)
+  public void setResultClass (final Class <?> value)
   {
     writer.setResultClass (value);
   }
@@ -931,7 +916,7 @@ public final class Response
    *        true if the method/procedure has declared exceptions, false
    *        otherwise
    */
-  public void setResult (final Object value, final Class type, final boolean hasDeclaredExceptions)
+  public void setResult (final Object value, final Class <?> type, final boolean hasDeclaredExceptions)
   {
     writer.setResult (value, type, hasDeclaredExceptions);
   }
@@ -1110,7 +1095,7 @@ public final class Response
     buf.append (Nul);
   }
 
-  protected byte [] getType (final Class type)
+  protected byte [] getType (final Class <?> type)
   {
     if (type.isArray () || List.class.isAssignableFrom (type) || Map.class.isAssignableFrom (type))
     {
@@ -1137,7 +1122,7 @@ public final class Response
       writeNull ();
       return;
     }
-    final Class dynamicType = o.getClass ();
+    final Class <?> dynamicType = o.getClass ();
     buf.append (O);
     buf.append (this.bridge.globalRef.append (o));
     buf.append (m);
@@ -1154,7 +1139,7 @@ public final class Response
       writeNull ();
       return;
     }
-    final Class dynamicType = o.getClass ();
+    final Class <?> dynamicType = o.getClass ();
     buf.append (O);
     buf.append (this.bridge.globalRef.append (o));
     buf.append (m);
@@ -1165,7 +1150,7 @@ public final class Response
   }
 
   /** write object of type class. Only called from new JavaClass(...) */
-  void writeClass (final Class o, final boolean hasDeclaredExceptions)
+  void writeClass (final Class <?> o, final boolean hasDeclaredExceptions)
   {
     if (o == null)
     {
@@ -1181,7 +1166,7 @@ public final class Response
     buf.append (e);
   }
 
-  void writeClass (final Class o)
+  void writeClass (final Class <?> o)
   {
     if (o == null)
     {

@@ -140,7 +140,7 @@ class FileLogger implements ILogger
    */
   public void log (final int level, final String msg)
   {
-    final StringBuffer b = new StringBuffer (now ());
+    final StringBuilder b = new StringBuilder (now ());
     b.append (" ");
     b.append (Util.EXTENSION_NAME);
     b.append (" ");
@@ -169,7 +169,7 @@ class FileLogger implements ILogger
 
   public void warn (final String msg)
   {
-    final StringBuffer b = new StringBuffer (now ());
+    final StringBuilder b = new StringBuilder (now ());
     b.append (" ");
     b.append (Util.EXTENSION_NAME);
     b.append (" ");

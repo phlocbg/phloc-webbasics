@@ -198,7 +198,7 @@ class Parser
   {
     if (bridge.logLevel >= 4)
     {
-      final StringBuffer buf = new StringBuffer ("--> <");
+      final StringBuilder buf = new StringBuilder ("--> <");
       buf.append (tag[0].strings[0].getUTF8StringValue ());
       buf.append (" ");
 
@@ -220,7 +220,7 @@ class Parser
   {
     if (bridge.logLevel >= 4)
     {
-      final StringBuffer buf = new StringBuffer ("--> </");
+      final StringBuilder buf = new StringBuilder ("--> </");
       buf.append (tag[0].strings[0].getUTF8StringValue ());
       buf.append (">");
       bridge.logDebug (buf.toString ());

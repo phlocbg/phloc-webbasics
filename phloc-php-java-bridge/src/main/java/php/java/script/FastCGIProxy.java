@@ -83,7 +83,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
   private static final boolean PHP_INCLUDE_JAVA = false; // servlet option
 
   public FastCGIProxy (final Reader reader,
-                       final Map env,
+                       final Map <String, String> env,
                        final OutputStream out,
                        final OutputStream err,
                        final HeaderParser headerParser,
@@ -94,12 +94,11 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
   }
 
   private FCGIConnectionFactory channelName;
-  static final HashMap PROCESS_ENVIRONMENT = getProcessEnvironment ();
+  static final Map <String, String> PROCESS_ENVIRONMENT = getProcessEnvironment ();
 
-  private static HashMap getProcessEnvironment ()
+  private static Map <String, String> getProcessEnvironment ()
   {
-    final HashMap map = new HashMap (Util.COMMON_ENVIRONMENT);
-    return map;
+    return new HashMap <String, String> (Util.COMMON_ENVIRONMENT);
   }
 
   private final FCGIIOFactory defaultPoolFactory = new FCGIIOFactory ()
@@ -178,7 +177,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
     }
 
     // Start the launcher.exe or launcher.sh
-    final Map map = (Map) PROCESS_ENVIRONMENT.clone ();
+    final Map <String, String> map = new HashMap <String, String> (PROCESS_ENVIRONMENT);
     map.put ("PHP_FCGI_CHILDREN", PROCESSES);
     map.put ("PHP_FCGI_MAX_REQUESTS", MAX_REQUESTS);
     channelName.startServer (Util.getLogger ());
@@ -270,7 +269,10 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
 
   /** required by IFCGIProcessFactory */
   /** {@inheritDoc} */
-  public IFCGIProcess createFCGIProcess (final String [] args, final boolean includeJava, final File home, final Map env) throws IOException
+  public IFCGIProcess createFCGIProcess (final String [] args,
+                                         final boolean includeJava,
+                                         final File home,
+                                         final Map <String, String> env) throws IOException
   {
     return new FCGIProcess (args,
                             includeJava,
@@ -297,7 +299,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
   }
 
   /** {@inheritDoc} */
-  public HashMap getEnvironment ()
+  public Map <String, String> getEnvironment ()
   {
     return getProcessEnvironment ();
   }

@@ -58,8 +58,8 @@ public class ThreadPool
 {
   private String name;
   private int threads = 0, idles = 0, poolMaxSize, poolReserve;
-  private final LinkedList runnables = new LinkedList ();
-  private final LinkedList threadList = new LinkedList ();
+  private final LinkedList <Runnable> runnables = new LinkedList <Runnable> ();
+  private final LinkedList <Delegate> threadList = new LinkedList <Delegate> ();
 
   /**
    * Threads continue to pull runnables and run them in the thread environment.
@@ -145,7 +145,7 @@ public class ThreadPool
       wait ();
       idles--;
     }
-    return (Runnable) runnables.removeFirst ();
+    return runnables.removeFirst ();
   }
 
   /**
@@ -178,9 +178,9 @@ public class ThreadPool
   /** Terminate all threads in the pool. */
   public void destroy ()
   {
-    for (final Iterator ii = threadList.iterator (); ii.hasNext ();)
+    for (final Iterator <Delegate> ii = threadList.iterator (); ii.hasNext ();)
     {
-      final Delegate d = (Delegate) ii.next ();
+      final Delegate d = ii.next ();
       d.terminate = true;
       d.interrupt ();
     }

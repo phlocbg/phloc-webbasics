@@ -64,9 +64,9 @@ public class FCGIInputStream extends FCGIConnectionInputStream
     this.processFactory = processFactory;
   }
 
-  private StringBuffer error;
+  private StringBuilder error;
 
-  public StringBuffer getError ()
+  public StringBuilder getError ()
   {
     return error;
   }
@@ -123,7 +123,7 @@ public class FCGIInputStream extends FCGIConnectionInputStream
           contentLength = 0;
 
           if (error == null)
-            error = new StringBuffer (s);
+            error = new StringBuilder (s);
           else
             error.append (s);
         }

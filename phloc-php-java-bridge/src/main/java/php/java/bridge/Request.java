@@ -53,7 +53,6 @@ import java.util.LinkedList;
  */
 public final class Request implements IDocHandler
 {
-
   private final Parser parser;
   private JavaBridge defaultBridge, bridge;
   protected static final IntegerComparator PHP_ARRAY_KEY_COMPARATOR = new IntegerComparator ();
@@ -138,13 +137,13 @@ public final class Request implements IDocHandler
 
   private final class SimpleArg extends Arg
   {
-    private LinkedList list;
+    private LinkedList <Object> list;
 
     @Override
     public void add (final Object val)
     {
       if (list == null)
-        list = new LinkedList ();
+        list = new LinkedList <Object> ();
       list.add (val);
     }
 
@@ -707,7 +706,7 @@ public final class Request implements IDocHandler
       response = bridge.createResponse ();
     this.arg = new SimpleArg ();
     while (Parser.OK == handleRequest ())
-      ;
+    {}
   }
 
   /**

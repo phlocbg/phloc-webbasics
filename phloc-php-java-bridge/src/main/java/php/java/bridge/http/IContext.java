@@ -59,50 +59,50 @@ public interface IContext
   /**
    * The engine scope
    */
-  static final int ENGINE_SCOPE = ScriptContext.ENGINE_SCOPE;
+  int ENGINE_SCOPE = ScriptContext.ENGINE_SCOPE;
 
   /**
    * The global scope
    */
-  static final int GLOBAL_SCOPE = ScriptContext.GLOBAL_SCOPE;
+  int GLOBAL_SCOPE = ScriptContext.GLOBAL_SCOPE;
 
   /**
    * This key can be used to get the current continuation. Example:
    * <code>java_context-&gt;getAttribute("php.java.bridge.PhpProcedure");</code>
    */
-  public static final String PHP_PROCEDURE = "php.java.bridge.PhpProcedure";
+  String PHP_PROCEDURE = "php.java.bridge.PhpProcedure";
   /**
    * This key can be used to get the current JavaBridge instance. Example:
    * <code>java_context-&gt;getAttribute("php.java.bridge.JavaBridge");</code>
    */
-  public static final String JAVA_BRIDGE = "php.java.bridge.JavaBridge";
+  String JAVA_BRIDGE = "php.java.bridge.JavaBridge";
   /**
    * This key can be used to get the current ServletContext instance. Example:
    * <code>java_context-&gt;getAttribute("php.java.servlet.ServletContext");</code>
    */
-  public static final String SERVLET_CONTEXT = "php.java.servlet.ServletContext";
+  String SERVLET_CONTEXT = "php.java.servlet.ServletContext";
   /**
    * This key can be used to get the current ServletConfig instance. Example:
    * <code>java_context-&gt;getAttribute("php.java.servlet.ServletConfig");</code>
    */
-  public static final String SERVLET_CONFIG = "php.java.servlet.ServletConfig";
+  String SERVLET_CONFIG = "php.java.servlet.ServletConfig";
   /**
    * This key can be used to get the current Servlet instance. Example:
    * <code>java_context-&gt;getAttribute("php.java.servlet.Servlet");</code>
    */
-  public static final String SERVLET = "php.java.servlet.Servlet";
+  String SERVLET = "php.java.servlet.Servlet";
   /**
    * This key can be used to get the current HttpServletRequest instance.
    * Example:
    * <code>java_context-&gt;getAttribute("php.java.servlet.HttpServletRequest");</code>
    */
-  public static final String SERVLET_REQUEST = "php.java.servlet.HttpServletRequest";
+  String SERVLET_REQUEST = "php.java.servlet.HttpServletRequest";
   /**
    * This key can be used to get the current HttpServletResponse instance.
    * Example:
    * <code>java_context-&gt;getAttribute("php.java.servlet.HttpServletResponse");</code>
    */
-  public static final String SERVLET_RESPONSE = "php.java.servlet.HttpServletResponse";
+  String SERVLET_RESPONSE = "php.java.servlet.HttpServletResponse";
 
   /**
    * Retrieves the value for getAttribute(String, int) for the lowest scope in
@@ -113,7 +113,7 @@ public interface IContext
    * @return the value of the attribute
    * @throws IllegalArgumentException
    */
-  public abstract Object getAttribute (String name) throws IllegalArgumentException;
+  Object getAttribute (String name) throws IllegalArgumentException;
 
   /**
    * Retrieves the value associated with specified name in the specified level
@@ -128,7 +128,7 @@ public interface IContext
    *         level of scope
    * @throws IllegalArgumentException
    */
-  public abstract Object getAttribute (String name, int scope) throws IllegalArgumentException;
+  Object getAttribute (String name, int scope) throws IllegalArgumentException;
 
   /**
    * Retrieves the lowest value of scopes for which the attribute is defined. If
@@ -138,7 +138,7 @@ public interface IContext
    *        the name of attribute
    * @return the value of level of scope
    */
-  public abstract int getAttributesScope (String name);
+  int getAttributesScope (String name);
 
   /**
    * Retrieves an instance of java.io.Writer which can be used by scripts to
@@ -147,7 +147,7 @@ public interface IContext
    * @return an instance of java.io.Writer
    * @throws IOException
    */
-  public abstract Writer getWriter () throws IOException;
+  Writer getWriter () throws IOException;
 
   /**
    * Removes the specified attribute form the specified level of scope.
@@ -159,7 +159,7 @@ public interface IContext
    * @return value which is removed
    * @throws IllegalArgumentException
    */
-  public abstract Object removeAttribute (String name, int scope) throws IllegalArgumentException;
+  Object removeAttribute (String name, int scope) throws IllegalArgumentException;
 
   /**
    * Sets an attribute specified by the name in specified level of scope.
@@ -173,42 +173,42 @@ public interface IContext
    * @throws IllegalArgumentException
    *         if the name is null scope is invlaid
    */
-  public abstract void setAttribute (String name, Object value, int scope) throws IllegalArgumentException;
+  void setAttribute (String name, Object value, int scope) throws IllegalArgumentException;
 
   /**
    * Return the http servlet response
    * 
    * @return The http servlet reponse
    */
-  public Object getHttpServletResponse ();
+  Object getHttpServletResponse ();
 
   /**
    * Return the http servlet request
    * 
    * @return The http servlet request
    */
-  public Object getHttpServletRequest ();
+  Object getHttpServletRequest ();
 
   /**
    * Return the http servlet
    * 
    * @return The http servlet
    */
-  public Object getServlet ();
+  Object getServlet ();
 
   /**
    * Return the servlet config
    * 
    * @return The servlet config
    */
-  public Object getServletConfig ();
+  Object getServletConfig ();
 
   /**
    * Return the servlet context
    * 
    * @return The servlet context
    */
-  public Object getServletContext ();
+  Object getServletContext ();
 
   /**
    * Get the full file system path for the given resource.
@@ -217,7 +217,7 @@ public interface IContext
    *        the relative path to an existing resource
    * @return the file system path
    */
-  public String getRealPath (String path);
+  String getRealPath (String path);
 
   /**
    * Add a new binding to the engine scope
@@ -227,7 +227,7 @@ public interface IContext
    * @param val
    *        the value
    */
-  public void put (String key, Object val);
+  void put (String key, Object val);
 
   /**
    * Get a binding from the engine scope
@@ -236,7 +236,7 @@ public interface IContext
    *        the key
    * @return the value
    */
-  public Object get (String key);
+  Object get (String key);
 
   /**
    * Remove a bindings from the engine scope
@@ -244,7 +244,7 @@ public interface IContext
    * @param key
    *        the key
    */
-  public void remove (String key);
+  void remove (String key);
 
   /**
    * Put all bindings to the engine scope
@@ -252,14 +252,14 @@ public interface IContext
    * @param map
    *        the map
    */
-  public void putAll (Map map);
+  void putAll (Map map);
 
   /**
    * Get all bindings from the engine scope
    * 
    * @return the map
    */
-  public Map getAll ();
+  Map getAll ();
 
   /**
    * Return the redirect string, for example http://localhost:8080/webPath Used
@@ -270,24 +270,24 @@ public interface IContext
    *        Usually request.getContextPath()+request.getServletPath()
    * @return the redirect string
    */
-  public String getRedirectURL (String webPath);
+  String getRedirectURL (String webPath);
 
   /**
    * @deprecated Use {@link #getRedirectURL(String)}
    */
   @Deprecated
-  public String getRedirectString (String webPath);
+  String getRedirectString (String webPath);
 
   /**
    * @deprecated Use {@link #getRedirectURL(String)}
    */
   @Deprecated
-  public String getRedirectString ();
+  String getRedirectString ();
 
   /**
    * Return the socket name, for example 8080
    * 
    * @return the socket name
    */
-  public String getSocketName ();
+  String getSocketName ();
 }

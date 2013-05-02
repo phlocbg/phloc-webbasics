@@ -55,7 +55,6 @@ import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -206,9 +205,9 @@ public class URLReader extends Reader implements IScriptReader
     throw new IllegalStateException ("Use urlReader.read(Hashtable, OutputStream) or use a FileReader() instead.");
   }
 
-  private void appendListValues (final StringBuffer buf, final List list)
+  private void appendListValues (final StringBuilder buf, final List <String> list)
   {
-    for (final Iterator ii = list.iterator (); ii.hasNext ();)
+    for (final Iterator <String> ii = list.iterator (); ii.hasNext ();)
     {
       buf.append (ii.next ());
       if (ii.hasNext ())
@@ -221,7 +220,7 @@ public class URLReader extends Reader implements IScriptReader
    * @see php.java.script.IScriptReader#read(java.util.Map,
    * java.io.OutputStream, php.java.bridge.Util.HeaderParser)
    */
-  public void read (final Map env, final OutputStream out, final HeaderParser headerParser) throws IOException
+  public void read (final Map <String, String> env, final OutputStream out, final HeaderParser headerParser) throws IOException
   {
     InputStream natIn = null;
 
@@ -232,12 +231,12 @@ public class URLReader extends Reader implements IScriptReader
 
       for (final String key : IScriptReader.HEADER)
       {
-        final String val = (String) env.get (key);
+        final String val = env.get (key);
         if (val != null)
           conn.setRequestProperty (key, val);
       }
 
-      final String overrideHosts = (String) env.get (Util.X_JAVABRIDGE_OVERRIDE_HOSTS);
+      final String overrideHosts = env.get (Util.X_JAVABRIDGE_OVERRIDE_HOSTS);
       if (overrideHosts != null)
       {
         conn.setRequestProperty (Util.X_JAVABRIDGE_OVERRIDE_HOSTS, overrideHosts);
@@ -248,19 +247,18 @@ public class URLReader extends Reader implements IScriptReader
       natIn = conn.getInputStream ();
       if (headerParser != HeaderParser.DEFAULT_HEADER_PARSER)
       {
-        final StringBuffer sbuf = new StringBuffer ();
-        for (final Object element : conn.getHeaderFields ().entrySet ())
+        final StringBuilder sbuf = new StringBuilder ();
+        for (final Map.Entry <String, List <String>> element : conn.getHeaderFields ().entrySet ())
         {
-          final Map.Entry e = (Entry) element;
-          final List list = (List) e.getValue ();
+          final List <String> list = element.getValue ();
           if (list.size () == 1)
           {
-            headerParser.addHeader (String.valueOf (e.getKey ()), String.valueOf (list.get (0)));
+            headerParser.addHeader (element.getKey (), String.valueOf (list.get (0)));
           }
           else
           {
             appendListValues (sbuf, list);
-            headerParser.addHeader (String.valueOf (e.getKey ()), sbuf.toString ());
+            headerParser.addHeader (element.getKey (), sbuf.toString ());
             sbuf.setLength (0);
           }
         }

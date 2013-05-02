@@ -119,7 +119,7 @@ public class NPChannelFactory extends FCGIConnectionFactory
   }
 
   @Override
-  protected Process doBind (final Map env, final String php, final boolean includeJava) throws IOException
+  protected Process doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
   {
     if (proc != null)
       return null;
@@ -133,7 +133,7 @@ public class NPChannelFactory extends FCGIConnectionFactory
     if (php != null)
       try
       {
-        home = ((new File (php)).getParentFile ());
+        home = new File (php).getParentFile ();
       }
       catch (final Exception e)
       {

@@ -54,5 +54,5 @@ public interface IContextFactoryVisitor extends IContextFactory
    * @param visited
    *        The context factory
    */
-  public void visit (IContextFactory visited);
+  void visit (IContextFactory visited);
 }

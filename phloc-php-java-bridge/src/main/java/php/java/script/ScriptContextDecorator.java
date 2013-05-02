@@ -103,7 +103,7 @@ public abstract class ScriptContextDecorator implements ScriptContext
   }
 
   /** {@inheritDoc} */
-  public List getScopes ()
+  public List <Integer> getScopes ()
   {
     return ctx.getScopes ();
   }

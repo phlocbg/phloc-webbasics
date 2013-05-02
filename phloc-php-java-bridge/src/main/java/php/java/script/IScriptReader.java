@@ -45,6 +45,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+import javax.servlet.ServletException;
+
 import php.java.bridge.Util;
 import php.java.bridge.http.HeaderParser;
 
@@ -78,6 +80,6 @@ public interface IScriptReader
    * @throws IOException
    * @throws ServletException
    */
-  public abstract void read (Map env, OutputStream out, HeaderParser headerParser) throws IOException;
+  public abstract void read (Map <String, String> env, OutputStream out, HeaderParser headerParser) throws IOException;
 
 }

@@ -21,7 +21,6 @@ package php.java.bridge.http;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -81,7 +80,7 @@ public interface IFCGIProcessFactory
    * @return a FastCGI process object
    * @throws IOException
    */
-  public IFCGIProcess createFCGIProcess (String [] args, boolean includeJava, File home, Map env) throws IOException;
+  public IFCGIProcess createFCGIProcess (String [] args, boolean includeJava, File home, Map <String, String> env) throws IOException;
 
   /**
    * Get the connection pool size, usually
@@ -119,7 +118,7 @@ public interface IFCGIProcessFactory
    * 
    * @return the process environment.
    */
-  public HashMap getEnvironment ();
+  public Map <String, String> getEnvironment ();
 
   /**
    * Used for debugging only. Should always return true.

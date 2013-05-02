@@ -86,15 +86,14 @@ public class SessionFactory extends JavaBridgeFactory
   {
     synchronized (JavaBridge.sessionHash)
     {
-      Session ref = null;
-      if (!JavaBridge.sessionHash.containsKey (name))
+      Session ref = JavaBridge.sessionHash.get (name);
+      if (ref == null)
       {
         ref = new Session (name);
         JavaBridge.sessionHash.put (name, ref);
       }
       else
       {
-        ref = (Session) JavaBridge.sessionHash.get (name);
         if (clientIsNew == ISession.SESSION_CREATE_NEW)
         { // client side gc'ed, destroy server ref now!
           ref.destroy ();
@@ -161,7 +160,7 @@ public class SessionFactory extends JavaBridgeFactory
 
   protected static class SessionTimer implements Runnable
   {
-    private final List jobs = Collections.synchronizedList (new LinkedList ());
+    private final List <Runnable> jobs = Collections.synchronizedList (new LinkedList <Runnable> ());
     private final Thread thread;
 
     public SessionTimer ()
@@ -201,9 +200,9 @@ public class SessionFactory extends JavaBridgeFactory
           java.lang.Thread.sleep (TIMER_DURATION);
           Session.expire ();
 
-          for (final Iterator ii = jobs.iterator (); ii.hasNext ();)
+          for (final Iterator <Runnable> ii = jobs.iterator (); ii.hasNext ();)
           {
-            final Runnable job = (Runnable) ii.next ();
+            final Runnable job = ii.next ();
             job.run ();
           }
         }

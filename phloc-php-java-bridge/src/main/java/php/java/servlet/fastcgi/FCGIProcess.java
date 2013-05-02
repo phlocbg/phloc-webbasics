@@ -43,6 +43,7 @@ package php.java.servlet.fastcgi;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import php.java.bridge.Util;
@@ -63,10 +64,10 @@ public class FCGIProcess extends Util.Process implements IFCGIProcess
                       final String pearDir,
                       final String webInfDir,
                       final File homeDir,
-                      final Map env,
+                      final Map <String, String> env,
                       final String realPath,
                       final boolean tryOtherLocations,
-                      final boolean preferSystemPhp) throws IOException
+                      final boolean preferSystemPhp)
   {
     super (args, includeJava, cgiDir, pearDir, webInfDir, homeDir, env, tryOtherLocations, preferSystemPhp);
     this.realPath = realPath;
@@ -75,7 +76,7 @@ public class FCGIProcess extends Util.Process implements IFCGIProcess
   @Override
   protected String [] getArgumentArray (final String [] php, final String [] args)
   {
-    final LinkedList buf = new LinkedList ();
+    final List <String> buf = new LinkedList <String> ();
     if (Util.USE_SH_WRAPPER)
     {
       buf.add ("/bin/sh");
@@ -95,7 +96,7 @@ public class FCGIProcess extends Util.Process implements IFCGIProcess
         buf.add (args[i]);
       }
     }
-    return (String []) buf.toArray (new String [buf.size ()]);
+    return buf.toArray (new String [buf.size ()]);
   }
 
   /*

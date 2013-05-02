@@ -81,7 +81,7 @@ public class HttpProxy extends CGIRunner
    *        The return value proxy
    */
   public HttpProxy (final Reader reader,
-                    final Map env,
+                    final Map <String, String> env,
                     final OutputStream out,
                     final OutputStream err,
                     final HeaderParser headerParser,

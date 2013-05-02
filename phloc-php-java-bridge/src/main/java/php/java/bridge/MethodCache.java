@@ -51,12 +51,12 @@ import java.util.Map;
  */
 final class MethodCache
 {
-  Map map;
+  Map <Entry, CachedMethod> map;
   static final Entry noCache = new NoCache ();
 
   private void init ()
   {
-    map = new HashMap ();
+    map = new HashMap <Entry, CachedMethod> ();
   }
 
   /**
@@ -70,7 +70,7 @@ final class MethodCache
   private static class CachedMethod
   {
     private final Method method;
-    private Class [] typeCache;
+    private Class <?> [] typeCache;
 
     public CachedMethod (final Method method)
     {
@@ -82,7 +82,7 @@ final class MethodCache
       return method;
     }
 
-    public Class [] getParameterTypes ()
+    public Class <?> [] getParameterTypes ()
     {
       if (typeCache != null)
         return typeCache;
@@ -97,17 +97,17 @@ final class MethodCache
   {
     boolean isStatic;
     String name;
-    Class clazz;
-    Class params[];
+    Class <?> clazz;
+    Class <?> [] params;
 
     protected Entry ()
     {}
 
-    protected Entry (final String name, final Object obj, final Class params[])
+    protected Entry (final String name, final Object obj, final Class <?> [] params)
     {
       this.name = name; // intern() is ~10% slower than lazy string comparison
       final boolean isStatic = obj instanceof Class;
-      this.clazz = isStatic ? (Class) obj : obj.getClass ();
+      this.clazz = isStatic ? (Class <?>) obj : obj.getClass ();
       this.isStatic = isStatic;
       this.params = params;
     }
@@ -120,7 +120,7 @@ final class MethodCache
     {
       if (hasResult)
         return result;
-      for (final Class param : params)
+      for (final Class <?> param : params)
       {
         result = result * 31 + (param == null ? 0 : param.hashCode ());
       }
@@ -134,6 +134,11 @@ final class MethodCache
     @Override
     public boolean equals (final Object o)
     {
+      if (o == this)
+        return true;
+      if (o == null || !getClass ().equals (o.getClass ()))
+        return false;
+
       final Entry that = (Entry) o;
       if (clazz != that.clazz)
         return false;
@@ -158,7 +163,7 @@ final class MethodCache
       this.cache = cache;
     }
 
-    public Class [] getParameterTypes (final Method method)
+    public Class <?> [] getParameterTypes (final Method method)
     {
       return cache.getParameterTypes ();
     }
@@ -167,7 +172,7 @@ final class MethodCache
   private static final class NoCache extends Entry
   {
     @Override
-    public Class [] getParameterTypes (final Method method)
+    public Class <?> [] getParameterTypes (final Method method)
     {
       return method.getParameterTypes ();
     }
@@ -184,7 +189,7 @@ final class MethodCache
   {
     if (entry == noCache)
       return null;
-    final CachedMethod cache = (CachedMethod) map.get (entry);
+    final CachedMethod cache = map.get (entry);
     if (cache == null)
       return null;
     entry.setMethod (cache);
@@ -222,10 +227,10 @@ final class MethodCache
    */
   public Entry getEntry (final String name, final Object obj, final Object args[])
   {
-    final Class params[] = new Class [args.length];
+    final Class <?> [] params = new Class [args.length];
     for (int i = 0; i < args.length; i++)
     {
-      final Class c = args[i] == null ? null : args[i].getClass ();
+      final Class <? extends Object> c = args[i] == null ? null : args[i].getClass ();
       if (c == PhpArray.class)
         return noCache;
       params[i] = c;

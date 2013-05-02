@@ -115,7 +115,7 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public List getScopes ()
+  public List <Integer> getScopes ()
   {
     return ctx.getScopes ();
   }
@@ -260,7 +260,7 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
 
   /** {@inheritDoc} */
   public Continuation createContinuation (final Reader reader,
-                                          final Map env,
+                                          final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
                                           final HeaderParser headerParser,

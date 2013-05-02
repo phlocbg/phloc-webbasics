@@ -62,15 +62,15 @@ class GlobalRef
   private Entry [] globalRef;
   private int id, count;
 
-  class Entry
+  static final class Entry
   {
-    int id;
+    int nid;
     Object value;
     Entry next;
 
     public Entry (final int id, final Object value, final Entry entry)
     {
-      this.id = id;
+      this.nid = id;
       this.value = value;
       this.next = entry;
     }
@@ -107,7 +107,7 @@ class GlobalRef
     final int index = (id & 0x7FFFFFFF) % globalRef.length;
     for (Entry e = globalRef[index]; e != null; e = e.next)
     {
-      if (e.id == id)
+      if (e.nid == id)
         return e.value;
     }
     throw new NullPointerException ("cannot manipulate the object #" + id + " which has already been destroyed by PHP");
@@ -124,7 +124,7 @@ class GlobalRef
     final int index = (id & 0x7FFFFFFF) % globalRef.length;
     for (Entry e = globalRef[index], prev = null; e != null; prev = e, e = e.next)
     {
-      if (e.id == id)
+      if (e.nid == id)
       {
         if (prev != null)
           prev.next = e.next;
@@ -142,7 +142,7 @@ class GlobalRef
    */
   public String dump ()
   {
-    final StringBuffer result = new StringBuffer ();
+    final StringBuilder result = new StringBuilder ();
     for (int i = 0; i < count; i++)
     {
       if (globalRef[i] != null)
@@ -177,7 +177,7 @@ class GlobalRef
     final int index = (id & 0x7FFFFFFF) % globalRef.length;
     for (Entry e = globalRef[index]; e != null; e = e.next)
     {
-      if (e.id == id)
+      if (e.nid == id)
       {
         e.value = value;
         return id;
@@ -213,7 +213,7 @@ class GlobalRef
         final Entry e = old;
         old = old.next;
 
-        final int index = (e.id & 0x7FFFFFFF) % newCapacity;
+        final int index = (e.nid & 0x7FFFFFFF) % newCapacity;
         e.next = newTable[index];
         newTable[index] = e;
       }

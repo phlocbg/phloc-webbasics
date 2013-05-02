@@ -55,7 +55,7 @@ import php.java.bridge.NotImplementedException;
  */
 public class HttpRequest
 {
-  private final HashMap headers;
+  private final HashMap <String, String> headers;
   private String method;
   private String uri;
 
@@ -77,7 +77,7 @@ public class HttpRequest
   public HttpRequest (final InputStream inputStream)
   {
     in = new HttpInputStream (new BufferedInputStream (inputStream));
-    headers = new HashMap ();
+    headers = new HashMap <String, String> ();
   }
 
   /**
@@ -89,7 +89,7 @@ public class HttpRequest
    */
   public String getHeader (final String string)
   {
-    return (String) headers.get (string);
+    return headers.get (string);
   }
 
   /**
@@ -141,7 +141,6 @@ public class HttpRequest
 
   private class HttpInputStream extends InputStream
   {
-
     private final InputStream in;
 
     public HttpInputStream (final InputStream in)
@@ -196,7 +195,7 @@ public class HttpRequest
   {
     try
     {
-      headers.put (line.substring (0, line.indexOf (":")).trim (), line.substring (line.indexOf (":") + 1).trim ());
+      headers.put (line.substring (0, line.indexOf (':')).trim (), line.substring (line.indexOf (':') + 1).trim ());
     }
     catch (final StringIndexOutOfBoundsException e)
     { /* not a valid header, assume method */

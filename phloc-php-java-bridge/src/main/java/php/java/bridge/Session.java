@@ -49,7 +49,7 @@ import java.util.Map;
 class Session implements ISession
 {
 
-  protected Map map;
+  protected Map <Object, Object> map;
   protected String name;
   private static int sessionCount = 0;
   boolean isNew = true;
@@ -77,7 +77,7 @@ class Session implements ISession
   {
     this.name = name;
     Session.sessionCount++;
-    this.map = Collections.synchronizedMap (new HashMap ());
+    this.map = Collections.synchronizedMap (new HashMap <Object, Object> ());
     this.creationTime = this.lastAccessedTime = System.currentTimeMillis ();
     this.timeout = 1440000;
   }
@@ -108,8 +108,7 @@ class Session implements ISession
     sessionCount--;
     synchronized (JavaBridge.sessionHash)
     {
-      if (JavaBridge.sessionHash != null)
-        JavaBridge.sessionHash.remove (name);
+      JavaBridge.sessionHash.remove (name);
     }
   }
 
@@ -128,10 +127,10 @@ class Session implements ISession
    * (non-Javadoc)
    * @see php.java.bridge.ISession#getAll()
    */
-  public Map getAll ()
+  public Map <Object, Object> getAll ()
   {
     this.lastAccessedTime = System.currentTimeMillis ();
-    return new HashMap (map); // unshare the map
+    return new HashMap <Object, Object> (map); // unshare the map
   }
 
   /**
@@ -143,9 +142,9 @@ class Session implements ISession
       return;
     synchronized (JavaBridge.sessionHash)
     {
-      for (final Iterator e = JavaBridge.sessionHash.values ().iterator (); e.hasNext ();)
+      for (final Iterator <Session> e = JavaBridge.sessionHash.values ().iterator (); e.hasNext ();)
       {
-        final Session ref = (Session) e.next ();
+        final Session ref = e.next ();
         if ((ref.timeout > 0) && (ref.lastAccessedTime + ref.timeout <= System.currentTimeMillis ()))
         {
           sessionCount--;
@@ -166,9 +165,9 @@ class Session implements ISession
       return;
     synchronized (JavaBridge.sessionHash)
     {
-      for (final Iterator e = JavaBridge.sessionHash.values ().iterator (); e.hasNext ();)
+      for (final Iterator <Session> e = JavaBridge.sessionHash.values ().iterator (); e.hasNext ();)
       {
-        final Session ref = (Session) e.next ();
+        final Session ref = e.next ();
         sessionCount--;
         e.remove ();
         if (Util.logLevel > 3)

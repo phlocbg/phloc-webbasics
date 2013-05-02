@@ -43,7 +43,6 @@ package php.java.bridge.http;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 
 import php.java.bridge.NotImplementedException;
@@ -140,15 +139,13 @@ public class FCGIOutputStream extends FCGIConnectionOutputStream
    * @param props
    * @throws FCGIConnectionException
    */
-  public void writeParams (final Map props) throws FCGIConnectionException
+  public void writeParams (final Map <String, String> props) throws FCGIConnectionException
   {
     final ByteArrayOutputStream out = new ByteArrayOutputStream ();
-    for (final Iterator ii = props.keySet ().iterator (); ii.hasNext ();)
+    for (final Map.Entry <String, String> entry : props.entrySet ())
     {
-      final Object k = ii.next ();
-      final Object v = props.get (k);
-      final String key = String.valueOf (k);
-      final String val = String.valueOf (v);
+      final String key = entry.getKey ();
+      final String val = entry.getValue ();
       final int keyLen = key.length ();
       final int valLen = val.length ();
       if (keyLen == 0 || valLen == 0)

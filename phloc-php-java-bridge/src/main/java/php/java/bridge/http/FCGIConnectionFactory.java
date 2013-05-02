@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.Map;
 
 import php.java.bridge.ILogger;
@@ -115,7 +116,7 @@ public abstract class FCGIConnectionFactory
 
   protected abstract void waitForDaemon () throws UnknownHostException, InterruptedException;
 
-  protected final void runFcgi (final Map env, final String php, final boolean includeJava)
+  protected final void runFcgi (final Map <String, String> env, final String php, final boolean includeJava)
   {
     int c;
     final byte buf[] = new byte [Util.BUF_SIZE];
@@ -144,19 +145,18 @@ public abstract class FCGIConnectionFactory
       lastException = e;
       System.err.println ("Could not start FCGI server: " + e);
     }
-    ;
   }
 
-  protected abstract Process doBind (Map env, String php, boolean includeJava) throws IOException;
+  protected abstract Process doBind (Map <String, String> env, String php, boolean includeJava) throws IOException;
 
-  protected void bind (final ILogger logger) throws InterruptedException, IOException
+  protected void bind (@SuppressWarnings ("unused") final ILogger logger) throws InterruptedException, IOException
   {
     final Thread t = (new Util.Thread ("JavaBridgeFastCGIRunner")
     {
       @Override
       public void run ()
       {
-        final Map env = (Map) processFactory.getEnvironment ().clone ();
+        final Map <String, String> env = new HashMap <String, String> (processFactory.getEnvironment ());
         env.put ("PHP_FCGI_CHILDREN", processFactory.getPhpConnectionPoolSize ());
         env.put ("PHP_FCGI_MAX_REQUESTS", processFactory.getPhpMaxRequests ());
         runFcgi (env, processFactory.getPhp (), processFactory.getPhpIncludeJava ());
@@ -253,8 +253,7 @@ public abstract class FCGIConnectionFactory
   {
     if (Util.USE_SH_WRAPPER)
       return new SocketChannelFactory (processFactory, promiscuous);
-    else
-      return new NPChannelFactory (processFactory);
+    return new NPChannelFactory (processFactory);
   }
 
   @Override

@@ -48,9 +48,9 @@ package php.java.bridge;
  */
 final class ParserString
 {
-  protected byte [] string;
-  protected int off;
-  protected int length;
+  byte [] string = null;
+  int off;
+  int length;
   private final JavaBridge bridge;
 
   /* 0..9, A..F, a..f */

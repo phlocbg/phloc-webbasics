@@ -90,9 +90,9 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
 {
   private static final String X_JAVABRIDGE_INCLUDE = Util.X_JAVABRIDGE_INCLUDE;
   private static final String PHP_JAVA_CONTEXT_CALL_JAVA_CLOSURE = "<?php java_context()->call(java_closure()); ?>";
-  protected static final Object EMPTY_INCLUDE = "@";
+  protected static final String EMPTY_INCLUDE = "@";
   private static boolean registeredHook = false;
-  private static final List engines = new LinkedList ();
+  private static final List <InvocablePhpScriptEngine> engines = new LinkedList <InvocablePhpScriptEngine> ();
   private static final String PHP_EMPTY_SCRIPT = "<?php ?>";
 
   /**
@@ -161,7 +161,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
   }
 
   /** {@inheritDoc} */
-  public Object invokeFunction (final String methodName, final Object [] args) throws ScriptException,
+  public Object invokeFunction (final String methodName, final Object... args) throws ScriptException,
                                                                               NoSuchMethodException
   {
     return invoke (methodName, args);
@@ -214,25 +214,25 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
   }
 
   /** {@inheritDoc} */
-  public Object invokeMethod (final Object thiz, final String methodName, final Object [] args) throws ScriptException,
+  public Object invokeMethod (final Object thiz, final String methodName, final Object... args) throws ScriptException,
                                                                                                NoSuchMethodException
   {
     return invoke (thiz, methodName, args);
   }
 
   /** {@inheritDoc} */
-  public Object getInterface (final Class clasz)
+  public <T> T getInterface (final Class <T> clasz)
   {
     checkPhpClosure (script);
     return getInterface (script, clasz);
   }
 
   /** {@inheritDoc} */
-  public Object getInterface (final Object thiz, final Class clasz)
+  public <T> T getInterface (final Object thiz, final Class <T> clasz)
   {
     checkPhpClosure (thiz);
-    final Class [] interfaces = clasz == null ? Util.ZERO_PARAM : new Class [] { clasz };
-    return PhpProcedure.createProxy (interfaces, (PhpProcedure) Proxy.getInvocationHandler (thiz));
+    final Class <?> [] interfaces = clasz == null ? Util.ZERO_PARAM : new Class [] { clasz };
+    return (T) PhpProcedure.createProxy (interfaces, (PhpProcedure) Proxy.getInvocationHandler (thiz));
   }
 
   @Override
@@ -412,13 +412,12 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
     }
     finally
     {
-      if (w != null)
-        try
-        {
-          w.close ();
-        }
-        catch (final IOException e)
-        {/* ignore */}
+      try
+      {
+        w.close ();
+      }
+      catch (final IOException e)
+      {/* ignore */}
       handleRelease ();
     }
     return resultProxy;
@@ -443,9 +442,9 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
                 return;
               synchronized (engines)
               {
-                for (final Iterator ii = engines.iterator (); ii.hasNext (); ii.remove ())
+                for (final Iterator <InvocablePhpScriptEngine> ii = engines.iterator (); ii.hasNext (); ii.remove ())
                 {
-                  final InvocablePhpScriptEngine e = (InvocablePhpScriptEngine) ii.next ();
+                  final InvocablePhpScriptEngine e = ii.next ();
                   e.releaseInternal ();
                 }
               }

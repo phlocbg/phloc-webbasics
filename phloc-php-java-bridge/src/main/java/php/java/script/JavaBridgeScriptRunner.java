@@ -239,7 +239,7 @@ public class JavaBridgeScriptRunner extends JavaBridgeRunner
       if (isSecure)
         engine.setContext (new PhpSecureScriptContext (ctx));
 
-      final StringBuffer buf = new StringBuffer ("/");
+      final StringBuilder buf = new StringBuilder ("/");
       buf.append (name);
       if (params != null)
       {
@@ -248,10 +248,10 @@ public class JavaBridgeScriptRunner extends JavaBridgeRunner
       }
 
       FileReader r = null;
-      ;
       try
       {
-        engine.eval (r = new FileReader (f));
+        r = new FileReader (f);
+        engine.eval (r);
       }
       catch (final Throwable e1)
       {
@@ -266,7 +266,6 @@ public class JavaBridgeScriptRunner extends JavaBridgeRunner
         }
         catch (final Exception e1)
         {/* ignore */}
-        ;
         if (r != null)
           try
           {
@@ -274,7 +273,6 @@ public class JavaBridgeScriptRunner extends JavaBridgeRunner
           }
           catch (final Exception e1)
           {/* ignore */}
-        ;
       }
       res.addHeader ("Content-Type", "text/html; charset=UTF-8");
       res.setContentLength (xout.size ());

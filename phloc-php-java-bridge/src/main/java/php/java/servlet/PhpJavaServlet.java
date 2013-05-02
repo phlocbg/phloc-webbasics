@@ -104,7 +104,7 @@ public/* singleton */class PhpJavaServlet extends HttpServlet
   {
     maxKeepAliveRequests = ServletUtil.getMBeanProperty ("*:type=Connector,port=8080", "maxKeepAliveRequests");
     keepAliveTimeout = ServletUtil.getMBeanProperty ("*:type=Connector,port=8080", "keepAliveTimeout");
-    final StringBuffer buf = new StringBuffer ("timeout=");
+    final StringBuilder buf = new StringBuilder ("timeout=");
     buf.append (keepAliveTimeout);
     buf.append (", max=");
     buf.append (maxKeepAliveRequests);
