@@ -43,11 +43,13 @@ package php.java.servlet.fastcgi;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import php.java.bridge.CBridge;
 import php.java.bridge.Util;
+import php.java.bridge.Util.UtilProcess;
 import php.java.bridge.http.IFCGIProcess;
 
 /**
@@ -55,7 +57,7 @@ import php.java.bridge.http.IFCGIProcess;
  * 
  * @author jostb
  */
-public class FCGIProcess extends Util.UtilProcess implements IFCGIProcess
+public class FCGIProcess extends UtilProcess implements IFCGIProcess
 {
   String realPath;
 
@@ -82,7 +84,7 @@ public class FCGIProcess extends Util.UtilProcess implements IFCGIProcess
     {
       buf.add ("/bin/sh");
       buf.add (realPath + File.separator + Util.osArch + "-" + Util.osName + File.separator + CBridge.LAUNCHER_SH);
-      buf.addAll (java.util.Arrays.asList (php));
+      buf.addAll (Arrays.asList (php));
       for (int i = 1; i < args.length; i++)
       {
         buf.add (args[i]);
@@ -91,7 +93,7 @@ public class FCGIProcess extends Util.UtilProcess implements IFCGIProcess
     else
     {
       buf.add (realPath + File.separator + Util.osArch + "-" + Util.osName + File.separator + CBridge.LAUNCHER_EXE);
-      buf.addAll (java.util.Arrays.asList (php));
+      buf.addAll (Arrays.asList (php));
       for (int i = 1; i < args.length; i++)
       {
         buf.add (args[i]);

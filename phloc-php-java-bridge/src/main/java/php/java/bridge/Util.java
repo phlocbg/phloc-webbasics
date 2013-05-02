@@ -1526,7 +1526,7 @@ public final class Util
       }
       if (php[0] == null && tryOtherLocations)
         php[0] = PHP_EXEC;
-      if (php[0] == null && phpExec != null && (new File (phpExec).exists ()))
+      if (php[0] == null && phpExec != null && new File (phpExec).exists ())
         php[0] = phpExec;
       if (php[0] == null)
         php[0] = "php-cgi";
@@ -1697,7 +1697,6 @@ public final class Util
     {
       proc.destroy ();
     }
-
   }
 
   /**
