@@ -551,7 +551,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
   {
     if (cachedSimpleStandardHeader != null)
       return cachedSimpleStandardHeader;
-    final StringBuffer buf = new StringBuffer (STANDARD_HEADER);
+    final StringBuilder buf = new StringBuilder (STANDARD_HEADER);
     buf.insert (20, filePath);
     return cachedSimpleStandardHeader = buf.toString ();
   }

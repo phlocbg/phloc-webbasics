@@ -53,13 +53,15 @@ import java.nio.charset.Charset;
  */
 class Options
 {
-
-  protected byte options = 0;
+  private byte options = 0;
 
   /**
    * Default encoding: UTF-8
    */
   private Charset encoding;
+
+  private boolean valuesCache, valuesCacheSet = false;
+  private boolean base64Cache, base64CacheSet = false;
 
   /**
    * Returns the file encoding, see java_set_file_encoding(). This option may
@@ -86,8 +88,6 @@ class Options
   {
     return s.getBytes (getEncoding ());
   }
-
-  private boolean valuesCache, valuesCacheSet = false;
 
   /**
    * Returns true when the bridge must destroy object identity (see
@@ -135,8 +135,6 @@ class Options
     encoding = null;
     this.options = b;
   }
-
-  private boolean base64Cache, base64CacheSet = false;
 
   /**
    * Return true if we must return a base 64 encoded string due to limitations

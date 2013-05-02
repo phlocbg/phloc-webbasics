@@ -51,10 +51,10 @@ import java.util.Map;
  */
 final class MethodCache
 {
-  Map <Entry, CachedMethod> map;
-  static final Entry noCache = new NoCache ();
+  private static final Entry noCache = new NoCache ();
+  private Map <Entry, CachedMethod> map;
 
-  private void init ()
+  private void _init ()
   {
     map = new HashMap <Entry, CachedMethod> ();
   }
@@ -64,7 +64,7 @@ final class MethodCache
    */
   public MethodCache ()
   {
-    init ();
+    _init ();
   }
 
   private static class CachedMethod
@@ -95,10 +95,12 @@ final class MethodCache
    */
   public static class Entry
   {
-    boolean isStatic;
-    String name;
-    Class <?> clazz;
-    Class <?> [] params;
+    private boolean isStatic;
+    private String name;
+    private Class <?> clazz;
+    private Class <?> [] params;
+    private boolean hasResult = false;
+    private int result = 1;
 
     protected Entry ()
     {}
@@ -111,9 +113,6 @@ final class MethodCache
       this.isStatic = isStatic;
       this.params = params;
     }
-
-    private boolean hasResult = false;
-    private int result = 1;
 
     @Override
     public int hashCode ()
@@ -139,18 +138,18 @@ final class MethodCache
       if (o == null || !getClass ().equals (o.getClass ()))
         return false;
 
-      final Entry that = (Entry) o;
-      if (clazz != that.clazz)
+      final Entry rhs = (Entry) o;
+      if (clazz != rhs.clazz)
         return false;
-      if (isStatic != that.isStatic)
+      if (isStatic != rhs.isStatic)
         return false;
-      if (params.length != that.params.length)
+      if (params.length != rhs.params.length)
         return false;
-      if (!name.equals (that.name))
+      if (!name.equals (rhs.name))
         return false;
       for (int i = 0; i < params.length; i++)
       {
-        if (params[i] != that.params[i])
+        if (params[i] != rhs.params[i])
           return false;
       }
       return true;
@@ -243,6 +242,6 @@ final class MethodCache
    */
   public void clear ()
   {
-    init ();
+    _init ();
   }
 }

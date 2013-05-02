@@ -43,6 +43,7 @@ package php.java.bridge;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -50,7 +51,7 @@ final class PhpArray extends AbstractMap <Object, Object>
 {
   // for PHP's array()
   private TreeMap <Integer, Object> t = new TreeMap <Integer, Object> (Request.PHP_ARRAY_KEY_COMPARATOR);
-  private HashMap <Object, Object> m = null;
+  private Map <Object, Object> m = null;
 
   @Override
   public Object put (final Object key, final Object value)

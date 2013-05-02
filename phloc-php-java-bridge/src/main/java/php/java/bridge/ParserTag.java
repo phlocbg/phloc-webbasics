@@ -46,7 +46,7 @@ package php.java.bridge;
  * 
  * @author jostb
  */
-class ParserTag
+final class ParserTag
 {
   /**
    * The number of strings.
@@ -56,7 +56,7 @@ class ParserTag
   /**
    * The strings.
    */
-  public ParserString strings[];
+  public final ParserString [] strings;
 
   protected ParserTag (final int n)
   {

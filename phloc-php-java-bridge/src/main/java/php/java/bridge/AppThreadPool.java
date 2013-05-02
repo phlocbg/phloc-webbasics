@@ -50,11 +50,27 @@ package php.java.bridge;
  */
 public final class AppThreadPool extends ThreadPool
 {
-
   /** Every Delegate has its own locked ThreadGroup. */
   static final class Group extends ThreadGroup
   {
-    boolean isLocked = false;
+    private boolean isLocked = false;
+
+    private void _init ()
+    {
+      setDaemon (true);
+    }
+
+    public Group (final String name)
+    {
+      super (name);
+      _init ();
+    }
+
+    public Group (final ThreadGroup group, final String name)
+    {
+      super (group, name);
+      _init ();
+    }
 
     void lock ()
     {
@@ -66,28 +82,16 @@ public final class AppThreadPool extends ThreadPool
       isLocked = false;
     }
 
-    private void init ()
+    public boolean isLocked ()
     {
-      setDaemon (true);
-    }
-
-    public Group (final String name)
-    {
-      super (name);
-      init ();
-    }
-
-    public Group (final ThreadGroup group, final String name)
-    {
-      super (group, name);
-      init ();
+      return isLocked;
     }
   }
 
   /** Application threads belong to this group */
   static final class AppGroup extends ThreadGroup
   {
-    private void init ()
+    private void _init ()
     {
       setDaemon (true);
     }
@@ -95,13 +99,13 @@ public final class AppThreadPool extends ThreadPool
     public AppGroup (final String name)
     {
       super (name);
-      init ();
+      _init ();
     }
 
     public AppGroup (final ThreadGroup group, final String name)
     {
       super (group, name);
-      init ();
+      _init ();
     }
   }
 
@@ -111,7 +115,7 @@ public final class AppThreadPool extends ThreadPool
    */
   final class Delegate extends ThreadPool.Delegate
   {
-    protected ThreadGroup appGroup = null;
+    private ThreadGroup appGroup = null;
 
     /**
      * Create a new delegate. The thread runs until terminatePersistent() is
@@ -193,7 +197,8 @@ public final class AppThreadPool extends ThreadPool
           group.destroy ();
         }
         catch (final SecurityException e)
-        {/* ignore */
+        {
+          /* ignore */
         }
         catch (final IllegalThreadStateException e1)
         {
@@ -223,7 +228,8 @@ public final class AppThreadPool extends ThreadPool
           group.interrupt ();
         }
         catch (final SecurityException e)
-        {/* ignore */
+        {
+          /* ignore */
         }
         catch (final Exception e2)
         {

@@ -64,10 +64,8 @@ import javax.swing.JOptionPane;
  * value="1" method="toString" predicate="Invoke" id="0"/&gt;<br>
  * </code>
  */
-
-public class Standalone
+public final class Standalone
 {
-
   /** The default HTTP port for management clients */
   public static final int HTTP_PORT_BASE = 8080;
   /** The default HTTP port for management clients */
@@ -107,12 +105,12 @@ public class Standalone
     disclaimer ();
     System.err.println ("Usage: java -jar JavaBridge.jar [SOCKETNAME LOGLEVEL LOGFILE]");
     System.err.println ("SOCKETNAME is one of INET_LOCAL, INET, HTTP_LOCAL, HTTP, HTTPS_LOCAL, HTTPS");
-    System.err.println ("");
+    System.err.println ();
     System.err.println ("Example 1: java -jar JavaBridge.jar");
     System.err.println ("Example 2: java -jar JavaBridge.jar HTTP_LOCAL:8080 3 JavaBridge.log");
     System.err.println ("Example 3: java -Djavax.net.ssl.keyStore=mySrvKeystore -Djavax.net.ssl.keyStorePassword=YOURPASSWD -jar JavaBridge.jar HTTPS:8443 3 JavaBridge.log");
     System.err.println ("The certificate for example 3 can be created with e.g.: jdk1.6.0/bin/keytool -keystore mySrvKeystore -genkey -keyalg RSA");
-    System.err.println ("");
+    System.err.println ();
     System.err.println ("Influential system properties: threads, daemon, php_exec, default_log_file, default_log_level, base.");
     System.err.println ("Example: java -Djava.awt.headless=\"true\" -Dphp.java.bridge.threads=50 -Dphp.java.bridge.base=/usr/lib/php/modules -Dphp.java.bridge.php_exec=/usr/local/bin/php-cgi -Dphp.java.bridge.default_log_file= -Dphp.java.bridge.default_log_level=5 -jar JavaBridge.jar");
     System.err.println ("Example: java -Dphp.java.bridge.daemon=\"true\" -jar JavaBridge.jar");

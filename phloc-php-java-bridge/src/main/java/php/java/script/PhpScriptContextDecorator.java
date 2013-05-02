@@ -199,7 +199,7 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public Map <?, ?> getAll ()
+  public Map <String, Object> getAll ()
   {
     return ctx.getAll ();
   }
@@ -247,7 +247,7 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public void putAll (final Map map)
+  public void putAll (final Map <String, Object> map)
   {
     ctx.putAll (map);
   }

@@ -53,7 +53,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocketFactory;
 
-class SSLServerSocketHelper
+final class SSLServerSocketHelper
 {
   private static final char [] KEYSTORE_PASSWORD = "123456".toCharArray ();
 
@@ -89,11 +89,10 @@ class SSLServerSocketHelper
 
     return new ISocketFactory ()
     {
-
       /** {@inheritDoc} */
       public String getSocketName ()
       {
-        return String.valueOf (port);
+        return Integer.toString (port);
       }
 
       /** {@inheritDoc} */

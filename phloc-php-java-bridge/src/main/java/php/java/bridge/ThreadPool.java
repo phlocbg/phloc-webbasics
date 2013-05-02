@@ -41,8 +41,8 @@ package php.java.bridge;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A standard thread pool, accepts runnables and runs them in a thread
@@ -51,15 +51,15 @@ import java.util.LinkedList;
  * ThreadPool pool = new ThreadPool("MyThreadPool", 20);<br>
  * pool.start(new YourRunnable());<br>
  * </code>
- * 
+ *
  * @author jostb
  */
 public class ThreadPool
 {
   private String name;
   private int threads = 0, idles = 0, poolMaxSize, poolReserve;
-  private final LinkedList <Runnable> runnables = new LinkedList <Runnable> ();
-  private final LinkedList <Delegate> threadList = new LinkedList <Delegate> ();
+  private final List <Runnable> runnables = new ArrayList <Runnable> ();
+  private final List <Delegate> threadList = new ArrayList <Delegate> ();
 
   /**
    * Threads continue to pull runnables and run them in the thread environment.
@@ -145,14 +145,14 @@ public class ThreadPool
       wait ();
       idles--;
     }
-    return runnables.removeFirst ();
+    return runnables.remove (0);
   }
 
   /**
    * Push a runnable to the list of runnables. The notify will fail if all
    * threads are busy. Since the pool contains at least one thread, it will pull
    * the runnable off the list when it becomes available.
-   * 
+   *
    * @param r
    *        - The runnable
    */
@@ -178,9 +178,8 @@ public class ThreadPool
   /** Terminate all threads in the pool. */
   public void destroy ()
   {
-    for (final Iterator <Delegate> ii = threadList.iterator (); ii.hasNext ();)
+    for (final Delegate d : threadList)
     {
-      final Delegate d = ii.next ();
       d.terminate = true;
       d.interrupt ();
     }
@@ -188,7 +187,7 @@ public class ThreadPool
 
   /**
    * Creates a new thread pool.
-   * 
+   *
    * @param name
    *        - The name of the pool threads.
    * @param poolMaxSize

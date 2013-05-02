@@ -49,7 +49,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import php.java.bridge.IManaged;
@@ -65,7 +66,7 @@ import php.java.bridge.Util;
  * function toString() {return "hello java, I am a php script, but in your eyes I am an ordinary java object...";}<br>
  * java_context()-&gt;call(java_closure()) || die("This script must be called from java!");
  * </code>
- * 
+ *
  * @see php.java.script.IPhpScriptContext
  * @see javax.script.ScriptContext
  * @see php.java.script.PhpScriptContext
@@ -195,7 +196,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   * 
+   *
    * @return none
    */
   public Object getHttpServletRequest ()
@@ -205,7 +206,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   * 
+   *
    * @return none
    */
   public Object getServletContext ()
@@ -215,7 +216,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   * 
+   *
    * @return none
    */
   public Object getHttpServletResponse ()
@@ -225,7 +226,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   * 
+   *
    * @return none
    */
   public Object getServlet ()
@@ -235,7 +236,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   * 
+   *
    * @return none
    */
   public Object getServletConfig ()
@@ -278,7 +279,7 @@ public class Context implements IManaged, Invocable, IContext
   }
 
   private static boolean registeredHook = false;
-  private static LinkedList <Object> closeables = new LinkedList <Object> ();
+  private static List <Object> closeables = new ArrayList <Object> ();
   private static Object lockObject = new Object ();
 
   /**
@@ -289,7 +290,7 @@ public class Context implements IManaged, Invocable, IContext
    * Within a servlet environment use the ContextLoaderListener instead: Either
    * php.java.servlet.Context or the JSR223 Context (see
    * PhpSimpleHttpScriptContext).
-   * 
+   *
    * @param closeable
    *        The procedure close(), will be called before the VM terminates
    */
@@ -338,7 +339,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Only for internal use
-   * 
+   *
    * @param callable
    *        The callable
    * @return The result of the Callable::call().
@@ -355,7 +356,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws Exception
    */
   public Object init (final Object callable) throws Exception
@@ -371,7 +372,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Only for internal use
-   * 
+   *
    * @param path
    *        the path
    * @return the real path
@@ -413,7 +414,7 @@ public class Context implements IManaged, Invocable, IContext
   }
 
   /** {@inheritDoc} */
-  public void putAll (final Map map)
+  public void putAll (final Map <String, Object> map)
   {
     getEngineScope ().putAll (map);
   }

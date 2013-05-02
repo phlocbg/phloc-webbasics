@@ -39,17 +39,16 @@ package php.java.bridge;
 
 class Base64EncodingOutputBuffer extends HexOutputBuffer
 {
-  static private final int LOOKUPLENGTH = 64;
-  static private final int TWENTYFOURBITGROUP = 24;
-  static private final int EIGHTBIT = 8;
-  static private final int SIXTEENBIT = 16;
-  static private final int SIGN = -128;
-  static private final char PAD = '=';
-  static final private char [] lookUpBase64Alphabet = new char [LOOKUPLENGTH];
+  private static final int LOOKUPLENGTH = 64;
+  private static final int TWENTYFOURBITGROUP = 24;
+  private static final int EIGHTBIT = 8;
+  private static final int SIXTEENBIT = 16;
+  private static final int SIGN = -128;
+  private static final char PAD = '=';
+  private static final char [] lookUpBase64Alphabet = new char [LOOKUPLENGTH];
 
   static
   {
-
     for (int i = 0; i <= 25; i++)
       lookUpBase64Alphabet[i] = (char) ('A' + i);
 
@@ -70,23 +69,23 @@ class Base64EncodingOutputBuffer extends HexOutputBuffer
 
   void appendBase64 (final byte binaryData[])
   {
-
     if (binaryData == null)
       return;
 
     final int lengthDataBits = binaryData.length * EIGHTBIT;
     if (lengthDataBits == 0)
-    {
       return;
-    }
 
     final int fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
     final int numberTriplets = lengthDataBits / TWENTYFOURBITGROUP;
     final int numberQuartet = fewerThan24bits != 0 ? numberTriplets + 1 : numberTriplets;
     final int numberLines = (numberQuartet - 1) / 19 + 1;
 
-    byte k = 0, l = 0, b1 = 0, b2 = 0, b3 = 0;
-
+    byte k = 0;
+    byte l = 0;
+    byte b1 = 0;
+    byte b2 = 0;
+    byte b3 = 0;
     int dataIndex = 0;
     int i = 0;
 

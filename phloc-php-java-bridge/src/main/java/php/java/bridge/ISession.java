@@ -86,11 +86,11 @@ import java.util.Map;
 public interface ISession
 {
   /** Get an existing session or create one */
-  public static final short SESSION_GET_OR_CREATE = 0;
+  short SESSION_GET_OR_CREATE = 0;
   /** Create a new session */
-  public static final short SESSION_CREATE_NEW = 1;
+  short SESSION_CREATE_NEW = 1;
   /** Get an existing session */
-  public static final short SESSION_GET = 2;
+  short SESSION_GET = 2;
 
   /**
    * Returns the object bound to the given name in the session's context layer
@@ -104,7 +104,7 @@ public interface ISession
    *            if an attempt is made to access session data after it has been
    *            invalidated
    */
-  public Object get (Object name);
+  Object get (Object name);
 
   /**
    * Binds the specified object into the session's context layer data with the
@@ -119,7 +119,7 @@ public interface ISession
    *            if an attempt is made to access session data after the session
    *            has been invalidated.
    */
-  public void put (Object name, Object value);
+  void put (Object name, Object value);
 
   /**
    * Removes the object bound to the given name in the session's context layer
@@ -132,7 +132,7 @@ public interface ISession
    *            if an attempt is made to access session data after the session
    *            has been invalidated.
    */
-  public Object remove (Object name);
+  Object remove (Object name);
 
   /**
    * Specifies the time, in seconds, between client requests before the servlet
@@ -142,7 +142,7 @@ public interface ISession
    * @param interval
    *        An integer specifying the number of seconds
    */
-  public void setTimeout (int interval);
+  void setTimeout (int interval);
 
   /**
    * Returns the maximum time interval, in seconds, that the servlet container
@@ -155,7 +155,7 @@ public interface ISession
    *         open between client requests
    * @see #setTimeout
    */
-  public int getTimeout ();
+  int getTimeout ();
 
   /**
    * Returns the time when this session was created, measured in milliseconds
@@ -167,7 +167,7 @@ public interface ISession
    *            if this method is called on an invalidated session
    */
 
-  public long getCreationTime ();
+  long getCreationTime ();
 
   /**
    * Returns the last time the client sent a request associated with this
@@ -183,14 +183,14 @@ public interface ISession
    *         if this method is called on an invalidated session
    */
 
-  public long getLastAccessedTime ();
+  long getLastAccessedTime ();
 
   /**
    * Returns the number of active sessions.
    * 
    * @return # of active sessions.
    */
-  public int getSessionCount ();
+  int getSessionCount ();
 
   /**
    * A session is considered to be "new" if it has been created by the server,
@@ -205,7 +205,7 @@ public interface ISession
    *            if an attempt is made to access session data after the session
    *            has been invalidated
    */
-  public boolean isNew ();
+  boolean isNew ();
 
   /**
    * Causes this representation of the session to be invalidated an removed from
@@ -215,7 +215,7 @@ public interface ISession
    *            if an attempt is made to access session data after the session
    *            has been invalidated
    */
-  public void destroy ();
+  void destroy ();
 
   /**
    * Copies all bindings to the session's context layer data. Any existing
@@ -227,7 +227,7 @@ public interface ISession
    *            if an attempt is made to access session data after the session
    *            has been invalidated.
    */
-  public void putAll (Map vars);
+  void putAll (Map <?, ?> vars);
 
   /**
    * Returns a map of all bindings maintained by this session.
@@ -237,5 +237,5 @@ public interface ISession
    *            if an attempt is made to access session data after it has been
    *            invalidated
    */
-  public Map getAll ();
+  Map <?, ?> getAll ();
 }

@@ -48,7 +48,7 @@ import java.util.Map;
 
 /**
  * Maps php iterator to java iterator.
- * 
+ *
  * @author jostb
  */
 abstract class PhpMap
@@ -76,35 +76,35 @@ abstract class PhpMap
 
   /**
    * Returns the object at the current position.
-   * 
+   *
    * @return The current object.
    */
   public abstract Object currentData ();
 
   /**
    * Returns the key at the current position.
-   * 
+   *
    * @return The current key, either a string or a number.
    */
   public abstract Object currentKey ();
 
   /**
    * Forward one element.
-   * 
+   *
    * @return true if move was possible, false otherwise.
    */
   public abstract boolean moveForward ();
 
   /**
    * Checks if it is possible to advance one element
-   * 
+   *
    * @return true if next element exists, false otherwise
    */
   public abstract boolean hasMore ();
 
   /**
    * Returns the key type.
-   * 
+   *
    * @return false if key is integer (array index), true if key is string (hash
    *         key)
    */
@@ -115,7 +115,7 @@ abstract class PhpMap
 
   /**
    * Returns a PhpMap for a given value.
-   * 
+   *
    * @param value
    *        The value, must be an array or implement Map or Collection
    * @param bridge
@@ -156,7 +156,7 @@ abstract class PhpMap
         {
           if (!valid)
             return null;
-          return _bridge.castToExact (new Integer (i));
+          return _bridge.castToExact (Integer.valueOf (i));
         }
 
         @Override
@@ -203,7 +203,7 @@ abstract class PhpMap
         @Override
         public Object currentKey ()
         {
-          return _bridge.castToExact (new Integer (i));
+          return _bridge.castToExact (Integer.valueOf (i));
         }
 
         @Override

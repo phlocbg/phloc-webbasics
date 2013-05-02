@@ -42,7 +42,7 @@ package php.java.servlet.fastcgi;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +51,7 @@ import php.java.bridge.http.IFCGIProcess;
 
 /**
  * Represents the FastCGI process.
- * 
+ *
  * @author jostb
  */
 public class FCGIProcess extends Util.Process implements IFCGIProcess
@@ -76,7 +76,7 @@ public class FCGIProcess extends Util.Process implements IFCGIProcess
   @Override
   protected String [] getArgumentArray (final String [] php, final String [] args)
   {
-    final List <String> buf = new LinkedList <String> ();
+    final List <String> buf = new ArrayList <String> ();
     if (Util.USE_SH_WRAPPER)
     {
       buf.add ("/bin/sh");

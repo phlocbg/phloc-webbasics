@@ -51,7 +51,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Proxy;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.Bindings;
@@ -92,7 +92,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
   private static final String PHP_JAVA_CONTEXT_CALL_JAVA_CLOSURE = "<?php java_context()->call(java_closure()); ?>";
   protected static final String EMPTY_INCLUDE = "@";
   private static boolean registeredHook = false;
-  private static final List <InvocablePhpScriptEngine> engines = new LinkedList <InvocablePhpScriptEngine> ();
+  private static final List <InvocablePhpScriptEngine> engines = new ArrayList <InvocablePhpScriptEngine> ();
   private static final String PHP_EMPTY_SCRIPT = "<?php ?>";
 
   /**
@@ -105,7 +105,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
 
   /**
    * Create a new ScriptEngine from a factory.
-   * 
+   *
    * @param factory
    *        The factory
    * @see #getFactory()
@@ -117,7 +117,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
 
   /**
    * Create a new ScriptEngine with bindings.
-   * 
+   *
    * @param n
    *        the bindings
    */

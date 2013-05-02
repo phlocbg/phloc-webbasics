@@ -49,9 +49,8 @@ package php.java.bridge;
  * can be used to avoid round-trips by "guessing" the next object ID, see
  * java_begin_document()/java_end_document().
  */
-class GlobalRef
+final class GlobalRef
 {
-
   /**
    * The default size (prime).
    */
@@ -62,9 +61,9 @@ class GlobalRef
   private Entry [] globalRef;
   private int id, count;
 
-  static final class Entry
+  private static final class Entry
   {
-    int nid;
+    final int nid;
     Object value;
     Entry next;
 
@@ -169,10 +168,10 @@ class GlobalRef
    */
   public int append (final Object value)
   {
-    return put (id++, value);
+    return _put (id++, value);
   }
 
-  private int put (final int id, final Object value)
+  private int _put (final int id, final Object value)
   {
     final int index = (id & 0x7FFFFFFF) % globalRef.length;
     for (Entry e = globalRef[index]; e != null; e = e.next)
@@ -186,8 +185,8 @@ class GlobalRef
 
     if (count >= threshold)
     {
-      rehash ();
-      return put (id, value);
+      _rehash ();
+      return _put (id, value);
     }
 
     globalRef[index] = new Entry (id, value, globalRef[index]);
@@ -195,7 +194,7 @@ class GlobalRef
     return id;
   }
 
-  private void rehash ()
+  private void _rehash ()
   {
     final int oldCapacity = globalRef.length;
     final Entry oldTable[] = globalRef;

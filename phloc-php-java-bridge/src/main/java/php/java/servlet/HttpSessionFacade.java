@@ -43,7 +43,6 @@ package php.java.servlet;
 
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -186,24 +185,22 @@ final class HttpSessionFacade implements ISession
   }
 
   /** @inheritDoc */
-  public void putAll (final Map vars)
+  public void putAll (final Map <?, ?> vars)
   {
-    for (final Iterator <?> ii = vars.keySet ().iterator (); ii.hasNext ();)
+    for (final Map.Entry <?, ?> entry : vars.entrySet ())
     {
-      final Object key = ii.next ();
-      final Object val = vars.get (key);
-      put (key, val);
+      put (entry.getKey (), entry.getValue ());
     }
   }
 
   /** @inheritDoc */
-  public Map getAll ()
+  public Map <?, ?> getAll ()
   {
     final HttpSession session = getCachedSession ();
     final Map <Object, Object> map = new HashMap <Object, Object> ();
     for (final Enumeration <?> ee = session.getAttributeNames (); ee.hasMoreElements ();)
     {
-      final Object key = ee.nextElement ();
+      final String key = (String) ee.nextElement ();
       final Object val = get (key);
       map.put (key, val);
     }

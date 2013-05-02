@@ -52,7 +52,6 @@ package php.java.bridge;
 
 final class DefaultOptions extends Options
 {
-
   @Override
   public boolean base64Data ()
   {

@@ -88,7 +88,7 @@ import php.java.servlet.ServletUtil;
  * <code>launcher.exe</code> is called instead:
  * <code>launcher.exe -a "path_to_php-cgi.exe" -b 9667</code>.
  * </p>
- * 
+ *
  * @see php.java.bridge.Util#DEFAULT_CGI_LOCATIONS
  * @author jostb
  */
@@ -131,7 +131,7 @@ public class FastCGIServlet extends HttpServlet
    * context to start the server and then uses this server for all subsequent
    * requests until the server is stopped. When FastCGI is not available
    * (anymore), the parent CGI servlet is used instead.
-   * 
+   *
    * @param config
    *        The servlet config
    * @throws ServletException
@@ -234,14 +234,14 @@ public class FastCGIServlet extends HttpServlet
 
   protected void setupCGIEnvironment (final HttpServletRequest req, final HttpServletResponse res, final Environment env)
   {
-    final HashMap <String, String> envp = new HashMap <String, String> (contextLoaderListener.getEnvironment ());
+    final Map <String, String> envp = new HashMap <String, String> (contextLoaderListener.getEnvironment ());
 
     envp.put ("SERVER_SOFTWARE", serverInfo);
     envp.put ("SERVER_NAME", ServletUtil.nullsToBlanks (req.getServerName ()));
     envp.put ("GATEWAY_INTERFACE", "CGI/1.1");
     envp.put ("SERVER_PROTOCOL", ServletUtil.nullsToBlanks (req.getProtocol ()));
     final int port = ServletUtil.getLocalPort (req);
-    final Integer iPort = (port == 0 ? new Integer (-1) : new Integer (port));
+    final Integer iPort = (port == 0 ? Integer.valueOf (-1) : Integer.valueOf (port));
     envp.put ("SERVER_PORT", iPort.toString ());
     envp.put ("REQUEST_METHOD", ServletUtil.nullsToBlanks (req.getMethod ()));
     envp.put ("SCRIPT_NAME", env.contextPath + env.servletPath);
@@ -363,7 +363,7 @@ public class FastCGIServlet extends HttpServlet
   /**
    * Optimized run method for FastCGI. Makes use of the large FCGI_BUF_SIZE and
    * the specialized in.read(). It is a modified copy of the parseBody.
-   * 
+   *
    * @throws InterruptedException
    * @see HeaderParser#parseBody(byte[], InputStream, OutputStream,
    *      HeaderParser)

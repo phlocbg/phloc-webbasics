@@ -62,7 +62,7 @@ public interface IDocHandler
    *         you already know that the current top-level request doesn't need a
    *         reply.
    */
-  public boolean begin (ParserTag [] tag);
+  boolean begin (ParserTag [] tag);
 
   /**
    * Called for each &lt;/tag&gt;
@@ -71,7 +71,7 @@ public interface IDocHandler
    *        The tag and the args.
    * @see IDocHandler#begin(ParserTag[])
    */
-  public void end (ParserString [] strings);
+  void end (ParserString [] strings);
 
   /**
    * Called for the header
@@ -80,6 +80,5 @@ public interface IDocHandler
    *        the input stream
    * @throws IOException
    */
-  public void parseHeader (InputStream in) throws IOException;
-
+  void parseHeader (InputStream in) throws IOException;
 }

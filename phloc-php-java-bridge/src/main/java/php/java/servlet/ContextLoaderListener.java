@@ -27,7 +27,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +82,7 @@ import php.java.servlet.fastcgi.FCGIProcess;
  */
 public class ContextLoaderListener implements javax.servlet.ServletContextListener, IFCGIProcessFactory
 {
-  private final LinkedList <Object> closeables = new LinkedList <Object> ();
+  private final List <Object> closeables = new ArrayList <Object> ();
 
   public static final String PEAR_DIR = "/WEB-INF/pear";
   public static final String CGI_DIR = "/WEB-INF/cgi";
@@ -126,7 +126,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
 
   /**
    * Only for internal use
-   * 
+   *
    * @param ctx
    *        The servlet context
    */

@@ -42,19 +42,23 @@
 package php.java.bridge;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * The classic PHP/Java Bridge logger, doesn't need any external libraries.
  */
-class FileLogger implements ILogger
+final class FileLogger implements ILogger
 {
-  static boolean haveDateFormat = true;
-  private static DateFormat _form;
+  private static boolean haveDateFormat = true;
+  private DateFormat _form;
   private boolean isInit = false;
 
-  private void init ()
+  private void _init ()
   {
     if (Util.logStream == null)
     {
@@ -63,7 +67,7 @@ class FileLogger implements ILogger
       else
         try
         {
-          Util.logStream = new java.io.PrintStream (new java.io.FileOutputStream (Util.DEFAULT_LOG_FILE));
+          Util.logStream = new PrintStream (new FileOutputStream (Util.DEFAULT_LOG_FILE));
         }
         catch (final FileNotFoundException e1)
         {
@@ -85,7 +89,7 @@ class FileLogger implements ILogger
     try
     {
       if (_form == null)
-        _form = new java.text.SimpleDateFormat ("MMM dd HH:mm:ss", java.util.Locale.ENGLISH);
+        _form = new SimpleDateFormat ("MMM dd HH:mm:ss", Locale.ENGLISH);
       return _form.format (new Date ());
     }
     catch (final Throwable t)
@@ -104,10 +108,10 @@ class FileLogger implements ILogger
   public void log (final String s)
   {
     if (!isInit)
-      init ();
+      _init ();
     final byte [] bytes = s.getBytes (Util.UTF8);
     Util.logStream.write (bytes, 0, bytes.length);
-    Util.logStream.println ("");
+    Util.logStream.println ();
     Util.logStream.flush ();
   }
 
@@ -118,7 +122,7 @@ class FileLogger implements ILogger
   public void printStackTrace (final Throwable t)
   {
     if (!isInit)
-      init ();
+      _init ();
     if (Util.logLevel > 0)
     {
       if (t instanceof Error)
@@ -141,9 +145,7 @@ class FileLogger implements ILogger
   public void log (final int level, final String msg)
   {
     final StringBuilder b = new StringBuilder (now ());
-    b.append (" ");
-    b.append (Util.EXTENSION_NAME);
-    b.append (" ");
+    b.append (' ').append (Util.EXTENSION_NAME).append (' ');
     switch (level)
     {
       case 1:
@@ -162,21 +164,13 @@ class FileLogger implements ILogger
         b.append (level);
         break;
     }
-    b.append (": ");
-    b.append (msg);
+    b.append (": ").append (msg);
     log (b.toString ());
   }
 
   public void warn (final String msg)
   {
-    final StringBuilder b = new StringBuilder (now ());
-    b.append (" ");
-    b.append (Util.EXTENSION_NAME);
-    b.append (" ");
-    b.append ("WARNING");
-    b.append (": ");
-    b.append (msg);
-    log (b.toString ());
+    log (now () + ' ' + Util.EXTENSION_NAME + " WARNING: " + msg);
   }
 
   @Override

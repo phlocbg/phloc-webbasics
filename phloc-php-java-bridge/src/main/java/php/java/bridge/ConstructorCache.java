@@ -51,10 +51,10 @@ import java.util.Map;
  */
 final class ConstructorCache
 {
-  Map <Entry, CachedConstructor> map;
-  static final Entry noCache = new NoCache ();
+  private static final Entry noCache = new NoCache ();
+  private Map <Entry, CachedConstructor> map;
 
-  private void init ()
+  private void _init ()
   {
     map = new HashMap <Entry, CachedConstructor> ();
   }
@@ -64,10 +64,10 @@ final class ConstructorCache
    */
   public ConstructorCache ()
   {
-    init ();
+    _init ();
   }
 
-  private static class CachedConstructor
+  private static final class CachedConstructor
   {
     private final Constructor <?> method;
     private Class <?> [] typeCache;
@@ -95,8 +95,11 @@ final class ConstructorCache
    */
   public static class Entry
   {
-    String name;
-    Class <?> params[];
+    private String name;
+    private Class <?> params[];
+    private boolean hasResult = false;
+    private int result = 1;
+    private CachedConstructor cache;
 
     protected Entry ()
     {}
@@ -106,9 +109,6 @@ final class ConstructorCache
       this.name = name; // intern() is ~10% slower than lazy string comparison
       this.params = params;
     }
-
-    private boolean hasResult = false;
-    private int result = 1;
 
     @Override
     public int hashCode ()
@@ -131,20 +131,18 @@ final class ConstructorCache
         return true;
       if (o == null || !getClass ().equals (o.getClass ()))
         return false;
-      final Entry that = (Entry) o;
-      if (params.length != that.params.length)
+      final Entry rhs = (Entry) o;
+      if (params.length != rhs.params.length)
         return false;
-      if (!name.equals (that.name))
+      if (!name.equals (rhs.name))
         return false;
       for (int i = 0; i < params.length; i++)
       {
-        if (params[i] != that.params[i])
+        if (params[i] != rhs.params[i])
           return false;
       }
       return true;
     }
-
-    private CachedConstructor cache;
 
     public void setMethod (final CachedConstructor cache)
     {
@@ -215,7 +213,7 @@ final class ConstructorCache
    *        The arguments
    * @return A cache entry.
    */
-  public Entry getEntry (final String name, final Object args[])
+  public Entry getEntry (final String name, final Object [] args)
   {
     final Class <?> params[] = new Class <?> [args.length];
     for (int i = 0; i < args.length; i++)
@@ -233,6 +231,6 @@ final class ConstructorCache
    */
   public void clear ()
   {
-    init ();
+    _init ();
   }
 }

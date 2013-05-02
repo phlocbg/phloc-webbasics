@@ -44,7 +44,7 @@ package php.java.bridge.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import php.java.bridge.Util;
@@ -77,7 +77,7 @@ import php.java.bridge.Util;
  * }<br>
  * </code>
  * </p>
- * 
+ *
  * @author jostb
  */
 public class FCGIConnectionPool
@@ -86,15 +86,15 @@ public class FCGIConnectionPool
   private final int limit;
   private long timeout;
   private int connections = 0;
-  private final List <Connection> freeList = new LinkedList <Connection> ();
-  private final List <Connection> connectionList = new LinkedList <Connection> ();
+  private final List <Connection> freeList = new ArrayList <Connection> ();
+  private final List <Connection> connectionList = new ArrayList <Connection> ();
   private final FCGIIOFactory factory;
   private final int maxRequests;
   private final FCGIConnectionFactory channelName;
 
   /**
    * Represents the connection kept by the pool.
-   * 
+   *
    * @author jostb
    */
   public final class Connection
@@ -168,7 +168,7 @@ public class FCGIConnectionPool
 
     /**
      * Returns the OutputStream associated with this connection.
-     * 
+     *
      * @return The output stream.
      * @throws FCGIConnectionException
      */
@@ -182,7 +182,7 @@ public class FCGIConnectionPool
 
     /**
      * Returns the InputStream associated with this connection.
-     * 
+     *
      * @return The input stream.
      * @throws FCGIConnectionException
      */
@@ -197,7 +197,7 @@ public class FCGIConnectionPool
 
   /**
    * Create a new connection pool.
-   * 
+   *
    * @param channelName
    *        The channel name
    * @param limit
@@ -225,7 +225,7 @@ public class FCGIConnectionPool
 
   /**
    * Create a new connection pool.
-   * 
+   *
    * @param channelName
    *        The channel name
    * @param limit
@@ -259,7 +259,7 @@ public class FCGIConnectionPool
 
   /**
    * Opens a connection to the back end.
-   * 
+   *
    * @return The connection
    * @throws InterruptedException
    * @throws FCGIConnectException

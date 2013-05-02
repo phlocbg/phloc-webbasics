@@ -42,9 +42,8 @@ package php.java.bridge;
  */
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import php.java.bridge.Util.Thread;
 import php.java.bridge.http.IContext;
@@ -160,7 +159,7 @@ public class SessionFactory extends JavaBridgeFactory
 
   protected static class SessionTimer implements Runnable
   {
-    private final List <Runnable> jobs = Collections.synchronizedList (new LinkedList <Runnable> ());
+    private final List <Runnable> jobs = new Vector <Runnable> ();
     private final Thread thread;
 
     public SessionTimer ()
@@ -200,7 +199,7 @@ public class SessionFactory extends JavaBridgeFactory
           java.lang.Thread.sleep (TIMER_DURATION);
           Session.expire ();
 
-          for (Runnable job : jobs)
+          for (final Runnable job : jobs)
           {
             job.run ();
           }

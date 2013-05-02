@@ -74,7 +74,7 @@ public final class Response
   static final byte append_for_OutBuf_getFirstBytes[] = new byte [] { '.', '.', '.' };
   static final byte append_none_for_OutBuf_getFirstBytes[] = new byte [0];
 
-  private class Base64OutputBuffer extends Base64EncodingOutputBuffer
+  private static class Base64OutputBuffer extends Base64EncodingOutputBuffer
   {
     Base64OutputBuffer (final JavaBridge bridge)
     {
@@ -318,7 +318,6 @@ public final class Response
 
   protected abstract class IncompleteClassicWriter extends WriterWithDelegate
   {
-
     @Override
     public boolean setResult (final Object value)
     {
@@ -332,7 +331,7 @@ public final class Response
           writeString ((byte []) value);
         }
         else
-          if (value instanceof java.lang.String)
+          if (value instanceof String)
           {
             writeString ((String) value);
           }
@@ -342,12 +341,9 @@ public final class Response
               writeString (((PhpString) value).getBytes ());
             }
             else
-              if (value instanceof java.lang.Number)
+              if (value instanceof Number)
               {
-
-                if (value instanceof java.lang.Integer ||
-                    value instanceof java.lang.Short ||
-                    value instanceof java.lang.Byte)
+                if (value instanceof Integer || value instanceof Short || value instanceof Byte)
                 {
                   writeLong (((Number) value).longValue ());
                 }
@@ -356,13 +352,11 @@ public final class Response
                   /* Float, Double, BigDecimal, BigInteger, Double, Long, ... */
                   writeDouble (((Number) value).doubleValue ());
                 }
-
               }
               else
-                if (value instanceof java.lang.Boolean)
+                if (value instanceof Boolean)
                 {
                   writeBoolean (((Boolean) value).booleanValue ());
-
                 }
                 else
                 {
@@ -743,7 +737,7 @@ public final class Response
             {
               try
               {
-                writeLong (new Long (Util.stringValueOf (value)).longValue ());
+                writeLong (Long.valueOf (Util.stringValueOf (value)).longValue ());
               }
               catch (final NumberFormatException n)
               {
@@ -760,7 +754,7 @@ public final class Response
               {
                 try
                 {
-                  writeDouble (new Double (Util.stringValueOf (value)).doubleValue ());
+                  writeDouble (Double.valueOf (Util.stringValueOf (value)).doubleValue ());
                 }
                 catch (final NumberFormatException n)
                 {
@@ -1011,51 +1005,51 @@ public final class Response
   protected void setID (final long id)
   {}
 
-  static final byte [] e = "\"/>".getBytes ();
-  static final byte [] c = "\">".getBytes ();
-  static final byte [] I = "\" i=\"".getBytes ();
-  static final byte [] S = "<S v=\"".getBytes ();
-  static final byte [] B = "<B v=\"".getBytes ();
-  static final byte [] L = "<L v=\"".getBytes ();
-  static final byte [] D = "<D v=\"".getBytes ();
-  static final byte [] E = "<E v=\"".getBytes ();
-  static final byte [] O = "<O v=\"".getBytes ();
-  static final byte [] N = "<N i=\"".getBytes ();
-  static final byte [] V = "<V i=\"".getBytes ();
-  static final byte [] Nul = "<N />".getBytes ();
-  static final byte [] VoidF = "<V n=\"F\"/>".getBytes ();
-  static final byte [] VoidT = "<V n=\"T\"/>".getBytes ();
-  static final byte [] m = "\" m=\"".getBytes ();
-  static final byte [] mT = "\" m=\"T".getBytes ();
-  static final byte [] mF = "\" m=\"F".getBytes ();
-  static final byte [] n = "\" n=\"".getBytes ();
-  static final byte [] nT = "\" n=\"T".getBytes ();
-  static final byte [] nF = "\" n=\"F".getBytes ();
-  static final byte [] p = "\" p=\"".getBytes ();
-  static final byte [] pa = "\" p=\"A".getBytes ();
-  static final byte [] pc = "\" p=\"C".getBytes ();
-  static final byte [] pe = "\" p=\"E".getBytes ();
-  static final byte [] po = "\" p=\"O".getBytes ();
-  static final byte [] Xa = "<X t=\"A".getBytes ();
-  static final byte [] Xh = "<X t=\"H".getBytes ();
-  static final byte [] Xe = "</X>".getBytes ();
-  static final byte [] A = "<A v=\"".getBytes ();
-  static final byte [] Ae = "</A>".getBytes ();
-  static final byte [] P = "<P>".getBytes ();
-  static final byte [] Pn = "<P t=\"N\" v=\"".getBytes ();
-  static final byte [] Ps = "<P t=\"S\" v=\"".getBytes ();
-  static final byte [] Pe = "</P>".getBytes ();
-  static final byte [] FA = "<F p=\"A\"/>".getBytes ();
-  static final byte [] Fa = "<F p=\"a\"/>".getBytes ();
-  static final byte [] FE = "<F p=\"E\"/>".getBytes ();
-  static final byte [] Fe = "<F p=\"e\"/>".getBytes ();
-  static final byte [] quote = "&quot;".getBytes ();
-  static final byte [] amp = "&amp;".getBytes ();
+  static final byte [] SELF_CLOSED = "\"/>".getBytes (Util.ASCII);
+  static final byte [] CLOSE = "\">".getBytes (Util.ASCII);
+  static final byte [] I = "\" i=\"".getBytes (Util.ASCII);
+  static final byte [] STRING = "<S v=\"".getBytes (Util.ASCII);
+  static final byte [] BOOLEAN = "<B v=\"".getBytes (Util.ASCII);
+  static final byte [] LONG = "<L v=\"".getBytes (Util.ASCII);
+  static final byte [] DOUBLE = "<D v=\"".getBytes (Util.ASCII);
+  static final byte [] EXCEPTION = "<E v=\"".getBytes (Util.ASCII);
+  static final byte [] OBJECT = "<O v=\"".getBytes (Util.ASCII);
+  static final byte [] N = "<N i=\"".getBytes (Util.ASCII);
+  static final byte [] V = "<V i=\"".getBytes (Util.ASCII);
+  static final byte [] NULL = "<N />".getBytes (Util.ASCII);
+  static final byte [] VOID_FALSE = "<V n=\"F\"/>".getBytes (Util.ASCII);
+  static final byte [] VOID_TRUE = "<V n=\"T\"/>".getBytes (Util.ASCII);
+  static final byte [] ATTR_MSG = "\" m=\"".getBytes (Util.ASCII);
+  static final byte [] M_TRUE = "\" m=\"T".getBytes (Util.ASCII);
+  static final byte [] M_FALSE = "\" m=\"F".getBytes (Util.ASCII);
+  static final byte [] ATTR_NUM = "\" n=\"".getBytes (Util.ASCII);
+  static final byte [] nT = "\" n=\"T".getBytes (Util.ASCII);
+  static final byte [] nF = "\" n=\"F".getBytes (Util.ASCII);
+  static final byte [] APPLY_POS = "\" p=\"".getBytes (Util.ASCII);
+  static final byte [] pa = "\" p=\"A".getBytes (Util.ASCII);
+  static final byte [] pc = "\" p=\"C".getBytes (Util.ASCII);
+  static final byte [] pe = "\" p=\"E".getBytes (Util.ASCII);
+  static final byte [] po = "\" p=\"O".getBytes (Util.ASCII);
+  static final byte [] COMPOSITE_BEGIN_a = "<X t=\"A".getBytes (Util.ASCII);
+  static final byte [] COMPOSITE_BEGIN_h = "<X t=\"H".getBytes (Util.ASCII);
+  static final byte [] COMPOSITE_END = "</X>".getBytes (Util.ASCII);
+  static final byte [] APPLY_BEGIN = "<A v=\"".getBytes (Util.ASCII);
+  static final byte [] APPLY_END = "</A>".getBytes (Util.ASCII);
+  static final byte [] PAIR_BEGIN = "<P>".getBytes (Util.ASCII);
+  static final byte [] PAIR_BEGIN_n = "<P t=\"N\" v=\"".getBytes (Util.ASCII);
+  static final byte [] PAIR_BEGIN_s = "<P t=\"S\" v=\"".getBytes (Util.ASCII);
+  static final byte [] PAIR_END = "</P>".getBytes (Util.ASCII);
+  static final byte [] FINISHA = "<F p=\"A\"/>".getBytes (Util.ASCII);
+  static final byte [] FINISHa = "<F p=\"a\"/>".getBytes (Util.ASCII);
+  static final byte [] FINISHE = "<F p=\"E\"/>".getBytes (Util.ASCII);
+  static final byte [] FINISHe = "<F p=\"e\"/>".getBytes (Util.ASCII);
+  static final byte [] quote = "&quot;".getBytes (Util.ASCII);
+  static final byte [] amp = "&amp;".getBytes (Util.ASCII);
 
-  void writeString (final byte s[])
+  void writeString (final byte [] s)
   {
     buf.appendString (s);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeString (final String s)
@@ -1065,37 +1059,37 @@ public final class Response
 
   void writeBoolean (final boolean b)
   {
-    buf.append (B);
+    buf.append (BOOLEAN);
     buf.write (b == true ? 'T' : 'F');
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeLong (final long l)
   {
     buf.appendLong (l);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeDouble (final double d)
   {
-    buf.append (D);
+    buf.append (DOUBLE);
     buf.append (d);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeVoid (final boolean hasDeclaredExceptions)
   {
-    buf.append (hasDeclaredExceptions ? VoidT : VoidF);
+    buf.append (hasDeclaredExceptions ? VOID_TRUE : VOID_FALSE);
   }
 
   void writeVoid ()
   {
-    buf.append (VoidT);
+    buf.append (VOID_TRUE);
   }
 
   void writeNull ()
   {
-    buf.append (Nul);
+    buf.append (NULL);
   }
 
   protected byte [] getType (final Class <?> type)
@@ -1126,13 +1120,13 @@ public final class Response
       return;
     }
     final Class <?> dynamicType = o.getClass ();
-    buf.append (O);
+    buf.append (OBJECT);
     buf.append (this.bridge.globalRef.append (o));
-    buf.append (m);
+    buf.append (ATTR_MSG);
     buf.append (Util.toBytes (dynamicType.getName ()));
     buf.append (getType (dynamicType));
     buf.append (hasDeclaredExceptions ? nT : nF);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeObject (final Object o)
@@ -1143,13 +1137,13 @@ public final class Response
       return;
     }
     final Class <?> dynamicType = o.getClass ();
-    buf.append (O);
+    buf.append (OBJECT);
     buf.append (this.bridge.globalRef.append (o));
-    buf.append (m);
+    buf.append (ATTR_MSG);
     buf.append (Util.toBytes (dynamicType.getName ()));
     buf.append (getType (dynamicType));
     buf.append (nT);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   /** write object of type class. Only called from new JavaClass(...) */
@@ -1160,13 +1154,13 @@ public final class Response
       writeNull ();
       return;
     }
-    buf.append (O);
+    buf.append (OBJECT);
     buf.append (this.bridge.globalRef.append (o));
-    buf.append (m);
+    buf.append (ATTR_MSG);
     buf.append (Util.toBytes (o.getName ()));
     buf.append (po);
     buf.append (hasDeclaredExceptions ? nT : nF);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeClass (final Class <?> o)
@@ -1176,92 +1170,92 @@ public final class Response
       writeNull ();
       return;
     }
-    buf.append (O);
+    buf.append (OBJECT);
     buf.append (this.bridge.globalRef.append (o));
-    buf.append (m);
+    buf.append (ATTR_MSG);
     buf.append (Util.toBytes (o.getName ()));
     buf.append (po);
     buf.append (nT);
-    buf.append (e);
+    buf.append (SELF_CLOSED);
   }
 
   void writeException (final Object o, final boolean hasDeclaredExceptions)
   {
-    buf.append (E);
+    buf.append (EXCEPTION);
     buf.append (this.bridge.globalRef.append (o));
-    buf.append (hasDeclaredExceptions ? mT : mF);
-    buf.append (e);
+    buf.append (hasDeclaredExceptions ? M_TRUE : M_FALSE);
+    buf.append (SELF_CLOSED);
   }
 
   void writeFinish (final boolean keepAlive)
   {
     if (hasLastAsyncException)
     {
-      buf.append (keepAlive ? Fa : Fe);
+      buf.append (keepAlive ? FINISHa : FINISHe);
     }
     else
     {
-      buf.append (keepAlive ? FA : FE);
+      buf.append (keepAlive ? FINISHA : FINISHE);
     }
   }
 
   void writeCompositeBegin_a ()
   {
-    buf.append (Xa);
-    buf.append (c);
+    buf.append (COMPOSITE_BEGIN_a);
+    buf.append (CLOSE);
   }
 
   void writeCompositeBegin_h ()
   {
-    buf.append (Xh);
-    buf.append (c);
+    buf.append (COMPOSITE_BEGIN_h);
+    buf.append (CLOSE);
   }
 
   void writeCompositeEnd ()
   {
-    buf.append (Xe);
+    buf.append (COMPOSITE_END);
   }
 
   void writePairBegin_s (final String key)
   {
-    buf.append (Ps);
+    buf.append (PAIR_BEGIN_s);
     buf.appendQuoted (key);
-    buf.append (c);
+    buf.append (CLOSE);
   }
 
   void writePairBegin_n (final int key)
   {
-    buf.append (Pn);
+    buf.append (PAIR_BEGIN_n);
     buf.append (key);
-    buf.append (c);
+    buf.append (CLOSE);
   }
 
   void writePairBegin ()
   {
-    buf.append (P);
+    buf.append (PAIR_BEGIN);
   }
 
   void writePairEnd ()
   {
-    buf.append (Pe);
+    buf.append (PAIR_END);
   }
 
   void writeApplyBegin (final long object, final String pos, final String str, final int argCount)
   {
-    buf.append (A);
+    buf.append (APPLY_BEGIN);
     buf.append (object);
-    buf.append (p);
+    buf.append (APPLY_POS);
     buf.appendQuoted (pos);
-    buf.append (m);
+    buf.append (ATTR_MSG);
     buf.appendQuoted (str);
-    buf.append (n);
+    buf.append (ATTR_NUM);
     buf.append (argCount);
-    buf.append (c);
+    buf.append (CLOSE);
   }
 
   void writeApplyEnd ()
   {
-    buf.append (Ae);
+    buf.append (APPLY_END);
   }
 
   /**

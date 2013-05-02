@@ -44,11 +44,12 @@ package php.java.bridge;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to handle requests from the front-end.
- * 
+ *
  * @author jostb
  */
 public final class Request implements IDocHandler
@@ -137,13 +138,13 @@ public final class Request implements IDocHandler
 
   private final class SimpleArg extends Arg
   {
-    private LinkedList <Object> list;
+    private List <Object> list;
 
     @Override
     public void add (final Object val)
     {
       if (list == null)
-        list = new LinkedList <Object> ();
+        list = new ArrayList <Object> ();
       list.add (val);
     }
 
@@ -187,7 +188,7 @@ public final class Request implements IDocHandler
       }
       else
       {
-        ht.put (new Integer (count++), val);
+        ht.put (Integer.valueOf (count++), val);
       }
 
     }
@@ -233,7 +234,7 @@ public final class Request implements IDocHandler
 
   /**
    * Creates an empty request object.
-   * 
+   *
    * @param bridge
    *        The bridge instance.
    * @see Request#init(InputStream, OutputStream)
@@ -250,7 +251,7 @@ public final class Request implements IDocHandler
   /**
    * This method must be called with the current header option byte. It
    * initializes the request object.
-   * 
+   *
    * @param ch
    *        the current php options.
    */
@@ -262,7 +263,7 @@ public final class Request implements IDocHandler
   /**
    * This method must be called with the current input and output streams. It
    * reads the protocol header and initializes the request object.
-   * 
+   *
    * @param in
    *        The input stream.
    * @param out
@@ -296,7 +297,7 @@ public final class Request implements IDocHandler
 
   private Object createClassicExact (final ParserString st[])
   {
-    return new Integer (st[0].getClassicIntValue ());
+    return Integer.valueOf (st[0].getClassicIntValue ());
   }
 
   private long getPhpLong (final ParserString st[])
@@ -313,7 +314,7 @@ public final class Request implements IDocHandler
       int val = st[0].getIntValue ();
       if (st[1].string[st[1].off] != 'O')
         val *= -1;
-      return (new Integer (val));
+      return (Integer.valueOf (val));
     }
   }
 
@@ -390,7 +391,7 @@ public final class Request implements IDocHandler
             arg.key = st[1].getCachedStringValue ();
           else
           {
-            arg.key = new Integer (st[1].getIntValue ());
+            arg.key = Integer.valueOf (st[1].getIntValue ());
           }
         }
         else
@@ -453,7 +454,7 @@ public final class Request implements IDocHandler
       }
       case 'D':
       {
-        arg.add (new Double (st[0].getDoubleValue ()));
+        arg.add (Double.valueOf (st[0].getDoubleValue ()));
         break;
       }
       case 'E':
@@ -697,7 +698,7 @@ public final class Request implements IDocHandler
   /**
    * Start handling requests until EOF. Creates a response object and handles
    * all packets.
-   * 
+   *
    * @throws IOException
    */
   public void handleRequests () throws IOException
@@ -712,7 +713,7 @@ public final class Request implements IDocHandler
   /**
    * Start handling one request. Creates a response object and handles one
    * packet.
-   * 
+   *
    * @throws IOException
    */
   public boolean handleOneRequest () throws IOException
@@ -737,7 +738,7 @@ public final class Request implements IDocHandler
    * AbortException. If you invoke using the reflection interface, check for the
    * wrapped exception, unwrap it, if necessary and re-throw the exception
    * </p>
-   * 
+   *
    * @see Request#handleRequest()
    */
   public static class AbortException extends RuntimeException
@@ -747,7 +748,7 @@ public final class Request implements IDocHandler
 
   /**
    * When within a sub request, handle an IOException as EOF
-   * 
+   *
    * @return EOF if an IOException or EOF occurred, otherwise the parser status
    *         is returned
    */
@@ -767,7 +768,7 @@ public final class Request implements IDocHandler
   /**
    * Handle protocol sub-requests, see <code>R</code> and <code>A</code> in the
    * protocol spec.
-   * 
+   *
    * @return An array of one object. The object is the result of the Apply call.
    * @throws IOException
    * @throws Throwable
@@ -914,7 +915,7 @@ public final class Request implements IDocHandler
   /**
    * Reset the internal state so that a new input and output stream can be used
    * for the next packed. Note that request options (from init()) remain valid.
-   * 
+   *
    * @see #init(InputStream, OutputStream)
    */
   public void reset ()
@@ -926,7 +927,7 @@ public final class Request implements IDocHandler
    * Set a temporary bridge into this request. The bridge and its associated
    * session-/contextFactory will be automatically destroyed when the request is
    * done.
-   * 
+   *
    * @see php.java.bridge.http.IContextFactory#recycle(String)
    * @param bridge
    *        The fresh bridge and its ContextFactory

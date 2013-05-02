@@ -41,14 +41,10 @@ package php.java.bridge;
  */
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /** numbers are base 16 */
 class HexOutputBuffer extends ByteArrayOutputStream
 {
-  /**
-     * 
-     */
   private final JavaBridge bridge;
 
   HexOutputBuffer (final JavaBridge bridge)
@@ -74,31 +70,19 @@ class HexOutputBuffer extends ByteArrayOutputStream
 
   protected void append (final byte [] s)
   {
-    try
-    {
-      write (s);
-    }
-    catch (final IOException e)
-    {/* not possible */}
+    write (s, 0, s.length);
   }
 
   protected void appendQuoted (final byte [] s)
   {
-    for (final byte element : s)
-    {
-      byte ch;
-      switch (ch = element)
-      {
-        case '&':
-          append (Response.amp);
-          break;
-        case '\"':
+    for (final byte ch : s)
+      if (ch == '&')
+        append (Response.amp);
+      else
+        if (ch == '\"')
           append (Response.quote);
-          break;
-        default:
+        else
           write (ch);
-      }
-    }
   }
 
   protected void appendQuoted (final String s)
@@ -109,8 +93,9 @@ class HexOutputBuffer extends ByteArrayOutputStream
   private final byte [] nbuf = new byte [16];
 
   /** append an unsigned long number */
-  protected void append (long i)
+  protected void append (final long pi)
   {
+    long i = pi;
     int pos = 16;
     do
     {
@@ -126,13 +111,13 @@ class HexOutputBuffer extends ByteArrayOutputStream
    */
   protected void append (final double d)
   {
-    append (Double.toString (d).getBytes ());
+    append (Double.toString (d).getBytes (Util.ASCII));
   }
 
   /** append a long number */
   protected void appendLong (final long l)
   {
-    append (Response.L);
+    append (Response.LONG);
     if (l < 0)
     {
       append (-l);
@@ -146,9 +131,9 @@ class HexOutputBuffer extends ByteArrayOutputStream
   }
 
   /** append a string */
-  protected void appendString (final byte s[])
+  protected void appendString (final byte [] s)
   {
-    append (Response.S);
+    append (Response.STRING);
     appendQuoted (s);
   }
 }

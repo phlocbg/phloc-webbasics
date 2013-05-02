@@ -75,17 +75,16 @@ final class StringCache
   /**
    * A cache entry.
    */
-  protected static final class Entry
+  private static final class Entry
   {
     byte [] name;
-    Charset enc;
+    final Charset enc;
     int start;
-    int length;
+    final int length;
+    private boolean hasResult = false;
+    private int result = 1;
 
-    protected Entry ()
-    {}
-
-    protected Entry (final byte [] name, final int start, final int length, final Charset enc)
+    private Entry (final byte [] name, final int start, final int length, final Charset enc)
     {
       this.name = name;
       this.start = start;
@@ -93,9 +92,6 @@ final class StringCache
       // how to check that enc is really a symbol?
       this.enc = enc;
     }
-
-    private boolean hasResult = false;
-    private int result = 1;
 
     @Override
     public int hashCode ()
@@ -148,7 +144,7 @@ final class StringCache
    *        The entry
    * @return The method
    */
-  protected String get (final Entry entry)
+  private String get (final Entry entry)
   {
     return map.get (entry);
   }
@@ -161,7 +157,7 @@ final class StringCache
    * @param method
    *        The method
    */
-  protected void put (final Entry entry, final String method)
+  private void put (final Entry entry, final String method)
   {
     final byte [] b = new byte [entry.length];
     System.arraycopy (entry.name, entry.start, b, 0, entry.length);
@@ -170,12 +166,12 @@ final class StringCache
     map.put (entry, method);
   }
 
-  protected Entry getEntry (final byte [] name, final int start, final int length, final Charset enc)
+  private static Entry _createEntry (final byte [] name, final int start, final int length, final Charset enc)
   {
     return new Entry (name, start, length, enc);
   }
 
-  private String createString (final byte [] name, final int start, final int length, final Charset encoding)
+  private static String _createString (final byte [] name, final int start, final int length, final Charset encoding)
   {
     return new String (name, start, length, encoding);
   }
@@ -195,10 +191,13 @@ final class StringCache
    */
   public String getString (final byte [] name, final int start, final int length, final Charset encoding)
   {
-    final Entry e = getEntry (name, start, length, encoding);
+    final Entry e = _createEntry (name, start, length, encoding);
     String s = get (e);
     if (s == null)
-      put (e, s = createString (name, start, length, encoding));
+    {
+      s = _createString (name, start, length, encoding);
+      put (e, s);
+    }
     return s;
   }
 

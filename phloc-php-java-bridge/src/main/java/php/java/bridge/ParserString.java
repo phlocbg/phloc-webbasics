@@ -54,109 +54,109 @@ final class ParserString
   private final JavaBridge bridge;
 
   /* 0..9, A..F, a..f */
-  static final byte [] digits = { (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 0,
-                                 (byte) 1,
-                                 (byte) 2,
-                                 (byte) 3,
-                                 (byte) 4,
-                                 (byte) 5,
-                                 (byte) 6,
-                                 (byte) 7,
-                                 (byte) 8,
-                                 (byte) 9,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 10,
-                                 (byte) 11,
-                                 (byte) 12,
-                                 (byte) 13,
-                                 (byte) 14,
-                                 (byte) 15,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 127,
-                                 (byte) 10,
-                                 (byte) 11,
-                                 (byte) 12,
-                                 (byte) 13,
-                                 (byte) 14,
-                                 (byte) 15 };
+  private static final byte [] digits = { (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 0,
+                                         (byte) 1,
+                                         (byte) 2,
+                                         (byte) 3,
+                                         (byte) 4,
+                                         (byte) 5,
+                                         (byte) 6,
+                                         (byte) 7,
+                                         (byte) 8,
+                                         (byte) 9,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 10,
+                                         (byte) 11,
+                                         (byte) 12,
+                                         (byte) 13,
+                                         (byte) 14,
+                                         (byte) 15,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 127,
+                                         (byte) 10,
+                                         (byte) 11,
+                                         (byte) 12,
+                                         (byte) 13,
+                                         (byte) 14,
+                                         (byte) 15 };
 
   /** Create a new ParserString */
   protected ParserString (final JavaBridge bridge)
@@ -214,9 +214,9 @@ final class ParserString
    */
   public int getClassicIntValue ()
   {
-    int sign;
     if (length == 0)
       return 0;
+    int sign = 1;
     int off = this.off;
     int length = this.length;
     int val = 0;
@@ -232,10 +232,7 @@ final class ParserString
       {
         off++;
         length--;
-        sign = 1;
       }
-      else
-        sign = 1;
 
     int pos = 1;
     while (length-- > 0)
@@ -253,9 +250,9 @@ final class ParserString
    */
   public long getClassicLongValue ()
   {
-    long sign;
     if (length == 0)
       return 0;
+    long sign = 1;
     int off = this.off;
     int length = this.length;
     long val = 0;
@@ -271,10 +268,7 @@ final class ParserString
       {
         off++;
         length--;
-        sign = 1;
       }
-      else
-        sign = 1;
 
     long pos = 1;
     while (length-- > 0)
@@ -340,7 +334,7 @@ final class ParserString
    */
   public double getDoubleValue ()
   {
-    return (Double.parseDouble (getASCIIStringValue ()));
+    return Double.parseDouble (getASCIIStringValue ());
   }
 
   /**

@@ -47,17 +47,36 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.SocketException;
 
-class Parser
+final class Parser
 {
-  static final int RECV_SIZE = 8192; // initial size of the receive buffer
-  static final int MAX_ARGS = 100; // max # of method arguments
-  static final int SLEN = 256; // initial length of the parser string
+  // initial size of the receive buffer
+  private static final int RECV_SIZE = 8192;
+  // max # of method arguments
+  private static final int MAX_ARGS = 100;
+  // initial length of the parser string
+  private static final int SLEN = 256;
 
-  static final short OK = 0, PING = 1, EOF = 2, IO_ERROR = 3; // parse return
-                                                              // codes
+  // parse return codes
+  static final short OK = 0;
+  static final short PING = 1;
+  static final short EOF = 2;
+  static final short IO_ERROR = 3;
 
-  IDocHandler handler;
-  JavaBridge bridge;
+  private final IDocHandler handler;
+  private JavaBridge bridge;
+
+  private boolean response = true;
+  private final ParserTag [] tag;
+  private final byte [] buf = new byte [RECV_SIZE];
+  private int len = SLEN;
+  private byte [] s = new byte [len];
+  private byte ch;
+  // VOJD is VOID for f... windows (VOID is in winsock2.h)
+  private static final short BEGIN = 0, KEY = 1, VAL = 2, ENTITY = 3, VOJD = 5, END = 6;
+  private short type = VOJD;
+  private short level = 0, eof = 0, eor = 0;
+  private boolean in_dquote, eot = false;
+  private int clen = 0, c = 0, i = 0, i0 = 0, e;
 
   Parser (final JavaBridge bridge, final IDocHandler handler)
   {
@@ -75,7 +94,6 @@ class Parser
     {
       if (bridge.logLevel > 3 && (bridge.logLevel != ((ch >> 2) & 7)))
         bridge.logDebug ("Client changed its request log level to: " + ((ch >> 2) & 7));
-
       bridge.logLevel = (ch >> 2) & 7;
     }
   }
@@ -84,7 +102,6 @@ class Parser
   {
     if ((clen = read (in)) > 0)
     {
-
       /*
        * Special handling if the first byte is neither a space nor "<"
        */
@@ -104,18 +121,15 @@ class Parser
 
           // OPTIONS
         default:
-          if (ch == 0177)
+          if (ch == 0x7f)
           { // extended header
             if (++c == clen)
             {
               if ((clen = read (in)) <= 0)
                 throw new IllegalArgumentException ("Illegal header length");
-              ch = buf[c = 0];
+              c = 0;
             }
-            else
-            {
-              ch = buf[c];
-            }
+            ch = buf[c];
           }
           else
           {
@@ -158,19 +172,6 @@ class Parser
     }
   }
 
-  private boolean response = true;
-  private ParserTag tag[] = null;
-  private final byte buf[] = new byte [RECV_SIZE];
-  private int len = SLEN;
-  private byte s[] = new byte [len];
-  private byte ch;
-  // VOJD is VOID for f... windows (VOID is in winsock2.h)
-  private static final short BEGIN = 0, KEY = 1, VAL = 2, ENTITY = 3, VOJD = 5, END = 6;
-  short type = VOJD;
-  private short level = 0, eof = 0, eor = 0;
-  boolean in_dquote, eot = false;
-  private int clen = 0, c = 0, i = 0, i0 = 0, e;
-
   void RESET ()
   {
     type = VOJD;
@@ -200,7 +201,7 @@ class Parser
     {
       final StringBuilder buf = new StringBuilder ("--> <");
       buf.append (tag[0].strings[0].getUTF8StringValue ());
-      buf.append (" ");
+      buf.append (' ');
 
       for (int i = 0; i < tag[1].n; i++)
       {
@@ -230,14 +231,19 @@ class Parser
 
   void PUSH (final int t)
   {
-    final ParserString str[] = tag[t].strings;
+    final ParserString [] str = tag[t].strings;
     final short n = tag[t].n;
     s[i] = 0;
-    if (str[n] == null)
-      str[n] = createParserString ();
-    str[n].string = s;
-    str[n].off = i0;
-    str[n].length = i - i0;
+
+    ParserString pstr = str[n];
+    if (pstr == null)
+    {
+      pstr = _createParserString ();
+      str[n] = pstr;
+    }
+    pstr.string = s;
+    pstr.off = i0;
+    pstr.length = i - i0;
     ++tag[t].n;
     APPEND ((byte) 0);
     i0 = i;
@@ -256,7 +262,6 @@ class Parser
         if (clen <= 0)
           return eof = EOF;
         c = 0;
-
       }
       switch ((ch = buf[c]))
       {/* --- This block must be compilable with an ansi C compiler or javac --- */
@@ -325,8 +330,12 @@ class Parser
               PUSH (type);
             CALL_BEGIN ();
           }
-          tag[0].n = tag[1].n = tag[2].n = 0;
-          i0 = i = 0; /* RESET */
+          tag[0].n = 0;
+          tag[1].n = 0;
+          tag[2].n = 0;
+          /* RESET */
+          i0 = 0;
+          i = 0;
           type = VOJD;
           if (level == 0 && response)
             eor = 1;
@@ -433,7 +442,7 @@ class Parser
     this.bridge = bridge;
   }
 
-  private ParserString createParserString ()
+  private ParserString _createParserString ()
   {
     return new ParserString (bridge);
   }

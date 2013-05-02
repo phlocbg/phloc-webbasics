@@ -45,6 +45,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import php.java.bridge.NotImplementedException;
 
@@ -55,7 +56,7 @@ import php.java.bridge.NotImplementedException;
  */
 public class HttpRequest
 {
-  private final HashMap <String, String> headers;
+  private final Map <String, String> headers;
   private String method;
   private String uri;
 

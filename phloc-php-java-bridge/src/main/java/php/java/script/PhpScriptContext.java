@@ -163,7 +163,7 @@ public final class PhpScriptContext extends AbstractPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public void putAll (final Map map)
+  public void putAll (final Map <String, Object> map)
   {
     getBindings (IContext.ENGINE_SCOPE).putAll (map);
   }

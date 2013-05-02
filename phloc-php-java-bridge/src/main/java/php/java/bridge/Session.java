@@ -117,17 +117,13 @@ class Session implements ISession
     destroy ();
   }
 
-  public void putAll (final Map vars)
+  public void putAll (final Map <?, ?> vars)
   {
     this.lastAccessedTime = System.currentTimeMillis ();
     map.putAll (vars);
   }
 
-  /*
-   * (non-Javadoc)
-   * @see php.java.bridge.ISession#getAll()
-   */
-  public Map <Object, Object> getAll ()
+  public Map <?, ?> getAll ()
   {
     this.lastAccessedTime = System.currentTimeMillis ();
     return new HashMap <Object, Object> (map); // unshare the map

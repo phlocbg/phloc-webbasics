@@ -42,7 +42,7 @@ package php.java.script;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptEngine;
@@ -105,7 +105,7 @@ public class InvocablePhpScriptEngineFactory extends PhpScriptEngineFactory
     return nnames = Arrays.asList (new String [] { getLanguageName () });
   }
 
-  private static final List <String> ext = Collections.unmodifiableList (new LinkedList <String> ());
+  private static final List <String> ext = Collections.unmodifiableList (new ArrayList <String> ());
 
   /** {@inheritDoc} */
   @Override

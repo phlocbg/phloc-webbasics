@@ -73,7 +73,7 @@ public class JavaBridgeSecurityManager extends SecurityManager
     }
     // one of our request-handling thread groups, check only if called from an
     // application thread
-    if ((g instanceof AppThreadPool.Group) && ((AppThreadPool.Group) g).isLocked)
+    if ((g instanceof AppThreadPool.Group) && ((AppThreadPool.Group) g).isLocked ())
       checkPermission (MODIFY_THREADGROUP_PERMISSION);
     // an application thread group, check this one
     else

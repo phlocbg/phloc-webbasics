@@ -57,7 +57,6 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -74,6 +73,21 @@ import php.java.bridge.http.FCGIConnectionPool;
  */
 public final class Util
 {
+  /**
+   * ASCII encoding
+   */
+  public static final Charset ASCII = Charset.forName ("ASCII");
+
+  /**
+   * UTF8 encoding
+   */
+  public static final Charset UTF8 = Charset.forName ("UTF-8");
+
+  /**
+   * DEFAULT currently UTF-8, will be changed when most OS support and use
+   * UTF-16.
+   */
+  public static final Charset DEFAULT_ENCODING = UTF8;
 
   static
   {
@@ -280,22 +294,6 @@ public final class Util
    * <code>"c:/Program Files/PHP/php-cgi.exe</code>
    */
   public static String DEFAULT_CGI_LOCATIONS[];
-
-  /**
-   * ASCII encoding
-   */
-  public static final Charset ASCII = Charset.forName ("ASCII");
-
-  /**
-   * UTF8 encoding
-   */
-  public static final Charset UTF8 = Charset.forName ("UTF-8");
-
-  /**
-   * DEFAULT currently UTF-8, will be changed when most OS support and use
-   * UTF-16.
-   */
-  public static final Charset DEFAULT_ENCODING = UTF8;
 
   /**
    * The default buffer size
@@ -602,7 +600,7 @@ public final class Util
     }
     catch (final Throwable t)
     {
-      // t.printStackTrace();
+      t.printStackTrace ();
     }
 
     try
@@ -1511,7 +1509,7 @@ public final class Util
 
     protected String [] getTestArgumentArray (final String [] php, final String [] args)
     {
-      final LinkedList <String> buf = new LinkedList <String> ();
+      final List <String> buf = new ArrayList <String> ();
       buf.addAll (java.util.Arrays.asList (php));
       buf.add ("-v");
 
@@ -1520,7 +1518,7 @@ public final class Util
 
     protected String [] getArgumentArray (final String [] php, final String [] args)
     {
-      final LinkedList <String> buf = new LinkedList <String> ();
+      final List <String> buf = new ArrayList <String> ();
       buf.addAll (java.util.Arrays.asList (php));
       buf.addAll (java.util.Arrays.asList (ALLOW_URL_INCLUDE));
       for (int i = 1; i < args.length; i++)
@@ -1955,7 +1953,7 @@ public final class Util
 
   private static List <String> getEnvironmentBlacklist (final Properties p)
   {
-    List <String> l = new LinkedList <String> ();
+    List <String> l = new ArrayList <String> ();
     try
     {
       final String s = getProperty (p, "PHP_ENV_BLACKLIST", "PHPRC");
@@ -1966,13 +1964,13 @@ public final class Util
     catch (final Exception e)
     {
       e.printStackTrace ();
-      l = new LinkedList <String> ();
+      l = new ArrayList <String> ();
       l.add ("PHPRC");
     }
     return l;
   }
 
-  private static HashMap <String, String> getCommonEnvironment (final List <String> blacklist)
+  private static Map <String, String> getCommonEnvironment (final List <String> blacklist)
   {
     final String entries[] = { "PATH",
                               "PATH",
@@ -1986,7 +1984,7 @@ public final class Util
                               "LANG",
                               "TZ",
                               "OS" };
-    final HashMap <String, String> defaultEnv = new HashMap <String, String> ();
+    final Map <String, String> defaultEnv = new HashMap <String, String> ();
     String key, val;
     Method m = null;
     try

@@ -43,8 +43,8 @@ package php.java.bridge;
 
 final class SimplePhpString extends PhpString
 {
-  String s;
-  JavaBridge bridge;
+  private final String s;
+  private final JavaBridge bridge;
 
   SimplePhpString (final JavaBridge bridge, final String s)
   {
