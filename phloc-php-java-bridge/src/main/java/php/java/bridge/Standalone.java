@@ -123,7 +123,7 @@ public final class Standalone
     System.exit (1);
   }
 
-  protected void checkOption (final String s[])
+  protected void checkOption (final String [] s)
   {
     if ("--version".equals (s[0]))
     {
@@ -165,7 +165,7 @@ public final class Standalone
    * @param s
    *        an array of [socketname, level, logFile]
    */
-  protected void init (final String s[])
+  protected void init (final String [] s)
   {
     String sockname = null;
     int logLevel = -1;

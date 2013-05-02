@@ -95,7 +95,7 @@ public class RemoteServletContextFactory extends SimpleServletContextFactory
 
     if (proxy == null)
       throw new NullPointerException ("This context " + getId () + " doesn't have a session proxy.");
-    return session = HttpSessionFacade.getFacade (this, kontext, proxy, res, clientIsNew, timeout);
+    return session = HttpSessionFacade.getFacade (this, proxy, clientIsNew, timeout);
   }
 
   /**

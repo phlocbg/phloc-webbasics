@@ -46,7 +46,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 final class SimpleHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse
 {
-
   private static final byte [] EMPTY_CONTENTS = new byte [0];
 
   public SimpleHttpServletResponse (final HttpServletResponse res)

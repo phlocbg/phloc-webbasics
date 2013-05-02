@@ -88,21 +88,21 @@ import php.java.servlet.ServletUtil;
  * <code>launcher.exe</code> is called instead:
  * <code>launcher.exe -a "path_to_php-cgi.exe" -b 9667</code>.
  * </p>
- *
+ * 
  * @see php.java.bridge.Util#DEFAULT_CGI_LOCATIONS
  * @author jostb
  */
-public class FastCGIServlet extends HttpServlet
+public final class FastCGIServlet extends HttpServlet
 {
-  protected static final String _80 = "80";
-  protected static final String _443 = "443";
+  private static final String _80 = "80";
+  private static final String _443 = "443";
 
   private static final long serialVersionUID = 3545800996174312757L;
 
-  protected String documentRoot;
-  protected String serverSignature;
+  private String documentRoot;
+  private String serverSignature;
 
-  protected static class Environment
+  private static class Environment
   {
     public IContextFactory ctx;
     public String contextPath;
@@ -115,13 +115,13 @@ public class FastCGIServlet extends HttpServlet
     public List <String> allHeaders;
   }
 
-  protected ServletContext context;
-  protected ContextLoaderListener contextLoaderListener;
-  protected String serverInfo;
+  private ServletContext context;
+  private ContextLoaderListener contextLoaderListener;
+  private String serverInfo;
 
-  protected FCGIConnectionPool connectionPool;
+  private FCGIConnectionPool connectionPool;
 
-  protected boolean phpRequestURIisUnique; // Patch#3040849
+  private boolean phpRequestURIisUnique; // Patch#3040849
 
   /**
    * Create a new FastCGI servlet which connects to a PHP FastCGI server using a
@@ -131,7 +131,7 @@ public class FastCGIServlet extends HttpServlet
    * context to start the server and then uses this server for all subsequent
    * requests until the server is stopped. When FastCGI is not available
    * (anymore), the parent CGI servlet is used instead.
-   *
+   * 
    * @param config
    *        The servlet config
    * @throws ServletException
@@ -180,7 +180,7 @@ public class FastCGIServlet extends HttpServlet
     super.destroy ();
   }
 
-  protected void setupRequestVariables (final HttpServletRequest req, final Environment env)
+  private void setupRequestVariables (final HttpServletRequest req, final Environment env)
   {
     env.allHeaders = new ArrayList <String> ();
     env.includedJava = contextLoaderListener.getPhpIncludeJava () &&
@@ -216,7 +216,7 @@ public class FastCGIServlet extends HttpServlet
   }
 
   /** calculate PATH_INFO, PATH_TRANSLATED and SCRIPT_FILENAME */
-  protected void setPathInfo (final HttpServletRequest req, final Map <String, String> envp, final Environment env)
+  private void setPathInfo (final Map <String, String> envp, final Environment env)
   {
     final String pathInfo = env.pathInfo;
     if (pathInfo != null)
@@ -232,7 +232,7 @@ public class FastCGIServlet extends HttpServlet
 
   }
 
-  protected void setupCGIEnvironment (final HttpServletRequest req, final HttpServletResponse res, final Environment env)
+  private void setupCGIEnvironment (final HttpServletRequest req, final HttpServletResponse res, final Environment env)
   {
     final Map <String, String> envp = new HashMap <String, String> (contextLoaderListener.getEnvironment ());
 
@@ -252,7 +252,7 @@ public class FastCGIServlet extends HttpServlet
     envp.put ("REMOTE_USER", ServletUtil.nullsToBlanks (req.getRemoteUser ()));
     envp.put ("REMOTE_IDENT", ""); // not necessary for full compliance
     envp.put ("CONTENT_TYPE", ServletUtil.nullsToBlanks (req.getContentType ()));
-    setPathInfo (req, envp, env);
+    setPathInfo (envp, env);
 
     /*
      * Note CGI spec says CONTENT_LENGTH must be NULL ("") or undefined if there
@@ -363,15 +363,15 @@ public class FastCGIServlet extends HttpServlet
   /**
    * Optimized run method for FastCGI. Makes use of the large FCGI_BUF_SIZE and
    * the specialized in.read(). It is a modified copy of the parseBody.
-   *
+   * 
    * @throws InterruptedException
    * @see HeaderParser#parseBody(byte[], InputStream, OutputStream,
    *      HeaderParser)
    */
-  protected void parseBody (final HttpServletRequest req, final HttpServletResponse res, final Environment env) throws FCGIConnectionException,
-                                                                                                               FCGIConnectException,
-                                                                                                               IOException,
-                                                                                                               ServletException
+  private void parseBody (final HttpServletRequest req, final HttpServletResponse res, final Environment env) throws FCGIConnectionException,
+                                                                                                             FCGIConnectException,
+                                                                                                             IOException,
+                                                                                                             ServletException
   {
     final byte [] buf = new byte [FCGIUtil.FCGI_BUF_SIZE];// headers cannot be
                                                           // larger than this
@@ -557,14 +557,14 @@ public class FastCGIServlet extends HttpServlet
     }
   }
 
-  protected Environment getEnvironment ()
+  private Environment getEnvironment ()
   {
     return new Environment ();
   }
 
-  protected void execute (final HttpServletRequest req, final HttpServletResponse res) throws IOException,
-                                                                                      ServletException,
-                                                                                      InterruptedException
+  private void execute (final HttpServletRequest req, final HttpServletResponse res) throws IOException,
+                                                                                    ServletException,
+                                                                                    InterruptedException
   {
 
     final Environment env = getEnvironment ();
@@ -613,7 +613,7 @@ public class FastCGIServlet extends HttpServlet
     }
   }
 
-  protected void addHeader (final HttpServletResponse response, final String pline, final Environment env)
+  private void addHeader (final HttpServletResponse response, final String pline, final Environment env)
   {
     try
     {
@@ -643,8 +643,8 @@ public class FastCGIServlet extends HttpServlet
     {/* not a valid header */}
   }
 
-  protected void handle (final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
-                                                                                     IOException
+  private void handle (final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
+                                                                                   IOException
   {
     try
     {

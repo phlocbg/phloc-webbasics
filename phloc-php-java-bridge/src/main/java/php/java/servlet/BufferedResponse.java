@@ -45,5 +45,5 @@ import java.io.IOException;
 
 interface BufferedResponse
 {
-  public byte [] getBufferContents () throws IOException;
+  byte [] getBufferContents () throws IOException;
 }

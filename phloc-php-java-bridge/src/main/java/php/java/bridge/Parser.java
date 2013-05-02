@@ -138,12 +138,10 @@ final class Parser
           initOptions (ch);
           c++;
       }
+      return OK;
     }
-    else
-    {
-      return EOF;
-    }
-    return OK;
+
+    return EOF;
   }
 
   private int read (final InputStream in) throws IOException

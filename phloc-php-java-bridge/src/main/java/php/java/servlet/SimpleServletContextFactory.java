@@ -61,10 +61,11 @@ import php.java.bridge.http.IContext;
  */
 public class SimpleServletContextFactory extends php.java.bridge.http.SimpleContextFactory
 {
-  protected HttpServletRequest proxy, req;
-  protected HttpServletResponse res;
-  protected ServletContext kontext;
-  protected Servlet servlet;
+  protected HttpServletRequest proxy;
+  protected final HttpServletRequest req;
+  protected final HttpServletResponse res;
+  protected final ServletContext kontext;
+  protected final Servlet servlet;
 
   protected SimpleServletContextFactory (final Servlet servlet,
                                          final ServletContext ctx,
@@ -93,7 +94,8 @@ public class SimpleServletContextFactory extends php.java.bridge.http.SimpleCont
   {}
 
   /** {@inheritDoc} */
-  public ISession getSimpleSession (final String name, final boolean clientIsNew, final int timeout)
+  @Override
+  public ISession getSimpleSession (final String name, final short clientIsNew, final int timeout)
   {
     throw new IllegalStateException ("Named sessions not supported by servlet.");
   }
@@ -111,7 +113,7 @@ public class SimpleServletContextFactory extends php.java.bridge.http.SimpleCont
 
     if (proxy == null)
       throw new NullPointerException ("This context " + getId () + " doesn't have a session proxy.");
-    return session = HttpSessionFacade.getFacade (this, kontext, proxy, res, clientIsNew, timeout);
+    return session = HttpSessionFacade.getFacade (this, proxy, clientIsNew, timeout);
   }
 
   /** {@inheritDoc} */

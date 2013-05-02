@@ -1002,7 +1002,10 @@ public final class Response
     return writer = currentWriter = defaultWriter;
   }
 
-  protected void setID (final long id)
+  /**
+   * @param id
+   */
+  protected final void setID (final long id)
   {}
 
   static final byte [] SELF_CLOSED = "\"/>".getBytes (Util.ASCII);

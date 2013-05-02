@@ -237,7 +237,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
     }
   }
 
-  private void updateGlobalEnvironment (final ScriptContext context) throws IOException
+  private void updateGlobalEnvironment () throws IOException
   {
     if (isCompiled)
     {
@@ -295,7 +295,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
                                                                     // everything
                                                                     // directly
     final IPhpScriptContext phpScriptContext = (IPhpScriptContext) context;
-    updateGlobalEnvironment (context);
+    updateGlobalEnvironment ();
     final OutputStream out = ((PhpScriptWriter) (context.getWriter ())).getOutputStream ();
     final OutputStream err = ((PhpScriptWriter) (context.getErrorWriter ())).getOutputStream ();
 

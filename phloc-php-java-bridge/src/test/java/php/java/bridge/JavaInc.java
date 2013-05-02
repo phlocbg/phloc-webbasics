@@ -17,11 +17,13 @@
  */
 package php.java.bridge;
 
-public class JavaInc
+public final class JavaInc
 {
+  private static final String JAR_NAME = "phloc-php-java-bridge.jar";
   private static final String data = "<?php\n"
                                      + "# Java.inc -- The PHP/Java Bridge PHP library. Compiled from JavaBridge.inc.\n"
                                      + "# Copyright (C) 2003-2009 Jost Boekemeier.\n"
+                                     + "# Copyright (C) 2013 phloc systems.\n"
                                      + "# Distributed under the MIT license, see Options.inc for details.\n"
                                      + "# Customization examples:\n"
                                      + "# define (\"JAVA_HOSTS\", 9267); define (\"JAVA_SERVLET\", false);\n"
@@ -87,7 +89,7 @@ public class JavaInc
                                      + "}\n"
                                      + "if(!defined(\"JAVA_DISABLE_AUTOLOAD\") && function_exists(\"spl_autoload_register\")) spl_autoload_register(\"java_autoload_function\");\n"
                                      + "function java_autoload($libs=null) {\n"
-                                     + "trigger_error('Please use <a href=\"http://php-java-bridge.sourceforge.net/pjb/webapp.php>tomcat or jee hot deployment</a> instead',E_USER_WARNING);\n"
+                                     + "trigger_error('Please use <a href=\"http://php-java-bridge.sourceforge.net/pjb/webapp.php\">tomcat or jee hot deployment</a> instead',E_USER_WARNING);\n"
                                      + "}\n"
                                      + "function java_virtual($path,$return=false) {\n"
                                      + "$req=java_context()->getHttpServletRequest();\n"
@@ -1243,866 +1245,874 @@ public class JavaInc
                                      + "throw new java_ConnectException(\"No Java server at $host:$channelName. Error message: $errstr ($errno)\");\n"
                                      + "}\n"
                                      + "if (!$peer) {\n"
-                                     + "$java=file_exists(ini_get(\"extension_dir\").\"/JavaBridge.jar\")?ini_get(\"extension_dir\").\"/JavaBridge.jar\":(java_get_base().\"/JavaBridge.jar\");\n"
-                                     + "if (!file_exists($java))\n"
-                                     + "throw new java_IOException(\"Could not find $java in \".getcwd().\". Download it from http://sf.net/projects/php-java-bridge/files/Binary%20package/php-java-bridge_\".JAVA_PEAR_VERSION.\"/exploded/JavaBridge.jar/download and try again.\");\n"
-                                     + "$java_cmd=\"java -Dphp.java.bridge.daemon=true -jar \\\"${java}\\\" INET_LOCAL:$channelName 0\";\n"
-                                     + "if (!$again)\n"
-                                     + "throw new java_ConnectException(\"No Java back end! Please run it with: $java_cmd. Error message: $errstr ($errno)\");\n"
-                                     + "if (!java_checkCliSapi())\n"
-                                     + "trigger_error(\"This PHP SAPI requires a JEE or SERVLET back end. Start it,define ('JAVA_SERVLET',true); define('JAVA_HOSTS',...); and try again.\",E_USER_ERROR);\n"
-                                     + "system ($java_cmd);\n"
-                                     + "return $this->createSimpleHandler($name,false);\n"
-                                     + "}\n"
-                                     + "stream_set_timeout($peer,-1);\n"
-                                     + "$handler=new java_SocketHandler($this,new java_SocketChannelP($peer,$host));\n"
-                                     + "$compatibility=java_getCompatibilityOption($this->client);\n"
-                                     + "$this->write(\"\\177$compatibility\");\n"
-                                     + "$this->serverName=\"127.0.0.1:$channelName\";\n"
-                                     + "return $handler;\n"
-                                     + "}\n"
-                                     + "function java_get_simple_channel() {\n"
-                                     + "return (JAVA_HOSTS&&(!JAVA_SERVLET||(JAVA_SERVLET==\"Off\"))) ? JAVA_HOSTS : null;\n"
-                                     + "}\n"
-                                     + "function createHandler() {\n"
-                                     + "if(!java_getHeader('X_JAVABRIDGE_OVERRIDE_HOSTS',$_SERVER)&&\n"
-                                     + "((function_exists(\"java_get_default_channel\")&&($defaultChannel=java_get_default_channel())) ||\n"
-                                     + "($defaultChannel=$this->java_get_simple_channel())) ) {\n"
-                                     + "return $this->createSimpleHandler($defaultChannel);\n"
-                                     + "} else {\n"
-                                     + "return $this->createHttpHandler();\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "function java_Protocol ($client) {\n"
-                                     + "$this->client=$client;\n"
-                                     + "$this->handler=$this->createHandler();\n"
-                                     + "}\n"
-                                     + "function redirect() {\n"
-                                     + "$this->handler->redirect();\n"
-                                     + "}\n"
-                                     + "function read($size) {\n"
-                                     + "return $this->handler->read($size);\n"
-                                     + "}\n"
-                                     + "function sendData() {\n"
-                                     + "$this->handler->write($this->client->sendBuffer);\n"
-                                     + "$this->client->sendBuffer=null;\n"
-                                     + "}\n"
-                                     + "function flush() {\n"
-                                     + "$this->sendData();\n"
-                                     + "}\n"
-                                     + "function getKeepAlive() {\n"
-                                     + "return $this->handler->getKeepAlive();\n"
-                                     + "}\n"
-                                     + "function keepAlive() {\n"
-                                     + "$this->handler->keepAlive();\n"
-                                     + "}\n"
-                                     + "function handle() {\n"
-                                     + "$this->client->handleRequests();\n"
-                                     + "}\n"
-                                     + "function write($data) {\n"
-                                     + "$this->client->sendBuffer.=$data;\n"
-                                     + "}\n"
-                                     + "function finish() {\n"
-                                     + "$this->flush();\n"
-                                     + "$this->handle();\n"
-                                     + "$this->redirect();\n"
-                                     + "}\n"
-                                     + "function referenceBegin($name) {\n"
-                                     + "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n"
-                                     + "$this->client->preparedToSendBuffer=null;\n"
-                                     + "$signature=sprintf(\"<H p=\\\"1\\\" v=\\\"%s\\\">\",$name);\n"
-                                     + "$this->write($signature);\n"
-                                     + "$signature[6]=\"2\";\n"
-                                     + "$this->client->currentArgumentsFormat=$signature;\n"
-                                     + "}\n"
-                                     + "function referenceEnd() {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"</H>\";\n"
-                                     + "$this->write($format);\n"
-                                     + "$this->finish();\n"
-                                     + "$this->client->currentCacheKey=null;\n"
-                                     + "}\n"
-                                     + "function createObjectBegin($name) {\n"
-                                     + "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n"
-                                     + "$this->client->preparedToSendBuffer=null;\n"
-                                     + "$signature=sprintf(\"<K p=\\\"1\\\" v=\\\"%s\\\">\",$name);\n"
-                                     + "$this->write($signature);\n"
-                                     + "$signature[6]=\"2\";\n"
-                                     + "$this->client->currentArgumentsFormat=$signature;\n"
-                                     + "}\n"
-                                     + "function createObjectEnd() {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"</K>\";\n"
-                                     + "$this->write($format);\n"
-                                     + "$this->finish();\n"
-                                     + "$this->client->currentCacheKey=null;\n"
-                                     + "}\n"
-                                     + "function propertyAccessBegin($object,$method) {\n"
-                                     + "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n"
-                                     + "$this->client->preparedToSendBuffer=null;\n"
-                                     + "$this->write(sprintf(\"<G p=\\\"1\\\" v=\\\"%x\\\" m=\\\"%s\\\">\",$object,$method));\n"
-                                     + "$this->client->currentArgumentsFormat=\"<G p=\\\"2\\\" v=\\\"%x\\\" m=\\\"${method}\\\">\";\n"
-                                     + "}\n"
-                                     + "function propertyAccessEnd() {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"</G>\";\n"
-                                     + "$this->write($format);\n"
-                                     + "$this->finish();\n"
-                                     + "$this->client->currentCacheKey=null;\n"
-                                     + "}\n"
-                                     + "function invokeBegin($object,$method) {\n"
-                                     + "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n"
-                                     + "$this->client->preparedToSendBuffer=null;\n"
-                                     + "$this->write(sprintf(\"<Y p=\\\"1\\\" v=\\\"%x\\\" m=\\\"%s\\\">\",$object,$method));\n"
-                                     + "$this->client->currentArgumentsFormat=\"<Y p=\\\"2\\\" v=\\\"%x\\\" m=\\\"${method}\\\">\";\n"
-                                     + "}\n"
-                                     + "function invokeEnd() {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"</Y>\";\n"
-                                     + "$this->write($format);\n"
-                                     + "$this->finish();\n"
-                                     + "$this->client->currentCacheKey=null;\n"
-                                     + "}\n"
-                                     + "function resultBegin() {\n"
-                                     + "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n"
-                                     + "$this->client->preparedToSendBuffer=null;\n"
-                                     + "$this->write(\"<R>\");\n"
-                                     + "}\n"
-                                     + "function resultEnd() {\n"
-                                     + "$this->client->currentCacheKey=null;\n"
-                                     + "$this->write(\"</R>\");\n"
-                                     + "$this->flush();\n"
-                                     + "}\n"
-                                     + "function writeString($name) {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"<S v=\\\"%s\\\"/>\";\n"
-                                     + "$this->write(sprintf($format,htmlspecialchars($name,ENT_COMPAT)));\n"
-                                     + "}\n"
-                                     + "function writeBoolean($boolean) {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"<T v=\\\"%s\\\"/>\";\n"
-                                     + "$this->write(sprintf($format,$boolean));\n"
-                                     + "}\n"
-                                     + "function writeLong($l) {\n"
-                                     + "$this->client->currentArgumentsFormat.=\"<J v=\\\"%d\\\"/>\";\n"
-                                     + "if($l<0) {\n"
-                                     + "$this->write(sprintf(\"<L v=\\\"%x\\\" p=\\\"A\\\"/>\",-$l));\n"
-                                     + "} else {\n"
-                                     + "$this->write(sprintf(\"<L v=\\\"%x\\\" p=\\\"O\\\"/>\",$l));\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "function writeULong($l) {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"<L v=\\\"%x\\\" p=\\\"O\\\"/>\";\n"
-                                     + "$this->write(sprintf($format,$l));\n"
-                                     + "}\n"
-                                     + "function writeDouble($d) {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"<D v=\\\"%.14e\\\"/>\";\n"
-                                     + "$this->write(sprintf($format,$d));\n"
-                                     + "}\n"
-                                     + "function writeObject($object) {\n"
-                                     + "$this->client->currentArgumentsFormat.=$format=\"<O v=\\\"%x\\\"/>\";\n"
-                                     + "$this->write(sprintf($format,$object));\n"
-                                     + "}\n"
-                                     + "function writeException($object,$str) {\n"
-                                     + "$this->write(sprintf(\"<E v=\\\"%x\\\" m=\\\"%s\\\"/>\",$object,htmlspecialchars($str,ENT_COMPAT)));\n"
-                                     + "}\n"
-                                     + "function writeCompositeBegin_a() {\n"
-                                     + "$this->write(\"<X t=\\\"A\\\">\");\n"
-                                     + "}\n"
-                                     + "function writeCompositeBegin_h() {\n"
-                                     + "$this->write(\"<X t=\\\"H\\\">\");\n"
-                                     + "}\n"
-                                     + "function writeCompositeEnd() {\n"
-                                     + "$this->write(\"</X>\");\n"
-                                     + "}\n"
-                                     + "function writePairBegin_s($key) {\n"
-                                     + "$this->write(sprintf(\"<P t=\\\"S\\\" v=\\\"%s\\\">\",htmlspecialchars($key,ENT_COMPAT)));\n"
-                                     + "}\n"
-                                     + "function writePairBegin_n($key) {\n"
-                                     + "$this->write(sprintf(\"<P t=\\\"N\\\" v=\\\"%x\\\">\",$key));\n"
-                                     + "}\n"
-                                     + "function writePairBegin() {\n"
-                                     + "$this->write(\"<P>\");\n"
-                                     + "}\n"
-                                     + "function writePairEnd() {\n"
-                                     + "$this->write(\"</P>\");\n"
-                                     + "}\n"
-                                     + "function writeUnref($object) {\n"
-                                     + "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n"
-                                     + "$this->client->preparedToSendBuffer=null;\n"
-                                     + "$this->write(sprintf(\"<U v=\\\"%x\\\"/>\",$object));\n"
-                                     + "}\n"
-                                     + "function getServerName() {\n"
-                                     + "return $this->serverName;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_ParserString {\n"
-                                     + "public $string,$off,$length;\n"
-                                     + "function toString() {\n"
-                                     + "return $this->getString();\n"
-                                     + "}\n"
-                                     + "function getString() {\n"
-                                     + "return substr($this->string,$this->off,$this->length);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_ParserTag {\n"
-                                     + "public $n,$strings;\n"
-                                     + "function java_ParserTag() {\n"
-                                     + "$this->strings=array();\n"
-                                     + "$this->n=0;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_SimpleParser {\n"
-                                     + "public $SLEN=256;\n"
-                                     + "public $handler;\n"
-                                     + "public $tag,$buf,$len,$s;\n"
-                                     + "public $type;\n"
-                                     + "function java_SimpleParser($handler) {\n"
-                                     + "$this->handler=$handler;\n"
-                                     + "$this->tag=array(new java_ParserTag(),new java_ParserTag(),new java_ParserTag());\n"
-                                     + "$this->len=$this->SLEN;\n"
-                                     + "$this->s=str_repeat(\" \",$this->SLEN);\n"
-                                     + "$this->type=$this->VOJD;\n"
-                                     + "}\n"
-                                     + "public $BEGIN=0,$KEY=1,$VAL=2,$ENTITY=3,$VOJD=5,$END=6;\n"
-                                     + "public $level=0,$eor=0; public $in_dquote,$eot=false;\n"
-                                     + "public $pos=0,$c=0,$i=0,$i0=0,$e;\n"
-                                     + "function RESET() {\n"
-                                     + "$this->type=$this->VOJD;\n"
-                                     + "$this->level=0;\n"
-                                     + "$this->eor=0;\n"
-                                     + "$this->in_dquote=false;\n"
-                                     + "$this->i=0;\n"
-                                     + "$this->i0=0;\n"
-                                     + "}\n"
-                                     + "function APPEND($c) {\n"
-                                     + "if($this->i>=$this->len-1) {\n"
-                                     + "$this->s=str_repeat($this->s,2);\n"
-                                     + "$this->len*=2;\n"
-                                     + "}\n"
-                                     + "$this->s[$this->i++]=$c;\n"
-                                     + "}\n"
-                                     + "function CALL_BEGIN() {\n"
-                                     + "$pt=&$this->tag[1]->strings;\n"
-                                     + "$st=&$this->tag[2]->strings;\n"
-                                     + "$t=&$this->tag[0]->strings[0];\n"
-                                     + "$name=$t->string[$t->off];\n"
-                                     + "$n=$this->tag[2]->n;\n"
-                                     + "$ar=array();\n"
-                                     + "for($i=0; $i<$n; $i++) {\n"
-                                     + "$ar[$pt[$i]->getString()]=$st[$i]->getString();\n"
-                                     + "}\n"
-                                     + "$this->handler->begin($name,$ar);\n"
-                                     + "}\n"
-                                     + "function CALL_END() {\n"
-                                     + "$t=&$this->tag[0]->strings[0];\n"
-                                     + "$name=$t->string[$t->off];\n"
-                                     + "$this->handler->end($name);\n"
-                                     + "}\n"
-                                     + "function PUSH($t) {\n"
-                                     + "$str=&$this->tag[$t]->strings;\n"
-                                     + "$n=&$this->tag[$t]->n;\n"
-                                     + "$this->s[$this->i]='|';\n"
-                                     + "if(!isset($str[$n])){$h=$this->handler; $str[$n]=$h->createParserString();}\n"
-                                     + "$str[$n]->string=&$this->s;\n"
-                                     + "$str[$n]->off=$this->i0;\n"
-                                     + "$str[$n]->length=$this->i-$this->i0;\n"
-                                     + "++$this->tag[$t]->n;\n"
-                                     + "$this->APPEND('|');\n"
-                                     + "$this->i0=$this->i;\n"
-                                     + "}\n"
-                                     + "function parse() {\n"
-                                     + "while($this->eor==0) {\n"
-                                     + "if($this->c>=$this->pos) {\n"
-                                     + "$this->buf=$this->handler->read(JAVA_RECV_SIZE);\n"
-                                     + "if(is_null($this->buf) || strlen($this->buf)==0)\n"
-                                     + "$this->handler->protocol->handler->shutdownBrokenConnection(\"protocol error. Check the back end log for OutOfMemoryErrors.\");\n"
-                                     + "$this->pos=strlen($this->buf);\n"
-                                     + "if($this->pos==0) break;\n"
-                                     + "$this->c=0;\n"
-                                     + "}\n"
-                                     + "switch(($ch=$this->buf[$this->c]))\n"
-                                     + "{\n"
-                                     + "case '<': if($this->in_dquote) {$this->APPEND($ch); break;}\n"
-                                     + "$this->level+=1;\n"
-                                     + "$this->type=$this->BEGIN;\n"
-                                     + "break;\n"
-                                     + "case '\\t': case '\\f': case '\\n': case '\\r': case ' ': if($this->in_dquote) {$this->APPEND($ch); break;}\n"
-                                     + "if($this->type==$this->BEGIN) {\n"
-                                     + "$this->PUSH($this->type);\n"
-                                     + "$this->type=$this->KEY;\n"
-                                     + "}\n"
-                                     + "break;\n"
-                                     + "case '=': if($this->in_dquote) {$this->APPEND($ch); break;}\n"
-                                     + "$this->PUSH($this->type);\n"
-                                     + "$this->type=$this->VAL;\n"
-                                     + "break;\n"
-                                     + "case '/': if($this->in_dquote) {$this->APPEND($ch); break;}\n"
-                                     + "if($this->type==$this->BEGIN) { $this->type=$this->END; $this->level-=1; }\n"
-                                     + "$this->level-=1;\n"
-                                     + "$this->eot=true;\n"
-                                     + "break;\n"
-                                     + "case '>': if($this->in_dquote) {$this->APPEND($ch); break;}\n"
-                                     + "if($this->type==$this->END){\n"
-                                     + "$this->PUSH($this->BEGIN);\n"
-                                     + "$this->CALL_END();\n"
-                                     + "} else {\n"
-                                     + "if($this->type==$this->VAL) $this->PUSH($this->type);\n"
-                                     + "$this->CALL_BEGIN();\n"
-                                     + "}\n"
-                                     + "$this->tag[0]->n=$this->tag[1]->n=$this->tag[2]->n=0; $this->i0=$this->i=0;\n"
-                                     + "$this->type=$this->VOJD;\n"
-                                     + "if($this->level==0) $this->eor=1;\n"
-                                     + "break;\n"
-                                     + "case ';':\n"
-                                     + "if($this->type==$this->ENTITY) {\n"
-                                     + "switch ($this->s[$this->e+1]) {\n"
-                                     + "case 'l': $this->s[$this->e]='<'; $this->i=$this->e+1; break;\n"
-                                     + "case 'g': $this->s[$this->e]='>'; $this->i=$this->e+1; break;\n"
-                                     + "case 'a': $this->s[$this->e]=($this->s[$this->e+2]=='m'?'&':'\\''); $this->i=$this->e+1; break;\n"
-                                     + "case 'q': $this->s[$this->e]='\"'; $this->i=$this->e+1; break;\n"
-                                     + "default: $this->APPEND($ch);\n"
-                                     + "}\n"
-                                     + "$this->type=$this->VAL;\n"
-                                     + "} else {\n"
-                                     + "$this->APPEND($ch);\n"
-                                     + "}\n"
-                                     + "break;\n"
-                                     + "case '&':\n"
-                                     + "$this->type=$this->ENTITY;\n"
-                                     + "$this->e=$this->i;\n"
-                                     + "$this->APPEND($ch);\n"
-                                     + "break;\n"
-                                     + "case '\"':\n"
-                                     + "$this->in_dquote=!$this->in_dquote;\n"
-                                     + "if(!$this->in_dquote && $this->type==$this->VAL) {\n"
-                                     + "$this->PUSH($this->type);\n"
-                                     + "$this->type=$this->KEY;\n"
-                                     + "}\n"
-                                     + "break;\n"
-                                     + "default:\n"
-                                     + "$this->APPEND($ch);\n"
-                                     + "}\n"
-                                     + "$this->c+=1;\n"
-                                     + "}\n"
-                                     + "$this->RESET();\n"
-                                     + "}\n"
-                                     + "function getData($str) {\n"
-                                     + "return $str;\n"
-                                     + "}\n"
-                                     + "function parserError() {\n"
-                                     + "$this->handler->protocol->handler->shutdownBrokenConnection(\n"
-                                     + "sprintf(\"protocol error: %s. Check the back end log for details.\",$this->s));\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "interface java_JavaType {};\n"
-                                     + "$java_initialized=false;\n"
-                                     + "function __javaproxy_Client_getClient() {\n"
-                                     + "static $client=null;\n"
-                                     + "if(!is_null($client)) return $client;\n"
-                                     + "if (function_exists(\"java_create_client\")) $client=java_create_client();\n"
-                                     + "else {\n"
-                                     + "global $java_initialized;\n"
-                                     + "$client=new java_Client();\n"
-                                     + "$java_initialized=true;\n"
-                                     + "}\n"
-                                     + "return $client;\n"
-                                     + "}\n"
-                                     + "function java_last_exception_get() {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->invokeMethod(0,\"getLastException\",array());\n"
-                                     + "}\n"
-                                     + "function java_last_exception_clear() {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "$client->invokeMethod(0,\"clearLastException\",array());\n"
-                                     + "}\n"
-                                     + "function java_values_internal($object) {\n"
-                                     + "if(!$object instanceof java_JavaType) return $object;\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->invokeMethod(0,\"getValues\",array($object));\n"
-                                     + "}\n"
-                                     + "function java_invoke($object,$method,$args) {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "$id=($object==null) ? 0 : $object->__java;\n"
-                                     + "return $client->invokeMethod($id,$method,$args);\n"
-                                     + "}\n"
-                                     + "function java_unwrap ($object) {\n"
-                                     + "if(!$object instanceof java_JavaType) throw new java_IllegalArgumentException($object);\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->globalRef->get($client->invokeMethod(0,\"unwrapClosure\",array($object)));\n"
-                                     + "}\n"
-                                     + "function java_values($object) {\n"
-                                     + "return java_values_internal($object);\n"
-                                     + "}\n"
-                                     + "function java_inspect_internal($object) {\n"
-                                     + "if(!$object instanceof java_JavaType) throw new java_IllegalArgumentException($object);\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->invokeMethod(0,\"inspect\",array($object));\n"
-                                     + "}\n"
-                                     + "function java_inspect($object) {\n"
-                                     + "return java_inspect_internal($object);\n"
-                                     + "}\n"
-                                     + "function java_set_file_encoding($enc) {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->invokeMethod(0,\"setFileEncoding\",array($enc));\n"
-                                     + "}\n"
-                                     + "function java_instanceof_internal($ob,$clazz) {\n"
-                                     + "if(!$ob instanceof java_JavaType) throw new java_IllegalArgumentException($ob);\n"
-                                     + "if(!$clazz instanceof java_JavaType) throw new java_IllegalArgumentException($clazz);\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->invokeMethod(0,\"instanceOf\",array($ob,$clazz));\n"
-                                     + "}\n"
-                                     + "function java_instanceof($ob,$clazz) {\n"
-                                     + "return java_instanceof_internal($ob,$clazz);\n"
-                                     + "}\n"
-                                     + "function java_cast_internal($object,$type) {\n"
-                                     + "if(!$object instanceof java_JavaType) {\n"
-                                     + "switch($type[0]) {\n"
-                                     + "case 'S': case 's':\n"
-                                     + "return (string)$object;\n"
-                                     + "case 'B': case 'b':\n"
-                                     + "return (boolean)$object;\n"
-                                     + "case 'L': case 'I': case 'l': case 'i':\n"
-                                     + "return (integer)$object;\n"
-                                     + "case 'D': case 'd': case 'F': case 'f':\n"
-                                     + "return (float) $object;\n"
-                                     + "case 'N': case 'n':\n"
-                                     + "return null;\n"
-                                     + "case 'A': case 'a':\n"
-                                     + "return (array)$object;\n"
-                                     + "case 'O': case 'o':\n"
-                                     + "return (object)$object;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "return $object->__cast($type);\n"
-                                     + "}\n"
-                                     + "function java_cast($object,$type) {\n"
-                                     + "return java_cast_internal($object,$type);\n"
-                                     + "}\n"
-                                     + "function java_require($arg) {\n"
-                                     + "trigger_error('java_require() not supported anymore. Please use <a href=\"http://php-java-bridge.sourceforge.net/pjb/webapp.php>tomcat or jee hot deployment</a> instead',E_USER_WARNING);\n"
-                                     + "}\n"
-                                     + "function java_get_lifetime ()\n"
-                                     + "{\n"
-                                     + "$session_max_lifetime=ini_get(\"session.gc_maxlifetime\");\n"
-                                     + "return $session_max_lifetime ? (int)$session_max_lifetime : 1440;\n"
-                                     + "}\n"
-                                     + "function java_session_array($args) {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "if(!isset($args[0])) $args[0]=null;\n"
-                                     + "if(!isset($args[1]))\n"
-                                     + "$args[1]=0;\n"
-                                     + "elseif ($args[1]===true)\n"
-                                     + "$args[1]=1;\n"
-                                     + "else\n"
-                                     + "$args[1]=2;\n"
-                                     + "if(!isset($args[2])) {\n"
-                                     + "$args[2]=java_get_lifetime ();\n"
-                                     + "}\n"
-                                     + "return $client->getSession($args);\n"
-                                     + "}\n"
-                                     + "function java_session() {\n"
-                                     + "return java_session_array(func_get_args());\n"
-                                     + "}\n"
-                                     + "function java_server_name() {\n"
-                                     + "try {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->getServerName();\n"
-                                     + "} catch (java_ConnectException $ex) {\n"
-                                     + "return null;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "function java_context() {\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "return $client->getContext();\n"
-                                     + "}\n"
-                                     + "function java_closure_array($args) {\n"
-                                     + "if(isset($args[2]) && ((!($args[2] instanceof java_JavaType))&&!is_array($args[2])))\n"
-                                     + "throw new java_IllegalArgumentException($args[2]);\n"
-                                     + "$client=__javaproxy_Client_getClient();\n"
-                                     + "$args[0]=isset($args[0]) ? $client->globalRef->add($args[0]) : 0;\n"
-                                     + "$client->protocol->invokeBegin(0,\"makeClosure\");\n"
-                                     + "$n=count($args);\n"
-                                     + "$client->protocol->writeULong($args[0]);\n"
-                                     + "for($i=1; $i<$n; $i++) {\n"
-                                     + "$client->writeArg($args[$i]);\n"
-                                     + "}\n"
-                                     + "$client->protocol->invokeEnd();\n"
-                                     + "$val=$client->getResult();\n"
-                                     + "return $val;\n"
-                                     + "}\n"
-                                     + "function java_closure() {\n"
-                                     + "return java_closure_array(func_get_args());\n"
-                                     + "}\n"
-                                     + "function java_begin_document() {\n"
-                                     + "}\n"
-                                     + "function java_end_document() {\n"
-                                     + "}\n"
-                                     + "class java_JavaProxy implements java_JavaType {\n"
-                                     + "public $__serialID,$__java;\n"
-                                     + "public $__signature;\n"
-                                     + "public $__client;\n"
-                                     + "public $__tempGlobalRef;\n"
-                                     + "function java_JavaProxy($java,$signature){\n"
-                                     + "$this->__java=$java;\n"
-                                     + "$this->__signature=$signature;\n"
-                                     + "$this->__client=__javaproxy_Client_getClient();\n"
-                                     + "}\n"
-                                     + "function __cast($type) {\n"
-                                     + "return $this->__client->cast($this,$type);\n"
-                                     + "}\n"
-                                     + "function __sleep() {\n"
-                                     + "$args=array($this,java_get_lifetime());\n"
-                                     + "$this->__serialID=$this->__client->invokeMethod(0,\"serialize\",$args);\n"
-                                     + "$this->__tempGlobalRef=$this->__client->globalRef;\n"
-                                     + "return array(\"__serialID\",\"__tempGlobalRef\");\n"
-                                     + "}\n"
-                                     + "function __wakeup() {\n"
-                                     + "$args=array($this->__serialID,java_get_lifetime());\n"
-                                     + "$this->__client=__javaproxy_Client_getClient();\n"
-                                     + "if($this->__tempGlobalRef)\n"
-                                     + "$this->__client->globalRef=$this->__tempGlobalRef;\n"
-                                     + "$this->__tempGlobalRef=null;\n"
-                                     + "$this->__java=$this->__client->invokeMethod(0,\"deserialize\",$args);\n"
-                                     + "}\n"
-                                     + "function __destruct() {\n"
-                                     + "if(isset($this->__client))\n"
-                                     + "$this->__client->unref($this->__java);\n"
-                                     + "}\n"
-                                     + "function __get($key) {\n"
-                                     + "return $this->__client->getProperty($this->__java,$key);\n"
-                                     + "}\n"
-                                     + "function __set($key,$val) {\n"
-                                     + "$this->__client->setProperty($this->__java,$key,$val);\n"
-                                     + "}\n"
-                                     + "function __call($method,$args) {\n"
-                                     + "return $this->__client->invokeMethod($this->__java,$method,$args);\n"
-                                     + "}\n"
-                                     + "function __toString() {\n"
-                                     + "try {\n"
-                                     + "return $this->__client->invokeMethod(0,\"ObjectToString\",array($this));\n"
-                                     + "} catch (JavaException $ex) {\n"
-                                     + "trigger_error(\"Exception in Java::__toString(): \". java_truncate((string)$ex),E_USER_WARNING);\n"
-                                     + "return \"\";\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_objectIterator implements Iterator {\n"
-                                     + "private $var;\n"
-                                     + "function java_ObjectIterator($javaProxy) {\n"
-                                     + "$this->var=java_cast ($javaProxy,\"A\");\n"
-                                     + "}\n"
-                                     + "function rewind() {\n"
-                                     + "reset($this->var);\n"
-                                     + "}\n"
-                                     + "function valid() {\n"
-                                     + "return $this->current() !==false;\n"
-                                     + "}\n"
-                                     + "function next() {\n"
-                                     + "return next($this->var);\n"
-                                     + "}\n"
-                                     + "function key() {\n"
-                                     + "return key($this->var);\n"
-                                     + "}\n"
-                                     + "function current() {\n"
-                                     + "return current($this->var);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_IteratorProxy extends java_JavaProxy implements IteratorAggregate {\n"
-                                     + "function getIterator() {\n"
-                                     + "return new java_ObjectIterator($this);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_ArrayProxy extends java_IteratorProxy implements ArrayAccess {\n"
-                                     + "function offsetExists($idx) {\n"
-                                     + "$ar=array($this,$idx);\n"
-                                     + "return $this->__client->invokeMethod(0,\"offsetExists\",$ar);\n"
-                                     + "}\n"
-                                     + "function offsetGet($idx) {\n"
-                                     + "$ar=array($this,$idx);\n"
-                                     + "return $this->__client->invokeMethod(0,\"offsetGet\",$ar);\n"
-                                     + "}\n"
-                                     + "function offsetSet($idx,$val) {\n"
-                                     + "$ar=array($this,$idx,$val);\n"
-                                     + "return $this->__client->invokeMethod(0,\"offsetSet\",$ar);\n"
-                                     + "}\n"
-                                     + "function offsetUnset($idx) {\n"
-                                     + "$ar=array($this,$idx);\n"
-                                     + "return $this->__client->invokeMethod(0,\"offsetUnset\",$ar);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_ExceptionProxy extends java_JavaProxy {\n"
-                                     + "function __toExceptionString($trace) {\n"
-                                     + "$args=array($this,$trace);\n"
-                                     + "return $this->__client->invokeMethod(0,\"ObjectToString\",$args);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "abstract class java_AbstractJava implements IteratorAggregate,ArrayAccess,java_JavaType {\n"
-                                     + "public $__client;\n"
-                                     + "public $__delegate;\n"
-                                     + "public $__serialID;\n"
-                                     + "public $__factory;\n"
-                                     + "public $__java,$__signature;\n"
-                                     + "public $__cancelProxyCreationTag;\n"
-                                     + "function __createDelegate() {\n"
-                                     + "$proxy=$this->__delegate=\n"
-                                     + "$this->__factory->create($this->__java,$this->__signature);\n"
-                                     + "$this->__java=$proxy->__java;\n"
-                                     + "$this->__signature=$proxy->__signature;\n"
-                                     + "}\n"
-                                     + "function __cast($type) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "return $this->__delegate->__cast($type);\n"
-                                     + "}\n"
-                                     + "function __sleep() {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "$this->__delegate->__sleep();\n"
-                                     + "return array(\"__delegate\");\n"
-                                     + "}\n"
-                                     + "function __wakeup() {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "$this->__delegate->__wakeup();\n"
-                                     + "$this->__java=$this->__delegate->__java;\n"
-                                     + "$this->__client=$this->__delegate->__client;\n"
-                                     + "}\n"
-                                     + "function __get($key) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "return $this->__delegate->__get($key);\n"
-                                     + "}\n"
-                                     + "function __set($key,$val) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "$this->__delegate->__set($key,$val);\n"
-                                     + "}\n"
-                                     + "function __call($method,$args) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "return $this->__delegate->__call($method,$args);\n"
-                                     + "}\n"
-                                     + "function __toString() {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "return $this->__delegate->__toString();\n"
-                                     + "}\n"
-                                     + "function getIterator() {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "if(func_num_args()==0) return $this->__delegate->getIterator();\n"
-                                     + "$args=func_get_args(); return $this->__call(\"getIterator\",$args);\n"
-                                     + "}\n"
-                                     + "function offsetExists($idx) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "if(func_num_args()==1) return $this->__delegate->offsetExists($idx);\n"
-                                     + "$args=func_get_args(); return $this->__call(\"offsetExists\",$args);\n"
-                                     + "}\n"
-                                     + "function offsetGet($idx) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "if(func_num_args()==1) return $this->__delegate->offsetGet($idx);\n"
-                                     + "$args=func_get_args(); return $this->__call(\"offsetGet\",$args);\n"
-                                     + "}\n"
-                                     + "function offsetSet($idx,$val) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "if(func_num_args()==2) return $this->__delegate->offsetSet($idx,$val);\n"
-                                     + "$args=func_get_args(); return $this->__call(\"offsetSet\",$args);\n"
-                                     + "}\n"
-                                     + "function offsetUnset($idx) {\n"
-                                     + "if(!isset($this->__delegate)) $this->__createDelegate();\n"
-                                     + "if(func_num_args()==1) return $this->__delegate->offsetUnset($idx);\n"
-                                     + "$args=func_get_args(); return $this->__call(\"offsetUnset\",$args);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class Java extends java_AbstractJava {\n"
-                                     + "function Java() {\n"
-                                     + "$client=$this->__client=__javaproxy_Client_getClient();\n"
-                                     + "$args=func_get_args();\n"
-                                     + "$name=array_shift($args);\n"
-                                     + "if(is_array($name)) {$args=$name; $name=array_shift($args);}\n"
-                                     + "$sig=\"&{$this->__signature}@{$name}\";\n"
-                                     + "$len=count($args);\n"
-                                     + "$args2=array();\n"
-                                     + "for($i=0; $i<$len; $i++) {\n"
-                                     + "switch(gettype($val=$args[$i])) {\n"
-                                     + "case 'boolean': array_push($args2,$val); $sig.='@b'; break;\n"
-                                     + "case 'integer': array_push($args2,$val); $sig.='@i'; break;\n"
-                                     + "case 'double': array_push($args2,$val); $sig.='@d'; break;\n"
-                                     + "case 'string': array_push($args2,htmlspecialchars($val,ENT_COMPAT)); $sig.='@s'; break;\n"
-                                     + "case 'array':$sig=\"~INVALID\"; break;\n"
-                                     + "case 'object':\n"
-                                     + "if($val instanceof java_JavaType) {\n"
-                                     + "array_push($args2,$val->__java);\n"
-                                     + "$sig.=\"@o{$val->__signature}\";\n"
-                                     + "}\n"
-                                     + "else {\n"
-                                     + "$sig=\"~INVALID\";\n"
-                                     + "}\n"
-                                     + "break;\n"
-                                     + "case 'resource': array_push($args2,$val); $sig.='@r'; break;\n"
-                                     + "case 'NULL': array_push($args2,$val); $sig.='@N'; break;\n"
-                                     + "case 'unknown type': array_push($args2,$val); $sig.='@u'; break;\n"
-                                     + "default: throw new java_IllegalArgumentException($val);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "if(array_key_exists($sig,$client->methodCache)) {\n"
-                                     + "$cacheEntry=&$client->methodCache[$sig];\n"
-                                     + "$client->sendBuffer.=$client->preparedToSendBuffer;\n"
-                                     + "if(strlen($client->sendBuffer)>=JAVA_SEND_SIZE) {\n"
-                                     + "if($client->protocol->handler->write($client->sendBuffer)<=0)\n"
-                                     + "throw new java_IllegalStateException(\"Connection out of sync,check backend log for details.\");\n"
-                                     + "$client->sendBuffer=null;\n"
-                                     + "}\n"
-                                     + "$client->preparedToSendBuffer=vsprintf($cacheEntry->fmt,$args2);\n"
-                                     + "$this->__java=++$client->asyncCtx;\n"
-                                     + "$this->__factory=$cacheEntry->factory;\n"
-                                     + "$this->__signature=$cacheEntry->signature;\n"
-                                     + "$this->__cancelProxyCreationTag=++$client->cancelProxyCreationTag;\n"
-                                     + "} else {\n"
-                                     + "$client->currentCacheKey=$sig;\n"
-                                     + "$delegate=$this->__delegate=$client->createObject($name,$args);\n"
-                                     + "$this->__java=$delegate->__java;\n"
-                                     + "$this->__signature=$delegate->__signature;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "function __destruct() {\n"
-                                     + "if(!isset($this->__client)) return;\n"
-                                     + "$client=$this->__client;\n"
-                                     + "$preparedToSendBuffer=&$client->preparedToSendBuffer;\n"
-                                     + "if($preparedToSendBuffer &&\n"
-                                     + "$client->cancelProxyCreationTag==$this->__cancelProxyCreationTag) {\n"
-                                     + "$preparedToSendBuffer[6]=\"3\";\n"
-                                     + "$client->sendBuffer.=$preparedToSendBuffer;\n"
-                                     + "$preparedToSendBuffer=null;\n"
-                                     + "$client->asyncCtx -=1;\n"
-                                     + "} else {\n"
-                                     + "if(!isset($this->__delegate)) {\n"
-                                     + "$client->unref($this->__java);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "function __call($method,$args) {\n"
-                                     + "$client=$this->__client;\n"
-                                     + "$sig=\"@{$this->__signature}@$method\";\n"
-                                     + "$len=count($args);\n"
-                                     + "$args2=array($this->__java);\n"
-                                     + "for($i=0; $i<$len; $i++) {\n"
-                                     + "switch(gettype($val=$args[$i])) {\n"
-                                     + "case 'boolean': array_push($args2,$val); $sig.='@b'; break;\n"
-                                     + "case 'integer': array_push($args2,$val); $sig.='@i'; break;\n"
-                                     + "case 'double': array_push($args2,$val); $sig.='@d'; break;\n"
-                                     + "case 'string': array_push($args2,htmlspecialchars($val,ENT_COMPAT)); $sig.='@s'; break;\n"
-                                     + "case 'array':$sig=\"~INVALID\"; break;\n"
-                                     + "case 'object':\n"
-                                     + "if($val instanceof java_JavaType) {\n"
-                                     + "array_push($args2,$val->__java);\n"
-                                     + "$sig.=\"@o{$val->__signature}\";\n"
-                                     + "}\n"
-                                     + "else {\n"
-                                     + "$sig=\"~INVALID\";\n"
-                                     + "}\n"
-                                     + "break;\n"
-                                     + "case 'resource': array_push($args2,$val); $sig.='@r'; break;\n"
-                                     + "case 'NULL': array_push($args2,$val); $sig.='@N'; break;\n"
-                                     + "case 'unknown type': array_push($args2,$val); $sig.='@u'; break;\n"
-                                     + "default: throw new java_IllegalArgumentException($val);\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "if(array_key_exists($sig,$client->methodCache)) {\n"
-                                     + "$cacheEntry=&$client->methodCache[$sig];\n"
-                                     + "$client->sendBuffer.=$client->preparedToSendBuffer;\n"
-                                     + "if(strlen($client->sendBuffer)>=JAVA_SEND_SIZE) {\n"
-                                     + "if($client->protocol->handler->write($client->sendBuffer)<=0)\n"
-                                     + "throw new java_IllegalStateException(\"Out of sync. Check backend log for details.\");\n"
-                                     + "$client->sendBuffer=null;\n"
-                                     + "}\n"
-                                     + "$client->preparedToSendBuffer=vsprintf($cacheEntry->fmt,$args2);\n"
-                                     + "if($cacheEntry->resultVoid) {\n"
-                                     + "$client->cancelProxyCreationTag +=1;\n"
-                                     + "return null;\n"
-                                     + "} else {\n"
-                                     + "$result=clone($client->cachedJavaPrototype);\n"
-                                     + "$result->__factory=$cacheEntry->factory;\n"
-                                     + "$result->__java=++$client->asyncCtx;\n"
-                                     + "$result->__signature=$cacheEntry->signature;\n"
-                                     + "$result->__cancelProxyCreationTag=++$client->cancelProxyCreationTag;\n"
-                                     + "return $result;\n"
-                                     + "}\n"
-                                     + "} else {\n"
-                                     + "$client->currentCacheKey=$sig;\n"
-                                     + "$retval=parent::__call($method,$args);\n"
-                                     + "return $retval;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_InternalJava extends Java {\n"
-                                     + "function java_InternalJava($proxy) {\n"
-                                     + "$this->__delegate=$proxy;\n"
-                                     + "$this->__java=$proxy->__java;\n"
-                                     + "$this->__signature=$proxy->__signature;\n"
-                                     + "$this->__client=$proxy->__client;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_class extends Java {\n"
-                                     + "function java_class() {\n"
-                                     + "$this->__client=__javaproxy_Client_getClient();\n"
-                                     + "$args=func_get_args();\n"
-                                     + "$name=array_shift($args);\n"
-                                     + "if(is_array($name)) { $args=$name; $name=array_shift($args); }\n"
-                                     + "$delegate=$this->__delegate=$this->__client->referenceObject($name,$args);\n"
-                                     + "$this->__java=$delegate->__java;\n"
-                                     + "$this->__signature=$delegate->__signature;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class JavaClass extends java_class{}\n"
-                                     + "class java_exception extends Exception implements java_JavaType {\n"
-                                     + "public $__serialID,$__java,$__client;\n"
-                                     + "public $__delegate;\n"
-                                     + "public $__signature;\n"
-                                     + "public $__hasDeclaredExceptions;\n"
-                                     + "function java_exception() {\n"
-                                     + "$this->__client=__javaproxy_Client_getClient();\n"
-                                     + "$args=func_get_args();\n"
-                                     + "$name=array_shift($args);\n"
-                                     + "if(is_array($name)) { $args=$name; $name=array_shift($args); }\n"
-                                     + "if (count($args)==0)\n"
-                                     + "Exception::__construct($name);\n"
-                                     + "else\n"
-                                     + "Exception::__construct($args[0]);\n"
-                                     + "$delegate=$this->__delegate=$this->__client->createObject($name,$args);\n"
-                                     + "$this->__java=$delegate->__java;\n"
-                                     + "$this->__signature=$delegate->__signature;\n"
-                                     + "$this->__hasDeclaredExceptions='T';\n"
-                                     + "}\n"
-                                     + "function __cast($type) {\n"
-                                     + "return $this->__delegate->__cast($type);\n"
-                                     + "}\n"
-                                     + "function __sleep() {\n"
-                                     + "$this->__delegate->__sleep();\n"
-                                     + "return array(\"__delegate\");\n"
-                                     + "}\n"
-                                     + "function __wakeup() {\n"
-                                     + "$this->__delegate->__wakeup();\n"
-                                     + "$this->__java=$this->__delegate->__java;\n"
-                                     + "$this->__client=$this->__delegate->__client;\n"
-                                     + "}\n"
-                                     + "function __get($key) {\n"
-                                     + "return $this->__delegate->__get($key);\n"
-                                     + "}\n"
-                                     + "function __set($key,$val) {\n"
-                                     + "$this->__delegate->__set($key,$val);\n"
-                                     + "}\n"
-                                     + "function __call($method,$args) {\n"
-                                     + "return $this->__delegate->__call($method,$args);\n"
-                                     + "}\n"
-                                     + "function __toString() {\n"
-                                     + "return $this->__delegate->__toExceptionString($this->getTraceAsString());\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class JavaException extends java_exception {}\n"
-                                     + "class java_InternalException extends JavaException {\n"
-                                     + "function java_InternalException($proxy,$exception) {\n"
-                                     + "$this->__delegate=$proxy;\n"
-                                     + "$this->__java=$proxy->__java;\n"
-                                     + "$this->__signature=$proxy->__signature;\n"
-                                     + "$this->__client=$proxy->__client;\n"
-                                     + "$this->__hasDeclaredExceptions=$exception;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "class java_JavaProxyProxy extends Java {\n"
-                                     + "function java_JavaProxyProxy($client) {\n"
-                                     + "$this->__client=$client;\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "}\n"
-                                     + "?>\n"
-                                     + "";
-  public static final byte [] bytes = data.getBytes ();
+                                     + "$java=file_exists(ini_get(\"extension_dir\").\"/" +
+                                     JAR_NAME +
+                                     "\")?ini_get(\"extension_dir\").\"/" +
+                                     JAR_NAME +
+                                     "\":(java_get_base().\"/" +
+                                     JAR_NAME +
+                                     "\");\n" +
+                                     "if (!file_exists($java))\n" +
+                                     "throw new java_IOException(\"Could not find $java in \".getcwd().\". Download it from http://sf.net/projects/php-java-bridge/files/Binary%20package/php-java-bridge_\".JAVA_PEAR_VERSION.\"/exploded/" +
+                                     JAR_NAME +
+                                     "/download and try again.\");\n" +
+                                     "$java_cmd=\"java -Dphp.java.bridge.daemon=true -jar \\\"${java}\\\" INET_LOCAL:$channelName 0\";\n" +
+                                     "if (!$again)\n" +
+                                     "throw new java_ConnectException(\"No Java back end! Please run it with: $java_cmd. Error message: $errstr ($errno)\");\n" +
+                                     "if (!java_checkCliSapi())\n" +
+                                     "trigger_error(\"This PHP SAPI requires a JEE or SERVLET back end. Start it,define ('JAVA_SERVLET',true); define('JAVA_HOSTS',...); and try again.\",E_USER_ERROR);\n" +
+                                     "system ($java_cmd);\n" +
+                                     "return $this->createSimpleHandler($name,false);\n" +
+                                     "}\n" +
+                                     "stream_set_timeout($peer,-1);\n" +
+                                     "$handler=new java_SocketHandler($this,new java_SocketChannelP($peer,$host));\n" +
+                                     "$compatibility=java_getCompatibilityOption($this->client);\n" +
+                                     "$this->write(\"\\177$compatibility\");\n" +
+                                     "$this->serverName=\"127.0.0.1:$channelName\";\n" +
+                                     "return $handler;\n" +
+                                     "}\n" +
+                                     "function java_get_simple_channel() {\n" +
+                                     "return (JAVA_HOSTS&&(!JAVA_SERVLET||(JAVA_SERVLET==\"Off\"))) ? JAVA_HOSTS : null;\n" +
+                                     "}\n" +
+                                     "function createHandler() {\n" +
+                                     "if(!java_getHeader('X_JAVABRIDGE_OVERRIDE_HOSTS',$_SERVER)&&\n" +
+                                     "((function_exists(\"java_get_default_channel\")&&($defaultChannel=java_get_default_channel())) ||\n" +
+                                     "($defaultChannel=$this->java_get_simple_channel())) ) {\n" +
+                                     "return $this->createSimpleHandler($defaultChannel);\n" +
+                                     "} else {\n" +
+                                     "return $this->createHttpHandler();\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "function java_Protocol ($client) {\n" +
+                                     "$this->client=$client;\n" +
+                                     "$this->handler=$this->createHandler();\n" +
+                                     "}\n" +
+                                     "function redirect() {\n" +
+                                     "$this->handler->redirect();\n" +
+                                     "}\n" +
+                                     "function read($size) {\n" +
+                                     "return $this->handler->read($size);\n" +
+                                     "}\n" +
+                                     "function sendData() {\n" +
+                                     "$this->handler->write($this->client->sendBuffer);\n" +
+                                     "$this->client->sendBuffer=null;\n" +
+                                     "}\n" +
+                                     "function flush() {\n" +
+                                     "$this->sendData();\n" +
+                                     "}\n" +
+                                     "function getKeepAlive() {\n" +
+                                     "return $this->handler->getKeepAlive();\n" +
+                                     "}\n" +
+                                     "function keepAlive() {\n" +
+                                     "$this->handler->keepAlive();\n" +
+                                     "}\n" +
+                                     "function handle() {\n" +
+                                     "$this->client->handleRequests();\n" +
+                                     "}\n" +
+                                     "function write($data) {\n" +
+                                     "$this->client->sendBuffer.=$data;\n" +
+                                     "}\n" +
+                                     "function finish() {\n" +
+                                     "$this->flush();\n" +
+                                     "$this->handle();\n" +
+                                     "$this->redirect();\n" +
+                                     "}\n" +
+                                     "function referenceBegin($name) {\n" +
+                                     "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n" +
+                                     "$this->client->preparedToSendBuffer=null;\n" +
+                                     "$signature=sprintf(\"<H p=\\\"1\\\" v=\\\"%s\\\">\",$name);\n" +
+                                     "$this->write($signature);\n" +
+                                     "$signature[6]=\"2\";\n" +
+                                     "$this->client->currentArgumentsFormat=$signature;\n" +
+                                     "}\n" +
+                                     "function referenceEnd() {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"</H>\";\n" +
+                                     "$this->write($format);\n" +
+                                     "$this->finish();\n" +
+                                     "$this->client->currentCacheKey=null;\n" +
+                                     "}\n" +
+                                     "function createObjectBegin($name) {\n" +
+                                     "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n" +
+                                     "$this->client->preparedToSendBuffer=null;\n" +
+                                     "$signature=sprintf(\"<K p=\\\"1\\\" v=\\\"%s\\\">\",$name);\n" +
+                                     "$this->write($signature);\n" +
+                                     "$signature[6]=\"2\";\n" +
+                                     "$this->client->currentArgumentsFormat=$signature;\n" +
+                                     "}\n" +
+                                     "function createObjectEnd() {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"</K>\";\n" +
+                                     "$this->write($format);\n" +
+                                     "$this->finish();\n" +
+                                     "$this->client->currentCacheKey=null;\n" +
+                                     "}\n" +
+                                     "function propertyAccessBegin($object,$method) {\n" +
+                                     "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n" +
+                                     "$this->client->preparedToSendBuffer=null;\n" +
+                                     "$this->write(sprintf(\"<G p=\\\"1\\\" v=\\\"%x\\\" m=\\\"%s\\\">\",$object,$method));\n" +
+                                     "$this->client->currentArgumentsFormat=\"<G p=\\\"2\\\" v=\\\"%x\\\" m=\\\"${method}\\\">\";\n" +
+                                     "}\n" +
+                                     "function propertyAccessEnd() {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"</G>\";\n" +
+                                     "$this->write($format);\n" +
+                                     "$this->finish();\n" +
+                                     "$this->client->currentCacheKey=null;\n" +
+                                     "}\n" +
+                                     "function invokeBegin($object,$method) {\n" +
+                                     "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n" +
+                                     "$this->client->preparedToSendBuffer=null;\n" +
+                                     "$this->write(sprintf(\"<Y p=\\\"1\\\" v=\\\"%x\\\" m=\\\"%s\\\">\",$object,$method));\n" +
+                                     "$this->client->currentArgumentsFormat=\"<Y p=\\\"2\\\" v=\\\"%x\\\" m=\\\"${method}\\\">\";\n" +
+                                     "}\n" +
+                                     "function invokeEnd() {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"</Y>\";\n" +
+                                     "$this->write($format);\n" +
+                                     "$this->finish();\n" +
+                                     "$this->client->currentCacheKey=null;\n" +
+                                     "}\n" +
+                                     "function resultBegin() {\n" +
+                                     "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n" +
+                                     "$this->client->preparedToSendBuffer=null;\n" +
+                                     "$this->write(\"<R>\");\n" +
+                                     "}\n" +
+                                     "function resultEnd() {\n" +
+                                     "$this->client->currentCacheKey=null;\n" +
+                                     "$this->write(\"</R>\");\n" +
+                                     "$this->flush();\n" +
+                                     "}\n" +
+                                     "function writeString($name) {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"<S v=\\\"%s\\\"/>\";\n" +
+                                     "$this->write(sprintf($format,htmlspecialchars($name,ENT_COMPAT)));\n" +
+                                     "}\n" +
+                                     "function writeBoolean($boolean) {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"<T v=\\\"%s\\\"/>\";\n" +
+                                     "$this->write(sprintf($format,$boolean));\n" +
+                                     "}\n" +
+                                     "function writeLong($l) {\n" +
+                                     "$this->client->currentArgumentsFormat.=\"<J v=\\\"%d\\\"/>\";\n" +
+                                     "if($l<0) {\n" +
+                                     "$this->write(sprintf(\"<L v=\\\"%x\\\" p=\\\"A\\\"/>\",-$l));\n" +
+                                     "} else {\n" +
+                                     "$this->write(sprintf(\"<L v=\\\"%x\\\" p=\\\"O\\\"/>\",$l));\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "function writeULong($l) {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"<L v=\\\"%x\\\" p=\\\"O\\\"/>\";\n" +
+                                     "$this->write(sprintf($format,$l));\n" +
+                                     "}\n" +
+                                     "function writeDouble($d) {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"<D v=\\\"%.14e\\\"/>\";\n" +
+                                     "$this->write(sprintf($format,$d));\n" +
+                                     "}\n" +
+                                     "function writeObject($object) {\n" +
+                                     "$this->client->currentArgumentsFormat.=$format=\"<O v=\\\"%x\\\"/>\";\n" +
+                                     "$this->write(sprintf($format,$object));\n" +
+                                     "}\n" +
+                                     "function writeException($object,$str) {\n" +
+                                     "$this->write(sprintf(\"<E v=\\\"%x\\\" m=\\\"%s\\\"/>\",$object,htmlspecialchars($str,ENT_COMPAT)));\n" +
+                                     "}\n" +
+                                     "function writeCompositeBegin_a() {\n" +
+                                     "$this->write(\"<X t=\\\"A\\\">\");\n" +
+                                     "}\n" +
+                                     "function writeCompositeBegin_h() {\n" +
+                                     "$this->write(\"<X t=\\\"H\\\">\");\n" +
+                                     "}\n" +
+                                     "function writeCompositeEnd() {\n" +
+                                     "$this->write(\"</X>\");\n" +
+                                     "}\n" +
+                                     "function writePairBegin_s($key) {\n" +
+                                     "$this->write(sprintf(\"<P t=\\\"S\\\" v=\\\"%s\\\">\",htmlspecialchars($key,ENT_COMPAT)));\n" +
+                                     "}\n" +
+                                     "function writePairBegin_n($key) {\n" +
+                                     "$this->write(sprintf(\"<P t=\\\"N\\\" v=\\\"%x\\\">\",$key));\n" +
+                                     "}\n" +
+                                     "function writePairBegin() {\n" +
+                                     "$this->write(\"<P>\");\n" +
+                                     "}\n" +
+                                     "function writePairEnd() {\n" +
+                                     "$this->write(\"</P>\");\n" +
+                                     "}\n" +
+                                     "function writeUnref($object) {\n" +
+                                     "$this->client->sendBuffer.=$this->client->preparedToSendBuffer;\n" +
+                                     "$this->client->preparedToSendBuffer=null;\n" +
+                                     "$this->write(sprintf(\"<U v=\\\"%x\\\"/>\",$object));\n" +
+                                     "}\n" +
+                                     "function getServerName() {\n" +
+                                     "return $this->serverName;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_ParserString {\n" +
+                                     "public $string,$off,$length;\n" +
+                                     "function toString() {\n" +
+                                     "return $this->getString();\n" +
+                                     "}\n" +
+                                     "function getString() {\n" +
+                                     "return substr($this->string,$this->off,$this->length);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_ParserTag {\n" +
+                                     "public $n,$strings;\n" +
+                                     "function java_ParserTag() {\n" +
+                                     "$this->strings=array();\n" +
+                                     "$this->n=0;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_SimpleParser {\n" +
+                                     "public $SLEN=256;\n" +
+                                     "public $handler;\n" +
+                                     "public $tag,$buf,$len,$s;\n" +
+                                     "public $type;\n" +
+                                     "function java_SimpleParser($handler) {\n" +
+                                     "$this->handler=$handler;\n" +
+                                     "$this->tag=array(new java_ParserTag(),new java_ParserTag(),new java_ParserTag());\n" +
+                                     "$this->len=$this->SLEN;\n" +
+                                     "$this->s=str_repeat(\" \",$this->SLEN);\n" +
+                                     "$this->type=$this->VOJD;\n" +
+                                     "}\n" +
+                                     "public $BEGIN=0,$KEY=1,$VAL=2,$ENTITY=3,$VOJD=5,$END=6;\n" +
+                                     "public $level=0,$eor=0; public $in_dquote,$eot=false;\n" +
+                                     "public $pos=0,$c=0,$i=0,$i0=0,$e;\n" +
+                                     "function RESET() {\n" +
+                                     "$this->type=$this->VOJD;\n" +
+                                     "$this->level=0;\n" +
+                                     "$this->eor=0;\n" +
+                                     "$this->in_dquote=false;\n" +
+                                     "$this->i=0;\n" +
+                                     "$this->i0=0;\n" +
+                                     "}\n" +
+                                     "function APPEND($c) {\n" +
+                                     "if($this->i>=$this->len-1) {\n" +
+                                     "$this->s=str_repeat($this->s,2);\n" +
+                                     "$this->len*=2;\n" +
+                                     "}\n" +
+                                     "$this->s[$this->i++]=$c;\n" +
+                                     "}\n" +
+                                     "function CALL_BEGIN() {\n" +
+                                     "$pt=&$this->tag[1]->strings;\n" +
+                                     "$st=&$this->tag[2]->strings;\n" +
+                                     "$t=&$this->tag[0]->strings[0];\n" +
+                                     "$name=$t->string[$t->off];\n" +
+                                     "$n=$this->tag[2]->n;\n" +
+                                     "$ar=array();\n" +
+                                     "for($i=0; $i<$n; $i++) {\n" +
+                                     "$ar[$pt[$i]->getString()]=$st[$i]->getString();\n" +
+                                     "}\n" +
+                                     "$this->handler->begin($name,$ar);\n" +
+                                     "}\n" +
+                                     "function CALL_END() {\n" +
+                                     "$t=&$this->tag[0]->strings[0];\n" +
+                                     "$name=$t->string[$t->off];\n" +
+                                     "$this->handler->end($name);\n" +
+                                     "}\n" +
+                                     "function PUSH($t) {\n" +
+                                     "$str=&$this->tag[$t]->strings;\n" +
+                                     "$n=&$this->tag[$t]->n;\n" +
+                                     "$this->s[$this->i]='|';\n" +
+                                     "if(!isset($str[$n])){$h=$this->handler; $str[$n]=$h->createParserString();}\n" +
+                                     "$str[$n]->string=&$this->s;\n" +
+                                     "$str[$n]->off=$this->i0;\n" +
+                                     "$str[$n]->length=$this->i-$this->i0;\n" +
+                                     "++$this->tag[$t]->n;\n" +
+                                     "$this->APPEND('|');\n" +
+                                     "$this->i0=$this->i;\n" +
+                                     "}\n" +
+                                     "function parse() {\n" +
+                                     "while($this->eor==0) {\n" +
+                                     "if($this->c>=$this->pos) {\n" +
+                                     "$this->buf=$this->handler->read(JAVA_RECV_SIZE);\n" +
+                                     "if(is_null($this->buf) || strlen($this->buf)==0)\n" +
+                                     "$this->handler->protocol->handler->shutdownBrokenConnection(\"protocol error. Check the back end log for OutOfMemoryErrors.\");\n" +
+                                     "$this->pos=strlen($this->buf);\n" +
+                                     "if($this->pos==0) break;\n" +
+                                     "$this->c=0;\n" +
+                                     "}\n" +
+                                     "switch(($ch=$this->buf[$this->c]))\n" +
+                                     "{\n" +
+                                     "case '<': if($this->in_dquote) {$this->APPEND($ch); break;}\n" +
+                                     "$this->level+=1;\n" +
+                                     "$this->type=$this->BEGIN;\n" +
+                                     "break;\n" +
+                                     "case '\\t': case '\\f': case '\\n': case '\\r': case ' ': if($this->in_dquote) {$this->APPEND($ch); break;}\n" +
+                                     "if($this->type==$this->BEGIN) {\n" +
+                                     "$this->PUSH($this->type);\n" +
+                                     "$this->type=$this->KEY;\n" +
+                                     "}\n" +
+                                     "break;\n" +
+                                     "case '=': if($this->in_dquote) {$this->APPEND($ch); break;}\n" +
+                                     "$this->PUSH($this->type);\n" +
+                                     "$this->type=$this->VAL;\n" +
+                                     "break;\n" +
+                                     "case '/': if($this->in_dquote) {$this->APPEND($ch); break;}\n" +
+                                     "if($this->type==$this->BEGIN) { $this->type=$this->END; $this->level-=1; }\n" +
+                                     "$this->level-=1;\n" +
+                                     "$this->eot=true;\n" +
+                                     "break;\n" +
+                                     "case '>': if($this->in_dquote) {$this->APPEND($ch); break;}\n" +
+                                     "if($this->type==$this->END){\n" +
+                                     "$this->PUSH($this->BEGIN);\n" +
+                                     "$this->CALL_END();\n" +
+                                     "} else {\n" +
+                                     "if($this->type==$this->VAL) $this->PUSH($this->type);\n" +
+                                     "$this->CALL_BEGIN();\n" +
+                                     "}\n" +
+                                     "$this->tag[0]->n=$this->tag[1]->n=$this->tag[2]->n=0; $this->i0=$this->i=0;\n" +
+                                     "$this->type=$this->VOJD;\n" +
+                                     "if($this->level==0) $this->eor=1;\n" +
+                                     "break;\n" +
+                                     "case ';':\n" +
+                                     "if($this->type==$this->ENTITY) {\n" +
+                                     "switch ($this->s[$this->e+1]) {\n" +
+                                     "case 'l': $this->s[$this->e]='<'; $this->i=$this->e+1; break;\n" +
+                                     "case 'g': $this->s[$this->e]='>'; $this->i=$this->e+1; break;\n" +
+                                     "case 'a': $this->s[$this->e]=($this->s[$this->e+2]=='m'?'&':'\\''); $this->i=$this->e+1; break;\n" +
+                                     "case 'q': $this->s[$this->e]='\"'; $this->i=$this->e+1; break;\n" +
+                                     "default: $this->APPEND($ch);\n" +
+                                     "}\n" +
+                                     "$this->type=$this->VAL;\n" +
+                                     "} else {\n" +
+                                     "$this->APPEND($ch);\n" +
+                                     "}\n" +
+                                     "break;\n" +
+                                     "case '&':\n" +
+                                     "$this->type=$this->ENTITY;\n" +
+                                     "$this->e=$this->i;\n" +
+                                     "$this->APPEND($ch);\n" +
+                                     "break;\n" +
+                                     "case '\"':\n" +
+                                     "$this->in_dquote=!$this->in_dquote;\n" +
+                                     "if(!$this->in_dquote && $this->type==$this->VAL) {\n" +
+                                     "$this->PUSH($this->type);\n" +
+                                     "$this->type=$this->KEY;\n" +
+                                     "}\n" +
+                                     "break;\n" +
+                                     "default:\n" +
+                                     "$this->APPEND($ch);\n" +
+                                     "}\n" +
+                                     "$this->c+=1;\n" +
+                                     "}\n" +
+                                     "$this->RESET();\n" +
+                                     "}\n" +
+                                     "function getData($str) {\n" +
+                                     "return $str;\n" +
+                                     "}\n" +
+                                     "function parserError() {\n" +
+                                     "$this->handler->protocol->handler->shutdownBrokenConnection(\n" +
+                                     "sprintf(\"protocol error: %s. Check the back end log for details.\",$this->s));\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "interface java_JavaType {};\n" +
+                                     "$java_initialized=false;\n" +
+                                     "function __javaproxy_Client_getClient() {\n" +
+                                     "static $client=null;\n" +
+                                     "if(!is_null($client)) return $client;\n" +
+                                     "if (function_exists(\"java_create_client\")) $client=java_create_client();\n" +
+                                     "else {\n" +
+                                     "global $java_initialized;\n" +
+                                     "$client=new java_Client();\n" +
+                                     "$java_initialized=true;\n" +
+                                     "}\n" +
+                                     "return $client;\n" +
+                                     "}\n" +
+                                     "function java_last_exception_get() {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->invokeMethod(0,\"getLastException\",array());\n" +
+                                     "}\n" +
+                                     "function java_last_exception_clear() {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "$client->invokeMethod(0,\"clearLastException\",array());\n" +
+                                     "}\n" +
+                                     "function java_values_internal($object) {\n" +
+                                     "if(!$object instanceof java_JavaType) return $object;\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->invokeMethod(0,\"getValues\",array($object));\n" +
+                                     "}\n" +
+                                     "function java_invoke($object,$method,$args) {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "$id=($object==null) ? 0 : $object->__java;\n" +
+                                     "return $client->invokeMethod($id,$method,$args);\n" +
+                                     "}\n" +
+                                     "function java_unwrap ($object) {\n" +
+                                     "if(!$object instanceof java_JavaType) throw new java_IllegalArgumentException($object);\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->globalRef->get($client->invokeMethod(0,\"unwrapClosure\",array($object)));\n" +
+                                     "}\n" +
+                                     "function java_values($object) {\n" +
+                                     "return java_values_internal($object);\n" +
+                                     "}\n" +
+                                     "function java_inspect_internal($object) {\n" +
+                                     "if(!$object instanceof java_JavaType) throw new java_IllegalArgumentException($object);\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->invokeMethod(0,\"inspect\",array($object));\n" +
+                                     "}\n" +
+                                     "function java_inspect($object) {\n" +
+                                     "return java_inspect_internal($object);\n" +
+                                     "}\n" +
+                                     "function java_set_file_encoding($enc) {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->invokeMethod(0,\"setFileEncoding\",array($enc));\n" +
+                                     "}\n" +
+                                     "function java_instanceof_internal($ob,$clazz) {\n" +
+                                     "if(!$ob instanceof java_JavaType) throw new java_IllegalArgumentException($ob);\n" +
+                                     "if(!$clazz instanceof java_JavaType) throw new java_IllegalArgumentException($clazz);\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->invokeMethod(0,\"instanceOf\",array($ob,$clazz));\n" +
+                                     "}\n" +
+                                     "function java_instanceof($ob,$clazz) {\n" +
+                                     "return java_instanceof_internal($ob,$clazz);\n" +
+                                     "}\n" +
+                                     "function java_cast_internal($object,$type) {\n" +
+                                     "if(!$object instanceof java_JavaType) {\n" +
+                                     "switch($type[0]) {\n" +
+                                     "case 'S': case 's':\n" +
+                                     "return (string)$object;\n" +
+                                     "case 'B': case 'b':\n" +
+                                     "return (boolean)$object;\n" +
+                                     "case 'L': case 'I': case 'l': case 'i':\n" +
+                                     "return (integer)$object;\n" +
+                                     "case 'D': case 'd': case 'F': case 'f':\n" +
+                                     "return (float) $object;\n" +
+                                     "case 'N': case 'n':\n" +
+                                     "return null;\n" +
+                                     "case 'A': case 'a':\n" +
+                                     "return (array)$object;\n" +
+                                     "case 'O': case 'o':\n" +
+                                     "return (object)$object;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "return $object->__cast($type);\n" +
+                                     "}\n" +
+                                     "function java_cast($object,$type) {\n" +
+                                     "return java_cast_internal($object,$type);\n" +
+                                     "}\n" +
+                                     "function java_require($arg) {\n" +
+                                     "trigger_error('java_require() not supported anymore. Please use <a href=\"http://php-java-bridge.sourceforge.net/pjb/webapp.php>tomcat or jee hot deployment</a> instead',E_USER_WARNING);\n" +
+                                     "}\n" +
+                                     "function java_get_lifetime ()\n" +
+                                     "{\n" +
+                                     "$session_max_lifetime=ini_get(\"session.gc_maxlifetime\");\n" +
+                                     "return $session_max_lifetime ? (int)$session_max_lifetime : 1440;\n" +
+                                     "}\n" +
+                                     "function java_session_array($args) {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "if(!isset($args[0])) $args[0]=null;\n" +
+                                     "if(!isset($args[1]))\n" +
+                                     "$args[1]=0;\n" +
+                                     "elseif ($args[1]===true)\n" +
+                                     "$args[1]=1;\n" +
+                                     "else\n" +
+                                     "$args[1]=2;\n" +
+                                     "if(!isset($args[2])) {\n" +
+                                     "$args[2]=java_get_lifetime ();\n" +
+                                     "}\n" +
+                                     "return $client->getSession($args);\n" +
+                                     "}\n" +
+                                     "function java_session() {\n" +
+                                     "return java_session_array(func_get_args());\n" +
+                                     "}\n" +
+                                     "function java_server_name() {\n" +
+                                     "try {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->getServerName();\n" +
+                                     "} catch (java_ConnectException $ex) {\n" +
+                                     "return null;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "function java_context() {\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "return $client->getContext();\n" +
+                                     "}\n" +
+                                     "function java_closure_array($args) {\n" +
+                                     "if(isset($args[2]) && ((!($args[2] instanceof java_JavaType))&&!is_array($args[2])))\n" +
+                                     "throw new java_IllegalArgumentException($args[2]);\n" +
+                                     "$client=__javaproxy_Client_getClient();\n" +
+                                     "$args[0]=isset($args[0]) ? $client->globalRef->add($args[0]) : 0;\n" +
+                                     "$client->protocol->invokeBegin(0,\"makeClosure\");\n" +
+                                     "$n=count($args);\n" +
+                                     "$client->protocol->writeULong($args[0]);\n" +
+                                     "for($i=1; $i<$n; $i++) {\n" +
+                                     "$client->writeArg($args[$i]);\n" +
+                                     "}\n" +
+                                     "$client->protocol->invokeEnd();\n" +
+                                     "$val=$client->getResult();\n" +
+                                     "return $val;\n" +
+                                     "}\n" +
+                                     "function java_closure() {\n" +
+                                     "return java_closure_array(func_get_args());\n" +
+                                     "}\n" +
+                                     "function java_begin_document() {\n" +
+                                     "}\n" +
+                                     "function java_end_document() {\n" +
+                                     "}\n" +
+                                     "class java_JavaProxy implements java_JavaType {\n" +
+                                     "public $__serialID,$__java;\n" +
+                                     "public $__signature;\n" +
+                                     "public $__client;\n" +
+                                     "public $__tempGlobalRef;\n" +
+                                     "function java_JavaProxy($java,$signature){\n" +
+                                     "$this->__java=$java;\n" +
+                                     "$this->__signature=$signature;\n" +
+                                     "$this->__client=__javaproxy_Client_getClient();\n" +
+                                     "}\n" +
+                                     "function __cast($type) {\n" +
+                                     "return $this->__client->cast($this,$type);\n" +
+                                     "}\n" +
+                                     "function __sleep() {\n" +
+                                     "$args=array($this,java_get_lifetime());\n" +
+                                     "$this->__serialID=$this->__client->invokeMethod(0,\"serialize\",$args);\n" +
+                                     "$this->__tempGlobalRef=$this->__client->globalRef;\n" +
+                                     "return array(\"__serialID\",\"__tempGlobalRef\");\n" +
+                                     "}\n" +
+                                     "function __wakeup() {\n" +
+                                     "$args=array($this->__serialID,java_get_lifetime());\n" +
+                                     "$this->__client=__javaproxy_Client_getClient();\n" +
+                                     "if($this->__tempGlobalRef)\n" +
+                                     "$this->__client->globalRef=$this->__tempGlobalRef;\n" +
+                                     "$this->__tempGlobalRef=null;\n" +
+                                     "$this->__java=$this->__client->invokeMethod(0,\"deserialize\",$args);\n" +
+                                     "}\n" +
+                                     "function __destruct() {\n" +
+                                     "if(isset($this->__client))\n" +
+                                     "$this->__client->unref($this->__java);\n" +
+                                     "}\n" +
+                                     "function __get($key) {\n" +
+                                     "return $this->__client->getProperty($this->__java,$key);\n" +
+                                     "}\n" +
+                                     "function __set($key,$val) {\n" +
+                                     "$this->__client->setProperty($this->__java,$key,$val);\n" +
+                                     "}\n" +
+                                     "function __call($method,$args) {\n" +
+                                     "return $this->__client->invokeMethod($this->__java,$method,$args);\n" +
+                                     "}\n" +
+                                     "function __toString() {\n" +
+                                     "try {\n" +
+                                     "return $this->__client->invokeMethod(0,\"ObjectToString\",array($this));\n" +
+                                     "} catch (JavaException $ex) {\n" +
+                                     "trigger_error(\"Exception in Java::__toString(): \". java_truncate((string)$ex),E_USER_WARNING);\n" +
+                                     "return \"\";\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_objectIterator implements Iterator {\n" +
+                                     "private $var;\n" +
+                                     "function java_ObjectIterator($javaProxy) {\n" +
+                                     "$this->var=java_cast ($javaProxy,\"A\");\n" +
+                                     "}\n" +
+                                     "function rewind() {\n" +
+                                     "reset($this->var);\n" +
+                                     "}\n" +
+                                     "function valid() {\n" +
+                                     "return $this->current() !==false;\n" +
+                                     "}\n" +
+                                     "function next() {\n" +
+                                     "return next($this->var);\n" +
+                                     "}\n" +
+                                     "function key() {\n" +
+                                     "return key($this->var);\n" +
+                                     "}\n" +
+                                     "function current() {\n" +
+                                     "return current($this->var);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_IteratorProxy extends java_JavaProxy implements IteratorAggregate {\n" +
+                                     "function getIterator() {\n" +
+                                     "return new java_ObjectIterator($this);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_ArrayProxy extends java_IteratorProxy implements ArrayAccess {\n" +
+                                     "function offsetExists($idx) {\n" +
+                                     "$ar=array($this,$idx);\n" +
+                                     "return $this->__client->invokeMethod(0,\"offsetExists\",$ar);\n" +
+                                     "}\n" +
+                                     "function offsetGet($idx) {\n" +
+                                     "$ar=array($this,$idx);\n" +
+                                     "return $this->__client->invokeMethod(0,\"offsetGet\",$ar);\n" +
+                                     "}\n" +
+                                     "function offsetSet($idx,$val) {\n" +
+                                     "$ar=array($this,$idx,$val);\n" +
+                                     "return $this->__client->invokeMethod(0,\"offsetSet\",$ar);\n" +
+                                     "}\n" +
+                                     "function offsetUnset($idx) {\n" +
+                                     "$ar=array($this,$idx);\n" +
+                                     "return $this->__client->invokeMethod(0,\"offsetUnset\",$ar);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_ExceptionProxy extends java_JavaProxy {\n" +
+                                     "function __toExceptionString($trace) {\n" +
+                                     "$args=array($this,$trace);\n" +
+                                     "return $this->__client->invokeMethod(0,\"ObjectToString\",$args);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "abstract class java_AbstractJava implements IteratorAggregate,ArrayAccess,java_JavaType {\n" +
+                                     "public $__client;\n" +
+                                     "public $__delegate;\n" +
+                                     "public $__serialID;\n" +
+                                     "public $__factory;\n" +
+                                     "public $__java,$__signature;\n" +
+                                     "public $__cancelProxyCreationTag;\n" +
+                                     "function __createDelegate() {\n" +
+                                     "$proxy=$this->__delegate=\n" +
+                                     "$this->__factory->create($this->__java,$this->__signature);\n" +
+                                     "$this->__java=$proxy->__java;\n" +
+                                     "$this->__signature=$proxy->__signature;\n" +
+                                     "}\n" +
+                                     "function __cast($type) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "return $this->__delegate->__cast($type);\n" +
+                                     "}\n" +
+                                     "function __sleep() {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "$this->__delegate->__sleep();\n" +
+                                     "return array(\"__delegate\");\n" +
+                                     "}\n" +
+                                     "function __wakeup() {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "$this->__delegate->__wakeup();\n" +
+                                     "$this->__java=$this->__delegate->__java;\n" +
+                                     "$this->__client=$this->__delegate->__client;\n" +
+                                     "}\n" +
+                                     "function __get($key) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "return $this->__delegate->__get($key);\n" +
+                                     "}\n" +
+                                     "function __set($key,$val) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "$this->__delegate->__set($key,$val);\n" +
+                                     "}\n" +
+                                     "function __call($method,$args) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "return $this->__delegate->__call($method,$args);\n" +
+                                     "}\n" +
+                                     "function __toString() {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "return $this->__delegate->__toString();\n" +
+                                     "}\n" +
+                                     "function getIterator() {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "if(func_num_args()==0) return $this->__delegate->getIterator();\n" +
+                                     "$args=func_get_args(); return $this->__call(\"getIterator\",$args);\n" +
+                                     "}\n" +
+                                     "function offsetExists($idx) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "if(func_num_args()==1) return $this->__delegate->offsetExists($idx);\n" +
+                                     "$args=func_get_args(); return $this->__call(\"offsetExists\",$args);\n" +
+                                     "}\n" +
+                                     "function offsetGet($idx) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "if(func_num_args()==1) return $this->__delegate->offsetGet($idx);\n" +
+                                     "$args=func_get_args(); return $this->__call(\"offsetGet\",$args);\n" +
+                                     "}\n" +
+                                     "function offsetSet($idx,$val) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "if(func_num_args()==2) return $this->__delegate->offsetSet($idx,$val);\n" +
+                                     "$args=func_get_args(); return $this->__call(\"offsetSet\",$args);\n" +
+                                     "}\n" +
+                                     "function offsetUnset($idx) {\n" +
+                                     "if(!isset($this->__delegate)) $this->__createDelegate();\n" +
+                                     "if(func_num_args()==1) return $this->__delegate->offsetUnset($idx);\n" +
+                                     "$args=func_get_args(); return $this->__call(\"offsetUnset\",$args);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class Java extends java_AbstractJava {\n" +
+                                     "function Java() {\n" +
+                                     "$client=$this->__client=__javaproxy_Client_getClient();\n" +
+                                     "$args=func_get_args();\n" +
+                                     "$name=array_shift($args);\n" +
+                                     "if(is_array($name)) {$args=$name; $name=array_shift($args);}\n" +
+                                     "$sig=\"&{$this->__signature}@{$name}\";\n" +
+                                     "$len=count($args);\n" +
+                                     "$args2=array();\n" +
+                                     "for($i=0; $i<$len; $i++) {\n" +
+                                     "switch(gettype($val=$args[$i])) {\n" +
+                                     "case 'boolean': array_push($args2,$val); $sig.='@b'; break;\n" +
+                                     "case 'integer': array_push($args2,$val); $sig.='@i'; break;\n" +
+                                     "case 'double': array_push($args2,$val); $sig.='@d'; break;\n" +
+                                     "case 'string': array_push($args2,htmlspecialchars($val,ENT_COMPAT)); $sig.='@s'; break;\n" +
+                                     "case 'array':$sig=\"~INVALID\"; break;\n" +
+                                     "case 'object':\n" +
+                                     "if($val instanceof java_JavaType) {\n" +
+                                     "array_push($args2,$val->__java);\n" +
+                                     "$sig.=\"@o{$val->__signature}\";\n" +
+                                     "}\n" +
+                                     "else {\n" +
+                                     "$sig=\"~INVALID\";\n" +
+                                     "}\n" +
+                                     "break;\n" +
+                                     "case 'resource': array_push($args2,$val); $sig.='@r'; break;\n" +
+                                     "case 'NULL': array_push($args2,$val); $sig.='@N'; break;\n" +
+                                     "case 'unknown type': array_push($args2,$val); $sig.='@u'; break;\n" +
+                                     "default: throw new java_IllegalArgumentException($val);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "if(array_key_exists($sig,$client->methodCache)) {\n" +
+                                     "$cacheEntry=&$client->methodCache[$sig];\n" +
+                                     "$client->sendBuffer.=$client->preparedToSendBuffer;\n" +
+                                     "if(strlen($client->sendBuffer)>=JAVA_SEND_SIZE) {\n" +
+                                     "if($client->protocol->handler->write($client->sendBuffer)<=0)\n" +
+                                     "throw new java_IllegalStateException(\"Connection out of sync,check backend log for details.\");\n" +
+                                     "$client->sendBuffer=null;\n" +
+                                     "}\n" +
+                                     "$client->preparedToSendBuffer=vsprintf($cacheEntry->fmt,$args2);\n" +
+                                     "$this->__java=++$client->asyncCtx;\n" +
+                                     "$this->__factory=$cacheEntry->factory;\n" +
+                                     "$this->__signature=$cacheEntry->signature;\n" +
+                                     "$this->__cancelProxyCreationTag=++$client->cancelProxyCreationTag;\n" +
+                                     "} else {\n" +
+                                     "$client->currentCacheKey=$sig;\n" +
+                                     "$delegate=$this->__delegate=$client->createObject($name,$args);\n" +
+                                     "$this->__java=$delegate->__java;\n" +
+                                     "$this->__signature=$delegate->__signature;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "function __destruct() {\n" +
+                                     "if(!isset($this->__client)) return;\n" +
+                                     "$client=$this->__client;\n" +
+                                     "$preparedToSendBuffer=&$client->preparedToSendBuffer;\n" +
+                                     "if($preparedToSendBuffer &&\n" +
+                                     "$client->cancelProxyCreationTag==$this->__cancelProxyCreationTag) {\n" +
+                                     "$preparedToSendBuffer[6]=\"3\";\n" +
+                                     "$client->sendBuffer.=$preparedToSendBuffer;\n" +
+                                     "$preparedToSendBuffer=null;\n" +
+                                     "$client->asyncCtx -=1;\n" +
+                                     "} else {\n" +
+                                     "if(!isset($this->__delegate)) {\n" +
+                                     "$client->unref($this->__java);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "function __call($method,$args) {\n" +
+                                     "$client=$this->__client;\n" +
+                                     "$sig=\"@{$this->__signature}@$method\";\n" +
+                                     "$len=count($args);\n" +
+                                     "$args2=array($this->__java);\n" +
+                                     "for($i=0; $i<$len; $i++) {\n" +
+                                     "switch(gettype($val=$args[$i])) {\n" +
+                                     "case 'boolean': array_push($args2,$val); $sig.='@b'; break;\n" +
+                                     "case 'integer': array_push($args2,$val); $sig.='@i'; break;\n" +
+                                     "case 'double': array_push($args2,$val); $sig.='@d'; break;\n" +
+                                     "case 'string': array_push($args2,htmlspecialchars($val,ENT_COMPAT)); $sig.='@s'; break;\n" +
+                                     "case 'array':$sig=\"~INVALID\"; break;\n" +
+                                     "case 'object':\n" +
+                                     "if($val instanceof java_JavaType) {\n" +
+                                     "array_push($args2,$val->__java);\n" +
+                                     "$sig.=\"@o{$val->__signature}\";\n" +
+                                     "}\n" +
+                                     "else {\n" +
+                                     "$sig=\"~INVALID\";\n" +
+                                     "}\n" +
+                                     "break;\n" +
+                                     "case 'resource': array_push($args2,$val); $sig.='@r'; break;\n" +
+                                     "case 'NULL': array_push($args2,$val); $sig.='@N'; break;\n" +
+                                     "case 'unknown type': array_push($args2,$val); $sig.='@u'; break;\n" +
+                                     "default: throw new java_IllegalArgumentException($val);\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "if(array_key_exists($sig,$client->methodCache)) {\n" +
+                                     "$cacheEntry=&$client->methodCache[$sig];\n" +
+                                     "$client->sendBuffer.=$client->preparedToSendBuffer;\n" +
+                                     "if(strlen($client->sendBuffer)>=JAVA_SEND_SIZE) {\n" +
+                                     "if($client->protocol->handler->write($client->sendBuffer)<=0)\n" +
+                                     "throw new java_IllegalStateException(\"Out of sync. Check backend log for details.\");\n" +
+                                     "$client->sendBuffer=null;\n" +
+                                     "}\n" +
+                                     "$client->preparedToSendBuffer=vsprintf($cacheEntry->fmt,$args2);\n" +
+                                     "if($cacheEntry->resultVoid) {\n" +
+                                     "$client->cancelProxyCreationTag +=1;\n" +
+                                     "return null;\n" +
+                                     "} else {\n" +
+                                     "$result=clone($client->cachedJavaPrototype);\n" +
+                                     "$result->__factory=$cacheEntry->factory;\n" +
+                                     "$result->__java=++$client->asyncCtx;\n" +
+                                     "$result->__signature=$cacheEntry->signature;\n" +
+                                     "$result->__cancelProxyCreationTag=++$client->cancelProxyCreationTag;\n" +
+                                     "return $result;\n" +
+                                     "}\n" +
+                                     "} else {\n" +
+                                     "$client->currentCacheKey=$sig;\n" +
+                                     "$retval=parent::__call($method,$args);\n" +
+                                     "return $retval;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_InternalJava extends Java {\n" +
+                                     "function java_InternalJava($proxy) {\n" +
+                                     "$this->__delegate=$proxy;\n" +
+                                     "$this->__java=$proxy->__java;\n" +
+                                     "$this->__signature=$proxy->__signature;\n" +
+                                     "$this->__client=$proxy->__client;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_class extends Java {\n" +
+                                     "function java_class() {\n" +
+                                     "$this->__client=__javaproxy_Client_getClient();\n" +
+                                     "$args=func_get_args();\n" +
+                                     "$name=array_shift($args);\n" +
+                                     "if(is_array($name)) { $args=$name; $name=array_shift($args); }\n" +
+                                     "$delegate=$this->__delegate=$this->__client->referenceObject($name,$args);\n" +
+                                     "$this->__java=$delegate->__java;\n" +
+                                     "$this->__signature=$delegate->__signature;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class JavaClass extends java_class{}\n" +
+                                     "class java_exception extends Exception implements java_JavaType {\n" +
+                                     "public $__serialID,$__java,$__client;\n" +
+                                     "public $__delegate;\n" +
+                                     "public $__signature;\n" +
+                                     "public $__hasDeclaredExceptions;\n" +
+                                     "function java_exception() {\n" +
+                                     "$this->__client=__javaproxy_Client_getClient();\n" +
+                                     "$args=func_get_args();\n" +
+                                     "$name=array_shift($args);\n" +
+                                     "if(is_array($name)) { $args=$name; $name=array_shift($args); }\n" +
+                                     "if (count($args)==0)\n" +
+                                     "Exception::__construct($name);\n" +
+                                     "else\n" +
+                                     "Exception::__construct($args[0]);\n" +
+                                     "$delegate=$this->__delegate=$this->__client->createObject($name,$args);\n" +
+                                     "$this->__java=$delegate->__java;\n" +
+                                     "$this->__signature=$delegate->__signature;\n" +
+                                     "$this->__hasDeclaredExceptions='T';\n" +
+                                     "}\n" +
+                                     "function __cast($type) {\n" +
+                                     "return $this->__delegate->__cast($type);\n" +
+                                     "}\n" +
+                                     "function __sleep() {\n" +
+                                     "$this->__delegate->__sleep();\n" +
+                                     "return array(\"__delegate\");\n" +
+                                     "}\n" +
+                                     "function __wakeup() {\n" +
+                                     "$this->__delegate->__wakeup();\n" +
+                                     "$this->__java=$this->__delegate->__java;\n" +
+                                     "$this->__client=$this->__delegate->__client;\n" +
+                                     "}\n" +
+                                     "function __get($key) {\n" +
+                                     "return $this->__delegate->__get($key);\n" +
+                                     "}\n" +
+                                     "function __set($key,$val) {\n" +
+                                     "$this->__delegate->__set($key,$val);\n" +
+                                     "}\n" +
+                                     "function __call($method,$args) {\n" +
+                                     "return $this->__delegate->__call($method,$args);\n" +
+                                     "}\n" +
+                                     "function __toString() {\n" +
+                                     "return $this->__delegate->__toExceptionString($this->getTraceAsString());\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class JavaException extends java_exception {}\n" +
+                                     "class java_InternalException extends JavaException {\n" +
+                                     "function java_InternalException($proxy,$exception) {\n" +
+                                     "$this->__delegate=$proxy;\n" +
+                                     "$this->__java=$proxy->__java;\n" +
+                                     "$this->__signature=$proxy->__signature;\n" +
+                                     "$this->__client=$proxy->__client;\n" +
+                                     "$this->__hasDeclaredExceptions=$exception;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "class java_JavaProxyProxy extends Java {\n" +
+                                     "function java_JavaProxyProxy($client) {\n" +
+                                     "$this->__client=$client;\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "}\n" +
+                                     "?>\n" +
+                                     "";
+  public static final byte [] bytes = data.getBytes (Util.ASCII);
 }

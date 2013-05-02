@@ -58,19 +58,18 @@ import php.java.bridge.http.IContextFactory;
 final class HttpContextRunner implements Serializable
 {
   private static final long serialVersionUID = 6280393106090501730L;
-  private Request request;
+  private transient Request request;
   private InputStream in;
   private OutputStream out;
   private final AbstractChannel channel;
   private final IContextFactory ctx;
+  private byte shortPathHeader;
 
   public HttpContextRunner (final AbstractChannel channel, final IContextFactory ctx)
   {
     this.channel = channel;
     this.ctx = ctx;
   }
-
-  private byte shortPathHeader;
 
   private int readLength () throws IOException
   {
@@ -179,5 +178,4 @@ final class HttpContextRunner implements Serializable
       channel.shutdown ();
     }
   }
-
 }

@@ -162,6 +162,10 @@ final class MethodCache
       this.cache = cache;
     }
 
+    /**
+     * @param method
+     * @return
+     */
     public Class <?> [] getParameterTypes (final Method method)
     {
       return cache.getParameterTypes ();

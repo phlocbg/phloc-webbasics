@@ -49,7 +49,7 @@ import java.util.List;
 
 /**
  * This class is used to handle requests from the front-end.
- *
+ * 
  * @author jostb
  */
 public final class Request implements IDocHandler
@@ -80,18 +80,24 @@ public final class Request implements IDocHandler
 
   static final Object [] ZERO_ARGS = new Object [0];
 
-  private class SimpleContext
+  private static class SimpleContext
   {
+    /**
+     * @param string
+     */
     public void parseID (final ParserString string)
     {}
 
+    /**
+     * @param response
+     */
     public void setID (final Response response)
     {}
   }
 
-  private class Context extends SimpleContext
+  private static class Context extends SimpleContext
   {
-    protected long id;
+    private long id;
 
     @Override
     public void parseID (final ParserString string)
@@ -234,7 +240,7 @@ public final class Request implements IDocHandler
 
   /**
    * Creates an empty request object.
-   *
+   * 
    * @param bridge
    *        The bridge instance.
    * @see Request#init(InputStream, OutputStream)
@@ -251,7 +257,7 @@ public final class Request implements IDocHandler
   /**
    * This method must be called with the current header option byte. It
    * initializes the request object.
-   *
+   * 
    * @param ch
    *        the current php options.
    */
@@ -263,7 +269,7 @@ public final class Request implements IDocHandler
   /**
    * This method must be called with the current input and output streams. It
    * reads the protocol header and initializes the request object.
-   *
+   * 
    * @param in
    *        The input stream.
    * @param out
@@ -275,7 +281,6 @@ public final class Request implements IDocHandler
   {
     switch (parser.initOptions (in, out))
     {
-
       case Parser.PING:
         bridge.logDebug ("PING - PONG - Closing Request");
         out.write (ZERO, 0, 1);
@@ -698,7 +703,7 @@ public final class Request implements IDocHandler
   /**
    * Start handling requests until EOF. Creates a response object and handles
    * all packets.
-   *
+   * 
    * @throws IOException
    */
   public void handleRequests () throws IOException
@@ -713,7 +718,7 @@ public final class Request implements IDocHandler
   /**
    * Start handling one request. Creates a response object and handles one
    * packet.
-   *
+   * 
    * @throws IOException
    */
   public boolean handleOneRequest () throws IOException
@@ -738,7 +743,7 @@ public final class Request implements IDocHandler
    * AbortException. If you invoke using the reflection interface, check for the
    * wrapped exception, unwrap it, if necessary and re-throw the exception
    * </p>
-   *
+   * 
    * @see Request#handleRequest()
    */
   public static class AbortException extends RuntimeException
@@ -748,7 +753,7 @@ public final class Request implements IDocHandler
 
   /**
    * When within a sub request, handle an IOException as EOF
-   *
+   * 
    * @return EOF if an IOException or EOF occurred, otherwise the parser status
    *         is returned
    */
@@ -768,7 +773,7 @@ public final class Request implements IDocHandler
   /**
    * Handle protocol sub-requests, see <code>R</code> and <code>A</code> in the
    * protocol spec.
-   *
+   * 
    * @return An array of one object. The object is the result of the Apply call.
    * @throws IOException
    * @throws Throwable
@@ -915,7 +920,7 @@ public final class Request implements IDocHandler
   /**
    * Reset the internal state so that a new input and output stream can be used
    * for the next packed. Note that request options (from init()) remain valid.
-   *
+   * 
    * @see #init(InputStream, OutputStream)
    */
   public void reset ()
@@ -927,7 +932,7 @@ public final class Request implements IDocHandler
    * Set a temporary bridge into this request. The bridge and its associated
    * session-/contextFactory will be automatically destroyed when the request is
    * done.
-   *
+   * 
    * @see php.java.bridge.http.IContextFactory#recycle(String)
    * @param bridge
    *        The fresh bridge and its ContextFactory

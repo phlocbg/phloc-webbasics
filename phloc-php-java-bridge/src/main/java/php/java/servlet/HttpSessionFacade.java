@@ -58,7 +58,6 @@ import php.java.bridge.http.IContextFactory;
  */
 final class HttpSessionFacade implements ISession
 {
-
   private HttpSession session;
   private final int timeout;
   private HttpSession sessionCache = null;
@@ -75,9 +74,7 @@ final class HttpSessionFacade implements ISession
   }
 
   private HttpSessionFacade (final IContextFactory ctxFactory,
-                             final ServletContext ctx,
                              final HttpServletRequest req,
-                             final HttpServletResponse res,
                              final short clientIsNew,
                              final int timeout)
   {
@@ -220,16 +217,13 @@ final class HttpSessionFacade implements ISession
   }
 
   public static ISession getFacade (final IContextFactory factory,
-                                    final ServletContext kontext,
                                     final HttpServletRequest req,
-                                    final HttpServletResponse res,
                                     final short clientIsNew,
                                     final int timeout)
   {
-
     if ((clientIsNew != ISession.SESSION_GET) ||
         ((clientIsNew == ISession.SESSION_GET) && req.getSession (false) != null))
-      return new HttpSessionFacade (factory, kontext, req, res, clientIsNew, timeout);
+      return new HttpSessionFacade (factory, req, clientIsNew, timeout);
     return null;
   }
 }

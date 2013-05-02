@@ -58,10 +58,12 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * 
  * @author jostb
  */
-public class RemoteHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse
+public final class RemoteHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse
 {
-
   private final ByteArrayOutputStream buffer;
+  private ServletOutputStream out = null;
+  private PrintWriter writer = null;
+  private boolean committed;
 
   public RemoteHttpServletResponse (final HttpServletResponse res)
   {
@@ -88,8 +90,6 @@ public class RemoteHttpServletResponse extends HttpServletResponseWrapper implem
     return buffer.size ();
   }
 
-  private ServletOutputStream out = null;
-
   @Override
   public ServletOutputStream getOutputStream () throws IOException
   {
@@ -111,8 +111,6 @@ public class RemoteHttpServletResponse extends HttpServletResponseWrapper implem
     };
   }
 
-  private PrintWriter writer = null;
-
   @Override
   public PrintWriter getWriter () throws IOException
   {
@@ -120,8 +118,6 @@ public class RemoteHttpServletResponse extends HttpServletResponseWrapper implem
       return writer;
     return writer = new PrintWriter (getOutputStream ());
   }
-
-  private boolean committed;
 
   @Override
   public boolean isCommitted ()

@@ -1,6 +1,7 @@
 <?php
 # Java.inc -- The PHP/Java Bridge PHP library. Compiled from JavaBridge.inc.
 # Copyright (C) 2003-2009 Jost Boekemeier.
+# Copyright (C) 2013 phloc systems.
 # Distributed under the MIT license, see Options.inc for details.
 # Customization examples:
 # define ("JAVA_HOSTS", 9267); define ("JAVA_SERVLET", false);
@@ -66,7 +67,7 @@ return true;
 }
 if(!defined("JAVA_DISABLE_AUTOLOAD") && function_exists("spl_autoload_register")) spl_autoload_register("java_autoload_function");
 function java_autoload($libs=null) {
-trigger_error('Please use <a href="http://php-java-bridge.sourceforge.net/pjb/webapp.php>tomcat or jee hot deployment</a> instead',E_USER_WARNING);
+trigger_error('Please use <a href="http://php-java-bridge.sourceforge.net/pjb/webapp.php">tomcat or jee hot deployment</a> instead',E_USER_WARNING);
 }
 function java_virtual($path,$return=false) {
 $req=java_context()->getHttpServletRequest();
@@ -1222,9 +1223,9 @@ if (!$peer)
 throw new java_ConnectException("No Java server at $host:$channelName. Error message: $errstr ($errno)");
 }
 if (!$peer) {
-$java=file_exists(ini_get("extension_dir")."/JavaBridge.jar")?ini_get("extension_dir")."/JavaBridge.jar":(java_get_base()."/JavaBridge.jar");
+$java=file_exists(ini_get("extension_dir")."/phloc-php-java-bridge.jar")?ini_get("extension_dir")."/phloc-php-java-bridge.jar":(java_get_base()."/phloc-php-java-bridge.jar");
 if (!file_exists($java))
-throw new java_IOException("Could not find $java in ".getcwd().". Download it from http://sf.net/projects/php-java-bridge/files/Binary%20package/php-java-bridge_".JAVA_PEAR_VERSION."/exploded/JavaBridge.jar/download and try again.");
+throw new java_IOException("Could not find $java in ".getcwd().". Download it from http://sf.net/projects/php-java-bridge/files/Binary%20package/php-java-bridge_".JAVA_PEAR_VERSION."/exploded/phloc-php-java-bridge.jar/download and try again.");
 $java_cmd="java -Dphp.java.bridge.daemon=true -jar \"${java}\" INET_LOCAL:$channelName 0";
 if (!$again)
 throw new java_ConnectException("No Java back end! Please run it with: $java_cmd. Error message: $errstr ($errno)");

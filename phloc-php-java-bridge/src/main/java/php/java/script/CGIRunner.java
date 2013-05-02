@@ -50,7 +50,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Map;
 
-import php.java.bridge.ILogger;
 import php.java.bridge.Util;
 import php.java.bridge.http.HeaderParser;
 import php.java.bridge.http.OutputStreamFactory;
@@ -68,16 +67,14 @@ import php.java.bridge.http.OutputStreamFactory;
 
 public class CGIRunner extends Continuation
 {
-
-  protected Reader reader;
+  protected final Reader reader;
 
   protected CGIRunner (final Reader reader,
                        final Map <String, String> env,
                        final OutputStream out,
                        final OutputStream err,
                        final HeaderParser headerParser,
-                       final ResultProxy resultProxy,
-                       final ILogger logger)
+                       final ResultProxy resultProxy)
   {
     super (env, out, err, headerParser, resultProxy);
     this.reader = reader;

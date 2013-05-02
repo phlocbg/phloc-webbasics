@@ -88,7 +88,7 @@ public class HttpProxy extends CGIRunner
                     final ResultProxy resultProxy,
                     final ILogger logger)
   {
-    super (reader, env, out, err, headerParser, resultProxy, logger);
+    super (reader, env, out, err, headerParser, resultProxy);
   }
 
   @Override
