@@ -46,7 +46,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 
-class NPChannel extends FCGIConnection
+class NPChannel extends AbstractFCGIConnection
 {
   boolean readIsClosed = false;
   boolean writeIsClosed = false;

@@ -62,14 +62,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * This is the main interface of the PHP/Java Bridge. It contains utility
  * methods which can be used by clients.
- *
+ * 
  * @author Sam Ruby (methods coerce and select)
  * @author Kai Londenberg
  * @author Jost Boekemeier
@@ -78,17 +77,16 @@ import java.util.Map;
  */
 public class JavaBridge implements Runnable
 {
-
   /**
    * For PHP4's last_exception_get.
    */
-  public Throwable lastException = null;
-  protected Throwable lastAsyncException; // reported by end_document()
+  public Throwable lastException;
+  Throwable lastAsyncException; // reported by end_document()
 
   // array of objects in use in the current script
   GlobalRef globalRef = new GlobalRef ();
 
-  static Map <String, Session> sessionHash = new HashMap <String, Session> ();
+  static final Map <String, Session> sessionHash = new HashMap <String, Session> ();
 
   /**
    * For internal use only. The input stream for the current channel.
@@ -112,7 +110,7 @@ public class JavaBridge implements Runnable
    * 3: log verbose <br>
    * 4: log debug <br>
    * 5: log method invocations
-   *
+   * 
    * @return The request log level.
    */
   public int getLogLevel ()
@@ -122,7 +120,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Handle requests from the InputStream, write the responses to OutputStream
-   *
+   * 
    * @param in
    *        the InputStream
    * @param out
@@ -149,7 +147,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Handle requests from the InputStream, write the responses to OutputStream
-   *
+   * 
    * @param in
    *        the InputStream
    * @param out
@@ -198,7 +196,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Return the session/jsr223 factory associated with this bridge
-   *
+   * 
    * @return The session/jsr223 factory
    */
   public IJavaBridgeFactory getFactory ()
@@ -212,7 +210,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the connection options
-   *
+   * 
    * @return The Options.
    */
   public Options getOptions ()
@@ -283,7 +281,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Create a new server socket and return it.
-   *
+   * 
    * @param sockname
    *        the socket name
    * @return the server socket
@@ -299,7 +297,7 @@ public class JavaBridge implements Runnable
    * or to System.err and creates and opens the communcation channel. Note: Do
    * not write anything to System.out, this stream is connected with a pipe
    * which waits for the channel name.
-   *
+   * 
    * @param s
    *        an array of [socketname, level, logFile]
    */
@@ -418,7 +416,7 @@ public class JavaBridge implements Runnable
    * <br>
    * Note: Do not write anything to System.out, this stream is connected with a
    * pipe which waits for the channel name.
-   *
+   * 
    * @param s
    *        an array of [socketname, level, logFile] Use Standalone.main()
    * @see php.java.bridge.Standalone#main(String[])
@@ -430,7 +428,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Print a stack trace to the log file.
-   *
+   * 
    * @param t
    *        the throwable
    */
@@ -452,7 +450,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Write a debug message
-   *
+   * 
    * @param msg
    *        The message
    */
@@ -464,7 +462,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Write a fatal message
-   *
+   * 
    * @param msg
    *        The message
    */
@@ -476,7 +474,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Write an error message.
-   *
+   * 
    * @param msg
    *        The message
    */
@@ -488,7 +486,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Write a notice.
-   *
+   * 
    * @param msg
    *        The message
    */
@@ -500,7 +498,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Write a warning.
-   *
+   * 
    * @param msg
    *        The warning.
    */
@@ -580,7 +578,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Create an new instance of a given class, to be called by clients.
-   *
+   * 
    * @param name
    *        The class name
    * @param createInstance
@@ -724,7 +722,7 @@ public class JavaBridge implements Runnable
     else
       if (param == java.lang.String.class)
       {
-        if (!(String.class.isAssignableFrom (arg)) && !(PhpString.class.isAssignableFrom (arg)))
+        if (!(String.class.isAssignableFrom (arg)) && !(AbstractPhpString.class.isAssignableFrom (arg)))
           if (byte [].class.isAssignableFrom (arg))
             w += 32;
           else
@@ -733,7 +731,7 @@ public class JavaBridge implements Runnable
       else
         if (param.isArray ())
         {
-          if (PhpString.class.isAssignableFrom (arg))
+          if (AbstractPhpString.class.isAssignableFrom (arg))
           {
             final Class <?> c = param.getComponentType ();
             if (c == byte.class)
@@ -830,7 +828,7 @@ public class JavaBridge implements Runnable
                       w += 9999;
                   }
                   else
-                    if ((String.class.isAssignableFrom (arg)) || (PhpString.class.isAssignableFrom (arg)))
+                    if ((String.class.isAssignableFrom (arg)) || (AbstractPhpString.class.isAssignableFrom (arg)))
                     {
                       w += 64;
                     }
@@ -951,23 +949,23 @@ public class JavaBridge implements Runnable
 
       if (parms[i] == String.class)
       {
-        if (arg instanceof PhpString)
-          result[i] = ((PhpString) arg).getString ();
+        if (arg instanceof AbstractPhpString)
+          result[i] = ((AbstractPhpString) arg).getString ();
         else
           result[i] = arg.toString ();
       }
       else
-        if (arg instanceof PhpString || arg instanceof String)
+        if (arg instanceof AbstractPhpString || arg instanceof String)
         {
           if (!parms[i].isArray ())
           {
             final Class <?> c = parms[i];
-            final String s = (arg instanceof String) ? (String) arg : ((PhpString) arg).getString ();
+            final String s = (arg instanceof String) ? (String) arg : ((AbstractPhpString) arg).getString ();
             result[i] = s;
             try
             {
               if (c == Boolean.TYPE)
-                result[i] =  Boolean.valueOf (s);
+                result[i] = Boolean.valueOf (s);
               else
                 if (c == Byte.TYPE)
                   result[i] = Byte.valueOf (s);
@@ -998,7 +996,7 @@ public class JavaBridge implements Runnable
           }
           else
           {
-            result[i] = ((PhpString) arg).getBytes ();
+            result[i] = ((AbstractPhpString) arg).getBytes ();
           }
         }
         else
@@ -1159,26 +1157,26 @@ public class JavaBridge implements Runnable
                     }
             }
             else
-              if (arg instanceof PhpString)
+              if (arg instanceof AbstractPhpString)
               {
                 // always prefer strings over byte[]
-                result[i] = ((PhpString) arg).getString ();
+                result[i] = ((AbstractPhpString) arg).getString ();
               }
     }
     return result;
   }
 
-  static abstract class FindMatchingInterface
+  static abstract class AbstractFindMatchingInterface
   {
-    JavaBridge bridge;
-    String name;
-    Object args[];
-    boolean ignoreCase;
+    final JavaBridge bridge;
+    final String name;
+    final Object args[];
+    final boolean ignoreCase;
 
-    public FindMatchingInterface (final JavaBridge bridge,
-                                  final String name,
-                                  final Object args[],
-                                  final boolean ignoreCase)
+    public AbstractFindMatchingInterface (final JavaBridge bridge,
+                                          final String name,
+                                          final Object args[],
+                                          final boolean ignoreCase)
     {
       this.bridge = bridge;
       this.name = name;
@@ -1197,7 +1195,7 @@ public class JavaBridge implements Runnable
   static final FindMatchingInterfaceVoid MATCH_VOID_ICASE = new FindMatchingInterfaceVoid (true);
   static final FindMatchingInterfaceVoid MATCH_VOID_CASE = new FindMatchingInterfaceVoid (false);
 
-  static class FindMatchingInterfaceVoid extends FindMatchingInterface
+  static class FindMatchingInterfaceVoid extends AbstractFindMatchingInterface
   {
     public FindMatchingInterfaceVoid (final boolean b)
     {
@@ -1228,7 +1226,7 @@ public class JavaBridge implements Runnable
     }
   }
 
-  static class FindMatchingInterfaceForInvoke extends FindMatchingInterface
+  static class FindMatchingInterfaceForInvoke extends AbstractFindMatchingInterface
   {
     protected FindMatchingInterfaceForInvoke (final JavaBridge bridge,
                                               final String name,
@@ -1238,11 +1236,11 @@ public class JavaBridge implements Runnable
       super (bridge, name, args, ignoreCase);
     }
 
-    public static FindMatchingInterface getInstance (final JavaBridge bridge,
-                                                     final String name,
-                                                     final Object args[],
-                                                     final boolean ignoreCase,
-                                                     final boolean canModifySecurityPermission)
+    public static AbstractFindMatchingInterface getInstance (final JavaBridge bridge,
+                                                             final String name,
+                                                             final Object args[],
+                                                             final boolean ignoreCase,
+                                                             final boolean canModifySecurityPermission)
     {
       if (canModifySecurityPermission)
         return ignoreCase ? MATCH_VOID_ICASE : MATCH_VOID_CASE;
@@ -1292,7 +1290,7 @@ public class JavaBridge implements Runnable
     }
   }
 
-  static class FindMatchingInterfaceForGetSetProp extends FindMatchingInterface
+  static class FindMatchingInterfaceForGetSetProp extends AbstractFindMatchingInterface
   {
     protected FindMatchingInterfaceForGetSetProp (final JavaBridge bridge,
                                                   final String name,
@@ -1302,11 +1300,11 @@ public class JavaBridge implements Runnable
       super (bridge, name, args, ignoreCase);
     }
 
-    public static FindMatchingInterface getInstance (final JavaBridge bridge,
-                                                     final String name,
-                                                     final Object args[],
-                                                     final boolean ignoreCase,
-                                                     final boolean canModifySecurityPermission)
+    public static AbstractFindMatchingInterface getInstance (final JavaBridge bridge,
+                                                             final String name,
+                                                             final Object args[],
+                                                             final boolean ignoreCase,
+                                                             final boolean canModifySecurityPermission)
     {
       if (canModifySecurityPermission)
         return ignoreCase ? MATCH_VOID_ICASE : MATCH_VOID_CASE;
@@ -1356,22 +1354,22 @@ public class JavaBridge implements Runnable
     }
   }
 
-  private static ClassIterator getClassClassIterator (final Class <?> clazz)
+  private static AbstractClassIterator getClassClassIterator (final Class <?> clazz)
   {
     if (clazz == Class.class)
       return new MetaClassIterator ();
     return new ClassClassIterator ();
   }
 
-  private static abstract class ClassIterator
+  private static abstract class AbstractClassIterator
   {
     Object object;
     Class <?> current;
-    FindMatchingInterface match;
+    AbstractFindMatchingInterface match;
 
-    public static ClassIterator getInstance (final Object object, final FindMatchingInterface match)
+    public static AbstractClassIterator getInstance (final Object object, final AbstractFindMatchingInterface match)
     {
-      ClassIterator c;
+      AbstractClassIterator c;
       if (object instanceof Class <?>)
         c = getClassClassIterator ((Class <?>) object);
       else
@@ -1390,7 +1388,7 @@ public class JavaBridge implements Runnable
     public abstract boolean isVisible (int modifier);
   }
 
-  static class ObjectClassIterator extends ClassIterator
+  static class ObjectClassIterator extends AbstractClassIterator
   {
     private Class <?> next ()
     {
@@ -1418,7 +1416,7 @@ public class JavaBridge implements Runnable
     }
   }
 
-  static class ClassClassIterator extends ClassIterator
+  static class ClassClassIterator extends AbstractClassIterator
   {
     boolean hasNext = false;
 
@@ -1458,7 +1456,7 @@ public class JavaBridge implements Runnable
     }
   }
 
-  static class MetaClassIterator extends ClassIterator
+  static class MetaClassIterator extends AbstractClassIterator
   {
     private Class <?> next ()
     {
@@ -1511,7 +1509,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Invoke a method on a given object, to be called by clients.
-   *
+   * 
    * @param object
    *        The object
    * @param method
@@ -1557,15 +1555,15 @@ public class JavaBridge implements Runnable
       do
       {
         again = false;
-        ClassIterator iter;
+        AbstractClassIterator iter;
         if (selected == null)
         {
-          for (iter = ClassIterator.getInstance (object,
-                                                 FindMatchingInterfaceForInvoke.getInstance (this,
-                                                                                             method,
-                                                                                             args,
-                                                                                             true,
-                                                                                             canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
+          for (iter = AbstractClassIterator.getInstance (object,
+                                                         FindMatchingInterfaceForInvoke.getInstance (this,
+                                                                                                     method,
+                                                                                                     args,
+                                                                                                     true,
+                                                                                                     canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
           {
             final Method methods[] = jclass.getMethods ();
             for (final Method meth : methods)
@@ -1692,7 +1690,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Only for internal use
-   *
+   * 
    * @param ob
    *        The object
    * @return A debug description.
@@ -1704,7 +1702,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Only for internal use
-   *
+   * 
    * @param obj
    *        The object
    * @return A debug description.
@@ -1746,7 +1744,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Only for internal use
-   *
+   * 
    * @param cls
    *        The class
    * @return A debug description.
@@ -1762,7 +1760,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Get or Set a property, to be called by clients.
-   *
+   * 
    * @param pobject
    *        The object
    * @param prop
@@ -1796,12 +1794,12 @@ public class JavaBridge implements Runnable
 
       // first search for the field *exactly*
       again2: // because of security exception
-      for (final ClassIterator iter = ClassIterator.getInstance (object,
-                                                                 FindMatchingInterfaceForGetSetProp.getInstance (this,
-                                                                                                                 prop,
-                                                                                                                 args,
-                                                                                                                 false,
-                                                                                                                 canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
+      for (final AbstractClassIterator iter = AbstractClassIterator.getInstance (object,
+                                                                                 FindMatchingInterfaceForGetSetProp.getInstance (this,
+                                                                                                                                 prop,
+                                                                                                                                 args,
+                                                                                                                                 false,
+                                                                                                                                 canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
       {
         try
         {
@@ -1842,12 +1840,12 @@ public class JavaBridge implements Runnable
 
       // search for a getter/setter, ignore case
       again1: // because of security exception
-      for (final ClassIterator iter = ClassIterator.getInstance (object,
-                                                                 FindMatchingInterfaceForInvoke.getInstance (this,
-                                                                                                             prop,
-                                                                                                             args,
-                                                                                                             true,
-                                                                                                             canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
+      for (final AbstractClassIterator iter = AbstractClassIterator.getInstance (object,
+                                                                                 FindMatchingInterfaceForInvoke.getInstance (this,
+                                                                                                                             prop,
+                                                                                                                             args,
+                                                                                                                             true,
+                                                                                                                             canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
       {
         try
         {
@@ -1889,12 +1887,12 @@ public class JavaBridge implements Runnable
 
       // search for the field, ignore case
       again0: // because of security exception
-      for (final ClassIterator iter = ClassIterator.getInstance (object,
-                                                                 FindMatchingInterfaceForGetSetProp.getInstance (this,
-                                                                                                                 prop,
-                                                                                                                 args,
-                                                                                                                 true,
-                                                                                                                 canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
+      for (final AbstractClassIterator iter = AbstractClassIterator.getInstance (object,
+                                                                                 FindMatchingInterfaceForGetSetProp.getInstance (this,
+                                                                                                                                 prop,
+                                                                                                                                 args,
+                                                                                                                                 true,
+                                                                                                                                 canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
       {
         try
         {
@@ -1972,7 +1970,7 @@ public class JavaBridge implements Runnable
    * Convert Map or Collection into a PHP array, sends the entire array, Map or
    * Collection to the client. This is much more efficient than generating
    * round-trips while iterating over the values of an array, Map or Collection.
-   *
+   * 
    * @param ob
    *        - The object to expand
    * @return The passed <code>ob</code>, will be expanded by the appropriate
@@ -1987,7 +1985,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the PHP object associated with a closure
-   *
+   * 
    * @param closure
    *        The closure
    * @return The php object
@@ -2000,7 +1998,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast a object to a type
-   *
+   * 
    * @param ob
    *        - The object to cast
    * @param type
@@ -2017,7 +2015,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast an object to a string
-   *
+   * 
    * @param ob
    *        - The object to cast
    * @return The passed <code>ob</code>, will be coerced by the appropriate
@@ -2030,7 +2028,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast a throwable to a string
-   *
+   * 
    * @param throwable
    *        The throwable to cast
    * @param trace
@@ -2048,7 +2046,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast an object to an exact number
-   *
+   * 
    * @param ob
    *        - The object to cast
    * @return The passed <code>ob</code>, will be coerced by the appropriate
@@ -2061,7 +2059,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast an object to a boolean value
-   *
+   * 
    * @param ob
    *        - The object to cast
    * @return The passed <code>ob</code>, will be coerced by the appropriate
@@ -2074,7 +2072,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast an object to a inexact value
-   *
+   * 
    * @param ob
    *        - The object to cast
    * @return The passed <code>ob</code>, will be coerced by the appropriate
@@ -2087,7 +2085,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Cast an object to an array
-   *
+   * 
    * @param ob
    *        - The object to cast
    * @return The passed <code>ob</code>, will be coerced by the appropriate
@@ -2102,7 +2100,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Create a new bridge using a factory.
-   *
+   * 
    * @param factory
    *        The session/context factory.
    */
@@ -2113,20 +2111,20 @@ public class JavaBridge implements Runnable
 
   /**
    * Return map for the value (PHP 5 only)
-   *
+   * 
    * @param value
    *        - The value which must be an array or implement Map or Collection.
    * @return The PHP map.
-   * @see php.java.bridge.PhpMap
+   * @see php.java.bridge.AbstractPhpMap
    */
-  public PhpMap getPhpMap (final Object value)
+  public AbstractPhpMap getPhpMap (final Object value)
   {
-    return PhpMap.getPhpMap (value, this);
+    return AbstractPhpMap.getPhpMap (value, this);
   }
 
   /**
    * For internal use only.
-   *
+   * 
    * @param object
    *        The java object
    * @return A list of all visible constructors, methods, fields and inner
@@ -2135,11 +2133,11 @@ public class JavaBridge implements Runnable
   public String inspect (final Object object)
   {
     Class <?> jclass;
-    ClassIterator iter;
+    AbstractClassIterator iter;
     final StringBuilder buf = new StringBuilder ("[");
     buf.append (String.valueOf (Util.getClass (object)));
     buf.append (":\nConstructors:\n");
-    for (iter = ClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
+    for (iter = AbstractClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
     {
       final Constructor <?> [] constructors = jclass.getConstructors ();
       for (final Constructor <?> constructor : constructors)
@@ -2149,7 +2147,7 @@ public class JavaBridge implements Runnable
       }
     }
     buf.append ("\nFields:\n");
-    for (iter = ClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
+    for (iter = AbstractClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
     {
       final Field jfields[] = jclass.getFields ();
       for (final Field jfield : jfields)
@@ -2159,7 +2157,7 @@ public class JavaBridge implements Runnable
       }
     }
     buf.append ("\nMethods:\n");
-    for (iter = ClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
+    for (iter = AbstractClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
     {
       final Method jmethods[] = jclass.getMethods ();
       for (final Method jmethod : jmethods)
@@ -2169,7 +2167,7 @@ public class JavaBridge implements Runnable
       }
     }
     buf.append ("\nClasses:\n");
-    for (iter = ClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
+    for (iter = AbstractClassIterator.getInstance (object, MATCH_VOID_CASE); (jclass = iter.getNext ()) != null;)
     {
       final Class <?> jclasses[] = jclass.getClasses ();
       for (final Class <?> jclasse : jclasses)
@@ -2185,7 +2183,7 @@ public class JavaBridge implements Runnable
   /**
    * Set a new file encoding, used to code and decode strings. Example:
    * setFileEncoding("UTF-8")
-   *
+   * 
    * @param fileEncoding
    *        The file encoding.
    */
@@ -2196,7 +2194,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Check if object is an instance of class.
-   *
+   * 
    * @param ob
    *        The object
    * @param claz
@@ -2211,7 +2209,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns a string representation of the object
-   *
+   * 
    * @param pob
    *        The object
    * @return A string representation.
@@ -2226,7 +2224,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns a string representation of the object
-   *
+   * 
    * @param ob
    *        The object
    * @return A string representation.
@@ -2240,7 +2238,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns a string representation of the object
-   *
+   * 
    * @param ob
    *        The object
    * @return A string representation.
@@ -2254,7 +2252,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns a string representation of the object
-   *
+   * 
    * @param ob
    *        The object
    * @return A string representation.
@@ -2268,7 +2266,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns a string representation of the object
-   *
+   * 
    * @param ob
    *        The Throwable
    * @param trace
@@ -2307,7 +2305,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the JSR223 context.
-   *
+   * 
    * @return The JSR223 context.
    */
   public Object getContext ()
@@ -2320,7 +2318,7 @@ public class JavaBridge implements Runnable
   /**
    * Return a session handle shared among all JavaBridge instances. If it is a
    * HTTP session, the session is shared with the servlet or jsp.
-   *
+   * 
    * @param name
    *        The session name, if any
    * @param clientIsNew
@@ -2352,7 +2350,7 @@ public class JavaBridge implements Runnable
    * Create a dynamic proxy proxy for calling PHP code.<br>
    * Example: <br>
    * java_closure($this, $map);<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @param names
@@ -2363,14 +2361,14 @@ public class JavaBridge implements Runnable
   {
     if (names == null)
       return makeClosure (object);
-    return PhpProcedure.createProxy (getFactory (), null, names, Util.ZERO_PARAM, object);
+    return PhpProcedure.createProxy (getFactory (), null, names, new Class <?> [0], object);
   }
 
   /**
    * Create a dynamic proxy proxy for calling PHP code.<br>
    * Example: <br>
    * java_closure($this, $map, $interfaces);<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @param names
@@ -2388,7 +2386,7 @@ public class JavaBridge implements Runnable
    * Create a dynamic proxy proxy for calling PHP code.<br>
    * Example: <br>
    * java_closure($this, $map, $interfaces);<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @param name
@@ -2407,7 +2405,7 @@ public class JavaBridge implements Runnable
    * Create a dynamic proxy proxy for calling PHP code.<br>
    * Example: <br>
    * java_closure($this, $map, $interfaces);<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @param names
@@ -2426,7 +2424,7 @@ public class JavaBridge implements Runnable
    * Create a dynamic proxy proxy for calling PHP code.<br>
    * Example: <br>
    * java_closure($this, "clickMe");<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @param name
@@ -2437,14 +2435,14 @@ public class JavaBridge implements Runnable
   {
     if (name == null)
       return makeClosure (object);
-    return PhpProcedure.createProxy (getFactory (), name, null, Util.ZERO_PARAM, object);
+    return PhpProcedure.createProxy (getFactory (), name, null, new Class <?> [0], object);
   }
 
   /**
    * Create a dynamic proxy proxy for calling PHP code.<br>
    * Example: <br>
    * java_closure($this, "clickMe", $interfaces);<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @param name
@@ -2467,20 +2465,20 @@ public class JavaBridge implements Runnable
    * Example: <br>
    * java_closure();<br>
    * java_closure($this);<br>
-   *
+   * 
    * @param object
    *        the PHP environment (the php instance)
    * @return the proxy
    */
   public Object makeClosure (final long object)
   {
-    return PhpProcedure.createProxy (getFactory (), null, emptyMap, Util.ZERO_PARAM, object);
+    return PhpProcedure.createProxy (getFactory (), null, emptyMap, new Class <?> [0], object);
   }
 
   /**
    * This method sets a new session factory. Used by the servlet to implement
    * session sharing.
-   *
+   * 
    * @param sessionFactory
    *        The sessionFactory to set.
    */
@@ -2498,7 +2496,7 @@ public class JavaBridge implements Runnable
    * See the JSessionAdapter in the php_java_lib folder. For real
    * serialization/deserialization see the JPersistenceAdapter in the
    * php_java_lib folder.
-   *
+   * 
    * @param serialID
    *        The key
    * @param timeout
@@ -2531,7 +2529,7 @@ public class JavaBridge implements Runnable
    * serialize anything. See the JSessionAdapter in the php_java_lib folder. For
    * real serialization/deserialization see the JPersistenceAdapter in the
    * php_java_lib folder.
-   *
+   * 
    * @param obj
    *        The object
    * @param timeout
@@ -2550,7 +2548,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Checks if a given position exists.
-   *
+   * 
    * @param value
    *        The map.
    * @param pos
@@ -2565,7 +2563,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the object at the posisition.
-   *
+   * 
    * @param value
    *        The map.
    * @param pos
@@ -2579,7 +2577,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Set an object at position.
-   *
+   * 
    * @param value
    *        The map.
    * @param ppos
@@ -2603,7 +2601,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Remove an object from the position.
-   *
+   * 
    * @param value
    *        The map.
    * @param pos
@@ -2616,7 +2614,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Checks if a given position exists.
-   *
+   * 
    * @param value
    *        The list.
    * @param pos
@@ -2639,7 +2637,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the object at the posisition.
-   *
+   * 
    * @param value
    *        The list.
    * @param pos
@@ -2653,7 +2651,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Set an object at position.
-   *
+   * 
    * @param value
    *        The list.
    * @param pos
@@ -2674,7 +2672,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Remove an object from the position.
-   *
+   * 
    * @param value
    *        The list.
    * @param pos
@@ -2694,7 +2692,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Checks if a given position exists.
-   *
+   * 
    * @param value
    *        The array.
    * @param pos
@@ -2708,7 +2706,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Checks if a given position exists.
-   *
+   * 
    * @param table
    *        The table.
    * @param off
@@ -2726,7 +2724,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the object at the posisition.
-   *
+   * 
    * @param value
    *        The array.
    * @param pos
@@ -2742,7 +2740,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Returns the object at the posisition.
-   *
+   * 
    * @param table
    *        The table.
    * @param off
@@ -2770,7 +2768,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Back to synchronous protocol mode
-   *
+   * 
    * @throws Throwable
    */
   public void endDocument () throws Throwable
@@ -2783,7 +2781,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Set an object at position.
-   *
+   * 
    * @param value
    *        The array.
    * @param pos
@@ -2798,7 +2796,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Set an object at position.
-   *
+   * 
    * @param table
    *        The table
    * @param off
@@ -2819,7 +2817,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Remove an object from the position.
-   *
+   * 
    * @param value
    *        The array.
    * @param pos
@@ -2833,7 +2831,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Remove an object from the position.
-   *
+   * 
    * @param table
    *        The table.
    * @param off
@@ -2879,7 +2877,7 @@ public class JavaBridge implements Runnable
   /**
    * Return a new string using the current file encoding (see
    * java_set_file_encoding()).
-   *
+   * 
    * @param b
    *        The byte array
    * @param start
@@ -2897,7 +2895,7 @@ public class JavaBridge implements Runnable
   /**
    * Return a cached string using the current file encoding (see
    * java_set_file_encoding()).
-   *
+   * 
    * @param b
    *        The byte array
    * @param start
@@ -2913,7 +2911,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Create a response object for this bridge, according to options.
-   *
+   * 
    * @return The response object
    */
   Response createResponse ()
@@ -2923,7 +2921,7 @@ public class JavaBridge implements Runnable
 
   /**
    * Check if a given class exists.
-   *
+   * 
    * @param name
    *        The class name
    * @return true if the type exists, false otherwise
@@ -2945,7 +2943,7 @@ public class JavaBridge implements Runnable
   /**
    * Return the first java.lang.RuntimeException/java.lang.Error in a chain or
    * the last java.lang.Exception.
-   *
+   * 
    * @return the last stored exception or null
    */
   public Throwable getLastException ()

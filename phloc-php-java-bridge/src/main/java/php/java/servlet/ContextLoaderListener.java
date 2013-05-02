@@ -26,8 +26,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,12 +37,12 @@ import javax.servlet.ServletContextEvent;
 import php.java.bridge.ILogger;
 import php.java.bridge.ThreadPool;
 import php.java.bridge.Util;
+import php.java.bridge.http.AbstractFCGIConnection;
+import php.java.bridge.http.AbstractFCGIConnectionFactory;
+import php.java.bridge.http.AbstractFCGIIOFactory;
 import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.FCGIConnectException;
-import php.java.bridge.http.FCGIConnection;
-import php.java.bridge.http.FCGIConnectionFactory;
 import php.java.bridge.http.FCGIConnectionPool;
-import php.java.bridge.http.FCGIIOFactory;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
@@ -90,7 +90,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
 
   protected ServletContext context;
 
-  protected FCGIConnectionFactory channelName;
+  protected AbstractFCGIConnectionFactory channelName;
 
   protected String php = null;
   /** default: true. Switched off when fcgi is not configured */
@@ -126,7 +126,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
 
   /**
    * Only for internal use
-   *
+   * 
    * @param ctx
    *        The servlet context
    */
@@ -142,9 +142,9 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       {
         try
         {
-          final Method close = c.getClass ().getMethod ("close", Util.ZERO_PARAM);
+          final Method close = c.getClass ().getMethod ("close");
           close.setAccessible (true);
-          close.invoke (c, Util.ZERO_ARG);
+          close.invoke (c);
         }
         catch (final Exception e)
         {
@@ -225,7 +225,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
       servletContextName = "";
     contextServer = new ContextServer (servletContextName, promiscuous);
 
-    channelName = FCGIConnectionFactory.createChannelFactory (this, promiscuous);
+    channelName = AbstractFCGIConnectionFactory.createChannelFactory (this, promiscuous);
     channelName.findFreePort (canStartFCGI);
 
     try
@@ -738,7 +738,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     }
   }
 
-  private final FCGIIOFactory defaultPoolFactory = new FCGIIOFactory ()
+  private final AbstractFCGIIOFactory defaultPoolFactory = new AbstractFCGIIOFactory ()
   {
     @Override
     public InputStream createInputStream ()
@@ -753,7 +753,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     }
 
     @Override
-    public FCGIConnection connect (final FCGIConnectionFactory name) throws FCGIConnectException
+    public AbstractFCGIConnection connect (final AbstractFCGIConnectionFactory name) throws FCGIConnectException
     {
       return name.connect ();
     }
@@ -792,7 +792,7 @@ public class ContextLoaderListener implements javax.servlet.ServletContextListen
     return logger;
   }
 
-  public FCGIConnectionFactory getChannelName ()
+  public AbstractFCGIConnectionFactory getChannelName ()
   {
     return channelName;
   }

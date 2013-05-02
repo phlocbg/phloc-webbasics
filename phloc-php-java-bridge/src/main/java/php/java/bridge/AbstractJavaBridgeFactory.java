@@ -57,10 +57,9 @@ import php.java.bridge.http.IContext;
  * @see php.java.script.PhpScriptContextFactory
  * @author jostb
  */
-public abstract class JavaBridgeFactory implements IJavaBridgeFactory
+public abstract class AbstractJavaBridgeFactory implements IJavaBridgeFactory
 {
-
-  protected JavaBridge bridge = null;
+  protected JavaBridge bridge;
 
   /**
    * Return a session for the JavaBridge
@@ -133,7 +132,6 @@ public abstract class JavaBridgeFactory implements IJavaBridgeFactory
    */
   public void parseHeader (final Request req, final InputStream in) throws IOException
   {
-
     in.read ();
 
     final byte option = (byte) (0xFF & in.read ());

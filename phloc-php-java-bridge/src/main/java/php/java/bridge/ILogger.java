@@ -46,7 +46,7 @@ package php.java.bridge;
  * 
  * @see php.java.bridge.FileLogger
  * @see php.java.bridge.ChainsawLogger
- * @see php.java.bridge.SimpleLog4jLogger
+ * @see php.java.bridge.AbstractSimpleLog4jLogger
  * @author jostb
  */
 public interface ILogger

@@ -37,11 +37,11 @@ import php.java.bridge.ILogger;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
 import php.java.bridge.http.ContextServer;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.WriterOutputStream;
-import php.java.script.Continuation;
+import php.java.script.AbstractContinuation;
 import php.java.script.IPhpScriptContext;
-import php.java.script.PhpScriptContextDecorator;
+import php.java.script.AbstractPhpScriptContextDecorator;
 import php.java.script.PhpScriptWriter;
 import php.java.script.ResultProxy;
 import php.java.servlet.ContextLoaderListener;
@@ -79,7 +79,7 @@ import php.java.servlet.ServletUtil;
  * 
  * @author jostb
  */
-public class PhpHttpScriptContext extends PhpScriptContextDecorator
+public class PhpHttpScriptContext extends AbstractPhpScriptContextDecorator
 {
 
   /**
@@ -103,16 +103,16 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
 
   /** {@inheritDoc} */
   @Override
-  public Continuation createContinuation (final Reader reader,
+  public AbstractContinuation createContinuation (final Reader reader,
                                           final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
-                                          final HeaderParser headerParser,
+                                          final AbstractHeaderParser headerParser,
                                           final ResultProxy result,
                                           final ILogger logger,
                                           final boolean isCompiled)
   {
-    Continuation cont;
+    AbstractContinuation cont;
     if (isCompiled)
     {
       final ContextLoaderListener listener = ContextLoaderListener.getContextLoaderListener ((ServletContext) getServletContext ());

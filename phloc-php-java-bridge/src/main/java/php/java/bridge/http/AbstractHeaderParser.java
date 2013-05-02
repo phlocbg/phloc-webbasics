@@ -55,16 +55,16 @@ import php.java.bridge.Util;
  * </code>
  * 
  * @author jostb
- * @see HeaderParser#parseBody(byte[], InputStream, OutputStreamFactory,
- *      HeaderParser)
+ * @see AbstractHeaderParser#parseBody(byte[], InputStream, AbstractOutputStreamFactory,
+ *      AbstractHeaderParser)
  */
-public abstract class HeaderParser
+public abstract class AbstractHeaderParser
 {
   /**
    * The default CGI header parser. The default implementation discards
    * everything.
    */
-  public static final HeaderParser DEFAULT_HEADER_PARSER = new SimpleHeaderParser ();
+  public static final AbstractHeaderParser DEFAULT_HEADER_PARSER = new SimpleHeaderParser ();
 
   /**
    * Parse a header
@@ -101,8 +101,8 @@ public abstract class HeaderParser
    */
   public static void parseBody (final byte [] buf,
                                 final InputStream natIn,
-                                final OutputStreamFactory out,
-                                final HeaderParser parser) throws UnsupportedEncodingException, IOException
+                                final AbstractOutputStreamFactory out,
+                                final AbstractHeaderParser parser) throws UnsupportedEncodingException, IOException
   {
     int i = 0, n, s = 0;
     boolean eoh = false;

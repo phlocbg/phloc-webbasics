@@ -147,7 +147,7 @@ public class ServletUtil
 
   public static String nullsToString (final String couldBeNull, final String subForNulls)
   {
-    return (couldBeNull == null ? subForNulls : couldBeNull);
+    return couldBeNull == null ? subForNulls : couldBeNull;
   }
 
   public static String getHeaders (final StringBuilder buf, final Enumeration <?> enumeration)
@@ -198,25 +198,25 @@ public class ServletUtil
       Object objectName = constructor.newInstance (new Object [] { pattern });
 
       Class <?> clazz = Class.forName ("javax.management.MBeanServerFactory");
-      Method method = clazz.getMethod ("findMBeanServer", new Class [] { String.class });
-      final List <?> servers = (List <?>) method.invoke (clazz, new Object [] { null });
+      Method method = clazz.getMethod ("findMBeanServer", String.class);
+      final List <?> servers = (List <?>) method.invoke (clazz, (Object) null);
       final Object server = servers.get (0);
 
       final Class <?> mBeanServerClazz = Class.forName ("javax.management.MBeanServer");
       clazz = Class.forName ("javax.management.QueryExp");
-      method = mBeanServerClazz.getMethod ("queryMBeans", new Class [] { objectNameClazz, clazz });
+      method = mBeanServerClazz.getMethod ("queryMBeans", objectNameClazz, clazz);
 
-      final Set <?> s = (Set <?>) method.invoke (server, new Object [] { objectName, null });
+      final Set <?> s = (Set <?>) method.invoke (server, objectName, null);
       final Iterator <?> ii = s.iterator ();
 
       if (ii.hasNext ())
       {
         clazz = Class.forName ("javax.management.ObjectInstance");
-        method = clazz.getMethod ("getObjectName", Util.ZERO_PARAM);
-        objectName = method.invoke (ii.next (), Util.ZERO_ARG);
+        method = clazz.getMethod ("getObjectName");
+        objectName = method.invoke (ii.next ());
 
-        method = mBeanServerClazz.getMethod ("getAttribute", new Class [] { objectNameClazz, String.class });
-        final Object result = method.invoke (server, new Object [] { objectName, property });
+        method = mBeanServerClazz.getMethod ("getAttribute", objectNameClazz, String.class);
+        final Object result = method.invoke (server, objectName, property);
         return Integer.parseInt (String.valueOf (result));
       }
     }

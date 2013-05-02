@@ -298,8 +298,8 @@ public final class Standalone
     try
     {
       runner = Util.classForName ("php.java.script.JavaBridgeScriptRunner");
-      final Method m = runner.getMethod ("getRequiredInstance", new Class [] { String.class, Boolean.TYPE });
-      r = (JavaBridgeRunner) m.invoke (runner, new Object [] { serverPort, new Boolean (isSecure) });
+      final Method m = runner.getMethod ("getRequiredInstance", String.class, Boolean.TYPE);
+      r = (JavaBridgeRunner) m.invoke (runner, serverPort, Boolean.valueOf (isSecure));
     }
     catch (final Throwable e)
     {

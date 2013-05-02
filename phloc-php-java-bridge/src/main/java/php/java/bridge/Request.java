@@ -125,7 +125,7 @@ public final class Request implements IDocHandler
     return contextCache = new SimpleContext ();
   }
 
-  private abstract class Arg
+  private abstract class AbstractArg
   {
     protected byte type;
     protected Object callObject;
@@ -142,7 +142,7 @@ public final class Request implements IDocHandler
     public abstract void reset ();
   }
 
-  private final class SimpleArg extends Arg
+  private final class SimpleArg extends AbstractArg
   {
     private List <Object> list;
 
@@ -172,13 +172,13 @@ public final class Request implements IDocHandler
     }
   }
 
-  private final class CompositeArg extends Arg
+  private final class CompositeArg extends AbstractArg
   {
     private PhpArray ht = null;
     private int count = 0;
-    private final Arg parent;
+    private final AbstractArg parent;
 
-    public CompositeArg (final Arg parent)
+    public CompositeArg (final AbstractArg parent)
     {
       this.parent = parent;
     }
@@ -199,7 +199,7 @@ public final class Request implements IDocHandler
 
     }
 
-    protected Arg pop ()
+    protected AbstractArg pop ()
     {
       if (ht == null)
         ht = new PhpArray ();
@@ -229,7 +229,7 @@ public final class Request implements IDocHandler
     }
   }
 
-  private Arg arg;
+  private AbstractArg arg;
 
   /**
    * The current response handle or null. There is only one response handle for
@@ -782,7 +782,7 @@ public final class Request implements IDocHandler
   protected Object [] handleSubRequests () throws AbortException, Throwable
   {
     final Response currentResponse = response;
-    final Arg current = arg;
+    final AbstractArg current = arg;
     response = response.copyResponse (); // must keep the current response
                                          // state, for example coerceWriter for
                                          // castToString()
@@ -897,7 +897,7 @@ public final class Request implements IDocHandler
           // no factory.invalidate necessary; ContextRunner will terminate and
           // call factory.destroy()
         case 'R':
-          final Arg ret = arg;
+          final AbstractArg ret = arg;
           arg = current;
 
           // remove retval from the output buffer and return it to the parent.

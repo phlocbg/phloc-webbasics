@@ -88,9 +88,9 @@ public class FCGIConnectionPool
   private int connections = 0;
   private final List <Connection> freeList = new ArrayList <Connection> ();
   private final List <Connection> connectionList = new ArrayList <Connection> ();
-  private final FCGIIOFactory factory;
+  private final AbstractFCGIIOFactory factory;
   private final int maxRequests;
-  private final FCGIConnectionFactory channelName;
+  private final AbstractFCGIConnectionFactory channelName;
 
   /**
    * Represents the connection kept by the pool.
@@ -100,10 +100,10 @@ public class FCGIConnectionPool
   public final class Connection
   {
     protected int ostate, state; // bit0: input closed, bit1: output closed
-    protected FCGIConnectionFactory nchannelName;
-    protected FCGIConnection channel;
+    protected AbstractFCGIConnectionFactory nchannelName;
+    protected AbstractFCGIConnection channel;
     private boolean isClosed;
-    private final FCGIIOFactory nfactory;
+    private final AbstractFCGIIOFactory nfactory;
     private final int nmaxRequests;
     private int counter;
 
@@ -126,7 +126,7 @@ public class FCGIConnectionPool
       return this;
     }
 
-    protected Connection (final FCGIConnectionFactory channelName, final int maxRequests, final FCGIIOFactory factory)
+    protected Connection (final AbstractFCGIConnectionFactory channelName, final int maxRequests, final AbstractFCGIIOFactory factory)
     {
       this.nchannelName = channelName;
       this.nfactory = factory;
@@ -206,12 +206,12 @@ public class FCGIConnectionPool
    * @param factory
    *        A factory for creating In- and OutputStreams.
    * @throws FCGIConnectException
-   * @see FCGIIOFactory
+   * @see AbstractFCGIIOFactory
    */
-  private FCGIConnectionPool (final FCGIConnectionFactory channelName,
+  private FCGIConnectionPool (final AbstractFCGIConnectionFactory channelName,
                               final int limit,
                               final int maxRequests,
-                              final FCGIIOFactory factory) throws FCGIConnectException
+                              final AbstractFCGIIOFactory factory) throws FCGIConnectException
   {
     if (Util.logLevel > 3)
       Util.logDebug ("Creating new connection pool for: " + channelName);
@@ -236,12 +236,12 @@ public class FCGIConnectionPool
    * @param timeout
    *        The pool timeout in milliseconds.
    * @throws FCGIConnectException
-   * @see FCGIIOFactory
+   * @see AbstractFCGIIOFactory
    */
-  public FCGIConnectionPool (final FCGIConnectionFactory channelName,
+  public FCGIConnectionPool (final AbstractFCGIConnectionFactory channelName,
                              final int limit,
                              final int maxRequests,
-                             final FCGIIOFactory factory,
+                             final AbstractFCGIIOFactory factory,
                              final long timeout) throws FCGIConnectException
   {
     this (channelName, limit, maxRequests, factory);

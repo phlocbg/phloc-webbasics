@@ -44,5 +44,5 @@ package php.java.script;
  * An interface which exposes a public clone method, unlike Object.clone() which
  * is protected and throws exceptions... how useless is that?
  */
-public interface CloneableScript extends java.security.cert.CertStoreParameters
+public interface ICloneableScript extends java.security.cert.CertStoreParameters
 {}

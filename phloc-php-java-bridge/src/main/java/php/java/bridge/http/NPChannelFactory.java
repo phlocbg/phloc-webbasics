@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 
 import php.java.bridge.Util;
-import php.java.bridge.Util.Process;
+import php.java.bridge.Util.CGIProcess;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -55,7 +55,7 @@ import php.java.bridge.Util.Process;
  * @author jostb
  */
 
-public class NPChannelFactory extends FCGIConnectionFactory
+public class NPChannelFactory extends AbstractFCGIConnectionFactory
 {
   /**
    * The named pipe prefix
@@ -113,13 +113,13 @@ public class NPChannelFactory extends FCGIConnectionFactory
    * @throws FCGIConnectException
    */
   @Override
-  public FCGIConnection connect () throws FCGIConnectException
+  public AbstractFCGIConnection connect () throws FCGIConnectException
   {
     return doConnect ();
   }
 
   @Override
-  protected Process doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
+  protected CGIProcess doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
   {
     if (proc != null)
       return null;
@@ -141,7 +141,7 @@ public class NPChannelFactory extends FCGIConnectionFactory
       }
     proc = processFactory.createFCGIProcess (new String [] { php, raPath }, includeJava, home, env);
     proc.start ();
-    return (Process) proc;
+    return (CGIProcess) proc;
   }
 
   @Override

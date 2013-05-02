@@ -50,8 +50,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Proxy;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.script.Bindings;
@@ -105,7 +105,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
 
   /**
    * Create a new ScriptEngine from a factory.
-   *
+   * 
    * @param factory
    *        The factory
    * @see #getFactory()
@@ -117,7 +117,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
 
   /**
    * Create a new ScriptEngine with bindings.
-   *
+   * 
    * @param n
    *        the bindings
    */
@@ -231,7 +231,7 @@ public class InvocablePhpScriptEngine extends AbstractPhpScriptEngine implements
   public <T> T getInterface (final Object thiz, final Class <T> clasz)
   {
     checkPhpClosure (thiz);
-    final Class <?> [] interfaces = clasz == null ? Util.ZERO_PARAM : new Class [] { clasz };
+    final Class <?> [] interfaces = clasz == null ? new Class <?> [0] : new Class <?> [] { clasz };
     return (T) PhpProcedure.createProxy (interfaces, (PhpProcedure) Proxy.getInvocationHandler (thiz));
   }
 

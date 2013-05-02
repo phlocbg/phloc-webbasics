@@ -58,7 +58,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * 
  * @author jostb
  */
-public final class RemoteHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse
+public final class RemoteHttpServletResponse extends HttpServletResponseWrapper implements IBufferedResponse
 {
   private final ByteArrayOutputStream buffer;
   private ServletOutputStream out = null;

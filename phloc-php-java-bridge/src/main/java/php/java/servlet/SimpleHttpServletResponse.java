@@ -44,7 +44,7 @@ package php.java.servlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-final class SimpleHttpServletResponse extends HttpServletResponseWrapper implements BufferedResponse
+final class SimpleHttpServletResponse extends HttpServletResponseWrapper implements IBufferedResponse
 {
   private static final byte [] EMPTY_CONTENTS = new byte [0];
 

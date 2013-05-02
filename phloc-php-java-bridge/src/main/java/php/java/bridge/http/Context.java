@@ -46,15 +46,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import php.java.bridge.IInvocable;
 import php.java.bridge.IManaged;
-import php.java.bridge.Invocable;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
 
@@ -66,13 +66,13 @@ import php.java.bridge.Util;
  * function toString() {return "hello java, I am a php script, but in your eyes I am an ordinary java object...";}<br>
  * java_context()-&gt;call(java_closure()) || die("This script must be called from java!");
  * </code>
- *
+ * 
  * @see php.java.script.IPhpScriptContext
  * @see javax.script.ScriptContext
  * @see php.java.script.PhpScriptContext
  * @author jostb
  */
-public class Context implements IManaged, Invocable, IContext
+public class Context implements IManaged, IInvocable, IContext
 {
 
   /** Map of the scope of level GLOBAL_SCOPE */
@@ -196,7 +196,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   *
+   * 
    * @return none
    */
   public Object getHttpServletRequest ()
@@ -206,7 +206,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   *
+   * 
    * @return none
    */
   public Object getServletContext ()
@@ -216,7 +216,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   *
+   * 
    * @return none
    */
   public Object getHttpServletResponse ()
@@ -226,7 +226,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   *
+   * 
    * @return none
    */
   public Object getServlet ()
@@ -236,7 +236,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Throws IllegalStateException
-   *
+   * 
    * @return none
    */
   public Object getServletConfig ()
@@ -290,7 +290,7 @@ public class Context implements IManaged, Invocable, IContext
    * Within a servlet environment use the ContextLoaderListener instead: Either
    * php.java.servlet.Context or the JSR223 Context (see
    * PhpSimpleHttpScriptContext).
-   *
+   * 
    * @param closeable
    *        The procedure close(), will be called before the VM terminates
    */
@@ -318,8 +318,8 @@ public class Context implements IManaged, Invocable, IContext
                   final Object c = ii.next ();
                   try
                   {
-                    final Method close = c.getClass ().getMethod ("close", Util.ZERO_PARAM);
-                    close.invoke (c, Util.ZERO_ARG);
+                    final Method close = c.getClass ().getMethod ("close");
+                    close.invoke (c);
                   }
                   catch (final Exception e)
                   {
@@ -339,7 +339,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Only for internal use
-   *
+   * 
    * @param callable
    *        The callable
    * @return The result of the Callable::call().
@@ -349,14 +349,14 @@ public class Context implements IManaged, Invocable, IContext
   {
     synchronized (lockObject)
     {
-      final Method call = callable.getClass ().getMethod ("call", Util.ZERO_PARAM);
-      return call.invoke (callable, Util.ZERO_ARG);
+      final Method call = callable.getClass ().getMethod ("call");
+      return call.invoke (callable);
     }
   }
 
   /**
    * {@inheritDoc}
-   *
+   * 
    * @throws Exception
    */
   public Object init (final Object callable) throws Exception
@@ -372,7 +372,7 @@ public class Context implements IManaged, Invocable, IContext
 
   /**
    * Only for internal use
-   *
+   * 
    * @param path
    *        the path
    * @return the real path

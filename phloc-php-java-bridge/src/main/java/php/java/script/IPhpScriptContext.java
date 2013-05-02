@@ -49,9 +49,9 @@ import javax.script.ScriptContext;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.IManaged;
-import php.java.bridge.Invocable;
+import php.java.bridge.IInvocable;
 import php.java.bridge.http.ContextServer;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IContext;
 
 /**
@@ -59,7 +59,7 @@ import php.java.bridge.http.IContext;
  * 
  * @author jostb
  */
-public interface IPhpScriptContext extends IManaged, Invocable, IContext, ScriptContext
+public interface IPhpScriptContext extends IManaged, IInvocable, IContext, ScriptContext
 {
 
   /**
@@ -68,14 +68,14 @@ public interface IPhpScriptContext extends IManaged, Invocable, IContext, Script
    * @param kont
    *        The continuation.
    */
-  void setContinuation (Continuation kont);
+  void setContinuation (AbstractContinuation kont);
 
   /**
    * Get the php continuation
    * 
    * @return The HttpProxy
    */
-  Continuation getContinuation ();
+  AbstractContinuation getContinuation ();
 
   /**
    * Create a continuation
@@ -98,11 +98,11 @@ public interface IPhpScriptContext extends IManaged, Invocable, IContext, Script
    *        create a continuation for a compiled or non-compiled script engine
    * @return the Continuation
    */
-  Continuation createContinuation (Reader reader,
+  AbstractContinuation createContinuation (Reader reader,
                                    Map <String, String> env,
                                    OutputStream out,
                                    OutputStream err,
-                                   HeaderParser headerParser,
+                                   AbstractHeaderParser headerParser,
                                    ResultProxy result,
                                    ILogger logger,
                                    boolean isCompiled);

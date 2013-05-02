@@ -30,7 +30,7 @@ import java.util.Map;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.Util;
-import php.java.bridge.Util.Process;
+import php.java.bridge.Util.CGIProcess;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -54,7 +54,7 @@ import php.java.bridge.Util.Process;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-class SocketChannelFactory extends FCGIConnectionFactory
+class SocketChannelFactory extends AbstractFCGIConnectionFactory
 {
   public static final String LOCAL_HOST = "127.0.0.1";
   private int port;
@@ -121,7 +121,7 @@ class SocketChannelFactory extends FCGIConnectionFactory
   }
 
   @Override
-  public FCGIConnection connect () throws FCGIConnectException
+  public AbstractFCGIConnection connect () throws FCGIConnectException
   {
     final Socket s = doConnect (getName (), getPort ());
     return new SocketChannel (s);
@@ -157,7 +157,7 @@ class SocketChannelFactory extends FCGIConnectionFactory
 
   /* Start a fast CGI Server process on this computer. Switched off per default. */
   @Override
-  protected Process doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
+  protected CGIProcess doBind (final Map <String, String> env, final String php, final boolean includeJava) throws IOException
   {
     if (proc != null)
       return null;
@@ -183,7 +183,7 @@ class SocketChannelFactory extends FCGIConnectionFactory
       }
     proc = processFactory.createFCGIProcess (new String [] { php, "-b", port }, includeJava, home, env);
     proc.start ();
-    return (Process) proc;
+    return (CGIProcess) proc;
   }
 
   protected int getPort ()

@@ -46,7 +46,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-class SocketChannel extends FCGIConnection
+class SocketChannel extends AbstractFCGIConnection
 {
   public Socket socket;
 

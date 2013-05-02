@@ -54,7 +54,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import php.java.bridge.ISession;
-import php.java.bridge.JavaBridgeFactory;
+import php.java.bridge.AbstractJavaBridgeFactory;
 import php.java.bridge.Request;
 import php.java.bridge.http.ContextFactory;
 import php.java.bridge.http.IContext;
@@ -71,7 +71,7 @@ import php.java.bridge.http.IContextFactoryVisitor;
  * @see php.java.bridge.http.ContextServer
  * @author jostb
  */
-public class RemoteHttpServletContextFactory extends JavaBridgeFactory implements IContextFactory, Serializable
+public class RemoteHttpServletContextFactory extends AbstractJavaBridgeFactory implements IContextFactory, Serializable
 {
 
   public static final String CONTEXT_FACTORY_ATTRIBUTE = RemoteHttpServletContextFactory.class.getName () + ".ROOT";

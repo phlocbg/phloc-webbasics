@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 /*-*- mode: Java; tab-width:8 -*-*/
-
-package php.java.bridge;
+package php.java.bridge.http;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -41,28 +40,38 @@ package php.java.bridge;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
- * A php string is a UTF-8 coded byte array.
+ * This class represents the physical FastCGI connection.
+ * 
+ * @author jostb
  */
-abstract class PhpString
+public abstract class AbstractFCGIConnection
 {
-  /**
-   * Get the encoded string representation
-   * 
-   * @return The encoded string.
-   */
-  public abstract String getString ();
 
   /**
-   * Get the encoded byte representation
+   * Return the input stream
    * 
-   * @return The encoded bytes.
+   * @return the InputStream
+   * @throws IOException
    */
-  public abstract byte [] getBytes ();
+  public abstract InputStream getInputStream () throws IOException;
 
-  @Override
-  public String toString ()
-  {
-    return getString ();
-  }
+  /**
+   * Return the output stream
+   * 
+   * @return the OutputStream
+   * @throws IOException
+   */
+  public abstract OutputStream getOutputStream () throws IOException;
+
+  /**
+   * Close the connection
+   * 
+   * @throws IOException
+   */
+  public abstract void close () throws IOException;
 }

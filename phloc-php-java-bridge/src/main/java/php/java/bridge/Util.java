@@ -56,6 +56,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -352,12 +353,6 @@ public final class Util
    * Backlog for TCP and unix domain connections.
    */
   public static final int BACKLOG = 20;
-
-  /** Only for internal use */
-  public static final Object [] ZERO_ARG = new Object [0];
-
-  /** Only for internal use */
-  public static final Class <?> [] ZERO_PARAM = new Class <?> [0];
 
   /** Only for internal use */
   public static final byte [] RN = Util.toBytes ("\r\n");
@@ -1260,10 +1255,9 @@ public final class Util
   /**
    * Starts a CGI process and returns the process handle.
    */
-  public static class Process extends java.lang.Process
+  public static class CGIProcess extends Process
   {
-
-    protected java.lang.Process proc;
+    protected Process proc;
     private String [] args;
     private File homeDir;
     private final Map <String, String> env;
@@ -1279,11 +1273,7 @@ public final class Util
     {
       if (isOldPhpVersion)
         return key + val;
-      final StringBuilder buf = new StringBuilder (key);
-      buf.append ("'");
-      buf.append (val);
-      buf.append ("'");
-      return buf.toString ();
+      return key + '\'' + val + '\'';
     }
 
     /**
@@ -1423,7 +1413,7 @@ public final class Util
       }
       catch (final IOException e)
       {
-        Util.logFatal ("Fatal Error: Failed to start PHP " + java.util.Arrays.asList (s) + ", reason: " + e);
+        Util.logFatal ("Fatal Error: Failed to start PHP " + Arrays.asList (s) + ", reason: " + e);
         return false;
       }
       catch (final InterruptedException e)
@@ -1484,7 +1474,7 @@ public final class Util
       }
 
       final int major = Integer.parseInt (str[0]);
-      if ((major > 5))
+      if (major > 5)
         return;
       if (major == 5)
       {
@@ -1504,13 +1494,13 @@ public final class Util
 
       proc = rt.exec (s, hashToStringArray (env), homeDir);
       if (Util.logLevel > 3)
-        Util.logDebug ("Started " + java.util.Arrays.asList (s));
+        Util.logDebug ("Started " + Arrays.asList (s));
     }
 
     protected String [] getTestArgumentArray (final String [] php, final String [] args)
     {
       final List <String> buf = new ArrayList <String> ();
-      buf.addAll (java.util.Arrays.asList (php));
+      buf.addAll (Arrays.asList (php));
       buf.add ("-v");
 
       return buf.toArray (new String [buf.size ()]);
@@ -1519,8 +1509,8 @@ public final class Util
     protected String [] getArgumentArray (final String [] php, final String [] args)
     {
       final List <String> buf = new ArrayList <String> ();
-      buf.addAll (java.util.Arrays.asList (php));
-      buf.addAll (java.util.Arrays.asList (ALLOW_URL_INCLUDE));
+      buf.addAll (Arrays.asList (php));
+      buf.addAll (Arrays.asList (ALLOW_URL_INCLUDE));
       for (int i = 1; i < args.length; i++)
       {
         buf.add (args[i]);
@@ -1590,7 +1580,7 @@ public final class Util
       if (php[0] == null)
         php[0] = "php-cgi";
       if (Util.logLevel > 3)
-        Util.logDebug ("Using php binary: " + java.util.Arrays.asList (php));
+        Util.logDebug ("Using php binary: " + Arrays.asList (php));
 
       /*
        * ... and construct a new argument array for this specific process.
@@ -1606,19 +1596,19 @@ public final class Util
         runPhp (php, getPhpArgs (args, includeJava, cgiDir, pearDir, webInfDir));
       else
         throw new IOException ("PHP not found. Please install php-cgi. PHP test command was: " +
-                               java.util.Arrays.asList (getTestArgumentArray (php, args)) +
+                               Arrays.asList (getTestArgumentArray (php, args)) +
                                " ");
     }
 
-    protected Process (final String [] args,
-                       final boolean includeJava,
-                       final String cgiDir,
-                       final String pearDir,
-                       final String webInfDir,
-                       final File homeDir,
-                       final Map <String, String> env,
-                       final boolean tryOtherLocations,
-                       final boolean preferSystemPhp)
+    protected CGIProcess (final String [] args,
+                          final boolean includeJava,
+                          final String cgiDir,
+                          final String pearDir,
+                          final String webInfDir,
+                          final File homeDir,
+                          final Map <String, String> env,
+                          final boolean tryOtherLocations,
+                          final boolean preferSystemPhp)
     {
       this.args = args;
       this.homeDir = homeDir;
@@ -1654,26 +1644,26 @@ public final class Util
      * @throws IOException
      * @see Util#checkCgiBinary(String)
      */
-    public static Process start (final String [] args,
-                                 final boolean includeJava,
-                                 final String cgiDir,
-                                 final String pearDir,
-                                 final String webInfDir,
-                                 final File homeDir,
-                                 final Map <String, String> env,
-                                 final boolean tryOtherLocations,
-                                 final boolean preferSystemPhp,
-                                 final OutputStream err) throws IOException
+    public static CGIProcess start (final String [] args,
+                                    final boolean includeJava,
+                                    final String cgiDir,
+                                    final String pearDir,
+                                    final String webInfDir,
+                                    final File homeDir,
+                                    final Map <String, String> env,
+                                    final boolean tryOtherLocations,
+                                    final boolean preferSystemPhp,
+                                    final OutputStream err) throws IOException
     {
-      final Process proc = new Process (args,
-                                        includeJava,
-                                        cgiDir,
-                                        pearDir,
-                                        webInfDir,
-                                        homeDir,
-                                        env,
-                                        tryOtherLocations,
-                                        preferSystemPhp);
+      final CGIProcess proc = new CGIProcess (args,
+                                              includeJava,
+                                              cgiDir,
+                                              pearDir,
+                                              webInfDir,
+                                              homeDir,
+                                              env,
+                                              tryOtherLocations,
+                                              preferSystemPhp);
       proc.start ();
       return proc;
     }
@@ -1763,7 +1753,7 @@ public final class Util
    * Starts a CGI process with an error handler attached and returns the process
    * handle.
    */
-  public static class ProcessWithErrorHandler extends Process
+  public static class ProcessWithErrorHandler extends CGIProcess
   {
     StringBuilder error = null;
     InputStream in = null;
@@ -1877,27 +1867,27 @@ public final class Util
      * @throws IOException
      * @see Util#checkCgiBinary(String)
      */
-    public static Process start (final String [] args,
-                                 final boolean includeJava,
-                                 final String cgiDir,
-                                 final String pearDir,
-                                 final String webInfDir,
-                                 final File homeDir,
-                                 final Map <String, String> env,
-                                 final boolean tryOtherLocations,
-                                 final boolean preferSystemPhp,
-                                 final OutputStream err) throws IOException
+    public static CGIProcess start (final String [] args,
+                                    final boolean includeJava,
+                                    final String cgiDir,
+                                    final String pearDir,
+                                    final String webInfDir,
+                                    final File homeDir,
+                                    final Map <String, String> env,
+                                    final boolean tryOtherLocations,
+                                    final boolean preferSystemPhp,
+                                    final OutputStream err) throws IOException
     {
-      final Process proc = new ProcessWithErrorHandler (args,
-                                                        includeJava,
-                                                        cgiDir,
-                                                        pearDir,
-                                                        webInfDir,
-                                                        homeDir,
-                                                        env,
-                                                        tryOtherLocations,
-                                                        preferSystemPhp,
-                                                        err);
+      final CGIProcess proc = new ProcessWithErrorHandler (args,
+                                                           includeJava,
+                                                           cgiDir,
+                                                           pearDir,
+                                                           webInfDir,
+                                                           homeDir,
+                                                           env,
+                                                           tryOtherLocations,
+                                                           preferSystemPhp,
+                                                           err);
       proc.start ();
       return proc;
     }
@@ -1989,7 +1979,7 @@ public final class Util
     Method m = null;
     try
     {
-      m = System.class.getMethod ("getenv", new Class [] { String.class });
+      m = System.class.getMethod ("getenv", String.class);
     }
     catch (final Exception e)
     {/* ignore */}
@@ -2000,7 +1990,7 @@ public final class Util
       {
         try
         {
-          val = (String) m.invoke (System.class, (Object []) new String [] { entries[i] });
+          val = (String) m.invoke (System.class, entries[i]);
         }
         catch (final Exception e)
         {
@@ -2049,8 +2039,8 @@ public final class Util
     // add all non-blacklisted environment entries
     try
     {
-      m = System.class.getMethod ("getenv", ZERO_PARAM);
-      final Map <String, String> map = (Map <String, String>) m.invoke (System.class, ZERO_ARG);
+      m = System.class.getMethod ("getenv");
+      final Map <String, String> map = (Map <String, String>) m.invoke (System.class);
       for (final Map.Entry <String, String> entry : map.entrySet ())
       {
         key = entry.getKey ();

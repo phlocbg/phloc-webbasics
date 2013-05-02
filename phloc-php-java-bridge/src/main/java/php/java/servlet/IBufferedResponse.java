@@ -17,7 +17,9 @@
  */
 /*-*- mode: Java; tab-width:8 -*-*/
 
-package php.java.bridge;
+package php.java.servlet;
+
+import java.io.IOException;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -41,29 +43,7 @@ package php.java.bridge;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Classes which implement this interface are able to call php code. Invocable
- * PHP scripts must end with the line:<br>
- * <code>
- * java_context()-&gt;call(java_closure());
- * </code> <br>
- * 
- * @see php.java.bridge.PhpProcedure#invoke(Object, String, Object[])
- * @see php.java.bridge.PhpProcedure#invoke(Object, java.lang.reflect.Method,
- *      Object[])
- * @author jostb
- */
-public interface Invocable
+interface IBufferedResponse
 {
-
-  /**
-   * Call the java continuation with the current continuation <code>kont</code>
-   * as its argument.
-   * 
-   * @param kont
-   *        The continuation.
-   * @return True on success, false otherwise.
-   * @throws Exception
-   */
-  public boolean call (Object kont) throws Exception;
+  byte [] getBufferContents () throws IOException;
 }

@@ -57,7 +57,7 @@ import java.net.Socket;
  * </blockquote> or set the PHP .ini option <blockquote>
  * <code>java.log_file=@127.0.0.1:4445</code></blockquote>.
  */
-public class ChainsawLogger extends SimpleLog4jLogger
+public class ChainsawLogger extends AbstractSimpleLog4jLogger
 {
   /** The default chainsaw port */
   public static final int DEFAULT_PORT = 4445;
@@ -85,15 +85,14 @@ public class ChainsawLogger extends SimpleLog4jLogger
     final Socket s = new Socket (defaultHost, configuredPort);
     s.close ();
     Class <?> clazz = Class.forName ("org.apache.log4j.net.SocketAppender");
-    final Constructor <?> constructor = clazz.getConstructor (new Class [] { String.class, int.class });
-    final Object socketAppender = constructor.newInstance (new Object [] { defaultHost,
-                                                                          Integer.valueOf (configuredPort) });
+    final Constructor <?> constructor = clazz.getConstructor (String.class, int.class);
+    final Object socketAppender = constructor.newInstance (defaultHost, Integer.valueOf (configuredPort));
     clazz = Class.forName ("org.apache.log4j.BasicConfigurator");
-    Method method = clazz.getMethod ("resetConfiguration", Util.ZERO_PARAM);
-    method.invoke (clazz, Util.ZERO_ARG);
+    Method method = clazz.getMethod ("resetConfiguration");
+    method.invoke (clazz);
     final Class <?> appender = Class.forName ("org.apache.log4j.Appender");
-    method = clazz.getMethod ("configure", new Class [] { appender });
-    method.invoke (clazz, new Object [] { socketAppender });
+    method = clazz.getMethod ("configure", appender);
+    method.invoke (clazz, socketAppender);
   }
 
   protected void init () throws Exception

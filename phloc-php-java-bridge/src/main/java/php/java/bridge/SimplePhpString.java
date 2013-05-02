@@ -41,7 +41,7 @@ package php.java.bridge;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-final class SimplePhpString extends PhpString
+final class SimplePhpString extends AbstractPhpString
 {
   private final String s;
   private final JavaBridge bridge;

@@ -51,8 +51,8 @@ import java.io.Writer;
 import java.util.Map;
 
 import php.java.bridge.Util;
-import php.java.bridge.http.HeaderParser;
-import php.java.bridge.http.OutputStreamFactory;
+import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.AbstractOutputStreamFactory;
 
 /**
  * This class can be used to run a PHP CGI binary. Used only when running local
@@ -60,12 +60,12 @@ import php.java.bridge.http.OutputStreamFactory;
  * a URLReader instead.
  * 
  * @author jostb
- * @see php.java.bridge.http.HttpServer
+ * @see php.java.bridge.http.AbstractHttpServer
  * @see php.java.script.URLReader
  * @see php.java.script.HttpProxy
  */
 
-public class CGIRunner extends Continuation
+public class CGIRunner extends AbstractContinuation
 {
   protected final Reader reader;
 
@@ -73,7 +73,7 @@ public class CGIRunner extends Continuation
                        final Map <String, String> env,
                        final OutputStream out,
                        final OutputStream err,
-                       final HeaderParser headerParser,
+                       final AbstractHeaderParser headerParser,
                        final ResultProxy resultProxy)
   {
     super (env, out, err, headerParser, resultProxy);
@@ -83,9 +83,9 @@ public class CGIRunner extends Continuation
   private Writer writer;
 
   @Override
-  protected void doRun () throws IOException, Util.Process.PhpException
+  protected void doRun () throws IOException, Util.CGIProcess.PhpException
   {
-    final Util.Process proc = Util.ProcessWithErrorHandler.start (new String [] { null },
+    final Util.CGIProcess proc = Util.ProcessWithErrorHandler.start (new String [] { null },
                                                                   false,
                                                                   null,
                                                                   null,
@@ -142,7 +142,7 @@ public class CGIRunner extends Continuation
       }).start ();
 
       final byte [] buf = new byte [Util.BUF_SIZE];
-      HeaderParser.parseBody (buf, natIn, new OutputStreamFactory ()
+      AbstractHeaderParser.parseBody (buf, natIn, new AbstractOutputStreamFactory ()
       {
         @Override
         public OutputStream getOutputStream () throws IOException

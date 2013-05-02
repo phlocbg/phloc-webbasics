@@ -50,9 +50,9 @@ import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
-import php.java.bridge.http.HeaderParser;
-import php.java.bridge.http.OutputStreamFactory;
-import php.java.script.Continuation;
+import php.java.bridge.http.AbstractHeaderParser;
+import php.java.bridge.http.AbstractOutputStreamFactory;
+import php.java.script.AbstractContinuation;
 import php.java.script.ResultProxy;
 
 /**
@@ -62,14 +62,14 @@ import php.java.script.ResultProxy;
  * @see php.java.script.FastCGIProxy
  */
 
-public class HttpFastCGIProxy extends Continuation
+public class HttpFastCGIProxy extends AbstractContinuation
 {
   private final FCGIConnectionPool fcgiConnectionPool;
 
   public HttpFastCGIProxy (final Map <String, String> env,
                            final OutputStream out,
                            final OutputStream err,
-                           final HeaderParser headerParser,
+                           final AbstractHeaderParser headerParser,
                            final ResultProxy resultProxy,
                            final FCGIConnectionPool fcgiConnectionPool)
   {
@@ -78,7 +78,7 @@ public class HttpFastCGIProxy extends Continuation
   }
 
   @Override
-  protected void doRun () throws IOException, Util.Process.PhpException
+  protected void doRun () throws IOException, Util.CGIProcess.PhpException
   {
     final byte [] buf = new byte [FCGIUtil.FCGI_BUF_SIZE];
 
@@ -97,7 +97,7 @@ public class HttpFastCGIProxy extends Continuation
       natOut.writeParams (env);
       natOut.write (FCGIUtil.FCGI_STDIN, FCGIUtil.FCGI_EMPTY_RECORD);
       natOut.close ();
-      HeaderParser.parseBody (buf, natIn, new OutputStreamFactory ()
+      AbstractHeaderParser.parseBody (buf, natIn, new AbstractOutputStreamFactory ()
       {
         @Override
         public OutputStream getOutputStream () throws IOException

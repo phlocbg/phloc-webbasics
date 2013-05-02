@@ -60,11 +60,11 @@ import php.java.bridge.Util;
  * @author jostb
  * @see php.java.bridge.http.HttpRequest
  * @see php.java.bridge.http.HttpResponse
- * @see php.java.script.Continuation
+ * @see php.java.script.AbstractContinuation
  * @see php.java.script.URLReader
- * @see php.java.script.Continuation
+ * @see php.java.script.AbstractContinuation
  */
-public abstract class HttpServer implements Runnable
+public abstract class AbstractHttpServer implements Runnable
 {
   /** Request method GET */
   public static final String PUT = "PUT";
@@ -102,9 +102,9 @@ public abstract class HttpServer implements Runnable
    * Create a new HTTP Server.
    * 
    * @throws IOException
-   * @see HttpServer#destroy()
+   * @see AbstractHttpServer#destroy()
    */
-  protected HttpServer () throws IOException
+  protected AbstractHttpServer () throws IOException
   {
     this (null);
   }
@@ -117,9 +117,9 @@ public abstract class HttpServer implements Runnable
    * @param isSecure
    *        use https instead of http
    * @throws IOException
-   * @see HttpServer#destroy()
+   * @see AbstractHttpServer#destroy()
    */
-  protected HttpServer (final String pserverPort, final boolean isSecure) throws IOException
+  protected AbstractHttpServer (final String pserverPort, final boolean isSecure) throws IOException
   {
     String serverPort = pserverPort;
     this.isSecure = isSecure;
@@ -145,9 +145,9 @@ public abstract class HttpServer implements Runnable
    *        The port# as a string. Prefix may be INET: or INET_LOCAL:
    * @param isSecure
    * @throws IOException
-   * @see HttpServer#destroy()
+   * @see AbstractHttpServer#destroy()
    */
-  protected HttpServer (final String serverPort) throws IOException
+  protected AbstractHttpServer (final String serverPort) throws IOException
   {
     this (serverPort, false);
   }

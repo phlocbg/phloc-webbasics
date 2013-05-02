@@ -47,7 +47,7 @@ import java.lang.reflect.Method;
  * A logger which uses the log4j default appender. Requires that log4j.jar is in
  * the classpath.<br>
  */
-public abstract class SimpleLog4jLogger implements ILogger
+public abstract class AbstractSimpleLog4jLogger implements ILogger
 {
   protected LoggerProxy logger;
 
@@ -60,8 +60,8 @@ public abstract class SimpleLog4jLogger implements ILogger
     protected LoggerProxy () throws Exception
     {
       Class <?> c = Class.forName ("org.apache.log4j.Logger");
-      final Method m = c.getMethod ("getLogger", new Class [] { String.class });
-      nlogger = m.invoke (c, new Object [] { "php.java.bridge.JavaBridge" });
+      final Method m = c.getMethod ("getLogger", String.class);
+      nlogger = m.invoke (c, "php.java.bridge.JavaBridge");
       c = priority = Class.forName ("org.apache.log4j.Priority");
       fatal = c.getField ("FATAL").get (c);
       error = c.getField ("ERROR").get (c);
@@ -71,36 +71,35 @@ public abstract class SimpleLog4jLogger implements ILogger
     }
 
     private Method errorMethod;
+    private Method logMethod;
 
     public synchronized void error (final String string, final Throwable t) throws Exception
     {
       if (errorMethod == null)
-        errorMethod = nlogger.getClass ().getMethod ("error", new Class [] { Object.class, Throwable.class });
-      errorMethod.invoke (nlogger, new Object [] { string, t });
+        errorMethod = nlogger.getClass ().getMethod ("error", Object.class, Throwable.class);
+      errorMethod.invoke (nlogger, string, t);
     }
-
-    private Method logMethod;
 
     public synchronized void log (final int level, final String msg) throws Exception
     {
       if (logMethod == null)
-        logMethod = nlogger.getClass ().getMethod ("log", new Class [] { priority, Object.class });
+        logMethod = nlogger.getClass ().getMethod ("log", priority, Object.class);
       switch (level)
       {
         case 1:
-          logMethod.invoke (nlogger, new Object [] { fatal, msg });
+          logMethod.invoke (nlogger, fatal, msg);
           break;
         case 2:
-          logMethod.invoke (nlogger, new Object [] { error, msg });
+          logMethod.invoke (nlogger, error, msg);
           break;
         case 3:
-          logMethod.invoke (nlogger, new Object [] { info, msg });
+          logMethod.invoke (nlogger, info, msg);
           break;
         case 4:
-          logMethod.invoke (nlogger, new Object [] { debug, msg });
+          logMethod.invoke (nlogger, debug, msg);
           break;
         default:
-          logMethod.invoke (nlogger, new Object [] { warn, msg });
+          logMethod.invoke (nlogger, warn, msg);
           break;
       }
     }
@@ -111,7 +110,7 @@ public abstract class SimpleLog4jLogger implements ILogger
    * 
    * @see php.java.bridge.Util#setDefaultLogger(ILogger)
    */
-  protected SimpleLog4jLogger ()
+  protected AbstractSimpleLog4jLogger ()
   {}
 
   /** {@inheritDoc} */

@@ -51,14 +51,14 @@ import java.util.Map;
  *
  * @author jostb
  */
-abstract class PhpMap
+abstract class AbstractPhpMap
 {
   JavaBridge _bridge;
   Object value;
   Class <?> componentType;
   boolean keyType; // false: key is integer (array), true: key is string (hash)
 
-  protected PhpMap (final JavaBridge bridge, final Object value, final boolean keyType)
+  protected AbstractPhpMap (final JavaBridge bridge, final Object value, final boolean keyType)
   {
     this._bridge = bridge;
     this.value = value;
@@ -122,14 +122,14 @@ abstract class PhpMap
    *        The bridge instance
    * @return The PhpMap
    */
-  public static PhpMap getPhpMap (final Object value, final JavaBridge bridge)
+  public static AbstractPhpMap getPhpMap (final Object value, final JavaBridge bridge)
   {
     if (bridge.logLevel > 3)
       bridge.logDebug ("returning map for " + value.getClass ());
 
     if (value.getClass ().isArray ())
     {
-      return new PhpMap (bridge, value, false)
+      return new AbstractPhpMap (bridge, value, false)
       {
         boolean valid;
         int i;
@@ -175,7 +175,7 @@ abstract class PhpMap
     }
     if (value instanceof Collection)
     {
-      return new PhpMap (bridge, value, false)
+      return new AbstractPhpMap (bridge, value, false)
       {
         int i;
         boolean valid;
@@ -231,7 +231,7 @@ abstract class PhpMap
     }
     if (value instanceof Map)
     {
-      return new PhpMap (bridge, value, true)
+      return new AbstractPhpMap (bridge, value, true)
       {
         Object currentKey;
         Iterator <?> iter;

@@ -54,17 +54,17 @@ import java.util.Map;
 import php.java.bridge.ILogger;
 import php.java.bridge.Util;
 import php.java.bridge.http.FCGIConnectException;
-import php.java.bridge.http.FCGIConnection;
-import php.java.bridge.http.FCGIConnectionFactory;
+import php.java.bridge.http.AbstractFCGIConnection;
+import php.java.bridge.http.AbstractFCGIConnectionFactory;
 import php.java.bridge.http.FCGIConnectionPool;
-import php.java.bridge.http.FCGIIOFactory;
+import php.java.bridge.http.AbstractFCGIIOFactory;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IFCGIProcess;
 import php.java.bridge.http.IFCGIProcessFactory;
-import php.java.bridge.http.OutputStreamFactory;
+import php.java.bridge.http.AbstractOutputStreamFactory;
 
 /**
  * This class can be used to run (and to connect to) a FastCGI server.
@@ -73,7 +73,7 @@ import php.java.bridge.http.OutputStreamFactory;
  * @see php.java.script.servlet.HttpFastCGIProxy
  */
 
-public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
+public class FastCGIProxy extends AbstractContinuation implements IFCGIProcessFactory
 {
   private static final String PROCESSES = Util.THREAD_POOL_MAX_SIZE; // PROCESSES
                                                                      // must ==
@@ -86,14 +86,14 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
                        final Map <String, String> env,
                        final OutputStream out,
                        final OutputStream err,
-                       final HeaderParser headerParser,
+                       final AbstractHeaderParser headerParser,
                        final ResultProxy resultProxy,
                        final ILogger logger)
   {
     super (env, out, err, headerParser, resultProxy);
   }
 
-  private FCGIConnectionFactory channelName;
+  private AbstractFCGIConnectionFactory channelName;
   static final Map <String, String> PROCESS_ENVIRONMENT = getProcessEnvironment ();
 
   private static Map <String, String> getProcessEnvironment ()
@@ -101,7 +101,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
     return new HashMap <String, String> (Util.COMMON_ENVIRONMENT);
   }
 
-  private final FCGIIOFactory defaultPoolFactory = new FCGIIOFactory ()
+  private final AbstractFCGIIOFactory defaultPoolFactory = new AbstractFCGIIOFactory ()
   {
     @Override
     public InputStream createInputStream ()
@@ -116,7 +116,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
     }
 
     @Override
-    public FCGIConnection connect (final FCGIConnectionFactory name) throws FCGIConnectException
+    public AbstractFCGIConnection connect (final AbstractFCGIConnectionFactory name) throws FCGIConnectException
     {
       return name.connect ();
     }
@@ -124,7 +124,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
 
   private FCGIConnectionPool createConnectionPool (final int children) throws FCGIConnectException
   {
-    channelName = FCGIConnectionFactory.createChannelFactory (this, false);
+    channelName = AbstractFCGIConnectionFactory.createChannelFactory (this, false);
     channelName.findFreePort (true);
     channelName.initialize ();
     final File cgiOsDir = Util.TMPDIR;
@@ -205,7 +205,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
   }
 
   @Override
-  protected void doRun () throws IOException, Util.Process.PhpException
+  protected void doRun () throws IOException, Util.CGIProcess.PhpException
   {
     final byte [] buf = new byte [FCGIUtil.FCGI_BUF_SIZE];
     setupFastCGIServer ();
@@ -226,7 +226,7 @@ public class FastCGIProxy extends Continuation implements IFCGIProcessFactory
       natOut.write (FCGIUtil.FCGI_STDIN, FCGIUtil.FCGI_EMPTY_RECORD);
       natOut.close ();
       natOut = null;
-      HeaderParser.parseBody (buf, natIn, new OutputStreamFactory ()
+      AbstractHeaderParser.parseBody (buf, natIn, new AbstractOutputStreamFactory ()
       {
         @Override
         public OutputStream getOutputStream () throws IOException

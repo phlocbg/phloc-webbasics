@@ -23,7 +23,7 @@ import java.io.OutputStream;
 /**
  * A default output stream factory for use with parseBody.
  */
-public abstract class OutputStreamFactory
+public abstract class AbstractOutputStreamFactory
 {
   /**
    * Return an output stream

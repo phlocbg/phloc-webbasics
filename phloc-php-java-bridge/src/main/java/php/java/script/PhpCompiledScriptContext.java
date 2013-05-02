@@ -24,7 +24,7 @@ import java.io.Reader;
 import java.util.Map;
 
 import php.java.bridge.ILogger;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -53,7 +53,7 @@ import php.java.bridge.http.HeaderParser;
  * 
  * @author jostb
  */
-public class PhpCompiledScriptContext extends PhpScriptContextDecorator
+public class PhpCompiledScriptContext extends AbstractPhpScriptContextDecorator
 {
 
   /**
@@ -69,16 +69,16 @@ public class PhpCompiledScriptContext extends PhpScriptContextDecorator
 
   /** {@inheritDoc} */
   @Override
-  public Continuation createContinuation (final Reader reader,
+  public AbstractContinuation createContinuation (final Reader reader,
                                           final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
-                                          final HeaderParser headerParser,
+                                          final AbstractHeaderParser headerParser,
                                           final ResultProxy result,
                                           final ILogger logger,
                                           final boolean isCompiled)
   {
-    Continuation cont;
+    AbstractContinuation cont;
     if (isCompiled)
     {
       cont = new FastCGIProxy (reader, env, out, err, headerParser, result, logger);

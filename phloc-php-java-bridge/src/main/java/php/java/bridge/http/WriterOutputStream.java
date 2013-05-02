@@ -52,7 +52,7 @@ import php.java.bridge.Util;
  * 
  * @author jostb
  */
-public class WriterOutputStream extends DefaultCharsetWriterOutputStream
+public class WriterOutputStream extends AbstractCharsetWriterOutputStream
 {
 
   protected Charset charsetName = Util.DEFAULT_ENCODING;

@@ -42,7 +42,7 @@ package php.java.bridge;
  */
 
 
-final class PhpParserString extends PhpString
+final class PhpParserString extends AbstractPhpString
 {
   ParserString st;
   private final JavaBridge bridge;

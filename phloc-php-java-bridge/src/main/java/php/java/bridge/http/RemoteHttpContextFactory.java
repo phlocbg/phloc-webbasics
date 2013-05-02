@@ -61,9 +61,8 @@ import php.java.bridge.SessionFactory;
  */
 public class RemoteHttpContextFactory extends SessionFactory implements IContextFactory, Serializable
 {
-
   /** The response */
-  private HttpResponse out;
+  private transient HttpResponse out;
 
   private static final long serialVersionUID = -7009009517347609467L;
   private IContext context;
@@ -74,7 +73,6 @@ public class RemoteHttpContextFactory extends SessionFactory implements IContext
   {
     super ();
     this.out = res;
-
     this.id = ContextFactory.EMPTY_CONTEXT_NAME; // dummy
   }
 

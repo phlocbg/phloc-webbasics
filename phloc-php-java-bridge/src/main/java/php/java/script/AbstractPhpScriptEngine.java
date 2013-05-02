@@ -66,7 +66,7 @@ import javax.script.SimpleScriptContext;
 import php.java.bridge.Util;
 import php.java.bridge.http.AbstractChannelName;
 import php.java.bridge.http.ContextServer;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IContext;
 import php.java.bridge.http.IContextFactory;
 import php.java.bridge.http.WriterOutputStream;
@@ -78,7 +78,7 @@ import php.java.bridge.http.WriterOutputStream;
  * @see php.java.script.InvocablePhpScriptEngine
  * @see php.java.script.PhpScriptEngine
  */
-abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements IPhpScriptEngine, CloneableScript
+abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements IPhpScriptEngine, ICloneableScript
 {
 
   /**
@@ -90,7 +90,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
   /**
    * The continuation of the script
    */
-  protected Continuation continuation;
+  protected AbstractContinuation continuation;
   protected Map <String, String> env;
   protected IContextFactory ctx;
 
@@ -247,7 +247,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
     }
   }
 
-  private final class SimpleHeaderParser extends HeaderParser
+  private final class SimpleHeaderParser extends AbstractHeaderParser
   {
     private final WriterOutputStream writer;
 
@@ -287,9 +287,9 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
     }
   }
 
-  protected Continuation getContinuation (final Reader reader, final ScriptContext context) throws IOException
+  protected AbstractContinuation getContinuation (final Reader reader, final ScriptContext context) throws IOException
   {
-    HeaderParser headerParser = HeaderParser.DEFAULT_HEADER_PARSER; // ignore
+    AbstractHeaderParser headerParser = AbstractHeaderParser.DEFAULT_HEADER_PARSER; // ignore
                                                                     // encoding,
                                                                     // we pass
                                                                     // everything
@@ -305,7 +305,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
     if (out instanceof WriterOutputStream)
       headerParser = new SimpleHeaderParser ((WriterOutputStream) out);
 
-    final Continuation kont = phpScriptContext.createContinuation (reader,
+    final AbstractContinuation kont = phpScriptContext.createContinuation (reader,
                                                                    env,
                                                                    out,
                                                                    err,
@@ -563,7 +563,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
     return true;
   }
 
-  private String getEmbeddedStandardHeader (final String filePath) throws IOException
+  private String getEmbeddedStandardHeader () throws IOException
   {
     if (cachedEmbeddedStandardHeader != null)
       return cachedEmbeddedStandardHeader;
@@ -589,7 +589,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
 
   protected String getStandardHeader (final String filePath) throws IOException
   {
-    return filePath == null ? getEmbeddedStandardHeader (filePath) : getSimpleStandardHeader (filePath);
+    return filePath == null ? getEmbeddedStandardHeader () : getSimpleStandardHeader (filePath);
   }
 
   /** {@inheritDoc} */

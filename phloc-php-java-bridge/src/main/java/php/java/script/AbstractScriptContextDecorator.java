@@ -56,12 +56,11 @@ import javax.script.ScriptContext;
  * 
  * @author jostb
  */
-public abstract class ScriptContextDecorator implements ScriptContext
+public abstract class AbstractScriptContextDecorator implements ScriptContext
 {
-
   protected ScriptContext ctx;
 
-  public ScriptContextDecorator (final ScriptContext ctx)
+  public AbstractScriptContextDecorator (final ScriptContext ctx)
   {
     this.ctx = ctx;
   }

@@ -138,7 +138,7 @@ public final class Response
     return new UndeclaredThrowableErrorMarker (o);
   }
 
-  protected abstract class DelegateWriter
+  protected abstract class AbstractDelegateWriter
   {
     protected Class <?> staticType;
 
@@ -154,7 +154,7 @@ public final class Response
     }
   }
 
-  protected abstract class Writer extends DelegateWriter
+  protected abstract class AbstractWriter extends AbstractDelegateWriter
   {
     protected boolean hasDeclaredExceptions;
 
@@ -233,9 +233,9 @@ public final class Response
     }
   }
 
-  protected abstract class WriterWithDelegate extends Writer
+  protected abstract class AbstractWriterWithDelegate extends AbstractWriter
   {
-    protected DelegateWriter delegate;
+    protected AbstractDelegateWriter delegate;
 
     @Override
     public void setType (final Class <?> type)
@@ -245,7 +245,7 @@ public final class Response
     }
   }
 
-  protected class ArrayWriter extends DelegateWriter
+  protected class ArrayWriter extends AbstractDelegateWriter
   {
     @Override
     public boolean setResult (final Object value)
@@ -254,7 +254,7 @@ public final class Response
     }
   }
 
-  protected class ArrayValuesWriter extends DelegateWriter
+  protected class ArrayValuesWriter extends AbstractDelegateWriter
   {
     @Override
     public boolean setResult (final Object value)
@@ -316,7 +316,7 @@ public final class Response
     }
   }
 
-  protected abstract class IncompleteClassicWriter extends WriterWithDelegate
+  protected abstract class AbstractIncompleteClassicWriter extends AbstractWriterWithDelegate
   {
     @Override
     public boolean setResult (final Object value)
@@ -336,9 +336,9 @@ public final class Response
             writeString ((String) value);
           }
           else
-            if (value instanceof PhpString)
+            if (value instanceof AbstractPhpString)
             {
-              writeString (((PhpString) value).getBytes ());
+              writeString (((AbstractPhpString) value).getBytes ());
             }
             else
               if (value instanceof Number)
@@ -366,7 +366,7 @@ public final class Response
     }
   }
 
-  protected abstract class IncompleteArrayValueWriter extends WriterWithDelegate
+  protected abstract class AbstractIncompleteArrayValueWriter extends AbstractWriterWithDelegate
   {
 
     @Override
@@ -377,9 +377,9 @@ public final class Response
         writeNull ();
       }
       else
-        if (value instanceof PhpString)
+        if (value instanceof AbstractPhpString)
         {
-          writeString (((PhpString) value).getBytes ());
+          writeString (((AbstractPhpString) value).getBytes ());
         }
         else
           if (value instanceof PhpExactNumber)
@@ -394,7 +394,7 @@ public final class Response
     }
   }
 
-  protected class ClassicWriter extends IncompleteClassicWriter
+  protected class ClassicWriter extends AbstractIncompleteClassicWriter
   {
 
     @Override
@@ -408,7 +408,7 @@ public final class Response
     }
   }
 
-  protected class DefaultWriter extends WriterWithDelegate
+  protected class DefaultWriter extends AbstractWriterWithDelegate
   {
 
     @Override
@@ -440,9 +440,9 @@ public final class Response
                   }
       }
       else
-        if (value instanceof PhpString)
+        if (value instanceof AbstractPhpString)
         {// No need to check for Request.PhpNumber, this cannot happen.
-          writeString (((PhpString) value).getBytes ());
+          writeString (((AbstractPhpString) value).getBytes ());
         }
         else
           if (!delegate.setResult (value))
@@ -453,7 +453,7 @@ public final class Response
     }
   }
 
-  protected class ArrayValueWriter extends IncompleteArrayValueWriter
+  protected class ArrayValueWriter extends AbstractIncompleteArrayValueWriter
   {
     @Override
     public void setResult (final Object value, final Class <?> type, final boolean hasDeclaredExceptions)
@@ -487,7 +487,7 @@ public final class Response
    * client-side cache is enabled, the client will select an Async or
    * AsyncVoidWriter in the next call.
    */
-  protected class DefaultObjectWriter extends Writer
+  protected class DefaultObjectWriter extends AbstractWriter
   {
     @Override
     public void setResultObject (final Object value)
@@ -535,7 +535,7 @@ public final class Response
    * Writer used by the async protocol. It writes nothing but stores the result
    * in global ref
    */
-  protected final class AsyncWriter extends Writer
+  protected final class AsyncWriter extends AbstractWriter
   {
     @Override
     public boolean isAsync ()
@@ -612,7 +612,7 @@ public final class Response
    * Writer used by the async protocol. It writes nothing and doesn't create a
    * result
    */
-  protected final class AsyncVoidWriter extends Writer
+  protected final class AsyncVoidWriter extends AbstractWriter
   {
     @Override
     public boolean isAsync ()
@@ -658,7 +658,7 @@ public final class Response
     }
   }
 
-  protected final class CoerceWriter extends Writer
+  protected final class CoerceWriter extends AbstractWriter
   {
     @Override
     public void setResult (final Object value, final Class <?> resultType, final boolean hasDeclaredExceptions)
@@ -671,8 +671,8 @@ public final class Response
     public boolean setResult (final Object pvalue)
     {
       Object value = pvalue;
-      if (value instanceof PhpString)
-        value = ((PhpString) value).getString ();
+      if (value instanceof AbstractPhpString)
+        value = ((AbstractPhpString) value).getString ();
 
       if (staticType.isPrimitive ())
       {
@@ -697,9 +697,9 @@ public final class Response
                   writeBoolean (((String) value).length () != 0);
                 }
                 else
-                  if (value instanceof PhpString)
+                  if (value instanceof AbstractPhpString)
                   {
-                    writeBoolean (((PhpString) value).getBytes ().length != 0);
+                    writeBoolean (((AbstractPhpString) value).getBytes ().length != 0);
                   }
                   else
                     if (value instanceof java.lang.Number)
@@ -794,16 +794,16 @@ public final class Response
     }
   }
 
-  private DelegateWriter getDefaultDelegate ()
+  private AbstractDelegateWriter getDefaultDelegate ()
   {
     return new ArrayWriter ();
   }
 
-  private Writer getDefaultWriter ()
+  private AbstractWriter getDefaultWriter ()
   {
     if (bridge.options.preferValues ())
     {
-      WriterWithDelegate writer;
+      AbstractWriterWithDelegate writer;
       writer = new DefaultWriter ();
       writer.delegate = getDefaultDelegate ();
       return writer;
@@ -811,9 +811,9 @@ public final class Response
     return getDefaultObjectWriter ();
   }
 
-  private Writer defaultWriter;
-  private Writer writer, currentWriter, arrayValuesWriter = null, arrayValueWriter = null, coerceWriter = null;
-  private Writer asyncWriter = null, asyncVoidWriter = null, objectWriter = null;
+  private AbstractWriter defaultWriter;
+  private AbstractWriter writer, currentWriter, arrayValuesWriter = null, arrayValueWriter = null, coerceWriter = null;
+  private AbstractWriter asyncWriter = null, asyncVoidWriter = null, objectWriter = null;
 
   protected HexOutputBuffer createBase64OutputBuffer ()
   {
@@ -943,17 +943,17 @@ public final class Response
    * 
    * @see JavaBridge#castToArray(Object)
    */
-  protected Writer setArrayValueWriter ()
+  protected AbstractWriter setArrayValueWriter ()
   {
     return writer = getArrayValueWriter ();
   }
 
-  Writer setArrayValuesWriter ()
+  AbstractWriter setArrayValuesWriter ()
   {
     return writer = getArrayValuesWriter ();
   }
 
-  Writer setCoerceWriter ()
+  AbstractWriter setCoerceWriter ()
   {
     return writer = getCoerceWriter ();
   }
@@ -964,7 +964,7 @@ public final class Response
    * 
    * @return The async. writer
    */
-  public Writer setAsyncWriter ()
+  public AbstractWriter setAsyncWriter ()
   {
     return writer = getAsyncWriter ();
   }
@@ -975,7 +975,7 @@ public final class Response
    * 
    * @return The async. writer
    */
-  public Writer setAsyncVoidWriter ()
+  public AbstractWriter setAsyncVoidWriter ()
   {
     return writer = getAsyncVoidWriter ();
   }
@@ -987,7 +987,7 @@ public final class Response
    * 
    * @return The async. writer
    */
-  public Writer setObjectWriter ()
+  public AbstractWriter setObjectWriter ()
   {
     return currentWriter = getObjectWriter ();
   }
@@ -997,7 +997,7 @@ public final class Response
    * 
    * @return The default writer
    */
-  public Writer setDefaultWriter ()
+  public AbstractWriter setDefaultWriter ()
   {
     return writer = currentWriter = defaultWriter;
   }
@@ -1312,57 +1312,57 @@ public final class Response
     return bridge.getString (b, 0, b.length);
   }
 
-  private Writer getArrayValuesWriter ()
+  private AbstractWriter getArrayValuesWriter ()
   {
     if (arrayValuesWriter == null)
     {
-      final WriterWithDelegate writer = new ClassicWriter ();
+      final AbstractWriterWithDelegate writer = new ClassicWriter ();
       writer.delegate = new ArrayValuesWriter ();
       arrayValuesWriter = writer;
     }
     return arrayValuesWriter;
   }
 
-  private Writer getArrayValueWriter ()
+  private AbstractWriter getArrayValueWriter ()
   {
     if (arrayValueWriter == null)
     {
-      final WriterWithDelegate writer = new ArrayValueWriter ();
+      final AbstractWriterWithDelegate writer = new ArrayValueWriter ();
       writer.delegate = new ArrayValuesWriter ();
       arrayValueWriter = writer;
     }
     return arrayValueWriter;
   }
 
-  private Writer getCoerceWriter ()
+  private AbstractWriter getCoerceWriter ()
   {
     if (coerceWriter == null)
       return coerceWriter = new CoerceWriter ();
     return coerceWriter;
   }
 
-  private Writer getDefaultObjectWriter ()
+  private AbstractWriter getDefaultObjectWriter ()
   {
     if (objectWriter == null)
       return objectWriter = new DefaultObjectWriter ();
     return objectWriter;
   }
 
-  private Writer getObjectWriter ()
+  private AbstractWriter getObjectWriter ()
   {
     if (objectWriter == null)
       return objectWriter = new ObjectWriter ();
     return objectWriter;
   }
 
-  private Writer getAsyncWriter ()
+  private AbstractWriter getAsyncWriter ()
   {
     if (asyncWriter == null)
       return asyncWriter = new AsyncWriter ();
     return asyncWriter;
   }
 
-  private Writer getAsyncVoidWriter ()
+  private AbstractWriter getAsyncVoidWriter ()
   {
     if (asyncVoidWriter == null)
       return asyncVoidWriter = new AsyncVoidWriter ();

@@ -46,24 +46,24 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import php.java.bridge.Util;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 
 /**
  * This class represents the logic to run PHP scripts through CGI, FastCGI or on
  * a remote HTTP server (accessed through URLReader).
  * 
  * @author jostb
- * @see php.java.bridge.http.HttpServer
+ * @see php.java.bridge.http.AbstractHttpServer
  * @see php.java.script.URLReader
  * @see php.java.script.HttpProxy
  */
 
-public abstract class Continuation implements IContinuation, Runnable
+public abstract class AbstractContinuation implements IContinuation, Runnable
 {
   protected Map <String, String> env;
   protected OutputStream out, err;
   // protected Reader reader;
-  protected HeaderParser headerParser;
+  protected AbstractHeaderParser headerParser;
   protected ResultProxy resultProxy;
 
   private final ScriptLock scriptLock = new ScriptLock ();
@@ -120,10 +120,10 @@ public abstract class Continuation implements IContinuation, Runnable
     }
   }
 
-  protected Continuation (final Map <String, String> env,
+  protected AbstractContinuation (final Map <String, String> env,
                           final OutputStream out,
                           final OutputStream err,
-                          final HeaderParser headerParser,
+                          final AbstractHeaderParser headerParser,
                           final ResultProxy resultProxy)
   {
     this.env = env;
@@ -143,7 +143,7 @@ public abstract class Continuation implements IContinuation, Runnable
     {
       phpScript.val = e;
     }
-    catch (final Util.Process.PhpException e1)
+    catch (final Util.CGIProcess.PhpException e1)
     {
       phpScript.val = e1;
     }
@@ -159,7 +159,7 @@ public abstract class Continuation implements IContinuation, Runnable
     }
   }
 
-  protected abstract void doRun () throws IOException, Util.Process.PhpException;
+  protected abstract void doRun () throws IOException, Util.CGIProcess.PhpException;
 
   private final Object lockObject = new Object ();
 

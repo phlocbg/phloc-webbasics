@@ -53,7 +53,7 @@ import php.java.bridge.http.ContextServer;
  * 
  * @author jostb
  */
-public class PhpJavaBridgeRunnerScriptContext extends PhpScriptContextDecorator
+public class PhpJavaBridgeRunnerScriptContext extends AbstractPhpScriptContextDecorator
 {
 
   protected JavaBridgeRunner httpServer;

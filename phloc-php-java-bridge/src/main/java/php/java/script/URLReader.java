@@ -65,7 +65,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
 import php.java.bridge.Util;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 
 /**
  * This class can be used to connect to a HTTP server to allocate and to invoke
@@ -220,7 +220,7 @@ public class URLReader extends Reader implements IScriptReader
    * @see php.java.script.IScriptReader#read(java.util.Map,
    * java.io.OutputStream, php.java.bridge.Util.HeaderParser)
    */
-  public void read (final Map <String, String> env, final OutputStream out, final HeaderParser headerParser) throws IOException
+  public void read (final Map <String, String> env, final OutputStream out, final AbstractHeaderParser headerParser) throws IOException
   {
     InputStream natIn = null;
 
@@ -245,7 +245,7 @@ public class URLReader extends Reader implements IScriptReader
         conn.setRequestProperty (Util.X_JAVABRIDGE_OVERRIDE_HOSTS_REDIRECT, overrideHosts);
       }
       natIn = conn.getInputStream ();
-      if (headerParser != HeaderParser.DEFAULT_HEADER_PARSER)
+      if (headerParser != AbstractHeaderParser.DEFAULT_HEADER_PARSER)
       {
         final StringBuilder sbuf = new StringBuilder ();
         for (final Map.Entry <String, List <String>> element : conn.getHeaderFields ().entrySet ())

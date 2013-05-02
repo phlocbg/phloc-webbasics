@@ -54,7 +54,7 @@ import php.java.bridge.JavaBridgeRunner;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.Util;
 import php.java.bridge.http.ContextServer;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IContext;
 
 /**
@@ -175,16 +175,16 @@ public final class PhpScriptContext extends AbstractPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public Continuation createContinuation (final Reader reader,
+  public AbstractContinuation createContinuation (final Reader reader,
                                           final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
-                                          final HeaderParser headerParser,
+                                          final AbstractHeaderParser headerParser,
                                           final ResultProxy result,
                                           final ILogger logger,
                                           final boolean isCompiled)
   {
-    Continuation cont;
+    AbstractContinuation cont;
 
     if (isCompiled)
       cont = new FastCGIProxy (reader, env, out, err, headerParser, result, logger);

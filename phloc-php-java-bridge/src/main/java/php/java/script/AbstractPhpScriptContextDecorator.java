@@ -52,7 +52,7 @@ import javax.script.Bindings;
 import php.java.bridge.ILogger;
 import php.java.bridge.NotImplementedException;
 import php.java.bridge.http.ContextServer;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 
 /**
  * Abstract class for IPhpScriptContexts. The abstract class itself provides
@@ -62,7 +62,7 @@ import php.java.bridge.http.HeaderParser;
  * 
  * @author jostb
  */
-public abstract class PhpScriptContextDecorator implements IPhpScriptContext
+public abstract class AbstractPhpScriptContextDecorator implements IPhpScriptContext
 {
 
   private final IPhpScriptContext ctx;
@@ -73,7 +73,7 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
    * @param ctx
    *        the PhpScriptContext to decorate.
    */
-  public PhpScriptContextDecorator (final IPhpScriptContext ctx)
+  public AbstractPhpScriptContextDecorator (final IPhpScriptContext ctx)
   {
     this.ctx = ctx;
   }
@@ -163,13 +163,13 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public Continuation getContinuation ()
+  public AbstractContinuation getContinuation ()
   {
     return ctx.getContinuation ();
   }
 
   /** {@inheritDoc} */
-  public void setContinuation (final Continuation kont)
+  public void setContinuation (final AbstractContinuation kont)
   {
     ctx.setContinuation (kont);
   }
@@ -259,11 +259,11 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public Continuation createContinuation (final Reader reader,
+  public AbstractContinuation createContinuation (final Reader reader,
                                           final Map <String, String> env,
                                           final OutputStream out,
                                           final OutputStream err,
-                                          final HeaderParser headerParser,
+                                          final AbstractHeaderParser headerParser,
                                           final ResultProxy result,
                                           final ILogger logger,
                                           final boolean isCompiled)

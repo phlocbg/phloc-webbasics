@@ -45,7 +45,7 @@ package php.java.bridge.http;
  * A procedure class which can be used to capture the HTTP header strings. This
  * template discards all headers.
  */
-public class SimpleHeaderParser extends HeaderParser
+public class SimpleHeaderParser extends AbstractHeaderParser
 {
   /**
    * Template discards parsed header

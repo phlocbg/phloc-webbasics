@@ -47,8 +47,8 @@ import java.io.Reader;
 import java.util.Map;
 
 import php.java.bridge.ILogger;
-import php.java.bridge.Util.Process.PhpException;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.Util.CGIProcess.PhpException;
+import php.java.bridge.http.AbstractHeaderParser;
 
 /**
  * Represents the script continuation. This class can be used to allocate php
@@ -84,7 +84,7 @@ public class HttpProxy extends CGIRunner
                     final Map <String, String> env,
                     final OutputStream out,
                     final OutputStream err,
-                    final HeaderParser headerParser,
+                    final AbstractHeaderParser headerParser,
                     final ResultProxy resultProxy,
                     final ILogger logger)
   {

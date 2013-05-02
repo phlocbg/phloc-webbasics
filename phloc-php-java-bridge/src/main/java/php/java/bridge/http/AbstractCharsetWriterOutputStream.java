@@ -41,48 +41,50 @@ package php.java.bridge.http;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
+
+import php.java.bridge.NotImplementedException;
 
 /**
- * FastCGI In-/OutputStream factory. Override this class if you want to use your
- * own streams.
+ * A PrintWriter backed by an OutputStream.
  * 
  * @author jostb
  */
-public abstract class FCGIIOFactory
+abstract class AbstractCharsetWriterOutputStream extends OutputStream
 {
-  /**
-   * Create a new socket and connect it to the given host/port
-   * 
-   * @param name
-   *        The channel name.
-   * @return The socket
-   * @throws FCGIConnectException
-   */
-  public abstract FCGIConnection connect (FCGIConnectionFactory name) throws FCGIConnectException;
+  protected Writer out;
 
   /**
-   * Create a new InputStream.
+   * Create a new PhpScriptWriter.
    * 
-   * @return The input stream.
-   * @throws FCGIConnectionException
+   * @param out
+   *        The OutputStream
    */
-  public InputStream createInputStream () throws FCGIConnectionException
+  public AbstractCharsetWriterOutputStream (final Writer out)
   {
-    final FCGIConnectionInputStream in = new FCGIConnectionInputStream ();
-    return in;
+    this.out = out;
   }
 
-  /**
-   * Create a new OutputStream.
-   * 
-   * @return The output stream.
-   * @throws FCGIConnectionException
-   */
-  public OutputStream createOutputStream () throws FCGIConnectionException
+  @Override
+  public void write (final int b) throws IOException
   {
-    final FCGIConnectionOutputStream out = new FCGIConnectionOutputStream ();
-    return out;
+    throw new NotImplementedException ();
+  }
+
+  @Override
+  public abstract void write (byte b[], int off, int len) throws IOException;
+
+  @Override
+  public void flush () throws IOException
+  {
+    out.flush ();
+  }
+
+  @Override
+  public void close () throws IOException
+  {
+    flush ();
   }
 }

@@ -27,7 +27,7 @@ import java.util.Map;
 
 import php.java.bridge.ILogger;
 import php.java.bridge.Util;
-import php.java.bridge.Util.Process;
+import php.java.bridge.Util.CGIProcess;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -56,7 +56,7 @@ import php.java.bridge.Util.Process;
  * 
  * @author jostb
  */
-public abstract class FCGIConnectionFactory
+public abstract class AbstractFCGIConnectionFactory
 {
   protected boolean promiscuous;
   protected IFCGIProcessFactory processFactory;
@@ -73,7 +73,7 @@ public abstract class FCGIConnectionFactory
    * @param processFactory
    *        the FCGIProcessFactory
    */
-  public FCGIConnectionFactory (final IFCGIProcessFactory processFactory)
+  public AbstractFCGIConnectionFactory (final IFCGIProcessFactory processFactory)
   {
     this.processFactory = processFactory;
   }
@@ -122,7 +122,7 @@ public abstract class FCGIConnectionFactory
     final byte buf[] = new byte [Util.BUF_SIZE];
     try
     {
-      final Process proc = doBind (env, php, includeJava);
+      final CGIProcess proc = doBind (env, php, includeJava);
       if (proc == null || proc.getInputStream () == null)
         return;
       // / make sure that the wrapper script launcher.sh does not output to
@@ -147,7 +147,7 @@ public abstract class FCGIConnectionFactory
     }
   }
 
-  protected abstract Process doBind (Map <String, String> env, String php, boolean includeJava) throws IOException;
+  protected abstract CGIProcess doBind (Map <String, String> env, String php, boolean includeJava) throws IOException;
 
   protected void bind (@SuppressWarnings ("unused") final ILogger logger) throws InterruptedException, IOException
   {
@@ -208,7 +208,7 @@ public abstract class FCGIConnectionFactory
    * @throws FCGIConnectException
    *         thrown if a IOException occured.
    */
-  public abstract FCGIConnection connect () throws FCGIConnectException;
+  public abstract AbstractFCGIConnection connect () throws FCGIConnectException;
 
   /**
    * For backward compatibility the "JavaBridge" context uses the port 9667
@@ -248,7 +248,7 @@ public abstract class FCGIConnectionFactory
    * 
    * @return The concrete ChannelFactory (NP or Socket channel factory).
    */
-  public static FCGIConnectionFactory createChannelFactory (final IFCGIProcessFactory processFactory,
+  public static AbstractFCGIConnectionFactory createChannelFactory (final IFCGIProcessFactory processFactory,
                                                             final boolean promiscuous)
   {
     if (Util.USE_SH_WRAPPER)

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 /*-*- mode: Java; tab-width:8 -*-*/
+
 package php.java.bridge.http;
 
 /*
@@ -40,38 +41,48 @@ package php.java.bridge.http;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * This class represents the physical FastCGI connection.
+ * FastCGI In-/OutputStream factory. Override this class if you want to use your
+ * own streams.
  * 
  * @author jostb
  */
-public abstract class FCGIConnection
+public abstract class AbstractFCGIIOFactory
 {
+  /**
+   * Create a new socket and connect it to the given host/port
+   * 
+   * @param name
+   *        The channel name.
+   * @return The socket
+   * @throws FCGIConnectException
+   */
+  public abstract AbstractFCGIConnection connect (AbstractFCGIConnectionFactory name) throws FCGIConnectException;
 
   /**
-   * Return the input stream
+   * Create a new InputStream.
    * 
-   * @return the InputStream
-   * @throws IOException
+   * @return The input stream.
+   * @throws FCGIConnectionException
    */
-  public abstract InputStream getInputStream () throws IOException;
+  public InputStream createInputStream () throws FCGIConnectionException
+  {
+    final FCGIConnectionInputStream in = new FCGIConnectionInputStream ();
+    return in;
+  }
 
   /**
-   * Return the output stream
+   * Create a new OutputStream.
    * 
-   * @return the OutputStream
-   * @throws IOException
+   * @return The output stream.
+   * @throws FCGIConnectionException
    */
-  public abstract OutputStream getOutputStream () throws IOException;
-
-  /**
-   * Close the connection
-   * 
-   * @throws IOException
-   */
-  public abstract void close () throws IOException;
+  public OutputStream createOutputStream () throws FCGIConnectionException
+  {
+    final FCGIConnectionOutputStream out = new FCGIConnectionOutputStream ();
+    return out;
+  }
 }

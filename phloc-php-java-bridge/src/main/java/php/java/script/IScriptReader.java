@@ -48,7 +48,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 
 import php.java.bridge.Util;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 
 /**
  * Read data from a URL or from a servlet and write the result to the output
@@ -80,6 +80,6 @@ public interface IScriptReader
    * @throws IOException
    * @throws ServletException
    */
-  public abstract void read (Map <String, String> env, OutputStream out, HeaderParser headerParser) throws IOException;
+  public abstract void read (Map <String, String> env, OutputStream out, AbstractHeaderParser headerParser) throws IOException;
 
 }

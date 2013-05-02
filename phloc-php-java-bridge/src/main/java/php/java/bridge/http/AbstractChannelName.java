@@ -50,8 +50,8 @@ import php.java.bridge.ILogger;
  */
 public abstract class AbstractChannelName
 {
-  protected String name;
-  protected IContextFactory currentCtx;
+  protected final String name;
+  protected final IContextFactory currentCtx;
 
   /**
    * Create a new ChannelName.

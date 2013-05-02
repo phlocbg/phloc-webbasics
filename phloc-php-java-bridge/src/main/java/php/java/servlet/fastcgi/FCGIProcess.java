@@ -54,7 +54,7 @@ import php.java.bridge.http.IFCGIProcess;
  *
  * @author jostb
  */
-public class FCGIProcess extends Util.Process implements IFCGIProcess
+public class FCGIProcess extends Util.CGIProcess implements IFCGIProcess
 {
   String realPath;
 

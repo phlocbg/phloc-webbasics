@@ -64,7 +64,7 @@ import php.java.bridge.http.FCGIConnectionPool;
 import php.java.bridge.http.FCGIInputStream;
 import php.java.bridge.http.FCGIOutputStream;
 import php.java.bridge.http.FCGIUtil;
-import php.java.bridge.http.HeaderParser;
+import php.java.bridge.http.AbstractHeaderParser;
 import php.java.bridge.http.IContextFactory;
 import php.java.servlet.ContextLoaderListener;
 import php.java.servlet.PhpJavaServlet;
@@ -365,8 +365,8 @@ public final class FastCGIServlet extends HttpServlet
    * the specialized in.read(). It is a modified copy of the parseBody.
    * 
    * @throws InterruptedException
-   * @see HeaderParser#parseBody(byte[], InputStream, OutputStream,
-   *      HeaderParser)
+   * @see AbstractHeaderParser#parseBody(byte[], InputStream, OutputStream,
+   *      AbstractHeaderParser)
    */
   private void parseBody (final HttpServletRequest req, final HttpServletResponse res, final Environment env) throws FCGIConnectionException,
                                                                                                              FCGIConnectException,

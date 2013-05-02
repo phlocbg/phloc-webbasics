@@ -55,7 +55,7 @@ import php.java.bridge.http.WriterOutputStream;
  * 
  * @author jostb
  */
-public abstract class AbstractPhpScriptContext extends ScriptContextDecorator implements IPhpScriptContext
+public abstract class AbstractPhpScriptContext extends AbstractScriptContextDecorator implements IPhpScriptContext
 {
 
   public AbstractPhpScriptContext (final ScriptContext ctx)
@@ -63,7 +63,7 @@ public abstract class AbstractPhpScriptContext extends ScriptContextDecorator im
     super (ctx);
   }
 
-  protected Continuation kont;
+  protected AbstractContinuation kont;
 
   /** {@inheritDoc} */
   protected Writer writer;
@@ -104,14 +104,14 @@ public abstract class AbstractPhpScriptContext extends ScriptContextDecorator im
   }
 
   /** @inheritDoc */
-  public void setContinuation (final Continuation kont)
+  public void setContinuation (final AbstractContinuation kont)
   {
     this.kont = kont;
     continuationCalled = false;
   }
 
   /** @inheritDoc */
-  public Continuation getContinuation ()
+  public AbstractContinuation getContinuation ()
   {
     return kont;
   }

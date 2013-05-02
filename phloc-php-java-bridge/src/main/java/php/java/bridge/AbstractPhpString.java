@@ -17,7 +17,7 @@
  */
 /*-*- mode: Java; tab-width:8 -*-*/
 
-package php.java.bridge.http;
+package php.java.bridge;
 
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
@@ -41,51 +41,28 @@ package php.java.bridge.http;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
-
-import php.java.bridge.NotImplementedException;
-
 /**
- * A PrintWriter backed by an OutputStream.
- * 
- * @author jostb
+ * A php string is a UTF-8 coded byte array.
  */
-abstract class DefaultCharsetWriterOutputStream extends OutputStream
+abstract class AbstractPhpString
 {
-
-  protected Writer out;
+  /**
+   * Get the encoded string representation
+   * 
+   * @return The encoded string.
+   */
+  public abstract String getString ();
 
   /**
-   * Create a new PhpScriptWriter.
+   * Get the encoded byte representation
    * 
-   * @param out
-   *        The OutputStream
+   * @return The encoded bytes.
    */
-  public DefaultCharsetWriterOutputStream (final Writer out)
-  {
-    this.out = out;
-  }
+  public abstract byte [] getBytes ();
 
   @Override
-  public void write (final int b) throws IOException
+  public String toString ()
   {
-    throw new NotImplementedException ();
-  }
-
-  @Override
-  public abstract void write (byte b[], int off, int len) throws IOException;
-
-  @Override
-  public void flush () throws IOException
-  {
-    out.flush ();
-  }
-
-  @Override
-  public void close () throws IOException
-  {
-    flush ();
+    return getString ();
   }
 }

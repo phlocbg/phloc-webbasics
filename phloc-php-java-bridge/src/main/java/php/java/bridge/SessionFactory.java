@@ -59,7 +59,7 @@ import php.java.bridge.http.IContext;
  * @see php.java.script.PhpScriptContextFactory
  * @author jostb
  */
-public class SessionFactory extends JavaBridgeFactory
+public class SessionFactory extends AbstractJavaBridgeFactory
 {
 
   /** Check for expired sessions or contexts every 10 minutes */

@@ -48,7 +48,7 @@ import javax.script.ScriptException;
 /**
  * A cloneable CompiledScript
  */
-public class CompiledPhpScript extends CompiledScript implements CloneableScript
+public class CompiledPhpScript extends CompiledScript implements ICloneableScript
 {
   /**
      * 

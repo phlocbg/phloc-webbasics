@@ -55,13 +55,13 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 
+import php.java.bridge.http.AbstractHttpServer;
 import php.java.bridge.http.ChunkedInputStream;
 import php.java.bridge.http.ChunkedOutputStream;
 import php.java.bridge.http.ContextFactory;
 import php.java.bridge.http.ContextServer;
 import php.java.bridge.http.HttpRequest;
 import php.java.bridge.http.HttpResponse;
-import php.java.bridge.http.HttpServer;
 import php.java.bridge.http.RemoteHttpContextFactory;
 
 /**
@@ -75,13 +75,12 @@ import php.java.bridge.http.RemoteHttpContextFactory;
  * &nbsp;&nbsp;&nbsp;&nbsp;runner.destroy();<br>
  * &nbsp;&nbsp;}<br>
  * }<br>
- *
+ * 
  * @author jostb
  * @see php.java.script.PhpScriptContext
  */
-public class JavaBridgeRunner extends HttpServer
+public class JavaBridgeRunner extends AbstractHttpServer
 {
-
   protected static JavaBridgeRunner runner;
   protected final ContextServer contextServer;
 
@@ -99,7 +98,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Create a new JavaBridgeRunner and ContextServer.
-   *
+   * 
    * @throws IOException
    * @see ContextServer
    */
@@ -110,7 +109,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return the ContextServer
-   *
+   * 
    * @return the ContextServer
    */
   public ContextServer getContextServer ()
@@ -120,7 +119,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return a instance.
-   *
+   * 
    * @param serverPort
    *        The server port name
    * @param isSecure
@@ -138,7 +137,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return a instance.
-   *
+   * 
    * @param serverPort
    *        The server port name
    * @param isSecure
@@ -162,7 +161,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return a instance.
-   *
+   * 
    * @param serverPort
    *        The server port name
    * @return a standalone runner
@@ -178,7 +177,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return a instance.
-   *
+   * 
    * @param serverPort
    *        The server port name
    * @return a standalone runner
@@ -200,7 +199,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return a instance.
-   *
+   * 
    * @return a standalone runner
    * @throws IOException
    */
@@ -214,7 +213,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Create a server socket.
-   *
+   * 
    * @param addr
    *        The host address, either INET:port or INET_LOCAL:port
    * @return The server socket.
@@ -229,7 +228,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Create a server socket.
-   *
+   * 
    * @param addr
    *        The host address, either INET:port or INET_LOCAL:port
    * @return The server socket.
@@ -302,7 +301,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Return the current directory to the browser
-   *
+   * 
    * @param fullName
    *        The full name of the file
    * @param f
@@ -394,33 +393,33 @@ public class JavaBridgeRunner extends HttpServer
     {
       final Class <?> c = Class.forName ("javax.script.ScriptEngineManager");
       Object o = c.newInstance ();
-      final Method ex = c.getMethod ("getEngineByExtension", new Class [] { String.class });
-      if (ex.invoke (o, (Object []) new String [] { "php" }) == null)
+      final Method ex = c.getMethod ("getEngineByExtension", String.class);
+      if (ex.invoke (o, "php") == null)
       {
         out.println ("Warning: required jar for PHP ScriptEngineManager not found.<br><br>");
       }
 
-      final Method e = c.getMethod ("getEngineFactories", new Class [] {});
-      final List <?> factories = (List <?>) e.invoke (o, new Object [] {});
+      final Method e = c.getMethod ("getEngineFactories");
+      final List <?> factories = (List <?>) e.invoke (o);
       final StringBuilder buf = new StringBuilder ();
       for (final Iterator <?> ii = factories.iterator (); ii.hasNext ();)
       {
         o = ii.next ();
-        final Method getName = o.getClass ().getMethod ("getEngineName", new Class [] {});
-        final Method getVersion = o.getClass ().getMethod ("getEngineVersion", new Class [] {});
-        final Method getNames = o.getClass ().getMethod ("getNames", new Class [] {});
-        final Method getExtensions = o.getClass ().getMethod ("getExtensions", new Class [] {});
+        final Method getName = o.getClass ().getMethod ("getEngineName");
+        final Method getVersion = o.getClass ().getMethod ("getEngineVersion");
+        final Method getNames = o.getClass ().getMethod ("getNames");
+        final Method getExtensions = o.getClass ().getMethod ("getExtensions");
         buf.append ("<li>");
-        buf.append (getName.invoke (o, new Object [] {}));
+        buf.append (getName.invoke (o));
         buf.append (", ");
         buf.append ("ver.: ");
-        buf.append (getVersion.invoke (o, new Object [] {}));
+        buf.append (getVersion.invoke (o));
         buf.append (", ");
         buf.append ("alias: ");
-        buf.append (getNames.invoke (o, new Object [] {}));
+        buf.append (getNames.invoke (o));
         buf.append (", ");
         buf.append (".ext: ");
-        buf.append (getExtensions.invoke (o, new Object [] {}));
+        buf.append (getExtensions.invoke (o));
         buf.append ("</li>");
         out.println (buf);
         buf.setLength (0);
@@ -448,8 +447,8 @@ public class JavaBridgeRunner extends HttpServer
    * the java ext dirs (usually /usr/share/java/ext or
    * /usr/java/packages/lib/ext) and start the HTTP server: java -jar
    * JavaBridge.jar HTTP_LOCAL:8080. Browse to http://localhost:8080/test.php.
-   *
-   * @param f
+   * 
+   * @param name
    *        The full name as a file
    * @param params
    *        The request parameter
@@ -474,7 +473,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Display a simple text file
-   *
+   * 
    * @param f
    *        The full name as a file
    * @param params
@@ -517,7 +516,7 @@ public class JavaBridgeRunner extends HttpServer
    * java_require("http://localhost:8080/JavaBridge/java/Java.inc"); Since each
    * script may also consume a HttpServer continuation (PUT ...), there cannot
    * be more than THREAD_POOL_MAX_SIZE/2 GET requests.
-   *
+   * 
    * @param req
    *        The HttpRequest
    * @param res
@@ -534,7 +533,7 @@ public class JavaBridgeRunner extends HttpServer
   /**
    * Handle doGet requests. For example
    * java_require("http://localhost:8080/JavaBridge/java/Java.inc");
-   *
+   * 
    * @param req
    *        The HttpRequest
    * @param res
@@ -653,7 +652,7 @@ public class JavaBridgeRunner extends HttpServer
 
   /**
    * Wait for the runner to finish
-   *
+   * 
    * @throws InterruptedException
    */
   public void waitFor () throws InterruptedException

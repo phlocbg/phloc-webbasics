@@ -50,7 +50,7 @@ import javax.script.ScriptContext;
  * 
  * @author jostb
  */
-public class PhpSecureScriptContext extends PhpScriptContextDecorator
+public class PhpSecureScriptContext extends AbstractPhpScriptContextDecorator
 {
 
   /**
