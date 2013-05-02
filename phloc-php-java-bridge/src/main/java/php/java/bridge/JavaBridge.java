@@ -397,7 +397,7 @@ public class JavaBridge implements Runnable
         else
         {
           Util.logDebug ("Starting new bridge thread");
-          final Thread t = new Util.Thread (bridge);
+          final Thread t = new Util.UtilThread (bridge);
           t.start ();
         }
       }

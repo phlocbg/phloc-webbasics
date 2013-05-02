@@ -134,7 +134,7 @@ public abstract class AbstractHttpServer implements Runnable
     }
     catch (final SecurityException e)
     {/* ignore */}
-    httpServer = new Util.Thread (this, "JavaBridgeHttpServer");
+    httpServer = new Util.UtilThread (this, "JavaBridgeHttpServer");
     httpServer.start ();
   }
 
@@ -330,7 +330,7 @@ public abstract class AbstractHttpServer implements Runnable
       if (pool == null)
       {
         Util.logDebug ("Starting new HTTP server thread");
-        (new Util.Thread (new Runner (sock), Util.EXTENSION_NAME + "HttpServerRunner")).start ();
+        (new Util.UtilThread (new Runner (sock), Util.EXTENSION_NAME + "HttpServerRunner")).start ();
       }
       else
       {

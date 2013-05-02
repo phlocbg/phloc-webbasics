@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
-import php.java.bridge.Util.Thread;
+import php.java.bridge.Util.UtilThread;
 import php.java.bridge.http.IContext;
 
 /**
@@ -160,7 +160,7 @@ public class SessionFactory extends AbstractJavaBridgeFactory
   protected static class SessionTimer implements Runnable
   {
     private final List <Runnable> jobs = new Vector <Runnable> ();
-    private final Thread thread;
+    private final UtilThread thread;
 
     public SessionTimer ()
     {
@@ -172,7 +172,7 @@ public class SessionFactory extends AbstractJavaBridgeFactory
        * (SessionFactory.class));
        */
 
-      thread = (new Util.Thread (this, "JavaBridgeSessionTimer"));
+      thread = (new Util.UtilThread (this, "JavaBridgeSessionTimer"));
       thread.start ();
     }
 

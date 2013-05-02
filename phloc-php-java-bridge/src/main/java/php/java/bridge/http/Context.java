@@ -304,7 +304,7 @@ public class Context implements IManaged, IInvocable, IContext
         registeredHook = true;
         try
         {
-          Runtime.getRuntime ().addShutdownHook (new Util.Thread ()
+          Runtime.getRuntime ().addShutdownHook (new Util.UtilThread ()
           {
             @Override
             public void run ()

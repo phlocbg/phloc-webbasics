@@ -367,7 +367,7 @@ public final class Standalone
         System.exit (12);
       }
 
-      new Util.Thread (new Runnable ()
+      new Util.UtilThread (new Runnable ()
       {
         public void run ()
         {
