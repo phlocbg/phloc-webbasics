@@ -43,6 +43,7 @@ package php.java.bridge.http;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 import php.java.bridge.Util;
 
@@ -54,7 +55,7 @@ import php.java.bridge.Util;
 public class WriterOutputStream extends DefaultCharsetWriterOutputStream
 {
 
-  protected String charsetName = Util.DEFAULT_ENCODING;
+  protected Charset charsetName = Util.DEFAULT_ENCODING;
   private boolean written = false;
 
   /**
@@ -62,7 +63,7 @@ public class WriterOutputStream extends DefaultCharsetWriterOutputStream
    * 
    * @param charsetName
    */
-  public void setEncoding (final String charsetName)
+  public void setEncoding (final Charset charsetName)
   {
     if (written)
       throw new IllegalStateException ("setEncoding");

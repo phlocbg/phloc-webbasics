@@ -42,6 +42,7 @@
 package php.java.bridge;
 
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -50,7 +51,7 @@ import java.util.Date;
 class FileLogger implements ILogger
 {
   static boolean haveDateFormat = true;
-  private static Object _form;
+  private static DateFormat _form;
   private boolean isInit = false;
 
   private void init ()
@@ -85,7 +86,7 @@ class FileLogger implements ILogger
     {
       if (_form == null)
         _form = new java.text.SimpleDateFormat ("MMM dd HH:mm:ss", java.util.Locale.ENGLISH);
-      return ((java.text.SimpleDateFormat) _form).format (new Date ());
+      return _form.format (new Date ());
     }
     catch (final Throwable t)
     {
@@ -104,16 +105,7 @@ class FileLogger implements ILogger
   {
     if (!isInit)
       init ();
-    byte [] bytes = null;
-    try
-    {
-      bytes = s.getBytes (Util.UTF8);
-    }
-    catch (final java.io.UnsupportedEncodingException e)
-    {
-      Util.printStackTrace (e);
-      bytes = s.getBytes ();
-    }
+    final byte [] bytes = s.getBytes (Util.UTF8);
     Util.logStream.write (bytes, 0, bytes.length);
     Util.logStream.println ("");
     Util.logStream.flush ();

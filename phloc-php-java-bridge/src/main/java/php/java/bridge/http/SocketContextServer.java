@@ -45,10 +45,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import php.java.bridge.AppThreadPool;
 import php.java.bridge.ILogger;
@@ -79,7 +78,7 @@ public final class SocketContextServer implements Runnable, IContextServer
 {
   private final AppThreadPool threadPool;
   private ISocketFactory serverSocket = null;
-  protected List sockets = Collections.synchronizedList (new ArrayList ());
+  protected List <Socket> sockets = new Vector <Socket> ();
   private ILogger logger;
   private final String contextName;
 
@@ -247,9 +246,9 @@ public final class SocketContextServer implements Runnable, IContextServer
   {
     synchronized (sockets)
     {
-      for (final Iterator ii = sockets.iterator (); ii.hasNext ();)
+      for (final Iterator <Socket> ii = sockets.iterator (); ii.hasNext ();)
       {
-        final Socket sock = (Socket) ii.next ();
+        final Socket sock = ii.next ();
         ii.remove ();
         try
         {

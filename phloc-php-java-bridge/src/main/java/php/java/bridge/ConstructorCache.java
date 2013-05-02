@@ -51,12 +51,12 @@ import java.util.Map;
  */
 final class ConstructorCache
 {
-  Map map;
+  Map <Entry, CachedConstructor> map;
   static final Entry noCache = new NoCache ();
 
   private void init ()
   {
-    map = new HashMap ();
+    map = new HashMap <Entry, CachedConstructor> ();
   }
 
   /**
@@ -69,20 +69,20 @@ final class ConstructorCache
 
   private static class CachedConstructor
   {
-    private final Constructor method;
-    private Class [] typeCache;
+    private final Constructor <?> method;
+    private Class <?> [] typeCache;
 
-    public CachedConstructor (final Constructor method)
+    public CachedConstructor (final Constructor <?> method)
     {
       this.method = method;
     }
 
-    public Constructor get ()
+    public Constructor <?> get ()
     {
       return method;
     }
 
-    public Class [] getParameterTypes ()
+    public Class <?> [] getParameterTypes ()
     {
       if (typeCache != null)
         return typeCache;
@@ -96,12 +96,12 @@ final class ConstructorCache
   public static class Entry
   {
     String name;
-    Class params[];
+    Class <?> params[];
 
     protected Entry ()
     {}
 
-    protected Entry (final String name, final Class params[])
+    protected Entry (final String name, final Class <?> params[])
     {
       this.name = name; // intern() is ~10% slower than lazy string comparison
       this.params = params;
@@ -115,7 +115,7 @@ final class ConstructorCache
     {
       if (hasResult)
         return result;
-      for (final Class param : params)
+      for (final Class <?> param : params)
       {
         result = result * 31 + (param == null ? 0 : param.hashCode ());
       }
@@ -127,6 +127,10 @@ final class ConstructorCache
     @Override
     public boolean equals (final Object o)
     {
+      if (o == this)
+        return true;
+      if (o == null || !getClass ().equals (o.getClass ()))
+        return false;
       final Entry that = (Entry) o;
       if (params.length != that.params.length)
         return false;
@@ -147,7 +151,11 @@ final class ConstructorCache
       this.cache = cache;
     }
 
-    public Class [] getParameterTypes (final Constructor method)
+    /**
+     * @param method
+     * @return
+     */
+    public Class <?> [] getParameterTypes (final Constructor <?> method)
     {
       return cache.getParameterTypes ();
     }
@@ -156,7 +164,7 @@ final class ConstructorCache
   private static final class NoCache extends Entry
   {
     @Override
-    public Class [] getParameterTypes (final Constructor method)
+    public Class <?> [] getParameterTypes (final Constructor <?> method)
     {
       return method.getParameterTypes ();
     }
@@ -169,11 +177,11 @@ final class ConstructorCache
    *        The entry
    * @return The constructor
    */
-  public Constructor get (final Entry entry)
+  public Constructor <?> get (final Entry entry)
   {
     if (entry == noCache)
       return null;
-    final CachedConstructor cache = (CachedConstructor) map.get (entry);
+    final CachedConstructor cache = map.get (entry);
     if (cache == null)
       return null;
     entry.setMethod (cache);
@@ -188,7 +196,7 @@ final class ConstructorCache
    * @param method
    *        The constructor
    */
-  public void put (final Entry entry, final Constructor method)
+  public void put (final Entry entry, final Constructor <?> method)
   {
     if (entry != noCache)
     {
@@ -209,10 +217,10 @@ final class ConstructorCache
    */
   public Entry getEntry (final String name, final Object args[])
   {
-    final Class params[] = new Class [args.length];
+    final Class <?> params[] = new Class <?> [args.length];
     for (int i = 0; i < args.length; i++)
     {
-      final Class c = args[i] == null ? null : args[i].getClass ();
+      final Class <? extends Object> c = args[i] == null ? null : args[i].getClass ();
       if (c == PhpArray.class)
         return noCache;
       params[i] = c;

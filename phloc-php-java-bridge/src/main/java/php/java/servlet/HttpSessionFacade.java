@@ -188,7 +188,7 @@ final class HttpSessionFacade implements ISession
   /** @inheritDoc */
   public void putAll (final Map vars)
   {
-    for (final Iterator ii = vars.keySet ().iterator (); ii.hasNext ();)
+    for (final Iterator <?> ii = vars.keySet ().iterator (); ii.hasNext ();)
     {
       final Object key = ii.next ();
       final Object val = vars.get (key);
@@ -200,8 +200,8 @@ final class HttpSessionFacade implements ISession
   public Map getAll ()
   {
     final HttpSession session = getCachedSession ();
-    final HashMap map = new HashMap ();
-    for (final Enumeration ee = session.getAttributeNames (); ee.hasMoreElements ();)
+    final Map <Object, Object> map = new HashMap <Object, Object> ();
+    for (final Enumeration <?> ee = session.getAttributeNames (); ee.hasMoreElements ();)
     {
       final Object key = ee.nextElement ();
       final Object val = get (key);
@@ -233,7 +233,6 @@ final class HttpSessionFacade implements ISession
     if ((clientIsNew != ISession.SESSION_GET) ||
         ((clientIsNew == ISession.SESSION_GET) && req.getSession (false) != null))
       return new HttpSessionFacade (factory, kontext, req, res, clientIsNew, timeout);
-    else
-      return null;
+    return null;
   }
 }

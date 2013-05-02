@@ -317,8 +317,7 @@ public/* singleton */class PhpJavaServlet extends HttpServlet
     return val;
   }
 
-  protected void handleHttpConnection (final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
-                                                                                                   IOException
+  protected void handleHttpConnection (final HttpServletRequest req, final HttpServletResponse res) throws IOException
   {
 
     final RemoteHttpServletContextFactory ctx = new RemoteHttpServletContextFactory (this,

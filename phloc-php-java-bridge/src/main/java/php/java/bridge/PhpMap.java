@@ -55,7 +55,7 @@ abstract class PhpMap
 {
   JavaBridge _bridge;
   Object value;
-  Class componentType;
+  Class <?> componentType;
   boolean keyType; // false: key is integer (array), true: key is string (hash)
 
   protected PhpMap (final JavaBridge bridge, final Object value, final boolean keyType)

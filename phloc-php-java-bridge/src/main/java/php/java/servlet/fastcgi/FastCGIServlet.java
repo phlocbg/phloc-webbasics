@@ -107,9 +107,9 @@ public class FastCGIServlet extends HttpServlet
     public String servletPath;
     public String queryString;
     public String requestUri;
-    public HashMap environment;
+    public HashMap <String, String> environment;
     public boolean includedJava;
-    public ArrayList allHeaders;
+    public ArrayList <String> allHeaders;
   }
 
   protected ServletContext context;
@@ -179,7 +179,7 @@ public class FastCGIServlet extends HttpServlet
 
   protected void setupRequestVariables (final HttpServletRequest req, final Environment env)
   {
-    env.allHeaders = new ArrayList ();
+    env.allHeaders = new ArrayList <String> ();
     env.includedJava = contextLoaderListener.getPhpIncludeJava () &&
                        PhpJavaServlet.getHeader (Util.X_JAVABRIDGE_INCLUDE, req) == null;
 
@@ -213,7 +213,7 @@ public class FastCGIServlet extends HttpServlet
   }
 
   /** calculate PATH_INFO, PATH_TRANSLATED and SCRIPT_FILENAME */
-  protected void setPathInfo (final HttpServletRequest req, final HashMap envp, final Environment env)
+  protected void setPathInfo (final HttpServletRequest req, final HashMap <String, String> envp, final Environment env)
   {
 
     final String pathInfo = env.pathInfo;
@@ -232,7 +232,7 @@ public class FastCGIServlet extends HttpServlet
 
   protected void setupCGIEnvironment (final HttpServletRequest req, final HttpServletResponse res, final Environment env) throws ServletException
   {
-    final HashMap envp = (HashMap) contextLoaderListener.getEnvironment ().clone ();
+    final HashMap <String, String> envp = (HashMap <String, String>) contextLoaderListener.getEnvironment ().clone ();
 
     envp.put ("SERVER_SOFTWARE", serverInfo);
     envp.put ("SERVER_NAME", ServletUtil.nullsToBlanks (req.getServerName ()));
@@ -301,9 +301,9 @@ public class FastCGIServlet extends HttpServlet
     env.environment.put ("REDIRECT_STATUS", "200");
     env.environment.put ("SERVER_SOFTWARE", Util.EXTENSION_NAME);
 
-    final String sPort = (String) env.environment.get ("SERVER_PORT");
+    final String sPort = env.environment.get ("SERVER_PORT");
     final String standardPort = req.isSecure () ? _443 : _80;
-    final StringBuffer httpHost = new StringBuffer ((String) env.environment.get ("SERVER_NAME"));
+    final StringBuffer httpHost = new StringBuffer (env.environment.get ("SERVER_NAME"));
     if (!standardPort.equals (sPort))
     { // append port only if necessary, see Patch#3040838
       httpHost.append (":");

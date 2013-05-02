@@ -41,7 +41,7 @@ package php.java.bridge;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,12 +51,13 @@ import java.util.Map;
  */
 final class StringCache
 {
-  private Map map;
+  private Map <Entry, String> map;
+  @SuppressWarnings ("unused")
   private final JavaBridge bridge;
 
   private void init ()
   {
-    map = new HashMap ();
+    map = new HashMap <Entry, String> ();
   }
 
   /**
@@ -74,17 +75,17 @@ final class StringCache
   /**
    * A cache entry.
    */
-  protected static class Entry
+  protected static final class Entry
   {
     byte [] name;
-    String enc;
+    Charset enc;
     int start;
     int length;
 
     protected Entry ()
     {}
 
-    protected Entry (final byte [] name, final int start, final int length, final String enc)
+    protected Entry (final byte [] name, final int start, final int length, final Charset enc)
     {
       this.name = name;
       this.start = start;
@@ -115,6 +116,10 @@ final class StringCache
     @Override
     public boolean equals (final Object o)
     {
+      if (o == this)
+        return true;
+      if (!(o instanceof Entry))
+        return false;
       final Entry that = (Entry) o;
       if (enc != that.enc)
         return false;
@@ -132,15 +137,7 @@ final class StringCache
     @Override
     public String toString ()
     {
-      try
-      {
-        return new String (name, start, length, enc);
-      }
-      catch (final UnsupportedEncodingException e)
-      {
-        Util.printStackTrace (e);
-        return new String (name, start, length);
-      }
+      return new String (name, start, length, enc);
     }
   }
 
@@ -153,7 +150,7 @@ final class StringCache
    */
   protected String get (final Entry entry)
   {
-    return (String) map.get (entry);
+    return map.get (entry);
   }
 
   /**
@@ -173,22 +170,14 @@ final class StringCache
     map.put (entry, method);
   }
 
-  protected Entry getEntry (final byte [] name, final int start, final int length, final String enc)
+  protected Entry getEntry (final byte [] name, final int start, final int length, final Charset enc)
   {
     return new Entry (name, start, length, enc);
   }
 
-  private String createString (final byte [] name, final int start, final int length, final String encoding)
+  private String createString (final byte [] name, final int start, final int length, final Charset encoding)
   {
-    try
-    {
-      return new String (name, start, length, encoding);
-    }
-    catch (final UnsupportedEncodingException e)
-    {
-      bridge.printStackTrace (e);
-      return new String (name, start, length);
-    }
+    return new String (name, start, length, encoding);
   }
 
   /**
@@ -204,7 +193,7 @@ final class StringCache
    *        The file.encoding.
    * @return the cached string.
    */
-  public String getString (final byte [] name, final int start, final int length, final String encoding)
+  public String getString (final byte [] name, final int start, final int length, final Charset encoding)
   {
     final Entry e = getEntry (name, start, length, encoding);
     String s = get (e);

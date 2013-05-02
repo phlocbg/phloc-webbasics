@@ -26,9 +26,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -148,7 +149,7 @@ public class ServletUtil
     return (couldBeNull == null ? subForNulls : couldBeNull);
   }
 
-  public static String getHeaders (final StringBuffer buf, final Enumeration enumeration)
+  public static String getHeaders (final StringBuffer buf, final Enumeration <?> enumeration)
   {
     while (enumeration.hasMoreElements ())
     {
@@ -170,7 +171,7 @@ public class ServletUtil
     catch (final IllegalStateException e)
     {
       final WriterOutputStream out = new WriterOutputStream (response.getWriter ());
-      out.setEncoding (response.getCharacterEncoding ());
+      out.setEncoding (Charset.forName (response.getCharacterEncoding ()));
       return out;
     }
   }
@@ -191,21 +192,21 @@ public class ServletUtil
   {
     try
     {
-      final Class objectNameClazz = Class.forName ("javax.management.ObjectName");
-      final Constructor constructor = objectNameClazz.getConstructor (new Class [] { String.class });
+      final Class <?> objectNameClazz = Class.forName ("javax.management.ObjectName");
+      final Constructor <?> constructor = objectNameClazz.getConstructor (new Class [] { String.class });
       Object objectName = constructor.newInstance (new Object [] { pattern });
 
-      Class clazz = Class.forName ("javax.management.MBeanServerFactory");
+      Class <?> clazz = Class.forName ("javax.management.MBeanServerFactory");
       Method method = clazz.getMethod ("findMBeanServer", new Class [] { String.class });
-      final ArrayList servers = (ArrayList) method.invoke (clazz, new Object [] { null });
+      final List <?> servers = (List <?>) method.invoke (clazz, new Object [] { null });
       final Object server = servers.get (0);
 
-      final Class mBeanServerClazz = Class.forName ("javax.management.MBeanServer");
+      final Class <?> mBeanServerClazz = Class.forName ("javax.management.MBeanServer");
       clazz = Class.forName ("javax.management.QueryExp");
       method = mBeanServerClazz.getMethod ("queryMBeans", new Class [] { objectNameClazz, clazz });
 
-      final Set s = (Set) method.invoke (server, new Object [] { objectName, null });
-      final Iterator ii = s.iterator ();
+      final Set <?> s = (Set <?>) method.invoke (server, new Object [] { objectName, null });
+      final Iterator <?> ii = s.iterator ();
 
       if (ii.hasNext ())
       {

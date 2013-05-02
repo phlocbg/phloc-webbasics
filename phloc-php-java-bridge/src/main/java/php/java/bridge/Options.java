@@ -19,6 +19,8 @@
 
 package php.java.bridge;
 
+import java.nio.charset.Charset;
+
 /*
  * Copyright (C) 2003-2007 Jost Boekemeier
  *
@@ -57,7 +59,7 @@ class Options
   /**
    * Default encoding: UTF-8
    */
-  private String encoding = null;
+  private Charset encoding;
 
   /**
    * Returns the file encoding, see java_set_file_encoding(). This option may
@@ -65,7 +67,7 @@ class Options
    * 
    * @return The file encoding
    */
-  public String getEncoding ()
+  public Charset getEncoding ()
   {
     if (encoding != null)
       return encoding;
@@ -82,15 +84,7 @@ class Options
    */
   public byte [] getBytes (final String s)
   {
-    try
-    {
-      return s.getBytes (getEncoding ());
-    }
-    catch (final java.io.UnsupportedEncodingException e)
-    {
-      Util.printStackTrace (e);
-      return s.getBytes ();
-    }
+    return s.getBytes (getEncoding ());
   }
 
   private boolean valuesCache, valuesCacheSet = false;
@@ -125,7 +119,7 @@ class Options
    * @param symbol
    *        The new file encoding, for example "UTF-8".
    */
-  public void setEncoding (final String symbol)
+  public void setEncoding (final Charset symbol)
   {
     this.encoding = symbol;
   }

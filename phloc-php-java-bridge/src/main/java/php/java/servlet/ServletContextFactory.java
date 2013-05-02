@@ -98,13 +98,13 @@ public class ServletContextFactory extends SimpleServletContextFactory
   {
     if (server.isAvailable (PhpJavaServlet.getHeader ("X_JAVABRIDGE_CHANNEL", req)))
       return new ServletContextFactory (servlet, kontext, proxy, req, res);
-    else
-      return RemoteHttpServletContextFactory.addNew (servlet,
-                                                     kontext,
-                                                     proxy,
-                                                     req,
-                                                     res,
-                                                     new ServletContextFactory (servlet, kontext, proxy, req, res));
+
+    return RemoteHttpServletContextFactory.addNew (servlet,
+                                                   kontext,
+                                                   proxy,
+                                                   req,
+                                                   res,
+                                                   new ServletContextFactory (servlet, kontext, proxy, req, res));
 
   }
 }

@@ -53,7 +53,9 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -64,7 +66,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.Vector;
 
 import php.java.bridge.http.FCGIConnectionPool;
 
@@ -111,15 +112,15 @@ public final class Util
   public static int MAX_WAIT;
 
   /** The java/Java.inc code */
-  public static Class JAVA_INC;
+  public static Class <?> JAVA_INC;
   /** The java/Java.inc code */
-  public static Class PHPDEBUGGER_PHP;
+  public static Class <?> PHPDEBUGGER_PHP;
   /** The java/JavaProxy.php code */
-  public static Class JAVA_PROXY;
+  public static Class <?> JAVA_PROXY;
   /** The launcher.sh code */
-  public static Class LAUNCHER_UNIX;
+  public static Class <?> LAUNCHER_UNIX;
   /** The launcher.exe code */
-  public static Class LAUNCHER_WINDOWS, LAUNCHER_WINDOWS2, LAUNCHER_WINDOWS3, LAUNCHER_WINDOWS4;
+  public static Class <?> LAUNCHER_WINDOWS, LAUNCHER_WINDOWS2, LAUNCHER_WINDOWS3, LAUNCHER_WINDOWS4;
   /** Only for internal use */
   public static final byte HEX_DIGITS[] = { '0',
                                            '1',
@@ -285,18 +286,18 @@ public final class Util
   /**
    * ASCII encoding
    */
-  public static final String ASCII = "ASCII";
+  public static final Charset ASCII = Charset.forName ("ASCII");
 
   /**
    * UTF8 encoding
    */
-  public static final String UTF8 = "UTF-8";
+  public static final Charset UTF8 = Charset.forName ("UTF-8");
 
   /**
    * DEFAULT currently UTF-8, will be changed when most OS support and use
    * UTF-16.
    */
-  public static final String DEFAULT_ENCODING = "UTF-8";
+  public static final Charset DEFAULT_ENCODING = UTF8;
 
   /**
    * The default buffer size
@@ -308,7 +309,7 @@ public final class Util
    * which is set by some broken PHP installers
    */
 
-  public static List ENVIRONMENT_BLACKLIST;
+  public static List <String> ENVIRONMENT_BLACKLIST;
   /**
    * A map containing environment values not in ENVIRONMENT_BLACKLIST. At least:
    * "PATH", "LD_LIBRARY_PATH", "LD_ASSUME_KERNEL", "USER", "TMP", "TEMP",
@@ -316,7 +317,7 @@ public final class Util
    * <code>java -DPATH="$PATH" -DHOME="$HOME" -jar JavaBridge.jar</code> or
    * <code>java -DPATH="%PATH%" -jar JavaBridge.jar</code>.
    */
-  public static HashMap COMMON_ENVIRONMENT;
+  public static HashMap <String, String> COMMON_ENVIRONMENT;
 
   /**
    * The default extension directories. If one of the directories
@@ -360,7 +361,7 @@ public final class Util
   public static final Object [] ZERO_ARG = new Object [0];
 
   /** Only for internal use */
-  public static final Class [] ZERO_PARAM = new Class [0];
+  public static final Class <?> [] ZERO_PARAM = new Class <?> [0];
 
   /** Only for internal use */
   public static final byte [] RN = Util.toBytes ("\r\n");
@@ -469,7 +470,7 @@ public final class Util
       VERSION = "unknown";
       // t.printStackTrace();
     }
-    ;
+
     ENVIRONMENT_BLACKLIST = getEnvironmentBlacklist (p);
     COMMON_ENVIRONMENT = getCommonEnvironment (ENVIRONMENT_BLACKLIST);
     DEFAULT_CGI_LOCATIONS = new String [] { "/usr/bin/php-cgi", "c:/Program Files/PHP/php-cgi.exe" };
@@ -480,7 +481,7 @@ public final class Util
         {
           File filePath = null;
           boolean found = false;
-          final String path = (String) COMMON_ENVIRONMENT.get ("PATH");
+          final String path = COMMON_ENVIRONMENT.get ("PATH");
           final StringTokenizer tok = new StringTokenizer (path, File.pathSeparator);
           while (tok.hasMoreTokens ())
           {
@@ -500,7 +501,7 @@ public final class Util
             found = ((filePath = new File ("/usr/php/bin/php-cgi")).exists ());
           if (!found)
           {
-            final String programFiles = (String) COMMON_ENVIRONMENT.get ("ProgramFiles");
+            final String programFiles = COMMON_ENVIRONMENT.get ("ProgramFiles");
             if (programFiles != null)
               found = ((filePath = new File (programFiles + "\\PHP\\php-cgi.exe")).exists ());
           }
@@ -563,7 +564,6 @@ public final class Util
     {
       // t.printStackTrace();
     }
-    ;
 
     // resolve java.io.tmpdir for windows; PHP doesn't like dos short file names
     // like foo~1\bar~2\...
@@ -593,7 +593,7 @@ public final class Util
       {
         try
         {
-          args[i] = java.net.URLDecoder.decode (args[i], UTF8);
+          args[i] = java.net.URLDecoder.decode (args[i], UTF8.name ());
         }
         catch (final UnsupportedEncodingException e)
         {
@@ -606,7 +606,7 @@ public final class Util
     {
       // t.printStackTrace();
     }
-    ;
+
     try
     {
       EXTENSION_NAME = "JavaBridge";
@@ -616,7 +616,7 @@ public final class Util
     {
       // t.printStackTrace();
     }
-    ;
+
     try
     {
       PHP_EXEC = getProperty (p, "PHP_EXEC", null);
@@ -782,7 +782,7 @@ public final class Util
   {
     if (obj == null)
       return "null";
-    final Class c = getClass (obj);
+    final Class <?> c = getClass (obj);
     String name = c.getName ();
     if (name.startsWith ("["))
       name = "array_of_" + name.substring (1);
@@ -812,7 +812,7 @@ public final class Util
    *        The class
    * @return The class name
    */
-  public static String getShortName (final Class clazz)
+  public static String getShortName (final Class <?> clazz)
   {
     String name = clazz.getName ();
     if (name.startsWith ("["))
@@ -830,11 +830,11 @@ public final class Util
    *        The object
    * @return Either obj or the class of obj.
    */
-  public static Class getClass (final Object obj)
+  public static Class <?> getClass (final Object obj)
   {
     if (obj == null)
       return null;
-    return obj instanceof Class ? (Class) obj : obj.getClass ();
+    return obj instanceof Class ? (Class <?>) obj : obj.getClass ();
   }
 
   /**
@@ -853,9 +853,9 @@ public final class Util
       return;
     }
 
-    if (obj instanceof Class)
+    if (obj instanceof Class <?>)
     {
-      if (((Class) obj).isInterface ())
+      if (((Class <?>) obj).isInterface ())
         buf.append ("[i:");
       else
         buf.append ("[c:");
@@ -913,9 +913,9 @@ public final class Util
       return;
     }
 
-    if (obj instanceof Class)
+    if (obj instanceof Class <?>)
     {
-      if (((Class) obj).isInterface ())
+      if (((Class <?>) obj).isInterface ())
         buf.append ("[i:");
       else
         buf.append ("[c:");
@@ -936,7 +936,7 @@ public final class Util
    * @param buf
    *        The StringBuffer
    */
-  public static void appendParam (final Class c, final StringBuffer buf)
+  public static void appendParam (final Class <?> c, final StringBuffer buf)
   {
     if (c.isInterface ())
       buf.append ("(i:");
@@ -959,9 +959,9 @@ public final class Util
    */
   public static void appendParam (final Object obj, final StringBuffer buf)
   {
-    if (obj instanceof Class)
+    if (obj instanceof Class <?>)
     {
-      final Class c = (Class) obj;
+      final Class <?> c = (Class <?>) obj;
       if (c.isInterface ())
         buf.append ("(i:");
       else
@@ -982,7 +982,7 @@ public final class Util
    *        The associated types
    * @return A new string
    */
-  public static String argsToString (final Object args[], final Class [] params)
+  public static String argsToString (final Object args[], final Class <?> [] params)
   {
     final StringBuffer buffer = new StringBuffer ("");
     appendArgs (args, params, buffer);
@@ -999,7 +999,7 @@ public final class Util
    * @param buf
    *        The StringBuffer
    */
-  public static void appendArgs (final Object args[], final Class [] params, final StringBuffer buf)
+  public static void appendArgs (final Object args[], final Class <?> [] params, final StringBuffer buf)
   {
     if (args != null)
     {
@@ -1026,15 +1026,7 @@ public final class Util
    */
   public static byte [] toBytes (final String s)
   {
-    try
-    {
-      return s.getBytes (ASCII);
-    }
-    catch (final UnsupportedEncodingException e)
-    {
-      e.printStackTrace ();
-      return s.getBytes ();
-    }
+    return s.getBytes (ASCII);
   }
 
   /**
@@ -1045,17 +1037,15 @@ public final class Util
    * @return The String
    * @throws NullPointerException
    */
-  public static String [] hashToStringArray (final Map h)
+  public static String [] hashToStringArray (final Map <String, ?> h)
   {
-    final Vector v = new Vector ();
-    final Iterator e = h.keySet ().iterator ();
-    while (e.hasNext ())
+    final List <String> v = new ArrayList <String> ();
+    for (final String k : h.keySet ())
     {
-      final String k = e.next ().toString ();
       v.add (k + "=" + h.get (k));
     }
     final String [] strArr = new String [v.size ()];
-    v.copyInto (strArr);
+    v.toArray (strArr);
     return strArr;
   }
 
@@ -1522,16 +1512,16 @@ public final class Util
 
     protected String [] getTestArgumentArray (final String [] php, final String [] args)
     {
-      final LinkedList buf = new LinkedList ();
+      final LinkedList <String> buf = new LinkedList <String> ();
       buf.addAll (java.util.Arrays.asList (php));
       buf.add ("-v");
 
-      return (String []) buf.toArray (new String [buf.size ()]);
+      return buf.toArray (new String [buf.size ()]);
     }
 
     protected String [] getArgumentArray (final String [] php, final String [] args)
     {
-      final LinkedList buf = new LinkedList ();
+      final LinkedList <String> buf = new LinkedList <String> ();
       buf.addAll (java.util.Arrays.asList (php));
       buf.addAll (java.util.Arrays.asList (ALLOW_URL_INCLUDE));
       for (int i = 1; i < args.length; i++)
@@ -1539,7 +1529,7 @@ public final class Util
         buf.add (args[i]);
       }
 
-      return (String []) buf.toArray (new String [buf.size ()]);
+      return buf.toArray (new String [buf.size ()]);
     }
 
     protected void start () throws NullPointerException, IOException
@@ -1964,9 +1954,9 @@ public final class Util
     }
   }
 
-  private static List getEnvironmentBlacklist (final Properties p)
+  private static List <String> getEnvironmentBlacklist (final Properties p)
   {
-    List l = new LinkedList ();
+    List <String> l = new LinkedList <String> ();
     try
     {
       final String s = getProperty (p, "PHP_ENV_BLACKLIST", "PHPRC");
@@ -1977,13 +1967,13 @@ public final class Util
     catch (final Exception e)
     {
       e.printStackTrace ();
-      l = new LinkedList ();
+      l = new LinkedList <String> ();
       l.add ("PHPRC");
     }
     return l;
   }
 
-  private static HashMap getCommonEnvironment (final List blacklist)
+  private static HashMap <String, String> getCommonEnvironment (final List <String> blacklist)
   {
     final String entries[] = { "PATH",
                               "PATH",
@@ -1997,7 +1987,7 @@ public final class Util
                               "LANG",
                               "TZ",
                               "OS" };
-    final HashMap defaultEnv = new HashMap ();
+    final HashMap <String, String> defaultEnv = new HashMap <String, String> ();
     String key, val;
     Method m = null;
     try
@@ -2257,7 +2247,7 @@ public final class Util
     return loader;
   }
 
-  public static final Class classForName (final String name) throws ClassNotFoundException
+  public static final Class <?> classForName (final String name) throws ClassNotFoundException
   {
     return Class.forName (name, true, getContextClassLoader ());
   }

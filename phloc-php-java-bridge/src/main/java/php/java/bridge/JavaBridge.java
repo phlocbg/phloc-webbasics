@@ -47,7 +47,6 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -56,6 +55,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -2200,9 +2200,9 @@ public class JavaBridge implements Runnable
    * @param fileEncoding
    *        The file encoding.
    */
-  public void setFileEncoding (final String fileEncoding)
+  public void setFileEncoding (final Charset fileEncoding)
   {
-    options.setEncoding (fileEncoding.intern ());
+    options.setEncoding (fileEncoding);
   }
 
   /**
@@ -2902,15 +2902,7 @@ public class JavaBridge implements Runnable
   public String getString (final byte [] b, final int start, final int length)
   {
     // return stringCache.getString(b, start, length, options.getEncoding());
-    try
-    {
-      return new String (b, start, length, options.getEncoding ());
-    }
-    catch (final UnsupportedEncodingException e)
-    {
-      printStackTrace (e);
-      return new String (b, start, length);
-    }
+    return new String (b, start, length, options.getEncoding ());
   }
 
   /**

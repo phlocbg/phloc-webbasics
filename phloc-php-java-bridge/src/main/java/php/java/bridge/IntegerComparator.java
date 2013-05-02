@@ -43,12 +43,12 @@ package php.java.bridge;
 
 import java.util.Comparator;
 
-final class IntegerComparator implements Comparator
+final class IntegerComparator implements Comparator <Integer>
 {
-  public int compare (final Object arg0, final Object arg1)
+  public int compare (final Integer arg0, final Integer arg1)
   {
-    final int k0 = ((Integer) arg0).intValue ();
-    final int k1 = ((Integer) arg1).intValue ();
+    final int k0 = arg0.intValue ();
+    final int k1 = arg1.intValue ();
     if (k0 < k1)
       return -1;
     else

@@ -294,7 +294,7 @@ public class Standalone
     final String serverPort = (Util.JAVABRIDGE_PROMISCUOUS ? "INET:" : "INET_LOCAL:") + sockname;
     Util.logMessage ("JavaBridgeRunner started on port " + serverPort);
 
-    Class runner = JavaBridgeRunner.class;
+    Class runner;
     JavaBridgeRunner r;
     try
     {

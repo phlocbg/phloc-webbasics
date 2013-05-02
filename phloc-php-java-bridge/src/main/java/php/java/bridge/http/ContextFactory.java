@@ -144,7 +144,7 @@ public final class ContextFactory extends SessionFactory implements IContextFact
     counter++;
     try
     {
-      webContext = URLEncoder.encode (webContext, Util.DEFAULT_ENCODING);
+      webContext = URLEncoder.encode (webContext, Util.DEFAULT_ENCODING.name ());
     }
     catch (final UnsupportedEncodingException e)
     {

@@ -50,6 +50,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -284,7 +285,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
         if (idx == -1)
           return;
         enc = enc.substring (idx + 1);
-        writer.setEncoding (enc);
+        writer.setEncoding (Charset.forName (enc));
       }
     }
   }
@@ -578,7 +579,7 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
       final OutputStreamWriter writer = new OutputStreamWriter (out);
       writer.write (STANDARD_HEADER_EMBEDDED);
       writer.close ();
-      return cachedEmbeddedStandardHeader = out.toString (Util.ASCII);
+      return cachedEmbeddedStandardHeader = out.toString (Util.ASCII.name ());
     }
     catch (final Exception e)
     {

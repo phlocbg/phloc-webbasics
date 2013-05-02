@@ -171,15 +171,7 @@ final class ParserString
    */
   public String getUTF8StringValue ()
   {
-    try
-    {
-      return new String (string, off, length, Util.UTF8);
-    }
-    catch (final java.io.UnsupportedEncodingException e)
-    {
-      Util.printStackTrace (e);
-      return new String (string, off, length);
-    }
+    return new String (string, off, length, Util.UTF8);
   }
 
   /**

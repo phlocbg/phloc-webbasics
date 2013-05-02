@@ -41,7 +41,6 @@ package php.java.bridge;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import java.io.UnsupportedEncodingException;
 
 final class PhpParserString extends PhpString
 {
@@ -103,13 +102,6 @@ final class PhpParserString extends PhpString
   @Override
   public String toString ()
   {
-    try
-    {
-      return new String (getBytes (), Util.UTF8);
-    }
-    catch (final UnsupportedEncodingException e)
-    {
-      return new String (getBytes ());
-    }
+    return new String (getBytes (), Util.UTF8);
   }
 }

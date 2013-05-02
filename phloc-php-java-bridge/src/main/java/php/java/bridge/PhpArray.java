@@ -46,11 +46,12 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-final class PhpArray extends AbstractMap
-{ // for PHP's array()
+final class PhpArray extends AbstractMap <Object, Object>
+{
+  // for PHP's array()
   private static final long serialVersionUID = 3905804162838115892L;
-  private TreeMap t = new TreeMap (Request.PHP_ARRAY_KEY_COMPARATOR);
-  private HashMap m = null;
+  private TreeMap <Integer, Object> t = new TreeMap <Integer, Object> (Request.PHP_ARRAY_KEY_COMPARATOR);
+  private HashMap <Object, Object> m = null;
 
   @Override
   public Object put (final Object key, final Object value)
@@ -59,11 +60,11 @@ final class PhpArray extends AbstractMap
       return m.put (key, value);
     try
     {
-      return t.put (key, value);
+      return t.put ((Integer) key, value);
     }
     catch (final ClassCastException e)
     {
-      m = new HashMap (t);
+      m = new HashMap <Object, Object> (t);
       t = null;
       return m.put (key, value);
     }
@@ -83,7 +84,7 @@ final class PhpArray extends AbstractMap
     {
       if (t.size () == 0)
         return 0;
-      return 1 + ((Integer) t.lastKey ()).intValue ();
+      return 1 + t.lastKey ().intValue ();
     }
     throw new IllegalArgumentException ("The passed PHP \"array\" is not a sequence but a dictionary");
   }
