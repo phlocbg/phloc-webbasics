@@ -139,13 +139,13 @@ public class HttpRequest
     this.bufEnd = length + start;
   }
 
-  private class HttpInputStream extends InputStream
+  private final class HttpInputStream extends InputStream
   {
-    private final InputStream in;
+    private final InputStream nin;
 
     public HttpInputStream (final InputStream in)
     {
-      this.in = in;
+      this.nin = in;
     }
 
     /*
@@ -159,8 +159,9 @@ public class HttpRequest
     }
 
     @Override
-    public int read (final byte [] b, final int start, int length) throws IOException
+    public int read (final byte [] b, final int start, final int plength) throws IOException
     {
+      int length = plength;
       if (contentLength > -1 && count == contentLength)
         return -1;
 
@@ -173,7 +174,7 @@ public class HttpRequest
         count += length;
         return length;
       }
-      final int n = in.read (b, start, length);
+      final int n = nin.read (b, start, length);
       count += n;
       return n;
     }

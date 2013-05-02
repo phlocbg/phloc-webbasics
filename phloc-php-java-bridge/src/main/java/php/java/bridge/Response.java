@@ -557,11 +557,12 @@ public final class Response
     }
 
     @Override
-    public void setResultObject (Object value)
+    public void setResultObject (final Object pvalue)
     {
       if (staticType == java.lang.Void.TYPE)
         throw new IllegalStateException ("Use the AsyncVoidWriter instead");
 
+      Object value = pvalue;
       if (value == null)
         value = Request.PHPNULL;
       if (bridge.logLevel >= 4)
@@ -575,8 +576,9 @@ public final class Response
     }
 
     @Override
-    public void setResultClass (Class <?> value)
+    public void setResultClass (final Class <?> pvalue)
     {
+      Class <?> value = pvalue;
       if (value == null)
         value = Request.PhpNull.class;
       if (bridge.logLevel >= 4)
@@ -672,8 +674,9 @@ public final class Response
     }
 
     @Override
-    public boolean setResult (Object value)
+    public boolean setResult (final Object pvalue)
     {
+      Object value = pvalue;
       if (value instanceof PhpString)
         value = ((PhpString) value).getString ();
 

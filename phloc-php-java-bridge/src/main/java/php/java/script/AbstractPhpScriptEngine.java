@@ -341,8 +341,9 @@ abstract class AbstractPhpScriptEngine extends AbstractScriptEngine implements I
    * javax.script.ScriptContext)
    */
   /** @inheritDoc */
-  public Object eval (String script, final ScriptContext context) throws ScriptException
+  public Object eval (final String pscript, final ScriptContext context) throws ScriptException
   {
+    String script = pscript;
     if (script == null)
       return evalPhp ((Reader) null, context);
 

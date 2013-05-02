@@ -57,23 +57,25 @@ class TCPServerSocket implements ISocketFactory
   private int port;
   boolean local;
 
-  public static ISocketFactory create (String name, final int backlog) throws IOException
+  public static ISocketFactory create (final String name, final int backlog) throws IOException
   {
-    int p;
-    boolean local = false;
-
     if (name == null)
       throw new NullPointerException ("name");
+
+    boolean local = false;
+    int p;
+
     if (name.startsWith ("INET:"))
-      name = name.substring (5);
+      p = Integer.parseInt (name.substring (5));
     else
       if (name.startsWith ("INET_LOCAL:"))
       {
         local = true;
-        name = name.substring (11);
+        p = Integer.parseInt (name.substring (11));
       }
+      else
+        p = Integer.parseInt (name);
 
-    p = Integer.parseInt (name);
     final TCPServerSocket s = new TCPServerSocket (p, backlog, local);
     return s;
   }

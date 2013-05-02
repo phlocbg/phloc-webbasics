@@ -126,8 +126,9 @@ public class InteractivePhpScriptEngine extends InvocablePhpScriptEngine
    * @throws ScriptException
    */
   @Override
-  public Object eval (String script, final ScriptContext context) throws ScriptException
+  public Object eval (final String pscript, final ScriptContext context) throws ScriptException
   {
+    String script = pscript;
     if (script == null)
     {
       release ();

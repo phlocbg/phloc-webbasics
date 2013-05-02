@@ -199,7 +199,7 @@ public abstract class PhpScriptContextDecorator implements IPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public Map getAll ()
+  public Map <?, ?> getAll ()
   {
     return ctx.getAll ();
   }

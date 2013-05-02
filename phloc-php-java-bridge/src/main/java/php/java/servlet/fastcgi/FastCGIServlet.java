@@ -613,10 +613,11 @@ public class FastCGIServlet extends HttpServlet
     }
   }
 
-  protected void addHeader (final HttpServletResponse response, String line, final Environment env)
+  protected void addHeader (final HttpServletResponse response, final String pline, final Environment env)
   {
     try
     {
+      String line = pline;
       if (line.startsWith ("Status"))
       {
         line = line.substring (line.indexOf (":") + 1).trim ();

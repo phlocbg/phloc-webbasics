@@ -82,8 +82,9 @@ public class ServletUtil
    *        may be "" or "/" for example.
    * @return a valid path or null
    */
-  public static String getRealPath (final ServletContext context2, String pathInfoCGI)
+  public static String getRealPath (final ServletContext context2, final String ppathInfoCGI)
   {
+    String pathInfoCGI = ppathInfoCGI;
     String ret = context2.getRealPath (pathInfoCGI);
     if (ret != null)
       return ret;

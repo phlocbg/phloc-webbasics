@@ -267,9 +267,10 @@ public class Standalone
     }
   }
 
-  private static boolean checkServlet (final int logLevel, String sockname, final String [] s) throws InterruptedException,
-                                                                                              IOException
+  private static boolean checkServlet (final int logLevel, final String psockname, final String [] s) throws InterruptedException,
+                                                                                                     IOException
   {
+    String sockname = psockname;
     if (sockname == null)
       return false;
     if (sockname.startsWith ("SERVLET_LOCAL:") ||

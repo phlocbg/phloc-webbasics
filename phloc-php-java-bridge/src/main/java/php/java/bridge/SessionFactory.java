@@ -43,7 +43,6 @@ package php.java.bridge;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -126,8 +125,9 @@ public class SessionFactory extends JavaBridgeFactory
    * @see php.java.bridge.ISession
    */
   @Override
-  public ISession getSession (String name, final short clientIsNew, final int timeout)
+  public ISession getSession (final String pname, final short clientIsNew, final int timeout)
   {
+    String name = pname;
     if (name == null)
       name = JavaBridge.PHPSESSION;
     else
@@ -200,9 +200,8 @@ public class SessionFactory extends JavaBridgeFactory
           java.lang.Thread.sleep (TIMER_DURATION);
           Session.expire ();
 
-          for (final Iterator <Runnable> ii = jobs.iterator (); ii.hasNext ();)
+          for (Runnable job : jobs)
           {
-            final Runnable job = ii.next ();
             job.run ();
           }
         }

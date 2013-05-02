@@ -252,14 +252,14 @@ public interface IContext
    * @param map
    *        the map
    */
-  void putAll (Map map);
+  void putAll (Map <?, ?> map);
 
   /**
    * Get all bindings from the engine scope
    * 
    * @return the map
    */
-  Map getAll ();
+  Map <?, ?> getAll ();
 
   /**
    * Return the redirect string, for example http://localhost:8080/webPath Used

@@ -119,8 +119,9 @@ public abstract class HttpServer implements Runnable
    * @throws IOException
    * @see HttpServer#destroy()
    */
-  protected HttpServer (String serverPort, final boolean isSecure) throws IOException
+  protected HttpServer (final String pserverPort, final boolean isSecure) throws IOException
   {
+    String serverPort = pserverPort;
     this.isSecure = isSecure;
     if (serverPort == null)
       serverPort = "0";

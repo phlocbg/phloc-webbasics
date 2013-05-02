@@ -102,8 +102,6 @@ public class FCGIConnectionPool
     protected int ostate, state; // bit0: input closed, bit1: output closed
     protected FCGIConnectionFactory nchannelName;
     protected FCGIConnection channel;
-    private FCGIConnectionOutputStream outputStream;
-    private FCGIConnectionInputStream inputStream;
     private boolean isClosed;
     private final FCGIIOFactory nfactory;
     private final int nmaxRequests;
@@ -116,8 +114,6 @@ public class FCGIConnectionPool
 
     protected void init ()
     {
-      inputStream = null;
-      outputStream = null;
       counter = nmaxRequests;
       reset ();
     }
@@ -178,8 +174,6 @@ public class FCGIConnectionPool
      */
     public OutputStream getOutputStream () throws FCGIConnectionException
     {
-      if (outputStream != null)
-        return outputStream;
       final FCGIConnectionOutputStream outputStream = (FCGIConnectionOutputStream) nfactory.createOutputStream ();
       outputStream.setConnection (this);
       ostate |= 2;
@@ -194,8 +188,6 @@ public class FCGIConnectionPool
      */
     public InputStream getInputStream () throws FCGIConnectionException
     {
-      if (inputStream != null)
-        return inputStream;
       final FCGIConnectionInputStream inputStream = (FCGIConnectionInputStream) nfactory.createInputStream ();
       inputStream.setConnection (this);
       ostate |= 1;

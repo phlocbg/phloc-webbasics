@@ -274,8 +274,9 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
 
   /** {@inheritDoc} */
   @Override
-  public void setWriter (Writer writer)
+  public void setWriter (final Writer pwriter)
   {
+    Writer writer = pwriter;
     if (!(writer instanceof PhpScriptWriter))
     {
       writer = new PhpScriptWriter (new WriterOutputStream (writer));
@@ -299,8 +300,9 @@ public class PhpHttpScriptContext extends PhpScriptContextDecorator
 
   /** {@inheritDoc} */
   @Override
-  public void setErrorWriter (Writer errorWriter)
+  public void setErrorWriter (final Writer perrorWriter)
   {
+    Writer errorWriter = perrorWriter;
     if (!(errorWriter instanceof PhpScriptWriter))
     {
       errorWriter = new PhpScriptWriter (new WriterOutputStream (errorWriter));

@@ -169,7 +169,7 @@ public final class PhpScriptContext extends AbstractPhpScriptContext
   }
 
   /** {@inheritDoc} */
-  public Map getAll ()
+  public Map <String, Object> getAll ()
   {
     return Collections.unmodifiableMap (getBindings (IContext.ENGINE_SCOPE));
   }
