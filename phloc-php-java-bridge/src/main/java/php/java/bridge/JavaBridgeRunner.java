@@ -89,7 +89,6 @@ public class JavaBridgeRunner extends AbstractHttpServer
   {
     super (serverPort, isSecure);
     contextServer = new ContextServer (ContextFactory.EMPTY_CONTEXT_NAME, Util.JAVABRIDGE_PROMISCUOUS);
-
   }
 
   protected JavaBridgeRunner (final String serverPort) throws IOException
@@ -275,14 +274,12 @@ public class JavaBridgeRunner extends AbstractHttpServer
   @Override
   protected void doPut (final HttpRequest req, final HttpResponse res) throws IOException
   {
-    ChunkedInputStream sin = null;
-    ChunkedOutputStream sout = null;
     final String transferEncoding = getHeader ("Transfer-Encoding", req);
     final boolean isChunked = "chunked".equals (transferEncoding);
     if (!isChunked)
       throw new IllegalStateException ("Please use a JEE server or servlet engine.");
-    sin = new ChunkedInputStream (req.getInputStream ());
-    sout = new ChunkedOutputStream (res.getOutputStream ());
+    final ChunkedInputStream sin = new ChunkedInputStream (req.getInputStream ());
+    final ChunkedOutputStream sout = new ChunkedOutputStream (res.getOutputStream ());
 
     final RemoteHttpContextFactory ctx = new RemoteHttpContextFactory (req, res);
     res.setHeader (Util.X_JAVABRIDGE_CONTEXT, ctx.getId ());
@@ -440,6 +437,8 @@ public class JavaBridgeRunner extends AbstractHttpServer
    *        The full name as a file
    * @param params
    *        The request parameter
+   * @param f
+   *        The file
    * @param length
    *        The length of the file
    * @param req
@@ -482,8 +481,6 @@ public class JavaBridgeRunner extends AbstractHttpServer
                                final HttpResponse res,
                                final boolean show) throws IOException
   {
-    byte [] buf;
-    OutputStream out;
     int c;
     if (Util.logLevel > 4)
       Util.logDebug ("web server: show text file:" + name);
@@ -492,8 +489,8 @@ public class JavaBridgeRunner extends AbstractHttpServer
       res.addHeader ("Content-Type", "text/plain");
     res.setContentLength (length);
     final InputStream in = new FileInputStream (f);
-    buf = new byte [Util.BUF_SIZE];
-    out = res.getOutputStream ();
+    final byte [] buf = new byte [Util.BUF_SIZE];
+    final OutputStream out = res.getOutputStream ();
     while ((c = in.read (buf)) != -1)
       out.write (buf, 0, c);
     in.close ();
@@ -527,7 +524,6 @@ public class JavaBridgeRunner extends AbstractHttpServer
    */
   protected void handleDoGet (final HttpRequest req, final HttpResponse res) throws IOException
   {
-
     byte [] buf;
     int c;
     String name = req.getRequestURI ();

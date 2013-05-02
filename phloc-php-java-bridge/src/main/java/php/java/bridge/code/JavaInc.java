@@ -2116,5 +2116,5 @@ public final class JavaInc
                                      "}\n" +
                                      "?>\n" +
                                      "";
-  public static final byte [] bytes = data.getBytes (Util.ASCII);
+  public static final byte [] bytes = data.getBytes (Util.ISO88591);
 }
