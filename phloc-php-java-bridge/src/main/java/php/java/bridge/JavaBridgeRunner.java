@@ -566,8 +566,9 @@ public class JavaBridgeRunner extends AbstractHttpServer
     {
       try
       {
-        res.setContentLength (JavaInc.bytes.length);
-        res.getOutputStream ().write (JavaInc.bytes);
+        final byte [] aBytes = JavaInc.bytes;
+        res.setContentLength (aBytes.length);
+        res.getOutputStream ().write (aBytes);
         return;
       }
       catch (final Exception e)
