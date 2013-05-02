@@ -228,12 +228,12 @@ final class MethodCache
    *        The arguments
    * @return A cache entry.
    */
-  public Entry getEntry (final String name, final Object obj, final Object args[])
+  public Entry getEntry (final String name, final Object obj, final Object [] args)
   {
     final Class <?> [] params = new Class [args.length];
     for (int i = 0; i < args.length; i++)
     {
-      final Class <? extends Object> c = args[i] == null ? null : args[i].getClass ();
+      final Class <?> c = args[i] == null ? null : args[i].getClass ();
       if (c == PhpArray.class)
         return noCache;
       params[i] = c;

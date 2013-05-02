@@ -1565,7 +1565,7 @@ public class JavaBridge implements Runnable
                                                                                                      true,
                                                                                                      canModifySecurityPermission)); (jclass = iter.getNext ()) != null;)
           {
-            final Method methods[] = jclass.getMethods ();
+            final Method [] methods = jclass.getMethods ();
             for (final Method meth : methods)
             {
               if (meth.getName ().equalsIgnoreCase (method) && iter.isVisible (meth.getModifiers ()))

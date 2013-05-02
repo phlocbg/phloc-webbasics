@@ -257,7 +257,7 @@ public class Context implements IManaged, IInvocable, IContext
   }
 
   private static boolean registeredHook = false;
-  private static List <Object> closeables = new ArrayList <Object> ();
+  private static List <Closeable> closeables = new ArrayList <Closeable> ();
   private static Object lockObject = new Object ();
 
   /**
@@ -272,7 +272,7 @@ public class Context implements IManaged, IInvocable, IContext
    * @param closeable
    *        The procedure close(), will be called before the VM terminates
    */
-  public static void handleManaged (final Object closeable)
+  public static void handleManaged (final Closeable closeable)
   {
     // make sure to properly release them upon System.exit().
     synchronized (closeables)
@@ -291,13 +291,12 @@ public class Context implements IManaged, IInvocable, IContext
                 return;
               synchronized (closeables)
               {
-                for (final Iterator <Object> ii = closeables.iterator (); ii.hasNext (); ii.remove ())
+                for (final Iterator <Closeable> ii = closeables.iterator (); ii.hasNext (); ii.remove ())
                 {
-                  final Object c = ii.next ();
+                  final Closeable c = ii.next ();
                   try
                   {
-                    final Method close = c.getClass ().getMethod ("close");
-                    close.invoke (c);
+                    c.close ();
                   }
                   catch (final Exception e)
                   {
