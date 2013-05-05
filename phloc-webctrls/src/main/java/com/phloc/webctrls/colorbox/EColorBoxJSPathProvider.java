@@ -25,7 +25,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EColorBoxJSPathProvider implements IJSPathProvider
 {
-  COLORBOX_1410 ("colorbox/1410/jquery.colorbox.js");
+  COLORBOX_1415 ("colorbox/1415/jquery.colorbox.js");
 
   private final String m_sPath;
 
