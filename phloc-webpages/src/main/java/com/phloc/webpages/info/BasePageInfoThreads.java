@@ -75,16 +75,19 @@ public class BasePageInfoThreads extends AbstractWebPageExt
     super (sID, aName, aDescription);
   }
 
-  private static String _getThreadGroupName (final ThreadGroup aParamTG)
+  @Nonnull
+  private static String _getThreadGroupName (@Nullable final ThreadGroup aParamTG)
   {
-    ThreadGroup aTG = aParamTG;
+    ThreadGroup aThreadGroup = aParamTG;
     final StringBuilder ret = new StringBuilder ();
-    while (aTG != null)
+    while (aThreadGroup != null)
     {
       if (ret.length () > 0)
-        ret.insert (0, "/");
-      ret.insert (0, aTG.getName ());
-      aTG = aTG.getParent ();
+        ret.insert (0, '/');
+      ret.insert (0, aThreadGroup.getName ());
+
+      // Descend
+      aThreadGroup = aThreadGroup.getParent ();
     }
     return ret.toString ();
   }

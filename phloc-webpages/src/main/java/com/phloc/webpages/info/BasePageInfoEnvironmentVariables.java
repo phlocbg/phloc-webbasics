@@ -28,8 +28,8 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
-    MSG_HEADER_NAME ("Name", "Name"),
-    MSG_HEADER_VALUE ("Wert", "Value");
+    MSG_NAME ("Name", "Name"),
+    MSG_VALUE ("Wert", "Value");
 
     private final ITextProvider m_aTP;
 
@@ -71,8 +71,8 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final BootstrapTable aTable = new BootstrapTable (new HCCol (200), HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_HEADER_VALUE.getDisplayText (aDisplayLocale));
+    aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                     EText.MSG_VALUE.getDisplayText (aDisplayLocale));
 
     // For all environment variables
     for (final Map.Entry <String, String> aEntry : ContainerHelper.getSortedByKey (System.getenv ()).entrySet ())

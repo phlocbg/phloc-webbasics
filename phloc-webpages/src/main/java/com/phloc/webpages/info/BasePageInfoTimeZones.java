@@ -11,6 +11,7 @@ import org.joda.time.Duration;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.format.impl.StringSkipPrefixAndSuffixFormatter;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
@@ -25,6 +26,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageExt;
 
 public class BasePageInfoTimeZones extends AbstractWebPageExt
@@ -115,6 +117,9 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
     aDataTables.addAllColumns (aTable);
+    aDataTables.getColumn (3).setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT",
+                                                                                                                 "S"),
+                                                                         aDisplayLocale));
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
