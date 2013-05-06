@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webctrls">
+  <entry date="2013-05-06" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to autoNumeric 1.9.7</text>
+    </change>
+  </entry>
   <entry date="2013-05-06" category="api" action="remove">
     <change>
       <text locale="en">Extracted web pages handling into separate project</text>
