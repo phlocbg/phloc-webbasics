@@ -34,7 +34,7 @@ import com.phloc.scopes.singleton.tree.GlobalSingletonTreeWithUniqueID;
  */
 public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
 {
-  private MenuTreeProxy m_aProxy;
+  private MenuOperations m_aProxy;
 
   @UsedViaReflection
   @Deprecated
@@ -44,7 +44,7 @@ public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <Strin
   @Override
   protected void onAfterInstantiation ()
   {
-    m_aProxy = new MenuTreeProxy (this);
+    m_aProxy = new MenuOperations (this);
   }
 
   @Nonnull

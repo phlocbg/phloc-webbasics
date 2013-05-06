@@ -33,11 +33,11 @@ import com.phloc.commons.url.ISimpleURL;
  */
 public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject> implements IMenuTree
 {
-  private final MenuTreeProxy m_aProxy;
+  private final MenuOperations m_aProxy;
 
   public MenuTree ()
   {
-    m_aProxy = new MenuTreeProxy (this);
+    m_aProxy = new MenuOperations (this);
   }
 
   @Nonnull

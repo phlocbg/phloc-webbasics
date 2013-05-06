@@ -38,14 +38,14 @@ import com.phloc.commons.url.ISimpleURL;
  * 
  * @author Philip Helger
  */
-public class MenuTreeProxy
+public class MenuOperations implements IMenuOperations
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTreeProxy.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MenuOperations.class);
 
   private final IMenuTree m_aMenuTree;
   private String m_sDefaultMenuItem;
 
-  public MenuTreeProxy (@Nonnull final IMenuTree aMenuTree)
+  public MenuOperations (@Nonnull final IMenuTree aMenuTree)
   {
     if (aMenuTree == null)
       throw new NullPointerException ("menuTree");
