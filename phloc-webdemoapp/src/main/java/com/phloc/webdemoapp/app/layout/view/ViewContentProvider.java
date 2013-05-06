@@ -56,7 +56,10 @@ final class ViewContentProvider
     else
     {
       // No rights -> goto start page
-      aDisplayPage = (IWebPage) ApplicationRequestManager.getInstance ().getDefaultMenuItem ().getPage ();
+      aDisplayPage = (IWebPage) ApplicationRequestManager.getInstance ()
+                                                         .getMenuTree ()
+                                                         .getDefaultMenuItem ()
+                                                         .getPage ();
     }
 
     final WebPageExecutionContext aWPEC = new WebPageExecutionContext (aLEC, aDisplayPage);
