@@ -611,8 +611,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
-    aDataTables.addAllColumns (aTable);
+    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.addColumn (new DataTablesColumn (3).setSortable (false));
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

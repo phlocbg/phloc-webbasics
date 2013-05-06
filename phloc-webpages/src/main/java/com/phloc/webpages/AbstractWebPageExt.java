@@ -110,12 +110,20 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  public static DataTables createBootstrapDataTables (@Nonnull final BootstrapTable aTable,
-                                                      @Nonnull final Locale aDisplayLocale)
+  public static DataTables createDefaultDataTablesStatic (@Nonnull final BootstrapTable aTable,
+                                                          @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapDataTables ret = new BootstrapDataTables (aTable);
     ret.setDisplayLocale (aDisplayLocale);
+    ret.addAllColumns (aTable);
     return ret;
+  }
+
+  @Nonnull
+  protected DataTables createDefaultDataTables (@Nonnull final BootstrapTable aTable,
+                                                @Nonnull final Locale aDisplayLocale)
+  {
+    return createDefaultDataTablesStatic (aTable, aDisplayLocale);
   }
 
   /**

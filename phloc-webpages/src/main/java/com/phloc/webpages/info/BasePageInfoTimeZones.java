@@ -132,8 +132,7 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
-    aDataTables.addAllColumns (aTable);
+    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getColumn (3).setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT",
                                                                                                                  "S"),
                                                                          aDisplayLocale));

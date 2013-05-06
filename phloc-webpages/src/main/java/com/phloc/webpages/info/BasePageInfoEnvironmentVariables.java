@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -92,7 +91,7 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
 
     // For all environment variables
-    for (final Map.Entry <String, String> aEntry : ContainerHelper.getSortedByKey (System.getenv ()).entrySet ())
+    for (final Map.Entry <String, String> aEntry : System.getenv ().entrySet ())
     {
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (aEntry.getKey ());
@@ -100,8 +99,7 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
-    aDataTables.addAllColumns (aTable);
+    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

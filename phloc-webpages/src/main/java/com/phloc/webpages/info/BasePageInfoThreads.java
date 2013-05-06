@@ -170,8 +170,7 @@ public class BasePageInfoThreads extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
-    aDataTables.addAllColumns (aTable);
+    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getColumn (0).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableLong (aDisplayLocale));
     aDataTables.getColumn (3).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableInteger (aDisplayLocale));
     aDataTables.getColumn (5).setSortable (false);
