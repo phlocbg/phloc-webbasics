@@ -71,6 +71,8 @@ public class PageShowChildrenRenderer implements Serializable
   @OverrideOnDemand
   protected IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItemPage, @Nonnull final Locale aDisplayLocale)
   {
+    if (!aMenuItemPage.matchesDisplayFilter ())
+      return null;
     return new HCA (LinkUtils.getLinkToMenuItem (aMenuItemPage.getID ())).addChild (aMenuItemPage.getDisplayText (aDisplayLocale));
   }
 
@@ -88,6 +90,8 @@ public class PageShowChildrenRenderer implements Serializable
   protected IHCNode renderMenuItemExternal (@Nonnull final IMenuItemExternal aMenuItemExternal,
                                             @Nonnull final Locale aDisplayLocale)
   {
+    if (!aMenuItemExternal.matchesDisplayFilter ())
+      return null;
     return new HCA (aMenuItemExternal.getURL ()).addChild (aMenuItemExternal.getDisplayText (aDisplayLocale));
   }
 }
