@@ -56,7 +56,10 @@ public class MenuTreeProxy
   private static <T extends IMenuObject> T _createChildItem (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aParentItem,
                                                              @Nonnull final T aMenuObject)
   {
-    aParentItem.createChildItem (aMenuObject.getID (), aMenuObject);
+    if (aParentItem.createChildItem (aMenuObject.getID (), aMenuObject, false) == null)
+      throw new IllegalArgumentException ("Failed to add the menu object " +
+                                          aMenuObject +
+                                          " probably the ID is already contained!");
     return aMenuObject;
   }
 
