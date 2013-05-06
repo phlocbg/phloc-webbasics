@@ -17,10 +17,13 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.url.ISimpleURL;
@@ -198,27 +201,62 @@ public interface IMenuOperations
                                 @Nonnull IHasDisplayText aName);
 
   /**
-   * Set the default menu item
+   * Set the default menu item. This is a shortcut for
+   * <code>setDefaultMenuItemIDs (new ArrayList (sDefaultMenuItemID));</code>.
+   * The passed menu item ID must resolve to an {@link IMenuItemPage} object.
    * 
-   * @param sDefaultMenuItem
+   * @param sDefaultMenuItemID
    *        The default menu item to be set. May be <code>null</code>.
    */
-  void setDefaultMenuItemID (@Nullable String sDefaultMenuItem);
+  void setDefaultMenuItemID (@Nullable String sDefaultMenuItemID);
 
   /**
+   * Set the default menu items in the priority order. The passed menu item IDs
+   * must resolve to {@link IMenuItemPage} objects.
+   * 
+   * @param aDefaultMenuItemIDs
+   *        The default menu items to be set. May be <code>null</code>. This
+   *        list may not contain any <code>null</code> entries.
+   */
+  void setDefaultMenuItemIDs (@Nullable List <String> aDefaultMenuItemIDs);
+
+  /**
+   * Get the default menu item with the highest priority. Similar to
+   * <code>getAllDefaultMenuItemIDs().get(0)</code>.
+   * 
    * @return The default menu item ID. May be <code>null</code>.
    */
   @Nullable
   String getDefaultMenuItemID ();
 
   /**
-   * Get the default menu item object.
+   * @return The default menu item IDs. May not be <code>null</code> but may be
+   *         empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllDefaultMenuItemIDs ();
+
+  /**
+   * Get the default menu item object. Similar to
+   * <code>getAllDefaultMenuItems().get(0)</code>.
    * 
    * @return <code>null</code> if either no default menu item is present, or the
    *         default menu item ID could not be resolved to a menu item
    */
   @Nullable
-  IMenuItem getDefaultMenuItem ();
+  IMenuItemPage getDefaultMenuItem ();
+
+  /**
+   * Get the default menu item objects in the correct order.
+   * 
+   * @return The list of all default menu items, in the order as specified by
+   *         {@link #setDefaultMenuItemIDs(List)}. Never <code>null</code> but
+   *         may be empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <IMenuItemPage> getAllDefaultMenuItems ();
 
   /**
    * Get the menu object with the specified ID

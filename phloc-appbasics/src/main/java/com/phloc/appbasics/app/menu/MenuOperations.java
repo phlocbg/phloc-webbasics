@@ -17,6 +17,9 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -24,7 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
@@ -43,7 +48,7 @@ public class MenuOperations implements IMenuOperations
   private static final Logger s_aLogger = LoggerFactory.getLogger (MenuOperations.class);
 
   private final IMenuTree m_aMenuTree;
-  private String m_sDefaultMenuItem;
+  private List <String> m_aDefaultMenuItemIDs;
 
   public MenuOperations (@Nonnull final IMenuTree aMenuTree)
   {
@@ -163,35 +168,71 @@ public class MenuOperations implements IMenuOperations
     return _createChildItem (aParentItem, new MenuItemExternal (sItemID, aURL, aName));
   }
 
-  public void setDefaultMenuItemID (@Nullable final String sDefaultMenuItem)
+  public void setDefaultMenuItemID (@Nullable final String sDefaultMenuItemID)
   {
-    m_sDefaultMenuItem = sDefaultMenuItem;
+    m_aDefaultMenuItemIDs = sDefaultMenuItemID == null ? null : ContainerHelper.newList (sDefaultMenuItemID);
+  }
+
+  public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
+  {
+    m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
   }
 
   @Nullable
   public String getDefaultMenuItemID ()
   {
-    return m_sDefaultMenuItem;
+    return ContainerHelper.getFirstElement (m_aDefaultMenuItemIDs);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllDefaultMenuItemIDs ()
+  {
+    return ContainerHelper.newList (m_aDefaultMenuItemIDs);
   }
 
   @Nullable
-  public IMenuItem getDefaultMenuItem ()
+  private IMenuItemPage _getDefaultMenuItem (@Nullable final String sMenuItemID)
   {
-    if (m_sDefaultMenuItem != null)
+    if (sMenuItemID != null)
     {
-      final DefaultTreeItemWithID <String, IMenuObject> aDefaultMenuItem = m_aMenuTree.getItemWithID (m_sDefaultMenuItem);
-      if (aDefaultMenuItem != null)
+      // Resolve default menu item ID
+      final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = m_aMenuTree.getItemWithID (sMenuItemID);
+      if (aTreeItem != null)
       {
-        final IMenuObject aData = aDefaultMenuItem.getData ();
-        if (aData instanceof IMenuItem)
-          return (IMenuItem) aData;
-        s_aLogger.warn ("The default menu object ID does not resolve to a menu item but to " +
-                        CGStringHelper.getSafeClassName (aData));
+        final IMenuObject aMenuItem = aTreeItem.getData ();
+        if (aMenuItem instanceof IMenuItemPage)
+          return (IMenuItemPage) aMenuItem;
+        s_aLogger.warn ("The default menu object ID '" +
+                        sMenuItemID +
+                        "' does not resolve to an IMenuItemPage but to " +
+                        CGStringHelper.getSafeClassName (aMenuItem));
       }
       else
-        s_aLogger.warn ("Failed to resolve the default menu item ID '" + m_sDefaultMenuItem + "'");
+        s_aLogger.warn ("Failed to resolve the default menu item ID '" + sMenuItemID + "'");
     }
     return null;
+  }
+
+  @Nullable
+  public IMenuItemPage getDefaultMenuItem ()
+  {
+    return _getDefaultMenuItem (getDefaultMenuItemID ());
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IMenuItemPage> getAllDefaultMenuItems ()
+  {
+    final List <IMenuItemPage> ret = new ArrayList <IMenuItemPage> ();
+    if (m_aDefaultMenuItemIDs != null)
+      for (final String sDefaultMenuItemID : m_aDefaultMenuItemIDs)
+      {
+        final IMenuItemPage aDefaultMenuItem = _getDefaultMenuItem (sDefaultMenuItemID);
+        if (aDefaultMenuItem != null)
+          ret.add (aDefaultMenuItem);
+      }
+    return ret;
   }
 
   @Nullable

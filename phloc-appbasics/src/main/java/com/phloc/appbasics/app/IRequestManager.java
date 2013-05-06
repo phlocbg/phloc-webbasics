@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.scopes.domain.IRequestScope;
 
 public interface IRequestManager
@@ -46,18 +47,17 @@ public interface IRequestManager
   void onRequestBegin (@Nonnull IRequestScope aRequestScope);
 
   /**
+   * @return The menu tree to be used. May not be <code>null</code>.
+   */
+  @Nonnull
+  IMenuTree getMenuTree ();
+
+  /**
    * @return The ID of the last requested menu item, or <code>null</code> if the
    *         corresponding session parameter is not present.
    */
   @Nullable
   IMenuItemPage getSessionMenuItem ();
-
-  /**
-   * @return The specified default menu item. May be <code>null</code> if no
-   *         default menu item is specified.
-   */
-  @Nullable
-  IMenuItemPage getDefaultMenuItem ();
 
   /**
    * Resolve the request parameter for the menu item to an {@link IMenuItem}

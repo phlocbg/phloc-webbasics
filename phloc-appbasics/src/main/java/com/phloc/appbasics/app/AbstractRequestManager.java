@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
-import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
@@ -47,9 +46,6 @@ public abstract class AbstractRequestManager implements IRequestManager
 {
   public AbstractRequestManager ()
   {}
-
-  @Nonnull
-  protected abstract IMenuTree getMenuTree ();
 
   @Nonnull
   protected abstract ILocaleManager getLocaleManager ();
@@ -102,16 +98,6 @@ public abstract class AbstractRequestManager implements IRequestManager
     return aSessionScope == null ? null : aSessionScope.<IMenuItemPage> getCastedAttribute (getSessionAttrMenuItem ());
   }
 
-  /**
-   * @return The specified default menu item. May be <code>null</code> if no
-   *         default menu item is specified.
-   */
-  @Nullable
-  public IMenuItemPage getDefaultMenuItem ()
-  {
-    return (IMenuItemPage) getMenuTree ().getDefaultMenuItem ();
-  }
-
   @Nonnull
   public IMenuItemPage getRequestMenuItem ()
   {
@@ -121,7 +107,7 @@ public abstract class AbstractRequestManager implements IRequestManager
       return aSelectedMenuItem;
 
     // Use default menu item
-    final IMenuItemPage aDefaultMenuItem = getDefaultMenuItem ();
+    final IMenuItemPage aDefaultMenuItem = getMenuTree ().getDefaultMenuItem ();
     if (aDefaultMenuItem != null && aDefaultMenuItem.matchesDisplayFilter ())
       return aDefaultMenuItem;
 

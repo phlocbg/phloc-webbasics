@@ -47,7 +47,7 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
   {
     @Override
     @Nonnull
-    protected IMenuTree getMenuTree ()
+    public IMenuTree getMenuTree ()
     {
       IMenuTree ret = ApplicationMenuTree.getInstance ();
       // XXX hack alert :(
@@ -102,15 +102,15 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
   }
 
   @Nullable
-  public IMenuItemPage getSessionMenuItem ()
+  public IMenuTree getMenuTree ()
   {
-    return m_aRM.getSessionMenuItem ();
+    return m_aRM.getMenuTree ();
   }
 
   @Nullable
-  public IMenuItemPage getDefaultMenuItem ()
+  public IMenuItemPage getSessionMenuItem ()
   {
-    return m_aRM.getDefaultMenuItem ();
+    return m_aRM.getSessionMenuItem ();
   }
 
   @Nonnull

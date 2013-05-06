@@ -17,10 +17,13 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.name.IHasDisplayText;
@@ -134,16 +137,35 @@ public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <Strin
     m_aProxy.setDefaultMenuItemID (sDefaultMenuItem);
   }
 
+  public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
+  {
+    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
+  }
+
   @Nullable
   public String getDefaultMenuItemID ()
   {
     return m_aProxy.getDefaultMenuItemID ();
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllDefaultMenuItemIDs ()
+  {
+    return m_aProxy.getAllDefaultMenuItemIDs ();
+  }
+
   @Nullable
-  public IMenuItem getDefaultMenuItem ()
+  public IMenuItemPage getDefaultMenuItem ()
   {
     return m_aProxy.getDefaultMenuItem ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IMenuItemPage> getAllDefaultMenuItems ()
+  {
+    return m_aProxy.getAllDefaultMenuItems ();
   }
 
   @Nullable
