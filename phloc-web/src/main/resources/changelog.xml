@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <entry date="2013-05-06" category="api" action="add">
+    <change>
+      <text locale="en">Updated RequestLogger API</text>
+    </change>
+  </entry>
   <release date="2013-04-22" version="5.0.5" />
   <entry date="2013-04-22" category="tech" action="update">
     <change>

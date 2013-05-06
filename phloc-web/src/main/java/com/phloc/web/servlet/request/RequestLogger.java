@@ -17,13 +17,13 @@
  */
 package com.phloc.web.servlet.request;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -201,31 +201,21 @@ public final class RequestLogger
     s_aLogger.info (getRequestHeader (aHttpRequest).toString ());
   }
 
+  @SuppressWarnings ("unchecked")
   @Nonnull
-  private static CharSequence _toString (@Nullable final Object o)
+  public static Map <String, String []> getRequestParameterMapTypes (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (o == null)
-      return "null";
-    if (!o.getClass ().isArray ())
-      return o.toString ();
-    final StringBuilder aSB = new StringBuilder ('[');
-    int i = 0;
-    for (final Object aValue : (Object []) o)
-    {
-      if (i++ > 0)
-        aSB.append (", ");
-      aSB.append (_toString (aValue));
-    }
-    return aSB.append (']');
+    return aHttpRequest.getParameterMap ();
   }
 
   @Nonnull
   public static Map <String, String> getRequestParameterMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
     final Map <String, String> ret = new LinkedHashMap <String, String> ();
-    final Map <?, ?> aParams = aHttpRequest.getParameterMap ();
-    for (final Entry <?, ?> aEntry : ContainerHelper.getSortedByKey (aParams, new ComparatorAsString ()).entrySet ())
-      ret.put (aEntry.getKey ().toString (), _toString (aEntry.getValue ()).toString ());
+    for (final Map.Entry <String, String []> aEntry : ContainerHelper.getSortedByKey (getRequestParameterMapTypes (aHttpRequest),
+                                                                                      new ComparatorAsString ())
+                                                                     .entrySet ())
+      ret.put (aEntry.getKey (), Arrays.toString (aEntry.getValue ()));
     return ret;
   }
 
