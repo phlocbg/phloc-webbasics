@@ -84,6 +84,7 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
+    aDataTables.addAllColumns (aTable);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

@@ -37,7 +37,7 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
     MSG_NAME ("Name", "Name"),
     MSG_SHORTNAME ("Kurzer Name", "Short name"),
     MSG_OFFSET ("Abweichung", "Offset"),
-    MSG_DEFAULT_OFFSET ("Std. Abweichung?", "Def offset?"),
+    MSG_STANDARD_OFFSET ("Ist Std.?", "Is std?"),
     MSG_FIXED ("Konstant?", "Fixed?");
 
     private final ITextProvider m_aTP;
@@ -85,20 +85,20 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
     final DateTimeZone aCurrentDTZ = PDTConfig.getDefaultDateTimeZone ();
 
     final BootstrapTable aTable = new BootstrapTable (new HCCol (100),
-                                                      new HCCol (200),
-                                                      new HCCol (120),
+                                                      HCCol.star (),
                                                       new HCCol (100),
-                                                      new HCCol (100),
-                                                      HCCol.star ()).setID (getID ());
+                                                      new HCCol (70),
+                                                      new HCCol (70),
+                                                      new HCCol (70)).setID (getID ());
     aTable.setSpanningHeaderContent (EText.MSG_CURRENT_TIMEZONE.getDisplayText (aDisplayLocale) +
                                      aCurrentDTZ.getID () +
-                                     ' ' +
+                                     " - " +
                                      aCurrentDTZ.getName (nNow));
     aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_SHORTNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_OFFSET.getDisplayText (aDisplayLocale),
-                                     EText.MSG_DEFAULT_OFFSET.getDisplayText (aDisplayLocale),
+                                     EText.MSG_STANDARD_OFFSET.getDisplayText (aDisplayLocale),
                                      EText.MSG_FIXED.getDisplayText (aDisplayLocale));
     for (final String sID : DateTimeZone.getAvailableIDs ())
     {
@@ -114,6 +114,7 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
+    aDataTables.addAllColumns (aTable);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

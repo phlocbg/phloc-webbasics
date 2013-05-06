@@ -133,6 +133,7 @@ public class BasePageAudit extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
+    aDataTables.addAllColumns (aTable);
     aDataTables.addColumn (new DataTablesColumn (0).addClass (CSS_CLASS_RIGHT)
                                                    .setComparator (new ComparatorTableDateTime (aDisplayLocale)));
     aDataTables.addColumn (new DataTablesColumn (4).setSortable (false));

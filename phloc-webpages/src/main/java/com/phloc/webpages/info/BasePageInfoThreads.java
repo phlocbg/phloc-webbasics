@@ -17,6 +17,8 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.htmlext.HCUtils;
@@ -60,15 +62,15 @@ public class BasePageInfoThreads extends AbstractWebPageExt
   }
 
   public BasePageInfoThreads (@Nonnull @Nonempty final String sID,
-                                  @Nonnull final String sName,
-                                  @Nullable final String sDescription)
+                              @Nonnull final String sName,
+                              @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageInfoThreads (@Nonnull @Nonempty final String sID,
-                                  @Nonnull final IReadonlyMultiLingualText aName,
-                                  @Nullable final IReadonlyMultiLingualText aDescription)
+                              @Nonnull final IReadonlyMultiLingualText aName,
+                              @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -95,7 +97,7 @@ public class BasePageInfoThreads extends AbstractWebPageExt
 
     final BootstrapTable aTable = new BootstrapTable (new HCCol (50),
                                                       new HCCol (100),
-                                                      new HCCol (230),
+                                                      new HCCol (150),
                                                       new HCCol (55),
                                                       new HCCol (100),
                                                       HCCol.star ()).setID (getID ());
@@ -111,7 +113,9 @@ public class BasePageInfoThreads extends AbstractWebPageExt
                                      "/" +
                                      Thread.NORM_PRIORITY +
                                      "/" +
-                                     Thread.MAX_PRIORITY);
+                                     Thread.MAX_PRIORITY +
+                                     "; Zeitpunkt: " +
+                                     PDTToString.getAsString (PDTFactory.getCurrentDateTime (), aDisplayLocale));
     aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
                                      EText.MSG_GROUP.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
@@ -147,8 +151,10 @@ public class BasePageInfoThreads extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
+    aDataTables.addAllColumns (aTable);
     aDataTables.getColumn (0).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableLong (aDisplayLocale));
     aDataTables.getColumn (3).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableInteger (aDisplayLocale));
+    aDataTables.getColumn (5).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
