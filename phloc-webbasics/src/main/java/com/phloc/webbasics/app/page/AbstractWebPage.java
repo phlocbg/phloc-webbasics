@@ -172,6 +172,14 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   /**
+   * This method is called before the main
+   * {@link #fillContent(WebPageExecutionContext)} method is called.
+   */
+  @OverrideOnDemand
+  protected void beforeFillContent ()
+  {}
+
+  /**
    * Abstract method to be implemented by subclasses, that creates the main page
    * content, without the help icon.
    * 
@@ -179,6 +187,14 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    *        The web page execution context. Never <code>null</code>.
    */
   protected abstract void fillContent (@Nonnull WebPageExecutionContext aWPEC);
+
+  /**
+   * This method is called after the main
+   * {@link #fillContent(WebPageExecutionContext)} method is called.
+   */
+  @OverrideOnDemand
+  protected void afterFillContent ()
+  {}
 
   /**
    * Get the help URL of the current page
@@ -245,8 +261,14 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   {
     if (isValidToDisplayPage (aWPEC).isValid ())
     {
+      // "before"-callback
+      beforeFillContent ();
+
       // Create the main page content
       fillContent (aWPEC);
+
+      // "after"-callback
+      afterFillContent ();
     }
 
     // Is help available for this page?
