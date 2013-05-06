@@ -27,7 +27,7 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableLong;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public final class BasePageInfoThreadDumps extends AbstractWebPageExt
+public class BasePageInfoThreadDumps extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -129,7 +129,6 @@ public final class BasePageInfoThreadDumps extends AbstractWebPageExt
       // Stack trace
       aRow.addCell (HCUtils.nl2brList (StackTraceHelper.getStackAsString (aEntry.getValue ())));
     }
-
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);

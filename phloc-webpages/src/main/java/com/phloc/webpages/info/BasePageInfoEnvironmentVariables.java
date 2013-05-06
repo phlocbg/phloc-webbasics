@@ -22,7 +22,7 @@ import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public final class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
+public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -66,6 +66,7 @@ public final class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
       aRow.addCell (aEntry.getKey ());
       aRow.addCell (aEntry.getValue ());
     }
+    aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createBootstrapDataTables (aTable, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
