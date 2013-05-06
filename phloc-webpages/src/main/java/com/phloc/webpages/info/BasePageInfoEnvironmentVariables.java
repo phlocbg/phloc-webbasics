@@ -11,6 +11,7 @@ import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
@@ -44,9 +45,23 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
+  }
+
+  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
+                                           @Nonnull final String sName,
+                                           @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
+                                           @Nonnull final IReadonlyMultiLingualText aName,
+                                           @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
   }
 
   @Override

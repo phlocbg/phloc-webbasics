@@ -13,6 +13,7 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.concurrent.ComparatorThreadID;
 import com.phloc.commons.lang.StackTraceHelper;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
@@ -53,9 +54,23 @@ public class BasePageInfoThreadDumps extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
+  }
+
+  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID,
+                                  @Nonnull final String sName,
+                                  @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID,
+                                  @Nonnull final IReadonlyMultiLingualText aName,
+                                  @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
   }
 
   private static String _getThreadGroupName (final ThreadGroup aParamTG)

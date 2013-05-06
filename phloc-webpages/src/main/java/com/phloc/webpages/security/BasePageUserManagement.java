@@ -43,6 +43,7 @@ import com.phloc.commons.name.ComparatorHasName;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
@@ -165,6 +166,24 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                  @Nullable final Locale aDefaultUserLocale)
   {
     super (sID, sName);
+    m_aDefaultUserLocale = aDefaultUserLocale;
+  }
+
+  public BasePageUserManagement (@Nonnull @Nonempty final String sID,
+                                 @Nonnull final String sName,
+                                 @Nullable final String sDescription,
+                                 @Nullable final Locale aDefaultUserLocale)
+  {
+    super (sID, sName, sDescription);
+    m_aDefaultUserLocale = aDefaultUserLocale;
+  }
+
+  public BasePageUserManagement (@Nonnull @Nonempty final String sID,
+                                 @Nonnull final IReadonlyMultiLingualText aName,
+                                 @Nullable final IReadonlyMultiLingualText aDescription,
+                                 @Nullable final Locale aDefaultUserLocale)
+  {
+    super (sID, aName, aDescription);
     m_aDefaultUserLocale = aDefaultUserLocale;
   }
 

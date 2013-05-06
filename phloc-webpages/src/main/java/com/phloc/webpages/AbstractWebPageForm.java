@@ -24,6 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCHiddenField;
@@ -48,6 +49,20 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   public AbstractWebPageForm (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
+  }
+
+  public AbstractWebPageForm (@Nonnull @Nonempty final String sID,
+                              @Nonnull final String sName,
+                              @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  public AbstractWebPageForm (@Nonnull @Nonempty final String sID,
+                              @Nonnull final IReadonlyMultiLingualText aName,
+                              @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
   }
 
   /**

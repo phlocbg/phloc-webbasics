@@ -27,6 +27,7 @@ import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
@@ -54,6 +55,20 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   public BasePageSavedStates (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
+  }
+
+  public BasePageSavedStates (@Nonnull @Nonempty final String sID,
+                              @Nonnull final String sName,
+                              @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  public BasePageSavedStates (@Nonnull @Nonempty final String sID,
+                              @Nonnull final IReadonlyMultiLingualText aName,
+                              @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
   }
 
   @Nonnull

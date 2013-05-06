@@ -12,6 +12,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
@@ -56,6 +57,20 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
   public BasePageInfoTimeZones (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
+  }
+
+  public BasePageInfoTimeZones (@Nonnull @Nonempty final String sID,
+                                @Nonnull final String sName,
+                                @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  public BasePageInfoTimeZones (@Nonnull @Nonempty final String sID,
+                                @Nonnull final IReadonlyMultiLingualText aName,
+                                @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
   }
 
   @Override

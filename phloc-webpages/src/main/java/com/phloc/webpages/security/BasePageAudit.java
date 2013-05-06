@@ -28,6 +28,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
@@ -76,6 +77,28 @@ public class BasePageAudit extends AbstractWebPageExt
                         @Nonnull final IAuditManager aAuditManager)
   {
     super (sID, sName);
+    if (aAuditManager == null)
+      throw new NullPointerException ("auditManager");
+    m_aAuditManager = aAuditManager;
+  }
+
+  public BasePageAudit (@Nonnull @Nonempty final String sID,
+                        @Nonnull final String sName,
+                        @Nullable final String sDescription,
+                        @Nonnull final IAuditManager aAuditManager)
+  {
+    super (sID, sName, sDescription);
+    if (aAuditManager == null)
+      throw new NullPointerException ("auditManager");
+    m_aAuditManager = aAuditManager;
+  }
+
+  public BasePageAudit (@Nonnull @Nonempty final String sID,
+                        @Nonnull final IReadonlyMultiLingualText aName,
+                        @Nullable final IReadonlyMultiLingualText aDescription,
+                        @Nonnull final IAuditManager aAuditManager)
+  {
+    super (sID, aName, aDescription);
     if (aAuditManager == null)
       throw new NullPointerException ("auditManager");
     m_aAuditManager = aAuditManager;

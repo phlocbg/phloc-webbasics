@@ -95,6 +95,20 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
     super (sID, aName);
   }
 
+  public AbstractWebPageExt (@Nonnull @Nonempty final String sID,
+                             @Nonnull final String sName,
+                             @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  public AbstractWebPageExt (@Nonnull @Nonempty final String sID,
+                             @Nonnull final IReadonlyMultiLingualText aName,
+                             @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
+  }
+
   @Nonnull
   public static DataTables createBootstrapDataTables (@Nonnull final BootstrapTable aTable,
                                                       @Nonnull final Locale aDisplayLocale)
