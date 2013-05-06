@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.webpages.info;
 
 import java.util.List;
@@ -22,7 +39,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webpages.AbstractWebPageExt;
 
 public final class BasePageInfoRequest extends AbstractWebPageExt
@@ -80,7 +97,8 @@ public final class BasePageInfoRequest extends AbstractWebPageExt
 
     // HTTP headers
     aNodeList.addChild (HCH3.create (EText.MSG_HTTP_HEADERS.getDisplayText (aDisplayLocale)));
-    BootstrapTable aTable = new BootstrapTable (new HCCol (nFirstColWidth), HCCol.star ()).setID (getID () + "$http");
+    BootstrapTableFormView aTable = new BootstrapTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable.setID (getID () + "$http");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, List <String>> aEntry : RequestHelper.getRequestHeaderMap (aHttpRequest))
@@ -91,7 +109,8 @@ public final class BasePageInfoRequest extends AbstractWebPageExt
 
     // Request parameters
     aNodeList.addChild (HCH3.create (EText.MSG_PARAMETERS.getDisplayText (aDisplayLocale)));
-    aTable = new BootstrapTable (new HCCol (nFirstColWidth), HCCol.star ()).setID (getID () + "$params");
+    aTable = new BootstrapTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable.setID (getID () + "$params");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, String> aEntry : RequestLogger.getRequestParameterMap (aHttpRequest).entrySet ())
@@ -102,7 +121,8 @@ public final class BasePageInfoRequest extends AbstractWebPageExt
 
     // Request properties
     aNodeList.addChild (HCH3.create (EText.MSG_PROPERTIES.getDisplayText (aDisplayLocale)));
-    aTable = new BootstrapTable (new HCCol (nFirstColWidth), HCCol.star ()).setID (getID () + "$attrs");
+    aTable = new BootstrapTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable.setID (getID () + "$attrs");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, String> aEntry : RequestLogger.getRequestFieldMap (aHttpRequest).entrySet ())
