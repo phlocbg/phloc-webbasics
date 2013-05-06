@@ -28,7 +28,7 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableLong;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public class BasePageInfoThreadDumps extends AbstractWebPageExt
+public class BasePageInfoThreads extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -54,19 +54,19 @@ public class BasePageInfoThreadDumps extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageInfoThreads (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID,
+  public BasePageInfoThreads (@Nonnull @Nonempty final String sID,
                                   @Nonnull final String sName,
                                   @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageInfoThreadDumps (@Nonnull @Nonempty final String sID,
+  public BasePageInfoThreads (@Nonnull @Nonempty final String sID,
                                   @Nonnull final IReadonlyMultiLingualText aName,
                                   @Nullable final IReadonlyMultiLingualText aDescription)
   {
