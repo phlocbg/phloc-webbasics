@@ -20,6 +20,7 @@ package com.phloc.webbasics.app.page.system;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  */
 public class SystemPageNotFound extends AbstractWebPage
 {
+  public static final String PAGEID_SYSTEM_NOTFOUND = "system.notfound";
   private static final Logger s_aLogger = LoggerFactory.getLogger (SystemPageNotFound.class);
 
   @Translatable
@@ -50,13 +52,14 @@ public class SystemPageNotFound extends AbstractWebPage
     TITLE ("Seite nicht gefunden", "Page not found"),
     MESSAGE ("Die von Ihnen gesuchte Seite existiert leider nicht!", "The page you are looking for does not exist!");
 
-    private ISimpleMultiLingualText m_aTP;
+    private final ISimpleMultiLingualText m_aTP;
 
-    private ETextBase (final String sDE, final String sEN)
+    private ETextBase (@Nonnull final String sDE, @Nonnull final String sEN)
     {
       m_aTP = TextProvider.create_DE_EN (sDE, sEN);
     }
 
+    @Nullable
     public String getDisplayText (final Locale aContentLocale)
     {
       return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
@@ -67,7 +70,7 @@ public class SystemPageNotFound extends AbstractWebPage
 
   protected SystemPageNotFound ()
   {
-    super ("system.notfound", new ReadonlyMultiLingualText (ETextBase.PAGENAME.m_aTP));
+    super (PAGEID_SYSTEM_NOTFOUND, new ReadonlyMultiLingualText (ETextBase.PAGENAME.m_aTP));
   }
 
   @Nonnull
@@ -77,7 +80,7 @@ public class SystemPageNotFound extends AbstractWebPage
   }
 
   @Override
-  protected void fillContent (final WebPageExecutionContext aWPEC)
+  protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     s_aLogger.info ("PAGE NOT FOUND " + aWPEC.getRequestScope ().getURL ());
     aWPEC.getNodeList ().addChild (HCH1.create (ETextBase.MESSAGE.getDisplayText (aWPEC.getDisplayLocale ())));

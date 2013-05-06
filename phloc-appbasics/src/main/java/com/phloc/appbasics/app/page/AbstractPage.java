@@ -43,6 +43,13 @@ public abstract class AbstractPage implements IPage
 
   private final String m_sID;
   private IReadonlyMultiLingualText m_aName;
+  private IReadonlyMultiLingualText m_aDescription;
+
+  @Nonnull
+  private static ReadonlyMultiLingualText _getAsMLT (@Nonnull final String sText)
+  {
+    return new ReadonlyMultiLingualText (ContainerHelper.newMap (CGlobal.LOCALE_INDEPENDENT, sText));
+  }
 
   /**
    * Constructor
@@ -68,7 +75,26 @@ public abstract class AbstractPage implements IPage
    */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
-    this (sID, new ReadonlyMultiLingualText (ContainerHelper.newMap (CGlobal.LOCALE_INDEPENDENT, sName)));
+    this (sID, _getAsMLT (sName));
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param sName
+   *        The constant (non-translatable) name of the page. May not be
+   *        <code>null</code>.
+   * @param sDescription
+   *        The constant (non-translatable) description of the page. May be
+   *        <code>null</code>.
+   */
+  public AbstractPage (@Nonnull @Nonempty final String sID,
+                       @Nonnull final String sName,
+                       @Nullable final String sDescription)
+  {
+    this (sID, _getAsMLT (sName), sDescription == null ? null : _getAsMLT (sDescription));
   }
 
   /**
@@ -81,8 +107,26 @@ public abstract class AbstractPage implements IPage
    */
   public AbstractPage (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
+    this (sID, aName, null);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param aName
+   *        The name of the page. May not be <code>null</code>.
+   * @param aDescription
+   *        Optional description of the page. May be <code>null</code>.
+   */
+  public AbstractPage (@Nonnull @Nonempty final String sID,
+                       @Nonnull final IReadonlyMultiLingualText aName,
+                       @Nullable final IReadonlyMultiLingualText aDescription)
+  {
     this (sID);
     setName (aName);
+    setDescription (aDescription);
   }
 
   /*
@@ -108,6 +152,16 @@ public abstract class AbstractPage implements IPage
     m_aName = aName;
   }
 
+  /**
+   * @return The complete name of the page in all available locales. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public final IReadonlyMultiLingualText getName ()
+  {
+    return m_aName;
+  }
+
   /*
    * Get the name of the page in the passed locale.
    */
@@ -115,6 +169,33 @@ public abstract class AbstractPage implements IPage
   public final String getDisplayText (@Nonnull final Locale aContentLocale)
   {
     return m_aName.getTextWithLocaleFallback (aContentLocale);
+  }
+
+  /**
+   * Set the description of the page.
+   * 
+   * @param aDescription
+   *        The multilingual description of the page. May be <code>null</code>.
+   */
+  public final void setDescription (@Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    m_aDescription = aDescription;
+  }
+
+  /**
+   * @return The complete description of the page in all available locales. May
+   *         be <code>null</code>.
+   */
+  @Nullable
+  public final IReadonlyMultiLingualText getDescription ()
+  {
+    return m_aDescription;
+  }
+
+  @Nullable
+  public final String getDescription (@Nonnull final Locale aContentLocale)
+  {
+    return m_aDescription.getTextWithLocaleFallback (aContentLocale);
   }
 
   @OverrideOnDemand

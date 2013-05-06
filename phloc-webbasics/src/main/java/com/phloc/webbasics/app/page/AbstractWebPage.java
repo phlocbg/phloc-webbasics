@@ -82,12 +82,48 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * 
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
+   * @param sName
+   *        The constant (non-translatable) name of the page. May not be
+   *        <code>null</code>.
+   * @param sDescription
+   *        The constant (non-translatable) description of the page. May be
+   *        <code>null</code>.
+   */
+  public AbstractWebPage (@Nonnull @Nonempty final String sID,
+                          @Nonnull final String sName,
+                          @Nullable final String sDescription)
+  {
+    super (sID, sName, sDescription);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
    * @param aName
    *        The name of the page. May not be <code>null</code>.
    */
   public AbstractWebPage (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
   {
     super (sID, aName);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sID
+   *        The unique page ID. May not be <code>null</code>.
+   * @param aName
+   *        The name of the page. May not be <code>null</code>.
+   * @param aDescription
+   *        Optional description of the page. May be <code>null</code>.
+   */
+  public AbstractWebPage (@Nonnull @Nonempty final String sID,
+                          @Nonnull final IReadonlyMultiLingualText aName,
+                          @Nullable final IReadonlyMultiLingualText aDescription)
+  {
+    super (sID, aName, aDescription);
   }
 
   @Nullable
