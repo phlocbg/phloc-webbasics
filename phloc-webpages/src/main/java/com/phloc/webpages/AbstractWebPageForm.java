@@ -35,6 +35,7 @@ import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
+import com.phloc.webpages.form.JSFormHelper;
 
 public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> extends AbstractWebPageExt
 {

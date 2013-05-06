@@ -20,15 +20,20 @@ package com.phloc.webpages.security;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.audit.IAuditItem;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.ITextProvider;
+import com.phloc.commons.text.impl.TextProvider;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
-import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
@@ -41,6 +46,29 @@ import com.phloc.webpages.AbstractWebPageExt;
 
 public class BasePageAudit extends AbstractWebPageExt
 {
+  @Translatable
+  protected static enum EText implements IHasDisplayText
+  {
+    MSG_DATE ("Datum", "Date"),
+    MSG_USER ("Benutzer", "User"),
+    MSG_TYPE ("Typ", "Type"),
+    MSG_SUCCESS ("Erfolg?", "Success?"),
+    MSG_ACTION ("Aktion", "Action");
+
+    private final ITextProvider m_aTP;
+
+    private EText (final String sDE, final String sEN)
+    {
+      m_aTP = TextProvider.create_DE_EN (sDE, sEN);
+    }
+
+    @Nullable
+    public String getDisplayText (@Nonnull final Locale aContentLocale)
+    {
+      return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
+    }
+  }
+
   private final IAuditManager m_aAuditManager;
 
   public BasePageAudit (@Nonnull @Nonempty final String sID,
@@ -63,7 +91,11 @@ public class BasePageAudit extends AbstractWebPageExt
                                                       new HCCol (60),
                                                       new HCCol (60),
                                                       HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells ("Datum", "Benutzer", "Typ", "Erfolg?", "Aktion");
+    aTable.addHeaderRow ().addCells (EText.MSG_DATE.getDisplayText (aDisplayLocale),
+                                     EText.MSG_USER.getDisplayText (aDisplayLocale),
+                                     EText.MSG_TYPE.getDisplayText (aDisplayLocale),
+                                     EText.MSG_SUCCESS.getDisplayText (aDisplayLocale),
+                                     EText.MSG_ACTION.getDisplayText (aDisplayLocale));
 
     for (final IAuditItem aItem : m_aAuditManager.getLastAuditItems (250))
     {
@@ -74,11 +106,6 @@ public class BasePageAudit extends AbstractWebPageExt
       aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
       aRow.addCell (aItem.getAction ());
     }
-
-    if (aTable.getBodyRowCount () == 0)
-      aTable.addBodyRow ()
-            .addAndReturnCell (HCStrong.create ("Keine Audit-Einträge gefunden!"))
-            .setColspan (aTable.getColumnCount ());
 
     aNodeList.addChild (aTable);
 
