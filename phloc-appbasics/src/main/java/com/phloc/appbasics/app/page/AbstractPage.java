@@ -207,6 +207,9 @@ public abstract class AbstractPage implements IPage
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_aName).toString ();
+    return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .append ("name", m_aName)
+                                       .append ("description", m_aDescription)
+                                       .toString ();
   }
 }
