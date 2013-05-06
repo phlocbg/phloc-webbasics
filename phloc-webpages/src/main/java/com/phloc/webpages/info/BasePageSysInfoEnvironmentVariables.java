@@ -39,7 +39,7 @@ import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
+public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -61,19 +61,19 @@ public class BasePageInfoEnvironmentVariables extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
                                            @Nonnull final String sName,
                                            @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
                                            @Nonnull final IReadonlyMultiLingualText aName,
                                            @Nullable final IReadonlyMultiLingualText aDescription)
   {

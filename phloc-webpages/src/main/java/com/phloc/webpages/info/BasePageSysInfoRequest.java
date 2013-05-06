@@ -42,7 +42,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public final class BasePageInfoRequest extends AbstractWebPageExt
+public class BasePageSysInfoRequest extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -67,19 +67,19 @@ public final class BasePageInfoRequest extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoRequest (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageInfoRequest (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID,
                               @Nonnull final String sName,
                               @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageInfoRequest (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID,
                               @Nonnull final IReadonlyMultiLingualText aName,
                               @Nullable final IReadonlyMultiLingualText aDescription)
   {

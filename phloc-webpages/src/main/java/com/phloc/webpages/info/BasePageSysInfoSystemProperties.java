@@ -56,7 +56,7 @@ import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public final class BasePageInfoSystemProperties extends AbstractWebPageExt
+public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -108,19 +108,19 @@ public final class BasePageInfoSystemProperties extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoSystemProperties (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageInfoSystemProperties (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID,
                                        @Nonnull final String sName,
                                        @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageInfoSystemProperties (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID,
                                        @Nonnull final IReadonlyMultiLingualText aName,
                                        @Nullable final IReadonlyMultiLingualText aDescription)
   {

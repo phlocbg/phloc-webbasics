@@ -46,7 +46,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageExt;
 
-public class BasePageInfoTimeZones extends AbstractWebPageExt
+public class BasePageSysInfoTimeZones extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -73,19 +73,19 @@ public class BasePageInfoTimeZones extends AbstractWebPageExt
     }
   }
 
-  public BasePageInfoTimeZones (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageInfoTimeZones (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID,
                                 @Nonnull final String sName,
                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageInfoTimeZones (@Nonnull @Nonempty final String sID,
+  public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID,
                                 @Nonnull final IReadonlyMultiLingualText aName,
                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
