@@ -50,7 +50,10 @@ import com.phloc.commons.string.ToStringGenerator;
  * map looks like this: <code>map{struct=map{key=value, key2=value2}}</code>.
  * Theses maps can indefinitely be nested.<br>
  * Having only <code>struct[key1][key2][key3]=value</code> results in
- * <code>map{struct=map{key1=map{key2=map{key3=value}}}}</code>
+ * <code>map{struct=map{key1=map{key2=map{key3=value}}}}</code><br>
+ * By default the separator chars ar "[" and "]" but since this may be a problem
+ * with JS expressions, {@link #setSeparatorChars(char, char)} offers the
+ * possibility to set different separator chars that are not special.
  * 
  * @author Philip Helger
  */
@@ -58,6 +61,9 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class RequestParamMap implements IRequestParamMap
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestParamMap.class);
+
+  private static String s_sOpen = "[";
+  private static String s_sClose = "]";
 
   private final Map <String, Object> m_aMap;
 
@@ -84,7 +90,7 @@ public final class RequestParamMap implements IRequestParamMap
                                   @Nonnull final String sName,
                                   @Nullable final Object aValue)
   {
-    final int nIndex = sName.indexOf ('[');
+    final int nIndex = sName.indexOf (s_sOpen);
     if (nIndex == -1)
     {
       // Value level
@@ -114,8 +120,8 @@ public final class RequestParamMap implements IRequestParamMap
   {
     // replace everything just to have opening "[" left and one closing "]" at
     // the end that is filtered out manually
-    String sRealName = StringHelper.replaceAll (sName, "][", "[");
-    sRealName = StringHelper.trimEnd (sRealName, "]");
+    String sRealName = StringHelper.replaceAll (sName, s_sClose + s_sOpen, s_sOpen);
+    sRealName = StringHelper.trimEnd (sRealName, s_sClose);
     _recursiveAddItem (m_aMap, sRealName, aValue);
   }
 
@@ -287,7 +293,39 @@ public final class RequestParamMap implements IRequestParamMap
     final StringBuilder aSB = new StringBuilder (sBaseName);
     if (aSuffixes != null)
       for (final String sSuffix : aSuffixes)
-        aSB.append ('[').append (StringHelper.getNotNull (sSuffix)).append (']');
+        aSB.append (s_sOpen).append (StringHelper.getNotNull (sSuffix)).append (s_sClose);
     return aSB.toString ();
+  }
+
+  /**
+   * Set the separator chars to use.
+   * 
+   * @param cOpen
+   *        Open char
+   * @param cClose
+   *        Close char - must be different from open char!
+   */
+  public static void setSeparatorChars (final char cOpen, final char cClose)
+  {
+    if (cOpen == cClose)
+      throw new IllegalArgumentException ("Open and closing element may not be identical!");
+    s_sOpen = Character.toString (cOpen);
+    s_sClose = Character.toString (cClose);
+  }
+
+  /**
+   * @return The open char. By default this is "["
+   */
+  public static char getOpenChar ()
+  {
+    return s_sOpen.charAt (0);
+  }
+
+  /**
+   * @return The close char. By default this is "]"
+   */
+  public static char getCloseChar ()
+  {
+    return s_sClose.charAt (0);
   }
 }
