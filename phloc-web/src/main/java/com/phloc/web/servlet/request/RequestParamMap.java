@@ -52,18 +52,21 @@ import com.phloc.commons.string.ToStringGenerator;
  * Having only <code>struct[key1][key2][key3]=value</code> results in
  * <code>map{struct=map{key1=map{key2=map{key3=value}}}}</code><br>
  * By default the separator chars ar "[" and "]" but since this may be a problem
- * with JS expressions, {@link #setSeparatorChars(char, char)} offers the
- * possibility to set different separator chars that are not special.
+ * with JS expressions, {@link #setSeparators(char, char)} and
+ * {@link #setSeparators(String, String)} offer the possibility to set different
+ * separator separators that are not special.
  * 
  * @author Philip Helger
  */
 @Immutable
 public final class RequestParamMap implements IRequestParamMap
 {
+  public static final String DEFAULT_OPEN = "[";
+  public static final String DEFAULT_CLOSE = "]";
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestParamMap.class);
 
-  private static String s_sOpen = "[";
-  private static String s_sClose = "]";
+  private static String s_sOpen = DEFAULT_OPEN;
+  private static String s_sClose = DEFAULT_CLOSE;
 
   private final Map <String, Object> m_aMap;
 
@@ -112,7 +115,7 @@ public final class RequestParamMap implements IRequestParamMap
 
       // Recursively scan child items (starting at the first character after the
       // '[')
-      _recursiveAddItem (aChildMap, sName.substring (nIndex + 1), aValue);
+      _recursiveAddItem (aChildMap, sName.substring (nIndex + s_sOpen.length ()), aValue);
     }
   }
 
@@ -297,6 +300,12 @@ public final class RequestParamMap implements IRequestParamMap
     return aSB.toString ();
   }
 
+  public static void setSeparatorsToDefault ()
+  {
+    s_sOpen = DEFAULT_OPEN;
+    s_sClose = DEFAULT_CLOSE;
+  }
+
   /**
    * Set the separator chars to use.
    * 
@@ -305,7 +314,7 @@ public final class RequestParamMap implements IRequestParamMap
    * @param cClose
    *        Close char - must be different from open char!
    */
-  public static void setSeparatorChars (final char cOpen, final char cClose)
+  public static void setSeparators (final char cOpen, final char cClose)
   {
     if (cOpen == cClose)
       throw new IllegalArgumentException ("Open and closing element may not be identical!");
@@ -314,18 +323,46 @@ public final class RequestParamMap implements IRequestParamMap
   }
 
   /**
-   * @return The open char. By default this is "["
+   * Set the separators to use.
+   * 
+   * @param sOpen
+   *        Open string. May neither be <code>null</code> nor empty.
+   * @param sClose
+   *        Close string. May neither be <code>null</code> nor empty.
    */
-  public static char getOpenChar ()
+  public static void setSeparators (@Nonnull @Nonempty final String sOpen, @Nonnull @Nonempty final String sClose)
   {
-    return s_sOpen.charAt (0);
+    if (StringHelper.hasNoText (sOpen))
+      throw new IllegalArgumentException ("open");
+    if (StringHelper.hasNoText (sClose))
+      throw new IllegalArgumentException ("close");
+    if (sOpen.contains (sClose))
+      throw new IllegalArgumentException ("open may not contain close");
+    if (sClose.contains (sOpen))
+      throw new IllegalArgumentException ("close may not contain open");
+    s_sOpen = sOpen;
+    s_sClose = sClose;
   }
 
   /**
-   * @return The close char. By default this is "]"
+   * @return The open char. By default this is "[". Never <code>null</code> nor
+   *         empty.
    */
-  public static char getCloseChar ()
+  @Nonnull
+  @Nonempty
+  public static String getOpenSeparator ()
   {
-    return s_sClose.charAt (0);
+    return s_sOpen;
+  }
+
+  /**
+   * @return The close char. By default this is "]". Never <code>null</code> nor
+   *         empty.
+   */
+  @Nonnull
+  @Nonempty
+  public static String getCloseSeparator ()
+  {
+    return s_sClose;
   }
 }
