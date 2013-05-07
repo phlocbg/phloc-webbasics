@@ -52,12 +52,12 @@ FormHelperClass.prototype =
     for (var name in vals) {
       val = vals[name];
       if (this.patternProp.test (name))
-        $('#'+formid+' [name='+name.substring(0,name.length-2)+']').prop('checked', val);
+        $('#'+formid+' [name="'+name.substring(0,name.length-2)+'"]').prop('checked', val);
       else
         if (this.patternArray.test (name))
-          $('#'+formid+' [name='+name.substring(0,name.length-2)+']').val(val);
+          $('#'+formid+' [name="'+name.substring(0,name.length-2)+'"]').val(val);
         else
-          $('#'+formid+' [name='+name+']').val(val);
+          $('#'+formid+' [name="'+name+'"]').val(val);
     }
   },
  
