@@ -63,7 +63,7 @@ public class MockRequestDispatcher implements RequestDispatcher
 
     getMockHttpServletResponse (aResponse).setForwardedUrl (m_sURL);
     if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("MockRequestDispatcher: forwarding to URL [" + m_sURL + "]");
+      s_aLogger.debug ("MockRequestDispatcher: forwarding to URL '" + m_sURL + "'");
   }
 
   public void include (@Nonnull final ServletRequest aRequest, @Nonnull final ServletResponse aResponse)
@@ -75,7 +75,7 @@ public class MockRequestDispatcher implements RequestDispatcher
 
     getMockHttpServletResponse (aResponse).setIncludedUrl (m_sURL);
     if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("MockRequestDispatcher: including URL [" + m_sURL + "]");
+      s_aLogger.debug ("MockRequestDispatcher: including URL '" + m_sURL + "'");
   }
 
   /**
