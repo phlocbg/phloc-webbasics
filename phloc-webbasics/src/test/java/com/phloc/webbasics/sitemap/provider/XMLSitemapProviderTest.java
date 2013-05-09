@@ -38,6 +38,8 @@ import com.phloc.webbasics.sitemap.XMLSitemapIndex;
  */
 public final class XMLSitemapProviderTest
 {
+  private static final boolean [] BOOLS = new boolean [] { true, false };
+
   static
   {
     // First set the default web server info
@@ -48,10 +50,8 @@ public final class XMLSitemapProviderTest
   @Test
   public void testWrite ()
   {
-    for (int i = 0; i < 2; ++i)
+    for (final boolean bUseGZip : BOOLS)
     {
-      final boolean bUseGZip = i == 0;
-
       // provider count
       assertEquals (4, XMLSitemapProvider.getProviderCount ());
 
