@@ -64,7 +64,7 @@ public class DefaultLockManager
   }
 
   /**
-   * Get the lock information of the the given object.
+   * Get the lock information of the given object.
    * 
    * @param sObjID
    *        The object to query for lock owner.

@@ -31,7 +31,7 @@ import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * This class encapsulates the the file IO base directory for the current user
+ * This class encapsulates the file IO base directory for the current user
  * 
  * @author Philip Helger
  */
