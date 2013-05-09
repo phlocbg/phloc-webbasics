@@ -118,7 +118,9 @@ public class AsynchronousAuditor extends AbstractAuditor
       // stop all specific queues
       m_aCollector.stopQueuingNewObjects ();
 
-      s_aLogger.info ("Stopping auditor queues with " + m_aCollector.getQueueLength () + " items");
+      final int nQueueLength = m_aCollector.getQueueLength ();
+      if (nQueueLength > 0)
+        s_aLogger.info ("Stopping auditor queues with " + nQueueLength + " items");
     }
     finally
     {

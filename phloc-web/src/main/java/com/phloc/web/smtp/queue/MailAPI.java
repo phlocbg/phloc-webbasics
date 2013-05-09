@@ -329,14 +329,15 @@ public final class MailAPI
 
       final int nQueues = s_aQueueCache.size ();
       final int nQueueLength = _getTotalQueueLength ();
-      s_aLogger.info ("Stopping central mail queues: " +
-                      nQueues +
-                      " queue" +
-                      (nQueues == 1 ? "" : "s") +
-                      " with " +
-                      nQueueLength +
-                      " mail" +
-                      (nQueueLength == 1 ? "" : "s"));
+      if (nQueues > 0 || nQueueLength > 0)
+        s_aLogger.info ("Stopping central mail queues: " +
+                        nQueues +
+                        " queue" +
+                        (nQueues == 1 ? "" : "s") +
+                        " with " +
+                        nQueueLength +
+                        " mail" +
+                        (nQueueLength == 1 ? "" : "s"));
     }
     finally
     {
