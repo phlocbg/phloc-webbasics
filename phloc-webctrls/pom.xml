@@ -189,7 +189,7 @@
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>closure-maven-plugin</artifactId>
-        <version>1.0.7</version><!--$NO-MVN-MAN-VER$-->
+        <version>1.0.8</version><!--$NO-MVN-MAN-VER$-->
         <executions>
           <execution>
             <goals>
@@ -204,7 +204,7 @@
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.12</version><!--$NO-MVN-MAN-VER$-->
+        <version>1.0.13</version><!--$NO-MVN-MAN-VER$-->
         <executions>
           <execution>
             <goals>
