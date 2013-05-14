@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.phloc.maven</groupId>
   <artifactId>closure-maven-plugin</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>closure-maven-plugin</name>
   <description>Maven plugin for compressing JS files at build time</description>
@@ -24,9 +24,9 @@
   </licenses>
   
   <scm>
-    <url>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/closure-maven-plugin-1.0.8</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/closure-maven-plugin-1.0.8</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/closure-maven-plugin-1.0.8</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/closure-maven-plugin</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/closure-maven-plugin</developerConnection>
   </scm>
   
   <organization>
