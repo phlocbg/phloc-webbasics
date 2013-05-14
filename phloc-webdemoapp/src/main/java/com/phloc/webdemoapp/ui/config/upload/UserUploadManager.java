@@ -18,7 +18,6 @@
 package com.phloc.webdemoapp.ui.config.upload;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -45,7 +44,8 @@ public class UserUploadManager extends SessionWebSingleton
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UserUploadManager.class);
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, UserDataObject> m_aMap = new HashMap <String, UserDataObject> ();
+  // Declaration must be HashMap for correct serialization
+  private final HashMap <String, UserDataObject> m_aMap = new HashMap <String, UserDataObject> ();
 
   @Deprecated
   @UsedViaReflection
