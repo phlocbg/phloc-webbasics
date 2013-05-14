@@ -1,0 +1,5 @@
+# Enerjy Software baseline data (files=2, problems=2).
+path: /closure-maven-plugin/src/main/java/com/google/javascript/jscomp/ClosureRunner.java
+problem: JAVA0166:JAVA0166 Generic exception 'java.lang.Exception' caught
+path: /closure-maven-plugin/src/main/java/com/phloc/maven/jscompress/JSCompressMojo.java
+problem: JAVA0137:JAVA0137 Non-abstract class 'JSCompressMojo' missing constructor
