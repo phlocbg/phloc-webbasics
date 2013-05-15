@@ -35,6 +35,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +60,7 @@ import com.phloc.commons.thirdparty.ThirdPartyModuleRegistry;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.commons.utils.ClassPathHelper;
 import com.phloc.commons.vminit.VirtualMachineInitializer;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.web.servlet.server.StaticServerInfo;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -111,6 +113,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
 
   private static final AtomicBoolean s_aInited = new AtomicBoolean (false);
+  private LocalDateTime m_aInitializationStartDT;
+  private LocalDateTime m_aInitializationEndDT;
 
   public WebAppListener ()
   {}
@@ -314,6 +318,8 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     if (s_aInited.getAndSet (true))
       throw new IllegalStateException ("WebAppListener was already instantiated!");
 
+    m_aInitializationStartDT = PDTFactory.getCurrentLocalDateTime ();
+
     // set global debug/trace mode
     final boolean bTraceMode = StringParser.parseBool (getInitParameterTrace (aSC));
     final boolean bDebugMode = StringParser.parseBool (getInitParameterDebug (aSC));
@@ -379,8 +385,31 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' was initialized");
 
+    m_aInitializationEndDT = PDTFactory.getCurrentLocalDateTime ();
+
     // Callback
     afterContextInitialized (aSC);
+  }
+
+  /**
+   * @return The date time when the initialization started. May be
+   *         <code>null</code> if the context was never initialized.
+   */
+  @Nullable
+  public LocalDateTime getInitializationStartDT ()
+  {
+    return m_aInitializationStartDT;
+  }
+
+  /**
+   * @return The date time when the initialization ended. May be
+   *         <code>null</code> if the context was never initialized or is just
+   *         in the middle of initialization.
+   */
+  @Nullable
+  public LocalDateTime getInitializationEndDT ()
+  {
+    return m_aInitializationEndDT;
   }
 
   /**
