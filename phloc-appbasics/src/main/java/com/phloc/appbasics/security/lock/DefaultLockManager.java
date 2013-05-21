@@ -325,7 +325,7 @@ public class DefaultLockManager
       m_aRWLock.writeLock ().lock ();
       try
       {
-        // determine objects to be removed
+        // determine locks to be removed
         for (final Map.Entry <String, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
         {
           final String sLockUserID = aEntry.getValue ().getLockUserID ();
@@ -341,7 +341,10 @@ public class DefaultLockManager
         // remove locks
         for (final String sObjectID : aObjectsToUnlock)
           if (m_aLockedObjs.remove (sObjectID) == null)
-            throw new IllegalStateException ("Internal inconsistency: failed to unlock " + aObjectsToUnlock);
+            throw new IllegalStateException ("Internal inconsistency: failed to unlock '" +
+                                             sObjectID +
+                                             "' from " +
+                                             aObjectsToUnlock);
       }
       finally
       {
