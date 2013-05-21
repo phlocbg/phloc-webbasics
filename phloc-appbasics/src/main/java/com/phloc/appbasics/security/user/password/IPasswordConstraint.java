@@ -24,6 +24,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.microdom.IMicroElement;
 
+/**
+ * Base interface for a single password constraint type.
+ * 
+ * @author Philip Helger
+ */
 public interface IPasswordConstraint
 {
   /**
