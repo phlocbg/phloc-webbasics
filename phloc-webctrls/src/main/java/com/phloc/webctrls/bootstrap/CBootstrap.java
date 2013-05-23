@@ -30,7 +30,11 @@ import com.phloc.commons.version.Version;
 public final class CBootstrap
 {
   /** Bootstrap version 2.3.1 */
+  @Deprecated
   public static final Version BOOTSTRAP_VERSION_231 = new Version (2, 3, 1);
+
+  /** Bootstrap version 2.3.2 */
+  public static final Version BOOTSTRAP_VERSION_232 = new Version (2, 3, 2);
 
   private CBootstrap ()
   {}
