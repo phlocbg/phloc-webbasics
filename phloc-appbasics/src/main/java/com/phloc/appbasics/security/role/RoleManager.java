@@ -139,7 +139,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     {
       m_aRWLock.writeLock ().unlock ();
     }
-    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_ROLE, aRole.getID ());
+    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_ROLE, aRole.getID (), sName);
     return aRole;
   }
 
@@ -160,7 +160,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     {
       m_aRWLock.writeLock ().unlock ();
     }
-    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_ROLE, aRole.getID (), "predefind-role");
+    AuditUtils.onAuditCreateSuccess (CSecurity.TYPE_ROLE, aRole.getID (), "predefind-role", sName);
     return aRole;
   }
 
@@ -259,7 +259,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     final Role aRole = getRoleOfID (sRoleID);
     if (aRole == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_ROLE, "name", "no-such-role-id", sRoleID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_ROLE, sRoleID, "no-such-id");
       return EChange.UNCHANGED;
     }
 
@@ -274,7 +274,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     {
       m_aRWLock.writeLock ().unlock ();
     }
-    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_ROLE, "name", sRoleID);
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_ROLE, "name", sRoleID, sNewName);
     return EChange.CHANGED;
   }
 }

@@ -436,7 +436,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = getUserOfID (sUserID);
     if (aUser == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, "all-fields", "no-such-user-id", sUserID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id");
       return EChange.UNCHANGED;
     }
 
@@ -452,6 +452,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       eChange = eChange.or (aUser.setDisabled (bNewDisabled));
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;
+
       aUser.updateLastModified ();
       markAsChanged ();
     }
@@ -460,7 +461,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       m_aRWLock.writeLock ().unlock ();
     }
     AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USER,
-                                     "all-fields",
+                                     "all",
                                      aUser.getID (),
                                      sNewLoginName,
                                      sNewEmailAddress,
@@ -479,7 +480,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = getUserOfID (sUserID);
     if (aUser == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, "password", "no-such-user-id", sUserID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id", "password");
       return EChange.UNCHANGED;
     }
 
@@ -490,6 +491,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       final EChange eChange = aUser.setPasswordHash (sPasswordHash);
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;
+
       aUser.updateLastModified ();
       markAsChanged ();
     }
@@ -497,7 +499,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     {
       m_aRWLock.writeLock ().unlock ();
     }
-    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USER, "password", aUser.getID ());
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USER, "password", sUserID);
     return EChange.CHANGED;
   }
 
@@ -507,7 +509,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = getUserOfID (sUserID);
     if (aUser == null)
     {
-      AuditUtils.onAuditDeleteFailure (CSecurity.TYPE_USER, "no-such-user-id", sUserID);
+      AuditUtils.onAuditDeleteFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id");
       return EChange.UNCHANGED;
     }
 
@@ -532,7 +534,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = getUserOfID (sUserID);
     if (aUser == null)
     {
-      AuditUtils.onAuditUndeleteFailure (CSecurity.TYPE_USER, "no-such-user-id", sUserID);
+      AuditUtils.onAuditUndeleteFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id");
       return EChange.UNCHANGED;
     }
 
@@ -557,7 +559,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = getUserOfID (sUserID);
     if (aUser == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, "disable", "no-such-user-id", sUserID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id", "disable");
       return EChange.UNCHANGED;
     }
 
@@ -582,7 +584,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = getUserOfID (sUserID);
     if (aUser == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, "enable", "no-such-user-id", sUserID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id", "enable");
       return EChange.UNCHANGED;
     }
 

@@ -299,7 +299,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "name", "no-such-usergroup-id", sUserGroupID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, sUserGroupID, "no-such-usergroup-id", "name");
       return EChange.UNCHANGED;
     }
 
@@ -325,7 +325,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "assign-user", "no-such-usergroup-id", sUserGroupID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, sUserGroupID, "no-such-usergroup-id", "assign-user");
       return EChange.UNCHANGED;
     }
 
@@ -351,7 +351,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "unassign-user", "no-such-usergroup-id", sUserGroupID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, sUserGroupID, "no-such-usergroup-id", "unassign-user");
       return EChange.UNCHANGED;
     }
 
@@ -451,7 +451,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "assign-role", "no-such-usergroup-id", sUserGroupID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, sUserGroupID, "no-such-usergroup-id", "assign-role");
       return EChange.UNCHANGED;
     }
 
@@ -477,7 +477,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
     if (aUserGroup == null)
     {
-      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, "unassign-role", "no-such-usergroup-id", sUserGroupID);
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, sUserGroupID, "no-such-usergroup-id", "unassign-role");
       return EChange.UNCHANGED;
     }
 
