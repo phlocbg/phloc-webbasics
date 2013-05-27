@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.AccessManager;
-import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.appbasics.security.user.password.PasswordUtils;
@@ -195,13 +194,13 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
-  protected boolean isEditAllowed (@Nullable final IUser aUser)
+  protected final boolean isEditAllowed (@Nullable final IUser aUser)
   {
     // Deleted users and the Administrator cannot be edited
-    return aUser != null && !aUser.isDeleted () && !aUser.getID ().equals (CSecurity.USER_ADMINISTRATOR_ID);
+    return aUser != null && !aUser.isDeleted () && !aUser.isAdministrator ();
   }
 
-  private static boolean _canResetPassword (@Nonnull final IUser aUser)
+  protected final boolean canResetPassword (@Nonnull final IUser aUser)
   {
     return !aUser.isDeleted ();
   }
@@ -228,16 +227,19 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     return null;
   }
 
-  @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, final IUser aSelectedObject)
+  /**
+   * @param aTable
+   *        Table to be filled.
+   * @param aSelectedObject
+   *        Current user.
+   * @param aDisplayLocale
+   *        Display locale to use.
+   */
+  @OverrideOnDemand
+  protected void onShowSelectedObjectTableStart (@Nonnull final BootstrapTableFormView aTable,
+                                                 @Nonnull final IUser aSelectedObject,
+                                                 @Nonnull final Locale aDisplayLocale)
   {
-    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-    final AccessManager aMgr = AccessManager.getInstance ();
-    final BootstrapTableFormView aTable = aWPEC.getNodeList ()
-                                               .addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
-                                                                                               HCCol.star ()));
-    aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                  aSelectedObject.getDisplayName ()));
     aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale)),
                        PDTToString.getAsString (aSelectedObject.getCreationDateTime (), aDisplayLocale));
     if (aSelectedObject.getLastModificationDateTime () != null)
@@ -246,6 +248,33 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (aSelectedObject.getDeletionDateTime () != null)
       aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_DELETIONDATE.getDisplayText (aDisplayLocale)),
                          PDTToString.getAsString (aSelectedObject.getDeletionDateTime (), aDisplayLocale));
+  }
+
+  /**
+   * @param aTable
+   *        Table to be filled.
+   * @param aSelectedObject
+   *        Current user.
+   * @param aDisplayLocale
+   *        Display locale to use.
+   */
+  @OverrideOnDemand
+  protected void onShowSelectedObjectTableEnd (@Nonnull final BootstrapTableFormView aTable,
+                                               @Nonnull final IUser aSelectedObject,
+                                               @Nonnull final Locale aDisplayLocale)
+  {}
+
+  @Override
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, final IUser aSelectedObject)
+  {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final AccessManager aMgr = AccessManager.getInstance ();
+    final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
+                                                                                                   HCCol.star ()));
+    aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                  aSelectedObject.getDisplayName ()));
+    onShowSelectedObjectTableStart (aTable, aSelectedObject, aDisplayLocale);
     aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
                        aSelectedObject.getFirstName ());
     aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale)),
@@ -315,6 +344,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)),
                            aAttrTable);
     }
+    onShowSelectedObjectTableEnd (aTable, aSelectedObject, aDisplayLocale);
   }
 
   @Override
@@ -481,7 +511,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     if (aWPEC.hasAction (ACTION_RESET_PASSWORD) && aSelectedObject != null)
     {
-      if (!_canResetPassword (aSelectedObject))
+      if (!canResetPassword (aSelectedObject))
         throw new IllegalStateException ("Won't work!");
 
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -596,7 +626,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       aActionCell.addChild (createCopyLink (aCurUser, aDisplayLocale));
 
       // Reset password of user
-      if (_canResetPassword (aCurUser))
+      if (canResetPassword (aCurUser))
       {
         aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
                                                 .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
