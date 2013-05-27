@@ -36,6 +36,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.web.servlet.response.UnifiedResponse;
+import com.phloc.web.useragent.UserAgentDatabase;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -49,6 +50,32 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public class LoginManager
 {
+  /**
+   * Attribute name for the LoginInfo attribute that holds the remote address of
+   * the last request
+   */
+  public static final String LOGIN_INFO_REMOTE_ADDRESS = "remote-address";
+  /**
+   * Attribute name for the LoginInfo attribute that holds the remote host of
+   * the last request
+   */
+  public static final String LOGIN_INFO_REMOTE_HOST = "remote-host";
+  /**
+   * Attribute name for the LoginInfo attribute that holds the URI (without the
+   * query string) of the last request
+   */
+  public static final String LOGIN_INFO_REQUEST_URI = "request-uri";
+  /**
+   * Attribute name for the LoginInfo attribute that holds the query string of
+   * the last request
+   */
+  public static final String LOGIN_INFO_QUERY_STRING = "query-string";
+  /**
+   * Attribute name for the LoginInfo attribute that holds the user-agent string
+   * of the last request
+   */
+  public static final String LOGIN_INFO_USER_AGENT = "user-agent";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoginManager.class);
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
@@ -101,6 +128,27 @@ public class LoginManager
   protected IUser getUserOfLoginName (@Nullable final String sLoginName)
   {
     return AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+  }
+
+  /**
+   * Modify the passed {@link LoginInfo} object with details of the passed
+   * request scope. This method is called for every request!
+   * 
+   * @param aLoginInfo
+   *        Login Info. Never <code>null</code>.
+   * @param aRequestScope
+   *        The current request scope.
+   */
+  protected void modifyLoginInfo (@Nonnull final LoginInfo aLoginInfo,
+                                  @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    // Set some debugging details
+    aLoginInfo.setAttribute (LOGIN_INFO_REMOTE_ADDRESS, aRequestScope.getRemoteAddr ());
+    aLoginInfo.setAttribute (LOGIN_INFO_REMOTE_HOST, aRequestScope.getRemoteHost ());
+    aLoginInfo.setAttribute (LOGIN_INFO_REQUEST_URI, aRequestScope.getRequestURI ());
+    aLoginInfo.setAttribute (LOGIN_INFO_QUERY_STRING, aRequestScope.getQueryString ());
+    aLoginInfo.setAttribute (LOGIN_INFO_USER_AGENT,
+                             UserAgentDatabase.getHttpUserAgentStringFromRequest (aRequestScope.getRequest ()));
   }
 
   /**
@@ -173,11 +221,11 @@ public class LoginManager
       // Update last login info
       aLoginInfo.setLastAccessDTNow ();
 
-      // Set some debugging details
-      aLoginInfo.setAttribute ("remote-host", aRequestScope.getRemoteHost ());
-      aLoginInfo.setAttribute ("request-uri", aRequestScope.getRequestURI ());
-      aLoginInfo.setAttribute ("query-string", aRequestScope.getQueryString ());
+      // Set custom attributes
+      modifyLoginInfo (aLoginInfo, aRequestScope);
     }
+    else
+      s_aLogger.warn ("Failed to resolve LoginInfo of '" + sSessionUserID + "'");
 
     // Continue only, if a valid user ID is present
     return EContinue.valueOf (sSessionUserID != null);

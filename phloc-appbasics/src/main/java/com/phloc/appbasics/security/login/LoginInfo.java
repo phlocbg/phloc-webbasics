@@ -18,13 +18,13 @@
 package com.phloc.appbasics.security.login;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 
@@ -42,11 +42,17 @@ public final class LoginInfo extends MapBasedAttributeContainer
 
   public LoginInfo (@Nonnull @Nonempty final String sUserID)
   {
+    if (StringHelper.hasNoText (sUserID))
+      throw new IllegalArgumentException ("userID");
     m_sUserID = sUserID;
     m_aLoginDT = PDTFactory.getCurrentDateTime ();
     m_aLastAccessDT = m_aLoginDT;
   }
 
+  /**
+   * @return The ID of the user to which this login info belongs. Neither
+   *         <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getUserID ()
@@ -54,18 +60,27 @@ public final class LoginInfo extends MapBasedAttributeContainer
     return m_sUserID;
   }
 
+  /**
+   * @return The login data and time. Never <code>null</code>.
+   */
   @Nonnull
   public DateTime getLoginDT ()
   {
     return m_aLoginDT;
   }
 
-  @Nullable
+  /**
+   * @return The last access data and time. Never <code>null</code>.
+   */
+  @Nonnull
   public DateTime getLastAccessDT ()
   {
     return m_aLastAccessDT;
   }
 
+  /**
+   * Update the last access date time to the current date and time.
+   */
   public void setLastAccessDTNow ()
   {
     m_aLastAccessDT = PDTFactory.getCurrentDateTime ();
