@@ -18,7 +18,8 @@
 package com.phloc.appbasics.security.login;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -126,7 +127,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   // Set of logged in user IDs
-  private final Set <String> m_aLoggedInUsers = new HashSet <String> ();
+  private final Map <String, LoginInfo> m_aLoggedInUsers = new HashMap <String, LoginInfo> ();
 
   @Deprecated
   @UsedViaReflection
@@ -202,12 +203,13 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     m_aRWLock.writeLock ().lock ();
     try
     {
-      if (!m_aLoggedInUsers.add (sUserID))
+      if (m_aLoggedInUsers.containsKey (sUserID))
       {
         // The user is already logged in
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-already-logged-in");
         return ELoginResult.USER_ALREADY_LOGGED_IN;
       }
+      m_aLoggedInUsers.put (sUserID, new LoginInfo (sUserID));
 
       if (SessionUserHolder.getInstance ().setUser (this, aUser).isUnchanged ())
       {
@@ -243,7 +245,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     m_aRWLock.writeLock ().lock ();
     try
     {
-      if (!m_aLoggedInUsers.remove (sUserID))
+      if (m_aLoggedInUsers.remove (sUserID) == null)
       {
         AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
         return EChange.UNCHANGED;
@@ -297,7 +299,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aLoggedInUsers.contains (sUserID);
+      return m_aLoggedInUsers.containsKey (sUserID);
     }
     finally
     {
@@ -316,7 +318,47 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newSet (m_aLoggedInUsers);
+      return ContainerHelper.newSet (m_aLoggedInUsers.keySet ());
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Get the login details of the specified user.
+   * 
+   * @param sUserID
+   *        The user ID to check. May be <code>null</code>.
+   * @return <code>null</code> if the passed user is not logged in.
+   */
+  @Nullable
+  public LoginInfo getLoginInfo (@Nullable final String sUserID)
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aLoggedInUsers.get (sUserID);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return A non-<code>null</code> but maybe empty collection with the details
+   *         of all currently logged in users.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <LoginInfo> getAllLoginInfos ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newList (m_aLoggedInUsers.values ());
     }
     finally
     {

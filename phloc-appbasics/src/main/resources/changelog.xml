@@ -22,6 +22,11 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-appbasics">
   <entry date="2013-05-27" category="api" action="add">
     <change>
+      <text locale="en">Extended the information stored for a logged in user. See class LoginInfo</text>
+    </change>
+  </entry>
+  <entry date="2013-05-27" category="api" action="add">
+    <change>
       <text locale="en">Added singleton instance of ILockManager called ObjectLockManager</text>
     </change>
   </entry>

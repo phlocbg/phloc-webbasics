@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.appbasics.security.login.LoginInfo;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
@@ -163,6 +164,19 @@ public class LoginManager
         final IHTMLProvider aLoginScreenProvider = createLoginScreen (bLoginError, eLoginResult);
         WebHTMLCreator.createHTMLResponse (aRequestScope, aUnifiedResponse, aLoginScreenProvider);
       }
+    }
+
+    // Update details
+    final LoginInfo aLoginInfo = aLUM.getLoginInfo (sSessionUserID);
+    if (aLoginInfo != null)
+    {
+      // Update last login info
+      aLoginInfo.setLastAccessDTNow ();
+
+      // Set some debugging details
+      aLoginInfo.setAttribute ("remote-host", aRequestScope.getRemoteHost ());
+      aLoginInfo.setAttribute ("request-uri", aRequestScope.getRequestURI ());
+      aLoginInfo.setAttribute ("query-string", aRequestScope.getQueryString ());
     }
 
     // Continue only, if a valid user ID is present
