@@ -46,7 +46,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @ThreadSafe
-public class DefaultLockManager
+public class DefaultLockManager implements ILockManager
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultLockManager.class);
 
