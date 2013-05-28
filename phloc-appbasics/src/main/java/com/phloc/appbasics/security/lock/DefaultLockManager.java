@@ -63,14 +63,6 @@ public class DefaultLockManager implements ILockManager
     m_aCurrentUserIDProvider = aCurrentUserIDProvider;
   }
 
-  /**
-   * Get the lock information of the given object.
-   * 
-   * @param sObjID
-   *        The object to query for lock owner.
-   * @return <code>null</code> if the object is not locked, the lock information
-   *         otherwise
-   */
   @Nullable
   public final ILockInfo getLockInfo (@Nullable final String sObjID)
   {
@@ -85,14 +77,6 @@ public class DefaultLockManager implements ILockManager
     }
   }
 
-  /**
-   * Get the user ID who locked the given object.
-   * 
-   * @param sObjID
-   *        The object to query for lock owner.
-   * @return <code>null</code> if the object is not locked, the user ID
-   *         otherwise
-   */
   @Nullable
   public final String getLockUserID (@Nullable final String sObjID)
   {
@@ -100,14 +84,6 @@ public class DefaultLockManager implements ILockManager
     return aLock != null ? aLock.getLockUserID () : null;
   }
 
-  /**
-   * Get the date and time when the given object was locked.
-   * 
-   * @param sObjID
-   *        The object to query for lock owner.
-   * @return <code>null</code> if the object is not locked, the locking date
-   *         time otherwise
-   */
   @Nullable
   public final DateTime getLockDateTime (@Nullable final String sObjID)
   {
@@ -115,16 +91,6 @@ public class DefaultLockManager implements ILockManager
     return aLock != null ? aLock.getLockDateTime () : null;
   }
 
-  /**
-   * Lock the object with the given ID. If the passed object is already locked
-   * by this user, this method has no effect. This is an atomic action.
-   * 
-   * @param sObjID
-   *        The object ID to lock. May not be <code>null</code>.
-   * @return {@link ELocked#LOCKED} if the object is locked by the current user
-   *         after the call to this method, {@link ELocked#NOT_LOCKED} if the
-   *         object was already locked by another user.
-   */
   @Nonnull
   public final ELocked lockObject (@Nonnull final String sObjID)
   {
@@ -135,19 +101,6 @@ public class DefaultLockManager implements ILockManager
     return lockObject (sObjID, sCurrentUserID);
   }
 
-  /**
-   * Lock the object with the given ID. If the passed object is already locked
-   * by this user, this method has no effect. This is an atomic action.
-   * 
-   * @param sObjID
-   *        The object ID to lock. May not be <code>null</code>.
-   * @param sUserID
-   *        The id of the user who locked the object. May be <code>null</code>.
-   * @return {@link ELocked#LOCKED} if the object is locked by the specified
-   *         user after the call to this method, {@link ELocked#NOT_LOCKED} if
-   *         the object was already locked by another user or no user ID was
-   *         provided.
-   */
   @Nonnull
   public final ELocked lockObject (@Nonnull final String sObjID, @Nullable final String sUserID)
   {
@@ -181,16 +134,6 @@ public class DefaultLockManager implements ILockManager
     return ELocked.LOCKED;
   }
 
-  /**
-   * Unlock the object with the given ID. Unlocking is only possible, if the
-   * current session user locked the object.
-   * 
-   * @param sObjID
-   *        The object ID to unlock.
-   * @return <code>true</code> if the object was successfully unlocked,
-   *         <code>false</code> if either the object is not locked or the object
-   *         is locked by another user than the current session user.
-   */
   @Nonnull
   public final EChange unlockObject (@Nonnull final String sObjID)
   {
@@ -201,17 +144,6 @@ public class DefaultLockManager implements ILockManager
     return unlockObject (sCurrentUserID, sObjID);
   }
 
-  /**
-   * Manually unlock a special object locked by a special user. This manual
-   * version is only required for especially unlocking a user!
-   * 
-   * @param sUserID
-   *        The user who locked the object.
-   * @param sObjID
-   *        The object to be unlocked.
-   * @return <code>true</code> if unlocking succeeded, <code>false</code>
-   *         otherwise.
-   */
   @Nonnull
   public final EChange unlockObject (@Nonnull final String sUserID, @Nonnull final String sObjID)
   {
@@ -261,11 +193,6 @@ public class DefaultLockManager implements ILockManager
     return EChange.CHANGED;
   }
 
-  /**
-   * Unlock all objects of the current user.
-   * 
-   * @return The list of all unlocked object IDs. Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfCurrentUser ()
@@ -273,14 +200,6 @@ public class DefaultLockManager implements ILockManager
     return unlockAllObjectsOfCurrentUserExcept (null);
   }
 
-  /**
-   * Unlock all objects of the current user except for the passed objects.
-   * 
-   * @param aObjectsToKeepLocked
-   *        An optional set of objects which should not be unlocked. May be
-   *        <code>null</code> or empty.
-   * @return The list of all unlocked object IDs. Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfCurrentUserExcept (@Nullable final Set <String> aObjectsToKeepLocked)
@@ -288,14 +207,6 @@ public class DefaultLockManager implements ILockManager
     return unlockAllObjectsOfUserExcept (m_aCurrentUserIDProvider.getCurrentUserID (), aObjectsToKeepLocked);
   }
 
-  /**
-   * Unlock all objects of the passed user.
-   * 
-   * @param sUserID
-   *        The user ID who's object are to be unlocked. May be
-   *        <code>null</code> or empty.
-   * @return The list of all unlocked object IDs. Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfUser (@Nullable final String sUserID)
@@ -303,17 +214,6 @@ public class DefaultLockManager implements ILockManager
     return unlockAllObjectsOfUserExcept (sUserID, null);
   }
 
-  /**
-   * Unlock all objects of the passed user except for the passed objects.
-   * 
-   * @param sUserID
-   *        The user ID who's object are to be unlocked. May be
-   *        <code>null</code> or empty.
-   * @param aObjectsToKeepLocked
-   *        An optional set of objects which should not be unlocked. May be
-   *        <code>null</code> or empty.
-   * @return The list of all unlocked object IDs. Never <code>null</code>.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> unlockAllObjectsOfUserExcept (@Nullable final String sUserID,
@@ -358,15 +258,6 @@ public class DefaultLockManager implements ILockManager
     return aObjectsToUnlock;
   }
 
-  /**
-   * Check if the object with the given ID is locked by the current user.
-   * 
-   * @param sObjID
-   *        The object ID to check.
-   * @return <code>true</code> if the object is locked by the current user,
-   *         <code>false</code> if the object is either not locked or locked by
-   *         another user.
-   */
   public final boolean isObjectLockedByCurrentUser (@Nullable final String sObjID)
   {
     final String sLockUserID = getLockUserID (sObjID);
@@ -379,16 +270,6 @@ public class DefaultLockManager implements ILockManager
     return sLockUserID.equals (sCurrentUserID);
   }
 
-  /**
-   * Check if the object with the given ID is locked by any but the current
-   * user.
-   * 
-   * @param sObjID
-   *        The object ID to check.
-   * @return <code>true</code> if the object is locked by any user that is not
-   *         the currently logged in user, <code>false</code> if the object is
-   *         either not locked or locked by the current user.
-   */
   public final boolean isObjectLockedByOtherUser (@Nullable final String sObjID)
   {
     final String sLockUser = getLockUserID (sObjID);
@@ -401,14 +282,6 @@ public class DefaultLockManager implements ILockManager
     return !sLockUser.equals (sCurrentUserID);
   }
 
-  /**
-   * Check if the object with the given ID is locked by any user.
-   * 
-   * @param sObjID
-   *        The object ID to check.
-   * @return <code>true</code> if the object is locked by any user,
-   *         <code>false</code> if the object is not locked.
-   */
   public final boolean isObjectLockedByAnyUser (@Nullable final String sObjID)
   {
     return getLockUserID (sObjID) != null;

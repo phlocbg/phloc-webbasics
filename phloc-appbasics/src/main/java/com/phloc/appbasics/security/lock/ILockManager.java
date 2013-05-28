@@ -208,7 +208,8 @@ public interface ILockManager
   boolean isObjectLockedByAnyUser (@Nullable String sObjID);
 
   /**
-   * @return A non-<code>null</code> set of all locked objects.
+   * @return A non-<code>null</code> set of all locked objects. Never
+   *         <code>null</code> but maybe empty.
    */
   @Nonnull
   @ReturnsMutableCopy

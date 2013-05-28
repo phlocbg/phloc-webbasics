@@ -40,6 +40,7 @@ import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.scopes.singleton.SessionSingleton;
 
@@ -52,7 +53,8 @@ import com.phloc.scopes.singleton.SessionSingleton;
 public final class LoggedInUserManager extends GlobalSingleton implements ICurrentUserIDProvider
 {
   /**
-   * This class manages the user ID of the current session
+   * This class manages the user ID of the current session. This is an internal
+   * class and should not be used from the outside!
    * 
    * @author Philip Helger
    */
@@ -69,20 +71,28 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     public SessionUserHolder ()
     {}
 
+    /**
+     * @return The instance of the current session. If none exists, an instance
+     *         is created. Never <code>null</code>.
+     */
     @Nonnull
-    public static SessionUserHolder getInstance ()
+    static SessionUserHolder getInstance ()
     {
       return getSessionSingleton (SessionUserHolder.class);
     }
 
+    /**
+     * @return The instance of the current session. If none exists,
+     *         <code>null</code> is returned.
+     */
     @Nullable
-    public static SessionUserHolder getInstanceIfInstantiated ()
+    static SessionUserHolder getInstanceIfInstantiated ()
     {
       return getSessionSingletonIfInstantiated (SessionUserHolder.class);
     }
 
     @Nonnull
-    public EChange setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
+    EChange setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
     {
       if (aUser == null)
         throw new NullPointerException ("user");
@@ -134,18 +144,43 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   public LoggedInUserManager ()
   {}
 
+  /**
+   * @return The global instance of this class. Never <code>null</code>.
+   */
   @Nonnull
   public static LoggedInUserManager getInstance ()
   {
     return getGlobalSingleton (LoggedInUserManager.class);
   }
 
+  /**
+   * Login the passed user without much ado.
+   * 
+   * @param sLoginName
+   *        Login name of the user to log-in. May be <code>null</code>.
+   * @param sPlainTextPassword
+   *        Plain text password to use. May be <code>null</code>.
+   * @return Never <code>null</code> login status.
+   */
   @Nonnull
   public ELoginResult loginUser (@Nullable final String sLoginName, @Nullable final String sPlainTextPassword)
   {
     return loginUser (sLoginName, sPlainTextPassword, (Collection <String>) null);
   }
 
+  /**
+   * Login the passed user and require a set of certain roles, the used needs to
+   * have to login here.
+   * 
+   * @param sLoginName
+   *        Login name of the user to log-in. May be <code>null</code>.
+   * @param sPlainTextPassword
+   *        Plain text password to use. May be <code>null</code>.
+   * @param aRequiredRoleIDs
+   *        A set of required role IDs, the user needs to have. May be
+   *        <code>null</code>.
+   * @return Never <code>null</code> login status.
+   */
   @Nonnull
   public ELoginResult loginUser (@Nullable final String sLoginName,
                                  @Nullable final String sPlainTextPassword,
@@ -153,9 +188,27 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     // Try to resolve the user
     final IUser aUser = AccessManager.getInstance ().getUserOfLoginName (sLoginName);
+    if (aUser == null)
+    {
+      AuditUtils.onAuditExecuteFailure ("login", sLoginName, "no-such-loginname");
+      return ELoginResult.USER_NOT_EXISTING;
+    }
     return loginUser (aUser, sPlainTextPassword, aRequiredRoleIDs);
   }
 
+  /**
+   * Login the passed user and require a set of certain roles, the used needs to
+   * have to login here.
+   * 
+   * @param aUser
+   *        The user to log-in. May be <code>null</code>.
+   * @param sPlainTextPassword
+   *        Plain text password to use. May be <code>null</code>.
+   * @param aRequiredRoleIDs
+   *        A set of required role IDs, the user needs to have. May be
+   *        <code>null</code>.
+   * @return Never <code>null</code> login status.
+   */
   @Nonnull
   public ELoginResult loginUser (@Nullable final IUser aUser,
                                  @Nullable final String sPlainTextPassword,
@@ -230,13 +283,13 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   }
 
   /**
-   * Manually log out the current user
+   * Manually log out the specified user
    * 
    * @param sUserID
-   *        The user to log out
+   *        The user to log out. May be <code>null</code>.
    * @param aSessionUserHolder
    *        The session user holder to use - avoid instantiating a singleton
-   *        again
+   *        again.
    * @return {@link EChange} if something changed
    */
   @Nonnull
@@ -257,6 +310,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     {
       m_aRWLock.writeLock ().unlock ();
     }
+
     s_aLogger.info ("Logged out user '" + sUserID + "'");
     AuditUtils.onAuditExecuteSuccess ("logout", sUserID);
     return EChange.CHANGED;
@@ -421,5 +475,11 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   {
     final IUser aUser = getCurrentUser ();
     return aUser != null && aUser.isAdministrator ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("loggedInUsers", m_aLoggedInUsers).toString ();
   }
 }
