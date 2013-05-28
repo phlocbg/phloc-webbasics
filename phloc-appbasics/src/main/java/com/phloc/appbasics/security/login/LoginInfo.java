@@ -22,9 +22,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
 
+import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 
@@ -36,17 +37,26 @@ import com.phloc.datetime.PDTFactory;
 @NotThreadSafe
 public final class LoginInfo extends MapBasedAttributeContainer
 {
-  private final String m_sUserID;
+  private final IUser m_aUser;
   private final DateTime m_aLoginDT;
   private DateTime m_aLastAccessDT;
 
-  public LoginInfo (@Nonnull @Nonempty final String sUserID)
+  LoginInfo (@Nonnull final IUser aUser)
   {
-    if (StringHelper.hasNoText (sUserID))
-      throw new IllegalArgumentException ("userID");
-    m_sUserID = sUserID;
+    if (aUser == null)
+      throw new NullPointerException ("user");
+    m_aUser = aUser;
     m_aLoginDT = PDTFactory.getCurrentDateTime ();
     m_aLastAccessDT = m_aLoginDT;
+  }
+
+  /**
+   * @return The user to which this login info belongs. Never <code>null</code>.
+   */
+  @Nonnull
+  public IUser getUser ()
+  {
+    return m_aUser;
   }
 
   /**
@@ -57,7 +67,7 @@ public final class LoginInfo extends MapBasedAttributeContainer
   @Nonempty
   public String getUserID ()
   {
-    return m_sUserID;
+    return m_aUser.getID ();
   }
 
   /**
@@ -87,10 +97,33 @@ public final class LoginInfo extends MapBasedAttributeContainer
   }
 
   @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final LoginInfo rhs = (LoginInfo) o;
+    return m_aUser.equals (rhs.m_aUser) &&
+           m_aLoginDT.equals (rhs.m_aLoginDT) &&
+           m_aLastAccessDT.equals (rhs.m_aLastAccessDT);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ())
+                            .append (m_aUser)
+                            .append (m_aLoginDT)
+                            .append (m_aLastAccessDT)
+                            .getHashCode ();
+  }
+
+  @Override
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("userID", m_sUserID)
+                            .append ("user", m_aUser)
                             .append ("loginDT", m_aLoginDT)
                             .append ("lastAccessDT", m_aLastAccessDT)
                             .toString ();

@@ -209,7 +209,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-already-logged-in");
         return ELoginResult.USER_ALREADY_LOGGED_IN;
       }
-      m_aLoggedInUsers.put (sUserID, new LoginInfo (sUserID));
+      m_aLoggedInUsers.put (sUserID, new LoginInfo (aUser));
 
       if (SessionUserHolder.getInstance ().setUser (this, aUser).isUnchanged ())
       {
