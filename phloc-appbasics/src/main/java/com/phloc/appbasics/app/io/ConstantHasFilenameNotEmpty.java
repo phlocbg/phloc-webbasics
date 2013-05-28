@@ -18,6 +18,7 @@
 package com.phloc.appbasics.app.io;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -30,6 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
+@Immutable
 public final class ConstantHasFilenameNotEmpty implements IHasFilename
 {
   private final String m_sFilename;

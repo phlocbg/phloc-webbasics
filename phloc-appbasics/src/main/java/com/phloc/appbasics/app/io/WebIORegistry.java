@@ -20,11 +20,10 @@ package com.phloc.appbasics.app.io;
 import java.io.File;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.io.IWritableResource;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.resource.FileSystemResource;
 
@@ -41,10 +40,17 @@ public final class WebIORegistry
    */
   private static final String DIR_REGISTRY = "WEB-INF/registry/";
 
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final WebIORegistry s_aInstance = new WebIORegistry ();
+
   private WebIORegistry ()
   {}
 
-  @Nullable
+  /**
+   * @return The {@link File} that represents the registry base directory.
+   */
+  @Nonnull
   public static File getRegistryDirectoryFile ()
   {
     return WebFileIO.getFile (DIR_REGISTRY);
@@ -58,16 +64,18 @@ public final class WebIORegistry
    * @return <code>WEB-INF/registry/<em>dirName</em>/</code>
    */
   @Nonnull
-  public static String getRegistryDirectoryName (@Nonnull final String sDirectoryName)
+  public static String getRegistryDirectoryName (@Nonnull @Nonempty final String sDirectoryName)
   {
     return getRegistryDirectoryName (sDirectoryName, false);
   }
 
   @Nonnull
-  public static String getRegistryDirectoryName (@Nonnull final String sDirectoryName, final boolean bCreateDirOnDemand)
+  public static String getRegistryDirectoryName (@Nonnull @Nonempty final String sDirectoryName,
+                                                 final boolean bCreateDirOnDemand)
   {
     if (!FilenameHelper.isValidFilenameWithPaths (sDirectoryName))
       throw new IllegalArgumentException ("Illegal file name passed: " + sDirectoryName);
+
     final String sDir = DIR_REGISTRY + sDirectoryName + '/';
     if (bCreateDirOnDemand)
       WebFileIO.createDirectory (sDir, true);
@@ -76,11 +84,12 @@ public final class WebIORegistry
 
   /**
    * @param sFilename
-   *        The file name to use. May neither be <code>null</code> nor empty.
+   *        The file name to use. May not contain path characters. May neither
+   *        be <code>null</code> nor empty.
    * @return <code>WEB-INF/registry/<em>fileName</em></code>
    */
   @Nonnull
-  public static String getRegistryFilename (@Nonnull final String sFilename)
+  public static String getRegistryFilename (@Nonnull @Nonempty final String sFilename)
   {
     if (!FilenameHelper.isValidFilename (sFilename))
       throw new IllegalArgumentException ("Illegal file name passed!");
@@ -96,7 +105,8 @@ public final class WebIORegistry
    * @return <code>WEB-INF/registry/<em>dirName</em>/<em>fileName</em></code>
    */
   @Nonnull
-  public static String getRegistryFilename (@Nonnull final String sDirectoryName, @Nonnull final String sFilename)
+  public static String getRegistryFilename (@Nonnull @Nonempty final String sDirectoryName,
+                                            @Nonnull @Nonempty final String sFilename)
   {
     return getRegistryFilename (sDirectoryName, sFilename, false);
   }
@@ -112,8 +122,8 @@ public final class WebIORegistry
    * @return <code>WEB-INF/registry/<em>dirName</em>/<em>fileName</em></code>
    */
   @Nonnull
-  public static String getRegistryFilename (@Nonnull final String sDirectoryName,
-                                            @Nonnull final String sFilename,
+  public static String getRegistryFilename (@Nonnull @Nonempty final String sDirectoryName,
+                                            @Nonnull @Nonempty final String sFilename,
                                             final boolean bCreateDirOnDemand)
   {
     if (!FilenameHelper.isValidFilename (sFilename))
@@ -123,52 +133,19 @@ public final class WebIORegistry
   }
 
   @Nonnull
-  public static FileSystemResource getRegistryResource (@Nonnull final String sDirectoryName,
-                                                        @Nonnull final String sFilename)
+  public static FileSystemResource getRegistryResource (@Nonnull @Nonempty final String sDirectoryName,
+                                                        @Nonnull @Nonempty final String sFilename)
   {
     return getRegistryResource (sDirectoryName, sFilename, false);
   }
 
   @Nonnull
-  public static FileSystemResource getRegistryResource (@Nonnull final String sDirectoryName,
-                                                        @Nonnull final String sFilename,
+  public static FileSystemResource getRegistryResource (@Nonnull @Nonempty final String sDirectoryName,
+                                                        @Nonnull @Nonempty final String sFilename,
                                                         final boolean bCreateDirOnDemand)
   {
-    return WebFileIO.getResource (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
-  }
-
-  @Deprecated
-  @Nonnull
-  public static IReadableResource getReadableRegistryResource (@Nonnull final String sDirectoryName,
-                                                               @Nonnull final String sFilename)
-  {
-    return getRegistryResource (sDirectoryName, sFilename);
-  }
-
-  @Deprecated
-  @Nonnull
-  public static FileSystemResource getReadableRegistryResource (@Nonnull final String sDirectoryName,
-                                                                @Nonnull final String sFilename,
-                                                                final boolean bCreateDirOnDemand)
-  {
-    return getRegistryResource (sDirectoryName, sFilename, bCreateDirOnDemand);
-  }
-
-  @Deprecated
-  @Nonnull
-  public static IWritableResource getWritableRegistryResource (@Nonnull final String sDirectoryName,
-                                                               @Nonnull final String sFilename)
-  {
-    return getRegistryResource (sDirectoryName, sFilename);
-  }
-
-  @Deprecated
-  @Nonnull
-  public static IWritableResource getWritableRegistryResource (@Nonnull final String sDirectoryName,
-                                                               @Nonnull final String sFilename,
-                                                               final boolean bCreateDirOnDemand)
-  {
-    return getRegistryResource (sDirectoryName, sFilename, bCreateDirOnDemand);
+    final String sRegistryFilename = getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand);
+    return WebFileIO.getResource (sRegistryFilename);
   }
 
   @Nonnull
@@ -178,22 +155,24 @@ public final class WebIORegistry
   }
 
   @Nonnull
-  public static File getDirectoryFile (@Nonnull final String sDirectoryName, final boolean bCreateDirOnDemand)
+  public static File getDirectoryFile (@Nonnull @Nonempty final String sDirectoryName, final boolean bCreateDirOnDemand)
   {
-    return WebFileIO.getFile (getRegistryDirectoryName (sDirectoryName, bCreateDirOnDemand));
+    final String sRegistryDirectoryName = getRegistryDirectoryName (sDirectoryName, bCreateDirOnDemand);
+    return WebFileIO.getFile (sRegistryDirectoryName);
   }
 
   @Nonnull
-  public static File getFile (@Nonnull final String sDirectoryName, @Nonnull final String sFilename)
+  public static File getFile (@Nonnull @Nonempty final String sDirectoryName, @Nonnull @Nonempty final String sFilename)
   {
     return getFile (sDirectoryName, sFilename, false);
   }
 
   @Nonnull
-  public static File getFile (@Nonnull final String sDirectoryName,
-                              @Nonnull final String sFilename,
+  public static File getFile (@Nonnull @Nonempty final String sDirectoryName,
+                              @Nonnull @Nonempty final String sFilename,
                               final boolean bCreateDirOnDemand)
   {
-    return WebFileIO.getFile (getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand));
+    final String sRegistryFilename = getRegistryFilename (sDirectoryName, sFilename, bCreateDirOnDemand);
+    return WebFileIO.getFile (sRegistryFilename);
   }
 }

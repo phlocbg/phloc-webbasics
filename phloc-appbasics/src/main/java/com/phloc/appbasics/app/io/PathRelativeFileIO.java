@@ -41,6 +41,7 @@ import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.timing.StopWatch;
 
 /**
  * Abstract for accessing files inside a specific path.
@@ -53,12 +54,6 @@ public final class PathRelativeFileIO
   private static final Logger s_aLogger = LoggerFactory.getLogger (PathRelativeFileIO.class);
 
   private final File m_aBasePath;
-
-  @Deprecated
-  public PathRelativeFileIO (@Nonnull final File aBasePath)
-  {
-    this (aBasePath, true);
-  }
 
   public PathRelativeFileIO (@Nonnull final File aBasePath, final boolean bCheckAccessRights)
   {
@@ -76,6 +71,7 @@ public final class PathRelativeFileIO
     if (bCheckAccessRights)
     {
       // Check read/write/execute
+      final StopWatch aSW = new StopWatch (true);
       s_aLogger.info ("Checking file access in " + aBasePath);
       int nFiles = 0;
       int nDirs = 0;
@@ -102,7 +98,13 @@ public final class PathRelativeFileIO
           }
           else
             s_aLogger.warn ("Neither file nor directory: " + aFile);
-      s_aLogger.info ("Finished checking file access for " + nFiles + " files and " + nDirs + " directories");
+      s_aLogger.info ("Finished checking file access for " +
+                      nFiles +
+                      " files and " +
+                      nDirs +
+                      " directories in " +
+                      aSW.stopAndGetMillis () +
+                      " milliseconds");
     }
   }
 

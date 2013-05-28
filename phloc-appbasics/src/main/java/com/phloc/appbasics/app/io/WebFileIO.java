@@ -28,6 +28,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -48,28 +49,57 @@ import com.phloc.commons.state.ISuccessIndicator;
 @ThreadSafe
 public final class WebFileIO
 {
-  private static FileOperationManager s_aFileOpMgr = new FileOperationManager (new LoggingFileOperationCallback ());
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebFileIO.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
+  @GuardedBy ("s_aRWLock")
+  private static FileOperationManager s_aFileOpMgr = new FileOperationManager (new LoggingFileOperationCallback ());
+  @GuardedBy ("s_aRWLock")
   private static PathRelativeFileIO s_aDataPath;
+  @GuardedBy ("s_aRWLock")
   private static PathRelativeFileIO s_aServletContextPath;
 
   private WebFileIO ()
   {}
 
+  /**
+   * Set the global file operation manager to be used.
+   * 
+   * @param aFileOpMgr
+   *        The file operation manager. May not be <code>null</code>.
+   */
   @Nonnull
   public static void setFileOpMgr (@Nonnull final FileOperationManager aFileOpMgr)
   {
     if (aFileOpMgr == null)
       throw new NullPointerException ("fileOpMgr");
-    s_aFileOpMgr = aFileOpMgr;
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aFileOpMgr = aFileOpMgr;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
   }
 
+  /**
+   * @return The global file operation manager. Never <code>null</code>.
+   */
   @Nonnull
   public static FileOperationManager getFileOpMgr ()
   {
-    return s_aFileOpMgr;
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aFileOpMgr;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Deprecated
@@ -127,7 +157,7 @@ public final class WebFileIO
   }
 
   /**
-   * Reset the base paths - no matter if it was initialized or not.
+   * Reset the base paths - no matter if they were initialized or not.
    */
   public static void resetPaths ()
   {

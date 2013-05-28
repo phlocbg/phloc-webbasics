@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IReadableResource;
@@ -62,10 +62,10 @@ public final class ClassPathResourceForWEBINF implements IReadableResource
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getPaths ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aPaths);
+    return ContainerHelper.newList (m_aPaths);
   }
 
   @Nonnull
