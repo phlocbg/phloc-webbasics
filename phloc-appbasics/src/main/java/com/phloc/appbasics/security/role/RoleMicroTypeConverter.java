@@ -24,6 +24,11 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
 
+/**
+ * Convert {@link Role} objects to {@link IMicroElement} and vice versa.
+ * 
+ * @author Philip Helger
+ */
 public final class RoleMicroTypeConverter implements IMicroTypeConverter
 {
   private static final String ATTR_ID = "id";

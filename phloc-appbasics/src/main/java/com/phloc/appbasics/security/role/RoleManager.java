@@ -50,6 +50,10 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   private static boolean s_bCreateDefaults = true;
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 
+  /**
+   * @return <code>true</code> if the default built-in roles should be created
+   *         if no roles are present, <code>false</code> if not.
+   */
   public static boolean isCreateDefaults ()
   {
     s_aRWLock.readLock ().lock ();
@@ -89,6 +93,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     if (!isCreateDefaults ())
       return EChange.UNCHANGED;
 
+    // Default should be created
     _addRole (new Role (CSecurity.ROLE_ADMINISTRATOR_ID, CSecurity.ROLE_ADMINISTRATOR_NAME));
     _addRole (new Role (CSecurity.ROLE_USER_ID, CSecurity.ROLE_USER_NAME));
     return EChange.CHANGED;
@@ -116,6 +121,9 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
 
   private void _addRole (@Nonnull final Role aRole)
   {
+    if (aRole == null)
+      throw new NullPointerException ("Role");
+
     final String sRoleID = aRole.getID ();
     if (m_aRoles.containsKey (sRoleID))
       throw new IllegalArgumentException ("Role ID " + sRoleID + " is already in use!");

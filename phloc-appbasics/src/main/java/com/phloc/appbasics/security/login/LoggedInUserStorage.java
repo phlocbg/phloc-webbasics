@@ -18,9 +18,11 @@
 package com.phloc.appbasics.security.login;
 
 import java.io.File;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,19 +37,63 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author Philip Helger
  */
-@Immutable
+@ThreadSafe
 public final class LoggedInUserStorage
 {
   /**
-   * The name of the base directory relative to the WebFileIO where the data is
-   * referenced
+   * The name of the default base directory relative to the WebFileIO where the
+   * data is referenced
    */
   public static final String BASE_DIRECTORY = "userdata/";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserStorage.class);
 
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private static String s_sBaseDirectory = BASE_DIRECTORY;
+
   private LoggedInUserStorage ()
   {}
+
+  /**
+   * @return The base directory to be used. By default {@link #BASE_DIRECTORY}
+   *         is used.
+   */
+  @Nonnull
+  public static String getBaseDirectory ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_sBaseDirectory;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set the base directory to be used.
+   * 
+   * @param sBaseDirectory
+   *        The new base directory. May not be <code>null</code> but maybe
+   *        empty.
+   */
+  public static void setBaseDirectory (@Nonnull final String sBaseDirectory)
+  {
+    if (sBaseDirectory == null)
+      throw new NullPointerException ("baseDirectory");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_sBaseDirectory = sBaseDirectory;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
 
   /**
    * @return The base directory for all user-related data
@@ -81,7 +127,7 @@ public final class LoggedInUserStorage
                       sRealUserID +
                       "' to be used as a file system name!");
 
-    final File aDir = WebFileIO.getFile (BASE_DIRECTORY + sRealUserID);
+    final File aDir = WebFileIO.getFile (getBaseDirectory () + sRealUserID);
     WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir);
     return aDir;
   }
