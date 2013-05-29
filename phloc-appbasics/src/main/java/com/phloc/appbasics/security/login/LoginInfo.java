@@ -18,6 +18,7 @@
 package com.phloc.appbasics.security.login;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.joda.time.DateTime;
@@ -25,7 +26,9 @@ import org.joda.time.DateTime;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.id.IHasID;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 
@@ -35,11 +38,12 @@ import com.phloc.datetime.PDTFactory;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class LoginInfo extends MapBasedAttributeContainer
+public final class LoginInfo extends MapBasedAttributeContainer implements IHasID <String>
 {
   private final IUser m_aUser;
   private final DateTime m_aLoginDT;
   private DateTime m_aLastAccessDT;
+  private DateTime m_aLogoutDT;
 
   LoginInfo (@Nonnull final IUser aUser)
   {
@@ -70,6 +74,13 @@ public final class LoginInfo extends MapBasedAttributeContainer
     return m_aUser.getID ();
   }
 
+  @Nonnull
+  @Nonempty
+  public String getID ()
+  {
+    return getUserID ();
+  }
+
   /**
    * @return The login data and time. Never <code>null</code>.
    */
@@ -96,6 +107,24 @@ public final class LoginInfo extends MapBasedAttributeContainer
     m_aLastAccessDT = PDTFactory.getCurrentDateTime ();
   }
 
+  /**
+   * @return The date and time when the user logged out. Is <code>null</code>
+   *         when the user is still logged in :)
+   */
+  @Nullable
+  public DateTime getLogoutDT ()
+  {
+    return m_aLogoutDT;
+  }
+
+  /**
+   * Update the logout date time to the current date and time.
+   */
+  void setLogoutDTNow ()
+  {
+    m_aLogoutDT = PDTFactory.getCurrentDateTime ();
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -106,7 +135,8 @@ public final class LoginInfo extends MapBasedAttributeContainer
     final LoginInfo rhs = (LoginInfo) o;
     return m_aUser.equals (rhs.m_aUser) &&
            m_aLoginDT.equals (rhs.m_aLoginDT) &&
-           m_aLastAccessDT.equals (rhs.m_aLastAccessDT);
+           m_aLastAccessDT.equals (rhs.m_aLastAccessDT) &&
+           EqualsUtils.equals (m_aLogoutDT, rhs.m_aLogoutDT);
   }
 
   @Override
@@ -116,6 +146,7 @@ public final class LoginInfo extends MapBasedAttributeContainer
                             .append (m_aUser)
                             .append (m_aLoginDT)
                             .append (m_aLastAccessDT)
+                            .append (m_aLogoutDT)
                             .getHashCode ();
   }
 
@@ -126,6 +157,7 @@ public final class LoginInfo extends MapBasedAttributeContainer
                             .append ("user", m_aUser)
                             .append ("loginDT", m_aLoginDT)
                             .append ("lastAccessDT", m_aLastAccessDT)
+                            .appendIfNotNull ("logoutDT", m_aLogoutDT)
                             .toString ();
   }
 }

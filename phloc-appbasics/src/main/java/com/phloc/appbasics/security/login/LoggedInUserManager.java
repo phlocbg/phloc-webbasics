@@ -27,8 +27,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,7 +139,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   // Set of logged in user IDs
+  @GuardedBy ("m_aRWLock")
   private final Map <String, LoginInfo> m_aLoggedInUsers = new HashMap <String, LoginInfo> ();
+  @GuardedBy ("m_aRWLock")
+  private IUserLoginCallback m_aUserLoginCallback;
+  @GuardedBy ("m_aRWLock")
+  private IUserLogoutCallback m_aUserLogoutCallback;
 
   @Deprecated
   @UsedViaReflection
@@ -151,6 +158,78 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   public static LoggedInUserManager getInstance ()
   {
     return getGlobalSingleton (LoggedInUserManager.class);
+  }
+
+  /**
+   * @return The current user login callback. May be <code>null</code>.
+   */
+  @Nullable
+  public IUserLoginCallback getUserLoginCallback ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aUserLoginCallback;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Change the user login callback.
+   * 
+   * @param aUserLoginCallback
+   *        The new login callback to be used. May be <code>null</code>.
+   */
+  public void setUserLoginCallback (@Nullable final IUserLoginCallback aUserLoginCallback)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aUserLoginCallback = aUserLoginCallback;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return The current user logout callback. May be <code>null</code>.
+   */
+  @Nullable
+  public IUserLogoutCallback getUserLogoutCallback ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aUserLogoutCallback;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Change the user logout callback.
+   * 
+   * @param aUserLogoutCallback
+   *        The new logout callback to be used. May be <code>null</code>.
+   */
+  public void setUserLogoutCallback (@Nullable final IUserLogoutCallback aUserLogoutCallback)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aUserLogoutCallback = aUserLogoutCallback;
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
@@ -252,7 +331,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       return ELoginResult.INVALID_PASSWORD;
     }
 
-    // All checks done!
+    LoginInfo aInfo;
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -262,7 +341,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-already-logged-in");
         return ELoginResult.USER_ALREADY_LOGGED_IN;
       }
-      m_aLoggedInUsers.put (sUserID, new LoginInfo (aUser));
+
+      aInfo = new LoginInfo (aUser);
+      m_aLoggedInUsers.put (sUserID, aInfo);
 
       if (SessionUserHolder.getInstance ().setUser (this, aUser).isUnchanged ())
       {
@@ -279,6 +360,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
     s_aLogger.info ("Logged in user '" + sUserID + "'");
     AuditUtils.onAuditExecuteSuccess ("login", sUserID);
+
+    // Execute callback as the very last action
+    final IUserLoginCallback aUserLoginCallback = getUserLoginCallback ();
+    if (aUserLoginCallback != null)
+      aUserLoginCallback.onUserLogin (aInfo);
+
     return ELoginResult.SUCCESS;
   }
 
@@ -296,23 +383,37 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   private EChange _logoutUser (@Nullable final String sUserID, @Nullable final SessionUserHolder aSessionUserHolder)
   {
     m_aRWLock.writeLock ().lock ();
+    LoginInfo aInfo;
     try
     {
-      if (m_aLoggedInUsers.remove (sUserID) == null)
+      aInfo = m_aLoggedInUsers.remove (sUserID);
+      if (aInfo == null)
       {
         AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
         return EChange.UNCHANGED;
       }
       if (aSessionUserHolder != null)
         aSessionUserHolder._reset ();
+
+      // Set logout time
+      aInfo.setLogoutDTNow ();
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
 
-    s_aLogger.info ("Logged out user '" + sUserID + "'");
+    s_aLogger.info ("Logged out user '" +
+                    sUserID +
+                    "' after " +
+                    new Period (aInfo.getLoginDT (), aInfo.getLogoutDT ()).toString ());
     AuditUtils.onAuditExecuteSuccess ("logout", sUserID);
+
+    // Execute callback as the very last action
+    final IUserLogoutCallback aUserLogoutCallback = getUserLogoutCallback ();
+    if (aUserLogoutCallback != null)
+      aUserLogoutCallback.onUserLogout (aInfo);
+
     return EChange.CHANGED;
   }
 
