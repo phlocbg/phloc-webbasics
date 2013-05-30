@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>5/30/13</td><td colspan="4">_Release *2.1.6*_</td></tr>
+<tr><td>5/29/13</td><td>add</td><td>api</td><td></td><td>Added possibility to specify callback when a user login or logout is performed.</td></tr>
 <tr><td>5/28/13</td><td>add</td><td>api</td><td></td><td>Extended LoggedInUserStorage to set and get the base directory to be used</td></tr>
 <tr><td>5/27/13</td><td>add</td><td>api</td><td></td><td>Extended the information stored for a logged in user. See class LoginInfo</td></tr>
 <tr><td>5/27/13</td><td>add</td><td>api</td><td></td><td>Added singleton instance of ILockManager called ObjectLockManager</td></tr>
