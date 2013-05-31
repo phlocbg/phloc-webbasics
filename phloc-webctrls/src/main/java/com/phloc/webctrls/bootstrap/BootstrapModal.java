@@ -174,6 +174,7 @@ public class BootstrapModal implements IHCNodeBuilder
         else
           aElement = HCSpan.create (m_aHeaderContent);
         aElement.setID (m_sID + "Label");
+        aHeader.addChild (aElement);
         ret.setCustomAttr ("aria-labelledby", aElement.getID ());
       }
     }
