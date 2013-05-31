@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.CHTMLAttributes;
+import com.phloc.html.EHTMLRole;
 import com.phloc.html.entities.EHTMLEntity;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
@@ -147,13 +149,13 @@ public class BootstrapModal implements IHCNodeBuilder
   @Nullable
   public IHCNode build ()
   {
-    final HCDiv ret = new HCDiv ().setID (m_sID).setCustomAttr ("role", "dialog");
+    final HCDiv ret = new HCDiv ().setID (m_sID).setRole (EHTMLRole.DIALOG);
     ret.addClass (CBootstrapCSS.MODAL);
     ret.addClass (m_bHide ? CBootstrapCSS.HIDE : CBootstrapCSS.SHOW);
     if (m_bFade)
       ret.addClass (CBootstrapCSS.FADE);
     if (m_bHide)
-      ret.setCustomAttr ("aria-hidden", "true");
+      ret.setCustomAttr (CHTMLAttributes.ARIA_HIDDEN, "true");
 
     if (m_aHeaderContent != null || m_bShowCloseButton)
     {
@@ -163,7 +165,7 @@ public class BootstrapModal implements IHCNodeBuilder
       if (m_bShowCloseButton)
         aHeader.addChild (new HCButton ().addClass (CBootstrapCSS.CLOSE)
                                          .setCustomAttr ("data-dismiss", "modal")
-                                         .setCustomAttr ("aria-hidden", "true")
+                                         .setCustomAttr (CHTMLAttributes.ARIA_HIDDEN, "true")
                                          .addChild (new HCEntityNode (EHTMLEntity.times, "x")));
 
       if (m_aHeaderContent != null)
@@ -175,7 +177,7 @@ public class BootstrapModal implements IHCNodeBuilder
           aElement = HCSpan.create (m_aHeaderContent);
         aElement.setID (m_sID + "Label");
         aHeader.addChild (aElement);
-        ret.setCustomAttr ("aria-labelledby", aElement.getID ());
+        ret.setCustomAttr (CHTMLAttributes.ARIA_LABELLEDBY, aElement.getID ());
       }
     }
 
@@ -205,7 +207,7 @@ public class BootstrapModal implements IHCNodeBuilder
   {
     final BootstrapButton_Button ret = new BootstrapButton_Button ();
     ret.setCustomAttr ("data-dismiss", "modal");
-    ret.setCustomAttr ("aria-hidden", "true");
+    ret.setCustomAttr (CHTMLAttributes.ARIA_HIDDEN, "true");
     return ret;
   }
 }

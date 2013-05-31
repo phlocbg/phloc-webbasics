@@ -28,6 +28,7 @@ import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
 import com.phloc.commons.factory.FactoryNewInstance;
+import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
@@ -86,7 +87,7 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
   @Override
   public void onLevelDown (@Nonnull final HCUL aNewLevel)
   {
-    aNewLevel.addClass (CBootstrapCSS.DROPDOWN_MENU).setCustomAttr ("role", "menu");
+    aNewLevel.addClass (CBootstrapCSS.DROPDOWN_MENU).setRole (EHTMLRole.MENU);
     ++m_nLevel;
   }
 
@@ -133,7 +134,7 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
                                                               new BootstrapMenuItemRendererNavbar (aDisplayLocale),
                                                               aAllDisplayMenuItemIDs);
     aUL.addClass (CBootstrapCSS.NAV);
-    aUL.setCustomAttr ("role", "navigation");
+    aUL.setRole (EHTMLRole.NAVIGATION);
 
     // For all root items
     for (final HCLI aLI : aUL.getChildren ())
@@ -144,7 +145,7 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
         aLI.addClass (CBootstrapCSS.DROPDOWN);
         ((HCA) aLI.getChild (0)).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
                                 .setCustomAttr ("data-toggle", "dropdown")
-                                .setCustomAttr ("role", "button")
+                                .setRole (EHTMLRole.BUTTON)
                                 .addChild (new BootstrapCaret ());
       }
     }
