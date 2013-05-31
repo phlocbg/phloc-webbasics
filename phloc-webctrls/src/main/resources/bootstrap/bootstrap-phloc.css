@@ -25,3 +25,9 @@ input::-moz-focus-inner {
 .input-append > input {
   text-align: right;
 }
+
+/* Make drop downs in modals possible.
+Source: stackoverflow.com/questions/11899870/
+*/
+.modal { overflow: visible; }
+.modal-body { overflow-y: visible; }
