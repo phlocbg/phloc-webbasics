@@ -196,7 +196,7 @@ public class DefaultDAO extends AbstractDAO
               // reset any pending changes, because the initialization should
               // be read-only. If the implementing class changed something, the
               // return value is what counts
-              m_bPendingChanges = false;
+              internalSetPendingChanges (false);
             }
           }
         });
@@ -228,7 +228,7 @@ public class DefaultDAO extends AbstractDAO
                 // reset any pending changes, because the initialization should
                 // be read-only. If the implementing class changed something,
                 // the return value is what counts
-                m_bPendingChanges = false;
+                internalSetPendingChanges (false);
               }
             }
           });
@@ -358,11 +358,11 @@ public class DefaultDAO extends AbstractDAO
   private void _internalWriteToFileOnPendingChanges ()
   {
     // Do we have any changes?
-    if (m_bPendingChanges)
+    if (internalHasPendingChanges ())
     {
       // Main write to the file
       if (_writeToFile ().isSuccess ())
-        m_bPendingChanges = false;
+        internalSetPendingChanges (false);
       else
       {
         // Only notify if we're operating on a file
@@ -382,8 +382,8 @@ public class DefaultDAO extends AbstractDAO
     m_aRWLock.writeLock ().lock ();
     try
     {
-      m_bPendingChanges = true;
-      if (m_bAutoSaveEnabled)
+      internalSetPendingChanges (true);
+      if (internalIsAutoSaveEnabled ())
         _internalWriteToFileOnPendingChanges ();
     }
     finally
@@ -419,8 +419,6 @@ public class DefaultDAO extends AbstractDAO
     final DefaultDAO rhs = (DefaultDAO) o;
     return m_aFilenameProvider.equals (rhs.m_aFilenameProvider) &&
            m_aDataProvider.equals (rhs.m_aDataProvider) &&
-           m_bPendingChanges == rhs.m_bPendingChanges &&
-           m_bAutoSaveEnabled == rhs.m_bAutoSaveEnabled &&
            m_nBackupCount == rhs.m_nBackupCount;
   }
 
@@ -429,8 +427,6 @@ public class DefaultDAO extends AbstractDAO
   {
     return new HashCodeGenerator (this).append (m_aFilenameProvider)
                                        .append (m_aDataProvider)
-                                       .append (m_bPendingChanges)
-                                       .append (m_bAutoSaveEnabled)
                                        .append (m_nBackupCount)
                                        .getHashCode ();
   }
@@ -438,11 +434,10 @@ public class DefaultDAO extends AbstractDAO
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("filenameProvider", m_aFilenameProvider)
-                                       .append ("dataProvider", m_aDataProvider)
-                                       .append ("pendingChanges", m_bPendingChanges)
-                                       .append ("autoSaveEnabled", m_bAutoSaveEnabled)
-                                       .append ("backupCount", m_nBackupCount)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("filenameProvider", m_aFilenameProvider)
+                            .append ("dataProvider", m_aDataProvider)
+                            .append ("backupCount", m_nBackupCount)
+                            .toString ();
   }
 }

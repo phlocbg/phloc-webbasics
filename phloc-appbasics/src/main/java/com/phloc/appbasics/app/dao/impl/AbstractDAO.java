@@ -22,16 +22,20 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 
 import com.phloc.appbasics.app.dao.IDAO;
 import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
+import com.phloc.commons.annotations.MustBeLocked;
+import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Base implementation of {@link IDAO}
@@ -44,14 +48,20 @@ public abstract class AbstractDAO implements IDAO
   public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
 
   protected static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("s_aRWLock")
   private static IDAOReadExceptionHandler s_aExceptionHandlerRead;
+  @GuardedBy ("s_aRWLock")
   private static IDAOWriteExceptionHandler s_aExceptionHandlerWrite;
 
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final IDAOIO m_aIO;
+
+  @GuardedBy ("m_aRWLock")
   private final NonBlockingStack <Boolean> m_aAutoSaveStack = new NonBlockingStack <Boolean> ();
-  protected boolean m_bPendingChanges = false;
-  protected boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
+  @GuardedBy ("m_aRWLock")
+  private boolean m_bPendingChanges = false;
+  @GuardedBy ("m_aRWLock")
+  private boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
 
   protected AbstractDAO (@Nonnull final IDAOIO aDAOIO)
   {
@@ -138,6 +148,16 @@ public abstract class AbstractDAO implements IDAO
    * @return <code>true</code> if auto save is enabled, <code>false</code>
    *         otherwise.
    */
+  @MustBeLocked (ELockType.READ)
+  protected final boolean internalIsAutoSaveEnabled ()
+  {
+    return m_bAutoSaveEnabled;
+  }
+
+  /**
+   * @return <code>true</code> if auto save is enabled, <code>false</code>
+   *         otherwise.
+   */
   public final boolean isAutoSaveEnabled ()
   {
     m_aRWLock.readLock ().lock ();
@@ -167,6 +187,21 @@ public abstract class AbstractDAO implements IDAO
     {
       m_aRWLock.writeLock ().unlock ();
     }
+  }
+
+  @MustBeLocked (ELockType.WRITE)
+  public final void internalSetPendingChanges (final boolean bPendingChanges)
+  {
+    m_bPendingChanges = bPendingChanges;
+  }
+
+  /**
+   * @return <code>true</code> if unsaved changes are present
+   */
+  @MustBeLocked (ELockType.READ)
+  public final boolean internalHasPendingChanges ()
+  {
+    return m_bPendingChanges;
   }
 
   /**
@@ -245,6 +280,9 @@ public abstract class AbstractDAO implements IDAO
   @Nullable
   public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
+    if (aCallable == null)
+      throw new NullPointerException ("callable");
+
     beginWithoutAutoSave ();
     try
     {
@@ -255,5 +293,15 @@ public abstract class AbstractDAO implements IDAO
     {
       endWithoutAutoSave ();
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("IO", m_aIO)
+                                       .append ("autoSaveStack", m_aAutoSaveStack)
+                                       .append ("pendingChanges", m_bPendingChanges)
+                                       .append ("autoSaveEnabled", m_bAutoSaveEnabled)
+                                       .toString ();
   }
 }

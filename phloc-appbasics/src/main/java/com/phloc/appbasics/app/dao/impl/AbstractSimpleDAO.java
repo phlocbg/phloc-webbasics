@@ -43,12 +43,18 @@ import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+/**
+ * Base class for a simple DAO.
+ * 
+ * @author Philip Helger
+ */
 public abstract class AbstractSimpleDAO extends AbstractDAO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
@@ -134,7 +140,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           // reset any pending changes, because the initialization should
           // be read-only. If the implementing class changed something,
           // the return value of onInit() is what counts
-          m_bPendingChanges = false;
+          internalSetPendingChanges (false);
         }
       }
       else
@@ -161,14 +167,14 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
             // reset any pending changes, because the initialization should
             // be read-only. If the implementing class changed something,
             // the return value of onRead() is what counts
-            m_bPendingChanges = false;
+            internalSetPendingChanges (false);
           }
         }
       }
 
       // Check if writing was successful on any of the 2 branches
       if (eWriteSuccess.isSuccess ())
-        m_bPendingChanges = false;
+        internalSetPendingChanges (false);
       else
         s_aLogger.warn ("File '" + m_aFile + "' has pending changes after initialRead!");
     }
@@ -310,12 +316,12 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   protected final void markAsChanged ()
   {
     // Just remember that something changed
-    m_bPendingChanges = true;
-    if (m_bAutoSaveEnabled)
+    internalSetPendingChanges (true);
+    if (internalIsAutoSaveEnabled ())
     {
       // Auto save
       if (_writeToFile ().isSuccess ())
-        m_bPendingChanges = false;
+        internalSetPendingChanges (false);
       else
         s_aLogger.warn ("File '" + m_aFile + "' still has pending changes after markAsChanged!");
     }
@@ -334,7 +340,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       {
         // Write to file
         if (_writeToFile ().isSuccess ())
-          m_bPendingChanges = false;
+          internalSetPendingChanges (false);
         else
           s_aLogger.warn ("File '" + m_aFile + "' still has pending changes after writeToFileOnPendingChanges!");
       }
@@ -343,5 +349,11 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         m_aRWLock.writeLock ().unlock ();
       }
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("file", m_aFile).toString ();
   }
 }
