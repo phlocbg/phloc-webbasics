@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableObject;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.IMicroNodeWithChildren;
 import com.phloc.commons.microdom.IMicroText;
@@ -341,7 +342,7 @@ public final class DataTablesServerData implements IHasUIState
   @Nullable
   public Comparator <String> getColumnComparator (@Nonnegative final int nColumnIndex)
   {
-    final ColumnData aColumnData = m_aColumns[nColumnIndex];
+    final ColumnData aColumnData = ArrayHelper.getSafeElement (m_aColumns, nColumnIndex);
     return aColumnData == null ? null : aColumnData.getComparator ();
   }
 
