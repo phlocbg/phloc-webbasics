@@ -28,6 +28,7 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.serialize.MicroWriter;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 
 public final class LongRunningJobResult implements IHasStringRepresentation
@@ -125,6 +126,12 @@ public final class LongRunningJobResult implements IHasStringRepresentation
       default:
         throw new IllegalStateException ("Unhandled type!");
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("type", m_eType).append ("result", m_aResult).toString ();
   }
 
   @Nonnull

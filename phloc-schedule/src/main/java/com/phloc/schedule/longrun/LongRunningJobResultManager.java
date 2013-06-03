@@ -104,13 +104,13 @@ public class LongRunningJobResultManager extends AbstractSimpleDAO
             throw new IllegalStateException ("Unknown type!");
         }
 
-        internalAdd (new LongRunningJobData (sID,
-                                             aStartDateTime,
-                                             aEndDateTime,
-                                             eExecSuccess,
-                                             sStartingUserID,
-                                             aJobDescription,
-                                             aResult));
+        _internalAdd (new LongRunningJobData (sID,
+                                              aStartDateTime,
+                                              aEndDateTime,
+                                              eExecSuccess,
+                                              sStartingUserID,
+                                              aJobDescription,
+                                              aResult));
       }
     return EChange.UNCHANGED;
   }
@@ -143,8 +143,11 @@ public class LongRunningJobResultManager extends AbstractSimpleDAO
     return aDoc;
   }
 
-  void internalAdd (@Nonnull final LongRunningJobData aJobData)
+  private void _internalAdd (@Nonnull final LongRunningJobData aJobData)
   {
+    if (aJobData == null)
+      throw new NullPointerException ("JobData");
+
     m_aMap.put (aJobData.getID (), aJobData);
   }
 
@@ -158,7 +161,7 @@ public class LongRunningJobResultManager extends AbstractSimpleDAO
     m_aRWLock.writeLock ().lock ();
     try
     {
-      internalAdd (aJobData);
+      _internalAdd (aJobData);
       markAsChanged ();
     }
     finally

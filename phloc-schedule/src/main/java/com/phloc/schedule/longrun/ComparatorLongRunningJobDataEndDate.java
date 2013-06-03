@@ -50,7 +50,7 @@ public final class ComparatorLongRunningJobDataEndDate extends AbstractComparato
   }
 
   @Override
-  protected int mainCompare (final LongRunningJobData aData1, final LongRunningJobData aData2)
+  protected int mainCompare (@Nonnull final LongRunningJobData aData1, @Nonnull final LongRunningJobData aData2)
   {
     return CompareUtils.nullSafeCompare (aData1.getEndDateTime (), aData2.getEndDateTime ());
   }
