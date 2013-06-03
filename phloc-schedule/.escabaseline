@@ -1,0 +1,7 @@
+# Enerjy Software baseline data (files=3, problems=3).
+path: /phloc-schedule/src/main/java/com/phloc/schedule/quartz/GlobalQuartzScheduler.java
+problem: JAVA0173:JAVA0173 Unused method parameter 'aJobDataMap'
+path: /phloc-schedule/src/main/java/com/phloc/schedule/quartz/utils/JobKeyGroupMatcher.java
+problem: JAVA0234:JAVA0234 Class 'JobKeyGroupMatcher' is Serializable but does not define serialVersionUID
+path: /phloc-schedule/src/main/java/com/phloc/schedule/quartz/utils/TriggerKeyGroupMatcher.java
+problem: JAVA0234:JAVA0234 Class 'TriggerKeyGroupMatcher' is Serializable but does not define serialVersionUID
