@@ -77,7 +77,6 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.datatables.DataTables;
-import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webctrls.security.UserGroupForUserSelect;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -642,7 +641,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.addColumn (new DataTablesColumn (3).setSortable (false));
+    aDataTables.getOrCreateColumnOfTarget (3).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 

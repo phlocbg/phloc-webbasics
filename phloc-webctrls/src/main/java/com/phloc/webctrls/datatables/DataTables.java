@@ -18,6 +18,7 @@
 package com.phloc.webctrls.datatables;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -232,32 +233,10 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
-  public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
+  @ReturnsMutableCopy
+  public Collection <DataTablesColumn> getAllColumns ()
   {
-    if (aColumn == null)
-      throw new NullPointerException ("column");
-    m_aColumns.add (aColumn);
-    return this;
-  }
-
-  @Nonnull
-  public DataTables addAllColumns (@Nonnull final AbstractHCBaseTable <?> aTable)
-  {
-    if (aTable == null)
-      throw new NullPointerException ("table");
-    // Add all columns
-    int nColIndex = 0;
-    final HCColGroup aColGroup = aTable.getColGroup ();
-    if (aColGroup != null)
-      for (final HCCol aCol : aColGroup.getAllColumns ())
-      {
-        final DataTablesColumn aColumn = new DataTablesColumn (nColIndex);
-        if (!aCol.isStar ())
-          aColumn.setWidth (aCol.getWidth ());
-        addColumn (aColumn);
-        ++nColIndex;
-      }
-    return this;
+    return ContainerHelper.newList (m_aColumns);
   }
 
   public boolean hasColumns ()
@@ -269,6 +248,59 @@ public class DataTables implements IHCNodeBuilder
   public int getColumnCount ()
   {
     return m_aColumns.size ();
+  }
+
+  @Nonnull
+  public DataTablesColumn getOrCreateColumnOfTarget (@Nonnegative final int nTarget)
+  {
+    for (final DataTablesColumn aCurColumn : m_aColumns)
+      if (aCurColumn.hasTarget (nTarget))
+        return aCurColumn;
+
+    final DataTablesColumn aColumn = new DataTablesColumn (nTarget);
+    m_aColumns.add (aColumn);
+    return aColumn;
+  }
+
+  @Nonnull
+  public DataTables addColumn (@Nonnull final DataTablesColumn aColumn)
+  {
+    if (aColumn == null)
+      throw new NullPointerException ("column");
+
+    // Check if targets are unique!
+    for (final int nTarget : aColumn.getAllTargets ())
+      for (final DataTablesColumn aCurColumn : m_aColumns)
+        if (aCurColumn.hasTarget (nTarget))
+        {
+          s_aLogger.warn ("Another DataTablesColumn with target " + nTarget + " is already contained!");
+          break;
+        }
+    m_aColumns.add (aColumn);
+    return this;
+  }
+
+  @Nonnull
+  public DataTables addAllColumns (@Nonnull final AbstractHCBaseTable <?> aTable)
+  {
+    if (aTable == null)
+      throw new NullPointerException ("table");
+
+    // Add all columns
+    final HCColGroup aColGroup = aTable.getColGroup ();
+    if (aColGroup != null)
+    {
+      int nColIndex = 0;
+      for (final HCCol aCol : aColGroup.getAllColumns ())
+      {
+        final DataTablesColumn aColumn = new DataTablesColumn (nColIndex);
+        if (!aCol.isStar ())
+          aColumn.setWidth (aCol.getWidth ());
+        addColumn (aColumn);
+        ++nColIndex;
+      }
+    }
+    return this;
   }
 
   @Nonnull

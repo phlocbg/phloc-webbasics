@@ -20,6 +20,7 @@ package com.phloc.webctrls.datatables;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -51,7 +52,7 @@ public class DataTablesColumn implements IHCHasCSSClasses <DataTablesColumn>
   private int [] m_aDataSort;
   private AbstractComparatorTable m_aComparator;
 
-  public DataTablesColumn (final int nTarget)
+  public DataTablesColumn (@Nonnegative final int nTarget)
   {
     m_aTargets = new int [] { nTarget };
   }
@@ -60,6 +61,9 @@ public class DataTablesColumn implements IHCHasCSSClasses <DataTablesColumn>
   {
     if (ArrayHelper.isEmpty (aTargets))
       throw new IllegalArgumentException ("targets may not be empty");
+    for (final int nTarget : aTargets)
+      if (nTarget < 0)
+        throw new IllegalArgumentException ("Target must be >= 0: " + nTarget);
     m_aTargets = ArrayHelper.getCopy (aTargets);
   }
 
@@ -69,6 +73,11 @@ public class DataTablesColumn implements IHCHasCSSClasses <DataTablesColumn>
   public int [] getAllTargets ()
   {
     return ArrayHelper.getCopy (m_aTargets);
+  }
+
+  public boolean hasTarget (final int nTarget)
+  {
+    return ArrayHelper.contains (m_aTargets, nTarget);
   }
 
   public boolean isSearchable ()
@@ -241,6 +250,7 @@ public class DataTablesColumn implements IHCHasCSSClasses <DataTablesColumn>
   }
 
   @Nullable
+  @ReturnsMutableCopy
   public int [] getDataSort ()
   {
     return ArrayHelper.getCopy (m_aDataSort);

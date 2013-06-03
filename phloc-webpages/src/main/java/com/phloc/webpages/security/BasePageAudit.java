@@ -40,7 +40,6 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
-import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
@@ -133,9 +132,10 @@ public class BasePageAudit extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.addColumn (new DataTablesColumn (0).addClass (CSS_CLASS_RIGHT)
-                                                   .setComparator (new ComparatorTableDateTime (aDisplayLocale)));
-    aDataTables.addColumn (new DataTablesColumn (4).setSortable (false));
+    aDataTables.getOrCreateColumnOfTarget (0)
+               .addClass (CSS_CLASS_RIGHT)
+               .setComparator (new ComparatorTableDateTime (aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (4).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.DESCENDING);
     aNodeList.addChild (aDataTables);
   }
