@@ -44,6 +44,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -56,7 +57,8 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     MSG_USER ("Benutzer", "User"),
     MSG_LOGINDT ("Anmeldezeit", "Login time"),
     MSG_LASTACCESSDT ("Letzter Zugriff", "Last access"),
-    FAILURE_CREATE ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!");
+    HEADER_DETAILS ("Details von Benutzer {0}", "Details of user {0}"),
+    XXX ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!");
 
     private final ITextProvider m_aTP;
 
@@ -114,7 +116,14 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
   protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
                                      @Nonnull final LoginInfo aSelectedObject)
   {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
+    final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
+                                                                                                   HCCol.star ()));
+    aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                  aSelectedObject.getUser ()
+                                                                                                 .getDisplayName ()));
   }
 
   @Override
