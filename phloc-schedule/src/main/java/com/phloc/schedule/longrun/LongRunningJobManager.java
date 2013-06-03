@@ -26,34 +26,33 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.ESuccess;
-import com.phloc.scopes.singleton.GlobalSingleton;
 
-public final class LongRunningJobManager extends GlobalSingleton
+@ThreadSafe
+public final class LongRunningJobManager
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LongRunningJobManager.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("m_aRWLock")
   private final Map <String, LongRunningJobData> m_aRunningJobs = new HashMap <String, LongRunningJobData> ();
+  private final LongRunningJobResultManager m_aResultMgr;
 
-  @Deprecated
-  @UsedViaReflection
-  public LongRunningJobManager ()
-  {}
-
-  @Nonnull
-  public static LongRunningJobManager getInstance ()
+  public LongRunningJobManager (@Nonnull final LongRunningJobResultManager aResultMgr)
   {
-    return getGlobalSingleton (LongRunningJobManager.class);
+    if (aResultMgr == null)
+      throw new NullPointerException ("ResultMgr");
+    m_aResultMgr = aResultMgr;
   }
 
   /**
@@ -124,7 +123,7 @@ public final class LongRunningJobManager extends GlobalSingleton
     }
 
     // Remember it
-    LongRunningJobResultManager.getInstance ().addResult (aJobData);
+    m_aResultMgr.addResult (aJobData);
   }
 
   @Nonnegative
@@ -156,8 +155,7 @@ public final class LongRunningJobManager extends GlobalSingleton
     }
   }
 
-  @Override
-  protected void onDestroy () throws InterruptedException
+  public void waitUntilAllJobsAreFinished () throws InterruptedException
   {
     // Wait until all long running jobs are finished
     final int nWaitSeconds = 1;

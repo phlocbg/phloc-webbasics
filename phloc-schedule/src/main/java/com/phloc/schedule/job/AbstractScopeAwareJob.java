@@ -124,6 +124,9 @@ public abstract class AbstractScopeAwareJob implements Job
   @Nonnull
   protected abstract String getCurrentUsedID (@Nonnull final JobDataMap aJobDataMap);
 
+  @Nonnull
+  protected abstract LongRunningJobManager getLongRunningJobManager ();
+
   /**
    * Called before the job gets executed.
    * 
@@ -211,8 +214,7 @@ public abstract class AbstractScopeAwareJob implements Job
         // access the current user!
         if (aLongRunningJob != null)
         {
-          sLongRunningJobID = LongRunningJobManager.getInstance ().startJob (aLongRunningJob,
-                                                                             getCurrentUsedID (aJobDataMap));
+          sLongRunningJobID = getLongRunningJobManager ().startJob (aLongRunningJob, getCurrentUsedID (aJobDataMap));
         }
 
         final StopWatch aSW = new StopWatch (true);
@@ -247,7 +249,7 @@ public abstract class AbstractScopeAwareJob implements Job
           try
           {
             final LongRunningJobResult aJobResult = aLongRunningJob.createResult ();
-            LongRunningJobManager.getInstance ().endJob (sLongRunningJobID, eExecSucess, aJobResult);
+            getLongRunningJobManager ().endJob (sLongRunningJobID, eExecSucess, aJobResult);
           }
           catch (final Throwable t)
           {
