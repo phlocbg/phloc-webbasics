@@ -26,9 +26,10 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.login.LoginInfo;
+import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
@@ -38,16 +39,19 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
-import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
@@ -65,8 +69,9 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     MSG_USERID ("Benutzer-ID", "User ID"),
     MSG_LOGOUTDT ("Abmeldezeit", "Logout time"),
     MSG_ATTRS ("Attribute", "Attributes"),
-    ACTION_LOGOUT ("Benutzer {0} abmelden", "Log out user {0}"),
-    XXX ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!");
+    MSG_NAME ("Name", "Wert"),
+    MSG_VALUE ("Wert", "Value"),
+    MSG_LOGOUT_USER ("Benutzer {0} abmelden", "Log out user {0}");
 
     private final ITextProvider m_aTP;
 
@@ -87,6 +92,8 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
     }
   }
+
+  private static final String ACTION_LOGOUT_USER = "logoutuser";
 
   public BasePageLoginInfo (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
@@ -140,15 +147,20 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       aTable.addItemRow (EText.MSG_LOGOUTDT.getDisplayText (aDisplayLocale),
                          PDTToString.getAsString (aSelectedObject.getLogoutDT (), aDisplayLocale));
 
+    // Add custom attributes
     final Map <String, Object> aAttrs = aSelectedObject.getAllAttributes ();
     if (!aAttrs.isEmpty ())
     {
-      final HCTable aCustomAttrTable = new HCTable ();
-      for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aAttrs).entrySet ())
-      {
+      final BootstrapTable aCustomAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ()).setID (aSelectedObject.getID ());
+      aCustomAttrTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                                 EText.MSG_VALUE.getDisplayText (aDisplayLocale));
+      for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
         aCustomAttrTable.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
-      }
-      aTable.addItemRow (EText.MSG_ATTRS.getDisplayText (aDisplayLocale), aCustomAttrTable);
+
+      final DataTables aDataTables = createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
+      aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
+
+      aTable.addItemRow (EText.MSG_ATTRS.getDisplayText (aDisplayLocale), aCustomAttrTable, aDataTables.build ());
     }
   }
 
@@ -172,6 +184,18 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     throw new UnsupportedOperationException ();
   }
 
+  protected final boolean canLogoutUser (@Nonnull final IUser aUser)
+  {
+    return aUser.isEnabled () && !aUser.isDeleted () && !aUser.isAdministrator ();
+  }
+
+  @Nullable
+  @OverrideOnDemand
+  protected IHCNode getLogoutUserIcon ()
+  {
+    return EBootstrapIcon.LOCK.getAsNode ();
+  }
+
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
@@ -181,7 +205,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final BootstrapTable aTable = new BootstrapTable (HCCol.star (),
                                                       new HCCol (150),
                                                       new HCCol (150),
-                                                      createActionCol (1)).setID (getID ());
+                                                      createActionCol (2)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
                                      EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),
@@ -197,11 +221,19 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLastAccessDT (), aDisplayLocale));
 
       final AbstractHCCell aActionCell = aRow.addCell ();
-      // XXX
-      if (false)
-        aActionCell.addChild (new HCA ().setTitle (EText.ACTION_LOGOUT.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                               aLoginInfo.getUser ()
-                                                                                                         .getDisplayName ())));
+      if (canLogoutUser (aLoginInfo.getUser ()))
+      {
+        aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
+                                                .add (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER)
+                                                .add (CHCParam.PARAM_OBJECT, aLoginInfo.getUserID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                                               aLoginInfo.getUser ()
+                                                                                                                                                                         .getDisplayName ()))
+                                                                                                      .addChild (getLogoutUserIcon ()));
+      }
+      else
+      {
+        aActionCell.addChild (createEmptyAction ());
+      }
     }
 
     aNodeList.addChild (aTable);
