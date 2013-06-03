@@ -19,6 +19,7 @@ package com.phloc.webpages.security;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,6 +28,7 @@ import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.login.LoginInfo;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
@@ -36,10 +38,12 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.validation.FormErrors;
@@ -54,10 +58,14 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    MSG_USER ("Benutzer", "User"),
+    MSG_USERNAME ("Benutzername", "User name"),
     MSG_LOGINDT ("Anmeldezeit", "Login time"),
     MSG_LASTACCESSDT ("Letzter Zugriff", "Last access"),
-    HEADER_DETAILS ("Details von Benutzer {0}", "Details of user {0}"),
+    MSG_ACTIONS ("Aktionen", "Actions"),
+    MSG_USERID ("Benutzer-ID", "User ID"),
+    MSG_LOGOUTDT ("Abmeldezeit", "Logout time"),
+    MSG_ATTRS ("Attribute", "Attributes"),
+    ACTION_LOGOUT ("Benutzer {0} abmelden", "Log out user {0}"),
     XXX ("Fehler beim Anlegen des Benutzers!", "Error creating the new user!");
 
     private final ITextProvider m_aTP;
@@ -121,9 +129,27 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
     final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
                                                                                                    HCCol.star ()));
-    aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                  aSelectedObject.getUser ()
-                                                                                                 .getDisplayName ()));
+
+    aTable.addItemRow (EText.MSG_USERID.getDisplayText (aDisplayLocale), aSelectedObject.getUserID ());
+    aTable.addItemRow (EText.MSG_USERNAME.getDisplayText (aDisplayLocale), aSelectedObject.getUser ().getDisplayName ());
+    aTable.addItemRow (EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
+                       PDTToString.getAsString (aSelectedObject.getLoginDT (), aDisplayLocale));
+    aTable.addItemRow (EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),
+                       PDTToString.getAsString (aSelectedObject.getLastAccessDT (), aDisplayLocale));
+    if (aSelectedObject.getLogoutDT () != null)
+      aTable.addItemRow (EText.MSG_LOGOUTDT.getDisplayText (aDisplayLocale),
+                         PDTToString.getAsString (aSelectedObject.getLogoutDT (), aDisplayLocale));
+
+    final Map <String, Object> aAttrs = aSelectedObject.getAllAttributes ();
+    if (!aAttrs.isEmpty ())
+    {
+      final HCTable aCustomAttrTable = new HCTable ();
+      for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aAttrs).entrySet ())
+      {
+        aCustomAttrTable.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
+      }
+      aTable.addItemRow (EText.MSG_ATTRS.getDisplayText (aDisplayLocale), aCustomAttrTable);
+    }
   }
 
   @Override
@@ -152,10 +178,14 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (150), new HCCol (150)).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_USER.getDisplayText (aDisplayLocale),
+    final BootstrapTable aTable = new BootstrapTable (HCCol.star (),
+                                                      new HCCol (150),
+                                                      new HCCol (150),
+                                                      createActionCol (1)).setID (getID ());
+    aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
-                                     EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale));
+                                     EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),
+                                     EText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     final Collection <LoginInfo> aLoginInfos = LoggedInUserManager.getInstance ().getAllLoginInfos ();
     for (final LoginInfo aLoginInfo : aLoginInfos)
     {
@@ -165,6 +195,13 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       aRow.addCell (new HCA (aViewLink).addChild (aLoginInfo.getUser ().getDisplayName ()));
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLoginDT (), aDisplayLocale));
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLastAccessDT (), aDisplayLocale));
+
+      final AbstractHCCell aActionCell = aRow.addCell ();
+      // XXX
+      if (false)
+        aActionCell.addChild (new HCA ().setTitle (EText.ACTION_LOGOUT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                               aLoginInfo.getUser ()
+                                                                                                         .getDisplayName ())));
     }
 
     aNodeList.addChild (aTable);
