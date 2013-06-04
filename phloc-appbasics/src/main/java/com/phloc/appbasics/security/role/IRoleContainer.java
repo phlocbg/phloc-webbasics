@@ -19,6 +19,7 @@ package com.phloc.appbasics.security.role;
 
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
@@ -28,6 +29,18 @@ import javax.annotation.Nonnull;
  */
 public interface IRoleContainer
 {
+  /**
+   * @return <code>true</code> if at least one role is contained,
+   *         <code>false</code> otherwise.
+   */
+  boolean hasContainedRoles ();
+
+  /**
+   * @return The number of contained roles. Always &ge; 0.
+   */
+  @Nonnegative
+  int getContainedRoleCount ();
+
   /**
    * @return A non-<code>null</code>but maybe empty set of all assigned role
    *         IDs.

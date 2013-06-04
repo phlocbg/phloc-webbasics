@@ -20,6 +20,7 @@ package com.phloc.appbasics.security.usergroup;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -93,6 +94,17 @@ public final class UserGroup implements IUserGroup
     return EChange.CHANGED;
   }
 
+  public boolean hasContainedUsers ()
+  {
+    return !m_aUserIDs.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getContainedUserCount ()
+  {
+    return m_aUserIDs.size ();
+  }
+
   @Nonnull
   @ReturnsImmutableObject
   public Set <String> getAllContainedUserIDs ()
@@ -118,6 +130,17 @@ public final class UserGroup implements IUserGroup
   EChange unassignUser (@Nonnull final String sUserID)
   {
     return EChange.valueOf (m_aUserIDs.remove (sUserID));
+  }
+
+  public boolean hasContainedRoles ()
+  {
+    return !m_aRoleIDs.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getContainedRoleCount ()
+  {
+    return m_aRoleIDs.size ();
   }
 
   @Nonnull

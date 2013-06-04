@@ -19,6 +19,7 @@ package com.phloc.appbasics.security.user;
 
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
@@ -28,6 +29,18 @@ import javax.annotation.Nonnull;
  */
 public interface IUserContainer
 {
+  /**
+   * @return <code>true</code> if at least one user is contained,
+   *         <code>false</code> otherwise.
+   */
+  boolean hasContainedUsers ();
+
+  /**
+   * @return The number of contained users. Always &ge; 0.
+   */
+  @Nonnegative
+  int getContainedUserCount ();
+
   /**
    * @return A non-<code>null</code>but maybe empty set of all assigned user
    *         IDs.
