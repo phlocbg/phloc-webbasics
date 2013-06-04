@@ -240,13 +240,13 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                  @Nonnull final IUser aSelectedObject,
                                                  @Nonnull final Locale aDisplayLocale)
   {
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale)),
+    aTable.addItemRow (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale),
                        PDTToString.getAsString (aSelectedObject.getCreationDateTime (), aDisplayLocale));
     if (aSelectedObject.getLastModificationDateTime () != null)
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_LASTMODIFICATIONDATE.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (EText.LABEL_LASTMODIFICATIONDATE.getDisplayText (aDisplayLocale),
                          PDTToString.getAsString (aSelectedObject.getLastModificationDateTime (), aDisplayLocale));
     if (aSelectedObject.getDeletionDateTime () != null)
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_DELETIONDATE.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (EText.LABEL_DELETIONDATE.getDisplayText (aDisplayLocale),
                          PDTToString.getAsString (aSelectedObject.getDeletionDateTime (), aDisplayLocale));
   }
 
@@ -275,22 +275,20 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getDisplayName ()));
     onShowSelectedObjectTableStart (aTable, aSelectedObject, aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
-                       aSelectedObject.getFirstName ());
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale)),
-                       aSelectedObject.getLastName ());
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale)),
+    aTable.addItemRow (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getFirstName ());
+    aTable.addItemRow (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getLastName ());
+    aTable.addItemRow (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale),
                        createEmailLink (aSelectedObject.getEmailAddress ()));
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
+    aTable.addItemRow (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_DELETED.getDisplayText (aDisplayLocale)),
+    aTable.addItemRow (EText.LABEL_DELETED.getDisplayText (aDisplayLocale),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isDeleted (), aDisplayLocale));
 
     // user groups
     final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aSelectedObject.getID ());
     if (aUserGroups.isEmpty ())
     {
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale),
                          HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
     }
     else
@@ -299,8 +297,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aUserGroups,
                                                                     new ComparatorHasName <IUserGroup> (aDisplayLocale)))
         aUserGroupUI.addChild (HCDiv.create (aUserGroup.getName ()));
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                     Integer.toString (aUserGroups.size ()))),
+      aTable.addItemRow (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                          Integer.toString (aUserGroups.size ())),
                          aUserGroupUI);
     }
 

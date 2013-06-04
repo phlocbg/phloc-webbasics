@@ -17,7 +17,9 @@
  */
 package com.phloc.webpages.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -25,6 +27,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.role.IRole;
+import com.phloc.appbasics.security.user.IUser;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
@@ -53,16 +56,18 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 
-public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
+public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
     MSG_NAME ("Name", "Name"),
     MSG_IN_USE ("Verwendet?", "In use?"),
-    HEADER_DETAILS ("Details von Rolle {0}", "Details of role {0}"),
-    MSG_USERGROUPS_0 ("Benutzergruppen", "User groups"),
-    MSG_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
+    HEADER_DETAILS ("Details von Benutzergruppe {0}", "Details of user group {0}"),
+    MSG_USERS_0 ("Benutzer", "Users"),
+    MSG_USERS_N ("Benutzer ({0})", "Users ({0})"),
+    MSG_ROLES_0 ("Rollen", "Roles"),
+    MSG_ROLES_N ("Rollen ({0})", "Roles ({0})"),
     MSG_NONE_ASSIGNED ("keine zugeordnet", "none assigned");
 
     private final ITextProvider m_aTP;
@@ -85,40 +90,41 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     }
   }
 
-  public BasePageRoleManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageRoleManagement (@Nonnull @Nonempty final String sID,
-                                 @Nonnull final String sName,
-                                 @Nullable final String sDescription)
+  public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID,
+                                      @Nonnull final String sName,
+                                      @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageRoleManagement (@Nonnull @Nonempty final String sID,
-                                 @Nonnull final IReadonlyMultiLingualText aName,
-                                 @Nullable final IReadonlyMultiLingualText aDescription)
+  public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID,
+                                      @Nonnull final IReadonlyMultiLingualText aName,
+                                      @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
 
   @Override
   @Nullable
-  protected IRole getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IUserGroup getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
-    return AccessManager.getInstance ().getRoleOfID (sID);
+    return AccessManager.getInstance ().getUserGroupOfID (sID);
   }
 
   @Override
-  protected final boolean isEditAllowed (@Nullable final IRole aLoginInfo)
+  protected final boolean isEditAllowed (@Nullable final IUserGroup aLoginInfo)
   {
     return false;
   }
 
   @Override
-  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IRole aSelectedObject)
+  protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
+                                     @Nonnull final IUserGroup aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
@@ -130,29 +136,58 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
 
     aTable.addItemRow (EText.MSG_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
 
-    // All user groups to which the role is assigned
-    final Collection <IUserGroup> aAssignedUserGroups = AccessManager.getInstance ()
-                                                                     .getAllUserGroupsWithAssignedRole (aSelectedObject.getID ());
-    if (aAssignedUserGroups.isEmpty ())
+    // All users assigned to this user group
+    final Collection <String> aAssignedUserIDs = aSelectedObject.getAllContainedUserIDs ();
+    if (aAssignedUserIDs.isEmpty ())
     {
-      aTable.addItemRow (EText.MSG_USERGROUPS_0.getDisplayText (aDisplayLocale),
+      aTable.addItemRow (EText.MSG_USERS_0.getDisplayText (aDisplayLocale),
                          HCEM.create (EText.MSG_NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
-      final HCNodeList aUserGroupUI = new HCNodeList ();
-      for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aAssignedUserGroups,
-                                                                    new ComparatorHasName <IUserGroup> (aDisplayLocale)))
-        aUserGroupUI.addChild (HCDiv.create (aUserGroup.getName ()));
-      aTable.addItemRow (EText.MSG_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                        Integer.toString (aAssignedUserGroups.size ())),
-                         aUserGroupUI);
+      // Convert IDs to objects
+      final AccessManager aMgr = AccessManager.getInstance ();
+      final List <IUser> aAssignedUsers = new ArrayList <IUser> (aAssignedUserIDs.size ());
+      for (final String sUserID : aAssignedUserIDs)
+        aAssignedUsers.add (aMgr.getUserOfID (sUserID));
+
+      final HCNodeList aUserUI = new HCNodeList ();
+      for (final IUser aUser : ContainerHelper.getSorted (aAssignedUsers,
+                                                          new ComparatorHasName <IUser> (aDisplayLocale)))
+        aUserUI.addChild (HCDiv.create (aUser.getName ()));
+      aTable.addItemRow (EText.MSG_USERS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                   Integer.toString (aAssignedUserIDs.size ())),
+                         aUserUI);
+    }
+
+    // All roles assigned to this user group
+    final Collection <String> aAssignedRoleIDs = aSelectedObject.getAllContainedRoleIDs ();
+    if (aAssignedRoleIDs.isEmpty ())
+    {
+      aTable.addItemRow (EText.MSG_ROLES_0.getDisplayText (aDisplayLocale),
+                         HCEM.create (EText.MSG_NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+    }
+    else
+    {
+      // Convert IDs to objects
+      final AccessManager aMgr = AccessManager.getInstance ();
+      final List <IRole> aAssignedRoles = new ArrayList <IRole> (aAssignedRoleIDs.size ());
+      for (final String sRoleID : aAssignedRoleIDs)
+        aAssignedRoles.add (aMgr.getRoleOfID (sRoleID));
+
+      final HCNodeList aRoleUI = new HCNodeList ();
+      for (final IRole aRole : ContainerHelper.getSorted (aAssignedRoles,
+                                                          new ComparatorHasName <IRole> (aDisplayLocale)))
+        aRoleUI.addChild (HCDiv.create (aRole.getName ()));
+      aTable.addItemRow (EText.MSG_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                   Integer.toString (aAssignedRoleIDs.size ())),
+                         aRoleUI);
     }
   }
 
   @Override
   protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
-                                                 @Nullable final IRole aSelectedObject,
+                                                 @Nullable final IUserGroup aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
   {
@@ -161,7 +196,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
 
   @Override
   protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
-                                @Nullable final IRole aSelectedObject,
+                                @Nullable final IUserGroup aSelectedObject,
                                 @Nonnull final HCForm aForm,
                                 final boolean bEdit,
                                 final boolean bCopy,
@@ -179,17 +214,14 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_IN_USE.getDisplayText (aDisplayLocale));
-    final Collection <? extends IRole> aRoles = AccessManager.getInstance ().getAllRoles ();
-    for (final IRole aRole : aRoles)
+    final Collection <? extends IUserGroup> aUserGroups = AccessManager.getInstance ().getAllUserGroups ();
+    for (final IUserGroup aUserGroup : aUserGroups)
     {
-      final ISimpleURL aViewLink = createViewURL (aRole);
-
-      final Collection <IUserGroup> aAssignedUserGroups = AccessManager.getInstance ()
-                                                                       .getAllUserGroupsWithAssignedRole (aRole.getID ());
+      final ISimpleURL aViewLink = createViewURL (aUserGroup);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (new HCA (aViewLink).addChild (aRole.getName ()));
-      aRow.addCell (EWebBasicsText.getYesOrNo (!aAssignedUserGroups.isEmpty (), aDisplayLocale));
+      aRow.addCell (new HCA (aViewLink).addChild (aUserGroup.getName ()));
+      aRow.addCell (EWebBasicsText.getYesOrNo (!aUserGroup.getAllContainedUserIDs ().isEmpty (), aDisplayLocale));
     }
 
     aNodeList.addChild (aTable);
