@@ -165,8 +165,8 @@ public class BootstrapTableForm extends BootstrapTable
     return aRow.addAndReturnCell (aCtrls);
   }
 
-  private static void _addControlCellErrorMessages (@Nonnull final AbstractHCCell aCell,
-                                                    @Nullable final IFormFieldErrorList aFormErrors)
+  public static void addControlCellErrorMessages (@Nonnull final AbstractHCCell aCell,
+                                                  @Nullable final IFormFieldErrorList aFormErrors)
   {
     if (aFormErrors != null)
       for (final IFormFieldError aError : aFormErrors.getAllItems ())
@@ -232,7 +232,7 @@ public class BootstrapTableForm extends BootstrapTable
     final AbstractHCCell aCtrlCell = _addControlCell (aRow, aCtrls, eHighest != null);
 
     // Add error messages
-    _addControlCellErrorMessages (aCtrlCell, aFormErrors);
+    addControlCellErrorMessages (aCtrlCell, aFormErrors);
     return aRow;
   }
 
