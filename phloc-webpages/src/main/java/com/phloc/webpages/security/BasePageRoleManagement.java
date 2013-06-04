@@ -19,6 +19,8 @@ package com.phloc.webpages.security;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,6 +30,7 @@ import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
@@ -66,12 +69,15 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    MSG_NAME ("Name", "Name"),
-    MSG_IN_USE ("Verwendet?", "In use?"),
+    HEADER_NAME ("Name", "Name"),
+    HEADER_IN_USE ("Verwendet?", "In use?"),
+    HEADER_VALUE ("Wert", "Value"),
     HEADER_DETAILS ("Details von Rolle {0}", "Details of role {0}"),
-    MSG_USERGROUPS_0 ("Benutzergruppen", "User groups"),
-    MSG_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
-    MSG_NONE_ASSIGNED ("keine zugeordnet", "none assigned"),
+    LABEL_NAME ("Name", "Name"),
+    LABEL_USERGROUPS_0 ("Benutzergruppen", "User groups"),
+    LABEL_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
+    LABEL_ATTRIBUTES ("Attribute", "Attributes"),
+    NONE_ASSIGNED ("keine zugeordnet", "none assigned"),
     DELETE_QUERY ("Soll die Rolle ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the role ''{0}''?"),
     DELETE_SUCCESS ("Die Rolle ''{0}'' wurden erfolgreich gelöscht!", "The role ''{0}'' was successfully deleted!"),
     DELETE_ERROR ("Fehler beim Löschen der Rolle ''{0}''!", "Error deleting the role ''{0}''!");
@@ -128,6 +134,31 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     return false;
   }
 
+  /**
+   * Callback for manually extracting custom attributes. This method is called
+   * independently if custom attributes are present or not.
+   * 
+   * @param aCurrentRole
+   *        The role currently shown
+   * @param aCustomAttrs
+   *        The available custom attributes
+   * @param aTable
+   *        The table to be add custom information
+   * @param aDisplayLocale
+   *        The display locale to use
+   * @return A set of all attribute names that were handled in this method or
+   *         <code>null</code>.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IRole aCurrentRole,
+                                                          @Nonnull final Map <String, ?> aCustomAttrs,
+                                                          @Nonnull final BootstrapTableFormView aTable,
+                                                          @Nonnull final Locale aDisplayLocale)
+  {
+    return null;
+  }
+
   @Override
   protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IRole aSelectedObject)
   {
@@ -139,15 +170,15 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
-    aTable.addItemRow (EText.MSG_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
+    aTable.addItemRow (EText.LABEL_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
 
     // All user groups to which the role is assigned
     final Collection <IUserGroup> aAssignedUserGroups = AccessManager.getInstance ()
                                                                      .getAllUserGroupsWithAssignedRole (aSelectedObject.getID ());
     if (aAssignedUserGroups.isEmpty ())
     {
-      aTable.addItemRow (EText.MSG_USERGROUPS_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.MSG_NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+      aTable.addItemRow (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale),
+                         HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -155,9 +186,39 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
       for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aAssignedUserGroups,
                                                                     new ComparatorHasName <IUserGroup> (aDisplayLocale)))
         aUserGroupUI.addChild (HCDiv.create (aUserGroup.getName ()));
-      aTable.addItemRow (EText.MSG_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                        Integer.toString (aAssignedUserGroups.size ())),
+      aTable.addItemRow (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                          Integer.toString (aAssignedUserGroups.size ())),
                          aUserGroupUI);
+    }
+
+    // custom attributes
+    final Map <String, Object> aCustomAttrs = aSelectedObject.getAllAttributes ();
+
+    // Callback
+    final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aSelectedObject,
+                                                                        aCustomAttrs,
+                                                                        aTable,
+                                                                        aDisplayLocale);
+
+    if (!aCustomAttrs.isEmpty ())
+    {
+      final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
+      aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                                           EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
+      for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
+      {
+        final String sName = aEntry.getKey ();
+        if (aHandledAttrs == null || !aHandledAttrs.contains (sName))
+        {
+          final String sValue = String.valueOf (aEntry.getValue ());
+          aAttrTable.addBodyRow ().addCells (sName, sValue);
+        }
+      }
+
+      // Maybe all custom attributes where handled in
+      // showCustomAttrsOfSelectedObject
+      if (aAttrTable.hasBodyRows ())
+        aTable.addItemRow (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale), aAttrTable);
     }
   }
 
@@ -226,8 +287,8 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110), createActionCol (1)).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_IN_USE.getDisplayText (aDisplayLocale),
+    aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                                     EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     final Collection <? extends IRole> aRoles = AccessManager.getInstance ().getAllRoles ();
     for (final IRole aRole : aRoles)

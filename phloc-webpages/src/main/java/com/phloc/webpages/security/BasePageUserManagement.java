@@ -310,7 +310,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Set <IRole> aUserRoles = aMgr.getAllUserRoles (aSelectedObject.getID ());
     if (aUserRoles.isEmpty ())
     {
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale),
                          HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
     }
     else
@@ -318,8 +318,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final HCNodeList aRoleUI = new HCNodeList ();
       for (final IRole aRole : ContainerHelper.getSorted (aUserRoles, new ComparatorHasName <IRole> (aDisplayLocale)))
         aRoleUI.addChild (HCDiv.create (aRole.getName ()));
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                Integer.toString (aUserRoles.size ()))),
+      aTable.addItemRow (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                     Integer.toString (aUserRoles.size ())),
                          aRoleUI);
     }
 
@@ -350,8 +350,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       // Maybe all custom attributes where handled in
       // showCustomAttrsOfSelectedObject
       if (aAttrTable.hasBodyRows ())
-        aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)),
-                           aAttrTable);
+        aTable.addItemRow (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale), aAttrTable);
     }
 
     // Callback

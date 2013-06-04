@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,6 +33,7 @@ import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
@@ -69,14 +72,17 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    MSG_NAME ("Name", "Name"),
-    MSG_IN_USE ("Verwendet?", "In use?"),
+    HEADER_NAME ("Name", "Name"),
+    HEADER_IN_USE ("Verwendet?", "In use?"),
+    HEADER_VALUE ("Wert", "Value"),
     HEADER_DETAILS ("Details von Benutzergruppe {0}", "Details of user group {0}"),
-    MSG_USERS_0 ("Benutzer", "Users"),
-    MSG_USERS_N ("Benutzer ({0})", "Users ({0})"),
-    MSG_ROLES_0 ("Rollen", "Roles"),
-    MSG_ROLES_N ("Rollen ({0})", "Roles ({0})"),
-    MSG_NONE_ASSIGNED ("keine zugeordnet", "none assigned"),
+    LABEL_NAME ("Name", "Name"),
+    LABEL_USERS_0 ("Benutzer", "Users"),
+    LABEL_USERS_N ("Benutzer ({0})", "Users ({0})"),
+    LABEL_ROLES_0 ("Rollen", "Roles"),
+    LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
+    LABEL_ATTRIBUTES ("Attribute", "Attributes"),
+    NONE_ASSIGNED ("keine zugeordnet", "none assigned"),
     DELETE_QUERY ("Soll die Benutzergruppe ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the user group ''{0}''?"),
     DELETE_SUCCESS ("Die Benutzergruppe ''{0}'' wurden erfolgreich gelöscht!", "The user group ''{0}'' was successfully deleted!"),
     DELETE_ERROR ("Fehler beim Löschen der Benutzergruppe ''{0}''!", "Error deleting the user group ''{0}''!");
@@ -133,6 +139,31 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     return false;
   }
 
+  /**
+   * Callback for manually extracting custom attributes. This method is called
+   * independently if custom attributes are present or not.
+   * 
+   * @param aCurrentUserGroup
+   *        The user group currently shown
+   * @param aCustomAttrs
+   *        The available custom attributes
+   * @param aTable
+   *        The table to be add custom information
+   * @param aDisplayLocale
+   *        The display locale to use
+   * @return A set of all attribute names that were handled in this method or
+   *         <code>null</code>.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IUserGroup aCurrentUserGroup,
+                                                          @Nonnull final Map <String, ?> aCustomAttrs,
+                                                          @Nonnull final BootstrapTableFormView aTable,
+                                                          @Nonnull final Locale aDisplayLocale)
+  {
+    return null;
+  }
+
   @Override
   protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC,
                                      @Nonnull final IUserGroup aSelectedObject)
@@ -145,14 +176,14 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
-    aTable.addItemRow (EText.MSG_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
+    aTable.addItemRow (EText.LABEL_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
 
     // All users assigned to this user group
     final Collection <String> aAssignedUserIDs = aSelectedObject.getAllContainedUserIDs ();
     if (aAssignedUserIDs.isEmpty ())
     {
-      aTable.addItemRow (EText.MSG_USERS_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.MSG_NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+      aTable.addItemRow (EText.LABEL_USERS_0.getDisplayText (aDisplayLocale),
+                         HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -166,8 +197,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       for (final IUser aUser : ContainerHelper.getSorted (aAssignedUsers,
                                                           new ComparatorHasName <IUser> (aDisplayLocale)))
         aUserUI.addChild (HCDiv.create (aUser.getName ()));
-      aTable.addItemRow (EText.MSG_USERS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                   Integer.toString (aAssignedUserIDs.size ())),
+      aTable.addItemRow (EText.LABEL_USERS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                     Integer.toString (aAssignedUserIDs.size ())),
                          aUserUI);
     }
 
@@ -175,8 +206,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final Collection <String> aAssignedRoleIDs = aSelectedObject.getAllContainedRoleIDs ();
     if (aAssignedRoleIDs.isEmpty ())
     {
-      aTable.addItemRow (EText.MSG_ROLES_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.MSG_NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+      aTable.addItemRow (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale),
+                         HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -190,9 +221,39 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       for (final IRole aRole : ContainerHelper.getSorted (aAssignedRoles,
                                                           new ComparatorHasName <IRole> (aDisplayLocale)))
         aRoleUI.addChild (HCDiv.create (aRole.getName ()));
-      aTable.addItemRow (EText.MSG_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                   Integer.toString (aAssignedRoleIDs.size ())),
+      aTable.addItemRow (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                     Integer.toString (aAssignedRoleIDs.size ())),
                          aRoleUI);
+    }
+
+    // custom attributes
+    final Map <String, Object> aCustomAttrs = aSelectedObject.getAllAttributes ();
+
+    // Callback
+    final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aSelectedObject,
+                                                                        aCustomAttrs,
+                                                                        aTable,
+                                                                        aDisplayLocale);
+
+    if (!aCustomAttrs.isEmpty ())
+    {
+      final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
+      aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                                           EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
+      for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
+      {
+        final String sName = aEntry.getKey ();
+        if (aHandledAttrs == null || !aHandledAttrs.contains (sName))
+        {
+          final String sValue = String.valueOf (aEntry.getValue ());
+          aAttrTable.addBodyRow ().addCells (sName, sValue);
+        }
+      }
+
+      // Maybe all custom attributes where handled in
+      // showCustomAttrsOfSelectedObject
+      if (aAttrTable.hasBodyRows ())
+        aTable.addItemRow (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale), aAttrTable);
     }
   }
 
@@ -260,8 +321,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110), createActionCol (1)).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_IN_USE.getDisplayText (aDisplayLocale),
+    aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
+                                     EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     final Collection <? extends IUserGroup> aUserGroups = AccessManager.getInstance ().getAllUserGroups ();
     for (final IUserGroup aUserGroup : aUserGroups)
