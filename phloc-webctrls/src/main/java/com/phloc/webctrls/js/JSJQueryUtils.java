@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.ajax;
+package com.phloc.webctrls.js;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -34,7 +34,7 @@ public final class JSJQueryUtils
 
   public static void registerResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EJQueryUtilsJSPathProvider.JQUERY_UTILS);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EWebCtrlsJSPathProvider.JQUERY_UTILS);
   }
 
   /**

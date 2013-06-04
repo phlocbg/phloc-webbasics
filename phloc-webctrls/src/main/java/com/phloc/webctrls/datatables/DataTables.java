@@ -68,8 +68,8 @@ import com.phloc.web.http.EHTTPMethod;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.state.UIStateRegistry;
-import com.phloc.webctrls.ajax.JSJQueryUtils;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData;
+import com.phloc.webctrls.js.JSJQueryUtils;
 
 public class DataTables implements IHCNodeBuilder
 {

@@ -53,6 +53,9 @@
   };
 })(jQuery)
 
+// Disable jQuery AJAX caching
+$.ajaxSetup ({cache:false});
+
 /**
  * Default jQuery AJAX success handler for phloc AJAX server side components
  * @param data PlainObject The data returned from the server, formatted according to the dataType parameter

@@ -115,5 +115,4 @@ FormHelperClass.prototype =
   }
 };
 
-$.ajaxSetup ({cache:false});
 var FormHelper = window.FormHelper = new FormHelperClass();
