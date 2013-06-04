@@ -18,6 +18,7 @@
 package com.phloc.webbasics.userdata;
 
 import java.io.File;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +38,7 @@ import com.phloc.commons.url.SimpleURL;
  * 
  * @author Philip Helger
  */
-public final class UserDataObject
+public final class UserDataObject implements Serializable
 {
   private final String m_sPath;
 
