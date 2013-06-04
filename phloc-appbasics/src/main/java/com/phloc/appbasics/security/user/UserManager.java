@@ -448,7 +448,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       eChange = eChange.or (aUser.setFirstName (sNewFirstName));
       eChange = eChange.or (aUser.setLastName (sNewLastName));
       eChange = eChange.or (aUser.setDesiredLocale (aNewDesiredLocale));
-      eChange = eChange.or (aUser.setCustomAttrs (aNewCustomAttrs));
+      eChange = eChange.or (aUser.setAttributes (aNewCustomAttrs));
       eChange = eChange.or (aUser.setDisabled (bNewDisabled));
       if (eChange.isUnchanged ())
         return EChange.UNCHANGED;

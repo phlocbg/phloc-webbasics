@@ -17,7 +17,6 @@
  */
 package com.phloc.appbasics.security.user;
 
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,8 +28,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -46,7 +44,7 @@ import com.phloc.datetime.PDTFactory;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class User implements IUser
+public final class User extends MapBasedAttributeContainer implements IUser
 {
   private final String m_sID;
   private final DateTime m_aCreationDT;
@@ -58,7 +56,6 @@ public final class User implements IUser
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
-  private Map <String, String> m_aCustomAttrs = new LinkedHashMap <String, String> ();
   private boolean m_bDeleted;
   private boolean m_bDisabled;
 
@@ -200,8 +197,7 @@ public final class User implements IUser
     m_sFirstName = sFirstName;
     m_sLastName = sLastName;
     m_aDesiredLocale = aDesiredLocale;
-    if (aCustomAttrs != null)
-      m_aCustomAttrs.putAll (aCustomAttrs);
+    setAttributes (aCustomAttrs);
     m_bDeleted = bDeleted;
     m_bDisabled = bDisabled;
   }
@@ -362,70 +358,6 @@ public final class User implements IUser
     return StringHelper.getConcatenatedOnDemand (m_sFirstName, " ", m_sLastName);
   }
 
-  @Nonnull
-  @ReturnsMutableCopy
-  public Map <String, String> getCustomAttrs ()
-  {
-    return ContainerHelper.newOrderedMap (m_aCustomAttrs);
-  }
-
-  @Nonnull
-  EChange setCustomAttrs (@Nullable final Map <String, String> aCustomAttrs)
-  {
-    if (ContainerHelper.isEmpty (aCustomAttrs))
-    {
-      // Remove all existing custom attrs
-      if (m_aCustomAttrs.isEmpty ())
-        return EChange.UNCHANGED;
-      m_aCustomAttrs.clear ();
-      return EChange.CHANGED;
-    }
-
-    // Set at least one custom attribute
-    final Map <String, String> aRealCustomAttrs = ContainerHelper.newOrderedMap (aCustomAttrs);
-    if (m_aCustomAttrs.equals (aRealCustomAttrs))
-      return EChange.UNCHANGED;
-    m_aCustomAttrs = aRealCustomAttrs;
-    return EChange.CHANGED;
-  }
-
-  public boolean containsCustomAttr (@Nullable final String sKey)
-  {
-    return m_aCustomAttrs.containsKey (sKey);
-  }
-
-  @Nullable
-  public String getCustomAttrValue (@Nullable final String sKey)
-  {
-    return m_aCustomAttrs.get (sKey);
-  }
-
-  @Nonnull
-  EChange removeCustomAttrValue (@Nullable final String sKey)
-  {
-    return EChange.valueOf (m_aCustomAttrs.remove (sKey) != null);
-  }
-
-  @Nonnull
-  EChange setCustomAttrValue (@Nonnull final String sKey, @Nullable final String sValue)
-  {
-    if (StringHelper.hasNoText (sKey))
-      throw new IllegalArgumentException ("key");
-
-    // Any change?
-    final String sOldValue = getCustomAttrValue (sKey);
-    if (EqualsUtils.equals (sValue, sOldValue))
-      return EChange.UNCHANGED;
-
-    // Remove value?
-    if (sValue == null)
-      return removeCustomAttrValue (sKey);
-
-    // Finally set it
-    m_aCustomAttrs.put (sKey, sValue);
-    return EChange.CHANGED;
-  }
-
   public boolean isDeleted ()
   {
     return m_bDeleted;
@@ -471,7 +403,7 @@ public final class User implements IUser
   {
     if (o == this)
       return true;
-    if (!(o instanceof User))
+    if (!super.equals (o))
       return false;
     final User rhs = (User) o;
     return m_sID.equals (rhs.m_sID);
@@ -480,25 +412,25 @@ public final class User implements IUser
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_sID).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID)
-                                       .append ("creationDT", m_aCreationDT)
-                                       .appendIfNotNull ("lastModificationDT", m_aLastModificationDT)
-                                       .appendIfNotNull ("deletionDT", m_aDeletionDT)
-                                       .append ("loginName", m_sLoginName)
-                                       .append ("emailAddress", m_sEmailAddress)
-                                       .append ("passwordHash", m_sPasswordHash)
-                                       .append ("firstName", m_sFirstName)
-                                       .append ("lastName", m_sLastName)
-                                       .append ("desiredLocale", m_aDesiredLocale)
-                                       .appendIfNotNull ("customAttrs", m_aCustomAttrs)
-                                       .append ("deleted", m_bDeleted)
-                                       .append ("disabled", m_bDisabled)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("ID", m_sID)
+                            .append ("creationDT", m_aCreationDT)
+                            .appendIfNotNull ("lastModificationDT", m_aLastModificationDT)
+                            .appendIfNotNull ("deletionDT", m_aDeletionDT)
+                            .append ("loginName", m_sLoginName)
+                            .append ("emailAddress", m_sEmailAddress)
+                            .append ("passwordHash", m_sPasswordHash)
+                            .append ("firstName", m_sFirstName)
+                            .append ("lastName", m_sLastName)
+                            .append ("desiredLocale", m_aDesiredLocale)
+                            .append ("deleted", m_bDeleted)
+                            .append ("disabled", m_bDisabled)
+                            .toString ();
   }
 }

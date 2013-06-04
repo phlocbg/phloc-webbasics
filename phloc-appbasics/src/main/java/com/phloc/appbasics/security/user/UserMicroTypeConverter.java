@@ -71,11 +71,11 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
       eUser.appendElement (ELEMENT_LASTNAME).appendText (aUser.getLastName ());
     if (aUser.getDesiredLocale () != null)
       eUser.setAttribute (ATTR_DESIREDLOCALE, aUser.getDesiredLocale ().toString ());
-    for (final Map.Entry <String, String> aEntry : aUser.getCustomAttrs ().entrySet ())
+    for (final Map.Entry <String, Object> aEntry : aUser.getAllAttributes ().entrySet ())
     {
       final IMicroElement eCustom = eUser.appendElement (ELEMENT_CUSTOM);
       eCustom.setAttribute (ATTR_ID, aEntry.getKey ());
-      eCustom.appendText (aEntry.getValue ());
+      eCustom.appendText (String.valueOf (aEntry.getValue ()));
     }
     eUser.setAttribute (ATTR_DELETED, Boolean.toString (aUser.isDeleted ()));
     eUser.setAttribute (ATTR_DISABLED, Boolean.toString (aUser.isDisabled ()));

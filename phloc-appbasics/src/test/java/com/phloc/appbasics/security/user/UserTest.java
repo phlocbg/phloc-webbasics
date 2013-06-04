@@ -99,7 +99,7 @@ public final class UserTest
     assertEquals ("Philip", aUser2.getFirstName ());
     assertEquals ("Helger", aUser2.getLastName ());
     assertEquals (Locale.GERMANY, aUser2.getDesiredLocale ());
-    assertEquals (1, aUser2.getCustomAttrs ().size ());
-    assertEquals ("de_DE", aUser2.getCustomAttrs ().get ("locale"));
+    assertEquals (1, aUser2.getAttributeCount ());
+    assertEquals ("de_DE", aUser2.getAttributeAsString ("locale"));
   }
 }

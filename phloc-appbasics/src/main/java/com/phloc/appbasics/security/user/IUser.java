@@ -17,9 +17,7 @@
  */
 package com.phloc.appbasics.security.user;
 
-import java.io.Serializable;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +25,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.auth.subject.IAuthSubject;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.type.ITypedObject;
 import com.phloc.datetime.IHasCreationDateTime;
@@ -39,7 +37,7 @@ import com.phloc.datetime.IHasLastModificationDateTime;
  * 
  * @author Philip Helger
  */
-public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreationDateTime, IHasLastModificationDateTime, IHasDeletionDateTime, Serializable, IAuthSubject
+public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreationDateTime, IHasLastModificationDateTime, IHasDeletionDateTime, IAuthSubject, IReadonlyAttributeContainer
 {
   /**
    * @return <code>true</code> if the user has the ID
@@ -86,30 +84,6 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
    */
   @Nullable
   Locale getDesiredLocale ();
-
-  /**
-   * @return A set of custom attributes in an ordered map. Never
-   *         <code>null</code>.
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  Map <String, String> getCustomAttrs ();
-
-  /**
-   * @param sKey
-   *        The name of the custom attribute to check. May be <code>null</code>.
-   * @return <code>true</code> if an attribute with the given name is contained,
-   *         <code>false</code> otherwise
-   */
-  boolean containsCustomAttr (@Nullable String sKey);
-
-  /**
-   * @param sKey
-   *        The name of the custom attribute to query. May be <code>null</code>.
-   * @return <code>null</code> if no such attribute is present.
-   */
-  @Nullable
-  String getCustomAttrValue (@Nullable String sKey);
 
   /**
    * @return <code>true</code> if this user is deleted, <code>false</code> if it
