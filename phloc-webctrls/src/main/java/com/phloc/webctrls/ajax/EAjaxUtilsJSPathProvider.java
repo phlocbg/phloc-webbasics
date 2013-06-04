@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls;
+package com.phloc.webctrls.ajax;
 
 import javax.annotation.Nonnull;
 
@@ -23,13 +23,13 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.html.resource.js.JSFilenameHelper;
 
-public enum EWebCtrlsJSPathProvider implements IJSPathProvider
+public enum EAjaxUtilsJSPathProvider implements IJSPathProvider
 {
-  STACKTRACE ("js/stacktrace.js");
+  AJAX_UTILS ("js/ajax-utils.js");
 
   private final String m_sPath;
 
-  private EWebCtrlsJSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EAjaxUtilsJSPathProvider (@Nonnull @Nonempty final String sPath)
   {
     if (!JSFilenameHelper.isJSFilename (sPath))
       throw new IllegalArgumentException ("path");

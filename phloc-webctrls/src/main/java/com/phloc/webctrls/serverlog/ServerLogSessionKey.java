@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.UsedViaReflection;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -69,6 +70,23 @@ public final class ServerLogSessionKey extends SessionWebSingleton
   {
     final ServerLogSessionKey aObj = getSessionSingletonIfInstantiated (ServerLogSessionKey.class);
     return aObj == null ? null : aObj.m_sGeneratedKey;
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof ServerLogSessionKey))
+      return false;
+    final ServerLogSessionKey rhs = (ServerLogSessionKey) o;
+    return m_sGeneratedKey.equals (rhs.m_sGeneratedKey);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_sGeneratedKey).getHashCode ();
   }
 
   @Override

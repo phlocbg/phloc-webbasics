@@ -56,7 +56,6 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSBlock;
 import com.phloc.html.js.builder.JSConditional;
 import com.phloc.html.js.builder.JSExpr;
-import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSRef;
 import com.phloc.html.js.builder.JSVar;
@@ -66,10 +65,10 @@ import com.phloc.html.js.builder.jquery.JQueryInvocation;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuerySelectorList;
 import com.phloc.web.http.EHTTPMethod;
-import com.phloc.webbasics.ajax.AjaxDefaultResponseJSSuccess;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.state.UIStateRegistry;
+import com.phloc.webctrls.ajax.JSAjaxUtils;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData;
 
 public class DataTables implements IHCNodeBuilder
@@ -741,10 +740,11 @@ public class DataTables implements IHCNodeBuilder
                                                                                                    : m_eServerMethod.getName ())
                                                                      .url (sSource)
                                                                      .data (aoData)
-                                                                     .success (new AjaxDefaultResponseJSSuccess (new JSInvocation (fnCallback.name ()),
-                                                                                                                 true));
+                                                                     .success (JSAjaxUtils.jqueryAjaxSuccessHandler (fnCallback,
+                                                                                                                     true));
       aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
+      JSAjaxUtils.registerResources ();
     }
     if (m_bDeferRender != DEFAULT_DEFER_RENDER)
       aParams.add ("bDeferRender", m_bDeferRender);

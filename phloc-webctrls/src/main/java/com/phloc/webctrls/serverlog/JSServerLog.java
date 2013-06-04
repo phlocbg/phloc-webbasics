@@ -23,12 +23,18 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSInvocation;
+import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
 public final class JSServerLog
 {
   private JSServerLog ()
   {}
+
+  public static void registerResources ()
+  {
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EServerLogJSPathProvider.SERVERLOG);
+  }
 
   @Nonnull
   public static JSInvocation serverLogInit (@Nonnull final ISimpleURL aURL,
