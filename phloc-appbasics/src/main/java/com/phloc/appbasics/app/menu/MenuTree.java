@@ -124,6 +124,11 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
     m_aProxy.setDefaultMenuItemID (sDefaultMenuItem);
   }
 
+  public void setDefaultMenuItemIDs (@Nullable final String... aDefaultMenuItemIDs)
+  {
+    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
+  }
+
   public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
   {
     m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);

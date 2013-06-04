@@ -137,6 +137,11 @@ public final class ApplicationMenuTree extends ApplicationSingletonTreeWithUniqu
     m_aProxy.setDefaultMenuItemID (sDefaultMenuItem);
   }
 
+  public void setDefaultMenuItemIDs (@Nullable final String... aDefaultMenuItemIDs)
+  {
+    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
+  }
+
   public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
   {
     m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);

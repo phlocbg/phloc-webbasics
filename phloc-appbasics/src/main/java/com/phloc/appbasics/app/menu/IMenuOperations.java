@@ -216,6 +216,16 @@ public interface IMenuOperations
    * 
    * @param aDefaultMenuItemIDs
    *        The default menu items to be set. May be <code>null</code>. This
+   *        array may not contain any <code>null</code> entries.
+   */
+  void setDefaultMenuItemIDs (@Nullable String... aDefaultMenuItemIDs);
+
+  /**
+   * Set the default menu items in the priority order. The passed menu item IDs
+   * must resolve to {@link IMenuItemPage} objects.
+   * 
+   * @param aDefaultMenuItemIDs
+   *        The default menu items to be set. May be <code>null</code>. This
    *        list may not contain any <code>null</code> entries.
    */
   void setDefaultMenuItemIDs (@Nullable List <String> aDefaultMenuItemIDs);

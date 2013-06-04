@@ -173,6 +173,11 @@ public class MenuOperations implements IMenuOperations
     m_aDefaultMenuItemIDs = sDefaultMenuItemID == null ? null : ContainerHelper.newList (sDefaultMenuItemID);
   }
 
+  public void setDefaultMenuItemIDs (@Nullable final String... aDefaultMenuItemIDs)
+  {
+    m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
+  }
+
   public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
   {
     m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
