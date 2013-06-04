@@ -19,7 +19,6 @@ package com.phloc.webpages.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -298,10 +297,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
         final String sUserGroupID = aSelectedObject.getID ();
 
         // We're editing an existing object
-        final Map <String, String> aCustomAttrs = new HashMap <String, String> ();
-        for (final Map.Entry <String, Object> aEntry : aSelectedObject.getAllAttributes ().entrySet ())
-          aCustomAttrs.put (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
-        aAccessMgr.setUserGroupData (sUserGroupID, sName, aCustomAttrs);
+        aAccessMgr.setUserGroupData (sUserGroupID, sName, aSelectedObject.getAllAttributes ());
         aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching roles
