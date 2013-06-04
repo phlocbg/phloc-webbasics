@@ -43,7 +43,8 @@ public final class JSAjaxUtils
    * 
    * @param aHandler
    *        The JS expression that must resolve to a JS function that takes 3
-   *        arguments. See jQuery.ajax success callback for details.
+   *        arguments. See jQuery.ajax success callback for details. Note: this
+   *        should not be in an invocation but an invokable!
    * @param bInvokeHandlerFirst
    *        <code>true</code> to invoke the handler before the inclusions take
    *        place, <code>false</code> to invoke the handler after the inclusions
