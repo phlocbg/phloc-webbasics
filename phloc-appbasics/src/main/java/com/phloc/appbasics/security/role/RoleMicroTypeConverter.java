@@ -17,6 +17,9 @@
  */
 package com.phloc.appbasics.security.role;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -33,6 +36,7 @@ public final class RoleMicroTypeConverter implements IMicroTypeConverter
 {
   private static final String ATTR_ID = "id";
   private static final String ATTR_NAME = "name";
+  private static final String ELEMENT_CUSTOM = "custom";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aObject,
@@ -43,6 +47,12 @@ public final class RoleMicroTypeConverter implements IMicroTypeConverter
     final IMicroElement eRole = new MicroElement (sNamespaceURI, sTagName);
     eRole.setAttribute (ATTR_ID, aRole.getID ());
     eRole.setAttribute (ATTR_NAME, aRole.getName ());
+    for (final Map.Entry <String, Object> aEntry : aRole.getAllAttributes ().entrySet ())
+    {
+      final IMicroElement eCustom = eRole.appendElement (ELEMENT_CUSTOM);
+      eCustom.setAttribute (ATTR_ID, aEntry.getKey ());
+      eCustom.appendText (String.valueOf (aEntry.getValue ()));
+    }
     return eRole;
   }
 
@@ -51,6 +61,9 @@ public final class RoleMicroTypeConverter implements IMicroTypeConverter
   {
     final String sID = eRole.getAttribute (ATTR_ID);
     final String sName = eRole.getAttribute (ATTR_NAME);
-    return new Role (sID, sName);
+    final Map <String, String> aCustomAttrs = new LinkedHashMap <String, String> ();
+    for (final IMicroElement eCustom : eRole.getAllChildElements (ELEMENT_CUSTOM))
+      aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
+    return new Role (sID, sName, aCustomAttrs);
   }
 }

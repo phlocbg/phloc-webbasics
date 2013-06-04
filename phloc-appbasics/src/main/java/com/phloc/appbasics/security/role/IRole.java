@@ -17,8 +17,7 @@
  */
 package com.phloc.appbasics.security.role;
 
-import java.io.Serializable;
-
+import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.type.ITypedObject;
 
@@ -27,7 +26,7 @@ import com.phloc.commons.type.ITypedObject;
  * 
  * @author Philip Helger
  */
-public interface IRole extends ITypedObject <String>, IHasName, Serializable
+public interface IRole extends ITypedObject <String>, IHasName, IReadonlyAttributeContainer
 {
   /* empty */
 }

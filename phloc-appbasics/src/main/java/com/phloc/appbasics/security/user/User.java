@@ -403,7 +403,7 @@ public final class User extends MapBasedAttributeContainer implements IUser
   {
     if (o == this)
       return true;
-    if (!super.equals (o))
+    if (!(o instanceof User))
       return false;
     final User rhs = (User) o;
     return m_sID.equals (rhs.m_sID);
@@ -412,7 +412,7 @@ public final class User extends MapBasedAttributeContainer implements IUser
   @Override
   public int hashCode ()
   {
-    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_sID).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
   }
 
   @Override

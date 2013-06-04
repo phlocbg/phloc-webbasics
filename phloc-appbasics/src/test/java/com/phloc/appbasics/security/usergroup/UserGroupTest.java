@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.url.SMap;
 
 /**
  * Test class for class {@link UserGroup}.
@@ -44,7 +45,7 @@ public final class UserGroupTest
   @Test
   public void testMicroConversion ()
   {
-    final UserGroup aUserGroup = new UserGroup ("id1", "User group 5");
+    final UserGroup aUserGroup = new UserGroup ("id1", "User group 5", new SMap ("key", "value"));
     aUserGroup.assignUser ("user1");
     aUserGroup.assignUser ("user2");
     aUserGroup.assignRole ("role1");
@@ -59,11 +60,13 @@ public final class UserGroupTest
     assertNotNull (aUserGroup2);
     assertEquals ("id1", aUserGroup2.getID ());
     assertEquals ("User group 5", aUserGroup2.getName ());
-    assertEquals (2, aUserGroup.getAllContainedUserIDs ().size ());
-    assertTrue (aUserGroup.getAllContainedUserIDs ().contains ("user1"));
-    assertTrue (aUserGroup.getAllContainedUserIDs ().contains ("user2"));
-    assertEquals (2, aUserGroup.getAllContainedRoleIDs ().size ());
-    assertTrue (aUserGroup.getAllContainedRoleIDs ().contains ("role1"));
-    assertTrue (aUserGroup.getAllContainedRoleIDs ().contains ("role2"));
+    assertEquals (2, aUserGroup2.getAllContainedUserIDs ().size ());
+    assertTrue (aUserGroup2.getAllContainedUserIDs ().contains ("user1"));
+    assertTrue (aUserGroup2.getAllContainedUserIDs ().contains ("user2"));
+    assertEquals (2, aUserGroup2.getAllContainedRoleIDs ().size ());
+    assertTrue (aUserGroup2.getAllContainedRoleIDs ().contains ("role1"));
+    assertTrue (aUserGroup2.getAllContainedRoleIDs ().contains ("role2"));
+    assertEquals (1, aUserGroup2.getAttributeCount ());
+    assertEquals ("value", aUserGroup2.getAttributeAsString ("key"));
   }
 }

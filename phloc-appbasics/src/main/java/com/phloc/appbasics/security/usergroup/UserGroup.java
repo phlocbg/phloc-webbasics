@@ -206,10 +206,11 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID)
-                                       .append ("name", m_sName)
-                                       .append ("assignedUsers", m_aUserIDs)
-                                       .append ("assignedRoles", m_aRoleIDs)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("ID", m_sID)
+                            .append ("name", m_sName)
+                            .append ("assignedUsers", m_aUserIDs)
+                            .append ("assignedRoles", m_aRoleIDs)
+                            .toString ();
   }
 }

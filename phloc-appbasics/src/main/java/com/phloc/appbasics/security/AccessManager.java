@@ -273,6 +273,13 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   }
 
   @Nonnull
+  public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName,
+                                        @Nullable final Map <String, String> aCustomAttrs)
+  {
+    return m_aUserGroupMgr.createNewUserGroup (sName, aCustomAttrs);
+  }
+
+  @Nonnull
   public IUserGroup createPredefinedUserGroup (@Nonnull @Nonempty final String sID,
                                                @Nonnull @Nonempty final String sName)
   {
@@ -389,6 +396,12 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   public IRole createNewRole (@Nonnull @Nonempty final String sName)
   {
     return m_aRoleMgr.createNewRole (sName);
+  }
+
+  @Nonnull
+  public IRole createNewRole (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  {
+    return m_aRoleMgr.createNewRole (sName, aCustomAttrs);
   }
 
   @Nonnull

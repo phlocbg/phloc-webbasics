@@ -18,6 +18,7 @@
 package com.phloc.appbasics.security.usergroup;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,6 +44,19 @@ public interface IUserGroupManager
    */
   @Nonnull
   IUserGroup createNewUserGroup (@Nonnull @Nonempty String sName);
+
+  /**
+   * Create a new user group.
+   * 
+   * @param sName
+   *        The name of the user group to create. May neither be
+   *        <code>null</code> nor empty.
+   * @param aCustomAttrs
+   *        A set of custom attributes. May be <code>null</code>.
+   * @return The created user group.
+   */
+  @Nonnull
+  IUserGroup createNewUserGroup (@Nonnull @Nonempty String sName, @Nullable Map <String, String> aCustomAttrs);
 
   /**
    * Create a predefined user group.

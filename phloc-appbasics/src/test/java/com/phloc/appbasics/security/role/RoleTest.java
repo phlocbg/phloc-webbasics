@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.url.SMap;
 
 /**
  * Test class for class {@link Role}.
@@ -43,7 +44,7 @@ public final class RoleTest
   @Test
   public void testMicroConversion ()
   {
-    final Role aRole = new Role ("id1", "Role 1");
+    final Role aRole = new Role ("id1", "Role 1", new SMap ("key", "value"));
 
     // To XML
     final IMicroElement aElement = MicroTypeConverter.convertToMicroElement (aRole, "role");
@@ -54,5 +55,7 @@ public final class RoleTest
     assertNotNull (aRole2);
     assertEquals ("id1", aRole2.getID ());
     assertEquals ("Role 1", aRole2.getName ());
+    assertEquals (1, aRole2.getAttributeCount ());
+    assertEquals ("value", aRole2.getAttributeAsString ("key"));
   }
 }

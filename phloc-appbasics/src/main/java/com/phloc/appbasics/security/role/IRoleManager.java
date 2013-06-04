@@ -18,6 +18,7 @@
 package com.phloc.appbasics.security.role;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,6 +43,18 @@ public interface IRoleManager
    */
   @Nonnull
   IRole createNewRole (@Nonnull @Nonempty String sName);
+
+  /**
+   * Create a new role.
+   * 
+   * @param sName
+   *        The name of the new role
+   * @param aCustomAttrs
+   *        A set of custom attributes. May be <code>null</code>.
+   * @return The created role and never <code>null</code>.
+   */
+  @Nonnull
+  IRole createNewRole (@Nonnull @Nonempty String sName, @Nullable Map <String, String> aCustomAttrs);
 
   /**
    * Create a predefined role.

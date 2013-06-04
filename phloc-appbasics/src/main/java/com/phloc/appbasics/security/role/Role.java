@@ -17,11 +17,15 @@
  */
 package com.phloc.appbasics.security.role;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
@@ -35,17 +39,29 @@ import com.phloc.commons.type.ObjectType;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class Role implements IRole
+public final class Role extends MapBasedAttributeContainer implements IRole
 {
   private final String m_sID;
   private String m_sName;
 
   public Role (@Nonnull @Nonempty final String sName)
   {
-    this (GlobalIDFactory.getNewPersistentStringID (), sName);
+    this (sName, (Map <String, String>) null);
+  }
+
+  public Role (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  {
+    this (GlobalIDFactory.getNewPersistentStringID (), sName, aCustomAttrs);
   }
 
   Role (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  {
+    this (sID, sName, (Map <String, String>) null);
+  }
+
+  Role (@Nonnull @Nonempty final String sID,
+        @Nonnull @Nonempty final String sName,
+        @Nullable final Map <String, String> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
@@ -53,6 +69,7 @@ public final class Role implements IRole
       throw new IllegalArgumentException ("name");
     m_sID = sID;
     m_sName = sName;
+    setAttributes (aCustomAttrs);
   }
 
   @Nonnull
@@ -106,6 +123,6 @@ public final class Role implements IRole
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("ID", m_sID).append ("name", m_sName).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("ID", m_sID).append ("name", m_sName).toString ();
   }
 }

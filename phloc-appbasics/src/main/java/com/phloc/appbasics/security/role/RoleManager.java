@@ -133,8 +133,14 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   @Nonnull
   public IRole createNewRole (@Nonnull @Nonempty final String sName)
   {
+    return createNewRole (sName, (Map <String, String>) null);
+  }
+
+  @Nonnull
+  public IRole createNewRole (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  {
     // Create role
-    final Role aRole = new Role (sName);
+    final Role aRole = new Role (sName, aCustomAttrs);
 
     m_aRWLock.writeLock ().lock ();
     try

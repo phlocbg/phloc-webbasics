@@ -164,8 +164,15 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName)
   {
+    return createNewUserGroup (sName, (Map <String, String>) null);
+  }
+
+  @Nonnull
+  public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName,
+                                        @Nullable final Map <String, String> aCustomAttrs)
+  {
     // Create user group
-    final UserGroup aUserGroup = new UserGroup (sName);
+    final UserGroup aUserGroup = new UserGroup (sName, aCustomAttrs);
 
     m_aRWLock.writeLock ().lock ();
     try
