@@ -27,14 +27,14 @@ import com.phloc.html.js.builder.JSVar;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
-public final class JSAjaxUtils
+public final class JSJQueryUtils
 {
-  private JSAjaxUtils ()
+  private JSJQueryUtils ()
   {}
 
   public static void registerResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAjaxUtilsJSPathProvider.AJAX_UTILS);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EJQueryUtilsJSPathProvider.JQUERY_UTILS);
   }
 
   /**

@@ -296,9 +296,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     else
     {
       final HCNodeList aUserGroupUI = new HCNodeList ();
-      for (final IUserGroup aUserGroupe : ContainerHelper.getSorted (aUserGroups,
-                                                                     new ComparatorHasName <IUserGroup> (aDisplayLocale)))
-        aUserGroupUI.addChild (HCDiv.create (aUserGroupe.getName ()));
+      for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aUserGroups,
+                                                                    new ComparatorHasName <IUserGroup> (aDisplayLocale)))
+        aUserGroupUI.addChild (HCDiv.create (aUserGroup.getName ()));
       aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                      Integer.toString (aUserGroups.size ()))),
                          aUserGroupUI);
@@ -493,23 +493,28 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
-    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (210), HCCol.star ()));
+    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (170), HCCol.star ()));
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                       aSelectedObject.getDisplayName ())
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
     // Use the country of the current client as the default
-    aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale)),
+    final String sFirstName = EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale);
+    aTable.addItemRow (BootstrapFormLabel.create (sFirstName),
                        new HCEdit (new RequestField (FIELD_FIRSTNAME,
-                                                     aSelectedObject == null ? null : aSelectedObject.getFirstName ())),
+                                                     aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName),
                        aFormErrors.getListOfField (FIELD_FIRSTNAME));
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale)),
+
+    final String sLastName = EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale);
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (sLastName),
                        new HCEdit (new RequestField (FIELD_LASTNAME,
-                                                     aSelectedObject == null ? null : aSelectedObject.getLastName ())),
+                                                     aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName),
                        aFormErrors.getListOfField (FIELD_LASTNAME));
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale)),
+
+    final String sEmail = EText.LABEL_EMAIL.getDisplayText (aDisplayLocale);
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (sEmail),
                        new HCEdit (new RequestField (FIELD_EMAILADDRESS,
                                                      aSelectedObject == null ? null
-                                                                            : aSelectedObject.getEmailAddress ())),
+                                                                            : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail),
                        aFormErrors.getListOfField (FIELD_EMAILADDRESS));
     if (!bEdit)
     {

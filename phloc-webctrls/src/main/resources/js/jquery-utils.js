@@ -16,6 +16,43 @@
  * limitations under the License.
  */
 
+// Extend jQuery
+(function($)
+{
+  // Disable an element
+  $.fn.disable = function()
+  {
+    return $(this).each(function()
+    {
+      $(this).prop('disabled', true);
+    });
+  };
+  // Enable an element
+  $.fn.enable = function()
+  {
+    return $(this).each(function()
+    {
+      $(this).prop('disabled', false);
+    });
+  };
+  // Check a checkbox
+  $.fn.check = function()
+  {
+    return $(this).each(function()
+    {
+      $(this).prop('checked', true);
+    });
+  };
+  // uncheck a checkbox
+  $.fn.uncheck = function()
+  {
+    return $(this).each(function()
+    {
+      $(this).prop('checked', false);
+    });
+  };
+})(jQuery)
+
 /**
  * Default jQuery AJAX success handler for phloc AJAX server side components
  * @param data PlainObject The data returned from the server, formatted according to the dataType parameter

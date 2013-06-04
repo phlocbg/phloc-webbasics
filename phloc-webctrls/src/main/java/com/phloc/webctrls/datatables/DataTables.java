@@ -68,7 +68,7 @@ import com.phloc.web.http.EHTTPMethod;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.state.UIStateRegistry;
-import com.phloc.webctrls.ajax.JSAjaxUtils;
+import com.phloc.webctrls.ajax.JSJQueryUtils;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData;
 
 public class DataTables implements IHCNodeBuilder
@@ -740,11 +740,11 @@ public class DataTables implements IHCNodeBuilder
                                                                                                    : m_eServerMethod.getName ())
                                                                      .url (sSource)
                                                                      .data (aoData)
-                                                                     .success (JSAjaxUtils.jqueryAjaxSuccessHandler (fnCallback,
+                                                                     .success (JSJQueryUtils.jqueryAjaxSuccessHandler (fnCallback,
                                                                                                                      true));
       aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
-      JSAjaxUtils.registerResources ();
+      JSJQueryUtils.registerResources ();
     }
     if (m_bDeferRender != DEFAULT_DEFER_RENDER)
       aParams.add ("bDeferRender", m_bDeferRender);
