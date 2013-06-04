@@ -17,10 +17,9 @@
  */
 package com.phloc.appbasics.security.usergroup;
 
-import java.io.Serializable;
-
 import com.phloc.appbasics.security.role.IRoleContainer;
 import com.phloc.appbasics.security.user.IUserContainer;
+import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.type.ITypedObject;
 
@@ -29,7 +28,7 @@ import com.phloc.commons.type.ITypedObject;
  * 
  * @author Philip Helger
  */
-public interface IUserGroup extends ITypedObject <String>, IHasName, IUserContainer, IRoleContainer, Serializable
+public interface IUserGroup extends ITypedObject <String>, IHasName, IUserContainer, IRoleContainer, IReadonlyAttributeContainer
 {
   /* empty */
 }

@@ -18,16 +18,19 @@
 package com.phloc.appbasics.security.usergroup;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
@@ -41,7 +44,7 @@ import com.phloc.commons.type.ObjectType;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class UserGroup implements IUserGroup
+public final class UserGroup extends MapBasedAttributeContainer implements IUserGroup
 {
   private final String m_sID;
   private String m_sName;
@@ -50,10 +53,22 @@ public final class UserGroup implements IUserGroup
 
   public UserGroup (@Nonnull @Nonempty final String sName)
   {
-    this (GlobalIDFactory.getNewPersistentStringID (), sName);
+    this (sName, (Map <String, String>) null);
+  }
+
+  public UserGroup (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  {
+    this (GlobalIDFactory.getNewPersistentStringID (), sName, aCustomAttrs);
   }
 
   UserGroup (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  {
+    this (sID, sName, (Map <String, String>) null);
+  }
+
+  UserGroup (@Nonnull @Nonempty final String sID,
+             @Nonnull @Nonempty final String sName,
+             @Nullable final Map <String, String> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
@@ -61,6 +76,7 @@ public final class UserGroup implements IUserGroup
       throw new IllegalArgumentException ("name");
     m_sID = sID;
     m_sName = sName;
+    setAttributes (aCustomAttrs);
   }
 
   @Nonnull
