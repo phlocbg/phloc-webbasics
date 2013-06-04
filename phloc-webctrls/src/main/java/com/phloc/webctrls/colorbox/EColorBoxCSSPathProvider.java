@@ -30,7 +30,7 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EColorBoxCSSPathProvider implements ICSSPathProvider
 {
-  COLORBOX_1415 ("colorbox/1415/colorbox.css");
+  COLORBOX_1419 ("colorbox/1419/colorbox.css");
 
   private final String m_sPath;
 
