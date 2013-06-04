@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
@@ -51,10 +52,12 @@ import com.phloc.commons.string.StringHelper;
 @ThreadSafe
 public final class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager
 {
+  @GuardedBy ("s_aRWLock")
   private static boolean s_bCreateDefaults = true;
 
   private final IUserManager m_aUserMgr;
   private final IRoleManager m_aRoleMgr;
+  @GuardedBy ("m_aRWLock")
   private final Map <String, UserGroup> m_aUserGroups = new HashMap <String, UserGroup> ();
 
   public static boolean isCreateDefaults ()
