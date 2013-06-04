@@ -134,6 +134,23 @@ public interface IUserGroupManager
   EChange renameUserGroup (@Nullable String sUserGroupID, @Nonnull @Nonempty String sNewName);
 
   /**
+   * Change the modifiable data of a user group
+   * 
+   * @param sUserGroupID
+   *        The ID of the user group. May be <code>null</code>.
+   * @param sNewName
+   *        The new name of the user group. May neither be <code>null</code> nor
+   *        empty.
+   * @param aNewCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  EChange setUserGroupData (@Nullable String sUserGroupID,
+                            @Nonnull @Nonempty String sNewName,
+                            @Nullable Map <String, String> aNewCustomAttrs);
+
+  /**
    * Assign the passed user ID to the passed user group.<br>
    * Note: no validity check must be performed for the user ID
    * 

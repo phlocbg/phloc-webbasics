@@ -329,6 +329,41 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   }
 
   @Nonnull
+  public EChange setUserGroupData (@Nullable final String sUserGroupID,
+                                   @Nonnull @Nonempty final String sNewName,
+                                   @Nullable final Map <String, String> aNewCustomAttrs)
+  {
+    // Resolve user group
+    final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);
+    if (aUserGroup == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USERGROUP, sUserGroupID, "no-such-usergroup-id");
+      return EChange.UNCHANGED;
+    }
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      EChange eChange = aUserGroup.setName (sNewName);
+      eChange = eChange.or (aUserGroup.setAttributes (aNewCustomAttrs));
+      if (eChange.isUnchanged ())
+        return EChange.UNCHANGED;
+
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USERGROUP,
+                                     "all",
+                                     aUserGroup.getID (),
+                                     sNewName,
+                                     StringHelper.getToString (aNewCustomAttrs));
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   public EChange assignUserToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
   {
     // Resolve user group

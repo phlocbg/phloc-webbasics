@@ -118,12 +118,30 @@ public interface IRoleManager
    * Rename the role with the passed ID
    * 
    * @param sRoleID
-   *        The ID of the role to be renamed
+   *        The ID of the role to be renamed. May be <code>null</code>.
    * @param sNewName
-   *        The new name of the role
+   *        The new name of the role. May neither be <code>null</code> nor
+   *        empty.
    * @return {@link EChange#CHANGED} if the passed role ID was found, and the
    *         new name is different from the old name of he role
    */
   @Nonnull
   EChange renameRole (@Nullable String sRoleID, @Nonnull @Nonempty String sNewName);
+
+  /**
+   * Change the modifiable data of a user group
+   * 
+   * @param sRoleID
+   *        The ID of the role to be renamed. May be <code>null</code>.
+   * @param sNewName
+   *        The new name of the role. May neither be <code>null</code> nor
+   *        empty.
+   * @param aNewCustomAttrs
+   *        Custom attributes. May be <code>null</code>.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  EChange setRoleData (@Nullable String sRoleID,
+                       @Nonnull @Nonempty String sNewName,
+                       @Nullable Map <String, String> aNewCustomAttrs);
 }

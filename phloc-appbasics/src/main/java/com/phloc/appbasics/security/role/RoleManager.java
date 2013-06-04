@@ -291,4 +291,39 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
     AuditUtils.onAuditModifySuccess (CSecurity.TYPE_ROLE, "name", sRoleID, sNewName);
     return EChange.CHANGED;
   }
+
+  @Nonnull
+  public EChange setRoleData (@Nullable final String sRoleID,
+                              @Nonnull @Nonempty final String sNewName,
+                              @Nullable final Map <String, String> aNewCustomAttrs)
+  {
+    // Resolve role
+    final Role aRole = getRoleOfID (sRoleID);
+    if (aRole == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_ROLE, sRoleID, "no-such-role-id");
+      return EChange.UNCHANGED;
+    }
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      EChange eChange = aRole.setName (sNewName);
+      eChange = eChange.or (aRole.setAttributes (aNewCustomAttrs));
+      if (eChange.isUnchanged ())
+        return EChange.UNCHANGED;
+
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_ROLE,
+                                     "all",
+                                     aRole.getID (),
+                                     sNewName,
+                                     StringHelper.getToString (aNewCustomAttrs));
+    return EChange.CHANGED;
+  }
 }

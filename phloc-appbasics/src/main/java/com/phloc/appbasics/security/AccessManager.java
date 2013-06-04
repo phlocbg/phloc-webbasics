@@ -322,6 +322,14 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   }
 
   @Nonnull
+  public EChange setUserGroupData (@Nullable final String sUserGroupID,
+                                   @Nonnull @Nonempty final String sNewName,
+                                   @Nullable final Map <String, String> aNewCustomAttrs)
+  {
+    return m_aUserGroupMgr.setUserGroupData (sUserGroupID, sNewName, aNewCustomAttrs);
+  }
+
+  @Nonnull
   public EChange assignUserToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID)
   {
     return m_aUserGroupMgr.assignUserToUserGroup (sUserGroupID, sUserID);
@@ -448,6 +456,14 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   public EChange renameRole (@Nullable final String sRoleID, @Nonnull @Nonempty final String sNewName)
   {
     return m_aRoleMgr.renameRole (sRoleID, sNewName);
+  }
+
+  @Nonnull
+  public EChange setRoleData (@Nullable final String sRoleID,
+                              @Nonnull @Nonempty final String sNewName,
+                              @Nullable final Map <String, String> aNewCustomAttrs)
+  {
+    return m_aRoleMgr.setRoleData (sRoleID, sNewName, aNewCustomAttrs);
   }
 
   public boolean hasUserRole (@Nullable final String sUserID, @Nullable final String sRoleID)
