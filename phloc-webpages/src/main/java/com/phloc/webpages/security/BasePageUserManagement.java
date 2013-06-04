@@ -18,6 +18,7 @@
 package com.phloc.webpages.security;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -220,7 +221,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   @Nullable
   @OverrideOnDemand
   protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IUser aCurrentUser,
-                                                          @Nonnull @Nonempty final Map <String, String> aCustomAttrs,
+                                                          @Nonnull @Nonempty final Map <String, ?> aCustomAttrs,
                                                           @Nonnull final BootstrapTableFormView aTable,
                                                           @Nonnull final Locale aDisplayLocale)
   {
@@ -320,7 +321,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     }
 
     // custom attributes
-    final Map <String, String> aCustomAttrs = aSelectedObject.getCustomAttrs ();
+    final Map <String, Object> aCustomAttrs = aSelectedObject.getAllAttributes ();
     if (!aCustomAttrs.isEmpty ())
     {
       final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aSelectedObject,
@@ -331,10 +332,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
       aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                            EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
-      for (final Map.Entry <String, String> aEntry : aCustomAttrs.entrySet ())
+      for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
       {
         final String sName = aEntry.getKey ();
-        final String sValue = aEntry.getValue ();
+        final String sValue = String.valueOf (aEntry.getValue ());
         if (aHandledAttrs == null || !aHandledAttrs.contains (sName))
           aAttrTable.addBodyRow ().addCells (sName, sValue);
       }
@@ -400,13 +401,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         final String sUserID = aSelectedObject.getID ();
 
         // We're editing an existing object
+        final Map <String, String> aCustomAttrs = new HashMap <String, String> ();
+        for (final Map.Entry <String, Object> aEntry : aSelectedObject.getAllAttributes ().entrySet ())
+          aCustomAttrs.put (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
         aAccessMgr.setUserData (sUserID,
                                 sEmailAddress,
                                 sEmailAddress,
                                 sFirstName,
                                 sLastName,
                                 m_aDefaultUserLocale,
-                                aSelectedObject.getCustomAttrs (),
+                                aCustomAttrs,
                                 !bEnabled);
         aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
