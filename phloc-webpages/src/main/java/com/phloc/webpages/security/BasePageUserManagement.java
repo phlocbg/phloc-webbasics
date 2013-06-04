@@ -76,6 +76,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
+import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webctrls.security.UserGroupForUserSelect;
@@ -352,6 +353,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
   {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aAccessMgr = AccessManager.getInstance ();
     final String sFirstName = aWPEC.getAttr (FIELD_FIRSTNAME);
@@ -408,7 +410,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 m_aDefaultUserLocale,
                                 aSelectedObject.getCustomAttrs (),
                                 !bEnabled);
-        aWPEC.getNodeList ().addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching internal user groups
         final Collection <String> aPrevUserGroupIDs = aAccessMgr.getAllUserGroupIDsWithAssignedUser (sUserID);
@@ -435,19 +437,48 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                          !bEnabled);
         if (aNewUser != null)
         {
-          aWPEC.getNodeList ()
-               .addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
           // assign to the matching internal user groups
           for (final String sUserGroupID : aUserGroupIDs)
             aAccessMgr.assignUserToUserGroup (sUserGroupID, aNewUser.getID ());
         }
         else
-          aWPEC.getNodeList ()
-               .addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
+          aNodeList.addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
       }
     }
   }
+
+  /**
+   * Add details after the regular show form.
+   * 
+   * @param aWPEC
+   *        The web page execution context. Never <code>null</code>.
+   * @param aSelectedObject
+   *        The currently selected object. May be <code>null</code> for newly
+   *        created objects.
+   * @param aForm
+   *        The parent form. Use this as parent and not the node list from the
+   *        web page execution context! Never <code>null</code>.
+   * @param bEdit
+   *        <code>true</code> if edit mode
+   * @param bCopy
+   *        <code>true</code> if copy mode
+   * @param aFormErrors
+   *        Previous errors from validation. Never <code>null</code> but maybe
+   *        empty.
+   * @param aTable
+   *        The table where new fields should be added. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  protected void showInputFormEnd (@Nonnull final WebPageExecutionContext aWPEC,
+                                   @Nullable final IUser aSelectedObject,
+                                   @Nonnull final HCForm aForm,
+                                   final boolean bEdit,
+                                   final boolean bCopy,
+                                   @Nonnull final FormErrors aFormErrors,
+                                   @Nonnull final BootstrapTableForm aTable)
+  {}
 
   @Override
   protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
@@ -483,12 +514,19 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (!bEdit)
     {
       // Password is only shown on creation of a new user
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale)),
-                         HCNodeList.create (new HCEditPassword (FIELD_PASSWORD),
+      final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
+
+      final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
+      aTable.addItemRow (BootstrapFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                        : ELabelType.OPTIONAL),
+                         HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD));
-      aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale)),
-                         HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM),
+
+      final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
+      aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                               : ELabelType.OPTIONAL),
+                         HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
@@ -502,6 +540,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
                        new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS), aDisplayLocale, aUserGroupIDs),
                        aFormErrors.getListOfField (FIELD_USERGROUPS));
+
+    showInputFormEnd (aWPEC, aSelectedObject, aForm, bEdit, bCopy, aFormErrors, aTable);
   }
 
   @Override
@@ -542,18 +582,24 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       if (bShowForm)
       {
         // Show input form
+        final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
         final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
         final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200),
                                                                                            HCCol.star ()));
         aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                             aSelectedObject.getDisplayName ()));
+
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
-        aTable.addItemRow (BootstrapFormLabel.create (sPassword),
+        aTable.addItemRow (BootstrapFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                          : ELabelType.OPTIONAL),
                            HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD));
+
         final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
-        aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm),
+        aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm,
+                                                      bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                               : ELabelType.OPTIONAL),
                            HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));

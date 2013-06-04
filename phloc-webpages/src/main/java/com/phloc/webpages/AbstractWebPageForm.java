@@ -325,22 +325,29 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                           boolean bEdit);
 
   /**
-   * Add additional form IDs (e.g. client and accounting area)
+   * Add additional form IDs (e.g. client and accounting area). This method is
+   * called before
+   * {@link #showInputForm(WebPageExecutionContext, IHasID, HCForm, boolean, boolean, FormErrors)}
+   * is called.
    * 
    * @param aForm
    *        the form to add the elements to
    */
   @OverrideOnDemand
-  protected void addAdditionalInputFormIDs (@Nonnull final HCForm aForm)
+  protected void modifyFormBeforeShowInputForm (@Nonnull final HCForm aForm)
   {}
 
   /**
+   * Show the input form for a new or existing object.
+   * 
    * @param aWPEC
-   *        The web page execution context
+   *        The web page execution context. Never <code>null</code>.
    * @param aSelectedObject
-   *        The currently selected object
+   *        The currently selected object. May be <code>null</code> for newly
+   *        created objects.
    * @param aForm
-   *        The parent form
+   *        The parent form. Use this as parent and not the node list from the
+   *        web page execution context! Never <code>null</code>.
    * @param bEdit
    *        <code>true</code> if edit mode
    * @param bCopy
@@ -467,7 +474,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           // -> Used only for "form state remembering"
           aForm.addChild (new HCHiddenField (new RequestField (FIELD_FLOW_ID, GlobalIDFactory.getNewStringID ())));
 
-          addAdditionalInputFormIDs (aForm);
+          modifyFormBeforeShowInputForm (aForm);
 
           // Is there as saved state to use?
           final String sRestoreFlowID = aWPEC.getAttr (FIELD_RESTORE_FLOW_ID);
