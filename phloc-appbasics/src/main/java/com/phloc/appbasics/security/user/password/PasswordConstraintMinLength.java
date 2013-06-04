@@ -41,7 +41,7 @@ public class PasswordConstraintMinLength implements IPasswordConstraint
   public PasswordConstraintMinLength (@Nonnegative final int nMinLength)
   {
     if (nMinLength < 1)
-      throw new IllegalArgumentException ("MinLength is too small!");
+      throw new IllegalArgumentException ("MinLength is too small: " + nMinLength);
     m_nMinLength = nMinLength;
   }
 

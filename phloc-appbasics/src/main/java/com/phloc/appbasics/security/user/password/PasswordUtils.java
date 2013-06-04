@@ -21,6 +21,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public final class PasswordUtils
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordUtils.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-
+  @GuardedBy ("s_aRWLock")
   private static IPasswordConstraints s_aPasswordConstraints = new PasswordConstraints ();
 
   private PasswordUtils ()
@@ -71,6 +72,15 @@ public final class PasswordUtils
       s_aRWLock.writeLock ().unlock ();
     }
     s_aLogger.info ("Set global password constraints to " + aPasswordConstraints);
+  }
+
+  /**
+   * @return <code>true</code> if any password constraint is defined,
+   *         <code>false</code> if not.
+   */
+  public static boolean isAnyPasswordConstraintDefined ()
+  {
+    return getPasswordConstraints ().hasConstraints ();
   }
 
   /**

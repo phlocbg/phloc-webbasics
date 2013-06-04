@@ -26,6 +26,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
+/**
+ * This interface defines a list of password constraints.
+ * 
+ * @author Philip Helger
+ */
 public interface IPasswordConstraints
 {
   /**
@@ -38,6 +43,14 @@ public interface IPasswordConstraints
    */
   @Nonnegative
   int getConstraintCount ();
+
+  /**
+   * @return A list of all contained password constraints. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <IPasswordConstraint> getAllPasswordConstraints ();
 
   /**
    * Check if the passed password is valid. Breaks after the first unfulfilled

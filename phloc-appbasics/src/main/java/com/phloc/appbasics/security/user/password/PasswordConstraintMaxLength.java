@@ -41,7 +41,7 @@ public class PasswordConstraintMaxLength implements IPasswordConstraint
   public PasswordConstraintMaxLength (@Nonnegative final int nMaxLength)
   {
     if (nMaxLength < 1)
-      throw new IllegalArgumentException ("MaxLength is too small!");
+      throw new IllegalArgumentException ("MaxLength is too small: " + nMaxLength);
     m_nMaxLength = nMaxLength;
   }
 

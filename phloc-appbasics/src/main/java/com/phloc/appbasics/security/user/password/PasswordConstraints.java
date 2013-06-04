@@ -27,8 +27,14 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * The default implementation of {@link IPasswordConstraints}.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class PasswordConstraints implements IPasswordConstraints
 {
@@ -60,6 +66,13 @@ public class PasswordConstraints implements IPasswordConstraints
   public int getConstraintCount ()
   {
     return m_aConstraints.size ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IPasswordConstraint> getAllPasswordConstraints ()
+  {
+    return ContainerHelper.newList (m_aConstraints);
   }
 
   @Nonnull
