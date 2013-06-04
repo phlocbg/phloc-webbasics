@@ -46,22 +46,22 @@ public final class Role extends MapBasedAttributeContainer implements IRole
 
   public Role (@Nonnull @Nonempty final String sName)
   {
-    this (sName, (Map <String, String>) null);
+    this (sName, (Map <String, ?>) null);
   }
 
-  public Role (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  public Role (@Nonnull @Nonempty final String sName, @Nullable final Map <String, ?> aCustomAttrs)
   {
     this (GlobalIDFactory.getNewPersistentStringID (), sName, aCustomAttrs);
   }
 
   Role (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
-    this (sID, sName, (Map <String, String>) null);
+    this (sID, sName, (Map <String, ?>) null);
   }
 
   Role (@Nonnull @Nonempty final String sID,
         @Nonnull @Nonempty final String sName,
-        @Nullable final Map <String, String> aCustomAttrs)
+        @Nullable final Map <String, ?> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");

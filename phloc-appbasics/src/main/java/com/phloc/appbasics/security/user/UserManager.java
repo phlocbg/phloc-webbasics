@@ -157,7 +157,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale,
-                              @Nullable final Map <String, String> aCustomAttrs,
+                              @Nullable final Map <String, ?> aCustomAttrs,
                               final boolean bDisabled)
   {
     if (StringHelper.hasNoText (sLoginName))
@@ -212,7 +212,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
                                      @Nullable final Locale aDesiredLocale,
-                                     @Nullable final Map <String, String> aCustomAttrs,
+                                     @Nullable final Map <String, ?> aCustomAttrs,
                                      final boolean bDisabled)
   {
     if (StringHelper.hasNoText (sLoginName))
@@ -429,7 +429,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
                               @Nullable final Locale aNewDesiredLocale,
-                              @Nullable final Map <String, String> aNewCustomAttrs,
+                              @Nullable final Map <String, ?> aNewCustomAttrs,
                               final boolean bNewDisabled)
   {
     // Resolve user

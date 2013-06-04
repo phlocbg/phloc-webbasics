@@ -56,7 +56,7 @@ public interface IUserGroupManager
    * @return The created user group.
    */
   @Nonnull
-  IUserGroup createNewUserGroup (@Nonnull @Nonempty String sName, @Nullable Map <String, String> aCustomAttrs);
+  IUserGroup createNewUserGroup (@Nonnull @Nonempty String sName, @Nullable Map <String, ?> aCustomAttrs);
 
   /**
    * Create a predefined user group.
@@ -148,7 +148,7 @@ public interface IUserGroupManager
   @Nonnull
   EChange setUserGroupData (@Nullable String sUserGroupID,
                             @Nonnull @Nonempty String sNewName,
-                            @Nullable Map <String, String> aNewCustomAttrs);
+                            @Nullable Map <String, ?> aNewCustomAttrs);
 
   /**
    * Assign the passed user ID to the passed user group.<br>

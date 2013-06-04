@@ -54,7 +54,7 @@ public interface IRoleManager
    * @return The created role and never <code>null</code>.
    */
   @Nonnull
-  IRole createNewRole (@Nonnull @Nonempty String sName, @Nullable Map <String, String> aCustomAttrs);
+  IRole createNewRole (@Nonnull @Nonempty String sName, @Nullable Map <String, ?> aCustomAttrs);
 
   /**
    * Create a predefined role.
@@ -143,5 +143,5 @@ public interface IRoleManager
   @Nonnull
   EChange setRoleData (@Nullable String sRoleID,
                        @Nonnull @Nonempty String sNewName,
-                       @Nullable Map <String, String> aNewCustomAttrs);
+                       @Nullable Map <String, ?> aNewCustomAttrs);
 }

@@ -137,7 +137,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   }
 
   @Nonnull
-  public IRole createNewRole (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  public IRole createNewRole (@Nonnull @Nonempty final String sName, @Nullable final Map <String, ?> aCustomAttrs)
   {
     // Create role
     final Role aRole = new Role (sName, aCustomAttrs);
@@ -295,7 +295,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   @Nonnull
   public EChange setRoleData (@Nullable final String sRoleID,
                               @Nonnull @Nonempty final String sNewName,
-                              @Nullable final Map <String, String> aNewCustomAttrs)
+                              @Nullable final Map <String, ?> aNewCustomAttrs)
   {
     // Resolve role
     final Role aRole = getRoleOfID (sRoleID);

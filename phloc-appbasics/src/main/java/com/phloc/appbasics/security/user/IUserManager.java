@@ -66,7 +66,7 @@ public interface IUserManager
                        @Nullable String sFirstName,
                        @Nullable String sLastName,
                        @Nullable Locale aDesiredLocale,
-                       @Nullable Map <String, String> aCustomAttrs,
+                       @Nullable Map <String, ?> aCustomAttrs,
                        boolean bDisabled);
 
   /**
@@ -103,7 +103,7 @@ public interface IUserManager
                               @Nullable String sFirstName,
                               @Nullable String sLastName,
                               @Nullable Locale aDesiredLocale,
-                              @Nullable Map <String, String> aCustomAttrs,
+                              @Nullable Map <String, ?> aCustomAttrs,
                               boolean bDisabled);
 
   /**
@@ -134,7 +134,7 @@ public interface IUserManager
                        @Nullable String sNewFirstName,
                        @Nullable String sNewLastName,
                        @Nullable Locale aNewDesiredLocale,
-                       @Nullable Map <String, String> aNewCustomAttrs,
+                       @Nullable Map <String, ?> aNewCustomAttrs,
                        boolean bNewDisabled);
 
   /**

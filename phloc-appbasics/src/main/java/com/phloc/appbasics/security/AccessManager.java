@@ -93,7 +93,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale,
-                              @Nullable final Map <String, String> aCustomAttrs,
+                              @Nullable final Map <String, ?> aCustomAttrs,
                               final boolean bDisabled)
   {
     return m_aUserMgr.createNewUser (sLoginName,
@@ -114,7 +114,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
                                      @Nullable final Locale aDesiredLocale,
-                                     @Nullable final Map <String, String> aCustomAttrs,
+                                     @Nullable final Map <String, ?> aCustomAttrs,
                                      final boolean bDisabled)
   {
     return m_aUserMgr.createPredefinedUser (sID,
@@ -222,7 +222,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
                               @Nullable final Locale aNewDesiredLocale,
-                              @Nullable final Map <String, String> aCustomAttrs,
+                              @Nullable final Map <String, ?> aCustomAttrs,
                               final boolean bDisabled)
   {
     return m_aUserMgr.setUserData (sUserID,
@@ -274,7 +274,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
 
   @Nonnull
   public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName,
-                                        @Nullable final Map <String, String> aCustomAttrs)
+                                        @Nullable final Map <String, ?> aCustomAttrs)
   {
     return m_aUserGroupMgr.createNewUserGroup (sName, aCustomAttrs);
   }
@@ -324,7 +324,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   @Nonnull
   public EChange setUserGroupData (@Nullable final String sUserGroupID,
                                    @Nonnull @Nonempty final String sNewName,
-                                   @Nullable final Map <String, String> aNewCustomAttrs)
+                                   @Nullable final Map <String, ?> aNewCustomAttrs)
   {
     return m_aUserGroupMgr.setUserGroupData (sUserGroupID, sNewName, aNewCustomAttrs);
   }
@@ -407,7 +407,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   }
 
   @Nonnull
-  public IRole createNewRole (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  public IRole createNewRole (@Nonnull @Nonempty final String sName, @Nullable final Map <String, ?> aCustomAttrs)
   {
     return m_aRoleMgr.createNewRole (sName, aCustomAttrs);
   }
@@ -461,7 +461,7 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   @Nonnull
   public EChange setRoleData (@Nullable final String sRoleID,
                               @Nonnull @Nonempty final String sNewName,
-                              @Nullable final Map <String, String> aNewCustomAttrs)
+                              @Nullable final Map <String, ?> aNewCustomAttrs)
   {
     return m_aRoleMgr.setRoleData (sRoleID, sNewName, aNewCustomAttrs);
   }

@@ -87,7 +87,7 @@ public final class User extends MapBasedAttributeContainer implements IUser
                @Nullable final String sFirstName,
                @Nullable final String sLastName,
                @Nullable final Locale aDesiredLocale,
-               @Nullable final Map <String, String> aCustomAttrs,
+               @Nullable final Map <String, ?> aCustomAttrs,
                final boolean bDisabled)
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
@@ -113,7 +113,7 @@ public final class User extends MapBasedAttributeContainer implements IUser
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
-        @Nullable final Map <String, String> aCustomAttrs,
+        @Nullable final Map <String, ?> aCustomAttrs,
         final boolean bDisabled)
   {
     this (sID,
@@ -173,7 +173,7 @@ public final class User extends MapBasedAttributeContainer implements IUser
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
-        @Nullable final Map <String, String> aCustomAttrs,
+        @Nullable final Map <String, ?> aCustomAttrs,
         final boolean bDeleted,
         final boolean bDisabled)
   {

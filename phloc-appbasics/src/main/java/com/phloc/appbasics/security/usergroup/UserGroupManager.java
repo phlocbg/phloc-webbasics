@@ -169,7 +169,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
 
   @Nonnull
   public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName,
-                                        @Nullable final Map <String, String> aCustomAttrs)
+                                        @Nullable final Map <String, ?> aCustomAttrs)
   {
     // Create user group
     final UserGroup aUserGroup = new UserGroup (sName, aCustomAttrs);
@@ -331,7 +331,7 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
   @Nonnull
   public EChange setUserGroupData (@Nullable final String sUserGroupID,
                                    @Nonnull @Nonempty final String sNewName,
-                                   @Nullable final Map <String, String> aNewCustomAttrs)
+                                   @Nullable final Map <String, ?> aNewCustomAttrs)
   {
     // Resolve user group
     final UserGroup aUserGroup = getUserGroupOfID (sUserGroupID);

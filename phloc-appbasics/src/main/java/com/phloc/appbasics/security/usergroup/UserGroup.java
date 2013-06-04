@@ -53,22 +53,22 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
 
   public UserGroup (@Nonnull @Nonempty final String sName)
   {
-    this (sName, (Map <String, String>) null);
+    this (sName, (Map <String, ?>) null);
   }
 
-  public UserGroup (@Nonnull @Nonempty final String sName, @Nullable final Map <String, String> aCustomAttrs)
+  public UserGroup (@Nonnull @Nonempty final String sName, @Nullable final Map <String, ?> aCustomAttrs)
   {
     this (GlobalIDFactory.getNewPersistentStringID (), sName, aCustomAttrs);
   }
 
   UserGroup (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
-    this (sID, sName, (Map <String, String>) null);
+    this (sID, sName, (Map <String, ?>) null);
   }
 
   UserGroup (@Nonnull @Nonempty final String sID,
              @Nonnull @Nonempty final String sName,
-             @Nullable final Map <String, String> aCustomAttrs)
+             @Nullable final Map <String, ?> aCustomAttrs)
   {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
