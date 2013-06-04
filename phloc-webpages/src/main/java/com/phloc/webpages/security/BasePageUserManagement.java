@@ -694,6 +694,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
+    // Required for best layout inside a tab!
+    aTable.removeAllColumns ();
+
     return aNodeList;
   }
 
