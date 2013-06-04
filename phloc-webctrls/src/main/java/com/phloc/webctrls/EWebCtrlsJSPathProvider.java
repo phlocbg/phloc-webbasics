@@ -25,6 +25,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EWebCtrlsJSPathProvider implements IJSPathProvider
 {
+  AJAX_UTILS ("js/ajax-utils.js"),
   STACKTRACE ("js/stacktrace.js");
 
   private final String m_sPath;

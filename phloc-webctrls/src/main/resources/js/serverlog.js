@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 // Inspiration: http://www.devhands.com/2008/10/javascript-error-handling-and-general-best-practices/
 var g_sServerLogURI = null;
 var g_sServerLogKey = null;
@@ -58,7 +59,7 @@ function serverLog(severity,message){
 function getStackTraceString(ex) {
   if (!ex)
     return null;
-  if (typeof printStackTrace == "function")
+  if (typeof printStackTrace === "function")
     return printStackTrace({e:ex,guess:true}).join("\n");
   return ex.message;
 }
