@@ -37,6 +37,7 @@ import com.phloc.html.js.builder.jquery.JQuery;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public class AjaxDefaultResponseJSSuccess extends JSAnonymousFunction
 {
   public AjaxDefaultResponseJSSuccess (@Nonnull final JSAnonymousFunction aAnonFunc, final boolean bInvokeHandlerFirst)
