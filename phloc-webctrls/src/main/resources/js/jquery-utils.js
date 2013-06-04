@@ -35,6 +35,15 @@
       $(this).prop('disabled', false);
     });
   };
+  // Enable or disable an element
+  $.fn.setDisabled = function(bDisabled)
+  {
+    return $(this).each(function()
+    {
+      $(this).prop('disabled', bDisabled);
+    });
+  };
+  
   // Check a checkbox
   $.fn.check = function()
   {
@@ -49,6 +58,14 @@
     return $(this).each(function()
     {
       $(this).prop('checked', false);
+    });
+  };
+  // check or uncheck a checkbox
+  $.fn.setChecked = function(bChecked)
+  {
+    return $(this).each(function()
+    {
+      $(this).prop('checked', bChecked);
     });
   };
 })(jQuery)
