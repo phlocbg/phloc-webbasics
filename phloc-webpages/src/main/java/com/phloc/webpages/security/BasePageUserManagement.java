@@ -149,15 +149,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   public static final boolean DEFAULT_ENABLED = true;
-  private static final String FIELD_FIRSTNAME = "firstname";
-  private static final String FIELD_LASTNAME = "lastname";
-  private static final String FIELD_EMAILADDRESS = "emailaddress";
-  private static final String FIELD_PASSWORD = "password";
-  private static final String FIELD_PASSWORD_CONFIRM = "passwordconf";
-  private static final String FIELD_ENABLED = "enabled";
-  private static final String FIELD_USERGROUPS = "usergroups";
+  public static final String FIELD_FIRSTNAME = "firstname";
+  public static final String FIELD_LASTNAME = "lastname";
+  public static final String FIELD_EMAILADDRESS = "emailaddress";
+  public static final String FIELD_PASSWORD = "password";
+  public static final String FIELD_PASSWORD_CONFIRM = "passwordconf";
+  public static final String FIELD_ENABLED = "enabled";
+  public static final String FIELD_USERGROUPS = "usergroups";
 
-  private static final String ACTION_RESET_PASSWORD = "resetpw";
+  public static final String ACTION_RESET_PASSWORD = "resetpw";
 
   private final Locale m_aDefaultUserLocale;
 
@@ -207,6 +207,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   /**
+   * Callback for manually extracting custom attributes. This method is called
+   * independently if custom attributes are present or not.
+   * 
    * @param aCurrentUser
    *        The user currently shown
    * @param aCustomAttrs
@@ -221,7 +224,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   @Nullable
   @OverrideOnDemand
   protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IUser aCurrentUser,
-                                                          @Nonnull @Nonempty final Map <String, ?> aCustomAttrs,
+                                                          @Nonnull final Map <String, ?> aCustomAttrs,
                                                           @Nonnull final BootstrapTableFormView aTable,
                                                           @Nonnull final Locale aDisplayLocale)
   {
@@ -322,27 +325,36 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     // custom attributes
     final Map <String, Object> aCustomAttrs = aSelectedObject.getAllAttributes ();
+
+    // Callback
+    final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aSelectedObject,
+                                                                        aCustomAttrs,
+                                                                        aTable,
+                                                                        aDisplayLocale);
+
     if (!aCustomAttrs.isEmpty ())
     {
-      final Set <String> aHandledAttrs = showCustomAttrsOfSelectedObject (aSelectedObject,
-                                                                          aCustomAttrs,
-                                                                          aTable,
-                                                                          aDisplayLocale);
-
       final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
       aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                            EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
       {
         final String sName = aEntry.getKey ();
-        final String sValue = String.valueOf (aEntry.getValue ());
         if (aHandledAttrs == null || !aHandledAttrs.contains (sName))
+        {
+          final String sValue = String.valueOf (aEntry.getValue ());
           aAttrTable.addBodyRow ().addCells (sName, sValue);
+        }
       }
-      if (aAttrTable.getBodyRowCount () > 0)
+
+      // Maybe all custom attributes where handled in
+      // showCustomAttrsOfSelectedObject
+      if (aAttrTable.hasBodyRows ())
         aTable.addItemRow (BootstrapFormLabel.create (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)),
                            aAttrTable);
     }
+
+    // Callback
     onShowSelectedObjectTableEnd (aTable, aSelectedObject, aDisplayLocale);
   }
 
@@ -537,17 +549,20 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
+
     aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
                        new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
                                                                 aSelectedObject == null ? DEFAULT_ENABLED
                                                                                        : aSelectedObject.isEnabled ())),
                        aFormErrors.getListOfField (FIELD_ENABLED));
+
     final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_USERGROUPS)
                                                                      : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
     aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
                        new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS), aDisplayLocale, aUserGroupIDs),
                        aFormErrors.getListOfField (FIELD_USERGROUPS));
 
+    // Custom overridable
     showInputFormEnd (aWPEC, aSelectedObject, aForm, bEdit, bCopy, aFormErrors, aTable);
   }
 

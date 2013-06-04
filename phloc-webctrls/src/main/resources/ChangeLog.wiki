@@ -2,6 +2,11 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>6/4/13</td><td>update</td><td>tech</td><td></td><td>Updated to autosize 1.16.12</td></tr>
+<tr><td>6/4/13</td><td>update</td><td>tech</td><td></td><td>Updated to colorbox 1.4.19</td></tr>
+<tr><td>6/4/13</td><td>update</td><td>tech</td><td></td><td>Updated to autoNumeric 1.9.8</td></tr>
+<tr><td>6/4/13</td><td>update</td><td>tech</td><td></td><td>Updated jQuery Cookie and Hotkeys Plugin</td></tr>
+<tr><td>6/4/13</td><td>add</td><td>tech</td><td></td><td>Added jQuery 1.10.1 and 2.0.2 and migrate plugin 1.2.1</td></tr>
 <tr><td>5/23/13</td><td>add</td><td>tech</td><td></td><td>Added Bootstrap 2.3.2 and deprecated Bootstrap 2.3.1</td></tr>
 <tr border="1"><td>5/6/13</td><td colspan="4">_Release *1.1.0*_</td></tr>
 <tr><td>5/6/13</td><td>update</td><td>tech</td><td></td><td>Updated to autoNumeric 1.9.7</td></tr>
