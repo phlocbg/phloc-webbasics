@@ -47,6 +47,7 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.validation.FormErrors;
@@ -65,7 +66,6 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     MSG_USERNAME ("Benutzername", "User name"),
     MSG_LOGINDT ("Anmeldezeit", "Login time"),
     MSG_LASTACCESSDT ("Letzter Zugriff", "Last access"),
-    MSG_ACTIONS ("Aktionen", "Actions"),
     HEADER_DETAILS ("Details des angemeldeten Benutzers", "Details of logged in user"),
     MSG_USERID ("Benutzer-ID", "User ID"),
     MSG_LOGOUTDT ("Abmeldezeit", "Logout time"),
@@ -211,7 +211,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
                                      EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),
-                                     EText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
+                                     EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     final Collection <LoginInfo> aLoginInfos = LoggedInUserManager.getInstance ().getAllLoginInfos ();
     for (final LoginInfo aLoginInfo : aLoginInfos)
     {

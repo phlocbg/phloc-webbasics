@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.AccessManager;
+import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
@@ -38,6 +39,8 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
@@ -49,9 +52,14 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.EWebPageText;
 
 public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
 {
@@ -63,7 +71,10 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     HEADER_DETAILS ("Details von Rolle {0}", "Details of role {0}"),
     MSG_USERGROUPS_0 ("Benutzergruppen", "User groups"),
     MSG_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
-    MSG_NONE_ASSIGNED ("keine zugeordnet", "none assigned");
+    MSG_NONE_ASSIGNED ("keine zugeordnet", "none assigned"),
+    DELETE_QUERY ("Soll die Rolle ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the role ''{0}''?"),
+    DELETE_SUCCESS ("Die Rolle ''{0}'' wurden erfolgreich gelöscht!", "The role ''{0}'' was successfully deleted!"),
+    DELETE_ERROR ("Fehler beim Löschen der Rolle ''{0}''!", "Error deleting the role ''{0}''!");
 
     private final ITextProvider m_aTP;
 
@@ -170,15 +181,54 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     throw new UnsupportedOperationException ();
   }
 
+  protected static boolean canDeleteRole (@Nonnull final IRole aRole)
+  {
+    return !aRole.getID ().equals (CSecurity.ROLE_ADMINISTRATOR_ID) &&
+           AccessManager.getInstance ().getAllUserGroupIDsWithAssignedRole (aRole.getID ()).isEmpty ();
+  }
+
+  @Override
+  protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
+                                        @Nonnull final IRole aSelectedObject)
+  {
+    if (!canDeleteRole (aSelectedObject))
+      return true;
+
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
+    {
+      if (AccessManager.getInstance ().deleteRole (aSelectedObject.getID ()).isChanged ())
+        aNodeList.addChild (BootstrapSuccessBox.create (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                     aSelectedObject.getName ())));
+      else
+        aNodeList.addChild (BootstrapErrorBox.create (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                 aSelectedObject.getName ())));
+      return true;
+    }
+
+    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    aForm.addChild (BootstrapQuestionBox.create (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                            aSelectedObject.getName ())));
+    final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
+    aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
+    aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
+    aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
+    aToolbar.addSubmitButtonYes (aDisplayLocale);
+    aToolbar.addButtonNo (aDisplayLocale);
+    return false;
+  }
+
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110)).setID (getID ());
+    final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110), createActionCol (1)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_IN_USE.getDisplayText (aDisplayLocale));
+                                     EText.MSG_IN_USE.getDisplayText (aDisplayLocale),
+                                     EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     final Collection <? extends IRole> aRoles = AccessManager.getInstance ().getAllRoles ();
     for (final IRole aRole : aRoles)
     {
@@ -190,11 +240,24 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aRole.getName ()));
       aRow.addCell (EWebBasicsText.getYesOrNo (!aAssignedUserGroups.isEmpty (), aDisplayLocale));
+
+      final AbstractHCCell aActionCell = aRow.addCell ();
+      if (canDeleteRole (aRole))
+      {
+        aActionCell.addChild (createDeleteLink (aRole,
+                                                EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                   aRole.getName ())));
+      }
+      else
+      {
+        aActionCell.addChild (createEmptyAction ());
+      }
     }
 
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
