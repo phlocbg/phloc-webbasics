@@ -19,6 +19,7 @@ package com.phloc.webpages.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -40,6 +41,7 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.ComparatorHasName;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
@@ -51,16 +53,20 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
+import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.validation.FormErrors;
+import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.datatables.DataTables;
@@ -72,6 +78,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
+    BUTTON_CREATE_NEW_USERGROUP ("Neue Benutzergruppe anlegen", "Create new user group"),
     HEADER_NAME ("Name", "Name"),
     HEADER_IN_USE ("Verwendet?", "In use?"),
     HEADER_VALUE ("Wert", "Value"),
@@ -83,9 +90,17 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
     LABEL_ATTRIBUTES ("Attribute", "Attributes"),
     NONE_ASSIGNED ("keine zugeordnet", "none assigned"),
+    TITLE_CREATE ("Neue Benutzergruppe anlegen", "Create new user group"),
+    TITLE_EDIT ("Benutzergruppe ''{0}'' bearbeiten", "Edit user group ''{0}''"),
+    ERROR_NAME_REQUIRED ("Es muss ein Name angegeben werden!", "A name must be specified!"),
+    ERROR_NO_ROLE ("Es muss mindestens eine Rolle ausgewählt werden!", "At least one role must be selected!"),
+    ERROR_INVALID_ROLES ("Mindestens eine der angegebenen Rolle ist ungültig!", "At least one selected role is invalid!"),
     DELETE_QUERY ("Soll die Benutzergruppe ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the user group ''{0}''?"),
     DELETE_SUCCESS ("Die Benutzergruppe ''{0}'' wurden erfolgreich gelöscht!", "The user group ''{0}'' was successfully deleted!"),
-    DELETE_ERROR ("Fehler beim Löschen der Benutzergruppe ''{0}''!", "Error deleting the user group ''{0}''!");
+    DELETE_ERROR ("Fehler beim Löschen der Benutzergruppe ''{0}''!", "Error deleting the user group ''{0}''!"),
+    SUCCESS_CREATE ("Die neue BenutzerGruppe wurde erfolgreich angelegt!", "Successfully created the new user group!"),
+    SUCCESS_EDIT ("Die Benutzergruppe wurde erfolgreich bearbeitet!", "Sucessfully edited the user group!"),
+    FAILURE_CREATE ("Fehler beim Anlegen der Benutzergruppe!", "Error creating the new user group!");
 
     private final ITextProvider m_aTP;
 
@@ -106,6 +121,9 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
     }
   }
+
+  public static final String FIELD_NAME = "name";
+  public static final String FIELD_ROLES = "roles";
 
   public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
@@ -131,12 +149,6 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
   protected IUserGroup getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getUserGroupOfID (sID);
-  }
-
-  @Override
-  protected final boolean isEditAllowed (@Nullable final IUserGroup aLoginInfo)
-  {
-    return false;
   }
 
   /**
@@ -263,7 +275,63 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
   {
-    throw new UnsupportedOperationException ();
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final AccessManager aAccessMgr = AccessManager.getInstance ();
+    final String sName = aWPEC.getAttr (FIELD_NAME);
+    final Collection <String> aRoleIDs = aWPEC.getAttrs (FIELD_ROLES);
+
+    if (StringHelper.hasNoText (sName))
+      aFormErrors.addFieldError (FIELD_NAME, EText.ERROR_NAME_REQUIRED.getDisplayText (aDisplayLocale));
+
+    if (ContainerHelper.isEmpty (aRoleIDs))
+      aFormErrors.addFieldError (FIELD_ROLES, EText.ERROR_NO_ROLE.getDisplayText (aDisplayLocale));
+    else
+      if (!aAccessMgr.containsAllRolesWithID (aRoleIDs))
+        aFormErrors.addFieldError (FIELD_ROLES, EText.ERROR_INVALID_ROLES.getDisplayText (aDisplayLocale));
+
+    if (aFormErrors.isEmpty ())
+    {
+      // All fields are valid -> save
+      if (bEdit)
+      {
+        final String sUserGroupID = aSelectedObject.getID ();
+
+        // We're editing an existing object
+        final Map <String, String> aCustomAttrs = new HashMap <String, String> ();
+        for (final Map.Entry <String, Object> aEntry : aSelectedObject.getAllAttributes ().entrySet ())
+          aCustomAttrs.put (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
+        aAccessMgr.setUserGroupData (sUserGroupID, sName, aCustomAttrs);
+        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+
+        // assign to the matching roles
+        final Collection <String> aPrevRoleIDs = aSelectedObject.getAllContainedRoleIDs ();
+        // Create all missing assignments
+        final Set <String> aRolesToBeAssigned = ContainerHelper.getDifference (aRoleIDs, aPrevRoleIDs);
+        for (final String sRoleID : aRolesToBeAssigned)
+          aAccessMgr.assignRoleToUserGroup (sUserGroupID, sRoleID);
+
+        // Delete all old assignments
+        final Set <String> aRolesToBeUnassigned = ContainerHelper.getDifference (aPrevRoleIDs, aRoleIDs);
+        for (final String sRoleID : aRolesToBeUnassigned)
+          aAccessMgr.unassignRoleFromUserGroup (sUserGroupID, sRoleID);
+      }
+      else
+      {
+        // We're creating a new object
+        final IUserGroup aNewUserGroup = aAccessMgr.createNewUserGroup (sName);
+        if (aNewUserGroup != null)
+        {
+          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+
+          // assign to the matching internal user groups
+          for (final String sRoleID : aRoleIDs)
+            aAccessMgr.assignRoleToUserGroup (aNewUserGroup.getID (), sRoleID);
+        }
+        else
+          aNodeList.addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
+      }
+    }
   }
 
   @Override
@@ -274,7 +342,26 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
                                 final boolean bCopy,
                                 @Nonnull final FormErrors aFormErrors)
   {
-    throw new UnsupportedOperationException ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (170), HCCol.star ()));
+    aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                      aSelectedObject.getName ())
+                                          : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
+
+    final String sName = EText.LABEL_NAME.getDisplayText (aDisplayLocale);
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (sName),
+                       new HCEdit (new RequestField (FIELD_NAME, aSelectedObject == null ? null
+                                                                                        : aSelectedObject.getName ())).setPlaceholder (sName),
+                       aFormErrors.getListOfField (FIELD_NAME));
+
+    final Collection <String> aRoleIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_ROLES)
+                                                                : aSelectedObject.getAllContainedRoleIDs ();
+    final RoleForUserGroupSelect aSelect = new RoleForUserGroupSelect (new RequestField (FIELD_ROLES),
+                                                                       aDisplayLocale,
+                                                                       aRoleIDs);
+    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale)),
+                       aSelect,
+                       aFormErrors.getListOfField (FIELD_ROLES));
   }
 
   protected static boolean canDeleteUserGroup (@Nonnull final IUserGroup aUserGroup)
@@ -320,7 +407,11 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110), createActionCol (1)).setID (getID ());
+    // Toolbar on top
+    final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ().addAndReturnChild (new BootstrapToolbarAdvanced ());
+    aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USERGROUP.getDisplayText (aDisplayLocale), createCreateURL ());
+
+    final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110), createActionCol (2)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
@@ -334,6 +425,9 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       aRow.addCell (EWebBasicsText.getYesOrNo (aUserGroup.hasContainedUsers (), aDisplayLocale));
 
       final AbstractHCCell aActionCell = aRow.addCell ();
+      aActionCell.addChild (createEditLink (aUserGroup,
+                                            EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                             aUserGroup.getName ())));
       if (canDeleteUserGroup (aUserGroup))
       {
         aActionCell.addChild (createDeleteLink (aUserGroup,
