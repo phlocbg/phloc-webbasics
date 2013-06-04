@@ -66,6 +66,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     MSG_LOGINDT ("Anmeldezeit", "Login time"),
     MSG_LASTACCESSDT ("Letzter Zugriff", "Last access"),
     MSG_ACTIONS ("Aktionen", "Actions"),
+    HEADER_DETAILS ("Details des angemeldeten Benutzers", "Details of logged in user"),
     MSG_USERID ("Benutzer-ID", "User ID"),
     MSG_LOGOUTDT ("Abmeldezeit", "Logout time"),
     MSG_ATTRS ("Attribute", "Attributes"),
@@ -136,6 +137,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
     final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
                                                                                                    HCCol.star ()));
+    aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayText (aDisplayLocale));
 
     aTable.addItemRow (EText.MSG_USERID.getDisplayText (aDisplayLocale), aSelectedObject.getUserID ());
     aTable.addItemRow (EText.MSG_USERNAME.getDisplayText (aDisplayLocale), aSelectedObject.getUser ().getDisplayName ());
