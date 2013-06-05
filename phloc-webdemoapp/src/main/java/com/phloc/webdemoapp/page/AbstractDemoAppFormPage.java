@@ -38,10 +38,11 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
-import com.phloc.webctrls.page.AbstractWebPageForm;
-import com.phloc.webctrls.page.JSFormHelper;
 import com.phloc.webdemoapp.app.ajax.config.CDemoAppAjaxConfig;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
+import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.form.JSFormHelper;
 
 public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE>
 {
@@ -85,13 +86,21 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
   }
 
   @Nonnull
-  public static DataTables createDataTables (@Nonnull final BootstrapTable aTable, @Nonnull final Locale aDisplayLocale)
+  public static DataTables createDefaultDataTablesStatic (@Nonnull final BootstrapTable aTable,
+                                                          @Nonnull final Locale aDisplayLocale)
   {
-    final DataTables ret = createBootstrapDataTables (aTable, aDisplayLocale);
+    final DataTables ret = AbstractWebPageExt.createDefaultDataTablesStatic (aTable, aDisplayLocale);
     ret.setUseJQueryAjax (true)
        .setAjaxSource (CDemoAppAjaxView.VIEW_DATATABLES.getInvocationURL ())
        .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()))
        .addAllColumns (aTable);
     return ret;
+  }
+
+  @Override
+  @Nonnull
+  public DataTables createDefaultDataTables (@Nonnull final BootstrapTable aTable, @Nonnull final Locale aDisplayLocale)
+  {
+    return createDefaultDataTablesStatic (aTable, aDisplayLocale);
   }
 }

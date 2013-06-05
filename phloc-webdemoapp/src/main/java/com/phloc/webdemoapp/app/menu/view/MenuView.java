@@ -23,8 +23,8 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.filter.MenuItemFilterNotLoggedIn;
 import com.phloc.commons.io.resource.ClassPathResource;
-import com.phloc.webctrls.page.PageViewExternal;
 import com.phloc.webdemoapp.page.view.PageLogin;
+import com.phloc.webpages.PageViewExternal;
 
 @Immutable
 public final class MenuView

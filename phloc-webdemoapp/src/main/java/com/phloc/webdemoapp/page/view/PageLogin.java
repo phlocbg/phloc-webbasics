@@ -25,8 +25,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.page.AbstractWebPageExt;
 import com.phloc.webdemoapp.ui.DemoAppAccessUI;
+import com.phloc.webpages.AbstractWebPageExt;
 
 public final class PageLogin extends AbstractWebPageExt
 {

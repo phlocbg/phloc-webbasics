@@ -23,7 +23,7 @@ import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.webctrls.page.form.BasePageSavedStates;
+import com.phloc.webpages.form.BasePageSavedStates;
 
 public final class PageSavedStates extends BasePageSavedStates
 {

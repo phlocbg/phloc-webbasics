@@ -20,8 +20,8 @@ package com.phloc.webdemoapp.page.config.admin;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.webctrls.page.security.BasePageUserManagement;
 import com.phloc.webdemoapp.app.CDemoApp;
+import com.phloc.webpages.security.BasePageUserManagement;
 
 public final class PageUserManagement extends BasePageUserManagement
 {

@@ -20,8 +20,8 @@ package com.phloc.webdemoapp.page.config.admin;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.webctrls.page.security.BasePageAudit;
 import com.phloc.webdemoapp.app.mgr.MetaManager;
+import com.phloc.webpages.security.BasePageAudit;
 
 public final class PageAudit extends BasePageAudit
 {
