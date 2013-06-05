@@ -98,8 +98,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     DELETE_SUCCESS ("Die Benutzergruppe ''{0}'' wurden erfolgreich gelöscht!", "The user group ''{0}'' was successfully deleted!"),
     DELETE_ERROR ("Fehler beim Löschen der Benutzergruppe ''{0}''!", "Error deleting the user group ''{0}''!"),
     SUCCESS_CREATE ("Die neue BenutzerGruppe wurde erfolgreich angelegt!", "Successfully created the new user group!"),
-    SUCCESS_EDIT ("Die Benutzergruppe wurde erfolgreich bearbeitet!", "Sucessfully edited the user group!"),
-    FAILURE_CREATE ("Fehler beim Anlegen der Benutzergruppe!", "Error creating the new user group!");
+    SUCCESS_EDIT ("Die Benutzergruppe wurde erfolgreich bearbeitet!", "Sucessfully edited the user group!");
 
     private final ITextProvider m_aTP;
 
@@ -316,16 +315,11 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       {
         // We're creating a new object
         final IUserGroup aNewUserGroup = aAccessMgr.createNewUserGroup (sName);
-        if (aNewUserGroup != null)
-        {
-          aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
-          // assign to the matching internal user groups
-          for (final String sRoleID : aRoleIDs)
-            aAccessMgr.assignRoleToUserGroup (aNewUserGroup.getID (), sRoleID);
-        }
-        else
-          aNodeList.addChild (BootstrapErrorBox.create (EText.FAILURE_CREATE.getDisplayText (aDisplayLocale)));
+        // assign to the matching internal user groups
+        for (final String sRoleID : aRoleIDs)
+          aAccessMgr.assignRoleToUserGroup (aNewUserGroup.getID (), sRoleID);
       }
     }
   }
