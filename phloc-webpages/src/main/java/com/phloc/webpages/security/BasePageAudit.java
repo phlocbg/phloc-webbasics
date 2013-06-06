@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.security.audit.IAuditItem;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
@@ -103,6 +104,13 @@ public class BasePageAudit extends AbstractWebPageExt
     m_aAuditManager = aAuditManager;
   }
 
+  @Nonnull
+  @OverrideOnDemand
+  protected String getActionString (@Nonnull final IAuditItem aItem)
+  {
+    return aItem.getAction ();
+  }
+
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
@@ -126,7 +134,7 @@ public class BasePageAudit extends AbstractWebPageExt
       aRow.addCell (SecurityUI.getUserDisplayName (aItem.getUserID ()));
       aRow.addCell (aItem.getType ().getID ());
       aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
-      aRow.addCell (aItem.getAction ());
+      aRow.addCell (getActionString (aItem));
     }
 
     aNodeList.addChild (aTable);
