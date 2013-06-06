@@ -22,10 +22,13 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.RegEx;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -57,7 +60,7 @@ public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldE
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormFieldErrorList getListOfField (@Nullable final String sSearchFieldName)
+  public FormFieldErrorList getListOfField (@Nullable final String sSearchFieldName)
   {
     final FormFieldErrorList ret = new FormFieldErrorList ();
     for (final IFormFieldError aError : m_aItems)
@@ -68,13 +71,27 @@ public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldE
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormFieldErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
+  public FormFieldErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
   {
     final FormFieldErrorList ret = new FormFieldErrorList ();
     if (aSearchFieldNames != null)
       for (final IFormFieldError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
           ret.add (aError);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public FormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  {
+    if (StringHelper.hasNoText (sRegExp))
+      throw new IllegalArgumentException ("Empty RegExp");
+
+    final FormFieldErrorList ret = new FormFieldErrorList ();
+    for (final IFormFieldError aError : m_aItems)
+      if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
+        ret.add (aError);
     return ret;
   }
 
@@ -98,6 +115,20 @@ public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldE
       for (final IFormFieldError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
           ret.add (aError.getErrorText ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  {
+    if (StringHelper.hasNoText (sRegExp))
+      throw new IllegalArgumentException ("Empty RegExp");
+
+    final List <String> ret = new ArrayList <String> ();
+    for (final IFormFieldError aError : m_aItems)
+      if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
+        ret.add (aError.getErrorText ());
     return ret;
   }
 }

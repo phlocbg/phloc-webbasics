@@ -21,7 +21,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.RegEx;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
@@ -41,9 +43,17 @@ public interface IFormFieldErrorList extends IBaseFormErrorList <IFormFieldError
 
   @Nonnull
   @ReturnsMutableCopy
+  IFormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
+
+  @Nonnull
+  @ReturnsMutableCopy
   List <String> getAllTextsOfField (@Nullable String sSearchFieldName);
 
   @Nonnull
   @ReturnsMutableCopy
   List <String> getAllTextsOfFields (@Nullable String... aSearchFieldNames);
+
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 }

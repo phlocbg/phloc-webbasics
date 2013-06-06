@@ -21,8 +21,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.RegEx;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -169,6 +171,13 @@ public final class FormErrors
 
   @Nonnull
   @ReturnsMutableCopy
+  public IFormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  {
+    return m_aFormFieldErrs.getListOfFieldsRegExp (sRegExp);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public List <String> getAllItemTextsOfField (@Nullable final String sSearchFieldName)
   {
     return m_aFormFieldErrs.getAllTextsOfField (sSearchFieldName);
@@ -179,6 +188,13 @@ public final class FormErrors
   public List <String> getAllItemTextsOfFields (@Nullable final String... aSearchFieldNames)
   {
     return m_aFormFieldErrs.getAllTextsOfFields (aSearchFieldNames);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  {
+    return m_aFormFieldErrs.getAllTextsOfFieldsRegExp (sRegExp);
   }
 
   @Nonnull
