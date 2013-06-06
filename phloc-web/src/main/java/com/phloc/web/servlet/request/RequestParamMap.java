@@ -288,6 +288,17 @@ public final class RequestParamMap implements IRequestParamMap
 
   @Nonnull
   @Nonempty
+  @Deprecated
+  public static String getFieldName (@Nonnull @Nonempty final String sBaseName)
+  {
+    if (StringHelper.hasNoText (sBaseName))
+      throw new IllegalArgumentException ("baseName");
+
+    return sBaseName;
+  }
+
+  @Nonnull
+  @Nonempty
   public static String getFieldName (@Nonnull @Nonempty final String sBaseName, @Nullable final String... aSuffixes)
   {
     if (StringHelper.hasNoText (sBaseName))
@@ -297,6 +308,20 @@ public final class RequestParamMap implements IRequestParamMap
     if (aSuffixes != null)
       for (final String sSuffix : aSuffixes)
         aSB.append (s_sOpen).append (StringHelper.getNotNull (sSuffix)).append (s_sClose);
+    return aSB.toString ();
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String getFieldName (@Nonnull @Nonempty final String sBaseName, @Nullable final int... aSuffixes)
+  {
+    if (StringHelper.hasNoText (sBaseName))
+      throw new IllegalArgumentException ("baseName");
+
+    final StringBuilder aSB = new StringBuilder (sBaseName);
+    if (aSuffixes != null)
+      for (final int nSuffix : aSuffixes)
+        aSB.append (s_sOpen).append (nSuffix).append (s_sClose);
     return aSB.toString ();
   }
 

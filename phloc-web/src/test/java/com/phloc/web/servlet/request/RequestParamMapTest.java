@@ -91,6 +91,7 @@ public final class RequestParamMapTest
     assertNull (aMap.getString ("a", "yyy"));
   }
 
+  @SuppressWarnings ("deprecation")
   @Test
   public void testGetFieldName ()
   {
@@ -199,6 +200,7 @@ public final class RequestParamMapTest
     assertEquals (RequestParamMap.DEFAULT_CLOSE, RequestParamMap.getCloseSeparator ());
   }
 
+  @SuppressWarnings ("deprecation")
   @Test
   public void testWithSeparators ()
   {
