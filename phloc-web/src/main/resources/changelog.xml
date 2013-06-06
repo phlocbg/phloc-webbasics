@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2013-06-06" version="5.0.6" />
+  <entry date="2013-06-06" category="api" action="add">
+    <change>
+      <text locale="en">Extended RequestParamMap API</text>
+    </change>
+  </entry>
   <entry date="2013-06-03" category="tech" action="update">
     <change>
       <text locale="en">Updated to JSch 0.1.50</text>
