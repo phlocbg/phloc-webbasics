@@ -39,7 +39,16 @@ import com.phloc.commons.string.StringHelper;
 @NotThreadSafe
 public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> implements IFormFieldErrorList
 {
+  /**
+   * @deprecated Use {@link #hasEntryForField(String)} instead
+   */
+  @Deprecated
   public boolean hasErrorsOrWarningsForField (@Nullable final String sSearchFieldName)
+  {
+    return hasEntryForField (sSearchFieldName);
+  }
+
+  public boolean hasEntryForField (@Nullable final String sSearchFieldName)
   {
     if (StringHelper.hasText (sSearchFieldName))
       for (final IFormFieldError aError : m_aItems)
@@ -74,10 +83,29 @@ public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldE
   public FormFieldErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
   {
     final FormFieldErrorList ret = new FormFieldErrorList ();
-    if (aSearchFieldNames != null)
+    if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IFormFieldError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
           ret.add (aError);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public FormFieldErrorList getListOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  {
+    final FormFieldErrorList ret = new FormFieldErrorList ();
+    if (ArrayHelper.isNotEmpty (aSearchFieldNames))
+      for (final IFormFieldError aError : m_aItems)
+      {
+        final String sErrorFieldName = aError.getFieldName ();
+        for (final String sSearchField : aSearchFieldNames)
+          if (sErrorFieldName.startsWith (sSearchField))
+          {
+            ret.add (aError);
+            break;
+          }
+      }
     return ret;
   }
 
@@ -111,10 +139,29 @@ public final class FormFieldErrorList extends AbstractFormErrorList <IFormFieldE
   public List <String> getAllTextsOfFields (@Nullable final String... aSearchFieldNames)
   {
     final List <String> ret = new ArrayList <String> ();
-    if (aSearchFieldNames != null)
+    if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IFormFieldError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
           ret.add (aError.getErrorText ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllTextsOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  {
+    final List <String> ret = new ArrayList <String> ();
+    if (ArrayHelper.isNotEmpty (aSearchFieldNames))
+      for (final IFormFieldError aError : m_aItems)
+      {
+        final String sErrorFieldName = aError.getFieldName ();
+        for (final String sSearchField : aSearchFieldNames)
+          if (sErrorFieldName.startsWith (sSearchField))
+          {
+            ret.add (aError.getErrorText ());
+            break;
+          }
+      }
     return ret;
   }
 

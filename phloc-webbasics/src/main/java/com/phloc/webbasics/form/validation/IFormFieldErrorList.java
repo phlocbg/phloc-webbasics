@@ -43,6 +43,10 @@ public interface IFormFieldErrorList extends IBaseFormErrorList <IFormFieldError
 
   @Nonnull
   @ReturnsMutableCopy
+  IFormFieldErrorList getListOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
+
+  @Nonnull
+  @ReturnsMutableCopy
   IFormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 
   @Nonnull
@@ -52,6 +56,10 @@ public interface IFormFieldErrorList extends IBaseFormErrorList <IFormFieldError
   @Nonnull
   @ReturnsMutableCopy
   List <String> getAllTextsOfFields (@Nullable String... aSearchFieldNames);
+
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllTextsOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
 
   @Nonnull
   @ReturnsMutableCopy

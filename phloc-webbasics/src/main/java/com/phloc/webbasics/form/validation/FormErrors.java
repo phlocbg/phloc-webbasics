@@ -141,7 +141,7 @@ public final class FormErrors
 
   public boolean hasErrorsOrWarningsForField (@Nullable final String sSearchFieldName)
   {
-    return m_aFormFieldErrs.hasErrorsOrWarningsForField (sSearchFieldName);
+    return m_aFormFieldErrs.hasEntryForField (sSearchFieldName);
   }
 
   public boolean hasEntryForField (@Nullable final String sSearchFieldName,
@@ -171,6 +171,13 @@ public final class FormErrors
 
   @Nonnull
   @ReturnsMutableCopy
+  public IFormFieldErrorList getListOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  {
+    return m_aFormFieldErrs.getListOfFieldsStartingWith (aSearchFieldNames);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public IFormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
   {
     return m_aFormFieldErrs.getListOfFieldsRegExp (sRegExp);
@@ -188,6 +195,13 @@ public final class FormErrors
   public List <String> getAllItemTextsOfFields (@Nullable final String... aSearchFieldNames)
   {
     return m_aFormFieldErrs.getAllTextsOfFields (aSearchFieldNames);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getAllTextsOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  {
+    return m_aFormFieldErrs.getAllTextsOfFieldsStartingWith (aSearchFieldNames);
   }
 
   @Nonnull
