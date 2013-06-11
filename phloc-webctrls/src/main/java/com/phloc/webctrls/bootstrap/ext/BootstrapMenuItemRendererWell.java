@@ -27,6 +27,7 @@ import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
@@ -60,18 +61,65 @@ public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCU
     return new HCLI ().addClass (CBootstrapCSS.DIVIDER);
   }
 
+  /**
+   * Get the label to display.
+   * 
+   * @param aMenuItem
+   *        Menu item. Never <code>null</code>.
+   * @param bHasChildren
+   *        <code>true</code> if the item has children
+   * @param bIsSelected
+   *        <code>true</code> if it is selected
+   * @param bIsExpanded
+   *        <code>true</code> if it is expanded.
+   * @return The label text. Should not be <code>null</code>.
+   * @see #getContentLocale()
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected String getMenuItemPageLabel (@Nonnull final IMenuItemPage aMenuItem,
+                                         final boolean bHasChildren,
+                                         final boolean bIsSelected,
+                                         final boolean bIsExpanded)
+  {
+    return aMenuItem.getDisplayText (getContentLocale ());
+  }
+
   @Nonnull
   public IHCNode renderMenuItemPage (@Nonnull final IMenuItemPage aMenuItem,
                                      final boolean bHasChildren,
                                      final boolean bIsSelected,
                                      final boolean bIsExpanded)
   {
-    final String sMenuItemID = aMenuItem.getID ();
-    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (sMenuItemID));
-    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()));
+    final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (aMenuItem.getID ()));
+    aLink.addChild (getMenuItemPageLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
+  }
+
+  /**
+   * Get the label to display.
+   * 
+   * @param aMenuItem
+   *        Menu item. Never <code>null</code>.
+   * @param bHasChildren
+   *        <code>true</code> if the item has children
+   * @param bIsSelected
+   *        <code>true</code> if it is selected
+   * @param bIsExpanded
+   *        <code>true</code> if it is expanded.
+   * @return The label text. Should not be <code>null</code>.
+   * @see #getContentLocale()
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected String getMenuItemExternalLabel (@Nonnull final IMenuItemExternal aMenuItem,
+                                             final boolean bHasChildren,
+                                             final boolean bIsSelected,
+                                             final boolean bIsExpanded)
+  {
+    return aMenuItem.getDisplayText (getContentLocale ());
   }
 
   @Nonnull
@@ -82,7 +130,7 @@ public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCU
   {
     final HCA aLink = new HCA (aMenuItem.getURL ());
     aLink.setTarget (HCA_Target.BLANK);
-    aLink.addChild (aMenuItem.getDisplayText (getContentLocale ()));
+    aLink.addChild (getMenuItemExternalLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
@@ -96,9 +144,9 @@ public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCU
 
   @Override
   public void onMenuItemPageItem (@Nonnull final HCLI aLI,
-                                  boolean bHasChildren,
+                                  final boolean bHasChildren,
                                   final boolean bSelected,
-                                  boolean bExpanded)
+                                  final boolean bExpanded)
   {
     if (bSelected)
       aLI.addClass (CBootstrapCSS.ACTIVE);
@@ -106,9 +154,9 @@ public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCU
 
   @Override
   public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
-                                      boolean bHasChildren,
+                                      final boolean bHasChildren,
                                       final boolean bSelected,
-                                      boolean bExpanded)
+                                      final boolean bExpanded)
   {
     if (bSelected)
       aLI.addClass (CBootstrapCSS.ACTIVE);
@@ -126,13 +174,22 @@ public class BootstrapMenuItemRendererWell extends AbstractMenuItemRenderer <HCU
                                                  @Nonnull final MenuItemDeterminatorCallback aDeterminator,
                                                  @Nonnull final Locale aDisplayLocale)
   {
-    final BootstrapWell ret = new BootstrapWell ();
+    return createSideBarMenu (aMenuTree, aDeterminator, new BootstrapMenuItemRendererWell (aDisplayLocale));
+  }
+
+  @Nonnull
+  public static BootstrapWell createSideBarMenu (@Nonnull final IMenuTree aMenuTree,
+                                                 @Nonnull final MenuItemDeterminatorCallback aDeterminator,
+                                                 @Nonnull final BootstrapMenuItemRendererWell aRenderer)
+  {
     final Map <String, Boolean> aAllDisplayMenuItemIDs = MenuItemDeterminatorCallback.getAllDisplayMenuItemIDs (aDeterminator);
-    ret.addChild (MenuRendererCallback.createRenderedMenu (FactoryNewInstance.create (HCUL.class),
-                                                           aMenuTree.getRootItem (),
-                                                           new BootstrapMenuItemRendererWell (aDisplayLocale),
-                                                           aAllDisplayMenuItemIDs).addClasses (CBootstrapCSS.NAV,
-                                                                                               CBootstrapCSS.NAV_LIST));
+    final HCUL aUL = MenuRendererCallback.createRenderedMenu (FactoryNewInstance.create (HCUL.class),
+                                                              aMenuTree.getRootItem (),
+                                                              aRenderer,
+                                                              aAllDisplayMenuItemIDs)
+                                         .addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_LIST);
+    final BootstrapWell ret = new BootstrapWell ();
+    ret.addChild (aUL);
     return ret;
   }
 }
