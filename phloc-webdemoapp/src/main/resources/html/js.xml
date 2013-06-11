@@ -19,8 +19,8 @@
 
 -->
 <items>
-  <js path="/stream/jquery/jquery-1.8.3.js" />
-  <js path="/stream/bootstrap/231/js/bootstrap.js" />
+  <js path="/stream/jquery/jquery-1.10.1.js" />
+  <js path="/stream/bootstrap/232/js/bootstrap.js" />
   <js path="/stream/js/form.js" />
   <js path="/stream/placeholder/placeholder-fix.js" condcomment="if lte IE 9"/>
   <js path="/js/demo.js" />

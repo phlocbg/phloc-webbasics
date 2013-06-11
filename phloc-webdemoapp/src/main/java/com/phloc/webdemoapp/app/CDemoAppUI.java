@@ -27,7 +27,7 @@ public final class CDemoAppUI
 {
   public static final String APP_CONFIG_ID = "config";
   public static final String APP_VIEW_ID = "view";
-  public static final Version BOOTSTRAP_VERSION = CBootstrap.BOOTSTRAP_VERSION_231;
+  public static final Version BOOTSTRAP_VERSION = CBootstrap.BOOTSTRAP_VERSION_232;
 
   private CDemoAppUI ()
   {}

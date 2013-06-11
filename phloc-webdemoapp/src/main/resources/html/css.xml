@@ -19,7 +19,7 @@
 
 -->
 <items>
-  <css path="/stream/bootstrap/231/css/bootstrap.css"/>
+  <css path="/stream/bootstrap/232/css/bootstrap.css"/>
   <css path="/stream/bootstrap/bootstrap-ie6.css" condcomment="if lte IE 6"/>
   <css path="/stream/bootstrap/bootstrap-phloc.css"/>
   <css path="/stream/famfam/flags/flags.css"/>
@@ -28,5 +28,5 @@
   <css path="/css/default-1.0.css"/>
   <css path="/stream/placeholder/placeholder-fix.css" condcomment="if lte IE 9"/>
   <!-- Must be the last entry! -->
-  <css path="/stream/bootstrap/231/css/bootstrap-responsive.css"/>
+  <css path="/stream/bootstrap/232/css/bootstrap-responsive.css"/>
 </items>
