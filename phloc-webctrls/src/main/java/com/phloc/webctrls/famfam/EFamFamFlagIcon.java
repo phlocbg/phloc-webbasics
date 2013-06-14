@@ -343,6 +343,6 @@ public enum EFamFamFlagIcon implements IIcon, IHasID <String>
   @Nullable
   public static EFamFamFlagIcon getFromIDOrNull (@Nullable final String sID)
   {
-    return EnumHelper.getFromIDOrNull (EFamFamFlagIcon.class, sID);
+    return EnumHelper.getFromIDCaseInsensitiveOrNull (EFamFamFlagIcon.class, sID);
   }
 }
