@@ -134,14 +134,17 @@ public class HCCountrySelect extends HCExtSelect
     for (final Locale aCountry : ContainerHelper.getSorted (aLocales, aComp))
 
     {
-      final String sDisplayCountry = aDisplayTextProvider != null
-                                                                 ? aDisplayTextProvider.getDisplayText (aCountry,
-                                                                                                        aDisplayLocale)
+      final String sDisplayCountry = aDisplayTextProvider != null ? aDisplayTextProvider.getDisplayText (aCountry,
+                                                                                                         aDisplayLocale)
                                                                  : aCountry.getDisplayCountry (aDisplayLocale);
       final HCOption aOption = addOption (aCountry.getCountry (), sDisplayCountry);
-      final EFamFamFlagIcon eIcon = FamFamFlags.getFlagFromLocale (aCountry);
-      if (eIcon != null)
-        eIcon.applyToNode (aOption);
+      if (false)
+      {
+        // XXX Does not work right now :(
+        final EFamFamFlagIcon eIcon = FamFamFlags.getFlagFromLocale (aCountry);
+        if (eIcon != null)
+          eIcon.applyToNode (aOption);
+      }
     }
 
     if (!hasSelectedOption () || bAlwaysShowPleaseSelect)
