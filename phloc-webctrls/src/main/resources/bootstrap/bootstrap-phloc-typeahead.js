@@ -45,12 +45,16 @@ function typeaheadHighlighterMultiple(item,parts){
   return item;
 }
 /**
- * Create a typeAhead that handles the IDs of selected items
+ * Create a typeAhead that handles the IDs of selected items. The data is retrieved via AJAX.
+ * The only parameter is called "query" and contains the data of the user.
+ * 
  * @param sLabelFieldSelector jQuery selector for the label field
- * @param aSelectedIDFct A function to be invoked with the selected ID
- * @param sAjaxURL The AJAX URL to invoke
+ * @param aSelectedIDFct A function to be invoked with the selected ID. May be <code>null</code>.
+ * @param sAjaxURL The AJAX URL to invoke.
+ * @param nMinLength Minimum length after which the server is queried. Defaults to 1.
+ * @param nItems Maximum items to show. Defaults to 8.
  */
-function typeaheadKeyValuePair(sLabelFieldSelector,aSelectedIDFct,sAjaxURL) {
+function registerTypeaheadKeyValuePair(sLabelFieldSelector,aSelectedIDFct,sAjaxURL,nMinLength,nItems) {
   var aLabels = [];
   var aIDs = {};
   $(sLabelFieldSelector).typeahead({
@@ -81,7 +85,8 @@ function typeaheadKeyValuePair(sLabelFieldSelector,aSelectedIDFct,sAjaxURL) {
     // Set custom value
     updater : function(item) {
       // Call callback
-      aSelectedIDFct(aIDs[item]);
+      if (aSelectedIDFct)
+        aSelectedIDFct(aIDs[item]);
       return item;
     },
     // Already matched on server
@@ -94,7 +99,10 @@ function typeaheadKeyValuePair(sLabelFieldSelector,aSelectedIDFct,sAjaxURL) {
     },
     // Highlight multiple terms
     highlighter : function(item) {
-      return typeaheadHighlighterMultiple(item, this.query.trim ().split (/\s+/));
-    }
+      var queryParts = this.query.trim ().split (/\s+/);
+      return typeaheadHighlighterMultiple(item, queryParts);
+    },
+    minLength: nMinLength || 1,
+    items: nItems || 8
   });
 }
