@@ -32,7 +32,6 @@ import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
-import com.phloc.json.IJSONObject;
 import com.phloc.json.impl.JSONObject;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -62,11 +61,11 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
-  private final IJSONObject m_aSuccessValue;
+  private final IJSON m_aSuccessValue;
 
   protected AjaxDefaultResponse (final boolean bSuccess,
                                  @Nullable final String sErrorMessage,
-                                 @Nullable final IJSONObject aSuccessValue)
+                                 @Nullable final IJSON aSuccessValue)
   {
     m_bSuccess = bSuccess;
     m_sErrorMessage = sErrorMessage;
@@ -120,7 +119,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     if (m_bSuccess)
     {
       if (m_aSuccessValue != null)
-        aAssocArray.setObjectProperty (PROPERTY_VALUE, m_aSuccessValue);
+        aAssocArray.setProperty (PROPERTY_VALUE, m_aSuccessValue);
       if (hasExternalCSSs ())
         aAssocArray.setStringListProperty (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
       if (hasExternalJSs ())
@@ -171,11 +170,11 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public static AjaxDefaultResponse createSuccess ()
   {
-    return createSuccess ((IJSONObject) null);
+    return createSuccess ((IJSON) null);
   }
 
   @Nonnull
-  public static AjaxDefaultResponse createSuccess (@Nullable final IJSONObject aSuccessValue)
+  public static AjaxDefaultResponse createSuccess (@Nullable final IJSON aSuccessValue)
   {
     return new AjaxDefaultResponse (true, null, aSuccessValue);
   }
