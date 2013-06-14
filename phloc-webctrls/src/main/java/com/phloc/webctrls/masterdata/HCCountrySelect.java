@@ -55,7 +55,7 @@ public class HCCountrySelect extends HCExtSelect
   }
 
   @Nonnull
-  private static List <Locale> _getAllCountries (@Nonnull final EWithDeprecated eWithDeprecated)
+  public static List <Locale> getAllCountries (@Nonnull final EWithDeprecated eWithDeprecated)
   {
     final boolean bWithDeprecated = eWithDeprecated.getAsBoolean ();
     final List <Locale> aLocales = new ArrayList <Locale> ();
@@ -77,7 +77,7 @@ public class HCCountrySelect extends HCExtSelect
                           @Nonnull final Locale aDisplayLocale,
                           @Nonnull final EWithDeprecated eWithDeprecated)
   {
-    this (aRF, aDisplayLocale, _getAllCountries (eWithDeprecated));
+    this (aRF, aDisplayLocale, getAllCountries (eWithDeprecated));
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,
@@ -92,7 +92,7 @@ public class HCCountrySelect extends HCExtSelect
                           @Nonnull final EWithDeprecated eWithDeprecated,
                           final boolean bAlwaysShowPleaseSelect)
   {
-    this (aRF, aDisplayLocale, _getAllCountries (eWithDeprecated), null, bAlwaysShowPleaseSelect);
+    this (aRF, aDisplayLocale, getAllCountries (eWithDeprecated), null, bAlwaysShowPleaseSelect);
   }
 
   public HCCountrySelect (@Nonnull final IHCRequestField aRF,
