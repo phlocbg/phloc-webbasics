@@ -27,6 +27,13 @@ public class BootstrapPhlocTypeahead implements IHCNodeBuilder
                                   @Nonnull final JSAnonymousFunction aIDCallback,
                                   @Nonnull final ISimpleURL aAjaxInvocationURL)
   {
+    if (aEditFieldSelector == null)
+      throw new NullPointerException ("EditFieldSelector");
+    if (aIDCallback == null)
+      throw new NullPointerException ("IDCallback");
+    if (aAjaxInvocationURL == null)
+      throw new NullPointerException ("AjaxInvocationURL");
+
     m_aEditFieldSelector = aEditFieldSelector;
     m_aIDCallback = aIDCallback;
     m_aAjaxInvocationURL = aAjaxInvocationURL;
