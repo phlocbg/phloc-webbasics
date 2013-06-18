@@ -33,11 +33,13 @@ import com.phloc.webctrls.datatables.EDataTablesPaginationType;
 
 public class BootstrapDataTables extends DataTables
 {
+  public static final String DEFAULT_DOM = "<<'span6'l><'span6'f>r>t<<'span6'i><'span6'p>>";
+
   public BootstrapDataTables (@Nonnull final BootstrapTable aTable)
   {
     super (aTable);
     aTable.setStriped (true).setHover (true);
-    setDom ("<<'span6'l><'span6'f>r>t<<'span6'i><'span6'p>>");
+    setDom (DEFAULT_DOM);
     setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
     registerExternalResources ();
   }

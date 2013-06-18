@@ -32,6 +32,7 @@ public enum EDataTablesCSSPathProvider implements ICSSPathProvider
 {
   DATATABLES_194 ("datatables/194/css/jquery.dataTables.css"),
   DATATABLES_THEMEROLLER_194 ("datatables/194/css/jquery.dataTables_themeroller.css"),
+  EXTRAS_SCROLLER_110 ("datatables/Scroller-1.1.0/dataTables.scroller.css"),
   DEMO_TABLE_194 ("datatables/194/css/demo_table.css"),
   DEMO_TABLE_JUI_194 ("datatables/194/css/demo_table_jui.css");
 
