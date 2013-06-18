@@ -7,14 +7,19 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json.impl.JSONObject;
 import com.phloc.json.impl.value.JSONPropertyValueList;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
@@ -37,26 +42,89 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
    * 
    * @author Philip Helger
    */
-  protected static final class Finder
+  @NotThreadSafe
+  protected static class Finder
   {
     private final String [] m_aSearchTerms;
     private final Locale m_aSortLocale;
 
+    /**
+     * Constructor.
+     * 
+     * @param sSearchTerms
+     *        The search term string. It is internally separated into multiple
+     *        tokens by using a "\s+" regular expression.
+     * @param aSortLocale
+     *        The sort locale to use. May not be <code>null</code>.
+     */
     public Finder (@Nonnull @Nonempty final String sSearchTerms, @Nonnull final Locale aSortLocale)
     {
       if (StringHelper.hasNoTextAfterTrim (sSearchTerms))
         throw new IllegalArgumentException ("SearchTerms");
       if (aSortLocale == null)
         throw new NullPointerException ("sortLocale");
+
       m_aSearchTerms = RegExHelper.getSplitToArray (sSearchTerms.trim (), "\\s+");
       if (m_aSearchTerms.length == 0)
         throw new IllegalStateException ("Weird - splitting of '" + sSearchTerms.trim () + "' failed!");
+      for (final String sSearchTerm : m_aSearchTerms)
+        if (sSearchTerm.length () == 0)
+          throw new IllegalArgumentException ("Weird - empty search term present!");
       m_aSortLocale = aSortLocale;
     }
 
+    /**
+     * @return An array with all search terms. Never <code>null</code> nor
+     *         empty.
+     */
+    @Nonnull
+    @ReturnsMutableCopy
+    @Nonempty
+    public final String [] getAllSearchTerms ()
+    {
+      return ArrayHelper.getCopy (m_aSearchTerms);
+    }
+
+    /**
+     * @return The sort locale provided in the constructor. Never
+     *         <code>null</code>.
+     */
+    @Nonnull
+    public final Locale getSortLocale ()
+    {
+      return m_aSortLocale;
+    }
+
+    /**
+     * Default matches function: match all search terms!
+     * 
+     * @param sSource
+     *        Source string. May be <code>null</code>.
+     * @return <code>true</code> if the source is not <code>null</code> and if
+     *         all search terms are contained, <code>false</code> otherwise.
+     * @see #matchesAll(String)
+     */
     public boolean matches (@Nullable final String sSource)
     {
       return matchesAll (sSource);
+    }
+
+    /**
+     * Match method for a single string. By default a case-insensitive lookup is
+     * performed.
+     * 
+     * @param sSource
+     *        The source string to search the search term in. Never
+     *        <code>null</code>.
+     * @param sSearchTerm
+     *        The search term to be searched. Never <code>null</code>.
+     * @return <code>true</code> if the source string contains the search term,
+     *         <code>false</code> otherwise.
+     */
+    @OverrideOnDemand
+    protected boolean isSingleStringMatching (@Nonnull final String sSource, @Nonnull final String sSearchTerm)
+    {
+      return StringHelper.containsIgnoreCase (sSource, sSearchTerm, m_aSortLocale);
     }
 
     /**
@@ -72,7 +140,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
       if (sSource == null)
         return false;
       for (final String sSearchTerm : m_aSearchTerms)
-        if (!StringHelper.containsIgnoreCase (sSource, sSearchTerm, m_aSortLocale))
+        if (!isSingleStringMatching (sSource, sSearchTerm))
           return false;
       return true;
     }
@@ -90,10 +158,34 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
       if (sSource == null)
         return false;
       for (final String sSearchTerm : m_aSearchTerms)
-        if (StringHelper.containsIgnoreCase (sSource, sSearchTerm, m_aSortLocale))
+        if (isSingleStringMatching (sSource, sSearchTerm))
           return true;
       return false;
     }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("searchTerms", m_aSearchTerms)
+                                         .append ("sortLocale", m_aSortLocale)
+                                         .toString ();
+    }
+  }
+
+  /**
+   * Create a new {@link Finder} object.
+   * 
+   * @param sOriginalQuery
+   *        The original query string. Never <code>null</code>.
+   * @param aSortLocale
+   *        The sort locale to be used. Never <code>null</code>.
+   * @return The non-<code>null</code> {@link Finder} object.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected Finder createFinder (@Nonnull final String sOriginalQuery, @Nonnull final Locale aSortLocale)
+  {
+    return new Finder (sOriginalQuery, aSortLocale);
   }
 
   /**
@@ -123,7 +215,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
       return AjaxDefaultResponse.createSuccess (new JSONObject ());
     }
 
-    final Finder aFinder = new Finder (sOriginalQuery, aDisplayLocale);
+    final Finder aFinder = createFinder (sOriginalQuery, aDisplayLocale);
 
     // Map from ID to name
     final Map <String, String> aMap = getAllMatchingObjects (aFinder, aDisplayLocale);
