@@ -1,0 +1,146 @@
+package com.phloc.webctrls.bootstrap.ajax;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
+import com.phloc.commons.compare.ComparatorString;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.json.impl.JSONObject;
+import com.phloc.json.impl.value.JSONPropertyValueList;
+import com.phloc.webbasics.ajax.AbstractAjaxHandler;
+import com.phloc.webbasics.ajax.AjaxDefaultResponse;
+import com.phloc.webbasics.ajax.IAjaxResponse;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+
+/**
+ * Abstract AJAX handler that can be used as the source for a Bootstrap
+ * typeahead control.
+ * 
+ * @author Philip Helger
+ */
+public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHandler
+{
+  public static final String PARAM_QUERY = "query";
+
+  /**
+   * A simple finder
+   * 
+   * @author Philip Helger
+   */
+  protected static final class Finder
+  {
+    private final String [] m_aSearchTerms;
+    private final Locale m_aSortLocale;
+
+    public Finder (@Nonnull @Nonempty final String sSearchTerms, @Nonnull final Locale aSortLocale)
+    {
+      if (StringHelper.hasNoTextAfterTrim (sSearchTerms))
+        throw new IllegalArgumentException ("SearchTerms");
+      if (aSortLocale == null)
+        throw new NullPointerException ("sortLocale");
+      m_aSearchTerms = RegExHelper.getSplitToArray (sSearchTerms.trim (), "\\s+");
+      if (m_aSearchTerms.length == 0)
+        throw new IllegalStateException ("Weird - splitting of '" + sSearchTerms.trim () + "' failed!");
+      m_aSortLocale = aSortLocale;
+    }
+
+    public boolean matches (@Nullable final String sSource)
+    {
+      return matchesAll (sSource);
+    }
+
+    /**
+     * Match all query terms.
+     * 
+     * @param sSource
+     *        Source string. May be <code>null</code>.
+     * @return <code>true</code> if the source is not <code>null</code> and if
+     *         all search terms are contained, <code>false</code> otherwise.
+     */
+    public boolean matchesAll (@Nullable final String sSource)
+    {
+      if (sSource == null)
+        return false;
+      for (final String sSearchTerm : m_aSearchTerms)
+        if (!StringHelper.containsIgnoreCase (sSource, sSearchTerm, m_aSortLocale))
+          return false;
+      return true;
+    }
+
+    /**
+     * Match any query term.
+     * 
+     * @param sSource
+     *        Source string. May be <code>null</code>.
+     * @return <code>true</code> if the source is not <code>null</code> and if
+     *         one search term is contained, <code>false</code> otherwise.
+     */
+    public boolean matchesAny (@Nullable final String sSource)
+    {
+      if (sSource == null)
+        return false;
+      for (final String sSearchTerm : m_aSearchTerms)
+        if (StringHelper.containsIgnoreCase (sSource, sSearchTerm, m_aSortLocale))
+          return true;
+      return false;
+    }
+  }
+
+  /**
+   * This is the main searcher method. It must filter all objects matching the
+   * criteria in the finder.
+   * 
+   * @param aFinder
+   *        The finder. Never <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to use. Never <code>null</code>.
+   * @return A non-<code>null</code> map from ID to display-text.
+   */
+  @Nonnull
+  protected abstract Map <String, String> getAllMatchingObjects (@Nonnull Finder aFinder, @Nonnull Locale aDisplayLocale);
+
+  @Override
+  @Nonnull
+  protected final IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+  {
+    final Locale aDisplayLocale = ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
+
+    final String sOriginalQuery = aParams.getAttributeAsString (PARAM_QUERY);
+    if (StringHelper.hasNoTextAfterTrim (sOriginalQuery))
+    {
+      // May happen when the user enters "  " (only spaces)
+      return AjaxDefaultResponse.createSuccess (new JSONObject ());
+    }
+
+    final Finder aFinder = new Finder (sOriginalQuery, aDisplayLocale);
+
+    // Map from ID to name
+    final Map <String, String> aMap = getAllMatchingObjects (aFinder, aDisplayLocale);
+
+    // Convert to JSON, sorted by display name using the current display locale
+    final List <JSONObject> ret = new ArrayList <JSONObject> ();
+    for (final Map.Entry <String, String> aEntry : ContainerHelper.getSortedByValue (aMap,
+                                                                                     new ComparatorString (aDisplayLocale))
+                                                                  .entrySet ())
+    {
+      final JSONObject aItem = new JSONObject ();
+      aItem.setStringProperty ("value", aEntry.getKey ());
+      aItem.setStringProperty ("label", aEntry.getValue ());
+      ret.add (aItem);
+    }
+
+    // Set as result property
+    return AjaxDefaultResponse.createSuccess (new JSONPropertyValueList <JSONObject> (ret));
+  }
+}
