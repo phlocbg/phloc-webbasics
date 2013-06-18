@@ -262,13 +262,16 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
   /**
    * Render a part of the menu
    * 
+   * @param aFactory
+   *        The factory to be used to create nodes of type T. May not be
+   *        <code>null</code>.
    * @param aStartTreeItem
-   *        The start tree to iterate
+   *        The start tree to iterate. May not be <code>null</code>.
    * @param aRenderer
-   *        The renderer to use
+   *        The renderer to use. May not be <code>null</code>.
    * @param aDisplayMenuItemIDs
    *        The menu items to display as a map from menu item ID to expanded
-   *        state
+   *        state. May not be <code>null</code>.
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -277,6 +280,9 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
                                                                      @Nonnull final IMenuItemRenderer <T> aRenderer,
                                                                      @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
+    if (aFactory == null)
+      throw new NullPointerException ("Factory");
+
     final NonBlockingStack <T> aNodeStack = new NonBlockingStack <T> ();
     aNodeStack.push (aFactory.create ());
     TreeWalkerDynamic.walkSubTree (aStartTreeItem, new MenuRendererCallback <T> (aFactory,
