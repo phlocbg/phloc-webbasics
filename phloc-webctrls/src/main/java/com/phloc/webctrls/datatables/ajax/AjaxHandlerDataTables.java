@@ -269,7 +269,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final List <Map <String, String>> aData = new ArrayList <Map <String, String>> ();
     int nResultRowCount = 0;
     final boolean bAllEntries = aRequestData.showAllEntries ();
-    final int nMaxResultRows = aRequestData.getDisplayLength ();
+    // Just in case ;-)
+    final int nMaxResultRows = Math.min (aRequestData.getDisplayLength (), aServerData.getRowCount ());
     while (bAllEntries || nResultRowCount < nMaxResultRows)
     {
       final int nRealIndex = aRequestData.getDisplayStart () + nResultRowCount;
