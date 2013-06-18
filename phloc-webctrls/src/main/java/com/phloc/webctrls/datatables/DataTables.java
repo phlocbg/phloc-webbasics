@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -427,6 +428,8 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
+  @Deprecated
+  @DevelopersNote ("According to https://www.datatables.net/forums/discussion/14532/duplicate-records-appended-to-datatables-on-redrawing-while-bscrollinfinite-property-is-used/p1  it may get deprecated in future releases!")
   public DataTables setScrollInfinite (final boolean bScrollInfinite)
   {
     m_bScrollInfinite = bScrollInfinite;
@@ -741,7 +744,7 @@ public class DataTables implements IHCNodeBuilder
                                                                      .url (sSource)
                                                                      .data (aoData)
                                                                      .success (JSJQueryUtils.jqueryAjaxSuccessHandler (fnCallback,
-                                                                                                                     true));
+                                                                                                                       true));
       aAF.body ().assign (oSettings.ref ("jqXHR"), aAjaxBuilder.build ());
       aParams.add ("fnServerData", aAF);
       JSJQueryUtils.registerResources ();

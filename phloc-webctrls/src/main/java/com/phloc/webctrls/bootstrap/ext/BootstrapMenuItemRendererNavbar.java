@@ -143,10 +143,10 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
       if (aLI.getChildCount () >= 2)
       {
         aLI.addClass (CBootstrapCSS.DROPDOWN);
-        ((HCA) aLI.getChild (0)).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
-                                .setCustomAttr ("data-toggle", "dropdown")
-                                .setRole (EHTMLRole.BUTTON)
-                                .addChild (new BootstrapCaret ());
+        ((HCA) aLI.getChildAtIndex (0)).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
+                                       .setCustomAttr ("data-toggle", "dropdown")
+                                       .setRole (EHTMLRole.BUTTON)
+                                       .addChild (new BootstrapCaret ());
       }
     }
     return aUL;
