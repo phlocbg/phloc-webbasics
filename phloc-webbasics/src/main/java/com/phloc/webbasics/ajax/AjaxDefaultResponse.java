@@ -26,9 +26,11 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.hc.IHCHasChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
+import com.phloc.html.hc.utils.HCSpecialNodeHandler;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
@@ -65,6 +67,49 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   private final String m_sErrorMessage;
   private final IJSON m_aSuccessValue;
 
+  private void _addCSSAndJS ()
+  {
+    // Grab per-request CSS/JS only in success case!
+    final boolean bRegularFiles = GlobalDebug.isDebugMode ();
+    for (final ICSSPathProvider aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ())
+      addExternalCSS (aCSSPath.getCSSItemPath (bRegularFiles));
+    for (final IJSPathProvider aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludesForThisRequest ())
+      addExternalJS (aJSPath.getJSItemPath (bRegularFiles));
+  }
+
+  /**
+   * Success constructor for HC nodes
+   * 
+   * @param aNode
+   *        The response HTML node. May be <code>null</code>.
+   */
+  protected AjaxDefaultResponse (@Nullable final IHCNode aNode)
+  {
+    // Do it first
+    _addCSSAndJS ();
+
+    // Now decompose the HCNode itself
+    final JSONObject aObj = new JSONObject ();
+    if (aNode != null)
+    {
+      IHCNode aRealNode;
+      if (aNode instanceof IHCHasChildren)
+      {
+        // no need to keepOnDocumentReady stuff as the document is already
+        // loaded
+        aRealNode = HCSpecialNodeHandler.extractSpecialContent ((IHCHasChildren) aNode, this, false);
+      }
+      else
+        aRealNode = aNode;
+
+      // Serialize remaining node to HTML
+      aObj.setStringProperty (PROPERTY_HTML, HCSettings.getAsHTMLStringWithoutNamespaces (aRealNode));
+    }
+    m_bSuccess = true;
+    m_sErrorMessage = null;
+    m_aSuccessValue = aObj;
+  }
+
   protected AjaxDefaultResponse (final boolean bSuccess,
                                  @Nullable final String sErrorMessage,
                                  @Nullable final IJSON aSuccessValue)
@@ -73,14 +118,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     m_sErrorMessage = sErrorMessage;
     m_aSuccessValue = aSuccessValue;
     if (bSuccess)
-    {
-      // Grab per-request CSS/JS only in success case!
-      final boolean bRegularFiles = GlobalDebug.isDebugMode ();
-      for (final ICSSPathProvider aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ())
-        addExternalCSS (aCSSPath.getCSSItemPath (bRegularFiles));
-      for (final IJSPathProvider aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludesForThisRequest ())
-        addExternalJS (aJSPath.getJSItemPath (bRegularFiles));
-    }
+      _addCSSAndJS ();
   }
 
   public boolean isSuccess ()
@@ -184,10 +222,8 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nullable final IHCNode aNode)
   {
-    final JSONObject aObj = new JSONObject ();
-    if (aNode != null)
-      aObj.setStringProperty (PROPERTY_HTML, HCSettings.getAsHTMLStringWithoutNamespaces (aNode));
-    return createSuccess (aObj);
+    // Special case required
+    return new AjaxDefaultResponse (aNode);
   }
 
   @Nonnull
