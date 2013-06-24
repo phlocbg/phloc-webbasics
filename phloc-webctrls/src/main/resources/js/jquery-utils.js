@@ -103,7 +103,7 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
       for(var js in data.externaljs){
         var jsNode=document.createElement('script');
         jsNode.type='text\/javascript';
-        jsNode.src=js;
+        jsNode.src=data.externaljs[js];
         jsNode.title='dynamicallyLoadedJS';
         firstjs.parentNode.insertBefore(jsNode,firstjs);
       }
@@ -115,7 +115,7 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
         var cssNode=document.createElement('link');
         cssNode.type='text\/css';
         cssNode.rel='stylesheet';
-        cssNode.src=css;
+        cssNode.src=data.externalcss[css];
         cssNode.title='dynamicallyLoadedCSS';
         firstcss.parentNode.insertBefore(cssNode,firstcss);
       }
