@@ -83,6 +83,18 @@ $.ajaxSetup ({
   }
 });
 
+jQuery.cachedScript = function(url, options) {
+  // allow user to set any option except for dataType, cache, and url
+  options = $.extend(options || {}, {
+    dataType : "script",
+    cache : true,
+    url : url
+  });
+  // Use $.ajax() since it is more flexible than $.getScript
+  // Return the jqXHR object so we can chain callbacks
+  return jQuery.ajax(options);
+};
+
 /**
  * Default jQuery AJAX success handler for phloc AJAX server side components
  * @param data PlainObject The data returned from the server, formatted according to the dataType parameter
@@ -99,14 +111,21 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
     }
     if(data.externaljs){
       // Include external JS elements
-      var firstjs=document.getElementsByTagName('script')[0];
+      var left = data.externaljs.length;
       for(var js in data.externaljs){
-        var jsNode=document.createElement('script');
-        jsNode.src=data.externaljs[js];
-        jsNode.type='text\/javascript';
-        jsNode.title='dynamicallyLoadedJS';
-        firstjs.parentNode.insertBefore(jsNode,firstjs);
+        $.cachedScript (data.externaljs[js]).always(function() { 
+          // One item less
+          left--; 
+        });
       }
+      var timeout=100;
+      var poll = function(){
+        setTimeout(function (){
+          if (left > 0 && --timeout > 0) 
+            poll();
+        }, 100); 
+      };
+      poll ();
     }
     if(data.externalcss){
       // Include external CSS elements

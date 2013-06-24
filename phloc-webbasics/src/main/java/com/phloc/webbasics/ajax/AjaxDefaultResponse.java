@@ -17,8 +17,12 @@
  */
 package com.phloc.webbasics.ajax;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.GlobalDebug;
@@ -26,15 +30,15 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCHasChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.utils.AbstractHCSpecialNodes;
 import com.phloc.html.hc.utils.HCSpecialNodeHandler;
-import com.phloc.html.resource.css.ICSSPathProvider;
-import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.json.IJSON;
 import com.phloc.json.impl.JSONObject;
+import com.phloc.webbasics.app.html.IURIToURLConverter;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
@@ -63,18 +67,28 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   /** Default property for HTML content */
   public static final String PROPERTY_HTML = "html";
 
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
+  @GuardedBy ("s_aRWLock")
+  private static IURIToURLConverter s_aConverter = null;
+
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
   private final IJSON m_aSuccessValue;
 
-  private void _addCSSAndJS ()
+  private void _addCSSAndJS (@Nonnull final IURIToURLConverter aConverter)
   {
+    if (aConverter == null)
+      throw new NullPointerException ("URIToURLConverter");
+
     // Grab per-request CSS/JS only in success case!
     final boolean bRegularFiles = GlobalDebug.isDebugMode ();
-    for (final ICSSPathProvider aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludesForThisRequest ())
-      addExternalCSS (aCSSPath.getCSSItemPath (bRegularFiles));
-    for (final IJSPathProvider aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludesForThisRequest ())
-      addExternalJS (aJSPath.getJSItemPath (bRegularFiles));
+    for (final ISimpleURL aCSSPath : PerRequestCSSIncludes.getAllRegisteredCSSIncludeURLsForThisRequest (aConverter,
+                                                                                                         bRegularFiles))
+      addExternalCSS (aCSSPath.getAsString ());
+    for (final ISimpleURL aJSPath : PerRequestJSIncludes.getAllRegisteredJSIncludeURLsForThisRequest (aConverter,
+                                                                                                      bRegularFiles))
+      addExternalJS (aJSPath.getAsString ());
   }
 
   /**
@@ -83,10 +97,10 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
    * @param aNode
    *        The response HTML node. May be <code>null</code>.
    */
-  protected AjaxDefaultResponse (@Nullable final IHCNode aNode)
+  protected AjaxDefaultResponse (@Nullable final IHCNode aNode, @Nonnull final IURIToURLConverter aConverter)
   {
     // Do it first
-    _addCSSAndJS ();
+    _addCSSAndJS (aConverter);
 
     // Now decompose the HCNode itself
     final JSONObject aObj = new JSONObject ();
@@ -112,13 +126,40 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
 
   protected AjaxDefaultResponse (final boolean bSuccess,
                                  @Nullable final String sErrorMessage,
-                                 @Nullable final IJSON aSuccessValue)
+                                 @Nullable final IJSON aSuccessValue,
+                                 @Nullable final IURIToURLConverter aConverter)
   {
     m_bSuccess = bSuccess;
     m_sErrorMessage = sErrorMessage;
     m_aSuccessValue = aSuccessValue;
     if (bSuccess)
-      _addCSSAndJS ();
+      _addCSSAndJS (aConverter);
+  }
+
+  public static void setDefaultURIToURLConverter (@Nullable final IURIToURLConverter aConverter)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aConverter = aConverter;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public static IURIToURLConverter getDefaultURIToURLConverter ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aConverter;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   public boolean isSuccess ()
@@ -216,19 +257,34 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nullable final IJSON aSuccessValue)
   {
-    return new AjaxDefaultResponse (true, null, aSuccessValue);
+    return createSuccess (aSuccessValue, getDefaultURIToURLConverter ());
+  }
+
+  @Nonnull
+  public static AjaxDefaultResponse createSuccess (@Nullable final IJSON aSuccessValue,
+                                                   @Nonnull final IURIToURLConverter aConverter)
+  {
+    return new AjaxDefaultResponse (true, null, aSuccessValue, aConverter);
   }
 
   @Nonnull
   public static AjaxDefaultResponse createSuccess (@Nullable final IHCNode aNode)
   {
+    // Use the default converter here
+    return createSuccess (aNode, getDefaultURIToURLConverter ());
+  }
+
+  @Nonnull
+  public static AjaxDefaultResponse createSuccess (@Nullable final IHCNode aNode,
+                                                   @Nonnull final IURIToURLConverter aConverter)
+  {
     // Special case required
-    return new AjaxDefaultResponse (aNode);
+    return new AjaxDefaultResponse (aNode, aConverter);
   }
 
   @Nonnull
   public static AjaxDefaultResponse createError (@Nullable final String sErrorMessage)
   {
-    return new AjaxDefaultResponse (false, sErrorMessage, null);
+    return new AjaxDefaultResponse (false, sErrorMessage, null, null);
   }
 }
