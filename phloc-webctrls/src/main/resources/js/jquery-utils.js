@@ -102,8 +102,8 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
       var firstjs=document.getElementsByTagName('script')[0];
       for(var js in data.externaljs){
         var jsNode=document.createElement('script');
-        jsNode.type='text\/javascript';
         jsNode.src=data.externaljs[js];
+        jsNode.type='text\/javascript';
         jsNode.title='dynamicallyLoadedJS';
         firstjs.parentNode.insertBefore(jsNode,firstjs);
       }
@@ -113,9 +113,9 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
       var firstcss=document.getElementsByTagName('link')[0];
       for(var css in data.externalcss){
         var cssNode=document.createElement('link');
+        cssNode.href=data.externalcss[css];
         cssNode.type='text\/css';
         cssNode.rel='stylesheet';
-        cssNode.src=data.externalcss[css];
         cssNode.title='dynamicallyLoadedCSS';
         firstcss.parentNode.insertBefore(cssNode,firstcss);
       }
