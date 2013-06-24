@@ -17,14 +17,17 @@
  */
 package com.phloc.webbasics.app.html;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.resource.css.ICSSPathProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.mgr.WebScopeManager;
@@ -74,11 +77,41 @@ public final class PerRequestCSSIncludes
    *         this request. Order is ensured using LinkedHashSet.
    */
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public static Set <ICSSPathProvider> getAllRegisteredCSSIncludesForThisRequest ()
   {
     final Set <ICSSPathProvider> ret = _getPerRequestSet (false);
-    return ContainerHelper.makeUnmodifiableNotNull (ret);
+    return ContainerHelper.newOrderedSet (ret);
+  }
+
+  /**
+   * Get all CSS includes registered for this path with the specified converter.
+   * 
+   * @param aConverter
+   *        The converter from the realtive URI path (e.g.
+   *        "autonumeric/autonumeric.css") to the final URL to be used (e.g.
+   *        "/stream/autonumeric/autonumeric.css"). May not be <code>null</code>
+   *        .
+   * @param bRegularVersion
+   *        <code>true</code> to use the non-minified version,
+   *        <code>false</code> to use the minified version.
+   * @return A non-<code>null</code> list with all CSS URLs to be included in
+   *         this request.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static List <ISimpleURL> getAllRegisteredCSSIncludeURLsForThisRequest (@Nonnull final IURIToURLConverter aConverter,
+                                                                                final boolean bRegularVersion)
+  {
+    if (aConverter == null)
+      throw new NullPointerException ("converter");
+
+    final Set <ICSSPathProvider> aSet = _getPerRequestSet (false);
+    final List <ISimpleURL> ret = new ArrayList <ISimpleURL> ();
+    if (aSet != null)
+      for (final ICSSPathProvider aPathProvider : aSet)
+        ret.add (aConverter.getAsURL (aPathProvider.getCSSItemPath (bRegularVersion)));
+    return ret;
   }
 
   /**
