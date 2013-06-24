@@ -17,9 +17,13 @@
  */
 package com.phloc.webctrls.bootstrap.ext;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.url.ISimpleURL;
@@ -33,11 +37,20 @@ import com.phloc.webctrls.bootstrap.EBootstrapJSPathProvider;
 
 public class BootstrapPhlocTypeaheadScript implements IHCNodeBuilder
 {
+  public static final int DEFAULT_MIN_LENGTH = 2;
+  public static final int DEFAULT_MAX_SHOW_ITEMS = 8;
+
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("s_aRWLock")
+  private static int s_nDefaultMinLength = DEFAULT_MIN_LENGTH;
+  @GuardedBy ("s_aRWLock")
+  private static int s_nDefaultMaxShowItems = DEFAULT_MAX_SHOW_ITEMS;
+
   private final IJQuerySelector m_aEditFieldSelector;
   private final JSAnonymousFunction m_aIDCallback;
   private final ISimpleURL m_aAjaxInvocationURL;
-  private int m_nMinLength = 2;
-  private int m_nMaxShowItems = 8;
+  private int m_nMinLength = s_nDefaultMinLength;
+  private int m_nMaxShowItems = s_nDefaultMaxShowItems;
 
   public BootstrapPhlocTypeaheadScript (@Nonnull final IJQuerySelector aEditFieldSelector,
                                         @Nonnull final JSAnonymousFunction aIDCallback,
@@ -53,6 +66,66 @@ public class BootstrapPhlocTypeaheadScript implements IHCNodeBuilder
     m_aEditFieldSelector = aEditFieldSelector;
     m_aIDCallback = aIDCallback;
     m_aAjaxInvocationURL = aAjaxInvocationURL;
+  }
+
+  public static void setDefaultMinLength (@Nonnegative final int nDefaultMinLength)
+  {
+    if (nDefaultMinLength < 0)
+      throw new IllegalArgumentException ("DefaultMinLength must be >= 0: " + nDefaultMinLength);
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_nDefaultMinLength = nDefaultMinLength;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnegative
+  public static int getDefaultMinLength ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_nDefaultMinLength;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setDefaultMaxShowItems (@Nonnegative final int nDefaultMaxShowItems)
+  {
+    if (nDefaultMaxShowItems <= 0)
+      throw new IllegalArgumentException ("DefaultMaxShowItems must be > 0: " + nDefaultMaxShowItems);
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_nDefaultMaxShowItems = nDefaultMaxShowItems;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnegative
+  public static int getDefaultMaxShowItems ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_nDefaultMaxShowItems;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nonnegative

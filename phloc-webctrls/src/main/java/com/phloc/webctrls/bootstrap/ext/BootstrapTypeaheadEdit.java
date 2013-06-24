@@ -20,6 +20,7 @@ package com.phloc.webctrls.bootstrap.ext;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
@@ -58,7 +59,9 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
 
     final JSAnonymousFunction aIDCallback = new JSAnonymousFunction ();
     final JSVar aID = aIDCallback.param ("id");
-    aIDCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val ().arg (aID));
+    // Need to manually call the "change" handler, because otherwise onchange
+    // event is not triggered for hidden fields!
+    aIDCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val ().arg (aID).change ());
     m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit.getID ()),
                                                    aIDCallback,
                                                    aAjaxInvocationURL);
@@ -73,6 +76,17 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
   public HCEdit getEdit ()
   {
     return m_aEdit;
+  }
+
+  /**
+   * @return The ID of the hidden field that is generated for this edit. Neither
+   *         <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  public String getHiddenFieldID ()
+  {
+    return m_sHiddenFieldID;
   }
 
   /**
