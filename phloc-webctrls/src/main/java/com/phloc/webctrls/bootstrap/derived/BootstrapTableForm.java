@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +40,7 @@ import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.impl.AbstractHCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.form.validation.EFormErrorLevel;
 import com.phloc.webbasics.form.validation.IFormFieldError;
@@ -135,15 +137,24 @@ public class BootstrapTableForm extends BootstrapTable
                                           @Nullable final Iterable <? extends IHCNode> aCtrls,
                                           final boolean bHasError)
   {
+    final List <IHCNode> aResolvedCtrls = new ArrayList <IHCNode> ();
     if (aCtrls != null)
     {
-      modifyControls (aCtrls);
+      // Inline all node lists for correct modification afterwards
+      for (final IHCNode aCtrl : aCtrls)
+        if (aCtrl instanceof AbstractHCNodeList <?>)
+          aResolvedCtrls.addAll (((AbstractHCNodeList <?>) aCtrl).getChildren ());
+        else
+          aResolvedCtrls.add (aCtrl);
+
+      // Customize controls
+      modifyControls (aResolvedCtrls);
 
       if (isFocusHandlingEnabled ())
       {
         // Set focus on first element with error
         if (bHasError && !m_bSetAutoFocus)
-          for (final IHCNode aCtrl : aCtrls)
+          for (final IHCNode aCtrl : aResolvedCtrls)
             if (aCtrl instanceof IHCHasFocus <?>)
             {
               _focusNode ((IHCHasFocus <?>) aCtrl);
@@ -153,7 +164,7 @@ public class BootstrapTableForm extends BootstrapTable
 
         // Find first focusable control
         if (m_aFirstFocusable == null)
-          for (final IHCNode aCtrl : aCtrls)
+          for (final IHCNode aCtrl : aResolvedCtrls)
             if (aCtrl instanceof IHCHasFocus <?>)
             {
               m_aFirstFocusable = (IHCHasFocus <?>) aCtrl;
@@ -162,7 +173,7 @@ public class BootstrapTableForm extends BootstrapTable
       }
     }
 
-    return aRow.addAndReturnCell (aCtrls);
+    return aRow.addAndReturnCell (aResolvedCtrls);
   }
 
   public static void addControlCellErrorMessages (@Nonnull final AbstractHCCell aCell,
