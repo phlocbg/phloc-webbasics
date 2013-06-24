@@ -84,9 +84,16 @@ function registerTypeaheadKeyValuePair(sLabelFieldSelector,aSelectedIDFct,sAjaxU
     },
     // Set custom value
     updater : function(item) {
-      // Call callback
+      var id = aIDs[item];
+      // Call callback with selected ID
       if (aSelectedIDFct)
-        aSelectedIDFct(aIDs[item]);
+        aSelectedIDFct(id);
+      
+      // If no ID is present (e.g. for "no entry found") no text should be displayed
+      if (!id)
+        return "";
+      
+      // Return the data as is
       return item;
     },
     // Already matched on server

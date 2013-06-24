@@ -92,11 +92,16 @@ public class BootstrapPhlocTypeaheadScript implements IHCNodeBuilder
   @Nullable
   public HCScript build ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EBootstrapJSPathProvider.BOOTSTRAP_PHLOC_TYPEAHEAD);
+    registerExternalResources ();
     return new HCScript (new JSInvocation ("registerTypeaheadKeyValuePair").arg (m_aEditFieldSelector.getExpression ())
                                                                            .arg (m_aIDCallback)
                                                                            .arg (m_aAjaxInvocationURL.getAsString ())
                                                                            .arg (m_nMinLength)
                                                                            .arg (m_nMaxShowItems));
+  }
+
+  public static void registerExternalResources ()
+  {
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EBootstrapJSPathProvider.BOOTSTRAP_PHLOC_TYPEAHEAD);
   }
 }

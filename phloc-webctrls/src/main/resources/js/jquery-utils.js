@@ -70,8 +70,18 @@
   };
 })(jQuery)
 
-// Disable jQuery AJAX caching
-$.ajaxSetup ({cache:false});
+// Set default AJAX settings
+$.ajaxSetup ({
+  // Disable jQuery AJAX caching
+  cache:false,
+  // Set a default error handler
+  error: function (jqXHR, textStatus, errorThrown) {
+    if (!window.ajaxSetupErrorShown) {
+      window.ajaxSetupErrorShown=true;
+      alert('AJAX error!\nStatus=' + textStatus+(errorThrown ? "\nError thrown="+errorThrown : ""));
+    }
+  }
+});
 
 /**
  * Default jQuery AJAX success handler for phloc AJAX server side components

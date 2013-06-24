@@ -70,7 +70,6 @@ public class HCDateEdit implements IHCNodeBuilder
     m_aEdit = new HCEdit (sName, sValue);
     m_aEdit.setID (sID);
     m_aLocale = aDisplayLocale;
-    registerExternalResources (aDisplayLocale);
   }
 
   @Nonnull
@@ -96,8 +95,8 @@ public class HCDateEdit implements IHCNodeBuilder
   @Nonnull
   public HCNodeList build ()
   {
-    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime
-                                                                               ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
+    registerExternalResources (m_aLocale);
+    final String sFormatString = DateFormatBuilder.fromJavaPattern (m_bShowTime ? PDTFormatPatterns.getDefaultPatternDateTime (m_aLocale)
                                                                                : PDTFormatPatterns.getDefaultPatternDate (m_aLocale))
                                                   .getJSCalendarFormatString ();
 
@@ -115,7 +114,7 @@ public class HCDateEdit implements IHCNodeBuilder
     return ret;
   }
 
-  public static void registerExternalResources (final Locale aContentLocale)
+  public static void registerExternalResources (@Nonnull final Locale aContentLocale)
   {
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimeJSPathProvider.CALENDAR);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimeJSPathProvider.CALENDAR_LANGUAGE.getInstance (aContentLocale.getLanguage ()));

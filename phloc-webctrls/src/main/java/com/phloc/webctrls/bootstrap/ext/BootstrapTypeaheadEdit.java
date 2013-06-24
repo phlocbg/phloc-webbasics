@@ -64,12 +64,22 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
                                                    aAjaxInvocationURL);
   }
 
+  /**
+   * @return The contained edit field that will hold the selected name. Never
+   *         <code>null</code>. Changes on the edit only have an effect if they
+   *         are performed before this control is build!
+   */
   @Nonnull
   public HCEdit getEdit ()
   {
     return m_aEdit;
   }
 
+  /**
+   * @return The type ahead script that handles the AJAX trigger based on the
+   *         input. Never <code>null</code>. Changes on the script only have an
+   *         effect if they are performed before this control is build!
+   */
   @Nonnull
   public BootstrapPhlocTypeaheadScript getScript ()
   {
