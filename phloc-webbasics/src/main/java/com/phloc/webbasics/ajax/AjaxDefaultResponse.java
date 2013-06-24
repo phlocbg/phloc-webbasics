@@ -251,7 +251,13 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public static AjaxDefaultResponse createSuccess ()
   {
-    return createSuccess ((IJSON) null);
+    return createSuccess (getDefaultURIToURLConverter ());
+  }
+
+  @Nonnull
+  public static AjaxDefaultResponse createSuccess (@Nonnull final IURIToURLConverter aConverter)
+  {
+    return createSuccess ((IJSON) null, aConverter);
   }
 
   @Nonnull
@@ -285,6 +291,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   @Nonnull
   public static AjaxDefaultResponse createError (@Nullable final String sErrorMessage)
   {
+    // No converter needed in case of error!
     return new AjaxDefaultResponse (false, sErrorMessage, null, null);
   }
 }

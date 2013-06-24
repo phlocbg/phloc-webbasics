@@ -109,24 +109,57 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
       // Invoke callback before the inclusions
       callbackFctStart(data.value,textStatus,xhr);
     }
+    
+    // Do we have inline JS?
+    var aInlineJSEval;
+    if(data.inlinejs){
+      // Include inline JS
+      aInlineJSEval = function() { $.globalEval(data.inlinejs); }
+    }
+
     if(data.externaljs){
       // Include external JS elements
-      var left = data.externaljs.length;
-      for(var js in data.externaljs){
-        $.cachedScript (data.externaljs[js]).always(function() { 
-          // One item less
-          left--; 
-        });
-      }
-      var timeout=100;
-      var poll = function(){
-        setTimeout(function (){
-          if (left > 0 && --timeout > 0) 
-            poll();
-        }, 100); 
-      };
-      poll ();
+      if (aInlineJSEval) {
+        // external JS and inline JS is present
+        // => synchronize them so that the inline JS is only evaluated after 
+        //    all external JS are loaded
+        var left = data.externaljs.length;
+        for(var js in data.externaljs){
+          $.cachedScript (data.externaljs[js]).always(function() { 
+            // One item less
+            left--; 
+          });
+        }
+        
+        // synchronize via setTimeout (timeout = 100*50ms = 5secs)
+        var timeout=100;
+        var poll = function(){
+          setTimeout(function (){
+            if (left > 0) {
+              // Still files left to load
+              if (--timeout > 0) poll();
+            }
+            else {
+              // All files loaded - eval inline JS
+              aInlineJSEval();
+            }  
+          }, 50); 
+        };
+        poll ();
+      } else {
+        // Only external JS present
+        // ==> no need to synchronize
+        for(var js in data.externaljs){
+          $.cachedScript (data.externaljs[js]);
+        }
+      }  
     }
+    else{
+      // No external JS - Maybe inline JS?
+      if (aInlineJSEval)
+        aInlineJSEval();
+    }
+    
     if(data.externalcss){
       // Include external CSS elements
       var firstcss=document.getElementsByTagName('link')[0];
@@ -138,10 +171,6 @@ function jqueryAjaxSuccessHandler(data,textStatus,xhr,callbackFctStart,callbackF
         cssNode.title='dynamicallyLoadedCSS';
         firstcss.parentNode.insertBefore(cssNode,firstcss);
       }
-    }
-    if(data.inlinejs){
-      // Include inline JS
-      $.globalEval(data.inlinejs);
     }
     if (callbackFctEnd) {
       // Invoke callback after the inclusions
