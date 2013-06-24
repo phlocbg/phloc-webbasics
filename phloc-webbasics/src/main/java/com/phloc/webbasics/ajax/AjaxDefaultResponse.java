@@ -58,6 +58,8 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   public static final String PROPERTY_INLINE_JS = "inlinejs";
   /** Error message property - only in case of error */
   public static final String PROPERTY_ERRORMESSAGE = "errormessage";
+  /** Default property for HTML content */
+  public static final String PROPERTY_HTML = "html";
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
@@ -184,7 +186,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   {
     final JSONObject aObj = new JSONObject ();
     if (aNode != null)
-      aObj.setStringProperty ("html", HCSettings.getAsHTMLStringWithoutNamespaces (aNode));
+      aObj.setStringProperty (PROPERTY_HTML, HCSettings.getAsHTMLStringWithoutNamespaces (aNode));
     return createSuccess (aObj);
   }
 
