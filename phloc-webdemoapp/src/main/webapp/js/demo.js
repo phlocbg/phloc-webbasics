@@ -32,6 +32,6 @@ DemoAppClass.prototype = {
       }
     });
   }
-}
+};
 
 var DemoApp = window.DemoApp = new DemoAppClass();
