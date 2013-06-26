@@ -44,7 +44,6 @@ package php.java.bridge;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
-import java.io.OutputStream;
 import java.net.SocketException;
 
 final class Parser
@@ -98,7 +97,7 @@ final class Parser
     }
   }
 
-  short initOptions (final InputStream in, final OutputStream out) throws IOException
+  short initOptions (final InputStream in) throws IOException
   {
     if ((clen = read (in)) > 0)
     {

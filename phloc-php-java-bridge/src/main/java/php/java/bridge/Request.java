@@ -279,7 +279,7 @@ public final class Request implements IDocHandler
    */
   public boolean init (final InputStream in, final OutputStream out) throws IOException
   {
-    switch (parser.initOptions (in, out))
+    switch (parser.initOptions (in))
     {
       case Parser.PING:
         bridge.logDebug ("PING - PONG - Closing Request");

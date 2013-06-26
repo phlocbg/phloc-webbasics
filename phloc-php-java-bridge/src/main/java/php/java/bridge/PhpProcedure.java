@@ -113,7 +113,7 @@ public final class PhpProcedure implements InvocationHandler
     return createProxy (proc.bridge, proc.name, proc.names, interfaces, proc.object);
   }
 
-  private Object invoke (final Object proxy, final String method, final Class <?> returnType, final Object [] args) throws Throwable
+  private Object invoke (final String method, final Class <?> returnType, final Object [] args) throws Throwable
   {
     final JavaBridge bridge = this.bridge.getBridge ();
     if (bridge.logLevel > 3)
@@ -159,7 +159,7 @@ public final class PhpProcedure implements InvocationHandler
   {
     checkPhpContinuation ();
 
-    return invoke (proxy, method, Object.class, args);
+    return invoke (method, Object.class, args);
   }
 
   /** {@inheritDoc} */
@@ -167,7 +167,7 @@ public final class PhpProcedure implements InvocationHandler
   {
     checkPhpContinuation ();
 
-    return invoke (proxy, method.getName (), method.getReturnType (), args);
+    return invoke (method.getName (), method.getReturnType (), args);
   }
 
   static long unwrap (final Object ob)
