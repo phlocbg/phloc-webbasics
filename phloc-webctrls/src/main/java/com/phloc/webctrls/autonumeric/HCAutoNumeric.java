@@ -331,9 +331,27 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public JSInvocation autoNumericSet (final int nValue)
+  {
+    return autoNumericSet ().arg (nValue);
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericSet (@Nonnull final IJSExpression aExpr)
+  {
+    return autoNumericSet ().arg (aExpr);
+  }
+
+  @Nonnull
   public JSInvocation autoNumericGet ()
   {
     return invoke ().arg ("get");
+  }
+
+  @Nonnull
+  public static JSInvocation autoNumericGet (@Nonnull final IJSExpression aExpr)
+  {
+    return invoke (aExpr).arg ("get");
   }
 
   @Nonnull
