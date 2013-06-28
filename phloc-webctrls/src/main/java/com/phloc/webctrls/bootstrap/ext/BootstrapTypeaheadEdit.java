@@ -17,6 +17,8 @@
  */
 package com.phloc.webctrls.bootstrap.ext;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -33,6 +35,7 @@ import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.form.RequestField;
+import com.phloc.webctrls.bootstrap.EBootstrapText;
 
 public class BootstrapTypeaheadEdit implements IHCNodeBuilder
 {
@@ -43,7 +46,8 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
 
   public BootstrapTypeaheadEdit (@Nonnull final RequestField aRFEdit,
                                  @Nonnull final RequestField aRFHidden,
-                                 @Nonnull final ISimpleURL aAjaxInvocationURL)
+                                 @Nonnull final ISimpleURL aAjaxInvocationURL,
+                                 @Nonnull final Locale aDisplayLocale)
   {
     if (aRFEdit == null)
       throw new NullPointerException ("RequestFieldEdit");
@@ -52,7 +56,9 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
     if (aAjaxInvocationURL == null)
       throw new NullPointerException ("AjaxInvocationURL");
 
-    m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true).setID (GlobalIDFactory.getNewStringID ());
+    m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true)
+                                  .setID (GlobalIDFactory.getNewStringID ())
+                                  .setPlaceholder (EBootstrapText.ENTER_SEARCH_STRING.getDisplayText (aDisplayLocale));
 
     m_aRFHidden = aRFHidden;
     m_sHiddenFieldID = GlobalIDFactory.getNewStringID ();
@@ -61,7 +67,7 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
     final JSVar aID = aIDCallback.param ("id");
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
-    aIDCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val ().arg (aID).change ());
+    aIDCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aID).change ());
     m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit.getID ()),
                                                    aIDCallback,
                                                    aAjaxInvocationURL);
