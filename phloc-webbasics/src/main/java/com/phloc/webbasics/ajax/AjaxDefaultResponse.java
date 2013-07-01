@@ -25,6 +25,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -43,9 +46,7 @@ import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 @Immutable
-public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements
-                                                                                     ISuccessIndicator,
-                                                                                     IAjaxResponse
+public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements ISuccessIndicator, IAjaxResponse
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
@@ -67,6 +68,7 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   /** Default property for HTML content */
   public static final String PROPERTY_HTML = "html";
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AjaxDefaultResponse.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
@@ -149,11 +151,14 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     }
   }
 
+  @Nullable
   public static IURIToURLConverter getDefaultURIToURLConverter ()
   {
     s_aRWLock.readLock ().lock ();
     try
     {
+      if (s_aConverter == null)
+        s_aLogger.warn ("No default URI to URL converter is set. Please use AjaxDefaultResponse.setDefaultURIToURLConverter(IURIToURLConverter).");
       return s_aConverter;
     }
     finally
