@@ -19,9 +19,14 @@ package com.phloc.webbasics.app.html;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +49,27 @@ import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.html.resource.js.JSFilenameHelper;
 import com.phloc.webbasics.app.LinkUtils;
 
+/**
+ * This class keeps all the global JS files that are read from configuration.
+ * 
+ * @author Philip Helger
+ */
+@ThreadSafe
 public class JSFiles
 {
-  public static final class Item
+  /**
+   * This class represents a single JS item to be included.
+   * 
+   * @author Philip Helger
+   */
+  @NotThreadSafe
+  public static final class JSItem
   {
     private final String m_sCondComment;
     private final String m_sPath;
     private final SimpleURL m_aURL;
 
-    public Item (@Nullable final String sCondComment, @Nonnull @Nonempty final String sPath)
+    public JSItem (@Nullable final String sCondComment, @Nonnull @Nonempty final String sPath)
     {
       if (StringHelper.hasNoText (sPath))
         throw new IllegalArgumentException ("path");
@@ -67,6 +84,11 @@ public class JSFiles
       return m_sCondComment;
     }
 
+    /**
+     * @return The path to the JS item. In debug mode, the full path is used,
+     *         otherwise the minified JS path is used. Neither <code>null</code>
+     *         nor empty.
+     */
     @Nonnull
     @Nonempty
     public String getPath ()
@@ -80,7 +102,7 @@ public class JSFiles
       return m_aURL;
     }
 
-    @Nullable
+    @Nonnull
     public IHCNode getAsNode ()
     {
       final HCScriptFile aScript = HCScriptFile.create (m_aURL);
@@ -92,7 +114,9 @@ public class JSFiles
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (JSFiles.class);
 
-  private final List <Item> m_aItems = new ArrayList <Item> ();
+  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("m_aRWLock")
+  private final List <JSItem> m_aItems = new ArrayList <JSItem> ();
 
   public JSFiles (@Nonnull final IReadableResource aFile)
   {
@@ -108,7 +132,7 @@ public class JSFiles
         if (XMLListHandler.readList (eRoot, aAllJSFiles).isFailure ())
           s_aLogger.error ("Failed to read " + aFile.getPath ());
         for (final String sJS : aAllJSFiles)
-          m_aItems.add (new Item (null, sJS));
+          addGlobalItem (null, sJS);
       }
       else
       {
@@ -122,16 +146,40 @@ public class JSFiles
             s_aLogger.error ("Found JS item without a path in " + aFile.getPath ());
             continue;
           }
-          m_aItems.add (new Item (sCondComment, sPath));
+          addGlobalItem (sCondComment, sPath);
         }
       }
     }
   }
 
   @Nonnull
-  @ReturnsMutableCopy
-  public List <Item> getAllItems ()
+  public JSFiles addGlobalItem (@Nullable final String sCondComment, @Nonnull @Nonempty final String sPath)
   {
-    return ContainerHelper.newList (m_aItems);
+    final JSItem aItem = new JSItem (sCondComment, sPath);
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aItems.add (aItem);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <JSItem> getAllItems ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newList (m_aItems);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 }

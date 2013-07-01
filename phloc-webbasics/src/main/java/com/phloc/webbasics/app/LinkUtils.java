@@ -28,7 +28,11 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.IRequestManager;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
@@ -42,6 +46,18 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 @Immutable
 public final class LinkUtils
 {
+  /**
+   * The default name of the stream servlet. If this is different in you
+   * application you may not use the methods that refer to this path!
+   */
+  public static final String DEFAULT_STREAM_SERVLET_NAME = "stream";
+
+  /**
+   * The default path to the stream servlet. If this is different in you
+   * application you may not use the methods that refer to this path!
+   */
+  public static final String DEFAULT_STREAM_SERVLET_PATH = "/" + DEFAULT_STREAM_SERVLET_NAME;
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (LinkUtils.class);
 
   private LinkUtils ()
@@ -69,13 +85,17 @@ public final class LinkUtils
    * href has no protocol yet.
    * 
    * @param sHRef
-   *        The href to be extended.
+   *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
-   *         <code>/webapp-context/<i>href</i></code> otherwise.
+   *         <code>/webapp-context/<i>href</i></code> otherwise. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public static String getURIWithContext (@Nonnull final String sHRef)
   {
+    if (sHRef == null)
+      throw new NullPointerException ("HRef");
+
     // If known protocol, keep it
     if (URLProtocolRegistry.hasKnownProtocol (sHRef))
       return sHRef;
@@ -88,9 +108,10 @@ public final class LinkUtils
    * href has no protocol yet.
    * 
    * @param sHRef
-   *        The href to be extended.
+   *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
-   *         <code>/webapp-context/<i>href</i></code> otherwise.
+   *         <code>/webapp-context/<i>href</i></code> otherwise. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public static SimpleURL getURLWithContext (@Nonnull final String sHRef)
@@ -103,11 +124,12 @@ public final class LinkUtils
    * href has no protocol yet.
    * 
    * @param sHRef
-   *        The href to be extended.
+   *        The href to be extended. May not be <code>null</code>.
    * @param aParams
-   *        optional parameter map
+   *        Optional parameter map. May be <code>null</code>.
    * @return Either the original href if already absolute or
-   *         <code>/webapp-context/<i>href</i></code> otherwise.
+   *         <code>/webapp-context/<i>href</i></code> otherwise. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public static SimpleURL getURLWithContext (@Nonnull final String sHRef, @Nullable final Map <String, String> aParams)
@@ -120,10 +142,10 @@ public final class LinkUtils
    * passed href has no protocol yet.
    * 
    * @param sHRef
-   *        The href to be extended.
+   *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
    *         <code>http://servername:8123/webapp-context/<i>href</i></code>
-   *         otherwise.
+   *         otherwise. Never <code>null</code>.
    */
   @Nonnull
   public static String getURIWithServerAndContext (@Nonnull final String sHRef)
@@ -180,9 +202,14 @@ public final class LinkUtils
   {
     if (sMenuItemID == null)
       throw new NullPointerException ("menu item id");
+
     return new SimpleURL ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
   }
 
+  /**
+   * @return A link to the start page. Never <code>null</code>. E.g.
+   *         <code>/</code> or <code>/context</code>.
+   */
   @Nonnull
   public static SimpleURL getHomeLink ()
   {
@@ -190,24 +217,75 @@ public final class LinkUtils
     return new SimpleURL (sContextPath.length () == 0 ? "/" : sContextPath);
   }
 
+  /**
+   * @return A non-<code>null</code> URL to the current page, without any
+   *         parameters. Never <code>null</code>.
+   */
   @Nonnull
   public static SimpleURL getSelfHref ()
   {
     return getSelfHref (null);
   }
 
+  /**
+   * Get the URL to the current page with the provided set of parameter.
+   * 
+   * @param aParams
+   *        The optional request parameters to be used. May be <code>null</code>
+   *        or empty.
+   * @return The non-<code>null</code> URL to the current page (selected menu
+   *         item) with the passed parameters.
+   * @see #getLinkToMenuItem(String)
+   */
   @Nonnull
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    return getLinkToMenuItem (ApplicationRequestManager.getInstance ().getRequestMenuItemID ()).addAll (aParams);
+    final String sSelectedMenuItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
+    return getLinkToMenuItem (sSelectedMenuItemID).addAll (aParams);
   }
 
+  /**
+   * @return A map with the default parameters handled by the application
+   *         framework. This currently consists of the selected menu item ID and
+   *         the current display locale. Never <code>null</code> nor empty.
+   */
   @Nonnull
+  @ReturnsMutableCopy
   public static SMap getDefaultParams ()
   {
     return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM,
                             ApplicationRequestManager.getInstance ().getRequestMenuItemID ())
                       .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
                             ApplicationRequestManager.getInstance ().getRequestDisplayLocale ().toString ());
+  }
+
+  /**
+   * Get the default URL to stream the passed URL. It is assumed that the
+   * servlet is located under the path "/stream". Because of the logic of the
+   * stream servlet, no parameter are assumed.
+   * 
+   * @param sURL
+   *        The URL to be streamed. If it does not start with a slash ("/") one
+   *        is prepended automatically. If the URL already has a protocol, it is
+   *        returned unchanged. May neither be <code>null</code> nor empty.
+   * @return The URL incl. the context to be stream. E.g.
+   *         <code>/<i>webapp-context</i>/stream/<i>URL</i></code>.
+   * @see #DEFAULT_STREAM_SERVLET_PATH
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static ISimpleURL getStreamURL (@Nonnull @Nonempty final String sURL)
+  {
+    if (StringHelper.hasNoText (sURL))
+      throw new IllegalArgumentException ("URL");
+
+    // If the URL is absolute, use it
+    if (URLProtocolRegistry.hasKnownProtocol (sURL))
+      return new ReadonlySimpleURL (sURL);
+
+    String sPrefix = DEFAULT_STREAM_SERVLET_PATH;
+    if (!StringHelper.startsWith (sURL, '/'))
+      sPrefix += '/';
+    return getURLWithContext (sPrefix + sURL);
   }
 }

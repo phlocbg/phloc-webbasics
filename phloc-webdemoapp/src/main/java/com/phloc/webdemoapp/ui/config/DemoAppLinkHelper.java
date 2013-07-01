@@ -23,11 +23,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.commons.url.ReadonlySimpleURL;
-import com.phloc.commons.url.URLProtocolRegistry;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webdemoapp.servlet.DemoAppConfigActionServlet;
-import com.phloc.webdemoapp.servlet.DemoAppStreamServlet;
 
 /**
  * Several helper methods for consistently creating links.
@@ -55,12 +52,7 @@ public final class DemoAppLinkHelper
   @Nonnull
   public static final ISimpleURL getStreamURL (@Nonnull final String sURL)
   {
-    if (URLProtocolRegistry.hasKnownProtocol (sURL))
-      return new ReadonlySimpleURL (sURL);
-
-    String sPrefix = DemoAppStreamServlet.SERVLET_DEFAULT_PATH;
-    if (!sURL.startsWith ("/"))
-      sPrefix += '/';
-    return LinkUtils.getURLWithContext (sPrefix + sURL);
+    // We're using the default path!
+    return LinkUtils.getStreamURL (sURL);
   }
 }

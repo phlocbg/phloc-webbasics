@@ -77,7 +77,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @Nonnull
   @ReturnsMutableCopy
   @OverrideOnDemand
-  protected List <CSSFiles.Item> getAllCSSItems ()
+  protected List <CSSFiles.CSSItem> getAllCSSItems ()
   {
     return getHTMLConfigMgr ().getAllCSSItems ();
   }
@@ -85,7 +85,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
   @Nonnull
   @ReturnsMutableCopy
   @OverrideOnDemand
-  protected List <JSFiles.Item> getAllJSItems ()
+  protected List <JSFiles.JSItem> getAllJSItems ()
   {
     return getHTMLConfigMgr ().getAllJSItems ();
   }
@@ -117,11 +117,11 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
       aHead.addMetaElement (new MetaElement (aEntry.getKey (), aEntry.getValue ()));
 
     // Add configured CSS
-    for (final CSSFiles.Item aCSSItem : getAllCSSItems ())
+    for (final CSSFiles.CSSItem aCSSItem : getAllCSSItems ())
       aHead.addCSS (aCSSItem.getAsNode ());
 
     // Add all configured JS
-    for (final JSFiles.Item aJSFile : getAllJSItems ())
+    for (final JSFiles.JSItem aJSFile : getAllJSItems ())
       aHead.addJS (aJSFile.getAsNode ());
   }
 

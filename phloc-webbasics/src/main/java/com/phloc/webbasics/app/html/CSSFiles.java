@@ -22,9 +22,14 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,23 +54,30 @@ import com.phloc.html.hc.html.HCLink;
 import com.phloc.html.hc.impl.HCConditionalCommentNode;
 import com.phloc.webbasics.app.LinkUtils;
 
+/**
+ * This class keeps all the global CSS files that are read from configuration.
+ * 
+ * @author Philip Helger
+ */
+@ThreadSafe
 public class CSSFiles
 {
-  public static final class Item
+  /**
+   * This class represents a single CSS item to be included.
+   * 
+   * @author Philip Helger
+   */
+  @NotThreadSafe
+  public static final class CSSItem
   {
     private final String m_sCondComment;
     private final String m_sPath;
     private final SimpleURL m_aURL;
     private final List <ECSSMedium> m_aMedia;
 
-    public Item (@Nonnull @Nonempty final String sPath)
-    {
-      this (null, sPath, null);
-    }
-
-    public Item (@Nullable final String sCondComment,
-                 @Nonnull @Nonempty final String sPath,
-                 @Nullable final Collection <ECSSMedium> aMedia)
+    public CSSItem (@Nullable final String sCondComment,
+                    @Nonnull @Nonempty final String sPath,
+                    @Nullable final Collection <ECSSMedium> aMedia)
     {
       if (StringHelper.hasNoText (sPath))
         throw new IllegalArgumentException ("path");
@@ -81,6 +93,11 @@ public class CSSFiles
       return m_sCondComment;
     }
 
+    /**
+     * @return The path to the CSS item. In debug mode, the full path is used,
+     *         otherwise the minified CSS path is used. Neither
+     *         <code>null</code> nor empty.
+     */
     @Nonnull
     @Nonempty
     public String getPath ()
@@ -95,18 +112,20 @@ public class CSSFiles
     }
 
     @Nonnull
+    @ReturnsMutableCopy
     public List <ECSSMedium> getMedia ()
     {
       return ContainerHelper.newList (m_aMedia);
     }
 
-    @Nullable
+    @Nonnull
     public IHCNode getAsNode ()
     {
       final HCLink aLink = HCLink.createCSSLink (m_aURL);
       if (m_aMedia != null)
         for (final ECSSMedium eMedium : m_aMedia)
           aLink.addMedium (eMedium);
+
       if (StringHelper.hasText (m_sCondComment))
         return new HCConditionalCommentNode (m_sCondComment, aLink);
       return aLink;
@@ -115,7 +134,9 @@ public class CSSFiles
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSFiles.class);
 
-  private final List <Item> m_aItems = new ArrayList <Item> ();
+  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("m_aRWLock")
+  private final List <CSSItem> m_aItems = new ArrayList <CSSItem> ();
 
   public CSSFiles (@Nonnull final IReadableResource aFile)
   {
@@ -131,7 +152,7 @@ public class CSSFiles
         if (XMLListHandler.readList (eRoot, aAllCSSFiles).isFailure ())
           s_aLogger.error ("Failed to read " + aFile.getPath ());
         for (final String sCSS : aAllCSSFiles)
-          m_aItems.add (new Item (sCSS));
+          addGlobalItem (null, sCSS, null);
       }
       else
       {
@@ -160,21 +181,47 @@ public class CSSFiles
                                 aFile.getPath () +
                                 " has an invalid medium '" +
                                 sMedium +
-                                "'");
+                                "' - ignoring");
                 continue;
               }
               aMediaList.add (eMedium);
             }
-          m_aItems.add (new Item (sCondComment, sPath, aMediaList));
+          addGlobalItem (sCondComment, sPath, aMediaList);
         }
       }
     }
   }
 
   @Nonnull
-  @ReturnsMutableCopy
-  public List <Item> getAllItems ()
+  public CSSFiles addGlobalItem (@Nullable final String sCondComment,
+                                 @Nonnull @Nonempty final String sPath,
+                                 @Nullable final Collection <ECSSMedium> aMedia)
   {
-    return ContainerHelper.newList (m_aItems);
+    final CSSItem aItem = new CSSItem (sCondComment, sPath, aMedia);
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aItems.add (aItem);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    return this;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSItem> getAllItems ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newList (m_aItems);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 }

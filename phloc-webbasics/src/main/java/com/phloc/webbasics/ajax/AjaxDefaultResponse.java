@@ -25,9 +25,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.Immutable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -44,9 +41,12 @@ import com.phloc.json.impl.JSONObject;
 import com.phloc.webbasics.app.html.IURIToURLConverter;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
+import com.phloc.webbasics.app.html.StreamURIToURLConverter;
 
 @Immutable
-public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements ISuccessIndicator, IAjaxResponse
+public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements
+                                                                                     ISuccessIndicator,
+                                                                                     IAjaxResponse
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";
@@ -68,11 +68,14 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   /** Default property for HTML content */
   public static final String PROPERTY_HTML = "html";
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AjaxDefaultResponse.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
+  /**
+   * The converter to be used from relative URIs (for CSS and JS) to absolute
+   * URLs.
+   */
   @GuardedBy ("s_aRWLock")
-  private static IURIToURLConverter s_aConverter = null;
+  private static IURIToURLConverter s_aConverter = StreamURIToURLConverter.getInstance ();
 
   private final boolean m_bSuccess;
   private final String m_sErrorMessage;
@@ -138,8 +141,11 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
       _addCSSAndJS (aConverter);
   }
 
-  public static void setDefaultURIToURLConverter (@Nullable final IURIToURLConverter aConverter)
+  public static void setDefaultURIToURLConverter (@Nonnull final IURIToURLConverter aConverter)
   {
+    if (aConverter == null)
+      throw new NullPointerException ("converter");
+
     s_aRWLock.writeLock ().lock ();
     try
     {
@@ -151,14 +157,12 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
     }
   }
 
-  @Nullable
+  @Nonnull
   public static IURIToURLConverter getDefaultURIToURLConverter ()
   {
     s_aRWLock.readLock ().lock ();
     try
     {
-      if (s_aConverter == null)
-        s_aLogger.warn ("No default URI to URL converter is set. Please use AjaxDefaultResponse.setDefaultURIToURLConverter(IURIToURLConverter).");
       return s_aConverter;
     }
     finally
