@@ -35,6 +35,7 @@ public class BootstrapButton_Link extends HCA
 {
   private EBootstrapButtonType m_eType = EBootstrapButtonType.LINK;
   private EBootstrapButtonSize m_eSize;
+  private boolean m_bDisabled = false;
 
   private void _init ()
   {
@@ -81,13 +82,28 @@ public class BootstrapButton_Link extends HCA
     return this;
   }
 
+  @Nonnull
+  public boolean isDisabled ()
+  {
+    return m_bDisabled;
+  }
+
+  @Nonnull
+  public BootstrapButton_Link setDisabled (final boolean bDisabled)
+  {
+    m_bDisabled = bDisabled;
+    return this;
+  }
+
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
   protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.internalBeforeConvertToNode (aConversionSettings);
-    addClasses (m_eType, m_eSize);
+    addClasses (getButtonType (), getSize ());
+    if (isDisabled ())
+      addClass (CBootstrapCSS.DISABLED);
   }
 
   @Nonnull

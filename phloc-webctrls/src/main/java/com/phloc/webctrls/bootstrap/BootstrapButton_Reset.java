@@ -94,17 +94,19 @@ public class BootstrapButton_Reset extends HCButton_Reset
   protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.internalBeforeConvertToNode (aConversionSettings);
-    addClasses (m_eType, m_eSize);
-    if (m_aIcon != null)
+    addClasses (getButtonType (), getSize ());
+    if (getIcon () != null)
     {
       final boolean bAddSeparator = hasChildren ();
-      addChild (0, m_aIcon.getAsNode ());
+      addChild (0, getIcon ().getAsNode ());
       if (bAddSeparator)
       {
         // Add spacer
         addChild (1, new HCTextNode (" "));
       }
     }
+    if (isDisabled ())
+      addClass (CBootstrapCSS.DISABLED);
   }
 
   @Nonnull

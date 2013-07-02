@@ -37,6 +37,7 @@ public class BootstrapButton extends HCA_JS
   private EBootstrapButtonType m_eType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eSize;
   private IIcon m_aIcon;
+  private boolean m_bDisabled = false;
 
   private void _init ()
   {
@@ -102,25 +103,40 @@ public class BootstrapButton extends HCA_JS
     return this;
   }
 
+  @Nonnull
+  public boolean isDisabled ()
+  {
+    return m_bDisabled;
+  }
+
+  @Nonnull
+  public BootstrapButton setDisabled (final boolean bDisabled)
+  {
+    m_bDisabled = bDisabled;
+    return this;
+  }
+
   @Override
   @OverrideOnDemand
   @OverridingMethodsMustInvokeSuper
   protected void internalBeforeConvertToNode (@Nonnull final IHCConversionSettingsToNode aConversionSettings)
   {
     super.internalBeforeConvertToNode (aConversionSettings);
-    addClasses (m_eType, m_eSize);
+    addClasses (getButtonType (), getSize ());
 
     // apply icon
-    if (m_aIcon != null)
+    if (getIcon () != null)
     {
       final boolean bAddSeparator = hasChildren ();
-      addChild (0, m_aIcon.getAsNode ());
+      addChild (0, getIcon ().getAsNode ());
       if (bAddSeparator)
       {
         // Add spacer
         addChild (1, new HCTextNode (" "));
       }
     }
+    if (isDisabled ())
+      addClass (CBootstrapCSS.DISABLED);
   }
 
   @Nonnull
