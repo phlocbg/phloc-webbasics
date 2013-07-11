@@ -42,6 +42,7 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
   private final HCEdit m_aEdit;
   private final RequestField m_aRFHidden;
   private final String m_sHiddenFieldID;
+  private final JSAnonymousFunction m_aSelectionCallback;
   private final BootstrapPhlocTypeaheadScript m_aScript;
 
   public BootstrapTypeaheadEdit (@Nonnull final RequestField aRFEdit,
@@ -63,13 +64,13 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
     m_aRFHidden = aRFHidden;
     m_sHiddenFieldID = GlobalIDFactory.getNewStringID ();
 
-    final JSAnonymousFunction aIDCallback = new JSAnonymousFunction ();
-    final JSVar aID = aIDCallback.param ("id");
+    m_aSelectionCallback = new JSAnonymousFunction ();
+    final JSVar aID = m_aSelectionCallback.param ("id");
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
-    aIDCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aID).change ());
+    m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aID).change ());
     m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit.getID ()),
-                                                   aIDCallback,
+                                                   m_aSelectionCallback,
                                                    aAjaxInvocationURL);
   }
 
@@ -93,6 +94,18 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
   public String getHiddenFieldID ()
   {
     return m_sHiddenFieldID;
+  }
+
+  /**
+   * @return The JS callback function that is invoked, when an item is selected.
+   *         Never <code>null</code>. Do not modify the original body content,
+   *         as this is required to be present for the correct working of this
+   *         control!
+   */
+  @Nonnull
+  public JSAnonymousFunction getJSSelectionCallback ()
+  {
+    return m_aSelectionCallback;
   }
 
   /**
