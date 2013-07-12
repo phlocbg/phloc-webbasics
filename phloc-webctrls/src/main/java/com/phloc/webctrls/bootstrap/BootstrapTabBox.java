@@ -361,7 +361,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
       if (aTab.isDisabled ())
       {
         aToggleLI.addClass (CBootstrapCSS.DISABLED);
-        aToggleLI.addChild (aTab.getLabel ());
+        aToggleLI.addChild (new HCA (aTab.getLinkURL ()).addChild (aTab.getLabel ()));
       }
       else
       {
