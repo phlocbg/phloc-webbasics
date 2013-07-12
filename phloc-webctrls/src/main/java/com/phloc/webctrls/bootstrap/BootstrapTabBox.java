@@ -59,8 +59,12 @@ public class BootstrapTabBox implements IHCNodeBuilder
     private final boolean m_bHasGeneratedID;
     private IHCNode m_aLabel;
     private IHCNode m_aContent;
+    private boolean m_bDisabled;
 
-    public Tab (@Nullable final String sID, @Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
+    public Tab (@Nullable final String sID,
+                @Nullable final IHCNode aLabel,
+                @Nullable final IHCNode aContent,
+                final boolean bDisabled)
     {
       if (StringHelper.hasText (sID))
       {
@@ -74,6 +78,7 @@ public class BootstrapTabBox implements IHCNodeBuilder
       }
       m_aLabel = aLabel;
       m_aContent = aContent;
+      m_bDisabled = bDisabled;
     }
 
     @Nonnull
@@ -120,6 +125,18 @@ public class BootstrapTabBox implements IHCNodeBuilder
       return this;
     }
 
+    public boolean isDisabled ()
+    {
+      return m_bDisabled;
+    }
+
+    @Nonnull
+    public Tab setDisabled (final boolean bDisabled)
+    {
+      m_bDisabled = bDisabled;
+      return this;
+    }
+
     @Override
     public String toString ()
     {
@@ -127,12 +144,15 @@ public class BootstrapTabBox implements IHCNodeBuilder
                                          .append ("generatedID", m_bHasGeneratedID)
                                          .append ("label", m_aLabel)
                                          .append ("content", m_aContent)
+                                         .append ("disabled", m_bDisabled)
                                          .toString ();
     }
   }
 
   /** By default a tab is not active */
   public static final boolean DEFAULT_ACTIVE = false;
+  /** By default a tab is not disabled */
+  public static final boolean DEFAULT_DISABLED = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (BootstrapTabBox.class);
 
@@ -188,6 +208,15 @@ public class BootstrapTabBox implements IHCNodeBuilder
   }
 
   @Nonnull
+  public Tab addTab (@Nullable final String sLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive,
+                     final boolean bDisabled)
+  {
+    return addTab (null, new HCTextNode (sLabel), aContent, bActive, bDisabled);
+  }
+
+  @Nonnull
   public Tab addTab (@Nullable final String sID,
                      @Nullable final String sLabel,
                      @Nullable final IHCNode aContent,
@@ -209,17 +238,32 @@ public class BootstrapTabBox implements IHCNodeBuilder
   }
 
   @Nonnull
+  public Tab addTab (@Nullable final IHCNode aLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive,
+                     final boolean bDisabled)
+  {
+    return addTab (null, aLabel, aContent, bActive, bDisabled);
+  }
+
+  @Nonnull
   public Tab addTab (@Nullable final String sID,
                      @Nullable final IHCNode aLabel,
                      @Nullable final IHCNode aContent,
                      final boolean bActive)
   {
-    final Tab aTab = new Tab (sID, aLabel, aContent);
-    // Tab ID may be generated, if null was provided
-    final String sTabID = aTab.getID ();
-    m_aTabs.put (sTabID, aTab);
-    if (bActive)
-      m_sActiveTabID = sTabID;
+    return addTab (sID, aLabel, aContent, bActive, DEFAULT_DISABLED);
+  }
+
+  @Nonnull
+  public Tab addTab (@Nullable final String sID,
+                     @Nullable final IHCNode aLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive,
+                     final boolean bDisabled)
+  {
+    final Tab aTab = new Tab (sID, aLabel, aContent, bDisabled);
+    addTab (aTab, bActive);
     return aTab;
   }
 
@@ -314,6 +358,8 @@ public class BootstrapTabBox implements IHCNodeBuilder
       final HCLI aToggleLI = aTabs.addItem ();
       if (bIsActiveTab)
         aToggleLI.addClass (CBootstrapCSS.ACTIVE);
+      if (aTab.isDisabled ())
+        aToggleLI.addClass (CBootstrapCSS.DISABLED);
       aToggleLI.addChild (new HCA (aTab.getLinkURL ()).setCustomAttr ("data-toggle", "tab").addChild (aTab.getLabel ()));
 
       // content
