@@ -30,7 +30,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.maven:maven-repository-metadata:2.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.maven:maven-artifact:2.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.maven.wagon:wagon-provider-api:1.0-alpha-5" level="project" />
-    <orderEntry type="library" name="Maven: com.google.javascript:closure-compiler:v20130411" level="project" />
+    <orderEntry type="library" name="Maven: com.google.javascript:closure-compiler:v20130603" level="project" />
     <orderEntry type="library" name="Maven: args4j:args4j:2.0.16" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:14.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
