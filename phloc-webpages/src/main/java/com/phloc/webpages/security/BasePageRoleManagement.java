@@ -25,6 +25,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.errorhandling.FormErrors;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.role.IRole;
@@ -53,7 +54,6 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;

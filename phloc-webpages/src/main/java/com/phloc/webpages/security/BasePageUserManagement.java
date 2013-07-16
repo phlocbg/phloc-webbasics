@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.errorhandling.FormErrors;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.user.IUser;
@@ -66,7 +67,6 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
-import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;

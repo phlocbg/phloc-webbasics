@@ -20,11 +20,11 @@ package com.phloc.webctrls.bootstrap;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.appbasics.errorhandling.EFormErrorLevel;
 import com.phloc.commons.annotations.Since;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.webbasics.form.validation.EFormErrorLevel;
 
 // ESCA-JAVA0116:
 /**

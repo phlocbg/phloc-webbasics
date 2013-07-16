@@ -20,6 +20,7 @@ package com.phloc.webpages;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.errorhandling.FormErrors;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
@@ -34,7 +35,6 @@ import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
-import com.phloc.webbasics.form.validation.FormErrors;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webpages.form.JSFormHelper;
 
