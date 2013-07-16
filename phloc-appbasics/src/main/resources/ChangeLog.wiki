@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>7/16/13</td><td colspan="4">_Release *2.2.2*_</td></tr>
+<tr><td>7/16/13</td><td>add</td><td>api</td><td></td><td>Added FormErrors etc. from [http://code.google.com/p/phloc-webbasics phloc-webbasics]</td></tr>
 <tr border="1"><td>6/4/13</td><td colspan="4">_Release *2.2.1*_</td></tr>
 <tr><td>6/4/13</td><td>add</td><td>api</td><td></td><td>Extended IMenuTree API</td></tr>
 <tr><td>6/4/13</td><td>change</td><td>api</td><td></td><td>Changed all custom attributes API to use Map`<`String,?`>` instead of Map`<`String,String`>`</td></tr>
