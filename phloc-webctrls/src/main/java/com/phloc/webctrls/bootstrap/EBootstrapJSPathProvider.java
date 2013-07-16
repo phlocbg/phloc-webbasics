@@ -25,8 +25,6 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EBootstrapJSPathProvider implements IJSPathProvider
 {
-  @Deprecated
-  BOOTSTRAP_231 ("bootstrap/231/js/bootstrap.js"),
   BOOTSTRAP_232 ("bootstrap/232/js/bootstrap.js"),
   BOOTSTRAP_DATATABLES ("bootstrap/datatables/bootstrap-datatables.js"),
   BOOTSTRAP_PHLOC_TYPEAHEAD ("bootstrap/bootstrap-phloc-typeahead.js");

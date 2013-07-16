@@ -30,10 +30,6 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  */
 public enum EBootstrapCSSPathProvider implements ICSSPathProvider
 {
-  @Deprecated
-  BOOTSTRAP_231 ("bootstrap/231/css/bootstrap.css"),
-  @Deprecated
-  BOOTSTRAP_RESPONSIVE_231 ("bootstrap/231/css/bootstrap-responsive.css"),
   BOOTSTRAP_232 ("bootstrap/232/css/bootstrap.css"),
   BOOTSTRAP_RESPONSIVE_232 ("bootstrap/232/css/bootstrap-responsive.css"),
   BOOTSTRAP_IE6 ("bootstrap/bootstrap-ie6.css"),
