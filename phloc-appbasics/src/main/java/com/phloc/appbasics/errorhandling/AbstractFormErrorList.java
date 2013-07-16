@@ -41,18 +41,31 @@ public abstract class AbstractFormErrorList <T extends IFormError> implements It
 {
   protected final List <T> m_aItems = new ArrayList <T> ();
 
-  public final void add (@Nonnull final T aError)
+  /**
+   * Add a new item.
+   * 
+   * @param aItem
+   *        The item to be added. May not be <code>null</code>.
+   */
+  public final void add (@Nonnull final T aItem)
   {
-    if (aError == null)
-      throw new NullPointerException ("error");
-    m_aItems.add (aError);
+    if (aItem == null)
+      throw new NullPointerException ("item");
+    m_aItems.add (aItem);
   }
 
+  /**
+   * @return <code>true</code> if no item is contained, <code>false</code> if at
+   *         least one item is contained.
+   */
   public final boolean isEmpty ()
   {
     return m_aItems.isEmpty ();
   }
 
+  /**
+   * @return The number of contained items. Always &ge; 0.
+   */
   @Nonnegative
   public final int getItemCount ()
   {
@@ -77,6 +90,10 @@ public abstract class AbstractFormErrorList <T extends IFormError> implements It
     return ret;
   }
 
+  /**
+   * @return A non-<code>null</code> list of all contained texts, independent of
+   *         the level.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> getAllItemTexts ()
@@ -87,6 +104,9 @@ public abstract class AbstractFormErrorList <T extends IFormError> implements It
     return ret;
   }
 
+  /**
+   * @return A copy of all contained items. Never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <T> getAllItems ()
@@ -94,6 +114,10 @@ public abstract class AbstractFormErrorList <T extends IFormError> implements It
     return ContainerHelper.newList (m_aItems);
   }
 
+  /**
+   * @return An {@link Iterator} over all contained items. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   public final Iterator <T> iterator ()
   {
