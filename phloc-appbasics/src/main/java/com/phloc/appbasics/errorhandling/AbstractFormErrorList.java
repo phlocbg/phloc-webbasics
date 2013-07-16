@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -50,6 +51,12 @@ public abstract class AbstractFormErrorList <T extends IFormError> implements It
   public final boolean isEmpty ()
   {
     return m_aItems.isEmpty ();
+  }
+
+  @Nonnegative
+  public final int getItemCount ()
+  {
+    return m_aItems.size ();
   }
 
   public final boolean hasErrorsOrWarnings ()

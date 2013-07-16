@@ -19,6 +19,7 @@ package com.phloc.appbasics.errorhandling;
 
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.RegEx;
@@ -209,6 +210,18 @@ public final class FormErrors
   }
 
   /**
+   * Get the total number of items for both form-global and form-field-specific
+   * items
+   * 
+   * @return The total item count. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getItemCount ()
+  {
+    return m_aFormGlobalErrs.getItemCount () + m_aFormFieldErrs.getItemCount ();
+  }
+
+  /**
    * @return <code>true</code> if form-global errors or warnings are present.
    */
   public boolean hasGlobalErrorsOrWarnings ()
@@ -263,6 +276,15 @@ public final class FormErrors
   public List <String> getAllGlobalItemTexts ()
   {
     return m_aFormGlobalErrs.getAllItemTexts ();
+  }
+
+  /**
+   * @return The number of global items. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getGlobalItemCount ()
+  {
+    return m_aFormGlobalErrs.getItemCount ();
   }
 
   public boolean hasErrorsOrWarningsForField (@Nullable final String sSearchFieldName)
@@ -349,6 +371,15 @@ public final class FormErrors
   public List <String> getAllFieldItemTexts ()
   {
     return m_aFormFieldErrs.getAllItemTexts ();
+  }
+
+  /**
+   * @return The number of form-field-specific items. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getFieldItemCount ()
+  {
+    return m_aFormFieldErrs.getItemCount ();
   }
 
   @Override
