@@ -25,8 +25,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.errorhandling.EFormErrorLevel;
-import com.phloc.appbasics.errorhandling.IFormFieldError;
-import com.phloc.appbasics.errorhandling.IFormFieldErrorList;
+import com.phloc.appbasics.errorhandling.IError;
+import com.phloc.appbasics.errorhandling.IErrorList;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -177,11 +177,11 @@ public class BootstrapTableForm extends BootstrapTable
   }
 
   public static void addControlCellErrorMessages (@Nonnull final AbstractHCCell aCell,
-                                                  @Nullable final IFormFieldErrorList aFormErrors)
+                                                  @Nullable final IErrorList aFormErrors)
   {
     if (aFormErrors != null)
-      for (final IFormFieldError aError : aFormErrors.getAllItems ())
-        aCell.addChild (new BootstrapHelpBlock ().addChild (aError.getErrorText ()));
+      for (final IError aError : aFormErrors.getAllItems ())
+        aCell.addChild (new BootstrapHelpBlock ().addChild (aError.getText ()));
   }
 
   @Nonnull
@@ -205,7 +205,7 @@ public class BootstrapTableForm extends BootstrapTable
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNodeBuilder aCtrlBuilder,
-                           @Nullable final IFormFieldErrorList aFormErrors)
+                           @Nullable final IErrorList aFormErrors)
   {
     return addItemRow (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aFormErrors);
   }
@@ -213,7 +213,7 @@ public class BootstrapTableForm extends BootstrapTable
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNode aCtrl,
-                           @Nullable final IFormFieldErrorList aFormErrors)
+                           @Nullable final IErrorList aFormErrors)
   {
     return addItemRow (aLabel, aCtrl == null ? (List <IHCNode>) null : ContainerHelper.newList (aCtrl), aFormErrors);
   }
@@ -227,7 +227,7 @@ public class BootstrapTableForm extends BootstrapTable
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
-                           @Nullable final IFormFieldErrorList aFormErrors)
+                           @Nullable final IErrorList aFormErrors)
   {
     final EFormErrorLevel eHighest = aFormErrors == null ? null : aFormErrors.getMostSevereErrorLevel ();
 
@@ -259,7 +259,7 @@ public class BootstrapTableForm extends BootstrapTable
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
                                    @Nullable final IFormNote aNote,
-                                   @Nullable final IFormFieldErrorList aFormErrors)
+                                   @Nullable final IErrorList aFormErrors)
   {
     return addItemRowWithNote (aLabel, new HCTextNode (sText), aNote, aFormErrors);
   }
@@ -292,7 +292,7 @@ public class BootstrapTableForm extends BootstrapTable
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
                                    @Nullable final IFormNote aNote,
-                                   @Nullable final IFormFieldErrorList aFormErrors)
+                                   @Nullable final IErrorList aFormErrors)
   {
     return addItemRowWithNote (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aNote, aFormErrors);
   }
@@ -301,7 +301,7 @@ public class BootstrapTableForm extends BootstrapTable
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
                                    @Nullable final IFormNote aNote,
-                                   @Nullable final IFormFieldErrorList aFormErrors)
+                                   @Nullable final IErrorList aFormErrors)
   {
     final HCRow aRow = addItemRow (aLabel, aCtrl, aFormErrors);
     aRow.addCell ().addChild (aNote);
@@ -312,7 +312,7 @@ public class BootstrapTableForm extends BootstrapTable
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
                                    @Nullable final IFormNote aNote,
-                                   @Nullable final IFormFieldErrorList aFormErrors)
+                                   @Nullable final IErrorList aFormErrors)
   {
     final HCRow aRow = addItemRow (aLabel, aCtrls, aFormErrors);
     aRow.addCell ().addChild (aNote);
