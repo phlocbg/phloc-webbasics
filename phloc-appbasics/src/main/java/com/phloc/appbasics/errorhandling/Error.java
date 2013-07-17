@@ -28,35 +28,34 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Represents an overall form error. Default implementation of
- * {@link IFormError}.
+ * Represents an overall form error. Default implementation of {@link IError}.
  * 
  * @author Philip Helger
  */
 @Immutable
-public class FormError implements IFormError
+public class Error implements IError
 {
   private final String m_sErrorID;
   private final EFormErrorLevel m_eLevel;
   private final String m_sFieldName;
   private final String m_sErrorText;
 
-  public FormError (@Nonnull final EFormErrorLevel eLevel, @Nonnull @Nonempty final String sErrorText)
+  public Error (@Nonnull final EFormErrorLevel eLevel, @Nonnull @Nonempty final String sErrorText)
   {
     this (null, eLevel, null, sErrorText);
   }
 
-  public FormError (@Nonnull final EFormErrorLevel eLevel,
-                    @Nullable final String sFieldName,
-                    @Nonnull @Nonempty final String sErrorText)
+  public Error (@Nonnull final EFormErrorLevel eLevel,
+                @Nullable final String sFieldName,
+                @Nonnull @Nonempty final String sErrorText)
   {
     this (null, eLevel, sFieldName, sErrorText);
   }
 
-  public FormError (@Nullable final String sErrorID,
-                    @Nonnull final EFormErrorLevel eLevel,
-                    @Nullable final String sFieldName,
-                    @Nonnull @Nonempty final String sErrorText)
+  public Error (@Nullable final String sErrorID,
+                @Nonnull final EFormErrorLevel eLevel,
+                @Nullable final String sFieldName,
+                @Nonnull @Nonempty final String sErrorText)
   {
     if (eLevel == null)
       throw new NullPointerException ("level");
@@ -107,9 +106,9 @@ public class FormError implements IFormError
   {
     if (o == this)
       return true;
-    if (!(o instanceof FormError))
+    if (!(o instanceof Error))
       return false;
-    final FormError rhs = (FormError) o;
+    final Error rhs = (Error) o;
     return EqualsUtils.equals (m_sErrorID, rhs.m_sErrorID) &&
            m_eLevel.equals (rhs.m_eLevel) &&
            EqualsUtils.equals (m_sFieldName, rhs.m_sFieldName) &&
@@ -137,82 +136,82 @@ public class FormError implements IFormError
   }
 
   @Nonnull
-  public static FormError createSuccess (@Nonnull @Nonempty final String sText)
+  public static Error createSuccess (@Nonnull @Nonempty final String sText)
   {
     return createSuccess (null, null, sText);
   }
 
   @Nonnull
-  public static FormError createSuccess (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  public static Error createSuccess (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
   {
     return createSuccess (null, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createSuccess (@Nullable final String sErrorID,
-                                         @Nullable final String sFieldName,
-                                         @Nonnull @Nonempty final String sText)
+  public static Error createSuccess (@Nullable final String sErrorID,
+                                     @Nullable final String sFieldName,
+                                     @Nonnull @Nonempty final String sText)
   {
-    return new FormError (sErrorID, EFormErrorLevel.SUCCESS, sFieldName, sText);
+    return new Error (sErrorID, EFormErrorLevel.SUCCESS, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createInfo (@Nonnull @Nonempty final String sText)
+  public static Error createInfo (@Nonnull @Nonempty final String sText)
   {
     return createInfo (null, null, sText);
   }
 
   @Nonnull
-  public static FormError createInfo (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  public static Error createInfo (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
   {
     return createInfo (null, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createInfo (@Nullable final String sErrorID,
-                                      @Nullable final String sFieldName,
-                                      @Nonnull @Nonempty final String sText)
+  public static Error createInfo (@Nullable final String sErrorID,
+                                  @Nullable final String sFieldName,
+                                  @Nonnull @Nonempty final String sText)
   {
-    return new FormError (sErrorID, EFormErrorLevel.INFO, sFieldName, sText);
+    return new Error (sErrorID, EFormErrorLevel.INFO, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createWarning (@Nonnull @Nonempty final String sText)
+  public static Error createWarning (@Nonnull @Nonempty final String sText)
   {
     return createWarning (null, null, sText);
   }
 
   @Nonnull
-  public static FormError createWarning (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  public static Error createWarning (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
   {
     return createWarning (null, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createWarning (@Nullable final String sErrorID,
-                                         @Nullable final String sFieldName,
-                                         @Nonnull @Nonempty final String sText)
+  public static Error createWarning (@Nullable final String sErrorID,
+                                     @Nullable final String sFieldName,
+                                     @Nonnull @Nonempty final String sText)
   {
-    return new FormError (sErrorID, EFormErrorLevel.WARN, sFieldName, sText);
+    return new Error (sErrorID, EFormErrorLevel.WARN, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createError (@Nonnull @Nonempty final String sText)
+  public static Error createError (@Nonnull @Nonempty final String sText)
   {
     return createError (null, null, sText);
   }
 
   @Nonnull
-  public static FormError createError (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  public static Error createError (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
   {
     return createError (null, sFieldName, sText);
   }
 
   @Nonnull
-  public static FormError createError (@Nullable final String sErrorID,
-                                       @Nullable final String sFieldName,
-                                       @Nonnull @Nonempty final String sText)
+  public static Error createError (@Nullable final String sErrorID,
+                                   @Nullable final String sFieldName,
+                                   @Nonnull @Nonempty final String sText)
   {
-    return new FormError (sErrorID, EFormErrorLevel.ERROR, sFieldName, sText);
+    return new Error (sErrorID, EFormErrorLevel.ERROR, sFieldName, sText);
   }
 }

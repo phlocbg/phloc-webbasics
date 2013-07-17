@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.Nonempty;
  * 
  * @author Philip Helger
  */
-public interface IFormError
+public interface IError
 {
   /**
    * @return The unique error ID. May be <code>null</code>.

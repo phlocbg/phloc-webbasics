@@ -28,43 +28,43 @@ import com.phloc.commons.mock.PhlocTestUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * Test class for class {@link FormError}.
+ * Test class for class {@link Error}.
  * 
  * @author Philip Helger
  */
-public final class FormErrorTest
+public final class ErrorTest
 {
   @Test
   @SuppressFBWarnings (value = "NP_NONNULL_PARAM_VIOLATION")
   public void testBasic ()
   {
-    final FormError aFE = new FormError (EFormErrorLevel.ERROR, "any");
+    final Error aFE = new Error (EFormErrorLevel.ERROR, "any");
     assertSame (EFormErrorLevel.ERROR, aFE.getLevel ());
     assertEquals ("any", aFE.getErrorText ());
 
-    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aFE, new FormError (EFormErrorLevel.ERROR, "any"));
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aFE, new Error (EFormErrorLevel.ERROR, "any"));
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aFE,
-                                                                        new FormError (EFormErrorLevel.WARN, "any"));
-    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aFE, new FormError (EFormErrorLevel.ERROR,
+                                                                        new Error (EFormErrorLevel.WARN, "any"));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aFE, new Error (EFormErrorLevel.ERROR,
                                                                                             "any other"));
 
     try
     {
-      new FormError (null, "xy");
+      new Error (null, "xy");
       fail ();
     }
     catch (final NullPointerException ex)
     {}
     try
     {
-      new FormError (EFormErrorLevel.ERROR, null);
+      new Error (EFormErrorLevel.ERROR, null);
       fail ();
     }
     catch (final IllegalArgumentException ex)
     {}
     try
     {
-      new FormError (EFormErrorLevel.ERROR, "");
+      new Error (EFormErrorLevel.ERROR, "");
       fail ();
     }
     catch (final IllegalArgumentException ex)

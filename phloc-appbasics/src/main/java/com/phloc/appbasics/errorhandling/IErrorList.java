@@ -30,11 +30,11 @@ import com.phloc.commons.collections.multimap.IMultiMapListBased;
 
 /**
  * A simple read only form error list interface. For a field specific list look
- * at {@link IFormErrorList}.
+ * at {@link IErrorList}.
  * 
  * @author Philip Helger
  */
-public interface IFormErrorList extends Iterable <IFormError>
+public interface IErrorList extends Iterable <IError>
 {
   /**
    * @return <code>true</code> if this list has no items, <code>false</code> if
@@ -67,10 +67,10 @@ public interface IFormErrorList extends Iterable <IFormError>
    */
   @Nonnull
   @ReturnsMutableCopy
-  List <IFormError> getAllItems ();
+  List <IError> getAllItems ();
 
   /**
-   * @return The error texts of all contained {@link IFormError} objects. Never
+   * @return The error texts of all contained {@link IError} objects. Never
    *         <code>null</code>.
    */
   @Nonnull
@@ -79,8 +79,33 @@ public interface IFormErrorList extends Iterable <IFormError>
 
   // --- field specific methods ---
 
+  /**
+   * @return An error list with all entries that don't have a field assigned.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IErrorList getListWithoutField ();
+
+  /**
+   * Check if any entry for the specified field is present
+   * 
+   * @param sSearchFieldName
+   *        The field name to search.
+   * @return <code>true</code> if an entry for the specified field is present
+   */
   boolean hasEntryForField (@Nullable String sSearchFieldName);
 
+  /**
+   * Check if any entry for the specified field and the specified error level is
+   * present
+   * 
+   * @param sSearchFieldName
+   *        The field name to search.
+   * @param eFormErrorLevel
+   *        The form error level to search. May not be <code>null</code>
+   * @return <code>true</code> if an entry for the specified field is present
+   *         that has exactly the specified form error level
+   */
   boolean hasEntryForField (@Nullable String sSearchFieldName, @Nullable EFormErrorLevel eFormErrorLevel);
 
   /**
@@ -92,7 +117,7 @@ public interface IFormErrorList extends Iterable <IFormError>
    */
   @Nonnull
   @ReturnsMutableCopy
-  IFormErrorList getListOfField (@Nullable String sSearchFieldName);
+  IErrorList getListOfField (@Nullable String sSearchFieldName);
 
   /**
    * Get a sub-list with all entries for the specified field names
@@ -103,7 +128,7 @@ public interface IFormErrorList extends Iterable <IFormError>
    */
   @Nonnull
   @ReturnsMutableCopy
-  IFormErrorList getListOfFields (@Nullable String... aSearchFieldNames);
+  IErrorList getListOfFields (@Nullable String... aSearchFieldNames);
 
   /**
    * Get a sub-list with all entries that have field names starting with one of
@@ -115,7 +140,7 @@ public interface IFormErrorList extends Iterable <IFormError>
    */
   @Nonnull
   @ReturnsMutableCopy
-  IFormErrorList getListOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
+  IErrorList getListOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
 
   /**
    * Get a sub-list with all entries that have field names matching the passed
@@ -127,7 +152,7 @@ public interface IFormErrorList extends Iterable <IFormError>
    */
   @Nonnull
   @ReturnsMutableCopy
-  IFormErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
+  IErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 
   /**
    * Get a list with all texts for the specified field name.
@@ -181,5 +206,5 @@ public interface IFormErrorList extends Iterable <IFormError>
    */
   @Nonnull
   @ReturnsMutableCopy
-  IMultiMapListBased <String, IFormError> getStructuredByFieldName ();
+  IMultiMapListBased <String, IError> getStructuredByFieldName ();
 }

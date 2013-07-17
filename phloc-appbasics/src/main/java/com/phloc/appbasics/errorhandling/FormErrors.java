@@ -40,8 +40,8 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 @NotThreadSafe
 public class FormErrors
 {
-  private final FormErrorList m_aFormGlobalErrs = new FormErrorList ();
-  private final FormErrorList m_aFormFieldErrs = new FormErrorList ();
+  private final ErrorList m_aFormGlobalErrs = new ErrorList ();
+  private final ErrorList m_aFormFieldErrs = new ErrorList ();
 
   public FormErrors ()
   {}
@@ -50,9 +50,9 @@ public class FormErrors
   {
     if (aErrors != null)
     {
-      for (final IFormError aFormError : aErrors.getAllGlobalItems ())
+      for (final IError aFormError : aErrors.getAllGlobalItems ())
         addGlobalItem (aFormError);
-      for (final IFormError aFormFieldError : aErrors.getAllFieldItems ())
+      for (final IError aFormFieldError : aErrors.getAllFieldItems ())
         addFieldItem (aFormFieldError);
     }
   }
@@ -63,7 +63,7 @@ public class FormErrors
    * @param aFormError
    *        The form error object to add. May not be <code>null</code>.
    */
-  public void addGlobalItem (@Nonnull final IFormError aFormError)
+  public void addGlobalItem (@Nonnull final IError aFormError)
   {
     if (aFormError == null)
       throw new NullPointerException ("FormError");
@@ -78,7 +78,7 @@ public class FormErrors
    */
   public void addGlobalInfo (@Nonnull @Nonempty final String sText)
   {
-    addGlobalItem (FormError.createInfo (sText));
+    addGlobalItem (Error.createInfo (sText));
   }
 
   /**
@@ -100,7 +100,7 @@ public class FormErrors
    */
   public void addGlobalWarning (@Nonnull @Nonempty final String sText)
   {
-    addGlobalItem (FormError.createWarning (sText));
+    addGlobalItem (Error.createWarning (sText));
   }
 
   /**
@@ -122,7 +122,7 @@ public class FormErrors
    */
   public void addGlobalError (@Nonnull @Nonempty final String sText)
   {
-    addGlobalItem (FormError.createError (sText));
+    addGlobalItem (Error.createError (sText));
   }
 
   /**
@@ -142,7 +142,7 @@ public class FormErrors
    * @param aFormFieldError
    *        The form field error object to add. May not be <code>null</code>.
    */
-  public void addFieldItem (@Nonnull final IFormError aFormFieldError)
+  public void addFieldItem (@Nonnull final IError aFormFieldError)
   {
     if (aFormFieldError == null)
       throw new NullPointerException ("FormError");
@@ -160,7 +160,7 @@ public class FormErrors
    */
   public void addFieldInfo (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    addFieldItem (FormError.createInfo (sFieldName, sText));
+    addFieldItem (Error.createInfo (sFieldName, sText));
   }
 
   /**
@@ -189,7 +189,7 @@ public class FormErrors
    */
   public void addFieldWarning (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    addFieldItem (FormError.createWarning (sFieldName, sText));
+    addFieldItem (Error.createWarning (sFieldName, sText));
   }
 
   /**
@@ -218,7 +218,7 @@ public class FormErrors
    */
   public void addFieldError (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    addFieldItem (FormError.createError (sFieldName, sText));
+    addFieldItem (Error.createError (sFieldName, sText));
   }
 
   /**
@@ -322,7 +322,7 @@ public class FormErrors
    */
   @Nonnull
   @ReturnsMutableCopy
-  public List <IFormError> getAllGlobalItems ()
+  public List <IError> getAllGlobalItems ()
   {
     return m_aFormGlobalErrs.getAllItems ();
   }
@@ -355,28 +355,28 @@ public class FormErrors
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormErrorList getListOfField (@Nullable final String sSearchFieldName)
+  public IErrorList getListOfField (@Nullable final String sSearchFieldName)
   {
     return m_aFormFieldErrs.getListOfField (sSearchFieldName);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
+  public IErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
   {
     return m_aFormFieldErrs.getListOfFields (aSearchFieldNames);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormErrorList getListOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  public IErrorList getListOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
   {
     return m_aFormFieldErrs.getListOfFieldsStartingWith (aSearchFieldNames);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  public IErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
   {
     return m_aFormFieldErrs.getListOfFieldsRegExp (sRegExp);
   }
@@ -411,7 +411,7 @@ public class FormErrors
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <IFormError> getAllFieldItems ()
+  public List <IError> getAllFieldItems ()
   {
     return m_aFormFieldErrs.getAllItems ();
   }
@@ -425,7 +425,7 @@ public class FormErrors
 
   @Nonnull
   @ReturnsMutableCopy
-  public IMultiMapListBased <String, IFormError> getStructuredByFieldName ()
+  public IMultiMapListBased <String, IError> getStructuredByFieldName ()
   {
     return m_aFormFieldErrs.getStructuredByFieldName ();
   }
