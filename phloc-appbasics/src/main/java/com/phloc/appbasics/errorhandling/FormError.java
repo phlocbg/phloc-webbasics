@@ -18,9 +18,11 @@
 package com.phloc.appbasics.errorhandling;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -32,25 +34,66 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class FormError implements IFormError
+public class FormError implements IFormError
 {
+  private final String m_sErrorID;
   private final EFormErrorLevel m_eLevel;
+  private final String m_sFieldName;
   private final String m_sErrorText;
 
   public FormError (@Nonnull final EFormErrorLevel eLevel, @Nonnull @Nonempty final String sErrorText)
+  {
+    this (null, eLevel, null, sErrorText);
+  }
+
+  public FormError (@Nonnull final EFormErrorLevel eLevel,
+                    @Nullable final String sFieldName,
+                    @Nonnull @Nonempty final String sErrorText)
+  {
+    this (null, eLevel, sFieldName, sErrorText);
+  }
+
+  public FormError (@Nullable final String sErrorID,
+                    @Nonnull final EFormErrorLevel eLevel,
+                    @Nullable final String sFieldName,
+                    @Nonnull @Nonempty final String sErrorText)
   {
     if (eLevel == null)
       throw new NullPointerException ("level");
     if (StringHelper.hasNoText (sErrorText))
       throw new IllegalArgumentException ("errorText");
+    m_sErrorID = sErrorID;
     m_eLevel = eLevel;
+    m_sFieldName = sFieldName;
     m_sErrorText = sErrorText;
+  }
+
+  @Nullable
+  public String getErrorID ()
+  {
+    return m_sErrorID;
+  }
+
+  public boolean hasErrorID ()
+  {
+    return StringHelper.hasText (m_sErrorID);
   }
 
   @Nonnull
   public EFormErrorLevel getLevel ()
   {
     return m_eLevel;
+  }
+
+  @Nullable
+  public String getFieldName ()
+  {
+    return m_sFieldName;
+  }
+
+  public boolean hasFieldName ()
+  {
+    return StringHelper.hasText (m_sFieldName);
   }
 
   @Nonnull
@@ -67,18 +110,29 @@ public final class FormError implements IFormError
     if (!(o instanceof FormError))
       return false;
     final FormError rhs = (FormError) o;
-    return m_eLevel.equals (rhs.m_eLevel) && m_sErrorText.equals (rhs.m_sErrorText);
+    return EqualsUtils.equals (m_sErrorID, rhs.m_sErrorID) &&
+           m_eLevel.equals (rhs.m_eLevel) &&
+           EqualsUtils.equals (m_sFieldName, rhs.m_sFieldName) &&
+           m_sErrorText.equals (rhs.m_sErrorText);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_eLevel).append (m_sErrorText).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sErrorID)
+                                       .append (m_eLevel)
+                                       .append (m_sFieldName)
+                                       .append (m_sErrorText)
+                                       .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("level", m_eLevel).append ("errorText", m_sErrorText).toString ();
+    return new ToStringGenerator (this).appendIfNotNull ("errorID", m_sErrorID)
+                                       .append ("level", m_eLevel)
+                                       .appendIfNotNull ("fieldName", m_sFieldName)
+                                       .append ("errorText", m_sErrorText)
+                                       .toString ();
   }
 }

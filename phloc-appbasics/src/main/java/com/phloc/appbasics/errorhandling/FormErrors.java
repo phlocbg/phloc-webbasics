@@ -27,6 +27,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.multimap.IMultiMapListBased;
+import com.phloc.commons.collections.multimap.MultiLinkedHashMapArrayListBased;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
@@ -40,7 +42,7 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 public class FormErrors implements IFormErrors
 {
   private final FormErrorList m_aFormGlobalErrs = new FormErrorList ();
-  private final FormFieldErrorList m_aFormFieldErrs = new FormFieldErrorList ();
+  private final FormErrorList m_aFormFieldErrs = new FormErrorList ();
 
   public FormErrors ()
   {}
@@ -51,7 +53,7 @@ public class FormErrors implements IFormErrors
     {
       for (final IFormError aFormError : aErrors.getAllGlobalItems ())
         addGlobalItem (aFormError);
-      for (final IFormFieldError aFormFieldError : aErrors.getAllFieldItems ())
+      for (final IFormError aFormFieldError : aErrors.getAllFieldItems ())
         addFieldItem (aFormFieldError);
     }
   }
@@ -141,10 +143,10 @@ public class FormErrors implements IFormErrors
    * @param aFormFieldError
    *        The form field error object to add. May not be <code>null</code>.
    */
-  public void addFieldItem (@Nonnull final IFormFieldError aFormFieldError)
+  public void addFieldItem (@Nonnull final IFormError aFormFieldError)
   {
     if (aFormFieldError == null)
-      throw new NullPointerException ("FormFieldError");
+      throw new NullPointerException ("FormError");
     m_aFormFieldErrs.addItem (aFormFieldError);
   }
 
@@ -159,7 +161,7 @@ public class FormErrors implements IFormErrors
    */
   public void addFieldInfo (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    addFieldItem (new FormFieldError (EFormErrorLevel.INFO, sFieldName, sText));
+    addFieldItem (new FormError (EFormErrorLevel.INFO, sFieldName, sText));
   }
 
   /**
@@ -188,7 +190,7 @@ public class FormErrors implements IFormErrors
    */
   public void addFieldWarning (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    addFieldItem (new FormFieldError (EFormErrorLevel.WARN, sFieldName, sText));
+    addFieldItem (new FormError (EFormErrorLevel.WARN, sFieldName, sText));
   }
 
   /**
@@ -217,7 +219,7 @@ public class FormErrors implements IFormErrors
    */
   public void addFieldError (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    addFieldItem (new FormFieldError (EFormErrorLevel.ERROR, sFieldName, sText));
+    addFieldItem (new FormError (EFormErrorLevel.ERROR, sFieldName, sText));
   }
 
   /**
@@ -313,28 +315,28 @@ public class FormErrors implements IFormErrors
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormFieldErrorList getListOfField (@Nullable final String sSearchFieldName)
+  public IFormErrorList getListOfField (@Nullable final String sSearchFieldName)
   {
     return m_aFormFieldErrs.getListOfField (sSearchFieldName);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormFieldErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
+  public IFormErrorList getListOfFields (@Nullable final String... aSearchFieldNames)
   {
     return m_aFormFieldErrs.getListOfFields (aSearchFieldNames);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormFieldErrorList getListOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  public IFormErrorList getListOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
   {
     return m_aFormFieldErrs.getListOfFieldsStartingWith (aSearchFieldNames);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public IFormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  public IFormErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
   {
     return m_aFormFieldErrs.getListOfFieldsRegExp (sRegExp);
   }
@@ -343,33 +345,33 @@ public class FormErrors implements IFormErrors
   @ReturnsMutableCopy
   public List <String> getAllItemTextsOfField (@Nullable final String sSearchFieldName)
   {
-    return m_aFormFieldErrs.getAllTextsOfField (sSearchFieldName);
+    return m_aFormFieldErrs.getAllItemTextsOfField (sSearchFieldName);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getAllItemTextsOfFields (@Nullable final String... aSearchFieldNames)
   {
-    return m_aFormFieldErrs.getAllTextsOfFields (aSearchFieldNames);
+    return m_aFormFieldErrs.getAllItemTextsOfFields (aSearchFieldNames);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <String> getAllTextsOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
+  public List <String> getAllItemTextsOfFieldsStartingWith (@Nullable final String... aSearchFieldNames)
   {
-    return m_aFormFieldErrs.getAllTextsOfFieldsStartingWith (aSearchFieldNames);
+    return m_aFormFieldErrs.getAllItemTextsOfFieldsStartingWith (aSearchFieldNames);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <String> getAllTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
+  public List <String> getAllItemTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx final String sRegExp)
   {
-    return m_aFormFieldErrs.getAllTextsOfFieldsRegExp (sRegExp);
+    return m_aFormFieldErrs.getAllItemTextsOfFieldsRegExp (sRegExp);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <IFormFieldError> getAllFieldItems ()
+  public List <IFormError> getAllFieldItems ()
   {
     return m_aFormFieldErrs.getAllItems ();
   }
@@ -379,6 +381,16 @@ public class FormErrors implements IFormErrors
   public List <String> getAllFieldItemTexts ()
   {
     return m_aFormFieldErrs.getAllItemTexts ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public IMultiMapListBased <String, IFormError> getStructuredByFieldName ()
+  {
+    final IMultiMapListBased <String, IFormError> ret = new MultiLinkedHashMapArrayListBased <String, IFormError> ();
+    for (final IFormError aFormError : m_aFormFieldErrs.getAllItems ())
+      ret.putSingle (aFormError.getFieldName (), aFormError);
+    return ret;
   }
 
   @Override

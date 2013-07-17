@@ -18,23 +18,46 @@
 package com.phloc.appbasics.errorhandling;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 
 /**
- * Base interface for a global error in a form. A global error is not field
- * specific.
+ * Base interface for a single error.
  * 
  * @author Philip Helger
- * @see IFormFieldError
  */
 public interface IFormError
 {
   /**
-   * @return The level of this error.
+   * @return The unique error ID. May be <code>null</code>.
+   */
+  @Nullable
+  String getErrorID ();
+
+  /**
+   * @return <code>true</code> if an error ID is present, <code>false</code>
+   *         otherwise
+   */
+  boolean hasErrorID ();
+
+  /**
+   * @return The level of this error. May not be <code>null</code>.
    */
   @Nonnull
   EFormErrorLevel getLevel ();
+
+  /**
+   * @return The field for which the error occurred. May be <code>null</code>.
+   */
+  @Nullable
+  String getFieldName ();
+
+  /**
+   * @return <code>true</code> if a field name is present, <code>false</code>
+   *         otherwise
+   */
+  boolean hasFieldName ();
 
   /**
    * @return The message of this form error. The error text is always locale

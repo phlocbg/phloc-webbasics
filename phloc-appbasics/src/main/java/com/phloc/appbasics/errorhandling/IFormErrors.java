@@ -26,6 +26,7 @@ import javax.annotation.RegEx;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.multimap.IMultiMapListBased;
 
 /**
  * Read-only base interface for {@link FormErrors} implementation
@@ -111,19 +112,19 @@ public interface IFormErrors
 
   @Nonnull
   @ReturnsMutableCopy
-  IFormFieldErrorList getListOfField (@Nullable String sSearchFieldName);
+  IFormErrorList getListOfField (@Nullable String sSearchFieldName);
 
   @Nonnull
   @ReturnsMutableCopy
-  IFormFieldErrorList getListOfFields (@Nullable String... aSearchFieldNames);
+  IFormErrorList getListOfFields (@Nullable String... aSearchFieldNames);
 
   @Nonnull
   @ReturnsMutableCopy
-  IFormFieldErrorList getListOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
+  IFormErrorList getListOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
 
   @Nonnull
   @ReturnsMutableCopy
-  IFormFieldErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
+  IFormErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 
   @Nonnull
   @ReturnsMutableCopy
@@ -135,17 +136,25 @@ public interface IFormErrors
 
   @Nonnull
   @ReturnsMutableCopy
-  List <String> getAllTextsOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
+  List <String> getAllItemTextsOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
 
   @Nonnull
   @ReturnsMutableCopy
-  List <String> getAllTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
+  List <String> getAllItemTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 
   @Nonnull
   @ReturnsMutableCopy
-  List <IFormFieldError> getAllFieldItems ();
+  List <IFormError> getAllFieldItems ();
 
   @Nonnull
   @ReturnsMutableCopy
   List <String> getAllFieldItemTexts ();
+
+  /**
+   * @return A map with all field-specific items mapped from field name to its
+   *         occurrences.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IMultiMapListBased <String, IFormError> getStructuredByFieldName ();
 }

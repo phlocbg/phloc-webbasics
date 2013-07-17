@@ -17,13 +17,149 @@
  */
 package com.phloc.appbasics.errorhandling;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.RegEx;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+
 /**
  * A simple read only form error list interface. For a field specific list look
- * at {@link IFormFieldErrorList}.
+ * at {@link IFormErrorList}.
  * 
  * @author Philip Helger
  */
-public interface IFormErrorList extends IBaseFormErrorList <IFormError>
+public interface IFormErrorList extends Iterable <IFormError>
 {
-  /* empty */
+  /**
+   * @return <code>true</code> if this list has no items, <code>false</code> if
+   *         at least one item is contained
+   */
+  boolean isEmpty ();
+
+  /**
+   * @return <code>true</code> if at least 1 item of level warning or at least 1
+   *         item of level error is contained.
+   */
+  boolean hasErrorsOrWarnings ();
+
+  /**
+   * @return The most severe error level contained in the list or
+   *         <code>null</code> if the list is empty.
+   */
+  @Nullable
+  EFormErrorLevel getMostSevereErrorLevel ();
+
+  /**
+   * @return An immutable list of all contained entries. Never <code>null</code>
+   *         .
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <IFormError> getAllItems ();
+
+  /**
+   * @return The error texts of all contained {@link IFormError} objects. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllItemTexts ();
+
+  // --- field specific methods ---
+
+  /**
+   * Get a sub-list with all entries for the specified field name
+   * 
+   * @param sSearchFieldName
+   *        The field name to search.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IFormErrorList getListOfField (@Nullable String sSearchFieldName);
+
+  /**
+   * Get a sub-list with all entries for the specified field names
+   * 
+   * @param aSearchFieldNames
+   *        The field names to search.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IFormErrorList getListOfFields (@Nullable String... aSearchFieldNames);
+
+  /**
+   * Get a sub-list with all entries that have field names starting with one of
+   * the supplied names.
+   * 
+   * @param aSearchFieldNames
+   *        The field names to search.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IFormErrorList getListOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
+
+  /**
+   * Get a sub-list with all entries that have field names matching the passed
+   * regular expression.
+   * 
+   * @param sRegExp
+   *        The regular expression to compare the entries against.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IFormErrorList getListOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
+
+  /**
+   * Get a list with all texts for the specified field name.
+   * 
+   * @param sSearchFieldName
+   *        The field name to search.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllItemTextsOfField (@Nullable String sSearchFieldName);
+
+  /**
+   * Get a list with all texts for the specified field names
+   * 
+   * @param aSearchFieldNames
+   *        The field names to search.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllItemTextsOfFields (@Nullable String... aSearchFieldNames);
+
+  /**
+   * Get a list with all texts of entries that have field names starting with
+   * one of the supplied names.
+   * 
+   * @param aSearchFieldNames
+   *        The field names to search.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllItemTextsOfFieldsStartingWith (@Nullable String... aSearchFieldNames);
+
+  /**
+   * Get a list with all texts of entries that have field names matching the
+   * passed regular expression.
+   * 
+   * @param sRegExp
+   *        The regular expression to compare the entries against.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <String> getAllItemTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 }
