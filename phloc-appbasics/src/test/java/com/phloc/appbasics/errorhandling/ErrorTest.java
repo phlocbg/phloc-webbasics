@@ -40,7 +40,7 @@ public final class ErrorTest
   {
     final Error aFE = new Error (EFormErrorLevel.ERROR, "any");
     assertSame (EFormErrorLevel.ERROR, aFE.getLevel ());
-    assertEquals ("any", aFE.getErrorText ());
+    assertEquals ("any", aFE.getText ());
 
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aFE, new Error (EFormErrorLevel.ERROR, "any"));
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aFE,

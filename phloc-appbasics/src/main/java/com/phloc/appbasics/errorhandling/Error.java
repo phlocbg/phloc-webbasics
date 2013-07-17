@@ -35,47 +35,40 @@ import com.phloc.commons.string.ToStringGenerator;
 @Immutable
 public class Error implements IError
 {
-  private final String m_sErrorID;
+  private final String m_sID;
   private final EFormErrorLevel m_eLevel;
   private final String m_sFieldName;
-  private final String m_sErrorText;
+  private final String m_sText;
 
-  public Error (@Nonnull final EFormErrorLevel eLevel, @Nonnull @Nonempty final String sErrorText)
+  public Error (@Nonnull final EFormErrorLevel eLevel, @Nonnull @Nonempty final String sText)
   {
-    this (null, eLevel, null, sErrorText);
+    this ((String) null, eLevel, (String) null, sText);
   }
 
-  public Error (@Nonnull final EFormErrorLevel eLevel,
-                @Nullable final String sFieldName,
-                @Nonnull @Nonempty final String sErrorText)
-  {
-    this (null, eLevel, sFieldName, sErrorText);
-  }
-
-  public Error (@Nullable final String sErrorID,
+  public Error (@Nullable final String sID,
                 @Nonnull final EFormErrorLevel eLevel,
                 @Nullable final String sFieldName,
-                @Nonnull @Nonempty final String sErrorText)
+                @Nonnull @Nonempty final String sText)
   {
     if (eLevel == null)
       throw new NullPointerException ("level");
-    if (StringHelper.hasNoText (sErrorText))
-      throw new IllegalArgumentException ("errorText");
-    m_sErrorID = sErrorID;
+    if (StringHelper.hasNoText (sText))
+      throw new IllegalArgumentException ("Text");
+    m_sID = sID;
     m_eLevel = eLevel;
     m_sFieldName = sFieldName;
-    m_sErrorText = sErrorText;
+    m_sText = sText;
   }
 
   @Nullable
-  public String getErrorID ()
+  public String getID ()
   {
-    return m_sErrorID;
+    return m_sID;
   }
 
-  public boolean hasErrorID ()
+  public boolean hasID ()
   {
-    return StringHelper.hasText (m_sErrorID);
+    return StringHelper.hasText (m_sID);
   }
 
   @Nonnull
@@ -96,9 +89,9 @@ public class Error implements IError
   }
 
   @Nonnull
-  public String getErrorText ()
+  public String getText ()
   {
-    return m_sErrorText;
+    return m_sText;
   }
 
   @Override
@@ -109,29 +102,29 @@ public class Error implements IError
     if (!(o instanceof Error))
       return false;
     final Error rhs = (Error) o;
-    return EqualsUtils.equals (m_sErrorID, rhs.m_sErrorID) &&
+    return EqualsUtils.equals (m_sID, rhs.m_sID) &&
            m_eLevel.equals (rhs.m_eLevel) &&
            EqualsUtils.equals (m_sFieldName, rhs.m_sFieldName) &&
-           m_sErrorText.equals (rhs.m_sErrorText);
+           m_sText.equals (rhs.m_sText);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sErrorID)
+    return new HashCodeGenerator (this).append (m_sID)
                                        .append (m_eLevel)
                                        .append (m_sFieldName)
-                                       .append (m_sErrorText)
+                                       .append (m_sText)
                                        .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).appendIfNotNull ("errorID", m_sErrorID)
+    return new ToStringGenerator (this).appendIfNotNull ("errorID", m_sID)
                                        .append ("level", m_eLevel)
                                        .appendIfNotNull ("fieldName", m_sFieldName)
-                                       .append ("errorText", m_sErrorText)
+                                       .append ("errorText", m_sText)
                                        .toString ();
   }
 
@@ -148,11 +141,11 @@ public class Error implements IError
   }
 
   @Nonnull
-  public static Error createSuccess (@Nullable final String sErrorID,
+  public static Error createSuccess (@Nullable final String sID,
                                      @Nullable final String sFieldName,
                                      @Nonnull @Nonempty final String sText)
   {
-    return new Error (sErrorID, EFormErrorLevel.SUCCESS, sFieldName, sText);
+    return new Error (sID, EFormErrorLevel.SUCCESS, sFieldName, sText);
   }
 
   @Nonnull
@@ -168,11 +161,11 @@ public class Error implements IError
   }
 
   @Nonnull
-  public static Error createInfo (@Nullable final String sErrorID,
+  public static Error createInfo (@Nullable final String sID,
                                   @Nullable final String sFieldName,
                                   @Nonnull @Nonempty final String sText)
   {
-    return new Error (sErrorID, EFormErrorLevel.INFO, sFieldName, sText);
+    return new Error (sID, EFormErrorLevel.INFO, sFieldName, sText);
   }
 
   @Nonnull
@@ -188,11 +181,11 @@ public class Error implements IError
   }
 
   @Nonnull
-  public static Error createWarning (@Nullable final String sErrorID,
+  public static Error createWarning (@Nullable final String sID,
                                      @Nullable final String sFieldName,
                                      @Nonnull @Nonempty final String sText)
   {
-    return new Error (sErrorID, EFormErrorLevel.WARN, sFieldName, sText);
+    return new Error (sID, EFormErrorLevel.WARN, sFieldName, sText);
   }
 
   @Nonnull
@@ -208,10 +201,10 @@ public class Error implements IError
   }
 
   @Nonnull
-  public static Error createError (@Nullable final String sErrorID,
+  public static Error createError (@Nullable final String sID,
                                    @Nullable final String sFieldName,
                                    @Nonnull @Nonempty final String sText)
   {
-    return new Error (sErrorID, EFormErrorLevel.ERROR, sFieldName, sText);
+    return new Error (sID, EFormErrorLevel.ERROR, sFieldName, sText);
   }
 }

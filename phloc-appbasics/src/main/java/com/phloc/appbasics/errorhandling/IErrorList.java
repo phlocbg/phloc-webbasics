@@ -201,8 +201,14 @@ public interface IErrorList extends Iterable <IError>
   List <String> getAllItemTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
 
   /**
-   * @return A map with all field-specific items mapped from field name to its
-   *         occurrences.
+   * @return A map with all items mapped from ID to its occurrences.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IMultiMapListBased <String, IError> getStructuredByID ();
+
+  /**
+   * @return A map with all items mapped from field name to its occurrences.
    */
   @Nonnull
   @ReturnsMutableCopy

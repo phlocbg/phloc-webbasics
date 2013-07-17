@@ -112,11 +112,11 @@ public class ErrorList implements IErrorList
     add (Error.createSuccess (sFieldName, sText));
   }
 
-  public void addSuccess (@Nullable final String sErrorID,
+  public void addSuccess (@Nullable final String sID,
                           @Nullable final String sFieldName,
                           @Nonnull @Nonempty final String sText)
   {
-    add (Error.createSuccess (sErrorID, sFieldName, sText));
+    add (Error.createSuccess (sID, sFieldName, sText));
   }
 
   public void addInfo (@Nonnull @Nonempty final String sText)
@@ -129,11 +129,11 @@ public class ErrorList implements IErrorList
     add (Error.createInfo (sFieldName, sText));
   }
 
-  public void addInfo (@Nullable final String sErrorID,
+  public void addInfo (@Nullable final String sID,
                        @Nullable final String sFieldName,
                        @Nonnull @Nonempty final String sText)
   {
-    add (Error.createInfo (sErrorID, sFieldName, sText));
+    add (Error.createInfo (sID, sFieldName, sText));
   }
 
   public void addWarning (@Nonnull @Nonempty final String sText)
@@ -146,11 +146,11 @@ public class ErrorList implements IErrorList
     add (Error.createWarning (sFieldName, sText));
   }
 
-  public void addWarning (@Nullable final String sErrorID,
+  public void addWarning (@Nullable final String sID,
                           @Nullable final String sFieldName,
                           @Nonnull @Nonempty final String sText)
   {
-    add (Error.createWarning (sErrorID, sFieldName, sText));
+    add (Error.createWarning (sID, sFieldName, sText));
   }
 
   public void addError (@Nonnull @Nonempty final String sText)
@@ -163,11 +163,11 @@ public class ErrorList implements IErrorList
     add (Error.createError (sFieldName, sText));
   }
 
-  public void addError (@Nullable final String sErrorID,
+  public void addError (@Nullable final String sID,
                         @Nullable final String sFieldName,
                         @Nonnull @Nonempty final String sText)
   {
-    add (Error.createError (sErrorID, sFieldName, sText));
+    add (Error.createError (sID, sFieldName, sText));
   }
 
   public boolean isEmpty ()
@@ -213,7 +213,7 @@ public class ErrorList implements IErrorList
   {
     final List <String> ret = new ArrayList <String> ();
     for (final IError aError : m_aItems)
-      ret.add (aError.getErrorText ());
+      ret.add (aError.getText ());
     return ret;
   }
 
@@ -334,7 +334,7 @@ public class ErrorList implements IErrorList
     final List <String> ret = new ArrayList <String> ();
     for (final IError aError : m_aItems)
       if (EqualsUtils.equals (aError.getFieldName (), sSearchFieldName))
-        ret.add (aError.getErrorText ());
+        ret.add (aError.getText ());
     return ret;
   }
 
@@ -346,7 +346,7 @@ public class ErrorList implements IErrorList
     if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
-          ret.add (aError.getErrorText ());
+          ret.add (aError.getText ());
     return ret;
   }
 
@@ -363,7 +363,7 @@ public class ErrorList implements IErrorList
           for (final String sSearchField : aSearchFieldNames)
             if (sErrorFieldName.startsWith (sSearchField))
             {
-              ret.add (aError.getErrorText ());
+              ret.add (aError.getText ());
               break;
             }
         }
@@ -381,7 +381,17 @@ public class ErrorList implements IErrorList
     for (final IError aError : m_aItems)
       if (aError.hasFieldName ())
         if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
-          ret.add (aError.getErrorText ());
+          ret.add (aError.getText ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public IMultiMapListBased <String, IError> getStructuredByID ()
+  {
+    final IMultiMapListBased <String, IError> ret = new MultiLinkedHashMapArrayListBased <String, IError> ();
+    for (final IError aFormError : m_aItems)
+      ret.putSingle (aFormError.getID (), aFormError);
     return ret;
   }
 

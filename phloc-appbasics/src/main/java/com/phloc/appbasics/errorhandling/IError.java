@@ -33,13 +33,13 @@ public interface IError
    * @return The unique error ID. May be <code>null</code>.
    */
   @Nullable
-  String getErrorID ();
+  String getID ();
 
   /**
    * @return <code>true</code> if an error ID is present, <code>false</code>
    *         otherwise
    */
-  boolean hasErrorID ();
+  boolean hasID ();
 
   /**
    * @return The level of this error. May not be <code>null</code>.
@@ -67,5 +67,5 @@ public interface IError
    */
   @Nonnull
   @Nonempty
-  String getErrorText ();
+  String getText ();
 }
