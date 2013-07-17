@@ -195,7 +195,11 @@ public class ErrorList implements IErrorList
     EFormErrorLevel ret = null;
     for (final IError aError : m_aItems)
       if (ret == null || aError.getLevel ().isMoreSevereThan (ret))
+      {
         ret = aError.getLevel ();
+        if (ret == EFormErrorLevel.HIGHEST)
+          break;
+      }
     return ret;
   }
 
@@ -248,17 +252,16 @@ public class ErrorList implements IErrorList
 
   public boolean hasEntryForField (@Nullable final String sSearchFieldName)
   {
-    if (StringHelper.hasText (sSearchFieldName))
-      for (final IError aError : m_aItems)
-        if (EqualsUtils.equals (sSearchFieldName, aError.getFieldName ()))
-          return true;
+    for (final IError aError : m_aItems)
+      if (EqualsUtils.equals (sSearchFieldName, aError.getFieldName ()))
+        return true;
     return false;
   }
 
   public boolean hasEntryForField (@Nullable final String sSearchFieldName,
                                    @Nullable final EFormErrorLevel eFormErrorLevel)
   {
-    if (StringHelper.hasText (sSearchFieldName) && eFormErrorLevel != null)
+    if (eFormErrorLevel != null)
       for (final IError aError : m_aItems)
         if (aError.getLevel ().equals (eFormErrorLevel) &&
             EqualsUtils.equals (sSearchFieldName, aError.getFieldName ()))
@@ -296,15 +299,16 @@ public class ErrorList implements IErrorList
     final ErrorList ret = new ErrorList ();
     if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IError aError : m_aItems)
-      {
-        final String sErrorFieldName = aError.getFieldName ();
-        for (final String sSearchField : aSearchFieldNames)
-          if (sErrorFieldName.startsWith (sSearchField))
-          {
-            ret.add (aError);
-            break;
-          }
-      }
+        if (aError.hasFieldName ())
+        {
+          final String sErrorFieldName = aError.getFieldName ();
+          for (final String sSearchField : aSearchFieldNames)
+            if (sErrorFieldName.startsWith (sSearchField))
+            {
+              ret.add (aError);
+              break;
+            }
+        }
     return ret;
   }
 
@@ -317,8 +321,9 @@ public class ErrorList implements IErrorList
 
     final ErrorList ret = new ErrorList ();
     for (final IError aError : m_aItems)
-      if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
-        ret.add (aError);
+      if (aError.hasFieldName ())
+        if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
+          ret.add (aError);
     return ret;
   }
 
@@ -328,7 +333,7 @@ public class ErrorList implements IErrorList
   {
     final List <String> ret = new ArrayList <String> ();
     for (final IError aError : m_aItems)
-      if (aError.getFieldName ().equals (sSearchFieldName))
+      if (EqualsUtils.equals (aError.getFieldName (), sSearchFieldName))
         ret.add (aError.getErrorText ());
     return ret;
   }
@@ -352,15 +357,16 @@ public class ErrorList implements IErrorList
     final List <String> ret = new ArrayList <String> ();
     if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IError aError : m_aItems)
-      {
-        final String sErrorFieldName = aError.getFieldName ();
-        for (final String sSearchField : aSearchFieldNames)
-          if (sErrorFieldName.startsWith (sSearchField))
-          {
-            ret.add (aError.getErrorText ());
-            break;
-          }
-      }
+        if (aError.hasFieldName ())
+        {
+          final String sErrorFieldName = aError.getFieldName ();
+          for (final String sSearchField : aSearchFieldNames)
+            if (sErrorFieldName.startsWith (sSearchField))
+            {
+              ret.add (aError.getErrorText ());
+              break;
+            }
+        }
     return ret;
   }
 
@@ -373,8 +379,9 @@ public class ErrorList implements IErrorList
 
     final List <String> ret = new ArrayList <String> ();
     for (final IError aError : m_aItems)
-      if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
-        ret.add (aError.getErrorText ());
+      if (aError.hasFieldName ())
+        if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
+          ret.add (aError.getErrorText ());
     return ret;
   }
 
