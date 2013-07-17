@@ -46,8 +46,21 @@ public abstract class AbstractFormErrorList <T extends IFormError> implements It
    * 
    * @param aItem
    *        The item to be added. May not be <code>null</code>.
+   * @deprecated Use {@link #addItem(IFormError)} instead
    */
+  @Deprecated
   public final void add (@Nonnull final T aItem)
+  {
+    addItem (aItem);
+  }
+
+  /**
+   * Add a new item.
+   * 
+   * @param aItem
+   *        The item to be added. May not be <code>null</code>.
+   */
+  public final void addItem (@Nonnull final T aItem)
   {
     if (aItem == null)
       throw new NullPointerException ("item");

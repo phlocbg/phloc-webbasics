@@ -83,7 +83,7 @@ public class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> 
     final FormFieldErrorList ret = new FormFieldErrorList ();
     for (final IFormFieldError aError : m_aItems)
       if (aError.getFieldName ().equals (sSearchFieldName))
-        ret.add (aError);
+        ret.addItem (aError);
     return ret;
   }
 
@@ -95,7 +95,7 @@ public class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> 
     if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IFormFieldError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
-          ret.add (aError);
+          ret.addItem (aError);
     return ret;
   }
 
@@ -111,7 +111,7 @@ public class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> 
         for (final String sSearchField : aSearchFieldNames)
           if (sErrorFieldName.startsWith (sSearchField))
           {
-            ret.add (aError);
+            ret.addItem (aError);
             break;
           }
       }
@@ -128,7 +128,7 @@ public class FormFieldErrorList extends AbstractFormErrorList <IFormFieldError> 
     final FormFieldErrorList ret = new FormFieldErrorList ();
     for (final IFormFieldError aError : m_aItems)
       if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
-        ret.add (aError);
+        ret.addItem (aError);
     return ret;
   }
 

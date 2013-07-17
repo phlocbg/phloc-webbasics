@@ -37,13 +37,37 @@ import com.phloc.commons.text.IPredefinedLocaleTextProvider;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class FormErrors
+public class FormErrors implements IFormErrors
 {
   private final FormErrorList m_aFormGlobalErrs = new FormErrorList ();
   private final FormFieldErrorList m_aFormFieldErrs = new FormFieldErrorList ();
 
   public FormErrors ()
   {}
+
+  public void addAll (@Nullable final IFormErrors aErrors)
+  {
+    if (aErrors != null)
+    {
+      for (final IFormError aFormError : aErrors.getAllGlobalItems ())
+        addGlobalItem (aFormError);
+      for (final IFormFieldError aFormFieldError : aErrors.getAllFieldItems ())
+        addFieldItem (aFormFieldError);
+    }
+  }
+
+  /**
+   * Add a form-global item
+   * 
+   * @param aFormError
+   *        The form error object to add. May not be <code>null</code>.
+   */
+  public void addGlobalItem (@Nonnull final IFormError aFormError)
+  {
+    if (aFormError == null)
+      throw new NullPointerException ("FormError");
+    m_aFormGlobalErrs.addItem (aFormError);
+  }
 
   /**
    * Add a form-global information
@@ -53,7 +77,7 @@ public final class FormErrors
    */
   public void addGlobalInfo (@Nonnull @Nonempty final String sText)
   {
-    m_aFormGlobalErrs.add (new FormError (EFormErrorLevel.INFO, sText));
+    addGlobalItem (new FormError (EFormErrorLevel.INFO, sText));
   }
 
   /**
@@ -75,7 +99,7 @@ public final class FormErrors
    */
   public void addGlobalWarning (@Nonnull @Nonempty final String sText)
   {
-    m_aFormGlobalErrs.add (new FormError (EFormErrorLevel.WARN, sText));
+    addGlobalItem (new FormError (EFormErrorLevel.WARN, sText));
   }
 
   /**
@@ -97,7 +121,7 @@ public final class FormErrors
    */
   public void addGlobalError (@Nonnull @Nonempty final String sText)
   {
-    m_aFormGlobalErrs.add (new FormError (EFormErrorLevel.ERROR, sText));
+    addGlobalItem (new FormError (EFormErrorLevel.ERROR, sText));
   }
 
   /**
@@ -112,6 +136,19 @@ public final class FormErrors
   }
 
   /**
+   * Add a form field specific item
+   * 
+   * @param aFormFieldError
+   *        The form field error object to add. May not be <code>null</code>.
+   */
+  public void addFieldItem (@Nonnull final IFormFieldError aFormFieldError)
+  {
+    if (aFormFieldError == null)
+      throw new NullPointerException ("FormFieldError");
+    m_aFormFieldErrs.addItem (aFormFieldError);
+  }
+
+  /**
    * Add a field specific information message.
    * 
    * @param sFieldName
@@ -122,7 +159,7 @@ public final class FormErrors
    */
   public void addFieldInfo (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    m_aFormFieldErrs.add (new FormFieldError (EFormErrorLevel.INFO, sFieldName, sText));
+    addFieldItem (new FormFieldError (EFormErrorLevel.INFO, sFieldName, sText));
   }
 
   /**
@@ -151,7 +188,7 @@ public final class FormErrors
    */
   public void addFieldWarning (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    m_aFormFieldErrs.add (new FormFieldError (EFormErrorLevel.WARN, sFieldName, sText));
+    addFieldItem (new FormFieldError (EFormErrorLevel.WARN, sFieldName, sText));
   }
 
   /**
@@ -180,7 +217,7 @@ public final class FormErrors
    */
   public void addFieldError (@Nonnull @Nonempty final String sFieldName, @Nonnull @Nonempty final String sText)
   {
-    m_aFormFieldErrs.add (new FormFieldError (EFormErrorLevel.ERROR, sFieldName, sText));
+    addFieldItem (new FormFieldError (EFormErrorLevel.ERROR, sFieldName, sText));
   }
 
   /**
@@ -198,79 +235,44 @@ public final class FormErrors
     addFieldError (sFieldName, aTextProvider.getText ());
   }
 
-  /**
-   * Check if no message is contained overall.
-   * 
-   * @return <code>true</code> if neither a form-global nor a form-field
-   *         specific message is present, <code>false</code> otherwise.
-   */
   public boolean isEmpty ()
   {
     return m_aFormGlobalErrs.isEmpty () && m_aFormFieldErrs.isEmpty ();
   }
 
-  /**
-   * @return <code>true</code> if form-global errors or warnings are present.
-   */
   public boolean hasGlobalErrorsOrWarnings ()
   {
     return m_aFormGlobalErrs.hasErrorsOrWarnings ();
   }
 
-  /**
-   * @return <code>true</code> if form-field errors or warnings are present.
-   */
   public boolean hasFormFieldErrorsOrWarnings ()
   {
     return m_aFormFieldErrs.hasErrorsOrWarnings ();
   }
 
-  /**
-   * @return <code>true</code> if form-global OR form-field errors or warnings
-   *         are present.
-   */
   public boolean hasErrorsOrWarnings ()
   {
     return m_aFormGlobalErrs.hasErrorsOrWarnings () || m_aFormFieldErrs.hasErrorsOrWarnings ();
   }
 
-  /**
-   * @return The number of global items. Always &ge; 0.
-   */
   @Nonnegative
   public int getGlobalItemCount ()
   {
     return m_aFormGlobalErrs.getItemCount ();
   }
 
-  /**
-   * @return The number of form-field-specific items. Always &ge; 0.
-   */
   @Nonnegative
   public int getFieldItemCount ()
   {
     return m_aFormFieldErrs.getItemCount ();
   }
 
-  /**
-   * Get the total number of items for both form-global and form-field-specific
-   * items
-   * 
-   * @return The total item count. Always &ge; 0.
-   */
   @Nonnegative
   public int getItemCount ()
   {
     return m_aFormGlobalErrs.getItemCount () + m_aFormFieldErrs.getItemCount ();
   }
 
-  /**
-   * Get the most severe error level that was recorded. This considers
-   * form-global and form-field-specific messages.
-   * 
-   * @return <code>null</code> if no message was recorded at all, the non-
-   *         <code>null</code> {@link EFormErrorLevel} otherwise.
-   */
   @Nullable
   public EFormErrorLevel getMostSevereErrorLevel ()
   {
@@ -279,9 +281,6 @@ public final class FormErrors
     return ret == null ? ret2 : ret2 == null ? ret : ret.isMoreSevereThan (ret2) ? ret : ret2;
   }
 
-  /**
-   * @return A non-<code>null</code> list of form global errors.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public List <IFormError> getAllGlobalItems ()
