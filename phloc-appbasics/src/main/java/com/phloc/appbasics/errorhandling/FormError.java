@@ -135,4 +135,84 @@ public class FormError implements IFormError
                                        .append ("errorText", m_sErrorText)
                                        .toString ();
   }
+
+  @Nonnull
+  public static FormError createSuccess (@Nonnull @Nonempty final String sText)
+  {
+    return createSuccess (null, null, sText);
+  }
+
+  @Nonnull
+  public static FormError createSuccess (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  {
+    return createSuccess (null, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createSuccess (@Nullable final String sErrorID,
+                                         @Nullable final String sFieldName,
+                                         @Nonnull @Nonempty final String sText)
+  {
+    return new FormError (sErrorID, EFormErrorLevel.SUCCESS, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createInfo (@Nonnull @Nonempty final String sText)
+  {
+    return createInfo (null, null, sText);
+  }
+
+  @Nonnull
+  public static FormError createInfo (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  {
+    return createInfo (null, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createInfo (@Nullable final String sErrorID,
+                                      @Nullable final String sFieldName,
+                                      @Nonnull @Nonempty final String sText)
+  {
+    return new FormError (sErrorID, EFormErrorLevel.INFO, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createWarning (@Nonnull @Nonempty final String sText)
+  {
+    return createWarning (null, null, sText);
+  }
+
+  @Nonnull
+  public static FormError createWarning (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  {
+    return createWarning (null, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createWarning (@Nullable final String sErrorID,
+                                         @Nullable final String sFieldName,
+                                         @Nonnull @Nonempty final String sText)
+  {
+    return new FormError (sErrorID, EFormErrorLevel.WARN, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createError (@Nonnull @Nonempty final String sText)
+  {
+    return createError (null, null, sText);
+  }
+
+  @Nonnull
+  public static FormError createError (@Nullable final String sFieldName, @Nonnull @Nonempty final String sText)
+  {
+    return createError (null, sFieldName, sText);
+  }
+
+  @Nonnull
+  public static FormError createError (@Nullable final String sErrorID,
+                                       @Nullable final String sFieldName,
+                                       @Nonnull @Nonempty final String sText)
+  {
+    return new FormError (sErrorID, EFormErrorLevel.ERROR, sFieldName, sText);
+  }
 }

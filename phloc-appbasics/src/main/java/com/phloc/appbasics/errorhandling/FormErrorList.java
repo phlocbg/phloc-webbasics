@@ -32,6 +32,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.multimap.IMultiMapListBased;
+import com.phloc.commons.collections.multimap.MultiLinkedHashMapArrayListBased;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -50,25 +52,40 @@ public class FormErrorList implements IFormErrorList
   public FormErrorList ()
   {}
 
+  public FormErrorList (@Nullable final IFormErrorList aErrorList)
+  {
+    addAll (aErrorList);
+  }
+
+  public FormErrorList (@Nullable final Collection <? extends IFormError> aErrorList)
+  {
+    addAll (aErrorList);
+  }
+
+  public FormErrorList (@Nullable final IFormError... aErrorList)
+  {
+    addAll (aErrorList);
+  }
+
   public void addAll (@Nullable final IFormErrorList aErrorList)
   {
     if (aErrorList != null)
       for (final IFormError aFormError : aErrorList.getAllItems ())
-        addItem (aFormError);
+        add (aFormError);
   }
 
   public void addAll (@Nullable final Collection <? extends IFormError> aErrorList)
   {
     if (aErrorList != null)
       for (final IFormError aFormError : aErrorList)
-        addItem (aFormError);
+        add (aFormError);
   }
 
   public void addAll (@Nullable final IFormError... aErrorList)
   {
     if (aErrorList != null)
       for (final IFormError aFormError : aErrorList)
-        addItem (aFormError);
+        add (aFormError);
   }
 
   /**
@@ -77,32 +94,42 @@ public class FormErrorList implements IFormErrorList
    * @param aItem
    *        The item to be added. May not be <code>null</code>.
    */
-  public final void addItem (@Nonnull final IFormError aItem)
+  public void add (@Nonnull final IFormError aItem)
   {
     if (aItem == null)
       throw new NullPointerException ("item");
     m_aItems.add (aItem);
   }
 
-  /**
-   * @return <code>true</code> if no item is contained, <code>false</code> if at
-   *         least one item is contained.
-   */
-  public final boolean isEmpty ()
+  public void addError (@Nonnull @Nonempty final String sErrorText)
+  {
+    add (FormError.createError (sErrorText));
+  }
+
+  public void addError (@Nullable final String sFieldName, @Nonnull @Nonempty final String sErrorText)
+  {
+    add (FormError.createError (sFieldName, sErrorText));
+  }
+
+  public void addError (@Nullable final String sErrorID,
+                        @Nullable final String sFieldName,
+                        @Nonnull @Nonempty final String sErrorText)
+  {
+    add (FormError.createError (sErrorID, sFieldName, sErrorText));
+  }
+
+  public boolean isEmpty ()
   {
     return m_aItems.isEmpty ();
   }
 
-  /**
-   * @return The number of contained items. Always &ge; 0.
-   */
   @Nonnegative
-  public final int getItemCount ()
+  public int getItemCount ()
   {
     return m_aItems.size ();
   }
 
-  public final boolean hasErrorsOrWarnings ()
+  public boolean hasErrorsOrWarnings ()
   {
     for (final IFormError aItem : m_aItems)
       if (aItem.getLevel ().isMoreOrEqualSevereThan (EFormErrorLevel.WARN))
@@ -111,7 +138,7 @@ public class FormErrorList implements IFormErrorList
   }
 
   @Nullable
-  public final EFormErrorLevel getMostSevereErrorLevel ()
+  public EFormErrorLevel getMostSevereErrorLevel ()
   {
     EFormErrorLevel ret = null;
     for (final IFormError aError : m_aItems)
@@ -126,7 +153,7 @@ public class FormErrorList implements IFormErrorList
    */
   @Nonnull
   @ReturnsMutableCopy
-  public final List <String> getAllItemTexts ()
+  public List <String> getAllItemTexts ()
   {
     final List <String> ret = new ArrayList <String> ();
     for (final IFormError aError : m_aItems)
@@ -139,7 +166,7 @@ public class FormErrorList implements IFormErrorList
    */
   @Nonnull
   @ReturnsMutableCopy
-  public final List <IFormError> getAllItems ()
+  public List <IFormError> getAllItems ()
   {
     return ContainerHelper.newList (m_aItems);
   }
@@ -149,7 +176,7 @@ public class FormErrorList implements IFormErrorList
    *         <code>null</code>.
    */
   @Nonnull
-  public final Iterator <IFormError> iterator ()
+  public Iterator <IFormError> iterator ()
   {
     return m_aItems.iterator ();
   }
@@ -200,7 +227,7 @@ public class FormErrorList implements IFormErrorList
     final FormErrorList ret = new FormErrorList ();
     for (final IFormError aError : m_aItems)
       if (aError.getFieldName ().equals (sSearchFieldName))
-        ret.addItem (aError);
+        ret.add (aError);
     return ret;
   }
 
@@ -212,7 +239,7 @@ public class FormErrorList implements IFormErrorList
     if (ArrayHelper.isNotEmpty (aSearchFieldNames))
       for (final IFormError aError : m_aItems)
         if (ArrayHelper.contains (aSearchFieldNames, aError.getFieldName ()))
-          ret.addItem (aError);
+          ret.add (aError);
     return ret;
   }
 
@@ -228,7 +255,7 @@ public class FormErrorList implements IFormErrorList
         for (final String sSearchField : aSearchFieldNames)
           if (sErrorFieldName.startsWith (sSearchField))
           {
-            ret.addItem (aError);
+            ret.add (aError);
             break;
           }
       }
@@ -245,7 +272,7 @@ public class FormErrorList implements IFormErrorList
     final FormErrorList ret = new FormErrorList ();
     for (final IFormError aError : m_aItems)
       if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
-        ret.addItem (aError);
+        ret.add (aError);
     return ret;
   }
 
@@ -302,6 +329,16 @@ public class FormErrorList implements IFormErrorList
     for (final IFormError aError : m_aItems)
       if (RegExHelper.stringMatchesPattern (sRegExp, aError.getFieldName ()))
         ret.add (aError.getErrorText ());
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public IMultiMapListBased <String, IFormError> getStructuredByFieldName ()
+  {
+    final IMultiMapListBased <String, IFormError> ret = new MultiLinkedHashMapArrayListBased <String, IFormError> ();
+    for (final IFormError aFormError : m_aItems)
+      ret.putSingle (aFormError.getFieldName (), aFormError);
     return ret;
   }
 

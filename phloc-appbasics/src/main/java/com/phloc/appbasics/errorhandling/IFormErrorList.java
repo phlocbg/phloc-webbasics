@@ -19,12 +19,14 @@ package com.phloc.appbasics.errorhandling;
 
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.RegEx;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.multimap.IMultiMapListBased;
 
 /**
  * A simple read only form error list interface. For a field specific list look
@@ -39,6 +41,12 @@ public interface IFormErrorList extends Iterable <IFormError>
    *         at least one item is contained
    */
   boolean isEmpty ();
+
+  /**
+   * @return The number of contained items. Always &ge; 0.
+   */
+  @Nonnegative
+  int getItemCount ();
 
   /**
    * @return <code>true</code> if at least 1 item of level warning or at least 1
@@ -70,6 +78,10 @@ public interface IFormErrorList extends Iterable <IFormError>
   List <String> getAllItemTexts ();
 
   // --- field specific methods ---
+
+  boolean hasEntryForField (@Nullable String sSearchFieldName);
+
+  boolean hasEntryForField (@Nullable String sSearchFieldName, @Nullable EFormErrorLevel eFormErrorLevel);
 
   /**
    * Get a sub-list with all entries for the specified field name
@@ -162,4 +174,12 @@ public interface IFormErrorList extends Iterable <IFormError>
   @Nonnull
   @ReturnsMutableCopy
   List <String> getAllItemTextsOfFieldsRegExp (@Nonnull @Nonempty @RegEx String sRegExp);
+
+  /**
+   * @return A map with all field-specific items mapped from field name to its
+   *         occurrences.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  IMultiMapListBased <String, IFormError> getStructuredByFieldName ();
 }
