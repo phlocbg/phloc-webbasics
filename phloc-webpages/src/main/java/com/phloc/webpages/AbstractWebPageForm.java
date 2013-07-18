@@ -139,10 +139,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected final BootstrapToolbarAdvanced createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                              final boolean bCanGoBack,
-                                                              final boolean bCanEdit,
-                                                              @Nonnull final DATATYPE aSelectedObject)
+  protected BootstrapToolbarAdvanced createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                        final boolean bCanGoBack,
+                                                        final boolean bCanEdit,
+                                                        @Nonnull final DATATYPE aSelectedObject)
   {
     final BootstrapToolbarAdvanced aToolbar = createNewToolbar ();
     if (bCanGoBack)
@@ -200,8 +200,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected final BootstrapToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                              @Nonnull final DATATYPE aSelectedObject)
+  protected BootstrapToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                        @Nonnull final DATATYPE aSelectedObject)
   {
     final BootstrapToolbarAdvanced aToolbar = createNewToolbar ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
@@ -253,8 +253,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected final BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                                @Nullable final DATATYPE aSelectedObject)
+  protected BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                          @Nullable final DATATYPE aSelectedObject)
   {
     final BootstrapToolbarAdvanced aToolbar = createNewToolbar ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
