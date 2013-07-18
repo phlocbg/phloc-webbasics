@@ -19,7 +19,6 @@ package com.phloc.webctrls.datatables.ajax;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -29,17 +28,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ArrayHelper;
-import com.phloc.commons.microdom.IMicroNode;
-import com.phloc.commons.microdom.IMicroNodeWithChildren;
-import com.phloc.commons.microdom.IMicroText;
-import com.phloc.commons.microdom.serialize.MicroWriter;
-import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
@@ -47,177 +38,13 @@ import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCRow;
-import com.phloc.html.hc.impl.HCNodeList;
-import com.phloc.html.hc.utils.HCSpecialNodeHandler;
-import com.phloc.html.hc.utils.HCSpecialNodes;
-import com.phloc.html.hc.utils.IHCSpecialNodes;
 import com.phloc.webbasics.state.IHasUIState;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
 
 public final class DataTablesServerData implements IHasUIState
 {
-  static final class CellData implements Serializable
-  {
-    private static final Logger s_aLogger = LoggerFactory.getLogger (CellData.class);
-
-    private final HCSpecialNodes m_aSpecialNodes = new HCSpecialNodes ();
-    private final String m_sHTML;
-    private final String m_sTextContent;
-
-    public CellData (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
-    {
-      if (aCell.hasAnyStyle ())
-        s_aLogger.warn ("Cell has styles assigned which will be lost: " + aCell.getAllStyles ());
-      if (aCell.hasAnyClass ())
-        s_aLogger.warn ("Cell has classes assigned which will be lost: " + aCell.getAllClasses ());
-
-      HCNodeList aCellContent = aCell.getAllChildrenAsNodeList ();
-
-      // Add the content without the out-of-band nodes (but no document.ready()
-      // because this is invoked per AJAX)
-      aCellContent = HCSpecialNodeHandler.extractSpecialContent (aCellContent, m_aSpecialNodes, false);
-
-      // Convert to IMicroNode and to String
-      final IMicroNode aNode = aCellContent.convertToNode (aCS);
-      m_sHTML = MicroWriter.getNodeAsString (aNode, aCS.getXMLWriterSettings ());
-
-      if (aNode instanceof IMicroNodeWithChildren)
-        m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
-      else
-        if (aNode.isText ())
-        {
-          // ignore whitespace-only content
-          if (!((IMicroText) aNode).isElementContentWhitespace ())
-            m_sTextContent = aNode.getNodeValue ();
-          else
-            m_sTextContent = null;
-        }
-        else
-          if (aNode.isCDATA ())
-          {
-            m_sTextContent = aNode.getNodeValue ();
-          }
-          else
-            m_sTextContent = null;
-    }
-
-    @Nullable
-    public String getHTML ()
-    {
-      return m_sHTML;
-    }
-
-    @Nonnull
-    public String getTextContent ()
-    {
-      return m_sTextContent;
-    }
-
-    @Nonnull
-    public IHCSpecialNodes getSpecialNodes ()
-    {
-      return m_aSpecialNodes;
-    }
-
-    public void matchRegEx (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
-    {
-      for (int i = 0; i < aSearchTexts.length; ++i)
-      {
-        final String sSearchText = aSearchTexts[i];
-        if (RegExHelper.stringMatchesPattern (sSearchText, m_sTextContent))
-          aMatchingWords.set (i);
-      }
-    }
-
-    public void matchPlainTextCaseSensitive (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
-    {
-      for (int i = 0; i < aSearchTexts.length; ++i)
-      {
-        final String sSearchText = aSearchTexts[i];
-        if (StringHelper.contains (m_sTextContent, sSearchText))
-          aMatchingWords.set (i);
-      }
-    }
-
-    public void matchPlainTextIgnoreCase (@Nonnull final String [] aSearchTexts,
-                                          @Nonnull final Locale aDisplayLocale,
-                                          @Nonnull final BitSet aMatchingWords)
-    {
-      for (int i = 0; i < aSearchTexts.length; ++i)
-      {
-        final String sSearchText = aSearchTexts[i];
-        if (StringHelper.containsIgnoreCase (m_sTextContent, sSearchText, aDisplayLocale))
-          aMatchingWords.set (i);
-      }
-    }
-
-    @Override
-    @Nonnull
-    public String toString ()
-    {
-      return new ToStringGenerator (this).append ("html", m_sHTML).append ("textContent", m_sTextContent).toString ();
-    }
-  }
-
-  static final class RowData implements Serializable
-  {
-    private static final Logger s_aLogger = LoggerFactory.getLogger (RowData.class);
-
-    private final String m_sRowID;
-    private final String m_sRowClass;
-    private final List <CellData> m_aCells;
-
-    public RowData (@Nonnull final HCRow aRow, @Nonnull final IHCConversionSettings aCS)
-    {
-      if (aRow.hasAnyStyle ())
-        s_aLogger.warn ("Cell has styles assigned which will be lost: " + aRow.getAllStyles ());
-
-      m_sRowID = aRow.getID ();
-      m_sRowClass = aRow.getAllClassesAsString ();
-      m_aCells = new ArrayList <CellData> (aRow.getCellCount ());
-      for (final AbstractHCCell aCell : aRow.getAllCells ())
-        m_aCells.add (new CellData (aCell, aCS));
-    }
-
-    @Nullable
-    public String getRowID ()
-    {
-      return m_sRowID;
-    }
-
-    public boolean hasRowID ()
-    {
-      return StringHelper.hasText (m_sRowID);
-    }
-
-    @Nullable
-    public String getRowClass ()
-    {
-      return m_sRowClass;
-    }
-
-    public boolean hasRowClass ()
-    {
-      return StringHelper.hasText (m_sRowClass);
-    }
-
-    @Nonnull
-    @ReturnsMutableObject (reason = "speed")
-    public List <CellData> directGetAllCells ()
-    {
-      return m_aCells;
-    }
-
-    @Nonnull
-    public CellData getCellAtIndex (@Nonnegative final int nIndex)
-    {
-      return m_aCells.get (nIndex);
-    }
-  }
-
   static final class ColumnData implements Serializable
   {
     private final Comparator <String> m_aComparator;
@@ -227,6 +54,7 @@ public final class DataTablesServerData implements IHasUIState
       m_aComparator = aComparator;
     }
 
+    @Nonnull
     public Comparator <String> getComparator ()
     {
       return m_aComparator;
@@ -242,7 +70,7 @@ public final class DataTablesServerData implements IHasUIState
   public static final ObjectType OBJECT_TYPE = new ObjectType ("datatables");
 
   private final ColumnData [] m_aColumns;
-  private final List <RowData> m_aRows;
+  private final List <DataTablesServerDataRow> m_aRows;
   private final Locale m_aDisplayLocale;
   private ServerSortState m_aServerSortState;
   private final EDataTablesFilterType m_eFilterType;
@@ -284,9 +112,9 @@ public final class DataTablesServerData implements IHasUIState
     final HCConversionSettings aRealCS = new HCConversionSettings (aCS);
     aRealCS.getXMLWriterSettings ().setEmitNamespaces (false);
 
-    m_aRows = new ArrayList <RowData> (aTable.getBodyRowCount ());
+    m_aRows = new ArrayList <DataTablesServerDataRow> (aTable.getBodyRowCount ());
     for (final HCRow aRow : aTable.getAllBodyRows ())
-      m_aRows.add (new RowData (aRow, aRealCS));
+      m_aRows.add (new DataTablesServerDataRow (aRow, aRealCS));
     m_aDisplayLocale = aDisplayLocale;
     m_aServerSortState = new ServerSortState (this, aDisplayLocale);
     m_eFilterType = eFilterType;
@@ -320,17 +148,27 @@ public final class DataTablesServerData implements IHasUIState
 
   @Nonnull
   @ReturnsMutableObject (reason = "speed")
-  public List <RowData> directGetAllRows ()
+  public List <DataTablesServerDataRow> directGetAllRows ()
   {
     return m_aRows;
   }
 
-  public void sortAllRows (@Nonnull final Comparator <RowData> aComp)
+  public void sortAllRows (@Nonnull final Comparator <DataTablesServerDataRow> aComp)
   {
     if (aComp == null)
       throw new NullPointerException ("comp");
 
     Collections.sort (m_aRows, aComp);
+  }
+
+  @Nullable
+  public DataTablesServerDataRow getRowOfID (@Nullable final String sID)
+  {
+    if (StringHelper.hasText (sID))
+      for (final DataTablesServerDataRow aRow : m_aRows)
+        if (sID.equals (aRow.getRowID ()))
+          return aRow;
+    return null;
   }
 
   @Nonnull

@@ -1,0 +1,163 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.phloc.webctrls.datatables.ajax;
+
+import java.io.Serializable;
+import java.util.BitSet;
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.microdom.IMicroNode;
+import com.phloc.commons.microdom.IMicroNodeWithChildren;
+import com.phloc.commons.microdom.IMicroText;
+import com.phloc.commons.microdom.serialize.MicroWriter;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.hc.conversion.IHCConversionSettings;
+import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.utils.HCSpecialNodeHandler;
+import com.phloc.html.hc.utils.HCSpecialNodes;
+import com.phloc.html.hc.utils.IHCSpecialNodes;
+
+public final class DataTablesServerDataCell implements Serializable
+{
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DataTablesServerDataCell.class);
+
+  private final IHCConversionSettings m_aCS;
+  private HCNodeList m_aContent;
+  private final HCSpecialNodes m_aSpecialNodes = new HCSpecialNodes ();
+  private String m_sHTML;
+  private String m_sTextContent;
+
+  public DataTablesServerDataCell (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
+  {
+    if (aCell.hasAnyStyle ())
+      s_aLogger.warn ("Cell has styles assigned which will be lost: " + aCell.getAllStyles ());
+    if (aCell.hasAnyClass ())
+      s_aLogger.warn ("Cell has classes assigned which will be lost: " + aCell.getAllClasses ());
+
+    m_aCS = aCS;
+    final HCNodeList aCellContent = aCell.getAllChildrenAsNodeList ();
+
+    // Remember cell content
+    setContent (aCellContent);
+  }
+
+  public void setContent (@Nonnull final HCNodeList aCellChildren)
+  {
+    // FIXME enable in phloc-html > 3.9.3
+    // m_aSpecialNodes.clear();
+
+    // Add the content without the out-of-band nodes (but no document.ready()
+    // because this is invoked per AJAX)
+    m_aContent = HCSpecialNodeHandler.extractSpecialContent (aCellChildren, m_aSpecialNodes, false);
+
+    // Convert to IMicroNode and to String
+    final IMicroNode aNode = m_aContent.convertToNode (m_aCS);
+    m_sHTML = MicroWriter.getNodeAsString (aNode, m_aCS.getXMLWriterSettings ());
+
+    if (aNode instanceof IMicroNodeWithChildren)
+      m_sTextContent = ((IMicroNodeWithChildren) aNode).getTextContent ();
+    else
+      if (aNode.isText ())
+      {
+        // ignore whitespace-only content
+        if (!((IMicroText) aNode).isElementContentWhitespace ())
+          m_sTextContent = aNode.getNodeValue ();
+        else
+          m_sTextContent = null;
+      }
+      else
+        if (aNode.isCDATA ())
+        {
+          m_sTextContent = aNode.getNodeValue ();
+        }
+        else
+          m_sTextContent = null;
+  }
+
+  @Nonnull
+  public HCNodeList getContent ()
+  {
+    return m_aContent;
+  }
+
+  @Nullable
+  public String getHTML ()
+  {
+    return m_sHTML;
+  }
+
+  @Nonnull
+  public String getTextContent ()
+  {
+    return m_sTextContent;
+  }
+
+  @Nonnull
+  public IHCSpecialNodes getSpecialNodes ()
+  {
+    return m_aSpecialNodes;
+  }
+
+  public void matchRegEx (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
+  {
+    for (int i = 0; i < aSearchTexts.length; ++i)
+    {
+      final String sSearchText = aSearchTexts[i];
+      if (RegExHelper.stringMatchesPattern (sSearchText, m_sTextContent))
+        aMatchingWords.set (i);
+    }
+  }
+
+  public void matchPlainTextCaseSensitive (@Nonnull final String [] aSearchTexts, @Nonnull final BitSet aMatchingWords)
+  {
+    for (int i = 0; i < aSearchTexts.length; ++i)
+    {
+      final String sSearchText = aSearchTexts[i];
+      if (StringHelper.contains (m_sTextContent, sSearchText))
+        aMatchingWords.set (i);
+    }
+  }
+
+  public void matchPlainTextIgnoreCase (@Nonnull final String [] aSearchTexts,
+                                        @Nonnull final Locale aDisplayLocale,
+                                        @Nonnull final BitSet aMatchingWords)
+  {
+    for (int i = 0; i < aSearchTexts.length; ++i)
+    {
+      final String sSearchText = aSearchTexts[i];
+      if (StringHelper.containsIgnoreCase (m_sTextContent, sSearchText, aDisplayLocale))
+        aMatchingWords.set (i);
+    }
+  }
+
+  @Override
+  @Nonnull
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("html", m_sHTML).append ("textContent", m_sTextContent).toString ();
+  }
+}

@@ -43,13 +43,11 @@ import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.CDataTables;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
-import com.phloc.webctrls.datatables.ajax.DataTablesServerData.CellData;
-import com.phloc.webctrls.datatables.ajax.DataTablesServerData.RowData;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {
-  private static final class RequestComparator extends AbstractComparator <RowData>
+  private static final class RequestComparator extends AbstractComparator <DataTablesServerDataRow>
   {
     private final RequestDataSortColumn [] m_aSortCols;
 
@@ -61,15 +59,15 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     @Override
-    protected int mainCompare (@Nonnull final RowData aRow1, @Nonnull final RowData aRow2)
+    protected int mainCompare (@Nonnull final DataTablesServerDataRow aRow1, @Nonnull final DataTablesServerDataRow aRow2)
     {
       int ret = 0;
       for (final RequestDataSortColumn aSortCol : m_aSortCols)
       {
         // Get the cells to compare
         final int nSortColumnIndex = aSortCol.getColumnIndex ();
-        final CellData aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
-        final CellData aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
+        final DataTablesServerDataCell aCell1 = aRow1.getCellAtIndex (nSortColumnIndex);
+        final DataTablesServerDataCell aCell2 = aRow2.getCellAtIndex (nSortColumnIndex);
 
         // Main compare
         ret = aSortCol.getComparator ().compare (aCell1.getTextContent (), aCell2.getTextContent ());
@@ -126,7 +124,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       if (!aNewServerSortState.equals (aOldServerSortState))
       {
         // Yes, change the sorting
-        final Comparator <RowData> aComp = new RequestComparator (aNewServerSortState);
+        final Comparator <DataTablesServerDataRow> aComp = new RequestComparator (aNewServerSortState);
 
         // Main sorting
         if (s_aLogger.isDebugEnabled ())
@@ -138,7 +136,7 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
       }
     }
 
-    List <RowData> aResultRows = aServerData.directGetAllRows ();
+    List <DataTablesServerDataRow> aResultRows = aServerData.directGetAllRows ();
     if (aRequestData.isSearchActive ())
     {
       // filter rows
@@ -157,15 +155,15 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
             s_aLogger.error ("DataTables has column specific search term - this is not implemented for filter type ALL_TERMS_PER_ROW!");
         }
 
-      final List <RowData> aFilteredRows = new ArrayList <RowData> ();
+      final List <DataTablesServerDataRow> aFilteredRows = new ArrayList <DataTablesServerDataRow> ();
       if (bContainsAnyColumnSpecificSearch)
       {
         // For all rows
-        for (final RowData aRow : aResultRows)
+        for (final DataTablesServerDataRow aRow : aResultRows)
         {
           // For all cells in row
           int nSearchableCellIndex = 0;
-          for (final CellData aCell : aRow.directGetAllCells ())
+          for (final DataTablesServerDataCell aCell : aRow.directGetAllCells ())
           {
             final RequestDataColumn aColumn = aColumns[nSearchableCellIndex];
             if (aColumn.isSearchable ())
@@ -206,14 +204,14 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         // Only global search is relevant
 
         // For all rows
-        for (final RowData aRow : aResultRows)
+        for (final DataTablesServerDataRow aRow : aResultRows)
         {
           // Each matching search term is represented as a bit in here
           final BitSet aMatchingWords = new BitSet (aGlobalSearchTexts.length);
 
           // For all cells in row
           int nSearchableCellIndex = 0;
-          perrow: for (final CellData aCell : aRow.directGetAllCells ())
+          perrow: for (final DataTablesServerDataCell aCell : aRow.directGetAllCells ())
           {
             final RequestDataColumn aColumn = aColumns[nSearchableCellIndex];
             if (aColumn.isSearchable ())
@@ -280,14 +278,14 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
         break;
       }
 
-      final RowData aRow = aResultRows.get (nRealIndex);
+      final DataTablesServerDataRow aRow = aResultRows.get (nRealIndex);
       final Map <String, String> aRowData = new HashMap <String, String> ();
       if (aRow.hasRowID ())
         aRowData.put (DT_ROW_ID, aRow.getRowID ());
       if (aRow.hasRowClass ())
         aRowData.put (DT_ROW_CLASS, aRow.getRowClass ());
       int nCellIndex = 0;
-      for (final CellData aCell : aRow.directGetAllCells ())
+      for (final DataTablesServerDataCell aCell : aRow.directGetAllCells ())
       {
         aRowData.put (Integer.toString (nCellIndex++), aCell.getHTML ());
 
