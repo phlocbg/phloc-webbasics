@@ -88,6 +88,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    *         toolbars :). May not be <code>null</code>.
    */
   @Nonnull
+  @OverrideOnDemand
   protected BootstrapToolbarAdvanced createNewToolbar ()
   {
     return new BootstrapToolbarAdvanced ();
@@ -139,6 +140,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
+  @OverrideOnDemand
   protected BootstrapToolbarAdvanced createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                         final boolean bCanGoBack,
                                                         final boolean bCanEdit,
@@ -200,6 +202,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
+  @OverrideOnDemand
   protected BootstrapToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                         @Nonnull final DATATYPE aSelectedObject)
   {
@@ -253,6 +256,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * @return Never <code>null</code>.
    */
   @Nonnull
+  @OverrideOnDemand
   protected BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                           @Nullable final DATATYPE aSelectedObject)
   {
