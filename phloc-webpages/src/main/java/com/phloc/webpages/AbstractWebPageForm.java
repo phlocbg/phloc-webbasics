@@ -84,6 +84,16 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   }
 
   /**
+   * @return A newly created toolbar. May be overridden to create other types of
+   *         toolbars :). May not be <code>null</code>.
+   */
+  @Nonnull
+  protected BootstrapToolbarAdvanced createNewToolbar ()
+  {
+    return new BootstrapToolbarAdvanced ();
+  }
+
+  /**
    * @param aWPEC
    *        The web page execution context
    * @param aSelectedObject
@@ -134,7 +144,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                                               final boolean bCanEdit,
                                                               @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
+    final BootstrapToolbarAdvanced aToolbar = createNewToolbar ();
     if (bCanGoBack)
     {
       // Back to list
@@ -193,7 +203,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final BootstrapToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                               @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
+    final BootstrapToolbarAdvanced aToolbar = createNewToolbar ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -246,7 +256,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                                                 @Nullable final DATATYPE aSelectedObject)
   {
-    final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
+    final BootstrapToolbarAdvanced aToolbar = createNewToolbar ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
     if (aSelectedObject != null)
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
