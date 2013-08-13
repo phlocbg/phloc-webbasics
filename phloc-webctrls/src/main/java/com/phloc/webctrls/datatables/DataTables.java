@@ -75,6 +75,7 @@ import com.phloc.webctrls.js.JSJQueryUtils;
 public class DataTables implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_GENERATE_ON_DOCUMENT_READY = false;
+  public static final boolean DEFAULT_AUTOWIDTH = true;
   public static final boolean DEFAULT_PAGINATE = true;
   public static final boolean DEFAULT_STATE_SAVE = false;
   public static final boolean DEFAULT_JQUERY_UI = false;
@@ -92,6 +93,7 @@ public class DataTables implements IHCNodeBuilder
   private final AbstractHCBaseTable <?> m_aTable;
   private boolean m_bGenerateOnDocumentReady = s_bDefaultGenerateOnDocumentReady;
   private Locale m_aDisplayLocale;
+  private boolean m_bAutoWidth = DEFAULT_AUTOWIDTH;
   private boolean m_bPaginate = DEFAULT_PAGINATE;
   private boolean m_bStateSave = DEFAULT_STATE_SAVE;
   private boolean m_bJQueryUI = DEFAULT_JQUERY_UI;
@@ -187,6 +189,18 @@ public class DataTables implements IHCNodeBuilder
   public DataTables setDisplayLocale (@Nullable final Locale aDisplayLocale)
   {
     m_aDisplayLocale = aDisplayLocale;
+    return this;
+  }
+
+  public boolean isAutoWidth ()
+  {
+    return m_bAutoWidth;
+  }
+
+  @Nonnull
+  public DataTables setAutoWidth (final boolean bAutoWidth)
+  {
+    m_bAutoWidth = bAutoWidth;
     return this;
   }
 
@@ -624,9 +638,11 @@ public class DataTables implements IHCNodeBuilder
 
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
+    if (m_bAutoWidth != DEFAULT_AUTOWIDTH)
+      aParams.add ("bAutoWidth", m_bAutoWidth);
     if (m_bPaginate != DEFAULT_PAGINATE)
       aParams.add ("bPaginate", m_bPaginate);
-    if (m_bPaginate != DEFAULT_STATE_SAVE)
+    if (m_bStateSave != DEFAULT_STATE_SAVE)
       aParams.add ("bStateSave", m_bStateSave);
     if (m_bJQueryUI != DEFAULT_JQUERY_UI)
       aParams.add ("bJQueryUI", m_bJQueryUI);
