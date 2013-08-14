@@ -18,9 +18,7 @@
 package com.phloc.webctrls.autonumeric;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -437,8 +435,8 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       String sInitialValue;
       if (m_aDisplayLocale != null)
       {
-        final DecimalFormat aDF = (DecimalFormat) NumberFormat.getInstance (m_aDisplayLocale);
-        sInitialValue = aDF.format (m_aInitialValue);
+        // Must be in Locale.US
+        sInitialValue = m_aInitialValue.toString ();
       }
       else
         sInitialValue = m_aInitialValue.toString ();
@@ -450,6 +448,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   public static void registerExternalResources ()
   {
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_198);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_15);
   }
 }
