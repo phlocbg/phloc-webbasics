@@ -432,15 +432,8 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     aPkg.add (invoke (e).arg ("init").arg (aArgs));
     if (m_aInitialValue != null)
     {
-      String sInitialValue;
-      if (m_aDisplayLocale != null)
-      {
-        // Must be in Locale.US
-        sInitialValue = m_aInitialValue.toString ();
-      }
-      else
-        sInitialValue = m_aInitialValue.toString ();
-      aPkg.add (invoke (e).arg ("set").arg (sInitialValue));
+      // Never locale specific!
+      aPkg.add (invoke (e).arg ("set").arg (m_aInitialValue.toString ()));
     }
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }

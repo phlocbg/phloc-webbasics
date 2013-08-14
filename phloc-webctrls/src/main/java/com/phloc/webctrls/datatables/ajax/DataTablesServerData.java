@@ -43,14 +43,27 @@ import com.phloc.webbasics.state.IHasUIState;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
 
+/**
+ * This class holds tables to be used by the DataTables server side handling.
+ * 
+ * @author Philip Helger
+ */
 public final class DataTablesServerData implements IHasUIState
 {
+  /**
+   * This class contains all data required for each column of a table.
+   * 
+   * @author Philip Helger
+   */
   static final class ColumnData implements Serializable
   {
     private final Comparator <String> m_aComparator;
 
     private ColumnData (@Nonnull final Comparator <String> aComparator)
     {
+      if (aComparator == null)
+        throw new NullPointerException ("comparator");
+
       m_aComparator = aComparator;
     }
 
@@ -106,18 +119,31 @@ public final class DataTablesServerData implements IHasUIState
       }
     }
 
-    // Row data
-    final IHCConversionSettings aCS = HCSettings.getConversionSettings (GlobalDebug.isDebugMode ());
     // Create HTML without namespaces
-    final HCConversionSettings aRealCS = new HCConversionSettings (aCS);
-    aRealCS.getXMLWriterSettings ().setEmitNamespaces (false);
+    final IHCConversionSettings aRealCS = createConversionSettings ();
 
+    // Row data
     m_aRows = new ArrayList <DataTablesServerDataRow> (aTable.getBodyRowCount ());
     for (final HCRow aRow : aTable.getAllBodyRows ())
       m_aRows.add (new DataTablesServerDataRow (aRow, aRealCS));
     m_aDisplayLocale = aDisplayLocale;
     m_aServerSortState = new ServerSortState (this, aDisplayLocale);
     m_eFilterType = eFilterType;
+  }
+
+  /**
+   * Create the HC conversion settings to be used for HTML serialization.
+   * 
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public static IHCConversionSettings createConversionSettings ()
+  {
+    final IHCConversionSettings aCS = HCSettings.getConversionSettings (GlobalDebug.isDebugMode ());
+    // Create HTML without namespaces
+    final HCConversionSettings aRealCS = new HCConversionSettings (aCS);
+    aRealCS.getXMLWriterSettings ().setEmitNamespaces (false);
+    return aRealCS;
   }
 
   @Nonnull

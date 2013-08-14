@@ -17,6 +17,9 @@
  */
 package com.phloc.webctrls.datatables.ajax;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.BitSet;
 import java.util.Locale;
@@ -41,13 +44,19 @@ import com.phloc.html.hc.utils.HCSpecialNodeHandler;
 import com.phloc.html.hc.utils.HCSpecialNodes;
 import com.phloc.html.hc.utils.IHCSpecialNodes;
 
+/**
+ * This class holds table cells to be used by the DataTables server side
+ * handling.
+ * 
+ * @author Philip Helger
+ */
 public final class DataTablesServerDataCell implements Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTablesServerDataCell.class);
 
-  private final IHCConversionSettings m_aCS;
+  private IHCConversionSettings m_aCS;
   private HCNodeList m_aContent;
-  private final HCSpecialNodes m_aSpecialNodes = new HCSpecialNodes ();
+  private HCSpecialNodes m_aSpecialNodes = new HCSpecialNodes ();
   private String m_sHTML;
   private String m_sTextContent;
 
@@ -63,6 +72,25 @@ public final class DataTablesServerDataCell implements Serializable
 
     // Remember cell content
     setContent (aCellContent);
+  }
+
+  private void writeObject (@Nonnull final ObjectOutputStream out) throws IOException
+  {
+    out.writeObject (m_aContent);
+    out.writeObject (m_aSpecialNodes);
+    out.writeUTF (m_sHTML);
+    out.writeUTF (m_sTextContent);
+  }
+
+  @SuppressWarnings ("unchecked")
+  private void readObject (@Nonnull final ObjectInputStream in) throws IOException, ClassNotFoundException
+  {
+    // Always the same CS
+    m_aCS = DataTablesServerData.createConversionSettings ();
+    m_aContent = (HCNodeList) in.readObject ();
+    m_aSpecialNodes = (HCSpecialNodes) in.readObject ();
+    m_sHTML = in.readUTF ();
+    m_sTextContent = in.readUTF ();
   }
 
   public void setContent (@Nonnull final HCNodeList aCellChildren)

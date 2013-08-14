@@ -34,6 +34,12 @@ import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCRow;
 
+/**
+ * This class holds table rows to be used by the DataTables server side
+ * handling.
+ * 
+ * @author Philip Helger
+ */
 public final class DataTablesServerDataRow implements Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTablesServerDataRow.class);
