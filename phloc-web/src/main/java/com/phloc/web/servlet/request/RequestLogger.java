@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -35,6 +36,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorAsString;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.mock.OfflineHttpServletRequest;
 
@@ -241,12 +243,41 @@ public final class RequestLogger
   }
 
   @Nonnull
+  public static StringBuilder getRequestCookies (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append ("Cookies:\n");
+    final Cookie [] aCookies = aHttpRequest.getCookies ();
+    if (aCookies != null)
+      for (final Cookie aCookie : aCookies)
+      {
+        aSB.append ("  ").append (aCookie.getName ()).append (" = ").append (aCookie.getValue ());
+        if (StringHelper.hasText (aCookie.getDomain ()))
+          aSB.append (" [domain=").append (aCookie.getDomain ()).append (']');
+        aSB.append (" [maxage=").append (aCookie.getMaxAge ()).append (']');
+        if (StringHelper.hasText (aCookie.getPath ()))
+          aSB.append (" [path=").append (aCookie.getPath ()).append (']');
+        if (aCookie.getSecure ())
+          aSB.append (" [secure]");
+        aSB.append (" [version=").append (aCookie.getVersion ()).append (']');
+        aSB.append ('\n');
+      }
+    return aSB;
+  }
+
+  public static void logRequestCookies (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    s_aLogger.info (getRequestCookies (aHttpRequest).toString ());
+  }
+
+  @Nonnull
   public static StringBuilder getRequestComplete (@Nonnull final HttpServletRequest aHttpRequest)
   {
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (getRequestFields (aHttpRequest));
     aSB.append (getRequestHeader (aHttpRequest));
     aSB.append (getRequestParameters (aHttpRequest));
+    aSB.append (getRequestCookies (aHttpRequest));
     return aSB;
   }
 
