@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap.ext;
+package com.phloc.webctrls.typeahead;
 
 import java.util.Locale;
 
@@ -37,19 +37,18 @@ import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.bootstrap.EBootstrapText;
 
-@Deprecated
-public class BootstrapTypeaheadEdit implements IHCNodeBuilder
+public class TypeaheadEdit implements IHCNodeBuilder
 {
   private final HCEdit m_aEdit;
   private final RequestField m_aRFHidden;
   private final String m_sHiddenFieldID;
   private final JSAnonymousFunction m_aSelectionCallback;
-  private final BootstrapPhlocTypeaheadScript m_aScript;
+  private final TypeaheadScript m_aScript;
 
-  public BootstrapTypeaheadEdit (@Nonnull final RequestField aRFEdit,
-                                 @Nonnull final RequestField aRFHidden,
-                                 @Nonnull final ISimpleURL aAjaxInvocationURL,
-                                 @Nonnull final Locale aDisplayLocale)
+  public TypeaheadEdit (@Nonnull final RequestField aRFEdit,
+                        @Nonnull final RequestField aRFHidden,
+                        @Nonnull final ISimpleURL aAjaxInvocationURL,
+                        @Nonnull final Locale aDisplayLocale)
   {
     if (aRFEdit == null)
       throw new NullPointerException ("RequestFieldEdit");
@@ -57,6 +56,8 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
       throw new NullPointerException ("RequestFieldHidden");
     if (aAjaxInvocationURL == null)
       throw new NullPointerException ("AjaxInvocationURL");
+    if (aDisplayLocale == null)
+      throw new NullPointerException ("DisplayLocale");
 
     m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true)
                                   .setID (GlobalIDFactory.getNewStringID ())
@@ -70,9 +71,7 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
     m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSID).change ());
-    m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit.getID ()),
-                                                   m_aSelectionCallback,
-                                                   aAjaxInvocationURL);
+    m_aScript = new TypeaheadScript (JQuerySelector.id (m_aEdit.getID ()), m_aSelectionCallback, aAjaxInvocationURL);
   }
 
   /**
@@ -115,7 +114,7 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
    *         effect if they are performed before this control is build!
    */
   @Nonnull
-  public BootstrapPhlocTypeaheadScript getScript ()
+  public TypeaheadScript getScript ()
   {
     return m_aScript;
   }

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap.ext;
+package com.phloc.webctrls.typeahead;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -35,8 +35,7 @@ import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webctrls.bootstrap.EBootstrapJSPathProvider;
 
-@Deprecated
-public class BootstrapPhlocTypeaheadScript implements IHCNodeBuilder
+public class TypeaheadScript implements IHCNodeBuilder
 {
   public static final int DEFAULT_MIN_LENGTH = 2;
   public static final int DEFAULT_MAX_SHOW_ITEMS = 8;
@@ -53,9 +52,9 @@ public class BootstrapPhlocTypeaheadScript implements IHCNodeBuilder
   private int m_nMinLength = s_nDefaultMinLength;
   private int m_nMaxShowItems = s_nDefaultMaxShowItems;
 
-  public BootstrapPhlocTypeaheadScript (@Nonnull final IJQuerySelector aEditFieldSelector,
-                                        @Nonnull final JSAnonymousFunction aIDCallback,
-                                        @Nonnull final ISimpleURL aAjaxInvocationURL)
+  public TypeaheadScript (@Nonnull final IJQuerySelector aEditFieldSelector,
+                          @Nonnull final JSAnonymousFunction aIDCallback,
+                          @Nonnull final ISimpleURL aAjaxInvocationURL)
   {
     if (aEditFieldSelector == null)
       throw new NullPointerException ("EditFieldSelector");

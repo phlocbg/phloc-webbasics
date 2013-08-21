@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap.ext;
+package com.phloc.webctrls.typeahead;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,12 +26,11 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 /**
  * Domain object to easily handle the selected elements of a
- * {@link BootstrapTypeaheadEdit}.
+ * {@link TypeaheadEdit}.
  * 
  * @author Philip Helger
  */
-@Deprecated
-public class BootstrapTypeaheadEditSelection
+public class TypeaheadEditSelection
 {
   private final String m_sEditValue;
   private final String m_sHiddenFieldValue;
@@ -44,7 +43,7 @@ public class BootstrapTypeaheadEditSelection
    * @param sHiddenFieldValue
    *        The value of the hidden field with the ID. May be <code>null</code>.
    */
-  public BootstrapTypeaheadEditSelection (@Nullable final String sEditValue, @Nullable final String sHiddenFieldValue)
+  public TypeaheadEditSelection (@Nullable final String sEditValue, @Nullable final String sHiddenFieldValue)
   {
     m_sEditValue = sEditValue;
     m_sHiddenFieldValue = sHiddenFieldValue;
@@ -92,9 +91,9 @@ public class BootstrapTypeaheadEditSelection
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static BootstrapTypeaheadEditSelection getSelectionForRequiredObject (@Nonnull final WebPageExecutionContext aWPEC,
-                                                                               @Nullable final String sEditFieldName,
-                                                                               @Nullable final String sHiddenFieldName)
+  public static TypeaheadEditSelection getSelectionForRequiredObject (@Nonnull final WebPageExecutionContext aWPEC,
+                                                                      @Nullable final String sEditFieldName,
+                                                                      @Nullable final String sHiddenFieldName)
   {
     if (aWPEC == null)
       throw new NullPointerException ("WPEC");
@@ -119,6 +118,6 @@ public class BootstrapTypeaheadEditSelection
       }
     }
 
-    return new BootstrapTypeaheadEditSelection (sEditValue, sHiddenFieldValue);
+    return new TypeaheadEditSelection (sEditValue, sHiddenFieldValue);
   }
 }
