@@ -32,6 +32,8 @@ public enum EBootstrapCSSPathProvider implements ICSSPathProvider
 {
   BOOTSTRAP_232 ("bootstrap/232/css/bootstrap.css"),
   BOOTSTRAP_RESPONSIVE_232 ("bootstrap/232/css/bootstrap-responsive.css"),
+  BOOTSTRAP_300 ("bootstrap/300/css/bootstrap.css"),
+  BOOTSTRAP_THEME_300 ("bootstrap/300/css/bootstrap-theme.css"),
   BOOTSTRAP_IE6 ("bootstrap/bootstrap-ie6.css"),
   BOOTSTRAP_PHLOC ("bootstrap/bootstrap-phloc.css"),
   BOOTSTRAP_DATATABLES ("bootstrap/datatables/bootstrap-datatables.css");
