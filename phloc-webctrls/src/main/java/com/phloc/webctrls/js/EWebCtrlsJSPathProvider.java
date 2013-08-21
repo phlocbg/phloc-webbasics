@@ -31,7 +31,9 @@ public enum EWebCtrlsJSPathProvider implements IJSPathProvider
    * Source: https://github.com/scottjehl/Respond - only for IE6-8 so use it
    * only in a conditional comment!
    */
-  RESPOND ("js/respond.js", false);
+  RESPOND ("js/respond.js", false),
+  /** Insert in &lt;head> element (after or before your CSS) for IE &lt; 9 */
+  HTML5SHIV_3_6_2 ("html5shiv/3.6.2/html5shiv.js", false);
 
   private final String m_sPath;
   private final boolean m_bCanBeBundled;
