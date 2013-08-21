@@ -99,11 +99,6 @@
       <version>6.1.3</version>
     </dependency>
     <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-validation</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>net.sf.trove4j</groupId>
       <artifactId>trove4j</artifactId>
       <version>3.0.3</version>
