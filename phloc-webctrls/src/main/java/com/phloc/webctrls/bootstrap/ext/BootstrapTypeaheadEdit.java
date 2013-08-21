@@ -65,10 +65,10 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
     m_sHiddenFieldID = GlobalIDFactory.getNewStringID ();
 
     m_aSelectionCallback = new JSAnonymousFunction ();
-    final JSVar aID = m_aSelectionCallback.param ("id");
+    final JSVar aJSID = m_aSelectionCallback.param ("id");
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
-    m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aID).change ());
+    m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSID).change ());
     m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit.getID ()),
                                                    m_aSelectionCallback,
                                                    aAjaxInvocationURL);
