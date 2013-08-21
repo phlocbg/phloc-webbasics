@@ -32,8 +32,8 @@ import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.IJQuerySelector;
+import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
-import com.phloc.webctrls.bootstrap.EBootstrapJSPathProvider;
 
 public class TypeaheadScript implements IHCNodeBuilder
 {
@@ -175,6 +175,8 @@ public class TypeaheadScript implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EBootstrapJSPathProvider.BOOTSTRAP_PHLOC_TYPEAHEAD);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.TYPEAHEAD_0_9_3);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.PHLOC_TYPEAHEAD);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETypeaheadCSSPathProvider.TYPEAHEAD_BOOTSTRAP);
   }
 }

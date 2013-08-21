@@ -35,7 +35,6 @@ import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webctrls.bootstrap.EBootstrapJSPathProvider;
 
-@Deprecated
 public class BootstrapPhlocTypeaheadScript implements IHCNodeBuilder
 {
   public static final int DEFAULT_MIN_LENGTH = 2;

@@ -35,7 +35,6 @@ import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.form.RequestField;
-import com.phloc.webctrls.bootstrap.EBootstrapText;
 
 public class TypeaheadEdit implements IHCNodeBuilder
 {
@@ -61,7 +60,7 @@ public class TypeaheadEdit implements IHCNodeBuilder
 
     m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true)
                                   .setID (GlobalIDFactory.getNewStringID ())
-                                  .setPlaceholder (EBootstrapText.ENTER_SEARCH_STRING.getDisplayText (aDisplayLocale));
+                                  .setPlaceholder (ETypeaheadText.ENTER_SEARCH_STRING.getDisplayText (aDisplayLocale));
 
     m_aRFHidden = aRFHidden;
     m_sHiddenFieldID = GlobalIDFactory.getNewStringID ();
@@ -71,6 +70,7 @@ public class TypeaheadEdit implements IHCNodeBuilder
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
     m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSID).change ());
+    // Params: edit-ID, selectionCallback function and AJAX URL
     m_aScript = new TypeaheadScript (JQuerySelector.id (m_aEdit.getID ()), m_aSelectionCallback, aAjaxInvocationURL);
   }
 

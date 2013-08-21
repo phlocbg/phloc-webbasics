@@ -30,7 +30,6 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * 
  * @author Philip Helger
  */
-@Deprecated
 public class BootstrapTypeaheadEditSelection
 {
   private final String m_sEditValue;

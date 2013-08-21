@@ -37,7 +37,6 @@ import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.bootstrap.EBootstrapText;
 
-@Deprecated
 public class BootstrapTypeaheadEdit implements IHCNodeBuilder
 {
   private final HCEdit m_aEdit;
