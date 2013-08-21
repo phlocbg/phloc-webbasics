@@ -18,7 +18,11 @@
     limitations under the License.
 
 -->
-<translationitems count="97">
+<translationitems count="98">
+  <item id="com.phloc.webctrls.bootstrap.EBootstrapText.ENTER_SEARCH_STRING">
+    <de>Geben Sie einen Suchtext ein</de>
+    <en>Enter a search phrase</en>
+  </item>
   <item id="com.phloc.webctrls.colorbox.EColorBoxText.CLOSE">
     <de>Schließen</de>
     <en>close</en>
