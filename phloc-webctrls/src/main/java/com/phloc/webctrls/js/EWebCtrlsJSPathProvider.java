@@ -25,16 +25,23 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EWebCtrlsJSPathProvider implements IJSPathProvider
 {
-  JQUERY_UTILS ("js/jquery-utils.js"),
-  STACKTRACE ("js/stacktrace.js");
+  JQUERY_UTILS ("js/jquery-utils.js", true),
+  STACKTRACE ("js/stacktrace.js", true),
+  /**
+   * Source: https://github.com/scottjehl/Respond - only for IE6-8 so use it
+   * only in a conditional comment!
+   */
+  RESPOND ("js/respond.js", false);
 
   private final String m_sPath;
+  private final boolean m_bCanBeBundled;
 
-  private EWebCtrlsJSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EWebCtrlsJSPathProvider (@Nonnull @Nonempty final String sPath, final boolean bCanBeBundled)
   {
     if (!JSFilenameHelper.isJSFilename (sPath))
       throw new IllegalArgumentException ("path");
     m_sPath = sPath;
+    m_bCanBeBundled = bCanBeBundled;
   }
 
   @Nonnull
@@ -46,6 +53,6 @@ public enum EWebCtrlsJSPathProvider implements IJSPathProvider
 
   public boolean canBeBundled ()
   {
-    return true;
+    return m_bCanBeBundled;
   }
 }

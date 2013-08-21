@@ -92,7 +92,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     }
   }
 
-  private final Locale m_aDisplayLocale;
   private final RequestField m_aRF;
   private String m_sID;
   private BigDecimal m_aInitialValue;
@@ -125,7 +124,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     // values by default!
     setMin (-999999999);
 
-    m_aDisplayLocale = aDisplayLocale;
     m_aRF = aRF;
     m_sID = GlobalIDFactory.getNewStringID ();
     if (aDisplayLocale != null)
