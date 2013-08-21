@@ -93,7 +93,6 @@ public final class ClosureRunner extends AbstractCommandLineRunner <Compiler, Co
   private void _setDefaultConfig ()
   {
     getCommandLineConfig ().setPrintTree (false)
-                           .setComputePhaseOrdering (false)
                            .setPrintAst (false)
                            .setPrintPassGraph (false)
                            .setJscompDevMode (CompilerOptions.DevMode.OFF)
