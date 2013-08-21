@@ -180,7 +180,7 @@ public class HCColorBox implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorBoxCSSPathProvider.COLORBOX_1419);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorBoxJSPathProvider.COLORBOX_1419);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EColorBoxCSSPathProvider.COLORBOX_1_4_27);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EColorBoxJSPathProvider.COLORBOX_1_4_27);
   }
 }
