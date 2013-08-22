@@ -41,8 +41,8 @@ public class ComparatorCellString extends AbstractCollationComparator <AbstractH
                                @Nullable final String sCommonSuffix)
   {
     super (aParseLocale);
-    m_sCommonPrefix = sCommonPrefix;
-    m_sCommonSuffix = sCommonSuffix;
+    m_sCommonPrefix = StringHelper.hasText (sCommonPrefix) ? sCommonPrefix : null;
+    m_sCommonSuffix = StringHelper.hasText (sCommonSuffix) ? sCommonSuffix : null;
   }
 
   @OverrideOnDemand
@@ -54,9 +54,9 @@ public class ComparatorCellString extends AbstractCollationComparator <AbstractH
     String sText = aCell.getPlainText ();
 
     // strip common prefix and suffix
-    if (StringHelper.hasText (m_sCommonPrefix))
+    if (m_sCommonPrefix != null)
       sText = StringHelper.trimStart (sText, m_sCommonPrefix);
-    if (StringHelper.hasText (m_sCommonSuffix))
+    if (m_sCommonSuffix != null)
       sText = StringHelper.trimEnd (sText, m_sCommonSuffix);
 
     return sText;
