@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>8/22/13</td><td colspan="4">_Release *1.2.1*_</td></tr>
+<tr><td>8/22/13</td><td>update</td><td>api</td><td></td><td>Updated to [http://code.google.com/p/phloc-webbasics phloc-appbasics] 2.3.0 and [http://code.google.com/p/phloc-webbasics phloc-webbasics] 2.1.5</td></tr>
 <tr><td>8/21/13</td><td>add</td><td>tech</td><td></td><td>Added Twitter typeahead.js 0.9.3</td></tr>
 <tr><td>8/21/13</td><td>update</td><td>tech</td><td></td><td>Updated stacktrace.js</td></tr>
 <tr><td>8/21/13</td><td>add</td><td>tech</td><td></td><td>Added jQuery 1.10.2 and 2.0.3</td></tr>
