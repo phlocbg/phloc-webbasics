@@ -20,7 +20,6 @@ package com.phloc.webpages;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.errorhandling.FormErrors;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
@@ -30,6 +29,7 @@ import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;

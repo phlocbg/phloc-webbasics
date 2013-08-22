@@ -20,7 +20,6 @@ package com.phloc.webctrls.bootstrap;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.appbasics.errorhandling.EFormErrorLevel;
 import com.phloc.commons.annotations.Since;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.html.css.DefaultCSSClassProvider;
@@ -429,11 +428,5 @@ public final class CBootstrapCSS
     if (eErrorLevel.isLessOrEqualSevereThan (EErrorLevel.WARN))
       return WARNING;
     return ERROR;
-  }
-
-  @Nullable
-  public static ICSSClassProvider getCSSClass (@Nullable final EFormErrorLevel eFormErrorLevel)
-  {
-    return eFormErrorLevel == null ? null : getCSSClass (eFormErrorLevel.getErrorLevel ());
   }
 }

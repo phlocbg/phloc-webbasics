@@ -24,11 +24,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.errorhandling.EFormErrorLevel;
-import com.phloc.appbasics.errorhandling.IError;
-import com.phloc.appbasics.errorhandling.IErrorList;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.html.css.ICSSClassProvider;
@@ -45,6 +43,8 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.AbstractHCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.validation.error.IError;
+import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.bootstrap.BootstrapHelpBlock;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
@@ -181,7 +181,7 @@ public class BootstrapTableForm extends BootstrapTable
   {
     if (aFormErrors != null)
       for (final IError aError : aFormErrors.getAllItems ())
-        aCell.addChild (new BootstrapHelpBlock ().addChild (aError.getText ()));
+        aCell.addChild (new BootstrapHelpBlock ().addChild (aError.getErrorText ()));
   }
 
   @Nonnull
@@ -229,7 +229,7 @@ public class BootstrapTableForm extends BootstrapTable
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
                            @Nullable final IErrorList aFormErrors)
   {
-    final EFormErrorLevel eHighest = aFormErrors == null ? null : aFormErrors.getMostSevereErrorLevel ();
+    final EErrorLevel eHighest = aFormErrors == null ? null : aFormErrors.getMostSevereErrorLevel ();
 
     // Start row
     final HCRow aRow = super.addBodyRow ();
