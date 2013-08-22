@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -320,6 +321,17 @@ public class BootstrapTabBox implements IHCNodeBuilder
     if (aTab == null)
       aTab = ContainerHelper.getFirstValue (m_aTabs);
     return aTab;
+  }
+
+  public boolean hasNoTabs ()
+  {
+    return m_aTabs.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getTabCount ()
+  {
+    return m_aTabs.size ();
   }
 
   @Nonnull
