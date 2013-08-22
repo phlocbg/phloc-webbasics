@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_plugin_schedule implements IThirdPar
   private static final IThirdPartyModule QUARTZ = new ThirdPartyModule ("Quartz",
                                                                         "Terracotta",
                                                                         ELicense.APACHE2,
-                                                                        new Version (2, 1, 7),
+                                                                        new Version (2, 2, 0),
                                                                         "http://www.quartz-scheduler.org/");
 
   @Nullable
