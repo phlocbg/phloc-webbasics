@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
@@ -46,6 +47,8 @@ import com.phloc.commons.codec.EncoderException;
  * @since 1.3
  * @version $Id: BCodec.java 1380305 2012-09-03 18:37:21Z tn $
  */
+@Deprecated
+@DevelopersNote ("Is now in phloc-commons > 4.0.8")
 public class RFC1522BCodec extends AbstractRFC1522Codec
 {
   /**

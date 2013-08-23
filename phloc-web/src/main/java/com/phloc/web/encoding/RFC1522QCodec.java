@@ -23,6 +23,7 @@ import java.util.BitSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.EncoderException;
@@ -51,6 +52,8 @@ import com.phloc.commons.codec.EncoderException;
  * @since 1.3
  * @version $Id: QCodec.java 1380305 2012-09-03 18:37:21Z tn $
  */
+@Deprecated
+@DevelopersNote ("Is now in phloc-commons > 4.0.8")
 public class RFC1522QCodec extends AbstractRFC1522Codec
 {
   /**

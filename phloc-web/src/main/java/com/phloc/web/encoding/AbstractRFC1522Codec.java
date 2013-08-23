@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -45,6 +46,8 @@ import com.phloc.commons.string.StringHelper;
  * @since 1.3
  * @version $Id: RFC1522Codec.java 1379145 2012-08-30 21:02:52Z tn $
  */
+@Deprecated
+@DevelopersNote ("Is now in phloc-commons > 4.0.8")
 public abstract class AbstractRFC1522Codec
 {
   /** Separator. */
