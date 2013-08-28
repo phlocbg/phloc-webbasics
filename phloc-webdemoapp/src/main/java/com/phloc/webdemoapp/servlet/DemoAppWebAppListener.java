@@ -26,7 +26,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
-import com.phloc.webctrls.bootstrap.servlet.WebAppListenerMultiAppBootstrap;
+import com.phloc.webctrls.bootstrap3.servlet.WebAppListenerMultiAppBootstrap3;
 import com.phloc.webdemoapp.app.CDemoAppUI;
 import com.phloc.webdemoapp.app.init.DefaultSecurity;
 import com.phloc.webdemoapp.app.init.InitializerConfig;
@@ -37,7 +37,7 @@ import com.phloc.webdemoapp.app.init.InitializerView;
  * 
  * @author Philip Helger
  */
-public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
+public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap3
 {
   @Override
   @Nonnull

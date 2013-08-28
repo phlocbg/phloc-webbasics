@@ -26,9 +26,9 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class JettyStop
+public final class JettyStopDEMOAPP
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (JettyStop.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (JettyStopDEMOAPP.class);
 
   public static void main (final String [] args) throws IOException
   {

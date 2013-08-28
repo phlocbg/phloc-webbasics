@@ -28,16 +28,16 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCDiv;
-import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCP;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCStrong;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webctrls.bootstrap.BootstrapNav;
-import com.phloc.webctrls.bootstrap.BootstrapNavbar;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
-import com.phloc.webctrls.bootstrap.EBootstrapNavBarType;
+import com.phloc.webctrls.bootstrap3.dropdown.Bootstrap3DropdownMenu;
+import com.phloc.webctrls.bootstrap3.nav.Bootstrap3Nav;
+import com.phloc.webctrls.bootstrap3.navbar.Bootstrap3Navbar;
+import com.phloc.webctrls.bootstrap3.navbar.EBootstrap3NavbarType;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 import com.phloc.webdemoapp.ui.DemoAppAccessUI;
 
@@ -51,27 +51,26 @@ final class ViewHeaderProvider
   private ViewHeaderProvider ()
   {}
 
-  private static void _addLoginLogout (@Nonnull final BootstrapNavbar aNavbar, @Nonnull final Locale aDisplayLocale)
+  private static void _addLoginLogout (@Nonnull final Bootstrap3Navbar aNavbar, @Nonnull final Locale aDisplayLocale)
   {
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     if (aUser != null)
     {
-      final BootstrapNav aNav = new BootstrapNav ();
+      final Bootstrap3Nav aNav = new Bootstrap3Nav ();
       aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale),
                     LinkUtils.getURLWithContext ("/logout"));
       aNavbar.addNav (true, aNav);
-      aNavbar.addTextContent (true, HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
+      aNavbar.addText (true, HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
     }
     else
     {
-      final BootstrapNav aNav = new BootstrapNav ();
-      final HCLI aDropDown = aNav.addDropDownItem ("Login");
+      final Bootstrap3Nav aNav = new Bootstrap3Nav ();
+      final Bootstrap3DropdownMenu aDropDown = aNav.addDropdownMenu ("Login");
       {
-        final HCDiv aDiv = new HCDiv ().addClass (CBootstrapCSS.DROPDOWN_MENU)
-                                       .addStyle (CCSSProperties.PADDING.newValue ("15px"));
+        final HCDiv aDiv = new HCDiv ().addStyle (CCSSProperties.PADDING.newValue ("15px"));
         aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null, false)
                                       .addClass (CBootstrapCSS.NAVBAR_FORM));
-        aDropDown.addChild (aDiv);
+        aDropDown.addItem (aDiv);
       }
       aNavbar.addNav (false, aNav);
     }
@@ -83,7 +82,7 @@ final class ViewHeaderProvider
     final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
                                                                                         .getDefaultMenuItemID ());
 
-    final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavBarType.FIXED_TOP, true);
+    final Bootstrap3Navbar aNavbar = new Bootstrap3Navbar (EBootstrap3NavbarType.STATIC_TOP, true, aDisplayLocale);
     aNavbar.addBrand (false, HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1), aLinkToStartPage);
 
     _addLoginLogout (aNavbar, aDisplayLocale);
