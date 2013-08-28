@@ -28,8 +28,8 @@ import com.phloc.webbasics.app.layout.ILayoutAreaContentProvider;
 import com.phloc.webbasics.app.layout.ILayoutManager;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webctrls.bootstrap.BootstrapContainer;
-import com.phloc.webctrls.bootstrap.BootstrapRow;
-import com.phloc.webctrls.bootstrap.EBootstrapSpan;
+import com.phloc.webctrls.bootstrap3.grid.Bootstrap3Row;
+import com.phloc.webctrls.bootstrap3.grid.EBootstrap3GridMD;
 
 /**
  * This class registers the renderer for the layout areas.
@@ -74,17 +74,17 @@ public final class LayoutConfig
     @Nonnull
     public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
     {
-      final BootstrapRow aRow = new BootstrapRow (true);
+      final Bootstrap3Row aRow = new Bootstrap3Row ();
       // left
       final HCNodeList aLeft = new HCNodeList ();
       // We need a wrapper span for easy AJAX content replacement
       aLeft.addChild (HCSpan.create (ConfigMenuProvider.getContent (aLEC.getDisplayLocale ()))
                             .setID (CLayout.LAYOUT_AREAID_MENU));
       aLeft.addChild (new HCDiv ().setID (CLayout.LAYOUT_AREAID_SPECIAL));
-      aRow.addColumn (EBootstrapSpan.SPAN3, aLeft);
+      aRow.createColumn (EBootstrap3GridMD.MD_3).addChild (aLeft);
 
       // content
-      aRow.addColumn (EBootstrapSpan.SPAN9, ConfigContentProvider.getContent (aLEC));
+      aRow.createColumn (EBootstrap3GridMD.MD_9).addChild (ConfigContentProvider.getContent (aLEC));
 
       final BootstrapContainer aContentLayout = new BootstrapContainer (true);
       aContentLayout.setContent (aRow);

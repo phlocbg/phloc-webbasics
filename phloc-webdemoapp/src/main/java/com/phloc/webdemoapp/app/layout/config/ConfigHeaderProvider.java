@@ -32,9 +32,9 @@ import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webctrls.bootstrap.BootstrapNav;
-import com.phloc.webctrls.bootstrap.BootstrapNavbar;
-import com.phloc.webctrls.bootstrap.EBootstrapNavBarType;
+import com.phloc.webctrls.bootstrap3.nav.Bootstrap3Nav;
+import com.phloc.webctrls.bootstrap3.navbar.Bootstrap3Navbar;
+import com.phloc.webctrls.bootstrap3.navbar.EBootstrap3NavbarType;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 
 /**
@@ -53,21 +53,21 @@ public final class ConfigHeaderProvider
     final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
                                                                                         .getDefaultMenuItemID ());
 
-    final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavBarType.FIXED_TOP, true);
+    final Bootstrap3Navbar aNavbar = new Bootstrap3Navbar (EBootstrap3NavbarType.STATIC_TOP, true, aDisplayLocale);
     aNavbar.addBrand (false, HCNodeList.create (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1),
                                                 HCSpan.create (" Administration")
                                                       .addClass (CDemoAppCSS.CSS_CLASS_LOGO2)), aLinkToStartPage);
 
-    final BootstrapNav aNav = new BootstrapNav ();
+    final Bootstrap3Nav aNav = new Bootstrap3Nav ();
 
     aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale), LinkUtils.getURLWithContext ("/logout"));
 
     aNavbar.addNav (false, aNav);
 
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
-    aNavbar.addTextContent (true,
-                            HCP.create ("Logged in as ")
-                               .addChild (HCStrong.create (aUser == null ? "guest" : aUser.getDisplayName ())));
+    aNavbar.addText (true,
+                     HCP.create ("Logged in as ").addChild (HCStrong.create (aUser == null ? "guest"
+                                                                                          : aUser.getDisplayName ())));
     return aNavbar;
   }
 }

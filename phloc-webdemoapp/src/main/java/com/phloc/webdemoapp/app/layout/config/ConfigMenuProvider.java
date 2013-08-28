@@ -23,8 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.html.hc.IHCElement;
-import com.phloc.webctrls.bootstrap.CBootstrapCSS;
-import com.phloc.webctrls.bootstrap.ext.BootstrapMenuItemRendererWell;
+import com.phloc.webctrls.bootstrap3.ext.Bootstrap3MenuItemRenderer;
 
 /**
  * The content provider for the menu area.
@@ -39,10 +38,8 @@ public final class ConfigMenuProvider
   @Nonnull
   public static IHCElement <?> getContent (@Nonnull final Locale aDisplayLocale)
   {
-    final IHCElement <?> ret = BootstrapMenuItemRendererWell.createSideBarMenu (ApplicationMenuTree.getInstance (),
-                                                                            aDisplayLocale);
-    if (false)
-      ret.addClass (CBootstrapCSS.AFFIX);
+    final IHCElement <?> ret = Bootstrap3MenuItemRenderer.createSideBarMenu (ApplicationMenuTree.getInstance (),
+                                                                             aDisplayLocale);
     return ret;
   }
 }

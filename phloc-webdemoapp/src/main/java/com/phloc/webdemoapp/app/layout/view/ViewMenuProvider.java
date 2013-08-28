@@ -27,7 +27,7 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.webctrls.bootstrap.ext.BootstrapMenuItemRendererWell;
+import com.phloc.webctrls.bootstrap3.ext.Bootstrap3MenuItemRenderer;
 import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
 
 /**
@@ -58,7 +58,7 @@ public final class ViewMenuProvider
         return super.isMenuItemValidToBeDisplayed (aMenuObj);
       }
     };
-    final IHCElement <?> aMenu = BootstrapMenuItemRendererWell.createSideBarMenu (aMenuTree, aCallback, aDisplayLocale);
+    final IHCElement <?> aMenu = Bootstrap3MenuItemRenderer.createSideBarMenu (aMenuTree, aCallback, aDisplayLocale);
 
     return aMenu;
   }
