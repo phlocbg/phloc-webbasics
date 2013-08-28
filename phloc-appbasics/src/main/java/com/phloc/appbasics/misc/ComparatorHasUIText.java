@@ -32,7 +32,7 @@ import com.phloc.commons.compare.ESortOrder;
  * 
  * @author Philip Helger
  */
-public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText>
+public class ComparatorHasUIText <DATATYPE extends IHasUIText> extends AbstractCollationComparator <DATATYPE>
 {
   /**
    * Comparator with default locale {@link Collator} and default sort order.
@@ -50,7 +50,7 @@ public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText
    *        The nested comparator to be invoked, when the main comparison
    *        resulted in 0.
    */
-  public ComparatorHasUIText (@Nullable final Comparator <? super Object> aNestedComparator)
+  public ComparatorHasUIText (@Nullable final Comparator <? super DATATYPE> aNestedComparator)
   {
     super (aNestedComparator);
   }
@@ -76,7 +76,7 @@ public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText
    *        resulted in 0.
    */
   public ComparatorHasUIText (@Nonnull final ESortOrder eSortOrder,
-                              @Nullable final Comparator <? super Object> aNestedComparator)
+                              @Nullable final Comparator <? super DATATYPE> aNestedComparator)
   {
     super (eSortOrder, aNestedComparator);
   }
@@ -103,7 +103,7 @@ public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText
    *        resulted in 0.
    */
   public ComparatorHasUIText (@Nullable final Locale aSortLocale,
-                              @Nullable final Comparator <? super Object> aNestedComparator)
+                              @Nullable final Comparator <? super DATATYPE> aNestedComparator)
   {
     super (aSortLocale, aNestedComparator);
   }
@@ -134,7 +134,7 @@ public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText
    */
   public ComparatorHasUIText (@Nullable final Locale aSortLocale,
                               @Nonnull final ESortOrder eSortOrder,
-                              @Nullable final Comparator <? super Object> aNestedComparator)
+                              @Nullable final Comparator <? super DATATYPE> aNestedComparator)
   {
     super (aSortLocale, eSortOrder, aNestedComparator);
   }
@@ -161,7 +161,7 @@ public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText
    *        resulted in 0.
    */
   public ComparatorHasUIText (@Nonnull final Collator aCollator,
-                              @Nullable final Comparator <? super Object> aNestedComparator)
+                              @Nullable final Comparator <? super DATATYPE> aNestedComparator)
   {
     super (aCollator, aNestedComparator);
   }
@@ -192,13 +192,13 @@ public class ComparatorHasUIText extends AbstractCollationComparator <IHasUIText
    */
   public ComparatorHasUIText (@Nonnull final Collator aCollator,
                               @Nonnull final ESortOrder eSortOrder,
-                              @Nullable final Comparator <? super Object> aNestedComparator)
+                              @Nullable final Comparator <? super DATATYPE> aNestedComparator)
   {
     super (aCollator, eSortOrder, aNestedComparator);
   }
 
   @Override
-  protected String asString (@Nonnull final IHasUIText aObject)
+  protected String asString (@Nonnull final DATATYPE aObject)
   {
     return aObject.getAsUIText ();
   }
