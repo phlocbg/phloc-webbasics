@@ -20,8 +20,8 @@ package com.phloc.webctrls.bootstrap3.nav;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.css.ICSSClassProvider;
@@ -34,6 +34,7 @@ import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
  */
 public enum EBootstrap3NavType
 {
+  DEFAULT,
   TABS (CBootstrap3CSS.NAV_TABS),
   TABS_JUSTIFIED (CBootstrap3CSS.NAV_TABS, CBootstrap3CSS.NAV_JUSTIFIED),
   PILLS (CBootstrap3CSS.NAV_PILLS),
@@ -42,7 +43,7 @@ public enum EBootstrap3NavType
 
   private final List <ICSSClassProvider> m_aCSSClasses;
 
-  private EBootstrap3NavType (@Nonnull @Nonempty final ICSSClassProvider... aCSSClasses)
+  private EBootstrap3NavType (@Nullable final ICSSClassProvider... aCSSClasses)
   {
     m_aCSSClasses = ContainerHelper.newList (aCSSClasses);
   }

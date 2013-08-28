@@ -44,6 +44,11 @@ public class Bootstrap3Nav extends HCUL
 
   private final EBootstrap3NavType m_eNavType;
 
+  public Bootstrap3Nav ()
+  {
+    this (EBootstrap3NavType.DEFAULT);
+  }
+
   public Bootstrap3Nav (@Nonnull final EBootstrap3NavType eNavType)
   {
     if (eNavType == null)
