@@ -17,6 +17,9 @@
  */
 package com.phloc.web.servlet.cookie;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -26,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -43,6 +47,21 @@ public final class CookieHelper
 
   private CookieHelper ()
   {}
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public static Map <String, Cookie> getAllCookies (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("request");
+
+    final Map <String, Cookie> ret = new HashMap <String, Cookie> ();
+    final Cookie [] aCookies = aHttpRequest.getCookies ();
+    if (aCookies != null)
+      for (final Cookie aCookie : aCookies)
+        ret.put (aCookie.getName (), aCookie);
+    return ret;
+  }
 
   @Nullable
   public static Cookie getCookie (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final String sCookieName)

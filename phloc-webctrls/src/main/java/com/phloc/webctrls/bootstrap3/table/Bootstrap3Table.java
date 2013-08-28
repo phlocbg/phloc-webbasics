@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap3.base;
+package com.phloc.webctrls.bootstrap3.table;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

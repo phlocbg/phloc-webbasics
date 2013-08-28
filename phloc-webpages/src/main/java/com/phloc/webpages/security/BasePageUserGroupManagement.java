@@ -48,6 +48,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
@@ -60,7 +61,6 @@ import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
-import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
@@ -68,6 +68,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
+import com.phloc.webctrls.custom.impl.HCFormLabel;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
@@ -339,7 +340,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     final String sName = EText.LABEL_NAME.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (sName),
+    aTable.addItemRow (HCFormLabel.createMandatory (sName),
                        new HCEdit (new RequestField (FIELD_NAME, aSelectedObject == null ? null
                                                                                         : aSelectedObject.getName ())).setPlaceholder (sName),
                        aFormErrors.getListOfField (FIELD_NAME));
@@ -349,7 +350,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final RoleForUserGroupSelect aSelect = new RoleForUserGroupSelect (new RequestField (FIELD_ROLES),
                                                                        aDisplayLocale,
                                                                        aRoleIDs);
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale)),
+    aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale)),
                        aSelect,
                        aFormErrors.getListOfField (FIELD_ROLES));
   }
@@ -401,7 +402,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ().addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USERGROUP.getDisplayText (aDisplayLocale), createCreateURL ());
 
-    final BootstrapTable aTable = new BootstrapTable (HCCol.star (), new HCCol (110), createActionCol (2)).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyle ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))
+                                                  .setID (getID ());
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
@@ -432,7 +434,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

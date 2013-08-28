@@ -33,7 +33,7 @@ import com.phloc.webctrls.fineupload.FineUploader;
 import com.phloc.webctrls.fineupload.HCFineUploaderBasic;
 import com.phloc.webdemoapp.servlet.DemoAppUserUploadServlet;
 import com.phloc.webdemoapp.ui.config.upload.UserUploadManager;
-import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.theme.WebPageStyleManager;
 
 @Immutable
 public final class DemoAppFormUI
@@ -70,10 +70,11 @@ public final class DemoAppFormUI
     // Is something in progress?
     final UserDataObject aUDO = UserUploadManager.getInstance ().getUploadedFile (sID);
     if (aUDO == null)
-      return new HCFineUploaderBasic (createFineUploader (aDisplayLocale, sDirectory, sID)).setButtonToUse (AbstractWebPageExt.createUploadButton (aDisplayLocale))
+      return new HCFineUploaderBasic (createFineUploader (aDisplayLocale, sDirectory, sID)).setButtonToUse (WebPageStyleManager.getStyle ()
+                                                                                                                               .createUploadButton (aDisplayLocale))
                                                                                            .build ();
     // add preview
-    return AbstractWebPageExt.createImageView (aUDO, aDisplayLocale);
+    return WebPageStyleManager.getStyle ().createImageView (aUDO, aDisplayLocale);
   }
 
 }

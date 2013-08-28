@@ -17,13 +17,10 @@
  */
 package com.phloc.webdemoapp.page;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.html.hc.IHCNode;
@@ -31,16 +28,11 @@ import com.phloc.html.js.builder.JSArray;
 import com.phloc.webbasics.app.layout.CLayout;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.EDefaultIcon;
-import com.phloc.webctrls.datatables.DataTables;
-import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
 import com.phloc.webdemoapp.app.ajax.config.CDemoAppAjaxConfig;
-import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
-import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.form.JSFormHelper;
 
@@ -83,24 +75,5 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
                                                              CDemoAppAjaxConfig.CONFIG_SAVE_FORM_STATE,
                                                              aSuccessUpdates,
                                                              aFailureUpdates), EDefaultIcon.SAVE);
-  }
-
-  @Nonnull
-  public static DataTables createDefaultDataTablesStatic (@Nonnull final BootstrapTable aTable,
-                                                          @Nonnull final Locale aDisplayLocale)
-  {
-    final DataTables ret = AbstractWebPageExt.createDefaultDataTablesStatic (aTable, aDisplayLocale);
-    ret.setUseJQueryAjax (true)
-       .setAjaxSource (CDemoAppAjaxView.VIEW_DATATABLES.getInvocationURL ())
-       .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()))
-       .addAllColumns (aTable);
-    return ret;
-  }
-
-  @Override
-  @Nonnull
-  public DataTables createDefaultDataTables (@Nonnull final BootstrapTable aTable, @Nonnull final Locale aDisplayLocale)
-  {
-    return createDefaultDataTablesStatic (aTable, aDisplayLocale);
   }
 }

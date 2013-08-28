@@ -36,12 +36,12 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableLong;
@@ -79,15 +79,15 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
   }
 
   public BasePageSysInfoThreads (@Nonnull @Nonempty final String sID,
-                              @Nonnull final String sName,
-                              @Nullable final String sDescription)
+                                 @Nonnull final String sName,
+                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageSysInfoThreads (@Nonnull @Nonempty final String sID,
-                              @Nonnull final IReadonlyMultiLingualText aName,
-                              @Nullable final IReadonlyMultiLingualText aDescription)
+                                 @Nonnull final IReadonlyMultiLingualText aName,
+                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -115,12 +115,12 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final BootstrapTable aTable = new BootstrapTable (new HCCol (50),
-                                                      new HCCol (100),
-                                                      new HCCol (150),
-                                                      new HCCol (55),
-                                                      new HCCol (100),
-                                                      HCCol.star ()).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (50),
+                                                                new HCCol (100),
+                                                                new HCCol (150),
+                                                                new HCCol (55),
+                                                                new HCCol (100),
+                                                                HCCol.star ()).setID (getID ());
 
     // get all threads and sort them by thread ID
     final Map <Thread, StackTraceElement []> aThreads = ContainerHelper.getSortedByKey (Thread.getAllStackTraces (),
@@ -170,7 +170,7 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getColumn (0).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableLong (aDisplayLocale));
     aDataTables.getColumn (3).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableInteger (aDisplayLocale));
     aDataTables.getColumn (5).setSortable (false);

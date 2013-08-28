@@ -25,43 +25,26 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.email.IEmailAddress;
-import com.phloc.commons.gfx.ImageDataManager;
-import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.commons.url.URLValidator;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
-import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.html.hc.html.HCEM;
-import com.phloc.html.hc.html.HCImg;
 import com.phloc.html.hc.html.HCSpan;
-import com.phloc.html.hc.htmlext.HCA_MailTo;
-import com.phloc.html.hc.impl.HCTextNode;
-import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
-import com.phloc.webbasics.userdata.UserDataObject;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.CBootstrapCSS;
-import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
-import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
-import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 import com.phloc.webctrls.custom.EDefaultIcon;
-import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webpages.theme.IWebPageStyle;
+import com.phloc.webpages.theme.WebPageStyleManager;
 
 public abstract class AbstractWebPageExt extends AbstractWebPage
 {
@@ -110,20 +93,9 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  public static DataTables createDefaultDataTablesStatic (@Nonnull final BootstrapTable aTable,
-                                                          @Nonnull final Locale aDisplayLocale)
+  protected final IWebPageStyle getStyle ()
   {
-    final BootstrapDataTables ret = new BootstrapDataTables (aTable);
-    ret.setDisplayLocale (aDisplayLocale);
-    ret.addAllColumns (aTable);
-    return ret;
-  }
-
-  @Nonnull
-  protected DataTables createDefaultDataTables (@Nonnull final BootstrapTable aTable,
-                                                @Nonnull final Locale aDisplayLocale)
-  {
-    return createDefaultDataTablesStatic (aTable, aDisplayLocale);
+    return WebPageStyleManager.getStyle ();
   }
 
   /**
@@ -297,73 +269,5 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   {
     final ISimpleURL aURL = createCreateURL ().add (CHCParam.PARAM_OBJECT, aCurObject.getID ());
     return new HCA (aURL).setTitle (sTitle).addChild (getCreateImg ());
-  }
-
-  @Nonnull
-  public static IHCNode createIncorrectInputBox (@Nonnull final Locale aDisplayLocale)
-  {
-    return BootstrapErrorBox.create (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
-  }
-
-  /**
-   * @param aDisplayLocale
-   * @return Never <code>null</code>
-   */
-  @Nonnull
-  public static IHCElement <?> createUploadButton (@Nonnull final Locale aDisplayLocale)
-  {
-    return new HCSpan ().addClasses (CBootstrapCSS.BTN, EBootstrapButtonType.SUCCESS)
-                        .addChild (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
-  }
-
-  @Nonnull
-  public static IHCNode createImageView (@Nullable final UserDataObject aUDO, @Nonnull final Locale aDisplayLocale)
-  {
-    return createImageView (aUDO, 200, aDisplayLocale);
-  }
-
-  @Nonnull
-  public static IHCNode createImageView (@Nullable final UserDataObject aUDO,
-                                         final int nMaxWidth,
-                                         @Nonnull final Locale aDisplayLocale)
-  {
-    if (aUDO == null)
-      return HCEM.create (EWebPageText.IMAGE_NONE.getDisplayText (aDisplayLocale));
-
-    final HCImg aImg = new HCImg ().setSrc (aUDO.getAsURL ());
-    ScalableSize aSize = ImageDataManager.getImageSize (aUDO.getAsResource ());
-    if (aSize != null)
-    {
-      if (nMaxWidth > 0 && nMaxWidth < aSize.getWidth ())
-        aSize = aSize.getScaledToWidth (nMaxWidth);
-      aImg.setExtent (aSize);
-    }
-    return aImg;
-  }
-
-  @Nullable
-  public static IHCNode createEmailLink (@Nullable final String sEmailAddress)
-  {
-    if (StringHelper.hasNoText (sEmailAddress))
-      return null;
-    return HCA_MailTo.createLinkedEmail (sEmailAddress);
-  }
-
-  @Nullable
-  public static IHCNode createEmailLink (@Nullable final IEmailAddress aEmail)
-  {
-    if (aEmail == null)
-      return null;
-    return HCA_MailTo.createLinkedEmail (aEmail.getAddress (), aEmail.getPersonal ());
-  }
-
-  @Nullable
-  public static IHCNode createWebLink (@Nullable final String sWebSite)
-  {
-    if (StringHelper.hasNoText (sWebSite))
-      return null;
-    if (!URLValidator.isValid (sWebSite))
-      return new HCTextNode (sWebSite);
-    return new HCA (new SimpleURL (sWebSite)).setTarget (HCA_Target.BLANK).addChild (sWebSite);
   }
 }

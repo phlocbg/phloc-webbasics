@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.custom.impl;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
@@ -31,9 +30,7 @@ import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabelUtils;
 
-@Deprecated
-@DevelopersNote ("Use HCFormLabel instead")
-public class BootstrapFormLabel extends HCLabel implements IFormLabel
+public class HCFormLabel extends HCLabel implements IFormLabel
 {
   private final ELabelType m_eType;
 
@@ -51,14 +48,14 @@ public class BootstrapFormLabel extends HCLabel implements IFormLabel
     return ret;
   }
 
-  protected BootstrapFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
+  protected HCFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
     addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL);
     addChild (_modifyNode (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType)), eType));
     m_eType = eType;
   }
 
-  protected BootstrapFormLabel (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)
+  protected HCFormLabel (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)
   {
     addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL);
     addChild (_modifyNode (HCFormLabelUtils.getNodeWithState (aNode, eType), eType));
@@ -72,58 +69,58 @@ public class BootstrapFormLabel extends HCLabel implements IFormLabel
   }
 
   @Nonnull
-  public static BootstrapFormLabel create (@Nonnull final String sText)
+  public static HCFormLabel create (@Nonnull final String sText)
   {
-    return new BootstrapFormLabel (sText, ELabelType.DEFAULT);
+    return new HCFormLabel (sText, ELabelType.DEFAULT);
   }
 
   @Nonnull
-  public static BootstrapFormLabel create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  public static HCFormLabel create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
   {
     return create (aTextProvider.getText ());
   }
 
   @Nonnull
-  public static BootstrapFormLabel create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider,
+  public static HCFormLabel create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider,
                                            @Nonnull final ELabelType eType)
   {
     return create (aTextProvider.getText (), eType);
   }
 
   @Nonnull
-  public static BootstrapFormLabel create (@Nonnull final String sText, @Nonnull final ELabelType eType)
+  public static HCFormLabel create (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
-    return new BootstrapFormLabel (sText, eType);
+    return new HCFormLabel (sText, eType);
   }
 
   @Nonnull
-  public static BootstrapFormLabel create (@Nonnull final IHCElementWithChildren <?> aNode)
+  public static HCFormLabel create (@Nonnull final IHCElementWithChildren <?> aNode)
   {
-    return new BootstrapFormLabel (aNode, ELabelType.DEFAULT);
+    return new HCFormLabel (aNode, ELabelType.DEFAULT);
   }
 
   @Nonnull
-  public static BootstrapFormLabel create (@Nonnull final IHCElementWithChildren <?> aNode,
+  public static HCFormLabel create (@Nonnull final IHCElementWithChildren <?> aNode,
                                            @Nonnull final ELabelType eType)
   {
-    return new BootstrapFormLabel (aNode, eType);
+    return new HCFormLabel (aNode, eType);
   }
 
   @Nonnull
-  public static BootstrapFormLabel createMandatory (@Nonnull final String sText)
+  public static HCFormLabel createMandatory (@Nonnull final String sText)
   {
-    return new BootstrapFormLabel (sText, ELabelType.MANDATORY);
+    return new HCFormLabel (sText, ELabelType.MANDATORY);
   }
 
   @Nonnull
-  public static BootstrapFormLabel createMandatory (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  public static HCFormLabel createMandatory (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
   {
     return createMandatory (aTextProvider.getText ());
   }
 
   @Nonnull
-  public static BootstrapFormLabel createMandatory (@Nonnull final IHCElementWithChildren <?> aNode)
+  public static HCFormLabel createMandatory (@Nonnull final IHCElementWithChildren <?> aNode)
   {
-    return new BootstrapFormLabel (aNode, ELabelType.MANDATORY);
+    return new HCFormLabel (aNode, ELabelType.MANDATORY);
   }
 }

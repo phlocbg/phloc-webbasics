@@ -30,6 +30,14 @@ import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webdemoapp.app.CDemoAppSecurity;
 import com.phloc.webdemoapp.page.config.PageSavedStates;
 import com.phloc.webdemoapp.page.config.admin.PageAudit;
+import com.phloc.webdemoapp.page.config.admin.PageLoginInfo;
+import com.phloc.webdemoapp.page.config.admin.PageRoleManagement;
+import com.phloc.webdemoapp.page.config.admin.PageSysInfoEnvironmentVariables;
+import com.phloc.webdemoapp.page.config.admin.PageSysInfoRequest;
+import com.phloc.webdemoapp.page.config.admin.PageSysInfoSystemProperties;
+import com.phloc.webdemoapp.page.config.admin.PageSysInfoThreads;
+import com.phloc.webdemoapp.page.config.admin.PageSysInfoTimeZones;
+import com.phloc.webdemoapp.page.config.admin.PageUserGroupManagement;
 import com.phloc.webdemoapp.page.config.admin.PageUserManagement;
 
 @Immutable
@@ -57,7 +65,14 @@ public final class MenuConfig
                                                                                        "Security",
                                                                                        aMenuTree))
                                                     .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSecurity, new PageLoginInfo (CDemoAppMenuConfig.MENU_ADMIN_SECURITY_LOGININFO))
+               .setDisplayFilter (aFilterSuperUser);
       aMenuTree.createItem (aAdminSecurity, new PageUserManagement (CDemoAppMenuConfig.MENU_ADMIN_SECURITY_USER))
+               .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSecurity,
+                            new PageUserGroupManagement (CDemoAppMenuConfig.MENU_ADMIN_SECURITY_USERGROUP))
+               .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSecurity, new PageRoleManagement (CDemoAppMenuConfig.MENU_ADMIN_SECURITY_ROLE))
                .setDisplayFilter (aFilterSuperUser);
 
       // - Monitoring
@@ -67,6 +82,25 @@ public final class MenuConfig
                                                                                          aMenuTree))
                                                       .setDisplayFilter (aFilterSuperUser);
       aMenuTree.createItem (aAdminMonitoring, new PageAudit (CDemoAppMenuConfig.MENU_ADMIN_MONITORING_AUDIT))
+               .setDisplayFilter (aFilterSuperUser);
+
+      // - System information
+      final IMenuItemPage aAdminSysInfo = aMenuTree.createItem (aAdmin,
+                                                                new PageShowChildren (CDemoAppMenuConfig.MENU_ADMIN_SYSINFO,
+                                                                                      "System Information",
+                                                                                      aMenuTree))
+                                                   .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSysInfo,
+                            new PageSysInfoEnvironmentVariables (CDemoAppMenuConfig.MENU_ADMIN_SYSINFO_ENVVARS))
+               .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSysInfo, new PageSysInfoRequest (CDemoAppMenuConfig.MENU_ADMIN_SYSINFO_REQUEST))
+               .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSysInfo,
+                            new PageSysInfoSystemProperties (CDemoAppMenuConfig.MENU_ADMIN_SYSINFO_SYSPROPS))
+               .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSysInfo, new PageSysInfoThreads (CDemoAppMenuConfig.MENU_ADMIN_SYSINFO_THREADS))
+               .setDisplayFilter (aFilterSuperUser);
+      aMenuTree.createItem (aAdminSysInfo, new PageSysInfoTimeZones (CDemoAppMenuConfig.MENU_ADMIN_SYSINFO_TIMEZONES))
                .setDisplayFilter (aFilterSuperUser);
     }
 

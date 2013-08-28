@@ -18,6 +18,7 @@
 package com.phloc.webdemoapp.servlet;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -25,12 +26,19 @@ import javax.annotation.Nonnull;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
+import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
 import com.phloc.webctrls.bootstrap3.servlet.WebAppListenerMultiAppBootstrap3;
+import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
 import com.phloc.webdemoapp.app.CDemoAppUI;
+import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 import com.phloc.webdemoapp.app.init.DefaultSecurity;
 import com.phloc.webdemoapp.app.init.InitializerConfig;
 import com.phloc.webdemoapp.app.init.InitializerView;
+import com.phloc.webpages.theme.WebPageStyleBootstrap3;
+import com.phloc.webpages.theme.WebPageStyleManager;
 
 /**
  * Callbacks for the application server
@@ -60,6 +68,23 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
     SLF4JBridgeHandler.install ();
 
     super.initGlobals ();
+
+    // UI stuff
+    WebPageStyleManager.getInstance ().setStyle (new WebPageStyleBootstrap3 ()
+    {
+      @Override
+      @Nonnull
+      public Bootstrap3DataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
+                                                           @Nonnull final Locale aDisplayLocale)
+      {
+        final Bootstrap3DataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
+        ret.setAutoWidth (false)
+           .setUseJQueryAjax (true)
+           .setAjaxSource (CDemoAppAjaxView.VIEW_DATATABLES.getInvocationURL ())
+           .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()));
+        return ret;
+      }
+    });
 
     // Set all security related stuff
     DefaultSecurity.init ();

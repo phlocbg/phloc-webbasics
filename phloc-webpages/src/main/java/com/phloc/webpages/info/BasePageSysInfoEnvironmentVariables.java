@@ -31,11 +31,11 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 
@@ -67,15 +67,15 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
   }
 
   public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
-                                           @Nonnull final String sName,
-                                           @Nullable final String sDescription)
+                                              @Nonnull final String sName,
+                                              @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
-                                           @Nonnull final IReadonlyMultiLingualText aName,
-                                           @Nullable final IReadonlyMultiLingualText aDescription)
+                                              @Nonnull final IReadonlyMultiLingualText aName,
+                                              @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -86,7 +86,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final BootstrapTable aTable = new BootstrapTable (new HCCol (200), HCCol.star ()).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
 
@@ -99,7 +99,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

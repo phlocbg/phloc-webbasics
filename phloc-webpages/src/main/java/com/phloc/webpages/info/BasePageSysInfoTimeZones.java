@@ -36,12 +36,12 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.config.PDTConfig;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageExt;
@@ -79,15 +79,15 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
   }
 
   public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID,
-                                @Nonnull final String sName,
-                                @Nullable final String sDescription)
+                                   @Nonnull final String sName,
+                                   @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID,
-                                @Nonnull final IReadonlyMultiLingualText aName,
-                                @Nullable final IReadonlyMultiLingualText aDescription)
+                                   @Nonnull final IReadonlyMultiLingualText aName,
+                                   @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -103,12 +103,12 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     // Get default time zone
     final DateTimeZone aCurrentDTZ = PDTConfig.getDefaultDateTimeZone ();
 
-    final BootstrapTable aTable = new BootstrapTable (new HCCol (100),
-                                                      HCCol.star (),
-                                                      new HCCol (100),
-                                                      new HCCol (70),
-                                                      new HCCol (70),
-                                                      new HCCol (70)).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (100),
+                                                                HCCol.star (),
+                                                                new HCCol (100),
+                                                                new HCCol (70),
+                                                                new HCCol (70),
+                                                                new HCCol (70)).setID (getID ());
     aTable.setSpanningHeaderContent (EText.MSG_CURRENT_TIMEZONE.getDisplayText (aDisplayLocale) +
                                      aCurrentDTZ.getID () +
                                      " - " +
@@ -132,7 +132,7 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getColumn (3).setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT",
                                                                                                                  "S"),
                                                                          aDisplayLocale));

@@ -494,7 +494,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
             FormStateManager.getInstance ().deleteFormState (aWPEC.getAttr (FIELD_FLOW_ID));
           }
           else
-            aWPEC.getNodeList ().addChild (createIncorrectInputBox (aWPEC.getDisplayLocale ()));
+          {
+            // Show: changes could not be saved...
+            aWPEC.getNodeList ().addChild (getStyle ().createIncorrectInputBox (aWPEC.getDisplayLocale ()));
+          }
         }
 
         if (bShowInputForm)

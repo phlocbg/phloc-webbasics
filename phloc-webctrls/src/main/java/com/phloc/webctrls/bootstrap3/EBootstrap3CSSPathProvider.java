@@ -31,7 +31,8 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 public enum EBootstrap3CSSPathProvider implements ICSSPathProvider
 {
   BOOTSTRAP_3_0_0 ("bootstrap/3.0.0/css/bootstrap.css"),
-  BOOTSTRAP_THEME_3_0_0 ("bootstrap/3.0.0/css/bootstrap-theme.css");
+  BOOTSTRAP_THEME_3_0_0 ("bootstrap/3.0.0/css/bootstrap-theme.css"),
+  BOOTSTRAP3_DATATABLES ("bootstrap/datatables/bootstrap3-datatables.css");
 
   private final String m_sPath;
 

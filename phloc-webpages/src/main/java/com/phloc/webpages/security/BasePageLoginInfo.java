@@ -42,6 +42,7 @@ import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
@@ -159,7 +160,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
         aCustomAttrTable.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
 
-      final DataTables aDataTables = createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
+      final DataTables aDataTables = getStyle ().createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
       aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
 
       aTable.addItemRow (EText.MSG_ATTRS.getDisplayText (aDisplayLocale), aCustomAttrTable, aDataTables.build ());
@@ -204,10 +205,10 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final BootstrapTable aTable = new BootstrapTable (HCCol.star (),
-                                                      new HCCol (150),
-                                                      new HCCol (150),
-                                                      createActionCol (2)).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyle ().createTable (HCCol.star (),
+                                                                new HCCol (150),
+                                                                new HCCol (150),
+                                                                createActionCol (2)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
                                      EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),
@@ -240,7 +241,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (1)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

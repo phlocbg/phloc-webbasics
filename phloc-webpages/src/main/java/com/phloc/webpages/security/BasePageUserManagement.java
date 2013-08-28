@@ -51,6 +51,7 @@ import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
@@ -67,7 +68,6 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
-import com.phloc.webctrls.bootstrap.BootstrapFormLabel;
 import com.phloc.webctrls.bootstrap.BootstrapTabBox;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
@@ -77,6 +77,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.ELabelType;
+import com.phloc.webctrls.custom.impl.HCFormLabel;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -280,7 +281,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.addItemRow (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getFirstName ());
     aTable.addItemRow (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getLastName ());
     aTable.addItemRow (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale),
-                       createEmailLink (aSelectedObject.getEmailAddress ()));
+                       getStyle ().createEmailLink (aSelectedObject.getEmailAddress ()));
     aTable.addItemRow (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
     aTable.addItemRow (EText.LABEL_DELETED.getDisplayText (aDisplayLocale),
@@ -512,19 +513,19 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     final String sFirstName = EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.create (sFirstName),
+    aTable.addItemRow (HCFormLabel.create (sFirstName),
                        new HCEdit (new RequestField (FIELD_FIRSTNAME,
                                                      aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName),
                        aFormErrors.getListOfField (FIELD_FIRSTNAME));
 
     final String sLastName = EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (sLastName),
+    aTable.addItemRow (HCFormLabel.createMandatory (sLastName),
                        new HCEdit (new RequestField (FIELD_LASTNAME,
                                                      aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName),
                        aFormErrors.getListOfField (FIELD_LASTNAME));
 
     final String sEmail = EText.LABEL_EMAIL.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (sEmail),
+    aTable.addItemRow (HCFormLabel.createMandatory (sEmail),
                        new HCEdit (new RequestField (FIELD_EMAILADDRESS,
                                                      aSelectedObject == null ? null
                                                                             : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail),
@@ -535,15 +536,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
 
       final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
-      aTable.addItemRow (BootstrapFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                        : ELabelType.OPTIONAL),
+      aTable.addItemRow (HCFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                 : ELabelType.OPTIONAL),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD));
 
       final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
-      aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                               : ELabelType.OPTIONAL),
+      aTable.addItemRow (HCFormLabel.create (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                        : ELabelType.OPTIONAL),
                          HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
                                             SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                          aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
@@ -552,12 +553,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (aSelectedObject != null && aSelectedObject.isAdministrator ())
     {
       // Cannot edit enabled state of administrator
-      aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
                          EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
     }
     else
     {
-      aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
+      aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
                          new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
                                                                   aSelectedObject == null ? DEFAULT_ENABLED
                                                                                          : aSelectedObject.isEnabled ())),
@@ -569,7 +570,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final UserGroupForUserSelect aSelect = new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS),
                                                                        aDisplayLocale,
                                                                        aUserGroupIDs);
-    aTable.addItemRow (BootstrapFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
+    aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
                        aSelect,
                        aFormErrors.getListOfField (FIELD_USERGROUPS));
     if (aSelectedObject != null && aSelectedObject.isAdministrator ())
@@ -628,16 +629,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                             aSelectedObject.getDisplayName ()));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
-        aTable.addItemRow (BootstrapFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                          : ELabelType.OPTIONAL),
+        aTable.addItemRow (HCFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                   : ELabelType.OPTIONAL),
                            HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD));
 
         final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
-        aTable.addItemRow (BootstrapFormLabel.create (sPasswordConfirm,
-                                                      bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                               : ELabelType.OPTIONAL),
+        aTable.addItemRow (HCFormLabel.create (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
+                                                                                          : ELabelType.OPTIONAL),
                            HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
@@ -668,10 +668,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
-    final BootstrapTable aTable = new BootstrapTable (new HCCol (200),
-                                                      HCCol.star (),
-                                                      new HCCol (150),
-                                                      createActionCol (3)).setID (sTableID);
+    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (200),
+                                                                HCCol.star (),
+                                                                new HCCol (150),
+                                                                createActionCol (3)).setID (sTableID);
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
                                      EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),
@@ -724,7 +724,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (3).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

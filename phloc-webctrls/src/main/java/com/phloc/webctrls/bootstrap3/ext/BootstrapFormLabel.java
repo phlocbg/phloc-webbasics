@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.bootstrap3.ext;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
@@ -31,8 +30,6 @@ import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabelUtils;
 
-@Deprecated
-@DevelopersNote ("Use HCFormLabel instead")
 public class BootstrapFormLabel extends HCLabel implements IFormLabel
 {
   private final ELabelType m_eType;

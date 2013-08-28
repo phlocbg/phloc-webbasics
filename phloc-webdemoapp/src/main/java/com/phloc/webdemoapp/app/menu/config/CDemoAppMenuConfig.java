@@ -25,9 +25,18 @@ public final class CDemoAppMenuConfig
   // Menu item IDs
   public static final String MENU_ADMIN = "admin";
   public static final String MENU_ADMIN_SECURITY = "admin_security";
-  public static final String MENU_ADMIN_SECURITY_USER = "admin_user";
+  public static final String MENU_ADMIN_SECURITY_LOGININFO = "admin_security_logininfo";
+  public static final String MENU_ADMIN_SECURITY_USER = "admin_security_user";
+  public static final String MENU_ADMIN_SECURITY_ROLE = "admin_security_role";
+  public static final String MENU_ADMIN_SECURITY_USERGROUP = "admin_security_usergroup";
   public static final String MENU_ADMIN_MONITORING = "admin_monitoring";
-  public static final String MENU_ADMIN_MONITORING_AUDIT = "admin_audit";
+  public static final String MENU_ADMIN_MONITORING_AUDIT = "admin_monitoring_audit";
+  public static final String MENU_ADMIN_SYSINFO = "admin_sysinfo";
+  public static final String MENU_ADMIN_SYSINFO_ENVVARS = "admin_sysinfo_envvars";
+  public static final String MENU_ADMIN_SYSINFO_REQUEST = "admin_sysinfo_request";
+  public static final String MENU_ADMIN_SYSINFO_SYSPROPS = "admin_sysinfo_sysprops";
+  public static final String MENU_ADMIN_SYSINFO_THREADS = "admin_sysinfo_threads";
+  public static final String MENU_ADMIN_SYSINFO_TIMEZONES = "admin_sysinfo_timezones";
 
   public static final String MENU_SAVED_STATES = "saved_states";
 

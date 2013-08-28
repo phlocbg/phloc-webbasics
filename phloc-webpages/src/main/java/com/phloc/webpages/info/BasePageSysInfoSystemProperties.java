@@ -43,6 +43,7 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
@@ -52,8 +53,6 @@ import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webpages.AbstractWebPageExt;
 
 public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
@@ -114,20 +113,20 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
   }
 
   public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID,
-                                       @Nonnull final String sName,
-                                       @Nullable final String sDescription)
+                                          @Nonnull final String sName,
+                                          @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID,
-                                       @Nonnull final IReadonlyMultiLingualText aName,
-                                       @Nullable final IReadonlyMultiLingualText aDescription)
+                                          @Nonnull final IReadonlyMultiLingualText aName,
+                                          @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
 
-  private static void _addDirectoryContent (@Nonnull final BootstrapTable aTable,
+  private static void _addDirectoryContent (@Nonnull final AbstractHCTable <?> aTable,
                                             @Nonnull final String sSysPropName,
                                             @Nonnull final IHCNode aLabel,
                                             @Nonnull final SizeHelper aSH,
@@ -180,7 +179,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     {
-      final BootstrapTableFormView aTable = new BootstrapTableFormView (new HCCol (250), HCCol.star ());
+      final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (250), HCCol.star ());
       aTable.setID (getID () + "$special");
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SPECIAL_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),
@@ -250,7 +249,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     }
 
     {
-      final BootstrapTableFormView aTable = new BootstrapTableFormView (new HCCol (250), HCCol.star ());
+      final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (250), HCCol.star ());
       aTable.setID (getID ());
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),

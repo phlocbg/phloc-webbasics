@@ -23,23 +23,28 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCH3;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.web.servlet.cookie.CookieHelper;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webpages.AbstractWebPageExt;
 
 public class BasePageSysInfoRequest extends AbstractWebPageExt
@@ -48,6 +53,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
   protected static enum EText implements IHasDisplayText
   {
     MSG_HTTP_HEADERS ("HTTP Header", "HTTP header"),
+    MSG_COOKIES ("Cookies", "Cookies"),
     MSG_PARAMETERS ("Request Parameter", "Request parameters"),
     MSG_PROPERTIES ("Request Eigenschaften", "Request properties"),
     MSG_NAME ("Name", "Name"),
@@ -73,15 +79,15 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
   }
 
   public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID,
-                              @Nonnull final String sName,
-                              @Nullable final String sDescription)
+                                 @Nonnull final String sName,
+                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID,
-                              @Nonnull final IReadonlyMultiLingualText aName,
-                              @Nullable final IReadonlyMultiLingualText aDescription)
+                                 @Nonnull final IReadonlyMultiLingualText aName,
+                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -97,19 +103,47 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // HTTP headers
     aNodeList.addChild (HCH3.create (EText.MSG_HTTP_HEADERS.getDisplayText (aDisplayLocale)));
-    BootstrapTableFormView aTable = new BootstrapTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+    AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$http");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
-    for (final Map.Entry <String, List <String>> aEntry : RequestHelper.getRequestHeaderMap (aHttpRequest))
+    for (final Map.Entry <String, List <String>> aEntry : ContainerHelper.getSortedByKey (RequestHelper.getRequestHeaderMap (aHttpRequest)
+                                                                                                       .getAllHeaders (),
+                                                                                          new ComparatorString (aDisplayLocale))
+                                                                         .entrySet ())
     {
       aTable.addBodyRow ().addCell (aEntry.getKey ()).addCell (HCUtils.list2divList (aEntry.getValue ()));
     }
     aNodeList.addChild (aTable);
 
+    // Cookies
+    aNodeList.addChild (HCH3.create (EText.MSG_COOKIES.getDisplayText (aDisplayLocale)));
+    aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star (), HCCol.star ());
+    aTable.setID (getID () + "$cookies");
+    aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                     EText.MSG_VALUE.getDisplayText (aDisplayLocale),
+                                     "");
+    for (final Map.Entry <String, Cookie> aEntry : ContainerHelper.getSortedByKey (CookieHelper.getAllCookies (aHttpRequest),
+                                                                                   new ComparatorString (aDisplayLocale))
+                                                                  .entrySet ())
+    {
+      final Cookie aCookie = aEntry.getValue ();
+      String sOther = "";
+      if (StringHelper.hasText (aCookie.getPath ()))
+        sOther += "[path: " + aCookie.getPath () + "]";
+      if (StringHelper.hasText (aCookie.getDomain ()))
+        sOther += "[domain: " + aCookie.getDomain () + "]";
+      if (aCookie.getSecure ())
+        sOther += "[secure]";
+      sOther += "[maxage: " + aCookie.getMaxAge () + "]";
+
+      aTable.addBodyRow ().addCell (aEntry.getKey ()).addCell (aCookie.getValue ()).addCell (sOther);
+    }
+    aNodeList.addChild (aTable);
+
     // Request parameters
     aNodeList.addChild (HCH3.create (EText.MSG_PARAMETERS.getDisplayText (aDisplayLocale)));
-    aTable = new BootstrapTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$params");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
@@ -121,7 +155,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // Request properties
     aNodeList.addChild (HCH3.create (EText.MSG_PROPERTIES.getDisplayText (aDisplayLocale)));
-    aTable = new BootstrapTableFormView (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$attrs");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));

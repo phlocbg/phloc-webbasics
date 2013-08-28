@@ -34,12 +34,12 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.format.PDTToString;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
@@ -116,11 +116,11 @@ public class BasePageAudit extends AbstractWebPageExt
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-    final BootstrapTable aTable = new BootstrapTable (new HCCol (180),
-                                                      new HCCol (120),
-                                                      new HCCol (60),
-                                                      new HCCol (60),
-                                                      HCCol.star ()).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (180),
+                                                                new HCCol (120),
+                                                                new HCCol (60),
+                                                                new HCCol (60),
+                                                                HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_DATE.getDisplayText (aDisplayLocale),
                                      EText.MSG_USER.getDisplayText (aDisplayLocale),
                                      EText.MSG_TYPE.getDisplayText (aDisplayLocale),
@@ -139,7 +139,7 @@ public class BasePageAudit extends AbstractWebPageExt
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (0)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));
