@@ -81,9 +81,10 @@ public class InitializerView extends DefaultApplicationInitializer
                                                  HTMLConfigManager.FILENAME_JS_XML,
                                                  HTMLConfigManager.FILENAME_METATAGS_XML })
     {
-      final File aDestFile = WebFileIO.getFile (sFilename);
+      final String sFullFilename = HTMLConfigManager.DEFAULT_BASE_PATH + sFilename;
+      final File aDestFile = WebFileIO.getFile (sFullFilename);
       WebFileIO.getFileOpMgr ().deleteFileIfExisting (aDestFile);
-      StreamUtils.copyInputStreamToOutputStreamAndCloseOS (ClassPathResource.getInputStream (sFilename),
+      StreamUtils.copyInputStreamToOutputStreamAndCloseOS (ClassPathResource.getInputStream (sFullFilename),
                                                            FileUtils.getOutputStream (aDestFile));
     }
   }
