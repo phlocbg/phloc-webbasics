@@ -15,23 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.bootstrap3;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.version.Version;
 
 /**
- * Constants for usage with Bootstrap
+ * Constants for usage with Bootstrap3
  * 
  * @author Philip Helger
  */
 @Immutable
-public final class CBootstrap
+public final class CBootstrap3
 {
-  /** Bootstrap version 2.3.2 */
-  public static final Version BOOTSTRAP_VERSION_232 = new Version (2, 3, 2);
+  /** Bootstrap version 3.0.0 */
+  public static final Version BOOTSTRAP_VERSION_300 = new Version (3, 0, 0);
 
-  private CBootstrap ()
+  private CBootstrap3 ()
   {}
 }

@@ -15,23 +15,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.bootstrap3.alert;
 
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.phloc.commons.version.Version;
+import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 
 /**
- * Constants for usage with Bootstrap
+ * Type of alert
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CBootstrap
+public enum EBootstrap3AlertType implements ICSSClassProvider
 {
-  /** Bootstrap version 2.3.2 */
-  public static final Version BOOTSTRAP_VERSION_232 = new Version (2, 3, 2);
+  SUCCESS (CBootstrap3CSS.ALERT_SUCCESS),
+  INFO (CBootstrap3CSS.ALERT_INFO),
+  WARNING (CBootstrap3CSS.ALERT_WARNING),
+  DANGER (CBootstrap3CSS.ALERT_DANGER);
 
-  private CBootstrap ()
-  {}
+  private final ICSSClassProvider m_aCSSClass;
+
+  private EBootstrap3AlertType (@Nonnull final ICSSClassProvider aCSSClass)
+  {
+    m_aCSSClass = aCSSClass;
+  }
+
+  @Nullable
+  public String getCSSClass ()
+  {
+    return m_aCSSClass.getCSSClass ();
+  }
 }
