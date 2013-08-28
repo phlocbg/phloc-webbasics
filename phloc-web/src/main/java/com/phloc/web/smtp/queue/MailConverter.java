@@ -33,6 +33,7 @@ import javax.mail.internet.MimeMultipart;
 
 import com.phloc.commons.exceptions.LoggedRuntimeException;
 import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.mime.MimeType;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.InternetAddressUtils;
 import com.phloc.web.smtp.attachment.IEmailAttachmentList;
@@ -77,7 +78,9 @@ public final class MailConverter
       if (aMailData.getEmailType ().isHTML ())
       {
         if (sCharset != null)
-          aBodyPart.setContent (aMailData.getBody (), CMimeType.TEXT_HTML.getAsStringWithEncoding (sCharset));
+          aBodyPart.setContent (aMailData.getBody (),
+                                new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
+                                                                                 sCharset).getAsString ());
         else
           aBodyPart.setContent (aMailData.getBody (), CMimeType.TEXT_HTML.getAsString ());
       }

@@ -29,6 +29,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.mime.EMimeContentType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
+import com.phloc.commons.mime.MimeTypeParser;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
@@ -75,7 +76,7 @@ public final class AcceptMimeTypeHandler
           dQuality = StringParser.parseDouble (aParts[1].trim ().substring (2), QValue.MAX_QUALITY);
 
         final String sMimeType = aParts[0];
-        final IMimeType aMimeType = MimeType.parseFromStringWithoutEncoding (sMimeType);
+        final IMimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType);
         if (aMimeType != null)
           ret.addMimeType (aMimeType, dQuality);
         else

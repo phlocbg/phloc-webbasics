@@ -44,7 +44,9 @@ import com.phloc.commons.collections.multimap.IMultiMapSetBased;
 import com.phloc.commons.collections.multimap.MultiHashMapLinkedHashSetBased;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
-import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.mime.IMimeType;
+import com.phloc.commons.mime.MimeTypeParser;
+import com.phloc.commons.mime.MimeTypeUtils;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.web.CWeb;
 
@@ -246,12 +248,10 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
     m_sContentType = sContentType;
     if (sContentType != null)
     {
-      final int nCharsetIndex = sContentType.toLowerCase (Locale.US).indexOf (CMimeType.CHARSET_PREFIX);
-      if (nCharsetIndex != -1)
-      {
-        final String sEncoding = sContentType.substring (nCharsetIndex + CMimeType.CHARSET_PREFIX.length ());
+      final IMimeType aContentType = MimeTypeParser.parseMimeType (sContentType);
+      final String sEncoding = MimeTypeUtils.getCharsetNameFromMimeType (aContentType);
+      if (sEncoding != null)
         setCharacterEncoding (sEncoding);
-      }
     }
   }
 

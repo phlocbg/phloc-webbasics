@@ -21,6 +21,8 @@ import java.nio.charset.Charset;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
+import com.phloc.commons.codec.RFC1522BCodec;
+import com.phloc.commons.codec.RFC1522QCodec;
 
 /**
  * @author Apache Abdera
@@ -62,10 +64,10 @@ public class RFC2047Helper
       switch (codec)
       {
         case Q:
-          return (new RFC1522QCodec (charset)).encode (value);
+          return new RFC1522QCodec (charset).encodeText (value);
         case B:
         default:
-          return (new RFC1522BCodec (charset)).encode (value);
+          return new RFC1522BCodec (charset).encodeText (value);
       }
     }
     catch (final Exception e)
@@ -87,14 +89,14 @@ public class RFC2047Helper
     try
     {
       // try BCodec first
-      return new RFC1522BCodec ().decode (value);
+      return new RFC1522BCodec ().decodeText (value);
     }
     catch (final DecoderException de)
     {
       // try QCodec next
       try
       {
-        return new RFC1522QCodec ().decode (value);
+        return new RFC1522QCodec ().decodeText (value);
       }
       catch (final Exception ex)
       {

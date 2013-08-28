@@ -50,7 +50,7 @@ import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.commons.mime.MimeType;
+import com.phloc.commons.mime.MimeTypeParser;
 import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -296,7 +296,7 @@ public class UnifiedResponse
   {
     if (StringHelper.hasNoText (sMimeType))
       throw new IllegalArgumentException ("mimeType");
-    final IMimeType aMimeType = MimeType.parseFromStringWithoutEncoding (sMimeType);
+    final IMimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType);
     if (aMimeType != null)
       setMimeType (aMimeType);
     else

@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.commons.mime.MimeType;
+import com.phloc.commons.mime.MimeTypeParser;
 
 /**
  * Represents a list of Accept HTTP header values
@@ -76,7 +76,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
 
   public double getQualityOfMimeType (@Nonnull final String sMimeType)
   {
-    return getQualityOfMimeType (MimeType.parseFromStringWithoutEncoding (sMimeType));
+    return getQualityOfMimeType (MimeTypeParser.parseMimeType (sMimeType));
   }
 
   /**
@@ -101,7 +101,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
    */
   public boolean supportsMimeType (@Nonnull final String sMimeType)
   {
-    return supportsMimeType (MimeType.parseFromStringWithoutEncoding (sMimeType));
+    return supportsMimeType (MimeTypeParser.parseMimeType (sMimeType));
   }
 
   /**
@@ -126,7 +126,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
    */
   public boolean explicitlySupportsMimeType (@Nonnull final String sMimeType)
   {
-    return explicitlySupportsMimeType (MimeType.parseFromStringWithoutEncoding (sMimeType));
+    return explicitlySupportsMimeType (MimeTypeParser.parseMimeType (sMimeType));
   }
 
   /**
