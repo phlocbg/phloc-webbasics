@@ -19,12 +19,9 @@ package com.phloc.webctrls.bootstrap3.grid;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.HCDiv;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 
 /**
@@ -85,7 +82,7 @@ public enum EBootstrap3Grid implements ICSSClassProvider
   LG_9 (9, CBootstrap3CSS.COL_LG_9),
   LG_10 (10, CBootstrap3CSS.COL_LG_10),
   LG_11 (11, CBootstrap3CSS.COL_LG_11),
-  LG_12 (12, CBootstrap3CSS.COL_LG_12), ;
+  LG_12 (12, CBootstrap3CSS.COL_LG_12);
 
   private final int m_nParts;
   private final ICSSClassProvider m_aCSSClass;
@@ -107,35 +104,5 @@ public enum EBootstrap3Grid implements ICSSClassProvider
   public String getCSSClass ()
   {
     return m_aCSSClass.getCSSClass ();
-  }
-
-  @Nonnull
-  public HCDiv getAsNode ()
-  {
-    return new HCDiv ().addClass (this);
-  }
-
-  @Nonnull
-  public HCDiv getAsNode (@Nullable final String sContent)
-  {
-    return new HCDiv ().addChild (sContent).addClass (this);
-  }
-
-  @Nonnull
-  public HCDiv getAsNode (@Nullable final IHCNode aContent)
-  {
-    return new HCDiv ().addChild (aContent).addClass (this);
-  }
-
-  @Nonnull
-  public HCDiv getAsNode (@Nullable final IHCNode... aContent)
-  {
-    return new HCDiv ().addChildren (aContent).addClass (this);
-  }
-
-  @Nonnull
-  public HCDiv getAsNode (@Nullable final Iterable <? extends IHCNode> aContent)
-  {
-    return new HCDiv ().addChildren (aContent).addClass (this);
   }
 }

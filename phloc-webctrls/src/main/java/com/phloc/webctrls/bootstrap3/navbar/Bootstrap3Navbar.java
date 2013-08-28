@@ -37,6 +37,7 @@ import com.phloc.html.hc.html5.HCNav;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 import com.phloc.webctrls.bootstrap3.EBootstrap3Text;
+import com.phloc.webctrls.bootstrap3.nav.Bootstrap3Nav;
 
 /**
  * Bootstrap Navbar
@@ -89,6 +90,13 @@ public class Bootstrap3Navbar extends HCNav
     else
       m_aHeader.addChild (aNode);
     return this;
+  }
+
+  @Nonnull
+  public Bootstrap3Navbar addNav (final boolean bCollapsible, @Nonnull final Bootstrap3Nav aNav)
+  {
+    aNav.addClass (CBootstrap3CSS.NAVBAR_NAV);
+    return _insert (bCollapsible, aNav);
   }
 
   @Nonnull
