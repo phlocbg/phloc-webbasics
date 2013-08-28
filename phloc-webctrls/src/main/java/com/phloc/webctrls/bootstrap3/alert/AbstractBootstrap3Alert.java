@@ -21,13 +21,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.html.CHTMLAttributes;
-import com.phloc.html.entities.EHTMLEntity;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
-import com.phloc.html.hc.html.HCButton;
-import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
+import com.phloc.webctrls.bootstrap3.base.Bootstrap3CloseIcon;
 
 /**
  * Bootstrap alert box
@@ -85,10 +82,7 @@ public abstract class AbstractBootstrap3Alert <THISTYPE extends AbstractBootstra
     if (m_bShowClose)
     {
       addClass (CBootstrap3CSS.ALERT_DISMISSABLE);
-      addChild (0, new HCButton ().addClass (CBootstrap3CSS.CLOSE)
-                                  .setCustomAttr ("data-dismiss", "alert")
-                                  .setCustomAttr (CHTMLAttributes.ARIA_HIDDEN, "true")
-                                  .addChild (new HCEntityNode (EHTMLEntity.times, "x")));
+      addChild (0, new Bootstrap3CloseIcon ().setCustomAttr ("data-dismiss", "alert"));
     }
   }
 }
