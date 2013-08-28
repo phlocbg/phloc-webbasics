@@ -98,7 +98,7 @@ public class Bootstrap3Table extends AbstractHCTable <Bootstrap3Table>
   }
 
   @Nonnull
-  public HCDiv getAsResponsiveNode ()
+  public HCDiv getAsResponsiveTable ()
   {
     return new HCDiv ().addClass (CBootstrap3CSS.TABLE_RESPONSIVE).addChild (this);
   }
