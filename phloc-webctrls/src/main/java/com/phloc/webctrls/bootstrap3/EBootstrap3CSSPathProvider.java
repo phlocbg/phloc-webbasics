@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.bootstrap3;
 
 import javax.annotation.Nonnull;
 
@@ -28,17 +28,14 @@ import com.phloc.html.resource.css.ICSSPathProvider;
  * 
  * @author Philip Helger
  */
-public enum EBootstrapCSSPathProvider implements ICSSPathProvider
+public enum EBootstrap3CSSPathProvider implements ICSSPathProvider
 {
-  BOOTSTRAP_232 ("bootstrap/232/css/bootstrap.css"),
-  BOOTSTRAP_RESPONSIVE_232 ("bootstrap/232/css/bootstrap-responsive.css"),
-  BOOTSTRAP_IE6 ("bootstrap/bootstrap-ie6.css"),
-  BOOTSTRAP_PHLOC ("bootstrap/bootstrap-phloc.css"),
-  BOOTSTRAP_DATATABLES ("bootstrap/datatables/bootstrap-datatables.css");
+  BOOTSTRAP_3_0_0 ("bootstrap/3.0.0/css/bootstrap.css"),
+  BOOTSTRAP_THEME_3_0_0 ("bootstrap/3.0.0/css/bootstrap-theme.css");
 
   private final String m_sPath;
 
-  private EBootstrapCSSPathProvider (@Nonnull @Nonempty final String sPath)
+  private EBootstrap3CSSPathProvider (@Nonnull @Nonempty final String sPath)
   {
     if (!CSSFilenameHelper.isCSSFilename (sPath))
       throw new IllegalArgumentException ("path");

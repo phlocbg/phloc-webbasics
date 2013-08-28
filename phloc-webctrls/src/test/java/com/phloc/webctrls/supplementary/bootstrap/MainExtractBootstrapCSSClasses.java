@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap;
+package com.phloc.webctrls.supplementary.bootstrap;
 
 import java.util.Locale;
 import java.util.Set;
@@ -33,6 +33,7 @@ import com.phloc.css.decl.ICSSSelectorMember;
 import com.phloc.css.decl.visit.CSSVisitor;
 import com.phloc.css.decl.visit.DefaultCSSVisitor;
 import com.phloc.css.reader.CSSReader;
+import com.phloc.webctrls.bootstrap.EBootstrapCSSPathProvider;
 
 public class MainExtractBootstrapCSSClasses
 {
@@ -80,7 +81,7 @@ public class MainExtractBootstrapCSSClasses
         final String sClassName = sClass.substring (1);
         String sFieldName = sClassName.toUpperCase (Locale.US);
         sFieldName = sFieldName.replace ('-', '_');
-        System.out.println (sFieldName.substring (5) + " (CBootstrapCSS." + sFieldName + "),");
+        System.out.println (sFieldName.substring ("icon-".length ()) + " (CBootstrapCSS." + sFieldName + "),");
       }
   }
 }
