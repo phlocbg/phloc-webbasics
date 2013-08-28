@@ -46,6 +46,7 @@ public class DemoAppHTMLProvider extends LayoutHTMLProvider
   public DemoAppHTMLProvider ()
   {
     super (ApplicationLayoutManager.getInstance ());
+    setCreateLayoutAreaSpan (false);
   }
 
   public static final void addPerRequestCSSAndJS (@Nonnull final HCHead aHead)

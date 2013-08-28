@@ -88,7 +88,7 @@ public final class LayoutConfig
 
       final BootstrapContainer aContentLayout = new BootstrapContainer (true);
       aContentLayout.setContent (aRow);
-      return aContentLayout.build ();
+      return aRow;
     }
   }
 

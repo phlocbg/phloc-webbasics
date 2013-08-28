@@ -46,6 +46,7 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
 
   private final ILayoutManager m_aLayoutMgr;
   private final List <String> m_aLayoutAreaIDs;
+  private boolean m_bCreateLayoutAreaSpan = true;
 
   public LayoutHTMLProvider (@Nonnull final ILayoutManager aLayoutMgr)
   {
@@ -54,6 +55,16 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
 
     m_aLayoutMgr = aLayoutMgr;
     m_aLayoutAreaIDs = aLayoutMgr.getAllAreaIDs ();
+  }
+
+  public boolean isCreateLayoutAreaSpan ()
+  {
+    return m_bCreateLayoutAreaSpan;
+  }
+
+  public void setCreateLayoutAreaSpan (final boolean bCreateLayoutAreaSpan)
+  {
+    m_bCreateLayoutAreaSpan = bCreateLayoutAreaSpan;
   }
 
   /**
@@ -97,10 +108,16 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
     {
       try
       {
-        final HCSpan aSpan = new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID);
-        aSpan.addChild (getContentOfArea (aLEC, sAreaID));
-        // Append to body if no error occurred
-        aBody.addChild (aSpan);
+        final IHCNode aContent = getContentOfArea (aLEC, sAreaID);
+        if (m_bCreateLayoutAreaSpan)
+        {
+          final HCSpan aSpan = new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID);
+          aSpan.addChild (aContent);
+          // Append to body if no error occurred
+          aBody.addChild (aSpan);
+        }
+        else
+          aBody.addChild (aContent);
       }
       catch (final Throwable t)
       {
