@@ -60,7 +60,7 @@ public final class LayoutConfig
   {
     public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
     {
-      return ConfigNavbarProvider.getContent (aLEC.getDisplayLocale ()).build ();
+      return ConfigNavbarProvider.getContent (aLEC.getDisplayLocale ());
     }
   }
 

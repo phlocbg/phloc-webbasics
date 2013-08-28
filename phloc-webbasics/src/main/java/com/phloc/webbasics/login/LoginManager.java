@@ -225,7 +225,8 @@ public class LoginManager
       modifyLoginInfo (aLoginInfo, aRequestScope);
     }
     else
-      s_aLogger.warn ("Failed to resolve LoginInfo of '" + sSessionUserID + "'");
+      if (sSessionUserID != null)
+        s_aLogger.warn ("Failed to resolve LoginInfo of '" + sSessionUserID + "'");
 
     // Continue only, if a valid user ID is present
     return EContinue.valueOf (sSessionUserID != null);

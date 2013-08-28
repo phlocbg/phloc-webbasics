@@ -28,11 +28,12 @@ import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webctrls.bootstrap.BootstrapBreadcrumb;
 import com.phloc.webctrls.bootstrap.BootstrapContainer;
 import com.phloc.webctrls.bootstrap.BootstrapRow;
 import com.phloc.webctrls.bootstrap.EBootstrapSpan;
+import com.phloc.webctrls.bootstrap3.breadcrumbs.Bootstrap3Breadcrumbs;
 
 /**
  * The content provider for the navigation bar area.
@@ -44,7 +45,7 @@ public final class ConfigNavbarProvider
   private ConfigNavbarProvider ()
   {}
 
-  private static void _getBreadCrumbs (final BootstrapBreadcrumb aBreadcrumb, final Locale aDisplayLocale)
+  private static void _getBreadCrumbs (final Bootstrap3Breadcrumbs aBreadcrumbs, final Locale aDisplayLocale)
   {
     final List <IMenuItem> aItems = new ArrayList <IMenuItem> ();
     IMenuItem aCurrent = ApplicationRequestManager.getInstance ().getRequestMenuItem ();
@@ -63,29 +64,25 @@ public final class ConfigNavbarProvider
       {
         final IMenuItem aItem = aItems.get (i);
 
-        // add separator?
-        if (i > 0)
-          aBreadcrumb.addSeparator (" | ");
-
         // Create link on all but the last item
         if (i < nItems - 1)
-          aBreadcrumb.addLink (LinkUtils.getLinkToMenuItem (aItem.getID ()), aItem.getDisplayText (aDisplayLocale));
+          aBreadcrumbs.addLink (LinkUtils.getLinkToMenuItem (aItem.getID ()), aItem.getDisplayText (aDisplayLocale));
         else
-          aBreadcrumb.addActive (aItem.getDisplayText (aDisplayLocale));
+          aBreadcrumbs.addActive (aItem.getDisplayText (aDisplayLocale));
       }
     }
   }
 
   @Nonnull
-  public static BootstrapContainer getContent (final Locale aDisplayLocale)
+  public static IHCNode getContent (final Locale aDisplayLocale)
   {
-    final BootstrapBreadcrumb aBreadcrumb = new BootstrapBreadcrumb ();
-    _getBreadCrumbs (aBreadcrumb, aDisplayLocale);
+    final Bootstrap3Breadcrumbs aBreadcrumbs = new Bootstrap3Breadcrumbs ();
+    _getBreadCrumbs (aBreadcrumbs, aDisplayLocale);
 
     final BootstrapContainer aCont = new BootstrapContainer ();
     final BootstrapRow aRow = new BootstrapRow ();
-    aRow.addColumn (EBootstrapSpan.SPAN12, aBreadcrumb);
+    aRow.addColumn (EBootstrapSpan.SPAN12, aBreadcrumbs);
     aCont.setContent (aRow);
-    return aCont;
+    return aBreadcrumbs;
   }
 }

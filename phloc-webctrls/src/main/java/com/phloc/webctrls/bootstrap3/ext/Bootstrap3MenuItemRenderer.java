@@ -40,9 +40,10 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
-import com.phloc.webctrls.bootstrap.BootstrapWell;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
+import com.phloc.webctrls.bootstrap3.well.Bootstrap3Well;
+import com.phloc.webctrls.bootstrap3.well.EBootstrap3WellType;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
@@ -188,8 +189,8 @@ public class Bootstrap3MenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
                                                               aMenuTree.getRootItem (),
                                                               aRenderer,
                                                               aAllDisplayMenuItemIDs).addClass (CBootstrap3CSS.NAV);
-    final BootstrapWell ret = new BootstrapWell ();
+    final Bootstrap3Well ret = new Bootstrap3Well (EBootstrap3WellType.SMALL);
     ret.addChild (aUL);
-    return aUL;
+    return ret;
   }
 }

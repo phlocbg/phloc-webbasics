@@ -17,4 +17,4 @@
     limitations under the License.
 
 --%>
---%><% response.sendRedirect ("view/"); %>
+<% response.sendRedirect ("view/"); %>

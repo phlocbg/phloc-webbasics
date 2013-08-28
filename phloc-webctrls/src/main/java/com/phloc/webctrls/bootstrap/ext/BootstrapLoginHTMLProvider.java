@@ -34,7 +34,6 @@ import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.login.CLogin;
 import com.phloc.webbasics.login.LoginHTMLProvider;
 import com.phloc.webctrls.bootstrap.BootstrapButton_Submit;
@@ -73,7 +72,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
                            @Nonnull final HCHtml aHtml,
                            @Nonnull final Locale aDisplayLocale)
   {
-    final HCForm aForm = new HCForm (LinkUtils.getSelfHref ());
+    final HCForm aForm = new HCForm (aRequestScope.getURL ());
 
     if (showLoginError ())
       aForm.addChild (BootstrapErrorBox.create (getTextErrorMessage (aDisplayLocale, getLoginResult ())));
@@ -97,8 +96,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     final BootstrapRow aRow = new BootstrapRow ();
     aRow.addColumn (EBootstrapSpan.SPAN3);
     aRow.addColumn (EBootstrapSpan.SPAN6,
-                    StringHelper.hasText (m_sPageTitle)
-                                                       ? new BootstrapPageHeader ().addChild (HCH2.create (m_sPageTitle))
+                    StringHelper.hasText (m_sPageTitle) ? new BootstrapPageHeader ().addChild (HCH2.create (m_sPageTitle))
                                                        : null,
                     aForm);
     aRow.addColumn (EBootstrapSpan.SPAN3);
