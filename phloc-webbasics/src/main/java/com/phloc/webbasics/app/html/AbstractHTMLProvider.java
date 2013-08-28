@@ -28,7 +28,6 @@ import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.html.CHTMLCharset;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.meta.EStandardMetaElement;
@@ -110,7 +109,7 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
 
     // Special meta tag
     final IMimeType aMimeType = WebHTMLCreator.getMimeType (aRequestScope);
-    aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (aMimeType.getAsStringWithEncoding (CHTMLCharset.CHARSET_HTML)));
+    aHead.addMetaElement (EStandardMetaElement.CONTENT_TYPE.getAsMetaElement (aMimeType.getAsString ()));
 
     // Add all configured meta element
     for (final Map.Entry <String, String> aEntry : getAllMetaTags ().entrySet ())

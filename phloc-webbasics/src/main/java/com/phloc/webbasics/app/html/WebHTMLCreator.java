@@ -23,6 +23,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
 import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
@@ -69,7 +70,8 @@ public final class WebHTMLCreator
   @Nonnull
   public static IMimeType getMimeType (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    return CMimeType.TEXT_HTML;
+    // Add the charset to the MIME type
+    return new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET, CHTMLCharset.CHARSET_HTML);
   }
 
   public static void createHTMLResponse (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
