@@ -40,9 +40,11 @@ import com.phloc.webbasics.app.layout.CLayout;
 import com.phloc.webbasics.app.layout.ILayoutAreaContentProvider;
 import com.phloc.webbasics.app.layout.ILayoutManager;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapContainer;
-import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.ext.BootstrapMenuItemRendererWellHorz;
+import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
+import com.phloc.webctrls.bootstrap3.base.Bootstrap3Container;
+import com.phloc.webctrls.bootstrap3.breadcrumbs.Bootstrap3Breadcrumbs;
+import com.phloc.webctrls.bootstrap3.breadcrumbs.Bootstrap3BreadcrumbsProvider;
 import com.phloc.webctrls.bootstrap3.grid.Bootstrap3Row;
 import com.phloc.webctrls.bootstrap3.grid.EBootstrap3GridMD;
 import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
@@ -55,60 +57,11 @@ import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
 public final class LayoutView
 {
   /**
-   * The header renderer.
-   * 
-   * @author Philip Helger
-   */
-  private static final class AreaHeader implements ILayoutAreaContentProvider
-  {
-    public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
-    {
-      return ViewHeaderProvider.getContent (aLEC.getDisplayLocale ());
-    }
-  }
-
-  /**
-   * The navigation bar renderer.
-   * 
-   * @author Philip Helger
-   */
-  private static final class AreaNavBar implements ILayoutAreaContentProvider
-  {
-    public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
-    {
-      return ViewNavbarProvider.getContent (aLEC).build ();
-    }
-  }
-
-  /**
    * The viewport renderer (menu + content area)
    * 
    * @author Philip Helger
    */
   private static final class AreaViewPort implements ILayoutAreaContentProvider
-  {
-    @Nonnull
-    public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
-    {
-      final Bootstrap3Row aRow = new Bootstrap3Row ();
-      // left
-      final HCNodeList aLeft = new HCNodeList ();
-      // We need a wrapper span for easy AJAX content replacement
-      aLeft.addChild (HCSpan.create (ViewMenuProvider.getContent (aLEC.getDisplayLocale ()))
-                            .setID (CLayout.LAYOUT_AREAID_MENU));
-      aLeft.addChild (new HCDiv ().setID (CLayout.LAYOUT_AREAID_SPECIAL));
-      aRow.createColumn (EBootstrap3GridMD.MD_3).addChild (aLeft);
-
-      // content
-      aRow.createColumn (EBootstrap3GridMD.MD_9).addChild (ViewContentProvider.getContent (aLEC));
-
-      final BootstrapContainer aContentLayout = new BootstrapContainer (true);
-      aContentLayout.setContent (aRow);
-      return aContentLayout.build ();
-    }
-  }
-
-  private static final class AreaFooter implements ILayoutAreaContentProvider
   {
     private static final ICSSClassProvider CSS_CLASS_FOOTER_LINKS = DefaultCSSClassProvider.create ("footer-links");
 
@@ -142,28 +95,62 @@ public final class LayoutView
     @Nonnull
     public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
     {
-      final HCDiv aDiv = new HCDiv ().addClass (CBootstrapCSS.CONTAINER);
+      final Bootstrap3Container aOuterContainer = new Bootstrap3Container ();
 
-      aDiv.addChild (HCP.create ("Demo web application for the phloc OSS-stack"));
-      aDiv.addChild (HCP.create ("Created by phloc-systems"));
-
-      final BootstrapMenuItemRendererWellHorz aRenderer = new BootstrapMenuItemRendererWellHorz (aLEC.getDisplayLocale ());
-      final HCUL aUL = aDiv.addAndReturnChild (new HCUL ().addClass (CSS_CLASS_FOOTER_LINKS));
-      for (final IMenuObject aMenuObj : _getFooterObjects ())
+      // Header
       {
-        if (aMenuObj instanceof IMenuSeparator)
-          aUL.addItem (aRenderer.renderSeparator ((IMenuSeparator) aMenuObj));
-        else
-          if (aMenuObj instanceof IMenuItemPage)
-            aUL.addItem (aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj, false, false, false));
-          else
-            if (aMenuObj instanceof IMenuItemExternal)
-              aUL.addItem (aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj, false, false, false));
-            else
-              throw new IllegalStateException ("Unsupported menu object type!");
+        aOuterContainer.addChild (ViewHeaderProvider.getContent (aLEC.getDisplayLocale ()));
       }
 
-      return aDiv;
+      // Breadcrumbs
+      {
+        final Bootstrap3Breadcrumbs aBreadcrumbs = Bootstrap3BreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance (),
+                                                                                                    aLEC.getDisplayLocale ());
+        aBreadcrumbs.addClass (CBootstrap3CSS.HIDDEN_XS);
+        aOuterContainer.addChild (aBreadcrumbs);
+      }
+
+      // Content
+      {
+        final Bootstrap3Row aRow = new Bootstrap3Row ();
+        // left
+        final HCNodeList aLeft = new HCNodeList ();
+        // We need a wrapper span for easy AJAX content replacement
+        aLeft.addChild (HCSpan.create (ViewMenuProvider.getContent (aLEC.getDisplayLocale ()))
+                              .setID (CLayout.LAYOUT_AREAID_MENU));
+        aLeft.addChild (new HCDiv ().setID (CLayout.LAYOUT_AREAID_SPECIAL));
+        aRow.createColumn (EBootstrap3GridMD.MD_3).addChild (aLeft);
+
+        // content
+        aRow.createColumn (EBootstrap3GridMD.MD_9).addChild (ViewContentProvider.getContent (aLEC));
+        aOuterContainer.addChild (aRow);
+      }
+
+      {
+        final HCDiv aDiv = new HCDiv ().addClass (CBootstrap3CSS.CONTAINER).setID (CLayout.LAYOUT_AREAID_FOOTER);
+
+        aDiv.addChild (HCP.create ("Demo web application for the phloc OSS-stack"));
+        aDiv.addChild (HCP.create ("Created by phloc-systems"));
+
+        final BootstrapMenuItemRendererWellHorz aRenderer = new BootstrapMenuItemRendererWellHorz (aLEC.getDisplayLocale ());
+        final HCUL aUL = aDiv.addAndReturnChild (new HCUL ().addClass (CSS_CLASS_FOOTER_LINKS));
+        for (final IMenuObject aMenuObj : _getFooterObjects ())
+        {
+          if (aMenuObj instanceof IMenuSeparator)
+            aUL.addItem (aRenderer.renderSeparator ((IMenuSeparator) aMenuObj));
+          else
+            if (aMenuObj instanceof IMenuItemPage)
+              aUL.addItem (aRenderer.renderMenuItemPage ((IMenuItemPage) aMenuObj, false, false, false));
+            else
+              if (aMenuObj instanceof IMenuItemExternal)
+                aUL.addItem (aRenderer.renderMenuItemExternal ((IMenuItemExternal) aMenuObj, false, false, false));
+              else
+                throw new IllegalStateException ("Unsupported menu object type!");
+        }
+        aOuterContainer.addChild (aDiv);
+      }
+
+      return aOuterContainer;
     }
   }
 
@@ -173,9 +160,6 @@ public final class LayoutView
   public static void init (@Nonnull final ILayoutManager aLayoutMgr)
   {
     // Register all layout area handler (order is important for SEO!)
-    aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_HEADER, new AreaHeader ());
-    aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_NAVBAR, new AreaNavBar ());
     aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_VIEWPORT, new AreaViewPort ());
-    aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_FOOTER, new AreaFooter ());
   }
 }
