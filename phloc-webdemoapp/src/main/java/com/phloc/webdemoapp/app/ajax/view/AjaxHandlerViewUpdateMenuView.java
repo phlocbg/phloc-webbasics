@@ -22,12 +22,10 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.conversion.HCSettings;
-import com.phloc.json.impl.JSONObject;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
-import com.phloc.webdemoapp.app.layout.view.ViewMenuProvider;
+import com.phloc.webdemoapp.app.layout.view.AreaViewPort;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public final class AjaxHandlerViewUpdateMenuView extends AbstractAjaxHandler
@@ -35,14 +33,13 @@ public final class AjaxHandlerViewUpdateMenuView extends AbstractAjaxHandler
   @Override
   @Nonnull
   protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
     // Get the rendered content of the menu area
-    final IHCNode aRoot = ViewMenuProvider.getContent (ApplicationRequestManager.getInstance ()
+    final IHCNode aRoot = AreaViewPort.getMenuContent (ApplicationRequestManager.getInstance ()
                                                                                 .getRequestDisplayLocale ());
 
     // Set as result property
-    return AjaxDefaultResponse.createSuccess (new JSONObject ().setStringProperty ("html",
-                                                                                   HCSettings.getAsHTMLString (aRoot)));
+    return AjaxDefaultResponse.createSuccess (aRoot);
   }
 }

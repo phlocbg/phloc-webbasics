@@ -29,9 +29,8 @@ import com.phloc.html.hc.customize.HCDefaultCustomizer;
 import com.phloc.html.hc.customize.HCMultiCustomizer;
 import com.phloc.webbasics.app.ApplicationWebSettings;
 import com.phloc.webbasics.servlet.WebAppListenerMultiApp;
-import com.phloc.webctrls.bootstrap.EBootstrapIcon;
-import com.phloc.webctrls.bootstrap.ext.BootstrapCustomizer;
 import com.phloc.webctrls.bootstrap3.CBootstrap3;
+import com.phloc.webctrls.bootstrap3.EBootstrap3Icon;
 
 /**
  * Bootstrap specific initialization listener
@@ -61,10 +60,10 @@ public abstract class WebAppListenerMultiAppBootstrap3 extends WebAppListenerMul
     // Special Bootstrap customizer
     final HCConversionSettingsProvider aCSP = new HCConversionSettingsProvider (ApplicationWebSettings.getHTMLVersion ());
     aCSP.setCustomizer (new HCMultiCustomizer (new HCDefaultCustomizer (),
-                                               new BootstrapCustomizer (getBoostrapVersion ())));
+                                               new Bootstrap3Customizer (getBoostrapVersion ())));
     HCSettings.setConversionSettingsProvider (aCSP);
 
     // Using Bootstrap icon set by default
-    EBootstrapIcon.setAsDefault ();
+    EBootstrap3Icon.setAsDefault ();
   }
 }

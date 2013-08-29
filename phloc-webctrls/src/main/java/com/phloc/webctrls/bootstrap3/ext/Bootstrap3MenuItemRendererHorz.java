@@ -15,26 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webdemoapp.app.layout.view;
+package com.phloc.webctrls.bootstrap3.ext;
+
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.webbasics.app.layout.CLayout;
-import com.phloc.webbasics.app.layout.ILayoutManager;
+import com.phloc.appbasics.app.menu.IMenuSeparator;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCLI;
 
 /**
- * This class registers the renderer for the layout areas.
+ * A special menu item renderer for the footer area, where the items are
+ * displayed horizontally
  * 
  * @author Philip Helger
  */
-public final class LayoutView
+public class Bootstrap3MenuItemRendererHorz extends Bootstrap3MenuItemRenderer
 {
-  private LayoutView ()
-  {}
-
-  public static void init (@Nonnull final ILayoutManager aLayoutMgr)
+  public Bootstrap3MenuItemRendererHorz (@Nonnull final Locale aContentLocale)
   {
-    // Register all layout area handler (order is important for SEO!)
-    aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_VIEWPORT, new AreaViewPort ());
+    super (aContentLocale);
+  }
+
+  @Override
+  @Nonnull
+  public IHCNode renderSeparator (@Nonnull final IMenuSeparator aSeparator)
+  {
+    return new HCLI ().addChild ("·");
   }
 }

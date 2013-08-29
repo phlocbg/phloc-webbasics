@@ -40,8 +40,8 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.menu.ui.AbstractMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.IMenuItemRenderer;
 import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
-import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
+import com.phloc.webctrls.bootstrap3.EBootstrap3Icon;
 import com.phloc.webctrls.bootstrap3.well.Bootstrap3Well;
 import com.phloc.webctrls.bootstrap3.well.EBootstrap3WellType;
 
@@ -96,7 +96,7 @@ public class Bootstrap3MenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
     final HCA aLink = new HCA (LinkUtils.getLinkToMenuItem (aMenuItem.getID ()));
     aLink.addChild (getMenuItemPageLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
-      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
+      aLink.addChildren (new HCTextNode (" "), EBootstrap3Icon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 
@@ -134,7 +134,7 @@ public class Bootstrap3MenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
     aLink.setTarget (HCA_Target.BLANK);
     aLink.addChild (getMenuItemExternalLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
-      aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
+      aLink.addChildren (new HCTextNode (" "), EBootstrap3Icon.CHEVRON_RIGHT.getAsNode ());
     return aLink;
   }
 

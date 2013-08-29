@@ -25,7 +25,6 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCOL;
 import com.phloc.html.hc.htmlext.HCA_JS;
 import com.phloc.html.js.IJSCodeProvider;
-import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 
 /**
@@ -57,7 +56,7 @@ public class Bootstrap3Breadcrumbs extends HCOL
   @Nonnull
   public Bootstrap3Breadcrumbs addActive (@Nullable final String sText)
   {
-    addAndReturnItem (sText).addClass (CBootstrapCSS.ACTIVE);
+    addAndReturnItem (sText).addClass (CBootstrap3CSS.ACTIVE);
     return this;
   }
 }
