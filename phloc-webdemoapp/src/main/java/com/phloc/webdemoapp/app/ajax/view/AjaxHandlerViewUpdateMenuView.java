@@ -25,7 +25,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
-import com.phloc.webdemoapp.app.layout.view.AreaViewPort;
+import com.phloc.webdemoapp.app.layout.view.RendererView;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 public final class AjaxHandlerViewUpdateMenuView extends AbstractAjaxHandler
@@ -36,7 +36,7 @@ public final class AjaxHandlerViewUpdateMenuView extends AbstractAjaxHandler
                                              @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
     // Get the rendered content of the menu area
-    final IHCNode aRoot = AreaViewPort.getMenuContent (ApplicationRequestManager.getInstance ()
+    final IHCNode aRoot = RendererView.getMenuContent (ApplicationRequestManager.getInstance ()
                                                                                 .getRequestDisplayLocale ());
 
     // Set as result property

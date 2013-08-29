@@ -206,8 +206,8 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     final AbstractHCTable <?> aTable = getStyle ().createTable (HCCol.star (),
-                                                                new HCCol (150),
-                                                                new HCCol (150),
+                                                                new HCCol (170),
+                                                                new HCCol (170),
                                                                 createActionCol (2)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),

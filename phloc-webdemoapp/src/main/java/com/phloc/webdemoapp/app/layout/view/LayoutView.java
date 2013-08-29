@@ -35,6 +35,6 @@ public final class LayoutView
   public static void init (@Nonnull final ILayoutManager aLayoutMgr)
   {
     // Register all layout area handler (order is important for SEO!)
-    aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_VIEWPORT, new AreaViewPort ());
+    aLayoutMgr.registerAreaContentProvider (CLayout.LAYOUT_AREAID_VIEWPORT, new RendererView ());
   }
 }

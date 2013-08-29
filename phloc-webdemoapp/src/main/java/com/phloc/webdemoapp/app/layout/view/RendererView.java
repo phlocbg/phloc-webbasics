@@ -61,13 +61,13 @@ import com.phloc.webdemoapp.ui.DemoAppAccessUI;
  * 
  * @author Philip Helger
  */
-public final class AreaViewPort implements ILayoutAreaContentProvider
+public final class RendererView implements ILayoutAreaContentProvider
 {
   private static final ICSSClassProvider CSS_CLASS_FOOTER_LINKS = DefaultCSSClassProvider.create ("footer-links");
 
   private final List <IMenuObject> m_aFooterObjects;
 
-  public AreaViewPort ()
+  public RendererView ()
   {
     m_aFooterObjects = new ArrayList <IMenuObject> ();
     ApplicationMenuTree.getInstance ().iterateAllMenuObjects (new INonThrowingRunnableWithParameter <IMenuObject> ()
