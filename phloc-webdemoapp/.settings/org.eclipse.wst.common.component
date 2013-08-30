@@ -7,9 +7,6 @@
         <dependent-module archiveName="phloc-html-3.9.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-html/phloc-html">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="phloc-web-5.0.7-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-web/phloc-web">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="phloc-webbasics-2.1.6-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-webbasics/phloc-webbasics">
             <dependency-type>uses</dependency-type>
         </dependent-module>
