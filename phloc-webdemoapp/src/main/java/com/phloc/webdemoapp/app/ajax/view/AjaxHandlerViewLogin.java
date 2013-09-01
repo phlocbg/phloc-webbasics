@@ -37,7 +37,7 @@ import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.login.CLogin;
-import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webctrls.bootstrap3.alert.Bootstrap3ErrorBox;
 import com.phloc.webdemoapp.app.CDemoAppSecurity;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -50,7 +50,7 @@ public final class AjaxHandlerViewLogin extends AbstractAjaxHandler
   @Override
   @Nonnull
   protected IAjaxResponse mainHandleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                                   @Nonnull final MapBasedAttributeContainer aParams) throws Exception
+                                             @Nonnull final MapBasedAttributeContainer aParams) throws Exception
   {
     final String sLoginName = aParams.getAttributeAsString (CLogin.REQUEST_ATTR_USERID);
     final String sPassword = aParams.getAttributeAsString (CLogin.REQUEST_ATTR_PASSWORD);
@@ -68,9 +68,9 @@ public final class AjaxHandlerViewLogin extends AbstractAjaxHandler
       s_aLogger.warn ("Login of '" + sLoginName + "' failed because " + eLoginResult);
 
     final Locale aDisplayLocale = ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
-    final IHCNode aRoot = BootstrapErrorBox.create (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale) +
-                                                    " " +
-                                                    eLoginResult.getDisplayText (aDisplayLocale));
+    final IHCNode aRoot = Bootstrap3ErrorBox.create (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale) +
+                                                     " " +
+                                                     eLoginResult.getDisplayText (aDisplayLocale));
 
     // Set as result property
     return AjaxDefaultResponse.createSuccess (new JSONObject ().setBooleanProperty (JSON_LOGGEDIN, false)

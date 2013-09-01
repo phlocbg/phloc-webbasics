@@ -27,19 +27,16 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
-import com.phloc.html.hc.html.HCFieldSet;
 import com.phloc.html.hc.html.HCForm;
-import com.phloc.html.hc.html.HCLabel;
-import com.phloc.html.hc.html.HCLegend;
-import com.phloc.html.js.EJSEvent;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.login.CLogin;
-import com.phloc.webctrls.bootstrap.BootstrapButton_Submit;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbar;
+import com.phloc.webctrls.bootstrap3.button.Bootstrap3ButtonToolbar;
+import com.phloc.webctrls.bootstrap3.form.Bootstrap3Form;
+import com.phloc.webctrls.bootstrap3.form.EBootstrap3FormType;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 
 @Immutable
@@ -59,32 +56,21 @@ public final class DemoAppAccessUI
     final String sIDPassword = GlobalIDFactory.getNewStringID ();
     final String sIDErrorField = GlobalIDFactory.getNewStringID ();
 
-    final String sTextUserName = EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale);
-    final String sTextPassword = EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale);
-
-    final HCForm aForm = new HCForm (LinkUtils.getSelfHref ());
-    final HCFieldSet aFieldSet = aForm.addAndReturnChild (new HCFieldSet ());
-    if (bFullUI)
-    {
-      aForm.addClass (CDemoAppCSS.CSS_CLASS_FORM_GROUPED);
-      aFieldSet.addChild (new HCLegend ().addChild ("Login"));
-    }
+    final Bootstrap3Form aForm = new Bootstrap3Form (LinkUtils.getSelfHref (), EBootstrap3FormType.HORIZONTAL);
 
     // User name field
-    aFieldSet.addChild (new HCLabel ().setFor (sIDUserName).addChild (sTextUserName));
-    aFieldSet.addChild (new HCEdit (CLogin.REQUEST_ATTR_USERID, sPreselectedUserName).setID (sIDUserName)
-                                                                                     .setPlaceholder (sTextUserName));
+    aForm.addFormGroup (EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale),
+                        new HCEdit (CLogin.REQUEST_ATTR_USERID, sPreselectedUserName).setID (sIDUserName));
 
     // Password field
-    aFieldSet.addChild (new HCLabel ().setFor (sIDPassword).addChild (sTextPassword));
-    aFieldSet.addChild (new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD).setID (sIDPassword)
-                                                                         .setPlaceholder (sTextPassword));
+    aForm.addFormGroup (EWebBasicsText.LOGIN_FIELD_PASSWORD.getDisplayText (aDisplayLocale),
+                        new HCEditPassword (CLogin.REQUEST_ATTR_PASSWORD).setID (sIDPassword));
 
     // Placeholder for error message
-    aFieldSet.addChild (new HCDiv ().setID (sIDErrorField));
+    aForm.addChild (new HCDiv ().setID (sIDErrorField));
 
     // Login button
-    final BootstrapToolbar aToolbar = aFieldSet.addAndReturnChild (new BootstrapToolbar ());
+    final Bootstrap3ButtonToolbar aToolbar = aForm.addAndReturnChild (new Bootstrap3ButtonToolbar ());
     final JSPackage aOnClick = new JSPackage ();
     aOnClick.add (DemoAppJS.viewLogin ()
                            .arg (CDemoAppAjaxView.VIEW_LOGIN.getInvocationURI ())
@@ -93,8 +79,7 @@ public final class DemoAppAccessUI
                                                           JQuery.idRef (sIDPassword).val ()))
                            .arg (sIDErrorField));
     aOnClick._return (false);
-    aToolbar.addChild (new BootstrapButton_Submit ().addChild (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale))
-                                                    .setEventHandler (EJSEvent.ONCLICK, aOnClick));
+    aToolbar.addSubmitButton (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale), aOnClick);
     return aForm;
   }
 }

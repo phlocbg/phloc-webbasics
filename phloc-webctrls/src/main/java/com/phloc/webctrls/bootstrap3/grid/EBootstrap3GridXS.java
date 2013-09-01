@@ -25,13 +25,12 @@ import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 
 /**
- * Bootstrap spans
+ * Bootstrap3 grid columns. Extra small - Phones (<768px)
  * 
  * @author Philip Helger
  */
-public enum EBootstrap3GridXS implements ICSSClassProvider
+public enum EBootstrap3GridXS implements IBootstrap3GridElement
 {
-  // Extra small - Phones (<768px)
   XS_1 (1, CBootstrap3CSS.COL_XS_1),
   XS_2 (2, CBootstrap3CSS.COL_XS_2),
   XS_3 (3, CBootstrap3CSS.COL_XS_3),
