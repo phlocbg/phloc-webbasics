@@ -47,8 +47,7 @@ public final class DemoAppAccessUI
 
   @Nonnull
   public static HCForm createViewLoginForm (@Nonnull final Locale aDisplayLocale,
-                                            @Nullable final String sPreselectedUserName,
-                                            final boolean bFullUI)
+                                            @Nullable final String sPreselectedUserName)
   {
     // Use new IDs for both fields, in case the login stuff is displayed more
     // than once!

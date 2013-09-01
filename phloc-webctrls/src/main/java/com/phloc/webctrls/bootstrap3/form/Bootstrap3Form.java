@@ -18,6 +18,8 @@ import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
+import com.phloc.webctrls.bootstrap3.grid.EBootstrap3GridMD;
+import com.phloc.webctrls.bootstrap3.grid.IBootstrap3GridElementExtended;
 
 public class Bootstrap3Form extends HCForm
 {
@@ -60,6 +62,16 @@ public class Bootstrap3Form extends HCForm
     return null;
   }
 
+  private IBootstrap3GridElementExtended _getLeft ()
+  {
+    return EBootstrap3GridMD.MD_2;
+  }
+
+  private IBootstrap3GridElementExtended _getRight ()
+  {
+    return EBootstrap3GridMD.MD_10;
+  }
+
   @Nonnull
   public Bootstrap3Form addFormGroup (@Nullable final String sLabel, @Nonnull final IHCNode aCtrl)
   {
@@ -70,21 +82,31 @@ public class Bootstrap3Form extends HCForm
     if (aFirstControl instanceof HCCheckBox)
     {
       // Check box
-      final HCDiv aDiv = addAndReturnChild (new HCDiv ().addClass (CBootstrap3CSS.CHECKBOX));
-      final HCLabel aLabel = aDiv.addAndReturnChild (new HCLabel ());
+      final HCDiv aCheckbox = new HCDiv ().addClass (CBootstrap3CSS.CHECKBOX);
+      final HCLabel aLabel = aCheckbox.addAndReturnChild (new HCLabel ());
       aLabel.addChild (aCtrl);
       if (StringHelper.hasText (sLabel))
         aLabel.addChild (new HCTextNode (" " + sLabel));
+
+      if (m_eFormType == EBootstrap3FormType.HORIZONTAL)
+        addChild (new HCDiv ().addClasses (_getLeft ().getCSSClassOffset (), _getRight ()).addChild (aCheckbox));
+      else
+        addChild (aCheckbox);
     }
     else
       if (aFirstControl instanceof HCRadioButton)
       {
         // Radio button
-        final HCDiv aDiv = addAndReturnChild (new HCDiv ().addClass (CBootstrap3CSS.RADIO));
-        final HCLabel aLabel = aDiv.addAndReturnChild (new HCLabel ());
+        final HCDiv aRadio = new HCDiv ().addClass (CBootstrap3CSS.RADIO);
+        final HCLabel aLabel = aRadio.addAndReturnChild (new HCLabel ());
         aLabel.addChild (aCtrl);
         if (StringHelper.hasText (sLabel))
           aLabel.addChild (new HCTextNode (" " + sLabel));
+
+        if (m_eFormType == EBootstrap3FormType.HORIZONTAL)
+          addChild (new HCDiv ().addClasses (_getLeft ().getCSSClassOffset (), _getRight ()).addChild (aRadio));
+        else
+          addChild (aRadio);
       }
       else
       {
@@ -97,6 +119,9 @@ public class Bootstrap3Form extends HCForm
           // Screen reader only....
           if (m_eFormType == EBootstrap3FormType.INLINE)
             aLabel.addClass (CBootstrap3CSS.SR_ONLY);
+          else
+            if (m_eFormType == EBootstrap3FormType.HORIZONTAL)
+              aLabel.addClasses (CBootstrap3CSS.CONTROL_LABEL, _getLeft ());
 
           if (aFirstControl != null)
           {
@@ -122,12 +147,26 @@ public class Bootstrap3Form extends HCForm
           }
 
           // Add in form group
-          addChild (new HCDiv ().addClass (CBootstrap3CSS.FORM_GROUP).addChildren (aLabel, aCtrl));
+          final HCDiv aFormGroup = new HCDiv ().addClass (CBootstrap3CSS.FORM_GROUP);
+          if (m_eFormType == EBootstrap3FormType.HORIZONTAL)
+            addChild (aFormGroup.addChildren (aLabel, new HCDiv ().addClass (_getRight ()).addChild (aCtrl)));
+          else
+            addChild (aFormGroup.addChildren (aLabel, aCtrl));
         }
         else
         {
-          // No label
-          addChild (aCtrl);
+          // No label - just add controls
+          if (m_eFormType == EBootstrap3FormType.HORIZONTAL)
+          {
+            final HCDiv aFormGroup = new HCDiv ().addClass (CBootstrap3CSS.FORM_GROUP);
+            aFormGroup.addChild (new HCDiv ().addClasses (_getLeft ().getCSSClassOffset (), _getRight ())
+                                             .addChild (aCtrl));
+            addChild (aFormGroup);
+          }
+          else
+          {
+            addChild (aCtrl);
+          }
         }
       }
     return this;

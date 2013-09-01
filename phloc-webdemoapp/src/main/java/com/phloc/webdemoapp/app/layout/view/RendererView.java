@@ -97,7 +97,7 @@ public final class RendererView implements ILayoutAreaContentProvider
       final Bootstrap3DropdownMenu aDropDown = aNav.addDropdownMenu ("Login");
       {
         final HCDiv aDiv = new HCDiv ().addStyle (CCSSProperties.PADDING.newValue ("15px"));
-        aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null, false)
+        aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null)
                                       .addClass (CBootstrapCSS.NAVBAR_FORM));
         aDropDown.addItem (aDiv);
       }
