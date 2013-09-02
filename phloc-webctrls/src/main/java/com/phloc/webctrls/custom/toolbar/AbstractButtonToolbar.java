@@ -157,7 +157,7 @@ public abstract class AbstractButtonToolbar <IMPLTYPE extends AbstractButtonTool
   }
 
   @Nonnull
-  public IMPLTYPE addButtonNew (final String sCaption, @Nonnull final ISimpleURL aURL)
+  public IMPLTYPE addButtonNew (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
   {
     return addButton (sCaption, aURL, EDefaultIcon.NEW);
   }

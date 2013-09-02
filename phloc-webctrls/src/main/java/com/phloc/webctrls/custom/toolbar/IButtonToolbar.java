@@ -31,13 +31,13 @@ public interface IButtonToolbar <IMPLTYPE extends IButtonToolbar <IMPLTYPE>> ext
   IMPLTYPE addHiddenFields (@Nullable Map <String, String> aValues);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, @Nullable IJSCodeProvider aJSCode);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nonnull IJSCodeProvider aJSCode);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, @Nullable IJSCodeProvider aJSCode, @Nullable EDefaultIcon eIcon);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nonnull IJSCodeProvider aJSCode, @Nullable EDefaultIcon eIcon);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, @Nullable IJSCodeProvider aJSCode, @Nullable IIcon aIcon);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nonnull IJSCodeProvider aJSCode, @Nullable IIcon aIcon);
 
   @Nonnull
   IMPLTYPE addButton (@Nullable String sCaption, @Nonnull ISimpleURL aURL);
