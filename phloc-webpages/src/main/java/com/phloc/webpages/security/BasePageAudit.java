@@ -116,7 +116,7 @@ public class BasePageAudit extends AbstractWebPageExt
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (180),
+    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (180),
                                                                 new HCCol (120),
                                                                 new HCCol (60),
                                                                 new HCCol (60),
@@ -139,7 +139,7 @@ public class BasePageAudit extends AbstractWebPageExt
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (0)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

@@ -281,7 +281,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.addItemRow (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getFirstName ());
     aTable.addItemRow (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getLastName ());
     aTable.addItemRow (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale),
-                       getStyle ().createEmailLink (aSelectedObject.getEmailAddress ()));
+                       getStyler ().createEmailLink (aSelectedObject.getEmailAddress ()));
     aTable.addItemRow (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale),
                        EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
     aTable.addItemRow (EText.LABEL_DELETED.getDisplayText (aDisplayLocale),
@@ -668,7 +668,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
-    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (200),
+    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (200),
                                                                 HCCol.star (),
                                                                 new HCCol (150),
                                                                 createActionCol (3)).setID (sTableID);
@@ -724,7 +724,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final HCNodeList aNodeList = new HCNodeList ();
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (3).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

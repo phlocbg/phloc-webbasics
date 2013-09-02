@@ -496,7 +496,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           else
           {
             // Show: changes could not be saved...
-            aWPEC.getNodeList ().addChild (getStyle ().createIncorrectInputBox (aWPEC.getDisplayLocale ()));
+            aWPEC.getNodeList ().addChild (getStyler ().createIncorrectInputBox (aWPEC.getDisplayLocale ()));
           }
         }
 

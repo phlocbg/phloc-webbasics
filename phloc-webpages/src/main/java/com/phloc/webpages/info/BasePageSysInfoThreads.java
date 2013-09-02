@@ -115,7 +115,7 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (50),
+    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (50),
                                                                 new HCCol (100),
                                                                 new HCCol (150),
                                                                 new HCCol (55),
@@ -170,7 +170,7 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getColumn (0).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableLong (aDisplayLocale));
     aDataTables.getColumn (3).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableInteger (aDisplayLocale));
     aDataTables.getColumn (5).setSortable (false);

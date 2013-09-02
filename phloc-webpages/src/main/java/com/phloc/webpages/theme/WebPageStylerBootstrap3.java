@@ -36,7 +36,7 @@ import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
 import com.phloc.webctrls.bootstrap3.table.Bootstrap3Table;
 import com.phloc.webctrls.bootstrap3.table.Bootstrap3TableFormView;
 
-public class WebPageStyleBootstrap3 extends WebPageStyleSimple
+public class WebPageStylerBootstrap3 extends WebPageStylerSimple
 {
   @Override
   @Nonnull

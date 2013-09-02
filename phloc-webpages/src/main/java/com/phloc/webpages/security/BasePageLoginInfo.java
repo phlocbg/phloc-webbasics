@@ -160,7 +160,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
         aCustomAttrTable.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
 
-      final DataTables aDataTables = getStyle ().createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
+      final DataTables aDataTables = getStyler ().createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
       aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
 
       aTable.addItemRow (EText.MSG_ATTRS.getDisplayText (aDisplayLocale), aCustomAttrTable, aDataTables.build ());
@@ -205,7 +205,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final AbstractHCTable <?> aTable = getStyle ().createTable (HCCol.star (),
+    final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
                                                                 new HCCol (170),
                                                                 new HCCol (170),
                                                                 createActionCol (2)).setID (getID ());
@@ -241,7 +241,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (1)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));

@@ -5,28 +5,28 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.scopes.singleton.GlobalSingleton;
 
-public class WebPageStyleManager extends GlobalSingleton
+public class WebPageStylerManager extends GlobalSingleton
 {
-  private IWebPageStyle m_aStyle = new WebPageStyleBootstrap2 ();
+  private IWebPageStyler m_aStyle = new WebPageStylerBootstrap2 ();
 
   @Deprecated
   @UsedViaReflection
-  public WebPageStyleManager ()
+  public WebPageStylerManager ()
   {}
 
   @Nonnull
-  public static WebPageStyleManager getInstance ()
+  public static WebPageStylerManager getInstance ()
   {
-    return getGlobalSingleton (WebPageStyleManager.class);
+    return getGlobalSingleton (WebPageStylerManager.class);
   }
 
   @Nonnull
-  public static IWebPageStyle getStyle ()
+  public static IWebPageStyler getStyler ()
   {
     return getInstance ().m_aStyle;
   }
 
-  public void setStyle (@Nonnull final IWebPageStyle aStyle)
+  public void setStyle (@Nonnull final IWebPageStyler aStyle)
   {
     if (aStyle == null)
       throw new NullPointerException ("Style");

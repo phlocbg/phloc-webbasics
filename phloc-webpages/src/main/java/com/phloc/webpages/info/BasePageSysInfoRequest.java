@@ -103,7 +103,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // HTTP headers
     aNodeList.addChild (HCH3.create (EText.MSG_HTTP_HEADERS.getDisplayText (aDisplayLocale)));
-    AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
+    AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$http");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
@@ -118,7 +118,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // Cookies
     aNodeList.addChild (HCH3.create (EText.MSG_COOKIES.getDisplayText (aDisplayLocale)));
-    aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star (), HCCol.star ());
+    aTable = getStyler ().createTable (new HCCol (nFirstColWidth), HCCol.star (), HCCol.star ());
     aTable.setID (getID () + "$cookies");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale),
@@ -143,7 +143,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // Request parameters
     aNodeList.addChild (HCH3.create (EText.MSG_PARAMETERS.getDisplayText (aDisplayLocale)));
-    aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable = getStyler ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$params");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
@@ -155,7 +155,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // Request properties
     aNodeList.addChild (HCH3.create (EText.MSG_PROPERTIES.getDisplayText (aDisplayLocale)));
-    aTable = getStyle ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
+    aTable = getStyler ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$attrs");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));

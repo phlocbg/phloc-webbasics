@@ -258,16 +258,16 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (AccessManager.getInstance ().deleteRole (aSelectedObject.getID ()).isChanged ())
-        aNodeList.addChild (getStyle ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                        aSelectedObject.getName ())));
       else
-        aNodeList.addChild (getStyle ().createErrorBox (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+        aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                    aSelectedObject.getName ())));
       return true;
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
-    aForm.addChild (getStyle ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
+    aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
                                                                                               aSelectedObject.getName ())));
     final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
@@ -284,7 +284,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final AbstractHCTable <?> aTable = getStyle ().createTable (HCCol.star (), new HCCol (110), createActionCol (1))
+    final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (1))
                                                   .setID (getID ());
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
@@ -316,7 +316,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

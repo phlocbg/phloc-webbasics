@@ -86,7 +86,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
+    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
 
@@ -99,7 +99,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

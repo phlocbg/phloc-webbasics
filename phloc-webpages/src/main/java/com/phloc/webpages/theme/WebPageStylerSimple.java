@@ -30,7 +30,7 @@ import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.EWebPageText;
 
-public class WebPageStyleSimple implements IWebPageStyle
+public class WebPageStylerSimple implements IWebPageStyler
 {
   @Nonnull
   public IHCNode createImageView (@Nullable final UserDataObject aUDO, @Nonnull final Locale aDisplayLocale)

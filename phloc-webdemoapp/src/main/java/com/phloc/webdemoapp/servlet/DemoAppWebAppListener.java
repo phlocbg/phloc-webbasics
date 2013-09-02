@@ -37,8 +37,8 @@ import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 import com.phloc.webdemoapp.app.init.DefaultSecurity;
 import com.phloc.webdemoapp.app.init.InitializerConfig;
 import com.phloc.webdemoapp.app.init.InitializerView;
-import com.phloc.webpages.theme.WebPageStyleBootstrap3;
-import com.phloc.webpages.theme.WebPageStyleManager;
+import com.phloc.webpages.theme.WebPageStylerBootstrap3;
+import com.phloc.webpages.theme.WebPageStylerManager;
 
 /**
  * Callbacks for the application server
@@ -70,7 +70,7 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
     super.initGlobals ();
 
     // UI stuff
-    WebPageStyleManager.getInstance ().setStyle (new WebPageStyleBootstrap3 ()
+    WebPageStylerManager.getInstance ().setStyle (new WebPageStylerBootstrap3 ()
     {
       @Override
       @Nonnull

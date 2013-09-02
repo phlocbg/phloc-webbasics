@@ -15,7 +15,7 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.datatables.DataTables;
 
-public interface IWebPageStyle
+public interface IWebPageStyler
 {
   @Nonnull
   IHCNode createImageView (@Nullable UserDataObject aUDO, @Nonnull Locale aDisplayLocale);

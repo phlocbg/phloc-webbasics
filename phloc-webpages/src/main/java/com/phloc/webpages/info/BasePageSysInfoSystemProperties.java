@@ -179,7 +179,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     {
-      final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (250), HCCol.star ());
+      final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
       aTable.setID (getID () + "$special");
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SPECIAL_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),
@@ -249,7 +249,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     }
 
     {
-      final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (250), HCCol.star ());
+      final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
       aTable.setID (getID ());
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),

@@ -43,8 +43,8 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
-import com.phloc.webpages.theme.IWebPageStyle;
-import com.phloc.webpages.theme.WebPageStyleManager;
+import com.phloc.webpages.theme.IWebPageStyler;
+import com.phloc.webpages.theme.WebPageStylerManager;
 
 public abstract class AbstractWebPageExt extends AbstractWebPage
 {
@@ -93,9 +93,9 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected final IWebPageStyle getStyle ()
+  protected final IWebPageStyler getStyler ()
   {
-    return WebPageStyleManager.getStyle ();
+    return WebPageStylerManager.getStyler ();
   }
 
   /**

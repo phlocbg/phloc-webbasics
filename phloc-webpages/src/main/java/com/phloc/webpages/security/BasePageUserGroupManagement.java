@@ -402,7 +402,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ().addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USERGROUP.getDisplayText (aDisplayLocale), createCreateURL ());
 
-    final AbstractHCTable <?> aTable = getStyle ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))
+    final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))
                                                   .setID (getID ());
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
@@ -434,7 +434,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
 
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);

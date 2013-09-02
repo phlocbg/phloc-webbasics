@@ -36,7 +36,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 
-public class WebPageStyleBootstrap2 extends WebPageStyleSimple
+public class WebPageStylerBootstrap2 extends WebPageStylerSimple
 {
   @Override
   @Nonnull

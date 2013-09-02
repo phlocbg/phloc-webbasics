@@ -103,7 +103,7 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     // Get default time zone
     final DateTimeZone aCurrentDTZ = PDTConfig.getDefaultDateTimeZone ();
 
-    final AbstractHCTable <?> aTable = getStyle ().createTable (new HCCol (100),
+    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (100),
                                                                 HCCol.star (),
                                                                 new HCCol (100),
                                                                 new HCCol (70),
@@ -132,7 +132,7 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     }
     aNodeList.addChild (aTable);
 
-    final DataTables aDataTables = getStyle ().createDefaultDataTables (aTable, aDisplayLocale);
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getColumn (3).setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT",
                                                                                                                  "S"),
                                                                          aDisplayLocale));
