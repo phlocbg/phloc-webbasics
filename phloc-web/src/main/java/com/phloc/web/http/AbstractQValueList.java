@@ -55,8 +55,11 @@ public abstract class AbstractQValueList <KEYTYPE>
   {
     final Map <KEYTYPE, QValue> ret = new HashMap <KEYTYPE, QValue> ();
     for (final Map.Entry <KEYTYPE, QValue> aEntry : m_aMap.entrySet ())
-      if (aEntry.getValue ().getQuality () < dQuality)
-        ret.put (aEntry.getKey (), aEntry.getValue ());
+    {
+      final QValue aQValue = aEntry.getValue ();
+      if (aQValue.getQuality () < dQuality)
+        ret.put (aEntry.getKey (), aQValue);
+    }
     return ret;
   }
 
@@ -66,8 +69,11 @@ public abstract class AbstractQValueList <KEYTYPE>
   {
     final Map <KEYTYPE, QValue> ret = new HashMap <KEYTYPE, QValue> ();
     for (final Map.Entry <KEYTYPE, QValue> aEntry : m_aMap.entrySet ())
-      if (aEntry.getValue ().getQuality () <= dQuality)
-        ret.put (aEntry.getKey (), aEntry.getValue ());
+    {
+      final QValue aQValue = aEntry.getValue ();
+      if (aQValue.getQuality () <= dQuality)
+        ret.put (aEntry.getKey (), aQValue);
+    }
     return ret;
   }
 
@@ -77,8 +83,11 @@ public abstract class AbstractQValueList <KEYTYPE>
   {
     final Map <KEYTYPE, QValue> ret = new HashMap <KEYTYPE, QValue> ();
     for (final Map.Entry <KEYTYPE, QValue> aEntry : m_aMap.entrySet ())
-      if (aEntry.getValue ().getQuality () > dQuality)
-        ret.put (aEntry.getKey (), aEntry.getValue ());
+    {
+      final QValue aQValue = aEntry.getValue ();
+      if (aQValue.getQuality () > dQuality)
+        ret.put (aEntry.getKey (), aQValue);
+    }
     return ret;
   }
 
@@ -88,8 +97,11 @@ public abstract class AbstractQValueList <KEYTYPE>
   {
     final Map <KEYTYPE, QValue> ret = new HashMap <KEYTYPE, QValue> ();
     for (final Map.Entry <KEYTYPE, QValue> aEntry : m_aMap.entrySet ())
-      if (aEntry.getValue ().getQuality () >= dQuality)
-        ret.put (aEntry.getKey (), aEntry.getValue ());
+    {
+      final QValue aQValue = aEntry.getValue ();
+      if (aQValue.getQuality () >= dQuality)
+        ret.put (aEntry.getKey (), aQValue);
+    }
     return ret;
   }
 

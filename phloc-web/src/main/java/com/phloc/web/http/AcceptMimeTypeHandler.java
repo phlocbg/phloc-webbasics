@@ -76,9 +76,16 @@ public final class AcceptMimeTypeHandler
           dQuality = StringParser.parseDouble (aParts[1].trim ().substring (2), QValue.MAX_QUALITY);
 
         final String sMimeType = aParts[0];
-        final IMimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType);
+        IMimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType);
         if (aMimeType != null)
+        {
+          if (aMimeType.hasAnyParameters ())
+          {
+            s_aLogger.warn ("Ignoring all contained MIME type parameter from '" + sMimeType + "'!");
+            aMimeType = new MimeType (aMimeType.getContentType (), aMimeType.getContentSubType ());
+          }
           ret.addMimeType (aMimeType, dQuality);
+        }
         else
           if ("*".equals (sMimeType))
             ret.addMimeType (ANY_MIMETYPE, dQuality);

@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
 
 /**
@@ -39,6 +40,9 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   {
     if (aMimeType == null)
       throw new NullPointerException ("charset name is empty");
+    if (aMimeType.hasAnyParameters ())
+      throw new IllegalArgumentException ("MimeTypes used here may not contain any parameter!");
+
     m_aMap.put (aMimeType, new QValue (dQuality));
   }
 
@@ -55,11 +59,15 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   {
     if (aMimeType == null)
       throw new NullPointerException ("mimeType");
-    QValue aQuality = m_aMap.get (aMimeType);
+
+    // Extract only the real MIME type, without any parameters!
+    final IMimeType aRealMimeType = new MimeType (aMimeType.getContentType (), aMimeType.getContentSubType ());
+
+    QValue aQuality = m_aMap.get (aRealMimeType);
     if (aQuality == null)
     {
       // Check for "contenttype/*"
-      aQuality = m_aMap.get (aMimeType.getContentType ().buildMimeType ("*"));
+      aQuality = m_aMap.get (aRealMimeType.getContentType ().buildMimeType ("*"));
       if (aQuality == null)
       {
         // If not explicitly given, check for "*"
