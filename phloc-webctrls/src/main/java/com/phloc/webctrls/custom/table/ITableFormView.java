@@ -4,9 +4,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.IHCBaseTable;
 import com.phloc.webctrls.custom.IFormLabel;
 
-public interface ITableFormView
+public interface ITableFormView <THISTYPE extends ITableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>
 {
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
 

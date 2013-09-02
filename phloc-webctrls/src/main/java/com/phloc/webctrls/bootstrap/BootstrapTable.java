@@ -17,81 +17,27 @@
  */
 package com.phloc.webctrls.bootstrap;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 
-public class BootstrapTable extends AbstractHCTable <BootstrapTable>
+public class BootstrapTable extends AbstractBootstrapTable <BootstrapTable>
 {
-  private void _init ()
-  {
-    addClass (CBootstrapCSS.TABLE);
-    setCondensed (true);
-  }
-
   public BootstrapTable ()
-  {
-    super ();
-    _init ();
-  }
+  {}
 
   public BootstrapTable (@Nullable final HCCol aCol)
   {
     super (aCol);
-    _init ();
   }
 
   public BootstrapTable (@Nullable final HCCol... aCols)
   {
     super (aCols);
-    _init ();
   }
 
   public BootstrapTable (@Nullable final Iterable <? extends HCCol> aCols)
   {
     super (aCols);
-    _init ();
-  }
-
-  @Nonnull
-  public final BootstrapTable setStriped (final boolean bStriped)
-  {
-    if (bStriped)
-      addClass (CBootstrapCSS.TABLE_STRIPED);
-    else
-      removeClass (CBootstrapCSS.TABLE_STRIPED);
-    return this;
-  }
-
-  @Nonnull
-  public final BootstrapTable setBordered (final boolean bBordered)
-  {
-    if (bBordered)
-      addClass (CBootstrapCSS.TABLE_BORDERED);
-    else
-      removeClass (CBootstrapCSS.TABLE_BORDERED);
-    return this;
-  }
-
-  @Nonnull
-  public final BootstrapTable setHover (final boolean bHover)
-  {
-    if (bHover)
-      addClass (CBootstrapCSS.TABLE_HOVER);
-    else
-      removeClass (CBootstrapCSS.TABLE_HOVER);
-    return this;
-  }
-
-  @Nonnull
-  public final BootstrapTable setCondensed (final boolean bCondensed)
-  {
-    if (bCondensed)
-      addClass (CBootstrapCSS.TABLE_CONDENSED);
-    else
-      removeClass (CBootstrapCSS.TABLE_CONDENSED);
-    return this;
   }
 }

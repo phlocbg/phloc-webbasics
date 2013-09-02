@@ -22,11 +22,12 @@ import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.AbstractBootstrapTable;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.table.ITableFormView;
 
-public class BootstrapTableFormView extends BootstrapTable
+public class BootstrapTableFormView extends AbstractBootstrapTable <BootstrapTableFormView> implements ITableFormView <BootstrapTableFormView>
 {
   private void _init ()
   {

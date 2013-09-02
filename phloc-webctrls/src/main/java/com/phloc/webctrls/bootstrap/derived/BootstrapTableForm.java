@@ -45,14 +45,14 @@ import com.phloc.html.hc.impl.AbstractHCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
+import com.phloc.webctrls.bootstrap.AbstractBootstrapTable;
 import com.phloc.webctrls.bootstrap.BootstrapHelpBlock;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.IFormNote;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
-public class BootstrapTableForm extends BootstrapTable
+public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableForm>
 {
   private static final String REQUEST_ATTR_FIRST_FOCUSABLE = "BootstrapTableForm$FirstFocusable";
 
@@ -120,9 +120,7 @@ public class BootstrapTableForm extends BootstrapTable
   {
     // Set full width class on first control
     for (final IHCNode aCtrl : aCtrls)
-      if (aCtrl instanceof IHCElement <?> &&
-          !(aCtrl instanceof HCCheckBox) &&
-          !(aCtrl instanceof IHCBaseTable <?>))
+      if (aCtrl instanceof IHCElement <?> && !(aCtrl instanceof HCCheckBox) && !(aCtrl instanceof IHCBaseTable <?>))
       {
         final IHCElement <?> aElement = (IHCElement <?>) aCtrl;
         // Don't resize elements with a predefined size

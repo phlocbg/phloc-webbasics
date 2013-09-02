@@ -26,7 +26,7 @@ import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
 import com.phloc.webctrls.custom.table.ITableFormView;
 
-public class Bootstrap3TableFormView extends Bootstrap3Table implements ITableFormView
+public class Bootstrap3TableFormView extends AbstractBootstrap3Table <Bootstrap3TableFormView> implements ITableFormView <Bootstrap3TableFormView>
 {
   private void _init ()
   {
