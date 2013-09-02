@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.IHCCell;
 
 /**
  * This class holds table rows to be used by the DataTables server side
@@ -56,7 +56,7 @@ public final class DataTablesServerDataRow implements Serializable
     m_sRowID = aRow.getID ();
     m_sRowClass = aRow.getAllClassesAsString ();
     m_aCells = new ArrayList <DataTablesServerDataCell> (aRow.getCellCount ());
-    for (final AbstractHCCell aCell : aRow.getAllCells ())
+    for (final IHCCell <?> aCell : aRow.getAllCells ())
       m_aCells.add (new DataTablesServerDataCell (aCell, aCS));
   }
 

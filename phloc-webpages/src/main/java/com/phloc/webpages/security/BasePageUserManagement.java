@@ -50,7 +50,6 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -61,6 +60,7 @@ import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.IHCCell;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
@@ -697,7 +697,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       }
       aRow.addCell (new HCA (aViewLink).addChild (aUserGroupsStr.toString ()));
 
-      final AbstractHCCell aActionCell = aRow.addCell ();
+      final IHCCell <?> aActionCell = aRow.addCell ();
 
       // Edit user
       if (isEditAllowed (aCurUser))

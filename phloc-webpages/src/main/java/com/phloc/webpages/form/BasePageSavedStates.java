@@ -37,11 +37,11 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.IHCCell;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.app.LinkUtils;
@@ -234,7 +234,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 
         aRow.addCell (PDTToString.getAsString (aFormState.getDateTime (), aDisplayLocale));
 
-        final AbstractHCCell aActionCell = aRow.addCell ();
+        final IHCCell <?> aActionCell = aRow.addCell ();
         // Original action (currently always create even for copy)
         final String sAction = aFormState.getAttributes ().getAttributeAsString (CHCParam.PARAM_ACTION, ACTION_CREATE);
         // Original object ID

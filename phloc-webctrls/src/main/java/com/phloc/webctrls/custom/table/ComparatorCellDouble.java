@@ -26,9 +26,9 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractNumericComparator;
 import com.phloc.commons.locale.LocaleFormatter;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.IHCCell;
 
-public class ComparatorCellDouble extends AbstractNumericComparator <AbstractHCCell>
+public class ComparatorCellDouble extends AbstractNumericComparator <IHCCell <?>>
 {
   protected final Locale m_aLocale;
   private final String m_sCommonPrefix;
@@ -51,7 +51,7 @@ public class ComparatorCellDouble extends AbstractNumericComparator <AbstractHCC
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected String getCellText (@Nullable final IHCCell <?> aCell)
   {
     if (aCell == null)
       return "";
@@ -74,7 +74,7 @@ public class ComparatorCellDouble extends AbstractNumericComparator <AbstractHCC
   }
 
   @Override
-  protected final double asDouble (@Nullable final AbstractHCCell aCell)
+  protected final double asDouble (@Nullable final IHCCell <?> aCell)
   {
     final String sText = getCellText (aCell);
 

@@ -23,14 +23,14 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.version.Version;
-import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.IHCCell;
 
 /**
  * This comparator is responsible for sorting cells by {@link Version}
  * 
  * @author Philip Helger
  */
-public class ComparatorCellVersion extends AbstractComparator <AbstractHCCell>
+public class ComparatorCellVersion extends AbstractComparator <IHCCell <?>>
 {
   private final String m_sCommonPrefix;
   private final String m_sCommonSuffix;
@@ -47,7 +47,7 @@ public class ComparatorCellVersion extends AbstractComparator <AbstractHCCell>
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected String getCellText (@Nullable final IHCCell <?> aCell)
   {
     if (aCell == null)
       return "";
@@ -64,7 +64,7 @@ public class ComparatorCellVersion extends AbstractComparator <AbstractHCCell>
   }
 
   @Override
-  protected final int mainCompare (final AbstractHCCell aCell1, final AbstractHCCell aCell2)
+  protected final int mainCompare (final IHCCell <?> aCell1, final IHCCell <?> aCell2)
   {
     final String sText1 = getCellText (aCell1);
     final String sText2 = getCellText (aCell2);

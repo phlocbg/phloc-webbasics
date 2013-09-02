@@ -28,14 +28,14 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.locale.LocaleFormatter;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.IHCCell;
 
 /**
  * This comparator is responsible for sorting cells by BigInteger
  * 
  * @author Philip Helger
  */
-public class ComparatorCellBigInteger extends AbstractComparator <AbstractHCCell>
+public class ComparatorCellBigInteger extends AbstractComparator <IHCCell <?>>
 {
   private static final BigDecimal DEFAULT_VALUE = BigDecimal.ZERO;
   private final Locale m_aLocale;
@@ -59,7 +59,7 @@ public class ComparatorCellBigInteger extends AbstractComparator <AbstractHCCell
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected String getCellText (@Nullable final IHCCell <?> aCell)
   {
     if (aCell == null)
       return "";
@@ -76,7 +76,7 @@ public class ComparatorCellBigInteger extends AbstractComparator <AbstractHCCell
   }
 
   @Override
-  protected final int mainCompare (final AbstractHCCell aCell1, final AbstractHCCell aCell2)
+  protected final int mainCompare (final IHCCell <?> aCell1, final IHCCell <?> aCell2)
   {
     final String sText1 = getCellText (aCell1);
     final String sText2 = getCellText (aCell2);

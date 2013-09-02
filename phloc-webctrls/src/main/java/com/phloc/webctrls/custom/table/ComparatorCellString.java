@@ -24,9 +24,9 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractCollationComparator;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.IHCCell;
 
-public class ComparatorCellString extends AbstractCollationComparator <AbstractHCCell>
+public class ComparatorCellString extends AbstractCollationComparator <IHCCell <?>>
 {
   private final String m_sCommonPrefix;
   private final String m_sCommonSuffix;
@@ -46,7 +46,7 @@ public class ComparatorCellString extends AbstractCollationComparator <AbstractH
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected String getCellText (@Nullable final IHCCell <?> aCell)
   {
     if (aCell == null)
       return "";
@@ -63,7 +63,7 @@ public class ComparatorCellString extends AbstractCollationComparator <AbstractH
   }
 
   @Override
-  protected final String asString (@Nullable final AbstractHCCell aCell)
+  protected final String asString (@Nullable final IHCCell <?> aCell)
   {
     return getCellText (aCell);
   }

@@ -38,7 +38,7 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
-import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.IHCCell;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.utils.HCSpecialNodeHandler;
 import com.phloc.html.hc.utils.HCSpecialNodes;
@@ -60,7 +60,7 @@ public final class DataTablesServerDataCell implements Serializable
   private String m_sHTML;
   private String m_sTextContent;
 
-  public DataTablesServerDataCell (@Nonnull final AbstractHCCell aCell, @Nonnull final IHCConversionSettings aCS)
+  public DataTablesServerDataCell (@Nonnull final IHCCell <?> aCell, @Nonnull final IHCConversionSettings aCS)
   {
     if (aCell.hasAnyStyle ())
       s_aLogger.warn ("Cell has styles assigned which will be lost: " + aCell.getAllStyles ());

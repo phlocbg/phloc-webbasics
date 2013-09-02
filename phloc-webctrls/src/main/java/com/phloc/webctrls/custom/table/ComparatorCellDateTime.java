@@ -31,14 +31,14 @@ import com.phloc.datetime.PDTUtils;
 import com.phloc.datetime.format.PDTFromString;
 import com.phloc.datetime.format.SerializableDateTimeFormatter;
 import com.phloc.datetime.format.SerializableDateTimeFormatter.EFormatStyle;
-import com.phloc.html.hc.html.AbstractHCCell;
+import com.phloc.html.hc.html.IHCCell;
 
 /**
  * This comparator is responsible for sorting cells by date and/or time.
  * 
  * @author Philip Helger
  */
-public class ComparatorCellDateTime extends AbstractComparator <AbstractHCCell>
+public class ComparatorCellDateTime extends AbstractComparator <IHCCell <?>>
 {
   private final SerializableDateTimeFormatter m_aFormatter;
   private final String m_sCommonPrefix;
@@ -75,7 +75,7 @@ public class ComparatorCellDateTime extends AbstractComparator <AbstractHCCell>
   }
 
   @OverrideOnDemand
-  protected String getCellText (@Nullable final AbstractHCCell aCell)
+  protected String getCellText (@Nullable final IHCCell <?> aCell)
   {
     if (aCell == null)
       return "";
@@ -92,7 +92,7 @@ public class ComparatorCellDateTime extends AbstractComparator <AbstractHCCell>
   }
 
   @Override
-  protected final int mainCompare (final AbstractHCCell aCell1, final AbstractHCCell aCell2)
+  protected final int mainCompare (final IHCCell <?> aCell1, final IHCCell <?> aCell2)
   {
     final String sText1 = getCellText (aCell1);
     final String sText2 = getCellText (aCell2);

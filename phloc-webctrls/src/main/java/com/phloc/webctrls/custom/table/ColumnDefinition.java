@@ -26,8 +26,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.IHCCell;
 
 @Immutable
 public class ColumnDefinition implements Serializable
@@ -35,7 +35,7 @@ public class ColumnDefinition implements Serializable
   private final String m_sName;
   private final HCCol m_aCol;
   private final String m_sFieldID;
-  private final Comparator <AbstractHCCell> m_aComparator;
+  private final Comparator <IHCCell <?>> m_aComparator;
   private String m_sToolTip;
 
   public ColumnDefinition (@Nonnull final String sName, @Nonnull final HCCol aCol)
@@ -51,7 +51,7 @@ public class ColumnDefinition implements Serializable
   public ColumnDefinition (@Nullable final String sName,
                            @Nonnull final HCCol aCol,
                            @Nullable final String sFieldID,
-                           @Nullable final Comparator <AbstractHCCell> aComparator)
+                           @Nullable final Comparator <IHCCell <?>> aComparator)
   {
     if (StringHelper.hasNoText (sFieldID) && aComparator != null)
       throw new IllegalArgumentException ("field ID cannot be empty for sortable columns");
@@ -100,7 +100,7 @@ public class ColumnDefinition implements Serializable
   }
 
   @Nullable
-  public Comparator <AbstractHCCell> getComparator ()
+  public Comparator <IHCCell <?>> getComparator ()
   {
     return m_aComparator;
   }

@@ -30,17 +30,17 @@ import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
-import com.phloc.html.hc.api.IHCControl;
 import com.phloc.html.hc.api.IHCHasFocus;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.html.IHCBaseTable;
+import com.phloc.html.hc.html.IHCCell;
 import com.phloc.html.hc.impl.AbstractHCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
@@ -131,9 +131,9 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
-  private AbstractHCCell _addControlCell (@Nonnull final HCRow aRow,
-                                          @Nullable final Iterable <? extends IHCNode> aCtrls,
-                                          final boolean bHasError)
+  private IHCCell <?> _addControlCell (@Nonnull final HCRow aRow,
+                                       @Nullable final Iterable <? extends IHCNode> aCtrls,
+                                       final boolean bHasError)
   {
     final List <IHCNode> aResolvedCtrls = new ArrayList <IHCNode> ();
     if (aCtrls != null)
@@ -174,7 +174,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return aRow.addAndReturnCell (aResolvedCtrls);
   }
 
-  public static void addControlCellErrorMessages (@Nonnull final AbstractHCCell aCell,
+  public static void addControlCellErrorMessages (@Nonnull final IHCCell <?> aCell,
                                                   @Nullable final IErrorList aFormErrors)
   {
     if (aFormErrors != null)
@@ -238,7 +238,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     _addLabelCell (aRow, aLabel);
 
     // Add main control
-    final AbstractHCCell aCtrlCell = _addControlCell (aRow, aCtrls, eHighest != null);
+    final IHCCell <?> aCtrlCell = _addControlCell (aRow, aCtrls, eHighest != null);
 
     // Add error messages
     addControlCellErrorMessages (aCtrlCell, aFormErrors);

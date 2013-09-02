@@ -47,7 +47,6 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
@@ -56,6 +55,7 @@ import com.phloc.html.hc.html.HCEM;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.IHCCell;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
@@ -416,7 +416,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       aRow.addCell (new HCA (aViewLink).addChild (aUserGroup.getName ()));
       aRow.addCell (EWebBasicsText.getYesOrNo (aUserGroup.hasContainedUsers (), aDisplayLocale));
 
-      final AbstractHCCell aActionCell = aRow.addCell ();
+      final IHCCell <?> aActionCell = aRow.addCell ();
       aActionCell.addChild (createEditLink (aUserGroup,
                                             EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                              aUserGroup.getName ())));
