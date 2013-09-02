@@ -27,61 +27,61 @@ import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
-import com.phloc.webctrls.bootstrap3.alert.Bootstrap3ErrorBox;
-import com.phloc.webctrls.bootstrap3.alert.Bootstrap3InfoBox;
-import com.phloc.webctrls.bootstrap3.alert.Bootstrap3QuestionBox;
-import com.phloc.webctrls.bootstrap3.alert.Bootstrap3SuccessBox;
-import com.phloc.webctrls.bootstrap3.button.Bootstrap3ButtonToolbar;
-import com.phloc.webctrls.bootstrap3.button.EBootstrap3ButtonType;
-import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
-import com.phloc.webctrls.bootstrap3.table.Bootstrap3Table;
-import com.phloc.webctrls.bootstrap3.table.Bootstrap3TableFormView;
+import com.phloc.webctrls.bootstrap.BootstrapTable;
+import com.phloc.webctrls.bootstrap.CBootstrapCSS;
+import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
+import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbar;
+import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 
-public class WebPageStylerBootstrap3 extends WebPageStylerSimple
+public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
 {
   @Override
   @Nonnull
   public IHCElement <?> createErrorBox (@Nullable final String sText)
   {
-    return Bootstrap3ErrorBox.create (sText);
+    return BootstrapErrorBox.create (sText);
   }
 
   @Override
   @Nonnull
   public IHCElement <?> createInfoBox (@Nullable final String sText)
   {
-    return Bootstrap3InfoBox.create (sText);
+    return BootstrapInfoBox.create (sText);
   }
 
   @Override
   @Nonnull
   public IHCElement <?> createSuccessBox (@Nullable final String sText)
   {
-    return Bootstrap3SuccessBox.create (sText);
+    return BootstrapSuccessBox.create (sText);
   }
 
   @Override
   @Nonnull
   public IHCElement <?> createQuestionBox (@Nullable final String sText)
   {
-    return Bootstrap3QuestionBox.create (sText);
+    return BootstrapQuestionBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public Bootstrap3TableFormView createTable (@Nullable final HCCol... aCols)
+  public BootstrapTableFormView createTable (@Nullable final HCCol... aCols)
   {
-    return new Bootstrap3TableFormView (aCols);
+    return new BootstrapTableFormView (aCols);
   }
 
   @Override
   @Nonnull
-  public Bootstrap3DataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
-                                                       @Nonnull final Locale aDisplayLocale)
+  public BootstrapDataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
+                                                      @Nonnull final Locale aDisplayLocale)
   {
-    final Bootstrap3DataTables ret = new Bootstrap3DataTables ((Bootstrap3Table) aTable);
+    final BootstrapDataTables ret = new BootstrapDataTables ((BootstrapTable) aTable);
     ret.setDisplayLocale (aDisplayLocale);
     ret.addAllColumns (aTable);
     return ret;
@@ -91,7 +91,7 @@ public class WebPageStylerBootstrap3 extends WebPageStylerSimple
   @Nonnull
   public HCSpan createUploadButton (@Nonnull final Locale aDisplayLocale)
   {
-    return new HCSpan ().addClasses (CBootstrap3CSS.BTN, EBootstrap3ButtonType.SUCCESS)
+    return new HCSpan ().addClasses (CBootstrapCSS.BTN, EBootstrapButtonType.SUCCESS)
                         .addChild (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
   }
 
@@ -99,6 +99,6 @@ public class WebPageStylerBootstrap3 extends WebPageStylerSimple
   @Nonnull
   public IButtonToolbar <?> createToolbar ()
   {
-    return new Bootstrap3ButtonToolbar ();
+    return new BootstrapToolbar ();
   }
 }

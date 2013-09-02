@@ -52,7 +52,6 @@ import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.EBootstrapIcon;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
@@ -154,7 +153,8 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final Map <String, Object> aAttrs = aSelectedObject.getAllAttributes ();
     if (!aAttrs.isEmpty ())
     {
-      final BootstrapTable aCustomAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ()).setID (aSelectedObject.getID ());
+      final AbstractHCTable <?> aCustomAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ())
+                                                               .setID (aSelectedObject.getID ());
       aCustomAttrTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                                  EText.MSG_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
@@ -206,9 +206,9 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
-                                                                new HCCol (170),
-                                                                new HCCol (170),
-                                                                createActionCol (2)).setID (getID ());
+                                                                 new HCCol (170),
+                                                                 new HCCol (170),
+                                                                 createActionCol (2)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
                                      EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),

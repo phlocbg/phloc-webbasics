@@ -11,6 +11,8 @@ import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLValidator;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
@@ -32,8 +34,13 @@ import com.phloc.webctrls.custom.toolbar.SimpleButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.EWebPageText;
 
-public class WebPageStylerSimple implements IWebPageStyler
+public class SimpleWebPageStyler implements IWebPageStyler
 {
+  public static final ICSSClassProvider CSS_CLASS_ERRORBOX = DefaultCSSClassProvider.create ("errorbox");
+  public static final ICSSClassProvider CSS_CLASS_INFOBOX = DefaultCSSClassProvider.create ("infobox");
+  public static final ICSSClassProvider CSS_CLASS_SUCCESSBOX = DefaultCSSClassProvider.create ("successbox");
+  public static final ICSSClassProvider CSS_CLASS_QUESTIONBOX = DefaultCSSClassProvider.create ("questionbox");
+
   @Nonnull
   public IHCNode createImageView (@Nullable final UserDataObject aUDO, @Nonnull final Locale aDisplayLocale)
   {
@@ -100,25 +107,25 @@ public class WebPageStylerSimple implements IWebPageStyler
   @Nonnull
   public IHCElement <?> createErrorBox (@Nullable final String sText)
   {
-    return HCDiv.create (sText);
+    return HCDiv.create (sText).addClass (CSS_CLASS_ERRORBOX);
   }
 
   @Nonnull
   public IHCElement <?> createInfoBox (@Nullable final String sText)
   {
-    return HCDiv.create (sText);
+    return HCDiv.create (sText).addClass (CSS_CLASS_INFOBOX);
   }
 
   @Nonnull
   public IHCElement <?> createSuccessBox (@Nullable final String sText)
   {
-    return HCDiv.create (sText);
+    return HCDiv.create (sText).addClass (CSS_CLASS_SUCCESSBOX);
   }
 
   @Nonnull
   public IHCElement <?> createQuestionBox (@Nullable final String sText)
   {
-    return HCDiv.create (sText);
+    return HCDiv.create (sText).addClass (CSS_CLASS_QUESTIONBOX);
   }
 
   @Nonnull

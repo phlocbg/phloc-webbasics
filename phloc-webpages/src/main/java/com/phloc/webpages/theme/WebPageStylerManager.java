@@ -7,7 +7,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
 
 public class WebPageStylerManager extends GlobalSingleton
 {
-  private IWebPageStyler m_aStyle = new WebPageStylerSimple ();
+  private IWebPageStyler m_aStyle = new SimpleWebPageStyler ();
 
   @Deprecated
   @UsedViaReflection
