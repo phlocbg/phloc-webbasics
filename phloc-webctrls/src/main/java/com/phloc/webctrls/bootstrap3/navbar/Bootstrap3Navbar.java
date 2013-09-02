@@ -83,56 +83,72 @@ public class Bootstrap3Navbar extends HCNav
   }
 
   @Nonnull
-  private Bootstrap3Navbar _insert (final boolean bCollapsible, @Nullable final IHCNode aNode)
+  private Bootstrap3Navbar _insert (@Nonnull final EBootstrap3NavbarPosition ePos, @Nullable final IHCElement <?> aNode)
   {
-    if (bCollapsible)
-      m_aContent.addChild (aNode);
-    else
+    if (aNode != null)
+      aNode.addClass (ePos);
+    if (ePos.isFixed ())
       m_aHeader.addChild (aNode);
+    else
+      m_aContent.addChild (aNode);
     return this;
   }
 
   @Nonnull
-  public Bootstrap3Navbar addNav (final boolean bCollapsible, @Nonnull final Bootstrap3Nav aNav)
+  public Bootstrap3Navbar addNav (@Nonnull final EBootstrap3NavbarPosition ePos, @Nonnull final Bootstrap3Nav aNav)
   {
     aNav.addClass (CBootstrap3CSS.NAVBAR_NAV);
-    return _insert (bCollapsible, aNav);
+    return _insert (ePos, aNav);
   }
 
   @Nonnull
-  public Bootstrap3Navbar addText (final boolean bCollapsible, @Nonnull final String sText)
+  public Bootstrap3Navbar addText (@Nonnull final EBootstrap3NavbarPosition ePos, @Nonnull final String sText)
   {
-    return addText (bCollapsible, new HCP ().addChild (sText));
+    return addText (ePos, new HCP ().addChild (sText));
   }
 
   @Nonnull
-  public Bootstrap3Navbar addText (final boolean bCollapsible, @Nonnull final IHCElementWithChildren <?> aText)
+  public Bootstrap3Navbar addText (@Nonnull final EBootstrap3NavbarPosition ePos,
+                                   @Nonnull final IHCElementWithChildren <?> aText)
   {
     aText.addClass (CBootstrap3CSS.NAVBAR_TEXT);
-    return _insert (bCollapsible, aText);
+    return _insert (ePos, aText);
   }
 
   @Nonnull
-  public Bootstrap3Navbar addButton (final boolean bCollapsible, @Nonnull final IHCElement <?> aButton)
+  public Bootstrap3Navbar addButton (@Nonnull final EBootstrap3NavbarPosition ePos,
+                                     @Nonnull final IHCElement <?> aButton)
   {
     aButton.addClass (CBootstrap3CSS.NAVBAR_BTN);
-    return _insert (bCollapsible, aButton);
+    return _insert (ePos, aButton);
   }
 
   @Nonnull
-  public Bootstrap3Navbar addBrand (final boolean bCollapsible,
+  public Bootstrap3Navbar addBrand (@Nonnull final String sBrand, @Nonnull final ISimpleURL aHomeLink)
+  {
+    return addBrand (EBootstrap3NavbarPosition.FIXED, new HCTextNode (sBrand), aHomeLink);
+  }
+
+  @Nonnull
+  public Bootstrap3Navbar addBrand (@Nonnull final EBootstrap3NavbarPosition ePos,
                                     @Nonnull final String sBrand,
                                     @Nonnull final ISimpleURL aHomeLink)
   {
-    return addBrand (bCollapsible, new HCTextNode (sBrand), aHomeLink);
+    return addBrand (ePos, new HCTextNode (sBrand), aHomeLink);
   }
 
   @Nonnull
-  public Bootstrap3Navbar addBrand (final boolean bCollapsible,
+  public Bootstrap3Navbar addBrand (@Nonnull final IHCNode aBrand, @Nonnull final ISimpleURL aHomeLink)
+  {
+    return addBrand (EBootstrap3NavbarPosition.FIXED, aBrand, aHomeLink);
+  }
+
+  @Nonnull
+  public Bootstrap3Navbar addBrand (@Nonnull final EBootstrap3NavbarPosition ePos,
                                     @Nonnull final IHCNode aBrand,
                                     @Nonnull final ISimpleURL aHomeLink)
   {
-    return _insert (bCollapsible, new HCA (aHomeLink).addChild (aBrand).addClass (CBootstrap3CSS.NAVBAR_BRAND));
+    return _insert (ePos, new HCA (aHomeLink).addChild (aBrand).addClass (CBootstrap3CSS.NAVBAR_BRAND));
   }
 
   public boolean isInverse ()

@@ -51,6 +51,7 @@ import com.phloc.webctrls.bootstrap3.grid.Bootstrap3Row;
 import com.phloc.webctrls.bootstrap3.grid.EBootstrap3GridMD;
 import com.phloc.webctrls.bootstrap3.nav.Bootstrap3Nav;
 import com.phloc.webctrls.bootstrap3.navbar.Bootstrap3Navbar;
+import com.phloc.webctrls.bootstrap3.navbar.EBootstrap3NavbarPosition;
 import com.phloc.webctrls.bootstrap3.navbar.EBootstrap3NavbarType;
 import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
@@ -85,23 +86,26 @@ public final class RendererView implements ILayoutAreaContentProvider
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     if (aUser != null)
     {
+      aNavbar.addText (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT,
+                       HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
+
       final Bootstrap3Nav aNav = new Bootstrap3Nav ();
       aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale),
                     LinkUtils.getURLWithContext ("/logout"));
-      aNavbar.addNav (true, aNav);
-      aNavbar.addText (true, HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
+      aNavbar.addNav (EBootstrap3NavbarPosition.COLLAPSIBLE_DEFAULT, aNav);
     }
     else
     {
       final Bootstrap3Nav aNav = new Bootstrap3Nav ();
       final Bootstrap3DropdownMenu aDropDown = aNav.addDropdownMenu ("Login");
       {
-        final HCDiv aDiv = new HCDiv ().addStyle (CCSSProperties.PADDING.newValue ("15px"));
-        aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null)
+        final HCDiv aDiv = new HCDiv ().addStyle (CCSSProperties.PADDING.newValue ("10px"))
+                                       .addStyle (CCSSProperties.WIDTH.newValue ("250px"));
+        aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null, false)
                                       .addClass (CBootstrapCSS.NAVBAR_FORM));
         aDropDown.addItem (aDiv);
       }
-      aNavbar.addNav (false, aNav);
+      aNavbar.addNav (EBootstrap3NavbarPosition.FIXED, aNav);
     }
   }
 
@@ -112,7 +116,7 @@ public final class RendererView implements ILayoutAreaContentProvider
                                                                                         .getDefaultMenuItemID ());
 
     final Bootstrap3Navbar aNavbar = new Bootstrap3Navbar (EBootstrap3NavbarType.STATIC_TOP, true, aDisplayLocale);
-    aNavbar.addBrand (false, HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1), aLinkToStartPage);
+    aNavbar.addBrand (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1), aLinkToStartPage);
 
     _addLoginLogout (aNavbar, aDisplayLocale);
     return aNavbar;

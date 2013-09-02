@@ -47,7 +47,8 @@ public final class DemoAppAccessUI
 
   @Nonnull
   public static HCForm createViewLoginForm (@Nonnull final Locale aDisplayLocale,
-                                            @Nullable final String sPreselectedUserName)
+                                            @Nullable final String sPreselectedUserName,
+                                            final boolean bFullUI)
   {
     // Use new IDs for both fields, in case the login stuff is displayed more
     // than once!
@@ -55,7 +56,8 @@ public final class DemoAppAccessUI
     final String sIDPassword = GlobalIDFactory.getNewStringID ();
     final String sIDErrorField = GlobalIDFactory.getNewStringID ();
 
-    final Bootstrap3Form aForm = new Bootstrap3Form (LinkUtils.getSelfHref (), EBootstrap3FormType.HORIZONTAL);
+    final Bootstrap3Form aForm = new Bootstrap3Form (LinkUtils.getSelfHref (), bFullUI ? EBootstrap3FormType.HORIZONTAL
+                                                                                      : EBootstrap3FormType.DEFAULT);
 
     // User name field
     aForm.addFormGroup (EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale),

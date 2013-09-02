@@ -47,7 +47,7 @@ public final class PageLogin extends AbstractWebPageExt
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    aNodeList.addChild (DemoAppAccessUI.createViewLoginForm (aWPEC.getDisplayLocale (), null));
+    aNodeList.addChild (DemoAppAccessUI.createViewLoginForm (aWPEC.getDisplayLocale (), null, true));
     aNodeList.addChild (HCDiv.create ("Demo login: " +
                                       CSecurity.USER_ADMINISTRATOR_EMAIL +
                                       " with password '" +

@@ -37,6 +37,7 @@ import com.phloc.webctrls.bootstrap3.grid.Bootstrap3Row;
 import com.phloc.webctrls.bootstrap3.grid.EBootstrap3GridMD;
 import com.phloc.webctrls.bootstrap3.nav.Bootstrap3Nav;
 import com.phloc.webctrls.bootstrap3.navbar.Bootstrap3Navbar;
+import com.phloc.webctrls.bootstrap3.navbar.EBootstrap3NavbarPosition;
 import com.phloc.webctrls.bootstrap3.navbar.EBootstrap3NavbarType;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 
@@ -54,20 +55,18 @@ public final class RendererConfig implements ILayoutAreaContentProvider
                                                                                         .getDefaultMenuItemID ());
 
     final Bootstrap3Navbar aNavbar = new Bootstrap3Navbar (EBootstrap3NavbarType.STATIC_TOP, true, aDisplayLocale);
-    aNavbar.addBrand (false, HCNodeList.create (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1),
-                                                HCSpan.create (" Administration")
-                                                      .addClass (CDemoAppCSS.CSS_CLASS_LOGO2)), aLinkToStartPage);
-
-    final Bootstrap3Nav aNav = new Bootstrap3Nav ();
-
-    aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale), LinkUtils.getURLWithContext ("/logout"));
-
-    aNavbar.addNav (false, aNav);
+    aNavbar.addBrand (HCNodeList.create (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1),
+                                         HCSpan.create (" Administration").addClass (CDemoAppCSS.CSS_CLASS_LOGO2)),
+                      aLinkToStartPage);
 
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
-    aNavbar.addText (true,
+    aNavbar.addText (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT,
                      HCP.create ("Logged in as ").addChild (HCStrong.create (aUser == null ? "guest"
                                                                                           : aUser.getDisplayName ())));
+
+    final Bootstrap3Nav aNav = new Bootstrap3Nav ();
+    aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale), LinkUtils.getURLWithContext ("/logout"));
+    aNavbar.addNav (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT, aNav);
     return aNavbar;
   }
 
