@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.servlet.AbstractApplicationServlet;
-import com.phloc.webdemoapp.app.CDemoAppUI;
+import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webdemoapp.app.layout.DemoAppHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -33,7 +33,7 @@ public final class DemoAppConfigApplicationServlet extends AbstractApplicationSe
   @Nonempty
   protected String getApplicationID ()
   {
-    return CDemoAppUI.APP_CONFIG_ID;
+    return CDemoApp.APP_CONFIG_ID;
   }
 
   @Override

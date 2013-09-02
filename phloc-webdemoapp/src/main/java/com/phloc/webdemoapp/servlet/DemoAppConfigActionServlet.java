@@ -23,7 +23,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.action.servlet.AbstractApplicationActionServlet;
-import com.phloc.webdemoapp.app.CDemoAppUI;
+import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
@@ -41,7 +41,7 @@ public final class DemoAppConfigActionServlet extends AbstractApplicationActionS
   @Nonempty
   protected String getApplicationID ()
   {
-    return CDemoAppUI.APP_CONFIG_ID;
+    return CDemoApp.APP_CONFIG_ID;
   }
 
   @Nonnull

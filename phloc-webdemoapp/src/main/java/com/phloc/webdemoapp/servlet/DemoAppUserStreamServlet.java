@@ -24,7 +24,7 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.webbasics.userdata.UserDataManager;
 import com.phloc.webbasics.userdata.UserDataObject;
-import com.phloc.webdemoapp.app.CDemoAppUI;
+import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.servlets.AbstractStreamServlet;
 
@@ -38,7 +38,7 @@ public final class DemoAppUserStreamServlet extends AbstractStreamServlet
   @Nonempty
   protected String getApplicationID ()
   {
-    return CDemoAppUI.APP_CONFIG_ID;
+    return CDemoApp.APP_CONFIG_ID;
   }
 
   @Override

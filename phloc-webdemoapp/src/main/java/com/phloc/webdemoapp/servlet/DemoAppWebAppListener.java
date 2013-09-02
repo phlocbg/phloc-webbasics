@@ -32,7 +32,7 @@ import com.phloc.webbasics.app.init.IApplicationInitializer;
 import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
 import com.phloc.webctrls.bootstrap3.servlet.WebAppListenerMultiAppBootstrap3;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
-import com.phloc.webdemoapp.app.CDemoAppUI;
+import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 import com.phloc.webdemoapp.app.init.DefaultSecurity;
 import com.phloc.webdemoapp.app.init.InitializerConfig;
@@ -53,8 +53,8 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
   protected Map <String, IApplicationInitializer> getAllInitializers ()
   {
     final Map <String, IApplicationInitializer> ret = new HashMap <String, IApplicationInitializer> ();
-    ret.put (CDemoAppUI.APP_CONFIG_ID, new InitializerConfig ());
-    ret.put (CDemoAppUI.APP_VIEW_ID, new InitializerView ());
+    ret.put (CDemoApp.APP_CONFIG_ID, new InitializerConfig ());
+    ret.put (CDemoApp.APP_VIEW_ID, new InitializerView ());
     return ret;
   }
 

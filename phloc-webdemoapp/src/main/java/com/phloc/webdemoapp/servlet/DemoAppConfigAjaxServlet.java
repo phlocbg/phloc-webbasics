@@ -23,7 +23,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.ajax.servlet.AbstractApplicationAjaxServlet;
-import com.phloc.webdemoapp.app.CDemoAppUI;
+import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 public final class DemoAppConfigAjaxServlet extends AbstractApplicationAjaxServlet
@@ -36,7 +36,7 @@ public final class DemoAppConfigAjaxServlet extends AbstractApplicationAjaxServl
   @Nonempty
   protected String getApplicationID ()
   {
-    return CDemoAppUI.APP_CONFIG_ID;
+    return CDemoApp.APP_CONFIG_ID;
   }
 
   @Nonnull

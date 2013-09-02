@@ -34,8 +34,8 @@ import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.login.LoginManager;
 import com.phloc.webctrls.bootstrap.ext.BootstrapLoginHTMLProvider;
+import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webdemoapp.app.CDemoAppSecurity;
-import com.phloc.webdemoapp.app.CDemoAppUI;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.servlets.filter.AbstractUnifiedResponseFilter;
 
@@ -48,7 +48,7 @@ public final class DemoAppConfigLoginFilter extends AbstractUnifiedResponseFilte
   @Nonempty
   protected String getApplicationID (@Nonnull final FilterConfig aFilterConfig)
   {
-    return CDemoAppUI.APP_CONFIG_ID;
+    return CDemoApp.APP_CONFIG_ID;
   }
 
   @Override
