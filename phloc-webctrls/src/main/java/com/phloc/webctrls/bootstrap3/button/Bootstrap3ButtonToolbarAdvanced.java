@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap.derived;
+package com.phloc.webctrls.bootstrap3.button;
 
 import java.util.Locale;
 
@@ -23,22 +23,23 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webctrls.custom.IButtonToolbarAdvanced;
 
 /**
- * Bootstrap advanced button toolbar
+ * Bootstrap3 advanced button toolbar
  * 
  * @author Philip Helger
  */
-public class BootstrapToolbarAdvanced extends BootstrapToolbar
+public class Bootstrap3ButtonToolbarAdvanced extends Bootstrap3ButtonToolbar implements IButtonToolbarAdvanced <Bootstrap3ButtonToolbar>
 {
   private final SimpleURL m_aSelfHref;
 
-  public BootstrapToolbarAdvanced ()
+  public Bootstrap3ButtonToolbarAdvanced ()
   {
     this (LinkUtils.getSelfHref ());
   }
 
-  public BootstrapToolbarAdvanced (@Nonnull final SimpleURL aSelfHref)
+  public Bootstrap3ButtonToolbarAdvanced (@Nonnull final SimpleURL aSelfHref)
   {
     super ();
     if (aSelfHref == null)
@@ -47,21 +48,21 @@ public class BootstrapToolbarAdvanced extends BootstrapToolbar
   }
 
   @Nonnull
-  public BootstrapToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
+  public Bootstrap3ButtonToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
   {
     addButtonBack (aDisplayLocale, m_aSelfHref);
     return this;
   }
 
   @Nonnull
-  public BootstrapToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
+  public Bootstrap3ButtonToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
   {
     addButtonCancel (aDisplayLocale, m_aSelfHref);
     return this;
   }
 
   @Nonnull
-  public BootstrapToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
+  public Bootstrap3ButtonToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
   {
     addButtonNo (aDisplayLocale, m_aSelfHref);
     return this;

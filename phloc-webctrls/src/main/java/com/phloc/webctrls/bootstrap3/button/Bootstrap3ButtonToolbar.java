@@ -21,7 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.html.AbstractHCDiv;
@@ -31,6 +30,7 @@ import com.phloc.html.js.builder.html.JSHtml;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.IButtonToolbar;
 import com.phloc.webctrls.custom.IIcon;
 
 /**
@@ -38,7 +38,7 @@ import com.phloc.webctrls.custom.IIcon;
  * 
  * @author Philip Helger
  */
-public class Bootstrap3ButtonToolbar extends AbstractHCDiv <Bootstrap3ButtonToolbar>
+public class Bootstrap3ButtonToolbar extends AbstractHCDiv <Bootstrap3ButtonToolbar> implements IButtonToolbar <Bootstrap3ButtonToolbar>
 {
   public Bootstrap3ButtonToolbar ()
   {
@@ -46,21 +46,21 @@ public class Bootstrap3ButtonToolbar extends AbstractHCDiv <Bootstrap3ButtonTool
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addHiddenField (@Nullable final String sName, final int nValue)
+  public final Bootstrap3ButtonToolbar addHiddenField (final String sName, final int nValue)
   {
     addChild (new HCHiddenField (sName, nValue));
     return this;
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addHiddenField (@Nullable final String sName, @Nullable final String sValue)
+  public final Bootstrap3ButtonToolbar addHiddenField (final String sName, final String sValue)
   {
     addChild (new HCHiddenField (sName, sValue));
     return this;
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addHiddenFields (@Nullable final Map <String, String> aValues)
+  public final Bootstrap3ButtonToolbar addHiddenFields (final Map <String, String> aValues)
   {
     if (aValues != null)
       for (final Map.Entry <String, String> aEntry : aValues.entrySet ())
@@ -69,47 +69,46 @@ public class Bootstrap3ButtonToolbar extends AbstractHCDiv <Bootstrap3ButtonTool
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addButton (@Nullable final String sCaption,
-                                                  @Nonnull final IJSCodeProvider aJSCode)
+  public final Bootstrap3ButtonToolbar addButton (final String sCaption, @Nonnull final IJSCodeProvider aJSCode)
   {
     return addButton (sCaption, aJSCode, (IIcon) null);
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addButton (@Nullable final String sCaption,
+  public final Bootstrap3ButtonToolbar addButton (final String sCaption,
                                                   @Nonnull final IJSCodeProvider aJSCode,
-                                                  @Nullable final EDefaultIcon eIcon)
+                                                  final EDefaultIcon eIcon)
   {
     return addButton (sCaption, aJSCode, eIcon == null ? null : eIcon.getIcon ());
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addButton (@Nullable final String sCaption,
+  public final Bootstrap3ButtonToolbar addButton (final String sCaption,
                                                   @Nonnull final IJSCodeProvider aJSCode,
-                                                  @Nullable final IIcon aIcon)
+                                                  final IIcon aIcon)
   {
     addChild (new Bootstrap3Button ().setIcon (aIcon).addChild (sCaption).setOnClick (aJSCode));
     return this;
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addButton (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
+  public final Bootstrap3ButtonToolbar addButton (final String sCaption, @Nonnull final ISimpleURL aURL)
   {
     return addButton (sCaption, aURL, (IIcon) null);
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addButton (@Nullable final String sCaption,
+  public final Bootstrap3ButtonToolbar addButton (final String sCaption,
                                                   @Nonnull final ISimpleURL aURL,
-                                                  @Nullable final EDefaultIcon eIcon)
+                                                  final EDefaultIcon eIcon)
   {
     return addButton (sCaption, aURL, eIcon == null ? null : eIcon.getIcon ());
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addButton (@Nullable final String sCaption,
+  public final Bootstrap3ButtonToolbar addButton (final String sCaption,
                                                   @Nonnull final ISimpleURL aURL,
-                                                  @Nullable final IIcon aIcon)
+                                                  final IIcon aIcon)
   {
     return addButton (sCaption, JSHtml.windowLocationHref (aURL), aIcon);
   }
@@ -139,7 +138,7 @@ public class Bootstrap3ButtonToolbar extends AbstractHCDiv <Bootstrap3ButtonTool
   }
 
   @Nonnull
-  public Bootstrap3ButtonToolbar addButtonNew (@Nullable final String sCaption, @Nonnull final ISimpleURL aURL)
+  public Bootstrap3ButtonToolbar addButtonNew (final String sCaption, @Nonnull final ISimpleURL aURL)
   {
     return addButton (sCaption, aURL, EDefaultIcon.NEW);
   }
@@ -151,29 +150,27 @@ public class Bootstrap3ButtonToolbar extends AbstractHCDiv <Bootstrap3ButtonTool
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addSubmitButton (@Nullable final String sCaption,
-                                                        @Nullable final IJSCodeProvider aOnClick)
+  public final Bootstrap3ButtonToolbar addSubmitButton (final String sCaption, final IJSCodeProvider aOnClick)
   {
     return addSubmitButton (sCaption, aOnClick, (IIcon) null);
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addSubmitButton (@Nullable final String sCaption,
-                                                        @Nullable final EDefaultIcon eIcon)
+  public final Bootstrap3ButtonToolbar addSubmitButton (final String sCaption, final EDefaultIcon eIcon)
   {
     return addSubmitButton (sCaption, (IJSCodeProvider) null, eIcon == null ? null : eIcon.getIcon ());
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addSubmitButton (@Nullable final String sCaption, @Nullable final IIcon aIcon)
+  public final Bootstrap3ButtonToolbar addSubmitButton (final String sCaption, final IIcon aIcon)
   {
     return addSubmitButton (sCaption, (IJSCodeProvider) null, aIcon);
   }
 
   @Nonnull
-  public final Bootstrap3ButtonToolbar addSubmitButton (@Nullable final String sCaption,
-                                                        @Nullable final IJSCodeProvider aOnClick,
-                                                        @Nullable final IIcon aIcon)
+  public final Bootstrap3ButtonToolbar addSubmitButton (final String sCaption,
+                                                        final IJSCodeProvider aOnClick,
+                                                        final IIcon aIcon)
   {
     addChild (new Bootstrap3SubmitButton ().setIcon (aIcon).setOnClick (aOnClick).addChild (sCaption));
     return this;
