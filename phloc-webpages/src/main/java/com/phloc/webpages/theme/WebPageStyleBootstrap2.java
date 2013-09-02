@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
@@ -30,16 +31,32 @@ import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
 
-public class WebPageStyleBootstrap2 extends AbstractWebPageStyle
+public class WebPageStyleBootstrap2 extends WebPageStyleSimple
 {
   @Override
   @Nonnull
-  public BootstrapErrorBox createIncorrectInputBox (@Nonnull final Locale aDisplayLocale)
+  public IHCElement <?> createErrorBox (@Nullable final String sText)
   {
-    return BootstrapErrorBox.create (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
+    return BootstrapErrorBox.create (sText);
+  }
+
+  @Override
+  @Nonnull
+  public IHCElement <?> createSuccessBox (@Nullable final String sText)
+  {
+    return BootstrapSuccessBox.create (sText);
+  }
+
+  @Override
+  @Nonnull
+  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  {
+    return BootstrapQuestionBox.create (sText);
   }
 
   @Override

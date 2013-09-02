@@ -56,9 +56,6 @@ import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.datatables.DataTables;
@@ -261,17 +258,17 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (AccessManager.getInstance ().deleteRole (aSelectedObject.getID ()).isChanged ())
-        aNodeList.addChild (BootstrapSuccessBox.create (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                     aSelectedObject.getName ())));
+        aNodeList.addChild (getStyle ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                       aSelectedObject.getName ())));
       else
-        aNodeList.addChild (BootstrapErrorBox.create (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                 aSelectedObject.getName ())));
+        aNodeList.addChild (getStyle ().createErrorBox (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                   aSelectedObject.getName ())));
       return true;
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
-    aForm.addChild (BootstrapQuestionBox.create (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                            aSelectedObject.getName ())));
+    aForm.addChild (getStyle ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                              aSelectedObject.getName ())));
     final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());

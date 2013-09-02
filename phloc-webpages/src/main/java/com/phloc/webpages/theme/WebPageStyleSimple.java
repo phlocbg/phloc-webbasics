@@ -30,7 +30,7 @@ import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.EWebPageText;
 
-public abstract class AbstractWebPageStyle implements IWebPageStyle
+public class WebPageStyleSimple implements IWebPageStyle
 {
   @Nonnull
   public IHCNode createImageView (@Nullable final UserDataObject aUDO, @Nonnull final Locale aDisplayLocale)
@@ -90,9 +90,27 @@ public abstract class AbstractWebPageStyle implements IWebPageStyle
   }
 
   @Nonnull
-  public IHCNode createIncorrectInputBox (@Nonnull final Locale aDisplayLocale)
+  public final IHCNode createIncorrectInputBox (@Nonnull final Locale aDisplayLocale)
   {
-    return HCDiv.create (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
+    return createErrorBox (EWebBasicsText.MSG_ERR_INCORRECT_INPUT.getDisplayText (aDisplayLocale));
+  }
+
+  @Nonnull
+  public IHCElement <?> createErrorBox (@Nullable final String sText)
+  {
+    return HCDiv.create (sText);
+  }
+
+  @Nonnull
+  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  {
+    return HCDiv.create (sText);
+  }
+
+  @Nonnull
+  public IHCElement <?> createSuccessBox (@Nullable final String sText)
+  {
+    return HCDiv.create (sText);
   }
 
   @Nonnull

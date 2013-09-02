@@ -47,6 +47,15 @@ public interface IWebPageStyle
   IHCNode createIncorrectInputBox (@Nonnull Locale aDisplayLocale);
 
   @Nonnull
+  IHCElement <?> createErrorBox (@Nullable String sText);
+
+  @Nonnull
+  IHCElement <?> createSuccessBox (@Nullable String sText);
+
+  @Nonnull
+  IHCElement <?> createQuestionBox (@Nullable String sText);
+
+  @Nonnull
   AbstractHCTable <?> createTable (@Nullable HCCol... aCols);
 
   @Nonnull
