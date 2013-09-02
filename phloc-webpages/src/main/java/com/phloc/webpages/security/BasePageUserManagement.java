@@ -75,9 +75,9 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -642,7 +642,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                               SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
                            aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
-        final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
         aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
         aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
@@ -669,9 +669,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
     final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (200),
-                                                                HCCol.star (),
-                                                                new HCCol (150),
-                                                                createActionCol (3)).setID (sTableID);
+                                                                 HCCol.star (),
+                                                                 new HCCol (150),
+                                                                 createActionCol (3)).setID (sTableID);
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
                                      EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),
@@ -739,9 +739,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     // Toolbar on top
-    final BootstrapToolbarAdvanced aToolbar = aWPEC.getNodeList ().addAndReturnChild (new BootstrapToolbarAdvanced ());
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
     final BootstrapTabBox aTabBox = new BootstrapTabBox ();
@@ -760,6 +761,6 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Collection <? extends IUser> aDeletedUsers = aMgr.getAllDeletedUsers ();
     aTabBox.addTab (EText.TAB_DELETED.getDisplayTextWithArgs (aDisplayLocale, Integer.toString (aDeletedUsers.size ())),
                     getTabWithUsers (aDisplayLocale, aDeletedUsers, getID () + "3"));
-    aWPEC.getNodeList ().addChild (aTabBox);
+    aNodeList.addChild (aTabBox);
   }
 }

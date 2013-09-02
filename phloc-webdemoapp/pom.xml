@@ -103,11 +103,6 @@
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-html</artifactId>
-      <version>3.9.4</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
       <version>3.6.0</version>
     </dependency>
@@ -125,6 +120,11 @@
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
       <version>2.1.6-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-html</artifactId>
+      <version>3.9.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>

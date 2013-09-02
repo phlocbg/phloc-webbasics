@@ -57,7 +57,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
@@ -259,17 +259,17 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     {
       if (AccessManager.getInstance ().deleteRole (aSelectedObject.getID ()).isChanged ())
         aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                       aSelectedObject.getName ())));
+                                                                                                        aSelectedObject.getName ())));
       else
         aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                   aSelectedObject.getName ())));
+                                                                                                    aSelectedObject.getName ())));
       return true;
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
     aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                              aSelectedObject.getName ())));
-    final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
+                                                                                               aSelectedObject.getName ())));
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -285,7 +285,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
     final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (1))
-                                                  .setID (getID ());
+                                                   .setID (getID ());
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));

@@ -24,8 +24,9 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.table.ITableFormView;
 
-public class Bootstrap3TableFormView extends Bootstrap3Table
+public class Bootstrap3TableFormView extends Bootstrap3Table implements ITableFormView
 {
   private void _init ()
   {
