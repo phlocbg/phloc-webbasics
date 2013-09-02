@@ -1,4 +1,4 @@
-package com.phloc.webctrls.custom;
+package com.phloc.webctrls.custom.toolbar;
 
 import java.util.Locale;
 

@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webctrls.custom.IButtonToolbarAdvanced;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbarAdvanced;
 
 /**
  * Bootstrap3 advanced button toolbar

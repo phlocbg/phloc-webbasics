@@ -23,13 +23,14 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbarAdvanced;
 
 /**
  * Bootstrap advanced button toolbar
  * 
  * @author Philip Helger
  */
-public class BootstrapToolbarAdvanced extends BootstrapToolbar
+public class BootstrapToolbarAdvanced extends BootstrapToolbar implements IButtonToolbarAdvanced <BootstrapToolbar>
 {
   private final SimpleURL m_aSelfHref;
 
