@@ -17,54 +17,23 @@
  */
 package com.phloc.webctrls.bootstrap.derived;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.url.SimpleURL;
-import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webctrls.custom.toolbar.IButtonToolbarAdvanced;
 
 /**
  * Bootstrap advanced button toolbar
  * 
  * @author Philip Helger
  */
-public class BootstrapToolbarAdvanced extends BootstrapToolbar implements IButtonToolbarAdvanced <BootstrapToolbar>
+@Deprecated
+public class BootstrapToolbarAdvanced extends BootstrapToolbar
 {
-  private final SimpleURL m_aSelfHref;
-
   public BootstrapToolbarAdvanced ()
-  {
-    this (LinkUtils.getSelfHref ());
-  }
+  {}
 
   public BootstrapToolbarAdvanced (@Nonnull final SimpleURL aSelfHref)
   {
-    super ();
-    if (aSelfHref == null)
-      throw new NullPointerException ("selfHref");
-    m_aSelfHref = aSelfHref;
-  }
-
-  @Nonnull
-  public BootstrapToolbarAdvanced addButtonBack (@Nonnull final Locale aDisplayLocale)
-  {
-    addButtonBack (aDisplayLocale, m_aSelfHref);
-    return this;
-  }
-
-  @Nonnull
-  public BootstrapToolbarAdvanced addButtonCancel (@Nonnull final Locale aDisplayLocale)
-  {
-    addButtonCancel (aDisplayLocale, m_aSelfHref);
-    return this;
-  }
-
-  @Nonnull
-  public BootstrapToolbarAdvanced addButtonNo (@Nonnull final Locale aDisplayLocale)
-  {
-    addButtonNo (aDisplayLocale, m_aSelfHref);
-    return this;
+    super (aSelfHref);
   }
 }

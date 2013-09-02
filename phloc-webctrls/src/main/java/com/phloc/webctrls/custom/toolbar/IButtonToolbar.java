@@ -31,40 +31,49 @@ public interface IButtonToolbar <IMPLTYPE extends IButtonToolbar <IMPLTYPE>> ext
   IMPLTYPE addHiddenFields (@Nullable Map <String, String> aValues);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, IJSCodeProvider aJSCode);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nullable IJSCodeProvider aJSCode);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, IJSCodeProvider aJSCode, @Nullable EDefaultIcon eIcon);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nullable IJSCodeProvider aJSCode, @Nullable EDefaultIcon eIcon);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, IJSCodeProvider aJSCode, @Nullable IIcon aIcon);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nullable IJSCodeProvider aJSCode, @Nullable IIcon aIcon);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, ISimpleURL aURL);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nonnull ISimpleURL aURL);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, ISimpleURL aURL, @Nullable EDefaultIcon eIcon);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nonnull ISimpleURL aURL, @Nullable EDefaultIcon eIcon);
 
   @Nonnull
-  IMPLTYPE addButton (@Nullable String sCaption, ISimpleURL aURL, @Nullable IIcon aIcon);
+  IMPLTYPE addButton (@Nullable String sCaption, @Nonnull ISimpleURL aURL, @Nullable IIcon aIcon);
 
   @Nonnull
-  IMPLTYPE addButtonBack (Locale aDisplayLocale, ISimpleURL aURL);
+  IMPLTYPE addButtonBack (@Nonnull Locale aDisplayLocale, @Nonnull ISimpleURL aURL);
 
   @Nonnull
-  IMPLTYPE addButtonCancel (Locale aDisplayLocale, ISimpleURL aURL);
+  IMPLTYPE addButtonBack (@Nonnull Locale aDisplayLocale);
 
   @Nonnull
-  IMPLTYPE addButtonNo (Locale aDisplayLocale, ISimpleURL aURL);
+  IMPLTYPE addButtonCancel (@Nonnull Locale aDisplayLocale, @Nonnull ISimpleURL aURL);
 
   @Nonnull
-  IMPLTYPE addButtonEdit (Locale aDisplayLocale, ISimpleURL aURL);
+  IMPLTYPE addButtonCancel (@Nonnull Locale aDisplayLocale);
 
   @Nonnull
-  IMPLTYPE addButtonNew (@Nullable String sCaption, ISimpleURL aURL);
+  IMPLTYPE addButtonNo (@Nonnull Locale aDisplayLocale, @Nonnull ISimpleURL aURL);
 
   @Nonnull
-  IMPLTYPE addSubmitButton (String sCaption);
+  IMPLTYPE addButtonNo (@Nonnull Locale aDisplayLocale);
+
+  @Nonnull
+  IMPLTYPE addButtonEdit (@Nonnull Locale aDisplayLocale, @Nonnull ISimpleURL aURL);
+
+  @Nonnull
+  IMPLTYPE addButtonNew (@Nullable String sCaption, @Nonnull ISimpleURL aURL);
+
+  @Nonnull
+  IMPLTYPE addSubmitButton (@Nullable String sCaption);
 
   @Nonnull
   IMPLTYPE addSubmitButton (@Nullable String sCaption, @Nullable IJSCodeProvider aOnClick);
