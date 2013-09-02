@@ -86,13 +86,13 @@ public final class RendererView implements ILayoutAreaContentProvider
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     if (aUser != null)
     {
-      aNavbar.addText (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT,
-                       HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
-
       final Bootstrap3Nav aNav = new Bootstrap3Nav ();
       aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale),
                     LinkUtils.getURLWithContext ("/logout"));
-      aNavbar.addNav (EBootstrap3NavbarPosition.COLLAPSIBLE_DEFAULT, aNav);
+      aNavbar.addNav (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT, aNav);
+
+      aNavbar.addText (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT,
+                       HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
     }
     else
     {

@@ -150,7 +150,7 @@ public class Bootstrap3MenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
                                   final boolean bSelected,
                                   final boolean bExpanded)
   {
-    if (bSelected)
+    if (bSelected || bExpanded)
       aLI.addClass (CBootstrap3CSS.ACTIVE);
   }
 
@@ -160,7 +160,7 @@ public class Bootstrap3MenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
                                       final boolean bSelected,
                                       final boolean bExpanded)
   {
-    if (bSelected)
+    if (bSelected || bExpanded)
       aLI.addClass (CBootstrap3CSS.ACTIVE);
   }
 
