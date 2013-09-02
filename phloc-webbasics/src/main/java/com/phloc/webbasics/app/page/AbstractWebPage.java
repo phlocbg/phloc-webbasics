@@ -26,6 +26,7 @@ import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EValidity;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
@@ -36,6 +37,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCForm_FileUpload;
+import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
@@ -131,6 +133,16 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   public String getHeaderText (@Nonnull final WebPageExecutionContext aWPEC)
   {
     return getDisplayText (aWPEC.getDisplayLocale ());
+  }
+
+  @Nullable
+  @OverrideOnDemand
+  public IHCNode getHeaderNode (@Nonnull final WebPageExecutionContext aWPEC)
+  {
+    final String sText = getHeaderText (aWPEC);
+    if (StringHelper.hasNoText (sText))
+      return null;
+    return HCH1.create (sText);
   }
 
   @Nonnull

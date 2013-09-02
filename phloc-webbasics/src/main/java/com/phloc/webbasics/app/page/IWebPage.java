@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.html.hc.IHCNode;
 
 /**
  * The base interface for a single page of content.
@@ -38,6 +39,18 @@ public interface IWebPage extends IPage
    */
   @Nullable
   String getHeaderText (@Nonnull WebPageExecutionContext aWPEC);
+
+  /**
+   * Get the headline of the page. By default it is
+   * <code>&lt;h1&gt;{@link #getHeaderText(WebPageExecutionContext)}&lt;/h1&gt;</code>
+   * 
+   * @param aWPEC
+   *        The web page execution context. Never <code>null</code>.
+   * @return The header/headline of the page. May be <code>null</code> to
+   *         indicate that no rendering is required.
+   */
+  @Nullable
+  IHCNode getHeaderNode (@Nonnull WebPageExecutionContext aWPEC);
 
   /**
    * @param aWPEC

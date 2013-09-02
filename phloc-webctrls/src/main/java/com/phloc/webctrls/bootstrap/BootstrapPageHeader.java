@@ -17,6 +17,9 @@
  */
 package com.phloc.webctrls.bootstrap;
 
+import javax.annotation.Nullable;
+
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
@@ -30,5 +33,11 @@ public class BootstrapPageHeader extends AbstractHCDiv <BootstrapPageHeader>
   {
     super ();
     addClass (CBootstrapCSS.PAGE_HEADER);
+  }
+
+  @Nullable
+  public static BootstrapPageHeader createOnDemand (@Nullable final IHCNode aNode)
+  {
+    return aNode == null ? null : new BootstrapPageHeader ().addChild (aNode);
   }
 }
