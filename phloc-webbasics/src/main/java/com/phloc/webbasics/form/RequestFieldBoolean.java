@@ -49,7 +49,6 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   {
     super (sFieldName, getStringValue (bDefaultValue));
 
-    // Save default value to parsing from string once we don't need it anymore
     // The default value is immutable
     m_bDefaultValue = bDefaultValue;
   }
@@ -57,18 +56,20 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   /**
    * @param bValue
    *        the boolean value
-   * @return The string parameter value to be used for the passed parameter
+   * @return The string parameter value to be used for the passed parameter.
+   *         Neither <code>null</code> nor empty.
    */
   @Nonnull
+  @Nonempty
   public static String getStringValue (final boolean bValue)
   {
     return bValue ? CHCParam.VALUE_CHECKED : CHCParam.VALUE_UNCHECKED;
   }
 
   /**
-   * @return <code>true</code> if the checkbox is checked or if no such request
-   *         parameter is present and the fallback is <code>true</code>,
-   *         <code>false</code> otherwise.
+   * @return <code>true</code> if the checkbox/radio button is checked or if no
+   *         such request parameter is present and the fallback is
+   *         <code>true</code>, <code>false</code> otherwise.
    */
   public boolean isChecked ()
   {
