@@ -31,10 +31,13 @@ import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.bootstrap.CBootstrapCSS;
 import com.phloc.webctrls.bootstrap.EBootstrapButtonType;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
+import com.phloc.webctrls.bootstrap.derived.BootstrapToolbar;
 import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 
 public class WebPageStylerBootstrap2 extends WebPageStylerSimple
 {
@@ -43,6 +46,13 @@ public class WebPageStylerBootstrap2 extends WebPageStylerSimple
   public IHCElement <?> createErrorBox (@Nullable final String sText)
   {
     return BootstrapErrorBox.create (sText);
+  }
+
+  @Override
+  @Nonnull
+  public IHCElement <?> createInfoBox (@Nullable final String sText)
+  {
+    return BootstrapInfoBox.create (sText);
   }
 
   @Override
@@ -83,5 +93,12 @@ public class WebPageStylerBootstrap2 extends WebPageStylerSimple
   {
     return new HCSpan ().addClasses (CBootstrapCSS.BTN, EBootstrapButtonType.SUCCESS)
                         .addChild (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
+  }
+
+  @Override
+  @Nonnull
+  public IButtonToolbar <?> createToolbar ()
+  {
+    return new BootstrapToolbar ();
   }
 }

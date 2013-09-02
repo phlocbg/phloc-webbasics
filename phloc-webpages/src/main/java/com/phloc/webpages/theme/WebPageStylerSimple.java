@@ -27,6 +27,8 @@ import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
+import com.phloc.webctrls.custom.toolbar.SimpleButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.EWebPageText;
 
@@ -102,13 +104,19 @@ public class WebPageStylerSimple implements IWebPageStyler
   }
 
   @Nonnull
-  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  public IHCElement <?> createInfoBox (@Nullable final String sText)
   {
     return HCDiv.create (sText);
   }
 
   @Nonnull
   public IHCElement <?> createSuccessBox (@Nullable final String sText)
+  {
+    return HCDiv.create (sText);
+  }
+
+  @Nonnull
+  public IHCElement <?> createQuestionBox (@Nullable final String sText)
   {
     return HCDiv.create (sText);
   }
@@ -133,5 +141,11 @@ public class WebPageStylerSimple implements IWebPageStyler
   public IHCElement <?> createUploadButton (@Nonnull final Locale aDisplayLocale)
   {
     return new HCButton (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
+  }
+
+  @Nonnull
+  public IButtonToolbar <?> createToolbar ()
+  {
+    return new SimpleButtonToolbar ();
   }
 }

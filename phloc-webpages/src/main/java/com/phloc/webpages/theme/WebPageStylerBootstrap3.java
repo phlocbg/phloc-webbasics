@@ -29,12 +29,15 @@ import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 import com.phloc.webctrls.bootstrap3.alert.Bootstrap3ErrorBox;
+import com.phloc.webctrls.bootstrap3.alert.Bootstrap3InfoBox;
 import com.phloc.webctrls.bootstrap3.alert.Bootstrap3QuestionBox;
 import com.phloc.webctrls.bootstrap3.alert.Bootstrap3SuccessBox;
+import com.phloc.webctrls.bootstrap3.button.Bootstrap3ButtonToolbar;
 import com.phloc.webctrls.bootstrap3.button.EBootstrap3ButtonType;
 import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
 import com.phloc.webctrls.bootstrap3.table.Bootstrap3Table;
 import com.phloc.webctrls.bootstrap3.table.Bootstrap3TableFormView;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 
 public class WebPageStylerBootstrap3 extends WebPageStylerSimple
 {
@@ -47,9 +50,9 @@ public class WebPageStylerBootstrap3 extends WebPageStylerSimple
 
   @Override
   @Nonnull
-  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  public IHCElement <?> createInfoBox (@Nullable final String sText)
   {
-    return Bootstrap3QuestionBox.create (sText);
+    return Bootstrap3InfoBox.create (sText);
   }
 
   @Override
@@ -57,6 +60,13 @@ public class WebPageStylerBootstrap3 extends WebPageStylerSimple
   public IHCElement <?> createSuccessBox (@Nullable final String sText)
   {
     return Bootstrap3SuccessBox.create (sText);
+  }
+
+  @Override
+  @Nonnull
+  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  {
+    return Bootstrap3QuestionBox.create (sText);
   }
 
   @Override
@@ -83,5 +93,12 @@ public class WebPageStylerBootstrap3 extends WebPageStylerSimple
   {
     return new HCSpan ().addClasses (CBootstrap3CSS.BTN, EBootstrap3ButtonType.SUCCESS)
                         .addChild (EWebBasicsText.FILE_SELECT.getDisplayText (aDisplayLocale));
+  }
+
+  @Override
+  @Nonnull
+  public IButtonToolbar <?> createToolbar ()
+  {
+    return new Bootstrap3ButtonToolbar ();
   }
 }

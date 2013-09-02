@@ -35,7 +35,7 @@ import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.form.JSFormHelper;
 
 public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> extends AbstractWebPageExt
@@ -89,9 +89,9 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected BootstrapToolbarAdvanced createNewViewToolbar ()
+  protected IButtonToolbar <?> createNewViewToolbar ()
   {
-    return new BootstrapToolbarAdvanced ();
+    return getStyler ().createToolbar ();
   }
 
   /**
@@ -122,7 +122,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected void modifyViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                     @Nonnull final DATATYPE aSelectedObject,
-                                    @Nonnull final BootstrapToolbarAdvanced aToolbar)
+                                    @Nonnull final IButtonToolbar <?> aToolbar)
   {}
 
   /**
@@ -141,12 +141,12 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected BootstrapToolbarAdvanced createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                        final boolean bCanGoBack,
-                                                        final boolean bCanEdit,
-                                                        @Nonnull final DATATYPE aSelectedObject)
+  protected IButtonToolbar <?> createViewToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                  final boolean bCanGoBack,
+                                                  final boolean bCanEdit,
+                                                  @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapToolbarAdvanced aToolbar = createNewViewToolbar ();
+    final IButtonToolbar <?> aToolbar = createNewViewToolbar ();
     if (bCanGoBack)
     {
       // Back to list
@@ -167,9 +167,9 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected BootstrapToolbarAdvanced createNewEditToolbar ()
+  protected IButtonToolbar <?> createNewEditToolbar ()
   {
-    return new BootstrapToolbarAdvanced ();
+    return getStyler ().createToolbar ();
   }
 
   /**
@@ -200,7 +200,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @OverrideOnDemand
   protected void modifyEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
                                     @Nonnull final DATATYPE aSelectedObject,
-                                    @Nonnull final BootstrapToolbarAdvanced aToolbar)
+                                    @Nonnull final IButtonToolbar <?> aToolbar)
   {}
 
   /**
@@ -214,10 +214,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected BootstrapToolbarAdvanced createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                        @Nonnull final DATATYPE aSelectedObject)
+  protected IButtonToolbar <?> createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                  @Nonnull final DATATYPE aSelectedObject)
   {
-    final BootstrapToolbarAdvanced aToolbar = createNewEditToolbar ();
+    final IButtonToolbar <?> aToolbar = createNewEditToolbar ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_EDIT);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
@@ -250,9 +250,9 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected BootstrapToolbarAdvanced createNewCreateToolbar ()
+  protected IButtonToolbar <?> createNewCreateToolbar ()
   {
-    return new BootstrapToolbarAdvanced ();
+    return getStyler ().createToolbar ();
   }
 
   /**
@@ -265,7 +265,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @OverrideOnDemand
   protected void modifyCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                      @Nonnull final BootstrapToolbarAdvanced aToolbar)
+                                      @Nonnull final IButtonToolbar <?> aToolbar)
   {}
 
   /**
@@ -279,10 +279,10 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected BootstrapToolbarAdvanced createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                                          @Nullable final DATATYPE aSelectedObject)
+  protected IButtonToolbar <?> createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                    @Nullable final DATATYPE aSelectedObject)
   {
-    final BootstrapToolbarAdvanced aToolbar = createNewCreateToolbar ();
+    final IButtonToolbar <?> aToolbar = createNewCreateToolbar ();
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_CREATE);
     if (aSelectedObject != null)
       aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());

@@ -30,8 +30,8 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
 import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webdemoapp.app.ajax.config.CDemoAppAjaxConfig;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.form.JSFormHelper;
@@ -55,7 +55,7 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
 
   @Override
   protected void modifyCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
-                                      @Nonnull final BootstrapToolbarAdvanced aToolbar)
+                                      @Nonnull final IButtonToolbar <?> aToolbar)
   {
     final JSArray aSuccessUpdates = new JSArray ();
     // Update menu via Ajax

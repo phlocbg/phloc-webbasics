@@ -70,7 +70,7 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
     super.initGlobals ();
 
     // UI stuff
-    WebPageStylerManager.getInstance ().setStyle (new WebPageStylerBootstrap3 ()
+    WebPageStylerManager.getInstance ().setStyler (new WebPageStylerBootstrap3 ()
     {
       @Override
       @Nonnull

@@ -18,6 +18,7 @@
 package com.phloc.webpages.form;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +28,12 @@ import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
+import com.phloc.commons.text.ITextProvider;
+import com.phloc.commons.text.impl.TextProvider;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
@@ -36,22 +42,50 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapToolbarAdvanced;
 import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.AbstractWebPageForm;
 
 public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 {
+  @Translatable
+  protected static enum EText implements IHasDisplayText
+  {
+    DELETE_QUERY ("Sollen diese gemerkten Daten wirklich gelöscht werden?", "Are you sure to delete this saved data?"),
+    DELETE_SUCCESS ("Die gemerkten Daten wurden erfolgreich gelöscht!", "The saved data was successfully deleted!"),
+    DELETE_ERROR ("Fehler beim Löschen der gemerkten Daten!", "Error deleting the saved data!"),
+    DELETE_ALL_QUERY ("Sollen alle gemerkten Daten wirklich gelöscht werden?", "Are you sure to delete all saved data?"),
+    DELETE_ALL_SUCCESS ("Alle gemerkten Daten wurden erfolgreich gelöscht!", "All saved data was successfully deleted!"),
+    DELETE_ALL_ERROR ("Fehler beim Löschen der gemerkten Daten!", "Error deleting the saved data!"),
+    NONE_PRESENT ("Es sind keine gemerkten Daten vorhanden!", "No saved data is available"),
+    BUTTON_DELETE ("Alle löschen", "Delete all"),
+    SAVED_STATE_EDIT ("Daten weiter bearbeiten", "Continue editing this data"),
+    SAVED_STATE_DELETE ("Lösche diese gemerkten Daten", "Delete this saved state"),
+    HEADER_PAGE ("Seite", "Page"),
+    HEADER_REMEMBERED_AT ("Gemerkt am", "Remebered at"),
+    HEADER_ACTIONS ("Aktionen", "Actions");
+
+    private final ITextProvider m_aTP;
+
+    private EText (final String sDE, final String sEN)
+    {
+      m_aTP = TextProvider.create_DE_EN (sDE, sEN);
+    }
+
+    @Nullable
+    public String getDisplayText (@Nonnull final Locale aContentLocale)
+    {
+      return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
+    }
+  }
+
   public BasePageSavedStates (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
@@ -109,23 +143,26 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
                                         @Nonnull final FormState aSelectedObject)
   {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (FormStateManager.getInstance ().deleteFormState (aSelectedObject.getID ()).isChanged ())
-        aWPEC.getNodeList ().addChild (BootstrapSuccessBox.create ("Die gemerkten Daten wurden erfolgreich gelöscht!"));
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayText (aDisplayLocale)));
       else
-        aWPEC.getNodeList ().addChild (BootstrapErrorBox.create ("Fehler beim Löschen der gemerkten Daten!"));
+        aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ERROR.getDisplayText (aDisplayLocale)));
       return true;
     }
 
-    final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
-    aForm.addChild (BootstrapQuestionBox.create ("Sollen diese gemerkten Daten wirklich gelöscht werden?"));
-    final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
+    final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+    aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayText (aDisplayLocale)));
+    final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
     aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
-    aToolbar.addSubmitButtonYes (aWPEC.getDisplayLocale ());
-    aToolbar.addButtonNo (aWPEC.getDisplayLocale ());
+    aToolbar.addSubmitButtonYes (aDisplayLocale);
+    aToolbar.addButtonNo (aDisplayLocale);
     return false;
   }
 
@@ -135,23 +172,25 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   {
     if (aWPEC.hasAction (ACTION_DELETE_ALL))
     {
+      final HCNodeList aNodeList = aWPEC.getNodeList ();
+      final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
       if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
       {
         if (FormStateManager.getInstance ().deleteAllFormStates ().isChanged ())
-          aWPEC.getNodeList ()
-               .addChild (BootstrapSuccessBox.create ("Alle gemerkten Daten wurden erfolgreich gelöscht!"));
+          aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_ALL_SUCCESS.getDisplayText (aDisplayLocale)));
         else
-          aWPEC.getNodeList ().addChild (BootstrapErrorBox.create ("Fehler beim Löschen der gemerkten Daten!"));
+          aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ALL_ERROR.getDisplayText (aDisplayLocale)));
         return true;
       }
 
-      final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
-      aForm.addChild (BootstrapQuestionBox.create ("Sollen alle gemerkten Daten wirklich gelöscht werden?"));
-      final BootstrapToolbarAdvanced aToolbar = aForm.addAndReturnChild (new BootstrapToolbarAdvanced ());
+      final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+      aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_ALL_QUERY.getDisplayText (aDisplayLocale)));
+      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
       aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL);
       aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_SAVE);
-      aToolbar.addSubmitButtonYes (aWPEC.getDisplayLocale ());
-      aToolbar.addButtonNo (aWPEC.getDisplayLocale ());
+      aToolbar.addSubmitButtonYes (aDisplayLocale);
+      aToolbar.addButtonNo (aDisplayLocale);
       return false;
     }
 
@@ -161,35 +200,39 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   @Override
   protected void showListOfExistingObjects (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final FormStateManager aFSM = FormStateManager.getInstance ();
 
     final Collection <FormState> aAllFormStates = aFSM.getAllFormStates ();
     if (aAllFormStates.isEmpty ())
     {
-      aWPEC.getNodeList ().addChild (BootstrapInfoBox.create ("Es sind keine gemerkten Daten vorhanden!"));
+      aNodeList.addChild (getStyler ().createInfoBox (EText.NONE_PRESENT.getDisplayText (aDisplayLocale)));
     }
     else
     {
-      final BootstrapToolbarAdvanced aToolbar = new BootstrapToolbarAdvanced ();
-      aToolbar.addButton ("Alle löschen",
+      final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
+      aToolbar.addButton (EText.BUTTON_DELETE.getDisplayText (aDisplayLocale),
                           LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL)),
                           EDefaultIcon.DELETE);
-      aWPEC.getNodeList ().addChild (aToolbar);
+      aNodeList.addChild (aToolbar);
 
       // Start emitting saved states
-      final BootstrapTable aPerPage = aWPEC.getNodeList ().addAndReturnChild (new BootstrapTable (HCCol.star (),
-                                                                                                  new HCCol (170),
-                                                                                                  createActionCol (2)));
-      aPerPage.addHeaderRow ().addCells ("Seite", "Gemerkt am", "Aktionen");
+      final BootstrapTable aPerPage = aNodeList.addAndReturnChild (new BootstrapTable (HCCol.star (),
+                                                                                       new HCCol (170),
+                                                                                       createActionCol (2)));
+      aPerPage.addHeaderRow ().addCells (EText.HEADER_PAGE.getDisplayText (aDisplayLocale),
+                                         EText.HEADER_REMEMBERED_AT.getDisplayText (aDisplayLocale),
+                                         EText.HEADER_ACTIONS.getDisplayText (aDisplayLocale));
       for (final FormState aFormState : aAllFormStates)
       {
         final HCRow aRow = aPerPage.addBodyRow ();
 
         final String sPageID = aFormState.getPageID ();
         final IMenuItem aMenuItem = (IMenuItem) getMenuTree ().getMenuObjectOfID (sPageID);
-        aRow.addCell (aMenuItem.getDisplayText (aWPEC.getDisplayLocale ()));
+        aRow.addCell (aMenuItem.getDisplayText (aDisplayLocale));
 
-        aRow.addCell (PDTToString.getAsString (aFormState.getDateTime (), aWPEC.getDisplayLocale ()));
+        aRow.addCell (PDTToString.getAsString (aFormState.getDateTime (), aDisplayLocale));
 
         final AbstractHCCell aActionCell = aRow.addCell ();
         // Original action (currently always create even for copy)
@@ -200,9 +243,9 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
                                                 .add (CHCParam.PARAM_ACTION, sAction)
                                                 .addIfNonNull (CHCParam.PARAM_OBJECT, sObjectID)
                                                 .add (FIELD_FLOW_ID, aFormState.getFlowID ())
-                                                .add (FIELD_RESTORE_FLOW_ID, aFormState.getFlowID ())).setTitle ("Daten weiter bearbeiten")
+                                                .add (FIELD_RESTORE_FLOW_ID, aFormState.getFlowID ())).setTitle (EText.SAVED_STATE_EDIT.getDisplayText (aDisplayLocale))
                                                                                                       .addChild (getCreateImg ()));
-        aActionCell.addChild (createDeleteLink (aFormState, "Lösche diese gemerkten Daten"));
+        aActionCell.addChild (createDeleteLink (aFormState, EText.SAVED_STATE_DELETE.getDisplayText (aDisplayLocale)));
       }
     }
   }

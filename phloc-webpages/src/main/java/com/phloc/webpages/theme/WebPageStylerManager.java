@@ -7,7 +7,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
 
 public class WebPageStylerManager extends GlobalSingleton
 {
-  private IWebPageStyler m_aStyle = new WebPageStylerBootstrap2 ();
+  private IWebPageStyler m_aStyle = new WebPageStylerSimple ();
 
   @Deprecated
   @UsedViaReflection
@@ -26,10 +26,10 @@ public class WebPageStylerManager extends GlobalSingleton
     return getInstance ().m_aStyle;
   }
 
-  public void setStyle (@Nonnull final IWebPageStyler aStyle)
+  public void setStyler (@Nonnull final IWebPageStyler aStyler)
   {
-    if (aStyle == null)
-      throw new NullPointerException ("Style");
-    m_aStyle = aStyle;
+    if (aStyler == null)
+      throw new NullPointerException ("Styler");
+    m_aStyle = aStyler;
   }
 }

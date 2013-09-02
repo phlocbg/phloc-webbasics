@@ -13,6 +13,7 @@ import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 
 public interface IWebPageStyler
@@ -50,6 +51,9 @@ public interface IWebPageStyler
   IHCElement <?> createErrorBox (@Nullable String sText);
 
   @Nonnull
+  IHCElement <?> createInfoBox (@Nullable String sText);
+
+  @Nonnull
   IHCElement <?> createSuccessBox (@Nullable String sText);
 
   @Nonnull
@@ -63,4 +67,7 @@ public interface IWebPageStyler
 
   @Nonnull
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);
+
+  @Nonnull
+  IButtonToolbar <?> createToolbar ();
 }
