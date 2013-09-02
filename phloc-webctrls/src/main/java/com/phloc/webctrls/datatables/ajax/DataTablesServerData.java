@@ -37,8 +37,8 @@ import com.phloc.commons.type.ObjectType;
 import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.IHCBaseTable;
 import com.phloc.webbasics.state.IHasUIState;
 import com.phloc.webctrls.datatables.DataTablesColumn;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
@@ -88,7 +88,7 @@ public final class DataTablesServerData implements IHasUIState
   private ServerSortState m_aServerSortState;
   private final EDataTablesFilterType m_eFilterType;
 
-  public DataTablesServerData (@Nonnull final AbstractHCBaseTable <?> aTable,
+  public DataTablesServerData (@Nonnull final IHCBaseTable <?> aTable,
                                @Nonnull final List <DataTablesColumn> aColumns,
                                @Nonnull final Locale aDisplayLocale,
                                @Nonnull final EDataTablesFilterType eFilterType)

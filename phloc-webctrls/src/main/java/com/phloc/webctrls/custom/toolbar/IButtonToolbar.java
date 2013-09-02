@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.html.hc.IHCElementWithChildren;
+import com.phloc.html.hc.html.IHCDiv;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
@@ -19,7 +19,7 @@ import com.phloc.webctrls.custom.IIcon;
  * @param <IMPLTYPE>
  *        Real implementation type
  */
-public interface IButtonToolbar <IMPLTYPE extends IButtonToolbar <IMPLTYPE>> extends IHCElementWithChildren <IMPLTYPE>
+public interface IButtonToolbar <IMPLTYPE extends IButtonToolbar <IMPLTYPE>> extends IHCDiv <IMPLTYPE>
 {
   @Nonnull
   IMPLTYPE addHiddenField (@Nullable String sName, int nValue);

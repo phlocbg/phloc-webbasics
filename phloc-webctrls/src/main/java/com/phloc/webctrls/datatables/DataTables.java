@@ -50,6 +50,7 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCColGroup;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.hc.html.IHCBaseTable;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
@@ -153,7 +154,7 @@ public class DataTables implements IHCNodeBuilder
    * @return The underlying table on which this object is operating.
    */
   @Nonnull
-  public final AbstractHCBaseTable <?> getTable ()
+  public final IHCBaseTable <?> getTable ()
   {
     return m_aTable;
   }
@@ -295,7 +296,7 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
-  public DataTables addAllColumns (@Nonnull final AbstractHCBaseTable <?> aTable)
+  public DataTables addAllColumns (@Nonnull final IHCBaseTable <?> aTable)
   {
     if (aTable == null)
       throw new NullPointerException ("table");

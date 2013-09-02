@@ -36,11 +36,11 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.api.IHCHasFocus;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.IHCBaseTable;
 import com.phloc.html.hc.impl.AbstractHCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
@@ -122,7 +122,7 @@ public class BootstrapTableForm extends BootstrapTable
     for (final IHCNode aCtrl : aCtrls)
       if (aCtrl instanceof IHCElement <?> &&
           !(aCtrl instanceof HCCheckBox) &&
-          !(aCtrl instanceof AbstractHCBaseTable <?>))
+          !(aCtrl instanceof IHCBaseTable <?>))
       {
         final IHCElement <?> aElement = (IHCElement <?>) aCtrl;
         // Don't resize elements with a predefined size
