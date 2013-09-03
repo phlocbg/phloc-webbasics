@@ -19,6 +19,9 @@ package com.phloc.web.encoding;
 
 import java.nio.charset.Charset;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.codec.DecoderException;
 import com.phloc.commons.codec.RFC1522BCodec;
@@ -31,81 +34,87 @@ public class RFC2047Helper
 {
   public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
 
-  public static enum Codec
+  public static enum ECodec
   {
     B,
     Q
   }
 
-  public static String encode (final String value)
+  @Nullable
+  public static String encode (@Nullable final String sValue)
   {
-    return encode (value, DEFAULT_CHARSET, Codec.B);
+    return encode (sValue, DEFAULT_CHARSET, ECodec.B);
   }
 
-  public static String encode (final String value, final Charset charset)
+  @Nullable
+  public static String encode (@Nullable final String SValue, @Nonnull final Charset aCharset)
   {
-    return encode (value, charset, Codec.B);
+    return encode (SValue, aCharset, ECodec.B);
   }
 
   /**
    * Used to encode a string as specified by RFC 2047
    * 
-   * @param value
+   * @param sValue
    *        The string to encode
-   * @param charset
+   * @param aCharset
    *        The character set to use for the encoding
    */
-  public static String encode (final String value, final Charset charset, final Codec codec)
+  @Nullable
+  public static String encode (@Nullable final String sValue, @Nonnull final Charset aCharset, final ECodec eCodec)
   {
-    if (value == null)
+    if (sValue == null)
       return null;
+
     try
     {
-      switch (codec)
+      switch (eCodec)
       {
         case Q:
-          return new RFC1522QCodec (charset).encodeText (value);
+          return new RFC1522QCodec (aCharset).encodeText (sValue);
         case B:
         default:
-          return new RFC1522BCodec (charset).encodeText (value);
+          return new RFC1522BCodec (aCharset).encodeText (sValue);
       }
     }
-    catch (final Exception e)
+    catch (final Exception ex)
     {
-      return value;
+      return sValue;
     }
   }
 
   /**
    * Used to decode a string as specified by RFC 2047
    * 
-   * @param value
+   * @param sValue
    *        The encoded string
    */
-  public static String decode (final String value)
+  @Nullable
+  public static String decode (@Nullable final String sValue)
   {
-    if (value == null)
+    if (sValue == null)
       return null;
+
     try
     {
       // try BCodec first
-      return new RFC1522BCodec ().decodeText (value);
+      return new RFC1522BCodec ().decodeText (sValue);
     }
     catch (final DecoderException de)
     {
       // try QCodec next
       try
       {
-        return new RFC1522QCodec ().decodeText (value);
+        return new RFC1522QCodec ().decodeText (sValue);
       }
       catch (final Exception ex)
       {
-        return value;
+        return sValue;
       }
     }
     catch (final Exception e)
     {
-      return value;
+      return sValue;
     }
   }
 }
