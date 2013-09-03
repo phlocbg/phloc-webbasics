@@ -27,12 +27,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.annotations.MustBeLocked;
+import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * This is a singleton object that keeps all the mails that could not be send.
@@ -42,13 +46,24 @@ import com.phloc.commons.stats.StatisticsManager;
 @ThreadSafe
 public class FailedMailQueue
 {
-  private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (FailedMailQueue.class);
+  private static final IStatisticsHandlerCounter s_aStatsCountAdd = StatisticsManager.getCounterHandler (FailedMailQueue.class.getName () +
+                                                                                                         "$add");
+  private static final IStatisticsHandlerCounter s_aStatsCountRemove = StatisticsManager.getCounterHandler (FailedMailQueue.class.getName () +
+                                                                                                            "$remove");
 
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("m_aRWLock")
   private final Map <String, FailedMailData> m_aMap = new LinkedHashMap <String, FailedMailData> ();
 
   public FailedMailQueue ()
   {}
+
+  @MustBeLocked (ELockType.WRITE)
+  protected void internalAdd (@Nonnull final FailedMailData aFailedMailData)
+  {
+    m_aMap.put (aFailedMailData.getID (), aFailedMailData);
+    s_aStatsCountAdd.increment ();
+  }
 
   public void add (@Nonnull final FailedMailData aFailedMailData)
   {
@@ -58,13 +73,22 @@ public class FailedMailQueue
     m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aMap.put (aFailedMailData.getID (), aFailedMailData);
-      s_aStatsCount.increment ();
+      internalAdd (aFailedMailData);
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
+  }
+
+  @Nullable
+  @MustBeLocked (ELockType.WRITE)
+  protected FailedMailData internalRemove (@Nullable final String sID)
+  {
+    final FailedMailData ret = m_aMap.remove (sID);
+    if (ret != null)
+      s_aStatsCountRemove.increment ();
+    return ret;
   }
 
   /**
@@ -77,10 +101,13 @@ public class FailedMailQueue
   @Nullable
   public FailedMailData remove (@Nullable final String sID)
   {
+    if (StringHelper.hasNoText (sID))
+      return null;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
-      return m_aMap.remove (sID);
+      return internalRemove (sID);
     }
     finally
     {
@@ -89,12 +116,19 @@ public class FailedMailQueue
   }
 
   @Nonnegative
+  @MustBeLocked (ELockType.READ)
+  protected int internalSize ()
+  {
+    return m_aMap.size ();
+  }
+
+  @Nonnegative
   public int size ()
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aMap.size ();
+      return internalSize ();
     }
     finally
     {
@@ -103,12 +137,19 @@ public class FailedMailQueue
   }
 
   @Nullable
+  @MustBeLocked (ELockType.READ)
+  protected FailedMailData internalGetFailedMailOfID (@Nullable final String sID)
+  {
+    return m_aMap.get (sID);
+  }
+
+  @Nullable
   public FailedMailData getFailedMailOfID (@Nullable final String sID)
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aMap.get (sID);
+      return internalGetFailedMailOfID (sID);
     }
     finally
     {
@@ -118,17 +159,39 @@ public class FailedMailQueue
 
   @Nonnull
   @ReturnsMutableCopy
+  @MustBeLocked (ELockType.READ)
+  protected List <FailedMailData> internalGetAllFailedMails ()
+  {
+    return ContainerHelper.newList (m_aMap.values ());
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public List <FailedMailData> getAllFailedMails ()
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return ContainerHelper.newList (m_aMap.values ());
+      return internalGetAllFailedMails ();
     }
     finally
     {
       m_aRWLock.readLock ().unlock ();
     }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  @MustBeLocked (ELockType.WRITE)
+  protected List <FailedMailData> internalRemoveAll ()
+  {
+    final List <FailedMailData> aTempList = new ArrayList <FailedMailData> (m_aMap.size ());
+    if (!m_aMap.isEmpty ())
+    {
+      aTempList.addAll (m_aMap.values ());
+      m_aMap.clear ();
+    }
+    return aTempList;
   }
 
   /**
@@ -143,13 +206,7 @@ public class FailedMailQueue
     m_aRWLock.writeLock ().lock ();
     try
     {
-      final List <FailedMailData> aTempList = new ArrayList <FailedMailData> (m_aMap.size ());
-      if (!m_aMap.isEmpty ())
-      {
-        aTempList.addAll (m_aMap.values ());
-        m_aMap.clear ();
-      }
-      return aTempList;
+      return internalRemoveAll ();
     }
     finally
     {
