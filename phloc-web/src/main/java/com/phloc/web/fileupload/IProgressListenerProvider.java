@@ -21,6 +21,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.IsSPIInterface;
 
+/**
+ * Provider interface for {@link IProgressListener} instances.
+ * 
+ * @author Philip Helger
+ */
 @IsSPIInterface
 public interface IProgressListenerProvider
 {

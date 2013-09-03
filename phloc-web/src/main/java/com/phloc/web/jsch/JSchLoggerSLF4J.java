@@ -33,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class JSchLoggerSLF4J implements com.jcraft.jsch.Logger
+public class JSchLoggerSLF4J implements com.jcraft.jsch.Logger
 {
   private final Logger m_aLogger;
 
