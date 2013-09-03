@@ -34,8 +34,13 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * This class represents a single UA profile.
+ * 
+ * @author Philip Helger
+ */
 @Immutable
-public final class UAProfile
+public class UAProfile
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfile.class);
   public static final UAProfile EMPTY = new UAProfile ();

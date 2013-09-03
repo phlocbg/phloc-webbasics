@@ -21,6 +21,8 @@ import javax.annotation.Nonnull;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.phloc.commons.annotations.Nonempty;
+
 /**
  * Available email settings.<br>
  * Source:
@@ -298,24 +300,38 @@ public enum ESMTPTransportProperty
   private final String m_sPropertyName;
   private final Class <?> m_aPropertyValueClass;
 
-  private ESMTPTransportProperty (@Nonnull final String sPropertyName, @Nonnull final Class <?> aPropertyValueClass)
+  private ESMTPTransportProperty (@Nonnull @Nonempty final String sPropertyName,
+                                  @Nonnull final Class <?> aPropertyValueClass)
   {
     m_sPropertyName = sPropertyName;
     m_aPropertyValueClass = aPropertyValueClass;
   }
 
+  /**
+   * @return The property name for regular SMTP transfer. Neither
+   *         <code>null</code> nor empty.
+   */
   @Nonnull
+  @Nonempty
   public String getSMTPPropertyName ()
   {
     return "mail.smtp." + m_sPropertyName;
   }
 
+  /**
+   * @return The property name for secure SMTP transfer. Neither
+   *         <code>null</code> nor empty.
+   */
   @Nonnull
+  @Nonempty
   public String getSMTPSPropertyName ()
   {
     return "mail.smtps." + m_sPropertyName;
   }
 
+  /**
+   * @return The expected value class of this property. Never <code>null</code>.
+   */
   @Nonnull
   public Class <?> getPropertyValueClass ()
   {

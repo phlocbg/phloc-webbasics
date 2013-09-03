@@ -27,13 +27,32 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * A special {@link DataSource} implementation based on data from
+ * {@link IInputStreamProvider}.
+ * 
+ * @author Philip Helger
+ */
 public final class InputStreamProviderDataSource implements DataSource
 {
   private final IInputStreamProvider m_aISS;
   private final String m_sFilename;
   private final String m_sContentType;
+
+  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS, @Nonnull final String sFilename)
+  {
+    this (aISS, sFilename, (IMimeType) null);
+  }
+
+  public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS,
+                                        @Nonnull final String sFilename,
+                                        @Nullable final IMimeType aContentType)
+  {
+    this (aISS, sFilename, aContentType == null ? null : aContentType.getAsString ());
+  }
 
   public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS,
                                         @Nonnull final String sFilename,

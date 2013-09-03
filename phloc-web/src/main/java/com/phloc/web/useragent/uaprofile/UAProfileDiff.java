@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ArrayHelper;
@@ -45,7 +46,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class UAProfileDiff
+public class UAProfileDiff
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfileDiff.class);
 
@@ -72,12 +73,16 @@ public final class UAProfileDiff
                                                                             sData,
                                                                             CCharset.CHARSET_UTF_8_OBJ);
       if (!Arrays.equals (m_aMD5Digest, aCalcedDigest))
-        s_aLogger.warn ("MD5 digest mismatch of profile diff data! Expected: " + Base64.encodeBytes (aCalcedDigest));
+        s_aLogger.warn ("MD5 digest mismatch of profile diff data! Expected '" +
+                        Base64.encodeBytes (aCalcedDigest) +
+                        "' but have '" +
+                        Base64.encodeBytes (m_aMD5Digest) +
+                        "'");
     }
 
     m_aDocument = MicroReader.readMicroXML (sData);
     if (m_aDocument == null)
-      s_aLogger.warn ("Failed to parse profile diff data '" + sData + "'");
+      s_aLogger.warn ("Failed to parse profile diff data as XML '" + sData + "'");
   }
 
   @Nonnull
@@ -87,12 +92,20 @@ public final class UAProfileDiff
     return m_sData;
   }
 
+  /**
+   * @return A copy of the MD5 digest data or <code>null</code> if non was
+   *         provided.
+   */
   @Nullable
+  @ReturnsMutableCopy
   public byte [] getMD5Digest ()
   {
     return ArrayHelper.getCopy (m_aMD5Digest);
   }
 
+  /**
+   * @return The parsed XML document or <code>null</code> in parsing failed.
+   */
   @Nullable
   public IMicroDocument getDocument ()
   {

@@ -82,7 +82,7 @@ public final class AcceptMimeTypeHandler
           if (aMimeType.hasAnyParameters ())
           {
             s_aLogger.warn ("Ignoring all contained MIME type parameter from '" + sMimeType + "'!");
-            aMimeType = new MimeType (aMimeType.getContentType (), aMimeType.getContentSubType ());
+            aMimeType = aMimeType.getCopyWithoutParameters ();
           }
           ret.addMimeType (aMimeType, dQuality);
         }

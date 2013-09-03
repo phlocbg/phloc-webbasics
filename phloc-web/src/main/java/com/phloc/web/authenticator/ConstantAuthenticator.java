@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * A simple implementation of the abstract {@link Authenticator} class using a
@@ -33,7 +34,7 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author Philip Helger
  */
-public final class ConstantAuthenticator extends Authenticator
+public class ConstantAuthenticator extends Authenticator
 {
   private final String m_sUserName;
   private final String m_sPassword;
@@ -55,9 +56,34 @@ public final class ConstantAuthenticator extends Authenticator
     m_sPassword = sPassword;
   }
 
+  /**
+   * @return The provided user name, including an eventually present domain.
+   *         Never <code>null</code>.
+   */
+  @Nonnull
+  public String getUserName ()
+  {
+    return m_sUserName;
+  }
+
+  /**
+   * @return The provided password. Never <code>null</code>.
+   */
+  @Nonnull
+  public String getPassword ()
+  {
+    return m_sPassword;
+  }
+
   @Override
   protected PasswordAuthentication getPasswordAuthentication ()
   {
     return new PasswordAuthentication (m_sUserName, m_sPassword.toCharArray ());
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("userName", m_sUserName).appendPassword ("password").toString ();
   }
 }

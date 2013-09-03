@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
 
 /**
@@ -61,7 +60,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
       throw new NullPointerException ("mimeType");
 
     // Extract only the real MIME type, without any parameters!
-    final IMimeType aRealMimeType = new MimeType (aMimeType.getContentType (), aMimeType.getContentSubType ());
+    final IMimeType aRealMimeType = aMimeType.getCopyWithoutParameters ();
 
     QValue aQuality = m_aMap.get (aRealMimeType);
     if (aQuality == null)

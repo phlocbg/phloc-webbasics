@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.http.HttpServletRequest;
 
@@ -71,8 +72,11 @@ public final class UAProfileDatabase
 
   private static final String REQUEST_ATTR = UAProfileDatabase.class.getName ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfileDatabase.class);
+
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("s_aRWLock")
   private static final Set <UAProfile> s_aUniqueUAProfiles = new HashSet <UAProfile> ();
+  @GuardedBy ("s_aRWLock")
   private static INonThrowingRunnableWithParameter <UAProfile> s_aNewUAProfileCallback;
 
   private UAProfileDatabase ()
@@ -128,8 +132,10 @@ public final class UAProfileDatabase
     String sValue = s.trim ();
 
     // Cut surrounding quotes (if any)
-    sValue = StringHelper.trimStart (sValue, "\"");
-    sValue = StringHelper.trimEnd (sValue, "\"");
+    if (StringHelper.getFirstChar (sValue) == '"')
+      sValue = sValue.substring (1);
+    if (StringHelper.getLastChar (sValue) == '"')
+      sValue = sValue.substring (0, sValue.length () - 1);
     return sValue;
   }
 
