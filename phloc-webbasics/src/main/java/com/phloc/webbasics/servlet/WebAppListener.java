@@ -46,9 +46,11 @@ import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.cleanup.CommonsCleanup;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.name.ComparatorHasDisplayName;
 import com.phloc.commons.name.IHasDisplayName;
@@ -57,6 +59,7 @@ import com.phloc.commons.string.StringParser;
 import com.phloc.commons.system.EJVMVendor;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.ThirdPartyModuleRegistry;
+import com.phloc.commons.timing.StopWatch;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.commons.utils.ClassPathHelper;
 import com.phloc.commons.vminit.VirtualMachineInitializer;
@@ -300,6 +303,50 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   }
 
   /**
+   * Get the data path to be used for this application. By default the servlet
+   * context init-parameter {@link #INIT_PARAMETER_STORAGE_PATH} is evaluated.
+   * If non is present, the servlet context path is used.
+   * 
+   * @param aSC
+   *        The servlet context. Never <code>null</code>.
+   * @return The data path to use. May neither be <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  @OverrideOnDemand
+  protected String getDataPath (@Nonnull final ServletContext aSC)
+  {
+    String sDataPath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
+    if (StringHelper.hasNoText (sDataPath))
+    {
+      // No storage path provided in web.xml
+      sDataPath = aSC.getRealPath (".");
+      if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
+        s_aLogger.info ("No servlet context init-parameter '" +
+                        INIT_PARAMETER_STORAGE_PATH +
+                        "' found! Defaulting to " +
+                        sDataPath);
+    }
+    return sDataPath;
+  }
+
+  /**
+   * Determine if the file access should be checked upon startup. By default
+   * this is done by evaluating the servlet context init-parameter
+   * {@link #INIT_PARAMETER_NO_CHECK_FILE_ACCESS}.
+   * 
+   * @param aSC
+   *        The servlet context. Never <code>null</code>.
+   * @return <code>true</code> if file access should be checked,
+   *         <code>false</code> otherwise.
+   */
+  @OverrideOnDemand
+  protected boolean shouldCheckFileAccess (@Nonnull final ServletContext aSC)
+  {
+    return !StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_NO_CHECK_FILE_ACCESS));
+  }
+
+  /**
    * This method is called to initialize the global ID factory. By default a
    * file-based {@link WebIOIntIDFactory} with the filename {@link #ID_FILENAME}
    * is created.
@@ -318,6 +365,7 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     if (s_aInited.getAndSet (true))
       throw new IllegalStateException ("WebAppListener was already instantiated!");
 
+    final StopWatch aSW = new StopWatch (true);
     m_aInitializationStartDT = PDTFactory.getCurrentLocalDateTime ();
 
     // set global debug/trace mode
@@ -362,33 +410,38 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     // begin global context
     WebScopeManager.onGlobalBegin (aSC);
 
-    // Get base storage path
-    final boolean bFileAccessCheck = !StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_NO_CHECK_FILE_ACCESS));
-    final String sServletContextPath = aSC.getRealPath (".");
-    String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_PATH);
-    if (StringHelper.hasNoText (sBasePath))
+    // Init IO
     {
-      if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
-        s_aLogger.info ("No servlet context init-parameter '" +
-                        INIT_PARAMETER_STORAGE_PATH +
-                        "' found! Defaulting to " +
-                        sServletContextPath);
-      sBasePath = sServletContextPath;
+      // Get the ServletContext base path
+      final String sServletContextPath = aSC.getRealPath (".");
+      // Get the data path
+      final String sDataPath = getDataPath (aSC);
+      if (StringHelper.hasNoText (sDataPath))
+        throw new InitializationException ("No data path was provided!");
+      final File aDataPath = new File (sDataPath);
+      // Should the file access check be performed?
+      final boolean bFileAccessCheck = shouldCheckFileAccess (aSC);
+      // Init the IO layer
+      WebFileIO.initPaths (aDataPath, new File (sServletContextPath), bFileAccessCheck);
+      WebIO.init (new WebIOResourceProviderChain (aDataPath));
     }
-    final File aBasePath = new File (sBasePath);
-    WebFileIO.initPaths (aBasePath, new File (sServletContextPath), bFileAccessCheck);
-    WebIO.init (new WebIOResourceProviderChain (aBasePath));
 
-    // Set persistent ID provider
+    // Set persistent ID provider - must be done after IO is setup
     initGlobalIDFactory ();
-
-    if (s_aLogger.isInfoEnabled ())
-      s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' was initialized");
-
-    m_aInitializationEndDT = PDTFactory.getCurrentLocalDateTime ();
 
     // Callback
     afterContextInitialized (aSC);
+
+    // Remember end time
+    m_aInitializationEndDT = PDTFactory.getCurrentLocalDateTime ();
+
+    // Finally
+    if (s_aLogger.isInfoEnabled ())
+      s_aLogger.info ("Servlet context '" +
+                      aSC.getServletContextName () +
+                      "' was initialized in " +
+                      aSW.stopAndGetMillis () +
+                      " milli seconds");
   }
 
   /**
@@ -436,11 +489,12 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   {
     final ServletContext aSC = aSCE.getServletContext ();
 
-    // Callback before
-    beforeContextDestroyed (aSC);
-
+    final StopWatch aSW = new StopWatch (true);
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' is being destroyed");
+
+    // Callback before
+    beforeContextDestroyed (aSC);
 
     // Shutdown global scope and destroy all singletons
     WebScopeManager.onGlobalEnd ();
@@ -457,6 +511,13 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
     // De-init
     s_aInited.set (false);
+
+    if (s_aLogger.isInfoEnabled ())
+      s_aLogger.info ("Servlet context '" +
+                      aSC.getServletContextName () +
+                      "' has been destroyed in " +
+                      aSW.stopAndGetMillis () +
+                      " milli seconds");
   }
 
   /**
