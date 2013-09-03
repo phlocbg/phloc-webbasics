@@ -30,6 +30,11 @@
       <text locale="en">Removed deprecated classes from encoding package</text>
     </change>
   </entry>
+  <entry date="2013-09-03" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-commons 4.0.10</text>
+    </change>
+  </entry>
   <release date="2013-08-29" version="5.0.7" />
   <entry date="2013-08-28" category="tech" action="update">
     <change>

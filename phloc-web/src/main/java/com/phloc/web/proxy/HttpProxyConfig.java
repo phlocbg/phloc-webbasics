@@ -122,16 +122,6 @@ public final class HttpProxyConfig implements IProxyConfig
     }
   }
 
-  /**
-   * @deprecated Use {@link #getAsProxy()} instead
-   */
-  @Deprecated
-  @Nonnull
-  public Proxy asProxy ()
-  {
-    return getAsProxy ();
-  }
-
   @Nonnull
   public Proxy getAsProxy ()
   {

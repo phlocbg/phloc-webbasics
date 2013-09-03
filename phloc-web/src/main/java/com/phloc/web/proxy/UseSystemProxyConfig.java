@@ -60,16 +60,6 @@ public final class UseSystemProxyConfig implements IProxyConfig
     SystemProperties.removePropertyValue (SYSPROP_JAVA_NET_USE_SYSTEM_PROXIES);
   }
 
-  /**
-   * @deprecated Use {@link #getAsProxy()} instead
-   */
-  @Deprecated
-  @Nullable
-  public Proxy asProxy ()
-  {
-    return getAsProxy ();
-  }
-
   @Nullable
   public Proxy getAsProxy ()
   {

@@ -17,7 +17,7 @@
  */
 package com.phloc.web.servlet.cookie;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -55,7 +55,7 @@ public final class CookieHelper
     if (aHttpRequest == null)
       throw new NullPointerException ("request");
 
-    final Map <String, Cookie> ret = new HashMap <String, Cookie> ();
+    final Map <String, Cookie> ret = new LinkedHashMap <String, Cookie> ();
     final Cookie [] aCookies = aHttpRequest.getCookies ();
     if (aCookies != null)
       for (final Cookie aCookie : aCookies)

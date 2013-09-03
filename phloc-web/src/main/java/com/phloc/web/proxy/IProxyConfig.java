@@ -37,15 +37,6 @@ public interface IProxyConfig extends Serializable
   /**
    * @return This proxy configuration as standard {@link java.net.Proxy} object.
    *         May be <code>null</code> if no adequate object can be created.
-   * @deprecated Use {@link #getAsProxy()} instead
-   */
-  @Deprecated
-  @Nullable
-  Proxy asProxy ();
-
-  /**
-   * @return This proxy configuration as standard {@link java.net.Proxy} object.
-   *         May be <code>null</code> if no adequate object can be created.
    */
   @Nullable
   Proxy getAsProxy ();

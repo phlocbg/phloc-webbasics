@@ -28,6 +28,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.WorkInProgress;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.web.CWeb;
 
@@ -36,6 +37,7 @@ import com.phloc.web.CWeb;
  * 
  * @author Philip Helger
  */
+@WorkInProgress
 @Deprecated
 public class MyProxySelector extends ProxySelector
 {

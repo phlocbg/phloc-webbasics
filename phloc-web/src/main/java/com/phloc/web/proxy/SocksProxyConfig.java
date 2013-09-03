@@ -101,16 +101,6 @@ public final class SocksProxyConfig implements IProxyConfig
     SystemProperties.removePropertyValue (SYSPROP_SOCKS_PROXY_PORT);
   }
 
-  /**
-   * @deprecated Use {@link #getAsProxy()} instead
-   */
-  @Deprecated
-  @Nonnull
-  public Proxy asProxy ()
-  {
-    return getAsProxy ();
-  }
-
   @Nonnull
   public Proxy getAsProxy ()
   {
