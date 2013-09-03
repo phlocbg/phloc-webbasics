@@ -77,7 +77,7 @@ public final class MailAPI
                                                                                      new SynchronousQueue <Runnable> (),
                                                                                      s_aThreadFactory);
   private static FailedMailQueue s_aFailedMailQueue = new FailedMailQueue ();
-  private static int s_nMaxMailQueueLen = 500;
+  private static final int s_nMaxMailQueueLen = 500;
 
   private MailAPI ()
   {}
@@ -123,6 +123,8 @@ public final class MailAPI
     {
       s_aRWLock.writeLock ().unlock ();
     }
+
+    s_aLogger.info ("Set FailedMailQueue to " + aFailedMailQueue);
   }
 
   @Nonnull

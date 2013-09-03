@@ -37,6 +37,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This is a singleton object that keeps all the mails that could not be send.
@@ -212,5 +213,11 @@ public class FailedMailQueue
     {
       m_aRWLock.writeLock ().unlock ();
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }
