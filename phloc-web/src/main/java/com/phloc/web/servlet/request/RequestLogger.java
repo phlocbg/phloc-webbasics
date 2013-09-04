@@ -129,33 +129,11 @@ public final class RequestLogger
     s_aLogger.info (getRequestFields (aHttpRequest).toString ());
   }
 
-  /**
-   * @deprecated Use {@link #getHTTPHeaderMap(HttpServletRequest)} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  public static Map <String, String> getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
-  {
-    return getHTTPHeaderMap (aHttpRequest);
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public static Map <String, String> getHTTPHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
     return getHTTPHeaderMap (RequestHelper.getRequestHeaderMap (aHttpRequest));
-  }
-
-  /**
-   * @deprecated Use {@link #getHTTPHeaderMap(HTTPHeaderMap)} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  public static Map <String, String> getRequestHeaderMap (@Nonnull final HTTPHeaderMap aMap)
-  {
-    return getHTTPHeaderMap (aMap);
   }
 
   @Nonnull

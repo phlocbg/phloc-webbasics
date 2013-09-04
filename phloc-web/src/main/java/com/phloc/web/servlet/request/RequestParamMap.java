@@ -286,6 +286,14 @@ public final class RequestParamMap implements IRequestParamMap
     return ret;
   }
 
+  /**
+   * This method doesn't make sense but it should stay, so that it's easy to
+   * spot usage of this invalid method.
+   * 
+   * @param sBaseName
+   *        Base name
+   * @return Base name as is.
+   */
   @Nonnull
   @Nonempty
   @Deprecated

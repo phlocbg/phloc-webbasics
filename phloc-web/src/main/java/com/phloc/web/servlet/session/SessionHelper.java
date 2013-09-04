@@ -71,13 +71,6 @@ public final class SessionHelper
     return EChange.UNCHANGED;
   }
 
-  @Deprecated
-  @Nonnull
-  public static HttpSession safeGetSession (@Nonnull final HttpServletRequest aRequest)
-  {
-    return aRequest.getSession (true);
-  }
-
   @Nonnull
   public static Enumeration <String> getAllAttributes (@Nonnull final HttpSession aSession)
   {

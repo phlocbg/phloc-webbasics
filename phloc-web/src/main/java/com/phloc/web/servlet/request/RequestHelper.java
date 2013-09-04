@@ -280,23 +280,6 @@ public final class RequestHelper
     return nServerPort;
   }
 
-  /**
-   * @deprecated Use
-   *             {@link #getFullServerNameAndPath(String,String,int,String,String)}
-   *             instead
-   */
-  @Deprecated
-  @Nonnull
-  @Nonempty
-  public static String getUrlString (@Nonnull final String sScheme,
-                                     @Nonnull final String sServerName,
-                                     final int nServerPort,
-                                     @Nullable final String sPath,
-                                     @Nullable final String sQueryString)
-  {
-    return getFullServerNameAndPath (sScheme, sServerName, nServerPort, sPath, sQueryString);
-  }
-
   @Nonnull
   @Nonempty
   public static StringBuilder getFullServerName (@Nonnull final String sScheme,
