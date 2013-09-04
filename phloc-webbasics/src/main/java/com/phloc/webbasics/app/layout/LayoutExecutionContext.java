@@ -26,6 +26,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.servlet.request.IRequestParamMap;
@@ -301,5 +302,13 @@ public class LayoutExecutionContext
   public BrowserInfo getBrowserInfo ()
   {
     return getUserAgent ().getBrowserInfo ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("requestURL", RequestHelper.getURI (m_aRequestScope.getRequest ()))
+                                       .append ("displayLocale", m_aDisplayLocale)
+                                       .toString ();
   }
 }

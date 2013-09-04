@@ -43,12 +43,18 @@ public class WebPageExecutionContext extends LayoutExecutionContext
     m_aWebPage = aWebPage;
   }
 
+  /**
+   * @return The invoked web page. Never <code>null</code>.
+   */
   @Nonnull
   public IWebPage getWebPage ()
   {
     return m_aWebPage;
   }
 
+  /**
+   * @return The node list to be filled with content.
+   */
   @Nonnull
   public HCNodeList getNodeList ()
   {

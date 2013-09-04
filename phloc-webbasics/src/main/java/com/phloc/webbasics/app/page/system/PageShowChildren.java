@@ -29,12 +29,14 @@ import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
 import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCUL;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
@@ -136,15 +138,25 @@ public class PageShowChildren extends AbstractWebPage
     m_aRenderer = aRenderer;
   }
 
+  @Nonnull
+  @OverrideOnDemand
+  protected HCUL createRootUL ()
+  {
+    return new HCUL ();
+  }
+
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+
     final DefaultTreeItemWithID <String, IMenuObject> aMenuTreeItem = m_aMenuTree.getItemWithID (getID ());
     if (aMenuTreeItem != null && aMenuTreeItem.getData () instanceof IMenuItem)
     {
-      final HCUL aUL = new HCUL ();
-      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback (aUL, aWPEC.getDisplayLocale (), m_aRenderer));
-      aWPEC.getNodeList ().addChild (aUL);
+      final HCUL aUL = createRootUL ();
+      TreeWalker.walkSubTree (aMenuTreeItem, new ShowChildrenCallback (aUL, aDisplayLocale, m_aRenderer));
+      aNodeList.addChild (aUL);
     }
   }
 }

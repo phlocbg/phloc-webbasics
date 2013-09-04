@@ -25,18 +25,19 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.state.EValidity;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
+import com.phloc.html.CHTMLAttributes;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCForm;
-import com.phloc.html.hc.html.HCForm_FileUpload;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
@@ -164,9 +165,11 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  public static final HCForm_FileUpload createFormFileUploadSelf ()
+  public static final HCForm createFormFileUploadSelf ()
   {
-    return new HCForm_FileUpload (LinkUtils.getSelfHref ());
+    final HCForm aForm = createFormSelf ();
+    aForm.setCustomAttr (CHTMLAttributes.ENCTYPE, CMimeType.MULTIPART_FORMDATA.getAsString ());
+    return aForm;
   }
 
   /**
@@ -235,13 +238,14 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * 
    * @param aWPEC
    *        The web page execution context
-   * @return The created help icon node.
+   * @return The created help icon node. May be <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   @OverrideOnDemand
   protected IHCNode getHelpIconNode (@Nonnull final WebPageExecutionContext aWPEC)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
     final HCA aHelpNode = new HCA (getHelpURL (aDisplayLocale));
     final String sPageName = getDisplayText (aDisplayLocale);
     aHelpNode.setTitle (EWebBasicsText.PAGE_HELP_TITLE.getDisplayTextWithArgs (aDisplayLocale, sPageName));
@@ -261,6 +265,22 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   public boolean isHelpAvailable (@Nonnull final WebPageExecutionContext aWPEC)
   {
     return false;
+  }
+
+  /**
+   * Overridable method to attach the help node to the page. This is called as
+   * the last action.
+   * 
+   * @param aWPEC
+   *        The web page execution context. Never <code>null</code>.
+   * @param aHelpNode
+   *        The help node to be inserted. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  protected void insertHelpNode (@Nonnull final WebPageExecutionContext aWPEC, @Nonnull final IHCNode aHelpNode)
+  {
+    // Add the help icon as the first child of the resulting node list
+    aWPEC.getNodeList ().addChild (0, aHelpNode);
   }
 
   /**
@@ -286,8 +306,9 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
     // Is help available for this page?
     if (isHelpAvailable (aWPEC))
     {
-      // Add the help icon as the first child of the resulting node list
-      aWPEC.getNodeList ().addChild (0, getHelpIconNode (aWPEC));
+      final IHCNode aHelpNode = getHelpIconNode (aWPEC);
+      if (aHelpNode != null)
+        insertHelpNode (aWPEC, aHelpNode);
     }
   }
 }

@@ -24,7 +24,7 @@ import com.phloc.appbasics.app.page.IPage;
 import com.phloc.html.hc.IHCNode;
 
 /**
- * The base interface for a single page of content.
+ * The base interface for a single web page of content.
  * 
  * @author Philip Helger
  */
