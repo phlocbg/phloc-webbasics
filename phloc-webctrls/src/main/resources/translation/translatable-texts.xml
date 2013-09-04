@@ -18,10 +18,18 @@
     limitations under the License.
 
 -->
-<translationitems count="98">
+<translationitems count="101">
   <item id="com.phloc.webctrls.bootstrap.EBootstrapText.ENTER_SEARCH_STRING">
     <de>Geben Sie einen Suchtext ein</de>
     <en>Enter a search phrase</en>
+  </item>
+  <item id="com.phloc.webctrls.bootstrap3.EBootstrap3Text.ENTER_SEARCH_STRING">
+    <de>Geben Sie einen Suchtext ein</de>
+    <en>Enter a search phrase</en>
+  </item>
+  <item id="com.phloc.webctrls.bootstrap3.EBootstrap3Text.TOOGLE_NAVIGATION">
+    <de>Navigation ein/ausblenden</de>
+    <en>Toggle navigation</en>
   </item>
   <item id="com.phloc.webctrls.colorbox.EColorBoxText.CLOSE">
     <de>Schließen</de>
@@ -424,5 +432,9 @@ Valid extension(s): {extensions}.</en>
   <item id="com.phloc.webctrls.fineupload.EFineUploaderText.WAITING_FOR_RESPONSE">
     <de>Verarbeitung...</de>
     <en>Processing...</en>
+  </item>
+  <item id="com.phloc.webctrls.typeahead.ETypeaheadText.ENTER_SEARCH_STRING">
+    <de>Geben Sie einen Suchtext ein</de>
+    <en>Enter a search phrase</en>
   </item>
 </translationitems>

@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="138">
+<translationitems count="152">
   <item id="com.phloc.webpages.EWebPageText.IMAGE_NONE">
     <de>keines</de>
     <en>none</en>
@@ -35,6 +35,58 @@
     <de>Bearbeite &#39;&#39;{0}&#39;&#39;</de>
     <en>Edit &#39;&#39;{0}&#39;&#39;</en>
   </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.BUTTON_DELETE">
+    <de>Alle löschen</de>
+    <en>Delete all</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.DELETE_ALL_ERROR">
+    <de>Fehler beim Löschen der gemerkten Daten!</de>
+    <en>Error deleting the saved data!</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.DELETE_ALL_QUERY">
+    <de>Sollen alle gemerkten Daten wirklich gelöscht werden?</de>
+    <en>Are you sure to delete all saved data?</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.DELETE_ALL_SUCCESS">
+    <de>Alle gemerkten Daten wurden erfolgreich gelöscht!</de>
+    <en>All saved data was successfully deleted!</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.DELETE_ERROR">
+    <de>Fehler beim Löschen der gemerkten Daten!</de>
+    <en>Error deleting the saved data!</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.DELETE_QUERY">
+    <de>Sollen diese gemerkten Daten wirklich gelöscht werden?</de>
+    <en>Are you sure to delete this saved data?</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.DELETE_SUCCESS">
+    <de>Die gemerkten Daten wurden erfolgreich gelöscht!</de>
+    <en>The saved data was successfully deleted!</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.HEADER_ACTIONS">
+    <de>Aktionen</de>
+    <en>Actions</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.HEADER_PAGE">
+    <de>Seite</de>
+    <en>Page</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.HEADER_REMEMBERED_AT">
+    <de>Gemerkt am</de>
+    <en>Remebered at</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.NONE_PRESENT">
+    <de>Es sind keine gemerkten Daten vorhanden!</de>
+    <en>No saved data is available</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.SAVED_STATE_DELETE">
+    <de>Lösche diese gemerkten Daten</de>
+    <en>Delete this saved state</en>
+  </item>
+  <item id="com.phloc.webpages.form.BasePageSavedStates$EText.SAVED_STATE_EDIT">
+    <de>Daten weiter bearbeiten</de>
+    <en>Continue editing this data</en>
+  </item>
   <item id="com.phloc.webpages.info.BasePageSysInfoEnvironmentVariables$EText.MSG_NAME">
     <de>Name</de>
     <en>Name</en>
@@ -42,6 +94,10 @@
   <item id="com.phloc.webpages.info.BasePageSysInfoEnvironmentVariables$EText.MSG_VALUE">
     <de>Wert</de>
     <en>Value</en>
+  </item>
+  <item id="com.phloc.webpages.info.BasePageSysInfoRequest$EText.MSG_COOKIES">
+    <de>Cookies</de>
+    <en>Cookies</en>
   </item>
   <item id="com.phloc.webpages.info.BasePageSysInfoRequest$EText.MSG_HTTP_HEADERS">
     <de>HTTP Header</de>
