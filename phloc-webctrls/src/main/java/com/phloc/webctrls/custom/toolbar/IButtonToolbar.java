@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.html.hc.html.IHCDiv;
+import com.phloc.html.hc.api.IHCDiv;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;

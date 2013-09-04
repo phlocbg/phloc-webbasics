@@ -26,8 +26,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.hc.api.IHCCell;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.html.hc.html.IHCCell;
 
 @Immutable
 public class ColumnDefinition implements Serializable

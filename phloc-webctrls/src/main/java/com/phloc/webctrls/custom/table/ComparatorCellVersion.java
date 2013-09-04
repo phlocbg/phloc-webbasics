@@ -23,7 +23,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.version.Version;
-import com.phloc.html.hc.html.IHCCell;
+import com.phloc.html.hc.api.IHCCell;
 
 /**
  * This comparator is responsible for sorting cells by {@link Version}

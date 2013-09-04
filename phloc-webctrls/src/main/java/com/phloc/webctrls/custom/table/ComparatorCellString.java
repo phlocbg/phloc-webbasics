@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractCollationComparator;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.html.IHCCell;
+import com.phloc.html.hc.api.IHCCell;
 
 public class ComparatorCellString extends AbstractCollationComparator <IHCCell <?>>
 {
