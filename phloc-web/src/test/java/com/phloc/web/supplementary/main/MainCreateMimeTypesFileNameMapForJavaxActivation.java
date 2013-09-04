@@ -33,7 +33,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.datetime.PDTFactory;
 
-public final class CreateMimeTypesFileNameMapForJavaxActivation
+public final class MainCreateMimeTypesFileNameMapForJavaxActivation
 {
   /**
    * Create the mime.types file that is read by javax.activation. See class
@@ -68,7 +68,7 @@ public final class CreateMimeTypesFileNameMapForJavaxActivation
         w.write ("# " + sLine + '\n');
       w.write ("#\n");
       w.write ("# Created on: " + PDTFactory.getCurrentDateTime ().toString () + "\n");
-      w.write ("# Created by: " + CreateMimeTypesFileNameMapForJavaxActivation.class.getName () + "\n");
+      w.write ("# Created by: " + MainCreateMimeTypesFileNameMapForJavaxActivation.class.getName () + "\n");
       w.write ("#\n");
 
       // write MIME type mapping

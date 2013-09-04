@@ -10,8 +10,8 @@
 # 
 # Vienna, Austria, Europe, World, Milky Way, Universe, 2004 - 2013
 #
-# Created on: 2013-02-12T15:36:21.016+01:00
-# Created by: com.phloc.tools.CreateMimeTypesFileNameMapForJavaxActivation
+# Created on: 2013-09-04T08:03:47.409+02:00
+# Created by: com.phloc.web.supplementary.main.MainCreateMimeTypesFileNameMapForJavaxActivation
 #
 type=application/STEP exts=step,stp
 type=application/andrew-inset exts=ez
