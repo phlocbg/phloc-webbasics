@@ -2,6 +2,10 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>9/4/13</td><td colspan="4">_Release *5.1.0*_</td></tr>
+<tr><td>9/3/13</td><td>add</td><td>api</td><td></td><td>Added getters to ConstantAuthenticator</td></tr>
+<tr><td>9/3/13</td><td>remove</td><td>tech</td><td>*yes*</td><td>Removed deprecated classes and methods</td></tr>
+<tr><td>9/3/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.0.10</td></tr>
 <tr border="1"><td>8/29/13</td><td colspan="4">_Release *5.0.7*_</td></tr>
 <tr><td>8/28/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.0.9</td></tr>
 <tr><td>8/20/13</td><td>add</td><td>api</td><td></td><td>Extended RequestLogger to handle Cookies as well</td></tr>
