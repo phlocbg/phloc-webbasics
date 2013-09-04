@@ -22,7 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.html.hc.IHCRequestField;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.masterdata.person.ESalutation;
 import com.phloc.webctrls.custom.HCExtSelect;
 

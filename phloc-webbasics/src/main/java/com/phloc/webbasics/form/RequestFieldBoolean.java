@@ -27,8 +27,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.IHCRequestFieldBoolean;
 import com.phloc.html.hc.html.HCCheckBox;
+import com.phloc.html.request.IHCRequestFieldBoolean;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**

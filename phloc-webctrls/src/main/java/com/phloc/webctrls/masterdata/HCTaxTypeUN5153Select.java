@@ -21,7 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.html.hc.IHCRequestField;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.masterdata.tax.ETaxTypeUN5153;
 import com.phloc.webctrls.custom.HCExtSelect;
 

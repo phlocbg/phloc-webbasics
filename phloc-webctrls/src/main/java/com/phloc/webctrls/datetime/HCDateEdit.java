@@ -23,12 +23,12 @@ import javax.annotation.Nonnull;
 
 import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.hc.IHCNodeBuilder;
-import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.form.RequestFieldDate;

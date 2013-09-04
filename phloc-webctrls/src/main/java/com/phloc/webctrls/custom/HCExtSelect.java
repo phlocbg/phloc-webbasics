@@ -23,9 +23,9 @@ import javax.annotation.Nonnull;
 
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCOption;
 import com.phloc.html.hc.html.HCSelect;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.EWebBasicsText;
 
 public class HCExtSelect extends HCSelect

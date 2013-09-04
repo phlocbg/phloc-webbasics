@@ -47,7 +47,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.api.IHCCell;
+import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;

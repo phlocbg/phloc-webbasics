@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.html.hc.IHCRequestField;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.webscopes.util.SessionBackedRequestFieldData;
 
 public class SessionBackedRequestField extends SessionBackedRequestFieldData implements IHCRequestField

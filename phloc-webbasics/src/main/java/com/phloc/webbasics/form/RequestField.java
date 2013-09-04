@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
-import com.phloc.html.hc.IHCRequestField;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.webscopes.util.RequestFieldData;
 
 public class RequestField extends RequestFieldData implements IHCRequestField

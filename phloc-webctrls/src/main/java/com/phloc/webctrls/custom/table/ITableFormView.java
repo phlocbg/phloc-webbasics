@@ -3,8 +3,8 @@ package com.phloc.webctrls.custom.table;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.api.IHCBaseTable;
 import com.phloc.webctrls.custom.IFormLabel;
 
 public interface ITableFormView <THISTYPE extends ITableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>

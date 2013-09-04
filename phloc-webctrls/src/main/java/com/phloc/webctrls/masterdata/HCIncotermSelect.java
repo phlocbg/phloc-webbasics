@@ -19,7 +19,7 @@ package com.phloc.webctrls.masterdata;
 
 import java.util.Locale;
 
-import com.phloc.html.hc.IHCRequestField;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.masterdata.trade.EIncoterm;
 import com.phloc.webctrls.custom.HCExtSelect;
 

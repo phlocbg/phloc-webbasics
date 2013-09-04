@@ -20,8 +20,8 @@ package com.phloc.webctrls.autosize;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCTextArea;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**

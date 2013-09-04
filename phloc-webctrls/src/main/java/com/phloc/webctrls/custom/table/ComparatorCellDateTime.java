@@ -31,7 +31,7 @@ import com.phloc.datetime.PDTUtils;
 import com.phloc.datetime.format.PDTFromString;
 import com.phloc.datetime.format.SerializableDateTimeFormatter;
 import com.phloc.datetime.format.SerializableDateTimeFormatter.EFormatStyle;
-import com.phloc.html.hc.api.IHCCell;
+import com.phloc.html.hc.IHCCell;
 
 /**
  * This comparator is responsible for sorting cells by date and/or time.

@@ -25,7 +25,6 @@ import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
-import com.phloc.html.hc.IHCRequestField;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCRow;
@@ -35,6 +34,7 @@ import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.form.RequestFieldDate;
 

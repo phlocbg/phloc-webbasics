@@ -37,7 +37,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.api.IHCCell;
+import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;

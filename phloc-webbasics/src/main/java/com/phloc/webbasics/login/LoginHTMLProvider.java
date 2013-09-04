@@ -25,8 +25,8 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCButton_Submit;
 import com.phloc.html.hc.html.HCCenter;
@@ -171,7 +171,7 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
     customizeLoginFields (aTable, aDisplayLocale);
 
     // Submit button
-    final AbstractHCCell aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());
+    final IHCCell <?> aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());
     aCell.addChild (new HCButton_Submit (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale)));
   }
 }

@@ -34,7 +34,7 @@ import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
-import com.phloc.html.hc.api.IHCBaseTable;
+import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;

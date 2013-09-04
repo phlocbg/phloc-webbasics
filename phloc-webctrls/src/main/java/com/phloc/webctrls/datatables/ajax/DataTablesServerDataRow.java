@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.api.IHCCell;
+import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCRow;
 

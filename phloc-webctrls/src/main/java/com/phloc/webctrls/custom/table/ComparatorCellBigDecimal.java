@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.locale.LocaleFormatter;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.api.IHCCell;
+import com.phloc.html.hc.IHCCell;
 
 /**
  * This comparator is responsible for sorting cells by BigDecimal

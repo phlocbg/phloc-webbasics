@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.html.hc.IHCRequestField;
+import com.phloc.html.request.IHCRequestField;
 import com.phloc.masterdata.vat.ComparatorVATItemPercentage;
 import com.phloc.masterdata.vat.IVATItem;
 import com.phloc.masterdata.vat.VATManager;

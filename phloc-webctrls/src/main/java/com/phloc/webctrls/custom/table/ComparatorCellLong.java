@@ -26,7 +26,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractIntegerComparator;
 import com.phloc.commons.locale.LocaleFormatter;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.api.IHCCell;
+import com.phloc.html.hc.IHCCell;
 
 public class ComparatorCellLong extends AbstractIntegerComparator <IHCCell <?>>
 {
