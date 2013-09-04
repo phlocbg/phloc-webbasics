@@ -23,13 +23,13 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.html.hc.html.HCButton;
+import com.phloc.html.hc.html.AbstractHCButton;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
-public class Bootstrap3Button extends HCButton
+public class Bootstrap3Button extends AbstractHCButton <Bootstrap3Button>
 {
   private EBootstrap3ButtonType m_eButtonType = EBootstrap3ButtonType.DEFAULT;
   private EBootstrap3ButtonSize m_eButtonSize = EBootstrap3ButtonSize.DEFAULT;

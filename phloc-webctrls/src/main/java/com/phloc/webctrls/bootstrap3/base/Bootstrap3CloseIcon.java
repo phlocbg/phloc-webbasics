@@ -19,11 +19,11 @@ package com.phloc.webctrls.bootstrap3.base;
 
 import com.phloc.html.CHTMLAttributes;
 import com.phloc.html.entities.EHTMLEntity;
-import com.phloc.html.hc.html.HCButton;
+import com.phloc.html.hc.html.AbstractHCButton;
 import com.phloc.html.hc.impl.HCEntityNode;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 
-public class Bootstrap3CloseIcon extends HCButton
+public class Bootstrap3CloseIcon extends AbstractHCButton <Bootstrap3CloseIcon>
 {
   public Bootstrap3CloseIcon ()
   {
