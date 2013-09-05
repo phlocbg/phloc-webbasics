@@ -60,7 +60,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class MockServletContext implements ServletContext
+public class MockServletContext implements ServletContext
 {
   public static final int SERVLET_SPEC_MAJOR_VERSION = 2;
   public static final int SERVLET_SPEC_MINOR_VERSION = 5;

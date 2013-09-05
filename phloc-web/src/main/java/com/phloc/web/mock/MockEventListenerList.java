@@ -46,7 +46,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class MockEventListenerList
+public class MockEventListenerList
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MockEventListenerList.class);
 

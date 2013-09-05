@@ -19,10 +19,10 @@ package com.phloc.web.http;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.mime.IMimeType;
-import com.phloc.commons.mime.MimeTypeParser;
 
 /**
  * Represents a list of Accept HTTP header values
@@ -81,9 +81,18 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
     return aQuality;
   }
 
+  /**
+   * Return the associated quality of the given MIME type using the fallback
+   * mechanism.
+   * 
+   * @param sMimeType
+   *        The MIME type name to query. May be <code>null</code>.
+   * @return 0 means not accepted, 1 means fully accepted. If the passed MIME
+   *         type is invalid, the "not accepted" quality is returned.
+   */
   public double getQualityOfMimeType (@Nonnull final String sMimeType)
   {
-    return getQualityOfMimeType (MimeTypeParser.parseMimeType (sMimeType));
+    return getQualityOfMimeType (AcceptMimeTypeHandler.safeParseMimeType (sMimeType));
   }
 
   /**
@@ -91,11 +100,14 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
    * mechanism.
    * 
    * @param aMimeType
-   *        The charset name to query. May not be <code>null</code>.
-   * @return 0 means not accepted, 1 means fully accepted.
+   *        The MIME type to query. May be <code>null</code>.
+   * @return 0 means not accepted, 1 means fully accepted. If the passed MIME
+   *         type is <code>null</code>, the "not accepted" quality is returned.
    */
-  public double getQualityOfMimeType (@Nonnull final IMimeType aMimeType)
+  public double getQualityOfMimeType (@Nullable final IMimeType aMimeType)
   {
+    if (aMimeType == null)
+      return QValue.MIN_QUALITY;
     return getQValueOfMimeType (aMimeType).getQuality ();
   }
 
@@ -108,18 +120,20 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
    */
   public boolean supportsMimeType (@Nonnull final String sMimeType)
   {
-    return supportsMimeType (MimeTypeParser.parseMimeType (sMimeType));
+    return supportsMimeType (AcceptMimeTypeHandler.safeParseMimeType (sMimeType));
   }
 
   /**
    * Check if the passed MIME type is supported, incl. fallback handling
    * 
    * @param aMimeType
-   *        The MIME type to check
+   *        The MIME type to check. May be <code>null</code>.
    * @return <code>true</code> if it is supported, <code>false</code> if not
    */
-  public boolean supportsMimeType (@Nonnull final IMimeType aMimeType)
+  public boolean supportsMimeType (@Nullable final IMimeType aMimeType)
   {
+    if (aMimeType == null)
+      return false;
     return getQValueOfMimeType (aMimeType).isAboveMinimumQuality ();
   }
 
@@ -133,7 +147,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
    */
   public boolean explicitlySupportsMimeType (@Nonnull final String sMimeType)
   {
-    return explicitlySupportsMimeType (MimeTypeParser.parseMimeType (sMimeType));
+    return explicitlySupportsMimeType (AcceptMimeTypeHandler.safeParseMimeType (sMimeType));
   }
 
   /**
@@ -141,11 +155,13 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
    * MIME types (xxx/*)
    * 
    * @param aMimeType
-   *        The MIME type to check
+   *        The MIME type to check. May be <code>null</code>.
    * @return <code>true</code> if it is supported, <code>false</code> if not
    */
-  public boolean explicitlySupportsMimeType (@Nonnull final IMimeType aMimeType)
+  public boolean explicitlySupportsMimeType (@Nullable final IMimeType aMimeType)
   {
+    if (aMimeType == null)
+      return false;
     final QValue aQuality = m_aMap.get (aMimeType);
     return aQuality != null && aQuality.isAboveMinimumQuality ();
   }

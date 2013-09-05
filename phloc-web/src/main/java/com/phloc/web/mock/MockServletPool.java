@@ -44,7 +44,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class MockServletPool
+public class MockServletPool
 {
   /**
    * Contains a single servlet item

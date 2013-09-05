@@ -36,7 +36,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class MockHttpListener
+public class MockHttpListener
 {
   private static MockEventListenerList s_aDefaultListener = new MockEventListenerList ();
   private static MockEventListenerList s_aListener = new MockEventListenerList ();

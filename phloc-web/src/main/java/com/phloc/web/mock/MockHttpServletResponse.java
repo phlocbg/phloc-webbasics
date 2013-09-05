@@ -33,6 +33,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.IHasLocale;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -46,6 +49,7 @@ import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeTypeParser;
+import com.phloc.commons.mime.MimeTypeParserException;
 import com.phloc.commons.mime.MimeTypeUtils;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.web.CWeb;
@@ -57,12 +61,13 @@ import com.phloc.web.CWeb;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class MockHttpServletResponse implements HttpServletResponse, IHasLocale
+public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
 {
   public static final int DEFAULT_SERVER_PORT = CWeb.DEFAULT_PORT_HTTP;
   public static final String DEFAULT_CHARSET_NAME = CCharset.CHARSET_UTF_8;
   public static final Charset DEFAULT_CHARSET_OBJ = CCharset.CHARSET_UTF_8_OBJ;
   private static final int DEFAULT_BUFFER_SIZE = 4096;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MockHttpServletResponse.class);
 
   private boolean m_bOutputStreamAccessAllowed = true;
   private boolean m_bWriterAccessAllowed = true;
@@ -248,10 +253,17 @@ public final class MockHttpServletResponse implements HttpServletResponse, IHasL
     m_sContentType = sContentType;
     if (sContentType != null)
     {
-      final IMimeType aContentType = MimeTypeParser.parseMimeType (sContentType);
-      final String sEncoding = MimeTypeUtils.getCharsetNameFromMimeType (aContentType);
-      if (sEncoding != null)
-        setCharacterEncoding (sEncoding);
+      try
+      {
+        final IMimeType aContentType = MimeTypeParser.parseMimeType (sContentType);
+        final String sEncoding = MimeTypeUtils.getCharsetNameFromMimeType (aContentType);
+        if (sEncoding != null)
+          setCharacterEncoding (sEncoding);
+      }
+      catch (final MimeTypeParserException ex)
+      {
+        s_aLogger.warn ("Passed content type '" + sContentType + "' cannot be parsed as a MIME type");
+      }
     }
   }
 

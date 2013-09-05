@@ -29,7 +29,7 @@ import javax.servlet.ServletContext;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class OfflineHttpServletRequest extends MockHttpServletRequest
+public class OfflineHttpServletRequest extends MockHttpServletRequest
 {
   public OfflineHttpServletRequest ()
   {

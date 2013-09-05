@@ -30,6 +30,7 @@ import com.phloc.commons.mime.EMimeContentType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
+import com.phloc.commons.mime.MimeTypeParserException;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
@@ -76,7 +77,7 @@ public final class AcceptMimeTypeHandler
           dQuality = StringParser.parseDouble (aParts[1].trim ().substring (2), QValue.MAX_QUALITY);
 
         final String sMimeType = aParts[0];
-        IMimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType);
+        IMimeType aMimeType = safeParseMimeType (sMimeType);
         if (aMimeType != null)
         {
           if (aMimeType.hasAnyParameters ())
@@ -112,5 +113,21 @@ public final class AcceptMimeTypeHandler
       aHttpRequest.setAttribute (AcceptMimeTypeList.class.getName (), aValue);
     }
     return aValue;
+  }
+
+  @Nullable
+  public static IMimeType safeParseMimeType (@Nullable final String sMimeType)
+  {
+    try
+    {
+      return MimeTypeParser.parseMimeType (sMimeType);
+    }
+    catch (final MimeTypeParserException ex)
+    {
+      if ("*".equals (sMimeType))
+        return new MimeType (EMimeContentType._STAR, "*");
+    }
+    s_aLogger.warn ("Unparsable MIME type '" + sMimeType + "'");
+    return null;
   }
 }
