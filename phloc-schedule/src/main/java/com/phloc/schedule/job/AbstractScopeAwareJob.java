@@ -206,7 +206,11 @@ public abstract class AbstractScopeAwareJob implements Job
   {
     // State variables
     ESuccess eExecSuccess = ESuccess.FAILURE;
-    final JobDataMap aJobDataMap = aContext.getJobDetail ().getJobDataMap ();
+
+    // Create a local copy of the job data map to allow for modifications and
+    // alteration
+    final JobDataMap aJobDataMap = new JobDataMap (aContext.getMergedJobDataMap ());
+
     final String sApplicationScopeID = getApplicationScopeID (aJobDataMap);
 
     beforeExecute (aJobDataMap);
