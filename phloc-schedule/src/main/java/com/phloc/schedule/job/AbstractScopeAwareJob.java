@@ -117,13 +117,20 @@ public abstract class AbstractScopeAwareJob implements Job
   protected abstract String getApplicationScopeID (@Nonnull final JobDataMap aJobDataMap);
 
   /**
+   * Get the ID of the current user. This method is only called for long running
+   * jobs.
+   * 
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
    * @return The user ID to be used. May not be <code>null</code>.
    */
   @Nonnull
-  protected abstract String getCurrentUsedID (@Nonnull final JobDataMap aJobDataMap);
+  protected abstract String getCurrentUserID (@Nonnull final JobDataMap aJobDataMap);
 
+  /**
+   * @return The {@link LongRunningJobManager} to be used. This method is only
+   *         invoked for long running jobs!
+   */
   @Nonnull
   protected abstract LongRunningJobManager getLongRunningJobManager ();
 
@@ -194,13 +201,13 @@ public abstract class AbstractScopeAwareJob implements Job
     String sLongRunningJobID = null;
     final ILongRunningJob aLongRunningJob = this instanceof ILongRunningJob ? (ILongRunningJob) this : null;
     final JobDataMap aJobDataMap = aContext.getJobDetail ().getJobDataMap ();
-    final String sScopeApplicationID = getApplicationScopeID (aJobDataMap);
+    final String sApplicationScopeID = getApplicationScopeID (aJobDataMap);
 
     beforeExecute (aJobDataMap);
     try
     {
       // Scopes (ensure to create a new scope each time!)
-      WebScopeManager.onRequestBegin (sScopeApplicationID,
+      WebScopeManager.onRequestBegin (sApplicationScopeID,
                                       new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ()
                                                                                     .getServletContext (), false),
                                       new MockHttpServletResponse ());
@@ -214,7 +221,7 @@ public abstract class AbstractScopeAwareJob implements Job
         // access the current user!
         if (aLongRunningJob != null)
         {
-          sLongRunningJobID = getLongRunningJobManager ().startJob (aLongRunningJob, getCurrentUsedID (aJobDataMap));
+          sLongRunningJobID = getLongRunningJobManager ().startJob (aLongRunningJob, getCurrentUserID (aJobDataMap));
         }
 
         final StopWatch aSW = new StopWatch (true);
@@ -243,9 +250,10 @@ public abstract class AbstractScopeAwareJob implements Job
       }
       finally
       {
-        if (sLongRunningJobID != null)
+        if (sLongRunningJobID != null && aLongRunningJob != null)
         {
           // End long running job before the request scope is closed
+          // But the job itself continues to run!
           try
           {
             final LongRunningJobResult aJobResult = aLongRunningJob.createResult ();
@@ -256,7 +264,7 @@ public abstract class AbstractScopeAwareJob implements Job
             s_aLogger.error ("Failed to end long running job", t);
 
             // Notify custom exception handler
-            _triggerCustomExceptionHandler (t, sJobClassName, aLongRunningJob != null);
+            _triggerCustomExceptionHandler (t, sJobClassName, true);
           }
         }
 

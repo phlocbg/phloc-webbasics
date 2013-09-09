@@ -32,6 +32,8 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.matchers.EverythingMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -48,6 +50,8 @@ import com.phloc.scopes.singleton.GlobalSingleton;
 public class GlobalQuartzScheduler extends GlobalSingleton
 {
   public static final String GROUP_NAME = "phloc";
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
 
   private final Scheduler m_aScheduler;
 
@@ -90,7 +94,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   }
 
   /**
-   * @return The underlying Quartz scheduler object.
+   * @return The underlying Quartz scheduler object. Never <code>null</code>.
    */
   @Nonnull
   protected final Scheduler getScheduler ()
@@ -151,7 +155,10 @@ public class GlobalQuartzScheduler extends GlobalSingleton
     try
     {
       // Schedule now
-      m_aScheduler.scheduleJob (aJobDetail, aTriggerBuilder.build ());
+      final Trigger aTrigger = aTriggerBuilder.build ();
+      m_aScheduler.scheduleJob (aJobDetail, aTrigger);
+
+      s_aLogger.info ("Succesfully scheduled job '" + sJobName + "' with trigger " + aTrigger);
     }
     catch (final SchedulerException ex)
     {
@@ -167,8 +174,17 @@ public class GlobalQuartzScheduler extends GlobalSingleton
    */
   public final void shutdown () throws SchedulerException
   {
-    // Shutdown but wait for jobs to complete
-    m_aScheduler.shutdown (true);
+    try
+    {
+      // Shutdown but wait for jobs to complete
+      m_aScheduler.shutdown (true);
+      s_aLogger.info ("Successfully shutdown GlobalQuartzScheduler");
+    }
+    catch (final SchedulerException ex)
+    {
+      s_aLogger.error ("Failed to shutdown GlobalQuartzScheduler", ex);
+      throw ex;
+    }
   }
 
   @Override
