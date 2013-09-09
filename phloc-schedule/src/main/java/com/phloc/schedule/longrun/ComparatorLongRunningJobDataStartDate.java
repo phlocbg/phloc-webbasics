@@ -25,17 +25,17 @@ import com.phloc.commons.compare.CompareUtils;
 import com.phloc.commons.compare.ESortOrder;
 
 /**
- * Compare {@link LongRunningJobData} objects by their end date
+ * Compare {@link LongRunningJobData} objects by their start date
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class ComparatorLongRunningJobDataEndDate extends AbstractComparator <LongRunningJobData>
+public final class ComparatorLongRunningJobDataStartDate extends AbstractComparator <LongRunningJobData>
 {
   /**
    * Comparator with default sort order.
    */
-  public ComparatorLongRunningJobDataEndDate ()
+  public ComparatorLongRunningJobDataStartDate ()
   {}
 
   /**
@@ -44,7 +44,7 @@ public final class ComparatorLongRunningJobDataEndDate extends AbstractComparato
    * @param eSortOrder
    *        The sort order to use. May not be <code>null</code>.
    */
-  public ComparatorLongRunningJobDataEndDate (@Nonnull final ESortOrder eSortOrder)
+  public ComparatorLongRunningJobDataStartDate (@Nonnull final ESortOrder eSortOrder)
   {
     super (eSortOrder);
   }
@@ -52,6 +52,6 @@ public final class ComparatorLongRunningJobDataEndDate extends AbstractComparato
   @Override
   protected int mainCompare (@Nonnull final LongRunningJobData aData1, @Nonnull final LongRunningJobData aData2)
   {
-    return CompareUtils.nullSafeCompare (aData1.getEndDateTime (), aData2.getEndDateTime ());
+    return CompareUtils.nullSafeCompare (aData1.getStartDateTime (), aData2.getStartDateTime ());
   }
 }

@@ -28,6 +28,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ISimpleMultiLingualText;
 import com.phloc.datetime.PDTFactory;
@@ -121,7 +122,7 @@ public final class LongRunningJobData implements IHasID <String>
   }
 
   /**
-   * @return The user who started the job.
+   * @return The user who started the job. May be <code>null</code>.
    */
   @Nullable
   public String getStartingUserID ()
@@ -192,5 +193,19 @@ public final class LongRunningJobData implements IHasID <String>
   public LongRunningJobResult getResult ()
   {
     return m_aResult;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .append ("jobDescription", m_aJobDescription)
+                                       .append ("startDateTime", m_aStartDateTime)
+                                       .append ("startingUserID", m_sStartingUserID)
+                                       .append ("endDateTime", m_aEndDateTime)
+                                       .append ("execSucces", m_eExecSuccess)
+                                       .append ("result", m_aResult)
+                                       .toString ();
+
   }
 }

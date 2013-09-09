@@ -39,8 +39,6 @@ import com.phloc.commons.stats.IStatisticsHandlerKeyedTimer;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.schedule.longrun.ILongRunningJob;
-import com.phloc.schedule.longrun.LongRunningJobManager;
-import com.phloc.schedule.longrun.LongRunningJobResult;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
@@ -117,31 +115,25 @@ public abstract class AbstractScopeAwareJob implements Job
   protected abstract String getApplicationScopeID (@Nonnull final JobDataMap aJobDataMap);
 
   /**
-   * Get the ID of the current user. This method is only called for long running
-   * jobs.
-   * 
-   * @param aJobDataMap
-   *        The current job data map. Never <code>null</code>.
-   * @return The user ID to be used. May not be <code>null</code>.
-   */
-  @Nonnull
-  protected abstract String getCurrentUserID (@Nonnull final JobDataMap aJobDataMap);
-
-  /**
-   * @return The {@link LongRunningJobManager} to be used. This method is only
-   *         invoked for long running jobs!
-   */
-  @Nonnull
-  protected abstract LongRunningJobManager getLongRunningJobManager ();
-
-  /**
-   * Called before the job gets executed.
+   * Called before the job gets executed. This method is called before the
+   * scopes are initialized!
    * 
    * @param aJobDataMap
    *        The current job data map. Never <code>null</code>.
    */
   @OverrideOnDemand
   protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap)
+  {}
+
+  /**
+   * Called before the job gets executed. This method is called after the scopes
+   * are initialized!
+   * 
+   * @param aJobDataMap
+   *        The current job data map. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  protected void beforeExecuteInScope (@Nonnull final JobDataMap aJobDataMap)
   {}
 
   /**
@@ -155,13 +147,29 @@ public abstract class AbstractScopeAwareJob implements Job
   protected abstract void onExecute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException;
 
   /**
-   * Called after the job gets executed.
+   * Called after the job gets executed. This method is called before the scopes
+   * are destroyed.
    * 
    * @param aJobDataMap
-   *        The current job data map.
+   *        The current job data map. Never <code>null</code>.
+   * @param eExecSuccess
+   *        The execution success state. Never <code>null</code>.
    */
   @OverrideOnDemand
-  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap)
+  protected void afterExecuteInScope (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
+  {}
+
+  /**
+   * Called after the job gets executed. This method is called after the scopes
+   * are destroyed.
+   * 
+   * @param aJobDataMap
+   *        The current job data map. Never <code>null</code>.
+   * @param eExecSuccess
+   *        The execution success state. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
   {}
 
   /**
@@ -174,9 +182,9 @@ public abstract class AbstractScopeAwareJob implements Job
    * @param bIsLongRunning
    *        <code>true</code> if it is a long running job
    */
-  private static void _triggerCustomExceptionHandler (@Nonnull final Throwable t,
-                                                      @Nullable final String sJobClassName,
-                                                      final boolean bIsLongRunning)
+  protected static void _triggerCustomExceptionHandler (@Nonnull final Throwable t,
+                                                        @Nullable final String sJobClassName,
+                                                        final boolean bIsLongRunning)
   {
     final IJobExceptionHandler aCustomExceptionHandler = getCustomExceptionHandler ();
     if (aCustomExceptionHandler != null)
@@ -197,9 +205,7 @@ public abstract class AbstractScopeAwareJob implements Job
   public final void execute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException
   {
     // State variables
-    ESuccess eExecSucess = ESuccess.FAILURE;
-    String sLongRunningJobID = null;
-    final ILongRunningJob aLongRunningJob = this instanceof ILongRunningJob ? (ILongRunningJob) this : null;
+    ESuccess eExecSuccess = ESuccess.FAILURE;
     final JobDataMap aJobDataMap = aContext.getJobDetail ().getJobDataMap ();
     final String sApplicationScopeID = getApplicationScopeID (aJobDataMap);
 
@@ -217,20 +223,16 @@ public abstract class AbstractScopeAwareJob implements Job
         if (s_aLogger.isDebugEnabled ())
           s_aLogger.debug ("Executing scheduled job " + sJobClassName);
 
-        // Do the long running job start inside the scopes, so that we can
-        // access the current user!
-        if (aLongRunningJob != null)
-        {
-          sLongRunningJobID = getLongRunningJobManager ().startJob (aLongRunningJob, getCurrentUserID (aJobDataMap));
-        }
+        // Invoke callback
+        beforeExecuteInScope (aJobDataMap);
 
         final StopWatch aSW = new StopWatch (true);
 
         // Main execution
         onExecute (aContext);
 
-        // Execution without exception
-        eExecSucess = ESuccess.SUCCESS;
+        // Execution without exception -> success
+        eExecSuccess = ESuccess.SUCCESS;
 
         // Increment statistics
         s_aStatsTimer.addTime (sJobClassName, aSW.stopAndGetMillis ());
@@ -242,7 +244,7 @@ public abstract class AbstractScopeAwareJob implements Job
         s_aStatsCounterFailure.increment (sJobClassName);
 
         // Notify custom exception handler
-        _triggerCustomExceptionHandler (t, sJobClassName, aLongRunningJob != null);
+        _triggerCustomExceptionHandler (t, sJobClassName, this instanceof ILongRunningJob);
 
         if (t instanceof JobExecutionException)
           throw (JobExecutionException) t;
@@ -250,31 +252,21 @@ public abstract class AbstractScopeAwareJob implements Job
       }
       finally
       {
-        if (sLongRunningJobID != null && aLongRunningJob != null)
+        try
         {
-          // End long running job before the request scope is closed
-          // But the job itself continues to run!
-          try
-          {
-            final LongRunningJobResult aJobResult = aLongRunningJob.createResult ();
-            getLongRunningJobManager ().endJob (sLongRunningJobID, eExecSucess, aJobResult);
-          }
-          catch (final Throwable t)
-          {
-            s_aLogger.error ("Failed to end long running job", t);
-
-            // Notify custom exception handler
-            _triggerCustomExceptionHandler (t, sJobClassName, true);
-          }
+          // Invoke callback
+          afterExecuteInScope (aJobDataMap, eExecSuccess);
         }
-
-        // Close request scope
-        WebScopeManager.onRequestEnd ();
+        finally
+        {
+          // Close request scope
+          WebScopeManager.onRequestEnd ();
+        }
       }
     }
     finally
     {
-      afterExecute (aJobDataMap);
+      afterExecute (aJobDataMap, eExecSuccess);
     }
   }
 }
