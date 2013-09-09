@@ -48,8 +48,9 @@ public class Bootstrap3Panel extends AbstractHCDiv <Bootstrap3Panel>
     if (eType == null)
       throw new NullPointerException ("Type");
 
+    addClasses (CBootstrap3CSS.PANEL, eType);
     m_eType = eType;
-    m_aBody = addAndReturnChild (new HCDiv ().addClasses (CBootstrap3CSS.PANEL, eType));
+    m_aBody = addAndReturnChild (new HCDiv ().addClass (CBootstrap3CSS.PANEL_BODY));
   }
 
   @Nonnull

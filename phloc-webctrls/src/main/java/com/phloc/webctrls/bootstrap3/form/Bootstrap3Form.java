@@ -26,13 +26,13 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.AbstractHCEdit;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
+import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 import com.phloc.webctrls.bootstrap3.grid.EBootstrap3GridMD;
@@ -69,28 +69,6 @@ public class Bootstrap3Form extends HCForm
     addClass (eFormType);
   }
 
-  @Nullable
-  private static IHCControl <?> _getFirstControl (@Nonnull final IHCNode aCtrl)
-  {
-    if (aCtrl instanceof IHCControl <?>)
-      return (IHCControl <?>) aCtrl;
-
-    if (aCtrl instanceof IHCNodeWithChildren <?>)
-    {
-      // E.g. HCNodeList
-      final IHCNodeWithChildren <?> aParent = (IHCNodeWithChildren <?>) aCtrl;
-      if (aParent.hasChildren ())
-        for (final IHCNode aChild : aParent.getChildren ())
-        {
-          final IHCControl <?> aNestedCtrl = _getFirstControl (aChild);
-          if (aNestedCtrl != null)
-            return aNestedCtrl;
-        }
-    }
-
-    return null;
-  }
-
   private IBootstrap3GridElementExtended _getLeft ()
   {
     return EBootstrap3GridMD.MD_2;
@@ -107,7 +85,7 @@ public class Bootstrap3Form extends HCForm
     if (aCtrl == null)
       throw new NullPointerException ("ctrl");
 
-    final IHCControl <?> aFirstControl = _getFirstControl (aCtrl);
+    final IHCControl <?> aFirstControl = HCUtils.getFirstHCControl (aCtrl);
     if (aFirstControl instanceof HCCheckBox)
     {
       // Check box
