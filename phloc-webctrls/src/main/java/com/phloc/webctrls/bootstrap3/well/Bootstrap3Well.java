@@ -26,8 +26,7 @@ import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.webctrls.bootstrap3.CBootstrap3CSS;
 
 /**
- * Wrapper for a Bootstrap well.
- * http://twitter.github.com/bootstrap/components.html#misc
+ * Wrapper for a Bootstrap3 well.
  * 
  * @author Philip Helger
  */
