@@ -29,6 +29,7 @@ import org.quartz.JobDetail;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.matchers.EverythingMatcher;
@@ -164,6 +165,28 @@ public class GlobalQuartzScheduler extends GlobalSingleton
     {
       throw LoggedRuntimeException.newException (ex);
     }
+  }
+
+  /**
+   * Schedule a new job that should be executed now and only once.
+   * 
+   * @param sJobName
+   *        Name of the job - must be unique within the whole system!
+   * @param aJobClass
+   *        The Job class to be executed.
+   * @param aJobData
+   *        Optional job data map.
+   */
+  public void scheduleJobNowOnce (@Nonnull final String sJobName,
+                                  @Nonnull final Class <? extends Job> aJobClass,
+                                  @Nullable final Map <String, ? extends Object> aJobData)
+  {
+    scheduleJob (sJobName,
+                 TriggerBuilder.newTrigger ()
+                               .startNow ()
+                               .withSchedule (SimpleScheduleBuilder.repeatMinutelyForTotalCount (1)),
+                 aJobClass,
+                 aJobData);
   }
 
   /**
