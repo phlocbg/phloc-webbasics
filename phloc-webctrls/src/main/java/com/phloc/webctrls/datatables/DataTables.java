@@ -878,9 +878,9 @@ public class DataTables implements IHCNodeBuilder
     }
     aPackage.add (JQuery.idRef (m_aTable.getID ())
                         .onClick ()
-                        .arg (new JQuerySelectorList (JQuerySelector.elementName (EHTMLElement.TBODY),
-                                                      JQuerySelector.elementName (EHTMLElement.TD),
-                                                      JQuerySelector.elementName (EHTMLElement.IMG)))
+                        .arg (new JQuerySelectorList (JQuerySelector.element (EHTMLElement.TBODY),
+                                                      JQuerySelector.element (EHTMLElement.TD),
+                                                      JQuerySelector.element (EHTMLElement.IMG)))
                         .arg (aOpenCloseCallback));
     return getWrapped (aPackage);
   }
