@@ -31,7 +31,6 @@ import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.jquery.IJQuerySelector;
-import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -173,9 +172,8 @@ public class HCColorBox implements IHCNodeBuilder
       aArgs.add ("slideshowStop", EColorBoxText.SLIDESHOW_STOP.getDisplayText (m_aDisplayLocale));
     }
 
-    return HCNodeList.create (m_aElement, new HCScriptOnDocumentReady (JQuery.select (aSelector)
-                                                                             .invoke ("colorbox")
-                                                                             .arg (aArgs)));
+    return HCNodeList.create (m_aElement,
+                              new HCScriptOnDocumentReady (aSelector.invoke ().invoke ("colorbox").arg (aArgs)));
   }
 
   public static void registerExternalResources ()

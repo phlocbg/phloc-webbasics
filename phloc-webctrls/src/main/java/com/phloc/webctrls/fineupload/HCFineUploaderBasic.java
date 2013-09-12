@@ -125,7 +125,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
         // assign an "onComplete" handler to the fileuploader, that submits the
         // form, as soon, as all uploaded files are handled
         final JSAnonymousFunction aOnCompete = new JSAnonymousFunction ();
-        aOnCompete.body ()._if (aGlobalCnt.decrPrefix ().eq (JSExpr.lit (0)))._then ().add (aForm.invoke ("submit"));
+        aOnCompete.body ()._if (aGlobalCnt.decrPrefix ().eq (0))._then ().add (aForm.invoke ("submit"));
         aOnClick.body ().add (aUpload.invoke ("on").arg ("complete").arg (aOnCompete));
       }
       // Start the uploading manually
@@ -134,7 +134,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
 
       // Find the first ":submit" element of the closest form of the passed
       // element and set the "click" handler
-      aPkg.addStatement (JQuery.select (JQuerySelector.submit).arg (aForm).click ().arg (aOnClick));
+      aPkg.addStatement (JQuerySelector.submit.invoke ().arg (aForm).click (aOnClick));
     }
     ret.addChild (new HCScriptOnDocumentReady (aPkg));
     return ret;

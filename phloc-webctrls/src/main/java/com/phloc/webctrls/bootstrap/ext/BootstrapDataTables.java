@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.html.js.builder.jquery.JQueryProperty;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webctrls.bootstrap.BootstrapTable;
@@ -49,7 +50,7 @@ public class BootstrapDataTables extends DataTables
   {
     if (false)
       aPackage.add (JQuery.extend ()
-                          .arg (JQuery.fn ().ref ("dataTableExt").ref ("oStdClasses"))
+                          .arg (JQueryProperty.fn ().ref ("dataTableExt").ref ("oStdClasses"))
                           .arg (new JSAssocArray ().add ("sSortAsc", "icon icon-arrow-down")
                                                    .add ("sSortDesc", "icon icon-arrow-up")
                                                    .add ("sSortable", "header")));
