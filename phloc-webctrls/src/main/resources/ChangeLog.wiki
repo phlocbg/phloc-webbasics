@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>9/13/13</td><td>change</td><td>api</td><td>*yes*</td><td>Moved all Bootstrap2 stuff to a separate project</td></tr>
+<tr><td>9/13/13</td><td>change</td><td>api</td><td>*yes*</td><td>Moved all Bootstrap3 stuff to a separate project</td></tr>
 <tr border="1"><td>9/13/13</td><td colspan="4">_Release *1.2.2*_</td></tr>
 <tr><td>9/13/13</td><td>update</td><td>api</td><td></td><td>Updated to [http://code.google.com/p/phloc-html phloc-html] 3.10.0 and [http://code.google.com/p/phloc-webbasics phloc-webbasics] 2.1.7</td></tr>
 <tr border="1"><td>8/22/13</td><td colspan="4">_Release *1.2.1*_</td></tr>
