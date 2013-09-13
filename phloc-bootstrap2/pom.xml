@@ -158,7 +158,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>com.phloc.webctrls.*</Export-Package>
+            <Export-Package>com.phloc.bootstrap2.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>
@@ -167,18 +167,7 @@
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>src/main/resources/autonumeric/**</exclude>
-            <exclude>src/main/resources/autosize/**</exclude>
             <exclude>src/main/resources/bootstrap/**</exclude>
-            <exclude>src/main/resources/colorbox/**</exclude>
-            <exclude>src/main/resources/datatables/**</exclude>
-            <exclude>src/main/resources/datetime/**</exclude>
-            <exclude>src/main/resources/famfam/**</exclude>
-            <exclude>src/main/resources/fineupload/**</exclude>
-            <exclude>src/main/resources/jquery/**</exclude>
-            <exclude>src/main/resources/jstree/**</exclude>
-            <exclude>src/main/resources/tiptip/**</exclude>
-            <exclude>src/test/resources/fineupload/**/*.js</exclude>
           </excludes>
         </configuration>
       </plugin>
@@ -216,57 +205,6 @@
           <sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
         </configuration>
       </plugin>
-      <!--
-      <plugin>
-        <groupId>com.cj.jshintmojo</groupId>
-        <artifactId>jshint-maven-plugin</artifactId>
-        <version>0.0.3-SNAPSHOT</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>lint</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <options>camelcase,eqeqeq,forin,immed,latedef,newcap,noarg,noempty,nonew,regexp,undef,trailing,browser,devel,jquery,smarttabs</options>
-          <directory>${basedir}/src/main/resources</directory>
-          <excludes>
-            <exclude>**/jquery/*.js</exclude>
-            <exclude>**/bootstrap/*/js/bootstrap*.js</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      -->
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>com.cj.jshintmojo</groupId>
-                    <artifactId>jshint-maven-plugin</artifactId>
-                    <versionRange>[0.0.1-SNAPSHOT,)</versionRange>
-                    <goals>
-                      <goal>lint</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 </project>
