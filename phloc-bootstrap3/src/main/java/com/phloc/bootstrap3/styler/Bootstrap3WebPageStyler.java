@@ -30,43 +30,42 @@ import com.phloc.bootstrap3.alert.Bootstrap3SuccessBox;
 import com.phloc.bootstrap3.button.Bootstrap3ButtonToolbar;
 import com.phloc.bootstrap3.button.EBootstrap3ButtonType;
 import com.phloc.bootstrap3.ext.Bootstrap3DataTables;
+import com.phloc.bootstrap3.nav.Bootstrap3TabBox;
 import com.phloc.bootstrap3.table.Bootstrap3Table;
 import com.phloc.bootstrap3.table.Bootstrap3TableForm;
 import com.phloc.bootstrap3.table.Bootstrap3TableFormView;
-import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
 
 public class Bootstrap3WebPageStyler extends SimpleWebPageStyler
 {
   @Override
   @Nonnull
-  public IHCElement <?> createErrorBox (@Nullable final String sText)
+  public Bootstrap3ErrorBox createErrorBox (@Nullable final String sText)
   {
     return Bootstrap3ErrorBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public IHCElement <?> createInfoBox (@Nullable final String sText)
+  public Bootstrap3InfoBox createInfoBox (@Nullable final String sText)
   {
     return Bootstrap3InfoBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public IHCElement <?> createSuccessBox (@Nullable final String sText)
+  public Bootstrap3SuccessBox createSuccessBox (@Nullable final String sText)
   {
     return Bootstrap3SuccessBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  public Bootstrap3QuestionBox createQuestionBox (@Nullable final String sText)
   {
     return Bootstrap3QuestionBox.create (sText);
   }
@@ -114,8 +113,15 @@ public class Bootstrap3WebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public IButtonToolbar <?> createToolbar ()
+  public Bootstrap3ButtonToolbar createToolbar ()
   {
     return new Bootstrap3ButtonToolbar ();
+  }
+
+  @Override
+  @Nonnull
+  public Bootstrap3TabBox createTabBox ()
+  {
+    return new Bootstrap3TabBox ();
   }
 }

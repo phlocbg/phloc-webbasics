@@ -15,17 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap2;
+package com.phloc.bootstrap3.nav;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.bootstrap3.CBootstrap3CSS;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCLI;
-import com.phloc.html.hc.html.HCUL;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webctrls.custom.tabbox.AbstractTabBox;
 import com.phloc.webctrls.custom.tabbox.Tab;
 
@@ -34,35 +35,16 @@ import com.phloc.webctrls.custom.tabbox.Tab;
  * 
  * @author Philip Helger
  */
-public class BootstrapTabBox extends AbstractTabBox <BootstrapTabBox>
+public class Bootstrap3TabBox extends AbstractTabBox <Bootstrap3TabBox>
 {
-  private EBootstrapTabBoxType m_eType = EBootstrapTabBoxType.TOP;
-
-  public BootstrapTabBox ()
+  public Bootstrap3TabBox ()
   {}
 
-  @Nonnull
-  public EBootstrapTabBoxType getType ()
-  {
-    return m_eType;
-  }
-
-  @Nonnull
-  public BootstrapTabBox setType (@Nonnull final EBootstrapTabBoxType eType)
-  {
-    if (eType == null)
-      throw new NullPointerException ("type");
-    m_eType = eType;
-    return this;
-  }
-
   @Nullable
-  public HCDiv build ()
+  public IHCNode build ()
   {
     if (m_aTabs.isEmpty ())
       return null;
-
-    final HCDiv aDiv = new HCDiv ().addClasses (CBootstrapCSS.TABBABLE, m_eType);
 
     String sActiveTabID = getActiveTabID ();
     if (StringHelper.hasNoText (sActiveTabID))
@@ -71,20 +53,21 @@ public class BootstrapTabBox extends AbstractTabBox <BootstrapTabBox>
       sActiveTabID = ContainerHelper.getFirstKey (m_aTabs);
     }
 
+    final Bootstrap3Nav aNav = new Bootstrap3Nav (EBootstrap3NavType.TABS);
+
     // Build code for tabs and content
-    final HCUL aTabs = new HCUL ().addClasses (CBootstrapCSS.NAV, CBootstrapCSS.NAV_TABS);
-    final HCDiv aContent = new HCDiv ().addClass (CBootstrapCSS.TAB_CONTENT);
+    final HCDiv aContent = new HCDiv ().addClass (CBootstrap3CSS.TAB_CONTENT);
     for (final Tab aTab : m_aTabs.values ())
     {
       final boolean bIsActiveTab = aTab.getID ().equals (sActiveTabID);
 
       // header
-      final HCLI aToggleLI = aTabs.addItem ();
+      final HCLI aToggleLI = aNav.addItem ();
       if (bIsActiveTab)
-        aToggleLI.addClass (CBootstrapCSS.ACTIVE);
+        aToggleLI.addClass (CBootstrap3CSS.ACTIVE);
       if (aTab.isDisabled ())
       {
-        aToggleLI.addClass (CBootstrapCSS.DISABLED);
+        aToggleLI.addClass (CBootstrap3CSS.DISABLED);
         aToggleLI.addChild (new HCA (aTab.getLinkURL ()).addChild (aTab.getLabel ()));
       }
       else
@@ -95,17 +78,12 @@ public class BootstrapTabBox extends AbstractTabBox <BootstrapTabBox>
 
       // content
       final HCDiv aPane = aContent.addAndReturnChild (new HCDiv ().addChild (aTab.getContent ())
-                                                                  .addClass (CBootstrapCSS.TAB_PANE)
+                                                                  .addClass (CBootstrap3CSS.TAB_PANE)
                                                                   .setID (aTab.getID ()));
       if (bIsActiveTab)
-        aPane.addClass (CBootstrapCSS.ACTIVE);
+        aPane.addClass (CBootstrap3CSS.ACTIVE);
     }
 
-    // Determine order of elements
-    if (m_eType.emitTabsBeforeContent ())
-      aDiv.addChildren (aTabs, aContent);
-    else
-      aDiv.addChildren (aContent, aTabs);
-    return aDiv;
+    return HCNodeList.create (aNav, aContent);
   }
 }

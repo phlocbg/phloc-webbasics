@@ -30,6 +30,7 @@ import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -95,4 +96,7 @@ public interface IWebPageStyler
 
   @Nonnull
   IButtonToolbar <?> createToolbar ();
+
+  @Nonnull
+  ITabBox <?> createTabBox ();
 }

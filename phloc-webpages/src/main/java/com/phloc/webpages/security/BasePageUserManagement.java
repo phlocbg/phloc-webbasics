@@ -72,6 +72,7 @@ import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -743,7 +744,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
 
-    final BootstrapTabBox aTabBox = new BootstrapTabBox ();
+    final ITabBox <?> aTabBox = getStyler ().createTabBox ();
 
     final AccessManager aMgr = AccessManager.getInstance ();
 

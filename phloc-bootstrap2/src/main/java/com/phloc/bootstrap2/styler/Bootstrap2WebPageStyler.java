@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.bootstrap2.BootstrapTabBox;
 import com.phloc.bootstrap2.BootstrapTable;
 import com.phloc.bootstrap2.CBootstrapCSS;
 import com.phloc.bootstrap2.EBootstrapButtonType;
@@ -33,40 +34,38 @@ import com.phloc.bootstrap2.derived.BootstrapTableForm;
 import com.phloc.bootstrap2.derived.BootstrapTableFormView;
 import com.phloc.bootstrap2.derived.BootstrapToolbar;
 import com.phloc.bootstrap2.ext.BootstrapDataTables;
-import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
 
 public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
 {
   @Override
   @Nonnull
-  public IHCElement <?> createErrorBox (@Nullable final String sText)
+  public BootstrapErrorBox createErrorBox (@Nullable final String sText)
   {
     return BootstrapErrorBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public IHCElement <?> createInfoBox (@Nullable final String sText)
+  public BootstrapInfoBox createInfoBox (@Nullable final String sText)
   {
     return BootstrapInfoBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public IHCElement <?> createSuccessBox (@Nullable final String sText)
+  public BootstrapSuccessBox createSuccessBox (@Nullable final String sText)
   {
     return BootstrapSuccessBox.create (sText);
   }
 
   @Override
   @Nonnull
-  public IHCElement <?> createQuestionBox (@Nullable final String sText)
+  public BootstrapQuestionBox createQuestionBox (@Nullable final String sText)
   {
     return BootstrapQuestionBox.create (sText);
   }
@@ -113,8 +112,15 @@ public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public IButtonToolbar <?> createToolbar ()
+  public BootstrapToolbar createToolbar ()
   {
     return new BootstrapToolbar ();
+  }
+
+  @Override
+  @Nonnull
+  public BootstrapTabBox createTabBox ()
+  {
+    return new BootstrapTabBox ();
   }
 }

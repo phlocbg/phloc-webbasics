@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.gfx.ImageDataManager;
 import com.phloc.commons.gfx.ScalableSize;
@@ -46,6 +47,7 @@ import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.HCTableForm;
 import com.phloc.webctrls.custom.table.HCTableFormView;
 import com.phloc.webctrls.custom.table.IHCTableForm;
@@ -186,5 +188,12 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public IButtonToolbar <?> createToolbar ()
   {
     return new SimpleButtonToolbar ();
+  }
+
+  @Nonnull
+  @UnsupportedOperation
+  public ITabBox <?> createTabBox ()
+  {
+    throw new UnsupportedOperationException ();
   }
 }
