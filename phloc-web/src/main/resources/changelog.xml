@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2013-09-13" version="5.2.0" />
+  <entry date="2013-09-13" category="api" action="add">
+    <change>
+      <text locale="en">Added class ServletRedirectIndicatorException from phloc-webbasics</text>
+    </change>
+  </entry>
+  <entry date="2013-09-13" category="api" action="add">
+    <change>
+      <text locale="en">Added sitemap stuff from phloc-webbasics</text>
+    </change>
+  </entry>
   <release date="2013-09-05" version="5.1.1" />
   <entry date="2013-09-05" category="api" action="change">
     <change>
