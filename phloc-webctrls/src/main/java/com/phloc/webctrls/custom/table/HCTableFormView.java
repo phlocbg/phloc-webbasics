@@ -15,47 +15,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.bootstrap3.table;
+package com.phloc.webctrls.custom.table;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
-import com.phloc.webctrls.custom.table.IHCTableFormView;
 
-public class Bootstrap3TableFormView extends AbstractBootstrap3Table <Bootstrap3TableFormView> implements IHCTableFormView <Bootstrap3TableFormView>
+public class HCTableFormView extends AbstractHCTable <HCTableFormView> implements IHCTableFormView <HCTableFormView>
 {
-  private void _init ()
-  {
-    setHover (true);
-    setStriped (true);
-  }
-
-  public Bootstrap3TableFormView ()
+  public HCTableFormView ()
   {
     super ();
-    _init ();
   }
 
-  public Bootstrap3TableFormView (@Nullable final HCCol aCol)
+  public HCTableFormView (@Nullable final HCCol aCol)
   {
     super (aCol);
-    _init ();
   }
 
-  public Bootstrap3TableFormView (@Nullable final HCCol... aCols)
+  public HCTableFormView (@Nullable final HCCol... aCols)
   {
     super (aCols);
-    _init ();
   }
 
-  public Bootstrap3TableFormView (@Nullable final Iterable <? extends HCCol> aCols)
+  public HCTableFormView (@Nullable final Iterable <? extends HCCol> aCols)
   {
     super (aCols);
-    _init ();
   }
 
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)

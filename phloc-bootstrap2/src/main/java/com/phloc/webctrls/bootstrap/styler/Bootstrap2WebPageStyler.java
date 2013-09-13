@@ -72,7 +72,14 @@ public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapTableFormView createTable (@Nullable final HCCol... aCols)
+  public BootstrapTable createTable (@Nullable final HCCol... aCols)
+  {
+    return new BootstrapTable (aCols);
+  }
+
+  @Override
+  @Nonnull
+  public BootstrapTableFormView createTableFormView (@Nullable final HCCol... aCols)
   {
     return new BootstrapTableFormView (aCols);
   }

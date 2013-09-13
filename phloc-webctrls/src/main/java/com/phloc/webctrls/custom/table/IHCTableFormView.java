@@ -24,7 +24,7 @@ import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.webctrls.custom.IFormLabel;
 
-public interface ITableFormView <THISTYPE extends ITableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>
+public interface IHCTableFormView <THISTYPE extends IHCTableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>
 {
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
 

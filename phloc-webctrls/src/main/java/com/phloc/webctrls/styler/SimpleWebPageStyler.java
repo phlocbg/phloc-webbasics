@@ -46,6 +46,8 @@ import com.phloc.html.hc.htmlext.HCA_MailTo;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webctrls.custom.table.HCTableFormView;
+import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.custom.toolbar.SimpleButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
@@ -148,6 +150,12 @@ public class SimpleWebPageStyler implements IWebPageStyler
   public AbstractHCTable <?> createTable (@Nullable final HCCol... aCols)
   {
     return new HCTable (aCols);
+  }
+
+  @Nonnull
+  public IHCTableFormView <?> createTableFormView (@Nullable final HCCol... aCols)
+  {
+    return new HCTableFormView (aCols);
   }
 
   @Nonnull
