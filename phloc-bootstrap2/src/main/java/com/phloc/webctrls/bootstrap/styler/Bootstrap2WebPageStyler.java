@@ -34,6 +34,7 @@ import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapInfoBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
 import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
+import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
 import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.bootstrap.derived.BootstrapToolbar;
 import com.phloc.webctrls.bootstrap.ext.BootstrapDataTables;
@@ -75,6 +76,13 @@ public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
   public BootstrapTable createTable (@Nullable final HCCol... aCols)
   {
     return new BootstrapTable (aCols);
+  }
+
+  @Override
+  @Nonnull
+  public BootstrapTableForm createTableForm (@Nullable final HCCol... aCols)
+  {
+    return new BootstrapTableForm (aCols);
   }
 
   @Override

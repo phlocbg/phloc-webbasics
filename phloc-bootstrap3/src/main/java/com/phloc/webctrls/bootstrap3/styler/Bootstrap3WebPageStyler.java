@@ -36,6 +36,7 @@ import com.phloc.webctrls.bootstrap3.button.Bootstrap3ButtonToolbar;
 import com.phloc.webctrls.bootstrap3.button.EBootstrap3ButtonType;
 import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
 import com.phloc.webctrls.bootstrap3.table.Bootstrap3Table;
+import com.phloc.webctrls.bootstrap3.table.Bootstrap3TableForm;
 import com.phloc.webctrls.bootstrap3.table.Bootstrap3TableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.styler.SimpleWebPageStyler;
@@ -76,6 +77,13 @@ public class Bootstrap3WebPageStyler extends SimpleWebPageStyler
   {
     // Must be a regular Bootstrap3Table to work with the data tables
     return new Bootstrap3Table (aCols);
+  }
+
+  @Override
+  @Nonnull
+  public Bootstrap3TableForm createTableForm (@Nullable final HCCol... aCols)
+  {
+    return new Bootstrap3TableForm (aCols);
   }
 
   @Override
