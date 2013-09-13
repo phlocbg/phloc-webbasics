@@ -43,8 +43,8 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
-import com.phloc.webpages.theme.IWebPageStyler;
-import com.phloc.webpages.theme.WebPageStylerManager;
+import com.phloc.webctrls.styler.IWebPageStyler;
+import com.phloc.webctrls.styler.WebPageStylerManager;
 
 public abstract class AbstractWebPageExt extends AbstractWebPage
 {

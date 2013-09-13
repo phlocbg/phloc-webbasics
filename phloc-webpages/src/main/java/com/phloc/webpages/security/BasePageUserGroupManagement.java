@@ -47,6 +47,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
@@ -61,13 +62,8 @@ import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapErrorBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapQuestionBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapSuccessBox;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableForm;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -169,7 +165,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
   @OverrideOnDemand
   protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IUserGroup aCurrentUserGroup,
                                                           @Nonnull final Map <String, ?> aCustomAttrs,
-                                                          @Nonnull final BootstrapTableFormView aTable,
+                                                          @Nonnull final IHCTableFormView <?> aTable,
                                                           @Nonnull final Locale aDisplayLocale)
   {
     return null;
@@ -182,8 +178,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
-                                                                                                   HCCol.star ()));
+    final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
+                                                                                                     HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
@@ -248,7 +244,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
 
     if (!aCustomAttrs.isEmpty ())
     {
-      final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
+      final IHCBaseTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
       aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                            EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
@@ -298,7 +294,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
 
         // We're editing an existing object
         aAccessMgr.setUserGroupData (sUserGroupID, sName, aSelectedObject.getAllAttributes ());
-        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
         // assign to the matching roles
         final Collection <String> aPrevRoleIDs = aSelectedObject.getAllContainedRoleIDs ();
@@ -316,7 +312,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       {
         // We're creating a new object
         final IUserGroup aNewUserGroup = aAccessMgr.createNewUserGroup (sName);
-        aNodeList.addChild (BootstrapSuccessBox.create (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
 
         // assign to the matching internal user groups
         for (final String sRoleID : aRoleIDs)
@@ -372,17 +368,17 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
     {
       if (AccessManager.getInstance ().deleteUserGroup (aSelectedObject.getID ()).isChanged ())
-        aNodeList.addChild (BootstrapSuccessBox.create (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                     aSelectedObject.getName ())));
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.DELETE_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                        aSelectedObject.getName ())));
       else
-        aNodeList.addChild (BootstrapErrorBox.create (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                 aSelectedObject.getName ())));
+        aNodeList.addChild (getStyler ().createErrorBox (EText.DELETE_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                    aSelectedObject.getName ())));
       return true;
     }
 
     final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
-    aForm.addChild (BootstrapQuestionBox.create (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                            aSelectedObject.getName ())));
+    aForm.addChild (getStyler ().createQuestionBox (EText.DELETE_QUERY.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                               aSelectedObject.getName ())));
     final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
     aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_DELETE);
     aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());

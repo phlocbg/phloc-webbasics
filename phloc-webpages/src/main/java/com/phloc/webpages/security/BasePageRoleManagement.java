@@ -43,6 +43,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
+import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
@@ -55,8 +56,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
+import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -151,7 +151,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
   @OverrideOnDemand
   protected Set <String> showCustomAttrsOfSelectedObject (@Nonnull final IRole aCurrentRole,
                                                           @Nonnull final Map <String, ?> aCustomAttrs,
-                                                          @Nonnull final BootstrapTableFormView aTable,
+                                                          @Nonnull final IHCTableFormView <?> aTable,
                                                           @Nonnull final Locale aDisplayLocale)
   {
     return null;
@@ -163,8 +163,8 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
-                                                                                                   HCCol.star ()));
+    final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
+                                                                                                     HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
@@ -200,7 +200,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
 
     if (!aCustomAttrs.isEmpty ())
     {
-      final BootstrapTable aAttrTable = new BootstrapTable (new HCCol (170), HCCol.star ());
+      final IHCBaseTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
       aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                            EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())

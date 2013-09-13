@@ -38,6 +38,7 @@ import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
+import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
@@ -48,7 +49,6 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
-import com.phloc.webctrls.bootstrap.BootstrapTable;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -218,9 +218,9 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
       aNodeList.addChild (aToolbar);
 
       // Start emitting saved states
-      final BootstrapTable aPerPage = aNodeList.addAndReturnChild (new BootstrapTable (HCCol.star (),
-                                                                                       new HCCol (170),
-                                                                                       createActionCol (2)));
+      final AbstractHCTable <?> aPerPage = aNodeList.addAndReturnChild (getStyler ().createTable (HCCol.star (),
+                                                                                                  new HCCol (170),
+                                                                                                  createActionCol (2)));
       aPerPage.addHeaderRow ().addCells (EText.HEADER_PAGE.getDisplayText (aDisplayLocale),
                                          EText.HEADER_REMEMBERED_AT.getDisplayText (aDisplayLocale),
                                          EText.HEADER_ACTIONS.getDisplayText (aDisplayLocale));

@@ -52,8 +52,8 @@ import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
-import com.phloc.webctrls.bootstrap.EBootstrapIcon;
-import com.phloc.webctrls.bootstrap.derived.BootstrapTableFormView;
+import com.phloc.webctrls.custom.EDefaultIcon;
+import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webpages.AbstractWebPageForm;
@@ -135,8 +135,8 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final BootstrapTableFormView aTable = aNodeList.addAndReturnChild (new BootstrapTableFormView (new HCCol (170),
-                                                                                                   HCCol.star ()));
+    final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
+                                                                                                       HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayText (aDisplayLocale));
 
     aTable.addItemRow (EText.MSG_USERID.getDisplayText (aDisplayLocale), aSelectedObject.getUserID ());
@@ -196,7 +196,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
   @OverrideOnDemand
   protected IHCNode getLogoutUserIcon ()
   {
-    return EBootstrapIcon.LOCK.getAsNode ();
+    return EDefaultIcon.KEY.getIcon ().getAsNode ();
   }
 
   @Override
