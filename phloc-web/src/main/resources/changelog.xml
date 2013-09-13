@@ -23,6 +23,16 @@
   <release date="2013-09-13" version="5.2.0" />
   <entry date="2013-09-13" category="api" action="add">
     <change>
+      <text locale="en">Added new class HttpProxyAuthenticator</text>
+    </change>
+  </entry>
+  <entry date="2013-09-13" category="api" action="add">
+    <change>
+      <text locale="en">Extended proxy classes to retrieve the current proxy settings</text>
+    </change>
+  </entry>
+  <entry date="2013-09-13" category="api" action="add">
+    <change>
       <text locale="en">Added class ServletRedirectIndicatorException from phloc-webbasics</text>
     </change>
   </entry>

@@ -21,6 +21,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
@@ -74,23 +75,105 @@ public enum EHttpProxyType implements IHasID <String>
     return m_nDefaultPort;
   }
 
+  /**
+   * @return The name of the system property for getting and setting the proxy
+   *         host
+   */
   @Nonnull
   public String getPropertyNameProxyHost ()
   {
     return m_sID + ".proxyHost";
   }
 
+  /**
+   * @return The current proxy host for this HTTP proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getProxyHost ()
+  {
+    return SystemProperties.getPropertyValueOrNull (getPropertyNameProxyHost ());
+  }
+
+  /**
+   * @return The name of the system property for getting and setting the proxy
+   *         port
+   */
   @Nonnull
   public String getPropertyNameProxyPort ()
   {
     return m_sID + ".proxyPort";
   }
 
+  /**
+   * @return The current proxy port for this HTTP proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getProxyPort ()
+  {
+    return SystemProperties.getPropertyValueOrNull (getPropertyNameProxyPort ());
+  }
+
+  /**
+   * @return The name of the system property for getting and setting the proxy
+   *         user name
+   */
+  @Nonnull
+  public String getPropertyNameProxyUser ()
+  {
+    return m_sID + ".proxyUser";
+  }
+
+  /**
+   * @return The current proxy user for this HTTP proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getProxyUser ()
+  {
+    return SystemProperties.getPropertyValueOrNull (getPropertyNameProxyUser ());
+  }
+
+  /**
+   * @return The name of the system property for getting and setting the proxy
+   *         password
+   */
+  @Nonnull
+  public String getPropertyNameProxyPassword ()
+  {
+    return m_sID + ".proxyPassword";
+  }
+
+  /**
+   * @return The current proxy password for this HTTP proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getProxyPassword ()
+  {
+    return SystemProperties.getPropertyValueOrNull (getPropertyNameProxyPassword ());
+  }
+
+  /**
+   * @return The name of the system property for getting and setting the
+   *         non-proxy hosts
+   */
   @Nonnull
   public String getPropertyNameNoProxyHosts ()
   {
     // HTTPS uses the http noProxyHosts property
     return this == HTTPS ? HTTP.getPropertyNameNoProxyHosts () : m_sID + ".noProxyHosts";
+  }
+
+  /**
+   * @return The current non-proxy hosts for this HTTP proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getNoProxyHosts ()
+  {
+    return SystemProperties.getPropertyValueOrNull (getPropertyNameNoProxyHosts ());
   }
 
   @Nullable

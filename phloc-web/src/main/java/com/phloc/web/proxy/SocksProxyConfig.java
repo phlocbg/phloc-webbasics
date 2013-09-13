@@ -22,6 +22,7 @@ import java.net.Proxy;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.SystemProperties;
@@ -40,6 +41,7 @@ public final class SocksProxyConfig implements IProxyConfig
   public static final String SYSPROP_SOCKS_PROXY_HOST = "socksProxyHost";
   public static final String SYSPROP_SOCKS_PROXY_PORT = "socksProxyPort";
   public static final int DEFAULT_SOCKS_PROXY_PORT = 1080;
+
   private final String m_sHost;
   private final int m_nPort;
 
@@ -83,6 +85,26 @@ public final class SocksProxyConfig implements IProxyConfig
   public int getPort ()
   {
     return m_nPort;
+  }
+
+  /**
+   * @return The current proxy host for SOCKS proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getProxyHost ()
+  {
+    return SystemProperties.getPropertyValueOrNull (SYSPROP_SOCKS_PROXY_HOST);
+  }
+
+  /**
+   * @return The current proxy port for SOCKS proxy type. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getProxyPort ()
+  {
+    return SystemProperties.getPropertyValueOrNull (SYSPROP_SOCKS_PROXY_PORT);
   }
 
   public void activateGlobally ()

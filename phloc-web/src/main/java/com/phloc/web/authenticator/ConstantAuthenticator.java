@@ -76,7 +76,7 @@ public class ConstantAuthenticator extends Authenticator
   }
 
   @Override
-  protected PasswordAuthentication getPasswordAuthentication ()
+  public PasswordAuthentication getPasswordAuthentication ()
   {
     return new PasswordAuthentication (m_sUserName, m_sPassword.toCharArray ());
   }

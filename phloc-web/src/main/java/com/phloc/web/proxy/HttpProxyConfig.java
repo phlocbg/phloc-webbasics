@@ -17,6 +17,7 @@
  */
 package com.phloc.web.proxy;
 
+import java.net.Authenticator;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -36,7 +37,10 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.port.DefaultNetworkPorts;
 
 /**
- * HTTP proxy configuration.
+ * HTTP proxy configuration.<br>
+ * Attention when using userName and password, make sure to call
+ * <code>Authenticator.setDefault (...)</code> with the same username and
+ * password as well!
  * 
  * @author Philip Helger
  */
@@ -46,18 +50,30 @@ public final class HttpProxyConfig implements IProxyConfig
   private final EHttpProxyType m_eProxyType;
   private final String m_sHost;
   private final int m_nPort;
+  private final String m_sUserName;
+  private final String m_sPassword;
   private final List <String> m_aNonProxyHosts = new ArrayList <String> ();
 
   public HttpProxyConfig (@Nonnull final EHttpProxyType eProxyType,
                           @Nonnull @Nonempty final String sHost,
                           @Nonnegative final int nPort)
   {
-    this (eProxyType, sHost, nPort, null);
+    this (eProxyType, sHost, nPort, (String) null, (String) null, (List <String>) null);
   }
 
   public HttpProxyConfig (@Nonnull final EHttpProxyType eProxyType,
                           @Nonnull @Nonempty final String sHost,
                           @Nonnegative final int nPort,
+                          @Nullable final List <String> aNonProxyHosts)
+  {
+    this (eProxyType, sHost, nPort, (String) null, (String) null, aNonProxyHosts);
+  }
+
+  public HttpProxyConfig (@Nonnull final EHttpProxyType eProxyType,
+                          @Nonnull @Nonempty final String sHost,
+                          @Nonnegative final int nPort,
+                          @Nullable final String sUserName,
+                          @Nullable final String sPassword,
                           @Nullable final List <String> aNonProxyHosts)
   {
     if (eProxyType == null)
@@ -69,6 +85,8 @@ public final class HttpProxyConfig implements IProxyConfig
     m_eProxyType = eProxyType;
     m_sHost = sHost;
     m_nPort = nPort;
+    m_sUserName = sUserName;
+    m_sPassword = sPassword;
     if (aNonProxyHosts != null)
       for (final String sNonProxyHost : aNonProxyHosts)
         if (StringHelper.hasText (sNonProxyHost))
@@ -93,11 +111,33 @@ public final class HttpProxyConfig implements IProxyConfig
     return m_nPort;
   }
 
+  @Nullable
+  public String getUserName ()
+  {
+    return m_sUserName;
+  }
+
+  @Nullable
+  public String getPassword ()
+  {
+    return m_sPassword;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getNonProxyHosts ()
   {
     return ContainerHelper.newList (m_aNonProxyHosts);
+  }
+
+  @Nullable
+  public Authenticator getAsAuthenticator ()
+  {
+    // If no user name is set, no Authenticator needs to be created
+    if (StringHelper.hasNoText (m_eProxyType.getProxyUser ()))
+      return null;
+
+    return new HttpProxyAuthenticator (m_eProxyType);
   }
 
   public void activateGlobally ()
@@ -108,6 +148,8 @@ public final class HttpProxyConfig implements IProxyConfig
 
     SystemProperties.setPropertyValue (m_eProxyType.getPropertyNameProxyHost (), m_sHost);
     SystemProperties.setPropertyValue (m_eProxyType.getPropertyNameProxyPort (), Integer.toString (m_nPort));
+    SystemProperties.setPropertyValue (m_eProxyType.getPropertyNameProxyUser (), m_sUserName);
+    SystemProperties.setPropertyValue (m_eProxyType.getPropertyNameProxyPassword (), m_sPassword);
     SystemProperties.setPropertyValue (m_eProxyType.getPropertyNameNoProxyHosts (),
                                        StringHelper.getImploded ("|", m_aNonProxyHosts));
   }
@@ -118,6 +160,8 @@ public final class HttpProxyConfig implements IProxyConfig
     {
       SystemProperties.removePropertyValue (eProxyType.getPropertyNameProxyHost ());
       SystemProperties.removePropertyValue (eProxyType.getPropertyNameProxyPort ());
+      SystemProperties.removePropertyValue (eProxyType.getPropertyNameProxyUser ());
+      SystemProperties.removePropertyValue (eProxyType.getPropertyNameProxyPassword ());
       SystemProperties.removePropertyValue (eProxyType.getPropertyNameNoProxyHosts ());
     }
   }
@@ -133,6 +177,8 @@ public final class HttpProxyConfig implements IProxyConfig
   {
     return new ToStringGenerator (this).append ("host", m_sHost)
                                        .append ("port", m_nPort)
+                                       .append ("userName", m_sUserName)
+                                       .appendPassword ("password")
                                        .append ("nonProxyHosts", m_aNonProxyHosts)
                                        .toString ();
   }

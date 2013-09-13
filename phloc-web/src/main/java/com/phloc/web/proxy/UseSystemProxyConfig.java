@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -44,6 +45,11 @@ public final class UseSystemProxyConfig implements IProxyConfig
   public static UseSystemProxyConfig getInstance ()
   {
     return s_aInstance;
+  }
+
+  public boolean isUseSystemProxies ()
+  {
+    return StringParser.parseBool (SystemProperties.getPropertyValueOrNull (SYSPROP_JAVA_NET_USE_SYSTEM_PROXIES), false);
   }
 
   public void activateGlobally ()
