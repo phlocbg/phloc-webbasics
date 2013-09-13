@@ -1,0 +1,4 @@
+com.phloc.web.sitemap.provider.MockXMLSitemapProviderSPI
+com.phloc.web.sitemap.provider.MockXMLSitemapProviderMultiFileSPI
+com.phloc.web.sitemap.provider.MockXMLSitemapProviderEmptySPI
+com.phloc.web.sitemap.provider.MockXMLSitemapProviderNullSPI
