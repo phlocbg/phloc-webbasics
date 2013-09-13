@@ -4,6 +4,15 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="phloc-webctrls-1.2.3-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-webctrls/phloc-webctrls">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="phloc-webpages-1.0.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-webpages/phloc-webpages">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="phloc-bootstrap3-1.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-bootstrap3/phloc-bootstrap3">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="phloc-webdemoapp"/>
         <property name="java-output-path" value="/phloc-webdemoapp/target/classes"/>
     </wb-module>

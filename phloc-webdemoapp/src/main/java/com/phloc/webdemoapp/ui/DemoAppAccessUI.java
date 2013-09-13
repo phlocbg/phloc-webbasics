@@ -23,6 +23,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.bootstrap3.button.Bootstrap3ButtonToolbar;
+import com.phloc.bootstrap3.form.Bootstrap3Form;
+import com.phloc.bootstrap3.form.EBootstrap3FormType;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
@@ -34,9 +37,6 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.login.CLogin;
-import com.phloc.webctrls.bootstrap3.button.Bootstrap3ButtonToolbar;
-import com.phloc.webctrls.bootstrap3.form.Bootstrap3Form;
-import com.phloc.webctrls.bootstrap3.form.EBootstrap3FormType;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 
 @Immutable

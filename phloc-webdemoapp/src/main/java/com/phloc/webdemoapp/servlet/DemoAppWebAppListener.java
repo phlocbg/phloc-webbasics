@@ -25,20 +25,20 @@ import javax.annotation.Nonnull;
 
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import com.phloc.bootstrap3.ext.Bootstrap3DataTables;
+import com.phloc.bootstrap3.servlet.WebAppListenerMultiAppBootstrap3;
+import com.phloc.bootstrap3.styler.Bootstrap3WebPageStyler;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
-import com.phloc.webctrls.bootstrap3.ext.Bootstrap3DataTables;
-import com.phloc.webctrls.bootstrap3.servlet.WebAppListenerMultiAppBootstrap3;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
+import com.phloc.webctrls.styler.WebPageStylerManager;
 import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 import com.phloc.webdemoapp.app.init.DefaultSecurity;
 import com.phloc.webdemoapp.app.init.InitializerConfig;
 import com.phloc.webdemoapp.app.init.InitializerView;
-import com.phloc.webpages.theme.Bootstrap3WebPageStyler;
-import com.phloc.webpages.theme.WebPageStylerManager;
 
 /**
  * Callbacks for the application server

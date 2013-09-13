@@ -33,7 +33,6 @@ import com.phloc.commons.state.EContinue;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.login.LoginManager;
-import com.phloc.webctrls.bootstrap.ext.BootstrapLoginHTMLProvider;
 import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webdemoapp.app.CDemoAppSecurity;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;

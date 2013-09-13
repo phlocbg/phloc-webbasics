@@ -31,9 +31,9 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.userdata.UserDataObject;
 import com.phloc.webctrls.fineupload.FineUploader;
 import com.phloc.webctrls.fineupload.HCFineUploaderBasic;
+import com.phloc.webctrls.styler.WebPageStylerManager;
 import com.phloc.webdemoapp.servlet.DemoAppUserUploadServlet;
 import com.phloc.webdemoapp.ui.config.upload.UserUploadManager;
-import com.phloc.webpages.theme.WebPageStylerManager;
 
 @Immutable
 public final class DemoAppFormUI

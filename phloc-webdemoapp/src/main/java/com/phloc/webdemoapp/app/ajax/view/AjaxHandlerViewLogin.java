@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.bootstrap3.alert.Bootstrap3ErrorBox;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.html.hc.IHCNode;
@@ -37,7 +38,6 @@ import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webbasics.login.CLogin;
-import com.phloc.webctrls.bootstrap3.alert.Bootstrap3ErrorBox;
 import com.phloc.webdemoapp.app.CDemoAppSecurity;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
