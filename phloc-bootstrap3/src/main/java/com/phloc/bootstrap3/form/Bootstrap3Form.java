@@ -57,13 +57,23 @@ public class Bootstrap3Form extends HCForm
     this ((ISimpleURL) null, eFormType);
   }
 
+  public Bootstrap3Form (@Nullable final String sAction)
+  {
+    this (sAction, EBootstrap3FormType.DEFAULT);
+  }
+
   public Bootstrap3Form (@Nullable final ISimpleURL aAction, @Nonnull final EBootstrap3FormType eFormType)
   {
+    this (aAction == null ? null : aAction.getAsString (), eFormType);
+  }
+
+  public Bootstrap3Form (@Nullable final String sAction, @Nonnull final EBootstrap3FormType eFormType)
+  {
     super ();
-    if (aAction != null)
-      setAction (aAction.getAsString ());
     if (eFormType == null)
       throw new NullPointerException ("FormType");
+    if (sAction != null)
+      setAction (sAction);
     m_eFormType = eFormType;
     setRole (EHTMLRole.FORM);
     addClass (eFormType);
