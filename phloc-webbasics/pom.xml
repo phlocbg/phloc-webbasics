@@ -8,7 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-webbasics</artifactId>
-  <version>2.1.8-SNAPSHOT</version>
+  <version>2.1.8</version>
   <packaging>bundle</packaging>
   <name>phloc-webbasics</name>
   <url>http://repo.phloc.com/apidocs/phloc-webbasics/${project.version}</url>
@@ -22,9 +22,9 @@
   </licenses>
   
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webbasics</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/tags/phloc-webbasics-2.1.8</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/phloc-webbasics-2.1.8</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/phloc-webbasics-2.1.8</developerConnection>
   </scm>
 
   <organization>
