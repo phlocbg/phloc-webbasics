@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <release date="2013-09-13" version="2.1.7" />
+  <entry date="2013-09-13" category="tech" action="update" incompatible="true">
+    <change>
+      <text locale="en">Updated to phloc-html 3.10.0</text>
+    </change>
+  </entry>
   <release date="2013-09-04" version="2.1.6" />
   <entry date="2013-09-04" category="api" action="remove" incompatible="true">
     <change>
