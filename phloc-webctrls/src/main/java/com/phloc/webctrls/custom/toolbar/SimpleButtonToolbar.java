@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.js.IJSCodeProvider;
-import com.phloc.webctrls.bootstrap3.button.Bootstrap3SubmitButton;
 import com.phloc.webctrls.custom.IIcon;
 
 /**
@@ -51,9 +50,9 @@ public class SimpleButtonToolbar extends AbstractButtonToolbar <SimpleButtonTool
                                                     @Nullable final IJSCodeProvider aOnClick,
                                                     @Nullable final IIcon aIcon)
   {
-    addChild (new Bootstrap3SubmitButton ().addChild (aIcon == null ? null : aIcon.getAsNode ())
-                                           .addChild (sCaption)
-                                           .setOnClick (aOnClick));
+    addChild (new HCButton ().addChild (aIcon == null ? null : aIcon.getAsNode ())
+                             .addChild (sCaption)
+                             .setOnClick (aOnClick));
     return this;
   }
 }
