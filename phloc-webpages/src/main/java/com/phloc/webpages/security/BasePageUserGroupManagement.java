@@ -63,6 +63,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
@@ -179,7 +180,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
-                                                                                                     HCCol.star ()));
+                                                                                                       HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
@@ -330,7 +331,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
                                 @Nonnull final FormErrors aFormErrors)
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (170), HCCol.star ()));
+    final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
+                                                                                           HCCol.star ()));
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                       aSelectedObject.getName ())
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));

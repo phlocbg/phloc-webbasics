@@ -72,6 +72,7 @@ import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
@@ -487,7 +488,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                    final boolean bEdit,
                                    final boolean bCopy,
                                    @Nonnull final FormErrors aFormErrors,
-                                   @Nonnull final BootstrapTableForm aTable)
+                                   @Nonnull final IHCTableForm <?> aTable)
   {}
 
   @Override
@@ -503,7 +504,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
-    final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (170), HCCol.star ()));
+    final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
+                                                                                           HCCol.star ()));
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                       aSelectedObject.getDisplayName ())
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
@@ -619,8 +621,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         // Show input form
         final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
         final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
-        final BootstrapTableForm aTable = aForm.addAndReturnChild (new BootstrapTableForm (new HCCol (200),
-                                                                                           HCCol.star ()));
+        final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (200),
+                                                                                               HCCol.star ()));
         aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                             aSelectedObject.getDisplayName ()));
 

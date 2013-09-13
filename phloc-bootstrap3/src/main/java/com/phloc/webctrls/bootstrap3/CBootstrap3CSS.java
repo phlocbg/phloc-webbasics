@@ -17,8 +17,10 @@
  */
 package com.phloc.webctrls.bootstrap3;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.error.EErrorLevel;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 
@@ -624,4 +626,17 @@ public final class CBootstrap3CSS
 
   private CBootstrap3CSS ()
   {}
+
+  @Nullable
+  public static ICSSClassProvider getCSSClass (@Nullable final EErrorLevel eErrorLevel)
+  {
+    if (eErrorLevel == null)
+      return null;
+
+    if (eErrorLevel.isLessOrEqualSevereThan (EErrorLevel.SUCCESS))
+      return SUCCESS;
+    if (eErrorLevel.isLessOrEqualSevereThan (EErrorLevel.WARN))
+      return WARNING;
+    return DANGER;
+  }
 }

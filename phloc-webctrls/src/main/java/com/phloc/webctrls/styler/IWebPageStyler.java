@@ -30,6 +30,7 @@ import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.userdata.UserDataObject;
+import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
@@ -79,6 +80,9 @@ public interface IWebPageStyler
 
   @Nonnull
   AbstractHCTable <?> createTable (@Nullable HCCol... aCols);
+
+  @Nonnull
+  IHCTableForm <?> createTableForm (@Nullable HCCol... aCols);
 
   @Nonnull
   IHCTableFormView <?> createTableFormView (@Nullable HCCol... aCols);
