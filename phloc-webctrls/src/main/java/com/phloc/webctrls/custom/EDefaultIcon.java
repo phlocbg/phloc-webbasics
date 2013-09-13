@@ -36,6 +36,7 @@ public enum EDefaultIcon
   EDIT,
   HELP,
   INFO,
+  KEY,
   MAGNIFIER,
   MINUS,
   NEW,

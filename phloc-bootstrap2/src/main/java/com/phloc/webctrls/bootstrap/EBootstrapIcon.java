@@ -229,6 +229,7 @@ public enum EBootstrapIcon implements IIcon
     DefaultIcons.set (EDefaultIcon.EDIT, PENCIL);
     DefaultIcons.set (EDefaultIcon.HELP, QUESTION_SIGN);
     DefaultIcons.set (EDefaultIcon.INFO, INFO_SIGN);
+    DefaultIcons.set (EDefaultIcon.KEY, LOCK);
     DefaultIcons.set (EDefaultIcon.MAGNIFIER, ZOOM_IN);
     DefaultIcons.set (EDefaultIcon.MINUS, MINUS);
     DefaultIcons.set (EDefaultIcon.NEW, FILE);
