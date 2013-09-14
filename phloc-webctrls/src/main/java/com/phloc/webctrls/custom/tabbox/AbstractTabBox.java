@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,7 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
   }
 
   @Nonnull
-  public IMPLTYPE setActiveTabID (final String sID)
+  public IMPLTYPE setActiveTabID (@Nullable final String sID)
   {
     m_sActiveTabID = sID;
     if (StringHelper.hasText (sID) && !m_aTabs.containsKey (sID))
@@ -72,57 +73,69 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
   }
 
   @Nonnull
-  public Tab addTab (final String sLabel, final IHCNode aContent)
+  public Tab addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent)
   {
     return addTab (null, new HCTextNode (sLabel), aContent, DEFAULT_ACTIVE);
   }
 
   @Nonnull
-  public Tab addTab (final String sLabel, final IHCNode aContent, final boolean bActive)
+  public Tab addTab (@Nullable final String sLabel, @Nullable final IHCNode aContent, final boolean bActive)
   {
     return addTab (null, new HCTextNode (sLabel), aContent, bActive);
   }
 
   @Nonnull
-  public Tab addTab (final String sLabel, final IHCNode aContent, final boolean bActive, final boolean bDisabled)
+  public Tab addTab (@Nullable final String sLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive,
+                     final boolean bDisabled)
   {
     return addTab (null, new HCTextNode (sLabel), aContent, bActive, bDisabled);
   }
 
   @Nonnull
-  public Tab addTab (final String sID, final String sLabel, final IHCNode aContent, final boolean bActive)
+  public Tab addTab (@Nullable final String sID,
+                     @Nullable final String sLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive)
   {
     return addTab (sID, new HCTextNode (sLabel), aContent, bActive);
   }
 
   @Nonnull
-  public Tab addTab (final IHCNode aLabel, final IHCNode aContent)
+  public Tab addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent)
   {
     return addTab (null, aLabel, aContent, DEFAULT_ACTIVE);
   }
 
   @Nonnull
-  public Tab addTab (final IHCNode aLabel, final IHCNode aContent, final boolean bActive)
+  public Tab addTab (@Nullable final IHCNode aLabel, @Nullable final IHCNode aContent, final boolean bActive)
   {
     return addTab (null, aLabel, aContent, bActive);
   }
 
   @Nonnull
-  public Tab addTab (final IHCNode aLabel, final IHCNode aContent, final boolean bActive, final boolean bDisabled)
+  public Tab addTab (@Nullable final IHCNode aLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive,
+                     final boolean bDisabled)
   {
     return addTab (null, aLabel, aContent, bActive, bDisabled);
   }
 
   @Nonnull
-  public Tab addTab (final String sID, final IHCNode aLabel, final IHCNode aContent, final boolean bActive)
+  public Tab addTab (@Nullable final String sID,
+                     @Nullable final IHCNode aLabel,
+                     @Nullable final IHCNode aContent,
+                     final boolean bActive)
   {
     return addTab (sID, aLabel, aContent, bActive, DEFAULT_DISABLED);
   }
 
   @Nonnull
-  public Tab addTab (final String sID,
-                     final IHCNode aLabel,
-                     final IHCNode aContent,
+  public Tab addTab (@Nullable final String sID,
+                     @Nullable final IHCNode aLabel,
+                     @Nullable final IHCNode aContent,
                      final boolean bActive,
                      final boolean bDisabled)
   {
@@ -152,7 +165,8 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
     return ContainerHelper.newList (m_aTabs.values ());
   }
 
-  public Tab getTabOfID (final String sID)
+  @Nullable
+  public Tab getTabOfID (@Nullable final String sID)
   {
     return m_aTabs.get (sID);
   }
@@ -161,6 +175,7 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
    * @return The tab marked as active or <code>null</code> if no tab is marked
    *         as active.
    */
+  @Nullable
   public Tab getActiveTab ()
   {
     Tab aTab = null;
@@ -174,6 +189,7 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
    * @return The tab marked as active, or the first tab which will be active by
    *         default. May be <code>null</code> if no tab is contained
    */
+  @Nullable
   public Tab getActiveTabOrDefault ()
   {
     Tab aTab = getActiveTab ();
@@ -195,7 +211,7 @@ public abstract class AbstractTabBox <IMPLTYPE extends ITabBox <IMPLTYPE>> imple
   }
 
   @Nonnull
-  public EChange removeTab (final String sTabID)
+  public EChange removeTab (@Nullable final String sTabID)
   {
     if (m_aTabs.remove (sTabID) == null)
       return EChange.UNCHANGED;
