@@ -17,16 +17,11 @@
  */
 package com.phloc.webctrls.custom.table;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
-import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.impl.HCFormLabel;
 
-public class HCTableFormView extends AbstractHCTable <HCTableFormView> implements IHCTableFormView <HCTableFormView>
+public class HCTableFormView extends AbstractHCTableFormView <HCTableFormView>
 {
   public HCTableFormView ()
   {
@@ -46,55 +41,5 @@ public class HCTableFormView extends AbstractHCTable <HCTableFormView> implement
   public HCTableFormView (@Nullable final Iterable <? extends HCCol> aCols)
   {
     super (aCols);
-  }
-
-  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
-  {
-    addBodyRow ().addCell (aLabel).addCell (sValue);
-  }
-
-  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String... aValues)
-  {
-    addBodyRow ().addCell (aLabel).addCell (aValues);
-  }
-
-  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aValue)
-  {
-    addBodyRow ().addCell (aLabel).addCell (aValue);
-  }
-
-  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode... aValues)
-  {
-    addBodyRow ().addCell (aLabel).addCell (aValues);
-  }
-
-  public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aValues)
-  {
-    addBodyRow ().addCell (aLabel).addCell (aValues);
-  }
-
-  public void addItemRow (@Nonnull final String sLabel, @Nullable final String sValue)
-  {
-    addItemRow (HCFormLabel.create (sLabel), sValue);
-  }
-
-  public void addItemRow (@Nonnull final String sLabel, @Nullable final String... aValue)
-  {
-    addItemRow (HCFormLabel.create (sLabel), aValue);
-  }
-
-  public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode aValue)
-  {
-    addItemRow (HCFormLabel.create (sLabel), aValue);
-  }
-
-  public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode... aValues)
-  {
-    addItemRow (HCFormLabel.create (sLabel), aValues);
-  }
-
-  public void addItemRow (@Nonnull final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
-  {
-    addItemRow (HCFormLabel.create (sLabel), aValues);
   }
 }
