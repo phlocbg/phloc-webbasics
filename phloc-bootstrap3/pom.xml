@@ -10,7 +10,7 @@
   <artifactId>phloc-bootstrap3</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>phloc-webctrls</name>
+  <name>phloc-bootstrap3</name>
   <url>http://repo.phloc.com/apidocs/phloc-bootstrap3/${project.version}</url>
  
   <licenses>
