@@ -37,6 +37,7 @@ import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCHasFocus;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
@@ -80,7 +81,8 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return m_bFocusHandlingEnabled;
   }
 
-  private static void _focusNode (@Nonnull final IHCHasFocus <?> aCtrl)
+  @OverrideOnDemand
+  protected void focusNode (@Nonnull final IHCHasFocus <?> aCtrl)
   {
     aCtrl.setFocused (true);
     if (aCtrl instanceof IHCControl <?>)
@@ -92,7 +94,8 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     }
   }
 
-  private static void _addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
+  @OverrideOnDemand
+  protected void addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
   {
     aRow.addCell (aLabel);
   }
@@ -132,9 +135,10 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
-  private IHCCell <?> _addControlCell (@Nonnull final HCRow aRow,
-                                       @Nullable final Iterable <? extends IHCNode> aCtrls,
-                                       final boolean bHasError)
+  @OverrideOnDemand
+  protected IHCCell <?> addControlCell (@Nonnull final HCRow aRow,
+                                        @Nullable final Iterable <? extends IHCNode> aCtrls,
+                                        final boolean bHasError)
   {
     final List <IHCNode> aResolvedCtrls = new ArrayList <IHCNode> ();
     if (aCtrls != null)
@@ -156,7 +160,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
           for (final IHCNode aCtrl : aResolvedCtrls)
             if (aCtrl instanceof IHCHasFocus <?>)
             {
-              _focusNode ((IHCHasFocus <?>) aCtrl);
+              focusNode ((IHCHasFocus <?>) aCtrl);
               m_bSetAutoFocus = true;
               break;
             }
@@ -175,12 +179,12 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return aRow.addAndReturnCell (aResolvedCtrls);
   }
 
-  public static void addControlCellErrorMessages (@Nonnull final IHCCell <?> aCell,
+  public static void addControlCellErrorMessages (@Nonnull final IHCElementWithChildren <?> aParent,
                                                   @Nullable final IErrorList aFormErrors)
   {
     if (aFormErrors != null)
       for (final IError aError : aFormErrors.getAllItems ())
-        aCell.addChild (new BootstrapHelpBlock ().addChild (aError.getErrorText ()));
+        aParent.addChild (new BootstrapHelpBlock ().addChild (aError.getErrorText ()));
   }
 
   @Nonnull
@@ -236,10 +240,10 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
       aRow.addClass (CBootstrapCSS.getCSSClass (eHighest));
 
     // Label cell
-    _addLabelCell (aRow, aLabel);
+    addLabelCell (aRow, aLabel);
 
     // Add main control
-    final IHCCell <?> aCtrlCell = _addControlCell (aRow, aCtrls, eHighest != null);
+    final IHCCell <?> aCtrlCell = addControlCell (aRow, aCtrls, eHighest != null);
 
     // Add error messages
     addControlCellErrorMessages (aCtrlCell, aFormErrors);
@@ -327,7 +331,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
       // Try to focus the first control (if available), but do it only once per
       // request because the cursor can only be on one control at a time :)
       if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag (REQUEST_ATTR_FIRST_FOCUSABLE))
-        _focusNode (m_aFirstFocusable);
+        focusNode (m_aFirstFocusable);
     }
     super.applyProperties (aDivElement, aConversionSettings);
   }

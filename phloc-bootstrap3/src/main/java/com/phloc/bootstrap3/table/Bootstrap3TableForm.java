@@ -19,7 +19,6 @@ package com.phloc.bootstrap3.table;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,10 +30,9 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.microdom.IMicroElement;
-import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCControl;
-import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCHasFocus;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
@@ -77,7 +75,8 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
     return m_bFocusHandlingEnabled;
   }
 
-  private static void _focusNode (@Nonnull final IHCHasFocus <?> aCtrl)
+  @OverrideOnDemand
+  protected void focusNode (@Nonnull final IHCHasFocus <?> aCtrl)
   {
     aCtrl.setFocused (true);
     if (aCtrl instanceof IHCControl <?>)
@@ -89,15 +88,10 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
     }
   }
 
-  private static void _addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
+  @OverrideOnDemand
+  protected void addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
   {
     aRow.addCell (aLabel);
-  }
-
-  public static final boolean hasDefinedInputSize (@Nonnull final IHCElement <?> aElement)
-  {
-    final Set <ICSSClassProvider> aClasses = aElement.getAllClasses ();
-    return aClasses.contains (CBootstrap3CSS.INPUT_LG) || aClasses.contains (CBootstrap3CSS.INPUT_SM);
   }
 
   /**
@@ -112,9 +106,10 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
   {}
 
   @Nonnull
-  private IHCCell <?> _addControlCell (@Nonnull final HCRow aRow,
-                                       @Nullable final Iterable <? extends IHCNode> aCtrls,
-                                       final boolean bHasError)
+  @OverrideOnDemand
+  protected IHCCell <?> addControlCell (@Nonnull final HCRow aRow,
+                                        @Nullable final Iterable <? extends IHCNode> aCtrls,
+                                        final boolean bHasError)
   {
     final List <IHCNode> aResolvedCtrls = new ArrayList <IHCNode> ();
     if (aCtrls != null)
@@ -136,7 +131,7 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
           for (final IHCNode aCtrl : aResolvedCtrls)
             if (aCtrl instanceof IHCHasFocus <?>)
             {
-              _focusNode ((IHCHasFocus <?>) aCtrl);
+              focusNode ((IHCHasFocus <?>) aCtrl);
               m_bSetAutoFocus = true;
               break;
             }
@@ -155,12 +150,12 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
     return aRow.addAndReturnCell (aResolvedCtrls);
   }
 
-  public static void addControlCellErrorMessages (@Nonnull final IHCCell <?> aCell,
+  public static void addControlCellErrorMessages (@Nonnull final IHCElementWithChildren <?> aParent,
                                                   @Nullable final IErrorList aFormErrors)
   {
     if (aFormErrors != null)
       for (final IError aError : aFormErrors.getAllItems ())
-        aCell.addChild (new Bootstrap3HelpBlock ().addChild (aError.getErrorText ()));
+        aParent.addChild (new Bootstrap3HelpBlock ().addChild (aError.getErrorText ()));
   }
 
   @Nonnull
@@ -216,10 +211,10 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
       aRow.addClass (CBootstrap3CSS.getCSSClass (eHighest));
 
     // Label cell
-    _addLabelCell (aRow, aLabel);
+    addLabelCell (aRow, aLabel);
 
     // Add main control
-    final IHCCell <?> aCtrlCell = _addControlCell (aRow, aCtrls, eHighest != null);
+    final IHCCell <?> aCtrlCell = addControlCell (aRow, aCtrls, eHighest != null);
 
     // Add error messages
     addControlCellErrorMessages (aCtrlCell, aFormErrors);
@@ -307,7 +302,7 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
       // Try to focus the first control (if available), but do it only once per
       // request because the cursor can only be on one control at a time :)
       if (!WebScopeManager.getRequestScope ().getAndSetAttributeFlag (REQUEST_ATTR_FIRST_FOCUSABLE))
-        _focusNode (m_aFirstFocusable);
+        focusNode (m_aFirstFocusable);
     }
     super.applyProperties (aDivElement, aConversionSettings);
   }
