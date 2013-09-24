@@ -102,18 +102,6 @@ public final class WebFileIO
     }
   }
 
-  @Deprecated
-  public static void initBasePath (@Nonnull final File aBasePath)
-  {
-    initPaths (aBasePath, aBasePath, true);
-  }
-
-  @Deprecated
-  public static void initPaths (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
-  {
-    initPaths (aDataPath, aServletContextPath, true);
-  }
-
   public static void initPaths (@Nonnull final File aDataPath,
                                 @Nonnull final File aServletContextPath,
                                 final boolean bCheckFileAccess)
@@ -146,17 +134,6 @@ public final class WebFileIO
   }
 
   /**
-   * Reset the base path - no matter if it was initialized or not.
-   * 
-   * @deprecated Use {@link #resetPaths()} instead
-   */
-  @Deprecated
-  public static void resetBasePath ()
-  {
-    resetPaths ();
-  }
-
-  /**
    * Reset the base paths - no matter if they were initialized or not.
    */
   public static void resetPaths ()
@@ -176,8 +153,19 @@ public final class WebFileIO
   /**
    * @return <code>true</code> if the base path was initialized,
    *         <code>false</code> otherwise
+   * @deprecated Use {@link #isInited()} instead
    */
+  @Deprecated
   public static boolean isBasePathInited ()
+  {
+    return isInited ();
+  }
+
+  /**
+   * @return <code>true</code> if the base path was initialized,
+   *         <code>false</code> otherwise
+   */
+  public static boolean isInited ()
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -355,25 +343,6 @@ public final class WebFileIO
   }
 
   /**
-   * Get the {@link Reader} relative to the base path
-   * 
-   * @param sRelativePath
-   *        the relative path
-   * @param sCharset
-   *        The charset to use. May not be <code>null</code>.
-   * @return <code>null</code> if the path does not exist
-   * @throws IllegalStateException
-   *         if no base path was provided
-   * @see #getBasePathFile()
-   */
-  @Nullable
-  @Deprecated
-  public static Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
-  {
-    return getDataIO ().getReader (sRelativePath, sCharset);
-  }
-
-  /**
    * Get the {@link OutputStream} relative to the base path
    * 
    * @param sRelativePath
@@ -407,27 +376,6 @@ public final class WebFileIO
                                   @Nonnull final EAppend eAppend)
   {
     return getDataIO ().getWriter (sRelativePath, aCharset, eAppend);
-  }
-
-  /**
-   * Get the {@link Writer} relative to the base path
-   * 
-   * @param sRelativePath
-   *        the relative path
-   * @param sCharset
-   *        The charset to use. May not be <code>null</code>.
-   * @param eAppend
-   *        Append or truncate mode. May not be <code>null</code>.
-   * @return <code>null</code> if the path is not writable
-   * @see #getBasePathFile()
-   */
-  @Nullable
-  @Deprecated
-  public static Writer getWriter (@Nonnull final String sRelativePath,
-                                  @Nonnull final String sCharset,
-                                  @Nonnull final EAppend eAppend)
-  {
-    return getDataIO ().getWriter (sRelativePath, sCharset, eAppend);
   }
 
   /**

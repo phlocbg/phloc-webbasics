@@ -38,14 +38,6 @@ public interface IAuditManager
   IAuditor getAuditor ();
 
   /**
-   * @return All available audit items. Never <code>null</code>.
-   */
-  @Nonnull
-  @ReturnsMutableCopy
-  @Deprecated
-  List <IAuditItem> getAllAuditItems ();
-
-  /**
    * @param nMaxItems
    *        The maximum number of items. Must be &gt; 0.
    * @return The n latest audit items. Never <code>null</code>.

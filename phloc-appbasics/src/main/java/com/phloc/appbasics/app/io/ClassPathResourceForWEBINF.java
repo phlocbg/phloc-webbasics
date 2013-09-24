@@ -44,7 +44,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-public final class ClassPathResourceForWEBINF implements IReadableResource
+public class ClassPathResourceForWEBINF implements IReadableResource
 {
   private final List <String> m_aPaths = new ArrayList <String> (2);
 

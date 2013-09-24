@@ -28,7 +28,7 @@ import com.phloc.commons.idfactory.FileIntIDFactory;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class WebIOIntIDFactory extends FileIntIDFactory
+public class WebIOIntIDFactory extends FileIntIDFactory
 {
   public WebIOIntIDFactory (@Nonnull final String sFilename)
   {

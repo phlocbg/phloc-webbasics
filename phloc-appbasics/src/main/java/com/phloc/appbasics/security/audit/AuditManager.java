@@ -27,7 +27,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.app.dao.xml.AbstractXMLDAO;
 import com.phloc.appbasics.app.io.IHasFilename;
-import com.phloc.appbasics.app.io.WebIO;
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -99,7 +99,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
 
     // Ensure base path is present
     if (StringHelper.hasText (sBaseDir))
-      WebIO.createDirRecursiveIfNotExisting (sBaseDir);
+      WebFileIO.getDataIO ().createDirectory (sBaseDir, true);
 
     final IThrowingRunnableWithParameter <List <IAuditItem>> aPerformer = new IThrowingRunnableWithParameter <List <IAuditItem>> ()
     {
@@ -151,22 +151,6 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
   {
     // Is sorted in itself
     return m_aItems.getAllItems ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  @Deprecated
-  public List <IAuditItem> getAllAuditItems ()
-  {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aItems.getAllItems ();
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
   }
 
   @Nonnull

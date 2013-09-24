@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
-import com.phloc.commons.state.EChange;
 
 /**
  * Abstraction layer around auto save stuff.
@@ -36,18 +35,6 @@ public interface IAutoSaveAware
    *         otherwise.
    */
   boolean isAutoSaveEnabled ();
-
-  /**
-   * Change the current state of the auto save flag.
-   * 
-   * @param bAutoSaveEnabled
-   *        If <code>true</code> auto save is enabled, if it is
-   *        <code>false</code> auto save is disabled.
-   * @return {@link EChange}
-   */
-  @Deprecated
-  @Nonnull
-  EChange setAutoSaveEnabled (boolean bAutoSaveEnabled);
 
   /**
    * Start doing something without auto save.

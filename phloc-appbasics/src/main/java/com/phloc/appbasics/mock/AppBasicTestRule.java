@@ -44,18 +44,6 @@ public class AppBasicTestRule extends ScopeTestRule
   /**
    * Ctor with an arbitrary path
    * 
-   * @param aStoragePath
-   *        The base path to be used. May not be <code>null</code>.
-   */
-  @Deprecated
-  public AppBasicTestRule (@Nonnull final File aStoragePath)
-  {
-    this (aStoragePath, aStoragePath);
-  }
-
-  /**
-   * Ctor with an arbitrary path
-   * 
    * @param aDataPath
    *        The data path to be used. May not be <code>null</code>.
    * @param aServletContextPath

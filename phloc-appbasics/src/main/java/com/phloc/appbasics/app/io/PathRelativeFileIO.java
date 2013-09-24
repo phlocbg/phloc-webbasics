@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.EAppend;
@@ -40,6 +41,8 @@ import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.timing.StopWatch;
 
@@ -65,7 +68,7 @@ public final class PathRelativeFileIO
 
     // Must be an existing directory
     if (!aBasePath.isDirectory ())
-      throw new InitializationException ("The passed base path exists but is not a directory!");
+      throw new InitializationException ("The passed base path " + aBasePath + " exists but is not a directory!");
     m_aBasePath = aBasePath;
 
     if (bCheckAccessRights)
@@ -109,7 +112,7 @@ public final class PathRelativeFileIO
   }
 
   /**
-   * @return The storage base path. Never <code>null</code>.
+   * @return The base path. Never <code>null</code>.
    */
   @Nonnull
   public File getBasePathFile ()
@@ -216,20 +219,18 @@ public final class PathRelativeFileIO
   }
 
   /**
-   * Get the {@link Reader} relative to the base path
+   * Get the {@link OutputStream} relative to the base path. An eventually
+   * existing file is truncated.
    * 
    * @param sRelativePath
    *        the relative path
-   * @param sCharset
-   *        The charset to use. May not be <code>null</code>.
-   * @return <code>null</code> if the path does not exist
+   * @return <code>null</code> if the path is not writable
    * @see #getBasePathFile()
    */
   @Nullable
-  @Deprecated
-  public Reader getReader (@Nonnull final String sRelativePath, @Nonnull final String sCharset)
+  public OutputStream getOutputStream (@Nonnull final String sRelativePath)
   {
-    return getResource (sRelativePath).getReader (sCharset);
+    return getOutputStream (sRelativePath, EAppend.TRUNCATE);
   }
 
   /**
@@ -269,27 +270,6 @@ public final class PathRelativeFileIO
   }
 
   /**
-   * Get the {@link Writer} relative to the base path
-   * 
-   * @param sRelativePath
-   *        the relative path
-   * @param sCharset
-   *        The charset to use. May not be <code>null</code>.
-   * @param eAppend
-   *        Append or truncate mode. May not be <code>null</code>.
-   * @return <code>null</code> if the path is not writable
-   * @see #getBasePathFile()
-   */
-  @Nullable
-  @Deprecated
-  public Writer getWriter (@Nonnull final String sRelativePath,
-                           @Nonnull final String sCharset,
-                           @Nonnull final EAppend eAppend)
-  {
-    return getResource (sRelativePath).getWriter (sCharset, eAppend);
-  }
-
-  /**
    * Create the appropriate directory if it is not existing
    * 
    * @param sRelativePath
@@ -305,6 +285,168 @@ public final class PathRelativeFileIO
     final File aDir = getFile (sRelativePath);
     return bRecursive ? WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aDir)
                      : WebFileIO.getFileOpMgr ().createDirIfNotExisting (aDir);
+  }
+
+  @Nonnull
+  public FileIOError deleteFile (@Nonnull final String sFilename)
+  {
+    return deleteFile (getFile (sFilename));
+  }
+
+  @Nonnull
+  public FileIOError deleteFile (@Nonnull final File aFile)
+  {
+    return WebFileIO.getFileOpMgr ().deleteFile (aFile);
+  }
+
+  @Nonnull
+  public FileIOError deleteFileIfExisting (@Nonnull final String sFilename)
+  {
+    return deleteFileIfExisting (getFile (sFilename));
+  }
+
+  @Nonnull
+  public FileIOError deleteFileIfExisting (@Nonnull final File aFile)
+  {
+    return WebFileIO.getFileOpMgr ().deleteFileIfExisting (aFile);
+  }
+
+  @Nonnull
+  public FileIOError deleteDirectory (@Nonnull final String sDirName, final boolean bDeleteRecursively)
+  {
+    return deleteDirectory (getFile (sDirName), bDeleteRecursively);
+  }
+
+  @Nonnull
+  public FileIOError deleteDirectory (@Nonnull final File fDir, final boolean bDeleteRecursively)
+  {
+    return bDeleteRecursively ? WebFileIO.getFileOpMgr ().deleteDirRecursive (fDir) : WebFileIO.getFileOpMgr ()
+                                                                                               .deleteDir (fDir);
+  }
+
+  @Nonnull
+  public FileIOError deleteDirectoryIfExisting (@Nonnull final String sDirName, final boolean bDeleteRecursively)
+  {
+    return deleteDirectoryIfExisting (getFile (sDirName), bDeleteRecursively);
+  }
+
+  @Nonnull
+  public FileIOError deleteDirectoryIfExisting (@Nonnull final File fDir, final boolean bDeleteRecursively)
+  {
+    return bDeleteRecursively ? WebFileIO.getFileOpMgr ().deleteDirRecursiveIfExisting (fDir)
+                             : WebFileIO.getFileOpMgr ().deleteDirIfExisting (fDir);
+  }
+
+  @Nonnull
+  public FileIOError renameFile (@Nonnull final String sOldFilename, @Nonnull final String sNewFilename)
+  {
+    final File fOld = getFile (sOldFilename);
+    final File fNew = getFile (sNewFilename);
+    return WebFileIO.getFileOpMgr ().renameFile (fOld, fNew);
+  }
+
+  @Nonnull
+  public FileIOError renameDir (@Nonnull final String sOldDirName, @Nonnull final String sNewDirName)
+  {
+    final File fOld = getFile (sOldDirName);
+    final File fNew = getFile (sNewDirName);
+    return WebFileIO.getFileOpMgr ().renameDir (fOld, fNew);
+  }
+
+  /**
+   * Helper function for saving a file with correct error handling.
+   * 
+   * @param sFilename
+   *        name of the file. May not be <code>null</code>.
+   * @param eAppend
+   *        Appending mode. May not be <code>null</code>.
+   * @param aBytes
+   *        the bytes to be written. May not be <code>null</code>.
+   * @return {@link ESuccess}
+   */
+  @Nonnull
+  private ESuccess _writeFile (@Nonnull final String sFilename,
+                               @Nonnull final EAppend eAppend,
+                               @Nonnull final byte [] aBytes)
+  {
+    // save to file
+    final OutputStream aOS = getOutputStream (sFilename, eAppend);
+    if (aOS == null)
+    {
+      s_aLogger.error ("Failed to open output stream for file '" + sFilename + "'");
+      return ESuccess.FAILURE;
+    }
+
+    // Close the OS automatically!
+    return StreamUtils.writeStream (aOS, aBytes);
+  }
+
+  /**
+   * Helper function for saving a file with correct error handling.
+   * 
+   * @param sFilename
+   *        name of the file. May not be <code>null</code>.
+   * @param sContent
+   *        the content to save. May not be <code>null</code>.
+   * @param aCharset
+   *        The character set to use. May not be <code>null</code>.
+   * @return {@link ESuccess}
+   */
+  @Nonnull
+  public ESuccess saveFile (@Nonnull final String sFilename,
+                            @Nonnull final String sContent,
+                            @Nonnull final Charset aCharset)
+  {
+    return saveFile (sFilename, CharsetManager.getAsBytes (sContent, aCharset));
+  }
+
+  /**
+   * Helper function for saving a file with correct error handling.
+   * 
+   * @param sFilename
+   *        name of the file. May not be <code>null</code>.
+   * @param aBytes
+   *        the bytes to be written. May not be <code>null</code>.
+   * @return {@link ESuccess}
+   */
+  @Nonnull
+  public ESuccess saveFile (@Nonnull final String sFilename, @Nonnull final byte [] aBytes)
+  {
+    return _writeFile (sFilename, EAppend.TRUNCATE, aBytes);
+  }
+
+  /**
+   * Helper function for saving a file with correct error handling.
+   * 
+   * @param sFilename
+   *        name of the file. May not be <code>null</code>.
+   * @param sContent
+   *        the content to save. May not be <code>null</code>.
+   * @param aCharset
+   *        The character set to use. May not be <code>null</code>.
+   * @return {@link ESuccess}
+   */
+  @Nonnull
+  public ESuccess appendFile (@Nonnull final String sFilename,
+                              @Nonnull final String sContent,
+                              @Nonnull final Charset aCharset)
+  {
+    return appendFile (sFilename, CharsetManager.getAsBytes (sContent, aCharset));
+  }
+
+  /**
+   * Helper function for saving a file with correct error handling.
+   * 
+   * @param sFilename
+   *        name of the file. May not be <code>null</code>.
+   * @param aBytes
+   *        the bytes to be written. May not be <code>null</code>.
+   * @return {@link ESuccess}
+   */
+  @Nonnull
+  public ESuccess appendFile (@Nonnull final String sFilename, @Nonnull final byte [] aBytes)
+  {
+    return _writeFile (sFilename, EAppend.APPEND, aBytes);
   }
 
   /**

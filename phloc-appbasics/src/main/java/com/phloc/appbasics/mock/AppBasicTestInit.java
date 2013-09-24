@@ -22,8 +22,6 @@ import java.io.File;
 import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.io.WebFileIO;
-import com.phloc.appbasics.app.io.WebIO;
-import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.commons.cleanup.CommonsCleanup;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
@@ -43,7 +41,6 @@ public final class AppBasicTestInit
     // Init the base path once - don't check access rights in test, for
     // performance reasons
     WebFileIO.initPaths (aDataPath, aServletContextPath, false);
-    WebIO.init (new WebIOResourceProviderChain (aDataPath));
 
     // Init the IDs
     if (!GlobalIDFactory.hasPersistentIntIDFactory ())

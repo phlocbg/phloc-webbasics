@@ -34,7 +34,6 @@ import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
 import com.phloc.commons.collections.NonBlockingStack;
-import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -168,24 +167,6 @@ public abstract class AbstractDAO implements IDAO
     finally
     {
       m_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  @Nonnull
-  @Deprecated
-  public final EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (m_bAutoSaveEnabled == bAutoSaveEnabled)
-        return EChange.UNCHANGED;
-      m_bAutoSaveEnabled = bAutoSaveEnabled;
-      return EChange.CHANGED;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
     }
   }
 

@@ -35,7 +35,6 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.IWritableResource;
 import com.phloc.commons.io.IWritableResourceProvider;
 import com.phloc.commons.io.file.FileIOError;
-import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.io.resourceprovider.ClassPathResourceProvider;
 import com.phloc.commons.io.resourceprovider.FileSystemResourceProvider;
 import com.phloc.commons.io.resourceprovider.WritableResourceProviderChain;
@@ -51,6 +50,7 @@ import com.phloc.commons.state.ISuccessIndicator;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public final class WebIO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebIO.class);
@@ -83,20 +83,6 @@ public final class WebIO
       if (GlobalDebug.isDebugMode ())
         s_aLogger.info ("Setting resource provider to " + aResourceProvider);
     }
-  }
-
-  @Deprecated
-  @Nonnull
-  public static void setFileOpMgr (@Nonnull final FileOperationManager aFileOpMgr)
-  {
-    WebFileIO.setFileOpMgr (aFileOpMgr);
-  }
-
-  @Deprecated
-  @Nonnull
-  public static FileOperationManager getFileOpMgr ()
-  {
-    return WebFileIO.getFileOpMgr ();
   }
 
   /**
@@ -356,26 +342,6 @@ public final class WebIO
    *        name of the file. May not be <code>null</code>.
    * @param sContent
    *        the content to save. May not be <code>null</code>.
-   * @param sCharset
-   *        The character set to use. May not be <code>null</code>.
-   * @return {@link ESuccess}
-   */
-  @Nonnull
-  @Deprecated
-  public static ESuccess saveFile (@Nonnull final String sFilename,
-                                   @Nonnull final String sContent,
-                                   @Nonnull final String sCharset)
-  {
-    return saveFile (sFilename, CharsetManager.getAsBytes (sContent, sCharset));
-  }
-
-  /**
-   * Helper function for saving a file with correct error handling.
-   * 
-   * @param sFilename
-   *        name of the file. May not be <code>null</code>.
-   * @param sContent
-   *        the content to save. May not be <code>null</code>.
    * @param aCharset
    *        The character set to use. May not be <code>null</code>.
    * @return {@link ESuccess}
@@ -401,26 +367,6 @@ public final class WebIO
   public static ESuccess saveFile (@Nonnull final String sFilename, @Nonnull final byte [] aBytes)
   {
     return _writeFile (sFilename, EAppend.TRUNCATE, aBytes);
-  }
-
-  /**
-   * Helper function for saving a file with correct error handling.
-   * 
-   * @param sFilename
-   *        name of the file. May not be <code>null</code>.
-   * @param sContent
-   *        the content to save. May not be <code>null</code>.
-   * @param sCharset
-   *        The character set to use. May not be <code>null</code>.
-   * @return {@link ESuccess}
-   */
-  @Nonnull
-  @Deprecated
-  public static ESuccess appendFile (@Nonnull final String sFilename,
-                                     @Nonnull final String sContent,
-                                     @Nonnull final String sCharset)
-  {
-    return appendFile (sFilename, CharsetManager.getAsBytes (sContent, sCharset));
   }
 
   /**

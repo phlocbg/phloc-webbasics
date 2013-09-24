@@ -31,6 +31,7 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
+@Deprecated
 public class DAOWebIO implements IDAOIO
 {
   public DAOWebIO ()

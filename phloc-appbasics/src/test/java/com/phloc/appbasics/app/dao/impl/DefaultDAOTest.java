@@ -33,7 +33,7 @@ import org.junit.rules.TestRule;
 import com.phloc.appbasics.app.dao.IDAODataProvider;
 import com.phloc.appbasics.app.io.ConstantHasFilename;
 import com.phloc.appbasics.app.io.IHasFilename;
-import com.phloc.appbasics.app.io.WebIO;
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -90,7 +90,7 @@ public final class DefaultDAOTest
     };
     final IHasFilename aHF = new ConstantHasFilename ("abc.txt");
     // Ensure that no such file exists
-    WebIO.deleteFile (aHF.getFilename ());
+    WebFileIO.getDataIO ().deleteFile (aHF.getFilename ());
     final DefaultDAO aDAO1 = new DefaultDAO (aHF, aDP);
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aDAO1, new DefaultDAO (aHF, aDP));
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aDAO1,

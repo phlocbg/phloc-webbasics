@@ -31,7 +31,6 @@ import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FileOperationManager;
 import com.phloc.commons.io.file.FileUtils;
-import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -74,8 +73,9 @@ public class DAOWebFileIO implements IDAOIO
 
   public void renameFile (@Nonnull final String sSrcFileName, @Nonnull final String sDstFileName)
   {
-    final File aSrcFile = _getIO ().getFile (sSrcFileName);
-    final File aDstFile = _getIO ().getFile (sDstFileName);
+    final PathRelativeFileIO aIO = _getIO ();
+    final File aSrcFile = aIO.getFile (sSrcFileName);
+    final File aDstFile = aIO.getFile (sDstFileName);
     if (FileUtils.existsFile (aSrcFile))
     {
       // Delete destination file if present
@@ -92,8 +92,7 @@ public class DAOWebFileIO implements IDAOIO
                             @Nonnull final String sContent,
                             @Nonnull final Charset aCharset)
   {
-    final File aFile = WebFileIO.getFile (sFilename);
-    return SimpleFileIO.writeFile (aFile, sContent, aCharset);
+    return _getIO ().saveFile (sFilename, sContent, aCharset);
   }
 
   @Override

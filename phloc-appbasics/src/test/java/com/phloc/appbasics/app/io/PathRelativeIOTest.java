@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -34,13 +33,11 @@ import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.io.streams.StreamUtils;
 
 /**
- * Test class for class {@link WebIO}
+ * Test class for class {@link PathRelativeFileIO}
  * 
  * @author Philip Helger
  */
-@SuppressWarnings ({ "javadoc", "deprecation" })
-@Ignore
-public final class WebIOTest
+public final class PathRelativeIOTest
 {
   @Rule
   public final TestRule m_aRule = new AppBasicTestRule ();
@@ -48,49 +45,50 @@ public final class WebIOTest
   @Test
   public void testBasePath () throws IOException
   {
+    final PathRelativeFileIO aIO = WebFileIO.getDataIO ();
     final String sTestFile = "testfile";
     final String sTestContent = "Das ist der Inhalt der TestDatei";
     final String sTestFile2 = "testfile2";
 
     // may not exist
-    assertFalse (WebIO.resourceExists (sTestFile));
+    assertFalse (aIO.existsFile (sTestFile));
 
     try
     {
       // write file
-      final OutputStream aOS = WebIO.getOutputStream (sTestFile);
+      final OutputStream aOS = aIO.getOutputStream (sTestFile);
       assertNotNull (aOS);
       aOS.write (sTestContent.getBytes ());
       assertTrue (StreamUtils.close (aOS).isSuccess ());
 
       // rename a to b
-      assertTrue (WebIO.resourceExists (sTestFile));
-      assertTrue (WebIO.renameFile (sTestFile, sTestFile2).isSuccess ());
+      assertTrue (aIO.existsFile (sTestFile));
+      assertTrue (aIO.renameFile (sTestFile, sTestFile2).isSuccess ());
 
       // ensure only b is present
-      assertFalse (WebIO.resourceExists (sTestFile));
-      assertTrue (WebIO.resourceExists (sTestFile2));
+      assertFalse (aIO.existsFile (sTestFile));
+      assertTrue (aIO.existsFile (sTestFile2));
 
       // rename back from b to a
-      assertTrue (WebIO.renameFile (sTestFile2, sTestFile).isSuccess ());
+      assertTrue (aIO.renameFile (sTestFile2, sTestFile).isSuccess ());
 
       // ensure only a is present
-      assertTrue (WebIO.resourceExists (sTestFile));
-      assertFalse (WebIO.resourceExists (sTestFile2));
+      assertTrue (aIO.existsFile (sTestFile));
+      assertFalse (aIO.existsFile (sTestFile2));
 
       // read file
-      final InputStream aIS = WebIO.getReadableResource (sTestFile).getInputStream ();
+      final InputStream aIS = aIO.getResource (sTestFile).getInputStream ();
       assertNotNull (aIS);
       StreamUtils.close (aIS);
     }
     finally
     {
       // ensure all files are gone :)
-      if (WebIO.resourceExists (sTestFile))
-        assertTrue (WebIO.deleteFile (sTestFile).isSuccess ());
-      if (WebIO.resourceExists (sTestFile2))
-        assertTrue (WebIO.deleteFile (sTestFile2).isSuccess ());
-      assertFalse (WebIO.resourceExists (sTestFile));
+      if (aIO.existsFile (sTestFile))
+        assertTrue (aIO.deleteFile (sTestFile).isSuccess ());
+      if (aIO.existsFile (sTestFile2))
+        assertTrue (aIO.deleteFile (sTestFile2).isSuccess ());
+      assertFalse (aIO.existsFile (sTestFile));
     }
   }
 }

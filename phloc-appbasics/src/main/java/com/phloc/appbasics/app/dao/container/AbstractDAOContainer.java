@@ -29,7 +29,6 @@ import com.phloc.appbasics.app.dao.IDAO;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
-import com.phloc.commons.state.EChange;
 
 @ThreadSafe
 public abstract class AbstractDAOContainer implements IDAOContainer
@@ -51,26 +50,6 @@ public abstract class AbstractDAOContainer implements IDAOContainer
     finally
     {
       m_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  @OverridingMethodsMustInvokeSuper
-  @Nonnull
-  @Deprecated
-  public EChange setAutoSaveEnabled (final boolean bAutoSaveEnabled)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      EChange eChange = EChange.UNCHANGED;
-      for (final IDAO aDAO : getContainedDAOs ())
-        if (aDAO != null)
-          eChange = eChange.or (aDAO.setAutoSaveEnabled (bAutoSaveEnabled));
-      return eChange;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
     }
   }
 
