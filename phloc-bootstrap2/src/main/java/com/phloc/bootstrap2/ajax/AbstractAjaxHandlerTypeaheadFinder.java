@@ -60,7 +60,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
    * @author Philip Helger
    */
   @NotThreadSafe
-  protected static class Finder
+  public static class Finder
   {
     private final String [] m_aSearchTerms;
     private final Locale m_aSortLocale;
