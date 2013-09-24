@@ -22,19 +22,22 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
+import com.phloc.appbasics.app.io.ConstantHasFilename;
+import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.MustBeLocked;
 import com.phloc.commons.annotations.MustBeLocked.ELockType;
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.file.FileIOError;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.microdom.IMicroDocument;
@@ -44,6 +47,7 @@ import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
@@ -59,26 +63,29 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
 
-  private final File m_aFile;
+  private final IHasFilename m_aFilenameProvider;
+  private String m_sPreviousFilename;
 
-  protected AbstractSimpleDAO (@Nonnull @Nonempty final String sFilename) throws DAOException
+  protected AbstractSimpleDAO (@Nullable final String sFilename)
   {
-    super (new DAOWebFileIO ());
-    m_aFile = WebFileIO.getFile (sFilename);
-    if (m_aFile.exists ())
-    {
-      // file exist -> must be a file!
-      if (!m_aFile.isFile ())
-        throw new DAOException ("The passed filename '" + sFilename + "' is not a file (maybe a directory?)");
-    }
-    else
-    {
-      // Ensure the parent directory is present
-      final File aParentDir = m_aFile.getParentFile ();
-      if (aParentDir != null)
-        if (WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentDir).isFailure ())
-          throw new DAOException ("Failed to create parent directory '" + aParentDir + "'");
-    }
+    this (new ConstantHasFilename (sFilename));
+  }
+
+  protected AbstractSimpleDAO (@Nonnull final IHasFilename aFilenameProvider)
+  {
+    super (DAOWebFileIO.getInstance ());
+    if (aFilenameProvider == null)
+      throw new NullPointerException ("FilenameProvider");
+    m_aFilenameProvider = aFilenameProvider;
+  }
+
+  /**
+   * @return The filename provider used internally.
+   */
+  @Nonnull
+  protected final IHasFilename getFilenameProvider ()
+  {
+    return m_aFilenameProvider;
   }
 
   /**
@@ -100,12 +107,39 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    * is only called within a write lock!
    * 
    * @param aDoc
-   *        The XML document to read from
+   *        The XML document to read from. Never <code>null</code>.
    * @return {@link EChange#CHANGED} if reading the data changed something in
    *         the internal structures that requires a writing.
    */
   @Nonnull
   protected abstract EChange onRead (@Nonnull IMicroDocument aDoc);
+
+  @Nonnull
+  protected static final File getSafeFile (@Nonnull final String sFilename) throws DAOException
+  {
+    final File aFile = WebFileIO.getFile (sFilename);
+    if (aFile.exists ())
+    {
+      // file exist -> must be a file!
+      if (!aFile.isFile ())
+        throw new DAOException ("The passed filename '" +
+                                sFilename +
+                                "' is not a file - maybe a directory: " +
+                                aFile.getAbsolutePath ());
+    }
+    else
+    {
+      // Ensure the parent directory is present
+      final File aParentDir = aFile.getParentFile ();
+      if (aParentDir != null)
+      {
+        final FileIOError aError = WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aParentDir);
+        if (aError.isFailure ())
+          throw new DAOException ("Failed to create parent directory '" + aParentDir + "': " + aError);
+      }
+    }
+    return aFile;
+  }
 
   /**
    * Call this method inside the constructor to read the file contents directly.
@@ -117,22 +151,39 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   protected final void initialRead () throws DAOException
   {
     boolean bIsInitialization = false;
+
+    File aFile = null;
+    final String sFilename = m_aFilenameProvider.getFilename ();
+    if (sFilename == null)
+    {
+      // required for testing
+      s_aLogger.error ("This DAO of class " + getClass ().getName () + " will not be able to read from a file");
+
+      // do not return - run initialization anyway
+    }
+    else
+    {
+      // Check consistency
+      aFile = getSafeFile (sFilename);
+    }
+
     m_aRWLock.writeLock ().lock ();
     try
     {
       ESuccess eWriteSuccess = ESuccess.SUCCESS;
-      bIsInitialization = !m_aFile.exists ();
+      bIsInitialization = aFile == null || !aFile.exists ();
       if (bIsInitialization)
       {
         // initial setup for non-existing file
         if (GlobalDebug.isDebugMode ())
-          s_aLogger.info ("Trying to initialize DAO XML file '" + m_aFile + "'");
+          s_aLogger.info ("Trying to initialize DAO XML file '" + aFile + "'");
 
         beginWithoutAutoSave ();
         try
         {
           if (onInit ().isChanged ())
-            eWriteSuccess = _writeToFile ();
+            if (aFile != null)
+              eWriteSuccess = _writeToFile ();
         }
         finally
         {
@@ -147,11 +198,11 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       {
         // Read existing file
         if (GlobalDebug.isDebugMode ())
-          s_aLogger.info ("Trying to read DAO XML file '" + m_aFile + "'");
+          s_aLogger.info ("Trying to read DAO XML file '" + aFile + "'");
 
-        final IMicroDocument aDoc = MicroReader.readMicroXML (new FileSystemResource (m_aFile));
+        final IMicroDocument aDoc = MicroReader.readMicroXML (aFile);
         if (aDoc == null)
-          s_aLogger.error ("Failed to read XML document from file '" + m_aFile + "'");
+          s_aLogger.error ("Failed to read XML document from file '" + aFile + "'");
         else
         {
           // Valid XML - start interpreting
@@ -176,7 +227,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       if (eWriteSuccess.isSuccess ())
         internalSetPendingChanges (false);
       else
-        s_aLogger.warn ("File '" + m_aFile + "' has pending changes after initialRead!");
+        s_aLogger.warn ("File '" + aFile + "' has pending changes after initialRead!");
     }
     catch (final Throwable t)
     {
@@ -184,7 +235,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       final IDAOReadExceptionHandler aExceptionHandlerRead = getCustomExceptionHandlerRead ();
       if (aExceptionHandlerRead != null)
       {
-        final IReadableResource aRes = m_aFile == null ? null : new FileSystemResource (m_aFile);
+        final IReadableResource aRes = aFile == null ? null : new FileSystemResource (aFile);
         try
         {
           aExceptionHandlerRead.onDAOReadException (t, bIsInitialization, aRes);
@@ -196,11 +247,8 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
                            t2);
         }
       }
-      throw new DAOException ("Error " +
-                              (bIsInitialization ? "initializing" : "reading") +
-                              " the file '" +
-                              m_aFile +
-                              "'", t);
+      throw new DAOException ("Error " + (bIsInitialization ? "initializing" : "reading") + " the file '" + aFile + "'",
+                              t);
     }
     finally
     {
@@ -209,12 +257,27 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
+   * Called after a successful write of the file, if the filename is different
+   * from the previous filename. This can e.g. be used to clear old data.
+   * 
+   * @param sPreviousFilename
+   *        The previous filename. May be <code>null</code>.
+   * @param sNewFilename
+   *        The new filename. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  @MustBeLocked (ELockType.WRITE)
+  protected void onFilenameChange (@Nullable final String sPreviousFilename, @Nonnull final String sNewFilename)
+  {}
+
+  /**
    * Create the XML document that should be saved to the file. This method is
    * only called within a write lock!
    * 
    * @return The non-<code>null</code> document to write to the file.
    */
   @Nonnull
+  @MustBeLocked (ELockType.WRITE)
   protected abstract IMicroDocument createWriteData ();
 
   /**
@@ -225,6 +288,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    *        The created non-<code>null</code> document.
    */
   @OverrideOnDemand
+  @MustBeLocked (ELockType.WRITE)
   protected void modifyWriteData (@Nonnull final IMicroDocument aDoc)
   {
     // Add a small comment
@@ -235,6 +299,32 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
+   * Optional callback method that is invoked before the file handle gets
+   * opened. This method can e.g. be used to create backups.
+   * 
+   * @param sFilename
+   *        The filename provided by the internal filename provider. Never
+   *        <code>null</code>.
+   * @param aFile
+   *        The resolved file. It is already consistency checked. Never
+   *        <code>null</code>.
+   */
+  @OverrideOnDemand
+  @MustBeLocked (ELockType.WRITE)
+  protected void beforeWriteToFile (@Nonnull final String sFilename, @Nonnull final File aFile)
+  {}
+
+  /**
+   * @return The {@link IXMLWriterSettings} to be used to serialize the data.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected IXMLWriterSettings getXMLWriterSettings ()
+  {
+    return XMLWriterSettings.DEFAULT_XML_SETTINGS;
+  }
+
+  /**
    * The main method for writing the new data to a file. This method may only be
    * called within a write lock!
    * 
@@ -242,8 +332,40 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    */
   @Nonnull
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
+  @MustBeLocked (ELockType.WRITE)
   private ESuccess _writeToFile ()
   {
+    // Build the filename to write to
+    final String sFilename = m_aFilenameProvider.getFilename ();
+    if (sFilename == null)
+    {
+      // We're not operating on a file! Required for testing
+      s_aLogger.error ("The DAO of class " + getClass ().getName () + " cannot write to a file");
+      return ESuccess.FAILURE;
+    }
+
+    // Check for a filename change before writing
+    if (!sFilename.equals (m_sPreviousFilename))
+    {
+      onFilenameChange (m_sPreviousFilename, sFilename);
+      m_sPreviousFilename = sFilename;
+    }
+
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.info ("Trying to write DAO file '" + sFilename + "'");
+
+    // Get the file handle
+    File aFile = null;
+    try
+    {
+      aFile = getSafeFile (sFilename);
+    }
+    catch (final DAOException ex)
+    {
+      s_aLogger.error ("The DAO of class " + getClass ().getName () + " cannot write to '" + sFilename + "'", ex);
+      return ESuccess.FAILURE;
+    }
+
     IMicroDocument aDoc = null;
     try
     {
@@ -251,15 +373,19 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       aDoc = createWriteData ();
       if (aDoc == null)
       {
-        s_aLogger.error ("Failed to create data to write to '" + m_aFile + "'!");
+        s_aLogger.error ("Failed to create data to write to '" + aFile + "'!");
         return ESuccess.FAILURE;
       }
 
       // Generic modification
       modifyWriteData (aDoc);
 
+      // Perform optional stuff like backup etc. Must be done BEFORE the output
+      // stream is opened!
+      beforeWriteToFile (sFilename, aFile);
+
       // Get the output stream
-      final OutputStream aOS = FileUtils.getOutputStream (m_aFile);
+      final OutputStream aOS = FileUtils.getOutputStream (aFile);
       if (aOS == null)
       {
         // Happens, when another application has the file open!
@@ -267,17 +393,11 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         return ESuccess.FAILURE;
       }
 
-      // rename old files to have a backup
-      // for (int i = m_nBackupCount; i > 0; --i)
-      // if (i == 1)
-      // getIO ().renameFile (sFilename, sFilename + "." + i);
-      // else
-      // getIO ().renameFile (sFilename + "." + (i - 1), sFilename + "." + i);
-
-      // Write to file
-      if (MicroWriter.writeToStream (aDoc, aOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
+      // Write to file (closes the OS)
+      final IXMLWriterSettings aXWS = getXMLWriterSettings ();
+      if (MicroWriter.writeToStream (aDoc, aOS, aXWS).isFailure ())
       {
-        s_aLogger.error ("Failed to write DAO XML data to '" + m_aFile + "'");
+        s_aLogger.error ("Failed to write DAO XML data to '" + aFile + "'");
         return ESuccess.FAILURE;
       }
 
@@ -285,13 +405,13 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     }
     catch (final Throwable t)
     {
-      s_aLogger.error ("Failed to write the DAO data to  '" + m_aFile + "'", t);
+      s_aLogger.error ("Failed to write the DAO data to  '" + aFile + "'", t);
 
       // Check if a custom exception handler is present
       final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
       if (aExceptionHandlerWrite != null)
       {
-        final IReadableResource aRes = new FileSystemResource (m_aFile);
+        final IReadableResource aRes = new FileSystemResource (aFile);
         try
         {
           aExceptionHandlerWrite.onDAOWriteException (t,
@@ -323,7 +443,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       if (_writeToFile ().isSuccess ())
         internalSetPendingChanges (false);
       else
-        s_aLogger.error ("File '" + m_aFile + "' still has pending changes after markAsChanged!");
+        s_aLogger.error ("The DAO of class " +
+                         getClass ().getName () +
+                         " still has pending changes after markAsChanged!");
     }
   }
 
@@ -342,7 +464,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         if (_writeToFile ().isSuccess ())
           internalSetPendingChanges (false);
         else
-          s_aLogger.error ("File '" + m_aFile + "' still has pending changes after writeToFileOnPendingChanges!");
+          s_aLogger.error ("The DAO of class " +
+                           getClass ().getName () +
+                           " still has pending changes after writeToFileOnPendingChanges!");
       }
       finally
       {
@@ -354,6 +478,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("file", m_aFile).toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("filenameProvider", m_aFilenameProvider)
+                            .append ("previousFilename", m_sPreviousFilename)
+                            .toString ();
   }
 }

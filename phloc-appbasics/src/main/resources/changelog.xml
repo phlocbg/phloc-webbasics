@@ -20,6 +20,22 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-appbasics">
+  <release date="2013-09-24" version="2.4.1" />
+  <entry date="2013-09-24" category="api" action="change">
+    <change>
+      <text locale="en">AuditManager is now an AbstractSimpleDAO</text>
+    </change>
+  </entry>
+  <entry date="2013-09-24" category="api" action="add">
+    <change>
+      <text locale="en">Extends AbstractSimpleDAO to support dynamic filenames, backups etc.</text>
+    </change>
+  </entry>
+  <entry date="2013-09-24" category="api" action="remove" incompatible="true">
+    <change>
+      <text locale="en">Removed DefaultDAO, WebIO, AbstractXMLDAO etc.</text>
+    </change>
+  </entry>
   <release date="2013-09-23" version="2.4.0" />
   <entry date="2013-09-23" category="api" action="change">
     <change>

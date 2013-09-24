@@ -35,10 +35,18 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
-public class DAOWebFileIO implements IDAOIO
+public final class DAOWebFileIO implements IDAOIO
 {
-  public DAOWebFileIO ()
+  private static final DAOWebFileIO s_aInstance = new DAOWebFileIO ();
+
+  private DAOWebFileIO ()
   {}
+
+  @Nonnull
+  public static DAOWebFileIO getInstance ()
+  {
+    return s_aInstance;
+  }
 
   @Nonnull
   private static PathRelativeFileIO _getIO ()

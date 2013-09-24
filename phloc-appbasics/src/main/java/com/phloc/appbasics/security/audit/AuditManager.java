@@ -24,18 +24,27 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
-import com.phloc.appbasics.app.dao.xml.AbstractXMLDAO;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.IThrowingRunnableWithParameter;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.impl.MicroDocument;
+import com.phloc.commons.state.EChange;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.io.PDTIOHelper;
 
 /**
@@ -44,7 +53,7 @@ import com.phloc.datetime.io.PDTIOHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class AuditManager extends AbstractXMLDAO implements IAuditManager
+public final class AuditManager extends AbstractSimpleDAO implements IAuditManager
 {
   private static final class AuditHasFilename implements IHasFilename
   {
@@ -88,6 +97,15 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     }
   }
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AuditManager.class);
+  private static final String ELEMENT_ITEMS = "items";
+  private static final String ELEMENT_ITEM = "item";
+  private static final String ATTR_DT = "dt";
+  private static final String ATTR_USER = "user";
+  private static final String ATTR_TYPE = "type";
+  /* initially was called "succes" by error */
+  private static final String ATTR_SUCCESS = "success";
+
   private final AuditItemList m_aItems = new AuditItemList ();
   private final AsynchronousAuditor m_aAuditor;
 
@@ -123,8 +141,7 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
     };
 
     m_aAuditor = new AsynchronousAuditor (aUserIDProvider, aPerformer);
-    setXMLDataProvider (new AuditManagerXMLDAO (this));
-    readFromFile ();
+    initialRead ();
   }
 
   @Nonnull
@@ -134,23 +151,71 @@ public final class AuditManager extends AbstractXMLDAO implements IAuditManager
   }
 
   @Override
-  protected void onFilenameChange ()
+  @Nonnull
+  protected EChange onRead (@Nonnull final IMicroDocument aDoc)
+  {
+    for (final IMicroElement eItem : aDoc.getDocumentElement ().getAllChildElements (ELEMENT_ITEM))
+    {
+      final String sDT = eItem.getAttribute (ATTR_DT);
+      final Long aDT = StringParser.parseLongObj (sDT);
+      if (aDT == null)
+      {
+        s_aLogger.warn ("Failed to parse date time '" + sDT + "'");
+        continue;
+      }
+
+      final String sUserID = eItem.getAttribute (ATTR_USER);
+      if (StringHelper.hasNoText (sUserID))
+      {
+        s_aLogger.warn ("Failed find user ID");
+        continue;
+      }
+
+      final String sType = eItem.getAttribute (ATTR_TYPE);
+      final EAuditActionType eType = EAuditActionType.getFromIDOrNull (sType);
+      if (eType == null)
+      {
+        s_aLogger.warn ("Failed to parse change type '" + sType + "'");
+        continue;
+      }
+
+      final String sSuccess = eItem.getAttribute (ATTR_SUCCESS);
+      final ESuccess eSuccess = ESuccess.valueOf (StringParser.parseBool (sSuccess));
+
+      final String sAction = eItem.getTextContent ();
+      m_aItems.internalAddItem (new AuditItem (PDTFactory.createDateTimeFromMillis (aDT.longValue ()),
+                                               sUserID,
+                                               eType,
+                                               eSuccess,
+                                               sAction));
+    }
+    // write-only :)
+    return EChange.UNCHANGED;
+  }
+
+  @Override
+  protected IMicroDocument createWriteData ()
+  {
+    final IMicroDocument aDoc = new MicroDocument ();
+    final IMicroElement eCIL = aDoc.appendElement (ELEMENT_ITEMS);
+    // Is sorted internally!
+    for (final IAuditItem aAuditItem : m_aItems.getAllItems ())
+    {
+      final IMicroElement eItem = eCIL.appendElement (ELEMENT_ITEM);
+      eItem.setAttribute (ATTR_DT, Long.toString (aAuditItem.getDateTime ().getMillis ()));
+      eItem.setAttribute (ATTR_USER, aAuditItem.getUserID ());
+      eItem.setAttribute (ATTR_TYPE, aAuditItem.getType ().getID ());
+      eItem.setAttribute (ATTR_SUCCESS, Boolean.toString (aAuditItem.getSuccess ().isSuccess ()));
+      eItem.appendText (aAuditItem.getAction ());
+    }
+    return aDoc;
+  }
+
+  @Override
+  protected void onFilenameChange (@Nullable final String sPreviousFilename, @Nonnull final String sNewFilename)
   {
     // Called within a write lock
     m_aItems.internalKeepOnlyLast ();
-  }
-
-  void internalAddItem (@Nonnull final IAuditItem aItem)
-  {
-    m_aItems.internalAddItem (aItem);
-  }
-
-  @Nonnull
-  @ReturnsImmutableObject
-  List <IAuditItem> internalGetAllItems ()
-  {
-    // Is sorted in itself
-    return m_aItems.getAllItems ();
   }
 
   @Nonnull
