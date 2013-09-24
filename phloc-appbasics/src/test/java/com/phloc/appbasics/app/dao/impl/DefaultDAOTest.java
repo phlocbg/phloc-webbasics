@@ -91,30 +91,47 @@ public final class DefaultDAOTest
     final IHasFilename aHF = new ConstantHasFilename ("abc.txt");
     // Ensure that no such file exists
     WebFileIO.getDataIO ().deleteFile (aHF.getFilename ());
-    final DefaultDAO aDAO1 = new DefaultDAO (aHF, aDP);
-    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aDAO1, new DefaultDAO (aHF, aDP));
-    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aDAO1,
-                                                                        new DefaultDAO (new ConstantHasFilename ("abc2.txt"),
-                                                                                        aDP));
+    try
+    {
+      final DefaultDAO aDAO1 = new DefaultDAO (aHF, aDP);
 
-    // Initial value
-    assertEquals (-1, aInt.intValue ());
-    // Read or init
-    aDAO1.readFromFile ();
-    assertEquals (0, aInt.intValue ());
-    // Explicitly set a new value
-    aInt.set (5);
-    assertFalse (aDAO1.hasPendingChanges ());
-    // Auto save is enabled
-    aDAO1.markAsChanged ();
-    assertFalse (aDAO1.hasPendingChanges ());
-    // Nothing to do
-    aDAO1.writeToFileOnPendingChanges ();
-    assertFalse (aDAO1.hasPendingChanges ());
-    // Read again
-    aInt.set (-2);
-    aDAO1.readFromFile ();
-    assertEquals (5, aInt.intValue ());
-    assertFalse (aDAO1.hasPendingChanges ());
+      PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aDAO1, new DefaultDAO (aHF, aDP));
+      PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aDAO1,
+                                                                          new DefaultDAO (new ConstantHasFilename ("abc2.txt"),
+                                                                                          aDP));
+
+      // Initial value
+      assertEquals (-1, aInt.intValue ());
+
+      // Read or init
+      aDAO1.readFromFile ();
+      assertEquals (0, aInt.intValue ());
+
+      // Explicitly set a new value
+      aInt.set (5);
+      assertFalse (aDAO1.hasPendingChanges ());
+      assertEquals (5, aInt.intValue ());
+
+      // Auto save is enabled
+      aDAO1.markAsChanged ();
+      assertFalse (aDAO1.hasPendingChanges ());
+      assertEquals (5, aInt.intValue ());
+
+      // Nothing to do
+      aDAO1.writeToFileOnPendingChanges ();
+      assertFalse (aDAO1.hasPendingChanges ());
+      assertEquals (5, aInt.intValue ());
+
+      // Read again
+      aInt.set (-2);
+      assertEquals (-2, aInt.intValue ());
+      aDAO1.readFromFile ();
+      assertEquals (5, aInt.intValue ());
+      assertFalse (aDAO1.hasPendingChanges ());
+    }
+    finally
+    {
+      WebFileIO.getDataIO ().deleteFile (aHF.getFilename ());
+    }
   }
 }
