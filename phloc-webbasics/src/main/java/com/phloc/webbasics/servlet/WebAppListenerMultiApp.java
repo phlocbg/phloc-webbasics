@@ -25,8 +25,6 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletContext;
 
 import com.phloc.appbasics.app.ApplicationLocaleManager;
-import com.phloc.appbasics.app.dao.impl.DAOWebFileIO;
-import com.phloc.appbasics.app.dao.impl.DefaultDAO;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.security.user.password.PasswordConstraintMinLength;
@@ -36,7 +34,6 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.factory.FactoryConstantValue;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.serialize.MicroWriter;
@@ -79,9 +76,6 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
 
     // UDO to data directory
     UserDataManager.setServletContextIO (false);
-
-    // DAO use use FileIO! (for AuditManager)
-    DefaultDAO.setDAOIOFactory (FactoryConstantValue.create (new DAOWebFileIO ()));
 
     // Define the password constrains
     PasswordUtils.setPasswordConstraints (new PasswordConstraints (new PasswordConstraintMinLength (6)));

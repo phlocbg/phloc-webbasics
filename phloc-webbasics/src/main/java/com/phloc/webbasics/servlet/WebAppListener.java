@@ -40,9 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
-import com.phloc.appbasics.app.io.WebIO;
 import com.phloc.appbasics.app.io.WebIOIntIDFactory;
-import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
@@ -423,7 +421,6 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
       final boolean bFileAccessCheck = shouldCheckFileAccess (aSC);
       // Init the IO layer
       WebFileIO.initPaths (aDataPath, new File (sServletContextPath), bFileAccessCheck);
-      WebIO.init (new WebIOResourceProviderChain (aDataPath));
     }
 
     // Set persistent ID provider - must be done after IO is setup
