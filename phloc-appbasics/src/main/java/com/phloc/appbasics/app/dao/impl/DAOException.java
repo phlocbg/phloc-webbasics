@@ -24,7 +24,7 @@ import com.phloc.commons.exceptions.LoggedException;
  * 
  * @author Philip Helger
  */
-public final class DAOException extends LoggedException
+public class DAOException extends LoggedException
 {
   public DAOException (final String sMsg)
   {

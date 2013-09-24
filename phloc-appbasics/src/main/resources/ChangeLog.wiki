@@ -2,6 +2,9 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>9/23/13</td><td colspan="4">_Release *2.4.0*_</td></tr>
+<tr><td>9/23/13</td><td>change</td><td>api</td><td></td><td>Deprecated WebIO and using DAOWebFileIO by default</td></tr>
+<tr><td>9/23/13</td><td>remove</td><td>api</td><td>*yes*</td><td>Removed deprecated methods</td></tr>
 <tr border="1"><td>8/22/13</td><td colspan="4">_Release *2.3.0*_</td></tr>
 <tr><td>8/21/13</td><td>remove</td><td>api</td><td>*yes*</td><td>Moved error handling to [http://code.google.com/p/phloc-masterdata phloc-validation]</td></tr>
 <tr border="1"><td>7/18/13</td><td colspan="4">_Release *2.2.5*_</td></tr>

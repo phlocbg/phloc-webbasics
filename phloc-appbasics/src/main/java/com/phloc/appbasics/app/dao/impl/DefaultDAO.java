@@ -57,7 +57,8 @@ public class DefaultDAO extends AbstractDAO
   public static final int DEFAULT_BACKUP_COUNT = 3;
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultDAO.class);
 
-  private static IFactory <? extends IDAOIO> s_aDAOIOFactory = FactoryConstantValue.create (new DAOWebFileIO ());
+  @SuppressWarnings ("deprecation")
+  private static IFactory <? extends IDAOIO> s_aDAOIOFactory = FactoryConstantValue.create (new DAOWebIO ());
 
   /** The file from which we read/to which we write */
   private final IHasFilename m_aFilenameProvider;

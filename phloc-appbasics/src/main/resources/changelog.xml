@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-appbasics">
+  <release date="2013-09-23" version="2.4.0" />
+  <entry date="2013-09-23" category="api" action="change">
+    <change>
+      <text locale="en">Deprecated WebIO and using DAOWebFileIO by default</text>
+    </change>
+  </entry>
+  <entry date="2013-09-23" category="api" action="remove" incompatible="true">
+    <change>
+      <text locale="en">Removed deprecated methods</text>
+    </change>
+  </entry>
   <release date="2013-08-22" version="2.3.0" />
   <entry date="2013-08-21" category="api" action="remove" incompatible="true">
     <change>

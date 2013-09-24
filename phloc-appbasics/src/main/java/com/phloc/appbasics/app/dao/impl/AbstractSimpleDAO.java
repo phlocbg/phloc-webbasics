@@ -323,7 +323,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       if (_writeToFile ().isSuccess ())
         internalSetPendingChanges (false);
       else
-        s_aLogger.warn ("File '" + m_aFile + "' still has pending changes after markAsChanged!");
+        s_aLogger.error ("File '" + m_aFile + "' still has pending changes after markAsChanged!");
     }
   }
 
@@ -342,7 +342,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         if (_writeToFile ().isSuccess ())
           internalSetPendingChanges (false);
         else
-          s_aLogger.warn ("File '" + m_aFile + "' still has pending changes after writeToFileOnPendingChanges!");
+          s_aLogger.error ("File '" + m_aFile + "' still has pending changes after writeToFileOnPendingChanges!");
       }
       finally
       {
