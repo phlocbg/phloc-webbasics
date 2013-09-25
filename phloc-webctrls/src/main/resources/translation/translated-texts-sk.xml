@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright (C) 2006-2013 phloc systems
@@ -18,46 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="87">
-  <item id="com.phloc.webctrls.datatable.EDataTableText.FIRST">
-    <sk>Prvý</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO">
-    <sk>_START_ do _END_od _TOTAL_ záznamy</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_EMPTY">
-    <sk>0 do 0 od 0 záznamy</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_FILTERED">
-    <sk>(filtorvaný z _MAX_  záznamy)</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.INFO_POSTFIX">
-    <sk></sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.LAST">
-    <sk>Posledný</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.LENGTH_MENU">
-    <sk>_MENU_ ukázať záznamy</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.NEXT">
-    <sk>Ďalší</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.PREVIOUS">
-    <sk>Späť</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.PROCESSING">
-    <sk>Prosím čakajte....</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.SEARCH">
-    <sk>Hľadať:</sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.URL">
-    <sk></sk>
-  </item>
-  <item id="com.phloc.webctrls.datatable.EDataTableText.ZERO_RECORDS">
-    <sk>Neexistujú žiadne záznamy</sk>
-  </item>
+<translationitems count="74">
   <item id="com.phloc.webctrls.datatables.EDataTablesText.FIRST">
     <sk>Prvý</sk>
   </item>
