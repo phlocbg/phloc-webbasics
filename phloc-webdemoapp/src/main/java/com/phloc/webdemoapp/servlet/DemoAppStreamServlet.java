@@ -19,9 +19,9 @@ package com.phloc.webdemoapp.servlet;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.io.ClassPathResourceForWEBINF;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.url.URLUtils;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webdemoapp.app.CDemoApp;
@@ -49,6 +49,6 @@ public final class DemoAppStreamServlet extends AbstractStreamServlet
     // URL decode is required because requests contain e.g. "%20"
     final String sFilename1 = URLUtils.urlDecode (sFilename);
 
-    return new ClassPathResourceForWEBINF (sFilename1);
+    return new ClassPathResource (sFilename1);
   }
 }
