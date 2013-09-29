@@ -19,6 +19,7 @@ package com.phloc.web.smtp.queue;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Level;
 
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
@@ -221,5 +222,11 @@ public final class MailTransportSettings
     {
       s_aRWLock.readLock ().unlock ();
     }
+  }
+
+  public static void enableJavaxMailDebugging (final boolean bDebug)
+  {
+    java.util.logging.Logger.getLogger ("com.sun.mail.smtp").setLevel (bDebug ? Level.FINEST : Level.INFO);
+    java.util.logging.Logger.getLogger ("com.sun.mail.smtp.protocol").setLevel (bDebug ? Level.FINEST : Level.INFO);
   }
 }

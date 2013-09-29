@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,6 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
@@ -59,12 +60,14 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
 final class MailTransport
 {
   public static final String SMTP_PROTOCOL = "smtp";
+  public static final String SMTPS_PROTOCOL = "smtps";
 
   private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (MailTransport.class);
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
   private static final String HEADER_MESSAGE_ID = "Message-ID";
 
   private final ISMTPSettings m_aSettings;
+  private final boolean m_bSMTPS;
   private final Properties m_aMailProperties = new Properties ();
   private final Session m_aSession;
 
@@ -74,44 +77,74 @@ final class MailTransport
       throw new NullPointerException ("settings");
 
     m_aSettings = aSettings;
-
-    final boolean bAuth = StringHelper.hasText (aSettings.getUserName ());
-
-    // Check if authentication is required
-    if (bAuth)
-      m_aMailProperties.setProperty (ESMTPTransportProperty.AUTH.getSMTPPropertyName (), Boolean.TRUE.toString ());
+    m_bSMTPS = aSettings.isSSLEnabled () || aSettings.isSTARTTLSEnabled ();
 
     // Enable SSL?
     if (aSettings.isSSLEnabled ())
-      m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_ENABLE.getSMTPPropertyName (), Boolean.TRUE.toString ());
+      m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_ENABLE.getPropertyName (m_bSMTPS),
+                                     Boolean.TRUE.toString ());
+
+    // Check if authentication is required
+    if (StringHelper.hasText (aSettings.getUserName ()))
+      m_aMailProperties.setProperty (ESMTPTransportProperty.AUTH.getPropertyName (m_bSMTPS), Boolean.TRUE.toString ());
 
     // Enable STARTTLS?
     if (aSettings.isSTARTTLSEnabled ())
-    {
-      m_aMailProperties.setProperty (ESMTPTransportProperty.STARTTLS_ENABLE.getSMTPPropertyName (),
+      m_aMailProperties.setProperty (ESMTPTransportProperty.STARTTLS_ENABLE.getPropertyName (m_bSMTPS),
                                      Boolean.TRUE.toString ());
-      m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_CLASS.getSMTPPropertyName (),
-                                     SSLSocketFactory.class.getName ());
-      m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_PORT.getSMTPPropertyName (),
-                                     Integer.toString (aSettings.getPort ()));
+
+    if (m_bSMTPS)
+    {
+      if (aSettings.isSSLEnabled ())
+      {
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_CLASS.getPropertyName (m_bSMTPS),
+                                       SSLSocketFactory.class.getName ());
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
+                                       Integer.toString (aSettings.getPort ()));
+      }
+
+      {
+        // This is even required for STARTTLS without SSL!
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_CLASS.getPropertyName (m_bSMTPS),
+                                       SSLSocketFactory.class.getName ());
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
+                                       Integer.toString (aSettings.getPort ()));
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_FALLBACK.getPropertyName (m_bSMTPS),
+                                       Boolean.FALSE.toString ());
+      }
     }
+    else
+      if (aSettings.isSTARTTLSEnabled ())
+      {
+        // This is even required for STARTTLS without SSL!
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_CLASS.getPropertyName (m_bSMTPS),
+                                       SSLSocketFactory.class.getName ());
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
+                                       Integer.toString (aSettings.getPort ()));
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_CLASS.getPropertyName (m_bSMTPS),
+                                       SSLSocketFactory.class.getName ());
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
+                                       Integer.toString (aSettings.getPort ()));
+        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_FALLBACK.getPropertyName (m_bSMTPS),
+                                       Boolean.FALSE.toString ());
+      }
 
     // Set connection timeout
     final long nConnectionTimeoutMilliSecs = MailTransportSettings.getConnectTimeoutMilliSecs ();
     if (nConnectionTimeoutMilliSecs > 0)
-      m_aMailProperties.setProperty (ESMTPTransportProperty.CONNECTIONTIMEOUT.getSMTPPropertyName (),
+      m_aMailProperties.setProperty (ESMTPTransportProperty.CONNECTIONTIMEOUT.getPropertyName (m_bSMTPS),
                                      Long.toString (nConnectionTimeoutMilliSecs));
 
     // Set socket timeout
     final long nTimeoutMilliSecs = MailTransportSettings.getTimeoutMilliSecs ();
     if (nTimeoutMilliSecs > 0)
-      m_aMailProperties.setProperty (ESMTPTransportProperty.TIMEOUT.getSMTPPropertyName (),
+      m_aMailProperties.setProperty (ESMTPTransportProperty.TIMEOUT.getPropertyName (m_bSMTPS),
                                      Long.toString (nTimeoutMilliSecs));
 
-    if (bAuth)
-      m_aSession = Session.getInstance (m_aMailProperties, new MailPasswordAuthenticator (aSettings));
-    else
-      m_aSession = Session.getInstance (m_aMailProperties);
+    System.out.println (m_aMailProperties);
+
+    // Create session based on properties
+    m_aSession = Session.getInstance (m_aMailProperties);
 
     // Set after eventual properties are set, because in setJavaMailProperties,
     // the session is reset!
@@ -122,6 +155,13 @@ final class MailTransport
   public ISMTPSettings getSettings ()
   {
     return m_aSettings;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <Object, Object> getMailProperties ()
+  {
+    return ContainerHelper.newMap (m_aMailProperties);
   }
 
   /**
@@ -139,7 +179,7 @@ final class MailTransport
     {
       try
       {
-        final Transport aTransport = m_aSession.getTransport (SMTP_PROTOCOL);
+        final Transport aTransport = m_aSession.getTransport (m_bSMTPS ? SMTPS_PROTOCOL : SMTP_PROTOCOL);
 
         // Add global listeners (if present)
         final ConnectionListener aConnectionListener = MailTransportSettings.getConnectionListener ();
@@ -253,11 +293,5 @@ final class MailTransport
                                        .append ("properties", m_aMailProperties)
                                        .append ("session", m_aSession)
                                        .toString ();
-  }
-
-  public static void enableJavaxMailDebugging (final boolean bDebug)
-  {
-    java.util.logging.Logger.getLogger ("com.sun.mail.smtp").setLevel (bDebug ? Level.FINE : Level.INFO);
-    java.util.logging.Logger.getLogger ("com.sun.mail.smtp.protocol").setLevel (bDebug ? Level.FINEST : Level.INFO);
   }
 }

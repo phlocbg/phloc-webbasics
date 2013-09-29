@@ -371,6 +371,17 @@ public enum ESMTPTransportProperty
   }
 
   /**
+   * @return The property name for regular SMTP transfer. Neither
+   *         <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  public String getPropertyName (final boolean bForSMTPS)
+  {
+    return bForSMTPS ? getSMTPSPropertyName () : getSMTPPropertyName ();
+  }
+
+  /**
    * @return The expected value class of this property. Never <code>null</code>.
    */
   @Nonnull

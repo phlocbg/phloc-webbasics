@@ -17,10 +17,13 @@
  */
 package com.phloc.web.smtp.queue;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
+import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.SystemProperties;
 import com.phloc.commons.email.EmailAddress;
+import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.idfactory.MemoryIntIDFactory;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
@@ -39,7 +42,12 @@ import com.phloc.web.smtp.settings.SMTPSettings;
  */
 public final class MailAPITest
 {
-  @Ignore ("to avoid spamming my mailbox")
+  static
+  {
+    GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
+  }
+
+  // @Ignore ("to avoid spamming my mailbox")
   @Test
   public void testBasic ()
   {
@@ -49,7 +57,11 @@ public final class MailAPITest
     final IReadableResource aRes = new ClassPathResource ("smtp-settings.xml");
     if (aRes.exists ())
     {
-      // Setup listeners
+      SystemProperties.setPropertyValue ("javax.net.debug", "all");
+      GlobalDebug.setDebugModeDirect (true);
+      MailTransportSettings.enableJavaxMailDebugging (true);
+
+      // Setup debug listeners
       MailTransportSettings.setConnectionListener (new LoggingConnectionListener ());
       MailTransportSettings.setTransportListener (new LoggingTransportListener ());
 
@@ -63,6 +75,8 @@ public final class MailAPITest
       aMailData.setBody ("Hi there\nLine 2\n4 special chars: äöüß\n123456789\nBest regards: phloc-web");
       MailAPI.queueMail (aSMTPSettings, aMailData);
       MailAPI.stop ();
+
+      GlobalDebug.setDebugModeDirect (false);
     }
   }
 }
