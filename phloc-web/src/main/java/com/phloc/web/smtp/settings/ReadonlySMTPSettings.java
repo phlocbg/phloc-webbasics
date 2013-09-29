@@ -49,7 +49,8 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
           aOther.getUserName (),
           aOther.getPassword (),
           aOther.getCharset (),
-          aOther.isSSLEnabled ());
+          aOther.isSSLEnabled (),
+          aOther.isSTARTTLSEnabled ());
   }
 
   /**
@@ -61,7 +62,7 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    */
   public ReadonlySMTPSettings (@Nonnull final String sHostName)
   {
-    this (sHostName, -1, null, null, null, false);
+    this (sHostName, -1, null, null, null, DEFAULT_SSL_ENABLED, DEFAULT_STARTTLS_ENABLED);
   }
 
   /**
@@ -80,15 +81,18 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    *        The charset to use. May be <code>null</code>.
    * @param bSSLEnabled
    *        <code>true</code> to enable SSL communications
+   * @param bSTARTTLSEnabled
+   *        <code>true</code> to enable STARTTLS communications
    */
   public ReadonlySMTPSettings (@Nonnull final String sHostName,
                                final int nPort,
                                @Nullable final String sUserName,
                                @Nullable final String sPassword,
                                @Nullable final String sCharset,
-                               final boolean bSSLEnabled)
+                               final boolean bSSLEnabled,
+                               final boolean bSTARTTLSEnabled)
   {
-    m_aSettings = new SMTPSettings (sHostName, nPort, sUserName, sPassword, sCharset, bSSLEnabled);
+    m_aSettings = new SMTPSettings (sHostName, nPort, sUserName, sPassword, sCharset, bSSLEnabled, bSTARTTLSEnabled);
   }
 
   @Nonnull
@@ -123,6 +127,11 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
   public boolean isSSLEnabled ()
   {
     return m_aSettings.isSSLEnabled ();
+  }
+
+  public boolean isSTARTTLSEnabled ()
+  {
+    return m_aSettings.isSTARTTLSEnabled ();
   }
 
   public boolean areRequiredFieldsSet ()

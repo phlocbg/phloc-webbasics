@@ -51,7 +51,8 @@ public final class FailedMailDataTest
                                                       "anyuser",
                                                       "secret",
                                                       CCharset.CHARSET_UTF_8,
-                                                      true);
+                                                      true,
+                                                      false);
     final Throwable aError = new MockException ("Test error");
 
     final FailedMailData aFMD = new FailedMailData (aSettings, aError);

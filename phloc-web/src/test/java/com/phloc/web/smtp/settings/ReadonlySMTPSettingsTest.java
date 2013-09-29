@@ -42,12 +42,14 @@ public final class ReadonlySMTPSettingsTest
                                                         "anyuser",
                                                         "secret",
                                                         CCharset.CHARSET_UTF_8,
-                                                        true);
+                                                        true,
+                                                        false);
     assertEquals ("mail.example.com", aSettings.getHostName ());
     assertEquals (19, aSettings.getPort ());
     assertEquals ("anyuser", aSettings.getUserName ());
     assertEquals ("secret", aSettings.getPassword ());
     assertTrue (aSettings.isSSLEnabled ());
+    assertFalse (aSettings.isSTARTTLSEnabled ());
     PhlocTestUtils.testMicroTypeConversion (aSettings);
 
     aSettings = new ReadonlySMTPSettings ("mail.example.com");
@@ -56,6 +58,7 @@ public final class ReadonlySMTPSettingsTest
     assertNull (aSettings.getUserName ());
     assertNull (aSettings.getPassword ());
     assertFalse (aSettings.isSSLEnabled ());
+    assertFalse (aSettings.isSTARTTLSEnabled ());
     PhlocTestUtils.testMicroTypeConversion (aSettings);
   }
 }

@@ -30,6 +30,9 @@ public interface ISMTPSettings
   /** Use SSL by default? no :) */
   boolean DEFAULT_SSL_ENABLED = false;
 
+  /** Use SSL by default? no :) */
+  boolean DEFAULT_STARTTLS_ENABLED = false;
+
   /**
    * @return The SMTP server host name
    */
@@ -64,6 +67,12 @@ public interface ISMTPSettings
    *         disabled
    */
   boolean isSSLEnabled ();
+
+  /**
+   * @return <code>true</code> if STARTTLS is enabled, <code>false</code> if
+   *         STARTTLS is disabled
+   */
+  boolean isSTARTTLSEnabled ();
 
   /**
    * @return <code>true</code> if the minimum number of fields are defined, that

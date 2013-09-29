@@ -36,6 +36,7 @@ public final class ReadonlySMTPSettingsMicroTypeConverter implements IMicroTypeC
   private static final String ATTR_PASSWORD = "password";
   private static final String ATTR_CHARSET = "charset";
   private static final String ATTR_SSLENABLED = "sslenabled";
+  private static final String ATTR_STARTTLSENABLED = "starttlsenabled";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
@@ -50,6 +51,7 @@ public final class ReadonlySMTPSettingsMicroTypeConverter implements IMicroTypeC
     eSMTPSettings.setAttribute (ATTR_PASSWORD, aSMTPSettings.getPassword ());
     eSMTPSettings.setAttribute (ATTR_CHARSET, aSMTPSettings.getCharset ());
     eSMTPSettings.setAttribute (ATTR_SSLENABLED, Boolean.toString (aSMTPSettings.isSSLEnabled ()));
+    eSMTPSettings.setAttribute (ATTR_STARTTLSENABLED, Boolean.toString (aSMTPSettings.isSTARTTLSEnabled ()));
     return eSMTPSettings;
   }
 
@@ -64,19 +66,28 @@ public final class ReadonlySMTPSettingsMicroTypeConverter implements IMicroTypeC
     String sHost = eSMTPSettings.getAttribute (ATTR_HOST);
     if (sHost == null)
       sHost = eSMTPSettings.getAttribute ("hostname");
+
     final String sPort = eSMTPSettings.getAttribute (ATTR_PORT);
     final int nPort = StringParser.parseInt (sPort, CWeb.DEFAULT_PORT_SMTP);
+
     String sUser = eSMTPSettings.getAttribute (ATTR_USER);
     if (sUser == null)
       sUser = eSMTPSettings.getAttribute ("username");
+
     final String sPassword = eSMTPSettings.getAttribute (ATTR_PASSWORD);
+
     String sCharset = eSMTPSettings.getAttribute (ATTR_CHARSET);
     if (sCharset == null)
       sCharset = CWebCharset.CHARSET_SMTP;
+
     String sSSLEnabled = eSMTPSettings.getAttribute (ATTR_SSLENABLED);
     if (sSSLEnabled == null)
       sSSLEnabled = eSMTPSettings.getAttribute ("usessl");
-    final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled);
-    return new ReadonlySMTPSettings (sHost, nPort, sUser, sPassword, sCharset, bSSLEnabled);
+    final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled, ISMTPSettings.DEFAULT_SSL_ENABLED);
+
+    final String sSTARTTLSEnabled = eSMTPSettings.getAttribute (ATTR_STARTTLSENABLED);
+    final boolean bSTARTTLSEnabled = StringParser.parseBool (sSTARTTLSEnabled, ISMTPSettings.DEFAULT_STARTTLS_ENABLED);
+
+    return new ReadonlySMTPSettings (sHost, nPort, sUser, sPassword, sCharset, bSSLEnabled, bSTARTTLSEnabled);
   }
 }

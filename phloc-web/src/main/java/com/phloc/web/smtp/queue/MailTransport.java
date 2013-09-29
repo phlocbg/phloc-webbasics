@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,9 +57,10 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
  */
 final class MailTransport
 {
+  public static final String SMTP_PROTOCOL = "smtp";
+
   private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (MailTransport.class);
-  static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
-  private static final String SMTP_PROTOCOL = "smtp";
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
   private static final String HEADER_MESSAGE_ID = "Message-ID";
 
   private final ISMTPSettings m_aSettings;
@@ -73,13 +75,17 @@ final class MailTransport
     m_aSettings = aSettings;
 
     // Check if authentication is required
-    // Note: Starkl server requires authentication!
     if (StringHelper.hasText (aSettings.getUserName ()))
       m_aMailProperties.setProperty (ESMTPTransportProperty.AUTH.getSMTPPropertyName (), Boolean.TRUE.toString ());
 
     // Enable SSL?
     if (aSettings.isSSLEnabled ())
       m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_ENABLE.getSMTPPropertyName (), Boolean.TRUE.toString ());
+
+    // Enable STARTTLS?
+    if (aSettings.isSTARTTLSEnabled ())
+      m_aMailProperties.setProperty (ESMTPTransportProperty.STARTTLS_ENABLE.getSMTPPropertyName (),
+                                     Boolean.TRUE.toString ());
 
     // Set connection timeout
     final long nConnectionTimeoutMilliSecs = MailTransportSettings.getConnectTimeoutMilliSecs ();
@@ -235,5 +241,11 @@ final class MailTransport
                                        .append ("properties", m_aMailProperties)
                                        .append ("session", m_aSession)
                                        .toString ();
+  }
+
+  public static void enableJavaxMailDebugging (final boolean bDebug)
+  {
+    java.util.logging.Logger.getLogger ("com.sun.mail.smtp").setLevel (bDebug ? Level.FINE : Level.INFO);
+    java.util.logging.Logger.getLogger ("com.sun.mail.smtp.protocol").setLevel (bDebug ? Level.FINEST : Level.INFO);
   }
 }

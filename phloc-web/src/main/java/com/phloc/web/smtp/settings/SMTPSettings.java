@@ -44,6 +44,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
   private String m_sPassword;
   private String m_sCharset;
   private boolean m_bSSLEnabled;
+  private boolean m_bSTARTTLSEnabled;
 
   /**
    * Constructor which copies settings from another object
@@ -58,7 +59,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
           aOther.getUserName (),
           aOther.getPassword (),
           aOther.getCharset (),
-          aOther.isSSLEnabled ());
+          aOther.isSSLEnabled (),
+          aOther.isSTARTTLSEnabled ());
   }
 
   /**
@@ -70,7 +72,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
    */
   public SMTPSettings (@Nonnull final String sHost)
   {
-    this (sHost, -1, null, null, null, false);
+    this (sHost, -1, null, null, null, DEFAULT_SSL_ENABLED, DEFAULT_STARTTLS_ENABLED);
   }
 
   /**
@@ -89,13 +91,16 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
    *        The charset to use. May be <code>null</code>.
    * @param bSSLEnabled
    *        <code>true</code> to enable SSL communications
+   * @param bSTARTTLSEnabled
+   *        <code>true</code> to enable STARTTLS communications
    */
   public SMTPSettings (@Nonnull final String sHostName,
                        final int nPort,
                        @Nullable final String sUserName,
                        @Nullable final String sPassword,
                        @Nullable final String sCharset,
-                       final boolean bSSLEnabled)
+                       final boolean bSSLEnabled,
+                       final boolean bSTARTTLSEnabled)
   {
     setHostName (sHostName);
     setPort (nPort);
@@ -103,6 +108,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
     setPassword (sPassword);
     setCharset (sCharset);
     setSSLEnabled (bSSLEnabled);
+    setSTARTTLSEnabled (bSTARTTLSEnabled);
   }
 
   @Nonnull
@@ -202,6 +208,20 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
     return EChange.CHANGED;
   }
 
+  public boolean isSTARTTLSEnabled ()
+  {
+    return m_bSTARTTLSEnabled;
+  }
+
+  @Nonnull
+  public EChange setSTARTTLSEnabled (final boolean bSTARTTLSEnabled)
+  {
+    if (m_bSTARTTLSEnabled == bSTARTTLSEnabled)
+      return EChange.UNCHANGED;
+    m_bSTARTTLSEnabled = bSTARTTLSEnabled;
+    return EChange.CHANGED;
+  }
+
   public boolean areRequiredFieldsSet ()
   {
     return StringHelper.hasText (m_sHostName);
@@ -226,7 +246,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
            EqualsUtils.equals (m_sUserName, rhs.m_sUserName) &&
            EqualsUtils.equals (m_sPassword, rhs.m_sPassword) &&
            m_sCharset.equals (rhs.m_sCharset) &&
-           m_bSSLEnabled == rhs.m_bSSLEnabled;
+           m_bSSLEnabled == rhs.m_bSSLEnabled &&
+           m_bSTARTTLSEnabled == rhs.m_bSTARTTLSEnabled;
   }
 
   @Override
@@ -238,6 +259,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                                        .append (m_sPassword)
                                        .append (m_sCharset)
                                        .append (m_bSSLEnabled)
+                                       .append (m_bSTARTTLSEnabled)
                                        .getHashCode ();
   }
 
@@ -249,7 +271,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                                        .append ("userName", m_sUserName)
                                        .appendPassword ("password")
                                        .append ("charset", m_sCharset)
-                                       .append ("useSSL", m_bSSLEnabled)
+                                       .append ("SSL", m_bSSLEnabled)
+                                       .append ("STARTTLS", m_bSTARTTLSEnabled)
                                        .toString ();
   }
 }
