@@ -34,6 +34,7 @@ import javax.mail.Transport;
 import javax.mail.event.ConnectionListener;
 import javax.mail.event.TransportListener;
 import javax.mail.internet.MimeMessage;
+import javax.net.ssl.SSLSocketFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +75,10 @@ final class MailTransport
 
     m_aSettings = aSettings;
 
+    final boolean bAuth = StringHelper.hasText (aSettings.getUserName ());
+
     // Check if authentication is required
-    if (StringHelper.hasText (aSettings.getUserName ()))
+    if (bAuth)
       m_aMailProperties.setProperty (ESMTPTransportProperty.AUTH.getSMTPPropertyName (), Boolean.TRUE.toString ());
 
     // Enable SSL?
@@ -84,8 +87,14 @@ final class MailTransport
 
     // Enable STARTTLS?
     if (aSettings.isSTARTTLSEnabled ())
+    {
       m_aMailProperties.setProperty (ESMTPTransportProperty.STARTTLS_ENABLE.getSMTPPropertyName (),
                                      Boolean.TRUE.toString ());
+      m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_CLASS.getSMTPPropertyName (),
+                                     SSLSocketFactory.class.getName ());
+      m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_PORT.getSMTPPropertyName (),
+                                     Integer.toString (aSettings.getPort ()));
+    }
 
     // Set connection timeout
     final long nConnectionTimeoutMilliSecs = MailTransportSettings.getConnectTimeoutMilliSecs ();
@@ -99,7 +108,10 @@ final class MailTransport
       m_aMailProperties.setProperty (ESMTPTransportProperty.TIMEOUT.getSMTPPropertyName (),
                                      Long.toString (nTimeoutMilliSecs));
 
-    m_aSession = Session.getInstance (m_aMailProperties);
+    if (bAuth)
+      m_aSession = Session.getInstance (m_aMailProperties, new MailPasswordAuthenticator (aSettings));
+    else
+      m_aSession = Session.getInstance (m_aMailProperties);
 
     // Set after eventual properties are set, because in setJavaMailProperties,
     // the session is reset!
