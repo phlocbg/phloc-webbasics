@@ -24,10 +24,10 @@ import javax.net.ssl.SSLSocketFactory;
 import com.phloc.commons.annotations.Nonempty;
 
 /**
- * Available email settings.<br>
- * Source:
- * http://java.sun.com/products/javamail/javadocs/com/sun/mail/smtp/package
- * -summary.html
+ * Available SMTP settings for javax-mail 1.5.0.<br>
+ * <a href=
+ * "https://javamail.java.net/nonav/docs/api/com/sun/mail/smtp/package-summary.html"
+ * >Source</a>
  * 
  * @author Philip Helger
  */
@@ -105,6 +105,18 @@ public enum ESMTPTransportProperty
    */
   AUTH_MECHANISMS ("auth.mechanisms", String.class),
 
+  /** If true, prevents use of the AUTH LOGIN command. Default is false. */
+  AUTH_LOGIN_DISABLE ("auth.login.disable", boolean.class),
+
+  /** If true, prevents use of the AUTH PLAIN command. Default is false. */
+  AUTH_PLAIN_DISABLE ("auth.plain.disable", boolean.class),
+
+  /** If true, prevents use of the AUTH DIGEST-MD5 command. Default is false. */
+  AUTH_DIGEST_MD5_DISABLE ("auth.digest-md5.disable", boolean.class),
+
+  /** If true, prevents use of the AUTH NTLM command. Default is false. */
+  AUTH_NTLM_DISABLE ("auth.ntlm.disable", boolean.class),
+
   /** The NTLM authentication domain. */
   AUTH_NTLM_DOMAIN ("auth.ntlm.domain", String.class),
 
@@ -146,6 +158,21 @@ public enum ESMTPTransportProperty
    * to any of the recipients if there is an invalid recipient address.
    */
   SENDPARTIAL ("sendpartial", boolean.class),
+
+  /**
+   * If set to true, attempt to use the javax.security.sasl package to choose an
+   * authentication mechanism for login. Defaults to false.
+   */
+  SASL_ENABLE ("sasl.enable", boolean.class),
+
+  /** A space or comma separated list of SASL mechanism names to try to use. */
+  SASL_MECHANISMS ("sasl.mechanisms", String.class),
+
+  /**
+   * The authorization ID to use in the SASL authentication. If not set, the
+   * authentication ID (user name) is used.
+   */
+  SASL_AUTHORIZATIONID ("sasl.authorizationid", String.class),
 
   /** The realm to use with DIGEST-MD5 authentication. */
   SASL_REALM ("sasl.realm", String.class),
@@ -251,15 +278,6 @@ public enum ESMTPTransportProperty
   SSL_CIPHERSUITES ("ssl.ciphersuites", String.class),
 
   /**
-   * Extension string to append to the MAIL command. The extension string can be
-   * used to specify standard SMTP service extensions as well as vendor-specific
-   * extensions. Typically the application should use the SMTPTransport method
-   * supportsExtension to verify that the server supports the desired service
-   * extension. See RFC 1869 and other RFCs that define specific extensions.
-   */
-  MAILEXTENSION ("mailextension", String.class),
-
-  /**
    * If true, enables the use of the STARTTLS command (if supported by the
    * server) to switch the connection to a TLS-protected connection before
    * issuing any login commands. Note that an appropriate trust store must
@@ -274,6 +292,29 @@ public enum ESMTPTransportProperty
    * fail. Defaults to false.
    */
   STARTTLS_REQUIRED ("starttls.required", boolean.class),
+
+  /**
+   * Specifies the host name of a SOCKS5 proxy server that will be used for
+   * connections to the mail server. (Note that this only works on JDK 1.5 or
+   * newer.)
+   */
+  SOCKS_HOST ("socks.host", String.class),
+
+  /**
+   * Specifies the port number for the SOCKS5 proxy server. This should only
+   * need to be used if the proxy server is not using the standard port number
+   * of 1080.
+   */
+  SOCKS_PORT ("socks.port", String.class),
+
+  /**
+   * Extension string to append to the MAIL command. The extension string can be
+   * used to specify standard SMTP service extensions as well as vendor-specific
+   * extensions. Typically the application should use the SMTPTransport method
+   * supportsExtension to verify that the server supports the desired service
+   * extension. See RFC 1869 and other RFCs that define specific extensions.
+   */
+  MAILEXTENSION ("mailextension", String.class),
 
   /**
    * If set to true, use the RSET command instead of the NOOP command in the
