@@ -57,7 +57,8 @@ public final class MailAPITest
     final IReadableResource aRes = new ClassPathResource ("smtp-settings.xml");
     if (aRes.exists ())
     {
-      SystemProperties.setPropertyValue ("javax.net.debug", "all");
+      if (false)
+        SystemProperties.setPropertyValue ("javax.net.debug", "all");
       GlobalDebug.setDebugModeDirect (true);
       MailTransportSettings.enableJavaxMailDebugging (true);
 
