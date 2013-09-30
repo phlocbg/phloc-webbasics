@@ -157,11 +157,37 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
     return ContainerHelper.newMap (m_aHeaders);
   }
 
+  /**
+   * @deprecated Use {@link #getHeaderValues(String)} instead
+   */
+  @Deprecated
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getHeaders (@Nullable final String sName)
   {
+    return getHeaderValues (sName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getHeaderValues (@Nullable final String sName)
+  {
     return ContainerHelper.newList (m_aHeaders.get (sName));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getHeaderValuesCaseInsenstive (@Nullable final String sName)
+  {
+    final List <String> ret = new ArrayList <String> ();
+    if (StringHelper.hasText (sName))
+      for (final Map.Entry <String, List <String>> aEntry : m_aHeaders.entrySet ())
+        if (sName.equalsIgnoreCase (aEntry.getKey ()))
+        {
+          ret.addAll (aEntry.getValue ());
+          break;
+        }
+    return ret;
   }
 
   public boolean containsHeaders (@Nullable final String sName)

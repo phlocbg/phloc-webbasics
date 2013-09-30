@@ -762,7 +762,7 @@ public class UnifiedResponse
     final boolean bETag = m_aResponseHeaderMap.containsHeaders (CHTTPHeader.ETAG);
 
     if (bExpires && bIsHttp11)
-      _info ("Expires found in HTTP 1.1 response: " + m_aResponseHeaderMap.getHeaders (CHTTPHeader.EXPIRES));
+      _info ("Expires found in HTTP 1.1 response: " + m_aResponseHeaderMap.getHeaderValues (CHTTPHeader.EXPIRES));
 
     if (bExpires && bCacheControl)
       _warn ("Expires and Cache-Control are both present. Cache-Control takes precedence!");
