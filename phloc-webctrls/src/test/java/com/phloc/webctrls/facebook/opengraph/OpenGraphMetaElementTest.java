@@ -33,7 +33,7 @@ public class OpenGraphMetaElementTest
   @Test
   public void testBasic ()
   {
-    for (final EOpenGraphMetaTag eMeta : EOpenGraphMetaTag.values ())
+    for (final EOpenGraphObjectProperty eMeta : EOpenGraphObjectProperty.values ())
     {
       final OpenGraphMetaElement aME = new OpenGraphMetaElement (eMeta, "test123");
       assertNotNull (aME.convertToNode (HCSettings.getConversionSettings (false)));

@@ -25,7 +25,9 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
+import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 public class HCFacebookSDK extends HCNodeList
@@ -39,14 +41,29 @@ public class HCFacebookSDK extends HCNodeList
                         final boolean bUseXFBML)
   {
     addChild (new HCDiv ().setID (FB_ROOT_ID));
-    addChild (new HCScript (new JSInvocation ("facebookLoadSDKAsync").arg (sAppID)
-                                                                     .arg (FacebookLocaleMapping.getInstance ()
-                                                                                                .getFBLocale (aDisplayLocale)
-                                                                                                .toString ())
-                                                                     .arg (FB_ROOT_ID)
-                                                                     .arg (bCheckLoginStatus)
-                                                                     .arg (bEnableCookies)
-                                                                     .arg (bUseXFBML)));
+    if (true)
+    {
+      addChild (new HCScript (JQuery.onDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery")
+                                                            .arg (sAppID)
+                                                            .arg (FacebookLocaleMapping.getInstance ()
+                                                                                       .getFBLocale (aDisplayLocale)
+                                                                                       .toString ())
+                                                            .arg (FB_ROOT_ID)
+                                                            .arg (bCheckLoginStatus)
+                                                            .arg (bEnableCookies)
+                                                            .arg (bUseXFBML))));
+    }
+    else
+    {
+      addChild (new HCScript (new JSInvocation ("facebookLoadSDKAsync").arg (sAppID)
+                                                                       .arg (FacebookLocaleMapping.getInstance ()
+                                                                                                  .getFBLocale (aDisplayLocale)
+                                                                                                  .toString ())
+                                                                       .arg (FB_ROOT_ID)
+                                                                       .arg (bCheckLoginStatus)
+                                                                       .arg (bEnableCookies)
+                                                                       .arg (bUseXFBML)));
+    }
     registerExternalResources ();
   }
 

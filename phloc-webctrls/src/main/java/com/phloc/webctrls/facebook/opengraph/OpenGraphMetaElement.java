@@ -26,7 +26,7 @@ import com.phloc.html.meta.MetaElement;
 
 public class OpenGraphMetaElement extends MetaElement
 {
-  public OpenGraphMetaElement (@Nonnull final EOpenGraphMetaTag eProperty, @Nullable final String sContent)
+  public OpenGraphMetaElement (@Nonnull final EOpenGraphObjectProperty eProperty, @Nullable final String sContent)
   {
     super (eProperty.getID (), false, sContent);
   }
