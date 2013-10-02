@@ -32,7 +32,7 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCSettings;
-import com.phloc.json.impl.JSONObject;
+import com.phloc.json2.impl.JsonObject;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
@@ -61,7 +61,7 @@ public final class AjaxHandlerViewLogin extends AbstractAjaxHandler
                                                                      sPassword,
                                                                      CDemoAppSecurity.REQUIRED_ROLE_IDS_VIEW);
     if (eLoginResult.isSuccess ())
-      return AjaxDefaultResponse.createSuccess (new JSONObject ().setBooleanProperty (JSON_LOGGEDIN, true));
+      return AjaxDefaultResponse.createSuccess (new JsonObject ().add (JSON_LOGGEDIN, true));
 
     // Get the rendered content of the menu area
     if (GlobalDebug.isDebugMode ())
@@ -73,8 +73,7 @@ public final class AjaxHandlerViewLogin extends AbstractAjaxHandler
                                                      eLoginResult.getDisplayText (aDisplayLocale));
 
     // Set as result property
-    return AjaxDefaultResponse.createSuccess (new JSONObject ().setBooleanProperty (JSON_LOGGEDIN, false)
-                                                               .setStringProperty (JSON_HTML,
-                                                                                   HCSettings.getAsHTMLString (aRoot)));
+    return AjaxDefaultResponse.createSuccess (new JsonObject ().add (JSON_LOGGEDIN, false)
+                                                               .add (JSON_HTML, HCSettings.getAsHTMLString (aRoot)));
   }
 }
