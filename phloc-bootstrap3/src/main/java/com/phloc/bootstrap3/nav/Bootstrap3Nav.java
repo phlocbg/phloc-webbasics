@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrap3CSS;
 import com.phloc.bootstrap3.dropdown.Bootstrap3DropdownMenu;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCElementWithChildren;
@@ -120,6 +121,21 @@ public class Bootstrap3Nav extends HCUL
       // Icon is the first child of the content
       aContent.addChild (0, aIcon.getAsNode ());
     }
+    return this;
+  }
+
+  @Nonnull
+  public Bootstrap3Nav addDivider ()
+  {
+    addItem ().addClass (CBootstrap3CSS.DIVIDER);
+    return this;
+  }
+
+  @Nonnull
+  public Bootstrap3Nav addHeader (@Nullable final String sHeaderText)
+  {
+    if (StringHelper.hasText (sHeaderText))
+      addItem (sHeaderText).addClass (CBootstrap3CSS.DROPDOWN_HEADER);
     return this;
   }
 

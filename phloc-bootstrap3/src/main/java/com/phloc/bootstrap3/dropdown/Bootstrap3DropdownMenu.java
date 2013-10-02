@@ -23,8 +23,11 @@ import javax.annotation.Nullable;
 import com.phloc.bootstrap3.CBootstrap3CSS;
 import com.phloc.bootstrap3.base.Bootstrap3Caret;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.IHCElementWithChildren;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 
@@ -41,6 +44,40 @@ public class Bootstrap3DropdownMenu extends HCUL
   {
     if (aItem.getRole () == null)
       aItem.setRole (EHTMLRole.PRESENTATION);
+  }
+
+  @Nonnull
+  public Bootstrap3DropdownMenu addMenuItem (@Nonnull final ISimpleURL aURL,
+                                             @Nullable final String sLabel,
+                                             final boolean bActive)
+  {
+    final HCLI aLI = addAndReturnItem (new HCA (aURL).addChild (sLabel));
+    if (bActive)
+      aLI.addClass (CBootstrap3CSS.ACTIVE);
+    return this;
+  }
+
+  @Nonnull
+  public Bootstrap3DropdownMenu addMenuItem (@Nonnull final ISimpleURL aURL,
+                                             @Nullable final IHCNode aLabel,
+                                             final boolean bActive)
+  {
+    final HCLI aLI = addAndReturnItem (new HCA (aURL).addChild (aLabel));
+    if (bActive)
+      aLI.addClass (CBootstrap3CSS.ACTIVE);
+    return this;
+  }
+
+  @Nonnull
+  public Bootstrap3DropdownMenu addActiveMenuItem (@Nonnull final ISimpleURL aURL, @Nullable final String sLabel)
+  {
+    return addMenuItem (aURL, sLabel, true);
+  }
+
+  @Nonnull
+  public Bootstrap3DropdownMenu addActiveMenuItem (@Nonnull final ISimpleURL aURL, @Nullable final IHCNode aLabel)
+  {
+    return addMenuItem (aURL, aLabel, true);
   }
 
   @Nonnull
