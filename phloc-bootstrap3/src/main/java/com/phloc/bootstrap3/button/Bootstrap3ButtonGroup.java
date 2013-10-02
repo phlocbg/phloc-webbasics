@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.bootstrap3.dropdown.Bootstrap3DropdownMenu;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
+import com.phloc.html.hc.impl.HCTextNode;
 
 public class Bootstrap3ButtonGroup extends AbstractHCDiv <Bootstrap3ButtonGroup>
 {
@@ -46,8 +47,23 @@ public class Bootstrap3ButtonGroup extends AbstractHCDiv <Bootstrap3ButtonGroup>
   }
 
   /**
-   * Add a new empty drop down button to the group.
+   * Add a new empty drop down menu to the group.
    * 
+   * @param sDropDownLabel
+   *        The label to be displayed. May be <code>null</code>.
+   * @return The created drop down button
+   */
+  @Nonnull
+  public Bootstrap3DropdownMenu addDropDownMenu (@Nullable final String sDropDownLabel)
+  {
+    return addDropDownMenu (new HCTextNode (sDropDownLabel));
+  }
+
+  /**
+   * Add a new empty drop down menu to the group.
+   * 
+   * @param aDropDownLabel
+   *        The label to be displayed. May be <code>null</code>.
    * @return The created drop down button
    */
   @Nonnull
