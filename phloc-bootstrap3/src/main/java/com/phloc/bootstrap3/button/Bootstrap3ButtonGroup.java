@@ -64,6 +64,15 @@ public class Bootstrap3ButtonGroup extends AbstractHCDiv <Bootstrap3ButtonGroup>
     return m_eSize;
   }
 
+  @Nonnull
+  public Bootstrap3DropdownMenu addDropDownMenu ()
+  {
+    final Bootstrap3DropdownMenu aDDM = addAndReturnChild (new Bootstrap3DropdownMenu ());
+    // Overwrite default "menu" role
+    aDDM.setRole (null);
+    return aDDM;
+  }
+
   /**
    * Add a button and convert it to a dropdown menu
    * 
@@ -79,9 +88,6 @@ public class Bootstrap3ButtonGroup extends AbstractHCDiv <Bootstrap3ButtonGroup>
 
     final Bootstrap3ButtonGroup aNestedGroup = addAndReturnChild (new Bootstrap3ButtonGroup ());
     aNestedGroup.addChild (aButton);
-    final Bootstrap3DropdownMenu aDDM = aNestedGroup.addAndReturnChild (new Bootstrap3DropdownMenu ());
-    // Overwrite default "menu" role
-    aDDM.setRole (null);
-    return aDDM;
+    return aNestedGroup.addAndReturnChild (addDropDownMenu ());
   }
 }
