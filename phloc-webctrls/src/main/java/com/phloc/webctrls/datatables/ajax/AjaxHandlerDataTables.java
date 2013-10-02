@@ -59,7 +59,8 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     }
 
     @Override
-    protected int mainCompare (@Nonnull final DataTablesServerDataRow aRow1, @Nonnull final DataTablesServerDataRow aRow2)
+    protected int mainCompare (@Nonnull final DataTablesServerDataRow aRow1,
+                               @Nonnull final DataTablesServerDataRow aRow2)
     {
       int ret = 0;
       for (final RequestDataSortColumn aSortCol : m_aSortCols)
@@ -358,6 +359,6 @@ public class AjaxHandlerDataTables extends AbstractAjaxHandler
     final ResponseData aResponseData = _handleRequest (aRequestData, aServerData);
 
     // Convert the response to JSON and add the special nodes
-    return AjaxDefaultResponse.createSuccess (aResponseData.getAsJSON ()).addAll (aResponseData.getSpecialNodes ());
+    return AjaxDefaultResponse.createSuccess (aResponseData.getAsJson ()).addAll (aResponseData.getSpecialNodes ());
   }
 }

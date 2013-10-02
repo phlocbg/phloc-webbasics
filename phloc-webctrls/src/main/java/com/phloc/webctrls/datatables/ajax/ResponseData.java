@@ -29,16 +29,16 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.utils.IHCSpecialNodes;
-import com.phloc.json.IJSONConvertible;
-import com.phloc.json.IJSONObject;
-import com.phloc.json.impl.JSONObject;
+import com.phloc.json2.IJsonObject;
+import com.phloc.json2.IJsonProvider;
+import com.phloc.json2.impl.JsonObject;
 
 /**
  * Encapsulates the response to a single DataTables AJAX request
  * 
  * @author Philip Helger
  */
-final class ResponseData implements IJSONConvertible
+final class ResponseData implements IJsonProvider
 {
   private final int m_nTotalRecords;
   private final int m_nTotalDisplayRecords;
@@ -135,23 +135,23 @@ final class ResponseData implements IJSONConvertible
   }
 
   @Nonnull
-  public IJSONObject getAsJSON ()
+  public IJsonObject getAsJson ()
   {
-    final IJSONObject ret = new JSONObject ();
-    ret.setIntegerProperty ("iTotalRecords", m_nTotalRecords);
-    ret.setIntegerProperty ("iTotalDisplayRecords", m_nTotalDisplayRecords);
-    ret.setStringProperty ("sEcho", Integer.toString (m_nEcho));
+    final IJsonObject ret = new JsonObject ();
+    ret.add ("iTotalRecords", m_nTotalRecords);
+    ret.add ("iTotalDisplayRecords", m_nTotalDisplayRecords);
+    ret.add ("sEcho", Integer.toString (m_nEcho));
     if (StringHelper.hasText (m_sColumns))
-      ret.setStringProperty ("sColumns", m_sColumns);
-    final List <JSONObject> aObjs = new ArrayList <JSONObject> ();
+      ret.add ("sColumns", m_sColumns);
+    final List <JsonObject> aObjs = new ArrayList <JsonObject> ();
     for (final Map <String, String> aRow : m_aData)
     {
-      final JSONObject aObj = new JSONObject ();
+      final JsonObject aObj = new JsonObject ();
       for (final Map.Entry <String, String> aEntry : aRow.entrySet ())
-        aObj.setStringProperty (aEntry.getKey (), aEntry.getValue ());
+        aObj.add (aEntry.getKey (), aEntry.getValue ());
       aObjs.add (aObj);
     }
-    ret.setObjectListProperty ("aaData", aObjs);
+    ret.add ("aaData", aObjs);
     return ret;
   }
 

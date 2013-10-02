@@ -24,14 +24,15 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.json.IJSONObject;
+import com.phloc.json2.IJsonObject;
+import com.phloc.json2.serialize.JsonWriter;
 
 @Immutable
 public final class AjaxSimpleResponse implements IAjaxResponse
 {
-  private final IJSONObject m_aValue;
+  private final IJsonObject m_aValue;
 
-  public AjaxSimpleResponse (@Nullable final IJSONObject aValue)
+  public AjaxSimpleResponse (@Nullable final IJsonObject aValue)
   {
     m_aValue = aValue;
   }
@@ -39,7 +40,7 @@ public final class AjaxSimpleResponse implements IAjaxResponse
   @Nonnull
   public String getSerializedAsJSON (final boolean bIndentAndAlign)
   {
-    return m_aValue == null ? "" : m_aValue.getJSONString (bIndentAndAlign);
+    return m_aValue == null ? "" : JsonWriter.getAsString (m_aValue);
   }
 
   @Override
