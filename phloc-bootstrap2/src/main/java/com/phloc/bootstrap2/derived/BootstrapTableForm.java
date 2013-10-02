@@ -236,7 +236,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
 
     // Start row
     final HCRow aRow = super.addBodyRow ();
-    if (eHighest != null)
+    if (eHighest != null && !eHighest.isSuccess ())
       aRow.addClass (CBootstrapCSS.getCSSClass (eHighest));
 
     // Label cell

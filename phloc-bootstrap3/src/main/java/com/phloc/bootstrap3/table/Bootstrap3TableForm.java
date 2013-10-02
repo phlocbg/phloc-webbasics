@@ -207,7 +207,7 @@ public class Bootstrap3TableForm extends AbstractBootstrap3Table <Bootstrap3Tabl
 
     // Start row
     final HCRow aRow = super.addBodyRow ();
-    if (eHighest != null)
+    if (eHighest != null && !eHighest.isSuccess ())
       aRow.addClass (CBootstrap3CSS.getCSSClass (eHighest));
 
     // Label cell
