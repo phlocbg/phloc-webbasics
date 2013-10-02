@@ -21,23 +21,35 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.dropdown.Bootstrap3DropdownMenu;
-import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
-import com.phloc.html.hc.impl.HCTextNode;
 
 public class Bootstrap3ButtonGroup extends AbstractHCDiv <Bootstrap3ButtonGroup>
 {
   private final EBootstrap3ButtonGroupType m_eType;
+  private final EBootstrap3ButtonGroupSize m_eSize;
 
   public Bootstrap3ButtonGroup ()
   {
-    this (EBootstrap3ButtonGroupType.DEFAULT);
+    this (EBootstrap3ButtonGroupType.DEFAULT, EBootstrap3ButtonGroupSize.DEFAULT);
   }
 
   public Bootstrap3ButtonGroup (@Nonnull final EBootstrap3ButtonGroupType eType)
   {
+    this (eType, EBootstrap3ButtonGroupSize.DEFAULT);
+  }
+
+  public Bootstrap3ButtonGroup (@Nonnull final EBootstrap3ButtonGroupSize eSize)
+  {
+    this (EBootstrap3ButtonGroupType.DEFAULT, eSize);
+  }
+
+  public Bootstrap3ButtonGroup (@Nonnull final EBootstrap3ButtonGroupType eType,
+                                @Nonnull final EBootstrap3ButtonGroupSize eSize)
+  {
     addClasses (eType.getAllCSSClasses ());
+    addClass (eSize);
     m_eType = eType;
+    m_eSize = eSize;
   }
 
   @Nonnull
@@ -46,36 +58,27 @@ public class Bootstrap3ButtonGroup extends AbstractHCDiv <Bootstrap3ButtonGroup>
     return m_eType;
   }
 
-  /**
-   * Add a new empty drop down menu to the group.
-   * 
-   * @param sDropDownLabel
-   *        The label to be displayed. May be <code>null</code>.
-   * @return The created drop down button
-   */
   @Nonnull
-  public Bootstrap3DropdownMenu addDropDownMenu (@Nullable final String sDropDownLabel)
+  public EBootstrap3ButtonGroupSize getSize ()
   {
-    return addDropDownMenu (new HCTextNode (sDropDownLabel));
+    return m_eSize;
   }
 
   /**
-   * Add a new empty drop down menu to the group.
+   * Add a button and convert it to a dropdown menu
    * 
-   * @param aDropDownLabel
-   *        The label to be displayed. May be <code>null</code>.
+   * @param aButton
+   *        The button to be added. May be <code>null</code>.
    * @return The created drop down button
    */
   @Nonnull
-  public Bootstrap3DropdownMenu addDropDownMenu (@Nullable final IHCNode aDropDownLabel)
+  public Bootstrap3DropdownMenu addButtonAsDropDownMenu (@Nullable final Bootstrap3Button aButton)
   {
+    // Add caret to button
+    Bootstrap3DropdownMenu.makeDropdownToggle (aButton);
+
     final Bootstrap3ButtonGroup aNestedGroup = addAndReturnChild (new Bootstrap3ButtonGroup ());
-    {
-      // Drop down button + caret
-      final Bootstrap3Button aButton = aNestedGroup.addAndReturnChild (new Bootstrap3Button ());
-      aButton.addChild (aDropDownLabel);
-      Bootstrap3DropdownMenu.makeDropdownToggle (aButton);
-    }
+    aNestedGroup.addChild (aButton);
     final Bootstrap3DropdownMenu aDDM = aNestedGroup.addAndReturnChild (new Bootstrap3DropdownMenu ());
     // Overwrite default "menu" role
     aDDM.setRole (null);
