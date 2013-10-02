@@ -34,6 +34,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCButton;
 import com.phloc.html.hc.html.HCDiv;
+import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCP;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html5.HCNav;
@@ -83,7 +84,7 @@ public class Bootstrap3Navbar extends HCNav
   }
 
   @Nonnull
-  private Bootstrap3Navbar _insert (@Nonnull final EBootstrap3NavbarPosition ePos, @Nullable final IHCElement <?> aNode)
+  private Bootstrap3Navbar _addNode (@Nonnull final EBootstrap3NavbarPosition ePos, @Nullable final IHCElement <?> aNode)
   {
     if (aNode != null)
       aNode.addClass (ePos);
@@ -95,10 +96,17 @@ public class Bootstrap3Navbar extends HCNav
   }
 
   @Nonnull
+  public Bootstrap3Navbar addForm (@Nonnull final EBootstrap3NavbarPosition ePos, @Nonnull final HCForm aForm)
+  {
+    aForm.addClass (CBootstrap3CSS.NAVBAR_FORM);
+    return _addNode (ePos, aForm);
+  }
+
+  @Nonnull
   public Bootstrap3Navbar addNav (@Nonnull final EBootstrap3NavbarPosition ePos, @Nonnull final Bootstrap3Nav aNav)
   {
     aNav.addClass (CBootstrap3CSS.NAVBAR_NAV);
-    return _insert (ePos, aNav);
+    return _addNode (ePos, aNav);
   }
 
   @Nonnull
@@ -112,7 +120,7 @@ public class Bootstrap3Navbar extends HCNav
                                    @Nonnull final IHCElementWithChildren <?> aText)
   {
     aText.addClass (CBootstrap3CSS.NAVBAR_TEXT);
-    return _insert (ePos, aText);
+    return _addNode (ePos, aText);
   }
 
   @Nonnull
@@ -120,7 +128,7 @@ public class Bootstrap3Navbar extends HCNav
                                      @Nonnull final IHCElement <?> aButton)
   {
     aButton.addClass (CBootstrap3CSS.NAVBAR_BTN);
-    return _insert (ePos, aButton);
+    return _addNode (ePos, aButton);
   }
 
   @Nonnull
@@ -148,7 +156,7 @@ public class Bootstrap3Navbar extends HCNav
                                     @Nonnull final IHCNode aBrand,
                                     @Nonnull final ISimpleURL aHomeLink)
   {
-    return _insert (ePos, new HCA (aHomeLink).addChild (aBrand).addClass (CBootstrap3CSS.NAVBAR_BRAND));
+    return _addNode (ePos, new HCA (aHomeLink).addChild (aBrand).addClass (CBootstrap3CSS.NAVBAR_BRAND));
   }
 
   public boolean isInverse ()
