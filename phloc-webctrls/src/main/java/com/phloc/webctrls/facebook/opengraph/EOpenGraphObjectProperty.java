@@ -34,9 +34,6 @@ import com.phloc.webctrls.facebook.CFacebook;
  */
 public enum EOpenGraphObjectProperty implements IHasID <String>
 {
-  /** The title, headline or name of the object. */
-  TITLE ("title"),
-  TYPE ("type"),
   /**
    * The URL of the object, which acts as each object's unique identifier,
    * otherwise known as the canonical URL - each URL can only contain a single
@@ -47,6 +44,8 @@ public enum EOpenGraphObjectProperty implements IHasID <String>
    * the variations of the URL.
    */
   URL ("url"),
+  /** The title, headline or name of the object. */
+  TITLE ("title"),
   /**
    * The URL of an image which is used in stories published about this object.
    * We suggest that you give us an image of at least 200x200 pixels. However,
@@ -60,18 +59,19 @@ public enum EOpenGraphObjectProperty implements IHasID <String>
    */
   IMAGE ("image"),
   /**
+   * The object type for this object - to see what the type is for your og:type,
+   * go to the Open Graph section of the App Dashboard, click on Types, choose
+   * your object type and check the Open Graph Type field under the Advanced
+   * section. Note that once an object's type is set and has been used in a
+   * story that its type can not be changed. For a list of built-in types,
+   * please see our list of common open graph object types.
+   */
+  TYPE ("type"),
+  /**
    * The language locale that the object properties use. This defaults to en_US
    * if not specified.
    */
   LOCALE ("locale"),
-  /**
-   * Human-readable name of site hosting the object.
-   */
-  SITE_NAME ("site_name"),
-  /**
-   * A short description or summary of the object.
-   */
-  DESCRIPTION ("description"),
   /**
    * The URL of a video that complements this object. You may specify more than
    * one og:video. If you specify more than one og:video, then og:video:type is
@@ -86,9 +86,13 @@ public enum EOpenGraphObjectProperty implements IHasID <String>
    */
   AUDIO ("audio"),
   /**
-   * Used to supply an additional link that shows related content to the object.
+   * A short description or summary of the object.
    */
-  SEE_ALSO ("see_also"),
+  DESCRIPTION ("description"),
+  /**
+   * Human-readable name of site hosting the object.
+   */
+  SITE_NAME ("site_name"),
   /**
    * The word that appears before the object's title in a story or sentence
    * (such as "an Omelette"). The value of this property should be a string that
@@ -106,7 +110,11 @@ public enum EOpenGraphObjectProperty implements IHasID <String>
   /**
    * When the object was last updated.
    */
-  UPDATED_TIME ("updated_time");
+  UPDATED_TIME ("updated_time"),
+  /**
+   * Used to supply an additional link that shows related content to the object.
+   */
+  SEE_ALSO ("see_also");
 
   private final String m_sID;
 
