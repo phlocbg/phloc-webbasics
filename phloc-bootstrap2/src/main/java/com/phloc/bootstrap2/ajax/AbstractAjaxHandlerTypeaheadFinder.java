@@ -17,8 +17,6 @@
  */
 package com.phloc.bootstrap2.ajax;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -38,7 +36,8 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.json.impl.JSONObject;
-import com.phloc.json.impl.value.JSONPropertyValueList;
+import com.phloc.json2.impl.JsonArray;
+import com.phloc.json2.impl.JsonObject;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
@@ -229,7 +228,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     if (StringHelper.hasNoTextAfterTrim (sOriginalQuery))
     {
       // May happen when the user enters "  " (only spaces)
-      return AjaxDefaultResponse.createSuccess (new JSONObject ());
+      return AjaxDefaultResponse.createSuccess (new JsonObject ());
     }
 
     final Finder aFinder = createFinder (sOriginalQuery, aDisplayLocale);
@@ -238,7 +237,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     final Map <String, String> aMap = getAllMatchingObjects (aFinder, aDisplayLocale);
 
     // Convert to JSON, sorted by display name using the current display locale
-    final List <JSONObject> ret = new ArrayList <JSONObject> ();
+    final JsonArray ret = new JsonArray ();
     for (final Map.Entry <String, String> aEntry : ContainerHelper.getSortedByValue (aMap,
                                                                                      new ComparatorString (aDisplayLocale))
                                                                   .entrySet ())
@@ -250,6 +249,6 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     }
 
     // Set as result property
-    return AjaxDefaultResponse.createSuccess (new JSONPropertyValueList <JSONObject> (ret));
+    return AjaxDefaultResponse.createSuccess (ret);
   }
 }
