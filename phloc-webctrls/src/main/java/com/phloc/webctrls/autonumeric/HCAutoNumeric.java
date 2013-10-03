@@ -439,6 +439,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   public static void registerExternalResources ()
   {
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_15);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_17);
   }
 }
