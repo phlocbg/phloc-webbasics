@@ -32,10 +32,6 @@ public final class CDemoAppAjaxView
   public static final IAjaxFunction VIEW_DATATABLES = new DemoAppAjaxFunctionView ("dataTables");
   public static final IAjaxFunction VIEW_LOGIN = new DemoAppAjaxFunctionView ("login");
   public static final IAjaxFunction VIEW_UPDATE_MENU_VIEW = new DemoAppAjaxFunctionView ("updateMenuView");
-  public static final IAjaxFunction VIEW_UPDATE_SHOPPINGCART = new DemoAppAjaxFunctionView ("updateShoppingCart");
-  public static final IAjaxFunction VIEW_SHOPPINGCART_INCREASE = new DemoAppAjaxFunctionView ("shoppingCartIncrease");
-  public static final IAjaxFunction VIEW_SHOPPINGCART_DECREASE = new DemoAppAjaxFunctionView ("shoppingCartDecrease");
-  public static final IAjaxFunction VIEW_SHOPPINGCART_REMOVE = new DemoAppAjaxFunctionView ("shoppingCartRemove");
 
   private CDemoAppAjaxView ()
   {}
