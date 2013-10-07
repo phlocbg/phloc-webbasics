@@ -31,7 +31,7 @@ public final class DemoAppJS
   {}
 
   @Nonnull
-  public static JSRef getLamaApp ()
+  public static JSRef getDemoApp ()
   {
     // Match the JS file in src/main/webapp/js
     return JSExpr.ref ("DemoApp");
@@ -41,6 +41,6 @@ public final class DemoAppJS
   public static JSInvocation viewLogin ()
   {
     // Invoke the JS function "viewLogin" on the object
-    return getLamaApp ().invoke ("viewLogin");
+    return getDemoApp ().invoke ("viewLogin");
   }
 }
