@@ -31,7 +31,7 @@ public class ActionPing extends AbstractActionExecutor
   public void execute (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                        @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
   {
-    aUnifiedResponse.setContentAndCharset ("png", CWebCharset.CHARSET_XML_OBJ)
+    aUnifiedResponse.setContentAndCharset ("pong", CWebCharset.CHARSET_XML_OBJ)
                     .setMimeType (CMimeType.TEXT_PLAIN)
                     .disableCaching ();
   }
