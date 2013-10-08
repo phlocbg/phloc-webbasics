@@ -29,8 +29,8 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
 import com.phloc.bootstrap3.CBootstrap3CSS;
 import com.phloc.bootstrap3.EBootstrap3Icon;
-import com.phloc.bootstrap3.well.Bootstrap3Well;
-import com.phloc.bootstrap3.well.EBootstrap3WellType;
+import com.phloc.bootstrap3.well.BootstrapWell;
+import com.phloc.bootstrap3.well.EBootstrapWellType;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.html.hc.IHCElement;
@@ -189,7 +189,7 @@ public class Bootstrap3MenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
                                                               aMenuTree.getRootItem (),
                                                               aRenderer,
                                                               aAllDisplayMenuItemIDs).addClass (CBootstrap3CSS.NAV);
-    final Bootstrap3Well ret = new Bootstrap3Well (EBootstrap3WellType.SMALL);
+    final BootstrapWell ret = new BootstrapWell (EBootstrapWellType.SMALL);
     ret.addChild (aUL);
     return ret;
   }

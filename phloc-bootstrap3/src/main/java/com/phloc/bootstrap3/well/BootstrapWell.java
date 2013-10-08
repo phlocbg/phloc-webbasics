@@ -30,19 +30,19 @@ import com.phloc.html.hc.html.AbstractHCDiv;
  * 
  * @author Philip Helger
  */
-public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
+public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
 {
-  private final EBootstrap3WellType m_eType;
+  private final EBootstrapWellType m_eType;
 
-  public Bootstrap3Well ()
+  public BootstrapWell ()
   {
-    this (EBootstrap3WellType.DEFAULT);
+    this (EBootstrapWellType.DEFAULT);
   }
 
   /**
    * Create a new Well element
    */
-  public Bootstrap3Well (@Nonnull final EBootstrap3WellType eType)
+  public BootstrapWell (@Nonnull final EBootstrapWellType eType)
   {
     if (eType == null)
       throw new NullPointerException ("Type");
@@ -52,7 +52,7 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
   }
 
   @Nonnull
-  public EBootstrap3WellType getType ()
+  public EBootstrapWellType getType ()
   {
     return m_eType;
   }
@@ -65,9 +65,9 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final IPredefinedLocaleTextProvider aChild)
+  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider aChild)
   {
-    return new Bootstrap3Well ().addChild (aChild);
+    return new BootstrapWell ().addChild (aChild);
   }
 
   /**
@@ -78,9 +78,9 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
+  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
   {
-    return new Bootstrap3Well ().addChildren (aChildren);
+    return new BootstrapWell ().addChildren (aChildren);
   }
 
   /**
@@ -91,9 +91,9 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final String sChild)
+  public static BootstrapWell create (@Nullable final String sChild)
   {
-    return new Bootstrap3Well ().addChild (sChild);
+    return new BootstrapWell ().addChild (sChild);
   }
 
   /**
@@ -104,9 +104,9 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final String... aChildren)
+  public static BootstrapWell create (@Nullable final String... aChildren)
   {
-    return new Bootstrap3Well ().addChildren (aChildren);
+    return new BootstrapWell ().addChildren (aChildren);
   }
 
   /**
@@ -117,9 +117,9 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final IHCNode aChild)
+  public static BootstrapWell create (@Nullable final IHCNode aChild)
   {
-    return new Bootstrap3Well ().addChild (aChild);
+    return new BootstrapWell ().addChild (aChild);
   }
 
   /**
@@ -130,9 +130,9 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final IHCNode... aChildren)
+  public static BootstrapWell create (@Nullable final IHCNode... aChildren)
   {
-    return new Bootstrap3Well ().addChildren (aChildren);
+    return new BootstrapWell ().addChildren (aChildren);
   }
 
   /**
@@ -143,8 +143,8 @@ public class Bootstrap3Well extends AbstractHCDiv <Bootstrap3Well>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static Bootstrap3Well create (@Nullable final Iterable <? extends IHCNode> aChildren)
+  public static BootstrapWell create (@Nullable final Iterable <? extends IHCNode> aChildren)
   {
-    return new Bootstrap3Well ().addChildren (aChildren);
+    return new BootstrapWell ().addChildren (aChildren);
   }
 }

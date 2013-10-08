@@ -27,7 +27,7 @@ import com.phloc.html.css.ICSSClassProvider;
  * 
  * @author Philip Helger
  */
-public enum EBootstrap3WellType implements ICSSClassProvider
+public enum EBootstrapWellType implements ICSSClassProvider
 {
   LARGE (CBootstrap3CSS.WELL_LG),
   DEFAULT (null),
@@ -35,7 +35,7 @@ public enum EBootstrap3WellType implements ICSSClassProvider
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrap3WellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
