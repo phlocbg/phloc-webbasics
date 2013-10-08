@@ -100,6 +100,12 @@ public class BootstrapTooltip
     return this;
   }
 
+  /**
+   * @param aFunction
+   *        Callback function with 3 parameters:
+   *        <code>(this, $tip[0], this.$element[0])</code>
+   * @return this
+   */
   @Nonnull
   public BootstrapTooltip setPlacement (@Nonnull final JSAnonymousFunction aFunction)
   {
@@ -144,11 +150,16 @@ public class BootstrapTooltip
     return this;
   }
 
+  /**
+   * @param aFunction
+   *        Callback function with 1 parameter: <code>(this.$element[0])</code>
+   * @return this
+   */
   @Nonnull
-  public BootstrapTooltip setTitle (@Nullable final JSAnonymousFunction aTitleFunc)
+  public BootstrapTooltip setTitle (@Nullable final JSAnonymousFunction aFunction)
   {
     m_sTitle = null;
-    m_aTitleFunc = aTitleFunc;
+    m_aTitleFunc = aFunction;
     return this;
   }
 
