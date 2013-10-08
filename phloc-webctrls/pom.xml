@@ -169,6 +169,8 @@
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
           <excludes>
+            <exclude>**/*.min.js</exclude>
+            <exclude>**/*.min.css</exclude>
             <exclude>src/main/resources/autonumeric/**</exclude>
             <exclude>src/main/resources/autosize/**</exclude>
             <exclude>src/main/resources/colorbox/**</exclude>
@@ -183,6 +185,7 @@
             <exclude>src/main/resources/placeholder/**</exclude>
             <exclude>src/main/resources/tiptip/**</exclude>
             <exclude>src/main/resources/typeahead/**</exclude>
+            <exclude>src/test/resources/fineupload/**</exclude>
           </excludes>
         </configuration>
       </plugin>
