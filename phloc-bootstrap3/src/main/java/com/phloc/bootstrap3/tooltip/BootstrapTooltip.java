@@ -8,10 +8,17 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.bootstrap3.EBootstrapIcon;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.EHTMLElement;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.hc.html.HCSpan;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
@@ -150,6 +157,15 @@ public class BootstrapTooltip
     return this;
   }
 
+  @Nonnull
+  public BootstrapTooltip setTitle (@Nullable final IHCNode aTitle)
+  {
+    setHTML (true);
+    m_sTitle = aTitle == null ? null : HCSettings.getAsHTMLStringWithoutNamespaces (aTitle);
+    m_aTitleFunc = null;
+    return this;
+  }
+
   /**
    * @param aFunction
    *        Callback function with 1 parameter: <code>(this.$element[0])</code>
@@ -236,7 +252,7 @@ public class BootstrapTooltip
   }
 
   @Nonnull
-  public JSInvocation jsAttach ()
+  public JSAssocArray getJSOptions ()
   {
     final JSAssocArray aOptions = new JSAssocArray ();
     if (m_bAnimation != DEFAULT_ANIMATION)
@@ -277,7 +293,13 @@ public class BootstrapTooltip
     }
     if (m_aContainer != null)
       aOptions.add ("container", m_aContainer.getJSCode ());
-    return m_aSelector.invoke ().invoke ("tooltip").arg (aOptions);
+    return aOptions;
+  }
+
+  @Nonnull
+  public JSInvocation jsAttach ()
+  {
+    return m_aSelector.invoke ().invoke ("tooltip").arg (getJSOptions ());
   }
 
   @Nonnull
@@ -302,5 +324,27 @@ public class BootstrapTooltip
   public JSInvocation jsDestroy ()
   {
     return m_aSelector.invoke ().invoke ("tooltip").arg ("destroy");
+  }
+
+  @Nonnull
+  public static IHCNode createSimpleTooltip (@Nonnull final String sTitle)
+  {
+    final String sID = GlobalIDFactory.getNewStringID ();
+    final HCSpan aSpan = new HCSpan ().setID (sID);
+    aSpan.addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
+    final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (sID)).setTitle (sTitle);
+    final IHCNode aScript = new HCScriptOnDocumentReady (aTooltip.jsAttach ());
+    return HCNodeList.create (aSpan, aScript);
+  }
+
+  @Nonnull
+  public static IHCNode createSimpleTooltip (@Nonnull final IHCNode aTitle)
+  {
+    final String sID = GlobalIDFactory.getNewStringID ();
+    final HCSpan aSpan = new HCSpan ().setID (sID);
+    aSpan.addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
+    final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (sID)).setTitle (aTitle);
+    final IHCNode aScript = new HCScriptOnDocumentReady (aTooltip.jsAttach ());
+    return HCNodeList.create (aSpan, aScript);
   }
 }
