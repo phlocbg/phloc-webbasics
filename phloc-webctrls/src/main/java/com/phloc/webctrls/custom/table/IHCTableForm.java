@@ -28,6 +28,13 @@ import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.IFormNote;
 
+/**
+ * Base interface for a form table
+ * 
+ * @author Philip Helger
+ * @param <IMPLTYPE>
+ *        Implementation type
+ */
 public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends IHCBaseTable <IMPLTYPE>
 {
   @Nonnull
@@ -43,6 +50,9 @@ public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends
 
   @Nonnull
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl);
+
+  @Nonnull
+  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode... aCtrls);
 
   @Nonnull
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNodeBuilder aCtrlBuilder, @Nullable IErrorList aFormErrors);

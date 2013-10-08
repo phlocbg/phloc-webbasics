@@ -183,6 +183,12 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode... aCtrls)
+  {
+    return addItemRow (aLabel, ContainerHelper.newList (aCtrls), null);
+  }
+
+  @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNodeBuilder aCtrlBuilder,
                            @Nullable final IErrorList aFormErrors)
