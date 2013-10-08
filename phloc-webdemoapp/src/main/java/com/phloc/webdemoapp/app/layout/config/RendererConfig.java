@@ -26,18 +26,18 @@ import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.user.IUser;
-import com.phloc.bootstrap3.CBootstrap3CSS;
-import com.phloc.bootstrap3.base.Bootstrap3Container;
-import com.phloc.bootstrap3.breadcrumbs.Bootstrap3Breadcrumbs;
-import com.phloc.bootstrap3.breadcrumbs.Bootstrap3BreadcrumbsProvider;
-import com.phloc.bootstrap3.ext.Bootstrap3MenuItemRenderer;
-import com.phloc.bootstrap3.grid.Bootstrap3Row;
-import com.phloc.bootstrap3.grid.EBootstrap3GridMD;
-import com.phloc.bootstrap3.nav.Bootstrap3Nav;
-import com.phloc.bootstrap3.navbar.Bootstrap3Navbar;
-import com.phloc.bootstrap3.navbar.EBootstrap3NavbarPosition;
-import com.phloc.bootstrap3.navbar.EBootstrap3NavbarType;
-import com.phloc.bootstrap3.pageheader.Bootstrap3PageHeader;
+import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.bootstrap3.base.BootstrapContainer;
+import com.phloc.bootstrap3.breadcrumbs.BootstrapBreadcrumbs;
+import com.phloc.bootstrap3.breadcrumbs.BootstrapBreadcrumbsProvider;
+import com.phloc.bootstrap3.ext.BootstrapMenuItemRenderer;
+import com.phloc.bootstrap3.grid.BootstrapRow;
+import com.phloc.bootstrap3.grid.EBootstrapGridMD;
+import com.phloc.bootstrap3.nav.BootstrapNav;
+import com.phloc.bootstrap3.navbar.BootstrapNavbar;
+import com.phloc.bootstrap3.navbar.EBootstrapNavbarPosition;
+import com.phloc.bootstrap3.navbar.EBootstrapNavbarType;
+import com.phloc.bootstrap3.pageheader.BootstrapPageHeader;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCElement;
@@ -71,26 +71,26 @@ public final class RendererConfig implements ILayoutAreaContentProvider
     final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
                                                                                         .getDefaultMenuItemID ());
 
-    final Bootstrap3Navbar aNavbar = new Bootstrap3Navbar (EBootstrap3NavbarType.STATIC_TOP, true, aDisplayLocale);
+    final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
     aNavbar.addBrand (HCNodeList.create (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1),
                                          HCSpan.create (" Administration").addClass (CDemoAppCSS.CSS_CLASS_LOGO2)),
                       aLinkToStartPage);
 
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
-    aNavbar.addText (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT,
+    aNavbar.addText (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT,
                      HCP.create ("Logged in as ").addChild (HCStrong.create (aUser == null ? "guest"
                                                                                           : aUser.getDisplayName ())));
 
-    final Bootstrap3Nav aNav = new Bootstrap3Nav ();
+    final BootstrapNav aNav = new BootstrapNav ();
     aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale), LinkUtils.getURLWithContext ("/logout"));
-    aNavbar.addNav (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT, aNav);
+    aNavbar.addNav (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT, aNav);
     return aNavbar;
   }
 
   @Nonnull
   public static IHCElement <?> getMenuContent (@Nonnull final Locale aDisplayLocale)
   {
-    final IHCElement <?> ret = Bootstrap3MenuItemRenderer.createSideBarMenu (ApplicationMenuTree.getInstance (),
+    final IHCElement <?> ret = BootstrapMenuItemRenderer.createSideBarMenu (ApplicationMenuTree.getInstance (),
                                                                              aDisplayLocale);
     return ret;
   }
@@ -124,7 +124,7 @@ public final class RendererConfig implements ILayoutAreaContentProvider
     final HCNodeList aPageContainer = new HCNodeList ();
     final String sHeaderText = aDisplayPage.getHeaderText (aWPEC);
     if (StringHelper.hasText (sHeaderText))
-      aPageContainer.addChild (new Bootstrap3PageHeader ().addChild (HCH1.create (sHeaderText)));
+      aPageContainer.addChild (new BootstrapPageHeader ().addChild (HCH1.create (sHeaderText)));
     // Main fill content
     aDisplayPage.getContent (aWPEC);
     // Add result
@@ -135,7 +135,7 @@ public final class RendererConfig implements ILayoutAreaContentProvider
   @Nonnull
   public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
   {
-    final Bootstrap3Container aOuterContainer = new Bootstrap3Container ();
+    final BootstrapContainer aOuterContainer = new BootstrapContainer ();
 
     // Header
     {
@@ -144,17 +144,17 @@ public final class RendererConfig implements ILayoutAreaContentProvider
 
     // Breadcrumbs
     {
-      final Bootstrap3Breadcrumbs aBreadcrumbs = Bootstrap3BreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance (),
+      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance (),
                                                                                                   aLEC.getDisplayLocale ());
-      aBreadcrumbs.addClass (CBootstrap3CSS.HIDDEN_XS);
+      aBreadcrumbs.addClass (CBootstrapCSS.HIDDEN_XS);
       aOuterContainer.addChild (aBreadcrumbs);
     }
 
     // Content
     {
-      final Bootstrap3Row aRow = aOuterContainer.addAndReturnChild (new Bootstrap3Row ());
-      final HCDiv aCol1 = aRow.createColumn (EBootstrap3GridMD.MD_3);
-      final HCDiv aCol2 = aRow.createColumn (EBootstrap3GridMD.MD_9);
+      final BootstrapRow aRow = aOuterContainer.addAndReturnChild (new BootstrapRow ());
+      final HCDiv aCol1 = aRow.createColumn (EBootstrapGridMD.MD_3);
+      final HCDiv aCol2 = aRow.createColumn (EBootstrapGridMD.MD_9);
 
       // left
       // We need a wrapper span for easy AJAX content replacement

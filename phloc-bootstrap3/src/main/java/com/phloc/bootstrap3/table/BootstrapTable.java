@@ -15,34 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.table;
 
 import javax.annotation.Nullable;
 
-import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.html.HCCol;
 
-/**
- * Type of well size
- * 
- * @author Philip Helger
- */
-public enum EBootstrapWellType implements ICSSClassProvider
+public class BootstrapTable extends AbstractBootstrapTable <BootstrapTable>
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  public BootstrapTable ()
+  {}
 
-  private final ICSSClassProvider m_aCSSClass;
-
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  public BootstrapTable (@Nullable final HCCol aCol)
   {
-    m_aCSSClass = aCSSClass;
+    super (aCol);
   }
 
-  @Nullable
-  public String getCSSClass ()
+  public BootstrapTable (@Nullable final HCCol... aCols)
   {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    super (aCols);
+  }
+
+  public BootstrapTable (@Nullable final Iterable <? extends HCCol> aCols)
+  {
+    super (aCols);
   }
 }

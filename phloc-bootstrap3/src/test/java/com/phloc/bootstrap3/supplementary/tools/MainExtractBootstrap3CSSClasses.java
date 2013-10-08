@@ -23,7 +23,7 @@ import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.bootstrap3.EBootstrap3CSSPathProvider;
+import com.phloc.bootstrap3.EBootstrapCSSPathProvider;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.css.ECSSVersion;
@@ -39,7 +39,7 @@ public class MainExtractBootstrap3CSSClasses
 {
   public static void main (final String [] args)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource (EBootstrap3CSSPathProvider.BOOTSTRAP_3_0_0.getCSSItemPath (true)),
+    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource (EBootstrapCSSPathProvider.BOOTSTRAP_3_0_0.getCSSItemPath (true)),
                                                                CCharset.CHARSET_UTF_8_OBJ,
                                                                ECSSVersion.CSS30);
     final Set <String> aClasses = new TreeSet <String> ();

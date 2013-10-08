@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.button;
 
 import javax.annotation.Nullable;
 
@@ -23,19 +23,20 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Type of well size
+ * Button size
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public enum EBootstrapButtonSize implements ICSSClassProvider
 {
-  LARGE (CBootstrapCSS.WELL_LG),
+  LARGE (CBootstrapCSS.BTN_LG),
   DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  SMALL (CBootstrapCSS.BTN_SM),
+  MINI (CBootstrapCSS.BTN_XS);
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapButtonSize (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }

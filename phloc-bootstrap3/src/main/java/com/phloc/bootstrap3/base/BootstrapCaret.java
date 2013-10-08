@@ -15,34 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
-
-import javax.annotation.Nullable;
+package com.phloc.bootstrap3.base;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.html.HCSpan;
+import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 
 /**
- * Type of well size
+ * Represents a caret symbol (e.g. for dropdowns) as the combination of a space
+ * (" ") and the span with class=caret
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public class BootstrapCaret extends HCNodeList
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
-
-  private final ICSSClassProvider m_aCSSClass;
-
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  public BootstrapCaret ()
   {
-    m_aCSSClass = aCSSClass;
-  }
-
-  @Nullable
-  public String getCSSClass ()
-  {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    addChildren (new HCTextNode (" "), new HCSpan ().addClass (CBootstrapCSS.CARET));
   }
 }

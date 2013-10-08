@@ -15,27 +15,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.button;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Type of well size
+ * Button type
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public enum EBootstrapButtonType implements ICSSClassProvider
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  DEFAULT (CBootstrapCSS.BTN_DEFAULT),
+  PRIMARY (CBootstrapCSS.BTN_PRIMARY),
+  SUCCESS (CBootstrapCSS.BTN_SUCCESS),
+  INFO (CBootstrapCSS.BTN_INFO),
+  WARNING (CBootstrapCSS.BTN_WARNING),
+  DANGER (CBootstrapCSS.BTN_DANGER),
+  LINK (CBootstrapCSS.BTN_LINK);
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapButtonType (@Nonnull final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
@@ -43,6 +48,6 @@ public enum EBootstrapWellType implements ICSSClassProvider
   @Nullable
   public String getCSSClass ()
   {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    return m_aCSSClass.getCSSClass ();
   }
 }

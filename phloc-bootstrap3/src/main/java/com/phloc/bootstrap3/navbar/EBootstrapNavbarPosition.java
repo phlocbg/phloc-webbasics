@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.navbar;
 
 import javax.annotation.Nullable;
 
@@ -23,19 +23,20 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Type of well size
+ * Position of a Navbar element
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public enum EBootstrapNavbarPosition implements ICSSClassProvider
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  FIXED (null),
+  COLLAPSIBLE_DEFAULT (null),
+  COLLAPSIBLE_LEFT (CBootstrapCSS.NAVBAR_LEFT),
+  COLLAPSIBLE_RIGHT (CBootstrapCSS.NAVBAR_RIGHT);
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapNavbarPosition (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
@@ -44,5 +45,10 @@ public enum EBootstrapWellType implements ICSSClassProvider
   public String getCSSClass ()
   {
     return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+  }
+
+  public boolean isFixed ()
+  {
+    return this == FIXED;
   }
 }

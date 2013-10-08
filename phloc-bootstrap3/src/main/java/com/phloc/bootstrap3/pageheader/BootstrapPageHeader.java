@@ -15,34 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.pageheader;
 
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
- * Type of well size
+ * Bootstrap3 page header.
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public class BootstrapPageHeader extends AbstractHCDiv <BootstrapPageHeader>
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
-
-  private final ICSSClassProvider m_aCSSClass;
-
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  public BootstrapPageHeader ()
   {
-    m_aCSSClass = aCSSClass;
+    super ();
+    addClass (CBootstrapCSS.PAGE_HEADER);
   }
 
   @Nullable
-  public String getCSSClass ()
+  public static BootstrapPageHeader createOnDemand (@Nullable final IHCNode aNode)
   {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    return aNode == null ? null : new BootstrapPageHeader ().addChild (aNode);
   }
 }

@@ -25,9 +25,9 @@ import javax.annotation.Nonnull;
 
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import com.phloc.bootstrap3.ext.Bootstrap3DataTables;
-import com.phloc.bootstrap3.servlet.WebAppListenerMultiAppBootstrap3;
-import com.phloc.bootstrap3.styler.Bootstrap3WebPageStyler;
+import com.phloc.bootstrap3.ext.BootstrapDataTables;
+import com.phloc.bootstrap3.servlet.WebAppListenerMultiAppBootstrap;
+import com.phloc.bootstrap3.styler.BootstrapWebPageStyler;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.hc.html.AbstractHCBaseTable;
@@ -45,7 +45,7 @@ import com.phloc.webdemoapp.app.init.InitializerView;
  * 
  * @author Philip Helger
  */
-public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap3
+public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
 {
   @Override
   @Nonnull
@@ -70,14 +70,14 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
     super.initGlobals ();
 
     // UI stuff
-    WebPageStylerManager.getInstance ().setStyler (new Bootstrap3WebPageStyler ()
+    WebPageStylerManager.getInstance ().setStyler (new BootstrapWebPageStyler ()
     {
       @Override
       @Nonnull
-      public Bootstrap3DataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
+      public BootstrapDataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
                                                            @Nonnull final Locale aDisplayLocale)
       {
-        final Bootstrap3DataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
+        final BootstrapDataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
         ret.setAutoWidth (false)
            .setUseJQueryAjax (true)
            .setAjaxSource (CDemoAppAjaxView.VIEW_DATATABLES.getInvocationURL ())

@@ -33,20 +33,20 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.user.IUser;
-import com.phloc.bootstrap3.CBootstrap3CSS;
-import com.phloc.bootstrap3.base.Bootstrap3Container;
-import com.phloc.bootstrap3.breadcrumbs.Bootstrap3Breadcrumbs;
-import com.phloc.bootstrap3.breadcrumbs.Bootstrap3BreadcrumbsProvider;
-import com.phloc.bootstrap3.dropdown.Bootstrap3DropdownMenu;
-import com.phloc.bootstrap3.ext.Bootstrap3MenuItemRenderer;
-import com.phloc.bootstrap3.ext.Bootstrap3MenuItemRendererHorz;
-import com.phloc.bootstrap3.grid.Bootstrap3Row;
-import com.phloc.bootstrap3.grid.EBootstrap3GridMD;
-import com.phloc.bootstrap3.nav.Bootstrap3Nav;
-import com.phloc.bootstrap3.navbar.Bootstrap3Navbar;
-import com.phloc.bootstrap3.navbar.EBootstrap3NavbarPosition;
-import com.phloc.bootstrap3.navbar.EBootstrap3NavbarType;
-import com.phloc.bootstrap3.pageheader.Bootstrap3PageHeader;
+import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.bootstrap3.base.BootstrapContainer;
+import com.phloc.bootstrap3.breadcrumbs.BootstrapBreadcrumbs;
+import com.phloc.bootstrap3.breadcrumbs.BootstrapBreadcrumbsProvider;
+import com.phloc.bootstrap3.dropdown.BootstrapDropdownMenu;
+import com.phloc.bootstrap3.ext.BootstrapMenuItemRenderer;
+import com.phloc.bootstrap3.ext.BootstrapMenuItemRendererHorz;
+import com.phloc.bootstrap3.grid.BootstrapRow;
+import com.phloc.bootstrap3.grid.EBootstrapGridMD;
+import com.phloc.bootstrap3.nav.BootstrapNav;
+import com.phloc.bootstrap3.navbar.BootstrapNavbar;
+import com.phloc.bootstrap3.navbar.EBootstrapNavbarPosition;
+import com.phloc.bootstrap3.navbar.EBootstrapNavbarType;
+import com.phloc.bootstrap3.pageheader.BootstrapPageHeader;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -97,31 +97,31 @@ public final class RendererView implements ILayoutAreaContentProvider
     });
   }
 
-  private static void _addLoginLogout (@Nonnull final Bootstrap3Navbar aNavbar, @Nonnull final Locale aDisplayLocale)
+  private static void _addLoginLogout (@Nonnull final BootstrapNavbar aNavbar, @Nonnull final Locale aDisplayLocale)
   {
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     if (aUser != null)
     {
-      final Bootstrap3Nav aNav = new Bootstrap3Nav ();
+      final BootstrapNav aNav = new BootstrapNav ();
       aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale),
                     LinkUtils.getURLWithContext ("/logout"));
-      aNavbar.addNav (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT, aNav);
+      aNavbar.addNav (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT, aNav);
 
-      aNavbar.addText (EBootstrap3NavbarPosition.COLLAPSIBLE_RIGHT,
+      aNavbar.addText (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT,
                        HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
     }
     else
     {
-      final Bootstrap3Nav aNav = new Bootstrap3Nav ();
-      final Bootstrap3DropdownMenu aDropDown = aNav.addDropdownMenu ("Login");
+      final BootstrapNav aNav = new BootstrapNav ();
+      final BootstrapDropdownMenu aDropDown = aNav.addDropdownMenu ("Login");
       {
         final HCDiv aDiv = new HCDiv ().addStyle (CCSSProperties.PADDING.newValue ("10px"))
                                        .addStyle (CCSSProperties.WIDTH.newValue ("250px"));
         aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null, false)
-                                      .addClass (CBootstrap3CSS.NAVBAR_FORM));
+                                      .addClass (CBootstrapCSS.NAVBAR_FORM));
         aDropDown.addItem (aDiv);
       }
-      aNavbar.addNav (EBootstrap3NavbarPosition.FIXED, aNav);
+      aNavbar.addNav (EBootstrapNavbarPosition.FIXED, aNav);
     }
   }
 
@@ -131,7 +131,7 @@ public final class RendererView implements ILayoutAreaContentProvider
     final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
                                                                                         .getDefaultMenuItemID ());
 
-    final Bootstrap3Navbar aNavbar = new Bootstrap3Navbar (EBootstrap3NavbarType.STATIC_TOP, true, aDisplayLocale);
+    final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
     aNavbar.addBrand (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1), aLinkToStartPage);
 
     _addLoginLogout (aNavbar, aDisplayLocale);
@@ -156,7 +156,7 @@ public final class RendererView implements ILayoutAreaContentProvider
         return super.isMenuItemValidToBeDisplayed (aMenuObj);
       }
     };
-    final IHCElement <?> aMenu = Bootstrap3MenuItemRenderer.createSideBarMenu (aMenuTree, aCallback, aDisplayLocale);
+    final IHCElement <?> aMenu = BootstrapMenuItemRenderer.createSideBarMenu (aMenuTree, aCallback, aDisplayLocale);
 
     return aMenu;
   }
@@ -189,7 +189,7 @@ public final class RendererView implements ILayoutAreaContentProvider
     final HCNodeList aPageContainer = new HCNodeList ();
     final String sHeaderText = aDisplayPage.getHeaderText (aWPEC);
     if (StringHelper.hasText (sHeaderText))
-      aPageContainer.addChild (new Bootstrap3PageHeader ().addChild (HCH1.create (sHeaderText)));
+      aPageContainer.addChild (new BootstrapPageHeader ().addChild (HCH1.create (sHeaderText)));
     // Main fill content
     aDisplayPage.getContent (aWPEC);
     // Add result
@@ -200,7 +200,7 @@ public final class RendererView implements ILayoutAreaContentProvider
   @Nonnull
   public IHCNode getContent (@Nonnull final LayoutExecutionContext aLEC)
   {
-    final Bootstrap3Container aOuterContainer = new Bootstrap3Container ();
+    final BootstrapContainer aOuterContainer = new BootstrapContainer ();
 
     // Header
     {
@@ -209,17 +209,17 @@ public final class RendererView implements ILayoutAreaContentProvider
 
     // Breadcrumbs
     {
-      final Bootstrap3Breadcrumbs aBreadcrumbs = Bootstrap3BreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance (),
+      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance (),
                                                                                                   aLEC.getDisplayLocale ());
-      aBreadcrumbs.addClass (CBootstrap3CSS.HIDDEN_XS);
+      aBreadcrumbs.addClass (CBootstrapCSS.HIDDEN_XS);
       aOuterContainer.addChild (aBreadcrumbs);
     }
 
     // Content
     {
-      final Bootstrap3Row aRow = aOuterContainer.addAndReturnChild (new Bootstrap3Row ());
-      final HCDiv aCol1 = aRow.createColumn (EBootstrap3GridMD.MD_3);
-      final HCDiv aCol2 = aRow.createColumn (EBootstrap3GridMD.MD_9);
+      final BootstrapRow aRow = aOuterContainer.addAndReturnChild (new BootstrapRow ());
+      final HCDiv aCol1 = aRow.createColumn (EBootstrapGridMD.MD_3);
+      final HCDiv aCol2 = aRow.createColumn (EBootstrapGridMD.MD_9);
 
       // left
       // We need a wrapper span for easy AJAX content replacement
@@ -232,12 +232,12 @@ public final class RendererView implements ILayoutAreaContentProvider
 
     // Footer
     {
-      final HCDiv aDiv = new HCDiv ().addClass (CBootstrap3CSS.CONTAINER).setID (CLayout.LAYOUT_AREAID_FOOTER);
+      final HCDiv aDiv = new HCDiv ().addClass (CBootstrapCSS.CONTAINER).setID (CLayout.LAYOUT_AREAID_FOOTER);
 
       aDiv.addChild (HCP.create ("Demo web application for the phloc OSS-stack"));
       aDiv.addChild (HCP.create ("Created by phloc-systems"));
 
-      final Bootstrap3MenuItemRendererHorz aRenderer = new Bootstrap3MenuItemRendererHorz (aLEC.getDisplayLocale ());
+      final BootstrapMenuItemRendererHorz aRenderer = new BootstrapMenuItemRendererHorz (aLEC.getDisplayLocale ());
       final HCUL aUL = aDiv.addAndReturnChild (new HCUL ().addClass (CSS_CLASS_FOOTER_LINKS));
       for (final IMenuObject aMenuObj : m_aFooterObjects)
       {

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
-import com.phloc.bootstrap3.ext.Bootstrap3LoginHTMLProvider;
+import com.phloc.bootstrap3.ext.BootstrapLoginHTMLProvider;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.state.EContinue;
@@ -60,7 +60,7 @@ public final class DemoAppConfigLoginFilter extends AbstractUnifiedResponseFilte
       @Override
       protected IHTMLProvider createLoginScreen (final boolean bLoginError, @Nonnull final ELoginResult eLoginResult)
       {
-        return new Bootstrap3LoginHTMLProvider (bLoginError, eLoginResult, "DemoApp Administration - Login");
+        return new BootstrapLoginHTMLProvider (bLoginError, eLoginResult, "DemoApp Administration - Login");
       }
 
       @Override

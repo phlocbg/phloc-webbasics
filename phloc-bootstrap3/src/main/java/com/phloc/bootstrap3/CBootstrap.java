@@ -15,34 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3;
 
-import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
-import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.commons.version.Version;
 
 /**
- * Type of well size
+ * Constants for usage with Bootstrap3
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+@Immutable
+public final class CBootstrap
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  /** Bootstrap version 3.0.0 */
+  public static final Version BOOTSTRAP_VERSION_300 = new Version (3, 0, 0);
 
-  private final ICSSClassProvider m_aCSSClass;
-
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
-  {
-    m_aCSSClass = aCSSClass;
-  }
-
-  @Nullable
-  public String getCSSClass ()
-  {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
-  }
+  private CBootstrap ()
+  {}
 }

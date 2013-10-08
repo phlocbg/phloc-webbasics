@@ -15,34 +15,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.button;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Type of well size
+ * Button group types
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public enum EBootstrapButtonGroupType
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  DEFAULT (CBootstrapCSS.BTN_GROUP),
+  VERTICAL (CBootstrapCSS.BTN_GROUP_VERTICAL),
+  JUSTIFIED (CBootstrapCSS.BTN_GROUP, CBootstrapCSS.BTN_GROUP_JUSTIFIED);
 
-  private final ICSSClassProvider m_aCSSClass;
+  private final List <ICSSClassProvider> m_aCSSClasses;
 
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapButtonGroupType (@Nullable final ICSSClassProvider... aCSSClasses)
   {
-    m_aCSSClass = aCSSClass;
+    m_aCSSClasses = ContainerHelper.newUnmodifiableList (aCSSClasses);
   }
 
-  @Nullable
-  public String getCSSClass ()
+  @Nonnull
+  @Nonempty
+  public List <ICSSClassProvider> getAllCSSClasses ()
   {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    return m_aCSSClasses;
   }
 }

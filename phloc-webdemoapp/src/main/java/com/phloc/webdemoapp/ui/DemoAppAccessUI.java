@@ -23,9 +23,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.bootstrap3.button.Bootstrap3ButtonToolbar;
-import com.phloc.bootstrap3.form.Bootstrap3Form;
-import com.phloc.bootstrap3.form.EBootstrap3FormType;
+import com.phloc.bootstrap3.button.BootstrapButtonToolbar;
+import com.phloc.bootstrap3.form.BootstrapForm;
+import com.phloc.bootstrap3.form.EBootstrapFormType;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
@@ -56,8 +56,8 @@ public final class DemoAppAccessUI
     final String sIDPassword = GlobalIDFactory.getNewStringID ();
     final String sIDErrorField = GlobalIDFactory.getNewStringID ();
 
-    final Bootstrap3Form aForm = new Bootstrap3Form (LinkUtils.getSelfHref (), bFullUI ? EBootstrap3FormType.HORIZONTAL
-                                                                                      : EBootstrap3FormType.DEFAULT);
+    final BootstrapForm aForm = new BootstrapForm (LinkUtils.getSelfHref (), bFullUI ? EBootstrapFormType.HORIZONTAL
+                                                                                      : EBootstrapFormType.DEFAULT);
 
     // User name field
     aForm.addFormGroup (EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale),
@@ -71,7 +71,7 @@ public final class DemoAppAccessUI
     aForm.addChild (new HCDiv ().setID (sIDErrorField));
 
     // Login button
-    final Bootstrap3ButtonToolbar aToolbar = aForm.addAndReturnChild (new Bootstrap3ButtonToolbar ());
+    final BootstrapButtonToolbar aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbar ());
     final JSPackage aOnClick = new JSPackage ();
     aOnClick.add (DemoAppJS.viewLogin ()
                            .arg (CDemoAppAjaxView.VIEW_LOGIN.getInvocationURI ())

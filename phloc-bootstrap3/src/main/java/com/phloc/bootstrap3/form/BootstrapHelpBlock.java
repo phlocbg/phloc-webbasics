@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.form;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,38 +23,18 @@ import javax.annotation.Nullable;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCDiv;
+import com.phloc.html.hc.html.AbstractHCSpan;
 
 /**
- * Wrapper for a Bootstrap3 well.
+ * Wrapper for a Bootstrap3 help block.
  * 
  * @author Philip Helger
  */
-public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
+public class BootstrapHelpBlock extends AbstractHCSpan <BootstrapHelpBlock>
 {
-  private final EBootstrapWellType m_eType;
-
-  public BootstrapWell ()
+  public BootstrapHelpBlock ()
   {
-    this (EBootstrapWellType.DEFAULT);
-  }
-
-  /**
-   * Create a new Well element
-   */
-  public BootstrapWell (@Nonnull final EBootstrapWellType eType)
-  {
-    if (eType == null)
-      throw new NullPointerException ("Type");
-
-    addClasses (CBootstrapCSS.WELL, eType);
-    m_eType = eType;
-  }
-
-  @Nonnull
-  public EBootstrapWellType getType ()
-  {
-    return m_eType;
+    addClass (CBootstrapCSS.HELP_BLOCK);
   }
 
   /**
@@ -65,9 +45,9 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider aChild)
+  public static BootstrapHelpBlock create (@Nullable final IPredefinedLocaleTextProvider aChild)
   {
-    return new BootstrapWell ().addChild (aChild);
+    return new BootstrapHelpBlock ().addChild (aChild);
   }
 
   /**
@@ -78,9 +58,9 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
+  public static BootstrapHelpBlock create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapHelpBlock ().addChildren (aChildren);
   }
 
   /**
@@ -91,9 +71,9 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final String sChild)
+  public static BootstrapHelpBlock create (@Nullable final String sChild)
   {
-    return new BootstrapWell ().addChild (sChild);
+    return new BootstrapHelpBlock ().addChild (sChild);
   }
 
   /**
@@ -104,9 +84,9 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final String... aChildren)
+  public static BootstrapHelpBlock create (@Nullable final String... aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapHelpBlock ().addChildren (aChildren);
   }
 
   /**
@@ -117,9 +97,9 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IHCNode aChild)
+  public static BootstrapHelpBlock create (@Nullable final IHCNode aChild)
   {
-    return new BootstrapWell ().addChild (aChild);
+    return new BootstrapHelpBlock ().addChild (aChild);
   }
 
   /**
@@ -130,9 +110,9 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IHCNode... aChildren)
+  public static BootstrapHelpBlock create (@Nullable final IHCNode... aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapHelpBlock ().addChildren (aChildren);
   }
 
   /**
@@ -143,8 +123,8 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * @return The created BootstrapWell element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final Iterable <? extends IHCNode> aChildren)
+  public static BootstrapHelpBlock create (@Nullable final Iterable <? extends IHCNode> aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapHelpBlock ().addChildren (aChildren);
   }
 }

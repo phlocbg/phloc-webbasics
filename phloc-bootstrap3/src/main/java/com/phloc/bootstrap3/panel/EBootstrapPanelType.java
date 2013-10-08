@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.panel;
 
 import javax.annotation.Nullable;
 
@@ -23,19 +23,22 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Type of well size
+ * Type of panel
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public enum EBootstrapPanelType implements ICSSClassProvider
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  DEFAULT (CBootstrapCSS.PANEL_DEFAULT),
+  PRIMARY (CBootstrapCSS.PANEL_PRIMARY),
+  SUCCESS (CBootstrapCSS.PANEL_SUCCESS),
+  INFO (CBootstrapCSS.PANEL_INFO),
+  WARNING (CBootstrapCSS.PANEL_WARNING),
+  DANGER (CBootstrapCSS.PANEL_DANGER);
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapPanelType (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
@@ -43,6 +46,6 @@ public enum EBootstrapWellType implements ICSSClassProvider
   @Nullable
   public String getCSSClass ()
   {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    return m_aCSSClass.getCSSClass ();
   }
 }

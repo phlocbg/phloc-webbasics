@@ -20,8 +20,8 @@ package com.phloc.webdemoapp.page;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.bootstrap3.alert.Bootstrap3ErrorBox;
-import com.phloc.bootstrap3.alert.Bootstrap3InfoBox;
+import com.phloc.bootstrap3.alert.BootstrapErrorBox;
+import com.phloc.bootstrap3.alert.BootstrapInfoBox;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
@@ -63,11 +63,11 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
                                                          CDemoAppAjaxConfig.CONFIG_UPDATE_MENU_VIEW));
 
     // Update special area directly with code
-    IHCNode aSpecialNode = Bootstrap3InfoBox.create ("Data was successfully saved!");
+    IHCNode aSpecialNode = BootstrapInfoBox.create ("Data was successfully saved!");
     aSuccessUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_SPECIAL, aSpecialNode));
     final JSArray aFailureUpdates = new JSArray ();
     // Update special area directly with code
-    aSpecialNode = Bootstrap3ErrorBox.create ("Error saving the data!");
+    aSpecialNode = BootstrapErrorBox.create ("Error saving the data!");
     aFailureUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_SPECIAL, aSpecialNode));
     aToolbar.addButton ("Merken", JSFormHelper.saveFormData (INPUT_FORM_ID,
                                                              AjaxHandlerSaveFormState.PREFIX_FIELD,

@@ -15,46 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.alert;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCDiv;
 
 /**
- * Wrapper for a Bootstrap3 well.
+ * Bootstrap3 danger box
  * 
  * @author Philip Helger
  */
-public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
+public class BootstrapDangerBox extends AbstractBootstrapAlert <BootstrapDangerBox>
 {
-  private final EBootstrapWellType m_eType;
-
-  public BootstrapWell ()
+  public BootstrapDangerBox ()
   {
-    this (EBootstrapWellType.DEFAULT);
-  }
-
-  /**
-   * Create a new Well element
-   */
-  public BootstrapWell (@Nonnull final EBootstrapWellType eType)
-  {
-    if (eType == null)
-      throw new NullPointerException ("Type");
-
-    addClasses (CBootstrapCSS.WELL, eType);
-    m_eType = eType;
-  }
-
-  @Nonnull
-  public EBootstrapWellType getType ()
-  {
-    return m_eType;
+    super (EBootstrapAlertType.DANGER);
   }
 
   /**
@@ -62,12 +40,12 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param aChild
    *        The child text provider to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider aChild)
+  public static BootstrapDangerBox create (@Nullable final IPredefinedLocaleTextProvider aChild)
   {
-    return new BootstrapWell ().addChild (aChild);
+    return new BootstrapDangerBox ().addChild (aChild);
   }
 
   /**
@@ -75,12 +53,12 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param aChildren
    *        The child texts to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
+  public static BootstrapDangerBox create (@Nullable final IPredefinedLocaleTextProvider... aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapDangerBox ().addChildren (aChildren);
   }
 
   /**
@@ -88,12 +66,12 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param sChild
    *        The child to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final String sChild)
+  public static BootstrapDangerBox create (@Nullable final String sChild)
   {
-    return new BootstrapWell ().addChild (sChild);
+    return new BootstrapDangerBox ().addChild (sChild);
   }
 
   /**
@@ -101,12 +79,12 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param aChildren
    *        The child texts to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final String... aChildren)
+  public static BootstrapDangerBox create (@Nullable final String... aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapDangerBox ().addChildren (aChildren);
   }
 
   /**
@@ -114,12 +92,12 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param aChild
    *        The child node to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IHCNode aChild)
+  public static BootstrapDangerBox create (@Nullable final IHCNode aChild)
   {
-    return new BootstrapWell ().addChild (aChild);
+    return new BootstrapDangerBox ().addChild (aChild);
   }
 
   /**
@@ -127,12 +105,12 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final IHCNode... aChildren)
+  public static BootstrapDangerBox create (@Nullable final IHCNode... aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapDangerBox ().addChildren (aChildren);
   }
 
   /**
@@ -140,11 +118,11 @@ public class BootstrapWell extends AbstractHCDiv <BootstrapWell>
    * 
    * @param aChildren
    *        The child nodes to be appended. May be <code>null</code>
-   * @return The created BootstrapWell element and never <code>null</code>
+   * @return The created BootstrapDangerBox element and never <code>null</code>
    */
   @Nonnull
-  public static BootstrapWell create (@Nullable final Iterable <? extends IHCNode> aChildren)
+  public static BootstrapDangerBox create (@Nullable final Iterable <? extends IHCNode> aChildren)
   {
-    return new BootstrapWell ().addChildren (aChildren);
+    return new BootstrapDangerBox ().addChildren (aChildren);
   }
 }

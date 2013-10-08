@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
-import com.phloc.bootstrap3.alert.Bootstrap3ErrorBox;
+import com.phloc.bootstrap3.alert.BootstrapErrorBox;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.html.hc.IHCNode;
@@ -68,7 +68,7 @@ public final class AjaxHandlerViewLogin extends AbstractAjaxHandler
       s_aLogger.warn ("Login of '" + sLoginName + "' failed because " + eLoginResult);
 
     final Locale aDisplayLocale = ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
-    final IHCNode aRoot = Bootstrap3ErrorBox.create (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale) +
+    final IHCNode aRoot = BootstrapErrorBox.create (EWebBasicsText.LOGIN_ERROR_MSG.getDisplayText (aDisplayLocale) +
                                                      " " +
                                                      eLoginResult.getDisplayText (aDisplayLocale));
 

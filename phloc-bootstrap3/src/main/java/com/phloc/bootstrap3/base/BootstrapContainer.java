@@ -15,34 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
-
-import javax.annotation.Nullable;
+package com.phloc.bootstrap3.base;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.html.AbstractHCDiv;
 
-/**
- * Type of well size
- * 
- * @author Philip Helger
- */
-public enum EBootstrapWellType implements ICSSClassProvider
+public class BootstrapContainer extends AbstractHCDiv <BootstrapContainer>
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
-
-  private final ICSSClassProvider m_aCSSClass;
-
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  public BootstrapContainer ()
   {
-    m_aCSSClass = aCSSClass;
-  }
-
-  @Nullable
-  public String getCSSClass ()
-  {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    addClass (CBootstrapCSS.CONTAINER);
   }
 }

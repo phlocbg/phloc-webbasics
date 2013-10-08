@@ -15,34 +15,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.ext;
 
-import javax.annotation.Nullable;
+import java.util.Locale;
 
-import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.html.css.ICSSClassProvider;
+import javax.annotation.Nonnull;
+
+import com.phloc.appbasics.app.menu.IMenuSeparator;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.html.HCLI;
 
 /**
- * Type of well size
+ * A special menu item renderer for the footer area, where the items are
+ * displayed horizontally
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public class BootstrapMenuItemRendererHorz extends BootstrapMenuItemRenderer
 {
-  LARGE (CBootstrapCSS.WELL_LG),
-  DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
-
-  private final ICSSClassProvider m_aCSSClass;
-
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  public BootstrapMenuItemRendererHorz (@Nonnull final Locale aContentLocale)
   {
-    m_aCSSClass = aCSSClass;
+    super (aContentLocale);
   }
 
-  @Nullable
-  public String getCSSClass ()
+  @Override
+  @Nonnull
+  public IHCNode renderSeparator (@Nonnull final IMenuSeparator aSeparator)
   {
-    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+    return new HCLI ().addChild ("·");
   }
 }

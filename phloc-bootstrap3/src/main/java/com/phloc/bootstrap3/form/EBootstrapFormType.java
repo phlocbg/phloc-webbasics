@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3.well;
+package com.phloc.bootstrap3.form;
 
 import javax.annotation.Nullable;
 
@@ -23,19 +23,19 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Type of well size
+ * Bootstrap3 form type
  * 
  * @author Philip Helger
  */
-public enum EBootstrapWellType implements ICSSClassProvider
+public enum EBootstrapFormType implements ICSSClassProvider
 {
-  LARGE (CBootstrapCSS.WELL_LG),
   DEFAULT (null),
-  SMALL (CBootstrapCSS.WELL_SM);
+  HORIZONTAL (CBootstrapCSS.FORM_HORIZONTAL),
+  INLINE (CBootstrapCSS.FORM_INLINE);
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapWellType (@Nullable final ICSSClassProvider aCSSClass)
+  private EBootstrapFormType (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
