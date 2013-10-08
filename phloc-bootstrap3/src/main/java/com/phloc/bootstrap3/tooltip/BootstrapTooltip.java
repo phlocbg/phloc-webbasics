@@ -1,21 +1,45 @@
 package com.phloc.bootstrap3.tooltip;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.html.EHTMLElement;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.IJQuerySelector;
+import com.phloc.html.js.builder.jquery.JQuerySelector;
 
 public class BootstrapTooltip
 {
+  public static final boolean DEFAULT_ANIMATION = true;
+  public static final boolean DEFAULT_HTML = false;
+  public static final EBootstrapTooltipPosition DEFAULT_PLACEMENT = EBootstrapTooltipPosition.TOP;
+  public static final boolean DEFAULT_PLACEMENT_AUTO = false;
+  public static final Set <EBootstrapTooltipTrigger> DEFAULT_TRIGGER = ContainerHelper.newUnmodifiableSortedSet (EBootstrapTooltipTrigger.HOVER,
+                                                                                                                 EBootstrapTooltipTrigger.FOCUS);
+
   private final IJQuerySelector m_aSelector;
-  private boolean m_bAnimation = true;
-  private boolean m_bHTML = false;
-  private EBootstrapTooltipPosition m_ePlacement = EBootstrapTooltipPosition.TOP;
-  private boolean m_bPlacementAuto = false;
+  private boolean m_bAnimation = DEFAULT_ANIMATION;
+  private boolean m_bHTML = DEFAULT_HTML;
+  private EBootstrapTooltipPosition m_ePlacement = DEFAULT_PLACEMENT;
+  private boolean m_bPlacementAuto = DEFAULT_PLACEMENT_AUTO;
   private JSAnonymousFunction m_aPlacementFunc;
+  private String m_sSelector;
+  private String m_sTitle;
+  private JSAnonymousFunction m_aTitleFunc;
+  private Set <EBootstrapTooltipTrigger> m_aTrigger = DEFAULT_TRIGGER;
+  private int m_nShowDelay = 0;
+  private int m_nHideDelay = 0;
+  private IJQuerySelector m_aContainer;
 
   public BootstrapTooltip (@Nonnull final IJQuerySelector aSelector)
   {
@@ -82,21 +106,190 @@ public class BootstrapTooltip
     if (aFunction == null)
       throw new NullPointerException ("Function");
     m_ePlacement = null;
-    m_bPlacementAuto = false;
+    m_bPlacementAuto = DEFAULT_PLACEMENT_AUTO;
     m_aPlacementFunc = aFunction;
     return this;
   }
 
+  @Nullable
+  public String getSelector ()
+  {
+    return m_sSelector;
+  }
+
   @Nonnull
-  public JSInvocation invoke ()
+  public BootstrapTooltip setSelector (@Nullable final String sSelector)
+  {
+    m_sSelector = sSelector;
+    return this;
+  }
+
+  @Nullable
+  public String getTitleString ()
+  {
+    return m_sTitle;
+  }
+
+  @Nullable
+  public JSAnonymousFunction getTitleFunction ()
+  {
+    return m_aTitleFunc;
+  }
+
+  @Nonnull
+  public BootstrapTooltip setTitle (@Nullable final String sTitle)
+  {
+    m_sTitle = sTitle;
+    m_aTitleFunc = null;
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapTooltip setTitle (@Nullable final JSAnonymousFunction aTitleFunc)
+  {
+    m_sTitle = null;
+    m_aTitleFunc = aTitleFunc;
+    return this;
+  }
+
+  @Nullable
+  @ReturnsMutableCopy
+  public List <EBootstrapTooltipTrigger> getTrigger ()
+  {
+    return ContainerHelper.newList (m_aTrigger);
+  }
+
+  @Nonnull
+  public BootstrapTooltip setTrigger (@Nullable final EBootstrapTooltipTrigger... aTrigger)
+  {
+    // Avoid duplicates!
+    m_aTrigger = ContainerHelper.newSortedSet (aTrigger);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapTooltip setTrigger (@Nullable final Collection <EBootstrapTooltipTrigger> aTrigger)
+  {
+    // Avoid duplicates!
+    m_aTrigger = ContainerHelper.newSortedSet (aTrigger);
+    return this;
+  }
+
+  @Nonnegative
+  public int getShowDelay ()
+  {
+    return m_nShowDelay;
+  }
+
+  @Nonnegative
+  public int getHideDelay ()
+  {
+    return m_nHideDelay;
+  }
+
+  @Nonnull
+  public BootstrapTooltip setDelay (@Nonnegative final int nDelay)
+  {
+    return setDelay (nDelay, nDelay);
+  }
+
+  @Nonnull
+  public BootstrapTooltip setDelay (@Nonnegative final int nShowDelay, @Nonnegative final int nHideDelay)
+  {
+    if (nShowDelay < 0)
+      throw new IllegalArgumentException ("showDelay: " + nShowDelay);
+    if (nHideDelay < 0)
+      throw new IllegalArgumentException ("hideDelay: " + nHideDelay);
+    m_nShowDelay = nShowDelay;
+    m_nHideDelay = nHideDelay;
+    return this;
+  }
+
+  @Nullable
+  public IJQuerySelector getContainer ()
+  {
+    return m_aContainer;
+  }
+
+  @Nonnull
+  public BootstrapTooltip setContainer (@Nullable final EHTMLElement eContainer)
+  {
+    return setContainer (JQuerySelector.element (eContainer));
+  }
+
+  @Nonnull
+  public BootstrapTooltip setContainer (@Nullable final IJQuerySelector aContainer)
+  {
+    m_aContainer = aContainer;
+    return this;
+  }
+
+  @Nonnull
+  public JSInvocation jsAttach ()
   {
     final JSAssocArray aOptions = new JSAssocArray ();
-    aOptions.add ("animation", m_bAnimation);
-    aOptions.add ("html", m_bAnimation);
+    if (m_bAnimation != DEFAULT_ANIMATION)
+      aOptions.add ("animation", m_bAnimation);
+    if (m_bHTML != DEFAULT_HTML)
+      aOptions.add ("html", m_bHTML);
     if (m_ePlacement != null)
-      aOptions.add ("placement", m_ePlacement.getValue () + (m_bPlacementAuto ? " auto" : ""));
+    {
+      if (m_ePlacement != DEFAULT_PLACEMENT || m_bPlacementAuto != DEFAULT_PLACEMENT_AUTO)
+        aOptions.add ("placement", m_ePlacement.getValue () + (m_bPlacementAuto ? " auto" : ""));
+    }
     else
       aOptions.add ("placement", m_aPlacementFunc);
+    if (StringHelper.hasText (m_sSelector))
+      aOptions.add ("selector", m_sSelector);
+    if (StringHelper.hasText (m_sTitle))
+      aOptions.add ("title", m_sTitle);
+    else
+      if (m_aTitleFunc != null)
+        aOptions.add ("title", m_aTitleFunc);
+    if (ContainerHelper.isNotEmpty (m_aTrigger) && !DEFAULT_TRIGGER.equals (m_aTrigger))
+    {
+      final StringBuilder aSB = new StringBuilder ();
+      for (final EBootstrapTooltipTrigger eTrigger : m_aTrigger)
+      {
+        if (aSB.length () > 0)
+          aSB.append (' ');
+        aSB.append (eTrigger.getValue ());
+      }
+      aOptions.add ("trigger", aSB.toString ());
+    }
+    if (m_nShowDelay > 0 || m_nHideDelay > 0)
+    {
+      if (m_nShowDelay == m_nHideDelay)
+        aOptions.add ("delay", m_nShowDelay);
+      else
+        aOptions.add ("delay", new JSAssocArray ().add ("show", m_nShowDelay).add ("hide", m_nHideDelay));
+    }
+    if (m_aContainer != null)
+      aOptions.add ("container", m_aContainer.getJSCode ());
     return m_aSelector.invoke ().invoke ("tooltip").arg (aOptions);
+  }
+
+  @Nonnull
+  public JSInvocation jsShow ()
+  {
+    return m_aSelector.invoke ().invoke ("tooltip").arg ("show");
+  }
+
+  @Nonnull
+  public JSInvocation jsHide ()
+  {
+    return m_aSelector.invoke ().invoke ("tooltip").arg ("hide");
+  }
+
+  @Nonnull
+  public JSInvocation jsToggle ()
+  {
+    return m_aSelector.invoke ().invoke ("tooltip").arg ("toggle");
+  }
+
+  @Nonnull
+  public JSInvocation jsDestroy ()
+  {
+    return m_aSelector.invoke ().invoke ("tooltip").arg ("destroy");
   }
 }
