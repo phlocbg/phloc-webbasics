@@ -43,54 +43,70 @@ public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends
   boolean isFocusHandlingEnabled ();
 
   @Nonnull
+  HCTableFormItemRowBuilder createItemRow ();
+
+  @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNodeBuilder aCtrlBuilder);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode... aCtrls);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNodeBuilder aCtrlBuilder, @Nullable IErrorList aFormErrors);
 
   @Nonnull
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl, @Nullable IErrorList aFormErrors);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable Iterable <? extends IHCNode> aCtrls);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRow (@Nullable IFormLabel aLabel,
                     @Nullable Iterable <? extends IHCNode> aCtrls,
                     @Nullable IErrorList aFormErrors);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable String sText, @Nullable IFormNote aNote);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable String sText,
                             @Nullable IFormNote aNote,
                             @Nullable IErrorList aFormErrors);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable IHCNodeBuilder aCtrlBuilder,
                             @Nullable IFormNote aNote);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl, @Nullable IFormNote aNote);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable Iterable <? extends IHCNode> aCtrls,
                             @Nullable IFormNote aNote);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable IHCNodeBuilder aCtrlBuilder,
                             @Nullable IFormNote aNote,

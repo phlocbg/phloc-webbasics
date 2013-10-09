@@ -165,6 +165,12 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  public HCTableFormItemRowBuilder createItemRow ()
+  {
+    return new HCTableFormItemRowBuilder (this);
+  }
+
+  @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     return addItemRow (aLabel, new HCTextNode (sValue), null);
