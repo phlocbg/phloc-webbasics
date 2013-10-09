@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>10/9/13</td><td colspan="4">_Release *1.4.1*_</td></tr>
+<tr><td>10/9/13</td><td>update</td><td>tech</td><td></td><td>Updated to Quartz 2.2.1</td></tr>
 <tr border="1"><td>9/10/13</td><td colspan="4">_Release *1.4.0*_</td></tr>
 <tr><td>9/10/13</td><td>add</td><td>api</td><td></td><td>Added method GlobalQuartzScheduler.scheduleJobNowOnce</td></tr>
 <tr><td>9/9/13</td><td>add</td><td>api</td><td></td><td>Added new class ComparatorLongRunningJobDataStartDate</td></tr>
