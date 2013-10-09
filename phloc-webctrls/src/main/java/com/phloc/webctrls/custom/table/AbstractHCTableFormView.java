@@ -49,9 +49,11 @@ public abstract class AbstractHCTableFormView <IMPLTYPE extends AbstractHCTableF
   }
 
   @Nonnull
-  public HCTableFormViewItemRowBuilder createItemRow ()
+  public HCTableFormViewItemRow createItemRow ()
   {
-    return new HCTableFormViewItemRowBuilder (this);
+    final HCTableFormViewItemRow aRow = new HCTableFormViewItemRow ();
+    addBodyRow (aRow);
+    return aRow;
   }
 
   @Deprecated

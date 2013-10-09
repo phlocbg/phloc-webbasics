@@ -27,7 +27,7 @@ import com.phloc.webctrls.custom.IFormLabel;
 public interface IHCTableFormView <THISTYPE extends IHCTableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>
 {
   @Nonnull
-  HCTableFormViewItemRowBuilder createItemRow ();
+  HCTableFormViewItemRow createItemRow ();
 
   @Deprecated
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);

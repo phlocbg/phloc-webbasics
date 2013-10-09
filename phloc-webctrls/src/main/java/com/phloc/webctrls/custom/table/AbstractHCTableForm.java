@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCControl;
@@ -221,8 +220,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
                            @Nullable final IErrorList aFormErrors)
   {
-    final boolean bHasErrors = aFormErrors != null &&
-                               aFormErrors.getMostSevereErrorLevel ().isMoreOrEqualSevereThan (EErrorLevel.ERROR);
+    final boolean bHasErrors = aFormErrors != null && aFormErrors.containsAtLeastOneError ();
 
     // Start row
     final HCRow aRow = super.addBodyRow ();
