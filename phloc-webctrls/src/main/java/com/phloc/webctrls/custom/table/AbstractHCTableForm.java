@@ -221,7 +221,8 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
                            @Nullable final IErrorList aFormErrors)
   {
-    final EErrorLevel eHighest = aFormErrors == null ? null : aFormErrors.getMostSevereErrorLevel ();
+    final boolean bHasErrors = aFormErrors != null &&
+                               aFormErrors.getMostSevereErrorLevel ().isMoreOrEqualSevereThan (EErrorLevel.ERROR);
 
     // Start row
     final HCRow aRow = super.addBodyRow ();
@@ -230,7 +231,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
     addLabelCell (aRow, aLabel);
 
     // Add main control
-    final IHCCell <?> aCtrlCell = addControlCell (aRow, aCtrls, eHighest != null);
+    final IHCCell <?> aCtrlCell = addControlCell (aRow, aCtrls, bHasErrors);
 
     // Add error messages
     addControlCellErrorMessages (aCtrlCell, aFormErrors);

@@ -48,51 +48,67 @@ public abstract class AbstractHCTableFormView <IMPLTYPE extends AbstractHCTableF
     super (aCols);
   }
 
+  @Nonnull
+  public HCTableFormViewItemRowBuilder createItemRow ()
+  {
+    return new HCTableFormViewItemRowBuilder (this);
+  }
+
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     addBodyRow ().addCell (aLabel).addCell (sValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String... aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aValue)
   {
     addBodyRow ().addCell (aLabel).addCell (aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode... aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final String sValue)
   {
     addItemRow (HCFormLabel.create (sLabel), sValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final String... aValue)
   {
     addItemRow (HCFormLabel.create (sLabel), aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode aValue)
   {
     addItemRow (HCFormLabel.create (sLabel), aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode... aValues)
   {
     addItemRow (HCFormLabel.create (sLabel), aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     addItemRow (HCFormLabel.create (sLabel), aValues);
