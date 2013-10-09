@@ -36,7 +36,7 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCH3;
 import com.phloc.html.hc.htmlext.HCUtils;
@@ -103,7 +103,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
     // HTTP headers
     aNodeList.addChild (HCH3.create (EText.MSG_HTTP_HEADERS.getDisplayText (aDisplayLocale)));
-    AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
+    IHCTable <?> aTable = getStyler ().createTable (new HCCol (nFirstColWidth), HCCol.star ());
     aTable.setID (getID () + "$http");
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));

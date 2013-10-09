@@ -42,7 +42,7 @@ import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
@@ -138,23 +138,31 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
                                                                                                        HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayText (aDisplayLocale));
-
-    aTable.addItemRow (EText.MSG_USERID.getDisplayText (aDisplayLocale), aSelectedObject.getUserID ());
-    aTable.addItemRow (EText.MSG_USERNAME.getDisplayText (aDisplayLocale), aSelectedObject.getUser ().getDisplayName ());
-    aTable.addItemRow (EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
-                       PDTToString.getAsString (aSelectedObject.getLoginDT (), aDisplayLocale));
-    aTable.addItemRow (EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),
-                       PDTToString.getAsString (aSelectedObject.getLastAccessDT (), aDisplayLocale));
+    aTable.createItemRow ()
+          .setLabel (EText.MSG_USERID.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getUserID ());
+    aTable.createItemRow ()
+          .setLabel (EText.MSG_USERNAME.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getUser ().getDisplayName ());
+    aTable.createItemRow ()
+          .setLabel (EText.MSG_LOGINDT.getDisplayText (aDisplayLocale))
+          .setCtrl (PDTToString.getAsString (aSelectedObject.getLoginDT (), aDisplayLocale));
+    aTable.createItemRow ()
+          .setLabel (EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale))
+          .setCtrl (PDTToString.getAsString (aSelectedObject.getLastAccessDT (), aDisplayLocale));
     if (aSelectedObject.getLogoutDT () != null)
-      aTable.addItemRow (EText.MSG_LOGOUTDT.getDisplayText (aDisplayLocale),
-                         PDTToString.getAsString (aSelectedObject.getLogoutDT (), aDisplayLocale));
+    {
+      aTable.createItemRow ()
+            .setLabel (EText.MSG_LOGOUTDT.getDisplayText (aDisplayLocale))
+            .setCtrl (PDTToString.getAsString (aSelectedObject.getLogoutDT (), aDisplayLocale));
+    }
 
     // Add custom attributes
     final Map <String, Object> aAttrs = aSelectedObject.getAllAttributes ();
     if (!aAttrs.isEmpty ())
     {
-      final AbstractHCTable <?> aCustomAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ())
-                                                               .setID (aSelectedObject.getID ());
+      final IHCTable <?> aCustomAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ())
+                                                        .setID (aSelectedObject.getID ());
       aCustomAttrTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                                  EText.MSG_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aAttrs.entrySet ())
@@ -205,10 +213,10 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
-    final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
-                                                                 new HCCol (190),
-                                                                 new HCCol (190),
-                                                                 createActionCol (2)).setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
+                                                          new HCCol (190),
+                                                          new HCCol (190),
+                                                          createActionCol (2)).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_USERNAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOGINDT.getDisplayText (aDisplayLocale),
                                      EText.MSG_LASTACCESSDT.getDisplayText (aDisplayLocale),

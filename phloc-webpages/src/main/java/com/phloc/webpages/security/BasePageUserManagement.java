@@ -49,10 +49,9 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
@@ -331,7 +330,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     if (!aCustomAttrs.isEmpty ())
     {
-      final IHCBaseTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
+      final IHCTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
       aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                            EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
@@ -667,10 +666,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
-    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (200),
-                                                                 HCCol.star (),
-                                                                 new HCCol (150),
-                                                                 createActionCol (3)).setID (sTableID);
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (200),
+                                                          HCCol.star (),
+                                                          new HCCol (150),
+                                                          createActionCol (3)).setID (sTableID);
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
                                      EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),

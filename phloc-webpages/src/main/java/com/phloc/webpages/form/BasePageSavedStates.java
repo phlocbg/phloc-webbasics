@@ -38,7 +38,7 @@ import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCForm;
@@ -218,9 +218,9 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
       aNodeList.addChild (aToolbar);
 
       // Start emitting saved states
-      final AbstractHCTable <?> aPerPage = aNodeList.addAndReturnChild (getStyler ().createTable (HCCol.star (),
-                                                                                                  new HCCol (170),
-                                                                                                  createActionCol (2)));
+      final IHCTable <?> aPerPage = aNodeList.addAndReturnChild (getStyler ().createTable (HCCol.star (),
+                                                                                           new HCCol (170),
+                                                                                           createActionCol (2)));
       aPerPage.addHeaderRow ().addCells (EText.HEADER_PAGE.getDisplayText (aDisplayLocale),
                                          EText.HEADER_REMEMBERED_AT.getDisplayText (aDisplayLocale),
                                          EText.HEADER_ACTIONS.getDisplayText (aDisplayLocale));

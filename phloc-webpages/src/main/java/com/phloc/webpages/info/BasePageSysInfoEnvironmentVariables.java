@@ -31,7 +31,7 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
@@ -86,7 +86,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_VALUE.getDisplayText (aDisplayLocale));
 

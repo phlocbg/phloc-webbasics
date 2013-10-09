@@ -36,7 +36,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.htmlext.HCUtils;
@@ -115,12 +115,12 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (50),
-                                                                new HCCol (100),
-                                                                new HCCol (150),
-                                                                new HCCol (55),
-                                                                new HCCol (100),
-                                                                HCCol.star ()).setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (50),
+                                                          new HCCol (100),
+                                                          new HCCol (150),
+                                                          new HCCol (55),
+                                                          new HCCol (100),
+                                                          HCCol.star ()).setID (getID ());
 
     // get all threads and sort them by thread ID
     final Map <Thread, StackTraceElement []> aThreads = ContainerHelper.getSortedByKey (Thread.getAllStackTraces (),

@@ -43,7 +43,7 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEM;
@@ -126,7 +126,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     super (sID, aName, aDescription);
   }
 
-  private static void _addDirectoryContent (@Nonnull final AbstractHCTable <?> aTable,
+  private static void _addDirectoryContent (@Nonnull final IHCTable <?> aTable,
                                             @Nonnull final String sSysPropName,
                                             @Nonnull final IHCNode aLabel,
                                             @Nonnull final SizeHelper aSH,
@@ -179,7 +179,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     {
-      final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
+      final IHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
       aTable.setID (getID () + "$special");
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SPECIAL_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),
@@ -249,7 +249,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     }
 
     {
-      final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
+      final IHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
       aTable.setID (getID ());
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),

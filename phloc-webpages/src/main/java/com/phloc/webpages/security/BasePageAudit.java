@@ -34,7 +34,7 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.format.PDTToString;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
@@ -116,11 +116,11 @@ public class BasePageAudit extends AbstractWebPageExt
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (180),
-                                                                new HCCol (120),
-                                                                new HCCol (60),
-                                                                new HCCol (60),
-                                                                HCCol.star ()).setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (180),
+                                                          new HCCol (120),
+                                                          new HCCol (60),
+                                                          new HCCol (60),
+                                                          HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_DATE.getDisplayText (aDisplayLocale),
                                      EText.MSG_USER.getDisplayText (aDisplayLocale),
                                      EText.MSG_TYPE.getDisplayText (aDisplayLocale),

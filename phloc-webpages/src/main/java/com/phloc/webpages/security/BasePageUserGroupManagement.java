@@ -47,9 +47,8 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
-import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCCell;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
@@ -245,7 +244,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
 
     if (!aCustomAttrs.isEmpty ())
     {
-      final IHCBaseTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
+      final IHCTable <?> aAttrTable = getStyler ().createTable (new HCCol (170), HCCol.star ());
       aAttrTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                            EText.HEADER_VALUE.getDisplayText (aDisplayLocale));
       for (final Map.Entry <String, Object> aEntry : aCustomAttrs.entrySet ())
@@ -400,8 +399,8 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
     aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USERGROUP.getDisplayText (aDisplayLocale), createCreateURL ());
 
-    final AbstractHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))
-                                                   .setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), new HCCol (110), createActionCol (2))
+                                            .setID (getID ());
     aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
                                      EText.HEADER_IN_USE.getDisplayText (aDisplayLocale),
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));

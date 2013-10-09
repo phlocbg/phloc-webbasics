@@ -36,7 +36,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.config.PDTConfig;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
@@ -103,12 +103,12 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     // Get default time zone
     final DateTimeZone aCurrentDTZ = PDTConfig.getDefaultDateTimeZone ();
 
-    final AbstractHCTable <?> aTable = getStyler ().createTable (new HCCol (100),
-                                                                HCCol.star (),
-                                                                new HCCol (100),
-                                                                new HCCol (70),
-                                                                new HCCol (70),
-                                                                new HCCol (70)).setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (100),
+                                                          HCCol.star (),
+                                                          new HCCol (100),
+                                                          new HCCol (70),
+                                                          new HCCol (70),
+                                                          new HCCol (70)).setID (getID ());
     aTable.setSpanningHeaderContent (EText.MSG_CURRENT_TIMEZONE.getDisplayText (aDisplayLocale) +
                                      aCurrentDTZ.getID () +
                                      " - " +
