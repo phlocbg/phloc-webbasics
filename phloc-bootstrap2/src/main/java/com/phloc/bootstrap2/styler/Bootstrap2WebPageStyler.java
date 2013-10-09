@@ -34,7 +34,7 @@ import com.phloc.bootstrap2.derived.BootstrapTableForm;
 import com.phloc.bootstrap2.derived.BootstrapTableFormView;
 import com.phloc.bootstrap2.derived.BootstrapToolbar;
 import com.phloc.bootstrap2.ext.BootstrapDataTables;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
@@ -93,7 +93,7 @@ public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapDataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
+  public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
                                                       @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapDataTables ret = new BootstrapDataTables ((BootstrapTable) aTable);

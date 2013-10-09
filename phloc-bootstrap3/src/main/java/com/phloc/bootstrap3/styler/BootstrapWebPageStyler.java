@@ -34,7 +34,7 @@ import com.phloc.bootstrap3.nav.BootstrapTabBox;
 import com.phloc.bootstrap3.table.BootstrapTable;
 import com.phloc.bootstrap3.table.BootstrapTableForm;
 import com.phloc.bootstrap3.table.BootstrapTableFormView;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.EWebBasicsText;
@@ -94,8 +94,8 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
 
   @Override
   @Nonnull
-  public BootstrapDataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
-                                                       @Nonnull final Locale aDisplayLocale)
+  public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
+                                                      @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapDataTables ret = new BootstrapDataTables ((BootstrapTable) aTable);
     ret.setDisplayLocale (aDisplayLocale);
