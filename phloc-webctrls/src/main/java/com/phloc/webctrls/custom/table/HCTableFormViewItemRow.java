@@ -1,11 +1,9 @@
 package com.phloc.webctrls.custom.table;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
@@ -18,14 +16,12 @@ import com.phloc.webctrls.custom.impl.HCFormLabel;
 
 public class HCTableFormViewItemRow extends HCRow
 {
-  private IFormLabel m_aLabel;
   private final IHCCell <?> m_aLabelCell;
-  private List <? extends IHCNode> m_aCtrls;
   private final IHCCell <?> m_aCtrlCell;
 
-  public HCTableFormViewItemRow ()
+  public HCTableFormViewItemRow (final boolean bHeader)
   {
-    super (false);
+    super (bHeader);
     m_aLabelCell = addCell ();
     m_aCtrlCell = addCell ();
   }
@@ -42,18 +38,25 @@ public class HCTableFormViewItemRow extends HCRow
     return setLabel (sLabel == null ? null : HCFormLabel.create (sLabel));
   }
 
+  /**
+   * Called after the label cell was altered
+   */
+  @OverrideOnDemand
+  protected void onLabelModified ()
+  {}
+
   @Nonnull
   public HCTableFormViewItemRow setLabel (@Nullable final IFormLabel aLabel)
   {
-    m_aLabel = aLabel;
     m_aLabelCell.removeAllChildren ().addChild (aLabel);
+    onLabelModified ();
     return this;
   }
 
-  @Nullable
-  public IFormLabel getLabel ()
+  @Nonnull
+  public IHCCell <?> getLabelCell ()
   {
-    return m_aLabel;
+    return m_aLabelCell;
   }
 
   @Nonnull
@@ -74,36 +77,40 @@ public class HCTableFormViewItemRow extends HCRow
     return setCtrl (aCtrlBuilder == null ? null : aCtrlBuilder.build ());
   }
 
-  private void _setCtrls (@Nullable final List <? extends IHCNode> aCtrls)
-  {
-    m_aCtrls = aCtrls;
-    m_aCtrlCell.removeAllChildren ().addChildren (aCtrls);
-  }
+  /**
+   * Called after the control cell was altered
+   */
+  @OverrideOnDemand
+  protected void onCtrlsModified ()
+  {}
 
   @Nonnull
   public HCTableFormViewItemRow setCtrl (@Nullable final IHCNode aCtrl)
   {
-    _setCtrls (ContainerHelper.newList (aCtrl));
+    m_aCtrlCell.removeAllChildren ().addChild (aCtrl);
+    onCtrlsModified ();
     return this;
   }
 
   @Nonnull
   public HCTableFormViewItemRow setCtrl (@Nullable final IHCNode... aCtrls)
   {
-    _setCtrls (ContainerHelper.newList (aCtrls));
+    m_aCtrlCell.removeAllChildren ().addChildren (aCtrls);
+    onCtrlsModified ();
     return this;
   }
 
   @Nonnull
   public HCTableFormViewItemRow setCtrl (@Nullable final Iterable <? extends IHCNode> aCtrls)
   {
-    _setCtrls (ContainerHelper.newList (aCtrls));
+    m_aCtrlCell.removeAllChildren ().addChildren (aCtrls);
+    onCtrlsModified ();
     return this;
   }
 
-  @Nullable
-  public List <IHCNode> getCtrls ()
+  @Nonnull
+  public IHCCell <?> getCtrlCell ()
   {
-    return ContainerHelper.newList (m_aCtrls);
+    return m_aCtrlCell;
   }
 }

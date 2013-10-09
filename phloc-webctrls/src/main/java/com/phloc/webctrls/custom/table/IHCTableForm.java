@@ -43,7 +43,7 @@ public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends
   boolean isFocusHandlingEnabled ();
 
   @Nonnull
-  HCTableFormItemRowBuilder createItemRow ();
+  HCTableFormItemRow createItemRow ();
 
   @Nonnull
   @Deprecated
@@ -121,6 +121,7 @@ public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends
                             @Nullable IErrorList aFormErrors);
 
   @Nonnull
+  @Deprecated
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable Iterable <? extends IHCNode> aCtrls,
                             @Nullable IFormNote aNote,
