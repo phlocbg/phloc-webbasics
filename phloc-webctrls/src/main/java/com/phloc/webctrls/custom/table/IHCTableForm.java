@@ -18,15 +18,8 @@
 package com.phloc.webctrls.custom.table;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCBaseTable;
-import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeBuilder;
-import com.phloc.html.hc.html.HCRow;
-import com.phloc.validation.error.IErrorList;
-import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.IFormNote;
 
 /**
  * Base interface for a form table
@@ -44,86 +37,4 @@ public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends
 
   @Nonnull
   HCTableFormItemRow createItemRow ();
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNodeBuilder aCtrlBuilder);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode... aCtrls);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNodeBuilder aCtrlBuilder, @Nullable IErrorList aFormErrors);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl, @Nullable IErrorList aFormErrors);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel, @Nullable Iterable <? extends IHCNode> aCtrls);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRow (@Nullable IFormLabel aLabel,
-                    @Nullable Iterable <? extends IHCNode> aCtrls,
-                    @Nullable IErrorList aFormErrors);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable String sText, @Nullable IFormNote aNote);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable String sText,
-                            @Nullable IFormNote aNote,
-                            @Nullable IErrorList aFormErrors);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable IHCNodeBuilder aCtrlBuilder,
-                            @Nullable IFormNote aNote);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl, @Nullable IFormNote aNote);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable Iterable <? extends IHCNode> aCtrls,
-                            @Nullable IFormNote aNote);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable IHCNodeBuilder aCtrlBuilder,
-                            @Nullable IFormNote aNote,
-                            @Nullable IErrorList aFormErrors);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable IHCNode aCtrl,
-                            @Nullable IFormNote aNote,
-                            @Nullable IErrorList aFormErrors);
-
-  @Nonnull
-  @Deprecated
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable Iterable <? extends IHCNode> aCtrls,
-                            @Nullable IFormNote aNote,
-                            @Nullable IErrorList aFormErrors);
 }

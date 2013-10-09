@@ -24,6 +24,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
+import com.phloc.webctrls.custom.table.HCTableFormViewItemRow;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 
 public class BootstrapTableFormView extends AbstractBootstrapTable <BootstrapTableFormView> implements IHCTableFormView <BootstrapTableFormView>
@@ -58,51 +59,69 @@ public class BootstrapTableFormView extends AbstractBootstrapTable <BootstrapTab
     _init ();
   }
 
+  @Nonnull
+  public HCTableFormViewItemRow createItemRow ()
+  {
+    final HCTableFormViewItemRow aRow = new HCTableFormViewItemRow (false);
+    addBodyRow (aRow);
+    return aRow;
+  }
+
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     addBodyRow ().addCell (aLabel).addCell (sValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String... aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aValue)
   {
     addBodyRow ().addCell (aLabel).addCell (aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode... aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     addBodyRow ().addCell (aLabel).addCell (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final String sValue)
   {
     addItemRow (HCFormLabel.create (sLabel), sValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final String... aValue)
   {
     addItemRow (HCFormLabel.create (sLabel), aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode aValue)
   {
     addItemRow (HCFormLabel.create (sLabel), aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode... aValues)
   {
     addItemRow (HCFormLabel.create (sLabel), aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     addItemRow (HCFormLabel.create (sLabel), aValues);

@@ -73,13 +73,6 @@ public class HCTableFormItemRow extends HCRow
   }
 
   /**
-   * Called after the controls cell was altered
-   */
-  @OverrideOnDemand
-  protected void onCtrlsModified ()
-  {}
-
-  /**
    * Modify the passed controls for a certain row
    * 
    * @param aCtrls
@@ -98,6 +91,13 @@ public class HCTableFormItemRow extends HCRow
   {
     return new HCDiv ().addChild (aError.getErrorText ());
   }
+
+  /**
+   * Called after the controls cell was altered
+   */
+  @OverrideOnDemand
+  protected void onCtrlsModified ()
+  {}
 
   private void _updateCtrlCell ()
   {

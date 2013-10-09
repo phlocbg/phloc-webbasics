@@ -45,6 +45,7 @@ import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.IFormNote;
+import com.phloc.webctrls.custom.table.HCTableFormItemRow;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -89,6 +90,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @OverrideOnDemand
+  @Deprecated
   protected void addLabelCell (@Nonnull final HCRow aRow, @Nullable final IFormLabel aLabel)
   {
     aRow.addCell (aLabel);
@@ -105,8 +107,34 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls)
   {}
 
+  private void _handleFocus (@Nonnull final Iterable <? extends IHCNode> aCtrls, final boolean bHasErrors)
+  {
+    if (isFocusHandlingEnabled ())
+    {
+      // Set focus on first element with error
+      if (bHasErrors && !m_bSetAutoFocus)
+        for (final IHCNode aCtrl : aCtrls)
+          if (aCtrl instanceof IHCHasFocus <?>)
+          {
+            focusNode ((IHCHasFocus <?>) aCtrl);
+            m_bSetAutoFocus = true;
+            break;
+          }
+
+      // Find first focusable control
+      if (m_aFirstFocusable == null)
+        for (final IHCNode aCtrl : aCtrls)
+          if (aCtrl instanceof IHCHasFocus <?>)
+          {
+            m_aFirstFocusable = (IHCHasFocus <?>) aCtrl;
+            break;
+          }
+    }
+  }
+
   @Nonnull
   @OverrideOnDemand
+  @Deprecated
   protected IHCCell <?> addControlCell (@Nonnull final HCRow aRow,
                                         @Nullable final Iterable <? extends IHCNode> aCtrls,
                                         final boolean bHasError)
@@ -123,33 +151,13 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
 
       // Customize controls
       modifyControls (aResolvedCtrls);
-
-      if (isFocusHandlingEnabled ())
-      {
-        // Set focus on first element with error
-        if (bHasError && !m_bSetAutoFocus)
-          for (final IHCNode aCtrl : aResolvedCtrls)
-            if (aCtrl instanceof IHCHasFocus <?>)
-            {
-              focusNode ((IHCHasFocus <?>) aCtrl);
-              m_bSetAutoFocus = true;
-              break;
-            }
-
-        // Find first focusable control
-        if (m_aFirstFocusable == null)
-          for (final IHCNode aCtrl : aResolvedCtrls)
-            if (aCtrl instanceof IHCHasFocus <?>)
-            {
-              m_aFirstFocusable = (IHCHasFocus <?>) aCtrl;
-              break;
-            }
-      }
+      _handleFocus (aResolvedCtrls, bHasError);
     }
 
     return aRow.addAndReturnCell (aResolvedCtrls);
   }
 
+  @Deprecated
   public static void addControlCellErrorMessages (@Nonnull final IHCElementWithChildren <?> aParent,
                                                   @Nullable final IErrorList aFormErrors)
   {
@@ -159,23 +167,53 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
+  public HCTableFormItemRow createItemRow ()
+  {
+    final HCTableFormItemRow ret = new HCTableFormItemRow (false, getColumnCount () > 2)
+    {
+      @Override
+      protected IHCNode createErrorNode (@Nonnull final IError aError)
+      {
+        return new BootstrapHelpBlock ().addChild (aError.getErrorText ());
+      }
+
+      @Override
+      protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls, final boolean bHasErrors)
+      {
+        BootstrapTableForm.this.modifyControls (aCtrls);
+        _handleFocus (aCtrls, bHasErrors);
+        if (bHasErrors)
+          addClass (CBootstrapCSS.getCSSClass (EErrorLevel.ERROR));
+        else
+          removeClass (CBootstrapCSS.getCSSClass (EErrorLevel.ERROR));
+      }
+    };
+    addBodyRow (ret);
+    return ret;
+  }
+
+  @Deprecated
+  @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     return addItemRow (aLabel, new HCTextNode (sValue), null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNodeBuilder aCtrlBuilder)
   {
     return addItemRow (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aCtrl)
   {
     return addItemRow (aLabel, aCtrl, null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNodeBuilder aCtrlBuilder,
@@ -184,6 +222,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRow (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aFormErrors);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNode aCtrl,
@@ -192,12 +231,14 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRow (aLabel, aCtrl == null ? (List <IHCNode>) null : ContainerHelper.newList (aCtrl), aFormErrors);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aCtrls)
   {
     return addItemRow (aLabel, aCtrls, null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
@@ -221,6 +262,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return aRow;
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
@@ -229,6 +271,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRowWithNote (aLabel, new HCTextNode (sText), aNote, null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
@@ -238,6 +281,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRowWithNote (aLabel, new HCTextNode (sText), aNote, aFormErrors);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
@@ -246,6 +290,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRowWithNote (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aNote, null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
@@ -254,6 +299,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRowWithNote (aLabel, aCtrl, aNote, null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
@@ -262,6 +308,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRowWithNote (aLabel, aCtrls, aNote, null);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
@@ -271,6 +318,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return addItemRowWithNote (aLabel, aCtrlBuilder == null ? null : aCtrlBuilder.build (), aNote, aFormErrors);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
@@ -282,6 +330,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return aRow;
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,

@@ -94,6 +94,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
    *        empty
    */
   @OverrideOnDemand
+  @Deprecated
   protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls)
   {}
 
@@ -110,11 +111,37 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
     }
   }
 
+  private void _handleFocus (@Nonnull final Iterable <? extends IHCNode> aCtrls, final boolean bHasErrors)
+  {
+    if (isFocusHandlingEnabled ())
+    {
+      // Set focus on first element with error
+      if (bHasErrors && !m_bSetAutoFocus)
+        for (final IHCNode aCtrl : aCtrls)
+          if (aCtrl instanceof IHCHasFocus <?>)
+          {
+            focusNode ((IHCHasFocus <?>) aCtrl);
+            m_bSetAutoFocus = true;
+            break;
+          }
+
+      // Find first focusable control
+      if (m_aFirstFocusable == null)
+        for (final IHCNode aCtrl : aCtrls)
+          if (aCtrl instanceof IHCHasFocus <?>)
+          {
+            m_aFirstFocusable = (IHCHasFocus <?>) aCtrl;
+            break;
+          }
+    }
+  }
+
   @Nonnull
   @OverrideOnDemand
+  @Deprecated
   protected IHCCell <?> addControlCell (@Nonnull final HCRow aRow,
                                         @Nullable final Iterable <? extends IHCNode> aCtrls,
-                                        final boolean bHasError)
+                                        final boolean bHasErrors)
   {
     final List <IHCNode> aResolvedCtrls = new ArrayList <IHCNode> ();
     if (aCtrls != null)
@@ -128,33 +155,13 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
 
       // Customize controls
       modifyControls (aResolvedCtrls);
-
-      if (isFocusHandlingEnabled ())
-      {
-        // Set focus on first element with error
-        if (bHasError && !m_bSetAutoFocus)
-          for (final IHCNode aCtrl : aResolvedCtrls)
-            if (aCtrl instanceof IHCHasFocus <?>)
-            {
-              focusNode ((IHCHasFocus <?>) aCtrl);
-              m_bSetAutoFocus = true;
-              break;
-            }
-
-        // Find first focusable control
-        if (m_aFirstFocusable == null)
-          for (final IHCNode aCtrl : aResolvedCtrls)
-            if (aCtrl instanceof IHCHasFocus <?>)
-            {
-              m_aFirstFocusable = (IHCHasFocus <?>) aCtrl;
-              break;
-            }
-      }
+      _handleFocus (aResolvedCtrls, bHasErrors);
     }
 
     return aRow.addAndReturnCell (aResolvedCtrls);
   }
 
+  @Deprecated
   public static void addControlCellErrorMessages (@Nonnull final IHCCell <?> aCell,
                                                   @Nullable final IErrorList aFormErrors)
   {
@@ -166,7 +173,14 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCTableFormItemRow createItemRow ()
   {
-    final HCTableFormItemRow ret = new HCTableFormItemRow (false, getColumnCount () > 2);
+    final HCTableFormItemRow ret = new HCTableFormItemRow (false, getColumnCount () > 2)
+    {
+      @Override
+      protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls, final boolean bHasErrors)
+      {
+        _handleFocus (aCtrls, bHasErrors);
+      }
+    };
     addBodyRow (ret);
     return ret;
   }

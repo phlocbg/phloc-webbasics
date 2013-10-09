@@ -18,44 +18,19 @@
 package com.phloc.webctrls.custom.table;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.html.hc.IHCBaseTable;
-import com.phloc.html.hc.IHCNode;
-import com.phloc.webctrls.custom.IFormLabel;
 
+/**
+ * Base interface for tables with a tabular layout: 2 columns where the first is
+ * the label and the second is the control cell.
+ * 
+ * @author Philip Helger
+ * @param <THISTYPE>
+ *        Implementation type
+ */
 public interface IHCTableFormView <THISTYPE extends IHCTableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>
 {
   @Nonnull
   HCTableFormViewItemRow createItemRow ();
-
-  @Deprecated
-  void addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
-
-  @Deprecated
-  void addItemRow (@Nullable IFormLabel aLabel, @Nullable String... aValues);
-
-  @Deprecated
-  void addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aValue);
-
-  @Deprecated
-  void addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode... aValues);
-
-  @Deprecated
-  void addItemRow (@Nullable IFormLabel aLabel, @Nullable Iterable <? extends IHCNode> aValues);
-
-  @Deprecated
-  void addItemRow (@Nonnull String sLabel, @Nullable String sValue);
-
-  @Deprecated
-  void addItemRow (@Nonnull String sLabel, @Nullable String... aValue);
-
-  @Deprecated
-  void addItemRow (@Nonnull String sLabel, @Nullable IHCNode aValue);
-
-  @Deprecated
-  void addItemRow (@Nonnull String sLabel, @Nullable IHCNode... aValues);
-
-  @Deprecated
-  void addItemRow (@Nonnull String sLabel, @Nullable Iterable <? extends IHCNode> aValues);
 }
