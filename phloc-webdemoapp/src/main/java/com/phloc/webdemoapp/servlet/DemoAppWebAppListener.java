@@ -30,7 +30,7 @@ import com.phloc.bootstrap3.servlet.WebAppListenerMultiAppBootstrap;
 import com.phloc.bootstrap3.styler.BootstrapWebPageStyler;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
 import com.phloc.webctrls.styler.WebPageStylerManager;
@@ -74,8 +74,8 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
     {
       @Override
       @Nonnull
-      public BootstrapDataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
-                                                           @Nonnull final Locale aDisplayLocale)
+      public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
+                                                          @Nonnull final Locale aDisplayLocale)
       {
         final BootstrapDataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
         ret.setAutoWidth (false)
