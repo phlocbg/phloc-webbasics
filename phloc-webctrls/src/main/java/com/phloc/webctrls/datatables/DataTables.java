@@ -43,10 +43,9 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.CHTMLAttributes;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCBaseTable;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCColGroup;
 import com.phloc.html.hc.html.HCScript;
@@ -91,7 +90,7 @@ public class DataTables implements IHCNodeBuilder
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
   private static boolean s_bDefaultGenerateOnDocumentReady = DEFAULT_GENERATE_ON_DOCUMENT_READY;
 
-  private final AbstractHCBaseTable <?> m_aTable;
+  private final IHCTable <?> m_aTable;
   private boolean m_bGenerateOnDocumentReady = s_bDefaultGenerateOnDocumentReady;
   private Locale m_aDisplayLocale;
   private boolean m_bAutoWidth = DEFAULT_AUTOWIDTH;
@@ -137,7 +136,7 @@ public class DataTables implements IHCNodeBuilder
    *        The table to apply the data table to. May not be <code>null</code>
    *        and must have a valid ID!
    */
-  public DataTables (@Nonnull final AbstractHCBaseTable <?> aTable)
+  public DataTables (@Nonnull final IHCTable <?> aTable)
   {
     if (aTable == null)
       throw new NullPointerException ("Table");
@@ -154,7 +153,7 @@ public class DataTables implements IHCNodeBuilder
    * @return The underlying table on which this object is operating.
    */
   @Nonnull
-  public final IHCBaseTable <?> getTable ()
+  public final IHCTable <?> getTable ()
   {
     return m_aTable;
   }
@@ -296,7 +295,7 @@ public class DataTables implements IHCNodeBuilder
   }
 
   @Nonnull
-  public DataTables addAllColumns (@Nonnull final IHCBaseTable <?> aTable)
+  public DataTables addAllColumns (@Nonnull final IHCTable <?> aTable)
   {
     if (aTable == null)
       throw new NullPointerException ("table");

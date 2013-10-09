@@ -33,8 +33,7 @@ import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCButton;
@@ -151,7 +150,7 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public AbstractHCTable <?> createTable (@Nullable final HCCol... aCols)
+  public IHCTable <?> createTable (@Nullable final HCCol... aCols)
   {
     return new HCTable (aCols);
   }
@@ -169,8 +168,7 @@ public class SimpleWebPageStyler implements IWebPageStyler
   }
 
   @Nonnull
-  public DataTables createDefaultDataTables (@Nonnull final AbstractHCBaseTable <?> aTable,
-                                             @Nonnull final Locale aDisplayLocale)
+  public DataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable, @Nonnull final Locale aDisplayLocale)
   {
     final DataTables ret = new DataTables (aTable);
     ret.setDisplayLocale (aDisplayLocale);

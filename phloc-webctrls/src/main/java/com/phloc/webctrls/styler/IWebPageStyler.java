@@ -25,8 +25,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.AbstractHCBaseTable;
-import com.phloc.html.hc.html.AbstractHCTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.webbasics.userdata.UserDataObject;
@@ -80,7 +79,7 @@ public interface IWebPageStyler
   IHCElement <?> createQuestionBox (@Nullable String sText);
 
   @Nonnull
-  AbstractHCTable <?> createTable (@Nullable HCCol... aCols);
+  IHCTable <?> createTable (@Nullable HCCol... aCols);
 
   @Nonnull
   IHCTableForm <?> createTableForm (@Nullable HCCol... aCols);
@@ -89,7 +88,7 @@ public interface IWebPageStyler
   IHCTableFormView <?> createTableFormView (@Nullable HCCol... aCols);
 
   @Nonnull
-  DataTables createDefaultDataTables (@Nonnull AbstractHCBaseTable <?> aTable, @Nonnull Locale aDisplayLocale);
+  DataTables createDefaultDataTables (@Nonnull IHCTable <?> aTable, @Nonnull Locale aDisplayLocale);
 
   @Nonnull
   IHCElement <?> createUploadButton (@Nonnull Locale aDisplayLocale);

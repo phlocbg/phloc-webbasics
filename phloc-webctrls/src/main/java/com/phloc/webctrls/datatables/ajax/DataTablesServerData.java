@@ -34,7 +34,7 @@ import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
-import com.phloc.html.hc.IHCBaseTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
@@ -88,7 +88,7 @@ public final class DataTablesServerData implements IHasUIState
   private ServerSortState m_aServerSortState;
   private final EDataTablesFilterType m_eFilterType;
 
-  public DataTablesServerData (@Nonnull final IHCBaseTable <?> aTable,
+  public DataTablesServerData (@Nonnull final IHCTable <?> aTable,
                                @Nonnull final List <DataTablesColumn> aColumns,
                                @Nonnull final Locale aDisplayLocale,
                                @Nonnull final EDataTablesFilterType eFilterType)

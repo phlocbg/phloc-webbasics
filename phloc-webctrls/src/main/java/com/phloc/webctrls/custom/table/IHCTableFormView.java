@@ -18,8 +18,11 @@
 package com.phloc.webctrls.custom.table;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.phloc.html.hc.IHCBaseTable;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCTable;
+import com.phloc.webctrls.custom.IFormLabel;
 
 /**
  * Base interface for tables with a tabular layout: 2 columns where the first is
@@ -29,8 +32,28 @@ import com.phloc.html.hc.IHCBaseTable;
  * @param <THISTYPE>
  *        Implementation type
  */
-public interface IHCTableFormView <THISTYPE extends IHCTableFormView <THISTYPE>> extends IHCBaseTable <THISTYPE>
+public interface IHCTableFormView <THISTYPE extends IHCTableFormView <THISTYPE>> extends IHCTable <THISTYPE>
 {
   @Nonnull
   HCTableFormViewItemRow createItemRow ();
+
+  void addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
+
+  void addItemRow (@Nullable IFormLabel aLabel, @Nullable String... aValues);
+
+  void addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aValue);
+
+  void addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode... aValues);
+
+  void addItemRow (@Nullable IFormLabel aLabel, @Nullable Iterable <? extends IHCNode> aValues);
+
+  void addItemRow (@Nonnull String sLabel, @Nullable String sValue);
+
+  void addItemRow (@Nonnull String sLabel, @Nullable String... aValue);
+
+  void addItemRow (@Nonnull String sLabel, @Nullable IHCNode aValue);
+
+  void addItemRow (@Nonnull String sLabel, @Nullable IHCNode... aValues);
+
+  void addItemRow (@Nonnull String sLabel, @Nullable Iterable <? extends IHCNode> aValues);
 }

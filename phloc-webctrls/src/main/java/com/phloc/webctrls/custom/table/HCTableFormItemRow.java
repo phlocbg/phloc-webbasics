@@ -40,15 +40,21 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nonnull
-  public HCTableFormItemRow setLabel (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  public final HCTableFormItemRow setLabel (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
   {
     return setLabel (aTextProvider.getText ());
   }
 
   @Nonnull
-  public HCTableFormItemRow setLabel (@Nullable final String sLabel)
+  public final HCTableFormItemRow setLabel (@Nullable final String sLabel)
   {
     return setLabel (sLabel == null ? null : HCFormLabel.create (sLabel));
+  }
+
+  @Nonnull
+  public final HCTableFormItemRow setLabelMandatory (@Nullable final String sLabel)
+  {
+    return setLabel (sLabel == null ? null : HCFormLabel.createMandatory (sLabel));
   }
 
   /**
@@ -59,7 +65,7 @@ public class HCTableFormItemRow extends HCRow
   {}
 
   @Nonnull
-  public HCTableFormItemRow setLabel (@Nullable final IFormLabel aLabel)
+  public final HCTableFormItemRow setLabel (@Nullable final IFormLabel aLabel)
   {
     m_aLabelCell.removeAllChildren ().addChild (aLabel);
     onLabelModified ();
@@ -67,7 +73,7 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nonnull
-  public IHCCell <?> getLabelCell ()
+  public final IHCCell <?> getLabelCell ()
   {
     return m_aLabelCell;
   }
@@ -107,6 +113,7 @@ public class HCTableFormItemRow extends HCRow
     if (m_aCtrls != null)
     {
       // Inline all node lists for correct modification afterwards
+      // Note: must be AbstractHCNodeList and not IHCNodeWithChildren!
       for (final IHCNode aCtrl : m_aCtrls)
         if (aCtrl instanceof AbstractHCNodeList <?>)
           aResolvedCtrls.addAll (((AbstractHCNodeList <?>) aCtrl).getChildren ());
@@ -127,25 +134,25 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nonnull
-  public HCTableFormItemRow setCtrl (@Nullable final String sValue)
+  public final HCTableFormItemRow setCtrl (@Nullable final String sValue)
   {
     return setCtrl (new HCTextNode (sValue));
   }
 
   @Nonnull
-  public HCTableFormItemRow setCtrl (@Nullable final String... aValues)
+  public final HCTableFormItemRow setCtrl (@Nullable final String... aValues)
   {
     return setCtrl (HCNodeList.create (aValues));
   }
 
   @Nonnull
-  public HCTableFormItemRow setCtrl (@Nullable final IHCNodeBuilder aCtrlBuilder)
+  public final HCTableFormItemRow setCtrl (@Nullable final IHCNodeBuilder aCtrlBuilder)
   {
     return setCtrl (aCtrlBuilder == null ? null : aCtrlBuilder.build ());
   }
 
   @Nonnull
-  public HCTableFormItemRow setCtrl (@Nullable final IHCNode aCtrl)
+  public final HCTableFormItemRow setCtrl (@Nullable final IHCNode aCtrl)
   {
     m_aCtrls = ContainerHelper.newList (aCtrl);
     _updateCtrlCell ();
@@ -153,7 +160,7 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nonnull
-  public HCTableFormItemRow setCtrl (@Nullable final IHCNode... aCtrls)
+  public final HCTableFormItemRow setCtrl (@Nullable final IHCNode... aCtrls)
   {
     m_aCtrls = ContainerHelper.newList (aCtrls);
     _updateCtrlCell ();
@@ -161,7 +168,7 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nonnull
-  public HCTableFormItemRow setCtrl (@Nullable final Iterable <? extends IHCNode> aCtrls)
+  public final HCTableFormItemRow setCtrl (@Nullable final Iterable <? extends IHCNode> aCtrls)
   {
     m_aCtrls = ContainerHelper.newList (aCtrls);
     _updateCtrlCell ();
@@ -169,13 +176,13 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nullable
-  public List <IHCNode> getCtrls ()
+  public final List <IHCNode> getCtrls ()
   {
     return ContainerHelper.newList (m_aCtrls);
   }
 
   @Nonnull
-  public HCTableFormItemRow setErrorList (@Nullable final IErrorList aErrorList)
+  public final HCTableFormItemRow setErrorList (@Nullable final IErrorList aErrorList)
   {
     m_aErrorList = aErrorList;
     _updateCtrlCell ();
@@ -183,13 +190,13 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nullable
-  public IErrorList getErrorList ()
+  public final IErrorList getErrorList ()
   {
     return m_aErrorList;
   }
 
   @Nonnull
-  public IHCCell <?> getCtrlCell ()
+  public final IHCCell <?> getCtrlCell ()
   {
     return m_aCtrlCell;
   }
@@ -202,7 +209,7 @@ public class HCTableFormItemRow extends HCRow
   {}
 
   @Nonnull
-  public HCTableFormItemRow setNote (@Nullable final IFormNote aNote)
+  public final HCTableFormItemRow setNote (@Nullable final IFormNote aNote)
   {
     if (m_aNoteCell == null)
       throw new IllegalStateException ("This table has no note column!");
@@ -213,7 +220,7 @@ public class HCTableFormItemRow extends HCRow
   }
 
   @Nullable
-  public IHCCell <?> getNoteCell ()
+  public final IHCCell <?> getNoteCell ()
   {
     return m_aNoteCell;
   }
