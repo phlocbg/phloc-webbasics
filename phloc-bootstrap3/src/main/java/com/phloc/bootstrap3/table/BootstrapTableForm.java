@@ -24,7 +24,6 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.form.BootstrapHelpBlock;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.error.EErrorLevel;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCHasFocus;
@@ -75,9 +74,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     if (aCtrl instanceof IHCControl <?>)
     {
       // Ensure that an ID is present
-      final IHCControl <?> aRealControl = (IHCControl <?>) aCtrl;
-      if (aRealControl.getID () == null)
-        aRealControl.setID (GlobalIDFactory.getNewStringID ());
+      ((IHCControl <?>) aCtrl).ensureID ();
     }
   }
 

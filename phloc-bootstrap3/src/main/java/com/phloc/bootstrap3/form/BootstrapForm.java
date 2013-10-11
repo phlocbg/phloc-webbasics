@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.grid.EBootstrapGridMD;
 import com.phloc.bootstrap3.grid.IBootstrapGridElementExtended;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
@@ -143,13 +142,7 @@ public class BootstrapForm extends HCForm
           if (aFirstControl != null)
           {
             // We have a label for a control
-            String sControlID = aFirstControl.getID ();
-            if (StringHelper.hasNoText (sControlID))
-            {
-              sControlID = GlobalIDFactory.getNewStringID ();
-              aFirstControl.setID (sControlID);
-            }
-            aLabel.setFor (sControlID);
+            aLabel.setFor (aFirstControl);
 
             // Ensure the form-control class is present
             aFirstControl.addClass (CBootstrapCSS.FORM_CONTROL);

@@ -79,7 +79,7 @@ public class Tab implements IHasID <String>, Serializable
   @Nonnull
   public ISimpleURL getLinkURL ()
   {
-    return new SimpleURL ("#" + m_sID);
+    return new SimpleURL ().setAnchor (m_sID);
   }
 
   @Nullable

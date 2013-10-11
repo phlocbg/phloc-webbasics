@@ -22,7 +22,6 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
@@ -139,16 +138,8 @@ public class HCColorBox implements IHCNodeBuilder
   {
     IJQuerySelector aSelector = m_aSelector;
     if (aSelector == null)
-    {
-      // Ensure element has an ID
-      String sID = m_aElement.getID ();
-      if (StringHelper.hasNoText (sID))
-      {
-        sID = GlobalIDFactory.getNewStringID ();
-        m_aElement.setID (sID);
-      }
-      aSelector = JQuerySelector.id (sID);
-    }
+      aSelector = JQuerySelector.id (m_aElement);
+
     registerExternalResources ();
 
     // Build parameters

@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 import com.phloc.bootstrap3.EBootstrapIcon;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.IHCNode;
@@ -329,10 +328,9 @@ public class BootstrapTooltip
   @Nonnull
   public static IHCNode createSimpleTooltip (@Nonnull final String sTitle)
   {
-    final String sID = GlobalIDFactory.getNewStringID ();
-    final HCSpan aSpan = new HCSpan ().setID (sID);
+    final HCSpan aSpan = new HCSpan ();
     aSpan.addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
-    final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (sID)).setTitle (sTitle);
+    final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (aSpan)).setTitle (sTitle);
     final IHCNode aScript = new HCScriptOnDocumentReady (aTooltip.jsAttach ());
     return HCNodeList.create (aSpan, aScript);
   }
@@ -340,10 +338,9 @@ public class BootstrapTooltip
   @Nonnull
   public static IHCNode createSimpleTooltip (@Nonnull final IHCNode aTitle)
   {
-    final String sID = GlobalIDFactory.getNewStringID ();
-    final HCSpan aSpan = new HCSpan ().setID (sID);
+    final HCSpan aSpan = new HCSpan ();
     aSpan.addChild (EBootstrapIcon.QUESTION_SIGN.getAsNode ());
-    final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (sID)).setTitle (aTitle);
+    final BootstrapTooltip aTooltip = new BootstrapTooltip (JQuerySelector.id (aSpan)).setTitle (aTitle);
     final IHCNode aScript = new HCScriptOnDocumentReady (aTooltip.jsAttach ());
     return HCNodeList.create (aSpan, aScript);
   }

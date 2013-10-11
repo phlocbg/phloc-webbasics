@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCHasFocus;
 import com.phloc.html.hc.IHCNode;
@@ -78,9 +77,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
     if (aCtrl instanceof IHCControl <?>)
     {
       // Ensure that an ID is present
-      final IHCControl <?> aRealControl = (IHCControl <?>) aCtrl;
-      if (aRealControl.getID () == null)
-        aRealControl.setID (GlobalIDFactory.getNewStringID ());
+      ((IHCControl <?>) aCtrl).ensureID ();
     }
   }
 

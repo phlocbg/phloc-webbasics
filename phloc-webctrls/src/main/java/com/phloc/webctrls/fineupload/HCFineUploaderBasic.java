@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.idfactory.GlobalIDFactory;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
@@ -70,13 +69,7 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
     {
       // We have a special button to use
       ret.addChild (m_aButton);
-      String sButtonID = m_aButton.getID ();
-      if (StringHelper.hasNoText (sButtonID))
-      {
-        sButtonID = GlobalIDFactory.getNewStringID ();
-        m_aButton.setID (sButtonID);
-      }
-      m_aUploader.setButtonElementID (sButtonID);
+      m_aUploader.setButtonElementID (m_aButton.ensureID ().getID ());
     }
 
     // Start building JS

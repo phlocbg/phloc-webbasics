@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.css.DefaultCSSClassProvider;
@@ -129,8 +128,7 @@ public final class TipTip implements IHCNodeBuilder
   {
     registerExternalResources ();
 
-    final String sID = GlobalIDFactory.getNewStringID ();
-    final HCSpan aSpan = new HCSpan ().setID (sID).addClasses (m_eType, CSS_CLASS_TOOLTIP);
+    final HCSpan aSpan = new HCSpan ().addClasses (m_eType, CSS_CLASS_TOOLTIP);
     if (false)
       aSpan.addChild (EDefaultIcon.INFO.getIcon ().getAsNode ());
 
@@ -140,7 +138,7 @@ public final class TipTip implements IHCNodeBuilder
       aOptions.add ("maxWidth", m_sMaxWidth);
     if (m_nEdgeOffset > 0)
       aOptions.add ("edgeOffset", m_nEdgeOffset);
-    final IHCNode aScript = new HCScriptOnDocumentReady (JQuery.idRef (sID).jqinvoke ("tipTip").arg (aOptions));
+    final IHCNode aScript = new HCScriptOnDocumentReady (JQuery.idRef (aSpan).jqinvoke ("tipTip").arg (aOptions));
 
     return HCNodeList.create (aSpan, aScript);
   }

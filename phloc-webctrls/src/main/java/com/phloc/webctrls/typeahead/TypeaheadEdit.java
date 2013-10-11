@@ -59,7 +59,6 @@ public class TypeaheadEdit implements IHCNodeBuilder
       throw new NullPointerException ("DisplayLocale");
 
     m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true)
-                                  .setID (GlobalIDFactory.getNewStringID ())
                                   .setPlaceholder (ETypeaheadText.ENTER_SEARCH_STRING.getDisplayText (aDisplayLocale));
 
     m_aRFHidden = aRFHidden;
@@ -71,7 +70,7 @@ public class TypeaheadEdit implements IHCNodeBuilder
     // event is not triggered for hidden fields!
     m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSID).change ());
     // Params: edit-ID, selectionCallback function and AJAX URL
-    m_aScript = new TypeaheadScript (JQuerySelector.id (m_aEdit.getID ()), m_aSelectionCallback, aAjaxInvocationURL);
+    m_aScript = new TypeaheadScript (JQuerySelector.id (m_aEdit), m_aSelectionCallback, aAjaxInvocationURL);
   }
 
   /**
