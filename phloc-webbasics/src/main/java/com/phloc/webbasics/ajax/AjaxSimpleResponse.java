@@ -24,17 +24,35 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.json2.IJsonObject;
+import com.phloc.json2.IJson;
 import com.phloc.json2.serialize.JsonWriter;
 
 @Immutable
-public final class AjaxSimpleResponse implements IAjaxResponse
+public class AjaxSimpleResponse implements IAjaxResponse
 {
-  private final IJsonObject m_aValue;
+  private final boolean m_bSuccess;
+  private final IJson m_aValue;
 
-  public AjaxSimpleResponse (@Nullable final IJsonObject aValue)
+  public AjaxSimpleResponse (final boolean bSuccess, @Nullable final IJson aValue)
   {
+    m_bSuccess = bSuccess;
     m_aValue = aValue;
+  }
+
+  public boolean isSuccess ()
+  {
+    return m_bSuccess;
+  }
+
+  public boolean isFailure ()
+  {
+    return !m_bSuccess;
+  }
+
+  @Nullable
+  public IJson getJson ()
+  {
+    return m_aValue;
   }
 
   @Nonnull

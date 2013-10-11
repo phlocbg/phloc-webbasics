@@ -28,7 +28,6 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCHasChildren;
@@ -45,7 +44,7 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webbasics.app.html.StreamURIToURLConverter;
 
 @Immutable
-public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements ISuccessIndicator, IAjaxResponse
+public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResponse> implements IAjaxResponse
 {
   /** Success property */
   public static final String PROPERTY_SUCCESS = "success";

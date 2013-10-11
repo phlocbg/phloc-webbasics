@@ -19,12 +19,14 @@ package com.phloc.webbasics.ajax;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.state.ISuccessIndicator;
+
 /**
  * Base interface for an Ajax response with a JSON representation.
  * 
  * @author Philip Helger
  */
-public interface IAjaxResponse
+public interface IAjaxResponse extends ISuccessIndicator
 {
   /**
    * Get the Ajax response as JSON
