@@ -24,10 +24,10 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCScript;
+import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
-import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 public class HCFacebookSDK extends HCNodeList
@@ -43,15 +43,15 @@ public class HCFacebookSDK extends HCNodeList
     addChild (new HCDiv ().setID (FB_ROOT_ID));
     if (true)
     {
-      addChild (new HCScript (JQuery.onDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery")
-                                                            .arg (sAppID)
-                                                            .arg (FacebookLocaleMapping.getInstance ()
-                                                                                       .getFBLocale (aDisplayLocale)
-                                                                                       .toString ())
-                                                            .arg (FB_ROOT_ID)
-                                                            .arg (bCheckLoginStatus)
-                                                            .arg (bEnableCookies)
-                                                            .arg (bUseXFBML))));
+      addChild (new HCScriptOnDocumentReady (JSExpr.invoke ("facebookLoadSDKjQuery")
+                                                   .arg (sAppID)
+                                                   .arg (FacebookLocaleMapping.getInstance ()
+                                                                              .getFBLocale (aDisplayLocale)
+                                                                              .toString ())
+                                                   .arg (FB_ROOT_ID)
+                                                   .arg (bCheckLoginStatus)
+                                                   .arg (bEnableCookies)
+                                                   .arg (bUseXFBML)));
     }
     else
     {

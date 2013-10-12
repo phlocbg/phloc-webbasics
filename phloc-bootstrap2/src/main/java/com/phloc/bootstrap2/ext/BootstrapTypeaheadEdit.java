@@ -58,7 +58,6 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
       throw new NullPointerException ("AjaxInvocationURL");
 
     m_aEdit = new HCEdit (aRFEdit).setDisableAutoComplete (true)
-                                  .setID (GlobalIDFactory.getNewStringID ())
                                   .setPlaceholder (EBootstrapText.ENTER_SEARCH_STRING.getDisplayText (aDisplayLocale));
 
     m_aRFHidden = aRFHidden;
@@ -69,7 +68,7 @@ public class BootstrapTypeaheadEdit implements IHCNodeBuilder
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
     m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSID).change ());
-    m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit.getID ()),
+    m_aScript = new BootstrapPhlocTypeaheadScript (JQuerySelector.id (m_aEdit),
                                                    m_aSelectionCallback,
                                                    aAjaxInvocationURL);
   }
