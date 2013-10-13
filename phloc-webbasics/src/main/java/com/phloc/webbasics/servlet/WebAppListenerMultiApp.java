@@ -17,18 +17,13 @@
  */
 package com.phloc.webbasics.servlet;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletContext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.appbasics.app.ApplicationLocaleManager;
-import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.security.user.password.PasswordConstraintMinLength;
 import com.phloc.appbasics.security.user.password.PasswordConstraints;
@@ -37,15 +32,7 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.io.file.SimpleFileIO;
-import com.phloc.commons.microdom.IMicroDocument;
-import com.phloc.commons.microdom.serialize.MicroWriter;
-import com.phloc.commons.stats.utils.StatisticsExporter;
-import com.phloc.commons.xml.serialize.XMLWriterSettings;
-import com.phloc.datetime.PDTFactory;
-import com.phloc.datetime.io.PDTIOHelper;
 import com.phloc.html.js.builder.JSPrinter;
-import com.phloc.web.datetime.PDTWebDateUtils;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
 import com.phloc.webbasics.action.ApplicationActionManager;
@@ -60,10 +47,8 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-public abstract class WebAppListenerMultiApp extends WebAppListener
+public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistics
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListenerMultiApp.class);
-
   @Nonnull
   @Nonempty
   protected abstract Map <String, IApplicationInitializer> getAllInitializers ();
@@ -133,41 +118,6 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
       finally
       {
         WebScopeManager.onRequestEnd ();
-      }
-    }
-  }
-
-  @OverrideOnDemand
-  protected boolean isWriteStatisticsOnEnd ()
-  {
-    return true;
-  }
-
-  @Nonnull
-  @Nonempty
-  protected String getStatisticsFilename ()
-  {
-    return "statistics/statistics_" + PDTIOHelper.getCurrentDateTimeForFilename () + ".xml";
-  }
-
-  @Override
-  protected void afterContextDestroyed (@Nonnull final ServletContext aSC)
-  {
-    if (isWriteStatisticsOnEnd ())
-    {
-      // serialize statistics
-      try
-      {
-        final File aDestPath = WebFileIO.getFile (getStatisticsFilename ());
-        final IMicroDocument aDoc = StatisticsExporter.getAsXMLDocument ();
-        aDoc.getDocumentElement ().setAttribute ("location", "shutdown");
-        aDoc.getDocumentElement ().setAttribute ("datetime",
-                                                 PDTWebDateUtils.getAsStringXSD (PDTFactory.getCurrentDateTime ()));
-        SimpleFileIO.writeFile (aDestPath, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
-      }
-      catch (final Throwable t)
-      {
-        s_aLogger.error ("Failed to write statistics on context shutdown.", t);
       }
     }
   }

@@ -528,6 +528,14 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   protected void afterContextDestroyed (@Nonnull final ServletContext aSC)
   {}
 
+  /**
+   * Callback for handling statistics. This is mainly used for class
+   * {@link WebAppListenerWithStatistics}.
+   */
+  @OverrideOnDemand
+  protected void handleStatistics ()
+  {}
+
   public final void contextDestroyed (@Nonnull final ServletContextEvent aSCE)
   {
     final ServletContext aSC = aSCE.getServletContext ();
@@ -536,14 +544,17 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     if (s_aLogger.isInfoEnabled ())
       s_aLogger.info ("Servlet context '" + aSC.getServletContextName () + "' is being destroyed");
 
-    // Callback before
+    // Callback before global scope end
     beforeContextDestroyed (aSC);
 
     // Shutdown global scope and destroy all singletons
     WebScopeManager.onGlobalEnd ();
 
-    // Callback after
+    // Callback after global scope end
     afterContextDestroyed (aSC);
+
+    // Handle statistics
+    handleStatistics ();
 
     // Reset base path - mainly for testing
     WebFileIO.resetPaths ();
