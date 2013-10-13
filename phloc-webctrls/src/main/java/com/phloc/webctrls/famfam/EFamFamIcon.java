@@ -1037,9 +1037,9 @@ public enum EFamFamIcon implements IIcon
   ZOOM_IN ("famfam-zoom_in"),
   ZOOM_OUT ("famfam-zoom_out");
 
-  public static final ICSSClassProvider CSS_CLASS_FAMFAM = DefaultCSSClassProvider.create ("icon-famfam");
+  public static final ICSSClassProvider CSS_CLASS_ICON_FAMFAM = DefaultCSSClassProvider.create ("icon-famfam");
 
-  private String m_sCSSClass;
+  private final String m_sCSSClass;
 
   private EFamFamIcon (@Nonnull @Nonempty final String sCSSClass)
   {
@@ -1057,14 +1057,14 @@ public enum EFamFamIcon implements IIcon
   public IHCElement <?> getAsNode ()
   {
     final HCLI ret = new HCLI ();
-    ret.addClasses (CSS_CLASS_FAMFAM, this);
+    ret.addClasses (CSS_CLASS_ICON_FAMFAM, this);
     return ret;
   }
 
   @Nonnull
   public <T extends IHCElement <?>> T applyToNode (@Nonnull final T aElement)
   {
-    aElement.addClasses (CSS_CLASS_FAMFAM, this);
+    aElement.addClasses (CSS_CLASS_ICON_FAMFAM, this);
     return aElement;
   }
 

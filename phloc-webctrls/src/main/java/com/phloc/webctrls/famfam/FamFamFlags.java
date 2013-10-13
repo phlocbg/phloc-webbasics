@@ -61,7 +61,7 @@ public final class FamFamFlags
   }
 
   /**
-   * Get the flag icon from the passed locale
+   * Get the flag icon from the passed locale or <code>null</code>.
    * 
    * @param aFlagLocale
    *        The locale to resolve. May be <code>null</code>.

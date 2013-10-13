@@ -302,10 +302,9 @@ public enum EFamFamFlagIcon implements IIcon, IHasID <String>
   ZW ("zw", "famfam-flag-zw");
 
   public static final ICSSClassProvider CSS_CLASS_ICON_FAMFAM_FLAG = DefaultCSSClassProvider.create ("icon-famfam-flag");
-  public static final ICSSClassProvider CSS_CLASS_CONTAINER_FAMFAM_FLAG = DefaultCSSClassProvider.create ("container-famfam-flag");
 
-  private String m_sID;
-  private String m_sCSSClass;
+  private final String m_sID;
+  private final String m_sCSSClass;
 
   private EFamFamFlagIcon (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sCSSClass)
   {
