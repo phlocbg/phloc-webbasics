@@ -43,8 +43,7 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCElement;
-import com.phloc.html.hc.html.HCI;
+import com.phloc.html.hc.html.HCLI;
 import com.phloc.webctrls.custom.IIcon;
 
 /**
@@ -302,7 +301,8 @@ public enum EFamFamFlagIcon implements IIcon, IHasID <String>
   ZM ("zm", "famfam-flag-zm"),
   ZW ("zw", "famfam-flag-zw");
 
-  public static final ICSSClassProvider CSS_CLASS_FAMFAM_FLAG = DefaultCSSClassProvider.create ("icon-famfam-flag");
+  public static final ICSSClassProvider CSS_CLASS_ICON_FAMFAM_FLAG = DefaultCSSClassProvider.create ("icon-famfam-flag");
+  public static final ICSSClassProvider CSS_CLASS_CONTAINER_FAMFAM_FLAG = DefaultCSSClassProvider.create ("container-famfam-flag");
 
   private String m_sID;
   private String m_sCSSClass;
@@ -328,16 +328,11 @@ public enum EFamFamFlagIcon implements IIcon, IHasID <String>
   }
 
   @Nonnull
-  public IHCElement <?> getAsNode ()
+  public HCLI getAsNode ()
   {
-    return applyToNode (new HCI ());
-  }
-
-  @Nonnull
-  public <T extends IHCElement <?>> T applyToNode (@Nonnull final T aElement)
-  {
-    aElement.addClasses (CSS_CLASS_FAMFAM_FLAG, this);
-    return aElement;
+    final HCLI ret = new HCLI ();
+    ret.addClasses (CSS_CLASS_ICON_FAMFAM_FLAG, this);
+    return ret;
   }
 
   @Nullable

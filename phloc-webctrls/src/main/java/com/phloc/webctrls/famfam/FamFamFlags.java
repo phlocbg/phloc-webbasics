@@ -19,13 +19,12 @@ package com.phloc.webctrls.famfam;
 
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.IHCNode;
 
 /**
  * A wrapper around the FamFam flags icon set
@@ -35,7 +34,7 @@ import com.phloc.html.hc.IHCElement;
 @Immutable
 public final class FamFamFlags
 {
-  public static final ICSSClassProvider CSS_CLASS_FAMFAM_FLAG = EFamFamFlagIcon.CSS_CLASS_FAMFAM_FLAG;
+  public static final ICSSClassProvider CSS_CLASS_ICON_FAMFAM_FLAG = EFamFamFlagIcon.CSS_CLASS_ICON_FAMFAM_FLAG;
 
   private FamFamFlags ()
   {}
@@ -62,28 +61,18 @@ public final class FamFamFlags
   }
 
   /**
-   * Add a specific CSS class, that adds a padding and a background-image with a
-   * flag to the passed object
+   * Get the flag icon from the passed locale
    * 
-   * @param <T>
-   *        Type of object
-   * @param aObject
-   *        The source object. May not be <code>null</code>
    * @param aFlagLocale
-   *        The locale who's flag is to be applied. Is only effective if the
-   *        locale contains a country element. May not be <code>null</code>
-   * @return The source object
+   *        The locale to resolve. May be <code>null</code>.
+   * @return <code>null</code> if the passed locale is <code>null</code>, if the
+   *         locale has no country or if the no flag is present for the passed
+   *         locale.
    */
-  @Nonnull
-  public static <T extends IHCElement <?>> T getWithFlagImage (@Nonnull final T aObject,
-                                                               @Nullable final Locale aFlagLocale)
+  @Nullable
+  public static IHCNode getFlagNodeFromLocale (@Nullable final Locale aFlagLocale)
   {
-    if (aObject == null)
-      throw new NullPointerException ("object");
-
     final EFamFamFlagIcon eIcon = getFlagFromLocale (aFlagLocale);
-    if (eIcon != null)
-      eIcon.applyToNode (aObject);
-    return aObject;
+    return eIcon == null ? null : eIcon.getAsNode ();
   }
 }

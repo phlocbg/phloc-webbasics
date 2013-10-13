@@ -23,7 +23,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCElement;
-import com.phloc.html.hc.html.HCI;
+import com.phloc.html.hc.html.HCLI;
 import com.phloc.webctrls.custom.DefaultIcons;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
@@ -1056,7 +1056,9 @@ public enum EFamFamIcon implements IIcon
   @Nonnull
   public IHCElement <?> getAsNode ()
   {
-    return applyToNode (new HCI ());
+    final HCLI ret = new HCLI ();
+    ret.addClasses (CSS_CLASS_FAMFAM, this);
+    return ret;
   }
 
   @Nonnull

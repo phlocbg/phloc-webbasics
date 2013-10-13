@@ -32,12 +32,9 @@ import com.phloc.commons.compare.AbstractCollationComparator;
 import com.phloc.commons.locale.country.ComparatorLocaleDisplayCountryInLocale;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.name.IDisplayTextProvider;
-import com.phloc.html.hc.html.HCOption;
 import com.phloc.html.request.IHCRequestField;
 import com.phloc.masterdata.locale.DeprecatedLocaleHandler;
 import com.phloc.webctrls.custom.HCExtSelect;
-import com.phloc.webctrls.famfam.EFamFamFlagIcon;
-import com.phloc.webctrls.famfam.FamFamFlags;
 
 public class HCCountrySelect extends HCExtSelect
 {
@@ -137,14 +134,7 @@ public class HCCountrySelect extends HCExtSelect
       final String sDisplayCountry = aDisplayTextProvider != null ? aDisplayTextProvider.getDisplayText (aCountry,
                                                                                                          aDisplayLocale)
                                                                  : aCountry.getDisplayCountry (aDisplayLocale);
-      final HCOption aOption = addOption (aCountry.getCountry (), sDisplayCountry);
-      if (false)
-      {
-        // XXX Does not work right now :(
-        final EFamFamFlagIcon eIcon = FamFamFlags.getFlagFromLocale (aCountry);
-        if (eIcon != null)
-          eIcon.applyToNode (aOption);
-      }
+      addOption (aCountry.getCountry (), sDisplayCountry);
     }
 
     if (!hasSelectedOption () || bAlwaysShowPleaseSelect)
