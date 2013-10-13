@@ -17,6 +17,7 @@
  */
 package com.phloc.webpages.info;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -25,32 +26,40 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.multimap.IMultiMapListBased;
+import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
+import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
 
 /**
- * Page with all environment variables
+ * Page with all available locales
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
+public class BasePageSysInfoLanguages extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
+    MSG_ID ("ID", "ID"),
     MSG_NAME ("Name", "Name"),
-    MSG_VALUE ("Wert", "Value");
+    MSG_LOCALES ("Locales", "Locales");
 
     private final ITextProvider m_aTP;
 
@@ -66,21 +75,21 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     }
   }
 
-  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
-                                              @Nonnull final String sName,
-                                              @Nullable final String sDescription)
+  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID,
+                                 @Nonnull final String sName,
+                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID,
-                                              @Nonnull final IReadonlyMultiLingualText aName,
-                                              @Nullable final IReadonlyMultiLingualText aDescription)
+  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID,
+                                 @Nonnull final IReadonlyMultiLingualText aName,
+                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -91,20 +100,44 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (200), HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_VALUE.getDisplayText (aDisplayLocale));
+    final IMultiMapListBased <String, Locale> aMapLanguageToLocale = new MultiHashMapArrayListBased <String, Locale> ();
+    for (final Locale aLocale : LocaleCache.getAllLocales ())
+    {
+      final String sLanguage = aLocale.getLanguage ();
+      if (sLanguage.length () > 0)
+        aMapLanguageToLocale.putSingle (sLanguage, aLocale);
+    }
+
+    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (100), new HCCol (200), HCCol.star ())
+                                            .setID (getID ());
+    aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
+                                     EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                     EText.MSG_LOCALES.getDisplayText (aDisplayLocale));
 
     // For all environment variables
-    for (final Map.Entry <String, String> aEntry : System.getenv ().entrySet ())
+    for (final Map.Entry <String, List <Locale>> aEntry : aMapLanguageToLocale.entrySet ())
     {
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (aEntry.getKey ());
-      aRow.addCell (aEntry.getValue ());
+      aRow.addCell (ContainerHelper.getFirstElement (aEntry.getValue ()).getDisplayLanguage (aDisplayLocale));
+
+      final IHCCell <?> aCell = aRow.addCell ();
+      for (final Locale aLocale : aEntry.getValue ())
+      {
+        final HCDiv aDiv = new HCDiv ();
+        final EFamFamFlagIcon eIcon = EFamFamFlagIcon.getFromIDOrNull (aLocale.getCountry ());
+        if (eIcon != null)
+          aDiv.addChild (eIcon.getAsNode ()).addChild (" ");
+        aDiv.addChild (aLocale.toString ());
+        if (aLocale.getCountry ().length () > 0)
+          aDiv.addChild (" (" + aLocale.getDisplayCountry (aDisplayLocale) + ")");
+        aCell.addChild (aDiv);
+      }
     }
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+    aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

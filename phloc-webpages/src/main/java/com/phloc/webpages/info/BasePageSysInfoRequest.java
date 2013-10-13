@@ -47,6 +47,11 @@ import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webpages.AbstractWebPageExt;
 
+/**
+ * Page with information on the current request
+ * 
+ * @author Philip Helger
+ */
 public class BasePageSysInfoRequest extends AbstractWebPageExt
 {
   @Translatable

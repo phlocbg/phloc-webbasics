@@ -47,6 +47,11 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableLong;
 import com.phloc.webpages.AbstractWebPageExt;
 
+/**
+ * Page with all threads
+ * 
+ * @author Philip Helger
+ */
 public class BasePageSysInfoThreads extends AbstractWebPageExt
 {
   @Translatable

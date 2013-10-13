@@ -55,6 +55,11 @@ import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webpages.AbstractWebPageExt;
 
+/**
+ * Page with all system properties
+ * 
+ * @author Philip Helger
+ */
 public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
 {
   @Translatable

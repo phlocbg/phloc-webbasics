@@ -46,6 +46,11 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageExt;
 
+/**
+ * Page with all time zones
+ * 
+ * @author Philip Helger
+ */
 public class BasePageSysInfoTimeZones extends AbstractWebPageExt
 {
   @Translatable
