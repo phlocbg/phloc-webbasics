@@ -7,6 +7,17 @@ $.extend( $.fn.dataTableExt.oStdClasses, {
   "sLengthSelect": "form-control input-sm"
 } );
 
+// added ph
+$.fn.dataTable.models.oSettings['aoInitComplete'].push( {
+  "fn": function(e,o){
+    // this is the <table> element
+     var wrapper = $(this).parent (); 
+     wrapper.find (".dataTables_filter input[type='text']").addClass ("form-control input-sm");
+     wrapper.find (".dataTables_length select").addClass ("form-control input-sm");
+   },
+  "sName": 'init-bootstrap3'
+} );
+
 
 /* API method to get paging information */
 $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )

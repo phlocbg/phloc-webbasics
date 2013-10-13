@@ -29,7 +29,7 @@ import com.phloc.webctrls.datatables.EDataTablesPaginationType;
 
 public class BootstrapDataTables extends DataTables
 {
-  public static final String DEFAULT_DOM = "<<'col-md-6'l><'col-md-6'f>r>t<<'col-md-6'i><'col-md-6'p>>";
+  public static final String DEFAULT_DOM = "<'row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>";
 
   public BootstrapDataTables (@Nonnull final BootstrapTable aTable)
   {
