@@ -171,9 +171,13 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getColumn (0).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableLong (aDisplayLocale));
-    aDataTables.getColumn (3).addClass (CSS_CLASS_RIGHT).setComparator (new ComparatorTableInteger (aDisplayLocale));
-    aDataTables.getColumn (5).setSortable (false);
+    aDataTables.getOrCreateColumnOfTarget (0)
+               .addClass (CSS_CLASS_RIGHT)
+               .setComparator (new ComparatorTableLong (aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (3)
+               .addClass (CSS_CLASS_RIGHT)
+               .setComparator (new ComparatorTableInteger (aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (5).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

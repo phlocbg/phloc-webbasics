@@ -133,9 +133,9 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getColumn (3).setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT",
-                                                                                                                 "S"),
-                                                                         aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (3)
+               .setComparator (new ComparatorTableInteger (new StringSkipPrefixAndSuffixFormatter ("PT", "S"),
+                                                           aDisplayLocale));
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
