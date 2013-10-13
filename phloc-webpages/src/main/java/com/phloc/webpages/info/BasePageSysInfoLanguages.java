@@ -30,6 +30,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
 import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.locale.ComparatorLocale;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -81,15 +82,15 @@ public class BasePageSysInfoLanguages extends AbstractWebPageExt
   }
 
   public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID,
-                                 @Nonnull final String sName,
-                                 @Nullable final String sDescription)
+                                   @Nonnull final String sName,
+                                   @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
   public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID,
-                                 @Nonnull final IReadonlyMultiLingualText aName,
-                                 @Nullable final IReadonlyMultiLingualText aDescription)
+                                   @Nonnull final IReadonlyMultiLingualText aName,
+                                   @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -122,12 +123,15 @@ public class BasePageSysInfoLanguages extends AbstractWebPageExt
       aRow.addCell (ContainerHelper.getFirstElement (aEntry.getValue ()).getDisplayLanguage (aDisplayLocale));
 
       final IHCCell <?> aCell = aRow.addCell ();
-      for (final Locale aLocale : aEntry.getValue ())
+      for (final Locale aLocale : ContainerHelper.getSorted (aEntry.getValue (), new ComparatorLocale ()))
       {
         final HCDiv aDiv = new HCDiv ();
         final EFamFamFlagIcon eIcon = EFamFamFlagIcon.getFromIDOrNull (aLocale.getCountry ());
         if (eIcon != null)
-          aDiv.addChild (eIcon.getAsNode ()).addChild (" ");
+        {
+          aDiv.addChild (eIcon.getAsNode ());
+          aDiv.addChild (" ");
+        }
         aDiv.addChild (aLocale.toString ());
         if (aLocale.getCountry ().length () > 0)
           aDiv.addChild (" (" + aLocale.getDisplayCountry (aDisplayLocale) + ")");
