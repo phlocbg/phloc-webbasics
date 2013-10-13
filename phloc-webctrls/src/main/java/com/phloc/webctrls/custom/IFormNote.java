@@ -26,6 +26,7 @@ import com.phloc.html.hc.IHCNode;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public interface IFormNote extends IHCNode
 {
   /* empty */

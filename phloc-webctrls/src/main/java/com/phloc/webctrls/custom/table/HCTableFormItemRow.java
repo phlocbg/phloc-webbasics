@@ -20,7 +20,6 @@ import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.IFormNote;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
 
 public class HCTableFormItemRow extends HCRow
@@ -209,7 +208,7 @@ public class HCTableFormItemRow extends HCRow
   {}
 
   @Nonnull
-  public final HCTableFormItemRow setNote (@Nullable final IFormNote aNote)
+  public final HCTableFormItemRow setNote (@Nullable final IHCNode aNote)
   {
     if (m_aNoteCell == null)
       throw new IllegalStateException ("This table has no note column!");

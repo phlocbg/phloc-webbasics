@@ -30,7 +30,6 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.IFormNote;
 
 public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm <IMPLTYPE>> extends AbstractHCTable <IMPLTYPE> implements IHCTableForm <IMPLTYPE>
 {
@@ -172,7 +171,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
-                                   @Nullable final IFormNote aNote)
+                                   @Nullable final IHCNode aNote)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (sText).setNote (aNote);
   }
@@ -180,7 +179,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
-                                   @Nullable final IFormNote aNote,
+                                   @Nullable final IHCNode aNote,
                                    @Nullable final IErrorList aFormErrors)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (sText).setErrorList (aFormErrors).setNote (aNote);
@@ -189,7 +188,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
-                                   @Nullable final IFormNote aNote)
+                                   @Nullable final IHCNode aNote)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrlBuilder).setNote (aNote);
   }
@@ -197,7 +196,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
-                                   @Nullable final IFormNote aNote)
+                                   @Nullable final IHCNode aNote)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrl).setNote (aNote);
   }
@@ -205,7 +204,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
-                                   @Nullable final IFormNote aNote)
+                                   @Nullable final IHCNode aNote)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrls).setNote (aNote);
   }
@@ -213,7 +212,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
-                                   @Nullable final IFormNote aNote,
+                                   @Nullable final IHCNode aNote,
                                    @Nullable final IErrorList aFormErrors)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrlBuilder).setErrorList (aFormErrors).setNote (aNote);
@@ -222,7 +221,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
-                                   @Nullable final IFormNote aNote,
+                                   @Nullable final IHCNode aNote,
                                    @Nullable final IErrorList aFormErrors)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrl).setErrorList (aFormErrors).setNote (aNote);
@@ -231,7 +230,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
-                                   @Nullable final IFormNote aNote,
+                                   @Nullable final IHCNode aNote,
                                    @Nullable final IErrorList aFormErrors)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrls).setErrorList (aFormErrors).setNote (aNote);

@@ -26,7 +26,6 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.IFormNote;
 
 /**
  * Base interface for a form table
@@ -69,42 +68,40 @@ public interface IHCTableForm <IMPLTYPE extends IHCTableForm <IMPLTYPE>> extends
                     @Nullable IErrorList aFormErrors);
 
   @Nonnull
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable String sText, @Nullable IFormNote aNote);
+  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable String sText, @Nullable IHCNode aNote);
 
   @Nonnull
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable String sText,
-                            @Nullable IFormNote aNote,
+                            @Nullable IHCNode aNote,
                             @Nullable IErrorList aFormErrors);
 
   @Nonnull
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
-                            @Nullable IHCNodeBuilder aCtrlBuilder,
-                            @Nullable IFormNote aNote);
+  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable IHCNodeBuilder aCtrlBuilder, @Nullable IHCNode aNote);
 
   @Nonnull
-  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl, @Nullable IFormNote aNote);
+  HCRow addItemRowWithNote (@Nullable IFormLabel aLabel, @Nullable IHCNode aCtrl, @Nullable IHCNode aNote);
 
   @Nonnull
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable Iterable <? extends IHCNode> aCtrls,
-                            @Nullable IFormNote aNote);
+                            @Nullable IHCNode aNote);
 
   @Nonnull
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable IHCNodeBuilder aCtrlBuilder,
-                            @Nullable IFormNote aNote,
+                            @Nullable IHCNode aNote,
                             @Nullable IErrorList aFormErrors);
 
   @Nonnull
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable IHCNode aCtrl,
-                            @Nullable IFormNote aNote,
+                            @Nullable IHCNode aNote,
                             @Nullable IErrorList aFormErrors);
 
   @Nonnull
   HCRow addItemRowWithNote (@Nullable IFormLabel aLabel,
                             @Nullable Iterable <? extends IHCNode> aCtrls,
-                            @Nullable IFormNote aNote,
+                            @Nullable IHCNode aNote,
                             @Nullable IErrorList aFormErrors);
 }
