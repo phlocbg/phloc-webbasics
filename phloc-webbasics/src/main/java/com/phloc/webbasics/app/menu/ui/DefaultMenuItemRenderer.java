@@ -95,7 +95,7 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   }
 
   @Override
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI, final boolean bExpanded)
+  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
   {
     aLI.addClass (CSS_CLASS_MENU_SEPARATOR);
   }
@@ -103,8 +103,8 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   @Override
   public void onMenuItemPageItem (@Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
-                                  final boolean bSelected,
-                                  final boolean bExpanded)
+                                  final boolean bIsSelected,
+                                  final boolean bIsExpanded)
   {
     aLI.addClass (CSS_CLASS_MENU_ITEM);
   }
@@ -112,8 +112,8 @@ public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends Abst
   @Override
   public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
-                                      final boolean bSelected,
-                                      final boolean bExpanded)
+                                      final boolean bIsSelected,
+                                      final boolean bIsExpanded)
   {
     aLI.addClass (CSS_CLASS_MENU_ITEM_EXTERNAL);
   }

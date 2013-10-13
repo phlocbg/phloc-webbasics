@@ -22,20 +22,60 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
+/**
+ * Action invoker interface.
+ * 
+ * @author Philip Helger
+ */
 public interface IActionInvoker
 {
+  /**
+   * Set a custom exception handler.
+   * 
+   * @param aExceptionHandler
+   *        The handler to be used. May be <code>null</code> to use none.
+   */
   void setCustomExceptionHandler (@Nullable IActionExceptionHandler aExceptionHandler);
 
+  /**
+   * @return The current custom exception handler or <code>null</code> if none
+   *         is set.
+   */
   @Nullable
   IActionExceptionHandler getCustomExceptionHandler ();
 
-  void addAction (@Nonnull String sAction, @Nonnull IActionExecutor aActionExecutor);
+  /**
+   * Register an action.
+   * 
+   * @param sAction
+   *        The name of the action. May neither be <code>null</code> nor empty.
+   * @param aActionExecutor
+   *        The executor that handles this action. The same instance is used for
+   *        all invocations!
+   */
+  void addAction (@Nonnull @Nonempty String sAction, @Nonnull IActionExecutor aActionExecutor);
 
+  /**
+   * Execute the specified action
+   * 
+   * @param sActionName
+   *        The name of the action to execute
+   * @param aRequestScope
+   *        The current request scope. May not be <code>null</code>.
+   * @param aUnifiedResponse
+   *        The response to be filled. May not be <code>null</code>.
+   * @return {@link ESuccess#FAILURE} if no executor was found for the specified
+   *         action. Never <code>null</code>.
+   * @throws Exception
+   *         In case the action specific {@link IActionExecutor} threw an
+   *         exception.
+   */
   @Nonnull
   ESuccess executeAction (@Nullable String sActionName,
                           @Nonnull IRequestWebScopeWithoutResponse aRequestScope,

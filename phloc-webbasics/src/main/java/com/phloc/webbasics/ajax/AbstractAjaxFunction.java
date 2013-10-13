@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Abstract base implementation of {@link IAjaxFunction}
@@ -44,5 +45,11 @@ public abstract class AbstractAjaxFunction implements IAjaxFunction
   public final String getName ()
   {
     return m_sFunctionName;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("functionName", m_sFunctionName).toString ();
   }
 }

@@ -25,12 +25,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCNode;
 
 /**
@@ -42,6 +44,7 @@ import com.phloc.html.hc.IHCNode;
 public class LayoutManagerProxy implements ILayoutManager
 {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("m_aRWLock")
   private final Map <String, ILayoutAreaContentProvider> m_aContentProviders = new LinkedHashMap <String, ILayoutAreaContentProvider> ();
 
   public LayoutManagerProxy ()
@@ -101,5 +104,11 @@ public class LayoutManagerProxy implements ILayoutManager
     {
       m_aRWLock.readLock ().unlock ();
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("contentProviders", m_aContentProviders).toString ();
   }
 }

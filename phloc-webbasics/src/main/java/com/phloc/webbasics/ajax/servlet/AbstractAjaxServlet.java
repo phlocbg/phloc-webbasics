@@ -89,6 +89,10 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
     }
   }
 
+  /**
+   * @return The current custom exception handler or <code>null</code> if none
+   *         is set.
+   */
   @Nullable
   public static IAjaxExceptionHandler getCustomExceptionHandler ()
   {

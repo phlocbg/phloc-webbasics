@@ -22,6 +22,11 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.url.ISimpleURL;
 
+/**
+ * A generic converted from String URI to {@link ISimpleURL}.
+ * 
+ * @author Philip Helger
+ */
 public interface IURIToURLConverter
 {
   /**

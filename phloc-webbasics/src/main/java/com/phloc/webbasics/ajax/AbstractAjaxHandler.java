@@ -23,6 +23,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -94,5 +95,11 @@ public abstract class AbstractAjaxHandler implements IAjaxHandler
 
     // Return invocation result
     return aResult;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

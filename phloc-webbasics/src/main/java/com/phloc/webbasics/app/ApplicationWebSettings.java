@@ -35,12 +35,21 @@ public final class ApplicationWebSettings
   private ApplicationWebSettings ()
   {}
 
+  /**
+   * @return The HTML version to use. Never <code>null</code>.
+   */
   @Nonnull
   public static EHTMLVersion getHTMLVersion ()
   {
     return s_eHTMLVersion;
   }
 
+  /**
+   * Set the default HTML version to use.
+   * 
+   * @param eHTMLVersion
+   *        The HTML version. May not be <code>null</code>.
+   */
   public static void setHTMLVersion (@Nonnull final EHTMLVersion eHTMLVersion)
   {
     if (eHTMLVersion == null)

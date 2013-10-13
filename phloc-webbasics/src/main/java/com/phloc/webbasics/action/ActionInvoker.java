@@ -24,11 +24,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -53,8 +55,10 @@ public final class ActionInvoker implements IActionInvoker
   private static final IStatisticsHandlerKeyedTimer s_aTimer = StatisticsManager.getKeyedTimerHandler (ActionInvoker.class);
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, IActionExecutor> m_aMap = new HashMap <String, IActionExecutor> ();
+  @GuardedBy ("m_aRWLock")
   private IActionExceptionHandler m_aExceptionHandler;
+  @GuardedBy ("m_aRWLock")
+  private final Map <String, IActionExecutor> m_aMap = new HashMap <String, IActionExecutor> ();
 
   public void setCustomExceptionHandler (@Nullable final IActionExceptionHandler aExceptionHandler)
   {
@@ -83,7 +87,7 @@ public final class ActionInvoker implements IActionInvoker
     }
   }
 
-  public void addAction (@Nonnull final String sAction, @Nonnull final IActionExecutor aActionExecutor)
+  public void addAction (@Nonnull @Nonempty final String sAction, @Nonnull final IActionExecutor aActionExecutor)
   {
     if (StringHelper.hasNoText (sAction))
       throw new IllegalArgumentException ("action");
@@ -124,7 +128,7 @@ public final class ActionInvoker implements IActionInvoker
     if (aActionExecutor == null)
     {
       // No executor found
-      s_aLogger.warn ("Failed to resolve action '" + sActionName + "'");
+      s_aLogger.error ("Failed to resolve action '" + sActionName + "'");
       return ESuccess.FAILURE;
     }
 
@@ -204,6 +208,8 @@ public final class ActionInvoker implements IActionInvoker
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
+    return new ToStringGenerator (this).append ("map", m_aMap)
+                                       .appendIfNotNull ("exceptionHandler", m_aExceptionHandler)
+                                       .toString ();
   }
 }

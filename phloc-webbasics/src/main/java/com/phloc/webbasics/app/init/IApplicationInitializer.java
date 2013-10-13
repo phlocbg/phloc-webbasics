@@ -25,6 +25,12 @@ import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.app.layout.ILayoutManager;
 
+/**
+ * Base interface for an application-specific initializer. The methods are
+ * called in the correct order they are required for dependencies.
+ * 
+ * @author Philip Helger
+ */
 public interface IApplicationInitializer
 {
   /**

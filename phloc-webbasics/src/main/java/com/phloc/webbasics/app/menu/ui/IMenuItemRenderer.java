@@ -95,9 +95,39 @@ public interface IMenuItemRenderer <T extends AbstractHCList <?>>
    */
   void onLevelUp (@Nonnull T aLastLevel);
 
-  void onMenuSeparatorItem (@Nonnull HCLI aLI, boolean bExpanded);
+  /**
+   * Callback invoked on the created node.
+   * 
+   * @param aLI
+   *        HCNode
+   */
+  void onMenuSeparatorItem (@Nonnull HCLI aLI);
 
-  void onMenuItemPageItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bSelected, boolean bExpanded);
+  /**
+   * Callback invoked on the created node.
+   * 
+   * @param aLI
+   *        HCNode
+   * @param bHasChildren
+   *        <code>true</code> if the menu item has children
+   * @param bIsSelected
+   *        <code>true</code> if the menu item is a selected menu item
+   * @param bIsExpanded
+   *        <code>true</code> if the menu item is expanded
+   */
+  void onMenuItemPageItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bIsSelected, boolean bIsExpanded);
 
-  void onMenuItemExternalItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bSelected, boolean bExpanded);
+  /**
+   * Callback invoked on the created node.
+   * 
+   * @param aLI
+   *        HCNode
+   * @param bHasChildren
+   *        <code>true</code> if the menu item has children
+   * @param bIsSelected
+   *        <code>true</code> if the menu item is a selected menu item
+   * @param bIsExpanded
+   *        <code>true</code> if the menu item is expanded
+   */
+  void onMenuItemExternalItem (@Nonnull HCLI aLI, boolean bHasChildren, boolean bIsSelected, boolean bIsExpanded);
 }

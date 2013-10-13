@@ -52,18 +52,18 @@ public abstract class AbstractMenuItemRenderer <T extends AbstractHCList <?>> im
   public void onLevelUp (@Nonnull final T aLastLevel)
   {}
 
-  public void onMenuSeparatorItem (@Nonnull final HCLI aLI, final boolean bExpanded)
+  public void onMenuSeparatorItem (@Nonnull final HCLI aLI)
   {}
 
   public void onMenuItemPageItem (@Nonnull final HCLI aLI,
                                   final boolean bHasChildren,
-                                  final boolean bSelected,
-                                  final boolean bExpanded)
+                                  final boolean bIsSelected,
+                                  final boolean bIsExpanded)
   {}
 
   public void onMenuItemExternalItem (@Nonnull final HCLI aLI,
                                       final boolean bHasChildren,
-                                      final boolean bSelected,
-                                      final boolean bExpanded)
+                                      final boolean bIsSelected,
+                                      final boolean bIsExpanded)
   {}
 }

@@ -55,6 +55,10 @@ public final class InternalErrorHandler
   private InternalErrorHandler ()
   {}
 
+  /**
+   * @return The current custom exception handler or <code>null</code> if none
+   *         is set.
+   */
   @Nullable
   public static IExceptionHandler <Throwable> getCustomExceptionHandler ()
   {
@@ -69,6 +73,13 @@ public final class InternalErrorHandler
     }
   }
 
+  /**
+   * Set the custom exception handler.
+   * 
+   * @param aCustomExceptionHandler
+   *        The exception handler to be used. May be <code>null</code> to
+   *        indicate none.
+   */
   public static void setCustomExceptionHandler (@Nullable final IExceptionHandler <Throwable> aCustomExceptionHandler)
   {
     s_aRWLock.writeLock ().lock ();

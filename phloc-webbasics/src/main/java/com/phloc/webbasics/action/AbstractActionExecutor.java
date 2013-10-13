@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
@@ -39,5 +40,11 @@ public abstract class AbstractActionExecutor implements IActionExecutor
   public DateTime getLastModificationDateTime ()
   {
     return null;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

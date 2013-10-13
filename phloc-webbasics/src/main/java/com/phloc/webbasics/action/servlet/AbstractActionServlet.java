@@ -66,7 +66,8 @@ public abstract class AbstractActionServlet extends AbstractUnifiedResponseServl
     if (StringHelper.startsWith (sAction, '/'))
       sAction = sAction.substring (1);
 
-    final IActionExecutor aActionExecutor = getActionInvoker (aRequestScope).getActionExecutor (sAction);
+    final IActionInvoker aInvoker = getActionInvoker (aRequestScope);
+    final IActionExecutor aActionExecutor = aInvoker.getActionExecutor (sAction);
     if (aActionExecutor == null)
     {
       s_aLogger.warn ("Unknown action '" + sAction + "' provided!");
@@ -93,7 +94,8 @@ public abstract class AbstractActionServlet extends AbstractUnifiedResponseServl
     final String sAction = aRequestScope.getAttributeAsString (SCOPE_ATTR_ACTION_NAME);
 
     // Handle the main action
-    if (getActionInvoker (aRequestScope).executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
+    final IActionInvoker aInvoker = getActionInvoker (aRequestScope);
+    if (aInvoker.executeAction (sAction, aRequestScope, aUnifiedResponse).isFailure ())
     {
       // Error in execution
       aUnifiedResponse.setStatus (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

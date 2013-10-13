@@ -39,6 +39,13 @@ import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.app.ApplicationWebSettings;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
+/**
+ * A utility class that handles a request, based on a
+ * {@link IRequestWebScopeWithoutResponse}, a {@link UnifiedResponse} and an
+ * {@link IHTMLProvider}.
+ * 
+ * @author Philip Helger
+ */
 @Immutable
 public final class WebHTMLCreator
 {
@@ -79,15 +86,20 @@ public final class WebHTMLCreator
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
     final boolean bIndentAndAlign = isIndentAndAlign ();
+
+    // Build the HC conversion settings to use
     final IHCConversionSettings aCS = HCSettings.getConversionSettings (bIndentAndAlign)
                                                 .getCloneIfNecessary (ApplicationWebSettings.getHTMLVersion ());
+
+    // Setup JavaScript printer
     JSPrinter.setIndentAndAlign (bIndentAndAlign);
 
-    // Build the HC tree
+    // Build the main HC tree
     final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope);
 
-    // Convert to String
+    // Convert HTML to String
     final String sXMLCode = HCSettings.getAsHTMLString (aHtml, aCS);
+
     // Write to response
     final IMimeType aMimeType = getMimeType (aRequestScope);
     aUnifiedResponse.setMimeType (aMimeType)

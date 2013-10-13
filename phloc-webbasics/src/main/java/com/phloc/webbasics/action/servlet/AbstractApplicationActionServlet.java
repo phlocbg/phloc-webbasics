@@ -24,7 +24,7 @@ import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Abstract action handling servlet
+ * Abstract action handling servlet using {@link ApplicationActionManager}.
  * 
  * @author Philip Helger
  */

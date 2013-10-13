@@ -25,6 +25,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.singleton.GlobalSingleton;
 
@@ -66,5 +67,11 @@ public final class GlobalLayoutManager extends GlobalSingleton implements ILayou
   public IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
   {
     return m_aProxy.getContentOfArea (aLEC, sAreaID);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("proxy", m_aProxy).toString ();
   }
 }

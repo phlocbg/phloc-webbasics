@@ -30,10 +30,18 @@ import com.phloc.commons.url.ISimpleURL;
  */
 public interface IAjaxFunction extends IHasName
 {
+  /**
+   * @return The URI where the AJAX function can be invoked. Neither
+   *         <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   String getInvocationURI ();
 
+  /**
+   * @return The URL where the AJAX function can be invoked. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   ISimpleURL getInvocationURL ();
 }

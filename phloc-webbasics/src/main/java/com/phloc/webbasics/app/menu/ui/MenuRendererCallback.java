@@ -132,7 +132,6 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
           }
         bHasChildren = bHasDisplayChildren;
       }
-      final boolean bExpanded = aExpandedState.booleanValue ();
       if (aMenuObj instanceof IMenuSeparator)
       {
         // separator
@@ -142,11 +141,12 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
           aLI = aParent.addAndReturnItem ((HCLI) aHCNode);
         else
           aLI = aParent.addAndReturnItem (aHCNode);
-        m_aRenderer.onMenuSeparatorItem (aLI, bExpanded);
+        m_aRenderer.onMenuSeparatorItem (aLI);
         m_aMenuItemStack.push (aLI);
       }
       else
       {
+        final boolean bExpanded = aExpandedState.booleanValue ();
         final boolean bSelected = aMenuObj.getID ().equals (m_sSelectedItem);
         if (aMenuObj instanceof IMenuItemPage)
         {

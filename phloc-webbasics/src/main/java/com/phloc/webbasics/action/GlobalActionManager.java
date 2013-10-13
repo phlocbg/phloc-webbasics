@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.ESuccess;
@@ -64,7 +65,7 @@ public final class GlobalActionManager extends GlobalSingleton implements IActio
     return m_aInvoker.getCustomExceptionHandler ();
   }
 
-  public void addAction (@Nonnull final String sAction, @Nonnull final IActionExecutor aCallback)
+  public void addAction (@Nonnull @Nonempty final String sAction, @Nonnull final IActionExecutor aCallback)
   {
     m_aInvoker.addAction (sAction, aCallback);
   }
@@ -98,6 +99,6 @@ public final class GlobalActionManager extends GlobalSingleton implements IActio
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("container", m_aInvoker).toString ();
+    return new ToStringGenerator (this).append ("invoker", m_aInvoker).toString ();
   }
 }

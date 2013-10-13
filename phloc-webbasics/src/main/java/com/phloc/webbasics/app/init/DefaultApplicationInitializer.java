@@ -25,6 +25,11 @@ import com.phloc.webbasics.action.IActionInvoker;
 import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.app.layout.ILayoutManager;
 
+/**
+ * Base class without anything in it.
+ * 
+ * @author Philip Helger
+ */
 public class DefaultApplicationInitializer implements IApplicationInitializer
 {
   public void initLocales (@Nonnull final ILocaleManager aLocaleMgr)

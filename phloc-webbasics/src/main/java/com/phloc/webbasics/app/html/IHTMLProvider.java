@@ -29,6 +29,13 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  */
 public interface IHTMLProvider
 {
+  /**
+   * Create HTML for the current request.
+   * 
+   * @param aRequestScope
+   *        The current request
+   * @return The created HTML content. May not be <code>null</code>.
+   */
   @Nonnull
   HCHtml createHTML (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 }
