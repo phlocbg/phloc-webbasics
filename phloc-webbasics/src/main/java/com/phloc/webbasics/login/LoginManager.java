@@ -44,7 +44,7 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
- * Handle the application login process.
+ * Handle the application login process. This class requires a separate UI.
  * 
  * @author Philip Helger
  */
@@ -159,7 +159,8 @@ public class LoginManager
    * @param aUnifiedResponse
    *        Response
    * @return {@link EContinue#BREAK} to indicate that no user is logged in and
-   *         therefore the login screen should be shown
+   *         therefore the login screen should be shown,
+   *         {@link EContinue#CONTINUE} if a user is correctly logged in.
    */
   @Nonnull
   public final EContinue checkUserAndShowLogin (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,

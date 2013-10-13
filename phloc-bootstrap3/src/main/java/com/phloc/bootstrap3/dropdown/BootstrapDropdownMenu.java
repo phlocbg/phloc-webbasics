@@ -48,8 +48,8 @@ public class BootstrapDropdownMenu extends HCUL
 
   @Nonnull
   public BootstrapDropdownMenu addMenuItem (@Nonnull final ISimpleURL aURL,
-                                             @Nullable final String sLabel,
-                                             final boolean bActive)
+                                            @Nullable final String sLabel,
+                                            final boolean bActive)
   {
     final HCLI aLI = addAndReturnItem (new HCA (aURL).addChild (sLabel));
     if (bActive)
@@ -59,8 +59,8 @@ public class BootstrapDropdownMenu extends HCUL
 
   @Nonnull
   public BootstrapDropdownMenu addMenuItem (@Nonnull final ISimpleURL aURL,
-                                             @Nullable final IHCNode aLabel,
-                                             final boolean bActive)
+                                            @Nullable final IHCNode aLabel,
+                                            final boolean bActive)
   {
     final HCLI aLI = addAndReturnItem (new HCA (aURL).addChild (aLabel));
     if (bActive)
@@ -112,7 +112,7 @@ public class BootstrapDropdownMenu extends HCUL
   public static <IMPLTYPE extends IHCElementWithChildren <?>> IMPLTYPE makeDropdownToggle (@Nonnull final IMPLTYPE aElement)
   {
     aElement.addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
-            .setCustomAttr ("data-toggle", "dropdown")
+            .setDataAttr ("toggle", "dropdown")
             .addChild (new BootstrapCaret ());
     return aElement;
   }

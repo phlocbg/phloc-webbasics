@@ -166,7 +166,7 @@ public class BootstrapNav extends HCUL
   {
     final HCLI aLI = addItem ().addClass (CBootstrapCSS.DROPDOWN);
     aLI.addChild (new HCA (new SimpleURL ()).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
-                                            .setCustomAttr ("data-toggle", "dropdown")
+                                            .setDataAttr ("toggle", "dropdown")
                                             .addChild (aText)
                                             .addChild (new BootstrapCaret ()));
     return aLI;

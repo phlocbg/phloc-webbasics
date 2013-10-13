@@ -32,8 +32,7 @@ import com.phloc.html.hc.impl.HCEntityNode;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends
-                                                                                                  AbstractHCDiv <THISTYPE>
+public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrapAlert <THISTYPE>> extends AbstractHCDiv <THISTYPE>
 {
   /** By default the close box is not shown */
   public static final boolean DEFAULT_SHOW_CLOSE = false;
@@ -104,7 +103,7 @@ public abstract class AbstractBootstrapAlert <THISTYPE extends AbstractBootstrap
     if (m_bShowClose)
       addChild (0,
                 new HCButton ().addClass (CBootstrapCSS.CLOSE)
-                               .setCustomAttr ("data-dismiss", "alert")
+                               .setDataAttr ("dismiss", "alert")
                                .addChild (new HCEntityNode (EHTMLEntity.times, "x")));
     if (m_bBlock)
       addClass (CBootstrapCSS.ALERT_BLOCK);

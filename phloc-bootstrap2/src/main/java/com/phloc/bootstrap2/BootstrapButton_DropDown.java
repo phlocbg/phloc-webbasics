@@ -37,7 +37,7 @@ public class BootstrapButton_DropDown extends BootstrapButton_Button
     super ();
     if (aDropDownMenu == null)
       throw new NullPointerException ("DropDownMenu");
-    addClass (CBootstrapCSS.DROPDOWN_TOGGLE).setCustomAttr ("data-toggle", "dropdown");
+    addClass (CBootstrapCSS.DROPDOWN_TOGGLE).setDataAttr ("toggle", "dropdown");
     m_aDropDownMenu = aDropDownMenu;
   }
 

@@ -181,7 +181,7 @@ public class BootstrapModal implements IHCNodeBuilder
 
       if (m_bShowCloseButton)
         aHeader.addChild (new HCButton ().addClass (CBootstrapCSS.CLOSE)
-                                         .setCustomAttr ("data-dismiss", "modal")
+                                         .setDataAttr ("dismiss", "modal")
                                          .setCustomAttr (CHTMLAttributes.ARIA_HIDDEN, "true")
                                          .addChild (new HCEntityNode (EHTMLEntity.times, "x")));
 
@@ -223,7 +223,7 @@ public class BootstrapModal implements IHCNodeBuilder
   public static BootstrapButton_Button createCloseButton ()
   {
     final BootstrapButton_Button ret = new BootstrapButton_Button ();
-    ret.setCustomAttr ("data-dismiss", "modal");
+    ret.setDataAttr ("dismiss", "modal");
     ret.setCustomAttr (CHTMLAttributes.ARIA_HIDDEN, "true");
     return ret;
   }

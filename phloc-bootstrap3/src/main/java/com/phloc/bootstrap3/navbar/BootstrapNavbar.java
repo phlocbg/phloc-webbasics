@@ -51,8 +51,8 @@ public class BootstrapNavbar extends HCNav
   private final HCDiv m_aContent;
 
   public BootstrapNavbar (@Nonnull final EBootstrapNavbarType eType,
-                           final boolean bCollapsible,
-                           @Nonnull final Locale aDisplayLocale)
+                          final boolean bCollapsible,
+                          @Nonnull final Locale aDisplayLocale)
   {
     addClasses (CBootstrapCSS.NAVBAR, CBootstrapCSS.NAVBAR_DEFAULT, eType);
     setRole (EHTMLRole.NAVIGATION);
@@ -71,8 +71,8 @@ public class BootstrapNavbar extends HCNav
       // Responsive toggle
       final HCButton aToggle = m_aHeader.addAndReturnChild (new HCButton ());
       aToggle.addClass (CBootstrapCSS.NAVBAR_TOGGLE);
-      aToggle.setCustomAttr ("data-toggle", "collapse");
-      aToggle.setCustomAttr ("data-target", "#" + sCollapseTarget);
+      aToggle.setDataAttr ("toggle", "collapse");
+      aToggle.setDataAttr ("target", "#" + sCollapseTarget);
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.SR_ONLY)
                                      .addChild (EBootstrapText.TOOGLE_NAVIGATION.getDisplayText (aDisplayLocale)));
       aToggle.addChild (new HCSpan ().addClass (CBootstrapCSS.ICON_BAR));
@@ -117,15 +117,14 @@ public class BootstrapNavbar extends HCNav
 
   @Nonnull
   public BootstrapNavbar addText (@Nonnull final EBootstrapNavbarPosition ePos,
-                                   @Nonnull final IHCElementWithChildren <?> aText)
+                                  @Nonnull final IHCElementWithChildren <?> aText)
   {
     aText.addClass (CBootstrapCSS.NAVBAR_TEXT);
     return _addNode (ePos, aText);
   }
 
   @Nonnull
-  public BootstrapNavbar addButton (@Nonnull final EBootstrapNavbarPosition ePos,
-                                     @Nonnull final IHCElement <?> aButton)
+  public BootstrapNavbar addButton (@Nonnull final EBootstrapNavbarPosition ePos, @Nonnull final IHCElement <?> aButton)
   {
     aButton.addClass (CBootstrapCSS.NAVBAR_BTN);
     return _addNode (ePos, aButton);
@@ -139,8 +138,8 @@ public class BootstrapNavbar extends HCNav
 
   @Nonnull
   public BootstrapNavbar addBrand (@Nonnull final EBootstrapNavbarPosition ePos,
-                                    @Nonnull final String sBrand,
-                                    @Nonnull final ISimpleURL aHomeLink)
+                                   @Nonnull final String sBrand,
+                                   @Nonnull final ISimpleURL aHomeLink)
   {
     return addBrand (ePos, new HCTextNode (sBrand), aHomeLink);
   }
@@ -153,8 +152,8 @@ public class BootstrapNavbar extends HCNav
 
   @Nonnull
   public BootstrapNavbar addBrand (@Nonnull final EBootstrapNavbarPosition ePos,
-                                    @Nonnull final IHCNode aBrand,
-                                    @Nonnull final ISimpleURL aHomeLink)
+                                   @Nonnull final IHCNode aBrand,
+                                   @Nonnull final ISimpleURL aHomeLink)
   {
     return _addNode (ePos, new HCA (aHomeLink).addChild (aBrand).addClass (CBootstrapCSS.NAVBAR_BRAND));
   }

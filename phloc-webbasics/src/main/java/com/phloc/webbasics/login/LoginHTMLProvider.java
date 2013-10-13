@@ -44,6 +44,11 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
+/**
+ * Provide a login screen
+ * 
+ * @author Philip Helger
+ */
 public class LoginHTMLProvider extends AbstractHTMLProvider
 {
   private final boolean m_bLoginError;

@@ -144,7 +144,7 @@ public class BootstrapMenuItemRendererNavbar extends AbstractMenuItemRenderer <H
       {
         aLI.addClass (CBootstrapCSS.DROPDOWN);
         ((HCA) aLI.getChildAtIndex (0)).addClass (CBootstrapCSS.DROPDOWN_TOGGLE)
-                                       .setCustomAttr ("data-toggle", "dropdown")
+                                       .setDataAttr ("toggle", "dropdown")
                                        .setRole (EHTMLRole.BUTTON)
                                        .addChild (new BootstrapCaret ());
       }
