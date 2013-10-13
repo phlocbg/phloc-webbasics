@@ -59,10 +59,9 @@ public enum EBootstrapWorkarounds
       final JSAnonymousFunction aAF = new JSAnonymousFunction ();
       final JSVar e = aAF.param ("e");
       aAF.body ().invoke (e, "stopPropagation");
-      return new HCScript (JQuery.elementNameRef (EHTMLElement.BODY)
-                                 .on ("touchstart.dropdown")
-                                 .arg (JQuery.classRef (CBootstrapCSS.DROPDOWN_MENU))
-                                 .arg (aAF));
+      return new HCScript (JQuery.elementNameRef (EHTMLElement.BODY).on ("touchstart.dropdown",
+                                                                         JQuery.classRef (CBootstrapCSS.DROPDOWN_MENU),
+                                                                         aAF));
     }
   };
 

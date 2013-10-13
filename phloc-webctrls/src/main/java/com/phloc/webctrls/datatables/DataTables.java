@@ -875,10 +875,13 @@ public class DataTables implements IHCNodeBuilder
          .arg (jsTable.invoke ("fnGetData").arg (jsTR).component (nColumnIndexWithDetails))
          .arg (aCellClass == null ? null : aCellClass.getCSSClass ());
     }
-    aPackage.add (JQuery.idRef (m_aTable).onClick (new JQuerySelectorList (JQuerySelector.element (EHTMLElement.TBODY),
-                                                                           JQuerySelector.element (EHTMLElement.TD),
-                                                                           JQuerySelector.element (EHTMLElement.IMG)),
-                                                   aOpenCloseCallback));
+    aPackage.add (JQuery.idRef (m_aTable)
+                        .on ()
+                        .arg ("click")
+                        .arg (new JQuerySelectorList (JQuerySelector.element (EHTMLElement.TBODY),
+                                                      JQuerySelector.element (EHTMLElement.TD),
+                                                      JQuerySelector.element (EHTMLElement.IMG)))
+                        .arg (aOpenCloseCallback));
     return getWrapped (aPackage);
   }
 
