@@ -123,12 +123,20 @@ public class CheckResponseFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         final FilterChain aChain) throws IOException, ServletException
   {
-    StatusAwareHttpResponseWrapper aWrapper = null;
+    // Works only for HTTP requests
     if (aRequest instanceof HttpServletRequest && aResponse instanceof HttpServletResponse)
-      aWrapper = new StatusAwareHttpResponseWrapper ((HttpServletResponse) aResponse);
-    aChain.doFilter (aRequest, aWrapper != null ? aWrapper : aResponse);
-    if (aWrapper != null)
+    {
+      // Create a response wrapper
+      final StatusAwareHttpResponseWrapper aWrapper = new StatusAwareHttpResponseWrapper ((HttpServletResponse) aResponse);
+      aChain.doFilter (aRequest, aWrapper);
+      // Evaluate the result
       _checkResults ((HttpServletRequest) aRequest, aWrapper);
+    }
+    else
+    {
+      // Do nothing
+      aChain.doFilter (aRequest, aResponse);
+    }
   }
 
   public void destroy ()

@@ -24,6 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.app.ApplicationLocaleManager;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
@@ -59,6 +62,8 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public abstract class WebAppListenerMultiApp extends WebAppListener
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListenerMultiApp.class);
+
   @Nonnull
   @Nonempty
   protected abstract Map <String, IApplicationInitializer> getAllInitializers ();
@@ -132,9 +137,17 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
     }
   }
 
+  @OverrideOnDemand
   protected boolean isWriteStatisticsOnEnd ()
   {
     return true;
+  }
+
+  @Nonnull
+  @Nonempty
+  protected String getStatisticsFilename ()
+  {
+    return "statistics/statistics_" + PDTIOHelper.getCurrentDateTimeForFilename () + ".xml";
   }
 
   @Override
@@ -143,14 +156,19 @@ public abstract class WebAppListenerMultiApp extends WebAppListener
     if (isWriteStatisticsOnEnd ())
     {
       // serialize statistics
-      final File aDestPath = WebFileIO.getFile ("statistics/statistics_" +
-                                                PDTIOHelper.getCurrentDateTimeForFilename () +
-                                                ".xml");
-      final IMicroDocument aDoc = StatisticsExporter.getAsXMLDocument ();
-      aDoc.getDocumentElement ().setAttribute ("location", "shutdown");
-      aDoc.getDocumentElement ().setAttribute ("datetime",
-                                               PDTWebDateUtils.getAsStringXSD (PDTFactory.getCurrentDateTime ()));
-      SimpleFileIO.writeFile (aDestPath, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+      try
+      {
+        final File aDestPath = WebFileIO.getFile (getStatisticsFilename ());
+        final IMicroDocument aDoc = StatisticsExporter.getAsXMLDocument ();
+        aDoc.getDocumentElement ().setAttribute ("location", "shutdown");
+        aDoc.getDocumentElement ().setAttribute ("datetime",
+                                                 PDTWebDateUtils.getAsStringXSD (PDTFactory.getCurrentDateTime ()));
+        SimpleFileIO.writeFile (aDestPath, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Failed to write statistics on context shutdown.", t);
+      }
     }
   }
 }

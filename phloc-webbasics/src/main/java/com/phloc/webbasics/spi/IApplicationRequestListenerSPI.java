@@ -22,8 +22,14 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.IsSPIInterface;
+import com.phloc.webbasics.action.servlet.AbstractApplicationActionServlet;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
+/**
+ * SPI interface that is invoked in {@link AbstractApplicationActionServlet}.
+ * 
+ * @author Philip Helger
+ */
 @IsSPIInterface
 public interface IApplicationRequestListenerSPI extends Serializable
 {
@@ -37,6 +43,10 @@ public interface IApplicationRequestListenerSPI extends Serializable
 
   /**
    * Called at the end of a request.
+   * 
+   * @param bExceptionOccurred
+   *        <code>true</code> if an exception occurred, <code>false</code> if
+   *        not.
    */
-  void onRequestEnd ();
+  void onRequestEnd (boolean bExceptionOccurred);
 }

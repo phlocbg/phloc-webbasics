@@ -52,29 +52,41 @@ public class LoginManager
 {
   /**
    * Attribute name for the LoginInfo attribute that holds the remote address of
-   * the last request
+   * the last request. Type: String.
    */
   public static final String LOGIN_INFO_REMOTE_ADDRESS = "remote-address";
+
   /**
    * Attribute name for the LoginInfo attribute that holds the remote host of
-   * the last request
+   * the last request. Type: String.
    */
   public static final String LOGIN_INFO_REMOTE_HOST = "remote-host";
+
   /**
    * Attribute name for the LoginInfo attribute that holds the URI (without the
-   * query string) of the last request
+   * query string) of the last request. Type: String.
    */
   public static final String LOGIN_INFO_REQUEST_URI = "request-uri";
+
   /**
    * Attribute name for the LoginInfo attribute that holds the query string of
-   * the last request
+   * the last request. Type: String.
    */
   public static final String LOGIN_INFO_QUERY_STRING = "query-string";
+
   /**
    * Attribute name for the LoginInfo attribute that holds the user-agent string
-   * of the last request
+   * of the last request. Type: String.
    */
   public static final String LOGIN_INFO_USER_AGENT = "user-agent";
+
+  /**
+   * Attribute name for the LoginInfo attribute that holds the number of
+   * requests in this session. Type: int.
+   * 
+   * @since 2.1.12
+   */
+  public static final String LOGIN_INFO_REQUEST_COUNT = "request-count";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoginManager.class);
   private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
@@ -149,6 +161,7 @@ public class LoginManager
     aLoginInfo.setAttribute (LOGIN_INFO_QUERY_STRING, aRequestScope.getQueryString ());
     aLoginInfo.setAttribute (LOGIN_INFO_USER_AGENT,
                              UserAgentDatabase.getHttpUserAgentStringFromRequest (aRequestScope.getRequest ()));
+    aLoginInfo.setAttribute (LOGIN_INFO_REQUEST_COUNT, aLoginInfo.getAttributeAsInt (LOGIN_INFO_REQUEST_COUNT, 0) + 1);
   }
 
   /**

@@ -84,31 +84,41 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
 
   /** Name of the initialization parameter to enable tracing. */
   public static final String DEFAULT_INIT_PARAMETER_TRACE = "trace";
+
   /** Name of the initialization parameter to enable debug. */
   public static final String DEFAULT_INIT_PARAMETER_DEBUG = "debug";
+
   /** Name of the initialization parameter to enable production mode. */
   public static final String DEFAULT_INIT_PARAMETER_PRODUCTION = "production";
+
   /** Name of the initialization parameter for the storagePath. */
   public static final String INIT_PARAMETER_STORAGE_PATH = "storagePath";
+
   /** Name of the initialization parameter to disable logging the startup info. */
   public static final String INIT_PARAMETER_NO_STARTUP_INFO = "noStartupInfo";
+
   /**
    * Name of the initialization parameter that contains the server URL for
    * non-production mode.
    */
   public static final String INIT_PARAMETER_SERVER_URL = "serverUrl";
+
   /**
    * Name of the initialization parameter that contains the server URL for
    * production mode.
    */
   public static final String INIT_PARAMETER_SERVER_URL_PRODUCTION = "serverUrlProduction";
+
   /**
    * Name of the initialization parameter to disable the file access check on
    * startup.
    */
   public static final String INIT_PARAMETER_NO_CHECK_FILE_ACCESS = "noCheckFileAccess";
 
-  protected static final String ID_FILENAME = "persistent_id.dat";
+  /**
+   * The default file name where the global unique IDs are stored.
+   */
+  public static final String ID_FILENAME = "persistent_id.dat";
 
   /** The logger to use. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListener.class);
@@ -301,6 +311,44 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
   }
 
   /**
+   * Get the value of the servlet context init-parameter that represents the
+   * <b>no-startup-info</b> flag. This value is than converted to a boolean
+   * internally.
+   * 
+   * @param aSC
+   *        The servlet context under investigation. Never <code>null</code>.
+   * @return The string value of the <b>no-startup-info</b> init-parameter. May
+   *         be <code>null</code> if no such init-parameter is present.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getInitParameterNoStartupInfo (@Nonnull final ServletContext aSC)
+  {
+    return aSC.getInitParameter (INIT_PARAMETER_NO_STARTUP_INFO);
+  }
+
+  /**
+   * Get the value of the servlet context init-parameter that represents the
+   * <b>no-startup-info</b> flag. This value is than converted to a boolean
+   * internally.
+   * 
+   * @param aSC
+   *        The servlet context under investigation. Never <code>null</code>.
+   * @param bProductionMode
+   *        <code>true</code> if we're in production mode, <code>false</code> if
+   *        not.
+   * @return The string value of the <b>no-startup-info</b> init-parameter. May
+   *         be <code>null</code> if no such init-parameter is present.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getInitParameterServerURL (@Nonnull final ServletContext aSC, final boolean bProductionMode)
+  {
+    final String sParameterName = bProductionMode ? INIT_PARAMETER_SERVER_URL_PRODUCTION : INIT_PARAMETER_SERVER_URL;
+    return aSC.getInitParameter (sParameterName);
+  }
+
+  /**
    * Get the data path to be used for this application. By default the servlet
    * context init-parameter {@link #INIT_PARAMETER_STORAGE_PATH} is evaluated.
    * If non is present, the servlet context path is used.
@@ -374,18 +422,16 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
     GlobalDebug.setDebugModeDirect (bDebugMode);
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
-    final boolean bNoStartupInfo = StringParser.parseBool (aSC.getInitParameter (INIT_PARAMETER_NO_STARTUP_INFO));
+    final boolean bNoStartupInfo = StringParser.parseBool (getInitParameterNoStartupInfo (aSC));
     if (!bNoStartupInfo)
     {
-      // Requires the global debug things to present
+      // Requires the global debug things to be present
       logStartupInfo (aSC);
     }
 
     // StaticServerInfo
     {
-      final String sInitParameterName = bProductionMode ? INIT_PARAMETER_SERVER_URL_PRODUCTION
-                                                       : INIT_PARAMETER_SERVER_URL;
-      final String sInitParameter = aSC.getInitParameter (sInitParameterName);
+      final String sInitParameter = getInitParameterServerURL (aSC, bProductionMode);
       if (StringHelper.hasText (sInitParameter))
       {
         final URL aURL = URLUtils.getAsURL (sInitParameter);
@@ -394,9 +440,9 @@ public class WebAppListener implements ServletContextListener, HttpSessionListen
           StaticServerInfo.init (aURL.getProtocol (), aURL.getHost (), aURL.getPort (), aSC.getContextPath ());
         }
         else
-          s_aLogger.error ("The init-parameter '" +
-                           sInitParameterName +
-                           "' contains the non-URL value '" +
+          s_aLogger.error ("The init-parameter for the server URL" +
+                           (bProductionMode ? " (production mode)" : " (non-production mode)") +
+                           "contains the non-URL value '" +
                            sInitParameter +
                            "'");
       }

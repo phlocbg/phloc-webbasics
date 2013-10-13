@@ -17,11 +17,14 @@
  */
 package com.phloc.webbasics.servlet;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
 import javax.servlet.ServletException;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.mime.CMimeType;
+import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.web.servlet.response.UnifiedResponse;
@@ -36,17 +39,23 @@ import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
  */
 public final class PingPongServlet extends AbstractUnifiedResponseServlet
 {
-  private static final IStatisticsHandlerCounter s_aStatsPingPong = StatisticsManager.getCounterHandler (PingPongServlet.class);
-
   /** The response string to send. */
-  private static final String RESPONSE_TEXT = "pong";
+  public static final String RESPONSE_TEXT = "pong";
+
+  /** The response charset */
+  public static final Charset RESPONSE_CHARSET = CCharset.CHARSET_ISO_8859_1_OBJ;
+
+  /** The response MIME type */
+  public static final IMimeType RESPONSE_MIMETYPE = CMimeType.TEXT_PLAIN;
+
+  private static final IStatisticsHandlerCounter s_aStatsPingPong = StatisticsManager.getCounterHandler (PingPongServlet.class);
 
   @Override
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException
   {
-    aUnifiedResponse.setContentAndCharset (RESPONSE_TEXT, CCharset.CHARSET_ISO_8859_1_OBJ)
-                    .setMimeType (CMimeType.TEXT_PLAIN)
+    aUnifiedResponse.setContentAndCharset (RESPONSE_TEXT, RESPONSE_CHARSET)
+                    .setMimeType (RESPONSE_MIMETYPE)
                     .disableCaching ();
     s_aStatsPingPong.increment ();
   }

@@ -31,6 +31,11 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
+/**
+ * Manager for {@link UserDataObject} objects.
+ * 
+ * @author Philip Helger
+ */
 public final class UserDataManager
 {
   /**

@@ -38,7 +38,7 @@ import com.phloc.commons.url.SimpleURL;
  * 
  * @author Philip Helger
  */
-public final class UserDataObject implements Serializable
+public class UserDataObject implements Serializable
 {
   private final String m_sPath;
 

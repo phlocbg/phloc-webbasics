@@ -27,6 +27,14 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.IHasType;
 import com.phloc.commons.type.ObjectType;
 
+/**
+ * A special wrapper that wraps an arbitrary object into an {@link IHasUIState}
+ * object.
+ * 
+ * @author Philip Helger
+ * @param <T>
+ *        Wrapped oject data tapye
+ */
 public class UIStateWrapper <T extends Serializable> implements IHasUIState
 {
   private final ObjectType m_aObjectType;
@@ -48,6 +56,9 @@ public class UIStateWrapper <T extends Serializable> implements IHasUIState
     return m_aObjectType;
   }
 
+  /**
+   * @return The wrapped object. Never <code>null</code>.
+   */
   @Nonnull
   public T getObject ()
   {

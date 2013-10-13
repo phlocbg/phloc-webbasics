@@ -80,7 +80,7 @@ public abstract class AbstractApplicationServlet extends AbstractUnifiedResponse
     for (final IApplicationRequestListenerSPI aListener : m_aListeners)
       try
       {
-        aListener.onRequestEnd ();
+        aListener.onRequestEnd (bExceptionOccurred);
       }
       catch (final Throwable t)
       {
@@ -91,7 +91,8 @@ public abstract class AbstractApplicationServlet extends AbstractUnifiedResponse
   /**
    * @param aRequestScope
    *        The request scope
-   * @return The HTML provider that creates the content.
+   * @return The HTML provider that creates the content. May not be
+   *         <code>null</code>.
    */
   @OverrideOnDemand
   @Nonnull
@@ -105,6 +106,8 @@ public abstract class AbstractApplicationServlet extends AbstractUnifiedResponse
     {
       // Who is responsible for creating the HTML?
       final IHTMLProvider aHTMLProvider = createHTMLProvider (aRequestScope);
+
+      // Create the HTML and put it into the response
       WebHTMLCreator.createHTMLResponse (aRequestScope, aUnifiedResponse, aHTMLProvider);
     }
     catch (final Throwable t)
