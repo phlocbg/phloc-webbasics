@@ -51,6 +51,14 @@ public class HCFineUploaderBasic implements IHCNodeBuilder
     m_aUploader = aUploader;
   }
 
+  /**
+   * Set the button object to use. The button element MUST NOT be manually
+   * attached to the response tree - this happens inside!
+   * 
+   * @param aButton
+   *        The button object to use. May be <code>null</code>.
+   * @return thsi
+   */
   @Nonnull
   public HCFineUploaderBasic setButtonToUse (@Nullable final IHCElement <?> aButton)
   {

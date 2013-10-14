@@ -22,7 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.json.impl.JSONObject;
+import com.phloc.html.js.builder.JSAssocArray;
 
 public class FineUploader extends FineUploaderBasic
 {
@@ -32,28 +32,26 @@ public class FineUploader extends FineUploaderBasic
   }
 
   @Override
-  protected void extendJSONMessages (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
+  protected void extendJSONMessages (@Nonnull final JSAssocArray aMessages, @Nonnull final Locale aDisplayLocale)
   {
-    aMessages.setStringProperty ("tooManyFilesError",
-                                 EFineUploaderText.TOO_MANY_FILE_ERROR.getDisplayText (aDisplayLocale));
+    aMessages.add ("tooManyFilesError", EFineUploaderText.TOO_MANY_FILE_ERROR.getDisplayText (aDisplayLocale));
   }
 
   @Override
-  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nullable final Locale aDisplayLocale)
+  protected void extendJSON (@Nonnull final JSAssocArray aRoot, @Nullable final Locale aDisplayLocale)
   {
     if (aDisplayLocale != null)
     {
-      final JSONObject aText = new JSONObject ();
-      aText.setStringProperty ("uploadButton", EFineUploaderText.UPLOAD_BUTTON.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("cancelButton", EFineUploaderText.CANCEL_BUTTON.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("retryButton", EFineUploaderText.RETRY_BUTTON.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("failUpload", EFineUploaderText.FAIL_UPLOAD.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("dragZone", EFineUploaderText.DRAG_ZONE.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("dropProcessing", EFineUploaderText.DROP_PROCESSING.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("formatProgress", EFineUploaderText.FORMAT_PROGRESS.getDisplayText (aDisplayLocale));
-      aText.setStringProperty ("waitingForResponse",
-                               EFineUploaderText.WAITING_FOR_RESPONSE.getDisplayText (aDisplayLocale));
-      aRoot.setObjectProperty ("text", aText);
+      final JSAssocArray aText = new JSAssocArray ();
+      aText.add ("uploadButton", EFineUploaderText.UPLOAD_BUTTON.getDisplayText (aDisplayLocale));
+      aText.add ("cancelButton", EFineUploaderText.CANCEL_BUTTON.getDisplayText (aDisplayLocale));
+      aText.add ("retryButton", EFineUploaderText.RETRY_BUTTON.getDisplayText (aDisplayLocale));
+      aText.add ("failUpload", EFineUploaderText.FAIL_UPLOAD.getDisplayText (aDisplayLocale));
+      aText.add ("dragZone", EFineUploaderText.DRAG_ZONE.getDisplayText (aDisplayLocale));
+      aText.add ("dropProcessing", EFineUploaderText.DROP_PROCESSING.getDisplayText (aDisplayLocale));
+      aText.add ("formatProgress", EFineUploaderText.FORMAT_PROGRESS.getDisplayText (aDisplayLocale));
+      aText.add ("waitingForResponse", EFineUploaderText.WAITING_FOR_RESPONSE.getDisplayText (aDisplayLocale));
+      aRoot.add ("text", aText);
     }
   }
 }

@@ -34,8 +34,9 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.html.js.builder.JSArray;
+import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.jquery.JQuery;
-import com.phloc.json.impl.JSONObject;
 
 /**
  * Wrapper for Fineuploader 3.1.1
@@ -677,7 +678,7 @@ public class FineUploaderBasic
    *        if none passed.
    */
   @OverrideOnDemand
-  protected void extendJSON (@Nonnull final JSONObject aRoot, @Nullable final Locale aDisplayLocale)
+  protected void extendJSON (@Nonnull final JSAssocArray aRoot, @Nullable final Locale aDisplayLocale)
   {}
 
   /**
@@ -687,101 +688,99 @@ public class FineUploaderBasic
    *        The locale to be used for test resolving
    */
   @OverrideOnDemand
-  protected void extendJSONMessages (@Nonnull final JSONObject aMessages, @Nonnull final Locale aDisplayLocale)
+  protected void extendJSONMessages (@Nonnull final JSAssocArray aMessages, @Nonnull final Locale aDisplayLocale)
   {}
 
   @Nonnull
-  public final JSONObject getJSON ()
+  public final JSAssocArray getJSON ()
   {
-    final JSONObject ret = new JSONObject ();
+    final JSAssocArray ret = new JSAssocArray ();
     if (m_bDebug != DEFAULT_DEBUG)
-      ret.setBooleanProperty ("debug", m_bDebug);
+      ret.add ("debug", m_bDebug);
     if (StringHelper.hasText (m_sButtonElementID))
-      ret.setFunctionPrebuildProperty ("button", JQuery.idRef (m_sButtonElementID).component0 ().getJSCode ());
+      ret.add ("button", JQuery.idRef (m_sButtonElementID).component0 ());
     if (m_bMultiple != DEFAULT_MULTIPLE)
-      ret.setBooleanProperty ("multiple", m_bMultiple);
+      ret.add ("multiple", m_bMultiple);
     if (m_nMaxConnections != DEFAULT_MAX_CONNECTIONS)
-      ret.setIntegerProperty ("maxConnections", m_nMaxConnections);
+      ret.add ("maxConnections", m_nMaxConnections);
     if (m_bDisableCancelForFormUploads != DEFAULT_DISABLE_CANCEL_FOR_FORM_UPLOADS)
-      ret.setBooleanProperty ("disableCancelForFormUploads", m_bDisableCancelForFormUploads);
+      ret.add ("disableCancelForFormUploads", m_bDisableCancelForFormUploads);
     if (m_bAutoUpload != DEFAULT_AUTO_UPLOAD)
-      ret.setBooleanProperty ("autoUpload", m_bAutoUpload);
+      ret.add ("autoUpload", m_bAutoUpload);
 
     // request
     {
-      final JSONObject aRequest = new JSONObject ();
+      final JSAssocArray aRequest = new JSAssocArray ();
       if (!m_aRequestEndpoint.equals (DEFAULT_REQUEST_ENDPOINT))
-        aRequest.setStringProperty ("endpoint", m_aRequestEndpoint.getAsString ());
+        aRequest.add ("endpoint", m_aRequestEndpoint.getAsString ());
       if (!m_aRequestParams.isEmpty ())
       {
-        final JSONObject aParams = new JSONObject ();
+        final JSAssocArray aParams = new JSAssocArray ();
         for (final Map.Entry <String, String> aEntry : m_aRequestParams.entrySet ())
-          aParams.setStringProperty (aEntry.getKey (), aEntry.getValue ());
-        aRequest.setObjectProperty ("params", aParams);
+          aParams.add (aEntry.getKey (), aEntry.getValue ());
+        aRequest.add ("params", aParams);
       }
       if (m_bRequestParamsInBody != DEFAULT_REQUEST_PARAMS_IN_BODY)
-        aRequest.setBooleanProperty ("paramsInBody", m_bRequestParamsInBody);
+        aRequest.add ("paramsInBody", m_bRequestParamsInBody);
       if (!m_aRequestCustomHeaders.isEmpty ())
       {
-        final JSONObject aCustomHeaders = new JSONObject ();
+        final JSAssocArray aCustomHeaders = new JSAssocArray ();
         for (final Map.Entry <String, String> aEntry : m_aRequestCustomHeaders.entrySet ())
-          aCustomHeaders.setStringProperty (aEntry.getKey (), aEntry.getValue ());
-        aRequest.setObjectProperty ("customHeaders", aCustomHeaders);
+          aCustomHeaders.add (aEntry.getKey (), aEntry.getValue ());
+        aRequest.add ("customHeaders", aCustomHeaders);
       }
       if (m_bRequestForceMultipart != DEFAULT_REQUEST_FORCE_MULTIPART)
-        aRequest.setBooleanProperty ("forceMultipart", m_bRequestForceMultipart);
+        aRequest.add ("forceMultipart", m_bRequestForceMultipart);
       if (!m_sRequestInputName.equals (DEFAULT_REQUEST_INPUT_NAME))
-        aRequest.setStringProperty ("inputName", m_sRequestInputName);
+        aRequest.add ("inputName", m_sRequestInputName);
 
       if (!aRequest.isEmpty ())
-        ret.setObjectProperty ("request", aRequest);
+        ret.add ("request", aRequest);
     }
 
     // validation
     {
-      final JSONObject aValidation = new JSONObject ();
+      final JSAssocArray aValidation = new JSAssocArray ();
       if (!m_aValidationAllowedExtensions.isEmpty ())
-        aValidation.setStringListProperty ("allowedExtensions", m_aValidationAllowedExtensions);
+        aValidation.add ("allowedExtensions", new JSArray ().addAll (m_aValidationAllowedExtensions));
       if (m_nValidationSizeLimit != DEFAULT_VALIDATION_SIZE_LIMIT)
-        aValidation.setIntegerProperty ("sizeLimit", m_nValidationSizeLimit);
+        aValidation.add ("sizeLimit", m_nValidationSizeLimit);
       if (m_nValidationMinSizeLimit != DEFAULT_VALIDATION_MIN_SIZE_LIMIT)
-        aValidation.setIntegerProperty ("minSizeLimit", m_nValidationMinSizeLimit);
+        aValidation.add ("minSizeLimit", m_nValidationMinSizeLimit);
       if (m_bValidationStopOnFirstInvalidFile != DEFAULT_VALIDATION_STOP_ON_FIRST_INVALID_FILE)
-        aValidation.setBooleanProperty ("stopOnFirstInvalidFile", m_bValidationStopOnFirstInvalidFile);
+        aValidation.add ("stopOnFirstInvalidFile", m_bValidationStopOnFirstInvalidFile);
       if (!aValidation.isEmpty ())
-        ret.setObjectProperty ("validation", aValidation);
+        ret.add ("validation", aValidation);
     }
 
     // messages
     if (m_aDisplayLocale != null)
     {
-      final JSONObject aMessages = new JSONObject ();
-      aMessages.setStringProperty ("typeError", EFineUploaderBasicText.TYPE_ERROR.getDisplayText (m_aDisplayLocale));
-      aMessages.setStringProperty ("sizeError", EFineUploaderBasicText.SIZE_ERROR.getDisplayText (m_aDisplayLocale));
-      aMessages.setStringProperty ("minSizeError",
-                                   EFineUploaderBasicText.MIN_SIZE_ERROR.getDisplayText (m_aDisplayLocale));
-      aMessages.setStringProperty ("emptyError", EFineUploaderBasicText.EMPTY_ERROR.getDisplayText (m_aDisplayLocale));
-      aMessages.setStringProperty ("noFilesError",
-                                   EFineUploaderBasicText.NO_FILES_ERROR.getDisplayText (m_aDisplayLocale));
-      aMessages.setStringProperty ("onLeave", EFineUploaderBasicText.ON_LEAVE.getDisplayText (m_aDisplayLocale));
+      final JSAssocArray aMessages = new JSAssocArray ();
+      aMessages.add ("typeError", EFineUploaderBasicText.TYPE_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.add ("sizeError", EFineUploaderBasicText.SIZE_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.add ("minSizeError", EFineUploaderBasicText.MIN_SIZE_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.add ("emptyError", EFineUploaderBasicText.EMPTY_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.add ("noFilesError", EFineUploaderBasicText.NO_FILES_ERROR.getDisplayText (m_aDisplayLocale));
+      aMessages.add ("onLeave", EFineUploaderBasicText.ON_LEAVE.getDisplayText (m_aDisplayLocale));
       // extended
       extendJSONMessages (aMessages, m_aDisplayLocale);
-      ret.setObjectProperty ("messages", aMessages);
+      ret.add ("messages", aMessages);
     }
 
     // retry
     {
-      final JSONObject aRetry = new JSONObject ();
+      final JSAssocArray aRetry = new JSAssocArray ();
       if (m_bRetryEnableAuto != DEFAULT_RETRY_ENABLE_AUTO)
-        aRetry.setBooleanProperty ("enableAuto", m_bRetryEnableAuto);
+        aRetry.add ("enableAuto", m_bRetryEnableAuto);
       if (m_nRetryMaxAutoAttempts != DEFAULT_RETRY_MAX_AUTO_ATTEMPTS)
-        aRetry.setIntegerProperty ("maxAutoAttempts", m_nRetryMaxAutoAttempts);
+        aRetry.add ("maxAutoAttempts", m_nRetryMaxAutoAttempts);
       if (m_nRetryAutoAttemptDelay != DEFAULT_RETRY_AUTO_ATTEMPT_DELAY)
-        aRetry.setIntegerProperty ("autoAttemptDelay", m_nRetryAutoAttemptDelay);
+        aRetry.add ("autoAttemptDelay", m_nRetryAutoAttemptDelay);
       if (!DEFAULT_RETRY_PREVENT_RETRY_RESPONSE_PROPERTY.equals (m_sRetryPreventRetryResponseProperty))
-        aRetry.setStringProperty ("preventRetryResponseProperty", m_sRetryPreventRetryResponseProperty);
+        aRetry.add ("preventRetryResponseProperty", m_sRetryPreventRetryResponseProperty);
       if (!aRetry.isEmpty ())
-        ret.setObjectProperty ("retry", aRetry);
+        ret.add ("retry", aRetry);
     }
 
     extendJSON (ret, m_aDisplayLocale);
