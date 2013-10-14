@@ -32,6 +32,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
+import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.tree.utils.walk.TreeWalker;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.html.hc.IHCNode;
@@ -116,6 +117,27 @@ public class PageShowChildren extends AbstractWebPage
 
   private final IMenuTree m_aMenuTree;
   private final PageShowChildrenRenderer m_aRenderer;
+
+  public PageShowChildren (@Nonnull @Nonempty final String sID,
+                           @Nonnull final IReadonlyMultiLingualText aName,
+                           @Nonnull final IMenuTree aMenuTree)
+  {
+    this (sID, aName, aMenuTree, new PageShowChildrenRenderer ());
+  }
+
+  public PageShowChildren (@Nonnull @Nonempty final String sID,
+                           @Nonnull final IReadonlyMultiLingualText aName,
+                           @Nonnull final IMenuTree aMenuTree,
+                           @Nonnull final PageShowChildrenRenderer aRenderer)
+  {
+    super (sID, aName);
+    if (aMenuTree == null)
+      throw new NullPointerException ("menuTree");
+    if (aRenderer == null)
+      throw new NullPointerException ("renderer");
+    m_aMenuTree = aMenuTree;
+    m_aRenderer = aRenderer;
+  }
 
   public PageShowChildren (@Nonnull @Nonempty final String sID,
                            @Nonnull final String sName,
