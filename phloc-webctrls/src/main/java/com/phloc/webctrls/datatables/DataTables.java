@@ -625,6 +625,35 @@ public class DataTables implements IHCNodeBuilder
   protected void addCodeAfterDataTables (@Nonnull final JSPackage aPackage, @Nonnull final JSVar aJSTable)
   {}
 
+  @Nonnull
+  public static JSAssocArray createLanguageJson (@Nonnull final Locale aDisplayLocale)
+  {
+    final JSAssocArray aLanguage = new JSAssocArray ();
+    aLanguage.add ("oAria",
+                   new JSAssocArray ().add ("sSortAscending",
+                                            EDataTablesText.SORT_ASCENDING.getDisplayText (aDisplayLocale))
+                                      .add ("sSortDescending",
+                                            EDataTablesText.SORT_DESCENDING.getDisplayText (aDisplayLocale)));
+    aLanguage.add ("oPaginate",
+                   new JSAssocArray ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (aDisplayLocale))
+                                      .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (aDisplayLocale))
+                                      .add ("sNext", EDataTablesText.NEXT.getDisplayText (aDisplayLocale))
+                                      .add ("sLast", EDataTablesText.LAST.getDisplayText (aDisplayLocale)));
+    aLanguage.add ("sEmptyTable", EDataTablesText.EMPTY_TABLE.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sInfo", EDataTablesText.INFO.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sInfoEmpty", EDataTablesText.INFO_EMPTY.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sInfoFiltered", EDataTablesText.INFO_FILTERED.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sInfoPostFix", EDataTablesText.INFO_POSTFIX.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sInfoThousands", EDataTablesText.INFO_THOUSANDS.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sLengthMenu", EDataTablesText.LENGTH_MENU.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sLoadingRecords", EDataTablesText.LOADING_RECORDS.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sUrl", "");
+    aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (aDisplayLocale));
+    return aLanguage;
+  }
+
   @Nullable
   public IHCNode build ()
   {
@@ -771,28 +800,7 @@ public class DataTables implements IHCNodeBuilder
     // Display texts
     if (m_aDisplayLocale != null)
     {
-      final JSAssocArray aLanguage = new JSAssocArray ();
-      aLanguage.add ("oAria",
-                     new JSAssocArray ().add ("sSortAscending",
-                                              EDataTablesText.SORT_ASCENDING.getDisplayText (m_aDisplayLocale))
-                                        .add ("sSortDescending",
-                                              EDataTablesText.SORT_DESCENDING.getDisplayText (m_aDisplayLocale)));
-      aLanguage.add ("oPaginate",
-                     new JSAssocArray ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (m_aDisplayLocale))
-                                        .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (m_aDisplayLocale))
-                                        .add ("sNext", EDataTablesText.NEXT.getDisplayText (m_aDisplayLocale))
-                                        .add ("sLast", EDataTablesText.LAST.getDisplayText (m_aDisplayLocale)));
-      aLanguage.add ("sEmptyTable", EDataTablesText.EMPTY_TABLE.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfo", EDataTablesText.INFO.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoEmpty", EDataTablesText.INFO_EMPTY.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoFiltered", EDataTablesText.INFO_FILTERED.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoPostFix", EDataTablesText.INFO_POSTFIX.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sInfoThousands", EDataTablesText.INFO_THOUSANDS.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sLengthMenu", EDataTablesText.LENGTH_MENU.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sLoadingRecords", EDataTablesText.LOADING_RECORDS.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (m_aDisplayLocale));
+      final JSAssocArray aLanguage = createLanguageJson (m_aDisplayLocale);
       aParams.add ("oLanguage", aLanguage);
     }
 

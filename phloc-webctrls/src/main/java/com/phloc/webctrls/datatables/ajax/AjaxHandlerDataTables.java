@@ -45,6 +45,11 @@ import com.phloc.webctrls.datatables.CDataTables;
 import com.phloc.webctrls.datatables.EDataTablesFilterType;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
+/**
+ * AJAX handler for filling DataTables
+ * 
+ * @author Philip Helger
+ */
 public class AjaxHandlerDataTables extends AbstractAjaxHandler
 {
   private static final class RequestComparator extends AbstractComparator <DataTablesServerDataRow>
