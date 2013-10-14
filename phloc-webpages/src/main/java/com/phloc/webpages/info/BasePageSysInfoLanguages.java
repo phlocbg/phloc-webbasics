@@ -47,6 +47,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 /**
  * Page with all available locales
@@ -74,6 +75,11 @@ public class BasePageSysInfoLanguages extends AbstractWebPageExt
     {
       return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
     }
+  }
+
+  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_LANGUAGES.getAsMLT ());
   }
 
   public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

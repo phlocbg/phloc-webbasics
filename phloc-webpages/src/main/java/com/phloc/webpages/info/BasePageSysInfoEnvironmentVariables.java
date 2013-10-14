@@ -38,6 +38,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 /**
  * Page with all environment variables
@@ -64,6 +65,11 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
     {
       return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
     }
+  }
+
+  public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_ENV_VARS.getAsMLT ());
   }
 
   public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

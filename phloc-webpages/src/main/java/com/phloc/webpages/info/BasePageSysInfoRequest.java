@@ -46,6 +46,7 @@ import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 /**
  * Page with information on the current request
@@ -76,6 +77,11 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
     {
       return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
     }
+  }
+
+  public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_REQUEST.getAsMLT ());
   }
 
   public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

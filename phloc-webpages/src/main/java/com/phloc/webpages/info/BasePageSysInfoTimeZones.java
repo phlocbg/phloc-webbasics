@@ -45,6 +45,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 /**
  * Page with all time zones
@@ -76,6 +77,11 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
     {
       return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
     }
+  }
+
+  public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_TIMEZONES.getAsMLT ());
   }
 
   public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)

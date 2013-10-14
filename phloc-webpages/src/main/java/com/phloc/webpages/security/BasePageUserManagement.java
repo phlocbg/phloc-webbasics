@@ -155,32 +155,32 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
   public static final String ACTION_RESET_PASSWORD = "resetpw";
 
-  private final Locale m_aDefaultUserLocale;
+  private Locale m_aDefaultUserLocale;
 
-  public BasePageUserManagement (@Nonnull @Nonempty final String sID,
-                                 @Nonnull @Nonempty final String sName,
-                                 @Nullable final Locale aDefaultUserLocale)
+  public BasePageUserManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
-    m_aDefaultUserLocale = aDefaultUserLocale;
   }
 
   public BasePageUserManagement (@Nonnull @Nonempty final String sID,
                                  @Nonnull final String sName,
-                                 @Nullable final String sDescription,
-                                 @Nullable final Locale aDefaultUserLocale)
+                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
-    m_aDefaultUserLocale = aDefaultUserLocale;
   }
 
   public BasePageUserManagement (@Nonnull @Nonempty final String sID,
                                  @Nonnull final IReadonlyMultiLingualText aName,
-                                 @Nullable final IReadonlyMultiLingualText aDescription,
-                                 @Nullable final Locale aDefaultUserLocale)
+                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
+  }
+
+  @Nonnull
+  public BasePageUserManagement setDefaultUserLocale (@Nullable final Locale aDefaultUserLocale)
+  {
     m_aDefaultUserLocale = aDefaultUserLocale;
+    return this;
   }
 
   @Override

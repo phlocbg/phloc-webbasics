@@ -46,6 +46,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableLong;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 /**
  * Page with all threads
@@ -76,6 +77,11 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
     {
       return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
     }
+  }
+
+  public BasePageSysInfoThreads (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_THREADS.getAsMLT ());
   }
 
   public BasePageSysInfoThreads (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

@@ -54,6 +54,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 /**
  * Page with all system properties
@@ -110,6 +111,11 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     {
       return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
     }
+  }
+
+  public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_SYS_PROPS.getAsMLT ());
   }
 
   public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

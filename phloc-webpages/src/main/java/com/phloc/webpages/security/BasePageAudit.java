@@ -44,6 +44,7 @@ import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
+import com.phloc.webpages.EWebPageText;
 
 public class BasePageAudit extends AbstractWebPageExt
 {
@@ -71,6 +72,14 @@ public class BasePageAudit extends AbstractWebPageExt
   }
 
   private final IAuditManager m_aAuditManager;
+
+  public BasePageAudit (@Nonnull @Nonempty final String sID, @Nonnull final IAuditManager aAuditManager)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SECURITY_AUDIT.getAsMLT ());
+    if (aAuditManager == null)
+      throw new NullPointerException ("auditManager");
+    m_aAuditManager = aAuditManager;
+  }
 
   public BasePageAudit (@Nonnull @Nonempty final String sID,
                         @Nonnull final String sName,
