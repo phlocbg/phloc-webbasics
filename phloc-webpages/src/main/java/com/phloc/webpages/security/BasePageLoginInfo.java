@@ -57,6 +57,7 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.EWebPageText;
 
 public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 {
@@ -95,6 +96,11 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
   }
 
   private static final String ACTION_LOGOUT_USER = "logoutuser";
+
+  public BasePageLoginInfo (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SECURITY_LOGIN_INFO.getAsMLT ());
+  }
 
   public BasePageLoginInfo (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {

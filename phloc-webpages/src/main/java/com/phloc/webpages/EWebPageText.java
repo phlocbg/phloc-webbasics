@@ -43,13 +43,17 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   OBJECT_DELETE ("Lösche ''{0}''", "Delete ''{0}''"),
   OBJECT_EDIT ("Bearbeite ''{0}''", "Edit ''{0}''"),
   IMAGE_NONE ("keines", "none"),
+  PAGE_NAME_SECURITY_AUDIT ("Audit-Einträge", "Audit items"),
+  PAGE_NAME_SECURITY_LOGIN_INFO ("Angemeldete Benutzer", "Logged in users"),
+  PAGE_NAME_SECURITY_ROLES ("Rollenverwaltung", "Role management"),
+  PAGE_NAME_SECURITY_USER_GROUPS ("Benutzergruppenverwaltung", "User group management"),
+  PAGE_NAME_SECURITY_USERS ("Benutzerverwaltung", "User management"),
   PAGE_NAME_SYS_INFO_ENV_VARS ("Umgebungsvariablen", "Environment variables"),
   PAGE_NAME_SYS_INFO_LANGUAGES ("Sprachen", "Languages"),
   PAGE_NAME_SYS_INFO_REQUEST ("Request", "Request"),
   PAGE_NAME_SYS_INFO_SYS_PROPS ("Systemeinstellungen", "System properties"),
   PAGE_NAME_SYS_INFO_THREADS ("Threads", "Threads"),
-  PAGE_NAME_SYS_INFO_TIMEZONES ("Zeitzonen", "Time zones"),
-  PAGE_NAME_SECURITY_AUDIT ("Audit-Einträge", "Audit items"), ;
+  PAGE_NAME_SYS_INFO_TIMEZONES ("Zeitzonen", "Time zones");
 
   private final ISimpleMultiLingualText m_aTP;
 

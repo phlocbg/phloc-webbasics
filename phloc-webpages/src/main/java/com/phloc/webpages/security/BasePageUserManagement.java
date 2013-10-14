@@ -78,6 +78,7 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.EWebPageText;
 
 public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 {
@@ -156,6 +157,11 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   public static final String ACTION_RESET_PASSWORD = "resetpw";
 
   private Locale m_aDefaultUserLocale;
+
+  public BasePageUserManagement (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SECURITY_USERS.getAsMLT ());
+  }
 
   public BasePageUserManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {

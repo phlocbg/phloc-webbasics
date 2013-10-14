@@ -51,6 +51,11 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     super (sID, sName);
   }
 
+  public AbstractWebPageForm (@Nonnull @Nonempty final String sID, @Nonnull final IReadonlyMultiLingualText aName)
+  {
+    super (sID, aName);
+  }
+
   public AbstractWebPageForm (@Nonnull @Nonempty final String sID,
                               @Nonnull final String sName,
                               @Nullable final String sDescription)

@@ -99,6 +99,11 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     }
   }
 
+  public BasePageRoleManagement (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SECURITY_ROLES.getAsMLT ());
+  }
+
   public BasePageRoleManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);

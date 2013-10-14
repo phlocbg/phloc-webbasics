@@ -120,6 +120,11 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
   public static final String FIELD_NAME = "name";
   public static final String FIELD_ROLES = "roles";
 
+  public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID)
+  {
+    super (sID, EWebPageText.PAGE_NAME_SECURITY_USER_GROUPS.getAsMLT ());
+  }
+
   public BasePageUserGroupManagement (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
