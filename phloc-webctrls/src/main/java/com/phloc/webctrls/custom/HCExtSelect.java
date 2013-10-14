@@ -25,6 +25,7 @@ import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.html.HCOption;
 import com.phloc.html.hc.html.HCSelect;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.EWebBasicsText;
 
@@ -46,7 +47,7 @@ public class HCExtSelect extends HCSelect
   public static HCOption createOptionPleaseSelect (@Nonnull final Locale aDisplayLocale)
   {
     final HCOption aOption = new HCOption ().setValue (VALUE_PLEASE_SELECT)
-                                            .addChild (EWebBasicsText.PLEASE_SELECT.getDisplayText (aDisplayLocale));
+                                            .addChild (new HCTextNode (EWebBasicsText.PLEASE_SELECT.getDisplayText (aDisplayLocale)));
     aOption.addClass (CSS_CLASS_SPECIAL_OPTION);
     return aOption;
   }
@@ -61,7 +62,7 @@ public class HCExtSelect extends HCSelect
   public static HCOption createOptionNone (@Nonnull final Locale aDisplayLocale)
   {
     final HCOption aOption = new HCOption ().setValue (VALUE_NONE)
-                                            .addChild (EWebBasicsText.SELECT_NONE.getDisplayText (aDisplayLocale));
+                                            .addChild (new HCTextNode (EWebBasicsText.SELECT_NONE.getDisplayText (aDisplayLocale)));
     aOption.addClass (CSS_CLASS_SPECIAL_OPTION);
     return aOption;
   }

@@ -28,8 +28,8 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
-import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.html.js.builder.JSPrinter;
+import com.phloc.json2.IJsonObject;
+import com.phloc.json2.serialize.JsonWriter;
 import com.phloc.web.servlet.response.ResponseHelperSettings;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.action.AbstractActionExecutor;
@@ -71,10 +71,10 @@ public class ActionExecutorDataTablesI18N extends AbstractActionExecutor
     if (aLanguage == null)
       aLanguage = m_aDefaultLocale;
 
-    final JSAssocArray aData = DataTables.createLanguageJson (aLanguage);
+    final IJsonObject aData = DataTables.createLanguageJson (aLanguage);
 
     final Charset aCharset = XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ;
-    aUnifiedResponse.setContentAndCharset (JSPrinter.getAsString (aData), aCharset)
+    aUnifiedResponse.setContentAndCharset (JsonWriter.getAsString (aData), aCharset)
                     .setMimeType (new MimeType (CMimeType.APPLICATION_JSON).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
                                                                                           aCharset.name ()))
                     .enableCaching (ResponseHelperSettings.getExpirationSeconds ());

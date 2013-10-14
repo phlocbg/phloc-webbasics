@@ -66,6 +66,8 @@ import com.phloc.html.js.builder.jquery.JQueryAjaxBuilder;
 import com.phloc.html.js.builder.jquery.JQueryInvocation;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuerySelectorList;
+import com.phloc.json2.IJsonObject;
+import com.phloc.json2.impl.JsonObject;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -120,6 +122,7 @@ public class DataTables implements IHCNodeBuilder
   private final String m_sGeneratedJSVariableName = "oTable" + GlobalIDFactory.getNewIntID ();
   private ISimpleURL m_aTextLoadingURL;
   private String m_sTextLoadingURLLocaleParameterName;
+  private Map <String, String> m_aTextLoadingParams;
 
   public static boolean isDefaultGenerateOnDocumentReady ()
   {
@@ -619,6 +622,20 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, String> getAllTextLoadingParams ()
+  {
+    return ContainerHelper.newMap (m_aTextLoadingParams);
+  }
+
+  @Nonnull
+  public DataTables setTextLoadingParams (@Nullable final Map <String, String> aTextLoadingParams)
+  {
+    m_aTextLoadingParams = aTextLoadingParams;
+    return this;
+  }
+
   /**
    * modify parameter map
    * 
@@ -652,19 +669,19 @@ public class DataTables implements IHCNodeBuilder
   {}
 
   @Nonnull
-  public static JSAssocArray createLanguageJson (@Nonnull final Locale aDisplayLocale)
+  public static IJsonObject createLanguageJson (@Nonnull final Locale aDisplayLocale)
   {
-    final JSAssocArray aLanguage = new JSAssocArray ();
+    final JsonObject aLanguage = new JsonObject ();
     aLanguage.add ("oAria",
-                   new JSAssocArray ().add ("sSortAscending",
-                                            EDataTablesText.SORT_ASCENDING.getDisplayText (aDisplayLocale))
-                                      .add ("sSortDescending",
-                                            EDataTablesText.SORT_DESCENDING.getDisplayText (aDisplayLocale)));
+                   new JsonObject ().add ("sSortAscending",
+                                          EDataTablesText.SORT_ASCENDING.getDisplayText (aDisplayLocale))
+                                    .add ("sSortDescending",
+                                          EDataTablesText.SORT_DESCENDING.getDisplayText (aDisplayLocale)));
     aLanguage.add ("oPaginate",
-                   new JSAssocArray ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (aDisplayLocale))
-                                      .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (aDisplayLocale))
-                                      .add ("sNext", EDataTablesText.NEXT.getDisplayText (aDisplayLocale))
-                                      .add ("sLast", EDataTablesText.LAST.getDisplayText (aDisplayLocale)));
+                   new JsonObject ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (aDisplayLocale))
+                                    .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (aDisplayLocale))
+                                    .add ("sNext", EDataTablesText.NEXT.getDisplayText (aDisplayLocale))
+                                    .add ("sLast", EDataTablesText.LAST.getDisplayText (aDisplayLocale)));
     aLanguage.add ("sEmptyTable", EDataTablesText.EMPTY_TABLE.getDisplayText (aDisplayLocale));
     aLanguage.add ("sInfo", EDataTablesText.INFO.getDisplayText (aDisplayLocale));
     aLanguage.add ("sInfoEmpty", EDataTablesText.INFO_EMPTY.getDisplayText (aDisplayLocale));
@@ -809,7 +826,8 @@ public class DataTables implements IHCNodeBuilder
       final JSVar aoData = aAF.param ("t");
       final JSVar fnCallback = aAF.param ("u");
       final JSVar oSettings = aAF.param ("v");
-      final JQueryAjaxBuilder aAjaxBuilder = new JQueryAjaxBuilder ().dataType ("json")
+      final JQueryAjaxBuilder aAjaxBuilder = new JQueryAjaxBuilder ().cache (false)
+                                                                     .dataType ("json")
                                                                      .type (m_eServerMethod == null ? null
                                                                                                    : m_eServerMethod.getName ())
                                                                      .url (sSource)
@@ -826,13 +844,15 @@ public class DataTables implements IHCNodeBuilder
     // Display texts
     if (m_aDisplayLocale != null)
     {
-      JSAssocArray aLanguage;
+      IJsonObject aLanguage;
       if (m_aTextLoadingURL != null)
       {
         // Load texts from there
         final SimpleURL aFinalURL = new SimpleURL (m_aTextLoadingURL).add (m_sTextLoadingURLLocaleParameterName,
                                                                            m_aDisplayLocale.getLanguage ());
-        aLanguage = new JSAssocArray ().add ("sUrl", aFinalURL.getAsString ());
+        if (m_aTextLoadingParams != null)
+          aFinalURL.addAll (m_aTextLoadingParams);
+        aLanguage = new JsonObject ().add ("sUrl", aFinalURL.getAsString ());
       }
       else
       {

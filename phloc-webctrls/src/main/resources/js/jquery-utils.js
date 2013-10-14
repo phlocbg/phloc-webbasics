@@ -72,8 +72,8 @@
 
 // Set default AJAX settings
 $.ajaxSetup ({
-  // Disable jQuery AJAX caching
-  cache:false,
+  // Disable jQuery AJAX caching - not always useful!
+  // cache:false,
   // Set a default error handler
   error: function (jqXHR, textStatus, errorThrown) {
     if (!window.ajaxSetupErrorShown) {
