@@ -52,13 +52,13 @@ public class BasePageScopes extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    MSG_GLOBAL_SCOPE ("Globaler Scope ''{0}''", "Global scope ''{0}''"),
-    MSG_APPLICATION_SCOPE ("App Scope ''{0}''", "App scope ''{0}''"),
-    MSG_APPLICATION_SCOPES ("Application Scopes", "Application scopes"),
-    MSG_SCOPE_ID ("Scope ID", "Scope ID"),
-    MSG_SCOPE_VALID ("Scope gültig?", "Scope valid?"),
-    MSG_SCOPE_IN_DESTRUCTION ("Scope in Zerstörung?", "Scope in destruction?"),
-    MSG_SCOPE_DESTROYED ("Scope zerstört?", "Scope destroyed?"),
+    MSG_GLOBAL_SCOPE ("Globaler Kontext ''{0}''", "Global scope ''{0}''"),
+    MSG_APPLICATION_SCOPE ("App Kontext ''{0}''", "App scope ''{0}''"),
+    MSG_APPLICATION_SCOPES ("Application Kontexte", "Application scopes"),
+    MSG_SCOPE_ID ("Kontext ID", "Scope ID"),
+    MSG_SCOPE_VALID ("Kontext gültig?", "Scope valid?"),
+    MSG_SCOPE_IN_DESTRUCTION ("Kontext in Zerstörung?", "Scope in destruction?"),
+    MSG_SCOPE_DESTROYED ("Kontext zerstört?", "Scope destroyed?"),
     MSG_SCOPE_ATTRS ("Attribute", "Attributes"),
     MSG_NAME ("Name", "Wert"),
     MSG_VALUE ("Wert", "Value");
