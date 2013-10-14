@@ -99,7 +99,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
   public BasePageLoginInfo (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SECURITY_LOGIN_INFO.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_MONITORING_LOGIN_INFO.getAsMLT ());
   }
 
   public BasePageLoginInfo (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)

@@ -75,7 +75,7 @@ public class BasePageAudit extends AbstractWebPageExt
 
   public BasePageAudit (@Nonnull @Nonempty final String sID, @Nonnull final IAuditManager aAuditManager)
   {
-    super (sID, EWebPageText.PAGE_NAME_SECURITY_AUDIT.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_MONITORING_AUDIT.getAsMLT ());
     if (aAuditManager == null)
       throw new NullPointerException ("auditManager");
     m_aAuditManager = aAuditManager;
