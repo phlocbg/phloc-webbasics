@@ -35,7 +35,6 @@ import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.json.impl.JSONObject;
 import com.phloc.json2.impl.JsonArray;
 import com.phloc.json2.impl.JsonObject;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
@@ -242,10 +241,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
                                                                                      new ComparatorString (aDisplayLocale))
                                                                   .entrySet ())
     {
-      final JSONObject aItem = new JSONObject ();
-      aItem.setStringProperty ("value", aEntry.getKey ());
-      aItem.setStringProperty ("label", aEntry.getValue ());
-      ret.add (aItem);
+      ret.add (new JsonObject ().add ("value", aEntry.getKey ()).add ("label", aEntry.getValue ()));
     }
 
     // Set as result property
