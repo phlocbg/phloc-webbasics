@@ -31,6 +31,7 @@ import com.phloc.commons.SystemProperties;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.io.file.iterate.FileSystemIterator;
 import com.phloc.commons.io.misc.SizeHelper;
 import com.phloc.commons.lang.ClassHelper;
@@ -53,6 +54,7 @@ import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 
@@ -285,6 +287,10 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
           aRow.addCells (sName, sValue);
       }
       aNodeList.addChild (aTable);
+
+      final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
+      aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
+      aNodeList.addChild (aDataTables);
     }
   }
 }
