@@ -25,6 +25,8 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
@@ -34,10 +36,12 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.scopes.domain.IApplicationScope;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
+import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webscopes.domain.IGlobalWebScope;
@@ -48,7 +52,8 @@ public class BasePageScopes extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
-    MSG_GLOBAL_SCOPE ("Globaler Scope", "Global scope"),
+    MSG_GLOBAL_SCOPE ("Globaler Scope ''{0}''", "Global scope ''{0}''"),
+    MSG_APPLICATION_SCOPE ("App Scope ''{0}''", "App scope ''{0}''"),
     MSG_APPLICATION_SCOPES ("Application Scopes", "Application scopes"),
     MSG_SCOPE_ID ("Scope ID", "Scope ID"),
     MSG_SCOPE_VALID ("Scope gültig?", "Scope valid?"),
@@ -103,16 +108,14 @@ public class BasePageScopes extends AbstractWebPageExt
   }
 
   @Nonnull
-  private IHCNode _getGlobalScopeInfo (@Nonnull final Locale aDisplayLocale)
+  private IHCNode _getGlobalScopeInfo (@Nonnull final IGlobalWebScope aScope, @Nonnull final Locale aDisplayLocale)
   {
-    final IGlobalWebScope aScope = WebScopeManager.getGlobalScope ();
-
     final HCNodeList aNodeList = new HCNodeList ();
 
     final IHCTableFormView <?> aTableScope = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
     aTableScope.createItemRow ()
                .setLabel (EText.MSG_SCOPE_ID.getDisplayText (aDisplayLocale))
-               .setCtrl (Integer.toString (aScope.getApplicationScopeCount ()));
+               .setCtrl (aScope.getID ());
     aTableScope.createItemRow ()
                .setLabel (EText.MSG_SCOPE_VALID.getDisplayText (aDisplayLocale))
                .setCtrl (EWebBasicsText.getYesOrNo (aScope.isValid (), aDisplayLocale));
@@ -130,13 +133,58 @@ public class BasePageScopes extends AbstractWebPageExt
                .setCtrl (Integer.toString (aScope.getAttributeCount ()));
     aNodeList.addChild (aTableScope);
 
-    // All scope attrs
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
+    // All scope attributes
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (new HCCol (200), HCCol.star ())
+                                                         .setID ("globalscope");
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
       aTableAttrs.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
+
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
+    aNodeList.addChild (aDataTables);
+
+    return aNodeList;
+  }
+
+  @Nonnull
+  private IHCNode _getApplicationScopeInfo (@Nonnull final IApplicationScope aScope,
+                                            @Nonnull final Locale aDisplayLocale)
+  {
+    final HCNodeList aNodeList = new HCNodeList ();
+
+    final IHCTableFormView <?> aTableScope = getStyler ().createTableFormView (new HCCol (200), HCCol.star ());
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_ID.getDisplayText (aDisplayLocale))
+               .setCtrl (aScope.getID ());
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_VALID.getDisplayText (aDisplayLocale))
+               .setCtrl (EWebBasicsText.getYesOrNo (aScope.isValid (), aDisplayLocale));
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_IN_DESTRUCTION.getDisplayText (aDisplayLocale))
+               .setCtrl (EWebBasicsText.getYesOrNo (aScope.isInDestruction (), aDisplayLocale));
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_DESTROYED.getDisplayText (aDisplayLocale))
+               .setCtrl (EWebBasicsText.getYesOrNo (aScope.isDestroyed (), aDisplayLocale));
+    aTableScope.createItemRow ()
+               .setLabel (EText.MSG_SCOPE_ATTRS.getDisplayText (aDisplayLocale))
+               .setCtrl (Integer.toString (aScope.getAttributeCount ()));
+    aNodeList.addChild (aTableScope);
+
+    // All scope attributes
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (new HCCol (200), HCCol.star ())
+                                                         .setID ("appscope" + aScope.getID ());
+    aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
+                                          EText.MSG_VALUE.getDisplayText (aDisplayLocale));
+    for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
+      aTableAttrs.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
+    aNodeList.addChild (aTableAttrs);
+
+    final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
+    aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
+    aNodeList.addChild (aDataTables);
 
     return aNodeList;
   }
@@ -146,9 +194,18 @@ public class BasePageScopes extends AbstractWebPageExt
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final IGlobalWebScope aGlobalScope = WebScopeManager.getGlobalScope ();
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
-    aTabBox.addTab (EText.MSG_GLOBAL_SCOPE.getDisplayText (aDisplayLocale), _getGlobalScopeInfo (aDisplayLocale));
+    // Global scope
+    aTabBox.addTab (EText.MSG_GLOBAL_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aGlobalScope.getID ()),
+                    _getGlobalScopeInfo (aGlobalScope, aDisplayLocale));
+    // Application scopes
+    for (final IApplicationScope aAppScope : ContainerHelper.getSortedByKey (aGlobalScope.getAllApplicationScopes ())
+                                                            .values ())
+      aTabBox.addTab (EText.MSG_APPLICATION_SCOPE.getDisplayTextWithArgs (aDisplayLocale, aAppScope.getID ()),
+                      _getApplicationScopeInfo (aAppScope, aDisplayLocale));
+
     aNodeList.addChild (aTabBox);
   }
 }

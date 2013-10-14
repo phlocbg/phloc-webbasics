@@ -31,6 +31,7 @@ import com.phloc.bootstrap3.button.BootstrapButtonToolbar;
 import com.phloc.bootstrap3.button.EBootstrapButtonType;
 import com.phloc.bootstrap3.ext.BootstrapDataTables;
 import com.phloc.bootstrap3.nav.BootstrapTabBox;
+import com.phloc.bootstrap3.table.AbstractBootstrapTable;
 import com.phloc.bootstrap3.table.BootstrapTable;
 import com.phloc.bootstrap3.table.BootstrapTableForm;
 import com.phloc.bootstrap3.table.BootstrapTableFormView;
@@ -97,7 +98,7 @@ public class BootstrapWebPageStyler extends SimpleWebPageStyler
   public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
                                                       @Nonnull final Locale aDisplayLocale)
   {
-    final BootstrapDataTables ret = new BootstrapDataTables ((BootstrapTable) aTable);
+    final BootstrapDataTables ret = new BootstrapDataTables ((AbstractBootstrapTable <?>) aTable);
     ret.setDisplayLocale (aDisplayLocale);
     ret.addAllColumns (aTable);
     return ret;
