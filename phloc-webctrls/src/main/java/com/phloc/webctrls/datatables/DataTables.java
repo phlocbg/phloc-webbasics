@@ -40,6 +40,7 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.CHTMLAttributes;
 import com.phloc.html.EHTMLElement;
 import com.phloc.html.css.ICSSClassProvider;
@@ -117,6 +118,8 @@ public class DataTables implements IHCNodeBuilder
   private EDataTablesFilterType m_eServerFilterType = EDataTablesFilterType.DEFAULT;
   private boolean m_bDeferRender = DEFAULT_DEFER_RENDER;
   private final String m_sGeneratedJSVariableName = "oTable" + GlobalIDFactory.getNewIntID ();
+  private ISimpleURL m_aTextLoadingURL;
+  private String m_sTextLoadingURLLocaleParameterName;
 
   public static boolean isDefaultGenerateOnDocumentReady ()
   {
@@ -593,6 +596,29 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  @Nullable
+  public ISimpleURL getTextLoadingURL ()
+  {
+    return m_aTextLoadingURL;
+  }
+
+  @Nullable
+  public String getextLoadingURLLocaleParameterName ()
+  {
+    return m_sTextLoadingURLLocaleParameterName;
+  }
+
+  @Nonnull
+  public DataTables setTextLoadingURL (@Nullable final ISimpleURL aTextLoadingURL,
+                                       @Nullable final String sTextLoadingURLLocaleParameterName)
+  {
+    if (aTextLoadingURL != null && StringHelper.hasNoText (sTextLoadingURLLocaleParameterName))
+      throw new IllegalArgumentException ("If a text loading URL is present, a text loading URL locale parameter name must also be present");
+    m_aTextLoadingURL = aTextLoadingURL;
+    m_sTextLoadingURLLocaleParameterName = sTextLoadingURLLocaleParameterName;
+    return this;
+  }
+
   /**
    * modify parameter map
    * 
@@ -800,7 +826,19 @@ public class DataTables implements IHCNodeBuilder
     // Display texts
     if (m_aDisplayLocale != null)
     {
-      final JSAssocArray aLanguage = createLanguageJson (m_aDisplayLocale);
+      JSAssocArray aLanguage;
+      if (m_aTextLoadingURL != null)
+      {
+        // Load texts from there
+        final SimpleURL aFinalURL = new SimpleURL (m_aTextLoadingURL).add (m_sTextLoadingURLLocaleParameterName,
+                                                                           m_aDisplayLocale.getLanguage ());
+        aLanguage = new JSAssocArray ().add ("sUrl", aFinalURL.getAsString ());
+      }
+      else
+      {
+        // Inline texts
+        aLanguage = createLanguageJson (m_aDisplayLocale);
+      }
       aParams.add ("oLanguage", aLanguage);
     }
 
