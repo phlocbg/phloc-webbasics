@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>22.5</version>
+    <version>22.6</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-webapp-redirect</artifactId>
@@ -99,7 +99,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
-      <version>7.6.12.v20130726</version>
+      <version>7.6.13.v20130916</version>
       <scope>test</scope>
     </dependency>
     <dependency>
