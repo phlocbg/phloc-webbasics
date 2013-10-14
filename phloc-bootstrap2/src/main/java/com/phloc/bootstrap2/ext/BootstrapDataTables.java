@@ -19,7 +19,7 @@ package com.phloc.bootstrap2.ext;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.bootstrap2.BootstrapTable;
+import com.phloc.bootstrap2.AbstractBootstrapTable;
 import com.phloc.bootstrap2.EBootstrapCSSPathProvider;
 import com.phloc.bootstrap2.EBootstrapJSPathProvider;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -36,7 +36,7 @@ public class BootstrapDataTables extends DataTables
 {
   public static final String DEFAULT_DOM = "<<'span6'l><'span6'f>r>t<<'span6'i><'span6'p>>";
 
-  public BootstrapDataTables (@Nonnull final BootstrapTable aTable)
+  public BootstrapDataTables (@Nonnull final AbstractBootstrapTable <?> aTable)
   {
     super (aTable);
     aTable.setStriped (true).setHover (true);

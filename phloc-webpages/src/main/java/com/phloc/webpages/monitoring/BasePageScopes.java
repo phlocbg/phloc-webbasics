@@ -134,7 +134,7 @@ public class BasePageScopes extends AbstractWebPageExt
     aNodeList.addChild (aTableScope);
 
     // All scope attributes
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (new HCCol (200), HCCol.star ())
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
                                                          .setID ("globalscope");
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
@@ -174,7 +174,7 @@ public class BasePageScopes extends AbstractWebPageExt
     aNodeList.addChild (aTableScope);
 
     // All scope attributes
-    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (new HCCol (200), HCCol.star ())
+    final IHCTableFormView <?> aTableAttrs = getStyler ().createTableFormView (HCCol.star (), HCCol.star ())
                                                          .setID ("appscope" + aScope.getID ());
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));

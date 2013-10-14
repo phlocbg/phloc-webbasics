@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.bootstrap2.AbstractBootstrapTable;
 import com.phloc.bootstrap2.BootstrapTabBox;
 import com.phloc.bootstrap2.BootstrapTable;
 import com.phloc.bootstrap2.CBootstrapCSS;
@@ -96,7 +97,7 @@ public class Bootstrap2WebPageStyler extends SimpleWebPageStyler
   public BootstrapDataTables createDefaultDataTables (@Nonnull final IHCTable <?> aTable,
                                                       @Nonnull final Locale aDisplayLocale)
   {
-    final BootstrapDataTables ret = new BootstrapDataTables ((BootstrapTable) aTable);
+    final BootstrapDataTables ret = new BootstrapDataTables ((AbstractBootstrapTable <?>) aTable);
     ret.setDisplayLocale (aDisplayLocale);
     ret.addAllColumns (aTable);
     return ret;
