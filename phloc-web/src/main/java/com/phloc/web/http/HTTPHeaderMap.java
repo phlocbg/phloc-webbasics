@@ -154,7 +154,7 @@ public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, Lis
   @ReturnsMutableCopy
   public Map <String, List <String>> getAllHeaders ()
   {
-    return ContainerHelper.newMap (m_aHeaders);
+    return ContainerHelper.newOrderedMap (m_aHeaders);
   }
 
   /**
