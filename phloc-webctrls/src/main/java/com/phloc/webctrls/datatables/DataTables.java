@@ -772,21 +772,27 @@ public class DataTables implements IHCNodeBuilder
     if (m_aDisplayLocale != null)
     {
       final JSAssocArray aLanguage = new JSAssocArray ();
-      final JSAssocArray aPagination = new JSAssocArray ();
-      aPagination.add ("sFirst", EDataTablesText.FIRST.getDisplayText (m_aDisplayLocale));
-      aPagination.add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (m_aDisplayLocale));
-      aPagination.add ("sNext", EDataTablesText.NEXT.getDisplayText (m_aDisplayLocale));
-      aPagination.add ("sLast", EDataTablesText.LAST.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("oPaginate", aPagination);
-      aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sLengthMenu", EDataTablesText.LENGTH_MENU.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("oAria",
+                     new JSAssocArray ().add ("sSortAscending",
+                                              EDataTablesText.SORT_ASCENDING.getDisplayText (m_aDisplayLocale))
+                                        .add ("sSortDescending",
+                                              EDataTablesText.SORT_DESCENDING.getDisplayText (m_aDisplayLocale)));
+      aLanguage.add ("oPaginate",
+                     new JSAssocArray ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (m_aDisplayLocale))
+                                        .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (m_aDisplayLocale))
+                                        .add ("sNext", EDataTablesText.NEXT.getDisplayText (m_aDisplayLocale))
+                                        .add ("sLast", EDataTablesText.LAST.getDisplayText (m_aDisplayLocale)));
+      aLanguage.add ("sEmptyTable", EDataTablesText.EMPTY_TABLE.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sInfo", EDataTablesText.INFO.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sInfoEmpty", EDataTablesText.INFO_EMPTY.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sInfoFiltered", EDataTablesText.INFO_FILTERED.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sInfoPostFix", EDataTablesText.INFO_POSTFIX.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sInfoThousands", EDataTablesText.INFO_THOUSANDS.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sLengthMenu", EDataTablesText.LENGTH_MENU.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sLoadingRecords", EDataTablesText.LOADING_RECORDS.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (m_aDisplayLocale));
       aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (m_aDisplayLocale));
-      aLanguage.add ("sUrl", EDataTablesText.URL.getDisplayText (m_aDisplayLocale));
+      aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (m_aDisplayLocale));
       aParams.add ("oLanguage", aLanguage);
     }
 

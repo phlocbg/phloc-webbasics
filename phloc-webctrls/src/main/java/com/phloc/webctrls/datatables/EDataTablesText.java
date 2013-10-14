@@ -31,21 +31,26 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 @Translatable
 public enum EDataTablesText implements IHasDisplayText
 {
+  // aria lables
+  SORT_ASCENDING (": aktivieren, um Spalte aufsteigend zu sortieren", ": activate to sort column ascending"),
+  SORT_DESCENDING (": aktivieren, um Spalte absteigend zu sortieren", ": activate to sort column descending"),
   // paginate
   FIRST ("Erster", "First"),
   PREVIOUS ("Zurück", "Previous"),
   NEXT ("Nächster", "Next"),
   LAST ("Letzter", "Last"),
   // main
-  PROCESSING ("Bitte warten...", "Processing..."),
-  LENGTH_MENU ("_MENU_ Einträge anzeigen", "Show _MENU_ entries"),
-  ZERO_RECORDS ("Keine Einträge vorhanden.", "No matching records found."),
+  EMPTY_TABLE ("Keine Einträge vorhanden", "No data available in table"),
   INFO ("_START_ bis _END_ von _TOTAL_ Einträgen", "Showing _START_ to _END_ of _TOTAL_ entries"),
   INFO_EMPTY ("0 bis 0 von 0 Einträgen", "Showing 0 to 0 of 0 entries"),
   INFO_FILTERED ("(gefiltert von _MAX_ Einträgen)", "(filtered from _MAX_ total entries)"),
   INFO_POSTFIX ("", ""),
+  INFO_THOUSANDS ("", ""),
+  LENGTH_MENU ("_MENU_ Einträge anzeigen", "Show _MENU_ entries"),
+  LOADING_RECORDS ("Lade...", "Loading..."),
+  PROCESSING ("Bitte warten...", "Processing..."),
   SEARCH ("Suchen:", "Search:"),
-  URL ("", "");
+  ZERO_RECORDS ("Keine passenden Einträge vorhanden.", "No matching records found.");
 
   private final ITextProvider m_aTP;
 
