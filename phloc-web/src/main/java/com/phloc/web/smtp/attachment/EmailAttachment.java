@@ -18,6 +18,7 @@
 package com.phloc.web.smtp.attachment;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import javax.activation.DataSource;
 import javax.activation.FileTypeMap;
@@ -40,8 +41,9 @@ import com.phloc.commons.string.ToStringGenerator;
 public class EmailAttachment implements IEmailAttachment
 {
   private final String m_sFilename;
-  private final String m_sContentType;
   private final IInputStreamProvider m_aInputStreamProvider;
+  private final Charset m_aCharset;
+  private final String m_sContentType;
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename, @Nonnull final byte [] aContent)
   {
@@ -49,15 +51,31 @@ public class EmailAttachment implements IEmailAttachment
   }
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                          @Nonnull final byte [] aContent,
+                          @Nullable final Charset aCharset)
+  {
+    this (sFilename, new ByteArrayInputStreamProvider (aContent), aCharset);
+  }
+
+  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
                           @Nonnull final IInputStreamProvider aInputStreamProvider)
   {
+    this (sFilename, aInputStreamProvider, null);
+  }
+
+  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                          @Nonnull final IInputStreamProvider aInputStreamProvider,
+                          @Nullable final Charset aCharset)
+  {
+
     if (StringHelper.hasNoText (sFilename))
       throw new IllegalArgumentException ("filename");
     if (aInputStreamProvider == null)
       throw new NullPointerException ("InputStreamProvider");
     m_sFilename = sFilename;
-    m_sContentType = FileTypeMap.getDefaultFileTypeMap ().getContentType (sFilename);
     m_aInputStreamProvider = aInputStreamProvider;
+    m_aCharset = aCharset;
+    m_sContentType = FileTypeMap.getDefaultFileTypeMap ().getContentType (sFilename);
   }
 
   @Nonnull
@@ -77,6 +95,12 @@ public class EmailAttachment implements IEmailAttachment
   public InputStream getInputStream ()
   {
     return m_aInputStreamProvider.getInputStream ();
+  }
+
+  @Nullable
+  public Charset getCharset ()
+  {
+    return m_aCharset;
   }
 
   @Nullable
@@ -102,6 +126,7 @@ public class EmailAttachment implements IEmailAttachment
     return m_sFilename.equals (rhs.m_sFilename) &&
     // Does not necessarily implement equals!
     // m_aInputStreamProvider.equals (rhs.m_aInputStreamProvider) &&
+           EqualsUtils.equals (m_aCharset, rhs.m_aCharset) &&
            EqualsUtils.equals (m_sContentType, rhs.m_sContentType);
   }
 
@@ -111,6 +136,7 @@ public class EmailAttachment implements IEmailAttachment
     return new HashCodeGenerator (this).append (m_sFilename)
     // Does not necessarily implement hashCode!
     // .append (m_aInputStreamProvider)
+                                       .append (m_aCharset)
                                        .append (m_sContentType)
                                        .getHashCode ();
   }
@@ -120,6 +146,7 @@ public class EmailAttachment implements IEmailAttachment
   {
     return new ToStringGenerator (this).append ("filename", m_sFilename)
                                        .append ("inputStreamProvider", m_aInputStreamProvider)
+                                       .appendIfNotNull ("charset", m_aCharset)
                                        .append ("contentType", m_sContentType)
                                        .toString ();
   }

@@ -17,6 +17,8 @@
  */
 package com.phloc.web.smtp.attachment;
 
+import java.nio.charset.Charset;
+
 import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +46,13 @@ public interface IEmailAttachment extends IInputStreamProvider
    */
   @Nonnull
   IInputStreamProvider getInputStreamProvider ();
+
+  /**
+   * @return The charset of the email attachment. May be <code>null</code> if
+   *         not specified.
+   */
+  @Nullable
+  Charset getCharset ();
 
   /**
    * @return The content type (MIME type) of the attachment

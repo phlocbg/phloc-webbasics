@@ -18,9 +18,16 @@
 package com.phloc.web.sitemap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 
+/**
+ * The determined change frequency of a sitemap entry
+ * 
+ * @author Philip Helger
+ */
 public enum EXMLSitemapChangeFequency
 {
   ALWAYS ("always"),
@@ -43,5 +50,15 @@ public enum EXMLSitemapChangeFequency
   public String getText ()
   {
     return m_sText;
+  }
+
+  @Nullable
+  public static EXMLSitemapChangeFequency getFromTextOrNull (@Nullable final String sText)
+  {
+    if (StringHelper.hasText (sText))
+      for (final EXMLSitemapChangeFequency e : values ())
+        if (e.getText ().equals (sText))
+          return e;
+    return null;
   }
 }

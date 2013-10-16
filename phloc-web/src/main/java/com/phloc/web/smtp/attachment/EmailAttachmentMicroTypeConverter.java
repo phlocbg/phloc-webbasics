@@ -17,12 +17,14 @@
  */
 package com.phloc.web.smtp.attachment;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.base64.Base64Helper;
-import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
@@ -31,6 +33,7 @@ import com.phloc.commons.microdom.impl.MicroElement;
 public final class EmailAttachmentMicroTypeConverter implements IMicroTypeConverter
 {
   private static final String ATTR_FILENAME = "filename";
+  private static final String ATTR_CHARSET = "charset";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
@@ -40,6 +43,8 @@ public final class EmailAttachmentMicroTypeConverter implements IMicroTypeConver
     final IEmailAttachment aAttachment = (IEmailAttachment) aSource;
     final IMicroElement eAttachment = new MicroElement (sNamespaceURI, sTagName);
     eAttachment.setAttribute (ATTR_FILENAME, aAttachment.getFilename ());
+    if (aAttachment.getCharset () != null)
+      eAttachment.setAttribute (ATTR_CHARSET, aAttachment.getCharset ().name ());
     // Base64 encode
     eAttachment.appendText (Base64.encodeBytes (StreamUtils.getAllBytes (aAttachment.getInputStream ())));
     return eAttachment;
@@ -49,7 +54,12 @@ public final class EmailAttachmentMicroTypeConverter implements IMicroTypeConver
   public EmailAttachment convertToNative (@Nonnull final IMicroElement eAttachment)
   {
     final String sFilename = eAttachment.getAttribute (ATTR_FILENAME);
+
+    final String sCharset = eAttachment.getAttribute (ATTR_CHARSET);
+    final Charset aCharset = sCharset == null ? null : CharsetManager.getCharsetFromName (sCharset);
+
     final byte [] aContent = Base64Helper.safeDecode (eAttachment.getTextContent ());
-    return new EmailAttachment (sFilename, new ByteArrayInputStreamProvider (aContent));
+
+    return new EmailAttachment (sFilename, aContent, aCharset);
   }
 }

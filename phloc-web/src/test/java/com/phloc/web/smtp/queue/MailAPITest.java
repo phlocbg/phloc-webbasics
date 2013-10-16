@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp.queue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.phloc.commons.GlobalDebug;
@@ -46,7 +47,7 @@ public final class MailAPITest
     GlobalIDFactory.setPersistentIntIDFactory (new MemoryIntIDFactory ());
   }
 
-  // @Ignore ("to avoid spamming my mailbox")
+  @Ignore ("to avoid spamming my mailbox")
   @Test
   public void testBasic ()
   {
