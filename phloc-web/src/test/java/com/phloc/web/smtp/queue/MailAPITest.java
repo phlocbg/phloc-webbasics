@@ -19,10 +19,14 @@ package com.phloc.web.smtp.queue;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.concurrent.ThreadUtils;
 import com.phloc.commons.email.EmailAddress;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
@@ -35,7 +39,6 @@ import com.phloc.web.smtp.EmailData;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.listener.LoggingConnectionListener;
 import com.phloc.web.smtp.listener.LoggingTransportListener;
-import com.phloc.web.smtp.settings.MailTransportSettings;
 import com.phloc.web.smtp.settings.SMTPSettings;
 
 /**
@@ -85,6 +88,37 @@ public final class MailAPITest
       assertEquals (1, MailAPI.getFailedMailQueue ().size ());
 
       GlobalDebug.setDebugModeDirect (false);
+    }
+  }
+
+  @Ignore ("to avoid spamming my mailbox")
+  @Test
+  public void testStopImmediately ()
+  {
+    // This file might not be present, as it contains the real-life SMTP
+    // settings. It should reside in src/test/resource and is SVN ignored by
+    // name
+    final IReadableResource aRes = new ClassPathResource ("smtp-settings.xml");
+    if (aRes.exists ())
+    {
+      final SMTPSettings aSMTPSettings = MicroTypeConverter.convertToNative (MicroReader.readMicroXML (aRes)
+                                                                                        .getDocumentElement (),
+                                                                             SMTPSettings.class);
+      final IEmailData aMailData = new EmailData (EEmailType.TEXT);
+      aMailData.setTo (new EmailAddress ("ph@phloc.com"));
+      aMailData.setFrom (new EmailAddress ("auto@phloc.com"));
+      aMailData.setSubject ("JÜnit test with späcial käräktärs");
+      aMailData.setBody ("Hi there\nLine 2\n4 special chars: äöüß\n123456789\nBest regards: phloc-web");
+
+      final List <IEmailData> aMails = new ArrayList <IEmailData> ();
+      for (int i = 0; i < 10; ++i)
+        aMails.add (aMailData);
+
+      MailAPI.queueMails (aSMTPSettings, aMails);
+      ThreadUtils.sleep (20);
+
+      // Stop immediately
+      MailAPI.stop (true);
     }
   }
 }

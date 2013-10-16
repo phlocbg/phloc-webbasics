@@ -27,6 +27,7 @@ import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringParser;
 import com.phloc.web.CWeb;
 import com.phloc.web.CWebCharset;
+import com.phloc.web.smtp.queue.MailTransportSettings;
 
 public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
 {

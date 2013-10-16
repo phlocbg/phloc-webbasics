@@ -51,7 +51,6 @@ import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.settings.ESMTPTransportProperty;
 import com.phloc.web.smtp.settings.ISMTPSettings;
-import com.phloc.web.smtp.settings.MailTransportSettings;
 
 /**
  * The wrapper around the main javax.mail transport
@@ -67,7 +66,7 @@ final class MailTransport
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
   private static final String HEADER_MESSAGE_ID = "Message-ID";
 
-  private final ISMTPSettings m_aSettings;
+  private final ISMTPSettings m_aSMTPSettings;
   private final boolean m_bSMTPS;
   private final Properties m_aMailProperties = new Properties ();
   private final Session m_aSession;
@@ -77,7 +76,7 @@ final class MailTransport
     if (aSettings == null)
       throw new NullPointerException ("settings");
 
-    m_aSettings = aSettings;
+    m_aSMTPSettings = aSettings;
     m_bSMTPS = aSettings.isSSLEnabled () || aSettings.isSTARTTLSEnabled ();
 
     // Enable SSL?
@@ -133,9 +132,9 @@ final class MailTransport
   }
 
   @Nonnull
-  public ISMTPSettings getSettings ()
+  public ISMTPSettings getSMTPSettings ()
   {
-    return m_aSettings;
+    return m_aSMTPSettings;
   }
 
   @Nonnull
@@ -172,10 +171,10 @@ final class MailTransport
           aTransport.addTransportListener (aTransportListener);
 
         // Connect
-        aTransport.connect (m_aSettings.getHostName (),
-                            m_aSettings.getPort (),
-                            m_aSettings.getUserName (),
-                            m_aSettings.getPassword ());
+        aTransport.connect (m_aSMTPSettings.getHostName (),
+                            m_aSMTPSettings.getPort (),
+                            m_aSMTPSettings.getUserName (),
+                            m_aSMTPSettings.getPassword ());
 
         try
         {
@@ -186,7 +185,7 @@ final class MailTransport
             {
               // convert from IEmailData to MimeMessage
               final MimeMessage aMimeMessage = new MimeMessage (m_aSession);
-              MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSettings.getCharsetObj ());
+              MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSMTPSettings.getCharsetObj ());
 
               // Ensure a sent date is present
               if (aMimeMessage.getSentDate () == null)
@@ -259,20 +258,20 @@ final class MailTransport
     if (!(o instanceof MailTransport))
       return false;
     final MailTransport rhs = (MailTransport) o;
-    return m_aSettings.equals (rhs.m_aSettings);
+    return m_aSMTPSettings.equals (rhs.m_aSMTPSettings);
   }
 
   @Override
   public int hashCode ()
   {
     // Compare only settings - session and properties are derived
-    return new HashCodeGenerator (this).append (m_aSettings).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aSMTPSettings).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("settings", m_aSettings)
+    return new ToStringGenerator (this).append ("settings", m_aSMTPSettings)
                                        .append ("properties", m_aMailProperties)
                                        .append ("session", m_aSession)
                                        .toString ();

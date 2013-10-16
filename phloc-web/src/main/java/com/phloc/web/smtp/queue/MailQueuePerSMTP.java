@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp.queue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.callback.IThrowingRunnableWithParameter;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.concurrent.collector.ConcurrentCollectorMultiple;
+import com.phloc.commons.state.ESuccess;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.failed.FailedMailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
@@ -49,30 +51,47 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
   private final MailTransport m_aTransport;
   private FailedMailQueue m_aFailedMailQueue;
 
-  public MailQueuePerSMTP (@Nonnull final ISMTPSettings aSettings, @Nonnull final FailedMailQueue aFailedMailQueue)
-  {
-    this (DEFAULT_MAX_QUEUE_SIZE, aSettings, aFailedMailQueue);
-  }
-
+  /**
+   * Constructor
+   * 
+   * @param nMaxQueueSize
+   *        Maximum objects to queue
+   * @param nMaxPerformCount
+   *        Maximum number of emails to send at once
+   * @param aSMTPSettings
+   *        SMTP settings to use. May not be <code>null</code>.
+   * @param aFailedMailQueue
+   *        The queue for unsent mails. May not be <code>null</code>.
+   */
   public MailQueuePerSMTP (@Nonnegative final int nMaxQueueSize,
-                           @Nonnull final ISMTPSettings aSettings,
+                           @Nonnegative final int nMaxPerformCount,
+                           @Nonnull final ISMTPSettings aSMTPSettings,
                            @Nonnull final FailedMailQueue aFailedMailQueue)
   {
-    super (nMaxQueueSize, nMaxQueueSize / 2, null);
-    if (aSettings == null)
-      throw new NullPointerException ("settings");
+    super (nMaxQueueSize, nMaxPerformCount, null);
+    if (aSMTPSettings == null)
+      throw new NullPointerException ("SMTPSettings");
 
-    m_aTransport = new MailTransport (aSettings);
+    // Mail mail transport object
+    m_aTransport = new MailTransport (aSMTPSettings);
     setFailedMailQueue (aFailedMailQueue);
+
+    // Set the callback of the concurrent collector
     setPerformer (this);
   }
 
+  /**
+   * @return The SMTP settings used for this queue. Never <code>null</code>.
+   */
   @Nonnull
   public ISMTPSettings getSMTPSettings ()
   {
-    return m_aTransport.getSettings ();
+    return m_aTransport.getSMTPSettings ();
   }
 
+  /**
+   * @return The Failed mail queue to be used for this queue.
+   */
   @Nonnull
   public FailedMailQueue getFailedMailQueue ()
   {
@@ -97,7 +116,7 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
     // Expect the worst
     if (ContainerHelper.isNotEmpty (aMessages))
     {
-      final ISMTPSettings aSettings = m_aTransport.getSettings ();
+      final ISMTPSettings aSettings = m_aTransport.getSMTPSettings ();
       try
       {
         final int nMessages = aMessages.size ();
@@ -125,5 +144,36 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
         m_aFailedMailQueue.add (new FailedMailData (aSettings, ex));
       }
     }
+  }
+
+  /**
+   * Stop this queue
+   * 
+   * @param bStopImmediately
+   *        <code>true</code> if all mails currently in the queue should be
+   *        removed and put in the failed mail queue. Only the emails currently
+   *        in sending are continued to be sent out.
+   * @return {@link ESuccess}
+   * @see #stopQueuingNewObjects()
+   */
+  @Nonnull
+  public final ESuccess stopQueuingNewObjects (final boolean bStopImmediately)
+  {
+    if (bStopImmediately)
+    {
+      // Remove all mails from the queue and put it in the failed mail queue
+      final List <Object> aLeftOvers = new ArrayList <Object> ();
+      m_aQueue.drainTo (aLeftOvers);
+      if (!aLeftOvers.isEmpty ())
+      {
+        final ISMTPSettings aSMTPSettings = getSMTPSettings ();
+        for (final Object aLeftOver : aLeftOvers)
+          m_aFailedMailQueue.add (new FailedMailData (aSMTPSettings, (IEmailData) aLeftOver));
+        s_aLogger.info ("Put " + aLeftOvers + " unsent mails into the failed mail queue because of immediate stop.");
+      }
+    }
+
+    // Regular stop
+    return super.stopQueuingNewObjects ();
   }
 }

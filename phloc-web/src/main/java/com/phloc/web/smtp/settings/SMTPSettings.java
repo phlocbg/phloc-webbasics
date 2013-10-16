@@ -35,6 +35,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.port.DefaultNetworkPorts;
+import com.phloc.web.smtp.queue.MailTransportSettings;
 
 /**
  * Writable implementation of the {@link ISMTPSettings} interface.

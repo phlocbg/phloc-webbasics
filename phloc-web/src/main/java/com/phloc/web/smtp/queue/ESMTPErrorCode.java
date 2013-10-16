@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.smtp;
+package com.phloc.web.smtp.queue;
 
 import java.util.Locale;
 

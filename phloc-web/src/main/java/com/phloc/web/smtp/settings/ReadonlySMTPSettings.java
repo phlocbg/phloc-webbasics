@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.web.smtp.queue.MailTransportSettings;
 
 /**
  * Read-only implementation of the {@link ISMTPSettings} interface. It is

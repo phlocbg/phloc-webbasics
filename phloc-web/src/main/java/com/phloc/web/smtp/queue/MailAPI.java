@@ -84,6 +84,7 @@ public final class MailAPI
                                                                                      s_aThreadFactory);
   private static FailedMailQueue s_aFailedMailQueue = new FailedMailQueue ();
   private static final int s_nMaxMailQueueLen = 500;
+  private static final int s_nMaxMailSendCount = 100;
 
   private MailAPI ()
   {}
@@ -149,7 +150,7 @@ public final class MailAPI
     if (aSMTPQueue == null)
     {
       // create a new queue
-      aSMTPQueue = new MailQueuePerSMTP (s_nMaxMailQueueLen, aRealSMTPSettings, s_aFailedMailQueue);
+      aSMTPQueue = new MailQueuePerSMTP (s_nMaxMailQueueLen, s_nMaxMailSendCount, aRealSMTPSettings, s_aFailedMailQueue);
 
       // put queue in cache
       s_aQueueCache.put (aRealSMTPSettings, aSMTPQueue);
@@ -282,6 +283,7 @@ public final class MailAPI
       }
 
       boolean bWasQueued = false;
+      Exception aException = null;
       if (bCanQueue)
       {
         // Check if a subject is present
@@ -313,17 +315,17 @@ public final class MailAPI
           }
           // else an error message was already logged
         }
-        catch (final IllegalStateException ex)
+        catch (final Exception ex)
         {
           // Occurs if queue is already stopped
-          s_aLogger.error (ex.getMessage ());
+          aException = ex;
         }
       }
 
       if (!bWasQueued)
       {
         // Mail was not queued - put in failed mail queue
-        aSMTPQueue.getFailedMailQueue ().add (new FailedMailData (aSMTPSettings, aEmailData));
+        aSMTPQueue.getFailedMailQueue ().add (new FailedMailData (aSMTPSettings, aEmailData, aException));
       }
     }
     return nQueuedMails;
@@ -362,6 +364,22 @@ public final class MailAPI
   @Nonnull
   public static EChange stop ()
   {
+    return stop (false);
+  }
+
+  /**
+   * Stop taking new mails, and wait until all mails already in the queue are
+   * delivered.
+   * 
+   * @param bStopImmediately
+   *        <code>true</code> if all mails currently in the queue should be
+   *        removed and put in the failed mail queue. Only the emails currently
+   *        in sending are continued to be sent out.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public static EChange stop (final boolean bStopImmediately)
+  {
     s_aRWLock.writeLock ().lock ();
     try
     {
@@ -372,12 +390,13 @@ public final class MailAPI
       // don't take any more actions
       s_aSenderThreadPool.shutdown ();
 
-      // stop all specific queues
+      // stop all specific queues afterwards
       for (final MailQueuePerSMTP aQueue : s_aQueueCache.values ())
-        aQueue.stopQueuingNewObjects ();
+        aQueue.stopQueuingNewObjects (bStopImmediately);
 
       final int nQueues = s_aQueueCache.size ();
-      final int nQueueLength = _getTotalQueueLength ();
+      // Subtract 1 for the STOP_MESSAGE
+      final int nQueueLength = _getTotalQueueLength () - 1;
       if (nQueues > 0 || nQueueLength > 0)
         s_aLogger.info ("Stopping central mail queues: " +
                         nQueues +
