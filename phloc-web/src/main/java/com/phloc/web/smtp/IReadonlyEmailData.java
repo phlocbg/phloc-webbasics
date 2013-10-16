@@ -18,6 +18,7 @@
 package com.phloc.web.smtp;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
@@ -53,16 +54,40 @@ public interface IReadonlyEmailData
   IEmailAddress getFrom ();
 
   /**
-   * Get the reply-to mail address.
+   * Get the reply-to mail addresses.
    * 
    * @return never <code>null</code>
    */
   @Nonnull
   List <? extends IEmailAddress> getReplyTo ();
 
+  /**
+   * Get the reply-to email addresses.
+   * 
+   * @param sCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws UnsupportedEncodingException
+   * @throws AddressException
+   */
   @Nonnull
+  @Deprecated
   InternetAddress [] getReplyToArray (@Nullable String sCharset) throws UnsupportedEncodingException, AddressException;
 
+  /**
+   * Get the reply-to email addresses.
+   * 
+   * @param aCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws AddressException
+   */
+  @Nonnull
+  InternetAddress [] getReplyToArray (@Nullable Charset aCharset) throws AddressException;
+
+  /**
+   * @return Number of reply-to addresses. Always &ge; 0.
+   */
   @Nonnegative
   int getReplyToCount ();
 
@@ -74,9 +99,33 @@ public interface IReadonlyEmailData
   @Nonnull
   List <? extends IEmailAddress> getTo ();
 
+  /**
+   * Get a list of all TO-receivers.
+   * 
+   * @param sCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws UnsupportedEncodingException
+   * @throws AddressException
+   */
   @Nonnull
+  @Deprecated
   InternetAddress [] getToArray (@Nullable String sCharset) throws UnsupportedEncodingException, AddressException;
 
+  /**
+   * Get a list of all TO-receivers.
+   * 
+   * @param aCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws AddressException
+   */
+  @Nonnull
+  InternetAddress [] getToArray (@Nullable Charset aCharset) throws AddressException;
+
+  /**
+   * @return Number of TO-receivers. Always &ge; 0.
+   */
   @Nonnegative
   int getToCount ();
 
@@ -88,9 +137,33 @@ public interface IReadonlyEmailData
   @Nonnull
   List <? extends IEmailAddress> getCc ();
 
+  /**
+   * Get a list of all CC-receivers.
+   * 
+   * @param sCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws UnsupportedEncodingException
+   * @throws AddressException
+   */
   @Nonnull
+  @Deprecated
   InternetAddress [] getCcArray (@Nullable String sCharset) throws UnsupportedEncodingException, AddressException;
 
+  /**
+   * Get a list of all CC-receivers.
+   * 
+   * @param aCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws AddressException
+   */
+  @Nonnull
+  InternetAddress [] getCcArray (@Nullable Charset aCharset) throws AddressException;
+
+  /**
+   * @return Number of CC-receivers. Always &ge; 0.
+   */
   @Nonnegative
   int getCcCount ();
 
@@ -102,9 +175,32 @@ public interface IReadonlyEmailData
   @Nonnull
   List <? extends IEmailAddress> getBcc ();
 
+  /**
+   * Get a list of all BCC-receivers.
+   * 
+   * @param sCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws UnsupportedEncodingException
+   * @throws AddressException
+   */
   @Nonnull
   InternetAddress [] getBccArray (@Nullable String sCharset) throws UnsupportedEncodingException, AddressException;
 
+  /**
+   * Get a list of all BCC-receivers.
+   * 
+   * @param aCharset
+   *        Character set to use. May be <code>null</code>.
+   * @return Never <code>null</code>.
+   * @throws AddressException
+   */
+  @Nonnull
+  InternetAddress [] getBccArray (@Nullable Charset aCharset) throws AddressException;
+
+  /**
+   * @return Number of BCC-receivers. Always &ge; 0.
+   */
   @Nonnegative
   int getBccCount ();
 

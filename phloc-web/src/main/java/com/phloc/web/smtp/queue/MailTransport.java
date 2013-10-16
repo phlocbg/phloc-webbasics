@@ -192,7 +192,7 @@ final class MailTransport
             {
               // convert from IEmailData to MimeMessage
               final MimeMessage aMimeMessage = new MimeMessage (m_aSession);
-              MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSettings.getCharset ());
+              MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSettings.getCharsetObj ());
 
               // Ensure a sent date is present
               if (aMimeMessage.getSentDate () == null)

@@ -18,6 +18,7 @@
 package com.phloc.web.smtp;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +40,28 @@ public final class InternetAddressUtils
 {
   private InternetAddressUtils ()
   {}
+
+  @Nonnull
+  public static InternetAddress getAsInternetAddress (@Nonnull final IEmailAddress aAddress,
+                                                      @Nullable final Charset aCharset) throws AddressException
+  {
+    return getAsInternetAddress (aAddress.getAddress (), aAddress.getPersonal (), aCharset);
+  }
+
+  @Nonnull
+  public static InternetAddress getAsInternetAddress (@Nonnull final String sAddress,
+                                                      @Nullable final String sPersonal,
+                                                      @Nullable final Charset aCharset) throws AddressException
+  {
+    try
+    {
+      return getAsInternetAddress (sAddress, sPersonal, aCharset == null ? null : aCharset.name ());
+    }
+    catch (final UnsupportedEncodingException ex)
+    {
+      throw new IllegalStateException ("Charset " + aCharset + " is unknown!", ex);
+    }
+  }
 
   @Nonnull
   public static InternetAddress getAsInternetAddress (@Nonnull final IEmailAddress aAddress,

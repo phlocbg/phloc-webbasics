@@ -17,6 +17,8 @@
  */
 package com.phloc.web.smtp.settings;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -122,6 +124,12 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
   public String getCharset ()
   {
     return m_aSettings.getCharset ();
+  }
+
+  @Nonnull
+  public Charset getCharsetObj ()
+  {
+    return m_aSettings.getCharsetObj ();
   }
 
   public boolean isSSLEnabled ()

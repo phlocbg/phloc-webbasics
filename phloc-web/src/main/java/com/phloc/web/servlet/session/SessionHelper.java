@@ -71,9 +71,19 @@ public final class SessionHelper
     return EChange.UNCHANGED;
   }
 
+  /**
+   * Get all attribute names present in the specified session.
+   * 
+   * @param aSession
+   *        The session to use. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   public static Enumeration <String> getAllAttributes (@Nonnull final HttpSession aSession)
   {
+    if (aSession == null)
+      throw new NullPointerException ("session");
+
     try
     {
       return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aSession.getAttributeNames ());
@@ -85,6 +95,14 @@ public final class SessionHelper
     }
   }
 
+  /**
+   * Invalidate the session of the specified request (if any) and create a new
+   * session.
+   * 
+   * @param aRequest
+   *        The HTTP request to use. May not be <code>null</code>.
+   * @return The new {@link HttpSession} to use. Never <code>null</code>.
+   */
   @Nonnull
   public static HttpSession safeRenewSession (@Nonnull final HttpServletRequest aRequest)
   {

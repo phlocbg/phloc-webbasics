@@ -18,6 +18,7 @@
 package com.phloc.web.smtp;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,10 +132,33 @@ public final class EmailData implements IEmailData
 
   @Nonnull
   @ReturnsMutableCopy
+  private static InternetAddress [] _asArray (@Nonnull final List <IEmailAddress> aList,
+                                              @Nullable final Charset aCharset) throws AddressException
+  {
+    try
+    {
+      return _asArray (aList, aCharset == null ? null : aCharset.name ());
+    }
+    catch (final UnsupportedEncodingException ex)
+    {
+      throw new IllegalStateException ("Charset " + aCharset + " is unknown!", ex);
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  @Deprecated
   public InternetAddress [] getReplyToArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                              AddressException
   {
     return _asArray (m_aReplyTo, sCharset);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public InternetAddress [] getReplyToArray (@Nullable final Charset aCharset) throws AddressException
+  {
+    return _asArray (m_aReplyTo, aCharset);
   }
 
   @Nonnegative
@@ -172,10 +196,18 @@ public final class EmailData implements IEmailData
 
   @Nonnull
   @ReturnsMutableCopy
+  @Deprecated
   public InternetAddress [] getToArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                         AddressException
   {
     return _asArray (m_aTo, sCharset);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public InternetAddress [] getToArray (@Nullable final Charset aCharset) throws AddressException
+  {
+    return _asArray (m_aTo, aCharset);
   }
 
   @Nonnegative
@@ -213,10 +245,18 @@ public final class EmailData implements IEmailData
 
   @Nonnull
   @ReturnsMutableCopy
+  @Deprecated
   public InternetAddress [] getCcArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                         AddressException
   {
     return _asArray (m_aCc, sCharset);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public InternetAddress [] getCcArray (@Nullable final Charset aCharset) throws AddressException
+  {
+    return _asArray (m_aCc, aCharset);
   }
 
   @Nonnegative
@@ -254,10 +294,18 @@ public final class EmailData implements IEmailData
 
   @Nonnull
   @ReturnsMutableCopy
+  @Deprecated
   public InternetAddress [] getBccArray (@Nullable final String sCharset) throws UnsupportedEncodingException,
                                                                          AddressException
   {
     return _asArray (m_aBcc, sCharset);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public InternetAddress [] getBccArray (@Nullable final Charset aCharset) throws AddressException
+  {
+    return _asArray (m_aBcc, aCharset);
   }
 
   @Nonnegative

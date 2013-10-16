@@ -44,7 +44,7 @@ public final class InputStreamProviderDataSource implements DataSource
 
   public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS, @Nonnull final String sFilename)
   {
-    this (aISS, sFilename, (IMimeType) null);
+    this (aISS, sFilename, (String) null);
   }
 
   public InputStreamProviderDataSource (@Nonnull final IInputStreamProvider aISS,

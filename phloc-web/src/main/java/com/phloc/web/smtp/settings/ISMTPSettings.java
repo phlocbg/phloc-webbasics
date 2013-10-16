@@ -17,6 +17,8 @@
  */
 package com.phloc.web.smtp.settings;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -61,6 +63,12 @@ public interface ISMTPSettings
    */
   @Nonnull
   String getCharset ();
+
+  /**
+   * @return The mail encoding to be used. May be <code>null</code>.
+   */
+  @Nonnull
+  Charset getCharsetObj ();
 
   /**
    * @return <code>true</code> if SSL is enabled, <code>false</code> if SSL is

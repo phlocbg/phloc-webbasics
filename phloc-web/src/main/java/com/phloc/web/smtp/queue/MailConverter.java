@@ -17,7 +17,7 @@
  */
 package com.phloc.web.smtp.queue;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -50,23 +50,50 @@ public final class MailConverter
   private MailConverter ()
   {}
 
+  private static void _setSubject (@Nonnull final MimeMessage aMIMEMessage,
+                                   @Nonnull final String sSubject,
+                                   @Nonnull final Charset aCharset)
+  {
+    try
+    {
+      aMIMEMessage.setSubject (sSubject, aCharset.name ());
+    }
+    catch (final MessagingException ex)
+    {
+      throw new IllegalStateException ("Charset " + aCharset + " is unknown!", ex);
+    }
+  }
+
+  private static void _setText (@Nonnull final MimeBodyPart aMIMEBody,
+                                @Nonnull final String sText,
+                                @Nonnull final Charset aCharset)
+  {
+    try
+    {
+      aMIMEBody.setText (sText, aCharset.name ());
+    }
+    catch (final MessagingException ex)
+    {
+      throw new IllegalStateException ("Charset " + aCharset + " is unknown!", ex);
+    }
+  }
+
   private static void _fillMimeMessage (@Nonnull final MimeMessage aMIMEMessage,
                                         @Nonnull final IEmailData aMailData,
-                                        @Nullable final String sCharset) throws MessagingException,
-                                                                        UnsupportedEncodingException
+                                        @Nullable final Charset aCharset) throws MessagingException
   {
     if (aMailData.getFrom () != null)
-      aMIMEMessage.setFrom (InternetAddressUtils.getAsInternetAddress (aMailData.getFrom (), sCharset));
+      aMIMEMessage.setFrom (InternetAddressUtils.getAsInternetAddress (aMailData.getFrom (), aCharset));
     if (aMailData.getReplyTo () != null)
-      aMIMEMessage.setReplyTo (aMailData.getReplyToArray (sCharset));
-    aMIMEMessage.setRecipients (Message.RecipientType.TO, aMailData.getToArray (sCharset));
-    aMIMEMessage.setRecipients (Message.RecipientType.CC, aMailData.getCcArray (sCharset));
-    aMIMEMessage.setRecipients (Message.RecipientType.BCC, aMailData.getBccArray (sCharset));
+      aMIMEMessage.setReplyTo (aMailData.getReplyToArray (aCharset));
+    aMIMEMessage.setRecipients (Message.RecipientType.TO, aMailData.getToArray (aCharset));
+    aMIMEMessage.setRecipients (Message.RecipientType.CC, aMailData.getCcArray (aCharset));
+    aMIMEMessage.setRecipients (Message.RecipientType.BCC, aMailData.getBccArray (aCharset));
     if (aMailData.getSentDate () != null)
       aMIMEMessage.setSentDate (aMailData.getSentDate ().toDate ());
     if (aMailData.getSubject () != null)
-      if (sCharset != null)
-        aMIMEMessage.setSubject (aMailData.getSubject (), sCharset);
+      if (aCharset != null)
+        _setSubject (aMIMEMessage, aMailData.getSubject (), aCharset);
       else
         aMIMEMessage.setSubject (aMailData.getSubject ());
 
@@ -77,17 +104,19 @@ public final class MailConverter
       final MimeBodyPart aBodyPart = new MimeBodyPart ();
       if (aMailData.getEmailType ().isHTML ())
       {
-        if (sCharset != null)
+        if (aCharset != null)
+        {
           aBodyPart.setContent (aMailData.getBody (),
                                 new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
-                                                                                 sCharset).getAsString ());
+                                                                                 aCharset.name ()).getAsString ());
+        }
         else
           aBodyPart.setContent (aMailData.getBody (), CMimeType.TEXT_HTML.getAsString ());
       }
       else
       {
-        if (sCharset != null)
-          aBodyPart.setText (aMailData.getBody (), sCharset);
+        if (aCharset != null)
+          _setText (aBodyPart, aMailData.getBody (), aCharset);
         else
           aBodyPart.setText (aMailData.getBody ());
       }
@@ -118,18 +147,18 @@ public final class MailConverter
    * @param aMailData
    *        The mail data object that contains all the source information to be
    *        send.
-   * @param sCharset
+   * @param aCharset
    *        The character set to be used for sending.
    * @throws LoggedRuntimeException
    *         in case of an error
    */
   public static void fillMimeMesage (@Nonnull final MimeMessage aMimeMessage,
                                      @Nonnull final IEmailData aMailData,
-                                     @Nullable final String sCharset)
+                                     @Nullable final Charset aCharset)
   {
     try
     {
-      _fillMimeMessage (aMimeMessage, aMailData, sCharset);
+      _fillMimeMessage (aMimeMessage, aMailData, aCharset);
     }
     catch (final Exception ex)
     {

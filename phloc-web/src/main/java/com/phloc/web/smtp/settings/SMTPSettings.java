@@ -17,11 +17,17 @@
  */
 package com.phloc.web.smtp.settings;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -38,11 +44,13 @@ import com.phloc.web.port.DefaultNetworkPorts;
 @Immutable
 public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettings>
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (SMTPSettings.class);
+
   private String m_sHostName;
   private int m_nPort;
   private String m_sUserName;
   private String m_sPassword;
-  private String m_sCharset;
+  private Charset m_aCharset;
   private boolean m_bSSLEnabled;
   private boolean m_bSTARTTLSEnabled;
 
@@ -181,17 +189,32 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
   @Nonnull
   public String getCharset ()
   {
-    return m_sCharset;
+    return m_aCharset.name ();
+  }
+
+  @Nonnull
+  public Charset getCharsetObj ()
+  {
+    return m_aCharset;
   }
 
   @Nonnull
   public EChange setCharset (@Nullable final String sCharset)
   {
-    final String sRealCharset = StringHelper.hasNoText (sCharset) ? CWebCharset.CHARSET_SMTP : sCharset;
-    if (EqualsUtils.equals (sRealCharset, m_sCharset))
+    try
+    {
+      final String sRealCharset = StringHelper.hasNoText (sCharset) ? CWebCharset.CHARSET_SMTP : sCharset;
+      final Charset aRealCharset = CharsetManager.getCharsetFromName (sRealCharset);
+      if (EqualsUtils.equals (aRealCharset, m_aCharset))
+        return EChange.UNCHANGED;
+      m_aCharset = aRealCharset;
+      return EChange.CHANGED;
+    }
+    catch (final IllegalArgumentException ex)
+    {
+      s_aLogger.error (ex.getMessage ());
       return EChange.UNCHANGED;
-    m_sCharset = sRealCharset;
-    return EChange.CHANGED;
+    }
   }
 
   public boolean isSSLEnabled ()
@@ -245,7 +268,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
            m_nPort == rhs.m_nPort &&
            EqualsUtils.equals (m_sUserName, rhs.m_sUserName) &&
            EqualsUtils.equals (m_sPassword, rhs.m_sPassword) &&
-           m_sCharset.equals (rhs.m_sCharset) &&
+           m_aCharset.equals (rhs.m_aCharset) &&
            m_bSSLEnabled == rhs.m_bSSLEnabled &&
            m_bSTARTTLSEnabled == rhs.m_bSTARTTLSEnabled;
   }
@@ -257,7 +280,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                                        .append (m_nPort)
                                        .append (m_sUserName)
                                        .append (m_sPassword)
-                                       .append (m_sCharset)
+                                       .append (m_aCharset)
                                        .append (m_bSSLEnabled)
                                        .append (m_bSTARTTLSEnabled)
                                        .getHashCode ();
@@ -270,7 +293,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                                        .append ("port", m_nPort)
                                        .append ("userName", m_sUserName)
                                        .appendPassword ("password")
-                                       .append ("charset", m_sCharset)
+                                       .append ("charset", m_aCharset)
                                        .append ("SSL", m_bSSLEnabled)
                                        .append ("STARTTLS", m_bSTARTTLSEnabled)
                                        .toString ();
