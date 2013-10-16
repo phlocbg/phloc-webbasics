@@ -28,8 +28,8 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
 import com.phloc.commons.mock.MockException;
 import com.phloc.commons.mock.PhlocTestUtils;
-import com.phloc.web.smtp.settings.ISMTPSettings;
-import com.phloc.web.smtp.settings.SMTPSettings;
+import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.impl.SMTPSettings;
 
 /**
  * Test class for class {@link FailedMailData}.

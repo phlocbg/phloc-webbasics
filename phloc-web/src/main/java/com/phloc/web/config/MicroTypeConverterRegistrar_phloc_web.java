@@ -23,18 +23,18 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistrarSPI;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistry;
-import com.phloc.web.smtp.EmailData;
-import com.phloc.web.smtp.EmailDataMicroTypeConverter;
-import com.phloc.web.smtp.attachment.EmailAttachment;
-import com.phloc.web.smtp.attachment.EmailAttachmentList;
-import com.phloc.web.smtp.attachment.EmailAttachmentListMicroTypeConverter;
-import com.phloc.web.smtp.attachment.EmailAttachmentMicroTypeConverter;
 import com.phloc.web.smtp.failed.FailedMailData;
 import com.phloc.web.smtp.failed.FailedMailDataMicroTypeConverter;
-import com.phloc.web.smtp.settings.ReadonlySMTPSettings;
-import com.phloc.web.smtp.settings.ReadonlySMTPSettingsMicroTypeConverter;
-import com.phloc.web.smtp.settings.SMTPSettings;
-import com.phloc.web.smtp.settings.SMTPSettingsMicroTypeConverter;
+import com.phloc.web.smtp.impl.EmailAttachment;
+import com.phloc.web.smtp.impl.EmailAttachmentList;
+import com.phloc.web.smtp.impl.EmailAttachmentListMicroTypeConverter;
+import com.phloc.web.smtp.impl.EmailAttachmentMicroTypeConverter;
+import com.phloc.web.smtp.impl.EmailData;
+import com.phloc.web.smtp.impl.EmailDataMicroTypeConverter;
+import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
+import com.phloc.web.smtp.impl.ReadonlySMTPSettingsMicroTypeConverter;
+import com.phloc.web.smtp.impl.SMTPSettings;
+import com.phloc.web.smtp.impl.SMTPSettingsMicroTypeConverter;
 
 /**
  * Register all MicroTypeConverter implementations of this project.

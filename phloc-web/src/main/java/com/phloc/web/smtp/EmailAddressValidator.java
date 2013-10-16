@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ import com.phloc.commons.email.EmailAddressUtils;
  * 
  * @author Philip Helger
  */
-@Immutable
+@ThreadSafe
 public final class EmailAddressValidator
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (EmailAddressValidator.class);

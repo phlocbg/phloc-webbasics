@@ -37,7 +37,7 @@ import com.phloc.commons.type.ObjectType;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.web.smtp.IEmailData;
-import com.phloc.web.smtp.settings.ISMTPSettings;
+import com.phloc.web.smtp.ISMTPSettings;
 
 @Immutable
 public final class FailedMailData implements ITypedObject <String>

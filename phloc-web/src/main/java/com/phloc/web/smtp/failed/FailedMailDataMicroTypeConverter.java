@@ -30,10 +30,10 @@ import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.web.datetime.PDTWebDateUtils;
-import com.phloc.web.smtp.EmailData;
 import com.phloc.web.smtp.IEmailData;
-import com.phloc.web.smtp.settings.ISMTPSettings;
-import com.phloc.web.smtp.settings.SMTPSettings;
+import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.impl.EmailData;
+import com.phloc.web.smtp.impl.SMTPSettings;
 
 public final class FailedMailDataMicroTypeConverter implements IMicroTypeConverter
 {
