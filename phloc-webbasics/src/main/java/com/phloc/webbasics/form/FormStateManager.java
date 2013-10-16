@@ -32,6 +32,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 public class FormStateManager extends SessionWebSingleton
@@ -100,5 +101,11 @@ public class FormStateManager extends SessionWebSingleton
       return EChange.UNCHANGED;
     m_aMap.clear ();
     return EChange.CHANGED;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
   }
 }

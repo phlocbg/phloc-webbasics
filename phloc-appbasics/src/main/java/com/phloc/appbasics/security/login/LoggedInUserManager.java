@@ -133,6 +133,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         m_aOwningMgr._logoutUser (m_sUserID, this);
       }
     }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("userID", m_sUserID).toString ();
+    }
   }
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
