@@ -37,6 +37,8 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_CHARSET = "charset";
   private static final String ATTR_SSLENABLED = "sslenabled";
   private static final String ATTR_STARTTLSENABLED = "starttlsenabled";
+  private static final String ATTR_CONNECTIONTIMEOUT = "connectiontimeout";
+  private static final String ATTR_TIMEOUT = "timeout";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
@@ -52,6 +54,8 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
     eSMTPSettings.setAttribute (ATTR_CHARSET, aSMTPSettings.getCharset ());
     eSMTPSettings.setAttribute (ATTR_SSLENABLED, Boolean.toString (aSMTPSettings.isSSLEnabled ()));
     eSMTPSettings.setAttribute (ATTR_STARTTLSENABLED, Boolean.toString (aSMTPSettings.isSTARTTLSEnabled ()));
+    eSMTPSettings.setAttribute (ATTR_CONNECTIONTIMEOUT, aSMTPSettings.getConnectionTimeoutMilliSecs ());
+    eSMTPSettings.setAttribute (ATTR_TIMEOUT, aSMTPSettings.getTimeoutMilliSecs ());
     return eSMTPSettings;
   }
 
@@ -88,6 +92,22 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
     final String sSTARTTLSEnabled = eSMTPSettings.getAttribute (ATTR_STARTTLSENABLED);
     final boolean bSTARTTLSEnabled = StringParser.parseBool (sSTARTTLSEnabled, ISMTPSettings.DEFAULT_STARTTLS_ENABLED);
 
-    return new SMTPSettings (sHost, nPort, sUser, sPassword, sCharset, bSSLEnabled, bSTARTTLSEnabled);
+    final String sConnectionTimeoutMilliSecs = eSMTPSettings.getAttribute (ATTR_CONNECTIONTIMEOUT);
+    final long nConnectionTimeoutMilliSecs = StringParser.parseLong (sConnectionTimeoutMilliSecs,
+                                                                     MailTransportSettings.getConnectionTimeoutMilliSecs ());
+
+    final String sTimeoutMilliSecs = eSMTPSettings.getAttribute (ATTR_TIMEOUT);
+    final long nTimeoutMilliSecs = StringParser.parseLong (sTimeoutMilliSecs,
+                                                           MailTransportSettings.getTimeoutMilliSecs ());
+
+    return new SMTPSettings (sHost,
+                             nPort,
+                             sUser,
+                             sPassword,
+                             sCharset,
+                             bSSLEnabled,
+                             bSTARTTLSEnabled,
+                             nConnectionTimeoutMilliSecs,
+                             nTimeoutMilliSecs);
   }
 }

@@ -53,6 +53,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
   private Charset m_aCharset;
   private boolean m_bSSLEnabled;
   private boolean m_bSTARTTLSEnabled;
+  private long m_nConnectionTimeoutMilliSecs;
+  private long m_nTimeoutMilliSecs;
 
   /**
    * Constructor which copies settings from another object
@@ -68,7 +70,9 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
           aOther.getPassword (),
           aOther.getCharset (),
           aOther.isSSLEnabled (),
-          aOther.isSTARTTLSEnabled ());
+          aOther.isSTARTTLSEnabled (),
+          aOther.getConnectionTimeoutMilliSecs (),
+          aOther.getTimeoutMilliSecs ());
   }
 
   /**
@@ -80,7 +84,50 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
    */
   public SMTPSettings (@Nonnull final String sHost)
   {
-    this (sHost, -1, null, null, null, DEFAULT_SSL_ENABLED, DEFAULT_STARTTLS_ENABLED);
+    this (sHost,
+          -1,
+          null,
+          null,
+          null,
+          DEFAULT_SSL_ENABLED,
+          DEFAULT_STARTTLS_ENABLED,
+          MailTransportSettings.getConnectionTimeoutMilliSecs (),
+          MailTransportSettings.getTimeoutMilliSecs ());
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sHostName
+   *        SMTP server name or IP address. May neither be <code>null</code> nor
+   *        empty.
+   * @param nPort
+   *        Port to use. May be <code>-1</code> for the default port.
+   * @param sUserName
+   *        The username to use. May be <code>null</code>.
+   * @param sPassword
+   *        The password to use. May be <code>null</code>.
+   * @param sCharset
+   *        The charset to use. May be <code>null</code>.
+   * @param bSSLEnabled
+   *        <code>true</code> to enable SSL communications
+   */
+  public SMTPSettings (@Nonnull final String sHostName,
+                       final int nPort,
+                       @Nullable final String sUserName,
+                       @Nullable final String sPassword,
+                       @Nullable final String sCharset,
+                       final boolean bSSLEnabled)
+  {
+    this (sHostName,
+          nPort,
+          sUserName,
+          sPassword,
+          sCharset,
+          bSSLEnabled,
+          DEFAULT_STARTTLS_ENABLED,
+          MailTransportSettings.getConnectionTimeoutMilliSecs (),
+          MailTransportSettings.getTimeoutMilliSecs ());
   }
 
   /**
@@ -101,6 +148,10 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
    *        <code>true</code> to enable SSL communications
    * @param bSTARTTLSEnabled
    *        <code>true</code> to enable STARTTLS communications
+   * @param nConnectionTimeoutMilliSecs
+   *        the connection timeout in milliseconds.
+   * @param nTimeoutMilliSecs
+   *        the socket timeout in milliseconds.
    */
   public SMTPSettings (@Nonnull final String sHostName,
                        final int nPort,
@@ -108,7 +159,9 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                        @Nullable final String sPassword,
                        @Nullable final String sCharset,
                        final boolean bSSLEnabled,
-                       final boolean bSTARTTLSEnabled)
+                       final boolean bSTARTTLSEnabled,
+                       final long nConnectionTimeoutMilliSecs,
+                       final long nTimeoutMilliSecs)
   {
     setHostName (sHostName);
     setPort (nPort);
@@ -117,6 +170,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
     setCharset (sCharset);
     setSSLEnabled (bSSLEnabled);
     setSTARTTLSEnabled (bSTARTTLSEnabled);
+    setConnectionTimeoutMilliSecs (nConnectionTimeoutMilliSecs);
+    setTimeoutMilliSecs (nTimeoutMilliSecs);
   }
 
   @Nonnull
@@ -245,6 +300,50 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
     return EChange.CHANGED;
   }
 
+  public long getConnectionTimeoutMilliSecs ()
+  {
+    return m_nConnectionTimeoutMilliSecs;
+  }
+
+  /**
+   * Set the connection timeout in milliseconds. Values &le; 0 are interpreted
+   * as indefinite timeout which is not recommended!
+   * 
+   * @param nMilliSecs
+   *        The milliseconds timeout
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public EChange setConnectionTimeoutMilliSecs (final long nMilliSecs)
+  {
+    if (m_nConnectionTimeoutMilliSecs == nMilliSecs)
+      return EChange.UNCHANGED;
+    m_nConnectionTimeoutMilliSecs = nMilliSecs;
+    return EChange.CHANGED;
+  }
+
+  public long getTimeoutMilliSecs ()
+  {
+    return m_nTimeoutMilliSecs;
+  }
+
+  /**
+   * Set the socket timeout in milliseconds. Values &le; 0 are interpreted as
+   * indefinite timeout which is not recommended!
+   * 
+   * @param nMilliSecs
+   *        The milliseconds timeout
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public EChange setTimeoutMilliSecs (final long nMilliSecs)
+  {
+    if (m_nTimeoutMilliSecs == nMilliSecs)
+      return EChange.UNCHANGED;
+    m_nTimeoutMilliSecs = nMilliSecs;
+    return EChange.CHANGED;
+  }
+
   public boolean areRequiredFieldsSet ()
   {
     return StringHelper.hasText (m_sHostName);
@@ -270,7 +369,9 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
            EqualsUtils.equals (m_sPassword, rhs.m_sPassword) &&
            m_aCharset.equals (rhs.m_aCharset) &&
            m_bSSLEnabled == rhs.m_bSSLEnabled &&
-           m_bSTARTTLSEnabled == rhs.m_bSTARTTLSEnabled;
+           m_bSTARTTLSEnabled == rhs.m_bSTARTTLSEnabled &&
+           m_nConnectionTimeoutMilliSecs == rhs.m_nConnectionTimeoutMilliSecs &&
+           m_nTimeoutMilliSecs == rhs.m_nTimeoutMilliSecs;
   }
 
   @Override
@@ -283,6 +384,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                                        .append (m_aCharset)
                                        .append (m_bSSLEnabled)
                                        .append (m_bSTARTTLSEnabled)
+                                       .append (m_nConnectionTimeoutMilliSecs)
+                                       .append (m_nTimeoutMilliSecs)
                                        .getHashCode ();
   }
 
@@ -296,6 +399,8 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
                                        .append ("charset", m_aCharset)
                                        .append ("SSL", m_bSSLEnabled)
                                        .append ("STARTTLS", m_bSTARTTLSEnabled)
+                                       .append ("connectionTimeout", m_nConnectionTimeoutMilliSecs)
+                                       .append ("timeout", m_nTimeoutMilliSecs)
                                        .toString ();
   }
 }

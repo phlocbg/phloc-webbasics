@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.smtp.queue;
+package com.phloc.web.smtp.settings;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -37,8 +37,7 @@ import com.phloc.commons.SystemProperties;
 import com.phloc.commons.state.EChange;
 
 /**
- * Global settings for the mail transport. The values of this class are applied
- * to all instances of javax.mail.Transport in the correct order.
+ * Global settings for the mail transport.
  * 
  * @author Philip Helger
  */
@@ -52,7 +51,7 @@ public final class MailTransportSettings
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
-  private static long s_nConnectTimeoutMilliSecs = DEFAULT_CONNECT_TIMEOUT_MILLISECS;
+  private static long s_nConnectionTimeoutMilliSecs = DEFAULT_CONNECT_TIMEOUT_MILLISECS;
   @GuardedBy ("s_aRWLock")
   private static long s_nTimeoutMilliSecs = DEFAULT_TIMEOUT_MILLISECS;
   @GuardedBy ("s_aRWLock")
@@ -72,18 +71,18 @@ public final class MailTransportSettings
    * @return {@link EChange}
    */
   @Nonnull
-  public static EChange setConnectTimeoutMilliSecs (final long nMilliSecs)
+  public static EChange setConnectionTimeoutMilliSecs (final long nMilliSecs)
   {
     s_aRWLock.writeLock ().lock ();
     try
     {
-      if (s_nConnectTimeoutMilliSecs == nMilliSecs)
+      if (s_nConnectionTimeoutMilliSecs == nMilliSecs)
         return EChange.UNCHANGED;
       if (nMilliSecs <= 0)
         s_aLogger.warn ("You are setting an indefinite connection timeout for the mail transport api: " + nMilliSecs);
       else
         s_aLogger.info ("Connection timeout for the mail transport api is set to " + nMilliSecs + " milliseconds");
-      s_nConnectTimeoutMilliSecs = nMilliSecs;
+      s_nConnectionTimeoutMilliSecs = nMilliSecs;
       return EChange.CHANGED;
     }
     finally
@@ -98,12 +97,12 @@ public final class MailTransportSettings
    * @return If the value is &le; 0 than there should be no connection timeout.
    */
   @CheckForSigned
-  public static long getConnectTimeoutMilliSecs ()
+  public static long getConnectionTimeoutMilliSecs ()
   {
     s_aRWLock.readLock ().lock ();
     try
     {
-      return s_nConnectTimeoutMilliSecs;
+      return s_nConnectionTimeoutMilliSecs;
     }
     finally
     {
@@ -113,7 +112,7 @@ public final class MailTransportSettings
 
   /**
    * Set the socket timeout in milliseconds. Values &le; 0 are interpreted as
-   * indefinite timeout which is not recommeneded!
+   * indefinite timeout which is not recommended!
    * 
    * @param nMilliSecs
    *        The milliseconds timeout

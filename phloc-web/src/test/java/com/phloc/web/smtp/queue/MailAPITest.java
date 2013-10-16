@@ -33,6 +33,7 @@ import com.phloc.web.smtp.EmailData;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.listener.LoggingConnectionListener;
 import com.phloc.web.smtp.listener.LoggingTransportListener;
+import com.phloc.web.smtp.settings.MailTransportSettings;
 import com.phloc.web.smtp.settings.SMTPSettings;
 
 /**

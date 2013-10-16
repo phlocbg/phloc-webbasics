@@ -52,7 +52,9 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
           aOther.getPassword (),
           aOther.getCharset (),
           aOther.isSSLEnabled (),
-          aOther.isSTARTTLSEnabled ());
+          aOther.isSTARTTLSEnabled (),
+          aOther.getConnectionTimeoutMilliSecs (),
+          aOther.getTimeoutMilliSecs ());
   }
 
   /**
@@ -64,7 +66,50 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    */
   public ReadonlySMTPSettings (@Nonnull final String sHostName)
   {
-    this (sHostName, -1, null, null, null, DEFAULT_SSL_ENABLED, DEFAULT_STARTTLS_ENABLED);
+    this (sHostName,
+          -1,
+          null,
+          null,
+          null,
+          DEFAULT_SSL_ENABLED,
+          DEFAULT_STARTTLS_ENABLED,
+          MailTransportSettings.getConnectionTimeoutMilliSecs (),
+          MailTransportSettings.getTimeoutMilliSecs ());
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sHostName
+   *        SMTP server name or IP address. May neither be <code>null</code> nor
+   *        empty.
+   * @param nPort
+   *        Port to use. May be <code>-1</code> for the default port.
+   * @param sUserName
+   *        The username to use. May be <code>null</code>.
+   * @param sPassword
+   *        The password to use. May be <code>null</code>.
+   * @param sCharset
+   *        The charset to use. May be <code>null</code>.
+   * @param bSSLEnabled
+   *        <code>true</code> to enable SSL communications
+   */
+  public ReadonlySMTPSettings (@Nonnull final String sHostName,
+                               final int nPort,
+                               @Nullable final String sUserName,
+                               @Nullable final String sPassword,
+                               @Nullable final String sCharset,
+                               final boolean bSSLEnabled)
+  {
+    this (sHostName,
+          nPort,
+          sUserName,
+          sPassword,
+          sCharset,
+          bSSLEnabled,
+          DEFAULT_STARTTLS_ENABLED,
+          MailTransportSettings.getConnectionTimeoutMilliSecs (),
+          MailTransportSettings.getTimeoutMilliSecs ());
   }
 
   /**
@@ -85,6 +130,10 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    *        <code>true</code> to enable SSL communications
    * @param bSTARTTLSEnabled
    *        <code>true</code> to enable STARTTLS communications
+   * @param nConnectTimeoutMilliSecs
+   *        the connection timeout in milliseconds.
+   * @param nTimeoutMilliSecs
+   *        the socket timeout in milliseconds.
    */
   public ReadonlySMTPSettings (@Nonnull final String sHostName,
                                final int nPort,
@@ -92,9 +141,19 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
                                @Nullable final String sPassword,
                                @Nullable final String sCharset,
                                final boolean bSSLEnabled,
-                               final boolean bSTARTTLSEnabled)
+                               final boolean bSTARTTLSEnabled,
+                               final long nConnectTimeoutMilliSecs,
+                               final long nTimeoutMilliSecs)
   {
-    m_aSettings = new SMTPSettings (sHostName, nPort, sUserName, sPassword, sCharset, bSSLEnabled, bSTARTTLSEnabled);
+    m_aSettings = new SMTPSettings (sHostName,
+                                    nPort,
+                                    sUserName,
+                                    sPassword,
+                                    sCharset,
+                                    bSSLEnabled,
+                                    bSTARTTLSEnabled,
+                                    nConnectTimeoutMilliSecs,
+                                    nTimeoutMilliSecs);
   }
 
   @Nonnull
@@ -140,6 +199,16 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
   public boolean isSTARTTLSEnabled ()
   {
     return m_aSettings.isSTARTTLSEnabled ();
+  }
+
+  public long getConnectionTimeoutMilliSecs ()
+  {
+    return m_aSettings.getConnectionTimeoutMilliSecs ();
+  }
+
+  public long getTimeoutMilliSecs ()
+  {
+    return m_aSettings.getTimeoutMilliSecs ();
   }
 
   public boolean areRequiredFieldsSet ()

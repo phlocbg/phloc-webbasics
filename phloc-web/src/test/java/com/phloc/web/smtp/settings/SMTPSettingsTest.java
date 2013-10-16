@@ -42,14 +42,32 @@ public final class SMTPSettingsTest
                                                 "anyuser",
                                                 "secret",
                                                 CCharset.CHARSET_UTF_8,
-                                                true,
-                                                false);
+                                                true);
     assertEquals ("mail.example.com", aSettings.getHostName ());
     assertEquals (19, aSettings.getPort ());
     assertEquals ("anyuser", aSettings.getUserName ());
     assertEquals ("secret", aSettings.getPassword ());
     assertTrue (aSettings.isSSLEnabled ());
     assertFalse (aSettings.isSTARTTLSEnabled ());
+    PhlocTestUtils.testMicroTypeConversion (aSettings);
+
+    aSettings = new SMTPSettings ("mail.example.com",
+                                  19,
+                                  "anyuser",
+                                  "secret",
+                                  CCharset.CHARSET_UTF_8,
+                                  true,
+                                  true,
+                                  5000,
+                                  1200);
+    assertEquals ("mail.example.com", aSettings.getHostName ());
+    assertEquals (19, aSettings.getPort ());
+    assertEquals ("anyuser", aSettings.getUserName ());
+    assertEquals ("secret", aSettings.getPassword ());
+    assertTrue (aSettings.isSSLEnabled ());
+    assertFalse (aSettings.isSTARTTLSEnabled ());
+    assertEquals (5000, aSettings.getConnectionTimeoutMilliSecs ());
+    assertEquals (1200, aSettings.getTimeoutMilliSecs ());
     PhlocTestUtils.testMicroTypeConversion (aSettings);
 
     aSettings = new SMTPSettings ("mail.example.com");

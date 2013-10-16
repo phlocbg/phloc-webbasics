@@ -51,6 +51,7 @@ import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.settings.ESMTPTransportProperty;
 import com.phloc.web.smtp.settings.ISMTPSettings;
+import com.phloc.web.smtp.settings.MailTransportSettings;
 
 /**
  * The wrapper around the main javax.mail transport
@@ -99,26 +100,16 @@ final class MailTransport
                                      SSLSocketFactory.class.getName ());
       m_aMailProperties.setProperty (ESMTPTransportProperty.SSL_SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
                                      Integer.toString (aSettings.getPort ()));
-
-      if (false)
-      {
-        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_CLASS.getPropertyName (m_bSMTPS),
-                                       SSLSocketFactory.class.getName ());
-        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_PORT.getPropertyName (m_bSMTPS),
-                                       Integer.toString (aSettings.getPort ()));
-        m_aMailProperties.setProperty (ESMTPTransportProperty.SOCKETFACTORY_FALLBACK.getPropertyName (m_bSMTPS),
-                                       Boolean.FALSE.toString ());
-      }
     }
 
     // Set connection timeout
-    final long nConnectionTimeoutMilliSecs = MailTransportSettings.getConnectTimeoutMilliSecs ();
+    final long nConnectionTimeoutMilliSecs = aSettings.getConnectionTimeoutMilliSecs ();
     if (nConnectionTimeoutMilliSecs > 0)
       m_aMailProperties.setProperty (ESMTPTransportProperty.CONNECTIONTIMEOUT.getPropertyName (m_bSMTPS),
                                      Long.toString (nConnectionTimeoutMilliSecs));
 
     // Set socket timeout
-    final long nTimeoutMilliSecs = MailTransportSettings.getTimeoutMilliSecs ();
+    final long nTimeoutMilliSecs = aSettings.getTimeoutMilliSecs ();
     if (nTimeoutMilliSecs > 0)
       m_aMailProperties.setProperty (ESMTPTransportProperty.TIMEOUT.getPropertyName (m_bSMTPS),
                                      Long.toString (nTimeoutMilliSecs));
@@ -126,10 +117,12 @@ final class MailTransport
     if (false)
       m_aMailProperties.setProperty (ESMTPTransportProperty.REPORTSUCCESS.getPropertyName (m_bSMTPS),
                                      Boolean.TRUE.toString ());
+
+    // Debug flag
     m_aMailProperties.setProperty ("mail.debug.auth", Boolean.toString (GlobalDebug.isDebugMode ()));
 
-    if (GlobalDebug.isDebugMode ())
-      s_aLogger.info ("Mail properties: " + m_aMailProperties);
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Mail properties: " + m_aMailProperties);
 
     // Create session based on properties
     m_aSession = Session.getInstance (m_aMailProperties);
@@ -173,6 +166,7 @@ final class MailTransport
         final ConnectionListener aConnectionListener = MailTransportSettings.getConnectionListener ();
         if (aConnectionListener != null)
           aTransport.addConnectionListener (aConnectionListener);
+
         final TransportListener aTransportListener = MailTransportSettings.getTransportListener ();
         if (aTransportListener != null)
           aTransport.addTransportListener (aTransportListener);

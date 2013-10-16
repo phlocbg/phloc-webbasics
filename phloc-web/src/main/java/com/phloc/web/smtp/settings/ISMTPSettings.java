@@ -19,6 +19,7 @@ package com.phloc.web.smtp.settings;
 
 import java.nio.charset.Charset;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -81,6 +82,22 @@ public interface ISMTPSettings
    *         STARTTLS is disabled
    */
   boolean isSTARTTLSEnabled ();
+
+  /**
+   * Get the connection timeout in milliseconds.
+   * 
+   * @return If the value is &le; 0 than there should be no connection timeout.
+   */
+  @CheckForSigned
+  long getConnectionTimeoutMilliSecs ();
+
+  /**
+   * Get the socket timeout in milliseconds.
+   * 
+   * @return If the value is &le; 0 than there should be no connection timeout.
+   */
+  @CheckForSigned
+  long getTimeoutMilliSecs ();
 
   /**
    * @return <code>true</code> if the minimum number of fields are defined, that
