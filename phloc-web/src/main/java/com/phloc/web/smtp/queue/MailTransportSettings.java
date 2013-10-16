@@ -22,6 +22,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 
 import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -44,12 +45,18 @@ import com.phloc.commons.state.EChange;
 @ThreadSafe
 public final class MailTransportSettings
 {
+  public static final int DEFAULT_MAX_QUEUE_LENGTH = 500;
+  public static final int DEFAULT_MAX_SEND_COUNT = 100;
   public static final long DEFAULT_CONNECT_TIMEOUT_MILLISECS = 5 * CGlobal.MILLISECONDS_PER_SECOND;
   public static final long DEFAULT_TIMEOUT_MILLISECS = 10 * CGlobal.MILLISECONDS_PER_SECOND;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransportSettings.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
+  @GuardedBy ("s_aRWLock")
+  private static int s_nMaxMailQueueLen = DEFAULT_MAX_QUEUE_LENGTH;
+  @GuardedBy ("s_aRWLock")
+  private static int s_nMaxMailSendCount = DEFAULT_MAX_SEND_COUNT;
   @GuardedBy ("s_aRWLock")
   private static long s_nConnectionTimeoutMilliSecs = DEFAULT_CONNECT_TIMEOUT_MILLISECS;
   @GuardedBy ("s_aRWLock")
@@ -63,8 +70,85 @@ public final class MailTransportSettings
   {}
 
   /**
+   * Set mail queue settings. Changing these settings has no effect on existing
+   * mail queues!
+   * 
+   * @param nMaxMailQueueLen
+   *        The maximum number of mails that can be queued. Must be &gt; 0.
+   * @param nMaxMailSendCount
+   *        The maximum number of mails that are send out in one mail session.
+   *        Must be &gt; 0 but &le; than {@link #getMaxMailQueueLength()}.
+   * @return {@link EChange}.
+   */
+  @Nonnull
+  public static EChange setMailQueueSize (@Nonnegative final int nMaxMailQueueLen,
+                                          @Nonnegative final int nMaxMailSendCount)
+  {
+    if (nMaxMailQueueLen < 1)
+      throw new IllegalArgumentException ("MaxMailQueueLen: " + nMaxMailQueueLen);
+    if (nMaxMailSendCount < 1)
+      throw new IllegalArgumentException ("MaxMailSendCount: " + nMaxMailSendCount);
+    if (nMaxMailSendCount > nMaxMailQueueLen)
+      throw new IllegalArgumentException ("MaxMailQueueLen (" +
+                                          nMaxMailQueueLen +
+                                          ") must be >= than MaxMailSendCount (" +
+                                          nMaxMailSendCount +
+                                          ")");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (nMaxMailQueueLen == s_nMaxMailQueueLen && nMaxMailSendCount == s_nMaxMailSendCount)
+        return EChange.UNCHANGED;
+      s_nMaxMailQueueLen = nMaxMailQueueLen;
+      s_nMaxMailSendCount = nMaxMailSendCount;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return The maximum number of mails that can be queued. Always &gt; 0.
+   */
+  @Nonnegative
+  public static int getMaxMailQueueLength ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_nMaxMailQueueLen;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return The maximum number of mails that are send out in one mail session.
+   *         Always &gt; 0 but &le; than {@link #getMaxMailQueueLength()}.
+   */
+  @Nonnegative
+  public static int getMaxMailSendCount ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_nMaxMailSendCount;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
    * Set the connection timeout in milliseconds. Values &le; 0 are interpreted
-   * as indefinite timeout which is not recommended!
+   * as indefinite timeout which is not recommended! Changing these settings has
+   * no effect on existing mail queues!
    * 
    * @param nMilliSecs
    *        The milliseconds timeout
@@ -80,8 +164,6 @@ public final class MailTransportSettings
         return EChange.UNCHANGED;
       if (nMilliSecs <= 0)
         s_aLogger.warn ("You are setting an indefinite connection timeout for the mail transport api: " + nMilliSecs);
-      else
-        s_aLogger.info ("Connection timeout for the mail transport api is set to " + nMilliSecs + " milliseconds");
       s_nConnectionTimeoutMilliSecs = nMilliSecs;
       return EChange.CHANGED;
     }
@@ -112,7 +194,8 @@ public final class MailTransportSettings
 
   /**
    * Set the socket timeout in milliseconds. Values &le; 0 are interpreted as
-   * indefinite timeout which is not recommended!
+   * indefinite timeout which is not recommended! Changing these settings has no
+   * effect on existing mail queues!
    * 
    * @param nMilliSecs
    *        The milliseconds timeout
@@ -128,8 +211,6 @@ public final class MailTransportSettings
         return EChange.UNCHANGED;
       if (nMilliSecs <= 0)
         s_aLogger.warn ("You are setting an indefinite socket timeout for the mail transport api: " + nMilliSecs);
-      else
-        s_aLogger.info ("Socket timeout for the mail transport api is set to " + nMilliSecs + " milliseconds");
       s_nTimeoutMilliSecs = nMilliSecs;
       return EChange.CHANGED;
     }
@@ -159,7 +240,8 @@ public final class MailTransportSettings
   }
 
   /**
-   * Set a new mail connection listener.
+   * Set a new mail connection listener. Changing these settings has no effect
+   * on existing mail queues!
    * 
    * @param aConnectionListener
    *        The new connection listener to set. May be <code>null</code>.
@@ -195,7 +277,8 @@ public final class MailTransportSettings
   }
 
   /**
-   * Set a new mail transport listener.
+   * Set a new mail transport listener. Changing these settings has no effect on
+   * existing mail queues!
    * 
    * @param aTransportListener
    *        The new transport listener to set. May be <code>null</code>.

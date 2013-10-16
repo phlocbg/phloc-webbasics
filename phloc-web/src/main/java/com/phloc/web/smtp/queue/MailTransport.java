@@ -49,7 +49,6 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.WebExceptionHelper;
 import com.phloc.web.smtp.IEmailData;
-import com.phloc.web.smtp.settings.ESMTPTransportProperty;
 import com.phloc.web.smtp.settings.ISMTPSettings;
 
 /**

@@ -83,8 +83,6 @@ public final class MailAPI
                                                                                      new SynchronousQueue <Runnable> (),
                                                                                      s_aThreadFactory);
   private static FailedMailQueue s_aFailedMailQueue = new FailedMailQueue ();
-  private static final int s_nMaxMailQueueLen = 500;
-  private static final int s_nMaxMailSendCount = 100;
 
   private MailAPI ()
   {}
@@ -150,7 +148,10 @@ public final class MailAPI
     if (aSMTPQueue == null)
     {
       // create a new queue
-      aSMTPQueue = new MailQueuePerSMTP (s_nMaxMailQueueLen, s_nMaxMailSendCount, aRealSMTPSettings, s_aFailedMailQueue);
+      aSMTPQueue = new MailQueuePerSMTP (MailTransportSettings.getMaxMailQueueLength (),
+                                         MailTransportSettings.getMaxMailSendCount (),
+                                         aRealSMTPSettings,
+                                         s_aFailedMailQueue);
 
       // put queue in cache
       s_aQueueCache.put (aRealSMTPSettings, aSMTPQueue);
