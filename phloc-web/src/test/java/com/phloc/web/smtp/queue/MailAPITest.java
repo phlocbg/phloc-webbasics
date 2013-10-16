@@ -20,7 +20,6 @@ package com.phloc.web.smtp.queue;
 import org.junit.Test;
 
 import com.phloc.commons.GlobalDebug;
-import com.phloc.commons.SystemProperties;
 import com.phloc.commons.email.EmailAddress;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.idfactory.MemoryIntIDFactory;
@@ -57,10 +56,8 @@ public final class MailAPITest
     final IReadableResource aRes = new ClassPathResource ("smtp-settings.xml");
     if (aRes.exists ())
     {
-      if (false)
-        SystemProperties.setPropertyValue ("javax.net.debug", "all");
       GlobalDebug.setDebugModeDirect (true);
-      MailTransportSettings.enableJavaxMailDebugging (true);
+      MailTransportSettings.enableJavaxMailDebugging (GlobalDebug.isDebugMode ());
 
       // Setup debug listeners
       MailTransportSettings.setConnectionListener (new LoggingConnectionListener ());

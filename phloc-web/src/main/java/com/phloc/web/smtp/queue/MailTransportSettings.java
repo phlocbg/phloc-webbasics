@@ -230,5 +230,7 @@ public final class MailTransportSettings
     java.util.logging.Logger.getLogger ("com.sun.mail.smtp").setLevel (bDebug ? Level.FINEST : Level.INFO);
     java.util.logging.Logger.getLogger ("com.sun.mail.smtp.protocol").setLevel (bDebug ? Level.FINEST : Level.INFO);
     SystemProperties.setPropertyValue ("mail.socket.debug", Boolean.toString (bDebug));
+    SystemProperties.setPropertyValue ("java.security.debug", bDebug ? "certpath" : null);
+    SystemProperties.setPropertyValue ("javax.net.debug", bDebug ? "trustmanager" : null);
   }
 }

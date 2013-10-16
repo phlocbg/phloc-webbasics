@@ -127,7 +127,9 @@ final class MailTransport
       m_aMailProperties.setProperty (ESMTPTransportProperty.REPORTSUCCESS.getPropertyName (m_bSMTPS),
                                      Boolean.TRUE.toString ());
     m_aMailProperties.setProperty ("mail.debug.auth", Boolean.toString (GlobalDebug.isDebugMode ()));
-    System.out.println (m_aMailProperties);
+
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.info ("Mail properties: " + m_aMailProperties);
 
     // Create session based on properties
     m_aSession = Session.getInstance (m_aMailProperties);
