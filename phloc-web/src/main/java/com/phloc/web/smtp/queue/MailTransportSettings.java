@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.mail.event.ConnectionListener;
 import javax.mail.event.TransportListener;
@@ -49,10 +50,15 @@ public final class MailTransportSettings
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransportSettings.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
+  @GuardedBy ("s_aRWLock")
   private static long s_nConnectTimeoutMilliSecs = DEFAULT_CONNECT_TIMEOUT_MILLISECS;
+  @GuardedBy ("s_aRWLock")
   private static long s_nTimeoutMilliSecs = DEFAULT_TIMEOUT_MILLISECS;
-  private static ConnectionListener s_aConnectionListener = null;
-  private static TransportListener s_aTransportListener = null;
+  @GuardedBy ("s_aRWLock")
+  private static ConnectionListener s_aConnectionListener;
+  @GuardedBy ("s_aRWLock")
+  private static TransportListener s_aTransportListener;
 
   private MailTransportSettings ()
   {}
@@ -225,6 +231,13 @@ public final class MailTransportSettings
     }
   }
 
+  /**
+   * Enable or disable javax.mail debugging. By default debugging is disabled.
+   * 
+   * @param bDebug
+   *        <code>true</code> to enabled debugging, <code>false</code> to
+   *        disable it.
+   */
   public static void enableJavaxMailDebugging (final boolean bDebug)
   {
     java.util.logging.Logger.getLogger ("com.sun.mail.smtp").setLevel (bDebug ? Level.FINEST : Level.INFO);
@@ -232,5 +245,14 @@ public final class MailTransportSettings
     SystemProperties.setPropertyValue ("mail.socket.debug", Boolean.toString (bDebug));
     SystemProperties.setPropertyValue ("java.security.debug", bDebug ? "certpath" : null);
     SystemProperties.setPropertyValue ("javax.net.debug", bDebug ? "trustmanager" : null);
+  }
+
+  /**
+   * @return <code>true</code> if javax.mail debugging is enabled,
+   *         <code>false</code> if not.
+   */
+  public static boolean isJavaxMailDebuggingEnabled ()
+  {
+    return java.util.logging.Logger.getLogger ("com.sun.mail.smtp").getLevel ().equals (Level.FINEST);
   }
 }

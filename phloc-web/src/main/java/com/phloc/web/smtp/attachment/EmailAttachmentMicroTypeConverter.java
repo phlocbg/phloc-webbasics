@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.ContainsSoftMigration;
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CharsetManager;
@@ -34,6 +35,7 @@ public final class EmailAttachmentMicroTypeConverter implements IMicroTypeConver
 {
   private static final String ATTR_FILENAME = "filename";
   private static final String ATTR_CHARSET = "charset";
+  private static final String ATTR_DISPOSITION = "disposition";
 
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
@@ -45,12 +47,14 @@ public final class EmailAttachmentMicroTypeConverter implements IMicroTypeConver
     eAttachment.setAttribute (ATTR_FILENAME, aAttachment.getFilename ());
     if (aAttachment.getCharset () != null)
       eAttachment.setAttribute (ATTR_CHARSET, aAttachment.getCharset ().name ());
+    eAttachment.setAttribute (ATTR_DISPOSITION, aAttachment.getDisposition ().getID ());
     // Base64 encode
     eAttachment.appendText (Base64.encodeBytes (StreamUtils.getAllBytes (aAttachment.getInputStream ())));
     return eAttachment;
   }
 
   @Nonnull
+  @ContainsSoftMigration
   public EmailAttachment convertToNative (@Nonnull final IMicroElement eAttachment)
   {
     final String sFilename = eAttachment.getAttribute (ATTR_FILENAME);
@@ -58,8 +62,14 @@ public final class EmailAttachmentMicroTypeConverter implements IMicroTypeConver
     final String sCharset = eAttachment.getAttribute (ATTR_CHARSET);
     final Charset aCharset = sCharset == null ? null : CharsetManager.getCharsetFromName (sCharset);
 
+    final String sDisposition = eAttachment.getAttribute (ATTR_DISPOSITION);
+    EEmailAttachmentDisposition eDisposition = EEmailAttachmentDisposition.getFromIDOrNull (sDisposition);
+    // migration
+    if (eDisposition == null)
+      eDisposition = EmailAttachment.DEFAULT_DISPOSITION;
+
     final byte [] aContent = Base64Helper.safeDecode (eAttachment.getTextContent ());
 
-    return new EmailAttachment (sFilename, aContent, aCharset);
+    return new EmailAttachment (sFilename, aContent, aCharset, eDisposition);
   }
 }

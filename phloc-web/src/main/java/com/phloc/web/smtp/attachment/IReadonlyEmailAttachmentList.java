@@ -19,7 +19,6 @@ package com.phloc.web.smtp.attachment;
 
 import java.util.List;
 
-import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -62,5 +61,5 @@ public interface IReadonlyEmailAttachmentList extends IHasSize
    */
   @Nonnull
   @ReturnsMutableCopy
-  List <DataSource> getAsDataSourceList ();
+  List <IEmailAttachmentDataSource> getAsDataSourceList ();
 }

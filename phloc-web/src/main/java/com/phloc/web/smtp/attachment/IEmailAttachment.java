@@ -61,8 +61,14 @@ public interface IEmailAttachment extends IInputStreamProvider
   String getContentType ();
 
   /**
+   * @return The disposition type to use. Never <code>null</code>.
+   */
+  @Nonnull
+  EEmailAttachmentDisposition getDisposition ();
+
+  /**
    * @return The attachment as a {@link DataSource}.
    */
   @Nonnull
-  DataSource getAsDataSource ();
+  IEmailAttachmentDataSource getAsDataSource ();
 }

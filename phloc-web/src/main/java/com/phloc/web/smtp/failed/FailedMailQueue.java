@@ -218,6 +218,6 @@ public class FailedMailQueue
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).toString ();
+    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
   }
 }

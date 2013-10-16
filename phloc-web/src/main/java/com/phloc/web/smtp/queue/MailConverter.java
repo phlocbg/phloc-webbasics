@@ -20,13 +20,11 @@ package com.phloc.web.smtp.queue;
 import java.nio.charset.Charset;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -36,6 +34,7 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.InternetAddressUtils;
+import com.phloc.web.smtp.attachment.IEmailAttachmentDataSource;
 import com.phloc.web.smtp.attachment.IEmailAttachmentList;
 
 /**
@@ -104,6 +103,7 @@ public final class MailConverter
       final MimeBodyPart aBodyPart = new MimeBodyPart ();
       if (aMailData.getEmailType ().isHTML ())
       {
+        // HTML text
         if (aCharset != null)
         {
           aBodyPart.setContent (aMailData.getBody (),
@@ -115,6 +115,7 @@ public final class MailConverter
       }
       else
       {
+        // Plain text
         if (aCharset != null)
           _setText (aBodyPart, aMailData.getBody (), aCharset);
         else
@@ -126,10 +127,10 @@ public final class MailConverter
     // Does the mail data contain attachments?
     final IEmailAttachmentList aAttachments = aMailData.getAttachments ();
     if (aAttachments != null)
-      for (final DataSource aDS : aAttachments.getAsDataSourceList ())
+      for (final IEmailAttachmentDataSource aDS : aAttachments.getAsDataSourceList ())
       {
         final MimeBodyPart aAttachmentPart = new MimeBodyPart ();
-        aAttachmentPart.setDisposition (Part.ATTACHMENT);
+        aAttachmentPart.setDisposition (aDS.getDisposition ().getID ());
         aAttachmentPart.setFileName (aDS.getName ());
         aAttachmentPart.setDataHandler (new DataHandler (aDS));
         aMixedMultipart.addBodyPart (aAttachmentPart);

@@ -20,7 +20,6 @@ package com.phloc.web.smtp.attachment;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import javax.activation.DataSource;
 import javax.activation.FileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,42 +39,63 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 public class EmailAttachment implements IEmailAttachment
 {
+  public static final EEmailAttachmentDisposition DEFAULT_DISPOSITION = EEmailAttachmentDisposition.ATTACHMENT;
+
   private final String m_sFilename;
   private final IInputStreamProvider m_aInputStreamProvider;
   private final Charset m_aCharset;
   private final String m_sContentType;
+  private final EEmailAttachmentDisposition m_eDisposition;
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename, @Nonnull final byte [] aContent)
   {
-    this (sFilename, new ByteArrayInputStreamProvider (aContent));
+    this (sFilename, aContent, (Charset) null);
   }
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename,
                           @Nonnull final byte [] aContent,
                           @Nullable final Charset aCharset)
   {
-    this (sFilename, new ByteArrayInputStreamProvider (aContent), aCharset);
+    this (sFilename, aContent, aCharset, DEFAULT_DISPOSITION);
+  }
+
+  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                          @Nonnull final byte [] aContent,
+                          @Nullable final Charset aCharset,
+                          @Nonnull final EEmailAttachmentDisposition eDisposition)
+  {
+    this (sFilename, new ByteArrayInputStreamProvider (aContent), aCharset, eDisposition);
   }
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename,
                           @Nonnull final IInputStreamProvider aInputStreamProvider)
   {
-    this (sFilename, aInputStreamProvider, null);
+    this (sFilename, aInputStreamProvider, (Charset) null);
   }
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename,
                           @Nonnull final IInputStreamProvider aInputStreamProvider,
                           @Nullable final Charset aCharset)
   {
+    this (sFilename, aInputStreamProvider, aCharset, DEFAULT_DISPOSITION);
+  }
 
+  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                          @Nonnull final IInputStreamProvider aInputStreamProvider,
+                          @Nullable final Charset aCharset,
+                          @Nonnull final EEmailAttachmentDisposition eDisposition)
+  {
     if (StringHelper.hasNoText (sFilename))
       throw new IllegalArgumentException ("filename");
     if (aInputStreamProvider == null)
       throw new NullPointerException ("InputStreamProvider");
+    if (eDisposition == null)
+      throw new NullPointerException ("Disposition");
     m_sFilename = sFilename;
     m_aInputStreamProvider = aInputStreamProvider;
     m_aCharset = aCharset;
     m_sContentType = FileTypeMap.getDefaultFileTypeMap ().getContentType (sFilename);
+    m_eDisposition = eDisposition;
   }
 
   @Nonnull
@@ -110,9 +130,15 @@ public class EmailAttachment implements IEmailAttachment
   }
 
   @Nonnull
-  public DataSource getAsDataSource ()
+  public EEmailAttachmentDisposition getDisposition ()
   {
-    return new InputStreamProviderDataSource (m_aInputStreamProvider, m_sFilename, m_sContentType);
+    return m_eDisposition;
+  }
+
+  @Nonnull
+  public EmailAttachmentDataSource getAsDataSource ()
+  {
+    return new EmailAttachmentDataSource (m_aInputStreamProvider, m_sFilename, m_sContentType, m_eDisposition);
   }
 
   @Override
@@ -127,7 +153,8 @@ public class EmailAttachment implements IEmailAttachment
     // Does not necessarily implement equals!
     // m_aInputStreamProvider.equals (rhs.m_aInputStreamProvider) &&
            EqualsUtils.equals (m_aCharset, rhs.m_aCharset) &&
-           EqualsUtils.equals (m_sContentType, rhs.m_sContentType);
+           EqualsUtils.equals (m_sContentType, rhs.m_sContentType) &&
+           m_eDisposition.equals (rhs.m_eDisposition);
   }
 
   @Override
@@ -138,6 +165,7 @@ public class EmailAttachment implements IEmailAttachment
     // .append (m_aInputStreamProvider)
                                        .append (m_aCharset)
                                        .append (m_sContentType)
+                                       .append (m_eDisposition)
                                        .getHashCode ();
   }
 
@@ -148,6 +176,7 @@ public class EmailAttachment implements IEmailAttachment
                                        .append ("inputStreamProvider", m_aInputStreamProvider)
                                        .appendIfNotNull ("charset", m_aCharset)
                                        .append ("contentType", m_sContentType)
+                                       .append ("disposition", m_eDisposition)
                                        .toString ();
   }
 }

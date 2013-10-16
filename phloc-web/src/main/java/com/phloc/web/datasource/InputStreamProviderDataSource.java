@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.web.smtp.attachment;
+package com.phloc.web.datasource;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,8 +36,10 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-public final class InputStreamProviderDataSource implements DataSource
+public class InputStreamProviderDataSource implements DataSource
 {
+  public static final IMimeType DEFAULT_CONTENT_TYPE = CMimeType.APPLICATION_OCTET_STREAM;
+
   private final IInputStreamProvider m_aISS;
   private final String m_sFilename;
   private final String m_sContentType;
@@ -83,7 +85,7 @@ public final class InputStreamProviderDataSource implements DataSource
   public String getContentType ()
   {
     // Use octet stream if undefined
-    return m_sContentType != null ? m_sContentType : CMimeType.APPLICATION_OCTET_STREAM.getAsString ();
+    return m_sContentType != null ? m_sContentType : DEFAULT_CONTENT_TYPE.getAsString ();
   }
 
   @Nonnull

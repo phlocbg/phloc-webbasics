@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.DataSource;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -126,9 +125,9 @@ public class EmailAttachmentList implements IEmailAttachmentList
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <DataSource> getAsDataSourceList ()
+  public List <IEmailAttachmentDataSource> getAsDataSourceList ()
   {
-    final List <DataSource> ret = new ArrayList <DataSource> ();
+    final List <IEmailAttachmentDataSource> ret = new ArrayList <IEmailAttachmentDataSource> ();
     for (final IEmailAttachment aAttachment : m_aMap.values ())
       ret.add (aAttachment.getAsDataSource ());
     return ret;
