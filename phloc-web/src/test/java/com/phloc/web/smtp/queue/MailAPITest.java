@@ -17,6 +17,8 @@
  */
 package com.phloc.web.smtp.queue;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -75,6 +77,12 @@ public final class MailAPITest
       aMailData.setBody ("Hi there\nLine 2\n4 special chars: äöüß\n123456789\nBest regards: phloc-web");
       MailAPI.queueMail (aSMTPSettings, aMailData);
       MailAPI.stop ();
+
+      // try to queue again after MailAPI was stopped - should end up in failed
+      // mail queue
+      assertEquals (0, MailAPI.getFailedMailQueue ().size ());
+      MailAPI.queueMail (aSMTPSettings, aMailData);
+      assertEquals (1, MailAPI.getFailedMailQueue ().size ());
 
       GlobalDebug.setDebugModeDirect (false);
     }

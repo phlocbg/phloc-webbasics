@@ -214,7 +214,18 @@ public final class MailAPI
     try
     {
       // get queue per SMTP settings
-      aSMTPQueue = _getOrCreateMailQueuePerSMTP (aSMTPSettings);
+      try
+      {
+        aSMTPQueue = _getOrCreateMailQueuePerSMTP (aSMTPSettings);
+      }
+      catch (final IllegalStateException ex)
+      {
+        // Happens if queue is already stopped
+        // Put all errors in failed mail queue
+        for (final IEmailData aEmailData : aMailDataList)
+          getFailedMailQueue ().add (new FailedMailData (aSMTPSettings, aEmailData, ex));
+        return 0;
+      }
     }
     finally
     {
