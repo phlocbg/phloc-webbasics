@@ -18,6 +18,7 @@
 package com.phloc.webscopes.smtp;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -27,9 +28,9 @@ import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.failed.FailedMailQueue;
-import com.phloc.web.smtp.queue.MailAPI;
-import com.phloc.web.smtp.settings.ISMTPSettings;
+import com.phloc.web.smtp.transport.MailAPI;
 
 /**
  * Scope aware wrapper around {@link MailAPI} class so that it is gracefully
@@ -40,6 +41,10 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
 @ThreadSafe
 public final class ScopedMailAPI extends GlobalSingleton
 {
+  public static final boolean DEFAULT_STOP_IMMEDIATLY = false;
+
+  private final AtomicBoolean m_aStopImmediately = new AtomicBoolean (DEFAULT_STOP_IMMEDIATLY);
+
   @UsedViaReflection
   @Deprecated
   public ScopedMailAPI ()
@@ -109,10 +114,33 @@ public final class ScopedMailAPI extends GlobalSingleton
     return MailAPI.getTotalQueueLength ();
   }
 
+  /**
+   * @return <code>true</code> if all mails currently in the queue should be
+   *         removed and put in the failed mail queue. Only the emails currently
+   *         in sending are continued to be sent out.
+   */
+  public boolean isStopImmediately ()
+  {
+    return m_aStopImmediately.get ();
+  }
+
+  /**
+   * Determine whether to stop immediately or not
+   * 
+   * @param bStopImmediately
+   *        <code>true</code> if all mails currently in the queue should be
+   *        removed and put in the failed mail queue. Only the emails currently
+   *        in sending are continued to be sent out.
+   */
+  public void setStopImmediatly (final boolean bStopImmediately)
+  {
+    m_aStopImmediately.set (bStopImmediately);
+  }
+
   @Override
   protected void onDestroy ()
   {
     // Stop mail queues
-    MailAPI.stop ();
+    MailAPI.stop (isStopImmediately ());
   }
 }

@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
+  <release date="2013-10-16" version="6.2.0" />
+  <entry date="2013-10-16" category="tech" action="update" incompatible="true">
+    <change>
+      <text locale="en">Updated to phloc-web 5.3.0</text>
+    </change>
+  </entry>
   <entry date="2013-09-09" category="api" action="add">
     <change>
       <text locale="en">Added new base class AbstractWebScopeAwareTimerTask</text>
