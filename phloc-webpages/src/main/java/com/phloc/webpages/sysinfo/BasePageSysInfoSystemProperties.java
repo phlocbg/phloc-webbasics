@@ -54,6 +54,7 @@ import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
@@ -139,7 +140,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     super (sID, aName, aDescription);
   }
 
-  private static void _addDirectoryContent (@Nonnull final IHCTable <?> aTable,
+  private static void _addDirectoryContent (@Nonnull final IHCTableFormView <?> aTable,
                                             @Nonnull final String sSysPropName,
                                             @Nonnull final IHCNode aLabel,
                                             @Nonnull final SizeHelper aSH,
@@ -192,7 +193,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
     {
-      final IHCTable <?> aTable = getStyler ().createTable (new HCCol (250), HCCol.star ());
+      final IHCTableFormView <?> aTable = getStyler ().createTableFormView (new HCCol (250), HCCol.star ());
       aTable.setID (getID () + "$special");
       aTable.setSpanningHeaderContent (EText.MSG_HEADER_SPECIAL_SYSPROPS.getDisplayText (aDisplayLocale));
       aTable.addHeaderRow ().addCells (EText.MSG_HEADER_NAME.getDisplayText (aDisplayLocale),

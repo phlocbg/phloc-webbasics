@@ -56,6 +56,7 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_SYS_INFO_LANGUAGES ("Sprachen", "Languages"),
   PAGE_NAME_SYS_INFO_REQUEST ("Request", "Request"),
   PAGE_NAME_SYS_INFO_SYS_PROPS ("Systemeinstellungen", "System properties"),
+  PAGE_NAME_SYS_INFO_THIRDPARTYLIBS ("Externe Module", "Thirdparty libraries"),
   PAGE_NAME_SYS_INFO_THREADS ("Threads", "Threads"),
   PAGE_NAME_SYS_INFO_TIMEZONES ("Zeitzonen", "Time zones");
 

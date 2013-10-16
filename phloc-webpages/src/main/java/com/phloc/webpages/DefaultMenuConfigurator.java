@@ -23,6 +23,7 @@ import com.phloc.webpages.sysinfo.BasePageSysInfoEnvironmentVariables;
 import com.phloc.webpages.sysinfo.BasePageSysInfoLanguages;
 import com.phloc.webpages.sysinfo.BasePageSysInfoRequest;
 import com.phloc.webpages.sysinfo.BasePageSysInfoSystemProperties;
+import com.phloc.webpages.sysinfo.BasePageSysInfoThirdPartyLibraries;
 import com.phloc.webpages.sysinfo.BasePageSysInfoThreads;
 import com.phloc.webpages.sysinfo.BasePageSysInfoTimeZones;
 
@@ -42,6 +43,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_SYSINFO_LANGUAGES = "admin_sysinfo_languages";
   public static final String MENU_ADMIN_SYSINFO_REQUEST = "admin_sysinfo_request";
   public static final String MENU_ADMIN_SYSINFO_SYSPROPS = "admin_sysinfo_sysprops";
+  public static final String MENU_ADMIN_SYSINFO_THIRDPARTYLIBS = "admin_sysinfo_thirdpartylibs";
   public static final String MENU_ADMIN_SYSINFO_THREADS = "admin_sysinfo_threads";
   public static final String MENU_ADMIN_SYSINFO_TIMEZONES = "admin_sysinfo_timezones";
 
@@ -106,6 +108,8 @@ public final class DefaultMenuConfigurator
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoRequest (MENU_ADMIN_SYSINFO_REQUEST))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoSystemProperties (MENU_ADMIN_SYSINFO_SYSPROPS))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoThirdPartyLibraries (MENU_ADMIN_SYSINFO_THIRDPARTYLIBS))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoThreads (MENU_ADMIN_SYSINFO_THREADS))
              .setDisplayFilter (aDisplayFilter);
