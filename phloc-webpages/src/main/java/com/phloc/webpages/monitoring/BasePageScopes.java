@@ -53,7 +53,7 @@ public class BasePageScopes extends AbstractWebPageExt
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
     MSG_GLOBAL_SCOPE ("Globaler Kontext ''{0}''", "Global scope ''{0}''"),
-    MSG_APPLICATION_SCOPE ("App Kontext ''{0}''", "App scope ''{0}''"),
+    MSG_APPLICATION_SCOPE ("Kontext ''{0}''", "App scope ''{0}''"),
     MSG_APPLICATION_SCOPES ("Application Kontexte", "Application scopes"),
     MSG_SCOPE_ID ("Kontext ID", "Scope ID"),
     MSG_SCOPE_VALID ("Kontext gültig?", "Scope valid?"),
