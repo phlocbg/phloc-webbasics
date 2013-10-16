@@ -49,6 +49,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.failed.FailedMailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.web.smtp.settings.ISMTPSettings;
 import com.phloc.web.smtp.settings.ReadonlySMTPSettings;
@@ -62,6 +63,11 @@ import com.phloc.web.smtp.settings.ReadonlySMTPSettings;
 @ThreadSafe
 public final class MailAPI
 {
+  /** The default prefix used in debug mode */
+  public static final String DEBUG_SUBJECT_PREFIX = "[DEBUG] ";
+  /** The default subject to be used if none is specified */
+  public static final String DEFAULT_SUBJECT = "<no subject specified>";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailAPI.class);
   private static final IStatisticsHandlerCounter s_aQueuedMailHdl = StatisticsManager.getCounterHandler (MailAPI.class.getName () +
                                                                                                          "$mails.queued");
@@ -219,7 +225,7 @@ public final class MailAPI
     final boolean bSendVendorOnlyMails = GlobalDebug.isDebugMode ();
 
     // submit all messages
-    for (final IEmailData aMailData : aMailDataList)
+    for (final IEmailData aEmailData : aMailDataList)
     {
       // queue the mail
       s_aQueuedMailHdl.increment ();
@@ -228,55 +234,85 @@ public final class MailAPI
       // send
       boolean bCanQueue = true;
 
-      if (aMailData.getFrom () == null)
+      if (aEmailData.getFrom () == null)
       {
-        s_aLogger.error ("Mail data has no sender address: " + aMailData + " - not queuing!");
+        s_aLogger.error ("Mail data has no sender address: " + aEmailData + " - not queuing!");
         bCanQueue = false;
       }
 
-      if (aMailData.getToCount () == 0)
+      if (aEmailData.getToCount () == 0)
       {
-        s_aLogger.error ("Mail data has no receiver address: " + aMailData + " - not queuing!");
+        s_aLogger.error ("Mail data has no receiver address: " + aEmailData + " - not queuing!");
         bCanQueue = false;
       }
-
-      if (StringHelper.hasNoText (aMailData.getSubject ()))
-        s_aLogger.warn ("Mail data has no subject: " + aMailData);
-
-      if (StringHelper.hasNoText (aMailData.getBody ()))
-        s_aLogger.warn ("Mail data has no body: " + aMailData);
 
       if (bSendVendorOnlyMails)
       {
-        // In the debug version we can only send to vendor addresses!
-        if (hasNonVendorEmailAddress (aMailData.getTo ()) ||
-            hasNonVendorEmailAddress (aMailData.getCc ()) ||
-            hasNonVendorEmailAddress (aMailData.getBcc ()))
+        // In the debug version we can *only* send to vendor addresses!
+        if (hasNonVendorEmailAddress (aEmailData.getTo ()) ||
+            hasNonVendorEmailAddress (aEmailData.getCc ()) ||
+            hasNonVendorEmailAddress (aEmailData.getBcc ()))
         {
+          s_aLogger.error ("Debug mode: ignoring mail TO '" +
+                           aEmailData.getTo () +
+                           "'" +
+                           (aEmailData.getCcCount () > 0 ? " and CC '" + aEmailData.getCc () + "'" : "") +
+                           (aEmailData.getBccCount () > 0 ? " and BCC '" + aEmailData.getBcc () + "'" : "") +
+                           " because at least one address is not targeted to the vendor domain");
           bCanQueue = false;
-          s_aLogger.warn ("Debug mode: ignoring mail TO '" +
-                          aMailData.getTo () +
-                          "'" +
-                          (aMailData.getCcCount () > 0 ? " and CC '" + aMailData.getCc () + "'" : "") +
-                          (aMailData.getBccCount () > 0 ? " and BCC '" + aMailData.getBcc () + "'" : "") +
-                          " because at least one address is not targeted to the vendor domain");
-          break;
         }
       }
 
+      // Check if queue is already stopped
+      if (aSMTPQueue.isStopped ())
+      {
+        s_aLogger.error ("Queue is already stopped - not queuing!");
+        bCanQueue = false;
+      }
+
+      boolean bWasQueued = false;
       if (bCanQueue)
       {
+        // Check if a subject is present
+        if (StringHelper.hasNoText (aEmailData.getSubject ()))
+        {
+          s_aLogger.warn ("Mail data has no subject: " + aEmailData + " - defaulting to " + DEFAULT_SUBJECT);
+          aEmailData.setSubject (DEFAULT_SUBJECT);
+        }
+
+        // Check if a body is present
+        if (StringHelper.hasNoText (aEmailData.getBody ()))
+          s_aLogger.warn ("Mail data has no body: " + aEmailData);
+
         if (bSendVendorOnlyMails)
         {
-          aMailData.setSubject ("[DEBUG] " + aMailData.getSubject ());
-          s_aLogger.info ("Sending only-to-vendor mail in debug version:\n" + aSMTPSettings + "\n" + aMailData);
+          // Add special debug prefix
+          aEmailData.setSubject (DEBUG_SUBJECT_PREFIX + aEmailData.getSubject ());
+          s_aLogger.info ("Sending only-to-vendor mail in debug version:\n" + aSMTPSettings + "\n" + aEmailData);
         }
 
         // Uses UTC timezone!
-        aMailData.setSentDate (PDTFactory.getCurrentDateTime ());
-        if (aSMTPQueue.queueObject (aMailData).isSuccess ())
-          ++nQueuedMails;
-        // else an error message was already logged
+        aEmailData.setSentDate (PDTFactory.getCurrentDateTime ());
+        try
+        {
+          if (aSMTPQueue.queueObject (aEmailData).isSuccess ())
+          {
+            bWasQueued = true;
+            ++nQueuedMails;
+          }
+          // else an error message was already logged
+        }
+        catch (final IllegalStateException ex)
+        {
+          // Occurs if queue is already stopped
+          s_aLogger.error (ex.getMessage ());
+        }
+      }
+
+      if (!bWasQueued)
+      {
+        // Mail was not queued - put in failed mail queue
+        aSMTPQueue.getFailedMailQueue ().add (new FailedMailData (aSMTPSettings, aEmailData));
       }
     }
     return nQueuedMails;

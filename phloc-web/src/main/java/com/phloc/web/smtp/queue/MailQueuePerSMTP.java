@@ -45,6 +45,7 @@ import com.phloc.web.smtp.settings.ISMTPSettings;
 final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> implements IThrowingRunnableWithParameter <List <IEmailData>>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailQueuePerSMTP.class);
+
   private final MailTransport m_aTransport;
   private FailedMailQueue m_aFailedMailQueue;
 
@@ -70,6 +71,12 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
   public ISMTPSettings getSMTPSettings ()
   {
     return m_aTransport.getSettings ();
+  }
+
+  @Nonnull
+  public FailedMailQueue getFailedMailQueue ()
+  {
+    return m_aFailedMailQueue;
   }
 
   public void setFailedMailQueue (@Nonnull final FailedMailQueue aFailedMailQueue)

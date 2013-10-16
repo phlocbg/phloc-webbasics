@@ -66,7 +66,22 @@ public final class FailedMailData implements ITypedObject <String>
   }
 
   /**
-   * Constructor for message unspecific error.
+   * Constructor for message specific error.
+   * 
+   * @param aSettings
+   *        The mail settings for which the error occurs. Never
+   *        <code>null</code>.
+   * @param aEmailData
+   *        The message that failed to send. May not be <code>null</code> in
+   *        practice.
+   */
+  public FailedMailData (@Nonnull final ISMTPSettings aSettings, @Nullable final IEmailData aEmailData)
+  {
+    this (aSettings, aEmailData, (Throwable) null);
+  }
+
+  /**
+   * Constructor for message specific error.
    * 
    * @param aSettings
    *        The mail settings for which the error occurs. Never
@@ -75,16 +90,16 @@ public final class FailedMailData implements ITypedObject <String>
    *        The message that failed to send. May be <code>null</code> if it is a
    *        mail-independent error.
    * @param aError
-   *        The exception that occurred. Never <code>null</code>.
+   *        The exception that occurred. May be <code>null</code>.
    */
   public FailedMailData (@Nonnull final ISMTPSettings aSettings,
                          @Nullable final IEmailData aEmailData,
-                         @Nonnull final Throwable aError)
+                         @Nullable final Throwable aError)
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
           PDTFactory.getCurrentLocalDateTime (),
           aSettings,
-          null,
+          aEmailData == null ? null : aEmailData.getSentDate (),
           aEmailData,
           aError);
   }
@@ -106,14 +121,14 @@ public final class FailedMailData implements ITypedObject <String>
    *        The message that failed to send. May be <code>null</code> if it is a
    *        mail-independent error.
    * @param aError
-   *        The exception that occurred. Never <code>null</code>.
+   *        The exception that occurred. May be <code>null</code>.
    */
   public FailedMailData (@Nonnull final String sID,
                          @Nonnull final LocalDateTime aErrorDT,
                          @Nonnull final ISMTPSettings aSettings,
                          @Nullable final DateTime aOriginalSentDT,
                          @Nullable final IEmailData aEmailData,
-                         @Nonnull final Throwable aError)
+                         @Nullable final Throwable aError)
   {
     if (sID == null)
       throw new NullPointerException ("id");
@@ -121,8 +136,6 @@ public final class FailedMailData implements ITypedObject <String>
       throw new NullPointerException ("errorDateTime");
     if (aSettings == null)
       throw new NullPointerException ("settings");
-    if (aError == null)
-      throw new NullPointerException ("error");
     m_sID = sID;
     m_aErrorDT = aErrorDT;
     m_aSettings = aSettings;
@@ -182,7 +195,7 @@ public final class FailedMailData implements ITypedObject <String>
     return m_aEmailData;
   }
 
-  @Nonnull
+  @Nullable
   public Throwable getError ()
   {
     return m_aError;
@@ -231,7 +244,7 @@ public final class FailedMailData implements ITypedObject <String>
   @Nullable
   public String getMessageDisplayText ()
   {
-    return m_aError.getMessage ();
+    return m_aError == null ? null : m_aError.getMessage ();
   }
 
   @Override
@@ -247,7 +260,7 @@ public final class FailedMailData implements ITypedObject <String>
            m_aSettings.equals (rhs.m_aSettings) &&
            EqualsUtils.equals (m_aOriginalSentDateTime, rhs.m_aOriginalSentDateTime) &&
            EqualsUtils.equals (m_aEmailData, rhs.m_aEmailData) &&
-           EqualsUtils.equals (m_aError.getMessage (), rhs.m_aError.getMessage ());
+           EqualsUtils.equals (getMessageDisplayText (), rhs.getMessageDisplayText ());
   }
 
   @Override
@@ -258,7 +271,7 @@ public final class FailedMailData implements ITypedObject <String>
                                        .append (m_aSettings)
                                        .append (m_aOriginalSentDateTime)
                                        .append (m_aEmailData)
-                                       .append (m_aError.getMessage ())
+                                       .append (getMessageDisplayText ())
                                        .getHashCode ();
   }
 
@@ -266,11 +279,11 @@ public final class FailedMailData implements ITypedObject <String>
   public String toString ()
   {
     return new ToStringGenerator (this).append ("id", m_sID)
-                                       .append ("dateTime", m_aErrorDT)
+                                       .append ("errorDateTime", m_aErrorDT)
                                        .append ("settings", m_aSettings)
                                        .appendIfNotNull ("originalSentDateTime", m_aOriginalSentDateTime)
-                                       .appendIfNotNull ("mailData", m_aEmailData)
-                                       .append ("error", m_aError)
+                                       .appendIfNotNull ("emailData", m_aEmailData)
+                                       .appendIfNotNull ("error", m_aError)
                                        .toString ();
   }
 }
