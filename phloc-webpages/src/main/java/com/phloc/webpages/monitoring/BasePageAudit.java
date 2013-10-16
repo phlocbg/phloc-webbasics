@@ -47,6 +47,11 @@ import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 
+/**
+ * Show audit items.
+ * 
+ * @author Philip Helger
+ */
 public class BasePageAudit extends AbstractWebPageExt
 {
   @Translatable

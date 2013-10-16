@@ -26,10 +26,11 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.CompareUtils;
 import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.locale.LocaleFormatter;
+import com.phloc.commons.string.ToStringGenerator;
 
 public class ComparatorTableDouble extends AbstractComparatorTable
 {
-  protected final Locale m_aLocale;
+  protected final Locale m_aParseLocale;
 
   public ComparatorTableDouble (@Nonnull final Locale aParseLocale)
   {
@@ -40,8 +41,14 @@ public class ComparatorTableDouble extends AbstractComparatorTable
   {
     super (aFormatter);
     if (aParseLocale == null)
-      throw new NullPointerException ("locale");
-    m_aLocale = aParseLocale;
+      throw new NullPointerException ("pareLocale");
+    m_aParseLocale = aParseLocale;
+  }
+
+  @Nonnull
+  public final Locale getParseLocale ()
+  {
+    return m_aParseLocale;
   }
 
   @OverrideOnDemand
@@ -51,7 +58,7 @@ public class ComparatorTableDouble extends AbstractComparatorTable
     // ones with non-numeric content
     if (sCellText.isEmpty ())
       return Double.MIN_VALUE;
-    return LocaleFormatter.parseDouble (sCellText, m_aLocale, 0);
+    return LocaleFormatter.parseDouble (sCellText, m_aParseLocale, 0);
   }
 
   @Override
@@ -60,5 +67,11 @@ public class ComparatorTableDouble extends AbstractComparatorTable
     final double d1 = getAsDouble (sText1);
     final double d2 = getAsDouble (sText2);
     return CompareUtils.compare (d1, d2);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("parseLocale", m_aParseLocale).toString ();
   }
 }

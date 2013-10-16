@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.format.IFormatter;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTUtils;
 import com.phloc.datetime.format.PDTFromString;
 import com.phloc.datetime.format.SerializableDateTimeFormatter;
@@ -63,11 +64,23 @@ public class ComparatorTableDateTime extends AbstractComparatorTable
     m_aDTFormatter = aDTFormatter;
   }
 
+  @Nonnull
+  public final SerializableDateTimeFormatter getDateTimeFormatter ()
+  {
+    return m_aDTFormatter;
+  }
+
   @Override
   protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
     final DateTime aDT1 = PDTFromString.getDateTimeFromString (sText1, m_aDTFormatter.getFormatter ());
     final DateTime aDT2 = PDTFromString.getDateTimeFromString (sText2, m_aDTFormatter.getFormatter ());
     return PDTUtils.nullSafeCompare (aDT1, aDT2);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("dtFormatter", m_aDTFormatter).toString ();
   }
 }

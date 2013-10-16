@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.format.IFormatter;
 import com.phloc.commons.locale.LocaleFormatter;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This comparator is responsible for sorting cells by BigDecimal
@@ -35,6 +36,7 @@ import com.phloc.commons.locale.LocaleFormatter;
 public class ComparatorTableBigDecimal extends AbstractComparatorTable
 {
   protected static final BigDecimal DEFAULT_VALUE = BigDecimal.ZERO;
+
   private final Locale m_aParseLocale;
 
   public ComparatorTableBigDecimal (@Nonnull final Locale aParseLocale)
@@ -48,6 +50,12 @@ public class ComparatorTableBigDecimal extends AbstractComparatorTable
     if (aParseLocale == null)
       throw new NullPointerException ("parseLocale");
     m_aParseLocale = aParseLocale;
+  }
+
+  @Nonnull
+  public final Locale getParseLocale ()
+  {
+    return m_aParseLocale;
   }
 
   @OverrideOnDemand
@@ -67,5 +75,11 @@ public class ComparatorTableBigDecimal extends AbstractComparatorTable
     final BigDecimal aBD1 = getAsBigDecimal (sText1);
     final BigDecimal aBD2 = getAsBigDecimal (sText2);
     return aBD1.compareTo (aBD2);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("parseLocale", m_aParseLocale).toString ();
   }
 }

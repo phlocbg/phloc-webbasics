@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.compare.CollatorUtils;
 import com.phloc.commons.format.IFormatter;
+import com.phloc.commons.string.ToStringGenerator;
 
 public class ComparatorTableString extends AbstractComparatorTable
 {
@@ -41,9 +42,21 @@ public class ComparatorTableString extends AbstractComparatorTable
     m_aCollator = CollatorUtils.getCollatorSpaceBeforeDot (aDisplayLocale);
   }
 
+  @Nonnull
+  public final Collator getCollator ()
+  {
+    return m_aCollator;
+  }
+
   @Override
   protected final int internalCompare (@Nonnull final String sText1, @Nonnull final String sText2)
   {
     return m_aCollator.compare (sText1, sText2);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("collator", m_aCollator).toString ();
   }
 }

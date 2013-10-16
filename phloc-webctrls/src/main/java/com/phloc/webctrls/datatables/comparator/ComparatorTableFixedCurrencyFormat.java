@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.masterdata.currency.ECurrency;
 
 /**
@@ -42,10 +43,22 @@ public final class ComparatorTableFixedCurrencyFormat extends ComparatorTableBig
     m_eCurrency = eCurrency;
   }
 
+  @Nonnull
+  public final ECurrency getCurrency ()
+  {
+    return m_eCurrency;
+  }
+
   @Override
   @Nonnull
   protected BigDecimal getAsBigDecimal (@Nonnull final String sCellText)
   {
     return m_eCurrency.parseCurrencyFormat (sCellText, DEFAULT_VALUE);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("currency", m_eCurrency).toString ();
   }
 }

@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.format.IFormatter;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.version.Version;
 
 /**
@@ -33,7 +34,7 @@ import com.phloc.commons.version.Version;
  */
 public class ComparatorTableVersion extends AbstractComparatorTable
 {
-  protected final Locale m_aLocale;
+  protected final Locale m_aParseLocale;
 
   public ComparatorTableVersion (@Nonnull final Locale aParseLocale)
   {
@@ -45,7 +46,13 @@ public class ComparatorTableVersion extends AbstractComparatorTable
     super (aFormatter);
     if (aParseLocale == null)
       throw new NullPointerException ("locale");
-    m_aLocale = aParseLocale;
+    m_aParseLocale = aParseLocale;
+  }
+
+  @Nonnull
+  public final Locale getParseLocale ()
+  {
+    return m_aParseLocale;
   }
 
   @OverrideOnDemand
@@ -60,5 +67,11 @@ public class ComparatorTableVersion extends AbstractComparatorTable
     final Version aVer1 = getAsVersion (sText1);
     final Version aVer2 = getAsVersion (sText2);
     return aVer1.compareTo (aVer2);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("parseLocale", m_aParseLocale).toString ();
   }
 }

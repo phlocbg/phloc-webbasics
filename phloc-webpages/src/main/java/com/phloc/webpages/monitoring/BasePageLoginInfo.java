@@ -59,6 +59,11 @@ import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 
+/**
+ * Show information on all logged in users.
+ * 
+ * @author Philip Helger
+ */
 public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 {
   @Translatable
@@ -123,7 +128,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
   @Override
   @Nullable
-  protected LoginInfo getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected LoginInfo getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return LoggedInUserManager.getInstance ().getLoginInfo (sID);
   }

@@ -47,6 +47,11 @@ import com.phloc.webpages.EWebPageText;
 import com.phloc.webscopes.domain.IGlobalWebScope;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
+/**
+ * Show information on global and application scopes
+ * 
+ * @author Philip Helger
+ */
 public class BasePageScopes extends AbstractWebPageExt
 {
   @Translatable
@@ -54,11 +59,11 @@ public class BasePageScopes extends AbstractWebPageExt
   {
     MSG_GLOBAL_SCOPE ("Globaler Kontext ''{0}''", "Global scope ''{0}''"),
     MSG_APPLICATION_SCOPE ("Kontext ''{0}''", "App scope ''{0}''"),
-    MSG_APPLICATION_SCOPES ("Application Kontexte", "Application scopes"),
     MSG_SCOPE_ID ("Kontext ID", "Scope ID"),
     MSG_SCOPE_VALID ("Kontext gültig?", "Scope valid?"),
     MSG_SCOPE_IN_DESTRUCTION ("Kontext in Zerstörung?", "Scope in destruction?"),
     MSG_SCOPE_DESTROYED ("Kontext zerstört?", "Scope destroyed?"),
+    MSG_APPLICATION_SCOPES ("Application Kontexte", "Application scopes"),
     MSG_SCOPE_ATTRS ("Attribute", "Attributes"),
     MSG_NAME ("Name", "Wert"),
     MSG_VALUE ("Wert", "Value");

@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.compare.AbstractComparator;
 import com.phloc.commons.format.IFormatter;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Base class for all table comparators
@@ -45,11 +46,18 @@ public abstract class AbstractComparatorTable extends AbstractComparator <String
   }
 
   @Nullable
-  protected final IFormatter getFormatter ()
+  public final IFormatter getFormatter ()
   {
     return m_aFormatter;
   }
 
+  /**
+   * Get the formatted text of the passed text
+   * 
+   * @param sCell
+   *        Original cell text
+   * @return Never <code>null</code>.
+   */
   @OverrideOnDemand
   @Nonnull
   protected String getFormattedText (@Nullable final String sCell)
@@ -66,5 +74,11 @@ public abstract class AbstractComparatorTable extends AbstractComparator <String
     final String sText2 = getFormattedText (sCellText2);
 
     return internalCompare (sText1, sText2);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("formatter", m_aFormatter).toString ();
   }
 }

@@ -16,6 +16,7 @@ import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webpages.monitoring.BasePageAudit;
 import com.phloc.webpages.monitoring.BasePageLoginInfo;
 import com.phloc.webpages.monitoring.BasePageScopes;
+import com.phloc.webpages.monitoring.BasePageSessions;
 import com.phloc.webpages.security.BasePageRoleManagement;
 import com.phloc.webpages.security.BasePageUserGroupManagement;
 import com.phloc.webpages.security.BasePageUserManagement;
@@ -39,6 +40,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_MONITORING_AUDIT = "admin_monitoring_audit";
   public static final String MENU_ADMIN_MONITORING_LOGININFO = "admin_monitoring_logininfo";
   public static final String MENU_ADMIN_MONITORING_SCOPES = "admin_monitoring_scopes";
+  public static final String MENU_ADMIN_MONITORING_SESSIONS = "admin_monitoring_sessions";
   public static final String MENU_ADMIN_SYSINFO = "admin_sysinfo";
   public static final String MENU_ADMIN_SYSINFO_CHANGELOGS = "admin_sysinfo_changelog";
   public static final String MENU_ADMIN_SYSINFO_ENVVARS = "admin_sysinfo_envvars";
@@ -68,6 +70,8 @@ public final class DefaultMenuConfigurator
     aMenuTree.createItem (aAdminMonitoring, new BasePageLoginInfo (MENU_ADMIN_MONITORING_LOGININFO))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminMonitoring, new BasePageScopes (MENU_ADMIN_MONITORING_SCOPES))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminMonitoring, new BasePageSessions (MENU_ADMIN_MONITORING_SESSIONS))
              .setDisplayFilter (aDisplayFilter);
     return aAdminMonitoring;
   }

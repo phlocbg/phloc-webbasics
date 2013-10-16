@@ -47,6 +47,7 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_MONITORING_AUDIT ("Audit-Einträge", "Audit items"),
   PAGE_NAME_MONITORING_LOGIN_INFO ("Angemeldete Benutzer", "Logged in users"),
   PAGE_NAME_MONITORING_SCOPES ("Kontexte", "Scopes"),
+  PAGE_NAME_MONITORING_SESSIONS ("Sessions", "Sessions"),
   PAGE_NAME_SECURITY ("Sicherheit", "Security"),
   PAGE_NAME_SECURITY_ROLES ("Rollenverwaltung", "Role management"),
   PAGE_NAME_SECURITY_USER_GROUPS ("Benutzergruppenverwaltung", "User group management"),
