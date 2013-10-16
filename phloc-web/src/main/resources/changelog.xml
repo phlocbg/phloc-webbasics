@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2013-10-16" version="5.3.0" />
+  <entry date="2013-10-16" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Moved constants from ISMTPSettings to EmailGlobalSettings and made customizable</text>
+    </change>
+  </entry>
+  <entry date="2013-10-16" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Renamed MailTransportSettings to EmailGlobalSettings</text>
+    </change>
+  </entry>
   <entry date="2013-10-16" category="api" action="change" incompatible="true">
     <change>
       <text locale="en">Changed the structure of the com.phloc.web.smtp packages</text>

@@ -25,8 +25,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.EmailGlobalSettings;
+import com.phloc.web.smtp.ISMTPSettings;
 
 /**
  * Read-only implementation of the {@link ISMTPSettings} interface. It is
@@ -39,6 +39,19 @@ import com.phloc.web.smtp.EmailGlobalSettings;
 public final class ReadonlySMTPSettings implements ISMTPSettings
 {
   private final SMTPSettings m_aSettings;
+
+  /**
+   * Constructor for internal deserialization only
+   * 
+   * @param aOther
+   *        The settings to use. May not be <code>null</code>.
+   */
+  ReadonlySMTPSettings (@Nonnull final SMTPSettings aOther)
+  {
+    if (aOther == null)
+      throw new NullPointerException ("other");
+    m_aSettings = aOther;
+  }
 
   /**
    * Constructor which copies settings from another object
@@ -68,15 +81,7 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
    */
   public ReadonlySMTPSettings (@Nonnull final String sHostName)
   {
-    this (sHostName,
-          -1,
-          null,
-          null,
-          null,
-          DEFAULT_SSL_ENABLED,
-          DEFAULT_STARTTLS_ENABLED,
-          EmailGlobalSettings.getConnectionTimeoutMilliSecs (),
-          EmailGlobalSettings.getTimeoutMilliSecs ());
+    this (sHostName, -1, null, null, null, EmailGlobalSettings.isUseSSL ());
   }
 
   /**
@@ -109,7 +114,7 @@ public final class ReadonlySMTPSettings implements ISMTPSettings
           sPassword,
           sCharset,
           bSSLEnabled,
-          DEFAULT_STARTTLS_ENABLED,
+          EmailGlobalSettings.isUseSTARTTLS (),
           EmailGlobalSettings.getConnectionTimeoutMilliSecs (),
           EmailGlobalSettings.getTimeoutMilliSecs ());
   }

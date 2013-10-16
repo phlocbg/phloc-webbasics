@@ -47,20 +47,33 @@ public final class EmailGlobalSettings
 {
   public static final int DEFAULT_MAX_QUEUE_LENGTH = 500;
   public static final int DEFAULT_MAX_SEND_COUNT = 100;
+  /** Don't use SSL by default */
+  public static final boolean DEFAULT_USE_SSL = false;
+  /** Don't use STARTTLS by default */
+  public static final boolean DEFAULT_USE_STARTTLS = false;
   public static final long DEFAULT_CONNECT_TIMEOUT_MILLISECS = 5 * CGlobal.MILLISECONDS_PER_SECOND;
   public static final long DEFAULT_TIMEOUT_MILLISECS = 10 * CGlobal.MILLISECONDS_PER_SECOND;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (EmailGlobalSettings.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
+  // Mail queue settings
   @GuardedBy ("s_aRWLock")
   private static int s_nMaxMailQueueLen = DEFAULT_MAX_QUEUE_LENGTH;
   @GuardedBy ("s_aRWLock")
   private static int s_nMaxMailSendCount = DEFAULT_MAX_SEND_COUNT;
+
+  // SMTP connection settings
+  @GuardedBy ("s_aRWLock")
+  private static boolean s_bUseSSL = DEFAULT_USE_SSL;
+  @GuardedBy ("s_aRWLock")
+  private static boolean s_bUseSTARTTLS = DEFAULT_USE_STARTTLS;
   @GuardedBy ("s_aRWLock")
   private static long s_nConnectionTimeoutMilliSecs = DEFAULT_CONNECT_TIMEOUT_MILLISECS;
   @GuardedBy ("s_aRWLock")
   private static long s_nTimeoutMilliSecs = DEFAULT_TIMEOUT_MILLISECS;
+
+  // Transport settings
   @GuardedBy ("s_aRWLock")
   private static ConnectionListener s_aConnectionListener;
   @GuardedBy ("s_aRWLock")
@@ -138,6 +151,86 @@ public final class EmailGlobalSettings
     try
     {
       return s_nMaxMailSendCount;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Use SSL by default?
+   * 
+   * @param bUseSSL
+   *        <code>true</code> to use it by default, <code>false</code> if not.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public static EChange setUseSSL (final boolean bUseSSL)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bUseSSL == bUseSSL)
+        return EChange.UNCHANGED;
+      s_bUseSSL = bUseSSL;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return <code>true</code> to use SSL by default
+   */
+  public static boolean isUseSSL ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bUseSSL;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Use STARTTLS by default?
+   * 
+   * @param bUseSTARTTLS
+   *        <code>true</code> to use it by default, <code>false</code> if not.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public static EChange setUseSTARTTLS (final boolean bUseSTARTTLS)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_bUseSTARTTLS == bUseSTARTTLS)
+        return EChange.UNCHANGED;
+      s_bUseSTARTTLS = bUseSTARTTLS;
+      return EChange.CHANGED;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return <code>true</code> to use STARTTLS by default
+   */
+  public static boolean isUseSTARTTLS ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bUseSTARTTLS;
     }
     finally
     {

@@ -27,8 +27,8 @@ import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringParser;
 import com.phloc.web.CWeb;
 import com.phloc.web.CWebCharset;
-import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.EmailGlobalSettings;
+import com.phloc.web.smtp.ISMTPSettings;
 
 public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
 {
@@ -43,11 +43,10 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_TIMEOUT = "timeout";
 
   @Nonnull
-  public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
-                                              @Nullable final String sNamespaceURI,
-                                              @Nonnull final String sTagName)
+  public static IMicroElement convertToMicroElement (@Nonnull final ISMTPSettings aSMTPSettings,
+                                                     @Nullable final String sNamespaceURI,
+                                                     @Nonnull final String sTagName)
   {
-    final ISMTPSettings aSMTPSettings = (ISMTPSettings) aSource;
     final IMicroElement eSMTPSettings = new MicroElement (sNamespaceURI, sTagName);
     eSMTPSettings.setAttribute (ATTR_HOST, aSMTPSettings.getHostName ());
     eSMTPSettings.setAttribute (ATTR_PORT, Integer.toString (aSMTPSettings.getPort ()));
@@ -61,13 +60,22 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
     return eSMTPSettings;
   }
 
+  @Nonnull
+  public IMicroElement convertToMicroElement (@Nonnull final Object aSource,
+                                              @Nullable final String sNamespaceURI,
+                                              @Nonnull final String sTagName)
+  {
+    final ISMTPSettings aSMTPSettings = (ISMTPSettings) aSource;
+    return convertToMicroElement (aSMTPSettings, sNamespaceURI, sTagName);
+  }
+
   /*
    * The alternative attributes are used to be consistent with old failed mail
    * conversions, as they did the transformation manually!
    */
   @Nonnull
   @ContainsSoftMigration
-  public SMTPSettings convertToNative (@Nonnull final IMicroElement eSMTPSettings)
+  public static SMTPSettings convertToSMTPSettings (@Nonnull final IMicroElement eSMTPSettings)
   {
     String sHost = eSMTPSettings.getAttribute (ATTR_HOST);
     if (sHost == null)
@@ -89,10 +97,10 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
 
     if (sSSLEnabled == null)
       sSSLEnabled = eSMTPSettings.getAttribute ("usessl");
-    final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled, ISMTPSettings.DEFAULT_SSL_ENABLED);
+    final boolean bSSLEnabled = StringParser.parseBool (sSSLEnabled, EmailGlobalSettings.isUseSSL ());
 
     final String sSTARTTLSEnabled = eSMTPSettings.getAttribute (ATTR_STARTTLSENABLED);
-    final boolean bSTARTTLSEnabled = StringParser.parseBool (sSTARTTLSEnabled, ISMTPSettings.DEFAULT_STARTTLS_ENABLED);
+    final boolean bSTARTTLSEnabled = StringParser.parseBool (sSTARTTLSEnabled, EmailGlobalSettings.isUseSTARTTLS ());
 
     final String sConnectionTimeoutMilliSecs = eSMTPSettings.getAttribute (ATTR_CONNECTIONTIMEOUT);
     final long nConnectionTimeoutMilliSecs = StringParser.parseLong (sConnectionTimeoutMilliSecs,
@@ -111,5 +119,16 @@ public final class SMTPSettingsMicroTypeConverter implements IMicroTypeConverter
                              bSTARTTLSEnabled,
                              nConnectionTimeoutMilliSecs,
                              nTimeoutMilliSecs);
+  }
+
+  /*
+   * The alternative attributes are used to be consistent with old failed mail
+   * conversions, as they did the transformation manually!
+   */
+  @Nonnull
+  @ContainsSoftMigration
+  public SMTPSettings convertToNative (@Nonnull final IMicroElement eSMTPSettings)
+  {
+    return convertToSMTPSettings (eSMTPSettings);
   }
 }

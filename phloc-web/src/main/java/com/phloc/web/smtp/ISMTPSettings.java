@@ -30,12 +30,6 @@ import javax.annotation.Nullable;
  */
 public interface ISMTPSettings
 {
-  /** Use SSL by default? no :) */
-  boolean DEFAULT_SSL_ENABLED = false;
-
-  /** Use SSL by default? no :) */
-  boolean DEFAULT_STARTTLS_ENABLED = false;
-
   /**
    * @return The SMTP server host name
    */

@@ -35,8 +35,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.port.DefaultNetworkPorts;
-import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.EmailGlobalSettings;
+import com.phloc.web.smtp.ISMTPSettings;
 
 /**
  * Writable implementation of the {@link ISMTPSettings} interface.
@@ -86,15 +86,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
    */
   public SMTPSettings (@Nonnull final String sHost)
   {
-    this (sHost,
-          -1,
-          null,
-          null,
-          null,
-          DEFAULT_SSL_ENABLED,
-          DEFAULT_STARTTLS_ENABLED,
-          EmailGlobalSettings.getConnectionTimeoutMilliSecs (),
-          EmailGlobalSettings.getTimeoutMilliSecs ());
+    this (sHost, -1, null, null, null, EmailGlobalSettings.isUseSSL ());
   }
 
   /**
@@ -127,7 +119,7 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
           sPassword,
           sCharset,
           bSSLEnabled,
-          DEFAULT_STARTTLS_ENABLED,
+          EmailGlobalSettings.isUseSTARTTLS (),
           EmailGlobalSettings.getConnectionTimeoutMilliSecs (),
           EmailGlobalSettings.getTimeoutMilliSecs ());
   }
