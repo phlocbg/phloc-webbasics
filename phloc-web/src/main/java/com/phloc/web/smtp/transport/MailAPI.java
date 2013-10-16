@@ -48,9 +48,9 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.datetime.PDTFactory;
+import com.phloc.web.smtp.EmailGlobalSettings;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.ISMTPSettings;
-import com.phloc.web.smtp.EmailGlobalSettings;
 import com.phloc.web.smtp.failed.FailedMailData;
 import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
@@ -68,6 +68,8 @@ public final class MailAPI
   public static final String DEBUG_SUBJECT_PREFIX = "[DEBUG] ";
   /** The default subject to be used if none is specified */
   public static final String DEFAULT_SUBJECT = "<no subject specified>";
+  /** By default wait until all queued mails are send */
+  public static final boolean DEFAULT_STOP_IMMEDIATLY = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailAPI.class);
   private static final IStatisticsHandlerCounter s_aQueuedMailHdl = StatisticsManager.getCounterHandler (MailAPI.class.getName () +
@@ -366,7 +368,7 @@ public final class MailAPI
   @Nonnull
   public static EChange stop ()
   {
-    return stop (false);
+    return stop (DEFAULT_STOP_IMMEDIATLY);
   }
 
   /**
