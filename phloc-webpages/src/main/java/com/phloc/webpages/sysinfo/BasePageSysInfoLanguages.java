@@ -79,7 +79,7 @@ public class BasePageSysInfoLanguages extends AbstractWebPageExt
 
   public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_LANGUAGES.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_LANGUAGES.getAsMLT ());
   }
 
   public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

@@ -52,15 +52,17 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_SECURITY_ROLES ("Rollenverwaltung", "Role management"),
   PAGE_NAME_SECURITY_USER_GROUPS ("Benutzergruppenverwaltung", "User group management"),
   PAGE_NAME_SECURITY_USERS ("Benutzerverwaltung", "User management"),
-  PAGE_NAME_SYS_INFO ("System Informationen", "System information"),
-  PAGE_NAME_SYS_INFO_CHANGELOGS ("Änderungshistorie", "Change logs"),
-  PAGE_NAME_SYS_INFO_ENV_VARS ("Umgebungsvariablen", "Environment variables"),
-  PAGE_NAME_SYS_INFO_LANGUAGES ("Sprachen", "Languages"),
-  PAGE_NAME_SYS_INFO_REQUEST ("Request", "Request"),
-  PAGE_NAME_SYS_INFO_SYS_PROPS ("Systemeinstellungen", "System properties"),
-  PAGE_NAME_SYS_INFO_THIRDPARTYLIBS ("Externe Module", "Thirdparty libraries"),
-  PAGE_NAME_SYS_INFO_THREADS ("Threads", "Threads"),
-  PAGE_NAME_SYS_INFO_TIMEZONES ("Zeitzonen", "Time zones");
+  PAGE_NAME_SETTINGS ("System Einstellungen", "System settings"),
+  PAGE_NAME_SETTINGS_GLOBAL ("Globale Einstellungen", "Global settings"),
+  PAGE_NAME_SYSINFO ("System Informationen", "System information"),
+  PAGE_NAME_SYSINFO_CHANGELOGS ("Änderungshistorie", "Change logs"),
+  PAGE_NAME_SYSINFO_ENV_VARS ("Umgebungsvariablen", "Environment variables"),
+  PAGE_NAME_SYSINFO_LANGUAGES ("Sprachen", "Languages"),
+  PAGE_NAME_SYSINFO_REQUEST ("Request", "Request"),
+  PAGE_NAME_SYSINFO_SYSPROPS ("Systemeinstellungen", "System properties"),
+  PAGE_NAME_SYSINFO_THIRDPARTYLIBS ("Externe Module", "Thirdparty libraries"),
+  PAGE_NAME_SYSINFO_THREADS ("Threads", "Threads"),
+  PAGE_NAME_SYSINFO_TIMEZONES ("Zeitzonen", "Time zones");
 
   private final ISimpleMultiLingualText m_aTP;
 

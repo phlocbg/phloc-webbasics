@@ -118,7 +118,7 @@ public class BasePageSysInfoSystemProperties extends AbstractWebPageExt
 
   public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_SYS_PROPS.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_SYSPROPS.getAsMLT ());
   }
 
   public BasePageSysInfoSystemProperties (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

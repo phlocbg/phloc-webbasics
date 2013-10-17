@@ -75,7 +75,7 @@ public class BasePageSysInfoThirdPartyLibraries extends AbstractWebPageExt
 
   public BasePageSysInfoThirdPartyLibraries (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_THIRDPARTYLIBS.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_THIRDPARTYLIBS.getAsMLT ());
   }
 
   public BasePageSysInfoThirdPartyLibraries (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)

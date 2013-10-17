@@ -83,7 +83,7 @@ public class BasePageSysInfoChangeLogs extends AbstractWebPageExt
 
   public BasePageSysInfoChangeLogs (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_CHANGELOGS.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_CHANGELOGS.getAsMLT ());
   }
 
   public BasePageSysInfoChangeLogs (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)

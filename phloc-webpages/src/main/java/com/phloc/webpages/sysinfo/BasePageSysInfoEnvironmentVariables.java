@@ -69,7 +69,7 @@ public class BasePageSysInfoEnvironmentVariables extends AbstractWebPageExt
 
   public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_ENV_VARS.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_ENV_VARS.getAsMLT ());
   }
 
   public BasePageSysInfoEnvironmentVariables (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

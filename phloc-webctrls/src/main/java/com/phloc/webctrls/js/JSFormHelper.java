@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webpages.form;
+package com.phloc.webctrls.js;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -24,6 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
@@ -31,6 +32,11 @@ import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSRef;
 import com.phloc.webbasics.ajax.IAjaxFunction;
 
+/**
+ * Java JavaScript wrapper for form.js
+ * 
+ * @author Philip Helger
+ */
 @Immutable
 public final class JSFormHelper
 {
@@ -61,7 +67,7 @@ public final class JSFormHelper
   public static JSInvocation updateElementDirect (@Nonnull @Nonempty final String sFieldID,
                                                   @Nonnull final IHCNode aHCNode)
   {
-    return updateElementDirect (sFieldID, HCSettings.getAsHTMLString (aHCNode));
+    return updateElementDirect (sFieldID, HCSettings.getAsHTMLStringWithoutNamespaces (aHCNode));
   }
 
   @Nonnull
@@ -92,10 +98,12 @@ public final class JSFormHelper
     return getFormHelper ().invoke ("updateElementViaAjax").arg (sFieldID).arg (sUpdateCallURI);
   }
 
+  // missing updateElements
+
   @Nonnull
   public static JSAssocArray createUpdateParam (@Nonnull @Nonempty final String sFieldID, @Nonnull final IHCNode aHCNode)
   {
-    return new JSAssocArray ().add ("id", sFieldID).add ("html", HCSettings.getAsHTMLString (aHCNode));
+    return new JSAssocArray ().add ("id", sFieldID).add ("html", HCSettings.getAsHTMLStringWithoutNamespaces (aHCNode));
   }
 
   @Nonnull
@@ -120,5 +128,20 @@ public final class JSFormHelper
                            .arg (aSaveCallURL.getInvocationURI ())
                            .arg (aSuccessUpdates)
                            .arg (aErrorUpdates);
+  }
+
+  /**
+   * Set all options of a &lt;select&gt;
+   * 
+   * @param aSelector
+   *        jQuery object
+   * @param aValueList
+   *        list of array[value,text] - nested array!
+   * @return the invocation
+   */
+  @Nonnull
+  public static JSInvocation setSelectOptions (@Nonnull final IJSExpression aSelector, @Nonnull final JSArray aValueList)
+  {
+    return getFormHelper ().invoke ("setSelectOptions").arg (aSelector).arg (aValueList);
   }
 }

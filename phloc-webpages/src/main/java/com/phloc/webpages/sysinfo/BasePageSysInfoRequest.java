@@ -81,7 +81,7 @@ public class BasePageSysInfoRequest extends AbstractWebPageExt
 
   public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_REQUEST.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_REQUEST.getAsMLT ());
   }
 
   public BasePageSysInfoRequest (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

@@ -20,6 +20,7 @@ import com.phloc.webpages.monitoring.BasePageSessions;
 import com.phloc.webpages.security.BasePageRoleManagement;
 import com.phloc.webpages.security.BasePageUserGroupManagement;
 import com.phloc.webpages.security.BasePageUserManagement;
+import com.phloc.webpages.settings.BasePageSettingsGlobal;
 import com.phloc.webpages.sysinfo.BasePageSysInfoChangeLogs;
 import com.phloc.webpages.sysinfo.BasePageSysInfoEnvironmentVariables;
 import com.phloc.webpages.sysinfo.BasePageSysInfoLanguages;
@@ -41,6 +42,8 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_MONITORING_LOGININFO = "admin_monitoring_logininfo";
   public static final String MENU_ADMIN_MONITORING_SCOPES = "admin_monitoring_scopes";
   public static final String MENU_ADMIN_MONITORING_SESSIONS = "admin_monitoring_sessions";
+  public static final String MENU_ADMIN_SETTINGS = "admin_settings";
+  public static final String MENU_ADMIN_SETTINGS_GLOBAL = "admin_settings_global";
   public static final String MENU_ADMIN_SYSINFO = "admin_sysinfo";
   public static final String MENU_ADMIN_SYSINFO_CHANGELOGS = "admin_sysinfo_changelog";
   public static final String MENU_ADMIN_SYSINFO_ENVVARS = "admin_sysinfo_envvars";
@@ -98,13 +101,28 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
+  public static IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
+                                                @Nonnull final IMenuItem aParent,
+                                                @Nullable final IFilter <IMenuObject> aDisplayFilter)
+  {
+    final IMenuItemPage aAdminSettings = aMenuTree.createItem (aParent,
+                                                               new PageShowChildren (MENU_ADMIN_SETTINGS,
+                                                                                     EWebPageText.PAGE_NAME_SETTINGS.getAsMLT (),
+                                                                                     aMenuTree))
+                                                  .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminSettings, new BasePageSettingsGlobal (MENU_ADMIN_SETTINGS_GLOBAL))
+             .setDisplayFilter (aDisplayFilter);
+    return aAdminSettings;
+  }
+
+  @Nonnull
   public static IMenuItemPage addSysInfoItems (@Nonnull final IMenuTree aMenuTree,
                                                @Nonnull final IMenuItem aParent,
                                                @Nullable final IFilter <IMenuObject> aDisplayFilter)
   {
     final IMenuItemPage aAdminSysInfo = aMenuTree.createItem (aParent,
                                                               new PageShowChildren (MENU_ADMIN_SYSINFO,
-                                                                                    EWebPageText.PAGE_NAME_SYS_INFO.getAsMLT (),
+                                                                                    EWebPageText.PAGE_NAME_SYSINFO.getAsMLT (),
                                                                                     aMenuTree))
                                                  .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoChangeLogs (MENU_ADMIN_SYSINFO_CHANGELOGS))

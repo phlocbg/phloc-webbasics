@@ -26,6 +26,11 @@ import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
+/**
+ * Java JavaScript wrapper for jquery-utils.js
+ * 
+ * @author Philip Helger
+ */
 @Immutable
 public final class JSJQueryUtils
 {

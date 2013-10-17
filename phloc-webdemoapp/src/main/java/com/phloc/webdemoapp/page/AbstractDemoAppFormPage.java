@@ -32,9 +32,9 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
+import com.phloc.webctrls.js.JSFormHelper;
 import com.phloc.webdemoapp.app.ajax.config.CDemoAppAjaxConfig;
 import com.phloc.webpages.AbstractWebPageForm;
-import com.phloc.webpages.form.JSFormHelper;
 
 public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>> extends AbstractWebPageForm <DATATYPE>
 {

@@ -79,7 +79,7 @@ FormHelperClass.prototype =
     });
   },
   
-  // array
+  // array[map{id,url|html}]
   updateElements : function(updates) {
     for (var i in updates) {
       var update = updates[i];
@@ -90,7 +90,7 @@ FormHelperClass.prototype =
     }
   },
   
-  // string,string,string,string,array[map{id,url|html}]
+  // string,string,string,string,array[map{id,url|html}],array[map{id,url|html}]
   saveFormData : function(formid,fieldPrefix,pageID,ajaxUrl,successUpdates,errorUpdates) {
     var vals=FormHelper.getAllFormValues(formid,fieldPrefix);
     vals.$pageID=pageID;
@@ -106,7 +106,9 @@ FormHelperClass.prototype =
     });
   },
   
-  // jQuery-select-obj, map<value,text>
+  // jQuery-select-obj, array(array(value,text))
+  // 2nd param changed in phloc-webctrls 1.3.4 so that order is maintained
+  //   was previously map<value,text>   
   setSelectOptions : function ($select,newOptions) {
     $select.empty(); // remove old options
     $.each(newOptions, function(value,text) {

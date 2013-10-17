@@ -81,7 +81,7 @@ public class BasePageSysInfoThreads extends AbstractWebPageExt
 
   public BasePageSysInfoThreads (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_THREADS.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_THREADS.getAsMLT ());
   }
 
   public BasePageSysInfoThreads (@Nonnull @Nonempty final String sID, @Nonnull final String sName)

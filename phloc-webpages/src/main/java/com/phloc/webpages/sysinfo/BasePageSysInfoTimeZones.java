@@ -81,7 +81,7 @@ public class BasePageSysInfoTimeZones extends AbstractWebPageExt
 
   public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYS_INFO_TIMEZONES.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_SYSINFO_TIMEZONES.getAsMLT ());
   }
 
   public BasePageSysInfoTimeZones (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
