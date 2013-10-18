@@ -360,6 +360,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   }
 
   @Override
+  @SuppressWarnings ("null")
   protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
                                                  @Nullable final IUser aSelectedObject,
                                                  @Nonnull final FormErrors aFormErrors,
