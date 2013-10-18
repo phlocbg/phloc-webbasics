@@ -10,12 +10,13 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 
 public class NamedSMTPSettings implements IHasID <String>
 {
   private final String m_sID;
   private String m_sName;
-  private ISMTPSettings m_aSMTPSettings;
+  private ReadonlySMTPSettings m_aSMTPSettings;
 
   public NamedSMTPSettings (@Nonnull @Nonempty final String sName, @Nonnull final ISMTPSettings aSMTPSettings)
   {
@@ -52,6 +53,7 @@ public class NamedSMTPSettings implements IHasID <String>
   {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
+
     if (sName.equals (m_sName))
       return EChange.UNCHANGED;
     m_sName = sName;
@@ -69,9 +71,12 @@ public class NamedSMTPSettings implements IHasID <String>
   {
     if (aSMTPSettings == null)
       throw new NullPointerException ("SMTPSettings");
-    if (aSMTPSettings.equals (m_aSMTPSettings))
+
+    // Ensure that the implementation type is the same!
+    final ReadonlySMTPSettings aRealSMTPSettings = new ReadonlySMTPSettings (aSMTPSettings);
+    if (aRealSMTPSettings.equals (m_aSMTPSettings))
       return EChange.UNCHANGED;
-    m_aSMTPSettings = aSMTPSettings;
+    m_aSMTPSettings = aRealSMTPSettings;
     return EChange.CHANGED;
   }
 

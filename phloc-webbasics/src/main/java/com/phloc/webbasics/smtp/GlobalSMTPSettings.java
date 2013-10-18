@@ -16,7 +16,6 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.web.smtp.impl.SMTPSettings;
@@ -31,7 +30,7 @@ import com.phloc.web.smtp.impl.SMTPSettings;
 public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
 {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, SMTPSettings> m_aMap = new HashMap <String, SMTPSettings> ();
+  private final Map <String, NamedSMTPSettings> m_aMap = new HashMap <String, NamedSMTPSettings> ();
 
   @Deprecated
   @UsedViaReflection
@@ -73,7 +72,7 @@ public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
 
   @Nonnull
   @ReturnsMutableCopy
-  public Map <String, SMTPSettings> getAllSettings ()
+  public Map <String, NamedSMTPSettings> getAllSettings ()
   {
     m_aRWLock.readLock ().lock ();
     try
@@ -86,12 +85,12 @@ public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
     }
   }
 
-  public boolean containsSettingsWithName (@Nullable final String sName)
+  public boolean containsSettings (@Nullable final String sID)
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aMap.containsKey (sName);
+      return m_aMap.containsKey (sID);
     }
     finally
     {
@@ -100,12 +99,12 @@ public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
   }
 
   @Nullable
-  public SMTPSettings getSettingsOfName (@Nullable final String sName)
+  public NamedSMTPSettings getSettings (@Nullable final String sID)
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aMap.get (sName);
+      return m_aMap.get (sID);
     }
     finally
     {
@@ -114,20 +113,15 @@ public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
   }
 
   @Nullable
-  public EChange addSettings (@Nonnull @Nonempty final String sName, @Nonnull final SMTPSettings aSettings)
+  public NamedSMTPSettings addSettings (@Nonnull @Nonempty final String sName, @Nonnull final SMTPSettings aSettings)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    if (aSettings == null)
-      throw new NullPointerException ("settings");
+    final NamedSMTPSettings aNamedSettings = new NamedSMTPSettings (sName, aSettings);
 
     m_aRWLock.writeLock ().lock ();
     try
     {
-      if (m_aMap.containsKey (sName))
-        return EChange.UNCHANGED;
-      m_aMap.put (sName, aSettings);
-      return EChange.CHANGED;
+      m_aMap.put (aNamedSettings.getID (), aNamedSettings);
+      return aNamedSettings;
     }
     finally
     {
@@ -136,18 +130,12 @@ public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
   }
 
   @Nullable
-  public EChange setSettings (@Nonnull @Nonempty final String sName, @Nonnull final SMTPSettings aSettings)
+  public EChange removeSettings (@Nullable final String sID)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    if (aSettings == null)
-      throw new NullPointerException ("settings");
-
     m_aRWLock.writeLock ().lock ();
     try
     {
-      final SMTPSettings aOldSettings = m_aMap.put (sName, aSettings);
-      return EChange.valueOf (aOldSettings == null || !aOldSettings.equals (aSettings));
+      return EChange.valueOf (m_aMap.remove (sID) != null);
     }
     finally
     {
