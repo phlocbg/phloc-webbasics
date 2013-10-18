@@ -35,33 +35,33 @@ import com.phloc.commons.version.Version;
 @IsSPIImplementation
 public final class ThirdPartyModuleProvider_phloc_web implements IThirdPartyModuleProviderSPI
 {
-  private static final IThirdPartyModule DNSJAVA = new ThirdPartyModule ("dnsjava",
-                                                                         "Brian Wellington",
-                                                                         ELicense.BSD,
-                                                                         new Version (2, 1, 1),
-                                                                         "http://www.xbill.org/dnsjava/",
-                                                                         true);
+  public static final IThirdPartyModule DNSJAVA = new ThirdPartyModule ("dnsjava",
+                                                                        "Brian Wellington",
+                                                                        ELicense.BSD,
+                                                                        new Version (2, 1, 1),
+                                                                        "http://www.xbill.org/dnsjava/",
+                                                                        true);
 
-  private static final IThirdPartyModule RHINO = new ThirdPartyModule ("Rhino",
-                                                                       "Mozilla",
-                                                                       ELicense.MPL20,
-                                                                       new Version ("1.7R4"),
-                                                                       "https://developer.mozilla.org/de/docs/Rhino",
-                                                                       true);
-
-  private static final IThirdPartyModule JAVAX_MAIL = new ThirdPartyModule ("JavaMail",
-                                                                            "Oracle",
-                                                                            ELicense.BSD,
-                                                                            new Version (1, 5, 0),
-                                                                            "http://javamail.java.net/",
-                                                                            true);
-
-  private static final IThirdPartyModule JSCH = new ThirdPartyModule ("JSch",
-                                                                      "JCraft Inc.",
-                                                                      ELicense.BSD,
-                                                                      new Version (0, 1, 50),
-                                                                      "http://www.jcraft.com/jsch/",
+  public static final IThirdPartyModule RHINO = new ThirdPartyModule ("Rhino",
+                                                                      "Mozilla",
+                                                                      ELicense.MPL20,
+                                                                      new Version ("1.7R4"),
+                                                                      "https://developer.mozilla.org/de/docs/Rhino",
                                                                       true);
+
+  public static final IThirdPartyModule JAVAX_MAIL = new ThirdPartyModule ("JavaMail",
+                                                                           "Oracle",
+                                                                           ELicense.BSD,
+                                                                           new Version (1, 5, 0),
+                                                                           "http://javamail.java.net/",
+                                                                           true);
+
+  public static final IThirdPartyModule JSCH = new ThirdPartyModule ("JSch",
+                                                                     "JCraft Inc.",
+                                                                     ELicense.BSD,
+                                                                     new Version (0, 1, 50),
+                                                                     "http://www.jcraft.com/jsch/",
+                                                                     true);
 
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
