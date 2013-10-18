@@ -149,6 +149,27 @@ public class UnifiedResponse
    */
   private CharsetEncoder m_aContentDispositionEncoder;
 
+  /**
+   * Constructor
+   * 
+   * @param aHttpRequest
+   *        The main HTTP request
+   */
+  public UnifiedResponse (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    this (RequestHelper.getHttpVersion (aHttpRequest), RequestHelper.getHttpMethod (aHttpRequest), aHttpRequest);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param eHTTPVersion
+   *        HTTP version of this request (1.0 or 1.1)
+   * @param eHTTPMethod
+   *        HTTP method of this request (GET, POST, ...)
+   * @param aHttpRequest
+   *        The main HTTP request
+   */
   public UnifiedResponse (@Nonnull final EHTTPVersion eHTTPVersion,
                           @Nonnull final EHTTPMethod eHTTPMethod,
                           @Nonnull final HttpServletRequest aHttpRequest)
