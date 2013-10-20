@@ -2,22 +2,24 @@ package com.phloc.webbasics.smtp;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
+import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.commons.IHasSize;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.web.smtp.impl.SMTPSettings;
 
 /**
@@ -27,20 +29,46 @@ import com.phloc.web.smtp.impl.SMTPSettings;
  * @author Philip Helger
  */
 @ThreadSafe
-public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
+public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasSize
 {
-  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
+  private static final String ELEMENT_NAMEDSMTPSETTINGSLIST = "namedsmtpsettingslist";
+  private static final String ELEMENT_NAMEDSMTPSETTINGS = "namedsmtpsettings";
+
   private final Map <String, NamedSMTPSettings> m_aMap = new HashMap <String, NamedSMTPSettings> ();
 
-  @Deprecated
-  @UsedViaReflection
-  public GlobalSMTPSettings ()
-  {}
-
-  @Nonnull
-  public static GlobalSMTPSettings getInstance ()
+  public NamedSMTPSettingsManager (@Nonnull @Nonempty final String sFilename) throws DAOException
   {
-    return getGlobalSingleton (GlobalSMTPSettings.class);
+    super (sFilename);
+    initialRead ();
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onRead (@Nonnull final IMicroDocument aDoc)
+  {
+    for (final IMicroElement eNamedSMTPSettings : aDoc.getDocumentElement ()
+                                                      .getAllChildElements (ELEMENT_NAMEDSMTPSETTINGS))
+      _addItem (MicroTypeConverter.convertToNative (eNamedSMTPSettings, NamedSMTPSettings.class));
+    return EChange.UNCHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected IMicroDocument createWriteData ()
+  {
+    final IMicroDocument aDoc = new MicroDocument ();
+    final IMicroElement eRoot = aDoc.appendElement (ELEMENT_NAMEDSMTPSETTINGSLIST);
+    for (final NamedSMTPSettings aNamedSMTPSettings : ContainerHelper.getSortedByKey (m_aMap).values ())
+      eRoot.appendChild (MicroTypeConverter.convertToMicroElement (aNamedSMTPSettings, ELEMENT_NAMEDSMTPSETTINGS));
+    return aDoc;
+  }
+
+  private void _addItem (@Nonnull final NamedSMTPSettings aNamedSMTPSettings)
+  {
+    final String sUserID = aNamedSMTPSettings.getID ();
+    if (m_aMap.containsKey (sUserID))
+      throw new IllegalArgumentException ("NamedSMTPSettings ID " + sUserID + " is already in use!");
+    m_aMap.put (sUserID, aNamedSMTPSettings);
   }
 
   @Nonnegative
@@ -120,7 +148,7 @@ public class GlobalSMTPSettings extends GlobalSingleton implements IHasSize
     m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aMap.put (aNamedSettings.getID (), aNamedSettings);
+      _addItem (aNamedSettings);
       return aNamedSettings;
     }
     finally
