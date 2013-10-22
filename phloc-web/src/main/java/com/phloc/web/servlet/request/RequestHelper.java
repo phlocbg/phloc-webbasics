@@ -17,6 +17,7 @@
  */
 package com.phloc.web.servlet.request;
 
+import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +54,10 @@ import com.phloc.web.port.DefaultNetworkPorts;
 @Immutable
 public final class RequestHelper
 {
+  public static final String SERVLET_ATTR_SSL_CIPHER_SUITE = "javax.servlet.request.cipher_suite";
+  public static final String SERVLET_ATTR_SSL_KEY_SIZE = "javax.servlet.request.key_size";
+  public static final String SERVLET_ATTR_CLIENT_CERTIFICATE = "javax.servlet.request.X509Certificate";
+
   private static final String SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP = "$requesthelp.requestparammap";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestHelper.class);
@@ -515,5 +520,77 @@ public final class RequestHelper
       throw new NullPointerException ("httpRequest");
 
     return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aHttpRequest.getHeaderNames ());
+  }
+
+  @Nullable
+  private static <T> T _getRequestAttr (@Nonnull final HttpServletRequest aHttpRequest,
+                                        @Nonnull @Nonempty final String sAttrName,
+                                        @Nonnull final Class <T> aDstClass)
+  {
+    if (aHttpRequest == null)
+      throw new NullPointerException ("httpRequest");
+
+    final Object aValue = aHttpRequest.getAttribute (sAttrName);
+    if (aValue == null)
+    {
+      // No client certificates present
+      return null;
+    }
+
+    // type check
+    if (!aDstClass.isAssignableFrom (aValue.getClass ()))
+    {
+      s_aLogger.error ("Request attribute " +
+                       sAttrName +
+                       " is not of type " +
+                       aDstClass.getName () +
+                       " but of type " +
+                       aValue.getClass ().getName ());
+      return null;
+    }
+
+    // Return the certificates
+    return aDstClass.cast (aValue);
+  }
+
+  /**
+   * @param aHttpRequest
+   *        he HTTP servlet request to extract the information from. May not be
+   *        <code>null</code>.
+   * @return SSL cipher suite or <code>null</code> if no such attribute is
+   *         present
+   */
+  @Nullable
+  public static String getRequestSSLCipherSuite (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    return _getRequestAttr (aHttpRequest, SERVLET_ATTR_SSL_CIPHER_SUITE, String.class);
+  }
+
+  /**
+   * @param aHttpRequest
+   *        he HTTP servlet request to extract the information from. May not be
+   *        <code>null</code>.
+   * @return Bit size of the algorithm or <code>null</code> if no such attribute
+   *         is present
+   */
+  @Nullable
+  public static Integer getRequestSSLKeySize (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    return _getRequestAttr (aHttpRequest, SERVLET_ATTR_SSL_KEY_SIZE, Integer.class);
+  }
+
+  /**
+   * Get the client certificates provided by a HTTP servlet request.
+   * 
+   * @param aHttpRequest
+   *        The HTTP servlet request to extract the information from. May not be
+   *        <code>null</code>.
+   * @return <code>null</code> if the passed request does not contain any client
+   *         certificate
+   */
+  @Nullable
+  public static X509Certificate [] getRequestClientCertificates (@Nonnull final HttpServletRequest aHttpRequest)
+  {
+    return _getRequestAttr (aHttpRequest, SERVLET_ATTR_CLIENT_CERTIFICATE, X509Certificate [].class);
   }
 }
