@@ -111,8 +111,8 @@ FormHelperClass.prototype =
   //   was previously map<value,text>   
   setSelectOptions : function ($select,newOptions) {
     $select.empty(); // remove old options
-    $.each(newOptions, function(value,text) {
-      $select.append($("<option></option>").attr("value",value).text(text));
+    $.each(newOptions, function(index,obj) {
+      $select.append($("<option></option>").attr("value",obj[0]).text(obj[1]));
     });    
   }
 };
