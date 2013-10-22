@@ -33,8 +33,10 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCEM;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.web.smtp.EmailGlobalSettings;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
@@ -66,6 +68,7 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
     MSG_EMAIL_SOCKET_TIMEOUT ("Socket-Timeout", "Socket timeout"),
     MSG_EMAIL_CONNECTION_LISTENER ("ConnectionListener", "ConnectionListener"),
     MSG_EMAIL_TRANSPORT_LISTENER ("TransportListener", "TransportListener"),
+    MSG_NONE ("keiner", "none"),
     MSG_CHANGE_SUCCESS ("Die Einstellungen wurden erfolgreich gespeichert.", "Changes were changed successfully.");
 
     private final ITextProvider m_aTP;
@@ -163,6 +166,14 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
       aTable.createItemRow ()
             .setLabel (EText.MSG_EMAIL_SOCKET_TIMEOUT.getDisplayText (aDisplayLocale))
             .setCtrl (Long.toString (EmailGlobalSettings.getTimeoutMilliSecs ()) + "ms");
+      aTable.createItemRow ()
+            .setLabel (EText.MSG_EMAIL_CONNECTION_LISTENER.getDisplayText (aDisplayLocale))
+            .setCtrl (EmailGlobalSettings.getConnectionListener () == null ? HCEM.create (EText.MSG_NONE.getDisplayText (aDisplayLocale))
+                                                                          : new HCTextNode (String.valueOf (EmailGlobalSettings.getConnectionListener ())));
+      aTable.createItemRow ()
+            .setLabel (EText.MSG_EMAIL_TRANSPORT_LISTENER.getDisplayText (aDisplayLocale))
+            .setCtrl (EmailGlobalSettings.getTransportListener () == null ? HCEM.create (EText.MSG_NONE.getDisplayText (aDisplayLocale))
+                                                                         : new HCTextNode (String.valueOf (EmailGlobalSettings.getTransportListener ())));
       aTabBox.addTab (EText.MSG_HEADER_EMAIL.getDisplayText (aDisplayLocale), aTable);
     }
 
