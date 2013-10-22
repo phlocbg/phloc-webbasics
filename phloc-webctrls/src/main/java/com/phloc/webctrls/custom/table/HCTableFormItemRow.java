@@ -19,6 +19,7 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
+import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.impl.HCFormLabel;
 
@@ -48,6 +49,12 @@ public class HCTableFormItemRow extends HCRow
   public final HCTableFormItemRow setLabel (@Nullable final String sLabel)
   {
     return setLabel (sLabel == null ? null : HCFormLabel.create (sLabel));
+  }
+
+  @Nonnull
+  public final HCTableFormItemRow setLabel (@Nullable final String sLabel, @Nonnull final ELabelType eLabelType)
+  {
+    return setLabel (sLabel == null ? null : HCFormLabel.create (sLabel, eLabelType));
   }
 
   @Nonnull
