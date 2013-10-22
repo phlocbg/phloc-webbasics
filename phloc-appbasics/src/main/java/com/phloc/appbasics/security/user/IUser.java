@@ -19,8 +19,11 @@ package com.phloc.appbasics.security.user;
 
 import java.util.Locale;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
 
 import com.phloc.appbasics.auth.subject.IAuthSubject;
 import com.phloc.appbasics.security.CSecurity;
@@ -84,6 +87,20 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
    */
   @Nullable
   Locale getDesiredLocale ();
+
+  /**
+   * @return The date time when the user last logged in.
+   * @since 2.4.2
+   */
+  @Nonnull
+  DateTime getLastLoginDateTime ();
+
+  /**
+   * @return The number of times the user logged in. Always &ge; 0.
+   * @since 2.4.2
+   */
+  @Nonnegative
+  int getLoginCount ();
 
   /**
    * @return <code>true</code> if this user is deleted, <code>false</code> if it

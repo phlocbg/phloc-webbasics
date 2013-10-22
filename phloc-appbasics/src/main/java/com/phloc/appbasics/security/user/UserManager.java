@@ -504,6 +504,30 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   }
 
   @Nonnull
+  public EChange updateUserLastLogin (@Nullable final String sUserID)
+  {
+    // Resolve user
+    final User aUser = getUserOfID (sUserID);
+    if (aUser == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id", "update-last-login");
+      return EChange.UNCHANGED;
+    }
+
+    try
+    {
+      aUser.updateLastLogin ();
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USER, "update-last-login", sUserID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   public EChange deleteUser (@Nullable final String sUserID)
   {
     final User aUser = getUserOfID (sUserID);

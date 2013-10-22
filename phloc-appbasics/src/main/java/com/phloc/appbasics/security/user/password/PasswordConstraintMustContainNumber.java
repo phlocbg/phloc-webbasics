@@ -31,6 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * be contained
  * 
  * @author Philip Helger
+ * @since 2.4.2
  */
 public class PasswordConstraintMustContainNumber implements IPasswordConstraint
 {

@@ -42,6 +42,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_LASTMODDT = "lastmoddt";
   private static final String ATTR_DELETIONDT = "deletiondt";
   private static final String ATTR_DESIREDLOCALE = "desiredlocale";
+  private static final String ATTR_LASTLOGINDT = "lastlogindt";
+  private static final String ATTR_LOGINCOUNT = "logincount";
   private static final String ELEMENT_LOGINNAME = "loginname";
   private static final String ELEMENT_EMAILADDRESS = "emailaddress";
   private static final String ELEMENT_PASSWORDHASH = "passwordhash";
@@ -71,6 +73,9 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
       eUser.appendElement (ELEMENT_LASTNAME).appendText (aUser.getLastName ());
     if (aUser.getDesiredLocale () != null)
       eUser.setAttribute (ATTR_DESIREDLOCALE, aUser.getDesiredLocale ().toString ());
+    if (aUser.getLastLoginDateTime () != null)
+      eUser.setAttributeWithConversion (ATTR_LASTLOGINDT, aUser.getLastLoginDateTime ());
+    eUser.setAttribute (ATTR_LOGINCOUNT, aUser.getLoginCount ());
     for (final Map.Entry <String, Object> aEntry : aUser.getAllAttributes ().entrySet ())
     {
       final IMicroElement eCustom = eUser.appendElement (ELEMENT_CUSTOM);
@@ -102,6 +107,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final String sLastName = MicroUtils.getChildTextContent (eUser, ELEMENT_LASTNAME);
     final String sDesiredLocale = eUser.getAttribute (ATTR_DESIREDLOCALE);
     final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.getLocale (sDesiredLocale);
+    final DateTime aLastLoginDT = eUser.getAttributeWithConversion (ATTR_LASTLOGINDT, DateTime.class);
+    final int nLoginCount = StringParser.parseInt (eUser.getAttribute (ATTR_LOGINCOUNT), 0);
     final Map <String, String> aCustomAttrs = new LinkedHashMap <String, String> ();
     for (final IMicroElement eCustom : eUser.getAllChildElements (ELEMENT_CUSTOM))
       aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
@@ -119,6 +126,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
                      sFirstName,
                      sLastName,
                      aDesiredLocale,
+                     aLastLoginDT,
+                     nLoginCount,
                      aCustomAttrs,
                      bDeleted,
                      bDisabled);

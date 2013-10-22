@@ -22,6 +22,11 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-appbasics">
   <entry date="2013-10-22" category="api" action="add">
     <change>
+      <text locale="en">Started adding support for last login DT and login count on IUser</text>
+    </change>
+  </entry>
+  <entry date="2013-10-22" category="api" action="add">
+    <change>
       <text locale="en">Added new password constraint class PasswordConstraintMustContainNumber</text>
     </change>
   </entry>

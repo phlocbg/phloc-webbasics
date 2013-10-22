@@ -20,6 +20,7 @@ package com.phloc.appbasics.security.user;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -44,7 +45,7 @@ import com.phloc.datetime.PDTFactory;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class User extends MapBasedAttributeContainer implements IUser
+public class User extends MapBasedAttributeContainer implements IUser
 {
   private final String m_sID;
   private final DateTime m_aCreationDT;
@@ -56,6 +57,8 @@ public final class User extends MapBasedAttributeContainer implements IUser
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
+  private DateTime m_aLastLoginDT;
+  private int m_nLoginCount;
   private boolean m_bDeleted;
   private boolean m_bDisabled;
 
@@ -92,14 +95,16 @@ public final class User extends MapBasedAttributeContainer implements IUser
   {
     this (GlobalIDFactory.getNewPersistentStringID (),
           PDTFactory.getCurrentDateTime (),
-          null,
-          null,
+          (DateTime) null,
+          (DateTime) null,
           sLoginName,
           sEmailAddress,
           sPasswordHash,
           sFirstName,
           sLastName,
           aDesiredLocale,
+          (DateTime) null,
+          0,
           aCustomAttrs,
           false,
           bDisabled);
@@ -118,14 +123,16 @@ public final class User extends MapBasedAttributeContainer implements IUser
   {
     this (sID,
           PDTFactory.getCurrentDateTime (),
-          null,
-          null,
+          (DateTime) null,
+          (DateTime) null,
           sLoginName,
           sEmailAddress,
           sPasswordHash,
           sFirstName,
           sLastName,
           aDesiredLocale,
+          (DateTime) null,
+          0,
           aCustomAttrs,
           false,
           bDisabled);
@@ -156,6 +163,10 @@ public final class User extends MapBasedAttributeContainer implements IUser
    *        The last name. May be <code>null</code>.
    * @param aDesiredLocale
    *        The desired locale. May be <code>null</code>.
+   * @param aLastLoginDT
+   *        The date time when the user last logged in.
+   * @param nLoginCount
+   *        The number of times the user logged in. Must be &ge; 0.
    * @param aCustomAttrs
    *        Custom attributes. May be <code>null</code>.
    * @param bDeleted
@@ -173,6 +184,8 @@ public final class User extends MapBasedAttributeContainer implements IUser
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
+        @Nullable final DateTime aLastLoginDT,
+        @Nonnegative final int nLoginCount,
         @Nullable final Map <String, ?> aCustomAttrs,
         final boolean bDeleted,
         final boolean bDisabled)
@@ -187,6 +200,8 @@ public final class User extends MapBasedAttributeContainer implements IUser
       throw new IllegalArgumentException ("emailAddress");
     if (StringHelper.hasNoText (sPasswordHash))
       throw new IllegalArgumentException ("passwordHash");
+    if (nLoginCount < 0)
+      throw new IllegalArgumentException ("loginCount");
     m_sID = sID;
     m_aCreationDT = aCreationDT;
     m_aLastModificationDT = aLastModificationDT;
@@ -197,6 +212,8 @@ public final class User extends MapBasedAttributeContainer implements IUser
     m_sFirstName = sFirstName;
     m_sLastName = sLastName;
     m_aDesiredLocale = aDesiredLocale;
+    m_aLastLoginDT = aLastLoginDT;
+    m_nLoginCount = nLoginCount;
     setAttributes (aCustomAttrs);
     m_bDeleted = bDeleted;
     m_bDisabled = bDisabled;
@@ -350,6 +367,24 @@ public final class User extends MapBasedAttributeContainer implements IUser
       return EChange.UNCHANGED;
     m_aDesiredLocale = aDesiredLocale;
     return EChange.CHANGED;
+  }
+
+  @Nullable
+  public DateTime getLastLoginDateTime ()
+  {
+    return m_aLastLoginDT;
+  }
+
+  @Nonnegative
+  public int getLoginCount ()
+  {
+    return m_nLoginCount;
+  }
+
+  void updateLastLogin ()
+  {
+    m_aLastLoginDT = PDTFactory.getCurrentDateTime ();
+    m_nLoginCount++;
   }
 
   @Nonnull
