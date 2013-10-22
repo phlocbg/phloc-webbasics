@@ -147,7 +147,7 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
 
     // Email global settings
     {
-      final IHCTableForm <?> aTable = getStyler ().createTableForm (new HCCol (170), HCCol.star ());
+      final IHCTableForm <?> aTable = getStyler ().createTableForm (new HCCol (200), HCCol.star ());
       aTable.createItemRow ()
             .setLabel (EText.MSG_EMAIL_MAILQUEUE_LENGTH.getDisplayText (aDisplayLocale))
             .setCtrl (Long.toString (EmailGlobalSettings.getMaxMailQueueLength ()));
