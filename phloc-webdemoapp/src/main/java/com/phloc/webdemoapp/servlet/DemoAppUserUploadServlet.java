@@ -31,8 +31,9 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.json.IJSONObject;
-import com.phloc.json.impl.JSONObject;
+import com.phloc.json2.IJsonObject;
+import com.phloc.json2.impl.JsonObject;
+import com.phloc.json2.serialize.JsonWriter;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.servlet.response.UnifiedResponse;
@@ -59,28 +60,22 @@ public final class DemoAppUserUploadServlet extends AbstractUnifiedResponseServl
   }
 
   @Nonnull
-  private static IJSONObject _createSuccess ()
+  private static IJsonObject _createSuccess ()
   {
-    final JSONObject ret = new JSONObject ();
-    ret.setBooleanProperty ("success", true);
-    return ret;
+    return new JsonObject ().add ("success", true);
   }
 
   @Nonnull
-  private static IJSONObject _createError (@Nonnull final String sErrorMsg)
+  private static IJsonObject _createError (@Nonnull final String sErrorMsg)
   {
     s_aLogger.error ("User upload error: " + sErrorMsg);
-    final JSONObject ret = new JSONObject ();
-    ret.setBooleanProperty ("success", false);
-    ret.setStringProperty ("error", sErrorMsg);
-    ret.setBooleanProperty ("preventRetry", true);
-    return ret;
+    return new JsonObject ().add ("success", false).add ("error", sErrorMsg).add ("preventRetry", true);
   }
 
   private void _post (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                       @Nonnull final UnifiedResponse aUnifiedResponse)
   {
-    IJSONObject ret;
+    IJsonObject ret;
 
     final Object aFile = aRequestScope.getAttributeObject (PARAM_FILE);
     if (!(aFile instanceof IFileItem))
@@ -128,7 +123,7 @@ public final class DemoAppUserUploadServlet extends AbstractUnifiedResponseServl
         }
       }
     }
-    aUnifiedResponse.setMimeType (CMimeType.APPLICATION_JSON).setContentAndCharset (ret.getJSONString (false),
+    aUnifiedResponse.setMimeType (CMimeType.APPLICATION_JSON).setContentAndCharset (JsonWriter.getAsString (ret),
                                                                                     CCharset.CHARSET_UTF_8_OBJ);
   }
 
