@@ -25,6 +25,6 @@
   <css path="/stream/famfam/flags/flags.css"/>
   <css path="/stream/famfam/013/famfam.css"/>
   <css path="/stream/css/webctrls.css"/>
-  <css path="/css/default-1.0.css"/>
+  <css path="/css/default.css"/>
   <css path="/stream/placeholder/placeholder-fix.css" condcomment="if lte IE 9"/>
 </items>
