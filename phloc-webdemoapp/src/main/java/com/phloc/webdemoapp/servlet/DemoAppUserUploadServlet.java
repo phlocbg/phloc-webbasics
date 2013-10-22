@@ -37,7 +37,7 @@ import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webbasics.userdata.UserDataObject;
-import com.phloc.webdemoapp.ui.config.upload.UserUploadManager;
+import com.phloc.webbasics.userdata.UserUploadManager;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 import com.phloc.webscopes.servlets.AbstractUnifiedResponseServlet;
 
