@@ -97,7 +97,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     TITLE_EDIT ("Benutzer ''{0}'' bearbeiten", "Edit user ''{0}''"),
     TITLE_RESET_PASSWORD ("Passwort von ''{0}'' zurücksetzen", "Reset password of user ''{0}''"),
     NONE_DEFINED ("keine definiert", "none defined"),
-    HEADER_DETAILS ("Details von Benutzer {0}", "Details of user {0}"),
+    HEADER_DETAILS ("Details von Benutzer ''{0}''", "Details of user ''{0}''"),
     LABEL_CREATIONDATE ("Angelegt am", "Created on"),
     LABEL_LASTMODIFICATIONDATE ("Letzte Änderung am", "Last modification on"),
     LABEL_DELETIONDATE ("Gelöscht am", "Deleted on"),
