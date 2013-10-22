@@ -35,11 +35,11 @@ import com.phloc.commons.version.Version;
 @IsSPIImplementation
 public final class ThirdPartyModuleProvider_plugin_schedule implements IThirdPartyModuleProviderSPI
 {
-  private static final IThirdPartyModule QUARTZ = new ThirdPartyModule ("Quartz",
-                                                                        "Terracotta",
-                                                                        ELicense.APACHE2,
-                                                                        new Version (2, 2, 1),
-                                                                        "http://www.quartz-scheduler.org/");
+  public static final IThirdPartyModule QUARTZ = new ThirdPartyModule ("Quartz",
+                                                                       "Terracotta",
+                                                                       ELicense.APACHE2,
+                                                                       new Version (2, 2, 1),
+                                                                       "http://www.quartz-scheduler.org/");
 
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
