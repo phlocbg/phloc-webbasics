@@ -51,8 +51,9 @@ import com.phloc.commons.string.ToStringGenerator;
  * Theses maps can indefinitely be nested.<br>
  * Having only <code>struct[key1][key2][key3]=value</code> results in
  * <code>map{struct=map{key1=map{key2=map{key3=value}}}}</code><br>
- * By default the separator chars ar "[" and "]" but since this may be a problem
- * with JS expressions, {@link #setSeparators(char, char)} and
+ * <br>
+ * By default the separator chars are "[" and "]" but since this may be a
+ * problem with JS expressions, {@link #setSeparators(char, char)} and
  * {@link #setSeparators(String, String)} offer the possibility to set different
  * separator separators that are not special.
  * 
@@ -65,7 +66,9 @@ public final class RequestParamMap implements IRequestParamMap
   public static final String DEFAULT_CLOSE = "]";
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestParamMap.class);
 
+  /** The index open separator */
   private static String s_sOpen = DEFAULT_OPEN;
+  /** The index close separator */
   private static String s_sClose = DEFAULT_CLOSE;
 
   private final Map <String, Object> m_aMap;
@@ -121,10 +124,12 @@ public final class RequestParamMap implements IRequestParamMap
 
   public void put (@Nonnull final String sName, @Nullable final Object aValue)
   {
-    // replace everything just to have opening "[" left and one closing "]" at
-    // the end that is filtered out manually
+    // replace everything just to have opening separators ("[") left and only
+    // one closing separator ("]") at the end
     String sRealName = StringHelper.replaceAll (sName, s_sClose + s_sOpen, s_sOpen);
+    // Remove the remaining trailing closing separator
     sRealName = StringHelper.trimEnd (sRealName, s_sClose);
+    // Start parsing
     _recursiveAddItem (m_aMap, sRealName, aValue);
   }
 
@@ -144,8 +149,16 @@ public final class RequestParamMap implements IRequestParamMap
     return GenericReflection.<Object, Map <String, Object>> uncheckedCast (aPathObj);
   }
 
+  /**
+   * Iterate the root map down to the map specified by the passed path.
+   * 
+   * @param aPath
+   *        The path to iterate. May neither be <code>null</code> nor empty.
+   * @return The map. May be <code>null</code> if the path did not find such a
+   *         child.
+   */
   @Nullable
-  private Map <String, Object> _getResolvedParentMap (@Nonnull @Nonempty final String... aPath)
+  private Map <String, Object> _getResolvedChildMap (@Nonnull @Nonempty final String... aPath)
   {
     if (ArrayHelper.isEmpty (aPath))
       throw new IllegalArgumentException ("Path path array may not be empty!");
@@ -163,14 +176,14 @@ public final class RequestParamMap implements IRequestParamMap
 
   public boolean contains (@Nonnull @Nonempty final String... aPath)
   {
-    final Map <String, Object> aMap = _getResolvedParentMap (aPath);
+    final Map <String, Object> aMap = _getResolvedChildMap (aPath);
     return aMap != null && aMap.containsKey (ArrayHelper.getLast (aPath));
   }
 
   @Nullable
   public Object getObject (@Nonnull @Nonempty final String... aPath)
   {
-    final Map <String, Object> aMap = _getResolvedParentMap (aPath);
+    final Map <String, Object> aMap = _getResolvedChildMap (aPath);
     return aMap == null ? null : aMap.get (ArrayHelper.getLast (aPath));
   }
 
@@ -237,7 +250,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   @Nonnull
   @ReturnsMutableCopy
-  public Map <String, String> getAsValueMap ()
+  public Map <String, String> getAsValueMap () throws ClassCastException
   {
     final Map <String, String> ret = new HashMap <String, String> (m_aMap.size ());
     for (final Map.Entry <String, Object> aEntry : m_aMap.entrySet ())
@@ -380,6 +393,7 @@ public final class RequestParamMap implements IRequestParamMap
   /**
    * @return The open char. By default this is "[". Never <code>null</code> nor
    *         empty.
+   * @see #DEFAULT_OPEN
    */
   @Nonnull
   @Nonempty
@@ -391,6 +405,7 @@ public final class RequestParamMap implements IRequestParamMap
   /**
    * @return The close char. By default this is "]". Never <code>null</code> nor
    *         empty.
+   * @see #DEFAULT_CLOSE
    */
   @Nonnull
   @Nonempty
