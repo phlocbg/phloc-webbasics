@@ -104,7 +104,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
         aInitializer.initLayout (ApplicationLayoutManager.getInstance ());
 
         // Create all menu items
-        aInitializer.initMenu (ApplicationMenuTree.getInstance ());
+        aInitializer.initMenu (ApplicationMenuTree.getInstance ().getTree ());
 
         // Register all Ajax functions here
         aInitializer.initAjax (ApplicationAjaxManager.getInstance ());
