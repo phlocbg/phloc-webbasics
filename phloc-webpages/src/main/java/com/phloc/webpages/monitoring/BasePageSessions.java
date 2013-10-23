@@ -48,6 +48,7 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webpages.UITextFormatter;
 
 /**
  * Show information on all active sessions
@@ -159,7 +160,9 @@ public class BasePageSessions extends AbstractWebPageForm <ISessionScope>
     aTableAttrs.addHeaderRow ().addCells (EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                           EText.MSG_VALUE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <String, Object> aEntry : aScope.getAllAttributes ().entrySet ())
-      aTableAttrs.addBodyRow ().addCells (aEntry.getKey (), String.valueOf (aEntry.getValue ()));
+      aTableAttrs.addBodyRow ()
+                 .addCell (aEntry.getKey ())
+                 .addCell (UITextFormatter.getToStringContent (aEntry.getValue ()));
     aNodeList.addChild (aTableAttrs);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTableAttrs, aDisplayLocale);
