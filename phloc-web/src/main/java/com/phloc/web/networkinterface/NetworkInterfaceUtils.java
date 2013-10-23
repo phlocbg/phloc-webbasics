@@ -35,14 +35,14 @@ public final class NetworkInterfaceUtils
     final DefaultTreeWithGlobalUniqueID <String, NetworkInterface> ret = new DefaultTreeWithGlobalUniqueID <String, NetworkInterface> ();
 
     // Build basic level - all IFs without a parent
-    final List <NetworkInterface> aRemainingNIs = new ArrayList <NetworkInterface> ();
+    final List <NetworkInterface> aNonRootNIs = new ArrayList <NetworkInterface> ();
     try
     {
       for (final NetworkInterface aNI : ContainerHelper.getIterator (NetworkInterface.getNetworkInterfaces ()))
         if (aNI.getParent () == null)
           ret.getRootItem ().createChildItem (aNI.getName (), aNI);
         else
-          aRemainingNIs.add (aNI);
+          aNonRootNIs.add (aNI);
     }
     catch (final Throwable t)
     {
@@ -50,9 +50,9 @@ public final class NetworkInterfaceUtils
     }
 
     int nNotFound = 0;
-    while (!aRemainingNIs.isEmpty ())
+    while (!aNonRootNIs.isEmpty ())
     {
-      final NetworkInterface aNI = aRemainingNIs.remove (0);
+      final NetworkInterface aNI = aNonRootNIs.remove (0);
       final DefaultTreeItemWithID <String, NetworkInterface> aParentItem = ret.getItemWithID (aNI.getParent ()
                                                                                                  .getName ());
       if (aParentItem != null)
@@ -66,16 +66,16 @@ public final class NetworkInterfaceUtils
       else
       {
         // Add again at the end
-        aRemainingNIs.add (aNI);
+        aNonRootNIs.add (aNI);
 
         // Parent not found
         nNotFound++;
 
         // We tried too many times without success - we iterated the whole
         // remaining list and found no parent tree item
-        if (nNotFound > aRemainingNIs.size ())
+        if (nNotFound > aNonRootNIs.size ())
           throw new IllegalStateException ("Seems like we have a data structure inconsistency! Remaining are: " +
-                                           aRemainingNIs);
+                                           aNonRootNIs);
       }
     }
     return ret;

@@ -2,6 +2,9 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>10/23/13</td><td>add</td><td>api</td><td></td><td>Added new class NetworkInterfaceUtils</td></tr>
+<tr><td>10/23/13</td><td>add</td><td>api</td><td></td><td>Added new classes ParentProviderNetworkInterface and ChildrenProviderNetworkInterface</td></tr>
+<tr><td>10/23/13</td><td>add</td><td>api</td><td></td><td>Added new class ComparatorNetworkInterfaceDisplayName</td></tr>
 <tr><td>10/22/13</td><td>add</td><td>api</td><td></td><td>Added SSL-support methods in class RequestHelper</td></tr>
 <tr><td>10/18/13</td><td>add</td><td>api</td><td></td><td>Added simplified constructor to UnifiedResponse</td></tr>
 <tr border="1"><td>10/16/13</td><td colspan="4">_Release *5.3.0*_</td></tr>
