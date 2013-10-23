@@ -188,14 +188,17 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
-    aTable.addItemRow (EText.LABEL_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_NAME.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getName ());
 
     // All users assigned to this user group
     final Collection <String> aAssignedUserIDs = aSelectedObject.getAllContainedUserIDs ();
     if (aAssignedUserIDs.isEmpty ())
     {
-      aTable.addItemRow (EText.LABEL_USERS_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_USERS_0.getDisplayText (aDisplayLocale))
+            .setCtrl (HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -209,17 +212,19 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       for (final IUser aUser : ContainerHelper.getSorted (aAssignedUsers,
                                                           new ComparatorHasName <IUser> (aDisplayLocale)))
         aUserUI.addChild (HCDiv.create (aUser.getName ()));
-      aTable.addItemRow (EText.LABEL_USERS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                     Integer.toString (aAssignedUserIDs.size ())),
-                         aUserUI);
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_USERS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                   Integer.toString (aAssignedUserIDs.size ())))
+            .setCtrl (aUserUI);
     }
 
     // All roles assigned to this user group
     final Collection <String> aAssignedRoleIDs = aSelectedObject.getAllContainedRoleIDs ();
     if (aAssignedRoleIDs.isEmpty ())
     {
-      aTable.addItemRow (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale))
+            .setCtrl (HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -233,9 +238,10 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       for (final IRole aRole : ContainerHelper.getSorted (aAssignedRoles,
                                                           new ComparatorHasName <IRole> (aDisplayLocale)))
         aRoleUI.addChild (HCDiv.create (aRole.getName ()));
-      aTable.addItemRow (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                     Integer.toString (aAssignedRoleIDs.size ())),
-                         aRoleUI);
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                   Integer.toString (aAssignedRoleIDs.size ())))
+            .setCtrl (aRoleUI);
     }
 
     // custom attributes
@@ -265,7 +271,7 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
       // Maybe all custom attributes where handled in
       // showCustomAttrsOfSelectedObject
       if (aAttrTable.hasBodyRows ())
-        aTable.addItemRow (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale), aAttrTable);
+        aTable.createItemRow ().setLabel (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)).setCtrl (aAttrTable);
     }
   }
 

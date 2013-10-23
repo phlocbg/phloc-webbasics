@@ -62,6 +62,7 @@ import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.LinkUtils;
@@ -70,7 +71,6 @@ import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.ELabelType;
-import com.phloc.webctrls.custom.impl.HCFormLabel;
 import com.phloc.webctrls.custom.tabbox.ITabBox;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
@@ -108,6 +108,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     LABEL_PASSWORD_CONFIRM ("Passwort (Bestätigung)", "Password (confirmation)"),
     LABEL_ENABLED ("Aktiv?", "Enabled?"),
     LABEL_DELETED ("Gelöscht?", "Deleted?"),
+    LABEL_LAST_LOGIN ("Letzter Login", "Last login"),
+    LABEL_LAST_LOGIN_NEVER ("noch nie", "never"),
+    LABEL_LOGIN_COUNT ("Login-Anzahl", "Login count"),
     LABEL_USERGROUPS_0 ("Benutzergruppen", "User groups"),
     LABEL_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
     LABEL_ROLES_0 ("Rollen", "Roles"),
@@ -246,14 +249,17 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                  @Nonnull final IUser aSelectedObject,
                                                  @Nonnull final Locale aDisplayLocale)
   {
-    aTable.addItemRow (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale),
-                       PDTToString.getAsString (aSelectedObject.getCreationDateTime (), aDisplayLocale));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_CREATIONDATE.getDisplayText (aDisplayLocale))
+          .setCtrl (PDTToString.getAsString (aSelectedObject.getCreationDateTime (), aDisplayLocale));
     if (aSelectedObject.getLastModificationDateTime () != null)
-      aTable.addItemRow (EText.LABEL_LASTMODIFICATIONDATE.getDisplayText (aDisplayLocale),
-                         PDTToString.getAsString (aSelectedObject.getLastModificationDateTime (), aDisplayLocale));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_LASTMODIFICATIONDATE.getDisplayText (aDisplayLocale))
+            .setCtrl (PDTToString.getAsString (aSelectedObject.getLastModificationDateTime (), aDisplayLocale));
     if (aSelectedObject.getDeletionDateTime () != null)
-      aTable.addItemRow (EText.LABEL_DELETIONDATE.getDisplayText (aDisplayLocale),
-                         PDTToString.getAsString (aSelectedObject.getDeletionDateTime (), aDisplayLocale));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_DELETIONDATE.getDisplayText (aDisplayLocale))
+            .setCtrl (PDTToString.getAsString (aSelectedObject.getDeletionDateTime (), aDisplayLocale));
   }
 
   /**
@@ -281,21 +287,37 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getDisplayName ()));
     onShowSelectedObjectTableStart (aTable, aSelectedObject, aDisplayLocale);
-    aTable.addItemRow (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getFirstName ());
-    aTable.addItemRow (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale), aSelectedObject.getLastName ());
-    aTable.addItemRow (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale),
-                       getStyler ().createEmailLink (aSelectedObject.getEmailAddress ()));
-    aTable.addItemRow (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale),
-                       EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
-    aTable.addItemRow (EText.LABEL_DELETED.getDisplayText (aDisplayLocale),
-                       EWebBasicsText.getYesOrNo (aSelectedObject.isDeleted (), aDisplayLocale));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getFirstName ());
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getLastName ());
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_EMAIL.getDisplayText (aDisplayLocale))
+          .setCtrl (getStyler ().createEmailLink (aSelectedObject.getEmailAddress ()));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale))
+          .setCtrl (EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_DELETED.getDisplayText (aDisplayLocale))
+          .setCtrl (EWebBasicsText.getYesOrNo (aSelectedObject.isDeleted (), aDisplayLocale));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_LAST_LOGIN.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getLastLoginDateTime () != null ? new HCTextNode (PDTToString.getAsString (aSelectedObject.getLastLoginDateTime (),
+                                                                                                               aDisplayLocale))
+                                                                   : HCEM.create (EText.LABEL_LAST_LOGIN_NEVER.getDisplayText (aDisplayLocale)));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_LOGIN_COUNT.getDisplayText (aDisplayLocale))
+          .setCtrl (Integer.toString (aSelectedObject.getLoginCount ()));
 
     // user groups
     final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aSelectedObject.getID ());
     if (aUserGroups.isEmpty ())
     {
-      aTable.addItemRow (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale))
+            .setCtrl (HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -303,26 +325,29 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aUserGroups,
                                                                     new ComparatorHasName <IUserGroup> (aDisplayLocale)))
         aUserGroupUI.addChild (HCDiv.create (aUserGroup.getName ()));
-      aTable.addItemRow (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                          Integer.toString (aUserGroups.size ())),
-                         aUserGroupUI);
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                        Integer.toString (aUserGroups.size ())))
+            .setCtrl (aUserGroupUI);
     }
 
     // roles
     final Set <IRole> aUserRoles = aMgr.getAllUserRoles (aSelectedObject.getID ());
     if (aUserRoles.isEmpty ())
     {
-      aTable.addItemRow (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale))
+            .setCtrl (HCEM.create (EText.NONE_DEFINED.getDisplayText (aDisplayLocale)));
     }
     else
     {
       final HCNodeList aRoleUI = new HCNodeList ();
       for (final IRole aRole : ContainerHelper.getSorted (aUserRoles, new ComparatorHasName <IRole> (aDisplayLocale)))
         aRoleUI.addChild (HCDiv.create (aRole.getName ()));
-      aTable.addItemRow (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                     Integer.toString (aUserRoles.size ())),
-                         aRoleUI);
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_ROLES_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                   Integer.toString (aUserRoles.size ())))
+            .setCtrl (aRoleUI);
     }
 
     // custom attributes
@@ -352,7 +377,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       // Maybe all custom attributes where handled in
       // showCustomAttrsOfSelectedObject
       if (aAttrTable.hasBodyRows ())
-        aTable.addItemRow (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale), aAttrTable);
+        aTable.createItemRow ().setLabel (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)).setCtrl (aAttrTable);
     }
 
     // Callback
@@ -518,56 +543,60 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     final String sFirstName = EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (HCFormLabel.create (sFirstName),
-                       new HCEdit (new RequestField (FIELD_FIRSTNAME,
-                                                     aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName),
-                       aFormErrors.getListOfField (FIELD_FIRSTNAME));
+    aTable.createItemRow ()
+          .setLabel (sFirstName)
+          .setCtrl (new HCEdit (new RequestField (FIELD_FIRSTNAME,
+                                                  aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName))
+          .setErrorList (aFormErrors.getListOfField (FIELD_FIRSTNAME));
 
     final String sLastName = EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (HCFormLabel.createMandatory (sLastName),
-                       new HCEdit (new RequestField (FIELD_LASTNAME,
-                                                     aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName),
-                       aFormErrors.getListOfField (FIELD_LASTNAME));
+    aTable.createItemRow ()
+          .setLabelMandatory (sLastName)
+          .setCtrl (new HCEdit (new RequestField (FIELD_LASTNAME,
+                                                  aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName))
+          .setErrorList (aFormErrors.getListOfField (FIELD_LASTNAME));
 
     final String sEmail = EText.LABEL_EMAIL.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (HCFormLabel.createMandatory (sEmail),
-                       new HCEdit (new RequestField (FIELD_EMAILADDRESS,
-                                                     aSelectedObject == null ? null
-                                                                            : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail),
-                       aFormErrors.getListOfField (FIELD_EMAILADDRESS));
+    aTable.createItemRow ()
+          .setLabelMandatory (sEmail)
+          .setCtrl (new HCEdit (new RequestField (FIELD_EMAILADDRESS,
+                                                  aSelectedObject == null ? null : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
+          .setErrorList (aFormErrors.getListOfField (FIELD_EMAILADDRESS));
     if (!bEdit)
     {
       // Password is only shown on creation of a new user
       final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
 
       final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
-      aTable.addItemRow (HCFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                 : ELabelType.OPTIONAL),
-                         HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
-                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
-                         aFormErrors.getListOfField (FIELD_PASSWORD));
+      aTable.createItemRow ()
+            .setLabel (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
+            .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
+                                         SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+            .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD));
 
       final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
-      aTable.addItemRow (HCFormLabel.create (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                        : ELabelType.OPTIONAL),
-                         HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
-                                            SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
-                         aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
+      aTable.createItemRow ()
+            .setLabel (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
+            .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
+                                         SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+            .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
 
     if (aSelectedObject != null && aSelectedObject.isAdministrator ())
     {
       // Cannot edit enabled state of administrator
-      aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
-                         EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale))
+            .setCtrl (EWebBasicsText.getYesOrNo (aSelectedObject.isEnabled (), aDisplayLocale));
     }
     else
     {
-      aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale)),
-                         new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
-                                                                  aSelectedObject == null ? DEFAULT_ENABLED
-                                                                                         : aSelectedObject.isEnabled ())),
-                         aFormErrors.getListOfField (FIELD_ENABLED));
+      aTable.createItemRow ()
+            .setLabelMandatory (EText.LABEL_ENABLED.getDisplayText (aDisplayLocale))
+            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_ENABLED,
+                                                               aSelectedObject == null ? DEFAULT_ENABLED
+                                                                                      : aSelectedObject.isEnabled ())))
+            .setErrorList (aFormErrors.getListOfField (FIELD_ENABLED));
     }
 
     final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_USERGROUPS)
@@ -575,9 +604,10 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final UserGroupForUserSelect aSelect = new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS),
                                                                        aDisplayLocale,
                                                                        aUserGroupIDs);
-    aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale)),
-                       aSelect,
-                       aFormErrors.getListOfField (FIELD_USERGROUPS));
+    aTable.createItemRow ()
+          .setLabelMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelect)
+          .setErrorList (aFormErrors.getListOfField (FIELD_USERGROUPS));
     if (aSelectedObject != null && aSelectedObject.isAdministrator ())
     {
       // Cannot edit user groups of administrator
@@ -634,18 +664,18 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                             aSelectedObject.getDisplayName ()));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
-        aTable.addItemRow (HCFormLabel.create (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                   : ELabelType.OPTIONAL),
-                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
-                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
-                           aFormErrors.getListOfField (FIELD_PASSWORD));
+        aTable.createItemRow ()
+              .setLabel (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
+              .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
+                                           SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+              .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD));
 
         final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
-        aTable.addItemRow (HCFormLabel.create (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY
-                                                                                          : ELabelType.OPTIONAL),
-                           HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
-                                              SecurityUI.createPasswordConstraintTip (aDisplayLocale)),
-                           aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
+        aTable.createItemRow ()
+              .setLabel (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
+              .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
+                                           SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+              .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
         final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD);
