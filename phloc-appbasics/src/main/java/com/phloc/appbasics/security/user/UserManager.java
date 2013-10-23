@@ -534,6 +534,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       return EChange.UNCHANGED;
     }
 
+    m_aRWLock.writeLock ().lock ();
     try
     {
       aUser.updateLastLogin ();
