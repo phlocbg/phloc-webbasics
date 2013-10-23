@@ -35,10 +35,12 @@ import com.phloc.appbasics.security.login.IUserLoginCallback;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.login.LoginInfo;
 import com.phloc.appbasics.security.role.IRole;
+import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.role.RoleManager;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.appbasics.security.user.UserManager;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
+import com.phloc.appbasics.security.usergroup.IUserGroupManager;
 import com.phloc.appbasics.security.usergroup.UserGroupManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -65,8 +67,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessManager.class);
 
   private final UserManager m_aUserMgr;
-  private final RoleManager m_aRoleMgr;
-  private final UserGroupManager m_aUserGroupMgr;
+  private final IRoleManager m_aRoleMgr;
+  private final IUserGroupManager m_aUserGroupMgr;
 
   @Deprecated
   @UsedViaReflection
@@ -76,11 +78,11 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
     m_aRoleMgr = new RoleManager (DEFAULT_BASE_PATH + FILENAME_ROLES_XML);
     m_aUserGroupMgr = new UserGroupManager (DEFAULT_BASE_PATH + FILENAME_USERGROUPS_XML, m_aUserMgr, m_aRoleMgr);
 
+    // Remember the last login date of the user
     LoggedInUserManager.getInstance ().addUserLoginCallback (new IUserLoginCallback ()
     {
       public void onUserLogin (@Nonnull final LoginInfo aInfo)
       {
-        // Remember the last login date of the user
         m_aUserMgr.updateUserLastLogin (aInfo.getUserID ());
       }
     });
