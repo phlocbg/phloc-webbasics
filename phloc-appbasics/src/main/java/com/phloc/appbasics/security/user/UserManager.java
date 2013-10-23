@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.appbasics.app.dao.IReloadableDAO;
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
@@ -48,7 +49,7 @@ import com.phloc.commons.string.StringHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class UserManager extends AbstractSimpleDAO implements IUserManager
+public final class UserManager extends AbstractSimpleDAO implements IUserManager, IReloadableDAO
 {
   private static boolean s_bCreateDefaults = true;
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
@@ -85,6 +86,20 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     initialRead ();
   }
 
+  public void reload () throws DAOException
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aUsers.clear ();
+      initialRead ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
   @Override
   @Nonnull
   protected EChange onInit ()
@@ -92,30 +107,35 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     if (!isCreateDefaults ())
       return EChange.UNCHANGED;
 
+    // Create Administrator
     _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,
                         CSecurity.USER_ADMINISTRATOR_LOGIN,
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
                         PasswordUtils.createUserPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
                         CSecurity.USER_ADMINISTRATOR_NAME,
-                        null,
+                        (String) null,
                         (Locale) null,
                         (Map <String, String>) null,
                         false));
+
+    // Create regular user
     _addUser (new User (CSecurity.USER_USER_ID,
                         CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
                         PasswordUtils.createUserPasswordHash (CSecurity.USER_USER_PASSWORD),
                         CSecurity.USER_USER_NAME,
-                        null,
+                        (String) null,
                         (Locale) null,
                         (Map <String, String>) null,
                         false));
+
+    // Create guest user
     _addUser (new User (CSecurity.USER_GUEST_ID,
                         CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
                         PasswordUtils.createUserPasswordHash (CSecurity.USER_GUEST_PASSWORD),
                         CSecurity.USER_GUEST_NAME,
-                        null,
+                        (String) null,
                         (Locale) null,
                         (Map <String, String>) null,
                         false));

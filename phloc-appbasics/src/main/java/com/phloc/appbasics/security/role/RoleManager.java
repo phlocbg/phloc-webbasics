@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.appbasics.app.dao.IReloadableDAO;
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
@@ -45,7 +46,7 @@ import com.phloc.commons.string.StringHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
+public final class RoleManager extends AbstractSimpleDAO implements IRoleManager, IReloadableDAO
 {
   private static boolean s_bCreateDefaults = true;
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
@@ -84,6 +85,20 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
   {
     super (sFilename);
     initialRead ();
+  }
+
+  public void reload () throws DAOException
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aRoles.clear ();
+      initialRead ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Override

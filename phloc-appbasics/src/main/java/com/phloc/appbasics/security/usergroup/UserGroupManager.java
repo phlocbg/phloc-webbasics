@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.appbasics.app.dao.IReloadableDAO;
 import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
@@ -50,7 +51,7 @@ import com.phloc.commons.string.StringHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager
+public final class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager, IReloadableDAO
 {
   @GuardedBy ("s_aRWLock")
   private static boolean s_bCreateDefaults = true;
@@ -98,6 +99,20 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
     m_aUserMgr = aUserMgr;
     m_aRoleMgr = aRoleMgr;
     initialRead ();
+  }
+
+  public void reload () throws DAOException
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aUserGroups.clear ();
+      initialRead ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Override
