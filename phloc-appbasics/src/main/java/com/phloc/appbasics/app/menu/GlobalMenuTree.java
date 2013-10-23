@@ -183,4 +183,10 @@ public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <Strin
   {
     m_aProxy.iterateAllMenuObjects (aCallback);
   }
+
+  @Nullable
+  public IMenuItemPage replaceMenuItem (@Nonnull final IPage aNewPage)
+  {
+    return m_aProxy.replaceMenuItem (aNewPage);
+  }
 }

@@ -286,4 +286,17 @@ public interface IMenuOperations
    *        <code>null</code>.
    */
   void iterateAllMenuObjects (@Nonnull INonThrowingRunnableWithParameter <IMenuObject> aCallback);
+
+  /**
+   * Replace an eventually existing menu item with the new one. The ID of the
+   * passed page is used to determine the ID of the menu item to be replaced.
+   * The new menu item will be a {@link MenuItemPage} object.
+   * 
+   * @param aNewPage
+   *        The page to be used instead of the existing menu item
+   * @return The create menu item or <code>null</code> if no such menu item
+   *         exists.
+   */
+  @Nullable
+  IMenuItemPage replaceMenuItem (@Nonnull IPage aNewPage);
 }

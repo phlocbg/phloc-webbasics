@@ -171,6 +171,12 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
     m_aProxy.iterateAllMenuObjects (aCallback);
   }
 
+  @Nullable
+  public IMenuItemPage replaceMenuItem (@Nonnull final IPage aNewPage)
+  {
+    return m_aProxy.replaceMenuItem (aNewPage);
+  }
+
   @Override
   public boolean equals (final Object o)
   {

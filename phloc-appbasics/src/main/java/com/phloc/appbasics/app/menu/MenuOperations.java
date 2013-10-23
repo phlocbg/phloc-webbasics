@@ -260,4 +260,20 @@ public class MenuOperations implements IMenuOperations
                            }
                          });
   }
+
+  @Nullable
+  public IMenuItemPage replaceMenuItem (@Nonnull final IPage aNewPage)
+  {
+    if (aNewPage == null)
+      throw new NullPointerException ("newPage");
+
+    final String sID = aNewPage.getID ();
+    final DefaultTreeItemWithID <String, IMenuObject> aItem = m_aMenuTree.getItemWithID (sID);
+    if (aItem == null)
+      return null;
+
+    final IMenuItemPage ret = new MenuItemPage (sID, aNewPage);
+    aItem.setData (ret);
+    return ret;
+  }
 }
