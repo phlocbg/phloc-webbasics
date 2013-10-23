@@ -40,7 +40,10 @@ public final class UITextFormatter
         {
           sValue = StringHelper.getConcatenatedOnDemand (aObjStart[0], aObjStart[2]).trim ();
           if (sValue.length () > 0)
-            aParts.add (sValue);
+          {
+            sValue = StringHelper.replaceAll (sValue, "; ", ";\n");
+            aParts.addAll (StringHelper.getExploded ('\n', sValue));
+          }
         }
 
         final HCNodeList ret = new HCNodeList ();
