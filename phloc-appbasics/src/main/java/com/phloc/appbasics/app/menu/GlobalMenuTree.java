@@ -17,38 +17,25 @@
  */
 package com.phloc.appbasics.app.menu;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import com.phloc.appbasics.app.page.IPage;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
-import com.phloc.commons.name.IHasDisplayText;
-import com.phloc.commons.url.ISimpleURL;
-import com.phloc.scopes.singleton.tree.GlobalSingletonTreeWithUniqueID;
+import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.scopes.singleton.GlobalSingleton;
 
 /**
  * Represents the global menu tree
  * 
  * @author Philip Helger
  */
-public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <String, IMenuObject> implements IMenuTree
+public final class GlobalMenuTree extends GlobalSingleton
 {
-  private MenuOperations m_aProxy;
+  private final IMenuTree m_aTree = new MenuTree ();
 
   @UsedViaReflection
   @Deprecated
   public GlobalMenuTree ()
   {}
-
-  @Override
-  protected void onAfterInstantiation ()
-  {
-    m_aProxy = new MenuOperations (this);
-  }
 
   @Nonnull
   public static GlobalMenuTree getInstance ()
@@ -57,136 +44,14 @@ public final class GlobalMenuTree extends GlobalSingletonTreeWithUniqueID <Strin
   }
 
   @Nonnull
-  public IMenuSeparator createRootSeparator ()
+  public IMenuTree getTree ()
   {
-    return m_aProxy.createRootSeparator ();
+    return m_aTree;
   }
 
-  @Nonnull
-  public IMenuSeparator createSeparator (@Nonnull final String sParentID)
+  @Override
+  public String toString ()
   {
-    return m_aProxy.createSeparator (sParentID);
-  }
-
-  @Nonnull
-  public IMenuSeparator createSeparator (@Nonnull final IMenuItem aParent)
-  {
-    return m_aProxy.createSeparator (aParent);
-  }
-
-  @Nonnull
-  public IMenuItemPage createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
-  {
-    return m_aProxy.createRootItem (sItemID, aPage);
-  }
-
-  @Nonnull
-  public IMenuItemPage createRootItem (@Nonnull final IPage aPage)
-  {
-    return m_aProxy.createRootItem (aPage);
-  }
-
-  @Nonnull
-  public IMenuItemPage createItem (@Nonnull final String sParentID,
-                                   @Nonnull final String sItemID,
-                                   @Nonnull final IPage aPage)
-  {
-    return m_aProxy.createItem (sParentID, sItemID, aPage);
-  }
-
-  @Nonnull
-  public IMenuItemPage createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
-  {
-    return m_aProxy.createItem (sParentID, aPage);
-  }
-
-  @Nonnull
-  public IMenuItemPage createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
-  {
-    return m_aProxy.createItem (aParent, aPage);
-  }
-
-  @Nonnull
-  public IMenuItemExternal createRootItem (@Nonnull final String sItemID,
-                                           @Nonnull final ISimpleURL aURL,
-                                           @Nonnull final IHasDisplayText aName)
-  {
-    return m_aProxy.createRootItem (sItemID, aURL, aName);
-  }
-
-  @Nonnull
-  public IMenuItemExternal createItem (@Nonnull final IMenuItem aParent,
-                                       @Nonnull final String sItemID,
-                                       @Nonnull final ISimpleURL aURL,
-                                       @Nonnull final IHasDisplayText aName)
-  {
-    return m_aProxy.createItem (aParent, sItemID, aURL, aName);
-  }
-
-  @Nonnull
-  public IMenuItemExternal createItem (@Nonnull final String sParentID,
-                                       @Nonnull final String sItemID,
-                                       @Nonnull final ISimpleURL aURL,
-                                       @Nonnull final IHasDisplayText aName)
-  {
-    return m_aProxy.createItem (sParentID, sItemID, aURL, aName);
-  }
-
-  public void setDefaultMenuItemID (@Nullable final String sDefaultMenuItem)
-  {
-    m_aProxy.setDefaultMenuItemID (sDefaultMenuItem);
-  }
-
-  public void setDefaultMenuItemIDs (@Nullable final String... aDefaultMenuItemIDs)
-  {
-    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
-  }
-
-  public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
-  {
-    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
-  }
-
-  @Nullable
-  public String getDefaultMenuItemID ()
-  {
-    return m_aProxy.getDefaultMenuItemID ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <String> getAllDefaultMenuItemIDs ()
-  {
-    return m_aProxy.getAllDefaultMenuItemIDs ();
-  }
-
-  @Nullable
-  public IMenuItemPage getDefaultMenuItem ()
-  {
-    return m_aProxy.getDefaultMenuItem ();
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <IMenuItemPage> getAllDefaultMenuItems ()
-  {
-    return m_aProxy.getAllDefaultMenuItems ();
-  }
-
-  @Nullable
-  public IMenuObject getMenuObjectOfID (@Nullable final String sID)
-  {
-    return m_aProxy.getMenuObjectOfID (sID);
-  }
-
-  public void iterateAllMenuObjects (@Nonnull final INonThrowingRunnableWithParameter <IMenuObject> aCallback)
-  {
-    m_aProxy.iterateAllMenuObjects (aCallback);
-  }
-
-  @Nullable
-  public IMenuItemPage replaceMenuItem (@Nonnull final IPage aNewPage)
-  {
-    return m_aProxy.replaceMenuItem (aNewPage);
+    return new ToStringGenerator (this).append ("tree", m_aTree).toString ();
   }
 }

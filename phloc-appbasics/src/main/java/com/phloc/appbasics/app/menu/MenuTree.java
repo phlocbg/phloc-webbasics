@@ -17,15 +17,27 @@
  */
 package com.phloc.appbasics.app.menu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.app.page.IPage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.hierarchy.DefaultHierarchyWalkerCallback;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.tree.utils.walk.TreeWalker;
+import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
 import com.phloc.commons.url.ISimpleURL;
 
@@ -36,41 +48,61 @@ import com.phloc.commons.url.ISimpleURL;
  */
 public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject> implements IMenuTree
 {
-  private final MenuOperations m_aProxy;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MenuTree.class);
+
+  private List <String> m_aDefaultMenuItemIDs;
 
   public MenuTree ()
+  {}
+
+  @Nonnull
+  private static <T extends IMenuObject> T _createChildItem (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aParentItem,
+                                                             @Nonnull final T aMenuObject)
   {
-    m_aProxy = new MenuOperations (this);
+    if (aParentItem.createChildItem (aMenuObject.getID (), aMenuObject, false) == null)
+      throw new IllegalArgumentException ("Failed to add the menu object " +
+                                          aMenuObject +
+                                          " probably the ID is already contained!");
+    return aMenuObject;
   }
 
   @Nonnull
   public IMenuSeparator createRootSeparator ()
   {
-    return m_aProxy.createRootSeparator ();
+    return _createChildItem (getRootItem (), new MenuSeparator ());
   }
 
   @Nonnull
   public IMenuSeparator createSeparator (@Nonnull final String sParentID)
   {
-    return m_aProxy.createSeparator (sParentID);
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = getItemWithID (sParentID);
+    if (aParentItem == null)
+      throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
+    return _createChildItem (aParentItem, new MenuSeparator ());
   }
 
   @Nonnull
   public IMenuSeparator createSeparator (@Nonnull final IMenuItem aParent)
   {
-    return m_aProxy.createSeparator (aParent);
+    if (aParent == null)
+      throw new NullPointerException ("parent");
+
+    return createSeparator (aParent.getID ());
   }
 
   @Nonnull
   public IMenuItemPage createRootItem (@Nonnull final String sItemID, @Nonnull final IPage aPage)
   {
-    return m_aProxy.createRootItem (sItemID, aPage);
+    return _createChildItem (getRootItem (), new MenuItemPage (sItemID, aPage));
   }
 
   @Nonnull
   public IMenuItemPage createRootItem (@Nonnull final IPage aPage)
   {
-    return m_aProxy.createRootItem (aPage);
+    if (aPage == null)
+      throw new NullPointerException ("page");
+
+    return createRootItem (aPage.getID (), aPage);
   }
 
   @Nonnull
@@ -78,19 +110,28 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
                                    @Nonnull final String sItemID,
                                    @Nonnull final IPage aPage)
   {
-    return m_aProxy.createItem (sParentID, sItemID, aPage);
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = getItemWithID (sParentID);
+    if (aParentItem == null)
+      throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
+    return _createChildItem (aParentItem, new MenuItemPage (sItemID, aPage));
   }
 
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
-    return m_aProxy.createItem (sParentID, aPage);
+    if (aPage == null)
+      throw new NullPointerException ("page");
+
+    return createItem (sParentID, aPage.getID (), aPage);
   }
 
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
   {
-    return m_aProxy.createItem (aParent, aPage);
+    if (aParent == null)
+      throw new NullPointerException ("parent");
+
+    return createItem (aParent.getID (), aPage);
   }
 
   @Nonnull
@@ -98,7 +139,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
                                            @Nonnull final ISimpleURL aURL,
                                            @Nonnull final IHasDisplayText aName)
   {
-    return m_aProxy.createRootItem (sItemID, aURL, aName);
+    return _createChildItem (getRootItem (), new MenuItemExternal (sItemID, aURL, aName));
   }
 
   @Nonnull
@@ -107,7 +148,10 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
                                        @Nonnull final ISimpleURL aURL,
                                        @Nonnull final IHasDisplayText aName)
   {
-    return m_aProxy.createItem (aParent, sItemID, aURL, aName);
+    if (aParent == null)
+      throw new NullPointerException ("parent");
+
+    return createItem (aParent.getID (), sItemID, aURL, aName);
   }
 
   @Nonnull
@@ -116,76 +160,142 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
                                        @Nonnull final ISimpleURL aURL,
                                        @Nonnull final IHasDisplayText aName)
   {
-    return m_aProxy.createItem (sParentID, sItemID, aURL, aName);
+    final DefaultTreeItemWithID <String, IMenuObject> aParentItem = getItemWithID (sParentID);
+    if (aParentItem == null)
+      throw new IllegalArgumentException ("No such parent menu item '" + sParentID + "'");
+    return _createChildItem (aParentItem, new MenuItemExternal (sItemID, aURL, aName));
   }
 
-  public void setDefaultMenuItemID (@Nullable final String sDefaultMenuItem)
+  public void setDefaultMenuItemID (@Nullable final String sDefaultMenuItemID)
   {
-    m_aProxy.setDefaultMenuItemID (sDefaultMenuItem);
+    m_aDefaultMenuItemIDs = sDefaultMenuItemID == null ? null : ContainerHelper.newList (sDefaultMenuItemID);
   }
 
   public void setDefaultMenuItemIDs (@Nullable final String... aDefaultMenuItemIDs)
   {
-    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
+    m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
   }
 
   public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
   {
-    m_aProxy.setDefaultMenuItemIDs (aDefaultMenuItemIDs);
+    m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
   }
 
   @Nullable
   public String getDefaultMenuItemID ()
   {
-    return m_aProxy.getDefaultMenuItemID ();
+    return ContainerHelper.getFirstElement (m_aDefaultMenuItemIDs);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getAllDefaultMenuItemIDs ()
   {
-    return m_aProxy.getAllDefaultMenuItemIDs ();
+    return ContainerHelper.newList (m_aDefaultMenuItemIDs);
+  }
+
+  @Nullable
+  private IMenuItemPage _getDefaultMenuItem (@Nullable final String sMenuItemID)
+  {
+    if (sMenuItemID != null)
+    {
+      // Resolve default menu item ID
+      final DefaultTreeItemWithID <String, IMenuObject> aTreeItem = getItemWithID (sMenuItemID);
+      if (aTreeItem != null)
+      {
+        final IMenuObject aMenuItem = aTreeItem.getData ();
+        if (aMenuItem instanceof IMenuItemPage)
+          return (IMenuItemPage) aMenuItem;
+        s_aLogger.warn ("The default menu object ID '" +
+                        sMenuItemID +
+                        "' does not resolve to an IMenuItemPage but to " +
+                        CGStringHelper.getSafeClassName (aMenuItem));
+      }
+      else
+        s_aLogger.warn ("Failed to resolve the default menu item ID '" + sMenuItemID + "'");
+    }
+    return null;
   }
 
   @Nullable
   public IMenuItemPage getDefaultMenuItem ()
   {
-    return m_aProxy.getDefaultMenuItem ();
+    return _getDefaultMenuItem (getDefaultMenuItemID ());
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <IMenuItemPage> getAllDefaultMenuItems ()
   {
-    return m_aProxy.getAllDefaultMenuItems ();
+    final List <IMenuItemPage> ret = new ArrayList <IMenuItemPage> ();
+    if (m_aDefaultMenuItemIDs != null)
+      for (final String sDefaultMenuItemID : m_aDefaultMenuItemIDs)
+      {
+        final IMenuItemPage aDefaultMenuItem = _getDefaultMenuItem (sDefaultMenuItemID);
+        if (aDefaultMenuItem != null)
+          ret.add (aDefaultMenuItem);
+      }
+    return ret;
   }
 
   @Nullable
   public IMenuObject getMenuObjectOfID (@Nullable final String sID)
   {
-    return m_aProxy.getMenuObjectOfID (sID);
+    return getItemDataWithID (sID);
   }
 
   public void iterateAllMenuObjects (@Nonnull final INonThrowingRunnableWithParameter <IMenuObject> aCallback)
   {
-    m_aProxy.iterateAllMenuObjects (aCallback);
+    if (aCallback == null)
+      throw new NullPointerException ("Callback");
+    TreeWalker.walkTree (this, new DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>> ()
+    {
+      @Override
+      public final void onItemBeforeChildren (@Nonnull final DefaultTreeItemWithID <String, IMenuObject> aItem)
+      {
+        aCallback.run (aItem.getData ());
+      }
+    });
   }
 
   @Nullable
   public IMenuItemPage replaceMenuItem (@Nonnull final IPage aNewPage)
   {
-    return m_aProxy.replaceMenuItem (aNewPage);
+    if (aNewPage == null)
+      throw new NullPointerException ("newPage");
+
+    final String sID = aNewPage.getID ();
+    final DefaultTreeItemWithID <String, IMenuObject> aItem = getItemWithID (sID);
+    if (aItem == null)
+      return null;
+
+    final IMenuItemPage ret = new MenuItemPage (sID, aNewPage);
+    aItem.setData (ret);
+    return ret;
   }
 
   @Override
   public boolean equals (final Object o)
   {
-    return super.equals (o);
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final MenuTree rhs = (MenuTree) o;
+    return EqualsUtils.equals (m_aDefaultMenuItemIDs, rhs.m_aDefaultMenuItemIDs);
   }
 
   @Override
   public int hashCode ()
   {
-    return super.hashCode ();
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_aDefaultMenuItemIDs).getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .appendIfNotNull ("defaultMenuItemIDs", m_aDefaultMenuItemIDs)
+                            .toString ();
   }
 }

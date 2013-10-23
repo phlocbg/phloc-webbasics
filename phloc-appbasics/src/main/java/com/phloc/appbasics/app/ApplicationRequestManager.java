@@ -43,16 +43,16 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  */
 public final class ApplicationRequestManager extends GlobalSingleton implements IRequestManager
 {
-  private static final class RM extends AbstractRequestManager
+  private static final class RequestManagerImpl extends AbstractRequestManager
   {
     @Override
     @Nonnull
     public IMenuTree getMenuTree ()
     {
-      IMenuTree ret = ApplicationMenuTree.getInstance ();
+      IMenuTree ret = ApplicationMenuTree.getInstance ().getTree ();
       // XXX hack alert :(
       if (!ret.getRootItem ().hasChildren ())
-        ret = GlobalMenuTree.getInstance ();
+        ret = GlobalMenuTree.getInstance ().getTree ();
       return ret;
     }
 
@@ -84,7 +84,7 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
     }
   }
 
-  private final IRequestManager m_aRM = new RM ();
+  private final IRequestManager m_aRM = new RequestManagerImpl ();
 
   @Deprecated
   @UsedViaReflection
