@@ -29,9 +29,9 @@ import com.phloc.webbasics.ajax.IAjaxFunction;
 @Immutable
 public final class CDemoAppAjaxView
 {
-  public static final IAjaxFunction VIEW_DATATABLES = new DemoAppAjaxFunctionView ("dataTables");
-  public static final IAjaxFunction VIEW_LOGIN = new DemoAppAjaxFunctionView ("login");
-  public static final IAjaxFunction VIEW_UPDATE_MENU_VIEW = new DemoAppAjaxFunctionView ("updateMenuView");
+  public static final IAjaxFunction DATATABLES = new DemoAppAjaxFunctionView ("dataTables");
+  public static final IAjaxFunction LOGIN = new DemoAppAjaxFunctionView ("login");
+  public static final IAjaxFunction UPDATE_MENU_VIEW = new DemoAppAjaxFunctionView ("updateMenuView");
 
   private CDemoAppAjaxView ()
   {}

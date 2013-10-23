@@ -27,7 +27,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class CDemoAppActionView
 {
-  public static final String VIEW_DATATABLES_I18N = "datatables-i18n";
+  public static final String DATATABLES_I18N = "datatables-i18n";
 
   private CDemoAppActionView ()
   {}

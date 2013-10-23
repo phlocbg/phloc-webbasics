@@ -29,8 +29,8 @@ import com.phloc.webbasics.ajax.IAjaxFunction;
 @Immutable
 public final class CDemoAppAjaxConfig
 {
-  public static final IAjaxFunction CONFIG_SAVE_FORM_STATE = new DemoAppAjaxFunctionConfig ("saveFormState");
-  public static final IAjaxFunction CONFIG_UPDATE_MENU_VIEW = new DemoAppAjaxFunctionConfig ("updateMenuView");
+  public static final IAjaxFunction SAVE_FORM_STATE = new DemoAppAjaxFunctionConfig ("saveFormState");
+  public static final IAjaxFunction UPDATE_MENU_VIEW = new DemoAppAjaxFunctionConfig ("updateMenuView");
 
   private CDemoAppAjaxConfig ()
   {}

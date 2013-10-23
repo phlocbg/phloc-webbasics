@@ -94,10 +94,10 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
            .setLengthMenu (LENGTH_MENU)
            .setDisplayLength (ContainerHelper.getFirstElement (LENGTH_MENU).getKey ().intValue ())
            .setUseJQueryAjax (true)
-           .setAjaxSource (CDemoAppAjaxView.VIEW_DATATABLES.getInvocationURL ())
+           .setAjaxSource (CDemoAppAjaxView.DATATABLES.getInvocationURL ())
            .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()))
            .setServerFilterType (EDataTablesFilterType.ALL_TERMS_PER_ROW)
-           .setTextLoadingURL (DemoAppViewActionServlet.getActionPath (CDemoAppActionView.VIEW_DATATABLES_I18N),
+           .setTextLoadingURL (DemoAppViewActionServlet.getActionPath (CDemoAppActionView.DATATABLES_I18N),
                                ActionExecutorDataTablesI18N.LANGUAGE_ID);
         return ret;
       }

@@ -74,7 +74,7 @@ public final class DemoAppAccessUI
     final BootstrapButtonToolbar aToolbar = aForm.addAndReturnChild (new BootstrapButtonToolbar ());
     final JSPackage aOnClick = new JSPackage ();
     aOnClick.add (DemoAppJS.viewLogin ()
-                           .arg (CDemoAppAjaxView.VIEW_LOGIN.getInvocationURI ())
+                           .arg (CDemoAppAjaxView.LOGIN.getInvocationURI ())
                            .arg (new JSAssocArray ().add (CLogin.REQUEST_ATTR_USERID, JQuery.idRef (sIDUserName).val ())
                                                     .add (CLogin.REQUEST_ATTR_PASSWORD,
                                                           JQuery.idRef (sIDPassword).val ()))

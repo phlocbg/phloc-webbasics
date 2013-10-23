@@ -65,14 +65,14 @@ public class InitializerConfig extends DefaultApplicationInitializer
   @Override
   public void initAjax (@Nonnull final IAjaxInvoker aAjaxInvoker)
   {
-    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxConfig.CONFIG_SAVE_FORM_STATE, AjaxHandlerSaveFormState.class);
-    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxConfig.CONFIG_UPDATE_MENU_VIEW, AjaxHandlerConfigUpdateMenuView.class);
+    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxConfig.SAVE_FORM_STATE, AjaxHandlerSaveFormState.class);
+    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxConfig.UPDATE_MENU_VIEW, AjaxHandlerConfigUpdateMenuView.class);
   }
 
   @Override
   public void initActions (@Nonnull final IActionInvoker aActionInvoker)
   {
-    aActionInvoker.addAction (CDemoAppActionConfig.CONFIG_PING, new ActionPing ());
+    aActionInvoker.addAction (CDemoAppActionConfig.PING, new ActionPing ());
   }
 
   @Override

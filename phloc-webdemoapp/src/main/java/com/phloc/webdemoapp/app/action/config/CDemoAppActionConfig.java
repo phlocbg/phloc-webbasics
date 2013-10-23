@@ -27,7 +27,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class CDemoAppActionConfig
 {
-  public static final String CONFIG_PING = "ping";
+  public static final String PING = "ping";
 
   private CDemoAppActionConfig ()
   {}

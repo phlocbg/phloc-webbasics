@@ -60,7 +60,7 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
     final JSArray aSuccessUpdates = new JSArray ();
     // Update menu via Ajax
     aSuccessUpdates.add (JSFormHelper.createUpdateParam (CLayout.LAYOUT_AREAID_MENU,
-                                                         CDemoAppAjaxConfig.CONFIG_UPDATE_MENU_VIEW));
+                                                         CDemoAppAjaxConfig.UPDATE_MENU_VIEW));
 
     // Update special area directly with code
     IHCNode aSpecialNode = BootstrapInfoBox.create ("Data was successfully saved!");
@@ -72,7 +72,7 @@ public abstract class AbstractDemoAppFormPage <DATATYPE extends IHasID <String>>
     aToolbar.addButton ("Merken", JSFormHelper.saveFormData (INPUT_FORM_ID,
                                                              AjaxHandlerSaveFormState.PREFIX_FIELD,
                                                              getID (),
-                                                             CDemoAppAjaxConfig.CONFIG_SAVE_FORM_STATE,
+                                                             CDemoAppAjaxConfig.SAVE_FORM_STATE,
                                                              aSuccessUpdates,
                                                              aFailureUpdates), EDefaultIcon.SAVE);
   }

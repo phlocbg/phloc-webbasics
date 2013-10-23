@@ -66,15 +66,15 @@ public class InitializerView extends DefaultApplicationInitializer
   @Override
   public void initAjax (@Nonnull final IAjaxInvoker aAjaxInvoker)
   {
-    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxView.VIEW_DATATABLES, AjaxHandlerDataTables.class);
-    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxView.VIEW_LOGIN, AjaxHandlerViewLogin.class);
-    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxView.VIEW_UPDATE_MENU_VIEW, AjaxHandlerViewUpdateMenuView.class);
+    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxView.DATATABLES, AjaxHandlerDataTables.class);
+    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxView.LOGIN, AjaxHandlerViewLogin.class);
+    aAjaxInvoker.addHandlerFunction (CDemoAppAjaxView.UPDATE_MENU_VIEW, AjaxHandlerViewUpdateMenuView.class);
   }
 
   @Override
   public void initActions (@Nonnull final IActionInvoker aActionInvoker)
   {
-    aActionInvoker.addAction (CDemoAppActionView.VIEW_DATATABLES_I18N,
+    aActionInvoker.addAction (CDemoAppActionView.DATATABLES_I18N,
                               new ActionExecutorDataTablesI18N (CDemoApp.DEFAULT_LOCALE));
   }
 
