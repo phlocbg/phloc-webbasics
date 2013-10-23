@@ -17,8 +17,10 @@
  */
 package com.phloc.appbasics.security.login;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -148,9 +150,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @GuardedBy ("m_aRWLock")
   private final Map <String, LoginInfo> m_aLoggedInUsers = new HashMap <String, LoginInfo> ();
   @GuardedBy ("m_aRWLock")
-  private IUserLoginCallback m_aUserLoginCallback;
+  private final List <IUserLoginCallback> m_aUserLoginCallbacks = new ArrayList <IUserLoginCallback> ();
   @GuardedBy ("m_aRWLock")
-  private IUserLogoutCallback m_aUserLogoutCallback;
+  private final List <IUserLogoutCallback> m_aUserLogoutCallbacks = new ArrayList <IUserLogoutCallback> ();
 
   @Deprecated
   @UsedViaReflection
@@ -167,15 +169,16 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   }
 
   /**
-   * @return The current user login callback. May be <code>null</code>.
+   * @return The current user login callbacks. Never <code>null</code>.
    */
-  @Nullable
-  public IUserLoginCallback getUserLoginCallback ()
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IUserLoginCallback> getAllUserLoginCallbacks ()
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aUserLoginCallback;
+      return ContainerHelper.newList (m_aUserLoginCallbacks);
     }
     finally
     {
@@ -184,17 +187,20 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   }
 
   /**
-   * Change the user login callback.
+   * Add a user login callback.
    * 
    * @param aUserLoginCallback
-   *        The new login callback to be used. May be <code>null</code>.
+   *        The new login callback to be added. May not be <code>null</code>.
    */
-  public void setUserLoginCallback (@Nullable final IUserLoginCallback aUserLoginCallback)
+  public void addUserLoginCallback (@Nonnull final IUserLoginCallback aUserLoginCallback)
   {
+    if (aUserLoginCallback == null)
+      throw new NullPointerException ("UserLoginCallback");
+
     m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aUserLoginCallback = aUserLoginCallback;
+      m_aUserLoginCallbacks.add (aUserLoginCallback);
     }
     finally
     {
@@ -203,15 +209,37 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   }
 
   /**
-   * @return The current user logout callback. May be <code>null</code>.
+   * Remove a user login callback.
+   * 
+   * @param aUserLoginCallback
+   *        The login callback to be removed. May be <code>null</code>.
+   * @return {@link EChange}
    */
-  @Nullable
-  public IUserLogoutCallback getUserLogoutCallback ()
+  @Nonnull
+  public EChange removeUserLoginCallback (@Nullable final IUserLoginCallback aUserLoginCallback)
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      return EChange.valueOf (m_aUserLoginCallbacks.remove (aUserLoginCallback));
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return The current user logout callbacks. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IUserLogoutCallback> getAllUserLogoutCallbacks ()
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aUserLogoutCallback;
+      return ContainerHelper.newList (m_aUserLogoutCallbacks);
     }
     finally
     {
@@ -220,17 +248,40 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   }
 
   /**
-   * Change the user logout callback.
+   * Add a user logout callback.
    * 
    * @param aUserLogoutCallback
-   *        The new logout callback to be used. May be <code>null</code>.
+   *        The new logout callback to be added. May not be <code>null</code>.
    */
-  public void setUserLogoutCallback (@Nullable final IUserLogoutCallback aUserLogoutCallback)
+  public void addUserLogoutCallback (@Nonnull final IUserLogoutCallback aUserLogoutCallback)
+  {
+    if (aUserLogoutCallback == null)
+      throw new NullPointerException ("UserLogoutCallback");
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aUserLogoutCallbacks.add (aUserLogoutCallback);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * Remove a user logout callback.
+   * 
+   * @param aUserLogoutCallback
+   *        The new logout callback to be removed. May be <code>null</code>.
+   */
+  @Nonnull
+  public EChange removeUserLogoutCallback (@Nullable final IUserLogoutCallback aUserLogoutCallback)
   {
     m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aUserLogoutCallback = aUserLogoutCallback;
+      return EChange.valueOf (m_aUserLogoutCallbacks.remove (aUserLogoutCallback));
     }
     finally
     {
@@ -368,9 +419,15 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     AuditUtils.onAuditExecuteSuccess ("login", sUserID);
 
     // Execute callback as the very last action
-    final IUserLoginCallback aUserLoginCallback = getUserLoginCallback ();
-    if (aUserLoginCallback != null)
-      aUserLoginCallback.onUserLogin (aInfo);
+    for (final IUserLoginCallback aUserLoginCallback : getAllUserLoginCallbacks ())
+      try
+      {
+        aUserLoginCallback.onUserLogin (aInfo);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Failed to invoke onUserLogin callback on " + aUserLoginCallback, t);
+      }
 
     return ELoginResult.SUCCESS;
   }
@@ -416,9 +473,15 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     AuditUtils.onAuditExecuteSuccess ("logout", sUserID);
 
     // Execute callback as the very last action
-    final IUserLogoutCallback aUserLogoutCallback = getUserLogoutCallback ();
-    if (aUserLogoutCallback != null)
-      aUserLogoutCallback.onUserLogout (aInfo);
+    for (final IUserLogoutCallback aUserLogoutCallback : getAllUserLogoutCallbacks ())
+      try
+      {
+        aUserLogoutCallback.onUserLogout (aInfo);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Failed to invoke onUserLogout callback on " + aUserLogoutCallback, t);
+      }
 
     return EChange.CHANGED;
   }
