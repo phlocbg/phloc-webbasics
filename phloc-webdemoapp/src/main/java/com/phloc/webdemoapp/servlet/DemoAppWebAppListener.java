@@ -92,7 +92,7 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
         final BootstrapDataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
         ret.setAutoWidth (false)
            .setLengthMenu (LENGTH_MENU)
-           .setDisplayLength (ContainerHelper.getFirstElement (LENGTH_MENU).getKey ().intValue ())
+           .setDisplayLength (ContainerHelper.getFirstKey (LENGTH_MENU).intValue ())
            .setUseJQueryAjax (true)
            .setAjaxSource (CDemoAppAjaxView.DATATABLES.getInvocationURL ())
            .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()))
