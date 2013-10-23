@@ -12,7 +12,9 @@
   text-align: right;
 }
 
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+/* No selection outline around tabs */
+.nav-tabs > .active > a, 
+.nav-tabs > .active > a:hover {
   outline:none;
 }
 
