@@ -79,6 +79,6 @@ public abstract class AbstractComparatorTable extends AbstractComparator <String
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("formatter", m_aFormatter).toString ();
+    return new ToStringGenerator (this).appendIfNotNull ("formatter", m_aFormatter).toString ();
   }
 }

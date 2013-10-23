@@ -461,9 +461,9 @@ public class User extends MapBasedAttributeContainer implements IUser
                             .append ("loginName", m_sLoginName)
                             .append ("emailAddress", m_sEmailAddress)
                             .append ("passwordHash", m_sPasswordHash)
-                            .append ("firstName", m_sFirstName)
-                            .append ("lastName", m_sLastName)
-                            .append ("desiredLocale", m_aDesiredLocale)
+                            .appendIfNotNull ("firstName", m_sFirstName)
+                            .appendIfNotNull ("lastName", m_sLastName)
+                            .appendIfNotNull ("desiredLocale", m_aDesiredLocale)
                             .append ("deleted", m_bDeleted)
                             .append ("disabled", m_bDisabled)
                             .toString ();

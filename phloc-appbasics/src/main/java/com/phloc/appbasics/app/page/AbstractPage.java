@@ -209,7 +209,7 @@ public abstract class AbstractPage implements IPage
   {
     return new ToStringGenerator (this).append ("ID", m_sID)
                                        .append ("name", m_aName)
-                                       .append ("description", m_aDescription)
+                                       .appendIfNotNull ("description", m_aDescription)
                                        .toString ();
   }
 }
