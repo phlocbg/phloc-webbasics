@@ -32,9 +32,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.webbasics.app.init.IApplicationInitializer;
+import com.phloc.webctrls.datatables.EDataTablesFilterType;
+import com.phloc.webctrls.datatables.ajax.ActionExecutorDataTablesI18N;
 import com.phloc.webctrls.datatables.ajax.AjaxHandlerDataTables;
 import com.phloc.webctrls.styler.WebPageStylerManager;
 import com.phloc.webdemoapp.app.CDemoApp;
+import com.phloc.webdemoapp.app.action.view.CDemoAppActionView;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 import com.phloc.webdemoapp.app.init.DefaultSecurity;
 import com.phloc.webdemoapp.app.init.InitializerConfig;
@@ -47,6 +50,15 @@ import com.phloc.webdemoapp.app.init.InitializerView;
  */
 public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
 {
+  private static final Map <Integer, String> LENGTH_MENU = ContainerHelper.newOrderedMap (new Integer [] { Integer.valueOf (25),
+                                                                                                          Integer.valueOf (50),
+                                                                                                          Integer.valueOf (100),
+                                                                                                          Integer.valueOf (-1) },
+                                                                                          new String [] { "25",
+                                                                                                         "50",
+                                                                                                         "100",
+                                                                                                         "all" });
+
   @Override
   @Nonnull
   @Nonempty
@@ -79,9 +91,14 @@ public final class DemoAppWebAppListener extends WebAppListenerMultiAppBootstrap
       {
         final BootstrapDataTables ret = super.createDefaultDataTables (aTable, aDisplayLocale);
         ret.setAutoWidth (false)
+           .setLengthMenu (LENGTH_MENU)
+           .setDisplayLength (ContainerHelper.getFirstElement (LENGTH_MENU).getKey ().intValue ())
            .setUseJQueryAjax (true)
            .setAjaxSource (CDemoAppAjaxView.VIEW_DATATABLES.getInvocationURL ())
-           .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()));
+           .setServerParams (ContainerHelper.newMap (AjaxHandlerDataTables.OBJECT_ID, aTable.getID ()))
+           .setServerFilterType (EDataTablesFilterType.ALL_TERMS_PER_ROW)
+           .setTextLoadingURL (DemoAppViewActionServlet.getActionPath (CDemoAppActionView.VIEW_DATATABLES_I18N),
+                               ActionExecutorDataTablesI18N.LANGUAGE_ID);
         return ret;
       }
     });

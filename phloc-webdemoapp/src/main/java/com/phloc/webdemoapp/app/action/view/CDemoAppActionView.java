@@ -15,20 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webdemoapp.app.action.config;
+package com.phloc.webdemoapp.app.action.view;
 
 import javax.annotation.concurrent.Immutable;
 
 /**
- * This class defines the available actions for the config app
+ * This class defines the available actions for the view app
  * 
  * @author Philip Helger
  */
 @Immutable
-public final class CDemoAppActionConfig
+public final class CDemoAppActionView
 {
-  public static final String CONFIG_PING = "ping";
+  public static final String VIEW_DATATABLES_I18N = "datatables-i18n";
 
-  private CDemoAppActionConfig ()
+  private CDemoAppActionView ()
   {}
 }

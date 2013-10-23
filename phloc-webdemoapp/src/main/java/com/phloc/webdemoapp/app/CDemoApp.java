@@ -27,6 +27,7 @@ import com.phloc.commons.locale.LocaleCache;
 public final class CDemoApp
 {
   public static final Locale DEFAULT_LOCALE = LocaleCache.getLocale ("en", "US");
+
   public static final String APP_CONFIG_ID = "config";
   public static final String APP_VIEW_ID = "view";
 
