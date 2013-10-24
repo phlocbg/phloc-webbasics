@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="99">
+<translationitems count="103">
   <item id="com.phloc.webctrls.colorbox.EColorBoxText.CLOSE">
     <de>Schließen</de>
     <en>close</en>
@@ -51,6 +51,10 @@
     <de>Fehler beim Laden des Inhalts</de>
     <en>This content failed to load.</en>
   </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.EMPTY_TABLE">
+    <de>Keine Einträge vorhanden</de>
+    <en>No data available in table</en>
+  </item>
   <item id="com.phloc.webctrls.datatables.EDataTablesText.FIRST">
     <de>Erster</de>
     <en>First</en>
@@ -71,6 +75,10 @@
     <de></de>
     <en></en>
   </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.INFO_THOUSANDS">
+    <de></de>
+    <en></en>
+  </item>
   <item id="com.phloc.webctrls.datatables.EDataTablesText.LAST">
     <de>Letzter</de>
     <en>Last</en>
@@ -78,6 +86,10 @@
   <item id="com.phloc.webctrls.datatables.EDataTablesText.LENGTH_MENU">
     <de>_MENU_ Einträge anzeigen</de>
     <en>Show _MENU_ entries</en>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.LOADING_RECORDS">
+    <de>Lade...</de>
+    <en>Loading...</en>
   </item>
   <item id="com.phloc.webctrls.datatables.EDataTablesText.NEXT">
     <de>Nächster</de>
@@ -95,12 +107,16 @@
     <de>Suchen:</de>
     <en>Search:</en>
   </item>
-  <item id="com.phloc.webctrls.datatables.EDataTablesText.URL">
-    <de></de>
-    <en></en>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.SORT_ASCENDING">
+    <de>: aktivieren, um Spalte aufsteigend zu sortieren</de>
+    <en>: activate to sort column ascending</en>
+  </item>
+  <item id="com.phloc.webctrls.datatables.EDataTablesText.SORT_DESCENDING">
+    <de>: aktivieren, um Spalte absteigend zu sortieren</de>
+    <en>: activate to sort column descending</en>
   </item>
   <item id="com.phloc.webctrls.datatables.EDataTablesText.ZERO_RECORDS">
-    <de>Keine Einträge vorhanden.</de>
+    <de>Keine passenden Einträge vorhanden.</de>
     <en>No matching records found.</en>
   </item>
   <item id="com.phloc.webctrls.datetime.EDateEditText.CALENDAR_ABOUT">

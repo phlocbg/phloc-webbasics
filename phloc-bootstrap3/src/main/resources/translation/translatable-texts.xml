@@ -19,11 +19,11 @@
 
 -->
 <translationitems count="2">
-  <item id="com.phloc.bootstrap3.EBootstrap3Text.ENTER_SEARCH_STRING">
+  <item id="com.phloc.bootstrap3.EBootstrapText.ENTER_SEARCH_STRING">
     <de>Geben Sie einen Suchtext ein</de>
     <en>Enter a search phrase</en>
   </item>
-  <item id="com.phloc.bootstrap3.EBootstrap3Text.TOOGLE_NAVIGATION">
+  <item id="com.phloc.bootstrap3.EBootstrapText.TOOGLE_NAVIGATION">
     <de>Navigation ein/ausblenden</de>
     <en>Toggle navigation</en>
   </item>

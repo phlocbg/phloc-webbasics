@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="21">
+<translationitems count="22">
   <item id="com.phloc.appbasics.exchange.EExchangeFileTypeName.CSV">
     <de>CSV</de>
     <en>CSV</en>
@@ -97,10 +97,14 @@
   </item>
   <item id="com.phloc.appbasics.security.user.password.EPasswordConstraintText.DESC_MAX_LENGTH">
     <de>Das Passwort darf maximal {0} Zeichen haben.</de>
-    <en>The password must have at last {0} characters.</en>
+    <en>The password must have at last {0} character(s).</en>
   </item>
   <item id="com.phloc.appbasics.security.user.password.EPasswordConstraintText.DESC_MIN_LENGTH">
     <de>Das Passwort muss mindestens {0} Zeichen haben.</de>
-    <en>The password must have at least {0} characters.</en>
+    <en>The password must have at least {0} character(s).</en>
+  </item>
+  <item id="com.phloc.appbasics.security.user.password.EPasswordConstraintText.DESC_MUST_CONTAIN_NUMBERS">
+    <de>Das Passwort muss mindestens {0} Zahl(en) enthalten.</de>
+    <en>The password must contain at least {0} digit(s).</en>
   </item>
 </translationitems>
