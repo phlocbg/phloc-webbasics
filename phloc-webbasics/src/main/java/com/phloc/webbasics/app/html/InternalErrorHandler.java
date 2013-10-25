@@ -43,7 +43,7 @@ import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.webbasics.EWebBasicsText;
 
 /**
- * Handle internal errors.
+ * A handler for internal errors that occur while building a UI page
  * 
  * @author Philip Helger
  */
