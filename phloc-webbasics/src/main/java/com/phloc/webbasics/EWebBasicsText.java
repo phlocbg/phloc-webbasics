@@ -84,14 +84,14 @@ public enum EWebBasicsText implements IHasDisplayText, IHasDisplayTextWithArgs
                               + "Notieren Sie sich bitte ihre persönliche Fehlernummer ''{0}'' für eine mögliche spätere Analyse.\n"
                               + "\n"
                               + "Sie können mit Ihrer Arbeit fortfahren.\n"
-                              + "Falls dieser Fehler wieder auftritt, vermeiden Sie bitte die Schritte die zu diesem Fehler geführt haben bis er behoben ist.", "Sorry!\n"
-                                                                                                                                                                + "An internal error was encountered.\n"
-                                                                                                                                                                + "\n"
-                                                                                                                                                                + "An automated error report was already sent to the technical responsible.\n"
-                                                                                                                                                                + "Write down your personal error number ''{0}'' for possible investigation.\n"
-                                                                                                                                                                + "\n"
-                                                                                                                                                                + "You can continue your work.\n"
-                                                                                                                                                                + "In case this error occurs again avoid the actions leading to it until the problem is solved."),
+                              + "Falls dieser Fehler wieder auftritt, vermeiden Sie bitte die Schritte die zu diesem Fehler geführt haben, und warten bis er behoben ist.", "Sorry!\n"
+                                                                                                                                                                            + "An internal error was encountered.\n"
+                                                                                                                                                                            + "\n"
+                                                                                                                                                                            + "An automated error report was already sent to the technical responsible.\n"
+                                                                                                                                                                            + "Write down your personal error number ''{0}'' for possible investigation.\n"
+                                                                                                                                                                            + "\n"
+                                                                                                                                                                            + "You can continue your work.\n"
+                                                                                                                                                                            + "In case this error occurs again avoid the actions leading to it until the problem is solved."),
 
   MSG_BACK_TO_OVERVIEW ("Zurück zur Übersicht", "Back to the list"),
   MSG_BUTTON_YES ("Ja", "Yes"),
