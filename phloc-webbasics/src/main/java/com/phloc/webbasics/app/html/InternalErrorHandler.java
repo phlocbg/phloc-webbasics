@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.callback.IExceptionHandler;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.StackTraceHelper;
@@ -96,18 +97,13 @@ public final class InternalErrorHandler
   }
 
   /**
-   * Default handling for an internal error
+   * Create a new unique internal error ID.
    * 
-   * @param aParent
-   *        The parent list to append the nodes to
-   * @param t
-   *        The exception that occurred. May not be <code>null</code>.
-   * @param aDisplayLocale
-   *        The display locale to use for the texts.
+   * @return The created error ID. Neither <code>null</code> nor empty.
    */
-  public static void handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
-                                          @Nonnull final Throwable t,
-                                          @Nonnull final Locale aDisplayLocale)
+  @Nonnull
+  @Nonempty
+  public static String createNewInternalErrorID ()
   {
     String sErrorNumber = "internal_error_";
     try
@@ -119,19 +115,64 @@ public final class InternalErrorHandler
       // happens when no persistent ID factory is present
       sErrorNumber += "t" + GlobalIDFactory.getNewIntID () + "_" + System.currentTimeMillis ();
     }
+    return sErrorNumber;
+  }
+
+  /**
+   * Default handling for an internal error
+   * 
+   * @param aParent
+   *        The parent list to append the nodes to
+   * @param t
+   *        The exception that occurred. May not be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to use for the texts.
+   * @return The created unique error ID
+   */
+  @Nonnull
+  @Nonempty
+  public static String handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
+                                            @Nonnull final Throwable t,
+                                            @Nonnull final Locale aDisplayLocale)
+  {
+    return handleInternalError (aParent, t, aDisplayLocale, true);
+  }
+
+  /**
+   * Default handling for an internal error
+   * 
+   * @param aParent
+   *        The parent list to append the nodes to
+   * @param t
+   *        The exception that occurred. May not be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to use for the texts.
+   * @param bInvokeCustomExceptionHandler
+   *        <code>true</code> to invoke the custom exception handler (if any is
+   *        present), <code>false</code> to not do so.
+   * @return The created unique error ID
+   */
+  @Nonnull
+  @Nonempty
+  public static String handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
+                                            @Nonnull final Throwable t,
+                                            @Nonnull final Locale aDisplayLocale,
+                                            final boolean bInvokeCustomExceptionHandler)
+  {
+    final String sErrorID = createNewInternalErrorID ();
 
     // Log the error, to ensure the data is persisted!
-    s_aLogger.error ("handleInternalError " + sErrorNumber, t);
-
-    // Get error stack trace
-    final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
+    s_aLogger.error ("handleInternalError " + sErrorID, t);
 
     aParent.addChild (new HCH1 ().addChild (EWebBasicsText.INTERNAL_ERROR_TITLE.getDisplayText (aDisplayLocale)));
     aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList (EWebBasicsText.INTERNAL_ERROR_DESCRIPTION.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                     sErrorNumber))));
+                                                                                                                                     sErrorID))));
 
     if (GlobalDebug.isDebugMode ())
     {
+      // Get error stack trace
+      final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
+
       final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
                                                                  .setRows (20)
                                                                  .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (98)))
@@ -145,9 +186,21 @@ public final class InternalErrorHandler
         throw new IllegalStateException ("Error executing unit test", t);
     }
 
-    // Invoke custom exception handler (if present)
-    final IExceptionHandler <Throwable> aCustomExceptionHandler = getCustomExceptionHandler ();
-    if (aCustomExceptionHandler != null)
-      aCustomExceptionHandler.onException (t);
+    if (bInvokeCustomExceptionHandler)
+    {
+      // Invoke custom exception handler (if present)
+      final IExceptionHandler <Throwable> aCustomExceptionHandler = getCustomExceptionHandler ();
+      if (aCustomExceptionHandler != null)
+        try
+        {
+          aCustomExceptionHandler.onException (t);
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Internal error in custom exception handler " + aCustomExceptionHandler, t2);
+        }
+    }
+
+    return sErrorID;
   }
 }
