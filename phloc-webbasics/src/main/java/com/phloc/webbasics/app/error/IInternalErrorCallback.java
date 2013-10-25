@@ -1,0 +1,46 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.phloc.webbasics.app.error;
+
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+
+import com.phloc.commons.annotations.Nonempty;
+
+/**
+ * Callback interface for the internal error handler.
+ * 
+ * @author Philip Helger
+ */
+public interface IInternalErrorCallback
+{
+  /**
+   * Called when an exception occurred. You may not re-throw the exception from
+   * in here!
+   * 
+   * @param t
+   *        The exception. Never <code>null</code>.
+   * @param sErrorID
+   *        The created internal error ID. Neither <code>null</code> nor empty.
+   * @param aDisplayLocale
+   *        The display locale for further handling if required. Never
+   *        <code>null</code>.
+   */
+  void onInternalError (@Nonnull Throwable t, @Nonnull @Nonempty String sErrorID, @Nonnull Locale aDisplayLocale);
+}

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webbasics.app.html;
+package com.phloc.webbasics.app.error;
 
 import java.util.Locale;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.callback.IExceptionHandler;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.StackTraceHelper;
 import com.phloc.css.ECSSUnit;
@@ -53,7 +52,7 @@ public final class InternalErrorHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (InternalErrorHandler.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
-  private static IExceptionHandler <Throwable> s_aCustomExceptionHandler;
+  private static IInternalErrorCallback s_aCustomExceptionHandler;
 
   private InternalErrorHandler ()
   {}
@@ -63,7 +62,7 @@ public final class InternalErrorHandler
    *         is set.
    */
   @Nullable
-  public static IExceptionHandler <Throwable> getCustomExceptionHandler ()
+  public static IInternalErrorCallback getCustomExceptionHandler ()
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -83,7 +82,7 @@ public final class InternalErrorHandler
    *        The exception handler to be used. May be <code>null</code> to
    *        indicate none.
    */
-  public static void setCustomExceptionHandler (@Nullable final IExceptionHandler <Throwable> aCustomExceptionHandler)
+  public static void setCustomExceptionHandler (@Nullable final IInternalErrorCallback aCustomExceptionHandler)
   {
     s_aRWLock.writeLock ().lock ();
     try
@@ -189,11 +188,11 @@ public final class InternalErrorHandler
     if (bInvokeCustomExceptionHandler)
     {
       // Invoke custom exception handler (if present)
-      final IExceptionHandler <Throwable> aCustomExceptionHandler = getCustomExceptionHandler ();
+      final IInternalErrorCallback aCustomExceptionHandler = getCustomExceptionHandler ();
       if (aCustomExceptionHandler != null)
         try
         {
-          aCustomExceptionHandler.onException (t);
+          aCustomExceptionHandler.onInternalError (t, sErrorID, aDisplayLocale);
         }
         catch (final Throwable t2)
         {

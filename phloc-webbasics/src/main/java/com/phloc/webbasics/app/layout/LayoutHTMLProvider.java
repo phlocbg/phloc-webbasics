@@ -30,8 +30,8 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
+import com.phloc.webbasics.app.error.InternalErrorHandler;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
-import com.phloc.webbasics.app.html.InternalErrorHandler;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
