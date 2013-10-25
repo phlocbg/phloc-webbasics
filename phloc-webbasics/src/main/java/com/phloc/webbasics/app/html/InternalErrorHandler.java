@@ -17,6 +17,7 @@
  */
 package com.phloc.webbasics.app.html;
 
+import java.util.Locale;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -34,11 +35,12 @@ import com.phloc.commons.lang.StackTraceHelper;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.css.propertyvalue.CCSSValue;
-import com.phloc.html.hc.IHCElementWithChildren;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.htmlext.HCUtils;
+import com.phloc.webbasics.EWebBasicsText;
 
 /**
  * Handle internal errors.
@@ -93,20 +95,40 @@ public final class InternalErrorHandler
     }
   }
 
-  public static void handleInternalError (@Nonnull final IHCElementWithChildren <?> aParent, @Nonnull final Throwable t)
+  /**
+   * Default handling for an internal error
+   * 
+   * @param aParent
+   *        The parent list to append the nodes to
+   * @param t
+   *        The exception that occurred. May not be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to use for the texts.
+   */
+  public static void handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
+                                          @Nonnull final Throwable t,
+                                          @Nonnull final Locale aDisplayLocale)
   {
-    // Log the error, to ensure the data is persisted!
-    s_aLogger.error ("handleInternalError", t);
+    String sErrorNumber = "internal_error_";
+    try
+    {
+      sErrorNumber += GlobalIDFactory.getNewPersistentIntID ();
+    }
+    catch (final IllegalStateException ex)
+    {
+      // happens when no persistent ID factory is present
+      sErrorNumber += "t" + GlobalIDFactory.getNewIntID () + "_" + System.currentTimeMillis ();
+    }
 
-    final String sErrorNumber = "internal_error_" + GlobalIDFactory.getNewPersistentIntID ();
+    // Log the error, to ensure the data is persisted!
+    s_aLogger.error ("handleInternalError " + sErrorNumber, t);
 
     // Get error stack trace
     final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
 
-    aParent.addChild (new HCH1 ().addChild ("Internal error"));
-    aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList ("Sorry!\nAn internal error was encountered.\n\nAn automated error report was already sent to the technical responsible.\nWrite down your personal error number '" +
-                                                                   sErrorNumber +
-                                                                   "' for possible investigation.\n\nYou can continue your work.\nIn case this error occurs again avoid the actions leading to it until the problem is solved.")));
+    aParent.addChild (new HCH1 ().addChild (EWebBasicsText.INTERNAL_ERROR_TITLE.getDisplayText (aDisplayLocale)));
+    aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList (EWebBasicsText.INTERNAL_ERROR_DESCRIPTION.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                     sErrorNumber))));
 
     if (GlobalDebug.isDebugMode ())
     {

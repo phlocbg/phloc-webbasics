@@ -122,7 +122,7 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
       catch (final Throwable t)
       {
         // send internal error mail here
-        InternalErrorHandler.handleInternalError (aBody, t);
+        InternalErrorHandler.handleInternalError (aBody, t, aDisplayLocale);
       }
     }
 
