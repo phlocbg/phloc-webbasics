@@ -31,7 +31,7 @@ import com.phloc.webscopes.servlets.AbstractStreamServlet;
 public final class DemoAppStreamServlet extends AbstractStreamServlet
 {
   public static final String SERVLET_DEFAULT_NAME = LinkUtils.DEFAULT_STREAM_SERVLET_NAME;
-  public static final String SERVLET_DEFAULT_PATH = LinkUtils.DEFAULT_STREAM_SERVLET_PATH;
+  public static final String SERVLET_DEFAULT_PATH = "/" + SERVLET_DEFAULT_NAME;
 
   @Override
   @Nonnull
