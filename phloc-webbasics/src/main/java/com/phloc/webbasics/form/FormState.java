@@ -33,6 +33,8 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.json2.impl.JsonArray;
+import com.phloc.json2.impl.JsonObject;
 
 @Immutable
 public class FormState implements IHasID <String>, Serializable
@@ -105,6 +107,29 @@ public class FormState implements IHasID <String>, Serializable
         if (aValue instanceof String [])
         {
           final JSArray aArray = new JSArray ();
+          for (final String sElement : (String []) aValue)
+            aArray.add (sElement);
+          ret.add (sKey, aArray);
+        }
+      // else e.g. fileitem -> ignore
+    }
+    return ret;
+  }
+
+  @Nonnull
+  public JsonObject getAsJsonObject ()
+  {
+    final JsonObject ret = new JsonObject ();
+    for (final Map.Entry <String, Object> aEntry : m_aAttrs.getAllAttributes ().entrySet ())
+    {
+      final String sKey = aEntry.getKey ();
+      final Object aValue = aEntry.getValue ();
+      if (aValue instanceof String)
+        ret.add (sKey, aValue);
+      else
+        if (aValue instanceof String [])
+        {
+          final JsonArray aArray = new JsonArray ();
           for (final String sElement : (String []) aValue)
             aArray.add (sElement);
           ret.add (sKey, aArray);
