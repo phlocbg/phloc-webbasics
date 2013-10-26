@@ -36,6 +36,7 @@ import com.phloc.webscopes.singleton.GlobalWebSingleton;
  * @author Philip Helger
  */
 @ThreadSafe
+@Deprecated
 public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjaxInvoker
 {
   private final AjaxInvoker m_aInvoker = new AjaxInvoker ();

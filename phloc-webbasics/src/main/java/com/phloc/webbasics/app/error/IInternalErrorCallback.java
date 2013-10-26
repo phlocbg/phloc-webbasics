@@ -25,7 +25,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Callback interface for the internal error handler.
+ * Callback interface for the {@link InternalErrorHandler}.
  * 
  * @author Philip Helger
  */

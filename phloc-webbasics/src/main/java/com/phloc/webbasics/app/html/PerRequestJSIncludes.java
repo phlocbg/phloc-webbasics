@@ -58,6 +58,12 @@ public final class PerRequestJSIncludes
     return ret;
   }
 
+  /**
+   * Register a new JS item only for this request
+   * 
+   * @param aJSPathProvider
+   *        The JS path provider to use. May not be <code>null</code>.
+   */
   public static void registerJSIncludeForThisRequest (@Nonnull final IJSPathProvider aJSPathProvider)
   {
     if (aJSPathProvider == null)
@@ -65,6 +71,12 @@ public final class PerRequestJSIncludes
     _getPerRequestSet (true).add (aJSPathProvider);
   }
 
+  /**
+   * Unregister a existing JS item only from this request
+   * 
+   * @param aJSPathProvider
+   *        The JS path provider to use. May not be <code>null</code>.
+   */
   public static void unregisterJSIncludeFromThisRequest (@Nonnull final IJSPathProvider aJSPathProvider)
   {
     if (aJSPathProvider == null)

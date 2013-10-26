@@ -38,6 +38,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * @author Philip Helger
  */
 @ThreadSafe
+@Deprecated
 public final class GlobalActionManager extends GlobalSingleton implements IActionInvoker
 {
   // Main container

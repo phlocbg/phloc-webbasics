@@ -28,6 +28,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public class GlobalActionServlet extends AbstractActionServlet
 {
   @Override

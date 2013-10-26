@@ -58,6 +58,12 @@ public final class PerRequestCSSIncludes
     return ret;
   }
 
+  /**
+   * Register a new CSS item only for this request
+   * 
+   * @param aCSSPathProvider
+   *        The CSS path provider to use. May not be <code>null</code>.
+   */
   public static void registerCSSIncludeForThisRequest (@Nonnull final ICSSPathProvider aCSSPathProvider)
   {
     if (aCSSPathProvider == null)
@@ -65,6 +71,12 @@ public final class PerRequestCSSIncludes
     _getPerRequestSet (true).add (aCSSPathProvider);
   }
 
+  /**
+   * Unregister an existing CSS item only from this request
+   * 
+   * @param aCSSPathProvider
+   *        The CSS path provider to use. May not be <code>null</code>.
+   */
   public static void unregisterCSSIncludeFromThisRequest (@Nonnull final ICSSPathProvider aCSSPathProvider)
   {
     if (aCSSPathProvider == null)

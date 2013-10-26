@@ -97,6 +97,27 @@ public final class InternalErrorHandler
   }
 
   /**
+   * Create a new unique error ID.
+   * 
+   * @return This is either a new persistent int ID or a non-persistent ID
+   *         together with the timestamp. Neither <code>null</code> nor empty.
+   */
+  @Nonnull
+  @Nonempty
+  public static String createNewErrorID ()
+  {
+    try
+    {
+      return Integer.toString (GlobalIDFactory.getNewPersistentIntID ());
+    }
+    catch (final IllegalStateException ex)
+    {
+      // happens when no persistent ID factory is present
+      return "t" + GlobalIDFactory.getNewIntID () + "_" + System.currentTimeMillis ();
+    }
+  }
+
+  /**
    * Create a new unique internal error ID.
    * 
    * @return The created error ID. Neither <code>null</code> nor empty.
@@ -105,17 +126,7 @@ public final class InternalErrorHandler
   @Nonempty
   public static String createNewInternalErrorID ()
   {
-    String sErrorNumber = "internal_error_";
-    try
-    {
-      sErrorNumber += GlobalIDFactory.getNewPersistentIntID ();
-    }
-    catch (final IllegalStateException ex)
-    {
-      // happens when no persistent ID factory is present
-      sErrorNumber += "t" + GlobalIDFactory.getNewIntID () + "_" + System.currentTimeMillis ();
-    }
-    return sErrorNumber;
+    return "internal-error-" + createNewErrorID ();
   }
 
   /**

@@ -113,6 +113,9 @@ public class HTMLConfigManager
     return m_sBasePath;
   }
 
+  /**
+   * @return A list of all global CSS items. Never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSFiles.CSSItem> getAllCSSItems ()
@@ -120,6 +123,9 @@ public class HTMLConfigManager
     return ContainerHelper.newList (m_aAllCSSItems);
   }
 
+  /**
+   * @return A list of all global JS items. Never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <JSFiles.JSItem> getAllJSItems ()
@@ -127,6 +133,9 @@ public class HTMLConfigManager
     return ContainerHelper.newList (m_aAllJSItems);
   }
 
+  /**
+   * @return A list of all global meta tags. Never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public Map <String, String> getAllMetaTags ()

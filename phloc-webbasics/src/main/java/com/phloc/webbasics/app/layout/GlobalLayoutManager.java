@@ -35,6 +35,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * @author Philip Helger
  */
 @ThreadSafe
+@Deprecated
 public final class GlobalLayoutManager extends GlobalSingleton implements ILayoutManager
 {
   private final LayoutManagerProxy m_aProxy = new LayoutManagerProxy ();
