@@ -23,6 +23,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.GlobalMenuTree;
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuTree;
@@ -53,6 +54,7 @@ import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webpages.AbstractWebPageForm;
 
+@SuppressWarnings ("deprecation")
 public class BasePageSavedStates extends AbstractWebPageForm <FormState>
 {
   @Translatable
@@ -109,7 +111,11 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   @OverrideOnDemand
   protected IMenuTree getMenuTree ()
   {
-    return GlobalMenuTree.getInstance ().getTree ();
+    IMenuTree ret = ApplicationMenuTree.getInstance ().getTree ();
+    // XXX hack alert :(
+    if (!ret.getRootItem ().hasChildren ())
+      ret = GlobalMenuTree.getInstance ().getTree ();
+    return ret;
   }
 
   @Override
