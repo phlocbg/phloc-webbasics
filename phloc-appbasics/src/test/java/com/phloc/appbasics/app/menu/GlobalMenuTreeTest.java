@@ -35,7 +35,8 @@ import com.phloc.scopes.mock.ScopeTestRule;
  * 
  * @author Philip Helger
  */
-public final class MenuTreeTest
+@SuppressWarnings ({ "deprecation", "javadoc" })
+public final class GlobalMenuTreeTest
 {
   @Rule
   public final TestRule m_aScopeRule = new ScopeTestRule ();

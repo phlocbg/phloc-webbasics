@@ -41,6 +41,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * 
  * @author Philip Helger
  */
+@SuppressWarnings ("deprecation")
 public final class ApplicationRequestManager extends GlobalSingleton implements IRequestManager
 {
   private static final class RequestManagerImpl extends AbstractRequestManager

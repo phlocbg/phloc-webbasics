@@ -35,12 +35,10 @@ import com.phloc.appbasics.security.login.IUserLoginCallback;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.login.LoginInfo;
 import com.phloc.appbasics.security.role.IRole;
-import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.role.RoleManager;
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.appbasics.security.user.UserManager;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
-import com.phloc.appbasics.security.usergroup.IUserGroupManager;
 import com.phloc.appbasics.security.usergroup.UserGroupManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -67,8 +65,8 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessManager.class);
 
   private final UserManager m_aUserMgr;
-  private final IRoleManager m_aRoleMgr;
-  private final IUserGroupManager m_aUserGroupMgr;
+  private final RoleManager m_aRoleMgr;
+  private final UserGroupManager m_aUserGroupMgr;
 
   @Deprecated
   @UsedViaReflection
@@ -92,6 +90,39 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
   public static AccessManager getInstance ()
   {
     return getGlobalSingleton (AccessManager.class);
+  }
+
+  /**
+   * Reload the content of the user manager.
+   * 
+   * @throws DAOException
+   *         in case reloading fails
+   */
+  public void reloadUserManager () throws DAOException
+  {
+    m_aUserMgr.reload ();
+  }
+
+  /**
+   * Reload the content of the user group manager.
+   * 
+   * @throws DAOException
+   *         in case reloading fails
+   */
+  public void reloadUserGroupManager () throws DAOException
+  {
+    m_aUserGroupMgr.reload ();
+  }
+
+  /**
+   * Reload the content of the role manager.
+   * 
+   * @throws DAOException
+   *         in case reloading fails
+   */
+  public void reloadRoleManager () throws DAOException
+  {
+    m_aRoleMgr.reload ();
   }
 
   // User API

@@ -28,6 +28,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public final class GlobalMenuTree extends GlobalSingleton
 {
   private final IMenuTree m_aTree = new MenuTree ();

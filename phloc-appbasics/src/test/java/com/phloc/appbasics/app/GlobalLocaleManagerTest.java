@@ -35,6 +35,7 @@ import com.phloc.commons.locale.LocaleCache;
  * 
  * @author Philip Helger
  */
+@SuppressWarnings ({ "deprecation", "javadoc" })
 public final class GlobalLocaleManagerTest
 {
   @Rule
