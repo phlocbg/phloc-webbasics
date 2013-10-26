@@ -18,10 +18,13 @@
 package com.phloc.webbasics.app;
 
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +33,7 @@ import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.appbasics.app.IRequestManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
@@ -43,9 +47,11 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  * 
  * @author Philip Helger
  */
-@Immutable
+@ThreadSafe
 public final class LinkUtils
 {
+  public static final String STREAM_SERVLET_NAME_REGEX = "[a-zA-Z0-9-_]+";
+
   /**
    * The default name of the stream servlet. If this is different in you
    * application you may not use the methods that refer to this path!
@@ -55,13 +61,71 @@ public final class LinkUtils
   /**
    * The default path to the stream servlet. If this is different in you
    * application you may not use the methods that refer to this path!
+   * 
+   * @deprecated Use {@link #getStreamServletPath()} instead
    */
+  @Deprecated
   public static final String DEFAULT_STREAM_SERVLET_PATH = "/" + DEFAULT_STREAM_SERVLET_NAME;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (LinkUtils.class);
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
+  @GuardedBy ("s_aRWLock")
+  private static String m_sStreamServletName = DEFAULT_STREAM_SERVLET_NAME;
 
   private LinkUtils ()
   {}
+
+  public static void setStreamServletName (@Nonnull @Nonempty final String sStreamServletName)
+  {
+    if (StringHelper.hasNoText (sStreamServletName))
+      throw new IllegalArgumentException ("StreamServletName");
+    if (!RegExHelper.stringMatchesPattern (STREAM_SERVLET_NAME_REGEX, sStreamServletName))
+      throw new IllegalArgumentException ("Invalid StreamServletName '" +
+                                          sStreamServletName +
+                                          "' passed. It must match the following rexg: " +
+                                          STREAM_SERVLET_NAME_REGEX);
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_sStreamServletName = sStreamServletName;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String getStreamServletName ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_sStreamServletName;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String getStreamServletPath ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return "/" + m_sStreamServletName;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
 
   @Nonnull
   private static String _getURIWithContext (@Nonnull final String sHRef)
@@ -283,7 +347,7 @@ public final class LinkUtils
     if (URLProtocolRegistry.hasKnownProtocol (sURL))
       return new ReadonlySimpleURL (sURL);
 
-    String sPrefix = DEFAULT_STREAM_SERVLET_PATH;
+    String sPrefix = getStreamServletPath ();
     if (!StringHelper.startsWith (sURL, '/'))
       sPrefix += '/';
     return getURLWithContext (sPrefix + sURL);
