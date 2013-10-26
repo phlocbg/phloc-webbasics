@@ -28,6 +28,7 @@ import com.phloc.appbasics.app.ApplicationRequestManager;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.mime.IMimeType;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.meta.EStandardMetaElement;
@@ -152,5 +153,11 @@ public abstract class AbstractHTMLProvider implements IHTMLProvider
     fillHead (aRequestScope, aHtml, aDisplayLocale);
 
     return aHtml;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }
