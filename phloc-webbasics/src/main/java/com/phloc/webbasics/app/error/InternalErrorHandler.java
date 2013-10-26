@@ -41,6 +41,7 @@ import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * A handler for internal errors that occur while building a UI page
@@ -124,6 +125,9 @@ public final class InternalErrorHandler
    *        The parent list to append the nodes to
    * @param t
    *        The exception that occurred. May not be <code>null</code>.
+   * @param aRequestScope
+   *        The request scope in which the error occurred. May not be
+   *        <code>null</code>.
    * @param aDisplayLocale
    *        The display locale to use for the texts.
    * @return The created unique error ID
@@ -132,9 +136,10 @@ public final class InternalErrorHandler
   @Nonempty
   public static String handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
                                             @Nonnull final Throwable t,
+                                            @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                             @Nonnull final Locale aDisplayLocale)
   {
-    return handleInternalError (aParent, t, aDisplayLocale, true);
+    return handleInternalError (aParent, t, aRequestScope, aDisplayLocale, true);
   }
 
   /**
@@ -144,6 +149,9 @@ public final class InternalErrorHandler
    *        The parent list to append the nodes to
    * @param t
    *        The exception that occurred. May not be <code>null</code>.
+   * @param aRequestScope
+   *        The request scope in which the error occurred. May not be
+   *        <code>null</code>.
    * @param aDisplayLocale
    *        The display locale to use for the texts.
    * @param bInvokeCustomExceptionHandler
@@ -155,6 +163,7 @@ public final class InternalErrorHandler
   @Nonempty
   public static String handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
                                             @Nonnull final Throwable t,
+                                            @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                             @Nonnull final Locale aDisplayLocale,
                                             final boolean bInvokeCustomExceptionHandler)
   {
@@ -192,7 +201,7 @@ public final class InternalErrorHandler
       if (aCustomExceptionHandler != null)
         try
         {
-          aCustomExceptionHandler.onInternalError (t, sErrorID, aDisplayLocale);
+          aCustomExceptionHandler.onInternalError (t, aRequestScope, sErrorID, aDisplayLocale);
         }
         catch (final Throwable t2)
         {

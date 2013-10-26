@@ -41,12 +41,14 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  */
 public class LayoutHTMLProvider extends AbstractHTMLProvider
 {
+  public static final boolean DEFAULT_CREATE_LAYOUT_AREA_SPAN = true;
+
   /** CSS class for each layout area - mainly for debugging */
   public static final ICSSClassProvider CSS_CLASS_LAYOUT_AREA = DefaultCSSClassProvider.create ("layout_area");
 
   private final ILayoutManager m_aLayoutMgr;
   private final List <String> m_aLayoutAreaIDs;
-  private boolean m_bCreateLayoutAreaSpan = true;
+  private boolean m_bCreateLayoutAreaSpan = DEFAULT_CREATE_LAYOUT_AREA_SPAN;
 
   public LayoutHTMLProvider (@Nonnull final ILayoutManager aLayoutMgr)
   {
@@ -57,17 +59,41 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
     m_aLayoutAreaIDs = aLayoutMgr.getAllAreaIDs ();
   }
 
+  /**
+   * @return The layout manager passed in the constructor.
+   */
+  @Nonnull
+  protected final ILayoutManager getLayoutManager ()
+  {
+    return m_aLayoutMgr;
+  }
+
+  /**
+   * @return <code>true</code> if a span surrounding all layout elements should
+   *         be created, <code>false</code> if not. Default value is
+   *         {@link #DEFAULT_CREATE_LAYOUT_AREA_SPAN}.
+   */
   public boolean isCreateLayoutAreaSpan ()
   {
     return m_bCreateLayoutAreaSpan;
   }
 
-  public void setCreateLayoutAreaSpan (final boolean bCreateLayoutAreaSpan)
+  /**
+   * @param bCreateLayoutAreaSpan
+   *        <code>true</code> if a span surrounding all layout elements should
+   *        be created, <code>false</code> if not.
+   * @return this
+   */
+  @Nonnull
+  public LayoutHTMLProvider setCreateLayoutAreaSpan (final boolean bCreateLayoutAreaSpan)
   {
     m_bCreateLayoutAreaSpan = bCreateLayoutAreaSpan;
+    return this;
   }
 
   /**
+   * Overridable method that is called before the content areas are rendered
+   * 
    * @param aHtml
    *        HTML element
    */
@@ -76,6 +102,8 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
   {}
 
   /**
+   * Overridable method that is called after the content areas are rendered
+   * 
    * @param aHtml
    *        HTML element
    */
@@ -83,6 +111,16 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
   protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
   {}
 
+  /**
+   * Determine the content of a single area.
+   * 
+   * @param aLEC
+   *        The layout execution context to use. Never <code>null</code>.
+   * @param sAreaID
+   *        The area ID to be rendered.
+   * @return The node to be rendered for the passed layout area. May be
+   *         <code>null</code>.
+   */
   @OverrideOnDemand
   @Nullable
   protected IHCNode getContentOfArea (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final String sAreaID)
@@ -122,7 +160,7 @@ public class LayoutHTMLProvider extends AbstractHTMLProvider
       catch (final Throwable t)
       {
         // send internal error mail here
-        InternalErrorHandler.handleInternalError (aBody, t, aDisplayLocale);
+        InternalErrorHandler.handleInternalError (aBody, t, aRequestScope, aDisplayLocale);
       }
     }
 

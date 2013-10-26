@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Callback interface for the internal error handler.
@@ -36,11 +37,17 @@ public interface IInternalErrorCallback
    * 
    * @param t
    *        The exception. Never <code>null</code>.
+   * @param aRequestScope
+   *        The request scope in which the error occurred. Never
+   *        <code>null</code>.
    * @param sErrorID
    *        The created internal error ID. Neither <code>null</code> nor empty.
    * @param aDisplayLocale
    *        The display locale for further handling if required. Never
    *        <code>null</code>.
    */
-  void onInternalError (@Nonnull Throwable t, @Nonnull @Nonempty String sErrorID, @Nonnull Locale aDisplayLocale);
+  void onInternalError (@Nonnull Throwable t,
+                        @Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                        @Nonnull @Nonempty String sErrorID,
+                        @Nonnull Locale aDisplayLocale);
 }
