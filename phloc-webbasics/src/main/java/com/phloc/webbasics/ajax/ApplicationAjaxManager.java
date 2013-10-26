@@ -36,7 +36,7 @@ import com.phloc.webscopes.singleton.ApplicationWebSingleton;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class ApplicationAjaxManager extends ApplicationWebSingleton implements IAjaxInvoker
+public class ApplicationAjaxManager extends ApplicationWebSingleton implements IAjaxInvoker
 {
   private final AjaxInvoker m_aInvoker = new AjaxInvoker ();
 

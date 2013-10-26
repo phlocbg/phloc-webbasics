@@ -39,7 +39,7 @@ public interface IAjaxExceptionHandler
    * @param sAjaxFunctionName
    *        The AJAX function that should have been involved
    * @param aRequestScope
-   *        The request scope
+   *        The request scope. Never <code>null</code>.
    */
   void onAjaxException (@Nonnull Throwable t,
                         @Nullable String sAjaxFunctionName,

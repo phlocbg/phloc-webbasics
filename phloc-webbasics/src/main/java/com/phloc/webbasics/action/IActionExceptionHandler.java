@@ -19,6 +19,8 @@ package com.phloc.webbasics.action;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+
 /**
  * Callback interface to handle thrown exception objects on action execution.
  * 
@@ -33,6 +35,10 @@ public interface IActionExceptionHandler
    *        The exception. Never <code>null</code>.
    * @param sActionName
    *        The action that should be executed
+   * @param aRequestScope
+   *        The request scope. Never <code>null</code>.
    */
-  void onActionExecutionException (@Nonnull Throwable t, @Nonnull String sActionName);
+  void onActionExecutionException (@Nonnull Throwable t,
+                                   @Nonnull String sActionName,
+                                   @Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 }

@@ -49,7 +49,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class ActionInvoker implements IActionInvoker
+public class ActionInvoker implements IActionInvoker
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ActionInvoker.class);
   private static final IStatisticsHandlerKeyedTimer s_aTimer = StatisticsManager.getKeyedTimerHandler (ActionInvoker.class);
@@ -152,7 +152,7 @@ public final class ActionInvoker implements IActionInvoker
       if (aCustomExceptionHandler != null)
         try
         {
-          aCustomExceptionHandler.onActionExecutionException (ex, sActionName);
+          aCustomExceptionHandler.onActionExecutionException (ex, sActionName, aRequestScope);
         }
         catch (final Throwable t2)
         {

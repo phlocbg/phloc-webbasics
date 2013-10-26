@@ -23,6 +23,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -65,6 +66,7 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
                                                                                                                        "$error");
 
   protected static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("s_aRWLock")
   private static IAjaxExceptionHandler s_aCustomExceptionHandler;
 
   /**
