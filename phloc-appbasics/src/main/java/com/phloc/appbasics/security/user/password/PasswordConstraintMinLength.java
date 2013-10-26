@@ -63,7 +63,6 @@ public class PasswordConstraintMinLength implements IPasswordConstraint
                                                                            Integer.valueOf (m_nMinLength));
   }
 
-  @Nonnull
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
     aElement.setAttribute (ATTR_MIN_LENGTH, m_nMinLength);

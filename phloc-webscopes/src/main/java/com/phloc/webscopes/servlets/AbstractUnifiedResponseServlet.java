@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.regex.RegExHelper;
@@ -120,7 +121,6 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
   public AbstractUnifiedResponseServlet ()
   {}
 
-  @Nonnull
   protected static final long getUnifiedMillis (final long nMillis)
   {
     // Round down to the nearest second for a proper compare (Java has milli
@@ -155,9 +155,10 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
    */
   @OverrideOnDemand
   @Nonnull
+  @ReturnsMutableCopy
   protected Set <EHTTPMethod> getAllowedHTTPMethods ()
   {
-    return ContainerHelper.makeUnmodifiable (DEFAULT_ALLOWED_METHDOS);
+    return ContainerHelper.newSet (DEFAULT_ALLOWED_METHDOS);
   }
 
   /**

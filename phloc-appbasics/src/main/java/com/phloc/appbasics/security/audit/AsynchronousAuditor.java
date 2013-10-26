@@ -52,7 +52,7 @@ public class AsynchronousAuditor extends AbstractAuditor
   private final ConcurrentCollectorMultiple <IAuditItem> m_aCollector;
   // Just to have custom named threads....
   private static final ThreadFactory s_aThreadFactory = new ExtendedDefaultThreadFactory ("AsyncAuditor");
-  private final ExecutorService s_aSenderThreadPool;
+  private final ExecutorService m_aSenderThreadPool;
 
   public AsynchronousAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider,
                               @Nonnull final IThrowingRunnableWithParameter <List <IAuditItem>> aPerformer)
@@ -62,8 +62,8 @@ public class AsynchronousAuditor extends AbstractAuditor
       throw new NullPointerException ("performer");
 
     m_aCollector = new ConcurrentCollectorMultiple <IAuditItem> (aPerformer);
-    s_aSenderThreadPool = Executors.newSingleThreadExecutor (s_aThreadFactory);
-    s_aSenderThreadPool.submit (m_aCollector);
+    m_aSenderThreadPool = Executors.newSingleThreadExecutor (s_aThreadFactory);
+    m_aSenderThreadPool.submit (m_aCollector);
   }
 
   @Override
@@ -109,11 +109,11 @@ public class AsynchronousAuditor extends AbstractAuditor
     try
     {
       // Check if the thread pool is already shut down
-      if (s_aSenderThreadPool.isShutdown ())
+      if (m_aSenderThreadPool.isShutdown ())
         return EChange.UNCHANGED;
 
       // don't take any more actions
-      s_aSenderThreadPool.shutdown ();
+      m_aSenderThreadPool.shutdown ();
 
       // stop all specific queues
       m_aCollector.stopQueuingNewObjects ();
@@ -130,7 +130,7 @@ public class AsynchronousAuditor extends AbstractAuditor
     // Don't wait in a writeLock!
     try
     {
-      while (!s_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
+      while (!m_aSenderThreadPool.awaitTermination (1, TimeUnit.SECONDS))
       {
         // wait until we're done
       }

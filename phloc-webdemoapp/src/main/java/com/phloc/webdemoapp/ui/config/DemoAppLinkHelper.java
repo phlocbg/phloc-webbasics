@@ -50,7 +50,7 @@ public final class DemoAppLinkHelper
   }
 
   @Nonnull
-  public static final ISimpleURL getStreamURL (@Nonnull final String sURL)
+  public static ISimpleURL getStreamURL (@Nonnull final String sURL)
   {
     // We're using the default path!
     return LinkUtils.getStreamURL (sURL);

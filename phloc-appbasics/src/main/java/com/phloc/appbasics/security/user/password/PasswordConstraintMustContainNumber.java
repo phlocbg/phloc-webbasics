@@ -69,7 +69,6 @@ public class PasswordConstraintMustContainNumber implements IPasswordConstraint
                                                                                      Integer.valueOf (m_nMinNumbers));
   }
 
-  @Nonnull
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
     aElement.setAttribute (ATTR_MIN_NUMBERS, m_nMinNumbers);

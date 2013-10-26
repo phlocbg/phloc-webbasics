@@ -68,7 +68,6 @@ public final class WebFileIO
    * @param aFileOpMgr
    *        The file operation manager. May not be <code>null</code>.
    */
-  @Nonnull
   public static void setFileOpMgr (@Nonnull final FileOperationManager aFileOpMgr)
   {
     if (aFileOpMgr == null)

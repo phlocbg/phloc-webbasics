@@ -35,7 +35,7 @@ public enum EEmailAttachmentDisposition implements IHasID <String>
   ATTACHMENT (Part.ATTACHMENT),
   INLINE (Part.INLINE);
 
-  private String m_sID;
+  private final String m_sID;
 
   private EEmailAttachmentDisposition (@Nonnull @Nonempty final String sID)
   {

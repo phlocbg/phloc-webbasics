@@ -158,7 +158,6 @@ public final class DataTablesServerData implements IHasUIState
     return m_aServerSortState;
   }
 
-  @Nonnull
   public void setServerSortState (@Nonnull final ServerSortState aServerSortState)
   {
     if (aServerSortState == null)

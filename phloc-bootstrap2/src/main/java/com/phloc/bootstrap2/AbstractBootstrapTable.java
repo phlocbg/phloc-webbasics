@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.html.hc.html.AbstractHCTable;
 import com.phloc.html.hc.html.HCCol;
 
-public class AbstractBootstrapTable <THISTYPE extends AbstractBootstrapTable <THISTYPE>> extends AbstractHCTable <THISTYPE>
+public abstract class AbstractBootstrapTable <THISTYPE extends AbstractBootstrapTable <THISTYPE>> extends AbstractHCTable <THISTYPE>
 {
   private void _init ()
   {

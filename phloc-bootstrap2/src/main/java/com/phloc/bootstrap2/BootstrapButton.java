@@ -103,7 +103,6 @@ public class BootstrapButton extends HCA_JS
     return this;
   }
 
-  @Nonnull
   public boolean isDisabled ()
   {
     return m_bDisabled;

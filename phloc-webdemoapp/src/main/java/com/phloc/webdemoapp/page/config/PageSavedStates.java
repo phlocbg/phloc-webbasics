@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.webpages.form.BasePageSavedStates;
 
 public final class PageSavedStates extends BasePageSavedStates
@@ -34,7 +33,6 @@ public final class PageSavedStates extends BasePageSavedStates
 
   @Override
   @Nonnull
-  @OverrideOnDemand
   protected IMenuTree getMenuTree ()
   {
     return ApplicationMenuTree.getInstance ().getTree ();

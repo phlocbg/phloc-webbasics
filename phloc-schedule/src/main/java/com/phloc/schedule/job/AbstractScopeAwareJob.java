@@ -182,7 +182,7 @@ public abstract class AbstractScopeAwareJob implements Job
    * @param bIsLongRunning
    *        <code>true</code> if it is a long running job
    */
-  protected static void _triggerCustomExceptionHandler (@Nonnull final Throwable t,
+  protected static void triggerCustomExceptionHandler (@Nonnull final Throwable t,
                                                         @Nullable final String sJobClassName,
                                                         final boolean bIsLongRunning)
   {
@@ -248,7 +248,7 @@ public abstract class AbstractScopeAwareJob implements Job
         s_aStatsCounterFailure.increment (sJobClassName);
 
         // Notify custom exception handler
-        _triggerCustomExceptionHandler (t, sJobClassName, this instanceof ILongRunningJob);
+        triggerCustomExceptionHandler (t, sJobClassName, this instanceof ILongRunningJob);
 
         if (t instanceof JobExecutionException)
           throw (JobExecutionException) t;

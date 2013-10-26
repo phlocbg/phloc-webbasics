@@ -17,11 +17,14 @@
  */
 package com.phloc.webbasics.app.layout;
 
+import javax.annotation.concurrent.Immutable;
+
 /**
  * Contains some predefined layout area IDs
  * 
  * @author Philip Helger
  */
+@Immutable
 public final class CLayout
 {
   // Layout area IDs - used in CSS!!!

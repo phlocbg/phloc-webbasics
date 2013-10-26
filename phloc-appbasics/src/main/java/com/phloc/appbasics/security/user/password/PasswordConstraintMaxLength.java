@@ -63,7 +63,6 @@ public class PasswordConstraintMaxLength implements IPasswordConstraint
                                                                            Integer.valueOf (m_nMaxLength));
   }
 
-  @Nonnull
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
     aElement.setAttribute (ATTR_MAX_LENGTH, m_nMaxLength);

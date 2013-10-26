@@ -167,7 +167,6 @@ final class RequestData
   /**
    * @return Information for DataTables to use for rendering.
    */
-  @Nonnull
   public int getEcho ()
   {
     return m_nEcho;

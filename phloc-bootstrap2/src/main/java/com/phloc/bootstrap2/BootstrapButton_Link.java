@@ -82,7 +82,6 @@ public class BootstrapButton_Link extends HCA
     return this;
   }
 
-  @Nonnull
   public boolean isDisabled ()
   {
     return m_bDisabled;

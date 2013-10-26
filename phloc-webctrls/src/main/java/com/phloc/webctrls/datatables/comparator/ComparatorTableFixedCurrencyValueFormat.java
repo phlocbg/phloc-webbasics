@@ -31,7 +31,7 @@ import com.phloc.masterdata.currency.ECurrency;
  * 
  * @author Philip Helger
  */
-public final class ComparatorTableFixedCurrencyValueFormat extends ComparatorTableBigDecimal
+public class ComparatorTableFixedCurrencyValueFormat extends ComparatorTableBigDecimal
 {
   private final ECurrency m_eCurrency;
 

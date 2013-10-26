@@ -131,7 +131,6 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
   protected abstract IHCNode getContentOfArea (@Nonnull LayoutExecutionContext aLEC, @Nonnull String sAreaID);
 
   @Override
-  @Nonnull
   protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                            @Nonnull final HCHtml aHtml,
                            @Nonnull final Locale aDisplayLocale)

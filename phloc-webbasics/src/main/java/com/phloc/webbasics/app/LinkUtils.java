@@ -71,7 +71,7 @@ public final class LinkUtils
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
-  private static String m_sStreamServletName = DEFAULT_STREAM_SERVLET_NAME;
+  private static String s_sStreamServletName = DEFAULT_STREAM_SERVLET_NAME;
 
   private LinkUtils ()
   {}
@@ -89,7 +89,7 @@ public final class LinkUtils
     s_aRWLock.writeLock ().lock ();
     try
     {
-      m_sStreamServletName = sStreamServletName;
+      s_sStreamServletName = sStreamServletName;
     }
     finally
     {
@@ -104,7 +104,7 @@ public final class LinkUtils
     s_aRWLock.readLock ().lock ();
     try
     {
-      return m_sStreamServletName;
+      return s_sStreamServletName;
     }
     finally
     {
@@ -119,7 +119,7 @@ public final class LinkUtils
     s_aRWLock.readLock ().lock ();
     try
     {
-      return "/" + m_sStreamServletName;
+      return "/" + s_sStreamServletName;
     }
     finally
     {

@@ -128,9 +128,8 @@ public final class DemoAppUserUploadServlet extends AbstractUnifiedResponseServl
   }
 
   @Override
-  protected final void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                      @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException,
-                                                                                      IOException
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
     aUnifiedResponse.disableCaching ();
     _post (aRequestScope, aUnifiedResponse);

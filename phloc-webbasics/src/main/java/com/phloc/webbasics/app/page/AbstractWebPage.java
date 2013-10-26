@@ -288,7 +288,6 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * {@link #fillContent(WebPageExecutionContext)} method and creating the help
    * node if desired.
    */
-  @Nonnull
   public final void getContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
     if (isValidToDisplayPage (aWPEC).isValid ())

@@ -94,7 +94,7 @@ public abstract class AbstractScopeAwareLongRunningJob extends AbstractScopeAwar
       s_aLogger.error ("Failed to end long running job", t);
 
       // Notify custom exception handler
-      _triggerCustomExceptionHandler (t, getClass ().getName (), true);
+      triggerCustomExceptionHandler (t, getClass ().getName (), true);
     }
   }
 }

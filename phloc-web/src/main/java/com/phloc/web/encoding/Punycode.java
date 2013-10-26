@@ -37,14 +37,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @Immutable
 public final class Punycode
 {
-  private static final int base = 0x24; // 36
-  private static final int tmin = 0x01; // 1
-  private static final int tmax = 0x1A; // 26
-  private static final int skew = 0x26; // 38
-  private static final int damp = 0x02BC; // 700
-  private static final int initial_bias = 0x48; // 72
-  private static final int initial_n = 0x80; // 0x80
-  private static final int delimiter = 0x2D; // 0x2D
+  private static final int BASE = 0x24; // 36
+  private static final int TMIN = 0x01; // 1
+  private static final int TMAX = 0x1A; // 26
+  private static final int SKEW = 0x26; // 38
+  private static final int DAMP = 0x02BC; // 700
+  private static final int INITIAL_BIAS = 0x48; // 72
+  private static final int INITIAL_N = 0x80; // 0x80
+  private static final int DELIMITER = 0x2D; // 0x2D
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -60,7 +60,7 @@ public final class Punycode
 
   private static boolean _delim (final int cp)
   {
-    return cp == delimiter;
+    return cp == DELIMITER;
   }
 
   private static boolean _flagged (final int bcp)
@@ -70,7 +70,7 @@ public final class Punycode
 
   private static int _decode_digit (final int cp)
   {
-    return (cp - 48 < 10) ? cp - 22 : (cp - 65 < 26) ? cp - 65 : (cp - 97 < 26) ? cp - 97 : base;
+    return (cp - 48 < 10) ? cp - 22 : (cp - 65 < 26) ? cp - 65 : (cp - 97 < 26) ? cp - 97 : BASE;
   }
 
   private static int _t (final boolean c)
@@ -87,13 +87,13 @@ public final class Punycode
   {
     int delta = pdelta;
     int k;
-    delta = (firsttime) ? delta / damp : delta >> 1;
+    delta = (firsttime) ? delta / DAMP : delta >> 1;
     delta += delta / numpoints;
-    for (k = 0; delta > ((base - tmin) * tmax) / 2; k += base)
+    for (k = 0; delta > ((BASE - TMIN) * TMAX) / 2; k += BASE)
     {
-      delta /= base - tmin;
+      delta /= BASE - TMIN;
     }
-    return k + (base - tmin + 1) * delta / (delta + skew);
+    return k + (BASE - TMIN + 1) * delta / (delta + SKEW);
   }
 
   @Nullable
@@ -108,9 +108,9 @@ public final class Punycode
   {
     final StringBuilder aSB = new StringBuilder ();
     final CodepointIteratorCharArray aIter = new CodepointIteratorCharArray (chars);
-    int n = initial_n;
+    int n = INITIAL_N;
     int delta = 0;
-    int bias = initial_bias;
+    int bias = INITIAL_BIAS;
     int i = -1;
     while (aIter.hasNext ())
     {
@@ -126,7 +126,7 @@ public final class Punycode
     int h, b, m, q, k, t;
     h = b = aSB.length ();
     if (b > 0)
-      aSB.append ((char) delimiter);
+      aSB.append ((char) DELIMITER);
     while (h < chars.length)
     {
       aIter.position (0);
@@ -154,13 +154,13 @@ public final class Punycode
         }
         if (i == n)
         {
-          for (q = delta, k = base;; k += base)
+          for (q = delta, k = BASE;; k += BASE)
           {
-            t = k <= bias ? tmin : k >= bias + tmax ? tmax : k - bias;
+            t = k <= bias ? TMIN : k >= bias + TMAX ? TMAX : k - bias;
             if (q < t)
               break;
-            aSB.append ((char) _encode_digit (t + (q - t) % (base - t), false));
-            q = (q - t) / (base - t);
+            aSB.append ((char) _encode_digit (t + (q - t) % (BASE - t), false));
+            q = (q - t) / (BASE - t);
           }
           aSB.append ((char) _encode_digit (q, (case_flags != null) ? case_flags[aIter.position () - 1] : false));
           bias = _adapt (delta, h + 1, h == b);
@@ -188,9 +188,9 @@ public final class Punycode
   {
     final StringBuilder aSB = new StringBuilder ();
     int n, out, i, bias, b, j, in, oldi, w, k, digit, t;
-    n = initial_n;
+    n = INITIAL_N;
     out = i = 0;
-    bias = initial_bias;
+    bias = INITIAL_BIAS;
     for (b = j = 0; j < chars.length; ++j)
       if (_delim (chars[j]))
         b = j;
@@ -205,22 +205,22 @@ public final class Punycode
     out = aSB.length ();
     for (in = (b > 0) ? b + 1 : 0; in < chars.length; ++out)
     {
-      for (oldi = i, w = 1, k = base;; k += base)
+      for (oldi = i, w = 1, k = BASE;; k += BASE)
       {
         if (in > chars.length)
           throw new DecoderException ("Bad input");
         digit = _decode_digit (chars[in++]);
-        if (digit >= base)
+        if (digit >= BASE)
           throw new DecoderException ("Bad input");
         if (digit > (Integer.MAX_VALUE - i) / w)
           throw new DecoderException ("Overflow");
         i += digit * w;
-        t = (k <= bias) ? tmin : (k >= bias + tmax) ? tmax : k - bias;
+        t = (k <= bias) ? TMIN : (k >= bias + TMAX) ? TMAX : k - bias;
         if (digit < t)
           break;
-        if (w > Integer.MAX_VALUE / (base - t))
+        if (w > Integer.MAX_VALUE / (BASE - t))
           throw new DecoderException ("Overflow");
-        w *= (base - t);
+        w *= (BASE - t);
       }
       bias = _adapt (i - oldi, out + 1, oldi == 0);
       if (i / (out + 1) > Integer.MAX_VALUE - n)

@@ -157,7 +157,7 @@ final class MailQueuePerSMTP extends ConcurrentCollectorMultiple <IEmailData> im
    * @see #stopQueuingNewObjects()
    */
   @Nonnull
-  public final ESuccess stopQueuingNewObjects (final boolean bStopImmediately)
+  public ESuccess stopQueuingNewObjects (final boolean bStopImmediately)
   {
     if (bStopImmediately)
     {
