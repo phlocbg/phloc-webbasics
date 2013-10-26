@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<translationitems count="57">
+<translationitems count="59">
   <item id="com.phloc.webbasics.EWebBasicsText.DOWNLOAD">
     <de>Download</de>
     <en>Download</en>
@@ -30,6 +30,28 @@
   <item id="com.phloc.webbasics.EWebBasicsText.FILE_SELECT">
     <de>Dateiauswahl</de>
     <en>File Selection</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.INTERNAL_ERROR_DESCRIPTION">
+    <de>Entschuldigung!
+Es ist ein interner Fehler aufgetreten.
+
+Diese Fehlermeldung wurde automatisch and die zuständigen Personen weitergeleitet.
+Notieren Sie sich bitte ihre persönliche Fehlernummer &#39;&#39;{0}&#39;&#39; für eine mögliche spätere Analyse.
+
+Sie können mit Ihrer Arbeit fortfahren.
+Falls dieser Fehler wieder auftritt, vermeiden Sie bitte die Schritte die zu diesem Fehler geführt haben, und warten bis er behoben ist.</de>
+    <en>Sorry!
+An internal error was encountered.
+
+An automated error report was already sent to the technical responsible.
+Write down your personal error number &#39;&#39;{0}&#39;&#39; for possible investigation.
+
+You can continue your work.
+In case this error occurs again avoid the actions leading to it until the problem is solved.</en>
+  </item>
+  <item id="com.phloc.webbasics.EWebBasicsText.INTERNAL_ERROR_TITLE">
+    <de>Interner Fehler</de>
+    <en>Internal error</en>
   </item>
   <item id="com.phloc.webbasics.EWebBasicsText.LOGIN_BUTTON_SUBMIT">
     <de>Anmelden</de>
