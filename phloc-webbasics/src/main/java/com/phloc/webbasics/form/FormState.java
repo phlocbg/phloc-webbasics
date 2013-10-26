@@ -33,7 +33,6 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.json2.impl.JsonArray;
 import com.phloc.json2.impl.JsonObject;
 
 @Immutable
@@ -128,12 +127,7 @@ public class FormState implements IHasID <String>, Serializable
         ret.add (sKey, aValue);
       else
         if (aValue instanceof String [])
-        {
-          final JsonArray aArray = new JsonArray ();
-          for (final String sElement : (String []) aValue)
-            aArray.add (sElement);
-          ret.add (sKey, aArray);
-        }
+          ret.add (sKey, aValue);
       // else e.g. fileitem -> ignore
     }
     return ret;

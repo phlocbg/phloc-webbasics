@@ -26,7 +26,7 @@ import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
- * Base web action executor interface.
+ * Web action executor interface.
  * 
  * @author Philip Helger
  */
@@ -44,7 +44,8 @@ public interface IActionExecutor
 
   /**
    * @return The last modification date time for the action result or
-   *         <code>null</code> if none is applicable.
+   *         <code>null</code> if none is applicable. This date is used to set
+   *         the HTTP response last modification date time.
    */
   @Nullable
   DateTime getLastModificationDateTime ();
@@ -55,7 +56,7 @@ public interface IActionExecutor
    * @param aRequestScope
    *        The request scope. Never <code>null</code>.
    * @param aUnifiedResponse
-   *        The response to write to
+   *        The response to write to. Never <code>null</code>.
    * @throws Exception
    *         In case something goes wrong.
    */
