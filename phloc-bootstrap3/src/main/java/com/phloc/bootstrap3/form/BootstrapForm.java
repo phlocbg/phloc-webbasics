@@ -82,12 +82,14 @@ public class BootstrapForm extends HCForm
     addClass (eFormType);
   }
 
-  private IBootstrapGridElementExtended _getLeft ()
+  @Nonnull
+  protected IBootstrapGridElementExtended getLeft ()
   {
     return EBootstrapGridMD.MD_2;
   }
 
-  private IBootstrapGridElementExtended _getRight ()
+  @Nonnull
+  protected IBootstrapGridElementExtended getRight ()
   {
     return EBootstrapGridMD.MD_10;
   }
@@ -114,6 +116,7 @@ public class BootstrapForm extends HCForm
       throw new NullPointerException ("ctrl");
 
     final List <IHCControl <?>> aAllCtrls = new ArrayList <IHCControl <?>> ();
+    // FIXME replace with HCUtils.getAllHCControls in phloc-html > 3.12.1
     _getAllHCControls (aCtrl, aAllCtrls);
 
     // Set CSS class to all contained controls
@@ -132,7 +135,7 @@ public class BootstrapForm extends HCForm
         aLabel.addChild (new HCTextNode (" " + sLabel));
 
       if (m_eFormType == EBootstrapFormType.HORIZONTAL)
-        addChild (new HCDiv ().addClasses (_getLeft ().getCSSClassOffset (), _getRight ()).addChild (aCheckbox));
+        addChild (new HCDiv ().addClasses (getLeft ().getCSSClassOffset (), getRight ()).addChild (aCheckbox));
       else
         addChild (aCheckbox);
     }
@@ -147,7 +150,7 @@ public class BootstrapForm extends HCForm
           aLabel.addChild (new HCTextNode (" " + sLabel));
 
         if (m_eFormType == EBootstrapFormType.HORIZONTAL)
-          addChild (new HCDiv ().addClasses (_getLeft ().getCSSClassOffset (), _getRight ()).addChild (aRadio));
+          addChild (new HCDiv ().addClasses (getLeft ().getCSSClassOffset (), getRight ()).addChild (aRadio));
         else
           addChild (aRadio);
       }
@@ -164,7 +167,7 @@ public class BootstrapForm extends HCForm
             aLabel.addClass (CBootstrapCSS.SR_ONLY);
           else
             if (m_eFormType == EBootstrapFormType.HORIZONTAL)
-              aLabel.addClasses (CBootstrapCSS.CONTROL_LABEL, _getLeft ());
+              aLabel.addClasses (CBootstrapCSS.CONTROL_LABEL, getLeft ());
 
           if (aFirstControl != null)
           {
@@ -183,7 +186,7 @@ public class BootstrapForm extends HCForm
           // Add in form group
           final HCDiv aFormGroup = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP);
           if (m_eFormType == EBootstrapFormType.HORIZONTAL)
-            addChild (aFormGroup.addChildren (aLabel, new HCDiv ().addClass (_getRight ()).addChild (aCtrl)));
+            addChild (aFormGroup.addChildren (aLabel, new HCDiv ().addClass (getRight ()).addChild (aCtrl)));
           else
             addChild (aFormGroup.addChildren (aLabel, aCtrl));
         }
@@ -193,7 +196,7 @@ public class BootstrapForm extends HCForm
           if (m_eFormType == EBootstrapFormType.HORIZONTAL)
           {
             final HCDiv aFormGroup = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP);
-            aFormGroup.addChild (new HCDiv ().addClasses (_getLeft ().getCSSClassOffset (), _getRight ())
+            aFormGroup.addChild (new HCDiv ().addClasses (getLeft ().getCSSClassOffset (), getRight ())
                                              .addChild (aCtrl));
             addChild (aFormGroup);
           }
