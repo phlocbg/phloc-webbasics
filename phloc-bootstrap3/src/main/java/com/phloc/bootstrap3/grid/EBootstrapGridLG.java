@@ -51,10 +51,10 @@ public enum EBootstrapGridLG implements IBootstrapGridElementExtended
   private final ICSSClassProvider m_aCSSClassPull;
 
   private EBootstrapGridLG (@Nonnegative final int nParts,
-                             @Nullable final ICSSClassProvider aCSSClass,
-                             @Nullable final ICSSClassProvider aCSSClassOffset,
-                             @Nullable final ICSSClassProvider aCSSClassPush,
-                             @Nullable final ICSSClassProvider aCSSClassPull)
+                            @Nullable final ICSSClassProvider aCSSClass,
+                            @Nullable final ICSSClassProvider aCSSClassOffset,
+                            @Nullable final ICSSClassProvider aCSSClassPush,
+                            @Nullable final ICSSClassProvider aCSSClassPull)
   {
     m_nParts = nParts;
     m_aCSSClass = aCSSClass;
@@ -91,5 +91,41 @@ public enum EBootstrapGridLG implements IBootstrapGridElementExtended
   public ICSSClassProvider getCSSClassPull ()
   {
     return m_aCSSClassPull;
+  }
+
+  @Nullable
+  public static EBootstrapGridLG getFromParts (@Nonnegative final int nParts)
+  {
+    switch (nParts)
+    {
+      case 0:
+        return LG_0;
+      case 1:
+        return LG_1;
+      case 2:
+        return LG_2;
+      case 3:
+        return LG_3;
+      case 4:
+        return LG_4;
+      case 5:
+        return LG_5;
+      case 6:
+        return LG_6;
+      case 7:
+        return LG_7;
+      case 8:
+        return LG_8;
+      case 9:
+        return LG_9;
+      case 10:
+        return LG_10;
+      case 11:
+        return LG_11;
+      case 12:
+        return LG_12;
+      default:
+        return null;
+    }
   }
 }

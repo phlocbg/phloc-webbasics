@@ -17,24 +17,28 @@
  */
 package com.phloc.bootstrap3.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.grid.EBootstrapGridMD;
 import com.phloc.bootstrap3.grid.IBootstrapGridElementExtended;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.AbstractHCEdit;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
-import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCTextNode;
 
 public class BootstrapForm extends HCForm
@@ -88,13 +92,36 @@ public class BootstrapForm extends HCForm
     return EBootstrapGridMD.MD_10;
   }
 
+  private static void _getAllHCControls (@Nullable final IHCNode aNode, @Nonnull final List <IHCControl <?>> ret)
+  {
+    if (aNode instanceof IHCControl <?>)
+      ret.add ((IHCControl <?>) aNode);
+    else
+      if (aNode instanceof IHCNodeWithChildren <?>)
+      {
+        // E.g. HCNodeList
+        final IHCNodeWithChildren <?> aParent = (IHCNodeWithChildren <?>) aNode;
+        if (aParent.hasChildren ())
+          for (final IHCNode aChild : aParent.getChildren ())
+            _getAllHCControls (aChild, ret);
+      }
+  }
+
   @Nonnull
   public BootstrapForm addFormGroup (@Nullable final String sLabel, @Nonnull final IHCNode aCtrl)
   {
     if (aCtrl == null)
       throw new NullPointerException ("ctrl");
 
-    final IHCControl <?> aFirstControl = HCUtils.getFirstHCControl (aCtrl);
+    final List <IHCControl <?>> aAllCtrls = new ArrayList <IHCControl <?>> ();
+    _getAllHCControls (aCtrl, aAllCtrls);
+
+    // Set CSS class to all contained controls
+    for (final IHCControl <?> aCurCtrl : aAllCtrls)
+      if (!(aCurCtrl instanceof HCCheckBox) && !(aCurCtrl instanceof HCRadioButton))
+        aCurCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
+
+    final IHCControl <?> aFirstControl = ContainerHelper.getFirstElement (aAllCtrls);
     if (aFirstControl instanceof HCCheckBox)
     {
       // Check box
@@ -143,9 +170,6 @@ public class BootstrapForm extends HCForm
           {
             // We have a label for a control
             aLabel.setFor (aFirstControl);
-
-            // Ensure the form-control class is present
-            aFirstControl.addClass (CBootstrapCSS.FORM_CONTROL);
 
             // Set the default placeholder (if none is present)
             if (aFirstControl instanceof AbstractHCEdit <?>)

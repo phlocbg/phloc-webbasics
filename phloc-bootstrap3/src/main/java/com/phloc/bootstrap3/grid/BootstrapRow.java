@@ -17,6 +17,7 @@
  */
 package com.phloc.bootstrap3.grid;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -29,6 +30,15 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   public BootstrapRow ()
   {
     addClass (CBootstrapCSS.ROW);
+  }
+
+  @Nonnull
+  public HCDiv createColumn (@Nonnegative final int nParts)
+  {
+    return createColumn (EBootstrapGridXS.getFromParts (nParts),
+                         EBootstrapGridSM.getFromParts (nParts),
+                         EBootstrapGridMD.getFromParts (nParts),
+                         EBootstrapGridLG.getFromParts (nParts));
   }
 
   @Nonnull

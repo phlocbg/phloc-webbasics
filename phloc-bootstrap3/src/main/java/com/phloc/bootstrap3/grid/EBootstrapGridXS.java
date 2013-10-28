@@ -19,6 +19,7 @@ package com.phloc.bootstrap3.grid;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.annotations.Nonempty;
@@ -64,5 +65,39 @@ public enum EBootstrapGridXS implements IBootstrapGridElement
   public String getCSSClass ()
   {
     return m_aCSSClass.getCSSClass ();
+  }
+
+  @Nullable
+  public static EBootstrapGridXS getFromParts (@Nonnegative final int nParts)
+  {
+    switch (nParts)
+    {
+      case 1:
+        return XS_1;
+      case 2:
+        return XS_2;
+      case 3:
+        return XS_3;
+      case 4:
+        return XS_4;
+      case 5:
+        return XS_5;
+      case 6:
+        return XS_6;
+      case 7:
+        return XS_7;
+      case 8:
+        return XS_8;
+      case 9:
+        return XS_9;
+      case 10:
+        return XS_10;
+      case 11:
+        return XS_11;
+      case 12:
+        return XS_12;
+      default:
+        return null;
+    }
   }
 }
