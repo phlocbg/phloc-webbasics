@@ -21,12 +21,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.ETriState;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.api.EHCTextDirection;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSInvocation;
 
 /**
  * Wraps TinyMCE4 into an HC node. The only required settings is
@@ -38,11 +41,17 @@ import com.phloc.html.js.builder.JSAssocArray;
 public class HCTinyMCE4 implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_BROWSER_SPELLCHECK = false;
+  public static final boolean DEFAULT_NOWRAP = false;
+  public static final boolean DEFAULT_OBJECT_RESIZING = true;
   public static final String DEFAULT_SELECTOR = "textarea";
 
   private String m_sAutoFocus;
   private ETriState m_eBrowserSpellcheck = ETriState.UNDEFINED;
   private EHCTextDirection m_eDirectionality;
+  private ETinyMCE4Language m_eLanguage;
+  private ISimpleURL m_aLanguageURL;
+  private ETriState m_eNoWrap = ETriState.UNDEFINED;
+  private ETriState m_eObjectResizing = ETriState.UNDEFINED;
   private String m_sSelector = DEFAULT_SELECTOR;
 
   @Nullable
@@ -116,6 +125,101 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eDirectionality = eDirectionality;
   }
 
+  @Nullable
+  public ETinyMCE4Language getLanguage ()
+  {
+    return m_eLanguage;
+  }
+
+  /**
+   * Set the language of the UI texts
+   * 
+   * @param eLanguage
+   *        The language to use. <code>null</code> means English
+   */
+  public void setLanguage (@Nullable final ETinyMCE4Language eLanguage)
+  {
+    m_eLanguage = eLanguage;
+  }
+
+  @Nullable
+  public ISimpleURL getLanguageURL ()
+  {
+    return m_aLanguageURL;
+  }
+
+  /**
+   * A simple URL to where the language file to use. We recommend using a site
+   * absolute URL.
+   * 
+   * @param aLanguageURL
+   *        The language URL to use.
+   */
+  public void setLanguageURL (@Nullable final ISimpleURL aLanguageURL)
+  {
+    m_aLanguageURL = aLanguageURL;
+  }
+
+  public boolean isNoWrap ()
+  {
+    return m_eNoWrap.getAsBooleanValue (DEFAULT_NOWRAP);
+  }
+
+  /**
+   * This option will make the editable are behave like very much like a
+   * &lt;pre> tag, and add a scroll instead of wrapping text.
+   * 
+   * @param bNoWrap
+   *        <code>true</code> to enabled, <code>false</code> to disable
+   */
+  public void setNoWrap (final boolean bNoWrap)
+  {
+    m_eNoWrap = ETriState.valueOf (bNoWrap);
+  }
+
+  /**
+   * This option will make the editable are behave like very much like a
+   * &lt;pre> tag, and add a scroll instead of wrapping text.
+   * 
+   * @param aNoWrap
+   *        <code>true</code> to enabled, <code>false</code> to disable and
+   *        <code>null</code> for default value.
+   */
+  public void setNoWrap (@Nullable final Boolean aNoWrap)
+  {
+    m_eNoWrap = ETriState.valueOf (aNoWrap);
+  }
+
+  public boolean isObjectResizing ()
+  {
+    return m_eObjectResizing.getAsBooleanValue (DEFAULT_OBJECT_RESIZING);
+  }
+
+  /**
+   * This options allows you to turn on/off the resizing handles on images,
+   * tables or media objects.
+   * 
+   * @param bObjectResizing
+   *        <code>true</code> to enabled, <code>false</code> to disable
+   */
+  public void setObjectResizing (final boolean bObjectResizing)
+  {
+    m_eObjectResizing = ETriState.valueOf (bObjectResizing);
+  }
+
+  /**
+   * This options allows you to turn on/off the resizing handles on images,
+   * tables or media objects.
+   * 
+   * @param aObjectResizing
+   *        <code>true</code> to enabled, <code>false</code> to disable and
+   *        <code>null</code> for default value.
+   */
+  public void setObjectResizing (@Nullable final Boolean aObjectResizing)
+  {
+    m_eObjectResizing = ETriState.valueOf (aObjectResizing);
+  }
+
   @Nonnull
   @Nonempty
   public String getSelector ()
@@ -147,7 +251,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   }
 
   @Nonnull
-  public HCScript build ()
+  @ReturnsMutableCopy
+  public JSAssocArray getJSInitOptions ()
   {
     final JSAssocArray aOptions = new JSAssocArray ();
     if (StringHelper.hasText (m_sAutoFocus))
@@ -156,7 +261,27 @@ public class HCTinyMCE4 implements IHCNodeBuilder
       aOptions.add ("browser_spellcheck", isBrowserSpellcheck ());
     if (m_eDirectionality != null)
       aOptions.add ("directionality", m_eDirectionality.getAttrValue ());
+    if (m_eLanguage != null)
+      aOptions.add ("language", m_eLanguage.getID ());
+    if (m_aLanguageURL != null)
+      aOptions.add ("language_url", m_aLanguageURL.getAsString ());
+    if (m_eNoWrap.isDefined ())
+      aOptions.add ("nowrap", isNoWrap ());
+    if (m_eObjectResizing.isDefined ())
+      aOptions.add ("object_resizing", isObjectResizing ());
     aOptions.add ("selector", m_sSelector);
-    return new HCScript (JSTinyMCE4.init (aOptions));
+    return aOptions;
+  }
+
+  @Nonnull
+  public JSInvocation getJSInvocation ()
+  {
+    return JSTinyMCE4.init (getJSInitOptions ());
+  }
+
+  @Nonnull
+  public HCScript build ()
+  {
+    return new HCScript (getJSInvocation ());
   }
 }
