@@ -45,12 +45,16 @@ import com.phloc.json2.impl.JsonObject;
  */
 public class HCTinyMCE4 implements IHCNodeBuilder
 {
+  // General options
   public static final boolean DEFAULT_BROWSER_SPELLCHECK = false;
   public static final boolean DEFAULT_NOWRAP = false;
   public static final boolean DEFAULT_OBJECT_RESIZING = true;
   public static final String DEFAULT_SELECTOR = "textarea";
   public static final boolean DEFAULT_INLINE = false;
   public static final boolean DEFAULT_HIDDEN_INPUT = true;
+
+  // Cleanup/output
+  public static final boolean DEFAULT_CONVERT_FONTS_TO_SPANS = true;
 
   // General options
   private String m_sAutoFocus;
@@ -69,6 +73,9 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   private ISimpleURL m_aThemeURL;
   private ETriState m_eInline = ETriState.UNDEFINED;
   private ETriState m_eHiddenInput = ETriState.UNDEFINED;
+
+  // Cleanup/output
+  private ETriState m_eConvertFontsToSpans = ETriState.UNDEFINED;
 
   @Nullable
   public String getAutoFocus ()
@@ -450,11 +457,47 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eHiddenInput = ETriState.valueOf (aHiddenInput);
   }
 
+  public boolean isConvertFontsToSpans ()
+  {
+    return m_eConvertFontsToSpans.getAsBooleanValue (DEFAULT_CONVERT_FONTS_TO_SPANS);
+  }
+
+  /**
+   * If you set this option to true, TinyMCE will convert all font elements to
+   * span elements and generate span elements instead of font elements. This
+   * option should be used in order to get more W3C compatible code, since font
+   * elements are deprecated.
+   * 
+   * @param bConvertFontsToSpans
+   *        <code>true</code> to enabled, <code>false</code> to disable
+   */
+  public void setConvertFontsToSpans (final boolean bConvertFontsToSpans)
+  {
+    m_eConvertFontsToSpans = ETriState.valueOf (bConvertFontsToSpans);
+  }
+
+  /**
+   * If you set this option to true, TinyMCE will convert all font elements to
+   * span elements and generate span elements instead of font elements. This
+   * option should be used in order to get more W3C compatible code, since font
+   * elements are deprecated.
+   * 
+   * @param aConvertFontsToSpans
+   *        <code>true</code> to enabled, <code>false</code> to disable and
+   *        <code>null</code> for default value.
+   */
+  public void setConvertFontsToSpans (@Nullable final Boolean aConvertFontsToSpans)
+  {
+    m_eConvertFontsToSpans = ETriState.valueOf (aConvertFontsToSpans);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getJSInitOptions ()
   {
     final JSAssocArray aOptions = new JSAssocArray ();
+
+    // General options
     if (StringHelper.hasText (m_sAutoFocus))
       aOptions.add ("auto_focus", m_sAutoFocus);
     if (m_eBrowserSpellcheck.isDefined ())
@@ -500,6 +543,11 @@ public class HCTinyMCE4 implements IHCNodeBuilder
       aOptions.add ("inline", isInline ());
     if (m_eHiddenInput.isDefined ())
       aOptions.add ("hidden_input", isHiddenInput ());
+
+    // Cleanup/output
+    if (m_eConvertFontsToSpans.isDefined ())
+      aOptions.add ("convert_fonts_to_spans", isConvertFontsToSpans ());
+
     return aOptions;
   }
 
