@@ -17,11 +17,15 @@
  */
 package com.phloc.tinymce4;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.ETriState;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -30,6 +34,7 @@ import com.phloc.html.hc.api.EHCTextDirection;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
+import com.phloc.json2.impl.JsonObject;
 
 /**
  * Wraps TinyMCE4 into an HC node. The only required settings is
@@ -44,15 +49,26 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   public static final boolean DEFAULT_NOWRAP = false;
   public static final boolean DEFAULT_OBJECT_RESIZING = true;
   public static final String DEFAULT_SELECTOR = "textarea";
+  public static final boolean DEFAULT_INLINE = false;
+  public static final boolean DEFAULT_HIDDEN_INPUT = true;
 
+  // General options
   private String m_sAutoFocus;
-  private ETriState m_eBrowserSpellcheck = ETriState.UNDEFINED;
   private EHCTextDirection m_eDirectionality;
+  private ETriState m_eBrowserSpellcheck = ETriState.UNDEFINED;
   private ETinyMCE4Language m_eLanguage;
   private ISimpleURL m_aLanguageURL;
   private ETriState m_eNoWrap = ETriState.UNDEFINED;
   private ETriState m_eObjectResizing = ETriState.UNDEFINED;
+  private final Set <ETinyMCE4Plugin> m_aPlugins = new LinkedHashSet <ETinyMCE4Plugin> ();
+  private final Set <TinyMCE4ExternalPlugin> m_aExternalPlugins = new LinkedHashSet <TinyMCE4ExternalPlugin> ();
   private String m_sSelector = DEFAULT_SELECTOR;
+  private ETinyMCE4Skin m_eSkin;
+  private ISimpleURL m_aSkinURL;
+  private ETinyMCE4Theme m_eTheme;
+  private ISimpleURL m_aThemeURL;
+  private ETriState m_eInline = ETriState.UNDEFINED;
+  private ETriState m_eHiddenInput = ETriState.UNDEFINED;
 
   @Nullable
   public String getAutoFocus ()
@@ -71,6 +87,28 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   public void setAutoFocus (@Nullable final String sAutoFocus)
   {
     m_sAutoFocus = sAutoFocus;
+  }
+
+  @Nullable
+  public EHCTextDirection getDirectionality ()
+  {
+    return m_eDirectionality;
+  }
+
+  /**
+   * <pre>
+   * Set the default directionality of the editor.
+   * Possible values are:
+   * - ltr
+   *  - rtl
+   * </pre>
+   * 
+   * @param eDirectionality
+   *        direction
+   */
+  public void setDirectionality (@Nullable final EHCTextDirection eDirectionality)
+  {
+    m_eDirectionality = eDirectionality;
   }
 
   public boolean isBrowserSpellcheck ()
@@ -101,28 +139,6 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   public void setBrowserSpellcheck (@Nullable final Boolean aBrowserSpellcheck)
   {
     m_eBrowserSpellcheck = ETriState.valueOf (aBrowserSpellcheck);
-  }
-
-  @Nullable
-  public EHCTextDirection getDirectionality ()
-  {
-    return m_eDirectionality;
-  }
-
-  /**
-   * <pre>
-   * Set the default directionality of the editor.
-   * Possible values are:
-   * - ltr
-   *  - rtl
-   * </pre>
-   * 
-   * @param eDirectionality
-   *        direction
-   */
-  public void setDirectionality (@Nullable final EHCTextDirection eDirectionality)
-  {
-    m_eDirectionality = eDirectionality;
   }
 
   @Nullable
@@ -221,6 +237,52 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   }
 
   @Nonnull
+  @ReturnsMutableCopy
+  public Set <ETinyMCE4Plugin> getAllPlugins ()
+  {
+    return ContainerHelper.newOrderedSet (m_aPlugins);
+  }
+
+  public void addPlugin (@Nonnull final ETinyMCE4Plugin ePlugin)
+  {
+    if (ePlugin == null)
+      throw new NullPointerException ("plugin");
+    m_aPlugins.add (ePlugin);
+  }
+
+  public void addAllPlugins ()
+  {
+    for (final ETinyMCE4Plugin ePlugin : ETinyMCE4Plugin.values ())
+      m_aPlugins.add (ePlugin);
+  }
+
+  public void removePlugin (@Nullable final ETinyMCE4Plugin ePlugin)
+  {
+    if (ePlugin != null)
+      m_aPlugins.remove (ePlugin);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <TinyMCE4ExternalPlugin> getAllExternalPlugins ()
+  {
+    return ContainerHelper.newOrderedSet (m_aExternalPlugins);
+  }
+
+  public void addExternalPlugin (@Nonnull final TinyMCE4ExternalPlugin eExternalPlugin)
+  {
+    if (eExternalPlugin == null)
+      throw new NullPointerException ("plugin");
+    m_aExternalPlugins.add (eExternalPlugin);
+  }
+
+  public void removeExternalPlugin (@Nullable final TinyMCE4ExternalPlugin eExternalPlugin)
+  {
+    if (eExternalPlugin != null)
+      m_aExternalPlugins.remove (eExternalPlugin);
+  }
+
+  @Nonnull
   @Nonempty
   public String getSelector ()
   {
@@ -250,6 +312,144 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_sSelector = sSelector;
   }
 
+  @Nullable
+  public ETinyMCE4Skin getSkin ()
+  {
+    return m_eSkin;
+  }
+
+  /**
+   * Select what skin to use, this should match the foldername of the skin.
+   * 
+   * @param eSkin
+   *        Skin to use.
+   */
+  public void setSkin (@Nullable final ETinyMCE4Skin eSkin)
+  {
+    m_eSkin = eSkin;
+  }
+
+  @Nullable
+  public ISimpleURL getSkinURL ()
+  {
+    return m_aSkinURL;
+  }
+
+  /**
+   * This option enables you to specify location of the current skin. Enables
+   * you to load TinyMCE from one URL for example a CDN then load a local skin
+   * on the current server.
+   * 
+   * @param aSkinURL
+   *        The skin URL to use.
+   */
+  public void setSkinURL (@Nullable final ISimpleURL aSkinURL)
+  {
+    m_aSkinURL = aSkinURL;
+  }
+
+  @Nullable
+  public ETinyMCE4Theme getTheme ()
+  {
+    return m_eTheme;
+  }
+
+  /**
+   * Set the theme of TinyMCE.
+   * 
+   * @param eTheme
+   *        Theme to use.
+   */
+  public void setTheme (@Nullable final ETinyMCE4Theme eTheme)
+  {
+    m_eTheme = eTheme;
+  }
+
+  @Nullable
+  public ISimpleURL getThemeURL ()
+  {
+    return m_aThemeURL;
+  }
+
+  /**
+   * This option enables you to specify location of the current theme. Enables
+   * you to load TinyMCE from one URL for example a CDN then load a local theme
+   * on the current server.
+   * 
+   * @param aThemeURL
+   *        The theme URL to use.
+   */
+  public void setThemeURL (@Nullable final ISimpleURL aThemeURL)
+  {
+    m_aThemeURL = aThemeURL;
+  }
+
+  public boolean isInline ()
+  {
+    return m_eInline.getAsBooleanValue (DEFAULT_INLINE);
+  }
+
+  /**
+   * This option changes the behaviour of the editor to allow the usage of
+   * inline elements instead of a textarea.
+   * 
+   * @param bInline
+   *        <code>true</code> to enabled, <code>false</code> to disable
+   */
+  public void setInline (final boolean bInline)
+  {
+    m_eInline = ETriState.valueOf (bInline);
+  }
+
+  /**
+   * This option changes the behaviour of the editor to allow the usage of
+   * inline elements instead of a textarea.
+   * 
+   * @param aInline
+   *        <code>true</code> to enabled, <code>false</code> to disable and
+   *        <code>null</code> for default value.
+   */
+  public void setInline (@Nullable final Boolean aInline)
+  {
+    m_eInline = ETriState.valueOf (aInline);
+  }
+
+  public boolean isHiddenInput ()
+  {
+    return m_eHiddenInput.getAsBooleanValue (DEFAULT_HIDDEN_INPUT);
+  }
+
+  /**
+   * This option gives you the ability to disable the auto generation of hidden
+   * input fields for inline editing elements. By default all inline editors
+   * gets an hidden input element that contents gets saved to when you do
+   * editor.save() or tinymce.triggerSave(); this can be disabled if you don't
+   * need these controls.
+   * 
+   * @param bHiddenInput
+   *        <code>true</code> to enabled, <code>false</code> to disable
+   */
+  public void setHiddenInput (final boolean bHiddenInput)
+  {
+    m_eHiddenInput = ETriState.valueOf (bHiddenInput);
+  }
+
+  /**
+   * This option gives you the ability to disable the auto generation of hidden
+   * input fields for inline editing elements. By default all inline editors
+   * gets an hidden input element that contents gets saved to when you do
+   * editor.save() or tinymce.triggerSave(); this can be disabled if you don't
+   * need these controls.
+   * 
+   * @param aHiddenInput
+   *        <code>true</code> to enabled, <code>false</code> to disable and
+   *        <code>null</code> for default value.
+   */
+  public void setHiddenInput (@Nullable final Boolean aHiddenInput)
+  {
+    m_eHiddenInput = ETriState.valueOf (aHiddenInput);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getJSInitOptions ()
@@ -269,7 +469,37 @@ public class HCTinyMCE4 implements IHCNodeBuilder
       aOptions.add ("nowrap", isNoWrap ());
     if (m_eObjectResizing.isDefined ())
       aOptions.add ("object_resizing", isObjectResizing ());
+    if (!m_aPlugins.isEmpty ())
+    {
+      final StringBuilder aSB = new StringBuilder ();
+      for (final ETinyMCE4Plugin ePlugin : m_aPlugins)
+      {
+        if (aSB.length () > 0)
+          aSB.append (' ');
+        aSB.append (ePlugin.getID ());
+      }
+      aOptions.add ("plugins", aSB.toString ());
+    }
+    if (!m_aExternalPlugins.isEmpty ())
+    {
+      final JsonObject aJsonObject = new JsonObject ();
+      for (final TinyMCE4ExternalPlugin aExternalPlugin : m_aExternalPlugins)
+        aJsonObject.add (aExternalPlugin.getPluginName (), aExternalPlugin.getPluginURL ().getAsString ());
+      aOptions.add ("external_plugins", aJsonObject);
+    }
     aOptions.add ("selector", m_sSelector);
+    if (m_eSkin != null)
+      aOptions.add ("skin", m_eSkin.getID ());
+    if (m_aSkinURL != null)
+      aOptions.add ("skin_url", m_aSkinURL.getAsString ());
+    if (m_eTheme != null)
+      aOptions.add ("theme", m_eTheme.getID ());
+    if (m_aThemeURL != null)
+      aOptions.add ("theme_url", m_aThemeURL.getAsString ());
+    if (m_eInline.isDefined ())
+      aOptions.add ("inline", isInline ());
+    if (m_eHiddenInput.isDefined ())
+      aOptions.add ("hidden_input", isHiddenInput ());
     return aOptions;
   }
 
