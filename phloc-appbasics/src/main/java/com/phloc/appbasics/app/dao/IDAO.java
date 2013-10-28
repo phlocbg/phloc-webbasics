@@ -17,16 +17,35 @@
  */
 package com.phloc.appbasics.app.dao;
 
+import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
+
 /**
  * Base DAO interface
  * 
  * @author Philip Helger
  */
-public interface IDAO extends IChangeable, IAutoSaveAware {
+public interface IDAO extends IChangeable, IAutoSaveAware
+{
   /**
    * This method is called to persist the content in disk in case there are
    * pending changes. If no pending changes are present, nothing happens. In
    * case the implementation is thread-safe, this method must be thread-safe!
    */
   void writeToFileOnPendingChanges ();
+
+  /**
+   * @return The last time this DAO was read (without error). May be
+   *         <code>null</code> if it wasn't read before.
+   */
+  @Nullable
+  DateTime getLastReadDateTime ();
+
+  /**
+   * @return The last time this DAO was written (without error). May be
+   *         <code>null</code> if it wasn't written before.
+   */
+  @Nullable
+  DateTime getLastWriteDateTime ();
 }

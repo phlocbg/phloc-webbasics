@@ -24,6 +24,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +66,8 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
 
   private final IHasFilename m_aFilenameProvider;
   private String m_sPreviousFilename;
+  private DateTime m_aLastReadDT;
+  private DateTime m_aLastWriteDT;
 
   protected AbstractSimpleDAO (@Nullable final String sFilename)
   {
@@ -211,6 +214,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           {
             if (onRead (aDoc).isChanged ())
               eWriteSuccess = _writeToFile ();
+            m_aLastReadDT = PDTFactory.getCurrentDateTime ();
           }
           finally
           {
@@ -401,6 +405,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         return ESuccess.FAILURE;
       }
 
+      m_aLastWriteDT = PDTFactory.getCurrentDateTime ();
       return ESuccess.SUCCESS;
     }
     catch (final Throwable t)
@@ -473,6 +478,18 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         m_aRWLock.writeLock ().unlock ();
       }
     }
+  }
+
+  @Nullable
+  public final DateTime getLastReadDateTime ()
+  {
+    return m_aLastReadDT;
+  }
+
+  @Nullable
+  public final DateTime getLastWriteDateTime ()
+  {
+    return m_aLastWriteDT;
   }
 
   @Override
