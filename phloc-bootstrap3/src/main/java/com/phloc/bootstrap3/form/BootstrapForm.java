@@ -98,15 +98,14 @@ public class BootstrapForm extends HCForm
   {
     if (aNode instanceof IHCControl <?>)
       ret.add ((IHCControl <?>) aNode);
-    else
-      if (aNode instanceof IHCNodeWithChildren <?>)
-      {
-        // E.g. HCNodeList
-        final IHCNodeWithChildren <?> aParent = (IHCNodeWithChildren <?>) aNode;
-        if (aParent.hasChildren ())
-          for (final IHCNode aChild : aParent.getChildren ())
-            _getAllHCControls (aChild, ret);
-      }
+    if (aNode instanceof IHCNodeWithChildren <?>)
+    {
+      // E.g. HCNodeList
+      final IHCNodeWithChildren <?> aParent = (IHCNodeWithChildren <?>) aNode;
+      if (aParent.hasChildren ())
+        for (final IHCNode aChild : aParent.getChildren ())
+          _getAllHCControls (aChild, ret);
+    }
   }
 
   @Nonnull
