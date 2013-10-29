@@ -47,7 +47,6 @@ import com.phloc.tinymce4.type.ETinyMCE4Resize;
 import com.phloc.tinymce4.type.ETinyMCE4Skin;
 import com.phloc.tinymce4.type.ETinyMCE4Theme;
 import com.phloc.tinymce4.type.TinyMCE4ExternalPlugin;
-import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**
  * Wraps TinyMCE4 into an HC node. The only required settings is
@@ -755,12 +754,6 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   @Nonnull
   public HCScript build ()
   {
-    registerExternalResources ();
     return new HCScript (getJSInvocation ());
-  }
-
-  public static final void registerExternalResources ()
-  {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETinyMCE4JSPathProvider.TINYMCE);
   }
 }

@@ -103,16 +103,6 @@
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-appbasics</artifactId>
-      <version>2.5.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-masterdata</artifactId>
-      <version>3.3.3</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
       <artifactId>phloc-json</artifactId>
       <version>2.4.6</version>
     </dependency>
@@ -125,11 +115,6 @@
       <groupId>com.phloc</groupId>
       <artifactId>phloc-html</artifactId>
       <version>3.12.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-webbasics</artifactId>
-      <version>2.2.0</version>
     </dependency>
 
     <dependency>
