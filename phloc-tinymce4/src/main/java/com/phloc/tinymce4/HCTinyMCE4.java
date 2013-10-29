@@ -35,6 +35,7 @@ import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.json2.impl.JsonObject;
+import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**
  * Wraps TinyMCE4 into an HC node. The only required settings is
@@ -551,6 +552,9 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     return aOptions;
   }
 
+  /**
+   * @return The JSInvocation with the tinymce.init code and all options
+   */
   @Nonnull
   public JSInvocation getJSInvocation ()
   {
@@ -560,6 +564,12 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   @Nonnull
   public HCScript build ()
   {
+    registerExternalResources ();
     return new HCScript (getJSInvocation ());
+  }
+
+  public static final void registerExternalResources ()
+  {
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETinyMCE4JSPathProvider.TINYMCE);
   }
 }

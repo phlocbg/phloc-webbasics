@@ -1156,8 +1156,8 @@ define("tinymce/tableplugin/Quirks", [
 						editor.dom.add(
 							editor.getBody(),
 							editor.settings.forced_root_block,
-							null,
-							Env.ie ? '&nbsp;' : '<br data-mce-bogus="1" />'
+							editor.settings.forced_root_block_attrs,
+							Env.ie && Env.ie < 11 ? '&nbsp;' : '<br data-mce-bogus="1" />'
 						);
 					} else {
 						editor.dom.add(editor.getBody(), 'br', {'data-mce-bogus': '1'});
@@ -1242,6 +1242,11 @@ define("tinymce/tableplugin/Quirks", [
 		}
 
 		if (Env.gecko) {
+			fixBeforeTableCaretBug();
+			fixTableCaretPos();
+		}
+
+		if (Env.ie > 10) {
 			fixBeforeTableCaretBug();
 			fixTableCaretPos();
 		}

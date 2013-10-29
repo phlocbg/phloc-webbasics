@@ -1,4 +1,4 @@
-// 4.0.9 (2013-10-24)
+// 4.0.10 (2013-10-28)
 
 /**
  * Compiled inline version. (Library mode)
@@ -5273,7 +5273,7 @@ define("tinymce/Env", [], function() {
 	ie = ie && /MSIE (\w+)\./.exec(userAgent)[1];
 	ie11 = userAgent.indexOf('Trident/') != -1 && (userAgent.indexOf('rv:') != -1 || nav.appName.indexOf('Netscape') != -1) ? 11 : false;
 	ie = ie || ie11;
-	gecko = !webkit && /Gecko/.test(userAgent);
+	gecko = !webkit && !ie11 && /Gecko/.test(userAgent);
 	mac = userAgent.indexOf('Mac') != -1;
 	iDevice = /(iPad|iPhone)/.test(userAgent);
 
@@ -6386,8 +6386,8 @@ define("tinymce/dom/DOMUtils", [
 
 					// Add scroll offsets from documentElement or body since IE with the wrong box model will use d.body and so do WebKit
 					// Also remove the body/documentelement clientTop/clientLeft on IE 6, 7 since they offset the position
-					x = pos.left + rootElm.scrollLeft - rootElm.clientTop;
-					y = pos.top + rootElm.scrollTop - rootElm.clientLeft;
+					x = pos.left + (doc.documentElement.scrollLeft || doc.body.scrollLeft) - rootElm.clientTop;
+					y = pos.top + (doc.documentElement.scrollTop || doc.body.scrollTop) - rootElm.clientLeft;
 
 					return {x: x, y: y};
 				}
@@ -10132,6 +10132,7 @@ define("tinymce/html/DomParser", [
 						if (!rootBlockNode) {
 							// Create a new root block element
 							rootBlockNode = createNode(rootBlockName, 1);
+							rootBlockNode.attr(settings.forced_root_block_attrs);
 							rootNode.insert(rootBlockNode, node);
 							rootBlockNode.append(node);
 						} else {
@@ -12297,16 +12298,24 @@ define("tinymce/dom/ControlSelection", [
 
 				if (Env.ie >= 11) {
 					// TODO: Drag/drop doesn't work
-					editor.on('mouseup mousedown', function(e) {
-						if (e.target.nodeName == 'IMG' || editor.selection.getNode().nodeName == 'IMG') {
+					editor.on('mouseup', function(e) {
+						var nodeName = e.target.nodeName;
+
+						if (/^(TABLE|IMG|HR)$/.test(nodeName)) {
+							editor.selection.select(e.target, nodeName == 'TABLE');
+							editor.nodeChanged();
+						}
+					});
+
+					editor.dom.bind(editor.getBody(), 'mscontrolselect', function(e) {
+						if (/^(TABLE|IMG|HR)$/.test(e.target.nodeName)) {
 							e.preventDefault();
-							editor.selection.select(e.target);
 						}
 					});
 				}
 			}
 
-			editor.on('nodechange mousedown ResizeEditor', updateResizeRect);
+			editor.on('nodechange mousedown mouseup ResizeEditor', updateResizeRect);
 
 			// Update resize rect while typing in a table
 			editor.on('keydown keyup', function(e) {
@@ -15870,6 +15879,7 @@ define("tinymce/Formatter", [
 								if (isValid(forcedRootBlock, node.nodeName.toLowerCase())) {
 									if (!rootBlockElm) {
 										rootBlockElm = wrap(node, forcedRootBlock);
+										dom.setAttribs(rootBlockElm, ed.settings.forced_root_block_attrs);
 									} else {
 										rootBlockElm.appendChild(node);
 									}
@@ -16929,12 +16939,26 @@ define("tinymce/EnterKey", [
 				selection.scrollIntoView(root);
 			}
 
+			function setForcedBlockAttrs(node) {
+				var forcedRootBlockName = settings.forced_root_block;
+
+				if (forcedRootBlockName && forcedRootBlockName.toLowerCase() === node.tagName.toLowerCase()) {
+					dom.setAttribs(node, settings.forced_root_block_attrs);
+				}
+			}
+
 			// Creates a new block element by cloning the current one or creating a new one if the name is specified
 			// This function will also copy any text formatting from the parent block and add it to the new one
 			function createNewBlock(name) {
 				var node = container, block, clonedNode, caretNode;
 
-				block = name || parentBlockName == "TABLE" ? dom.create(name || newBlockName) : parentBlock.cloneNode(false);
+				if (name || parentBlockName == "TABLE") {
+					block = dom.create(name || newBlockName);
+					setForcedBlockAttrs(block);
+				} else {
+					block = parentBlock.cloneNode(false);
+				}
+
 				caretNode = block;
 
 				// Clone any parent styles
@@ -17040,6 +17064,7 @@ define("tinymce/EnterKey", [
 
 					if (!parentBlock.hasChildNodes()) {
 						newBlock = dom.create(blockName);
+						setForcedBlockAttrs(newBlock);
 						parentBlock.appendChild(newBlock);
 						rng.setStart(newBlock, 0);
 						rng.setEnd(newBlock, 0);
@@ -17060,6 +17085,7 @@ define("tinymce/EnterKey", [
 
 					if (startNode && schema.isValidChild(rootBlockName, blockName.toLowerCase())) {
 						newBlock = dom.create(blockName);
+						setForcedBlockAttrs(newBlock);
 						startNode.parentNode.insertBefore(newBlock, startNode);
 
 						// Start wrapping until we hit a block
@@ -17502,7 +17528,7 @@ define("tinymce/ForceBlocks", [], function() {
 					}
 
 					if (!rootBlockNode) {
-						rootBlockNode = dom.create(forcedRootBlock);
+						rootBlockNode = dom.create(forcedRootBlock, editor.settings.forced_root_block_attrs);
 						node.parentNode.insertBefore(rootBlockNode, node);
 						wrapped = true;
 					}
@@ -26992,13 +27018,9 @@ define("tinymce/Editor", [
 
 				// Check if forcedRootBlock is configured and that the block is a valid child of the body
 				if (forcedRootBlockName && self.schema.isValidChild(body.nodeName.toLowerCase(), forcedRootBlockName.toLowerCase())) {
-					if (ie && ie < 11) {
-						// IE renders BR elements in blocks so lets just add an empty block
-						content = '<' + forcedRootBlockName + '></' + forcedRootBlockName + '>';
-					} else {
-						content = '<' + forcedRootBlockName + '><br data-mce-bogus="1"></' + forcedRootBlockName + '>';
-					}
-				} else if (!ie) {
+					content = ie && ie < 11 ? '' : '<br data-mce-bogus="1">';
+					content = self.dom.createHTML(forcedRootBlockName, self.settings.forced_root_block_attrs, content);
+				} else if (!ie || ie < 11) {
 					// We need to add a BR when forced_root_block is disabled on non IE browsers to place the caret
 					content = '<br data-mce-bogus="1">';
 				}
@@ -27803,7 +27825,7 @@ define("tinymce/EditorManager", [
 		 * @property minorVersion
 		 * @type String
 		 */
-		minorVersion : '0.9',
+		minorVersion : '0.10',
 
 		/**
 		 * Release date of TinyMCE build.
@@ -27811,7 +27833,7 @@ define("tinymce/EditorManager", [
 		 * @property releaseDate
 		 * @type String
 		 */
-		releaseDate: '2013-10-24',
+		releaseDate: '2013-10-28',
 
 		/**
 		 * Collection of editor instances.
@@ -30411,8 +30433,18 @@ define("tinymce/ui/ElementPath", [
 		postRender: function() {
 			var self = this, editor = EditorManager.activeEditor;
 
-			function isBogus(elm) {
-				return elm.nodeType === 1 && (elm.nodeName == "BR" || !!elm.getAttribute('data-mce-bogus'));
+			function isHidden(elm) {
+				if (elm.nodeType === 1) {
+					if (elm.nodeName == "BR" || !!elm.getAttribute('data-mce-bogus')) {
+						return true;
+					}
+
+					if (elm.getAttribute('data-mce-type') === 'bookmark') {
+						return true;
+					}
+				}
+
+				return false;
 			}
 
 			self.on('select', function(e) {
@@ -30422,7 +30454,7 @@ define("tinymce/ui/ElementPath", [
 
 				node = editor.selection.getStart();
 				while (node && node != body) {
-					if (!isBogus(node)) {
+					if (!isHidden(node)) {
 						parents.push(node);
 					}
 
@@ -30437,7 +30469,7 @@ define("tinymce/ui/ElementPath", [
 				var parents = [], selectionParents = e.parents, i = selectionParents.length;
 
 				while (i--) {
-					if (selectionParents[i].nodeType == 1 && !isBogus(selectionParents[i])) {
+					if (selectionParents[i].nodeType == 1 && !isHidden(selectionParents[i])) {
 						var args = editor.fire('ResolveName', {
 							name: selectionParents[i].nodeName.toLowerCase(),
 							target: selectionParents[i]
