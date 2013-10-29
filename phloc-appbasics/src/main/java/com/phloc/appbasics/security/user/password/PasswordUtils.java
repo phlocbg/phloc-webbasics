@@ -41,12 +41,15 @@ public final class PasswordUtils
   @GuardedBy ("s_aRWLock")
   private static IPasswordConstraints s_aPasswordConstraints = new PasswordConstraints ();
   @GuardedBy ("s_aRWLock")
-  private static Map <String, IPasswordHashCreator> s_aPasswordHashCreators = new HashMap <String, IPasswordHashCreator> ();
+  private static final Map <String, IPasswordHashCreator> s_aPasswordHashCreators = new HashMap <String, IPasswordHashCreator> ();
+  @GuardedBy ("s_aRWLock")
+  private static IPasswordHashCreator s_aDefaultPasswordHashCreator;
 
   static
   {
     // Always register the old, default creator
     registerPasswordHashCreator (new PasswordHashCreatorDefault ());
+    setDefaultPasswordHashCreatorAlgorithm (PasswordHashCreatorDefault.ALGORITHM);
   }
 
   private PasswordUtils ()
@@ -124,6 +127,7 @@ public final class PasswordUtils
     {
       s_aRWLock.writeLock ().unlock ();
     }
+    s_aLogger.info ("Registered password hash creator algorithm '" + sAlgorithmName + "' to " + aPasswordHashCreator);
   }
 
   /**
@@ -148,11 +152,72 @@ public final class PasswordUtils
   }
 
   /**
-   * The one and only method to create a message digest hash from a password.
+   * Set the default password hash creator algorithm. A matching
+   * {@link IPasswordHashCreator} object must be registered previously using
+   * {@link #registerPasswordHashCreator(IPasswordHashCreator)}.
+   * 
+   * @param sAlgorithm
+   *        The name of the algorithm to use as the default. May neither be
+   *        <code>null</code> nor empty.
+   */
+  public static void setDefaultPasswordHashCreatorAlgorithm (@Nonnull @Nonempty final String sAlgorithm)
+  {
+    if (StringHelper.hasNoText (sAlgorithm))
+      throw new IllegalArgumentException ("algorithm");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      final IPasswordHashCreator aPHC = s_aPasswordHashCreators.get (sAlgorithm);
+      if (aPHC == null)
+        throw new IllegalArgumentException ("No PasswordHashCreator registered for algorithm '" + sAlgorithm + "'");
+      s_aDefaultPasswordHashCreator = aPHC;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+    s_aLogger.info ("Default PasswordHashCreator algorithm set to '" + sAlgorithm + "'");
+  }
+
+  /**
+   * @return The default {@link IPasswordHashCreator} algorithm to use. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public static IPasswordHashCreator getDefaultPasswordHashCreator ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      final IPasswordHashCreator ret = s_aDefaultPasswordHashCreator;
+      if (ret == null)
+        throw new IllegalStateException ("No default PasswordHashCreator present!");
+      return ret;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return The default password hash creator algorithm name currently in use.
+   */
+  @Nonnull
+  public static String getDefaultPasswordHashCreatorAlgorithm ()
+  {
+    return getDefaultPasswordHashCreator ().getAlgorithmName ();
+  }
+
+  /**
+   * Create the password hash from the passed plain text password, using the
+   * default password hash creator.
    * 
    * @param sPlainTextPassword
-   *        Plain text password
-   * @return The String representation of the password hash
+   *        Plain text password. May not be <code>null</code>.
+   * @return The String representation of the password hash.
+   * @see #getDefaultPasswordHashCreator()
    */
   @Nonnull
   @Nonempty
@@ -161,6 +226,6 @@ public final class PasswordUtils
     if (sPlainTextPassword == null)
       throw new NullPointerException ("plainTextPassword");
 
-    return getPaswordHashCreatorOfAlgorithm (PasswordHashCreatorDefault.ALGORITHM).createPasswordHash (sPlainTextPassword);
+    return getDefaultPasswordHashCreator ().createPasswordHash (sPlainTextPassword);
   }
 }

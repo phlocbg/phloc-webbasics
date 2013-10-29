@@ -8,6 +8,11 @@ import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * The default implementation of {@link IPasswordHashCreator}.
+ * 
+ * @author Philip Helger
+ */
 public final class PasswordHashCreatorDefault implements IPasswordHashCreator
 {
   public static final String ALGORITHM = "default";
