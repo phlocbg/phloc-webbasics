@@ -15,12 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.tinymce4;
+package com.phloc.tinymce4.type;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 
 /**
  * All TinyMCE4 supported themes.<br>
@@ -28,21 +27,21 @@ import com.phloc.commons.id.IHasID;
  * 
  * @author Philip Helger
  */
-public enum ETinyMCE4Theme implements IHasID <String>
+public enum ETinyMCE4Theme
 {
   MODERN ("modern");
 
-  private final String m_sID;
+  private final String m_sValue;
 
-  private ETinyMCE4Theme (@Nonnull @Nonempty final String sID)
+  private ETinyMCE4Theme (@Nonnull @Nonempty final String sValue)
   {
-    m_sID = sID;
+    m_sValue = sValue;
   }
 
   @Nonnull
   @Nonempty
-  public String getID ()
+  public String getValue ()
   {
-    return m_sID;
+    return m_sValue;
   }
 }

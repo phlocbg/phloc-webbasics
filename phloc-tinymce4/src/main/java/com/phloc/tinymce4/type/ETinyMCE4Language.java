@@ -15,12 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.tinymce4;
+package com.phloc.tinymce4.type;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
 
 /**
  * All TinyMCE4 supported languages. Note: not all locales here are valid Java
@@ -29,7 +28,7 @@ import com.phloc.commons.id.IHasID;
  * 
  * @author Philip Helger
  */
-public enum ETinyMCE4Language implements IHasID <String>
+public enum ETinyMCE4Language
 {
   AR ("ar"),
   BG_BG ("bg_BG"),
@@ -92,17 +91,17 @@ public enum ETinyMCE4Language implements IHasID <String>
   ZH_CN ("zh_CN"),
   ZH_TW ("zh_TW");
 
-  private final String m_sID;
+  private final String m_sValue;
 
-  private ETinyMCE4Language (@Nonnull @Nonempty final String sID)
+  private ETinyMCE4Language (@Nonnull @Nonempty final String sValue)
   {
-    m_sID = sID;
+    m_sValue = sValue;
   }
 
   @Nonnull
   @Nonempty
-  public String getID ()
+  public String getValue ()
   {
-    return m_sID;
+    return m_sValue;
   }
 }

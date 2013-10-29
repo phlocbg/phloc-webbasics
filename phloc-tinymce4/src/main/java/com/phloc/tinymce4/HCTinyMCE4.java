@@ -40,6 +40,12 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.json2.impl.JsonObject;
+import com.phloc.tinymce4.type.ETinyMCE4Language;
+import com.phloc.tinymce4.type.ETinyMCE4Plugin;
+import com.phloc.tinymce4.type.ETinyMCE4Resize;
+import com.phloc.tinymce4.type.ETinyMCE4Skin;
+import com.phloc.tinymce4.type.ETinyMCE4Theme;
+import com.phloc.tinymce4.type.TinyMCE4ExternalPlugin;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**
@@ -125,6 +131,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   // menubar
   // menu
   // statusbar
+  private ETinyMCE4Resize m_eResize;
   // resize
   // width
   // height
@@ -557,6 +564,19 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eConvertFontsToSpans = ETriState.valueOf (aConvertFontsToSpans);
   }
 
+  @Nullable
+  public ETinyMCE4Resize getResize ()
+  {
+    return m_eResize;
+  }
+
+  public void setResize (@Nullable final ETinyMCE4Resize eResize)
+  {
+    m_eResize = eResize;
+  }
+
+  // --- custom options ---
+
   public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
   {
     addCustomOption (sName, JSExpr.lit (sValue));
@@ -615,7 +635,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     if (m_eDirectionality != null)
       aOptions.add ("directionality", m_eDirectionality.getAttrValue ());
     if (m_eLanguage != null)
-      aOptions.add ("language", m_eLanguage.getID ());
+      aOptions.add ("language", m_eLanguage.getValue ());
     if (m_aLanguageURL != null)
       aOptions.add ("language_url", m_aLanguageURL.getAsString ());
     if (m_eNoWrap.isDefined ())
@@ -629,7 +649,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
       {
         if (aSB.length () > 0)
           aSB.append (' ');
-        aSB.append (ePlugin.getID ());
+        aSB.append (ePlugin.getValue ());
       }
       aOptions.add ("plugins", aSB.toString ());
     }
@@ -642,11 +662,11 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     }
     aOptions.add ("selector", m_sSelector);
     if (m_eSkin != null)
-      aOptions.add ("skin", m_eSkin.getID ());
+      aOptions.add ("skin", m_eSkin.getValue ());
     if (m_aSkinURL != null)
       aOptions.add ("skin_url", m_aSkinURL.getAsString ());
     if (m_eTheme != null)
-      aOptions.add ("theme", m_eTheme.getID ());
+      aOptions.add ("theme", m_eTheme.getValue ());
     if (m_aThemeURL != null)
       aOptions.add ("theme_url", m_aThemeURL.getAsString ());
     if (m_eInline.isDefined ())
@@ -657,6 +677,10 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     // Cleanup/output
     if (m_eConvertFontsToSpans.isDefined ())
       aOptions.add ("convert_fonts_to_spans", isConvertFontsToSpans ());
+
+    // User interface
+    if (m_eResize != null)
+      aOptions.add ("resize", m_eResize.getValue ());
 
     // Custom
     for (final Map.Entry <String, IJSExpression> aEntry : m_aCustom.entrySet ())
