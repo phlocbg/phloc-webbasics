@@ -44,9 +44,12 @@ import com.phloc.commons.string.ToStringGenerator;
  * Default implementation of a locking manager.
  * 
  * @author Philip Helger
+ * @param <IDTYPE>
+ *        The type of object to be locked. E.g. String or TypedObject. Must
+ *        implement equals and hashCode!
  */
 @ThreadSafe
-public class DefaultLockManager implements ILockManager
+public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultLockManager.class);
 
@@ -54,7 +57,7 @@ public class DefaultLockManager implements ILockManager
   private final ICurrentUserIDProvider m_aCurrentUserIDProvider;
 
   // Key: lockedObjectID, value: lock-info
-  private final Map <String, ILockInfo> m_aLockedObjs = new HashMap <String, ILockInfo> ();
+  private final Map <IDTYPE, ILockInfo> m_aLockedObjs = new HashMap <IDTYPE, ILockInfo> ();
 
   public DefaultLockManager (@Nonnull final ICurrentUserIDProvider aCurrentUserIDProvider)
   {
@@ -64,12 +67,12 @@ public class DefaultLockManager implements ILockManager
   }
 
   @Nullable
-  public final ILockInfo getLockInfo (@Nullable final String sObjID)
+  public final ILockInfo getLockInfo (@Nullable final IDTYPE aObjID)
   {
     m_aRWLock.readLock ().lock ();
     try
     {
-      return m_aLockedObjs.get (sObjID);
+      return m_aLockedObjs.get (aObjID);
     }
     finally
     {
@@ -78,33 +81,33 @@ public class DefaultLockManager implements ILockManager
   }
 
   @Nullable
-  public final String getLockUserID (@Nullable final String sObjID)
+  public final String getLockUserID (@Nullable final IDTYPE aObjID)
   {
-    final ILockInfo aLock = getLockInfo (sObjID);
+    final ILockInfo aLock = getLockInfo (aObjID);
     return aLock != null ? aLock.getLockUserID () : null;
   }
 
   @Nullable
-  public final DateTime getLockDateTime (@Nullable final String sObjID)
+  public final DateTime getLockDateTime (@Nullable final IDTYPE aObjID)
   {
-    final ILockInfo aLock = getLockInfo (sObjID);
+    final ILockInfo aLock = getLockInfo (aObjID);
     return aLock != null ? aLock.getLockDateTime () : null;
   }
 
   @Nonnull
-  public final ELocked lockObject (@Nonnull final String sObjID)
+  public final ELocked lockObject (@Nonnull final IDTYPE aObjID)
   {
-    if (sObjID == null)
+    if (aObjID == null)
       throw new NullPointerException ("objID");
 
     final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
-    return lockObject (sObjID, sCurrentUserID);
+    return lockObject (aObjID, sCurrentUserID);
   }
 
   @Nonnull
-  public final ELocked lockObject (@Nonnull final String sObjID, @Nullable final String sUserID)
+  public final ELocked lockObject (@Nonnull final IDTYPE aObjID, @Nullable final String sUserID)
   {
-    if (sObjID == null)
+    if (aObjID == null)
       throw new NullPointerException ("objID");
 
     if (StringHelper.hasNoText (sUserID))
@@ -113,7 +116,7 @@ public class DefaultLockManager implements ILockManager
     m_aRWLock.writeLock ().lock ();
     try
     {
-      final ILockInfo aCurrentLock = m_aLockedObjs.get (sObjID);
+      final ILockInfo aCurrentLock = m_aLockedObjs.get (aObjID);
       if (aCurrentLock != null)
       {
         // Object is already locked.
@@ -122,7 +125,7 @@ public class DefaultLockManager implements ILockManager
       }
 
       // Overwrite any existing lock!
-      m_aLockedObjs.put (sObjID, new LockInfo (sUserID));
+      m_aLockedObjs.put (aObjID, new LockInfo (sUserID));
     }
     finally
     {
@@ -130,35 +133,35 @@ public class DefaultLockManager implements ILockManager
     }
 
     if (s_aLogger.isInfoEnabled ())
-      s_aLogger.info ("User '" + sUserID + "' locked object '" + sObjID + "'");
+      s_aLogger.info ("User '" + sUserID + "' locked object '" + aObjID + "'");
     return ELocked.LOCKED;
   }
 
   @Nonnull
-  public final EChange unlockObject (@Nonnull final String sObjID)
+  public final EChange unlockObject (@Nonnull final IDTYPE aObjID)
   {
     final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
     if (StringHelper.hasNoText (sCurrentUserID))
       return EChange.UNCHANGED;
 
-    return unlockObject (sCurrentUserID, sObjID);
+    return unlockObject (sCurrentUserID, aObjID);
   }
 
   @Nonnull
-  public final EChange unlockObject (@Nonnull final String sUserID, @Nonnull final String sObjID)
+  public final EChange unlockObject (@Nonnull final String sUserID, @Nonnull final IDTYPE aObjID)
   {
     if (sUserID == null)
       throw new NullPointerException ("userID");
-    if (sObjID == null)
+    if (aObjID == null)
       throw new NullPointerException ("objID");
 
-    final ILockInfo aCurrentLock = getLockInfo (sObjID);
+    final ILockInfo aCurrentLock = getLockInfo (aObjID);
 
     // Not locked at all?
     if (aCurrentLock == null)
     {
       // This may happen if the user was manually unlocked!
-      s_aLogger.warn ("User '" + sUserID + "' could not unlock object '" + sObjID + "' because it is not locked");
+      s_aLogger.warn ("User '" + sUserID + "' could not unlock object '" + aObjID + "' because it is not locked");
       return EChange.UNCHANGED;
     }
 
@@ -169,7 +172,7 @@ public class DefaultLockManager implements ILockManager
       s_aLogger.warn ("User '" +
                       sUserID +
                       "' could not unlock object '" +
-                      sObjID +
+                      aObjID +
                       "' because it is locked by '" +
                       aCurrentLock.getLockUserID () +
                       "'");
@@ -180,7 +183,7 @@ public class DefaultLockManager implements ILockManager
     try
     {
       // this user locked the object -> unlock it
-      if (m_aLockedObjs.remove (sObjID) == null)
+      if (m_aLockedObjs.remove (aObjID) == null)
         throw new IllegalStateException ("Internal inconsistency: removing from lock list failed!");
     }
     finally
@@ -189,60 +192,60 @@ public class DefaultLockManager implements ILockManager
     }
 
     if (s_aLogger.isInfoEnabled ())
-      s_aLogger.info ("User '" + sUserID + "' unlocked object '" + sObjID + "'");
+      s_aLogger.info ("User '" + sUserID + "' unlocked object '" + aObjID + "'");
     return EChange.CHANGED;
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public final List <String> unlockAllObjectsOfCurrentUser ()
+  public final List <IDTYPE> unlockAllObjectsOfCurrentUser ()
   {
     return unlockAllObjectsOfCurrentUserExcept (null);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public final List <String> unlockAllObjectsOfCurrentUserExcept (@Nullable final Set <String> aObjectsToKeepLocked)
+  public final List <IDTYPE> unlockAllObjectsOfCurrentUserExcept (@Nullable final Set <IDTYPE> aObjectsToKeepLocked)
   {
     return unlockAllObjectsOfUserExcept (m_aCurrentUserIDProvider.getCurrentUserID (), aObjectsToKeepLocked);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public final List <String> unlockAllObjectsOfUser (@Nullable final String sUserID)
+  public final List <IDTYPE> unlockAllObjectsOfUser (@Nullable final String sUserID)
   {
     return unlockAllObjectsOfUserExcept (sUserID, null);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public final List <String> unlockAllObjectsOfUserExcept (@Nullable final String sUserID,
-                                                           @Nullable final Set <String> aObjectsToKeepLocked)
+  public final List <IDTYPE> unlockAllObjectsOfUserExcept (@Nullable final String sUserID,
+                                                           @Nullable final Set <IDTYPE> aObjectsToKeepLocked)
   {
-    final List <String> aObjectsToUnlock = new ArrayList <String> ();
+    final List <IDTYPE> aObjectsToUnlock = new ArrayList <IDTYPE> ();
     if (StringHelper.hasText (sUserID))
     {
       m_aRWLock.writeLock ().lock ();
       try
       {
         // determine locks to be removed
-        for (final Map.Entry <String, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
+        for (final Map.Entry <IDTYPE, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
         {
           final String sLockUserID = aEntry.getValue ().getLockUserID ();
           if (sLockUserID.equals (sUserID))
           {
             // Object is locked by current user
-            final String sObjID = aEntry.getKey ();
-            if (aObjectsToKeepLocked == null || !aObjectsToKeepLocked.contains (sObjID))
-              aObjectsToUnlock.add (sObjID);
+            final IDTYPE aObjID = aEntry.getKey ();
+            if (aObjectsToKeepLocked == null || !aObjectsToKeepLocked.contains (aObjID))
+              aObjectsToUnlock.add (aObjID);
           }
         }
 
         // remove locks
-        for (final String sObjectID : aObjectsToUnlock)
-          if (m_aLockedObjs.remove (sObjectID) == null)
+        for (final IDTYPE aObjID : aObjectsToUnlock)
+          if (m_aLockedObjs.remove (aObjID) == null)
             throw new IllegalStateException ("Internal inconsistency: failed to unlock '" +
-                                             sObjectID +
+                                             aObjID +
                                              "' from " +
                                              aObjectsToUnlock);
       }
@@ -258,9 +261,9 @@ public class DefaultLockManager implements ILockManager
     return aObjectsToUnlock;
   }
 
-  public final boolean isObjectLockedByCurrentUser (@Nullable final String sObjID)
+  public final boolean isObjectLockedByCurrentUser (@Nullable final IDTYPE aObjID)
   {
-    final String sLockUserID = getLockUserID (sObjID);
+    final String sLockUserID = getLockUserID (aObjID);
     if (sLockUserID == null)
     {
       // Object is not locked at all
@@ -270,9 +273,9 @@ public class DefaultLockManager implements ILockManager
     return sLockUserID.equals (sCurrentUserID);
   }
 
-  public final boolean isObjectLockedByOtherUser (@Nullable final String sObjID)
+  public final boolean isObjectLockedByOtherUser (@Nullable final IDTYPE aObjID)
   {
-    final String sLockUser = getLockUserID (sObjID);
+    final String sLockUser = getLockUserID (aObjID);
     if (sLockUser == null)
     {
       // Object is not locked at all
@@ -282,14 +285,14 @@ public class DefaultLockManager implements ILockManager
     return !sLockUser.equals (sCurrentUserID);
   }
 
-  public final boolean isObjectLockedByAnyUser (@Nullable final String sObjID)
+  public final boolean isObjectLockedByAnyUser (@Nullable final IDTYPE aObjID)
   {
-    return getLockUserID (sObjID) != null;
+    return getLockUserID (aObjID) != null;
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public final Set <String> getAllLockedObjects ()
+  public final Set <IDTYPE> getAllLockedObjects ()
   {
     m_aRWLock.readLock ().lock ();
     try

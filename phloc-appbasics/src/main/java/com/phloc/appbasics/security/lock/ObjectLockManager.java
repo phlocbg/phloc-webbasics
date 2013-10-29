@@ -38,9 +38,9 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class ObjectLockManager extends GlobalSingleton implements ILockManager
+public final class ObjectLockManager extends GlobalSingleton implements ILockManager <String>
 {
-  private final DefaultLockManager m_aMgr = new DefaultLockManager (LoggedInUserManager.getInstance ());
+  private final DefaultLockManager <String> m_aMgr = new DefaultLockManager <String> (LoggedInUserManager.getInstance ());
 
   @Deprecated
   @UsedViaReflection
