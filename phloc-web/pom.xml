@@ -8,7 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-web</artifactId>
-  <version>5.3.2</version>
+  <version>5.3.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-web</name>
   <url>http://repo.phloc.com/apidocs/phloc-web/${project.version}</url>
@@ -22,9 +22,9 @@
   </licenses>
   
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/tags/phloc-web-5.3.2</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/phloc-web-5.3.2</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/phloc-web-5.3.2</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-web</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-web</developerConnection>
   </scm>
 
   <organization>
