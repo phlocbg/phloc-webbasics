@@ -49,8 +49,10 @@ import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
+import com.phloc.commons.stats.IStatisticsHandlerTimer;
 import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.timing.StopWatch;
 import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.datetime.PDTFactory;
@@ -71,16 +73,22 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
                                                                                                           "$init-total");
   private final IStatisticsHandlerCounter s_aStatsCounterInitSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                             "$init-success");
+  private final IStatisticsHandlerTimer s_aStatsCounterInitTimer = StatisticsManager.getTimerHandler (getClass ().getName () +
+                                                                                                      "$init");
   private final IStatisticsHandlerCounter s_aStatsCounterReadTotal = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                           "$read-total");
   private final IStatisticsHandlerCounter s_aStatsCounterReadSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                             "$read-success");
+  private final IStatisticsHandlerTimer s_aStatsCounterReadTimer = StatisticsManager.getTimerHandler (getClass ().getName () +
+                                                                                                      "$read");
   private final IStatisticsHandlerCounter s_aStatsCounterWriteTotal = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                            "$write-total");
   private final IStatisticsHandlerCounter s_aStatsCounterWriteSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                              "$write-success");
   private final IStatisticsHandlerCounter s_aStatsCounterWriteExceptions = StatisticsManager.getCounterHandler (getClass ().getName () +
                                                                                                                 "$write-exceptions");
+  private final IStatisticsHandlerTimer s_aStatsCounterWriteTimer = StatisticsManager.getTimerHandler (getClass ().getName () +
+                                                                                                       "$write");
 
   private final IHasFilename m_aFilenameProvider;
   private String m_sPreviousFilename;
@@ -207,11 +215,13 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         try
         {
           s_aStatsCounterInitTotal.increment ();
+          final StopWatch aSW = new StopWatch (true);
 
           if (onInit ().isChanged ())
             if (aFile != null)
               eWriteSuccess = _writeToFile ();
 
+          s_aStatsCounterInitTimer.addTime (aSW.stopAndGetMillis ());
           s_aStatsCounterInitSuccess.increment ();
           m_nInitCount++;
           m_aLastInitDT = PDTFactory.getCurrentDateTime ();
@@ -241,10 +251,12 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           try
           {
             s_aStatsCounterReadTotal.increment ();
+            final StopWatch aSW = new StopWatch (true);
 
             if (onRead (aDoc).isChanged ())
               eWriteSuccess = _writeToFile ();
 
+            s_aStatsCounterReadTimer.addTime (aSW.stopAndGetMillis ());
             s_aStatsCounterReadSuccess.increment ();
             m_nReadCount++;
             m_aLastReadDT = PDTFactory.getCurrentDateTime ();
@@ -407,6 +419,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     try
     {
       s_aStatsCounterWriteTotal.increment ();
+      final StopWatch aSW = new StopWatch (true);
 
       // Create XML document to write
       aDoc = createWriteData ();
@@ -440,6 +453,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         return ESuccess.FAILURE;
       }
 
+      s_aStatsCounterWriteTimer.addTime (aSW.stopAndGetMillis ());
       s_aStatsCounterWriteSuccess.increment ();
       m_nWriteCount++;
       m_aLastWriteDT = PDTFactory.getCurrentDateTime ();
