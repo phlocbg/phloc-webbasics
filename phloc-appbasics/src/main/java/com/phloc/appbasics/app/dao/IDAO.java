@@ -17,12 +17,20 @@
  */
 package com.phloc.appbasics.app.dao;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
 /**
- * Base DAO interface
+ * Base DAO interface. DAO = Data Access Object. A DAO implementation usually
+ * has 3 basic operations:
+ * <ul>
+ * <li>Initialization - when no file exists and an initial setup can be
+ * performed.</li>
+ * <li>Reading - read existing data from a file</li>
+ * <li>Write - write modified data to a file</li>
+ * </ul>
  * 
  * @author Philip Helger
  */
@@ -36,15 +44,49 @@ public interface IDAO extends IChangeable, IAutoSaveAware
   void writeToFileOnPendingChanges ();
 
   /**
+   * @return The number of times this DAO was initialized. Always &ge; 0.
+   *         Usually this field is not persistent and only is valid until the
+   *         application ends.
+   */
+  @Nonnegative
+  int getInitCount ();
+
+  /**
+   * @return The last time this DAO was initialized (without error). May be
+   *         <code>null</code> if it wasn't read before. Usually this field is
+   *         not persistent and only is valid until the application ends.
+   */
+  @Nullable
+  DateTime getLastInitDateTime ();
+
+  /**
+   * @return The number of times this DAO was initialized. Always &ge; 0.
+   *         Usually this field is not persistent and only is valid until the
+   *         application ends.
+   */
+  @Nonnegative
+  int getReadCount ();
+
+  /**
    * @return The last time this DAO was read (without error). May be
-   *         <code>null</code> if it wasn't read before.
+   *         <code>null</code> if it wasn't read before. Usually this field is
+   *         not persistent and only is valid until the application ends.
    */
   @Nullable
   DateTime getLastReadDateTime ();
 
   /**
+   * @return The number of times this DAO was initialized. Always &ge; 0.
+   *         Usually this field is not persistent and only is valid until the
+   *         application ends.
+   */
+  @Nonnegative
+  int getWriteCount ();
+
+  /**
    * @return The last time this DAO was written (without error). May be
-   *         <code>null</code> if it wasn't written before.
+   *         <code>null</code> if it wasn't written before. Usually this field
+   *         is not persistent and only is valid until the application ends.
    */
   @Nullable
   DateTime getLastWriteDateTime ();

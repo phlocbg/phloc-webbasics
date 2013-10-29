@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.util.Locale;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -47,6 +48,8 @@ import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.stats.IStatisticsHandlerCounter;
+import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.xml.serialize.IXMLWriterSettings;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
@@ -64,9 +67,28 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
 
+  private final IStatisticsHandlerCounter s_aStatsCounterInitTotal = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                          "$init-total");
+  private final IStatisticsHandlerCounter s_aStatsCounterInitSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                            "$init-success");
+  private final IStatisticsHandlerCounter s_aStatsCounterReadTotal = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                          "$read-total");
+  private final IStatisticsHandlerCounter s_aStatsCounterReadSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                            "$read-success");
+  private final IStatisticsHandlerCounter s_aStatsCounterWriteTotal = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                           "$write-total");
+  private final IStatisticsHandlerCounter s_aStatsCounterWriteSuccess = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                             "$write-success");
+  private final IStatisticsHandlerCounter s_aStatsCounterWriteExceptions = StatisticsManager.getCounterHandler (getClass ().getName () +
+                                                                                                                "$write-exceptions");
+
   private final IHasFilename m_aFilenameProvider;
   private String m_sPreviousFilename;
+  private int m_nInitCount = 0;
+  private DateTime m_aLastInitDT;
+  private int m_nReadCount = 0;
   private DateTime m_aLastReadDT;
+  private int m_nWriteCount = 0;
   private DateTime m_aLastWriteDT;
 
   protected AbstractSimpleDAO (@Nullable final String sFilename)
@@ -184,9 +206,15 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         beginWithoutAutoSave ();
         try
         {
+          s_aStatsCounterInitTotal.increment ();
+
           if (onInit ().isChanged ())
             if (aFile != null)
               eWriteSuccess = _writeToFile ();
+
+          s_aStatsCounterInitSuccess.increment ();
+          m_nInitCount++;
+          m_aLastInitDT = PDTFactory.getCurrentDateTime ();
         }
         finally
         {
@@ -212,8 +240,13 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           beginWithoutAutoSave ();
           try
           {
+            s_aStatsCounterReadTotal.increment ();
+
             if (onRead (aDoc).isChanged ())
               eWriteSuccess = _writeToFile ();
+
+            s_aStatsCounterReadSuccess.increment ();
+            m_nReadCount++;
             m_aLastReadDT = PDTFactory.getCurrentDateTime ();
           }
           finally
@@ -373,6 +406,8 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     IMicroDocument aDoc = null;
     try
     {
+      s_aStatsCounterWriteTotal.increment ();
+
       // Create XML document to write
       aDoc = createWriteData ();
       if (aDoc == null)
@@ -405,6 +440,8 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         return ESuccess.FAILURE;
       }
 
+      s_aStatsCounterWriteSuccess.increment ();
+      m_nWriteCount++;
       m_aLastWriteDT = PDTFactory.getCurrentDateTime ();
       return ESuccess.SUCCESS;
     }
@@ -429,6 +466,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           s_aLogger.error ("Error in custom exception handler for writing " + aRes.toString (), t2);
         }
       }
+      s_aStatsCounterWriteExceptions.increment ();
       return ESuccess.FAILURE;
     }
   }
@@ -480,10 +518,34 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     }
   }
 
+  @Nonnegative
+  public int getInitCount ()
+  {
+    return m_nInitCount;
+  }
+
+  @Nullable
+  public final DateTime getLastInitDateTime ()
+  {
+    return m_aLastInitDT;
+  }
+
+  @Nonnegative
+  public int getReadCount ()
+  {
+    return m_nReadCount;
+  }
+
   @Nullable
   public final DateTime getLastReadDateTime ()
   {
     return m_aLastReadDT;
+  }
+
+  @Nonnegative
+  public int getWriteCount ()
+  {
+    return m_nWriteCount;
   }
 
   @Nullable
@@ -498,6 +560,12 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("filenameProvider", m_aFilenameProvider)
                             .append ("previousFilename", m_sPreviousFilename)
+                            .append ("initCount", m_nInitCount)
+                            .appendIfNotNull ("lastInitDT", m_aLastInitDT)
+                            .append ("readCount", m_nReadCount)
+                            .appendIfNotNull ("lastReadDT", m_aLastReadDT)
+                            .append ("writeCount", m_nWriteCount)
+                            .appendIfNotNull ("lastWriteDT", m_aLastWriteDT)
                             .toString ();
   }
 }
