@@ -241,6 +241,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
         if (GlobalDebug.isDebugMode ())
           s_aLogger.info ("Trying to read DAO XML file '" + aFile + "'");
 
+        s_aStatsCounterReadTotal.increment ();
         final IMicroDocument aDoc = MicroReader.readMicroXML (aFile);
         if (aDoc == null)
           s_aLogger.error ("Failed to read XML document from file '" + aFile + "'");
@@ -250,7 +251,6 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
           beginWithoutAutoSave ();
           try
           {
-            s_aStatsCounterReadTotal.increment ();
             final StopWatch aSW = new StopWatch (true);
 
             if (onRead (aDoc).isChanged ())
