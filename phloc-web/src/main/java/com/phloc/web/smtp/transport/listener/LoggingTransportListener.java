@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.log.LogUtils;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * An implementation of {@link TransportListener} that logs stuff to a logger.
@@ -114,5 +115,11 @@ public class LoggingTransportListener implements TransportListener
   public void messagePartiallyDelivered (@Nonnull final TransportEvent aEvent)
   {
     LogUtils.log (s_aLogger, m_eErrorLevel, "Message partially delivered: " + getLogString (aEvent));
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

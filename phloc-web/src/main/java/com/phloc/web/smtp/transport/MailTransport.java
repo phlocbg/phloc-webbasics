@@ -31,6 +31,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.event.ConnectionListener;
+import javax.mail.event.TransportEvent;
 import javax.mail.event.TransportListener;
 import javax.mail.internet.MimeMessage;
 import javax.net.ssl.SSLSocketFactory;
@@ -48,9 +49,10 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.WebExceptionHelper;
-import com.phloc.web.smtp.IEmailData;
-import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.EmailGlobalSettings;
+import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.IEmailDataTransportListener;
+import com.phloc.web.smtp.ISMTPSettings;
 
 /**
  * The wrapper around the main javax.mail transport
@@ -62,7 +64,9 @@ final class MailTransport
   public static final String SMTP_PROTOCOL = "smtp";
   public static final String SMTPS_PROTOCOL = "smtps";
 
-  private static final IStatisticsHandlerCounter s_aStatsCount = StatisticsManager.getCounterHandler (MailTransport.class);
+  private static final IStatisticsHandlerCounter s_aStatsCountSuccess = StatisticsManager.getCounterHandler (MailTransport.class);
+  private static final IStatisticsHandlerCounter s_aStatsCountFailed = StatisticsManager.getCounterHandler (MailTransport.class.getName () +
+                                                                                                            "$failed");
   private static final Logger s_aLogger = LoggerFactory.getLogger (MailTransport.class);
   private static final String HEADER_MESSAGE_ID = "Message-ID";
 
@@ -166,9 +170,13 @@ final class MailTransport
         if (aConnectionListener != null)
           aTransport.addConnectionListener (aConnectionListener);
 
-        final TransportListener aTransportListener = EmailGlobalSettings.getTransportListener ();
-        if (aTransportListener != null)
-          aTransport.addTransportListener (aTransportListener);
+        final TransportListener aGlobalTransportListener = EmailGlobalSettings.getTransportListener ();
+        final IEmailDataTransportListener aEmailDataTransportListener = EmailGlobalSettings.getEmailDataTransportListener ();
+        if (aGlobalTransportListener != null && aEmailDataTransportListener == null)
+        {
+          // Set only the global transport listener
+          aTransport.addTransportListener (aGlobalTransportListener);
+        }
 
         // Connect
         aTransport.connect (m_aSMTPSettings.getHostName (),
@@ -183,6 +191,36 @@ final class MailTransport
           {
             try
             {
+              // Set email data specific listeners
+              TransportListener aPerMailListener = null;
+              if (aEmailDataTransportListener != null)
+              {
+                aPerMailListener = new TransportListener ()
+                {
+                  public void messageDelivered (@Nonnull final TransportEvent aEvent)
+                  {
+                    aEmailDataTransportListener.messageDelivered (m_aSMTPSettings, aMessage, aEvent);
+                    if (aGlobalTransportListener != null)
+                      aGlobalTransportListener.messageDelivered (aEvent);
+                  }
+
+                  public void messageNotDelivered (@Nonnull final TransportEvent aEvent)
+                  {
+                    aEmailDataTransportListener.messageNotDelivered (m_aSMTPSettings, aMessage, aEvent);
+                    if (aGlobalTransportListener != null)
+                      aGlobalTransportListener.messageNotDelivered (aEvent);
+                  }
+
+                  public void messagePartiallyDelivered (@Nonnull final TransportEvent aEvent)
+                  {
+                    aEmailDataTransportListener.messagePartiallyDelivered (m_aSMTPSettings, aMessage, aEvent);
+                    if (aGlobalTransportListener != null)
+                      aGlobalTransportListener.messagePartiallyDelivered (aEvent);
+                  }
+                };
+                aTransport.addTransportListener (aPerMailListener);
+              }
+
               // convert from IEmailData to MimeMessage
               final MimeMessage aMimeMessage = new MimeMessage (m_aSession);
               MailConverter.fillMimeMesage (aMimeMessage, aMessage, m_aSMTPSettings.getCharsetObj ());
@@ -214,10 +252,15 @@ final class MailTransport
               // Start transmitting
               aTransport.sendMessage (aMimeMessage, aMimeMessage.getAllRecipients ());
 
-              s_aStatsCount.increment ();
+              // Remove per-mail listener again
+              if (aPerMailListener != null)
+                aTransport.removeTransportListener (aPerMailListener);
+
+              s_aStatsCountSuccess.increment ();
             }
             catch (final MessagingException ex)
             {
+              s_aStatsCountFailed.increment ();
               // Sending exactly THIS messages failed
               aFailedMessages.put (aMessage, ex);
             }

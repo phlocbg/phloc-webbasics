@@ -20,6 +20,7 @@ package com.phloc.web.smtp.transport.listener;
 import javax.annotation.Nonnull;
 import javax.mail.event.TransportEvent;
 
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.IEmailDataTransportListener;
 import com.phloc.web.smtp.ISMTPSettings;
@@ -45,4 +46,10 @@ public class DoNothingEmailDataTransportListener implements IEmailDataTransportL
                                          @Nonnull final IEmailData aEmailData,
                                          @Nonnull final TransportEvent aEvent)
   {}
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
+  }
 }

@@ -21,6 +21,8 @@ import javax.annotation.Nonnull;
 import javax.mail.event.ConnectionEvent;
 import javax.mail.event.ConnectionListener;
 
+import com.phloc.commons.string.ToStringGenerator;
+
 /**
  * An implementation of {@link ConnectionListener} that does nothing.
  * 
@@ -36,4 +38,10 @@ public class DoNothingConnectionListener implements ConnectionListener
 
   public void closed (@Nonnull final ConnectionEvent aEvent)
   {}
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
+  }
 }

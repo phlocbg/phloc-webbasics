@@ -21,6 +21,8 @@ import javax.annotation.Nonnull;
 import javax.mail.event.TransportEvent;
 import javax.mail.event.TransportListener;
 
+import com.phloc.commons.string.ToStringGenerator;
+
 /**
  * An implementation of {@link TransportListener} that does nothing.
  * 
@@ -39,4 +41,10 @@ public class DoNothingTransportListener implements TransportListener
   @Override
   public void messagePartiallyDelivered (@Nonnull final TransportEvent aEvent)
   {}
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
+  }
 }

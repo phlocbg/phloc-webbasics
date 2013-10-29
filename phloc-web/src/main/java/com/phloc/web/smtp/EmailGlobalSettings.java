@@ -78,6 +78,8 @@ public final class EmailGlobalSettings
   private static ConnectionListener s_aConnectionListener;
   @GuardedBy ("s_aRWLock")
   private static TransportListener s_aTransportListener;
+  @GuardedBy ("s_aRWLock")
+  private static IEmailDataTransportListener s_aEmailDataTransportListener;
 
   private EmailGlobalSettings ()
   {}
@@ -399,6 +401,43 @@ public final class EmailGlobalSettings
     try
     {
       return s_aTransportListener;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set a new mail transport listener. Changing these settings has no effect on
+   * existing mail queues!
+   * 
+   * @param aEmailDataTransportListener
+   *        The new transport listener to set. May be <code>null</code>.
+   */
+  public static void setEmailDataTransportListener (@Nullable final IEmailDataTransportListener aEmailDataTransportListener)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aEmailDataTransportListener = aEmailDataTransportListener;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * @return The default mail transport listener. May be <code>null</code>.
+   */
+  @Nullable
+  public static IEmailDataTransportListener getEmailDataTransportListener ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aEmailDataTransportListener;
     }
     finally
     {
