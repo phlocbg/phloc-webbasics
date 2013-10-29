@@ -17,9 +17,12 @@
  */
 package com.phloc.tinymce4;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -32,7 +35,9 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.api.EHCTextDirection;
 import com.phloc.html.hc.html.HCScript;
+import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.json2.impl.JsonObject;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -77,6 +82,66 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   // Cleanup/output
   private ETriState m_eConvertFontsToSpans = ETriState.UNDEFINED;
+
+  // custom_elements
+  // doctype
+  // element_format
+  // entities
+  // entity_encoding
+  // extended_valid_elements
+  // fix_list_elements
+  // font_formats
+  // fontsize_formats
+  // force_p_newlines
+  // force_hex_style_colors
+  // forced_root_block
+  // forced_root_block_attrs
+  // formats
+  // indentation
+  // invalid_elements
+  // keep_styles
+  // protect
+  // schema
+  // style_formats
+  // block_formats
+  // valid_children
+  // valid_elements
+  // valid_styles
+
+  // Content style
+  // body_id
+  // body_class
+  // content_css
+
+  // Visual aids
+  // visual
+
+  // Undo/Redo
+  // custom_undo_redo_levels
+
+  // User interface
+  // toolbar
+  // toolbar<N>
+  // menubar
+  // menu
+  // statusbar
+  // resize
+  // width
+  // height
+  // preview_styles
+  // fixed_toolbar_container
+
+  // URL
+  // convert_urls
+  // relative_urls
+  // remove_script_host
+  // document_base_url
+
+  // Callbacks
+  // file_browser_callback
+
+  // Custom
+  private final Map <String, IJSExpression> m_aCustom = new LinkedHashMap <String, IJSExpression> ();
 
   @Nullable
   public String getAutoFocus ()
@@ -492,6 +557,50 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eConvertFontsToSpans = ETriState.valueOf (aConvertFontsToSpans);
   }
 
+  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
+  {
+    addCustomOption (sName, JSExpr.lit (sValue));
+  }
+
+  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final IJSExpression aValue)
+  {
+    if (StringHelper.hasNoText (sName))
+      throw new IllegalArgumentException ("name");
+    if (aValue == null)
+      throw new NullPointerException ("value");
+    m_aCustom.put (sName, aValue);
+  }
+
+  @Nullable
+  public IJSExpression removeCustomOption (@Nullable final String sName)
+  {
+    return m_aCustom.remove (sName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, IJSExpression> getAllCustomOptions ()
+  {
+    return ContainerHelper.newOrderedMap (m_aCustom);
+  }
+
+  public boolean containsCustomOption (@Nullable final String sName)
+  {
+    return m_aCustom.containsKey (sName);
+  }
+
+  @Nullable
+  public IJSExpression getCustomOptionValue (@Nullable final String sName)
+  {
+    return m_aCustom.get (sName);
+  }
+
+  @Nonnegative
+  public int getCustomOptionCount ()
+  {
+    return m_aCustom.size ();
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getJSInitOptions ()
@@ -548,6 +657,10 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     // Cleanup/output
     if (m_eConvertFontsToSpans.isDefined ())
       aOptions.add ("convert_fonts_to_spans", isConvertFontsToSpans ());
+
+    // Custom
+    for (final Map.Entry <String, IJSExpression> aEntry : m_aCustom.entrySet ())
+      aOptions.add (aEntry.getKey (), aEntry.getValue ());
 
     return aOptions;
   }
