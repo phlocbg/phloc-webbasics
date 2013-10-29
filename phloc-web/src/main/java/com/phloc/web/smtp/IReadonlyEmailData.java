@@ -29,14 +29,16 @@ import javax.mail.internet.InternetAddress;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.email.IEmailAddress;
 
 /**
- * Contains all possible fields for mail sending in a read-only fashion.
+ * Contains all possible fields for mail sending in a read-only fashion. Note:
+ * the attribute container may only contain String values!
  * 
  * @author Philip Helger
  */
-public interface IReadonlyEmailData
+public interface IReadonlyEmailData extends IReadonlyAttributeContainer
 {
   /**
    * @return The type of the email - text or html.

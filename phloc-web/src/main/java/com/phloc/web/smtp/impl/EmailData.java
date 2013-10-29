@@ -33,6 +33,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -43,12 +44,13 @@ import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.InternetAddressUtils;
 
 /**
- * Default implementation of the {@link IEmailData} interface.
+ * Default implementation of the {@link IEmailData} interface. Note: the
+ * attribute container may only contain String values!
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class EmailData implements IEmailData
+public class EmailData extends MapBasedAttributeContainer implements IEmailData
 {
   private EEmailType m_eEmailType;
   private IEmailAddress m_aFrom;
@@ -377,7 +379,7 @@ public final class EmailData implements IEmailData
   {
     if (o == this)
       return true;
-    if (!(o instanceof EmailData))
+    if (!super.equals (o))
       return false;
     final EmailData rhs = (EmailData) o;
     return EqualsUtils.equals (m_aFrom, rhs.m_aFrom) &&
@@ -394,31 +396,33 @@ public final class EmailData implements IEmailData
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aFrom)
-                                       .append (m_aReplyTo)
-                                       .append (m_aTo)
-                                       .append (m_aCc)
-                                       .append (m_aBcc)
-                                       .append (m_aSentDate)
-                                       .append (m_sSubject)
-                                       .append (m_sBody)
-                                       .append (m_aAttachments)
-                                       .getHashCode ();
+    return HashCodeGenerator.getDerived (super.hashCode ())
+                            .append (m_aFrom)
+                            .append (m_aReplyTo)
+                            .append (m_aTo)
+                            .append (m_aCc)
+                            .append (m_aBcc)
+                            .append (m_aSentDate)
+                            .append (m_sSubject)
+                            .append (m_sBody)
+                            .append (m_aAttachments)
+                            .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("from", m_aFrom)
-                                       .appendIfNotNull ("replyTo", m_aReplyTo)
-                                       .append ("to", m_aTo)
-                                       .appendIfNotNull ("cc", m_aCc)
-                                       .appendIfNotNull ("bcc", m_aBcc)
-                                       .append ("sendDate", m_aSentDate)
-                                       .append ("subject", m_sSubject)
-                                       .append ("body", m_sBody)
-                                       .appendIfNotNull ("attachments", m_aAttachments)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("from", m_aFrom)
+                            .appendIfNotNull ("replyTo", m_aReplyTo)
+                            .append ("to", m_aTo)
+                            .appendIfNotNull ("cc", m_aCc)
+                            .appendIfNotNull ("bcc", m_aBcc)
+                            .append ("sendDate", m_aSentDate)
+                            .append ("subject", m_sSubject)
+                            .append ("body", m_sBody)
+                            .appendIfNotNull ("attachments", m_aAttachments)
+                            .toString ();
   }
 
   /**

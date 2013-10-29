@@ -24,7 +24,6 @@ import org.junit.Test;
 import com.phloc.commons.email.EmailAddress;
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.web.smtp.EEmailType;
-import com.phloc.web.smtp.impl.EmailData;
 
 public final class EmailDataTest
 {
@@ -48,6 +47,14 @@ public final class EmailDataTest
 
     aEmailData.setBcc (aMA);
     assertEquals (aMA, aEmailData.getBcc ().get (0));
+
+    PhlocTestUtils.testMicroTypeConversion (aEmailData);
+
+    assertEquals (0, aEmailData.getAttributeCount ());
+    aEmailData.setAttribute ("test", "foo");
+    assertEquals (1, aEmailData.getAttributeCount ());
+    aEmailData.setAttribute ("test2", "bar");
+    assertEquals (2, aEmailData.getAttributeCount ());
 
     PhlocTestUtils.testMicroTypeConversion (aEmailData);
   }

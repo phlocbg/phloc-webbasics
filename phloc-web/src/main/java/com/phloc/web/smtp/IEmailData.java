@@ -24,14 +24,16 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.email.IEmailAddress;
 
 /**
- * Contains all possible fields for mail sending
+ * Contains all possible fields for mail sending. Note: the attribute container
+ * may only contain String values!
  * 
  * @author Philip Helger
  */
-public interface IEmailData extends IReadonlyEmailData
+public interface IEmailData extends IReadonlyEmailData, IAttributeContainer
 {
   @Nonnull
   IEmailData setEmailType (@Nonnull EEmailType eType);

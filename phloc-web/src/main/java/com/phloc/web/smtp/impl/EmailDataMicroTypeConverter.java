@@ -19,6 +19,7 @@ package com.phloc.web.smtp.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,6 +27,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.annotations.ContainsSoftMigration;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.email.EmailAddress;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.microdom.IMicroElement;
@@ -51,6 +53,8 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_SUBJECT = "subject";
   private static final String ELEMENT_BODY = "body";
   private static final String ELEMENT_ATTACHMENTS = "attachments";
+  private static final String ELEMENT_CUSTOM = "custom";
+  private static final String ATTR_ID = "id";
 
   private static void _writeEmailAddress (@Nonnull final IMicroElement eParent,
                                           @Nonnull final IEmailAddress aEmailAddress)
@@ -94,6 +98,15 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
     eEmailData.appendChild (MicroTypeConverter.convertToMicroElement (aEmailData.getAttachments (),
                                                                       sNamespaceURI,
                                                                       ELEMENT_ATTACHMENTS));
+
+    for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aEmailData.getAllAttributes ())
+                                                                  .entrySet ())
+    {
+      final IMicroElement eCustom = eEmailData.appendElement (ELEMENT_CUSTOM);
+      eCustom.setAttribute (ATTR_ID, aEntry.getKey ());
+      eCustom.appendText (String.valueOf (aEntry.getValue ()));
+    }
+
     return eEmailData;
   }
 
@@ -162,6 +175,10 @@ public final class EmailDataMicroTypeConverter implements IMicroTypeConverter
       if (!aAttachments.isEmpty ())
         aEmailData.setAttachments (aAttachments);
     }
+
+    for (final IMicroElement eCustom : eEmailData.getAllChildElements (ELEMENT_CUSTOM))
+      aEmailData.setAttribute (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
+
     return aEmailData;
   }
 }
