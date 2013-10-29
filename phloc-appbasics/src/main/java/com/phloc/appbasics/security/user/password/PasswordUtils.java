@@ -17,20 +17,21 @@
  */
 package com.phloc.appbasics.security.user.password;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.security.CSecurity;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
+import com.phloc.commons.string.StringHelper;
 
 @ThreadSafe
 public final class PasswordUtils
@@ -39,6 +40,14 @@ public final class PasswordUtils
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("s_aRWLock")
   private static IPasswordConstraints s_aPasswordConstraints = new PasswordConstraints ();
+  @GuardedBy ("s_aRWLock")
+  private static Map <String, IPasswordHashCreator> s_aPasswordHashCreators = new HashMap <String, IPasswordHashCreator> ();
+
+  static
+  {
+    // Always register the old, default creator
+    registerPasswordHashCreator (new PasswordHashCreatorDefault ());
+  }
 
   private PasswordUtils ()
   {}
@@ -84,6 +93,61 @@ public final class PasswordUtils
   }
 
   /**
+   * Register a new password hash creator. No other password hash creator with
+   * the same algorithm name may be registered.
+   * 
+   * @param aPasswordHashCreator
+   *        The password hash creator to be registered. May not be
+   *        <code>null</code>.
+   */
+  public static void registerPasswordHashCreator (@Nonnull final IPasswordHashCreator aPasswordHashCreator)
+  {
+    if (aPasswordHashCreator == null)
+      throw new NullPointerException ("PasswordHashCreator");
+
+    final String sAlgorithmName = aPasswordHashCreator.getAlgorithmName ();
+    if (StringHelper.hasNoText (sAlgorithmName))
+      throw new IllegalArgumentException ("PasswordHashCreator algorithm '" +
+                                          sAlgorithmName +
+                                          "' is already registered!");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      if (s_aPasswordHashCreators.containsKey (sAlgorithmName))
+        throw new IllegalArgumentException ("Another PasswordHashCreator for algorithm '" +
+                                            sAlgorithmName +
+                                            "' is already registered!");
+      s_aPasswordHashCreators.put (sAlgorithmName, aPasswordHashCreator);
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
+   * Get the password hash creator of the specified algorithm name.
+   * 
+   * @param sAlgorithmName
+   *        The algorithm name to query. May be <code>null</code>.
+   * @return <code>null</code> if no such hash creator is registered.
+   */
+  @Nullable
+  public static IPasswordHashCreator getPaswordHashCreatorOfAlgorithm (@Nullable final String sAlgorithmName)
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aPasswordHashCreators.get (sAlgorithmName);
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
    * The one and only method to create a message digest hash from a password.
    * 
    * @param sPlainTextPassword
@@ -97,9 +161,6 @@ public final class PasswordUtils
     if (sPlainTextPassword == null)
       throw new NullPointerException ("plainTextPassword");
 
-    final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (CSecurity.USER_PASSWORD_ALGO,
-                                                                    sPlainTextPassword,
-                                                                    CCharset.CHARSET_UTF_8_OBJ);
-    return MessageDigestGeneratorHelper.getHexValueFromDigest (aDigest);
+    return getPaswordHashCreatorOfAlgorithm (PasswordHashCreatorDefault.ALGORITHM).createPasswordHash (sPlainTextPassword);
   }
 }

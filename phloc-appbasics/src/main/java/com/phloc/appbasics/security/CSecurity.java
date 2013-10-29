@@ -19,7 +19,6 @@ package com.phloc.appbasics.security;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.type.ObjectType;
 
 // ESCA-JAVA0116:
@@ -74,9 +73,6 @@ public final class CSecurity
   // Default right object facet names
   public static final String FACET_READ = "read";
   public static final String FACET_WRITE = "write";
-
-  /** Hashing algorithm to use for user passwords */
-  public static final EMessageDigestAlgorithm USER_PASSWORD_ALGO = EMessageDigestAlgorithm.SHA_512;
 
   // Object types
   public static final ObjectType TYPE_USER = new ObjectType ("user");
