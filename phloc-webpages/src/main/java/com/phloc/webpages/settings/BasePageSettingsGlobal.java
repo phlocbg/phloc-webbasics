@@ -68,6 +68,7 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
     MSG_EMAIL_SOCKET_TIMEOUT ("Socket-Timeout", "Socket timeout"),
     MSG_EMAIL_CONNECTION_LISTENER ("ConnectionListener", "ConnectionListener"),
     MSG_EMAIL_TRANSPORT_LISTENER ("TransportListener", "TransportListener"),
+    MSG_EMAIL_EMAILDATA_TRANSPORT_LISTENER ("EmailDataTransportListener", "EmailDataTransportListener"),
     MSG_NONE ("keiner", "none"),
     MSG_CHANGE_SUCCESS ("Die Einstellungen wurden erfolgreich gespeichert.", "Changes were changed successfully.");
 
@@ -174,6 +175,10 @@ public class BasePageSettingsGlobal extends AbstractWebPageExt
             .setLabel (EText.MSG_EMAIL_TRANSPORT_LISTENER.getDisplayText (aDisplayLocale))
             .setCtrl (EmailGlobalSettings.getTransportListener () == null ? HCEM.create (EText.MSG_NONE.getDisplayText (aDisplayLocale))
                                                                          : new HCTextNode (String.valueOf (EmailGlobalSettings.getTransportListener ())));
+      aTable.createItemRow ()
+            .setLabel (EText.MSG_EMAIL_EMAILDATA_TRANSPORT_LISTENER.getDisplayText (aDisplayLocale))
+            .setCtrl (EmailGlobalSettings.getEmailDataTransportListener () == null ? HCEM.create (EText.MSG_NONE.getDisplayText (aDisplayLocale))
+                                                                                  : new HCTextNode (String.valueOf (EmailGlobalSettings.getEmailDataTransportListener ())));
       aTabBox.addTab (EText.MSG_HEADER_EMAIL.getDisplayText (aDisplayLocale), aTable);
     }
 
