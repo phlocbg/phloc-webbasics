@@ -255,8 +255,11 @@ public class BootstrapTooltip
   }
 
   @Nonnull
-  public BootstrapTooltip setContainer (@Nullable final EHTMLElement eContainer)
+  public BootstrapTooltip setContainer (@Nonnull final EHTMLElement eContainer)
   {
+    if (eContainer == null)
+      throw new NullPointerException ("container");
+
     return setContainer (JQuerySelector.element (eContainer));
   }
 
