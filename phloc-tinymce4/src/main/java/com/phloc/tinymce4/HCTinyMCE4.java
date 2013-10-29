@@ -36,6 +36,7 @@ import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.api.EHCTextDirection;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.IJSExpression;
+import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
@@ -88,64 +89,62 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   // Cleanup/output
   private ETriState m_eConvertFontsToSpans = ETriState.UNDEFINED;
-
-  // custom_elements
-  // doctype
-  // element_format
-  // entities
-  // entity_encoding
-  // extended_valid_elements
-  // fix_list_elements
-  // font_formats
-  // fontsize_formats
-  // force_p_newlines
-  // force_hex_style_colors
-  // forced_root_block
-  // forced_root_block_attrs
-  // formats
-  // indentation
-  // invalid_elements
-  // keep_styles
-  // protect
-  // schema
-  // style_formats
-  // block_formats
-  // valid_children
-  // valid_elements
-  // valid_styles
+  // TODO custom_elements
+  // TODO doctype
+  // TODO element_format
+  // TODO entities
+  // TODO entity_encoding
+  // TODO extended_valid_elements
+  // TODO fix_list_elements
+  // TODO font_formats
+  // TODO fontsize_formats
+  // TODO force_p_newlines
+  // TODO force_hex_style_colors
+  // TODO forced_root_block
+  // TODO forced_root_block_attrs
+  // TODO formats
+  // TODO indentation
+  // TODO invalid_elements
+  // TODO keep_styles
+  // TODO protect
+  // TODO schema
+  // TODO style_formats
+  // TODO block_formats
+  // TODO valid_children
+  // TODO valid_elements
+  // TODO valid_styles
 
   // Content style
-  // body_id
-  // body_class
-  // content_css
+  // TODO body_id
+  // TODO body_class
+  // TODO content_css
 
   // Visual aids
-  // visual
+  // TODO visual
 
   // Undo/Redo
-  // custom_undo_redo_levels
+  // TODO custom_undo_redo_levels
 
   // User interface
-  // toolbar
-  // toolbar<N>
-  // menubar
-  // menu
-  // statusbar
+  // TODO toolbar
+  // TODO toolbar<N>
+  // TODO menubar
+  // TODO menu
+  // TODO statusbar
   private ETinyMCE4Resize m_eResize;
-  // resize
-  // width
-  // height
-  // preview_styles
-  // fixed_toolbar_container
+  // TODO width
+  // TODO height
+  // TODO preview_styles
+  // TODO fixed_toolbar_container
 
   // URL
-  // convert_urls
-  // relative_urls
-  // remove_script_host
-  // document_base_url
+  // TODO convert_urls
+  // TODO relative_urls
+  // TODO remove_script_host
+  // TODO document_base_url
 
   // Callbacks
-  // file_browser_callback
+  private JSAnonymousFunction m_aFileBrowserCallback;
 
   // Custom
   private final Map <String, IJSExpression> m_aCustom = new LinkedHashMap <String, IJSExpression> ();
@@ -530,6 +529,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eHiddenInput = ETriState.valueOf (aHiddenInput);
   }
 
+  // --- Cleanup/Output ---
+
   public boolean isConvertFontsToSpans ()
   {
     return m_eConvertFontsToSpans.getAsBooleanValue (DEFAULT_CONVERT_FONTS_TO_SPANS);
@@ -564,6 +565,14 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eConvertFontsToSpans = ETriState.valueOf (aConvertFontsToSpans);
   }
 
+  // --- Content style ---
+
+  // --- Visual aids ---
+
+  // --- Undo/Redo ---
+
+  // --- User interface ---
+
   @Nullable
   public ETinyMCE4Resize getResize ()
   {
@@ -573,6 +582,39 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   public void setResize (@Nullable final ETinyMCE4Resize eResize)
   {
     m_eResize = eResize;
+  }
+
+  // --- URL ---
+
+  // --- Callbacks ---
+
+  @Nullable
+  public JSAnonymousFunction getFileBrowserCallback ()
+  {
+    return m_aFileBrowserCallback;
+  }
+
+  /**
+   * This option enables you to add your own file browser/image browser to
+   * TinyMCE. If this option is set with a value a browse button will appear in
+   * different dialogues such as "insert/edit link" or "insert/edit image". If
+   * this option hasn't got a value set (or equals to false or null) the
+   * dialogues in question won't show any browse button. This function is
+   * executed each time a user clicks on the "browse" buttons in various
+   * dialogues. The format of this callback function is: fileBrowser(field_name,
+   * url, type, win) where field_name is the id/name of the form element that
+   * the browser should insert its URL into. The url parameter contains the URL
+   * value that is currently inside the field. The type parameter contains what
+   * type of browser to present; this value can be file, image or flash
+   * depending on what dialogue is calling the function. The win parameter
+   * contains a reference to the dialog/window that executes the function.
+   * 
+   * @param aFileBrowserCallback
+   *        Callback function
+   */
+  public void setFileBrowserCallback (@Nullable final JSAnonymousFunction aFileBrowserCallback)
+  {
+    m_aFileBrowserCallback = aFileBrowserCallback;
   }
 
   // --- custom options ---
@@ -678,9 +720,21 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     if (m_eConvertFontsToSpans.isDefined ())
       aOptions.add ("convert_fonts_to_spans", isConvertFontsToSpans ());
 
+    // Content style
+
+    // Visual aids
+
+    // Undo/Redo
+
     // User interface
     if (m_eResize != null)
       aOptions.add ("resize", m_eResize.getValue ());
+
+    // URL
+
+    // Callbacks
+    if (m_aFileBrowserCallback != null)
+      aOptions.add ("file_browser_callback", m_aFileBrowserCallback);
 
     // Custom
     for (final Map.Entry <String, IJSExpression> aEntry : m_aCustom.entrySet ())

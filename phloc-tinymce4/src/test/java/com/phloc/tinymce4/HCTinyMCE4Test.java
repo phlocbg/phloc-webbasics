@@ -17,12 +17,14 @@
  */
 package com.phloc.tinymce4;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
+import com.phloc.tinymce4.type.ETinyMCE4Resize;
 import com.phloc.webscopes.mock.WebScopeTestRule;
 
 /**
@@ -38,6 +40,16 @@ public final class HCTinyMCE4Test
   @Test
   public void testBasic ()
   {
-    assertNotNull (new HCTinyMCE4 ().build ());
+    final HCTinyMCE4 aEditor = new HCTinyMCE4 ();
+    assertEquals ("{selector:'textarea'}", aEditor.getJSInitOptions ().getJSCode ());
+    aEditor.setResize (ETinyMCE4Resize.DISABLE);
+    assertEquals ("{selector:'textarea',resize:false}", aEditor.getJSInitOptions ().getJSCode ());
+    aEditor.setResize (ETinyMCE4Resize.VERTICALLY);
+    assertEquals ("{selector:'textarea',resize:true}", aEditor.getJSInitOptions ().getJSCode ());
+    aEditor.setResize (ETinyMCE4Resize.BOTH);
+    assertEquals ("{selector:'textarea',resize:'both'}", aEditor.getJSInitOptions ().getJSCode ());
+    aEditor.setResize (null);
+    assertEquals ("{selector:'textarea'}", aEditor.getJSInitOptions ().getJSCode ());
+    assertNotNull (aEditor.build ());
   }
 }
