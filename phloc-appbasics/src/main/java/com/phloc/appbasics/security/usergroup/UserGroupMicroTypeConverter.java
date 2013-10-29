@@ -45,7 +45,8 @@ public final class UserGroupMicroTypeConverter implements IMicroTypeConverter
     final IMicroElement eUserGroup = new MicroElement (sNamespaceURI, sTagName);
     eUserGroup.setAttribute (ATTR_ID, aUserGroup.getID ());
     eUserGroup.setAttribute (ATTR_NAME, aUserGroup.getName ());
-    for (final Map.Entry <String, Object> aEntry : aUserGroup.getAllAttributes ().entrySet ())
+    for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aUserGroup.getAllAttributes ())
+                                                                  .entrySet ())
     {
       final IMicroElement eCustom = eUserGroup.appendElement (ELEMENT_CUSTOM);
       eCustom.setAttribute (ATTR_ID, aEntry.getKey ());

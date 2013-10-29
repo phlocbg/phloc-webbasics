@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.phloc.commons.annotations.ContainsSoftMigration;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
@@ -76,7 +77,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     if (aUser.getLastLoginDateTime () != null)
       eUser.setAttributeWithConversion (ATTR_LASTLOGINDT, aUser.getLastLoginDateTime ());
     eUser.setAttribute (ATTR_LOGINCOUNT, aUser.getLoginCount ());
-    for (final Map.Entry <String, Object> aEntry : aUser.getAllAttributes ().entrySet ())
+    for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aUser.getAllAttributes ())
+                                                                  .entrySet ())
     {
       final IMicroElement eCustom = eUser.appendElement (ELEMENT_CUSTOM);
       eCustom.setAttribute (ATTR_ID, aEntry.getKey ());

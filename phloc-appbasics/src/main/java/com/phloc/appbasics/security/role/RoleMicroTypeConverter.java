@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
@@ -47,7 +48,8 @@ public final class RoleMicroTypeConverter implements IMicroTypeConverter
     final IMicroElement eRole = new MicroElement (sNamespaceURI, sTagName);
     eRole.setAttribute (ATTR_ID, aRole.getID ());
     eRole.setAttribute (ATTR_NAME, aRole.getName ());
-    for (final Map.Entry <String, Object> aEntry : aRole.getAllAttributes ().entrySet ())
+    for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aRole.getAllAttributes ())
+                                                                  .entrySet ())
     {
       final IMicroElement eCustom = eRole.appendElement (ELEMENT_CUSTOM);
       eCustom.setAttribute (ATTR_ID, aEntry.getKey ());
