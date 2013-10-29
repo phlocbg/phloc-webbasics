@@ -23,6 +23,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.IDAO;
 import com.phloc.appbasics.app.dao.IDAOIO;
@@ -41,6 +42,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
+@ThreadSafe
 public abstract class AbstractDAO implements IDAO
 {
   /** By default auto-save is enabled */

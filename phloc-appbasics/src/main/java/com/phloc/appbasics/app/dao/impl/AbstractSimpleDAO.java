@@ -24,6 +24,7 @@ import java.util.Locale;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -65,6 +66,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * 
  * @author Philip Helger
  */
+@ThreadSafe
 public abstract class AbstractSimpleDAO extends AbstractDAO
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractSimpleDAO.class);
@@ -91,7 +93,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
                                                                                                        "$write");
 
   private final IHasFilename m_aFilenameProvider;
-  private String m_sPreviousFilename;
+  private String m_sLastFilename;
   private int m_nInitCount = 0;
   private DateTime m_aLastInitDT;
   private int m_nReadCount = 0;
@@ -374,6 +376,24 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
+   * @return The filename to which was written last. May be <code>null</code> if
+   *         no wrote action was performed yet.
+   */
+  @Nullable
+  public final String getLastFilename ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_sLastFilename;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
    * The main method for writing the new data to a file. This method may only be
    * called within a write lock!
    * 
@@ -394,10 +414,10 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     }
 
     // Check for a filename change before writing
-    if (!sFilename.equals (m_sPreviousFilename))
+    if (!sFilename.equals (m_sLastFilename))
     {
-      onFilenameChange (m_sPreviousFilename, sFilename);
-      m_sPreviousFilename = sFilename;
+      onFilenameChange (m_sLastFilename, sFilename);
+      m_sLastFilename = sFilename;
     }
 
     if (GlobalDebug.isDebugMode ())
@@ -573,7 +593,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("filenameProvider", m_aFilenameProvider)
-                            .append ("previousFilename", m_sPreviousFilename)
+                            .append ("previousFilename", m_sLastFilename)
                             .append ("initCount", m_nInitCount)
                             .appendIfNotNull ("lastInitDT", m_aLastInitDT)
                             .append ("readCount", m_nReadCount)
