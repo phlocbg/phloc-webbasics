@@ -80,6 +80,8 @@ import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 {
   @Translatable
@@ -277,6 +279,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   {}
 
   @Override
+  @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   protected void showSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, final IUser aSelectedObject)
   {
     final HCNodeList aNodeList = aWPEC.getNodeList ();
