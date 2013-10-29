@@ -57,7 +57,7 @@ public class LoggingConnectionListener implements ConnectionListener
 
   public void disconnected (@Nonnull final ConnectionEvent aEvent)
   {
-    LogUtils.log (s_aLogger, m_eErrorLevel, "Disconnected to SMTP server");
+    LogUtils.log (s_aLogger, m_eErrorLevel, "Disconnected from SMTP server");
   }
 
   public void closed (@Nonnull final ConnectionEvent aEvent)
