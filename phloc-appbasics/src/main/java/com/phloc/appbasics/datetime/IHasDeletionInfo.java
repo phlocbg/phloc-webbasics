@@ -21,6 +21,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.datetime.IHasDeletionDateTime;
 
+/**
+ * Base interface for an object that has a date time and a user ID.
+ * 
+ * @author Philip Helger
+ */
 public interface IHasDeletionInfo extends IHasDeletionDateTime
 {
   /**
