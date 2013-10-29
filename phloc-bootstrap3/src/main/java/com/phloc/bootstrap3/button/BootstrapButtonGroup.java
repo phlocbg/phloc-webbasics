@@ -18,7 +18,6 @@
 package com.phloc.bootstrap3.button;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.dropdown.BootstrapDropdownMenu;
 import com.phloc.html.hc.html.AbstractHCDiv;
@@ -44,7 +43,7 @@ public class BootstrapButtonGroup extends AbstractHCDiv <BootstrapButtonGroup>
   }
 
   public BootstrapButtonGroup (@Nonnull final EBootstrapButtonGroupType eType,
-                                @Nonnull final EBootstrapButtonGroupSize eSize)
+                               @Nonnull final EBootstrapButtonGroupSize eSize)
   {
     addClasses (eType.getAllCSSClasses ());
     addClass (eSize);
@@ -77,11 +76,11 @@ public class BootstrapButtonGroup extends AbstractHCDiv <BootstrapButtonGroup>
    * Add a button and convert it to a dropdown menu
    * 
    * @param aButton
-   *        The button to be added. May be <code>null</code>.
+   *        The button to be added. May not be <code>null</code>.
    * @return The created drop down button
    */
   @Nonnull
-  public BootstrapDropdownMenu addButtonAsDropDownMenu (@Nullable final BootstrapButton aButton)
+  public BootstrapDropdownMenu addButtonAsDropDownMenu (@Nonnull final BootstrapButton aButton)
   {
     // Add caret to button
     BootstrapDropdownMenu.makeDropdownToggle (aButton);
