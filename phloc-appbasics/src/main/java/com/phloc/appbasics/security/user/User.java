@@ -28,6 +28,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.joda.time.DateTime;
 
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.appbasics.security.user.password.PasswordHash;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
@@ -53,7 +54,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   private DateTime m_aDeletionDT;
   private String m_sLoginName;
   private String m_sEmailAddress;
-  private String m_sPasswordHash;
+  private PasswordHash m_aPasswordHash;
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
@@ -70,9 +71,8 @@ public class User extends MapBasedAttributeContainer implements IUser
    * @param sEmailAddress
    *        Email address of the user. May neither be <code>null</code> nor
    *        empty.
-   * @param sPasswordHash
-   *        Password hash of the user. May neither be <code>null</code> nor
-   *        empty.
+   * @param aPasswordHash
+   *        Password hash of the user. May not be <code>null</code>.
    * @param sFirstName
    *        The first name. May be <code>null</code>.
    * @param sLastName
@@ -86,7 +86,7 @@ public class User extends MapBasedAttributeContainer implements IUser
    */
   public User (@Nonnull @Nonempty final String sLoginName,
                @Nonnull @Nonempty final String sEmailAddress,
-               @Nonnull @Nonempty final String sPasswordHash,
+               @Nonnull final PasswordHash aPasswordHash,
                @Nullable final String sFirstName,
                @Nullable final String sLastName,
                @Nullable final Locale aDesiredLocale,
@@ -99,7 +99,7 @@ public class User extends MapBasedAttributeContainer implements IUser
           (DateTime) null,
           sLoginName,
           sEmailAddress,
-          sPasswordHash,
+          aPasswordHash,
           sFirstName,
           sLastName,
           aDesiredLocale,
@@ -114,7 +114,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   User (@Nonnull @Nonempty final String sID,
         @Nonnull @Nonempty final String sLoginName,
         @Nonnull @Nonempty final String sEmailAddress,
-        @Nonnull @Nonempty final String sPasswordHash,
+        @Nonnull final PasswordHash aPasswordHash,
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
@@ -127,7 +127,7 @@ public class User extends MapBasedAttributeContainer implements IUser
           (DateTime) null,
           sLoginName,
           sEmailAddress,
-          sPasswordHash,
+          aPasswordHash,
           sFirstName,
           sLastName,
           aDesiredLocale,
@@ -154,9 +154,8 @@ public class User extends MapBasedAttributeContainer implements IUser
    * @param sEmailAddress
    *        Email address of the user. May neither be <code>null</code> nor
    *        empty.
-   * @param sPasswordHash
-   *        Password hash of the user. May neither be <code>null</code> nor
-   *        empty.
+   * @param aPasswordHash
+   *        Password hash of the user. May not be <code>null</code>.
    * @param sFirstName
    *        The first name. May be <code>null</code>.
    * @param sLastName
@@ -180,7 +179,7 @@ public class User extends MapBasedAttributeContainer implements IUser
         @Nullable final DateTime aDeletionDT,
         @Nonnull @Nonempty final String sLoginName,
         @Nonnull @Nonempty final String sEmailAddress,
-        @Nonnull @Nonempty final String sPasswordHash,
+        @Nonnull final PasswordHash aPasswordHash,
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
         @Nullable final Locale aDesiredLocale,
@@ -198,8 +197,6 @@ public class User extends MapBasedAttributeContainer implements IUser
       throw new IllegalArgumentException ("loginName");
     if (StringHelper.hasNoText (sEmailAddress))
       throw new IllegalArgumentException ("emailAddress");
-    if (StringHelper.hasNoText (sPasswordHash))
-      throw new IllegalArgumentException ("passwordHash");
     if (nLoginCount < 0)
       throw new IllegalArgumentException ("loginCount");
     m_sID = sID;
@@ -208,7 +205,7 @@ public class User extends MapBasedAttributeContainer implements IUser
     m_aDeletionDT = aDeletionDT;
     m_sLoginName = sLoginName;
     m_sEmailAddress = sEmailAddress;
-    m_sPasswordHash = sPasswordHash;
+    setPasswordHash (aPasswordHash);
     m_sFirstName = sFirstName;
     m_sLastName = sLastName;
     m_aDesiredLocale = aDesiredLocale;
@@ -307,20 +304,20 @@ public class User extends MapBasedAttributeContainer implements IUser
 
   @Nonnull
   @Nonempty
-  public String getPasswordHash ()
+  public PasswordHash getPasswordHash ()
   {
-    return m_sPasswordHash;
+    return m_aPasswordHash;
   }
 
   @Nonnull
-  EChange setPasswordHash (@Nullable final String sPasswordHash)
+  EChange setPasswordHash (@Nonnull final PasswordHash aPasswordHash)
   {
-    if (StringHelper.hasNoText (sPasswordHash))
-      throw new IllegalArgumentException ("passwordHash");
+    if (aPasswordHash == null)
+      throw new NullPointerException ("passwordHash");
 
-    if (sPasswordHash.equals (m_sPasswordHash))
+    if (aPasswordHash.equals (m_aPasswordHash))
       return EChange.UNCHANGED;
-    m_sPasswordHash = sPasswordHash;
+    m_aPasswordHash = aPasswordHash;
     return EChange.CHANGED;
   }
 
@@ -460,7 +457,7 @@ public class User extends MapBasedAttributeContainer implements IUser
                             .appendIfNotNull ("deletionDT", m_aDeletionDT)
                             .append ("loginName", m_sLoginName)
                             .append ("emailAddress", m_sEmailAddress)
-                            .append ("passwordHash", m_sPasswordHash)
+                            .append ("passwordHash", m_aPasswordHash)
                             .appendIfNotNull ("firstName", m_sFirstName)
                             .appendIfNotNull ("lastName", m_sLastName)
                             .appendIfNotNull ("desiredLocale", m_aDesiredLocale)

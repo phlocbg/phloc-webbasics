@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.phloc.appbasics.security.user.password.PasswordUtils;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
@@ -48,7 +49,7 @@ public final class UserTest
                                  null,
                                  "MyName",
                                  "me@example.org",
-                                 "ABCDEF",
+                                 PasswordUtils.createUserDefaultPasswordHash ("ABCDEF"),
                                  "Philip",
                                  "Helger",
                                  Locale.GERMANY,
@@ -59,7 +60,7 @@ public final class UserTest
                                  false);
     assertEquals ("id1", aUser.getID ());
     assertEquals ("me@example.org", aUser.getEmailAddress ());
-    assertEquals ("ABCDEF", aUser.getPasswordHash ());
+    assertNotNull (aUser.getPasswordHash ());
     assertEquals ("Philip", aUser.getFirstName ());
     assertEquals ("Helger", aUser.getLastName ());
     assertEquals (Locale.GERMANY, aUser.getDesiredLocale ());
@@ -81,7 +82,7 @@ public final class UserTest
                                  null,
                                  "MyName",
                                  "me@example.org",
-                                 "ABCDEF",
+                                 PasswordUtils.createUserDefaultPasswordHash ("ABCDEF"),
                                  "Philip",
                                  "Helger",
                                  Locale.GERMANY,
@@ -100,7 +101,7 @@ public final class UserTest
     assertNotNull (aUser2);
     assertEquals ("id1", aUser2.getID ());
     assertEquals ("me@example.org", aUser2.getEmailAddress ());
-    assertEquals ("ABCDEF", aUser2.getPasswordHash ());
+    assertNotNull (aUser2.getPasswordHash ());
     assertEquals ("Philip", aUser2.getFirstName ());
     assertEquals ("Helger", aUser2.getLastName ());
     assertEquals (Locale.GERMANY, aUser2.getDesiredLocale ());

@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.appbasics.security.user.password.PasswordHash;
+import com.phloc.appbasics.security.user.password.PasswordHashCreatorDefault;
 import com.phloc.commons.annotations.ContainsSoftMigration;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.locale.LocaleCache;
@@ -48,6 +50,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   private static final String ELEMENT_LOGINNAME = "loginname";
   private static final String ELEMENT_EMAILADDRESS = "emailaddress";
   private static final String ELEMENT_PASSWORDHASH = "passwordhash";
+  private static final String ATTR_ALGORITHM = "algorithm";
   private static final String ELEMENT_FIRSTNAME = "firstname";
   private static final String ELEMENT_LASTNAME = "lastname";
   private static final String ELEMENT_CUSTOM = "custom";
@@ -67,7 +70,9 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     eUser.setAttributeWithConversion (ATTR_DELETIONDT, aUser.getDeletionDateTime ());
     eUser.appendElement (ELEMENT_LOGINNAME).appendText (aUser.getLoginName ());
     eUser.appendElement (ELEMENT_EMAILADDRESS).appendText (aUser.getEmailAddress ());
-    eUser.appendElement (ELEMENT_PASSWORDHASH).appendText (aUser.getPasswordHash ());
+    final IMicroElement ePasswordHash = eUser.appendElement (ELEMENT_PASSWORDHASH);
+    ePasswordHash.setAttribute (ATTR_ALGORITHM, aUser.getPasswordHash ().getAlgorithmName ());
+    ePasswordHash.appendText (aUser.getPasswordHash ().getPasswordHash ());
     if (aUser.getFirstName () != null)
       eUser.appendElement (ELEMENT_FIRSTNAME).appendText (aUser.getFirstName ());
     if (aUser.getLastName () != null)
@@ -104,7 +109,15 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final DateTime aDeletionDT = eUser.getAttributeWithConversion (ATTR_DELETIONDT, DateTime.class);
     final String sLoginName = MicroUtils.getChildTextContent (eUser, ELEMENT_LOGINNAME);
     final String sEmailAddress = MicroUtils.getChildTextContent (eUser, ELEMENT_EMAILADDRESS);
-    final String sPasswordHash = MicroUtils.getChildTextContent (eUser, ELEMENT_PASSWORDHASH);
+    final IMicroElement ePasswordHash = eUser.getFirstChildElement (ELEMENT_PASSWORDHASH);
+    String sPasswordHashAlgorithm = ePasswordHash.getAttribute (ATTR_ALGORITHM);
+    if (sPasswordHashAlgorithm == null)
+    {
+      // migration
+      sPasswordHashAlgorithm = PasswordHashCreatorDefault.ALGORITHM;
+    }
+    final String sPasswordHashValue = ePasswordHash.getTextContent ();
+    final PasswordHash aPasswordHash = new PasswordHash (sPasswordHashAlgorithm, sPasswordHashValue);
     final String sFirstName = MicroUtils.getChildTextContent (eUser, ELEMENT_FIRSTNAME);
     final String sLastName = MicroUtils.getChildTextContent (eUser, ELEMENT_LASTNAME);
     final String sDesiredLocale = eUser.getAttribute (ATTR_DESIREDLOCALE);
@@ -118,13 +131,14 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final boolean bDeleted = StringParser.parseBool (sDeleted);
     final String sDisabled = eUser.getAttribute (ATTR_DISABLED);
     final boolean bDisabled = StringParser.parseBool (sDisabled);
+
     return new User (sID,
                      aCreationDT,
                      aLastModificationDT,
                      aDeletionDT,
                      sLoginName,
                      sEmailAddress,
-                     sPasswordHash,
+                     aPasswordHash,
                      sFirstName,
                      sLastName,
                      aDesiredLocale,

@@ -138,7 +138,7 @@ public final class PasswordUtils
    * @return <code>null</code> if no such hash creator is registered.
    */
   @Nullable
-  public static IPasswordHashCreator getPaswordHashCreatorOfAlgorithm (@Nullable final String sAlgorithmName)
+  public static IPasswordHashCreator getPasswordHashCreatorOfAlgorithm (@Nullable final String sAlgorithmName)
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -216,16 +216,43 @@ public final class PasswordUtils
    * 
    * @param sPlainTextPassword
    *        Plain text password. May not be <code>null</code>.
-   * @return The String representation of the password hash.
+   * @return The password hash. Never <code>null</code>.
    * @see #getDefaultPasswordHashCreator()
    */
   @Nonnull
-  @Nonempty
-  public static String createUserPasswordHash (@Nonnull final String sPlainTextPassword)
+  public static PasswordHash createUserDefaultPasswordHash (@Nonnull final String sPlainTextPassword)
   {
     if (sPlainTextPassword == null)
       throw new NullPointerException ("plainTextPassword");
 
-    return getDefaultPasswordHashCreator ().createPasswordHash (sPlainTextPassword);
+    final IPasswordHashCreator aPHC = getDefaultPasswordHashCreator ();
+    final String sPasswordHash = aPHC.createPasswordHash (sPlainTextPassword);
+    return new PasswordHash (aPHC.getAlgorithmName (), sPasswordHash);
+  }
+
+  /**
+   * Create the password hash from the passed plain text password, using the
+   * default password hash creator.
+   * 
+   * @param sAlgorithmName
+   *        The password hash creator algorithm name to query. May neither be
+   *        <code>null</code> nor empty.
+   * @param sPlainTextPassword
+   *        Plain text password. May not be <code>null</code>.
+   * @return The password hash. Never <code>null</code>.
+   * @see #getDefaultPasswordHashCreator()
+   */
+  @Nonnull
+  public static PasswordHash createUserPasswordHash (@Nonnull @Nonempty final String sAlgorithmName,
+                                                     @Nonnull final String sPlainTextPassword)
+  {
+    if (sPlainTextPassword == null)
+      throw new NullPointerException ("plainTextPassword");
+
+    final IPasswordHashCreator aPHC = getPasswordHashCreatorOfAlgorithm (sAlgorithmName);
+    if (aPHC == null)
+      throw new IllegalArgumentException ("No password hash creator for algorithm '" + sAlgorithmName + "' registered!");
+    final String sPasswordHash = aPHC.createPasswordHash (sPlainTextPassword);
+    return new PasswordHash (sAlgorithmName, sPasswordHash);
   }
 }

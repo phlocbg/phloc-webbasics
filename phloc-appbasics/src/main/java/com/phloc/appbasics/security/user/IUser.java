@@ -27,6 +27,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.appbasics.auth.subject.IAuthSubject;
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.appbasics.security.user.password.PasswordHash;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.name.IHasDisplayName;
@@ -64,11 +65,10 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   String getEmailAddress ();
 
   /**
-   * @return The hashed password of the user.
+   * @return The hashed password of the user. Never <code>null</code>.
    */
   @Nonnull
-  @Nonempty
-  String getPasswordHash ();
+  PasswordHash getPasswordHash ();
 
   /**
    * @return The first name of the user.
