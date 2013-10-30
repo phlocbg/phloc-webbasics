@@ -15,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.security.password;
+package com.phloc.appbasics.security.password.hash;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.security.password.hash.IPasswordHashCreator;
-import com.phloc.appbasics.security.password.hash.PasswordHashCreatorManager;
 import com.phloc.commons.annotations.IsSPIInterface;
 
 /**

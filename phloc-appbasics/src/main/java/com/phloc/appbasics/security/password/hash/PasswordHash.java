@@ -17,16 +17,17 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class PasswordHash
 {
   private final String m_sAlgorithmName;
-  private final String m_sPasswordHash;
+  private final String m_sPasswordHashValue;
 
-  public PasswordHash (@Nonnull @Nonempty final String sAlgorithmName, @Nonnull @Nonempty final String sPasswordHash)
+  public PasswordHash (@Nonnull @Nonempty final String sAlgorithmName,
+                       @Nonnull @Nonempty final String sPasswordHashValue)
   {
     if (StringHelper.hasNoText (sAlgorithmName))
       throw new IllegalArgumentException ("algorithmName");
-    if (StringHelper.hasNoText (sPasswordHash))
-      throw new IllegalArgumentException ("passwordHash");
+    if (StringHelper.hasNoText (sPasswordHashValue))
+      throw new IllegalArgumentException ("passwordHashValue");
     m_sAlgorithmName = sAlgorithmName;
-    m_sPasswordHash = sPasswordHash;
+    m_sPasswordHashValue = sPasswordHashValue;
   }
 
   @Nonnull
@@ -38,9 +39,9 @@ public final class PasswordHash
 
   @Nonnull
   @Nonempty
-  public String getPasswordHash ()
+  public String getPasswordHashValue ()
   {
-    return m_sPasswordHash;
+    return m_sPasswordHashValue;
   }
 
   @Override
@@ -51,20 +52,20 @@ public final class PasswordHash
     if (!(o instanceof PasswordHash))
       return false;
     final PasswordHash rhs = (PasswordHash) o;
-    return m_sAlgorithmName.equals (rhs.m_sAlgorithmName) && m_sPasswordHash.equals (rhs.m_sPasswordHash);
+    return m_sAlgorithmName.equals (rhs.m_sAlgorithmName) && m_sPasswordHashValue.equals (rhs.m_sPasswordHashValue);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sAlgorithmName).append (m_sPasswordHash).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sAlgorithmName).append (m_sPasswordHashValue).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
     return new ToStringGenerator (this).append ("algorithmName", m_sAlgorithmName)
-                                       .append ("passwordHash", m_sPasswordHash)
+                                       .append ("passwordHashValue", m_sPasswordHashValue)
                                        .toString ();
   }
 }

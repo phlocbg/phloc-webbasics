@@ -72,7 +72,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     eUser.appendElement (ELEMENT_EMAILADDRESS).appendText (aUser.getEmailAddress ());
     final IMicroElement ePasswordHash = eUser.appendElement (ELEMENT_PASSWORDHASH);
     ePasswordHash.setAttribute (ATTR_ALGORITHM, aUser.getPasswordHash ().getAlgorithmName ());
-    ePasswordHash.appendText (aUser.getPasswordHash ().getPasswordHash ());
+    ePasswordHash.appendText (aUser.getPasswordHash ().getPasswordHashValue ());
     if (aUser.getFirstName () != null)
       eUser.appendElement (ELEMENT_FIRSTNAME).appendText (aUser.getFirstName ());
     if (aUser.getLastName () != null)

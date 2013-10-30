@@ -30,9 +30,13 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.security.password.constraint.IPasswordConstraintList;
 import com.phloc.appbasics.security.password.constraint.PasswordConstraintList;
 import com.phloc.appbasics.security.password.hash.IPasswordHashCreator;
+import com.phloc.appbasics.security.password.hash.IPasswordHashCreatorRegistrarSPI;
 import com.phloc.appbasics.security.password.hash.PasswordHash;
+import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
 import com.phloc.appbasics.security.password.hash.PasswordHashCreatorManager;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.lang.ServiceLoaderUtils;
 
 @ThreadSafe
 public final class PasswordUtils
@@ -45,6 +49,21 @@ public final class PasswordUtils
 
   @GuardedBy ("s_aRWLock")
   private static PasswordHashCreatorManager s_aPHCMgr;
+
+  static
+  {
+    // Register default implementation so that something is present
+    s_aPHCMgr.registerPasswordHashCreator (new PasswordHashCreatorDefault ());
+    s_aPHCMgr.setDefaultPasswordHashCreatorAlgorithm (PasswordHashCreatorDefault.ALGORITHM);
+
+    // Register all custom SPI implementations
+    for (final IPasswordHashCreatorRegistrarSPI aSPI : ServiceLoaderUtils.getAllSPIImplementations (IPasswordHashCreatorRegistrarSPI.class))
+      aSPI.registerPasswordHashCreator (s_aPHCMgr);
+  }
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final PasswordUtils s_aInstance = new PasswordUtils ();
 
   private PasswordUtils ()
   {}
