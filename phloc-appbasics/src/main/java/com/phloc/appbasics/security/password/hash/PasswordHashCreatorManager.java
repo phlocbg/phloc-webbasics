@@ -51,11 +51,7 @@ public final class PasswordHashCreatorManager
   private IPasswordHashCreator m_aDefaultPasswordHashCreator;
 
   public PasswordHashCreatorManager ()
-  {
-    // Always register the old, default creator
-    registerPasswordHashCreator (new PasswordHashCreatorDefault ());
-    setDefaultPasswordHashCreatorAlgorithm (PasswordHashCreatorDefault.ALGORITHM);
-  }
+  {}
 
   /**
    * Register a new password hash creator. No other password hash creator with
@@ -72,9 +68,7 @@ public final class PasswordHashCreatorManager
 
     final String sAlgorithmName = aPasswordHashCreator.getAlgorithmName ();
     if (StringHelper.hasNoText (sAlgorithmName))
-      throw new IllegalArgumentException ("PasswordHashCreator algorithm '" +
-                                          sAlgorithmName +
-                                          "' is already registered!");
+      throw new IllegalArgumentException ("PasswordHashCreator algorithm '" + aPasswordHashCreator + "' is empty!");
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -90,6 +84,27 @@ public final class PasswordHashCreatorManager
       m_aRWLock.writeLock ().unlock ();
     }
     s_aLogger.info ("Registered password hash creator algorithm '" + sAlgorithmName + "' to " + aPasswordHashCreator);
+  }
+
+  public void unregisterPasswordHashCreator (@Nullable final IPasswordHashCreator aPasswordHashCreator)
+  {
+    if (aPasswordHashCreator != null)
+    {
+      final String sAlgorithmName = aPasswordHashCreator.getAlgorithmName ();
+      if (StringHelper.hasText (sAlgorithmName))
+      {
+        m_aRWLock.writeLock ().lock ();
+        try
+        {
+          if (m_aPasswordHashCreators.remove (sAlgorithmName) != null)
+            s_aLogger.info ("Unregistered password hash creator algorithm '" + sAlgorithmName + "'");
+        }
+        finally
+        {
+          m_aRWLock.writeLock ().unlock ();
+        }
+      }
+    }
   }
 
   /**
