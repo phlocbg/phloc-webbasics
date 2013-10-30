@@ -18,8 +18,9 @@
 package com.phloc.appbasics.app.io;
 
 import static org.junit.Assert.assertTrue;
-import gnu.trove.set.TIntSet;
-import gnu.trove.set.hash.TIntHashSet;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,12 +43,12 @@ public final class WebIOIntIDFactoryTest
   public void testFileBasedIDProvider ()
   {
     final IIntIDFactory aIDProvider = new WebIOIntIDFactory ("junit.ids.dat");
-    final TIntSet aIDs = new TIntHashSet ();
+    final Set <Integer> aIDs = new HashSet <Integer> ();
 
     for (int i = 0; i < 1000; ++i)
     {
       final int nID = aIDProvider.getNewID ();
-      assertTrue ("Failed to add ID " + nID, aIDs.add (nID));
+      assertTrue ("Failed to add ID " + nID, aIDs.add (Integer.valueOf (nID)));
     }
   }
 }
