@@ -17,13 +17,10 @@
  */
 package com.phloc.appbasics.security.password;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -34,9 +31,8 @@ import com.phloc.appbasics.security.password.constraint.IPasswordConstraintList;
 import com.phloc.appbasics.security.password.constraint.PasswordConstraintList;
 import com.phloc.appbasics.security.password.hash.IPasswordHashCreator;
 import com.phloc.appbasics.security.password.hash.PasswordHash;
-import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
+import com.phloc.appbasics.security.password.hash.PasswordHashCreatorManager;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 
 @ThreadSafe
 public final class PasswordUtils
@@ -48,16 +44,7 @@ public final class PasswordUtils
   private static IPasswordConstraintList s_aPasswordConstraints = new PasswordConstraintList ();
 
   @GuardedBy ("s_aRWLock")
-  private static final Map <String, IPasswordHashCreator> s_aPasswordHashCreators = new HashMap <String, IPasswordHashCreator> ();
-  @GuardedBy ("s_aRWLock")
-  private static IPasswordHashCreator s_aDefaultPasswordHashCreator;
-
-  static
-  {
-    // Always register the old, default creator
-    registerPasswordHashCreator (new PasswordHashCreatorDefault ());
-    setDefaultPasswordHashCreatorAlgorithm (PasswordHashCreatorDefault.ALGORITHM);
-  }
+  private static PasswordHashCreatorManager s_aPHCMgr;
 
   private PasswordUtils ()
   {}
@@ -103,118 +90,12 @@ public final class PasswordUtils
   }
 
   /**
-   * Register a new password hash creator. No other password hash creator with
-   * the same algorithm name may be registered.
-   * 
-   * @param aPasswordHashCreator
-   *        The password hash creator to be registered. May not be
-   *        <code>null</code>.
-   */
-  public static void registerPasswordHashCreator (@Nonnull final IPasswordHashCreator aPasswordHashCreator)
-  {
-    if (aPasswordHashCreator == null)
-      throw new NullPointerException ("PasswordHashCreator");
-
-    final String sAlgorithmName = aPasswordHashCreator.getAlgorithmName ();
-    if (StringHelper.hasNoText (sAlgorithmName))
-      throw new IllegalArgumentException ("PasswordHashCreator algorithm '" +
-                                          sAlgorithmName +
-                                          "' is already registered!");
-
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      if (s_aPasswordHashCreators.containsKey (sAlgorithmName))
-        throw new IllegalArgumentException ("Another PasswordHashCreator for algorithm '" +
-                                            sAlgorithmName +
-                                            "' is already registered!");
-      s_aPasswordHashCreators.put (sAlgorithmName, aPasswordHashCreator);
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-    s_aLogger.info ("Registered password hash creator algorithm '" + sAlgorithmName + "' to " + aPasswordHashCreator);
-  }
-
-  /**
-   * Get the password hash creator of the specified algorithm name.
-   * 
-   * @param sAlgorithmName
-   *        The algorithm name to query. May be <code>null</code>.
-   * @return <code>null</code> if no such hash creator is registered.
-   */
-  @Nullable
-  public static IPasswordHashCreator getPasswordHashCreatorOfAlgorithm (@Nullable final String sAlgorithmName)
-  {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      return s_aPasswordHashCreators.get (sAlgorithmName);
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * Set the default password hash creator algorithm. A matching
-   * {@link IPasswordHashCreator} object must be registered previously using
-   * {@link #registerPasswordHashCreator(IPasswordHashCreator)}.
-   * 
-   * @param sAlgorithm
-   *        The name of the algorithm to use as the default. May neither be
-   *        <code>null</code> nor empty.
-   */
-  public static void setDefaultPasswordHashCreatorAlgorithm (@Nonnull @Nonempty final String sAlgorithm)
-  {
-    if (StringHelper.hasNoText (sAlgorithm))
-      throw new IllegalArgumentException ("algorithm");
-
-    s_aRWLock.writeLock ().lock ();
-    try
-    {
-      final IPasswordHashCreator aPHC = s_aPasswordHashCreators.get (sAlgorithm);
-      if (aPHC == null)
-        throw new IllegalArgumentException ("No PasswordHashCreator registered for algorithm '" + sAlgorithm + "'");
-      s_aDefaultPasswordHashCreator = aPHC;
-    }
-    finally
-    {
-      s_aRWLock.writeLock ().unlock ();
-    }
-    s_aLogger.info ("Default PasswordHashCreator algorithm set to '" + sAlgorithm + "'");
-  }
-
-  /**
-   * @return The default {@link IPasswordHashCreator} algorithm to use. Never
-   *         <code>null</code>.
+   * @return The central {@link PasswordHashCreatorManager}.
    */
   @Nonnull
-  public static IPasswordHashCreator getDefaultPasswordHashCreator ()
+  public static PasswordHashCreatorManager getPasswordHashCreatorManager ()
   {
-    s_aRWLock.readLock ().lock ();
-    try
-    {
-      final IPasswordHashCreator ret = s_aDefaultPasswordHashCreator;
-      if (ret == null)
-        throw new IllegalStateException ("No default PasswordHashCreator present!");
-      return ret;
-    }
-    finally
-    {
-      s_aRWLock.readLock ().unlock ();
-    }
-  }
-
-  /**
-   * @return The default password hash creator algorithm name currently in use.
-   */
-  @Nonnull
-  public static String getDefaultPasswordHashCreatorAlgorithm ()
-  {
-    return getDefaultPasswordHashCreator ().getAlgorithmName ();
+    return s_aPHCMgr;
   }
 
   /**
@@ -224,7 +105,6 @@ public final class PasswordUtils
    * @param sPlainTextPassword
    *        Plain text password. May not be <code>null</code>.
    * @return The password hash. Never <code>null</code>.
-   * @see #getDefaultPasswordHashCreator()
    */
   @Nonnull
   public static PasswordHash createUserDefaultPasswordHash (@Nonnull final String sPlainTextPassword)
@@ -232,7 +112,7 @@ public final class PasswordUtils
     if (sPlainTextPassword == null)
       throw new NullPointerException ("plainTextPassword");
 
-    final IPasswordHashCreator aPHC = getDefaultPasswordHashCreator ();
+    final IPasswordHashCreator aPHC = s_aPHCMgr.getDefaultPasswordHashCreator ();
     final String sPasswordHash = aPHC.createPasswordHash (sPlainTextPassword);
     return new PasswordHash (aPHC.getAlgorithmName (), sPasswordHash);
   }
@@ -247,7 +127,6 @@ public final class PasswordUtils
    * @param sPlainTextPassword
    *        Plain text password. May not be <code>null</code>.
    * @return The password hash. Never <code>null</code>.
-   * @see #getDefaultPasswordHashCreator()
    */
   @Nonnull
   public static PasswordHash createUserPasswordHash (@Nonnull @Nonempty final String sAlgorithmName,
@@ -256,7 +135,7 @@ public final class PasswordUtils
     if (sPlainTextPassword == null)
       throw new NullPointerException ("plainTextPassword");
 
-    final IPasswordHashCreator aPHC = getPasswordHashCreatorOfAlgorithm (sAlgorithmName);
+    final IPasswordHashCreator aPHC = s_aPHCMgr.getPasswordHashCreatorOfAlgorithm (sAlgorithmName);
     if (aPHC == null)
       throw new IllegalArgumentException ("No password hash creator for algorithm '" + sAlgorithmName + "' registered!");
     final String sPasswordHash = aPHC.createPasswordHash (sPlainTextPassword);

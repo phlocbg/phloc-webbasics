@@ -40,7 +40,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class PasswordHashCreatorManager
+public class PasswordHashCreatorManager
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordHashCreatorManager.class);
 
