@@ -32,7 +32,7 @@ import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.audit.AuditUtils;
-import com.phloc.appbasics.security.password.PasswordUtils;
+import com.phloc.appbasics.security.password.PasswordManager;
 import com.phloc.appbasics.security.password.hash.PasswordHash;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -112,7 +112,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,
                         CSecurity.USER_ADMINISTRATOR_LOGIN,
                         CSecurity.USER_ADMINISTRATOR_EMAIL,
-                        PasswordUtils.createUserDefaultPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
+                        PasswordManager.createUserDefaultPasswordHash (CSecurity.USER_ADMINISTRATOR_PASSWORD),
                         CSecurity.USER_ADMINISTRATOR_NAME,
                         (String) null,
                         (Locale) null,
@@ -123,7 +123,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     _addUser (new User (CSecurity.USER_USER_ID,
                         CSecurity.USER_USER_LOGIN,
                         CSecurity.USER_USER_EMAIL,
-                        PasswordUtils.createUserDefaultPasswordHash (CSecurity.USER_USER_PASSWORD),
+                        PasswordManager.createUserDefaultPasswordHash (CSecurity.USER_USER_PASSWORD),
                         CSecurity.USER_USER_NAME,
                         (String) null,
                         (Locale) null,
@@ -134,7 +134,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     _addUser (new User (CSecurity.USER_GUEST_ID,
                         CSecurity.USER_GUEST_LOGIN,
                         CSecurity.USER_GUEST_EMAIL,
-                        PasswordUtils.createUserDefaultPasswordHash (CSecurity.USER_GUEST_PASSWORD),
+                        PasswordManager.createUserDefaultPasswordHash (CSecurity.USER_GUEST_PASSWORD),
                         CSecurity.USER_GUEST_NAME,
                         (String) null,
                         (Locale) null,
@@ -196,7 +196,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     // Create user
     final User aUser = new User (sLoginName,
                                  sEmailAddress,
-                                 PasswordUtils.createUserDefaultPasswordHash (sPlainTextPassword),
+                                 PasswordManager.createUserDefaultPasswordHash (sPlainTextPassword),
                                  sFirstName,
                                  sLastName,
                                  aDesiredLocale,
@@ -252,7 +252,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     final User aUser = new User (sID,
                                  sLoginName,
                                  sEmailAddress,
-                                 PasswordUtils.createUserDefaultPasswordHash (sPlainTextPassword),
+                                 PasswordManager.createUserDefaultPasswordHash (sPlainTextPassword),
                                  sFirstName,
                                  sLastName,
                                  aDesiredLocale,
@@ -505,7 +505,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       return EChange.UNCHANGED;
     }
 
-    final PasswordHash aPasswordHash = PasswordUtils.createUserDefaultPasswordHash (sNewPlainTextPassword);
+    final PasswordHash aPasswordHash = PasswordManager.createUserDefaultPasswordHash (sNewPlainTextPassword);
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -662,7 +662,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
 
     // Now compare the hashes
     final String sPasswordHashAlgorithm = aUser.getPasswordHash ().getAlgorithmName ();
-    final PasswordHash aPasswordHash = PasswordUtils.createUserPasswordHash (sPasswordHashAlgorithm, sPlainTextPassword);
+    final PasswordHash aPasswordHash = PasswordManager.createUserPasswordHash (sPasswordHashAlgorithm, sPlainTextPassword);
     return aUser.getPasswordHash ().equals (aPasswordHash);
   }
 }

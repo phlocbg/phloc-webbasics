@@ -38,14 +38,19 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.lang.ServiceLoaderUtils;
 
+/**
+ * Central class for all password related elements.
+ * 
+ * @author Philip Helger
+ */
 @ThreadSafe
-public final class PasswordUtils
+public final class PasswordManager
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordUtils.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordManager.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
-  private static IPasswordConstraintList s_aPasswordConstraints = new PasswordConstraintList ();
+  private static IPasswordConstraintList s_aPasswordConstraintList = new PasswordConstraintList ();
 
   @GuardedBy ("s_aRWLock")
   private static PasswordHashCreatorManager s_aPHCMgr;
@@ -63,9 +68,9 @@ public final class PasswordUtils
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
-  private static final PasswordUtils s_aInstance = new PasswordUtils ();
+  private static final PasswordManager s_aInstance = new PasswordManager ();
 
-  private PasswordUtils ()
+  private PasswordManager ()
   {}
 
   @Nonnull
@@ -74,7 +79,7 @@ public final class PasswordUtils
     s_aRWLock.readLock ().lock ();
     try
     {
-      return s_aPasswordConstraints;
+      return s_aPasswordConstraintList;
     }
     finally
     {
@@ -90,7 +95,7 @@ public final class PasswordUtils
     s_aRWLock.writeLock ().lock ();
     try
     {
-      s_aPasswordConstraints = aPasswordConstraints;
+      s_aPasswordConstraintList = aPasswordConstraints;
     }
     finally
     {
