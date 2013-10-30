@@ -43,6 +43,13 @@ public class PasswordConstraintList implements IPasswordConstraintList
   public PasswordConstraintList ()
   {}
 
+  public PasswordConstraintList (@Nonnull final IPasswordConstraintList aOther)
+  {
+    if (aOther == null)
+      throw new NullPointerException ("other");
+    m_aConstraints.addAll (aOther.getAllPasswordConstraints ());
+  }
+
   public PasswordConstraintList (@Nullable final IPasswordConstraint... aPasswordConstraints)
   {
     if (aPasswordConstraints != null)
@@ -143,6 +150,12 @@ public class PasswordConstraintList implements IPasswordConstraintList
     for (final IPasswordConstraint aPasswordConstraint : m_aConstraints)
       ret.add (aPasswordConstraint.getDescription (aContentLocale));
     return ret;
+  }
+
+  @Nonnull
+  public PasswordConstraintList getClone ()
+  {
+    return new PasswordConstraintList (this);
   }
 
   @Override

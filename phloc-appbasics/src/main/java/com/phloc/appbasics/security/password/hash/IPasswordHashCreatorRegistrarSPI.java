@@ -36,5 +36,5 @@ public interface IPasswordHashCreatorRegistrarSPI
    * @param aRegistry
    *        The registry to register your creators. Never <code>null</code>.
    */
-  void registerPasswordHashCreator (@Nonnull PasswordHashCreatorManager aRegistry);
+  void registerPasswordHashCreators (@Nonnull PasswordHashCreatorManager aRegistry);
 }

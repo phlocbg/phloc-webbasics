@@ -24,6 +24,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ICloneable;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
@@ -31,7 +32,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * 
  * @author Philip Helger
  */
-public interface IPasswordConstraintList
+public interface IPasswordConstraintList extends ICloneable <IPasswordConstraintList>
 {
   /**
    * @return <code>true</code> if at least one constraint is present

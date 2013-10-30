@@ -52,8 +52,7 @@ public final class PasswordManager
   @GuardedBy ("s_aRWLock")
   private static IPasswordConstraintList s_aPasswordConstraintList = new PasswordConstraintList ();
 
-  @GuardedBy ("s_aRWLock")
-  private static PasswordHashCreatorManager s_aPHCMgr;
+  private static final PasswordHashCreatorManager s_aPHCMgr = new PasswordHashCreatorManager ();
 
   static
   {
@@ -63,7 +62,7 @@ public final class PasswordManager
 
     // Register all custom SPI implementations
     for (final IPasswordHashCreatorRegistrarSPI aSPI : ServiceLoaderUtils.getAllSPIImplementations (IPasswordHashCreatorRegistrarSPI.class))
-      aSPI.registerPasswordHashCreator (s_aPHCMgr);
+      aSPI.registerPasswordHashCreators (s_aPHCMgr);
   }
 
   @PresentForCodeCoverage
@@ -92,16 +91,18 @@ public final class PasswordManager
     if (aPasswordConstraints == null)
       throw new NullPointerException ("passwordConstraints");
 
+    // Create a copy
+    final IPasswordConstraintList aRealPasswordConstraints = aPasswordConstraints.getClone ();
     s_aRWLock.writeLock ().lock ();
     try
     {
-      s_aPasswordConstraintList = aPasswordConstraints;
+      s_aPasswordConstraintList = aRealPasswordConstraints;
     }
     finally
     {
       s_aRWLock.writeLock ().unlock ();
     }
-    s_aLogger.info ("Set global password constraints to " + aPasswordConstraints);
+    s_aLogger.info ("Set global password constraints to " + aRealPasswordConstraints);
   }
 
   /**
