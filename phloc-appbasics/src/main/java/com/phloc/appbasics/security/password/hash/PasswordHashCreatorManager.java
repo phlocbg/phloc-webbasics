@@ -17,8 +17,10 @@
  */
 package com.phloc.appbasics.security.password.hash;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -31,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -121,6 +125,36 @@ public class PasswordHashCreatorManager
     try
     {
       return m_aPasswordHashCreators.get (sAlgorithmName);
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllPasswordHashCreatorAlgorithms ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newSet (m_aPasswordHashCreators.keySet ());
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <IPasswordHashCreator> getAllPasswordHashCreators ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return ContainerHelper.newList (m_aPasswordHashCreators.values ());
     }
     finally
     {

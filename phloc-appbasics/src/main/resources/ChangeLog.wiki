@@ -2,7 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
-<tr><td>10/30/13</td><td>change</td><td>api</td><td>*yes*</td><td>Renamed PasswordUtils to GlobalPasswordManager</td></tr>
+<tr border="1"><td>10/30/13</td><td colspan="4">_Release *2.6.0*_</td></tr>
+<tr><td>10/30/13</td><td>change</td><td>api</td><td>*yes*</td><td>Renamed PasswordUtils to GlobalPasswordSettings</td></tr>
 <tr><td>10/30/13</td><td>add</td><td>api</td><td></td><td>PasswordConstraintList is now clonable</td></tr>
 <tr><td>10/30/13</td><td>change</td><td>api</td><td>*yes*</td><td>Renamed PasswordConstraints to PasswordConstraintList</td></tr>
 <tr><td>10/30/13</td><td>add</td><td>tech</td><td></td><td>Added possibility to register password hash creators via SPI</td></tr>

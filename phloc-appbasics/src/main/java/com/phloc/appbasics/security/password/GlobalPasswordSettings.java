@@ -45,9 +45,9 @@ import com.phloc.commons.lang.ServiceLoaderUtils;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class GlobalPasswordManager
+public final class GlobalPasswordSettings
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalPasswordManager.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalPasswordSettings.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
@@ -68,9 +68,9 @@ public final class GlobalPasswordManager
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
-  private static final GlobalPasswordManager s_aInstance = new GlobalPasswordManager ();
+  private static final GlobalPasswordSettings s_aInstance = new GlobalPasswordSettings ();
 
-  private GlobalPasswordManager ()
+  private GlobalPasswordSettings ()
   {}
 
   /**
