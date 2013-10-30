@@ -27,9 +27,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.AccessManager;
+import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.role.IRole;
 import com.phloc.appbasics.security.user.IUser;
-import com.phloc.appbasics.security.user.password.PasswordUtils;
 import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -425,8 +425,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
     if (!bEdit)
     {
-      final List <String> aPasswordErrors = PasswordUtils.getPasswordConstraints ()
-                                                         .getInvalidPasswordDescriptions (sPassword, aDisplayLocale);
+      final List <String> aPasswordErrors = GlobalPasswordSettings.getPasswordConstraintList ()
+                                                                  .getInvalidPasswordDescriptions (sPassword,
+                                                                                                   aDisplayLocale);
       for (final String sPasswordError : aPasswordErrors)
         aFormErrors.addFieldError (FIELD_PASSWORD, sPasswordError);
       if (!EqualsUtils.equals (sPassword, sPasswordConf))
@@ -568,7 +569,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (!bEdit)
     {
       // Password is only shown on creation of a new user
-      final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
+      final boolean bHasAnyPasswordConstraint = GlobalPasswordSettings.getPasswordConstraintList ().hasConstraints ();
 
       final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
@@ -638,9 +639,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         final String sPlainTextPassword = aWPEC.getAttr (FIELD_PASSWORD);
         final String sPlainTextPasswordConfirm = aWPEC.getAttr (FIELD_PASSWORD_CONFIRM);
 
-        final List <String> aPasswordErrors = PasswordUtils.getPasswordConstraints ()
-                                                           .getInvalidPasswordDescriptions (sPlainTextPassword,
-                                                                                            aDisplayLocale);
+        final List <String> aPasswordErrors = GlobalPasswordSettings.getPasswordConstraintList ()
+                                                                    .getInvalidPasswordDescriptions (sPlainTextPassword,
+                                                                                                     aDisplayLocale);
         for (final String sPasswordError : aPasswordErrors)
           aFormErrors.addFieldError (FIELD_PASSWORD, sPasswordError);
         if (!EqualsUtils.equals (sPlainTextPassword, sPlainTextPasswordConfirm))
@@ -659,7 +660,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       if (bShowForm)
       {
         // Show input form
-        final boolean bHasAnyPasswordConstraint = PasswordUtils.getPasswordConstraints ().hasConstraints ();
+        final boolean bHasAnyPasswordConstraint = GlobalPasswordSettings.getPasswordConstraintList ().hasConstraints ();
         final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
         final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (200),
                                                                                                HCCol.star ()));
