@@ -25,9 +25,9 @@ import javax.servlet.ServletContext;
 
 import com.phloc.appbasics.app.ApplicationLocaleManager;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
-import com.phloc.appbasics.security.user.password.PasswordConstraintMinLength;
-import com.phloc.appbasics.security.user.password.PasswordConstraints;
-import com.phloc.appbasics.security.user.password.PasswordUtils;
+import com.phloc.appbasics.security.password.GlobalPasswordSettings;
+import com.phloc.appbasics.security.password.constraint.PasswordConstraintList;
+import com.phloc.appbasics.security.password.constraint.PasswordConstraintMinLength;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -68,7 +68,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
     UserDataManager.setServletContextIO (false);
 
     // Define the password constrains
-    PasswordUtils.setPasswordConstraints (new PasswordConstraints (new PasswordConstraintMinLength (6)));
+    GlobalPasswordSettings.setPasswordConstraintList (new PasswordConstraintList (new PasswordConstraintMinLength (6)));
 
     // Global JS formatting stuff :(
     JSPrinter.setGenerateComments (false);
