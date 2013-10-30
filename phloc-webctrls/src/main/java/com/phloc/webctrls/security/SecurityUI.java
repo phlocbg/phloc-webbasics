@@ -24,8 +24,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.AccessManager;
+import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.user.IUser;
-import com.phloc.appbasics.security.user.password.PasswordUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.htmlext.HCUtils;
@@ -55,8 +55,8 @@ public final class SecurityUI
   @Nullable
   public static IHCNode createPasswordConstraintTip (@Nonnull final Locale aDisplayLocale)
   {
-    final List <String> aTexts = PasswordUtils.getPasswordConstraints ()
-                                              .getAllPasswordConstraintDescriptions (aDisplayLocale);
+    final List <String> aTexts = GlobalPasswordSettings.getPasswordConstraintList ()
+                                                       .getAllPasswordConstraintDescriptions (aDisplayLocale);
     if (aTexts.isEmpty ())
       return null;
 
