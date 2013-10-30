@@ -54,8 +54,8 @@ public interface IPasswordConstraintList extends ICloneable <IPasswordConstraint
   List <IPasswordConstraint> getAllPasswordConstraints ();
 
   /**
-   * Check if the passed password is valid. Breaks after the first unfulfilled
-   * constrained
+   * Check if the passed plaintext password is valid. Breaks after the first
+   * unfulfilled constrained
    * 
    * @param sPlainTextPassword
    *        The password to check. May be <code>null</code>.

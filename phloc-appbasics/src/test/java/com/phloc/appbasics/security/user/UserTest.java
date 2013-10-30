@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
-import com.phloc.appbasics.security.password.PasswordManager;
+import com.phloc.appbasics.security.password.GlobalPasswordManager;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
@@ -49,7 +49,7 @@ public final class UserTest
                                  null,
                                  "MyName",
                                  "me@example.org",
-                                 PasswordManager.createUserDefaultPasswordHash ("ABCDEF"),
+                                 GlobalPasswordManager.createUserDefaultPasswordHash ("ABCDEF"),
                                  "Philip",
                                  "Helger",
                                  Locale.GERMANY,
@@ -82,7 +82,7 @@ public final class UserTest
                                  null,
                                  "MyName",
                                  "me@example.org",
-                                 PasswordManager.createUserDefaultPasswordHash ("ABCDEF"),
+                                 GlobalPasswordManager.createUserDefaultPasswordHash ("ABCDEF"),
                                  "Philip",
                                  "Helger",
                                  Locale.GERMANY,

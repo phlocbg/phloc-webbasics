@@ -36,6 +36,7 @@ import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
 import com.phloc.appbasics.security.password.hash.PasswordHashCreatorManager;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.lang.ServiceLoaderUtils;
 
 /**
@@ -44,9 +45,9 @@ import com.phloc.commons.lang.ServiceLoaderUtils;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class PasswordManager
+public final class GlobalPasswordManager
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordManager.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalPasswordManager.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
   @GuardedBy ("s_aRWLock")
@@ -67,18 +68,23 @@ public final class PasswordManager
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
-  private static final PasswordManager s_aInstance = new PasswordManager ();
+  private static final GlobalPasswordManager s_aInstance = new GlobalPasswordManager ();
 
-  private PasswordManager ()
+  private GlobalPasswordManager ()
   {}
 
+  /**
+   * @return The current password constraint list. Never <code>null</code> but
+   *         maybe empty.
+   */
   @Nonnull
-  public static IPasswordConstraintList getPasswordConstraints ()
+  @ReturnsMutableCopy
+  public static IPasswordConstraintList getPasswordConstraintList ()
   {
     s_aRWLock.readLock ().lock ();
     try
     {
-      return s_aPasswordConstraintList;
+      return s_aPasswordConstraintList.getClone ();
     }
     finally
     {
@@ -86,13 +92,19 @@ public final class PasswordManager
     }
   }
 
-  public static void setPasswordConstraints (@Nonnull final IPasswordConstraintList aPasswordConstraints)
+  /**
+   * Set the global password constraint list.
+   * 
+   * @param aPasswordConstraintList
+   *        The list to be set. May not be <code>null</code>.
+   */
+  public static void setPasswordConstraintList (@Nonnull final IPasswordConstraintList aPasswordConstraintList)
   {
-    if (aPasswordConstraints == null)
-      throw new NullPointerException ("passwordConstraints");
+    if (aPasswordConstraintList == null)
+      throw new NullPointerException ("passwordConstraintList");
 
     // Create a copy
-    final IPasswordConstraintList aRealPasswordConstraints = aPasswordConstraints.getClone ();
+    final IPasswordConstraintList aRealPasswordConstraints = aPasswordConstraintList.getClone ();
     s_aRWLock.writeLock ().lock ();
     try
     {
@@ -111,7 +123,7 @@ public final class PasswordManager
    */
   public static boolean isAnyPasswordConstraintDefined ()
   {
-    return getPasswordConstraints ().hasConstraints ();
+    return getPasswordConstraintList ().hasConstraints ();
   }
 
   /**

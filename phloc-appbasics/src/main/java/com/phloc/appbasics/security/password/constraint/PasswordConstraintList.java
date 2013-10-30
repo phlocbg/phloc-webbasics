@@ -28,6 +28,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -82,8 +83,15 @@ public class PasswordConstraintList implements IPasswordConstraintList
     return ContainerHelper.newList (m_aConstraints);
   }
 
+  /**
+   * Added a password constraint.
+   * 
+   * @param aPasswordConstraint
+   *        The constraint to be added. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
-  public IPasswordConstraintList addConstraint (@Nonnull final IPasswordConstraint aPasswordConstraint)
+  public PasswordConstraintList addConstraint (@Nonnull final IPasswordConstraint aPasswordConstraint)
   {
     if (aPasswordConstraint == null)
       throw new NullPointerException ("passwordConstraint");
@@ -92,14 +100,18 @@ public class PasswordConstraintList implements IPasswordConstraintList
   }
 
   /**
-   * Check if the passed password is valid. Breaks after the first unfulfilled
-   * constrained
+   * Remove the passed constraint.
    * 
-   * @param sPlainTextPassword
-   *        The password to check. May be <code>null</code>.
-   * @return <code>true</code> if no constraint was unfulfilled (meaning that if
-   *         no constrained is defined, every password is valid).
+   * @param aPasswordConstraint
+   *        The constraint to be removed. May be <code>null</code>.
+   * @return {@link EChange}.
    */
+  @Nonnull
+  public EChange removeConstraint (@Nullable final IPasswordConstraint aPasswordConstraint)
+  {
+    return EChange.valueOf (m_aConstraints.remove (aPasswordConstraint));
+  }
+
   public boolean isPasswordValid (@Nullable final String sPlainTextPassword)
   {
     for (final IPasswordConstraint aPasswordConstraint : m_aConstraints)
@@ -108,19 +120,6 @@ public class PasswordConstraintList implements IPasswordConstraintList
     return true;
   }
 
-  /**
-   * Check if the passed password is valid. The descriptions of all failed
-   * constraints are returned.
-   * 
-   * @param sPlainTextPassword
-   *        The password to check. May be <code>null</code>.
-   * @param aContentLocale
-   *        The content locale to be used to determine the descriptions.
-   * @return A non-<code>null</code> but empty list if no constraint was
-   *         unfulfilled (meaning that if no constrained is defined, every
-   *         password is valid). If the returned list is not empty than the
-   *         password is invalid.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getInvalidPasswordDescriptions (@Nullable final String sPlainTextPassword,
@@ -133,15 +132,6 @@ public class PasswordConstraintList implements IPasswordConstraintList
     return ret;
   }
 
-  /**
-   * Get a list of all password constraint descriptions in the specified locale
-   * (e.g. for hinting a user)
-   * 
-   * @param aContentLocale
-   *        The locale to be used for text resolving.
-   * @return A non-<code>null</code> list with all constraint descriptions. If
-   *         the returned list is empty, it means that no constraint is defined.
-   */
   @Nonnull
   @ReturnsMutableCopy
   public List <String> getAllPasswordConstraintDescriptions (@Nonnull final Locale aContentLocale)
