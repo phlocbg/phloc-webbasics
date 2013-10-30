@@ -2,7 +2,6 @@ package com.phloc.appbasics.security.password.hash;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
@@ -13,18 +12,16 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-public final class PasswordHashCreatorDefault implements IPasswordHashCreator
+public final class PasswordHashCreatorDefault extends AbstractPasswordHashCreator
 {
   public static final String ALGORITHM = "default";
 
   /** Hashing algorithm to use for user passwords - never change it! */
   public static final EMessageDigestAlgorithm USER_PASSWORD_ALGO = EMessageDigestAlgorithm.SHA_512;
 
-  @Nonnull
-  @Nonempty
-  public String getAlgorithmName ()
+  public PasswordHashCreatorDefault ()
   {
-    return ALGORITHM;
+    super (ALGORITHM);
   }
 
   @Nonnull
