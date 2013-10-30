@@ -31,26 +31,26 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * The default implementation of {@link IPasswordConstraints}.
+ * The default implementation of {@link IPasswordConstraintList}.
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
-public class PasswordConstraints implements IPasswordConstraints
+public class PasswordConstraintList implements IPasswordConstraintList
 {
   private final List <IPasswordConstraint> m_aConstraints = new ArrayList <IPasswordConstraint> ();
 
-  public PasswordConstraints ()
+  public PasswordConstraintList ()
   {}
 
-  public PasswordConstraints (@Nullable final IPasswordConstraint... aPasswordConstraints)
+  public PasswordConstraintList (@Nullable final IPasswordConstraint... aPasswordConstraints)
   {
     if (aPasswordConstraints != null)
       for (final IPasswordConstraint aPasswordConstraint : aPasswordConstraints)
         addConstraint (aPasswordConstraint);
   }
 
-  public PasswordConstraints (@Nullable final Iterable <? extends IPasswordConstraint> aPasswordConstraints)
+  public PasswordConstraintList (@Nullable final Iterable <? extends IPasswordConstraint> aPasswordConstraints)
   {
     if (aPasswordConstraints != null)
       for (final IPasswordConstraint aPasswordConstraint : aPasswordConstraints)
@@ -76,7 +76,7 @@ public class PasswordConstraints implements IPasswordConstraints
   }
 
   @Nonnull
-  public IPasswordConstraints addConstraint (@Nonnull final IPasswordConstraint aPasswordConstraint)
+  public IPasswordConstraintList addConstraint (@Nonnull final IPasswordConstraint aPasswordConstraint)
   {
     if (aPasswordConstraint == null)
       throw new NullPointerException ("passwordConstraint");

@@ -31,7 +31,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * 
  * @author Philip Helger
  */
-public interface IPasswordConstraints
+public interface IPasswordConstraintList
 {
   /**
    * @return <code>true</code> if at least one constraint is present

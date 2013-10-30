@@ -30,8 +30,8 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.appbasics.security.password.constraint.IPasswordConstraints;
-import com.phloc.appbasics.security.password.constraint.PasswordConstraints;
+import com.phloc.appbasics.security.password.constraint.IPasswordConstraintList;
+import com.phloc.appbasics.security.password.constraint.PasswordConstraintList;
 import com.phloc.appbasics.security.password.hash.IPasswordHashCreator;
 import com.phloc.appbasics.security.password.hash.PasswordHash;
 import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
@@ -43,8 +43,10 @@ public final class PasswordUtils
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PasswordUtils.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
   @GuardedBy ("s_aRWLock")
-  private static IPasswordConstraints s_aPasswordConstraints = new PasswordConstraints ();
+  private static IPasswordConstraintList s_aPasswordConstraints = new PasswordConstraintList ();
+
   @GuardedBy ("s_aRWLock")
   private static final Map <String, IPasswordHashCreator> s_aPasswordHashCreators = new HashMap <String, IPasswordHashCreator> ();
   @GuardedBy ("s_aRWLock")
@@ -61,7 +63,7 @@ public final class PasswordUtils
   {}
 
   @Nonnull
-  public static IPasswordConstraints getPasswordConstraints ()
+  public static IPasswordConstraintList getPasswordConstraints ()
   {
     s_aRWLock.readLock ().lock ();
     try
@@ -74,7 +76,7 @@ public final class PasswordUtils
     }
   }
 
-  public static void setPasswordConstraints (@Nonnull final IPasswordConstraints aPasswordConstraints)
+  public static void setPasswordConstraints (@Nonnull final IPasswordConstraintList aPasswordConstraints)
   {
     if (aPasswordConstraints == null)
       throw new NullPointerException ("passwordConstraints");
