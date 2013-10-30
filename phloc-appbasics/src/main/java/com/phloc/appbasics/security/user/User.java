@@ -28,7 +28,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.joda.time.DateTime;
 
 import com.phloc.appbasics.security.CSecurity;
-import com.phloc.appbasics.security.user.password.PasswordHash;
+import com.phloc.appbasics.security.password.hash.PasswordHash;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;

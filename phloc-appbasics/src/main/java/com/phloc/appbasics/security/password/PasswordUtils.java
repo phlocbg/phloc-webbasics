@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.security.user.password;
+package com.phloc.appbasics.security.password;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +30,11 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.security.password.constraint.IPasswordConstraints;
+import com.phloc.appbasics.security.password.constraint.PasswordConstraints;
+import com.phloc.appbasics.security.password.hash.IPasswordHashCreator;
+import com.phloc.appbasics.security.password.hash.PasswordHash;
+import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 

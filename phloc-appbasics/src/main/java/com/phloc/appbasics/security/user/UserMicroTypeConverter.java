@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 
-import com.phloc.appbasics.security.user.password.PasswordHash;
-import com.phloc.appbasics.security.user.password.PasswordHashCreatorDefault;
+import com.phloc.appbasics.security.password.hash.PasswordHash;
+import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
 import com.phloc.commons.annotations.ContainsSoftMigration;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.locale.LocaleCache;

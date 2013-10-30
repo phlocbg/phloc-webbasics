@@ -27,7 +27,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.appbasics.auth.subject.IAuthSubject;
 import com.phloc.appbasics.security.CSecurity;
-import com.phloc.appbasics.security.user.password.PasswordHash;
+import com.phloc.appbasics.security.password.hash.PasswordHash;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.name.IHasDisplayName;

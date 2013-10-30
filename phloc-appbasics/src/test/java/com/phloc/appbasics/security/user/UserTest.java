@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
-import com.phloc.appbasics.security.user.password.PasswordUtils;
+import com.phloc.appbasics.security.password.PasswordUtils;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;

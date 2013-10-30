@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.security.user.password;
+package com.phloc.appbasics.security.password.constraint;
 
 import java.util.Locale;
 
@@ -24,53 +24,59 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.microdom.IMicroElement;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Password constraint defining the minimum length (incl.)
+ * Password constraint defining that at least a certain amount of numbers must
+ * be contained
  * 
  * @author Philip Helger
+ * @since 2.4.2
  */
-public class PasswordConstraintMinLength implements IPasswordConstraint
+public class PasswordConstraintMustContainNumber implements IPasswordConstraint
 {
-  private static final String ATTR_MIN_LENGTH = "minlength";
+  private static final String ATTR_MIN_NUMBERS = "minnumbers";
 
-  private final int m_nMinLength;
+  private final int m_nMinNumbers;
 
-  public PasswordConstraintMinLength (@Nonnegative final int nMinLength)
+  public PasswordConstraintMustContainNumber (@Nonnegative final int nMinNumbers)
   {
-    if (nMinLength < 1)
-      throw new IllegalArgumentException ("MinLength is too small: " + nMinLength);
-    m_nMinLength = nMinLength;
+    if (nMinNumbers < 1)
+      throw new IllegalArgumentException ("MinNumbers is too small: " + nMinNumbers);
+    m_nMinNumbers = nMinNumbers;
   }
 
   @Nonnegative
-  public int getMinLength ()
+  public int getMinNumbers ()
   {
-    return m_nMinLength;
+    return m_nMinNumbers;
   }
 
   public boolean isPasswordValid (@Nullable final String sPlainTextPassword)
   {
-    return StringHelper.getLength (sPlainTextPassword) >= m_nMinLength;
+    int nNumbers = 0;
+    if (sPlainTextPassword != null)
+      for (final char c : sPlainTextPassword.toCharArray ())
+        if (Character.isDigit (c))
+          ++nNumbers;
+    return nNumbers >= m_nMinNumbers;
   }
 
   @Nullable
   public String getDescription (@Nonnull final Locale aContentLocale)
   {
-    return EPasswordConstraintText.DESC_MIN_LENGTH.getDisplayTextWithArgs (aContentLocale,
-                                                                           Integer.valueOf (m_nMinLength));
+    return EPasswordConstraintText.DESC_MUST_CONTAIN_NUMBERS.getDisplayTextWithArgs (aContentLocale,
+                                                                                     Integer.valueOf (m_nMinNumbers));
   }
 
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
-    aElement.setAttribute (ATTR_MIN_LENGTH, m_nMinLength);
+    aElement.setAttribute (ATTR_MIN_NUMBERS, m_nMinNumbers);
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("minLength", m_nMinLength).toString ();
+    return new ToStringGenerator (this).append ("minNumbers", m_nMinNumbers).toString ();
   }
 }

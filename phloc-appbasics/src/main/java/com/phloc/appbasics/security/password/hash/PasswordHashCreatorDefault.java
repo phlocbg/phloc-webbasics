@@ -1,4 +1,4 @@
-package com.phloc.appbasics.security.user.password;
+package com.phloc.appbasics.security.password.hash;
 
 import javax.annotation.Nonnull;
 
