@@ -182,7 +182,10 @@ public abstract class AbstractBaseObject implements IObject
       throw new IllegalArgumentException ("undeletionUserID");
 
     if (m_aDeletionDT == null)
+    {
+      // Object is not deleted and can therefore not be undeleted
       return EChange.UNCHANGED;
+    }
 
     setLastModification (aUndeletionDT, sUndeletionUserID);
     m_aDeletionDT = null;

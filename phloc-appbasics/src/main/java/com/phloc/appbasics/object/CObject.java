@@ -40,8 +40,6 @@ public final class CObject
   @SuppressWarnings ("unused")
   private static final CObject s_aInstance = new CObject ();
 
-  public static final ObjectType OT_ACTION = new ObjectType ("action");
-
   private CObject ()
   {}
 }

@@ -24,6 +24,11 @@ import org.joda.time.DateTime;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 
+/**
+ * Abstract base class for object related micro type conversion.
+ * 
+ * @author Philip Helger
+ */
 public abstract class AbstractObjectMicroTypeConverter implements IMicroTypeConverter
 {
   private static final String ATTR_ID = "id";
