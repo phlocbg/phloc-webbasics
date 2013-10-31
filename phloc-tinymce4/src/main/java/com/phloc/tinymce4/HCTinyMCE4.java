@@ -69,7 +69,20 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   // Cleanup/output
   public static final boolean DEFAULT_CONVERT_FONTS_TO_SPANS = true;
 
-  // General options
+  // Content style
+
+  // Visual aids
+
+  // Undo/Redo
+
+  // User interface
+  public static final boolean DEFAULT_STATUSBAR = true;
+
+  // URL
+
+  // Callbacks
+
+  // General
   private String m_sAutoFocus;
   private EHCTextDirection m_eDirectionality;
   private ETriState m_eBrowserSpellcheck = ETriState.UNDEFINED;
@@ -130,7 +143,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   // TODO toolbar<N>
   // TODO menubar
   // TODO menu
-  // TODO statusbar
+  private ETriState m_eStatusbar = ETriState.UNDEFINED;
   private ETinyMCE4Resize m_eResize;
   private int m_nWidth = CGlobal.ILLEGAL_UINT;
   private int m_nHeight = CGlobal.ILLEGAL_UINT;
@@ -629,6 +642,34 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   // --- User interface ---
 
+  public boolean isStatusbar ()
+  {
+    return m_eStatusbar.getAsBooleanValue (DEFAULT_STATUSBAR);
+  }
+
+  /**
+   * Show or hide the statusbar.
+   * 
+   * @param bStatusbar
+   *        <code>true</code> to show, <code>false</code> to hide
+   */
+  public void setStatusbar (final boolean bStatusbar)
+  {
+    m_eStatusbar = ETriState.valueOf (bStatusbar);
+  }
+
+  /**
+   * Show or hide the statusbar.
+   * 
+   * @param aStatusbar
+   *        <code>true</code> to show, <code>false</code> to hide and
+   *        <code>null</code> for default value.
+   */
+  public void setStatusbar (@Nullable final Boolean aStatusbar)
+  {
+    m_eStatusbar = ETriState.valueOf (aStatusbar);
+  }
+
   @Nullable
   public ETinyMCE4Resize getResize ()
   {
@@ -825,6 +866,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     // Undo/Redo
 
     // User interface
+    if (m_eStatusbar != null)
+      aOptions.add ("statusbar", isStatusbar ());
     if (m_eResize != null)
       aOptions.add ("resize", m_eResize.getValue ());
     if (m_nWidth >= 0)
