@@ -77,6 +77,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   // User interface
   public static final boolean DEFAULT_STATUSBAR = true;
+  public static final boolean DEFAULT_PREVIEW_STYLES = true;
 
   // URL
 
@@ -147,7 +148,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   private ETinyMCE4Resize m_eResize;
   private int m_nWidth = CGlobal.ILLEGAL_UINT;
   private int m_nHeight = CGlobal.ILLEGAL_UINT;
-  // TODO preview_styles
+  private ETriState m_ePreviewStyles = ETriState.UNDEFINED;
   // TODO fixed_toolbar_container
 
   // URL
@@ -713,6 +714,36 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_nHeight = nHeight;
   }
 
+  public boolean isPreviewStyles ()
+  {
+    return m_ePreviewStyles.getAsBooleanValue (DEFAULT_PREVIEW_STYLES);
+  }
+
+  /**
+   * The enables you to turn of the preview of styles in format/style listboxes.
+   * It's turned on by default.
+   * 
+   * @param bPreviewStyles
+   *        <code>true</code> to show, <code>false</code> to hide
+   */
+  public void setPreviewStyles (final boolean bPreviewStyles)
+  {
+    m_ePreviewStyles = ETriState.valueOf (bPreviewStyles);
+  }
+
+  /**
+   * The enables you to turn of the preview of styles in format/style listboxes.
+   * It's turned on by default.
+   * 
+   * @param aPreviewStyles
+   *        <code>true</code> to show, <code>false</code> to hide and
+   *        <code>null</code> for default value.
+   */
+  public void setPreviewStyles (@Nullable final Boolean aPreviewStyles)
+  {
+    m_ePreviewStyles = ETriState.valueOf (aPreviewStyles);
+  }
+
   // --- URL ---
 
   // --- Callbacks ---
@@ -874,6 +905,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
       aOptions.add ("width", m_nWidth);
     if (m_nHeight >= 0)
       aOptions.add ("height", m_nHeight);
+    if (m_ePreviewStyles != null)
+      aOptions.add ("preview_styles", isPreviewStyles ());
 
     // URL
 
