@@ -22,21 +22,21 @@ import java.util.Locale;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
-public class MainCreateTinyMCEToolbarControls
+public class MainCreateTinyMCEMenuControls
 {
   public static void main (final String [] args)
   {
     // Paste table from http://www.tinymce.com/wiki.php/Controls into this
     // string
     // Last update: 2013-10-31
-    final String s = "core  newdocument bold italic underline strikethrough alignleft aligncenter alignright alignjustify styleselect formatselect fontselect fontsizeselect cut copy paste bullist numlist outdent indent blockquote undo redo removeformat subscript superscript\r\n"
-                     + "hr  hr\r\n"
-                     + "link  link unlink\r\n"
+    final String s = "core  newdocument undo redo visualaid cut copy paste selectall bold italic underline strikethrough subscript superscript removeformat formats\r\n"
+                     + "link  link\r\n"
                      + "image   image\r\n"
                      + "charmap   charmap\r\n"
                      + "paste   pastetext\r\n"
                      + "print   print\r\n"
                      + "preview   preview\r\n"
+                     + "hr  hr\r\n"
                      + "anchor  anchor\r\n"
                      + "pagebreak   pagebreak\r\n"
                      + "spellchecker  spellchecker\r\n"
@@ -45,15 +45,10 @@ public class MainCreateTinyMCEToolbarControls
                      + "visualchars   visualchars\r\n"
                      + "code  code\r\n"
                      + "fullscreen  fullscreen\r\n"
-                     + "insertdatetime  inserttime\r\n"
+                     + "insertdatetime  insertdatetime\r\n"
                      + "media   media\r\n"
                      + "nonbreaking   nonbreaking\r\n"
-                     + "save  save cancel\r\n"
-                     + "table   table\r\n"
-                     + "directionality  ltr rtl\r\n"
-                     + "emoticons   emoticons\r\n"
-                     + "template  template\r\n"
-                     + "textcolor   forecolor backcolor";
+                     + "table   inserttable tableprops deletetable cell row column";
     for (final String sLine : StringHelper.getExploded ("\r\n", s))
     {
       final String [] aParts = RegExHelper.getSplitToArray (sLine, "\\s+");

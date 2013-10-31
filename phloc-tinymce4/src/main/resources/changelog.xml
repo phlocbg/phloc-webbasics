@@ -23,6 +23,11 @@
   <release date="2013-10-31" version="0.1.1" />
   <entry date="2013-10-31" category="api" action="add">
     <change>
+      <text locale="en">Added enum ETinyMCE4MenuControl</text>
+    </change>
+  </entry>
+  <entry date="2013-10-31" category="api" action="add">
+    <change>
       <text locale="en">Added enum ETinyMCE4ToolbarControl</text>
     </change>
   </entry>
