@@ -21,6 +21,11 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-tinymce4">
   <release date="2013-10-31" version="0.1.1" />
+  <entry date="2013-10-31" category="api" action="add">
+    <change>
+      <text locale="en">Added enum ETinyMCE4ToolbarControl</text>
+    </change>
+  </entry>
   <entry date="2013-10-31" category="tech" action="update">
     <change>
       <text locale="en">Language update</text>
