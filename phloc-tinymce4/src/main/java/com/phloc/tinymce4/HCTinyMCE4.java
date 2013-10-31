@@ -897,7 +897,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     // Undo/Redo
 
     // User interface
-    if (m_eStatusbar != null)
+    if (m_eStatusbar.isDefined ())
       aOptions.add ("statusbar", isStatusbar ());
     if (m_eResize != null)
       aOptions.add ("resize", m_eResize.getValue ());
@@ -905,7 +905,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
       aOptions.add ("width", m_nWidth);
     if (m_nHeight >= 0)
       aOptions.add ("height", m_nHeight);
-    if (m_ePreviewStyles != null)
+    if (m_ePreviewStyles.isDefined ())
       aOptions.add ("preview_styles", isPreviewStyles ());
 
     // URL
