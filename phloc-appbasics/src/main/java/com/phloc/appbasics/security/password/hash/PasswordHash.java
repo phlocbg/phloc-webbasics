@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.security.password.hash;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -31,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class PasswordHash
+public final class PasswordHash implements Serializable
 {
   private final String m_sAlgorithmName;
   private final String m_sPasswordHashValue;
