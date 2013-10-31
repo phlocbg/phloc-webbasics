@@ -26,6 +26,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -131,8 +132,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   // TODO menu
   // TODO statusbar
   private ETinyMCE4Resize m_eResize;
-  // TODO width
-  // TODO height
+  private int m_nWidth = CGlobal.ILLEGAL_UINT;
+  private int m_nHeight = CGlobal.ILLEGAL_UINT;
   // TODO preview_styles
   // TODO fixed_toolbar_container
 
@@ -328,6 +329,20 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_aPlugins.add (ePlugin);
   }
 
+  public void addPlugins (@Nullable final ETinyMCE4Plugin... aPlugins)
+  {
+    if (aPlugins != null)
+      for (final ETinyMCE4Plugin ePlugin : aPlugins)
+        addPlugin (ePlugin);
+  }
+
+  public void addPlugins (@Nullable final Iterable <ETinyMCE4Plugin> aPlugins)
+  {
+    if (aPlugins != null)
+      for (final ETinyMCE4Plugin ePlugin : aPlugins)
+        addPlugin (ePlugin);
+  }
+
   public void addAllPlugins ()
   {
     for (final ETinyMCE4Plugin ePlugin : ETinyMCE4Plugin.values ())
@@ -338,6 +353,20 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   {
     if (ePlugin != null)
       m_aPlugins.remove (ePlugin);
+  }
+
+  public void removePlugins (@Nullable final ETinyMCE4Plugin... aPlugins)
+  {
+    if (aPlugins != null)
+      for (final ETinyMCE4Plugin ePlugin : aPlugins)
+        removePlugin (ePlugin);
+  }
+
+  public void removePlugins (@Nullable final Iterable <ETinyMCE4Plugin> aPlugins)
+  {
+    if (aPlugins != null)
+      for (final ETinyMCE4Plugin ePlugin : aPlugins)
+        removePlugin (ePlugin);
   }
 
   @Nonnull
@@ -354,10 +383,38 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_aExternalPlugins.add (eExternalPlugin);
   }
 
+  public void addExternalPlugins (@Nullable final TinyMCE4ExternalPlugin... aExternalPlugins)
+  {
+    if (aExternalPlugins != null)
+      for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
+        addExternalPlugin (aExternalPlugin);
+  }
+
+  public void addExternalPlugins (@Nullable final Iterable <? extends TinyMCE4ExternalPlugin> aExternalPlugins)
+  {
+    if (aExternalPlugins != null)
+      for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
+        addExternalPlugin (aExternalPlugin);
+  }
+
   public void removeExternalPlugin (@Nullable final TinyMCE4ExternalPlugin eExternalPlugin)
   {
     if (eExternalPlugin != null)
       m_aExternalPlugins.remove (eExternalPlugin);
+  }
+
+  public void removeExternalPlugins (@Nullable final TinyMCE4ExternalPlugin... aExternalPlugins)
+  {
+    if (aExternalPlugins != null)
+      for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
+        removeExternalPlugin (aExternalPlugin);
+  }
+
+  public void removeExternalPlugins (@Nullable final Iterable <? extends TinyMCE4ExternalPlugin> aExternalPlugins)
+  {
+    if (aExternalPlugins != null)
+      for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
+        removeExternalPlugin (aExternalPlugin);
   }
 
   @Nonnull
@@ -583,6 +640,38 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     m_eResize = eResize;
   }
 
+  public int getWidth ()
+  {
+    return m_nWidth;
+  }
+
+  /**
+   * Set the width of the editor.
+   * 
+   * @param nWidth
+   *        New width. Only values >= 0 are considered!
+   */
+  public void setWidth (final int nWidth)
+  {
+    m_nWidth = nWidth;
+  }
+
+  public int getHeight ()
+  {
+    return m_nHeight;
+  }
+
+  /**
+   * Set the height of the editor.
+   * 
+   * @param nHeight
+   *        New height. Only values >= 0 are considered!
+   */
+  public void setHeight (final int nHeight)
+  {
+    m_nHeight = nHeight;
+  }
+
   // --- URL ---
 
   // --- Callbacks ---
@@ -617,6 +706,16 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   }
 
   // --- custom options ---
+
+  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final boolean bValue)
+  {
+    addCustomOption (sName, JSExpr.lit (bValue));
+  }
+
+  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final int nValue)
+  {
+    addCustomOption (sName, JSExpr.lit (nValue));
+  }
 
   public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
   {
@@ -728,6 +827,10 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     // User interface
     if (m_eResize != null)
       aOptions.add ("resize", m_eResize.getValue ());
+    if (m_nWidth >= 0)
+      aOptions.add ("width", m_nWidth);
+    if (m_nHeight >= 0)
+      aOptions.add ("height", m_nHeight);
 
     // URL
 
