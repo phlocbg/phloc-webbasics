@@ -23,7 +23,7 @@ tinymce.addI18n('nb_NO',{
 "Header 1": "Overskrift 1",
 "Superscript": "Hevet skrift",
 "Clear formatting": "Fjern formateringer",
-"Font Sizes": "Skriftst\u00f8rrelser",
+"Font Sizes": "St\u00f8rrelse",
 "Subscript": "Senket skrift",
 "Header 6": "Overskrift 6",
 "Redo": "Utf\u00f8r likevel",
