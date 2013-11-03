@@ -32,13 +32,13 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.AbstractHCEdit;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
+import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCTextNode;
 
 public class BootstrapForm extends HCForm
@@ -94,20 +94,6 @@ public class BootstrapForm extends HCForm
     return EBootstrapGridMD.MD_10;
   }
 
-  private static void _getAllHCControls (@Nullable final IHCNode aNode, @Nonnull final List <IHCControl <?>> ret)
-  {
-    if (aNode instanceof IHCControl <?>)
-      ret.add ((IHCControl <?>) aNode);
-    if (aNode instanceof IHCNodeWithChildren <?>)
-    {
-      // E.g. HCNodeList
-      final IHCNodeWithChildren <?> aParent = (IHCNodeWithChildren <?>) aNode;
-      if (aParent.hasChildren ())
-        for (final IHCNode aChild : aParent.getChildren ())
-          _getAllHCControls (aChild, ret);
-    }
-  }
-
   @Nonnull
   public BootstrapForm addFormGroup (@Nullable final String sLabel, @Nonnull final IHCNode aCtrl)
   {
@@ -115,8 +101,7 @@ public class BootstrapForm extends HCForm
       throw new NullPointerException ("ctrl");
 
     final List <IHCControl <?>> aAllCtrls = new ArrayList <IHCControl <?>> ();
-    // FIXME replace with HCUtils.getAllHCControls in phloc-html > 3.12.1
-    _getAllHCControls (aCtrl, aAllCtrls);
+    HCUtils.getAllHCControls (aCtrl, aAllCtrls);
 
     // Set CSS class to all contained controls
     for (final IHCControl <?> aCurCtrl : aAllCtrls)
