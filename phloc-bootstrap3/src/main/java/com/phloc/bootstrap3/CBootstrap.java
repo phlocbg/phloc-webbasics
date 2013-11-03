@@ -29,8 +29,8 @@ import com.phloc.commons.version.Version;
 @Immutable
 public final class CBootstrap
 {
-  /** Bootstrap version 3.0.0 */
-  public static final Version BOOTSTRAP_VERSION_300 = new Version (3, 0, 0);
+  /** Bootstrap version 3.0.1 */
+  public static final Version BOOTSTRAP_VERSION_301 = new Version (3, 0, 1);
 
   private CBootstrap ()
   {}
