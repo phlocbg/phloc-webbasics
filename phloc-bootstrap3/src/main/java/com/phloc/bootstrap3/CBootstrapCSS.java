@@ -20,6 +20,7 @@ package com.phloc.bootstrap3;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.Since;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
@@ -74,6 +75,8 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider CAROUSEL_CONTROL = DefaultCSSClassProvider.create ("carousel-control");
   public static final ICSSClassProvider CAROUSEL_INDICATORS = DefaultCSSClassProvider.create ("carousel-indicators");
   public static final ICSSClassProvider CAROUSEL_INNER = DefaultCSSClassProvider.create ("carousel-inner");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider CENTER_BLOCK = DefaultCSSClassProvider.create ("center-block");
   public static final ICSSClassProvider CHECKBOX = DefaultCSSClassProvider.create ("checkbox");
   public static final ICSSClassProvider CHECKBOX_INLINE = DefaultCSSClassProvider.create ("checkbox-inline");
   public static final ICSSClassProvider CLEARFIX = DefaultCSSClassProvider.create ("clearfix");
@@ -91,10 +94,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_LG_7 = DefaultCSSClassProvider.create ("col-lg-7");
   public static final ICSSClassProvider COL_LG_8 = DefaultCSSClassProvider.create ("col-lg-8");
   public static final ICSSClassProvider COL_LG_9 = DefaultCSSClassProvider.create ("col-lg-9");
+  @Deprecated
   public static final ICSSClassProvider COL_LG_OFFSET_0 = DefaultCSSClassProvider.create ("col-lg-offset-0");
   public static final ICSSClassProvider COL_LG_OFFSET_1 = DefaultCSSClassProvider.create ("col-lg-offset-1");
   public static final ICSSClassProvider COL_LG_OFFSET_10 = DefaultCSSClassProvider.create ("col-lg-offset-10");
   public static final ICSSClassProvider COL_LG_OFFSET_11 = DefaultCSSClassProvider.create ("col-lg-offset-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_LG_OFFSET_12 = DefaultCSSClassProvider.create ("col-lg-offset-12");
   public static final ICSSClassProvider COL_LG_OFFSET_2 = DefaultCSSClassProvider.create ("col-lg-offset-2");
   public static final ICSSClassProvider COL_LG_OFFSET_3 = DefaultCSSClassProvider.create ("col-lg-offset-3");
   public static final ICSSClassProvider COL_LG_OFFSET_4 = DefaultCSSClassProvider.create ("col-lg-offset-4");
@@ -103,10 +109,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_LG_OFFSET_7 = DefaultCSSClassProvider.create ("col-lg-offset-7");
   public static final ICSSClassProvider COL_LG_OFFSET_8 = DefaultCSSClassProvider.create ("col-lg-offset-8");
   public static final ICSSClassProvider COL_LG_OFFSET_9 = DefaultCSSClassProvider.create ("col-lg-offset-9");
+  @Deprecated
   public static final ICSSClassProvider COL_LG_PULL_0 = DefaultCSSClassProvider.create ("col-lg-pull-0");
   public static final ICSSClassProvider COL_LG_PULL_1 = DefaultCSSClassProvider.create ("col-lg-pull-1");
   public static final ICSSClassProvider COL_LG_PULL_10 = DefaultCSSClassProvider.create ("col-lg-pull-10");
   public static final ICSSClassProvider COL_LG_PULL_11 = DefaultCSSClassProvider.create ("col-lg-pull-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_LG_PULL_12 = DefaultCSSClassProvider.create ("col-lg-pull-12");
   public static final ICSSClassProvider COL_LG_PULL_2 = DefaultCSSClassProvider.create ("col-lg-pull-2");
   public static final ICSSClassProvider COL_LG_PULL_3 = DefaultCSSClassProvider.create ("col-lg-pull-3");
   public static final ICSSClassProvider COL_LG_PULL_4 = DefaultCSSClassProvider.create ("col-lg-pull-4");
@@ -115,10 +124,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_LG_PULL_7 = DefaultCSSClassProvider.create ("col-lg-pull-7");
   public static final ICSSClassProvider COL_LG_PULL_8 = DefaultCSSClassProvider.create ("col-lg-pull-8");
   public static final ICSSClassProvider COL_LG_PULL_9 = DefaultCSSClassProvider.create ("col-lg-pull-9");
+  @Deprecated
   public static final ICSSClassProvider COL_LG_PUSH_0 = DefaultCSSClassProvider.create ("col-lg-push-0");
   public static final ICSSClassProvider COL_LG_PUSH_1 = DefaultCSSClassProvider.create ("col-lg-push-1");
   public static final ICSSClassProvider COL_LG_PUSH_10 = DefaultCSSClassProvider.create ("col-lg-push-10");
   public static final ICSSClassProvider COL_LG_PUSH_11 = DefaultCSSClassProvider.create ("col-lg-push-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_LG_PUSH_12 = DefaultCSSClassProvider.create ("col-lg-push-12");
   public static final ICSSClassProvider COL_LG_PUSH_2 = DefaultCSSClassProvider.create ("col-lg-push-2");
   public static final ICSSClassProvider COL_LG_PUSH_3 = DefaultCSSClassProvider.create ("col-lg-push-3");
   public static final ICSSClassProvider COL_LG_PUSH_4 = DefaultCSSClassProvider.create ("col-lg-push-4");
@@ -139,10 +151,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_MD_7 = DefaultCSSClassProvider.create ("col-md-7");
   public static final ICSSClassProvider COL_MD_8 = DefaultCSSClassProvider.create ("col-md-8");
   public static final ICSSClassProvider COL_MD_9 = DefaultCSSClassProvider.create ("col-md-9");
+  @Deprecated
   public static final ICSSClassProvider COL_MD_OFFSET_0 = DefaultCSSClassProvider.create ("col-md-offset-0");
   public static final ICSSClassProvider COL_MD_OFFSET_1 = DefaultCSSClassProvider.create ("col-md-offset-1");
   public static final ICSSClassProvider COL_MD_OFFSET_10 = DefaultCSSClassProvider.create ("col-md-offset-10");
   public static final ICSSClassProvider COL_MD_OFFSET_11 = DefaultCSSClassProvider.create ("col-md-offset-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_MD_OFFSET_12 = DefaultCSSClassProvider.create ("col-md-offset-12");
   public static final ICSSClassProvider COL_MD_OFFSET_2 = DefaultCSSClassProvider.create ("col-md-offset-2");
   public static final ICSSClassProvider COL_MD_OFFSET_3 = DefaultCSSClassProvider.create ("col-md-offset-3");
   public static final ICSSClassProvider COL_MD_OFFSET_4 = DefaultCSSClassProvider.create ("col-md-offset-4");
@@ -151,10 +166,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_MD_OFFSET_7 = DefaultCSSClassProvider.create ("col-md-offset-7");
   public static final ICSSClassProvider COL_MD_OFFSET_8 = DefaultCSSClassProvider.create ("col-md-offset-8");
   public static final ICSSClassProvider COL_MD_OFFSET_9 = DefaultCSSClassProvider.create ("col-md-offset-9");
+  @Deprecated
   public static final ICSSClassProvider COL_MD_PULL_0 = DefaultCSSClassProvider.create ("col-md-pull-0");
   public static final ICSSClassProvider COL_MD_PULL_1 = DefaultCSSClassProvider.create ("col-md-pull-1");
   public static final ICSSClassProvider COL_MD_PULL_10 = DefaultCSSClassProvider.create ("col-md-pull-10");
   public static final ICSSClassProvider COL_MD_PULL_11 = DefaultCSSClassProvider.create ("col-md-pull-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_MD_PULL_12 = DefaultCSSClassProvider.create ("col-md-pull-12");
   public static final ICSSClassProvider COL_MD_PULL_2 = DefaultCSSClassProvider.create ("col-md-pull-2");
   public static final ICSSClassProvider COL_MD_PULL_3 = DefaultCSSClassProvider.create ("col-md-pull-3");
   public static final ICSSClassProvider COL_MD_PULL_4 = DefaultCSSClassProvider.create ("col-md-pull-4");
@@ -163,10 +181,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_MD_PULL_7 = DefaultCSSClassProvider.create ("col-md-pull-7");
   public static final ICSSClassProvider COL_MD_PULL_8 = DefaultCSSClassProvider.create ("col-md-pull-8");
   public static final ICSSClassProvider COL_MD_PULL_9 = DefaultCSSClassProvider.create ("col-md-pull-9");
+  @Deprecated
   public static final ICSSClassProvider COL_MD_PUSH_0 = DefaultCSSClassProvider.create ("col-md-push-0");
   public static final ICSSClassProvider COL_MD_PUSH_1 = DefaultCSSClassProvider.create ("col-md-push-1");
   public static final ICSSClassProvider COL_MD_PUSH_10 = DefaultCSSClassProvider.create ("col-md-push-10");
   public static final ICSSClassProvider COL_MD_PUSH_11 = DefaultCSSClassProvider.create ("col-md-push-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_MD_PUSH_12 = DefaultCSSClassProvider.create ("col-md-push-12");
   public static final ICSSClassProvider COL_MD_PUSH_2 = DefaultCSSClassProvider.create ("col-md-push-2");
   public static final ICSSClassProvider COL_MD_PUSH_3 = DefaultCSSClassProvider.create ("col-md-push-3");
   public static final ICSSClassProvider COL_MD_PUSH_4 = DefaultCSSClassProvider.create ("col-md-push-4");
@@ -190,6 +211,8 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_SM_OFFSET_1 = DefaultCSSClassProvider.create ("col-sm-offset-1");
   public static final ICSSClassProvider COL_SM_OFFSET_10 = DefaultCSSClassProvider.create ("col-sm-offset-10");
   public static final ICSSClassProvider COL_SM_OFFSET_11 = DefaultCSSClassProvider.create ("col-sm-offset-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_SM_OFFSET_12 = DefaultCSSClassProvider.create ("col-sm-offset-12");
   public static final ICSSClassProvider COL_SM_OFFSET_2 = DefaultCSSClassProvider.create ("col-sm-offset-2");
   public static final ICSSClassProvider COL_SM_OFFSET_3 = DefaultCSSClassProvider.create ("col-sm-offset-3");
   public static final ICSSClassProvider COL_SM_OFFSET_4 = DefaultCSSClassProvider.create ("col-sm-offset-4");
@@ -201,6 +224,8 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_SM_PULL_1 = DefaultCSSClassProvider.create ("col-sm-pull-1");
   public static final ICSSClassProvider COL_SM_PULL_10 = DefaultCSSClassProvider.create ("col-sm-pull-10");
   public static final ICSSClassProvider COL_SM_PULL_11 = DefaultCSSClassProvider.create ("col-sm-pull-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_SM_PULL_12 = DefaultCSSClassProvider.create ("col-sm-pull-12");
   public static final ICSSClassProvider COL_SM_PULL_2 = DefaultCSSClassProvider.create ("col-sm-pull-2");
   public static final ICSSClassProvider COL_SM_PULL_3 = DefaultCSSClassProvider.create ("col-sm-pull-3");
   public static final ICSSClassProvider COL_SM_PULL_4 = DefaultCSSClassProvider.create ("col-sm-pull-4");
@@ -212,6 +237,8 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_SM_PUSH_1 = DefaultCSSClassProvider.create ("col-sm-push-1");
   public static final ICSSClassProvider COL_SM_PUSH_10 = DefaultCSSClassProvider.create ("col-sm-push-10");
   public static final ICSSClassProvider COL_SM_PUSH_11 = DefaultCSSClassProvider.create ("col-sm-push-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_SM_PUSH_12 = DefaultCSSClassProvider.create ("col-sm-push-12");
   public static final ICSSClassProvider COL_SM_PUSH_2 = DefaultCSSClassProvider.create ("col-sm-push-2");
   public static final ICSSClassProvider COL_SM_PUSH_3 = DefaultCSSClassProvider.create ("col-sm-push-3");
   public static final ICSSClassProvider COL_SM_PUSH_4 = DefaultCSSClassProvider.create ("col-sm-push-4");
@@ -232,6 +259,78 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COL_XS_7 = DefaultCSSClassProvider.create ("col-xs-7");
   public static final ICSSClassProvider COL_XS_8 = DefaultCSSClassProvider.create ("col-xs-8");
   public static final ICSSClassProvider COL_XS_9 = DefaultCSSClassProvider.create ("col-xs-9");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_1 = DefaultCSSClassProvider.create ("col-xs-offset-1");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_10 = DefaultCSSClassProvider.create ("col-xs-offset-10");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_11 = DefaultCSSClassProvider.create ("col-xs-offset-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_12 = DefaultCSSClassProvider.create ("col-xs-offset-12");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_2 = DefaultCSSClassProvider.create ("col-xs-offset-2");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_3 = DefaultCSSClassProvider.create ("col-xs-offset-3");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_4 = DefaultCSSClassProvider.create ("col-xs-offset-4");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_5 = DefaultCSSClassProvider.create ("col-xs-offset-5");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_6 = DefaultCSSClassProvider.create ("col-xs-offset-6");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_7 = DefaultCSSClassProvider.create ("col-xs-offset-7");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_8 = DefaultCSSClassProvider.create ("col-xs-offset-8");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_OFFSET_9 = DefaultCSSClassProvider.create ("col-xs-offset-9");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_1 = DefaultCSSClassProvider.create ("col-xs-pull-1");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_10 = DefaultCSSClassProvider.create ("col-xs-pull-10");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_11 = DefaultCSSClassProvider.create ("col-xs-pull-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_12 = DefaultCSSClassProvider.create ("col-xs-pull-12");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_2 = DefaultCSSClassProvider.create ("col-xs-pull-2");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_3 = DefaultCSSClassProvider.create ("col-xs-pull-3");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_4 = DefaultCSSClassProvider.create ("col-xs-pull-4");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_5 = DefaultCSSClassProvider.create ("col-xs-pull-5");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_6 = DefaultCSSClassProvider.create ("col-xs-pull-6");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_7 = DefaultCSSClassProvider.create ("col-xs-pull-7");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_8 = DefaultCSSClassProvider.create ("col-xs-pull-8");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PULL_9 = DefaultCSSClassProvider.create ("col-xs-pull-9");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_1 = DefaultCSSClassProvider.create ("col-xs-push-1");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_10 = DefaultCSSClassProvider.create ("col-xs-push-10");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_11 = DefaultCSSClassProvider.create ("col-xs-push-11");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_12 = DefaultCSSClassProvider.create ("col-xs-push-12");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_2 = DefaultCSSClassProvider.create ("col-xs-push-2");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_3 = DefaultCSSClassProvider.create ("col-xs-push-3");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_4 = DefaultCSSClassProvider.create ("col-xs-push-4");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_5 = DefaultCSSClassProvider.create ("col-xs-push-5");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_6 = DefaultCSSClassProvider.create ("col-xs-push-6");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_7 = DefaultCSSClassProvider.create ("col-xs-push-7");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_8 = DefaultCSSClassProvider.create ("col-xs-push-8");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider COL_XS_PUSH_9 = DefaultCSSClassProvider.create ("col-xs-push-9");
   public static final ICSSClassProvider COLLAPSE = DefaultCSSClassProvider.create ("collapse");
   public static final ICSSClassProvider COLLAPSING = DefaultCSSClassProvider.create ("collapsing");
   public static final ICSSClassProvider CONTAINER = DefaultCSSClassProvider.create ("container");
@@ -453,6 +552,10 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider GLYPHICON_WRENCH = DefaultCSSClassProvider.create ("glyphicon-wrench");
   public static final ICSSClassProvider GLYPHICON_ZOOM_IN = DefaultCSSClassProvider.create ("glyphicon-zoom-in");
   public static final ICSSClassProvider GLYPHICON_ZOOM_OUT = DefaultCSSClassProvider.create ("glyphicon-zoom-out");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider GLYPHICONS_CHEVRON_LEFT = DefaultCSSClassProvider.create ("glyphicons-chevron-left");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider GLYPHICONS_CHEVRON_RIGHT = DefaultCSSClassProvider.create ("glyphicons-chevron-right");
   public static final ICSSClassProvider H1 = DefaultCSSClassProvider.create ("h1");
   public static final ICSSClassProvider H2 = DefaultCSSClassProvider.create ("h2");
   public static final ICSSClassProvider H3 = DefaultCSSClassProvider.create ("h3");
@@ -487,6 +590,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider INPUT_LG = DefaultCSSClassProvider.create ("input-lg");
   public static final ICSSClassProvider INPUT_SM = DefaultCSSClassProvider.create ("input-sm");
   public static final ICSSClassProvider INVISIBLE = DefaultCSSClassProvider.create ("invisible");
+  @Deprecated
   public static final ICSSClassProvider IR = DefaultCSSClassProvider.create ("ir");
   public static final ICSSClassProvider ITEM = DefaultCSSClassProvider.create ("item");
   public static final ICSSClassProvider JUMBOTRON = DefaultCSSClassProvider.create ("jumbotron");
@@ -563,12 +667,15 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider PANEL_SUCCESS = DefaultCSSClassProvider.create ("panel-success");
   public static final ICSSClassProvider PANEL_TITLE = DefaultCSSClassProvider.create ("panel-title");
   public static final ICSSClassProvider PANEL_WARNING = DefaultCSSClassProvider.create ("panel-warning");
+  @Deprecated
   public static final ICSSClassProvider PILL_CONTENT = DefaultCSSClassProvider.create ("pill-content");
+  @Deprecated
   public static final ICSSClassProvider PILL_PANE = DefaultCSSClassProvider.create ("pill-pane");
   public static final ICSSClassProvider POPOVER = DefaultCSSClassProvider.create ("popover");
   public static final ICSSClassProvider POPOVER_CONTENT = DefaultCSSClassProvider.create ("popover-content");
   public static final ICSSClassProvider POPOVER_TITLE = DefaultCSSClassProvider.create ("popover-title");
   public static final ICSSClassProvider PRE_SCROLLABLE = DefaultCSSClassProvider.create ("pre-scrollable");
+  @Deprecated
   public static final ICSSClassProvider PRETTYPRINT = DefaultCSSClassProvider.create ("prettyprint");
   public static final ICSSClassProvider PREV = DefaultCSSClassProvider.create ("prev");
   public static final ICSSClassProvider PREVIOUS = DefaultCSSClassProvider.create ("previous");
@@ -586,10 +693,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider RIGHT = DefaultCSSClassProvider.create ("right");
   public static final ICSSClassProvider ROW = DefaultCSSClassProvider.create ("row");
   public static final ICSSClassProvider SHOW = DefaultCSSClassProvider.create ("show");
+  @Since ("3.0.1")
+  public static final ICSSClassProvider SMALL = DefaultCSSClassProvider.create ("small");
   public static final ICSSClassProvider SR_ONLY = DefaultCSSClassProvider.create ("sr-only");
   public static final ICSSClassProvider SUCCESS = DefaultCSSClassProvider.create ("success");
   public static final ICSSClassProvider TAB_CONTENT = DefaultCSSClassProvider.create ("tab-content");
   public static final ICSSClassProvider TAB_PANE = DefaultCSSClassProvider.create ("tab-pane");
+  @Deprecated
   public static final ICSSClassProvider TABBABLE = DefaultCSSClassProvider.create ("tabbable");
   public static final ICSSClassProvider TABLE = DefaultCSSClassProvider.create ("table");
   public static final ICSSClassProvider TABLE_BORDERED = DefaultCSSClassProvider.create ("table-bordered");

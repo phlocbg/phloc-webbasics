@@ -30,7 +30,6 @@ import com.phloc.html.css.ICSSClassProvider;
  */
 public enum EBootstrapGridLG implements IBootstrapGridElementExtended
 {
-  LG_0 (0, null, CBootstrapCSS.COL_LG_OFFSET_0, CBootstrapCSS.COL_LG_PUSH_0, CBootstrapCSS.COL_LG_PULL_0),
   LG_1 (1, CBootstrapCSS.COL_LG_1, CBootstrapCSS.COL_LG_OFFSET_1, CBootstrapCSS.COL_LG_PUSH_1, CBootstrapCSS.COL_LG_PULL_1),
   LG_2 (2, CBootstrapCSS.COL_LG_2, CBootstrapCSS.COL_LG_OFFSET_2, CBootstrapCSS.COL_LG_PUSH_2, CBootstrapCSS.COL_LG_PULL_2),
   LG_3 (3, CBootstrapCSS.COL_LG_3, CBootstrapCSS.COL_LG_OFFSET_3, CBootstrapCSS.COL_LG_PUSH_3, CBootstrapCSS.COL_LG_PULL_3),
@@ -42,7 +41,7 @@ public enum EBootstrapGridLG implements IBootstrapGridElementExtended
   LG_9 (9, CBootstrapCSS.COL_LG_9, CBootstrapCSS.COL_LG_OFFSET_9, CBootstrapCSS.COL_LG_PUSH_9, CBootstrapCSS.COL_LG_PULL_9),
   LG_10 (10, CBootstrapCSS.COL_LG_10, CBootstrapCSS.COL_LG_OFFSET_10, CBootstrapCSS.COL_LG_PUSH_10, CBootstrapCSS.COL_LG_PULL_10),
   LG_11 (11, CBootstrapCSS.COL_LG_11, CBootstrapCSS.COL_LG_OFFSET_11, CBootstrapCSS.COL_LG_PUSH_11, CBootstrapCSS.COL_LG_PULL_11),
-  LG_12 (12, CBootstrapCSS.COL_LG_12, null, null, null);
+  LG_12 (12, CBootstrapCSS.COL_LG_12, CBootstrapCSS.COL_LG_OFFSET_12, CBootstrapCSS.COL_LG_PUSH_12, CBootstrapCSS.COL_LG_PULL_12);
 
   private final int m_nParts;
   private final ICSSClassProvider m_aCSSClass;
@@ -98,8 +97,6 @@ public enum EBootstrapGridLG implements IBootstrapGridElementExtended
   {
     switch (nParts)
     {
-      case 0:
-        return LG_0;
       case 1:
         return LG_1;
       case 2:

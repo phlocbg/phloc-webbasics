@@ -43,7 +43,7 @@ public enum EBootstrapGridSM implements IBootstrapGridElementExtended
   SM_9 (9, CBootstrapCSS.COL_SM_9, CBootstrapCSS.COL_SM_OFFSET_9, CBootstrapCSS.COL_SM_PUSH_9, CBootstrapCSS.COL_SM_PULL_9),
   SM_10 (10, CBootstrapCSS.COL_SM_10, CBootstrapCSS.COL_SM_OFFSET_10, CBootstrapCSS.COL_SM_PUSH_10, CBootstrapCSS.COL_SM_PULL_10),
   SM_11 (11, CBootstrapCSS.COL_SM_11, CBootstrapCSS.COL_SM_OFFSET_11, CBootstrapCSS.COL_SM_PUSH_11, CBootstrapCSS.COL_SM_PULL_11),
-  SM_12 (12, CBootstrapCSS.COL_SM_12, null, null, null);
+  SM_12 (12, CBootstrapCSS.COL_SM_12, CBootstrapCSS.COL_SM_OFFSET_12, CBootstrapCSS.COL_SM_PUSH_12, CBootstrapCSS.COL_SM_PULL_12);
 
   private final int m_nParts;
   private final ICSSClassProvider m_aCSSClass;

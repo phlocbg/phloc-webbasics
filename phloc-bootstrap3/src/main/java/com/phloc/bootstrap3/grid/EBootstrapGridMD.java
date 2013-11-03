@@ -30,7 +30,6 @@ import com.phloc.html.css.ICSSClassProvider;
  */
 public enum EBootstrapGridMD implements IBootstrapGridElementExtended
 {
-  MD_0 (0, null, CBootstrapCSS.COL_MD_OFFSET_0, CBootstrapCSS.COL_MD_PUSH_0, CBootstrapCSS.COL_MD_PULL_0),
   MD_1 (1, CBootstrapCSS.COL_MD_1, CBootstrapCSS.COL_MD_OFFSET_1, CBootstrapCSS.COL_MD_PUSH_1, CBootstrapCSS.COL_MD_PULL_1),
   MD_2 (2, CBootstrapCSS.COL_MD_2, CBootstrapCSS.COL_MD_OFFSET_2, CBootstrapCSS.COL_MD_PUSH_2, CBootstrapCSS.COL_MD_PULL_2),
   MD_3 (3, CBootstrapCSS.COL_MD_3, CBootstrapCSS.COL_MD_OFFSET_3, CBootstrapCSS.COL_MD_PUSH_3, CBootstrapCSS.COL_MD_PULL_3),
@@ -42,7 +41,7 @@ public enum EBootstrapGridMD implements IBootstrapGridElementExtended
   MD_9 (9, CBootstrapCSS.COL_MD_9, CBootstrapCSS.COL_MD_OFFSET_9, CBootstrapCSS.COL_MD_PUSH_9, CBootstrapCSS.COL_MD_PULL_9),
   MD_10 (10, CBootstrapCSS.COL_MD_10, CBootstrapCSS.COL_MD_OFFSET_10, CBootstrapCSS.COL_MD_PUSH_10, CBootstrapCSS.COL_MD_PULL_10),
   MD_11 (11, CBootstrapCSS.COL_MD_11, CBootstrapCSS.COL_MD_OFFSET_11, CBootstrapCSS.COL_MD_PUSH_11, CBootstrapCSS.COL_MD_PULL_11),
-  MD_12 (12, CBootstrapCSS.COL_MD_12, null, null, null);
+  MD_12 (12, CBootstrapCSS.COL_MD_12, CBootstrapCSS.COL_MD_OFFSET_12, CBootstrapCSS.COL_MD_PUSH_12, CBootstrapCSS.COL_MD_PULL_12);
 
   private final int m_nParts;
   private final ICSSClassProvider m_aCSSClass;
@@ -98,8 +97,6 @@ public enum EBootstrapGridMD implements IBootstrapGridElementExtended
   {
     switch (nParts)
     {
-      case 0:
-        return MD_0;
       case 1:
         return MD_1;
       case 2:

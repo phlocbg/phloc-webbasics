@@ -39,7 +39,7 @@ public class MainExtractBootstrap3CSSClasses
 {
   public static void main (final String [] args)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource (EBootstrapCSSPathProvider.BOOTSTRAP_3_0_0.getCSSItemPath (true)),
+    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource (EBootstrapCSSPathProvider.BOOTSTRAP_3_0_1.getCSSItemPath (true)),
                                                                CCharset.CHARSET_UTF_8_OBJ,
                                                                ECSSVersion.CSS30);
     final Set <String> aClasses = new TreeSet <String> ();
@@ -81,7 +81,7 @@ public class MainExtractBootstrap3CSSClasses
         final String sClassName = sClass.substring (1);
         String sFieldName = sClassName.toUpperCase (Locale.US);
         sFieldName = sFieldName.replace ('-', '_');
-        System.out.println (sFieldName.substring ("glyphicon-".length ()) + " (CBootstrap3CSS." + sFieldName + "),");
+        System.out.println (sFieldName.substring ("glyphicon-".length ()) + " (CBootstrapCSS." + sFieldName + "),");
       }
   }
 }

@@ -30,28 +30,38 @@ import com.phloc.html.css.ICSSClassProvider;
  * 
  * @author Philip Helger
  */
-public enum EBootstrapGridXS implements IBootstrapGridElement
+public enum EBootstrapGridXS implements IBootstrapGridElementExtended
 {
-  XS_1 (1, CBootstrapCSS.COL_XS_1),
-  XS_2 (2, CBootstrapCSS.COL_XS_2),
-  XS_3 (3, CBootstrapCSS.COL_XS_3),
-  XS_4 (4, CBootstrapCSS.COL_XS_4),
-  XS_5 (5, CBootstrapCSS.COL_XS_5),
-  XS_6 (6, CBootstrapCSS.COL_XS_6),
-  XS_7 (7, CBootstrapCSS.COL_XS_7),
-  XS_8 (8, CBootstrapCSS.COL_XS_8),
-  XS_9 (9, CBootstrapCSS.COL_XS_9),
-  XS_10 (10, CBootstrapCSS.COL_XS_10),
-  XS_11 (11, CBootstrapCSS.COL_XS_11),
-  XS_12 (12, CBootstrapCSS.COL_XS_12);
+  XS_1 (1, CBootstrapCSS.COL_XS_1, CBootstrapCSS.COL_XS_OFFSET_1, CBootstrapCSS.COL_XS_PUSH_1, CBootstrapCSS.COL_XS_PULL_1),
+  XS_2 (2, CBootstrapCSS.COL_XS_2, CBootstrapCSS.COL_XS_OFFSET_2, CBootstrapCSS.COL_XS_PUSH_2, CBootstrapCSS.COL_XS_PULL_2),
+  XS_3 (3, CBootstrapCSS.COL_XS_3, CBootstrapCSS.COL_XS_OFFSET_3, CBootstrapCSS.COL_XS_PUSH_3, CBootstrapCSS.COL_XS_PULL_3),
+  XS_4 (4, CBootstrapCSS.COL_XS_4, CBootstrapCSS.COL_XS_OFFSET_4, CBootstrapCSS.COL_XS_PUSH_4, CBootstrapCSS.COL_XS_PULL_4),
+  XS_5 (5, CBootstrapCSS.COL_XS_5, CBootstrapCSS.COL_XS_OFFSET_5, CBootstrapCSS.COL_XS_PUSH_5, CBootstrapCSS.COL_XS_PULL_5),
+  XS_6 (6, CBootstrapCSS.COL_XS_6, CBootstrapCSS.COL_XS_OFFSET_6, CBootstrapCSS.COL_XS_PUSH_6, CBootstrapCSS.COL_XS_PULL_6),
+  XS_7 (7, CBootstrapCSS.COL_XS_7, CBootstrapCSS.COL_XS_OFFSET_7, CBootstrapCSS.COL_XS_PUSH_7, CBootstrapCSS.COL_XS_PULL_7),
+  XS_8 (8, CBootstrapCSS.COL_XS_8, CBootstrapCSS.COL_XS_OFFSET_8, CBootstrapCSS.COL_XS_PUSH_8, CBootstrapCSS.COL_XS_PULL_8),
+  XS_9 (9, CBootstrapCSS.COL_XS_9, CBootstrapCSS.COL_XS_OFFSET_9, CBootstrapCSS.COL_XS_PUSH_9, CBootstrapCSS.COL_XS_PULL_9),
+  XS_10 (10, CBootstrapCSS.COL_XS_10, CBootstrapCSS.COL_XS_OFFSET_10, CBootstrapCSS.COL_XS_PUSH_10, CBootstrapCSS.COL_XS_PULL_10),
+  XS_11 (11, CBootstrapCSS.COL_XS_11, CBootstrapCSS.COL_XS_OFFSET_11, CBootstrapCSS.COL_XS_PUSH_11, CBootstrapCSS.COL_XS_PULL_11),
+  XS_12 (12, CBootstrapCSS.COL_XS_12, CBootstrapCSS.COL_XS_OFFSET_12, CBootstrapCSS.COL_XS_PUSH_12, CBootstrapCSS.COL_XS_PULL_12);
 
   private final int m_nParts;
   private final ICSSClassProvider m_aCSSClass;
+  private final ICSSClassProvider m_aCSSClassOffset;
+  private final ICSSClassProvider m_aCSSClassPush;
+  private final ICSSClassProvider m_aCSSClassPull;
 
-  private EBootstrapGridXS (@Nonnegative final int nParts, @Nonnull final ICSSClassProvider aCSSClass)
+  private EBootstrapGridXS (@Nonnegative final int nParts,
+                            @Nonnull final ICSSClassProvider aCSSClass,
+                            @Nullable final ICSSClassProvider aCSSClassOffset,
+                            @Nullable final ICSSClassProvider aCSSClassPush,
+                            @Nullable final ICSSClassProvider aCSSClassPull)
   {
     m_nParts = nParts;
     m_aCSSClass = aCSSClass;
+    m_aCSSClassOffset = aCSSClassOffset;
+    m_aCSSClassPush = aCSSClassPush;
+    m_aCSSClassPull = aCSSClassPull;
   }
 
   @Nonnegative
@@ -65,6 +75,24 @@ public enum EBootstrapGridXS implements IBootstrapGridElement
   public String getCSSClass ()
   {
     return m_aCSSClass.getCSSClass ();
+  }
+
+  @Nullable
+  public ICSSClassProvider getCSSClassOffset ()
+  {
+    return m_aCSSClassOffset;
+  }
+
+  @Nullable
+  public ICSSClassProvider getCSSClassPush ()
+  {
+    return m_aCSSClassPush;
+  }
+
+  @Nullable
+  public ICSSClassProvider getCSSClassPull ()
+  {
+    return m_aCSSClassPull;
   }
 
   @Nullable
