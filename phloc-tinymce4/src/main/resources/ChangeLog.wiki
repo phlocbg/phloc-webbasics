@@ -2,6 +2,11 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>10/31/13</td><td colspan="4">_Release *0.1.1*_</td></tr>
+<tr><td>10/31/13</td><td>add</td><td>api</td><td></td><td>Added enum ETinyMCE4MenuControl</td></tr>
+<tr><td>10/31/13</td><td>add</td><td>api</td><td></td><td>Added enum ETinyMCE4ToolbarControl</td></tr>
+<tr><td>10/31/13</td><td>update</td><td>tech</td><td></td><td>Language update</td></tr>
+<tr><td>10/31/13</td><td>add</td><td>api</td><td></td><td>Extended API</td></tr>
 <tr border="1"><td>10/29/13</td><td colspan="4">_Release *0.1.0*_</td></tr>
 <tr><td>10/29/13</td><td>update</td><td>tech</td><td></td><td>Updated to TinyMCE 4.0.10</td></tr>
 </tbody></table>
