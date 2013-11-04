@@ -8,7 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-bootstrap3</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.7</version>
   <packaging>bundle</packaging>
   <name>phloc-bootstrap3</name>
   <url>http://repo.phloc.com/apidocs/phloc-bootstrap3/${project.version}</url>
@@ -22,9 +22,9 @@
   </licenses>
   
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-bootstrap3</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-bootstrap3</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/tags/phloc-bootstrap3-1.0.7</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/phloc-bootstrap3-1.0.7</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/phloc-bootstrap3-1.0.7</developerConnection>
   </scm>
 
   <organization>
