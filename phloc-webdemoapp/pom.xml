@@ -11,8 +11,8 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>phloc-webdemoapp</name>
-
   <inceptionYear>2013</inceptionYear>
+  
   <licenses>
     <license>
       <name>Apache 2</name>
