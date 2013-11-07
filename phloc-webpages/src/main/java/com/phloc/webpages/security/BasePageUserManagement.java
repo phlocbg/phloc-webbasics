@@ -103,6 +103,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     LABEL_CREATIONDATE ("Angelegt am", "Created on"),
     LABEL_LASTMODIFICATIONDATE ("Letzte Änderung am", "Last modification on"),
     LABEL_DELETIONDATE ("Gelöscht am", "Deleted on"),
+    LABEL_LOGINNAME ("Benutzername", "User name"),
     LABEL_FIRSTNAME ("Vorname", "First name"),
     LABEL_LASTNAME ("Nachname", "Last name"),
     LABEL_EMAIL ("E-Mail-Adresse", "Email address"),
@@ -118,6 +119,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     LABEL_ROLES_0 ("Rollen", "Roles"),
     LABEL_ROLES_N ("Rollen ({0})", "Roles ({0})"),
     LABEL_ATTRIBUTES ("Attribute", "Attributes"),
+    ERROR_LOGINNAME_REQUIRED ("Es muss ein Benutzername angegeben werden!", "A user name must be specified!"),
     ERROR_LASTNAME_REQUIRED ("Es muss ein Nachname angegeben werden!", "A last name must be specified!"),
     ERROR_EMAIL_REQUIRED ("Es muss eine E-Mail-Adresse angegeben werden!", "An email address must be specified!"),
     ERROR_EMAIL_INVALID ("Es muss eine gültige E-Mail-Adresse angegeben werden!", "A valid email address must be specified!"),
@@ -153,6 +155,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   public static final boolean DEFAULT_ENABLED = true;
   public static final String FIELD_FIRSTNAME = "firstname";
   public static final String FIELD_LASTNAME = "lastname";
+  public static final String FIELD_LOGINNAME = "loginname";
   public static final String FIELD_EMAILADDRESS = "emailaddress";
   public static final String FIELD_PASSWORD = "password";
   public static final String FIELD_PASSWORD_CONFIRM = "passwordconf";
@@ -194,6 +197,18 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     return this;
   }
 
+  /**
+   * Override this method to determine if the email address should be used as
+   * login name or not.
+   * 
+   * @return <code>true</code> by default
+   */
+  @OverrideOnDemand
+  protected boolean useEmailAddressAsLoginName ()
+  {
+    return true;
+  }
+
   @Override
   @Nullable
   protected IUser getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
@@ -208,6 +223,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     return aUser != null && !aUser.isDeleted ();
   }
 
+  /**
+   * Check if the password of a user can be reset or not. Currently the
+   * passwords of all not deleted users can be reset.
+   * 
+   * @param aUser
+   *        The user to check. May not be <code>null</code>.
+   * @return <code>true</code> if the password can be reset, <code>false</code>
+   *         if not.
+   */
   protected final boolean canResetPassword (@Nonnull final IUser aUser)
   {
     return !aUser.isDeleted ();
@@ -290,6 +314,12 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getDisplayName ()));
     onShowSelectedObjectTableStart (aTable, aSelectedObject, aDisplayLocale);
+    if (!useEmailAddressAsLoginName ())
+    {
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_LOGINNAME.getDisplayText (aDisplayLocale))
+            .setCtrl (aSelectedObject.getLoginName ());
+    }
     aTable.createItemRow ()
           .setLabel (EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale))
           .setCtrl (aSelectedObject.getFirstName ());
@@ -398,6 +428,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final boolean bIsAdministrator = aSelectedObject != null && aSelectedObject.isAdministrator ();
     final AccessManager aAccessMgr = AccessManager.getInstance ();
+    String sLoginName = aWPEC.getAttr (FIELD_LOGINNAME);
     final String sFirstName = aWPEC.getAttr (FIELD_FIRSTNAME);
     final String sLastName = aWPEC.getAttr (FIELD_LASTNAME);
     final String sEmailAddress = aWPEC.getAttr (FIELD_EMAILADDRESS);
@@ -406,6 +437,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final boolean bEnabled = bIsAdministrator ? true : aWPEC.getCheckBoxAttr (FIELD_ENABLED, DEFAULT_ENABLED);
     final Collection <String> aUserGroupIDs = bIsAdministrator ? aAccessMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ())
                                                               : aWPEC.getAttrs (FIELD_USERGROUPS);
+
+    if (useEmailAddressAsLoginName ())
+    {
+      sLoginName = sEmailAddress;
+    }
+    else
+    {
+      if (StringHelper.hasNoText (sLoginName))
+        aFormErrors.addFieldError (FIELD_LOGINNAME, EText.ERROR_LOGINNAME_REQUIRED.getDisplayText (aDisplayLocale));
+    }
 
     if (StringHelper.hasNoText (sLastName))
       aFormErrors.addFieldError (FIELD_LASTNAME, EText.ERROR_LASTNAME_REQUIRED.getDisplayText (aDisplayLocale));
@@ -450,7 +491,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
         // We're editing an existing object
         aAccessMgr.setUserData (sUserID,
-                                sEmailAddress,
+                                sLoginName,
                                 sEmailAddress,
                                 sFirstName,
                                 sLastName,
@@ -474,7 +515,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       else
       {
         // We're creating a new object
-        final IUser aNewUser = aAccessMgr.createNewUser (sEmailAddress,
+        final IUser aNewUser = aAccessMgr.createNewUser (sLoginName,
                                                          sEmailAddress,
                                                          sPassword,
                                                          sFirstName,
@@ -546,6 +587,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                       aSelectedObject.getDisplayName ())
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
+    if (!useEmailAddressAsLoginName ())
+    {
+      final String sLoginName = EText.LABEL_LOGINNAME.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sLoginName)
+            .setCtrl (new HCEdit (new RequestField (FIELD_LOGINNAME,
+                                                    aSelectedObject == null ? null : aSelectedObject.getLoginName ())).setPlaceholder (sLoginName))
+            .setErrorList (aFormErrors.getListOfField (FIELD_LOGINNAME));
+    }
+
     final String sFirstName = EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale);
     aTable.createItemRow ()
           .setLabel (sFirstName)
@@ -566,6 +617,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
           .setCtrl (new HCEdit (new RequestField (FIELD_EMAILADDRESS,
                                                   aSelectedObject == null ? null : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
           .setErrorList (aFormErrors.getListOfField (FIELD_EMAILADDRESS));
+
     if (!bEdit)
     {
       // Password is only shown on creation of a new user
