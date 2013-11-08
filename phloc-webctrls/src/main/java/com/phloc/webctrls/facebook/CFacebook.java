@@ -39,6 +39,11 @@ public final class CFacebook
   /** The preferred namespace prefix for Facebook nodes */
   public static final String FACEBOOK_PREFIX = "fb";
 
+  /**
+   * Date time format used for e.g. last modification object property
+   */
+  public static final String FACEBOOK_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+
   private CFacebook ()
   {}
 }

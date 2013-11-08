@@ -25,6 +25,7 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.webctrls.facebook.CFacebook;
 
+@Deprecated
 public enum EOpenGraphType implements IHasID <String>
 {
   TITLE ("title"),
