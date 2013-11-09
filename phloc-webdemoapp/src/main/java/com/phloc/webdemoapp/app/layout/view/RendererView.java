@@ -128,7 +128,7 @@ public final class RendererView implements ILayoutAreaContentProvider
   }
 
   @Nonnull
-  private static IHCNode _getNavbar (final Locale aDisplayLocale)
+  private static BootstrapNavbar _getNavbar (final Locale aDisplayLocale)
   {
     final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
                                                                                         .getTree ()
