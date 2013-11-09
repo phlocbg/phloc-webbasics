@@ -22,3 +22,8 @@
 .nav-tabs > li > a:active {
   outline-style:none;
 }
+
+/* No margin for alerts in navbar! */ 
+.nav .alert {
+  margin-bottom: 0;
+}

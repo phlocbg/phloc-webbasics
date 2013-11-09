@@ -43,7 +43,8 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.html.HCLI;
+import com.phloc.html.hc.IHCElement;
+import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webctrls.custom.IIcon;
 
 /**
@@ -327,9 +328,9 @@ public enum EFamFamFlagIcon implements IIcon, IHasID <String>
   }
 
   @Nonnull
-  public HCLI getAsNode ()
+  public IHCElement <?> getAsNode ()
   {
-    final HCLI ret = new HCLI ();
+    final HCSpan ret = new HCSpan ();
     ret.addClasses (CSS_CLASS_ICON_FAMFAM_FLAG, this);
     return ret;
   }
