@@ -17,6 +17,9 @@
  */
 package com.phloc.bootstrap3.table;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -30,8 +33,12 @@ import com.phloc.html.hc.IHCHasFocus;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
+import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCRadioButton;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.htmlext.HCUtils;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
@@ -121,6 +128,12 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
           addClass (CBootstrapCSS.getCSSClass (EErrorLevel.ERROR));
         else
           removeClass (CBootstrapCSS.getCSSClass (EErrorLevel.ERROR));
+
+        final List <IHCControl <?>> aTarget = new ArrayList <IHCControl <?>> ();
+        HCUtils.getAllHCControls (HCNodeList.create (aCtrls), aTarget);
+        for (final IHCControl <?> aCtrl : aTarget)
+          if (!(aCtrl instanceof HCCheckBox) && !(aCtrl instanceof HCRadioButton))
+            aCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
       }
     };
     addBodyRow (ret);
