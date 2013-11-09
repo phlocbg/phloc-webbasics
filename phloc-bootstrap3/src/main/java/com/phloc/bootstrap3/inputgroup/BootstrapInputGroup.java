@@ -103,7 +103,7 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   @Nullable
   public IHCNode build ()
   {
-    if (m_aPrefix == null && m_aSuffix != null)
+    if (m_aPrefix == null && m_aSuffix == null)
       return m_aInput;
 
     final HCDiv aDiv = new HCDiv ().addClasses (CBootstrapCSS.INPUT_GROUP, m_eSize);
