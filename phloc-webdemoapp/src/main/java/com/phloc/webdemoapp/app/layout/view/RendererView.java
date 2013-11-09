@@ -41,7 +41,6 @@ import com.phloc.bootstrap3.dropdown.BootstrapDropdownMenu;
 import com.phloc.bootstrap3.ext.BootstrapMenuItemRenderer;
 import com.phloc.bootstrap3.ext.BootstrapMenuItemRendererHorz;
 import com.phloc.bootstrap3.grid.BootstrapRow;
-import com.phloc.bootstrap3.grid.EBootstrapGridMD;
 import com.phloc.bootstrap3.nav.BootstrapNav;
 import com.phloc.bootstrap3.navbar.BootstrapNavbar;
 import com.phloc.bootstrap3.navbar.EBootstrapNavbarPosition;
@@ -222,8 +221,8 @@ public final class RendererView implements ILayoutAreaContentProvider
     // Content
     {
       final BootstrapRow aRow = aOuterContainer.addAndReturnChild (new BootstrapRow ());
-      final HCDiv aCol1 = aRow.createColumn (EBootstrapGridMD.MD_3);
-      final HCDiv aCol2 = aRow.createColumn (EBootstrapGridMD.MD_9);
+      final HCDiv aCol1 = aRow.createColumn (3);
+      final HCDiv aCol2 = aRow.createColumn (9);
 
       // left
       // We need a wrapper span for easy AJAX content replacement

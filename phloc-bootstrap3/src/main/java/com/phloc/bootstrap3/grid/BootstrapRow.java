@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCDiv;
 
@@ -77,5 +78,44 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
     final HCDiv aDiv = addAndReturnChild (new HCDiv ());
     aDiv.addClasses (eXS, eSM, eMD, eLG);
     return aDiv;
+  }
+
+  @Nonnull
+  public BootstrapRow addColumns (@Nonnegative final int nParts0,
+                                  @Nullable final IHCNode aPart0,
+                                  @Nonnegative final int nParts1,
+                                  @Nullable final IHCNode aPart1)
+  {
+    createColumn (nParts0).addChild (aPart0);
+    createColumn (nParts1).addChild (aPart1);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapRow addColumns (@Nonnegative final int nParts0,
+                                  @Nullable final IHCNode aPart0,
+                                  @Nonnegative final int nParts1,
+                                  @Nullable final IHCNode aPart1,
+                                  @Nonnegative final int nParts2,
+                                  @Nullable final IHCNode aPart2)
+  {
+    addColumns (nParts0, aPart0, nParts1, aPart1);
+    createColumn (nParts2).addChild (aPart2);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapRow addColumns (@Nonnegative final int nParts0,
+                                  @Nullable final IHCNode aPart0,
+                                  @Nonnegative final int nParts1,
+                                  @Nullable final IHCNode aPart1,
+                                  @Nonnegative final int nParts2,
+                                  @Nullable final IHCNode aPart2,
+                                  @Nonnegative final int nParts3,
+                                  @Nullable final IHCNode aPart3)
+  {
+    addColumns (nParts0, aPart0, nParts1, aPart1, nParts2, aPart2);
+    createColumn (nParts3).addChild (aPart3);
+    return this;
   }
 }

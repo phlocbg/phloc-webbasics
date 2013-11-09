@@ -28,7 +28,6 @@ import com.phloc.bootstrap3.base.BootstrapContainer;
 import com.phloc.bootstrap3.button.BootstrapSubmitButton;
 import com.phloc.bootstrap3.form.BootstrapForm;
 import com.phloc.bootstrap3.grid.BootstrapRow;
-import com.phloc.bootstrap3.grid.EBootstrapGridMD;
 import com.phloc.bootstrap3.pageheader.BootstrapPageHeader;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.html.HCBody;
@@ -48,8 +47,8 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
   private final String m_sPageTitle;
 
   public BootstrapLoginHTMLProvider (final boolean bLoginError,
-                                      @Nonnull final ELoginResult eLoginResult,
-                                      @Nullable final String sPageTitle)
+                                     @Nonnull final ELoginResult eLoginResult,
+                                     @Nullable final String sPageTitle)
   {
     super (bLoginError, eLoginResult);
     m_sPageTitle = sPageTitle;
@@ -87,9 +86,9 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     // Layout
     final BootstrapContainer aContentLayout = new BootstrapContainer ();
     final BootstrapRow aRow = aContentLayout.addAndReturnChild (new BootstrapRow ());
-    aRow.createColumn (EBootstrapGridMD.MD_3);
-    final HCDiv aCol2 = aRow.createColumn (EBootstrapGridMD.MD_6);
-    aRow.createColumn (EBootstrapGridMD.MD_3);
+    aRow.createColumn (3);
+    final HCDiv aCol2 = aRow.createColumn (6);
+    aRow.createColumn (3);
     if (StringHelper.hasText (m_sPageTitle))
       aCol2.addChild (new BootstrapPageHeader ().addChild (HCH2.create (m_sPageTitle)));
     aCol2.addChild (aForm);
