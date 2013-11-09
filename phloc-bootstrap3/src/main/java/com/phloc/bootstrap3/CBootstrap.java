@@ -29,8 +29,8 @@ import com.phloc.commons.version.Version;
 @Immutable
 public final class CBootstrap
 {
-  /** Bootstrap version 3.0.1 */
-  public static final Version BOOTSTRAP_VERSION_301 = new Version (3, 0, 1);
+  /** Bootstrap version 3.0.2 */
+  public static final Version BOOTSTRAP_VERSION_302 = new Version (3, 0, 2);
 
   /** The maximum number of columns a grid system can be separated into */
   public static final int GRID_SYSTEM_MAX = 12;
