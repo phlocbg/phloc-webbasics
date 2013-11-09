@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webctrls.facebook.opengraph;
+package com.phloc.webctrls.facebook.opengraph.objecttypes;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,23 +23,26 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
-import com.phloc.webctrls.facebook.CFacebook;
 
-@Deprecated
-public enum EOpenGraphType implements IHasID <String>
+/**
+ * The various open graph object types taken from <a href=
+ * "https://developers.facebook.com/docs/reference/opengraph/object-type"
+ * >developers.facebook.com</a>
+ * 
+ * @author Boris Gregorcic
+ */
+public enum EOpenGraphObjectTypeRestaurant implements IHasID <String>
 {
-  TITLE ("title"),
-  TYPE ("type"),
-  URL ("url"),
-  IMAGE ("image"),
-  SITE_NAME ("site_name"),
-  DESCRIPTION ("description");
+  RESTAURANT ("restaurant.restaurant"),
+  MENU_ITEM ("restaurant.menu_item"),
+  MENU_SECTION ("restaurant.menu_section"),
+  MENU ("restaurant.menu");
 
   private final String m_sID;
 
-  private EOpenGraphType (@Nonnull @Nonempty final String sID)
+  private EOpenGraphObjectTypeRestaurant (@Nonnull @Nonempty final String sID)
   {
-    m_sID = CFacebook.OPENGRAPH_PREFIX + ':' + sID;
+    m_sID = sID;
   }
 
   @Nonnull
@@ -50,8 +53,8 @@ public enum EOpenGraphType implements IHasID <String>
   }
 
   @Nullable
-  public static EOpenGraphType getFromIDOrNull (@Nullable final String sID)
+  public static EOpenGraphObjectTypeRestaurant getFromID (@Nullable final String sID)
   {
-    return EnumHelper.getFromIDOrNull (EOpenGraphType.class, sID);
+    return EnumHelper.getFromIDOrNull (EOpenGraphObjectTypeRestaurant.class, sID);
   }
 }
