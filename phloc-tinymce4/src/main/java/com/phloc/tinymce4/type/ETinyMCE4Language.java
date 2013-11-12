@@ -17,9 +17,14 @@
  */
 package com.phloc.tinymce4.type;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.locale.LocaleCache;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * All TinyMCE4 supported languages. Note: not all locales here are valid Java
@@ -103,5 +108,54 @@ public enum ETinyMCE4Language
   public String getValue ()
   {
     return m_sValue;
+  }
+
+  /**
+   * Get the language from the passed locale, considering only available
+   * translations. If the passed locale has language 'English' no translation is
+   * required!
+   * 
+   * @param aLocale
+   *        The locale to check. May be <code>null</code>.
+   * @return <code>null</code> if no special translation locale was found.
+   */
+  @Nullable
+  public static ETinyMCE4Language getFromLocaleOrNull (@Nullable final Locale aLocale)
+  {
+    if (aLocale != null)
+    {
+      // Check for special case English - no translation required in this case
+      if (aLocale.getLanguage ().equals ("en"))
+        return null;
+
+      // Check for direct match
+      String sLocaleStr = aLocale.toString ();
+      for (final ETinyMCE4Language e : values ())
+        if (sLocaleStr.equals (e.m_sValue))
+          return e;
+
+      if (StringHelper.hasText (aLocale.getCountry ()))
+      {
+        // Not found so far - extract language and country
+        final Locale aLocale2 = LocaleCache.getLocale (aLocale.getLanguage (), aLocale.getCountry ());
+        if (aLocale2 != null)
+        {
+          sLocaleStr = aLocale2.toString ();
+          for (final ETinyMCE4Language e : values ())
+            if (sLocaleStr.equals (e.m_sValue))
+              return e;
+        }
+      }
+
+      if (StringHelper.hasText (aLocale.getLanguage ()))
+      {
+        // Not found so far - extract language only
+        sLocaleStr = aLocale.getLanguage ();
+        for (final ETinyMCE4Language e : values ())
+          if (sLocaleStr.equals (e.m_sValue))
+            return e;
+      }
+    }
+    return null;
   }
 }

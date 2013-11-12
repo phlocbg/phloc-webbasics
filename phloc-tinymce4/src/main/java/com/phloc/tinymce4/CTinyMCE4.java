@@ -30,7 +30,7 @@ import com.phloc.commons.version.Version;
 public final class CTinyMCE4
 {
   /** Edit version */
-  public static final Version TINYMCE_VERSION_409 = new Version (4, 0, 9);
+  public static final Version TINYMCE_VERSION_4_0_10 = new Version (4, 0, 10);
 
   private CTinyMCE4 ()
   {}
