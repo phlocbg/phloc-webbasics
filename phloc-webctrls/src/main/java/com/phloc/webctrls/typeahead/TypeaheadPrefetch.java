@@ -118,7 +118,7 @@ public class TypeaheadPrefetch implements ICloneable <TypeaheadPrefetch>
 
   @Nonnull
   @ReturnsMutableCopy
-  public JSAssocArray getAsJSArray ()
+  public JSAssocArray getAsJSObject ()
   {
     final JSAssocArray ret = new JSAssocArray ();
     ret.add (JSON_URL, m_aURL.getAsString ());

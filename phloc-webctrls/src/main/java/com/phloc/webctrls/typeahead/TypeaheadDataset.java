@@ -57,6 +57,7 @@ public class TypeaheadDataset
   private IJSExpression m_aFooter;
   private List <? extends TypeaheadDatum> m_aLocal;
   private TypeaheadPrefetch m_aPrefetch;
+  private TypeaheadRemote m_aRemote;
 
   /**
    * Constructor.
@@ -343,8 +344,7 @@ public class TypeaheadDataset
   @Nonnull
   public TypeaheadDataset setPrefetch (@Nullable final ISimpleURL aURL)
   {
-    m_aPrefetch = aURL == null ? null : new TypeaheadPrefetch (aURL);
-    return this;
+    return setPrefetch (aURL == null ? null : new TypeaheadPrefetch (aURL));
   }
 
   /**
@@ -358,7 +358,7 @@ public class TypeaheadDataset
   @Nonnull
   public TypeaheadDataset setPrefetch (@Nullable final TypeaheadPrefetch aPrefetch)
   {
-    m_aPrefetch = aPrefetch == null ? null : aPrefetch.getClone ();
+    m_aPrefetch = aPrefetch;
     return this;
   }
 
@@ -372,6 +372,33 @@ public class TypeaheadDataset
     return m_aPrefetch;
   }
 
+  /**
+   * Can be a URL to fetch suggestions from when the data provided by local and
+   * prefetch is insufficient or, if more configurability is needed, a remote
+   * options object.
+   * 
+   * @param aRemote
+   *        The remote object to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setRemote (@Nullable final TypeaheadRemote aRemote)
+  {
+    m_aRemote = aRemote;
+    return this;
+  }
+
+  /**
+   * @return Can be a URL to fetch suggestions from when the data provided by
+   *         local and prefetch is insufficient or, if more configurability is
+   *         needed, a remote options object.
+   */
+  @Nullable
+  public TypeaheadRemote getRemote ()
+  {
+    return m_aRemote;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getAsJSCode ()
@@ -379,8 +406,14 @@ public class TypeaheadDataset
     // Consistency checks
     if (m_aTemplate instanceof JSStringLiteral && StringHelper.hasNoText (m_sEngine))
       s_aLogger.warn ("If template is a String, engine must be set!");
+    if (m_aLocal == null && m_aPrefetch == null && m_aRemote == null)
+      s_aLogger.warn ("Either local, prefetch or remote must be set!");
     if (m_aLocal != null && m_aPrefetch != null)
       s_aLogger.warn ("Only local or prefetch should be used!");
+    if (m_aLocal != null && m_aRemote != null)
+      s_aLogger.warn ("Only local or remote should be used!");
+    if (m_aPrefetch != null && m_aRemote != null)
+      s_aLogger.warn ("Only prefetch or remote should be used!");
 
     // Build result object
     final JSAssocArray ret = new JSAssocArray ().add (JSON_NAME, m_sName);
@@ -404,7 +437,9 @@ public class TypeaheadDataset
       ret.add (JSON_LOCAL, aLocal);
     }
     if (m_aPrefetch != null)
-      ret.add (JSON_PREFETCH, m_aPrefetch.getAsJSArray ());
+      ret.add (JSON_PREFETCH, m_aPrefetch.getAsJSObject ());
+    if (m_aRemote != null)
+      ret.add (JSON_REMOTE, m_aRemote.getAsJSObject ());
     return ret;
   }
 
@@ -419,6 +454,8 @@ public class TypeaheadDataset
                                        .appendIfNotNull ("header", m_aHeader)
                                        .appendIfNotNull ("footer", m_aFooter)
                                        .appendIfNotNull ("local", m_aLocal)
+                                       .appendIfNotNull ("prefetch", m_aPrefetch)
+                                       .appendIfNotNull ("remote", m_aRemote)
                                        .toString ();
   }
 }
