@@ -23,9 +23,14 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.html.resource.js.JSFilenameHelper;
 
+/**
+ * Contains default JS paths for this package.
+ * 
+ * @author Philip Helger
+ */
 public enum EAutosizeJSPathProvider implements IJSPathProvider
 {
-  AUTOSIZE_1_18_0 ("autosize/1.18.0/jquery.autosize.js"),
+  AUTOSIZE_1_18_1 ("autosize/1.18.1/jquery.autosize.js"),
   AUTOSIZE_ALL ("autosize/autosize-all.js");
 
   private final String m_sPath;

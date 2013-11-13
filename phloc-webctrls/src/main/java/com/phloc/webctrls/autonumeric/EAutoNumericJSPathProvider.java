@@ -23,6 +23,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.html.resource.js.JSFilenameHelper;
 
+/**
+ * Contains default JS paths for this package.
+ * 
+ * @author Philip Helger
+ */
 public enum EAutoNumericJSPathProvider implements IJSPathProvider
 {
   AUTONUMERIC_1_9_17 ("autonumeric/1.9.17/autonumeric.js");

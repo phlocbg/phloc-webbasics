@@ -23,9 +23,14 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.html.resource.js.JSFilenameHelper;
 
+/**
+ * Contains default JS paths for this package.
+ * 
+ * @author Philip Helger
+ */
 public enum EColorBoxJSPathProvider implements IJSPathProvider
 {
-  COLORBOX_1_4_31 ("colorbox/1.4.31/jquery.colorbox.js");
+  COLORBOX_1_4_33 ("colorbox/1.4.33/jquery.colorbox.js");
 
   private final String m_sPath;
 
