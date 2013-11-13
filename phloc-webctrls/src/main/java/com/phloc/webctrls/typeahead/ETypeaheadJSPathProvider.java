@@ -23,6 +23,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.html.resource.js.IJSPathProvider;
 import com.phloc.html.resource.js.JSFilenameHelper;
 
+/**
+ * Contains default JS paths for this package.
+ * 
+ * @author Philip Helger
+ */
 public enum ETypeaheadJSPathProvider implements IJSPathProvider
 {
   /** https://github.com/twitter/typeahead.js/ */
