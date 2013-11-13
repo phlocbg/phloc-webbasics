@@ -110,6 +110,23 @@ public enum ETinyMCE4Language
     return m_sValue;
   }
 
+  @Nullable
+  public static ETinyMCE4Language getFromValueOrNull (@Nullable final String sValue)
+  {
+    return getFromValueOrDefault (sValue, null);
+  }
+
+  @Nullable
+  public static ETinyMCE4Language getFromValueOrDefault (@Nullable final String sValue,
+                                                         @Nullable final ETinyMCE4Language eDefault)
+  {
+    if (StringHelper.hasText (sValue))
+      for (final ETinyMCE4Language e : values ())
+        if (sValue.equals (e.m_sValue))
+          return e;
+    return eDefault;
+  }
+
   /**
    * Get the language from the passed locale, considering only available
    * translations. If the passed locale has language 'English' no translation is
@@ -122,12 +139,28 @@ public enum ETinyMCE4Language
   @Nullable
   public static ETinyMCE4Language getFromLocaleOrNull (@Nullable final Locale aLocale)
   {
-    if (aLocale != null)
-    {
-      // Check for special case English - no translation required in this case
-      if (aLocale.getLanguage ().equals ("en"))
-        return null;
+    return getFromLocaleOrDefault (aLocale, null);
+  }
 
+  /**
+   * Get the language from the passed locale, considering only available
+   * translations. If the passed locale has language 'English' no translation is
+   * required!
+   * 
+   * @param aLocale
+   *        The locale to check. May be <code>null</code>.
+   * @param eDefault
+   *        The default language to be returned if no match was found. May be
+   *        <code>null</code>.
+   * @return <code>eDefault</code> if no special translation locale was found.
+   */
+  @Nullable
+  public static ETinyMCE4Language getFromLocaleOrDefault (@Nullable final Locale aLocale,
+                                                          @Nullable final ETinyMCE4Language eDefault)
+  {
+    // Check for special case English - no translation required in this case
+    if (aLocale != null && !aLocale.getLanguage ().equals ("en"))
+    {
       // Check for direct match
       String sLocaleStr = aLocale.toString ();
       for (final ETinyMCE4Language e : values ())
@@ -156,6 +189,6 @@ public enum ETinyMCE4Language
             return e;
       }
     }
-    return null;
+    return eDefault;
   }
 }
