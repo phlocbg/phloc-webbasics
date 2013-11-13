@@ -30,6 +30,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public class TypeaheadEditSelection
 {
   private final String m_sEditValue;

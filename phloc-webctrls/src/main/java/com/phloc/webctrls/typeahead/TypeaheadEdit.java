@@ -36,6 +36,7 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.form.RequestField;
 
+@Deprecated
 public class TypeaheadEdit implements IHCNodeBuilder
 {
   private final HCEdit m_aEdit;

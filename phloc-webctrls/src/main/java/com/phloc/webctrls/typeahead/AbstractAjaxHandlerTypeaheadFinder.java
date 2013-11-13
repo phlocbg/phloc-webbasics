@@ -48,6 +48,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
+@Deprecated
 public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHandler
 {
   public static final String PARAM_QUERY = "query";

@@ -35,6 +35,7 @@ import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
+@Deprecated
 public class TypeaheadScript implements IHCNodeBuilder
 {
   public static final int DEFAULT_MIN_LENGTH = 2;
