@@ -122,3 +122,21 @@ function registerTypeaheadKeyValuePair(sLabelFieldSelector,aSelectedIDFct,sAjaxU
     items: nItems || 8
   });
 }
+
+/**
+ * Use engine: TypeaheadHandlebars in your typeahead dataset
+ * 
+ * Source: http://jsfiddle.net/sshaw/TuQmH/
+ */
+var TypeaheadHandlebars = {};
+TypeaheadHandlebars.compile = function(template) {
+  /* precompile */
+  var _template = Handlebars.compile(template);
+  /* render */
+  var _render = {
+    render : function(ctx) {
+      return _template(ctx);
+    }
+  };
+  return _render;
+};
