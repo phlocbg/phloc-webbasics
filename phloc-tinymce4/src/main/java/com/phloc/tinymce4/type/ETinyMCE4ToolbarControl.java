@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * All TinyMCE4 toolbar controls.<br>
@@ -111,5 +112,22 @@ public enum ETinyMCE4ToolbarControl
   public ETinyMCE4Plugin getRequiredPlugin ()
   {
     return m_eRequiredPlugin;
+  }
+
+  @Nullable
+  public static ETinyMCE4ToolbarControl getFromValueOrNull (@Nullable final String sValue)
+  {
+    return getFromValueOrDefault (sValue, null);
+  }
+
+  @Nullable
+  public static ETinyMCE4ToolbarControl getFromValueOrDefault (@Nullable final String sValue,
+                                                               @Nullable final ETinyMCE4ToolbarControl eDefault)
+  {
+    if (StringHelper.hasText (sValue))
+      for (final ETinyMCE4ToolbarControl e : values ())
+        if (sValue.equals (e.m_sValue))
+          return e;
+    return eDefault;
   }
 }

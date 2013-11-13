@@ -18,8 +18,10 @@
 package com.phloc.tinymce4.type;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * All TinyMCE4 supported skins.<br>
@@ -43,5 +45,22 @@ public enum ETinyMCE4Skin
   public String getValue ()
   {
     return m_sValue;
+  }
+
+  @Nullable
+  public static ETinyMCE4Skin getFromValueOrNull (@Nullable final String sValue)
+  {
+    return getFromValueOrDefault (sValue, null);
+  }
+
+  @Nullable
+  public static ETinyMCE4Skin getFromValueOrDefault (@Nullable final String sValue,
+                                                     @Nullable final ETinyMCE4Skin eDefault)
+  {
+    if (StringHelper.hasText (sValue))
+      for (final ETinyMCE4Skin e : values ())
+        if (sValue.equals (e.m_sValue))
+          return e;
+    return eDefault;
   }
 }
