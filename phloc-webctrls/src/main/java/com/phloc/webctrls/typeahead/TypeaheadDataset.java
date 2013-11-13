@@ -5,13 +5,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
+import com.phloc.html.js.builder.JSStringLiteral;
 
 /**
  * Represents a single typeahead dataset.
@@ -35,12 +41,23 @@ public class TypeaheadDataset
   public static final String DEFAULT_VALUE_KEY = "value";
   public static final int DEFAULT_LIMIT = 5;
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (TypeaheadDataset.class);
+
   private final String m_sName;
   private String m_sValueKey = DEFAULT_VALUE_KEY;
   private int m_nLimit = DEFAULT_LIMIT;
   private IJSExpression m_aTemplate;
   private String m_sEngine;
+  private IJSExpression m_aHeader;
+  private IJSExpression m_aFooter;
 
+  /**
+   * Constructor.
+   * 
+   * @param sName
+   *        The string used to identify the dataset. Used by typeahead.js to
+   *        cache intelligently.
+   */
   public TypeaheadDataset (@Nonnull @Nonempty final String sName)
   {
     if (StringHelper.hasNoText (sName))
@@ -59,6 +76,15 @@ public class TypeaheadDataset
     return m_sName;
   }
 
+  /**
+   * The key used to access the value of the datum in the datum object. Defaults
+   * to <code>value</code>.
+   * 
+   * @param sValueKey
+   *        The name of the value key in the typeahead datum. May neither be
+   *        <code>null</code> nor empty.
+   * @return this
+   */
   @Nonnull
   public TypeaheadDataset setValueKey (@Nonnull @Nonempty final String sValueKey)
   {
@@ -79,6 +105,14 @@ public class TypeaheadDataset
     return m_sValueKey;
   }
 
+  /**
+   * The max number of suggestions from the dataset to display for a given
+   * query. Defaults to 5.
+   * 
+   * @param nLimit
+   *        The new limit. Must be &ge; 1.
+   * @return this
+   */
   @Nonnull
   public TypeaheadDataset setLimit (@Nonnegative final int nLimit)
   {
@@ -98,12 +132,30 @@ public class TypeaheadDataset
     return m_nLimit;
   }
 
+  /**
+   * The template used to render suggestions. Can be a string or a precompiled
+   * template. If not provided, suggestions will render as their value contained
+   * in a <code>&lt;p></code> element (i.e. <code>&lt;p>value&lt;/p></code>).
+   * 
+   * @param sTemplate
+   *        The String template to use. May be <code>null</code> or empty.
+   * @return this
+   */
   @Nonnull
   public TypeaheadDataset setTemplate (@Nullable final String sTemplate)
   {
     return setTemplate (StringHelper.hasText (sTemplate) ? JSExpr.lit (sTemplate) : (IJSExpression) null);
   }
 
+  /**
+   * The template used to render suggestions. Can be a string or a precompiled
+   * template. If not provided, suggestions will render as their value contained
+   * in a <code>&lt;p></code> element (i.e. <code>&lt;p>value&lt;/p></code>).
+   * 
+   * @param aTemplate
+   *        The JS expression to use. May be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public TypeaheadDataset setTemplate (@Nullable final IJSExpression aTemplate)
   {
@@ -154,10 +206,121 @@ public class TypeaheadDataset
     return m_sEngine;
   }
 
+  /**
+   * The header rendered before suggestions in the dropdown menu. Can be either
+   * a DOM element or HTML.
+   * 
+   * @param aHeader
+   *        The header to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setHeader (@Nullable final IHCNode aHeader)
+  {
+    return setHeader (aHeader != null ? HCSettings.getAsHTMLStringWithoutNamespaces (aHeader) : (String) null);
+  }
+
+  /**
+   * The header rendered before suggestions in the dropdown menu. Can be either
+   * a DOM element or HTML.
+   * 
+   * @param sHeaderHTML
+   *        The header to use. May be <code>null</code> or empty.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setHeader (@Nullable final String sHeaderHTML)
+  {
+    return setHeader (StringHelper.hasText (sHeaderHTML) ? JSExpr.lit (sHeaderHTML) : (IJSExpression) null);
+  }
+
+  /**
+   * The header rendered before suggestions in the dropdown menu. Can be either
+   * a DOM element or HTML.
+   * 
+   * @param aHeader
+   *        The header to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setHeader (@Nullable final IJSExpression aHeader)
+  {
+    m_aHeader = aHeader;
+    return this;
+  }
+
+  /**
+   * @return The header rendered before suggestions in the dropdown menu. Can be
+   *         either a DOM element or HTML.
+   */
+  @Nullable
+  public IJSExpression getHeader ()
+  {
+    return m_aHeader;
+  }
+
+  /**
+   * The footer rendered after suggestions in the dropdown menu. Can be either a
+   * DOM element or HTML.
+   * 
+   * @param aFooter
+   *        The footer to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setFooter (@Nullable final IHCNode aFooter)
+  {
+    return setFooter (aFooter != null ? HCSettings.getAsHTMLStringWithoutNamespaces (aFooter) : (String) null);
+  }
+
+  /**
+   * The footer rendered after suggestions in the dropdown menu. Can be either a
+   * DOM element or HTML.
+   * 
+   * @param sFooterHTML
+   *        The footer to use. May be <code>null</code> or empty.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setFooter (@Nullable final String sFooterHTML)
+  {
+    return setFooter (StringHelper.hasText (sFooterHTML) ? JSExpr.lit (sFooterHTML) : (IJSExpression) null);
+  }
+
+  /**
+   * The footer rendered after suggestions in the dropdown menu. Can be either a
+   * DOM element or HTML.
+   * 
+   * @param aFooter
+   *        The footer to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setFooter (@Nullable final IJSExpression aFooter)
+  {
+    m_aFooter = aFooter;
+    return this;
+  }
+
+  /**
+   * @return The footer rendered after suggestions in the dropdown menu. Can be
+   *         either a DOM element or HTML.
+   */
+  @Nullable
+  public IJSExpression getFooter ()
+  {
+    return m_aFooter;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getAsJSCode ()
   {
+    // Consistency checks
+    if (m_aTemplate instanceof JSStringLiteral && StringHelper.hasNoText (m_sEngine))
+      s_aLogger.warn ("If template is a String, engine must be set!");
+
+    // Build result object
     final JSAssocArray ret = new JSAssocArray ().add (JSON_NAME, m_sName);
     if (!m_sValueKey.equals (DEFAULT_VALUE_KEY))
       ret.add (JSON_VALUE_KEY, m_sValueKey);
@@ -167,6 +330,10 @@ public class TypeaheadDataset
       ret.add (JSON_TEMPLATE, m_aTemplate);
     if (StringHelper.hasText (m_sEngine))
       ret.add (JSON_ENGINE, m_sEngine);
+    if (m_aHeader != null)
+      ret.add (JSON_HEADER, m_aHeader);
+    if (m_aFooter != null)
+      ret.add (JSON_FOOTER, m_aFooter);
     return ret;
   }
 
@@ -178,6 +345,8 @@ public class TypeaheadDataset
                                        .append ("limit", m_nLimit)
                                        .appendIfNotNull ("template", m_aTemplate)
                                        .appendIfNotNull ("engine", m_sEngine)
+                                       .appendIfNotNull ("header", m_aHeader)
+                                       .appendIfNotNull ("footer", m_aFooter)
                                        .toString ();
   }
 }
