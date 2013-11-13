@@ -1,5 +1,7 @@
 package com.phloc.webctrls.typeahead;
 
+import java.util.List;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -10,11 +12,14 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.js.builder.IJSExpression;
+import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSStringLiteral;
@@ -50,6 +55,8 @@ public class TypeaheadDataset
   private String m_sEngine;
   private IJSExpression m_aHeader;
   private IJSExpression m_aFooter;
+  private List <? extends TypeaheadDatum> m_aLocal;
+  private TypeaheadPrefetch m_aPrefetch;
 
   /**
    * Constructor.
@@ -313,12 +320,67 @@ public class TypeaheadDataset
   }
 
   @Nonnull
+  public TypeaheadDataset setLocal (@Nullable final List <? extends TypeaheadDatum> aLocal)
+  {
+    m_aLocal = aLocal == null ? null : ContainerHelper.newList (aLocal);
+    return this;
+  }
+
+  @Nullable
+  public List <? extends TypeaheadDatum> getLocal ()
+  {
+    return m_aLocal == null ? null : ContainerHelper.newList (m_aLocal);
+  }
+
+  /**
+   * Can be a URL to a JSON file containing an array of datums or, if more
+   * configurability is needed, a prefetch options object.
+   * 
+   * @param aURL
+   *        URL to the JSON file. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setPrefetch (@Nullable final ISimpleURL aURL)
+  {
+    m_aPrefetch = aURL == null ? null : new TypeaheadPrefetch (aURL);
+    return this;
+  }
+
+  /**
+   * Can be a URL to a JSON file containing an array of datums or, if more
+   * configurability is needed, a prefetch options object.
+   * 
+   * @param aPrefetch
+   *        Prefetch object. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public TypeaheadDataset setPrefetch (@Nullable final TypeaheadPrefetch aPrefetch)
+  {
+    m_aPrefetch = aPrefetch == null ? null : aPrefetch.getClone ();
+    return this;
+  }
+
+  /**
+   * @return Can be a URL to a JSON file containing an array of datums or, if
+   *         more configurability is needed, a prefetch options object.
+   */
+  @Nullable
+  public TypeaheadPrefetch getPrefetch ()
+  {
+    return m_aPrefetch;
+  }
+
+  @Nonnull
   @ReturnsMutableCopy
   public JSAssocArray getAsJSCode ()
   {
     // Consistency checks
     if (m_aTemplate instanceof JSStringLiteral && StringHelper.hasNoText (m_sEngine))
       s_aLogger.warn ("If template is a String, engine must be set!");
+    if (m_aLocal != null && m_aPrefetch != null)
+      s_aLogger.warn ("Only local or prefetch should be used!");
 
     // Build result object
     final JSAssocArray ret = new JSAssocArray ().add (JSON_NAME, m_sName);
@@ -334,6 +396,15 @@ public class TypeaheadDataset
       ret.add (JSON_HEADER, m_aHeader);
     if (m_aFooter != null)
       ret.add (JSON_FOOTER, m_aFooter);
+    if (m_aLocal != null)
+    {
+      final JSArray aLocal = new JSArray ();
+      for (final TypeaheadDatum aDatum : m_aLocal)
+        aLocal.add (aDatum.getAsJson ());
+      ret.add (JSON_LOCAL, aLocal);
+    }
+    if (m_aPrefetch != null)
+      ret.add (JSON_PREFETCH, m_aPrefetch.getAsJSArray ());
     return ret;
   }
 
@@ -347,6 +418,7 @@ public class TypeaheadDataset
                                        .appendIfNotNull ("engine", m_sEngine)
                                        .appendIfNotNull ("header", m_aHeader)
                                        .appendIfNotNull ("footer", m_aFooter)
+                                       .appendIfNotNull ("local", m_aLocal)
                                        .toString ();
   }
 }
