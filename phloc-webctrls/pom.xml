@@ -178,6 +178,7 @@
             <exclude>src/main/resources/datetime/**</exclude>
             <exclude>src/main/resources/famfam/**</exclude>
             <exclude>src/main/resources/fineupload/**</exclude>
+            <exclude>src/test/resources/fineupload/**</exclude>
             <exclude>src/main/resources/handlebars/**</exclude>
             <exclude>src/main/resources/html5shiv/**</exclude>
             <exclude>src/main/resources/jquery/**</exclude>

@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2013 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.webctrls.typeahead;
 
 import java.util.List;
@@ -12,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -321,6 +339,13 @@ public class TypeaheadDataset
   }
 
   @Nonnull
+  public TypeaheadDataset setLocal (@Nullable final TypeaheadDatum... aLocal)
+  {
+    m_aLocal = aLocal == null ? null : ContainerHelper.newList (aLocal);
+    return this;
+  }
+
+  @Nonnull
   public TypeaheadDataset setLocal (@Nullable final List <? extends TypeaheadDatum> aLocal)
   {
     m_aLocal = aLocal == null ? null : ContainerHelper.newList (aLocal);
@@ -352,7 +377,8 @@ public class TypeaheadDataset
    * configurability is needed, a prefetch options object.
    * 
    * @param aPrefetch
-   *        Prefetch object. May be <code>null</code>.
+   *        Prefetch object. May be <code>null</code>. The object is stored as
+   *        is!
    * @return this
    */
   @Nonnull
@@ -364,9 +390,12 @@ public class TypeaheadDataset
 
   /**
    * @return Can be a URL to a JSON file containing an array of datums or, if
-   *         more configurability is needed, a prefetch options object.
+   *         more configurability is needed, a prefetch options object.<br>
+   *         This returns the internal representation of the object so handle
+   *         with care!
    */
   @Nullable
+  @ReturnsMutableObject (reason = "Design")
   public TypeaheadPrefetch getPrefetch ()
   {
     return m_aPrefetch;
@@ -378,7 +407,8 @@ public class TypeaheadDataset
    * options object.
    * 
    * @param aRemote
-   *        The remote object to use. May be <code>null</code>.
+   *        The remote object to use. May be <code>null</code>. The object is
+   *        stored as is!
    * @return this
    */
   @Nonnull
@@ -391,9 +421,12 @@ public class TypeaheadDataset
   /**
    * @return Can be a URL to fetch suggestions from when the data provided by
    *         local and prefetch is insufficient or, if more configurability is
-   *         needed, a remote options object.
+   *         needed, a remote options object.<br>
+   *         This returns the internal representation of the object so handle
+   *         with care!
    */
   @Nullable
+  @ReturnsMutableObject (reason = "design")
   public TypeaheadRemote getRemote ()
   {
     return m_aRemote;
@@ -401,7 +434,7 @@ public class TypeaheadDataset
 
   @Nonnull
   @ReturnsMutableCopy
-  public JSAssocArray getAsJSCode ()
+  public JSAssocArray getAsJSObject ()
   {
     // Consistency checks
     if (m_aTemplate instanceof JSStringLiteral && StringHelper.hasNoText (m_sEngine))
@@ -433,7 +466,7 @@ public class TypeaheadDataset
     {
       final JSArray aLocal = new JSArray ();
       for (final TypeaheadDatum aDatum : m_aLocal)
-        aLocal.add (aDatum.getAsJson ());
+        aLocal.add (aDatum.getAsJSObject ());
       ret.add (JSON_LOCAL, aLocal);
     }
     if (m_aPrefetch != null)
