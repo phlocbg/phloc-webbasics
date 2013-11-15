@@ -21,8 +21,10 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
@@ -48,6 +50,14 @@ public class TypeaheadDatum implements IJsonProvider
   private final String m_sValue;
   private final List <String> m_aTokens;
 
+  /**
+   * Constructor
+   * 
+   * @param sValue
+   *        Value to display. Must not be <code>null</code>.
+   * @param aTokens
+   *        All possible tokens. Must not be <code>null</code>.
+   */
   public TypeaheadDatum (@Nonnull final String sValue, @Nonnull final String... aTokens)
   {
     if (sValue == null)
@@ -58,6 +68,14 @@ public class TypeaheadDatum implements IJsonProvider
     m_aTokens = ContainerHelper.newList (aTokens);
   }
 
+  /**
+   * Constructor
+   * 
+   * @param sValue
+   *        Value to display. Must not be <code>null</code>.
+   * @param aTokens
+   *        All possible tokens. Must not be <code>null</code>.
+   */
   public TypeaheadDatum (@Nonnull final String sValue, @Nonnull final Collection <String> aTokens)
   {
     if (sValue == null)
@@ -68,12 +86,18 @@ public class TypeaheadDatum implements IJsonProvider
     m_aTokens = ContainerHelper.newList (aTokens);
   }
 
+  /**
+   * @return The value to display. Never <code>null</code>.
+   */
   @Nonnull
   public final String getValue ()
   {
     return m_sValue;
   }
 
+  /**
+   * @return A list of all tokesn. Never <code>null</code> but maybe empty.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public final List <String> getAllTokens ()
@@ -81,15 +105,27 @@ public class TypeaheadDatum implements IJsonProvider
     return ContainerHelper.newList (m_aTokens);
   }
 
+  /**
+   * @return This object as JSON object representation. May not be
+   *         <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
   public JsonObject getAsJson ()
   {
     return new JsonObject ().add (JSON_VALUE, m_sValue).add (JSON_TOKENS, new JsonArray ().addAll (m_aTokens));
   }
 
+  /**
+   * @return This object as JavaScript object representation. May not be
+   *         <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
+  @OverrideOnDemand
+  @OverridingMethodsMustInvokeSuper
   public JSAssocArray getAsJSObject ()
   {
     return new JSAssocArray ().add (JSON_VALUE, m_sValue).add (JSON_TOKENS, new JSArray ().addAll (m_aTokens));
