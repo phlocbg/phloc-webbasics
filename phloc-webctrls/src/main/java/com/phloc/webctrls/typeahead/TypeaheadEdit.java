@@ -89,9 +89,7 @@ public class TypeaheadEdit implements IHCNodeBuilder
                                                                        TypeaheadRemote.DEFAULT_WILDCARD);
     final TypeaheadRemote aRemote = new TypeaheadRemote (aRealURL).setCache (false);
     final TypeaheadDataset aDS = new TypeaheadDataset ("default").setRemote (aRemote);
-    m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS)
-                                                             .setOnSelected (m_aAutoCompletedCallback)
-                                                             .setOnAutoCompleted (m_aAutoCompletedCallback);
+    m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS).setOnSelected (m_aAutoCompletedCallback);
   }
 
   /**
