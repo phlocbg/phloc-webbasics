@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.form;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -67,13 +69,23 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   }
 
   /**
-   * @return <code>true</code> if the checkbox/radio button is checked or if no
-   *         such request parameter is present and the fallback is
+   * @return <code>true</code> if the check-box/radio button is checked or if no
+   *         such request parameter is present and the fall-back is
    *         <code>true</code>, <code>false</code> otherwise.
    */
   public boolean isChecked ()
   {
-    return getCheckBoxValue (getFieldName (), m_bDefaultValue);
+    return isChecked (null);
+  }
+
+  /**
+   * @return <code>true</code> if the check-box/radio button is checked or if no
+   *         such request parameter is present and the fall-back is
+   *         <code>true</code>, <code>false</code> otherwise.
+   */
+  public boolean isChecked (@Nullable final String sFieldValue)
+  {
+    return getCheckBoxValue (getFieldName (), sFieldValue, m_bDefaultValue);
   }
 
   @Override
@@ -103,10 +115,25 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   public static String getCheckBoxRequestValue (@Nonnull @Nonempty final String sFieldName,
                                                 @Nullable final String sDefaultValue)
   {
+    return getCheckBoxRequestValue (sFieldName, null, sDefaultValue);
+  }
+
+  @Nullable
+  public static String getCheckBoxRequestValue (@Nonnull @Nonempty final String sFieldName,
+                                                @Nullable final String sFieldValue,
+                                                @Nullable final String sDefaultValue)
+  {
     if (StringHelper.hasNoText (sFieldName))
       throw new IllegalArgumentException ("fieldName may not be empty!");
 
     final IRequestWebScopeWithoutResponse aScope = getScope ();
+    if (StringHelper.hasText (sFieldValue))
+    {
+      final List <String> aValues = aScope.getAttributeValues (sFieldName);
+      if (aValues == null)
+        return sDefaultValue;
+      return String.valueOf (aValues.contains (sFieldValue));
+    }
 
     // Is the checked value present?
     final String sRequestValue = aScope.getAttributeAsString (sFieldName);
@@ -125,15 +152,29 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
   @Nonnull
   public static ETriState getCheckBoxState (@Nonnull @Nonempty final String sFieldName)
   {
-    final String sValue = getCheckBoxRequestValue (sFieldName, null);
+    return getCheckBoxState (sFieldName, null);
+  }
+
+  @Nonnull
+  public static ETriState getCheckBoxState (@Nonnull @Nonempty final String sFieldName,
+                                            @Nullable final String sFieldValue)
+  {
+    final String sValue = getCheckBoxRequestValue (sFieldName, sFieldValue, null);
     return sValue == null ? ETriState.UNDEFINED : ETriState.valueOf (StringParser.parseBool (sValue));
   }
 
   public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
   {
+    return getCheckBoxValue (sFieldName, null, bDefaultValue);
+  }
+
+  public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName,
+                                          @Nullable final String sFieldValue,
+                                          final boolean bDefaultValue)
+  {
     if (StringHelper.hasNoText (sFieldName))
       throw new IllegalArgumentException ("fieldName may not be empty!");
 
-    return getCheckBoxState (sFieldName).getAsBooleanValue (bDefaultValue);
+    return getCheckBoxState (sFieldName, sFieldValue).getAsBooleanValue (bDefaultValue);
   }
 }
