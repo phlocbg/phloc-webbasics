@@ -28,6 +28,8 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -135,5 +137,18 @@ public class TypeaheadDatum implements IJsonProvider
   public String toString ()
   {
     return new ToStringGenerator (this).append ("value", m_sValue).append ("tokens", m_aTokens).toString ();
+  }
+
+  /**
+   * Utility method to get all tokens from a single value
+   * 
+   * @param sValue
+   *        The value to use. May not be <code>null</code>.
+   * @return An array of tokens to use. Never <code>null</code>.
+   */
+  @Nonnull
+  public static String [] getTokensFromValue (@Nonnull final String sValue)
+  {
+    return RegExHelper.getSplitToArray (StringHelper.trim (sValue), "\\W+");
   }
 }

@@ -34,6 +34,9 @@ import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAnonymousFunction;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSInvocation;
+import com.phloc.html.js.builder.jquery.IJQuerySelector;
+import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
+import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 public class HCTypeahead implements IHCNodeBuilder
 {
@@ -44,6 +47,11 @@ public class HCTypeahead implements IHCNodeBuilder
   private JSAnonymousFunction m_aOnClosed;
   private JSAnonymousFunction m_aOnSelected;
   private JSAnonymousFunction m_aOnAutoCompleted;
+
+  public HCTypeahead (@Nonnull final IJQuerySelector aSelector)
+  {
+    this (aSelector.invoke ());
+  }
 
   public HCTypeahead (@Nonnull final IJSExpression aSelector)
   {
@@ -275,5 +283,12 @@ public class HCTypeahead implements IHCNodeBuilder
   public static JSInvocation typeaheadSetQuery (@Nonnull final IJSExpression aTypeahead, @Nonnull final String sQuery)
   {
     return invoke (aTypeahead).arg ("setQuery").arg (sQuery);
+  }
+
+  public static void registerExternalResources ()
+  {
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.TYPEAHEAD_0_9_3);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETypeaheadJSPathProvider.PHLOC_TYPEAHEAD);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (ETypeaheadCSSPathProvider.TYPEAHEAD_BOOTSTRAP);
   }
 }

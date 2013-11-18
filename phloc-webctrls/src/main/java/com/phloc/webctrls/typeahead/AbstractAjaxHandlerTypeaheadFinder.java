@@ -37,6 +37,7 @@ import com.phloc.json2.impl.JsonArray;
 import com.phloc.json2.impl.JsonObject;
 import com.phloc.webbasics.ajax.AbstractAjaxHandler;
 import com.phloc.webbasics.ajax.AjaxDefaultResponse;
+import com.phloc.webbasics.ajax.AjaxSimpleResponse;
 import com.phloc.webbasics.ajax.IAjaxResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -241,7 +242,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     for (final TypeaheadDatum aDatum : aMatchingDatums)
       ret.add (aDatum.getAsJson ());
 
-    // Set as result property
-    return AjaxDefaultResponse.createSuccess (ret);
+    // Use the simple response, because the response layout is predefined!
+    return new AjaxSimpleResponse (true, ret);
   }
 }

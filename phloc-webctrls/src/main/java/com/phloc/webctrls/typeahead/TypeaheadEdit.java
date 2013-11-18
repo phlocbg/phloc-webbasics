@@ -36,14 +36,21 @@ import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQuerySelector;
 import com.phloc.webbasics.form.RequestField;
 
-@Deprecated
+/**
+ * This class encapsulates a HTML input field, a hidden field for the ID and the
+ * script to execute the typeahead action
+ * 
+ * @author Philip Helger
+ */
 public class TypeaheadEdit implements IHCNodeBuilder
 {
+  public static final String JSON_ID = "id";
+
   private final HCEdit m_aEdit;
   private final RequestField m_aRFHidden;
   private final String m_sHiddenFieldID;
-  private final JSAnonymousFunction m_aSelectionCallback;
-  private final TypeaheadScript m_aScript;
+  private final JSAnonymousFunction m_aAutoCompletedCallback;
+  private final HCTypeahead m_aScript;
 
   public TypeaheadEdit (@Nonnull final RequestField aRFEdit,
                         @Nonnull final RequestField aRFHidden,
@@ -65,13 +72,22 @@ public class TypeaheadEdit implements IHCNodeBuilder
     m_aRFHidden = aRFHidden;
     m_sHiddenFieldID = GlobalIDFactory.getNewStringID ();
 
-    m_aSelectionCallback = new JSAnonymousFunction ();
-    final JSVar aJSID = m_aSelectionCallback.param ("id");
+    // Callback has 3 params:
+    // 1. event
+    // 2. selected datum
+    // 3. selected dataset
+    m_aAutoCompletedCallback = new JSAnonymousFunction ();
+    m_aAutoCompletedCallback.param ("evt");
+    final JSVar aJSDatum = m_aAutoCompletedCallback.param ("datum");
+    m_aAutoCompletedCallback.param ("dsname");
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
-    m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSID).change ());
-    // Params: edit-ID, selectionCallback function and AJAX URL
-    m_aScript = new TypeaheadScript (JQuerySelector.id (m_aEdit), m_aSelectionCallback, aAjaxInvocationURL);
+    m_aAutoCompletedCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSDatum.ref (JSON_ID)).change ());
+
+    final TypeaheadDataset aDS = new TypeaheadDataset ("default").setRemote (new TypeaheadRemote (aAjaxInvocationURL));
+    m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS)
+                                                             .setOnSelected (m_aAutoCompletedCallback)
+                                                             .setOnAutoCompleted (m_aAutoCompletedCallback);
   }
 
   /**
@@ -103,9 +119,9 @@ public class TypeaheadEdit implements IHCNodeBuilder
    *         control!
    */
   @Nonnull
-  public JSAnonymousFunction getJSSelectionCallback ()
+  public JSAnonymousFunction getJSAutoCompletedCallback ()
   {
-    return m_aSelectionCallback;
+    return m_aAutoCompletedCallback;
   }
 
   /**
@@ -114,7 +130,7 @@ public class TypeaheadEdit implements IHCNodeBuilder
    *         effect if they are performed before this control is build!
    */
   @Nonnull
-  public TypeaheadScript getScript ()
+  public HCTypeahead getScript ()
   {
     return m_aScript;
   }
@@ -132,6 +148,8 @@ public class TypeaheadEdit implements IHCNodeBuilder
 
     // JS code
     ret.addChild (m_aScript);
+
+    HCTypeahead.registerExternalResources ();
 
     return ret;
   }
