@@ -162,7 +162,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
    * @return this
    */
   @Nonnull
-  public TypeaheadRemote setCache (@Nullable final ETriState eCache)
+  public TypeaheadRemote setCache (@Nonnull final ETriState eCache)
   {
     if (eCache == null)
       throw new NullPointerException ("Cache");
@@ -268,7 +268,7 @@ public class TypeaheadRemote implements ICloneable <TypeaheadRemote>
    * @return this
    */
   @Nonnull
-  public TypeaheadRemote setRateLimitFn (@Nullable final ETypeaheadRemoteRateLimitFunction eRateLimitFn)
+  public TypeaheadRemote setRateLimitFn (@Nonnull final ETypeaheadRemoteRateLimitFunction eRateLimitFn)
   {
     if (eRateLimitFn == null)
       throw new NullPointerException ("rateLimitFn");
