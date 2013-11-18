@@ -160,7 +160,7 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
                                             @Nullable final String sFieldValue)
   {
     final String sValue = getCheckBoxRequestValue (sFieldName, sFieldValue, null);
-    return sValue == null ? ETriState.UNDEFINED : ETriState.valueOf (StringParser.parseBool (sValue));
+    return sValue == null ? ETriState.UNDEFINED : ETriState.valueOf (StringParser.parseBoolObj (sValue));
   }
 
   public static boolean getCheckBoxValue (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
