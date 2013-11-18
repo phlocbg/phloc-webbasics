@@ -17,8 +17,8 @@
  */
 package com.phloc.webctrls.typeahead;
 
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,9 +29,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
-import com.phloc.commons.compare.ComparatorString;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -48,7 +46,6 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-@Deprecated
 public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHandler
 {
   public static final String PARAM_QUERY = "query";
@@ -80,6 +77,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
       if (aSortLocale == null)
         throw new NullPointerException ("sortLocale");
 
+      // Split search terms by white spaces
       m_aSearchTerms = RegExHelper.getSplitToArray (sSearchTerms.trim (), "\\s+");
       if (m_aSearchTerms.length == 0)
         throw new IllegalStateException ("Weird - splitting of '" + sSearchTerms.trim () + "' failed!");
@@ -144,7 +142,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     }
 
     /**
-     * Match all query terms.
+     * Check if the passed source string matches all query terms.
      * 
      * @param sSource
      *        Source string. May be <code>null</code>.
@@ -162,7 +160,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
     }
 
     /**
-     * Match any query term.
+     * Check if the passed source string matches at least one query term.
      * 
      * @param sSource
      *        Source string. May be <code>null</code>.
@@ -212,10 +210,11 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
    *        The finder. Never <code>null</code>.
    * @param aDisplayLocale
    *        The display locale to use. Never <code>null</code>.
-   * @return A non-<code>null</code> map from ID to display-text.
+   * @return A non-<code>null</code> list with all datums to use.
    */
   @Nonnull
-  protected abstract Map <String, String> getAllMatchingObjects (@Nonnull Finder aFinder, @Nonnull Locale aDisplayLocale);
+  protected abstract List <? extends TypeaheadDatum> getAllMatchingDatums (@Nonnull Finder aFinder,
+                                                                           @Nonnull Locale aDisplayLocale);
 
   @Override
   @Nonnull
@@ -231,19 +230,16 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
       return AjaxDefaultResponse.createSuccess (new JsonObject ());
     }
 
+    // Create the main Finder object
     final Finder aFinder = createFinder (sOriginalQuery, aDisplayLocale);
 
     // Map from ID to name
-    final Map <String, String> aMap = getAllMatchingObjects (aFinder, aDisplayLocale);
+    final List <? extends TypeaheadDatum> aMatchingDatums = getAllMatchingDatums (aFinder, aDisplayLocale);
 
     // Convert to JSON, sorted by display name using the current display locale
     final JsonArray ret = new JsonArray ();
-    for (final Map.Entry <String, String> aEntry : ContainerHelper.getSortedByValue (aMap,
-                                                                                     new ComparatorString (aDisplayLocale))
-                                                                  .entrySet ())
-    {
-      ret.add (new JsonObject ().add ("value", aEntry.getKey ()).add ("label", aEntry.getValue ()));
-    }
+    for (final TypeaheadDatum aDatum : aMatchingDatums)
+      ret.add (aDatum.getAsJson ());
 
     // Set as result property
     return AjaxDefaultResponse.createSuccess (ret);
