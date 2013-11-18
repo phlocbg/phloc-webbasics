@@ -20,7 +20,8 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
-  <entry date="2013-11-18" category="tech" action="add">
+  <release date="2013-11-18" version="2.2.2" />
+  <entry date="2013-11-18" category="tech" action="add" incompatible="true">
     <change>
       <text locale="en">Extended RequestFieldBoolean to be able to deal with multiple check-boxes sharing the same field name.</text>
     </change>
