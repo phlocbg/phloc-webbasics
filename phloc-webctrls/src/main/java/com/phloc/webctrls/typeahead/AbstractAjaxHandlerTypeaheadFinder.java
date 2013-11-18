@@ -79,7 +79,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
         throw new NullPointerException ("sortLocale");
 
       // Split search terms by white spaces
-      m_aSearchTerms = RegExHelper.getSplitToArray (sSearchTerms.trim (), "\\s+");
+      m_aSearchTerms = RegExHelper.getSplitToArray (sSearchTerms.trim (), "\\W+");
       if (m_aSearchTerms.length == 0)
         throw new IllegalStateException ("Weird - splitting of '" + sSearchTerms.trim () + "' failed!");
       for (final String sSearchTerm : m_aSearchTerms)

@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCEdit;
@@ -84,7 +85,10 @@ public class TypeaheadEdit implements IHCNodeBuilder
     // event is not triggered for hidden fields!
     m_aAutoCompletedCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSDatum.ref (JSON_ID)).change ());
 
-    final TypeaheadDataset aDS = new TypeaheadDataset ("default").setRemote (new TypeaheadRemote (aAjaxInvocationURL));
+    final SimpleURL aRealURL = new SimpleURL (aAjaxInvocationURL).add (AbstractAjaxHandlerTypeaheadFinder.PARAM_QUERY,
+                                                                       TypeaheadRemote.DEFAULT_WILDCARD);
+    final TypeaheadRemote aRemote = new TypeaheadRemote (aRealURL).setCache (false);
+    final TypeaheadDataset aDS = new TypeaheadDataset ("default").setRemote (aRemote);
     m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS)
                                                              .setOnSelected (m_aAutoCompletedCallback)
                                                              .setOnAutoCompleted (m_aAutoCompletedCallback);
