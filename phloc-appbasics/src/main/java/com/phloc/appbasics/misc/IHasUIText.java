@@ -21,6 +21,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 
+/**
+ * Interface for objects that have a UI display text
+ * 
+ * @author Philip Helger
+ */
 public interface IHasUIText
 {
   /**
