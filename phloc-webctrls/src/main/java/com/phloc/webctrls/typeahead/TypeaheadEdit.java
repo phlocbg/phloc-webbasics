@@ -50,7 +50,7 @@ public class TypeaheadEdit implements IHCNodeBuilder
   private final HCEdit m_aEdit;
   private final RequestField m_aRFHidden;
   private final String m_sHiddenFieldID;
-  private final JSAnonymousFunction m_aAutoCompletedCallback;
+  private final JSAnonymousFunction m_aSelectionCallback;
   private final HCTypeahead m_aScript;
 
   public TypeaheadEdit (@Nonnull final RequestField aRFEdit,
@@ -77,19 +77,19 @@ public class TypeaheadEdit implements IHCNodeBuilder
     // 1. event
     // 2. selected datum
     // 3. selected dataset
-    m_aAutoCompletedCallback = new JSAnonymousFunction ();
-    m_aAutoCompletedCallback.param ("evt");
-    final JSVar aJSDatum = m_aAutoCompletedCallback.param ("datum");
-    m_aAutoCompletedCallback.param ("dsname");
+    m_aSelectionCallback = new JSAnonymousFunction ();
+    m_aSelectionCallback.param ("evt");
+    final JSVar aJSDatum = m_aSelectionCallback.param ("datum");
+    m_aSelectionCallback.param ("dsname");
     // Need to manually call the "change" handler, because otherwise onchange
     // event is not triggered for hidden fields!
-    m_aAutoCompletedCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSDatum.ref (JSON_ID)).change ());
+    m_aSelectionCallback.body ().add (JQuery.idRef (m_sHiddenFieldID).val (aJSDatum.ref (JSON_ID)).change ());
 
     final SimpleURL aRealURL = new SimpleURL (aAjaxInvocationURL).add (AbstractAjaxHandlerTypeaheadFinder.PARAM_QUERY,
                                                                        TypeaheadRemote.DEFAULT_WILDCARD);
     final TypeaheadRemote aRemote = new TypeaheadRemote (aRealURL).setCache (false);
     final TypeaheadDataset aDS = new TypeaheadDataset ("default").setRemote (aRemote);
-    m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS).setOnSelected (m_aAutoCompletedCallback);
+    m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS).setOnSelected (m_aSelectionCallback);
   }
 
   /**
@@ -121,9 +121,9 @@ public class TypeaheadEdit implements IHCNodeBuilder
    *         control!
    */
   @Nonnull
-  public JSAnonymousFunction getJSAutoCompletedCallback ()
+  public JSAnonymousFunction getJSSelectionCallback ()
   {
-    return m_aAutoCompletedCallback;
+    return m_aSelectionCallback;
   }
 
   /**
