@@ -28,7 +28,7 @@ public class MainCreateTinyMCEMenuControls
   {
     // Paste table from http://www.tinymce.com/wiki.php/Controls into this
     // string
-    // Last update: 2013-10-31
+    // Last update: 2013-11-22
     final String s = "core  newdocument undo redo visualaid cut copy paste selectall bold italic underline strikethrough subscript superscript removeformat formats\r\n"
                      + "link  link\r\n"
                      + "image   image\r\n"

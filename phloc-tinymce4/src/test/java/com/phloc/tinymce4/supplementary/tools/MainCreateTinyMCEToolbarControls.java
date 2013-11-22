@@ -28,7 +28,7 @@ public class MainCreateTinyMCEToolbarControls
   {
     // Paste table from http://www.tinymce.com/wiki.php/Controls into this
     // string
-    // Last update: 2013-10-31
+    // Last update: 2013-11-22
     final String s = "core  newdocument bold italic underline strikethrough alignleft aligncenter alignright alignjustify styleselect formatselect fontselect fontsizeselect cut copy paste bullist numlist outdent indent blockquote undo redo removeformat subscript superscript\r\n"
                      + "hr  hr\r\n"
                      + "link  link unlink\r\n"

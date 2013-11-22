@@ -28,6 +28,7 @@ public class MainCreateTinyMCEPluginEnum
 {
   public static void main (final String [] args)
   {
+    // Last update: 2013-11-22
     for (final File aFile : FileSystemIterator.create ("src/main/resources/tinymce/plugins",
                                                        FileFilterDirectoryPublic.getInstance ()))
     {

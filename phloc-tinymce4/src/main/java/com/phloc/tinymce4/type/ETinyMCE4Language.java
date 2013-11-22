@@ -45,6 +45,8 @@ public enum ETinyMCE4Language
   DE ("de"),
   DE_AT ("de_AT"),
   EL ("el"),
+  EN_CA ("en_CA"),
+  EN_GB ("en_GB"),
   ES ("es"),
   ET ("et"),
   EU ("eu"),
@@ -60,10 +62,13 @@ public enum ETinyMCE4Language
   HY ("hy"),
   /* Note: this is not a valid Java locale! */
   ID ("id"),
+  IS_IS ("is_IS"),
   IT ("it"),
   JA ("ja"),
   /* Note: this is not a valid Java locale! */
   KA_GE ("ka_GE"),
+  /* Note: this is not a valid Java locale! */
+  KM_KH ("km_KH"),
   KO_KR ("ko_KR"),
   LB ("lb"),
   LT ("lt"),

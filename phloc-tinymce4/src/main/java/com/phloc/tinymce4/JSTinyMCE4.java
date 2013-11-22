@@ -24,6 +24,11 @@ import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSRef;
 
+/**
+ * JS wrapped for TinyMCE4
+ * 
+ * @author Philip Helger
+ */
 public final class JSTinyMCE4
 {
   private JSTinyMCE4 ()

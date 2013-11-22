@@ -52,7 +52,9 @@ import com.phloc.tinymce4.type.TinyMCE4ExternalPlugin;
 /**
  * Wraps TinyMCE4 into an HC node. The only required settings is
  * {@link #setSelector(String)} but this does not need to be called, as the
- * default value {@link #DEFAULT_SELECTOR} is used automatically.
+ * default value {@link #DEFAULT_SELECTOR} is used automatically.<br>
+ * Note: all options that are not explicitly wrapped can be set by
+ * {@link #addCustomOption(String, IJSExpression)}
  * 
  * @author Philip Helger
  */
