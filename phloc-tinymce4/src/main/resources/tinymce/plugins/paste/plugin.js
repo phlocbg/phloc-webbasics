@@ -229,11 +229,6 @@ define("tinymce/pasteplugin/Clipboard", [
 		function pasteHtml(html) {
 			var args, dom = editor.dom;
 
-			// Remove all data images from paste for example from Gecko
-			if (!editor.settings.paste_data_images) {
-				html = html.replace(/<img[^>]+src=\"data:image[^>]+>/g, '');
-			}
-
 			args = editor.fire('BeforePastePreProcess', {content: html}); // Internal event used by Quirks
 			args = editor.fire('PastePreProcess', args);
 			html = args.content;
@@ -300,7 +295,7 @@ define("tinymce/pasteplugin/Clipboard", [
 		 */
 		function createPasteBin() {
 			var dom = editor.dom, body = editor.getBody(), viewport = editor.dom.getViewPort(editor.getWin());
-			var scrollY = editor.inline ? body.scrollTop : viewport.y, height = editor.inline ? body.clientHeight : viewport.h;
+			var height = editor.inline ? body.clientHeight : viewport.h;
 
 			removePasteBin();
 
@@ -309,7 +304,7 @@ define("tinymce/pasteplugin/Clipboard", [
 				id: "mcepastebin",
 				contentEditable: true,
 				"data-mce-bogus": "1",
-				style: 'position: absolute; top: ' + (scrollY + 20) + 'px;' +
+				style: 'position: fixed; top: 20px;' +
 					'width: 10px; height: ' + (height - 40) + 'px; overflow: hidden; opacity: 0'
 			}, pasteBinDefaultContent);
 
@@ -455,6 +450,25 @@ define("tinymce/pasteplugin/Clipboard", [
 
 		self.pasteHtml = pasteHtml;
 		self.pasteText = pasteText;
+
+		// Remove all data images from paste for example from Gecko
+		// except internal images like video elements
+		editor.on('preInit', function() {
+			editor.parser.addNodeFilter('img', function(nodes) {
+				if (!editor.settings.paste_data_images) {
+					var i = nodes.length;
+
+					while (i--) {
+						var src = nodes[i].attributes.map.src;
+						if (src && src.indexOf('data:image') === 0) {
+							if (!nodes[i].attr('data-mce-object') && src !== Env.transparentSrc) {
+								nodes[i].remove();
+							}
+						}
+					}
+				}
+			});
+		});
 	};
 });
 
@@ -681,7 +695,7 @@ define("tinymce/pasteplugin/WordFilter", [
 				var validElements = settings.paste_word_valid_elements;
 				if (!validElements) {
 					validElements = '@[style],-strong/b,-em/i,-span,-p,-ol,-ul,-li,-h1,-h2,-h3,-h4,-h5,-h6,' +
-						'-table,-tr,-td[colspan|rowspan],-th,-thead,-tfoot,-tbody,-a[!href],sub,sup,strike,br';
+						'-table,-tr,-td[colspan|rowspan],-th,-thead,-tfoot,-tbody,-a[href|name],sub,sup,strike,br';
 				}
 
 				// Setup strict schema
@@ -692,7 +706,6 @@ define("tinymce/pasteplugin/WordFilter", [
 				// Parse HTML into DOM structure
 				var domParser = new DomParser({}, schema);
 
-				// Filte element style attributes
 				domParser.addAttributeFilter('style', function(nodes) {
 					var i = nodes.length, node;
 
@@ -707,6 +720,31 @@ define("tinymce/pasteplugin/WordFilter", [
 					}
 				});
 
+				domParser.addNodeFilter('a', function(nodes) {
+					var i = nodes.length, node, href, name;
+
+					while (i--) {
+						node = nodes[i];
+						href = node.attr('href');
+						name = node.attr('name');
+
+						if (href && href.indexOf('file://') === 0) {
+							href = href.split('#')[1];
+							if (href) {
+								href = '#' + href;
+							}
+						}
+
+						if (!href && !name) {
+							node.unwrap();
+						} else {
+							node.attr({
+								href: href,
+								name: name
+							});
+						}
+					}
+				});
 				// Parse into DOM structure
 				var rootNode = domParser.parse(content);
 
