@@ -17,7 +17,6 @@
  */
 package com.phloc.bootstrap3.form;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
@@ -25,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.bootstrap3.BootstrapHelper;
 import com.phloc.bootstrap3.CBootstrap;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.grid.EBootstrapGridSM;
@@ -145,13 +145,10 @@ public class BootstrapForm extends HCForm
     if (aCtrls == null)
       throw new NullPointerException ("ctrl");
 
-    final List <IHCControl <?>> aAllCtrls = new ArrayList <IHCControl <?>> ();
-    HCUtils.getAllHCControls (aCtrls, aAllCtrls);
+    final List <IHCControl <?>> aAllCtrls = HCUtils.getAllHCControls (aCtrls);
 
     // Set CSS class to all contained controls
-    for (final IHCControl <?> aCurCtrl : aAllCtrls)
-      if (!(aCurCtrl instanceof HCCheckBox) && !(aCurCtrl instanceof HCRadioButton))
-        aCurCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
+    BootstrapHelper.markAsFormControls (aAllCtrls);
 
     // Check form errors
     ICSSClassProvider aErrorCSS = null;

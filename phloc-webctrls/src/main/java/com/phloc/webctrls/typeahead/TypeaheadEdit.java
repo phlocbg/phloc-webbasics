@@ -88,7 +88,8 @@ public class TypeaheadEdit implements IHCNodeBuilder
     final SimpleURL aRealURL = new SimpleURL (aAjaxInvocationURL).add (AbstractAjaxHandlerTypeaheadFinder.PARAM_QUERY,
                                                                        TypeaheadRemote.DEFAULT_WILDCARD);
     final TypeaheadRemote aRemote = new TypeaheadRemote (aRealURL).setCache (false);
-    final TypeaheadDataset aDS = new TypeaheadDataset ("default").setRemote (aRemote);
+    // Ensure unique dataset name
+    final TypeaheadDataset aDS = new TypeaheadDataset (m_sHiddenFieldID).setRemote (aRemote);
     m_aScript = new HCTypeahead (JQuerySelector.id (m_aEdit)).addDataset (aDS).setOnSelected (m_aSelectionCallback);
   }
 

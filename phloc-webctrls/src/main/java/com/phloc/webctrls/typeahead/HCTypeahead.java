@@ -27,6 +27,8 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCScript;
@@ -40,6 +42,13 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 public class HCTypeahead implements IHCNodeBuilder
 {
+  public static final ICSSClassProvider TT_QUERY = DefaultCSSClassProvider.create ("tt-query");
+  public static final ICSSClassProvider TT_HINT = DefaultCSSClassProvider.create ("tt-hint");
+  public static final ICSSClassProvider TT_DROPDOWN_MENU = DefaultCSSClassProvider.create ("tt-dropdown-menu");
+  public static final ICSSClassProvider TT_SUGGESTIONS = DefaultCSSClassProvider.create ("tt-suggestions");
+  public static final ICSSClassProvider TT_SUGGESTION = DefaultCSSClassProvider.create ("tt-suggestion");
+  public static final ICSSClassProvider TT_IS_UNDER_CURSOR = DefaultCSSClassProvider.create ("tt-is-under-cursor");
+
   private final IJSExpression m_aSelector;
   private final List <TypeaheadDataset> m_aDatasets = new ArrayList <TypeaheadDataset> ();
   private JSAnonymousFunction m_aOnInitialized;
