@@ -31,7 +31,6 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.validation.error.IErrorList;
 import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.table.HCTableFormItemRow;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
@@ -99,16 +98,9 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
-  public static HCTableFormItemRow createNewItemRow (final boolean bHeader, final boolean bHasNoteColumn)
+  public BootstrapTableFormItemRow createItemRow ()
   {
-    final HCTableFormItemRow ret = new BootstrapTableFormItemRow (bHeader, bHasNoteColumn);
-    return ret;
-  }
-
-  @Nonnull
-  public HCTableFormItemRow createItemRow ()
-  {
-    final HCTableFormItemRow ret = new BootstrapTableFormItemRow (false, getColumnCount () > 2)
+    final BootstrapTableFormItemRow ret = new BootstrapTableFormItemRow (false, getColumnCount () > 2)
     {
       @Override
       protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls, final boolean bHasErrors)

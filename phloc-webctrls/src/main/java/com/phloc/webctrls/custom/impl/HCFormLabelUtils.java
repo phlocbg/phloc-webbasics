@@ -28,7 +28,13 @@ import com.phloc.webctrls.custom.ELabelType;
 
 public final class HCFormLabelUtils
 {
+  @Deprecated
   public static final ICSSClassProvider CSS_CLASS_FORM_LABEL = DefaultCSSClassProvider.create ("phloc-form-label");
+  public static final ICSSClassProvider CSS_CLASS_FORM_LABEL2 = DefaultCSSClassProvider.create ("form-label");
+  public static final ICSSClassProvider CSS_CLASS_FORM_LABEL_OPTIONAL = DefaultCSSClassProvider.create ("form-label-optional");
+  public static final ICSSClassProvider CSS_CLASS_FORM_LABEL_MANDATORY = DefaultCSSClassProvider.create ("form-label-mandatory");
+  public static final ICSSClassProvider CSS_CLASS_FORM_LABEL_ALTERNATIVE = DefaultCSSClassProvider.create ("form-label-alternative");
+
   public static final String SIGN_MANDATORY = "*";
   public static final String SIGN_ALTERNATIVE = "°";
   public static final String LABEL_END = ":";
@@ -37,7 +43,7 @@ public final class HCFormLabelUtils
   {}
 
   @Nonnull
-  private static String _getSuffix (@Nonnull final ELabelType eType, final boolean bAppendColon)
+  public static String getSuffix (@Nonnull final ELabelType eType, final boolean bAppendColon)
   {
     if (eType.equals (ELabelType.MANDATORY))
       return SIGN_MANDATORY + (bAppendColon ? LABEL_END : "");
@@ -58,7 +64,7 @@ public final class HCFormLabelUtils
     String sPlainText = StringHelper.trimEnd (sText.trim (), LABEL_END);
     // Append suffix only, if at least some text is present
     if (StringHelper.hasText (sPlainText))
-      sPlainText += _getSuffix (eType, !StringHelper.endsWith (sPlainText, '?'));
+      sPlainText += getSuffix (eType, !StringHelper.endsWith (sPlainText, '?'));
     return sPlainText;
   }
 
@@ -73,7 +79,7 @@ public final class HCFormLabelUtils
 
     // Only append the suffix, if at least one text child is present
     if (HCUtils.recursiveContainsAtLeastOneTextNode (aNode))
-      aNode.addChild (_getSuffix (eType, true));
+      aNode.addChild (getSuffix (eType, true));
     return aNode;
   }
 }

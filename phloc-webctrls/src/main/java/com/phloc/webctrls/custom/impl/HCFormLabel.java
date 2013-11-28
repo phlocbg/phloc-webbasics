@@ -28,7 +28,6 @@ import com.phloc.html.hc.html.HCStrong;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
-import com.phloc.webctrls.custom.impl.HCFormLabelUtils;
 
 public class HCFormLabel extends HCLabel implements IFormLabel
 {
@@ -48,16 +47,34 @@ public class HCFormLabel extends HCLabel implements IFormLabel
     return ret;
   }
 
+  @SuppressWarnings ("deprecation")
+  private void _assignClasses (@Nonnull final ELabelType eType)
+  {
+    addClasses (HCFormLabelUtils.CSS_CLASS_FORM_LABEL, HCFormLabelUtils.CSS_CLASS_FORM_LABEL2);
+    switch (eType)
+    {
+      case OPTIONAL:
+        addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL_OPTIONAL);
+        break;
+      case MANDATORY:
+        addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL_MANDATORY);
+        break;
+      case ALTERNATIVE:
+        addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL_ALTERNATIVE);
+        break;
+    }
+  }
+
   protected HCFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
-    addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL);
+    _assignClasses (eType);
     addChild (_modifyNode (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType)), eType));
     m_eType = eType;
   }
 
   protected HCFormLabel (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)
   {
-    addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL);
+    _assignClasses (eType);
     addChild (_modifyNode (HCFormLabelUtils.getNodeWithState (aNode, eType), eType));
     m_eType = eType;
   }
@@ -82,7 +99,7 @@ public class HCFormLabel extends HCLabel implements IFormLabel
 
   @Nonnull
   public static HCFormLabel create (@Nonnull final IPredefinedLocaleTextProvider aTextProvider,
-                                           @Nonnull final ELabelType eType)
+                                    @Nonnull final ELabelType eType)
   {
     return create (aTextProvider.getText (), eType);
   }
@@ -100,8 +117,7 @@ public class HCFormLabel extends HCLabel implements IFormLabel
   }
 
   @Nonnull
-  public static HCFormLabel create (@Nonnull final IHCElementWithChildren <?> aNode,
-                                           @Nonnull final ELabelType eType)
+  public static HCFormLabel create (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)
   {
     return new HCFormLabel (aNode, eType);
   }

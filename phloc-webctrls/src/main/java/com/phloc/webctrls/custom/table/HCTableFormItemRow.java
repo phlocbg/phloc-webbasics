@@ -17,7 +17,6 @@
  */
 package com.phloc.webctrls.custom.table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -31,7 +30,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCRow;
-import com.phloc.html.hc.impl.AbstractHCNodeList;
+import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
@@ -132,23 +131,16 @@ public class HCTableFormItemRow extends HCRow
   {
     final boolean bHasErrors = m_aErrorList != null && m_aErrorList.containsAtLeastOneError ();
 
-    final List <IHCNode> aResolvedCtrls = new ArrayList <IHCNode> ();
-    if (m_aCtrls != null)
-    {
-      // Inline all node lists for correct modification afterwards
-      // Note: must be AbstractHCNodeList and not IHCNodeWithChildren!
-      for (final IHCNode aCtrl : m_aCtrls)
-        if (aCtrl instanceof AbstractHCNodeList <?>)
-          aResolvedCtrls.addAll (((AbstractHCNodeList <?>) aCtrl).getChildren ());
-        else
-          aResolvedCtrls.add (aCtrl);
+    // Flatten all HCNodeLists away :)
+    final List <IHCNode> aResolvedCtrls = HCUtils.getAsFlattenedList (m_aCtrls);
 
-      // Customize controls
-      modifyControls (aResolvedCtrls, bHasErrors);
-    }
+    // Customize controls
+    modifyControls (aResolvedCtrls, bHasErrors);
 
+    // Replace existing children with flattened list
     m_aCtrlCell.removeAllChildren ().addChildren (aResolvedCtrls);
 
+    // Create all potential error nodes
     if (m_aErrorList != null)
       for (final IError aError : m_aErrorList.getAllItems ())
         m_aCtrlCell.addChild (createErrorNode (aError));
