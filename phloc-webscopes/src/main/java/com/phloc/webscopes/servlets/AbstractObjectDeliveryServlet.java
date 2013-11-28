@@ -60,8 +60,9 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   protected static final String ETAG_VALUE_OBJECT_DELIVERY_SERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
                                                                                                           .nextLong ()) + '"';
 
-  private static Set <String> s_aAllowedExtensions = new HashSet <String> ();
+  private static Set <String> s_aDeniedFilenames = new HashSet <String> ();
   private static Set <String> s_aDeniedExtensions = new HashSet <String> ();
+  private static Set <String> s_aAllowedExtensions = new HashSet <String> ();
 
   @Nonnull
   private static String _unifyExtension (@Nonnull final String sExt)
@@ -89,16 +90,35 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   @OverridingMethodsMustInvokeSuper
   protected final void onInit ()
   {
-    _asSet (s_aAllowedExtensions, getInitParameter ("allowedExtensions"));
+    _asSet (s_aDeniedFilenames, getInitParameter ("deniedFilenames"));
     _asSet (s_aDeniedExtensions, getInitParameter ("deniedExtensions"));
+    _asSet (s_aAllowedExtensions, getInitParameter ("allowedExtensions"));
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Settings: deniedFilenames=" +
+                       s_aDeniedFilenames +
+                       "; deniedExtensions=" +
+                       s_aDeniedExtensions +
+                       "; allowedExtension=" +
+                       s_aAllowedExtensions);
   }
 
-  private static boolean _hasValidExtension (@Nullable final String sFilename)
+  private static boolean _isValidFilename (@Nullable final String sRelativeFilename)
   {
+    final String sFilename = FilenameHelper.getWithoutPath (sRelativeFilename);
+    if (s_aDeniedFilenames.contains (sFilename) || s_aDeniedFilenames.contains ("*"))
+    {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Denied object with name '" + sFilename + "' because it is in the denied filenames list");
+      return false;
+    }
+
     final String sExt = _unifyExtension (FilenameHelper.getExtension (sFilename));
     if (s_aDeniedExtensions.contains (sExt) || s_aDeniedExtensions.contains ("*"))
       return false;
-    return s_aAllowedExtensions.contains (sExt) || s_aAllowedExtensions.contains ("*");
+    if (!s_aAllowedExtensions.contains (sExt) && !s_aAllowedExtensions.contains ("*"))
+      return false;
+    return true;
   }
 
   private static boolean _isPossibleDirectoryTraversalRequest (@Nonnull final String sFilename)
@@ -118,7 +138,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
     final String sFilename = URLUtils.urlDecode (RequestHelper.getPathWithinServlet (aRequestScope.getRequest ()));
 
     if (StringHelper.hasNoText (sFilename) ||
-        !_hasValidExtension (sFilename) ||
+        !_isValidFilename (sFilename) ||
         _isPossibleDirectoryTraversalRequest (sFilename))
     {
       // Send the same error code as if it is simply not found to confuse
@@ -148,7 +168,11 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
+    // The request has been checked and the filename is valid for delivery
     final String sFilename = aRequestScope.getAttributeAsString (REQUEST_ATTR_OBJECT_DELIVERY_FILENAME);
     onDeliverResource (aRequestScope, aUnifiedResponse, sFilename);
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Delivered object with name '" + sFilename + "'");
   }
 }

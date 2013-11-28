@@ -81,6 +81,7 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
   protected EContinue initRequestState (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                         @Nonnull final UnifiedResponse aUnifiedResponse)
   {
+    // Check for valid filenames, path traversal etc.
     if (super.initRequestState (aRequestScope, aUnifiedResponse).isBreak ())
       return EContinue.BREAK;
 
@@ -89,6 +90,9 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
     final IReadableResource aRes = getResource (aRequestScope, sFilename);
     if (!aRes.exists ())
     {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Not streaming '" + sFilename + "' because no such resource exists.");
+
       m_aStatsNotFound.increment (sFilename);
       aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
       return EContinue.BREAK;
@@ -193,5 +197,8 @@ public abstract class AbstractStreamServlet extends AbstractObjectDeliveryServle
     // Do the main copying from InputStream to OutputStream
     aUnifiedResponse.setContent (aRes);
     m_aStatsSuccess.increment (sFilename);
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Successfully stream resource '" + sFilename + "'");
   }
 }

@@ -39,6 +39,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.stats.IStatisticsHandlerCounter;
@@ -345,6 +346,9 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
     final UnifiedResponse aUnifiedResponse = new UnifiedResponse (eHTTPVersion, eHTTPMethod, aHttpRequest);
     if (initRequestState (aRequestScope, aUnifiedResponse).isBreak ())
     {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Cancelled request after initRequestState with response " + aUnifiedResponse);
+
       // May e.g. be an 404 error for some not-found resource
       m_aStatsInitFailure.increment ();
       aUnifiedResponse.applyToResponse (aHttpResponse);
@@ -367,6 +371,9 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
           final DateTime aRequestIfModifiedSince = convertMillisToDateTimeGMT (nRequestIfModifiedSince);
           if (PDTUtils.isLessOrEqual (aLastModification, aRequestIfModifiedSince))
           {
+            if (s_aLogger.isDebugEnabled ())
+              s_aLogger.debug ("Requested resource was not modified: " + aRequestScope.getPathWithinServlet ());
+
             // Was not modified since the passed time
             m_aStatsNotModifiedIfModifiedSince.increment ();
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
@@ -382,6 +389,9 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
           final DateTime aRequestIfUnmodifiedSince = convertMillisToDateTimeGMT (nRequestIfUnmodifiedSince);
           if (PDTUtils.isGreaterOrEqual (aLastModification, aRequestIfUnmodifiedSince))
           {
+            if (s_aLogger.isDebugEnabled ())
+              s_aLogger.debug ("Requested resource was not modified: " + aRequestScope.getPathWithinServlet ());
+
             // Was not modified since the passed time
             m_aStatsNotModifiedIfUnmodifiedSince.increment ();
             aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
@@ -415,6 +425,9 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
             for (final String sCurrentETag : aAllETags)
               if (sSupportedETag.equals (sCurrentETag))
               {
+                if (s_aLogger.isDebugEnabled ())
+                  s_aLogger.debug ("Requested resource has the same E-Tag: " + aRequestScope.getPathWithinServlet ());
+
                 // We have a matching ETag
                 m_aStatsNotModifiedIfNonMatch.increment ();
                 aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_MODIFIED).applyToResponse (aHttpResponse);
@@ -453,12 +466,25 @@ public abstract class AbstractUnifiedResponseServlet extends AbstractScopeAwareH
       bExceptionOccurred = false;
 
       m_aStatsHandledRequestsSuccess.increment ();
+
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Successfully handled request: " + aRequestScope.getPathWithinServlet ());
     }
     catch (final Throwable t)
     {
       m_aStatsHandledRequestsFailure.increment ();
       // Do not show the exceptions that occur, when client cancels a request.
-      if (!StreamUtils.isKnownEOFException (t))
+      if (StreamUtils.isKnownEOFException (t))
+      {
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Error delivering requested resource '" +
+                           aRequestScope.getPathWithinServlet () +
+                           "' - " +
+                           CGStringHelper.getClassLocalName (t) +
+                           " - " +
+                           t.getMessage ());
+      }
+      else
       {
         onException (aRequestScope, t);
 
