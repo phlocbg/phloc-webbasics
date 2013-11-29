@@ -18,7 +18,7 @@
 package com.phloc.webscopes.servlets;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -60,14 +60,17 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   protected static final String ETAG_VALUE_OBJECT_DELIVERY_SERVLET = '"' + Long.toString (VerySecureRandom.getInstance ()
                                                                                                           .nextLong ()) + '"';
 
-  private static Set <String> s_aDeniedFilenames = new HashSet <String> ();
-  private static Set <String> s_aDeniedExtensions = new HashSet <String> ();
-  private static Set <String> s_aAllowedExtensions = new HashSet <String> ();
+  private static final Set <String> s_aDeniedFilenames = new LinkedHashSet <String> ();
+  private static final Set <String> s_aDeniedExtensions = new LinkedHashSet <String> ();
+  private static final Set <String> s_aAllowedFilenames = new LinkedHashSet <String> ();
+  private static final Set <String> s_aAllowedExtensions = new LinkedHashSet <String> ();
+  private static boolean s_bDeniedAllExtensions = false;
+  private static boolean s_bAllowedAllExtensions = false;
 
   @Nonnull
-  private static String _unifyExtension (@Nonnull final String sExt)
+  private static String _unifyItem (@Nonnull final String sItem)
   {
-    return sExt.toLowerCase (Locale.US);
+    return sItem.toLowerCase (Locale.US);
   }
 
   /**
@@ -75,50 +78,97 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
    * 
    * @param aSet
    *        The set to be filled. May not be <code>null</code>.
-   * @param sExtensionList
+   * @param sItemList
    *        The string to be separated to a list. Each item is separated by a
    *        ",".
+   * @param bUnify
+   *        To unify the found item by converting them all to lowercase. This
+   *        makes only sense for file extensions but not for file names. This
+   *        unification is only relevant because of the incasesensitive file
+   *        system on Windows machines.
    */
-  private static void _asSet (@Nonnull final Set <String> aSet, @Nullable final String sExtensionList)
+  private static void _asSet (@Nonnull final Set <String> aSet, @Nullable final String sItemList, final boolean bUnify)
   {
-    if (StringHelper.hasText (sExtensionList))
-      for (final String sExtension : StringHelper.getExploded (',', sExtensionList))
-        aSet.add (_unifyExtension (sExtension.trim ()));
+    if (StringHelper.hasText (sItemList))
+      for (final String sItem : StringHelper.getExploded (',', sItemList))
+      {
+        String sRealItem = sItem.trim ();
+        if (bUnify)
+          sRealItem = _unifyItem (sRealItem);
+
+        // Add only non-empty items
+        if (StringHelper.hasText (sRealItem))
+          aSet.add (sRealItem);
+      }
   }
 
   @Override
   @OverridingMethodsMustInvokeSuper
   protected final void onInit ()
   {
-    _asSet (s_aDeniedFilenames, getInitParameter ("deniedFilenames"));
-    _asSet (s_aDeniedExtensions, getInitParameter ("deniedExtensions"));
-    _asSet (s_aAllowedExtensions, getInitParameter ("allowedExtensions"));
+    _asSet (s_aDeniedFilenames, getInitParameter ("deniedFilenames"), false);
+    _asSet (s_aDeniedExtensions, getInitParameter ("deniedExtensions"), true);
+    _asSet (s_aAllowedFilenames, getInitParameter ("allowedFilenames"), false);
+    _asSet (s_aAllowedExtensions, getInitParameter ("allowedExtensions"), true);
+    s_bDeniedAllExtensions = s_aDeniedExtensions.contains ("*");
+    s_bAllowedAllExtensions = s_aAllowedExtensions.contains ("*");
 
     if (s_aLogger.isDebugEnabled ())
+    {
       s_aLogger.debug ("Settings: deniedFilenames=" +
                        s_aDeniedFilenames +
                        "; deniedExtensions=" +
                        s_aDeniedExtensions +
+                       "; allowedFilenames=" +
+                       s_aAllowedFilenames +
                        "; allowedExtension=" +
                        s_aAllowedExtensions);
+    }
+
+    // Short hint, as this may render the whole servlet senseless...
+    if (s_bDeniedAllExtensions)
+      s_aLogger.warn ("All extension have been denied. This means that this servlet will deny to delivery any resource!");
   }
 
   private static boolean _isValidFilename (@Nullable final String sRelativeFilename)
   {
     final String sFilename = FilenameHelper.getWithoutPath (sRelativeFilename);
-    if (s_aDeniedFilenames.contains (sFilename) || s_aDeniedFilenames.contains ("*"))
+    final String sUnifiedExt = _unifyItem (FilenameHelper.getExtension (sFilename));
+
+    // Denial has precedence
+    if (s_aDeniedFilenames.contains (sFilename))
     {
       if (s_aLogger.isDebugEnabled ())
         s_aLogger.debug ("Denied object with name '" + sFilename + "' because it is in the denied filenames list");
       return false;
     }
 
-    final String sExt = _unifyExtension (FilenameHelper.getExtension (sFilename));
-    if (s_aDeniedExtensions.contains (sExt) || s_aDeniedExtensions.contains ("*"))
+    if (s_bDeniedAllExtensions || s_aDeniedExtensions.contains (sUnifiedExt))
+    {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Denied object with name '" + sFilename + "' because it is in the denied extension list");
       return false;
-    if (!s_aAllowedExtensions.contains (sExt) && !s_aAllowedExtensions.contains ("*"))
-      return false;
-    return true;
+    }
+
+    // Allowance comes next
+    if (s_aAllowedFilenames.contains (sFilename))
+    {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Allowed object with name '" + sFilename + "' because it is in the allowed filenames list");
+      return true;
+    }
+
+    if (s_bAllowedAllExtensions || s_aAllowedExtensions.contains (sUnifiedExt))
+    {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Allowed object with name '" + sFilename + "' because it is in the allowed extension list");
+      return true;
+    }
+
+    // Neither denied nor allowed -> deny for the sake of security
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Denied object with name '" + sFilename + "' because it is neither denied nor allowed");
+    return false;
   }
 
   private static boolean _isPossibleDirectoryTraversalRequest (@Nonnull final String sFilename)
