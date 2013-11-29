@@ -131,7 +131,7 @@
     <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
-      <version>1.5.0</version>
+      <version>1.5.1</version>
       <exclusions>
         <!-- Ships with Java 1.6 -->
         <exclusion>

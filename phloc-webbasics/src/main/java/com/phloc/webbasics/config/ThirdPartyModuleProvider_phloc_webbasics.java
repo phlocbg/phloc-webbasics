@@ -20,11 +20,9 @@ package com.phloc.webbasics.config;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
-import com.phloc.commons.thirdparty.ELicense;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.IThirdPartyModuleProviderSPI;
-import com.phloc.commons.thirdparty.ThirdPartyModule;
-import com.phloc.commons.version.Version;
+import com.phloc.web.config.ThirdPartyModuleProvider_phloc_web;
 
 /**
  * Implement this SPI interface if your JAR file contains external third party
@@ -35,11 +33,7 @@ import com.phloc.commons.version.Version;
 @IsSPIImplementation
 public final class ThirdPartyModuleProvider_phloc_webbasics implements IThirdPartyModuleProviderSPI
 {
-  public static final IThirdPartyModule JAVAX_MAIL = new ThirdPartyModule ("JavaMail",
-                                                                           "Oracle",
-                                                                           ELicense.BSD,
-                                                                           new Version (1, 5, 0),
-                                                                           "http://javamail.java.net/");
+  public static final IThirdPartyModule JAVAX_MAIL = ThirdPartyModuleProvider_phloc_web.JAVAX_MAIL.getAsNonOptionalCopy ();
 
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
