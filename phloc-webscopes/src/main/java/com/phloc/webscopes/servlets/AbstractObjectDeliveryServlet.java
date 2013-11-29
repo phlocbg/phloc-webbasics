@@ -127,10 +127,10 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
 
     // Short hint, as this may render the whole servlet senseless...
     if (s_bDeniedAllExtensions)
-      s_aLogger.warn ("All extension have been denied. This means that this servlet will deny to deliver any resource!");
+      s_aLogger.warn ("All extensions are denied. This means that this servlet will not deliver any resource!");
     else
       if (s_aAllowedFilenames.isEmpty () && s_aAllowedExtensions.isEmpty ())
-        s_aLogger.warn ("No allowance rules are defined. This means that this servlet will deny to deliver any resource!");
+        s_aLogger.warn ("No allowance rules are defined. This means that this servlet will not deliver any resource!");
   }
 
   private static boolean _isValidFilename (@Nullable final String sRelativeFilename)
