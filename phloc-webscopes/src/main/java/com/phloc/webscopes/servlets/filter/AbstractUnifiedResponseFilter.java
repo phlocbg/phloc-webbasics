@@ -55,7 +55,9 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
    *        The response object to be filled. Never <code>null</code>.
    * @return If {@link EContinue#BREAK} is returned, the content of the unified
    *         response is rendered to the HTTP servlet response and the filter
-   *         chain stops.
+   *         chain stops. On {@link EContinue#CONTINUE} the content of the
+   *         unified response is discarded and the filter chain continues as
+   *         normal.
    * @throws ServletException
    *         In case of an error
    */
@@ -93,6 +95,7 @@ public abstract class AbstractUnifiedResponseFilter extends AbstractScopeAwareFi
     if (handleRequest (aRequestScope, aUnifiedResponse).isContinue ())
     {
       // Filter passed, without any output -> continue
+      // Discard the content of the unified response
       return EContinue.CONTINUE;
     }
 
