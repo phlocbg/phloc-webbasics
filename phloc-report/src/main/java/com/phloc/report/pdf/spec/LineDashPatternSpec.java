@@ -84,6 +84,9 @@ public class LineDashPatternSpec
     m_fPhase = fPhase;
   }
 
+  /**
+   * @return A copy with all patterns. 0-2 elements.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public float [] getPattern ()
@@ -91,6 +94,9 @@ public class LineDashPatternSpec
     return ArrayHelper.getCopy (m_aPattern);
   }
 
+  /**
+   * @return The phase to use.
+   */
   public float getPhase ()
   {
     return m_fPhase;

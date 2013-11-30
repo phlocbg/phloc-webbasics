@@ -25,9 +25,14 @@ import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
 
-public class PLSpacerHorz extends AbstractPLElement <PLSpacerHorz>
+/**
+ * A horizontal spacer
+ * 
+ * @author Philip Helger
+ */
+public class PLSpacerX extends AbstractPLElement <PLSpacerX>
 {
-  public PLSpacerHorz ()
+  public PLSpacerX ()
   {}
 
   @Override

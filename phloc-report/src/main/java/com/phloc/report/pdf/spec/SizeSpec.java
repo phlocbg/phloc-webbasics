@@ -42,6 +42,14 @@ public class SizeSpec
   private final float m_fWidth;
   private final float m_fHeight;
 
+  /**
+   * Constructor
+   * 
+   * @param fWidth
+   *        Width. Must be &ge; 0.
+   * @param fHeight
+   *        Height. Must be &ge; 0.
+   */
   public SizeSpec (@Nonnegative final float fWidth, @Nonnegative final float fHeight)
   {
     if (fWidth < 0)
@@ -53,14 +61,28 @@ public class SizeSpec
     m_fHeight = fHeight;
   }
 
+  /**
+   * @return Width. Always &ge; 0.
+   */
+  @Nonnegative
   public float getWidth ()
   {
     return m_fWidth;
   }
 
+  /**
+   * @return Height. Always &ge; 0.
+   */
+  @Nonnegative
   public float getHeight ()
   {
     return m_fHeight;
+  }
+
+  @Nonnull
+  public PDRectangle getAsRectangle ()
+  {
+    return new PDRectangle (m_fWidth, m_fHeight);
   }
 
   @Override

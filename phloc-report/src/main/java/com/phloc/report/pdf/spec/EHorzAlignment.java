@@ -24,8 +24,13 @@ package com.phloc.report.pdf.spec;
  */
 public enum EHorzAlignment
 {
+  /** Align left */
   LEFT,
+
+  /** Align center */
   CENTER,
+
+  /** Align right */
   RIGHT;
 
   public static final EHorzAlignment DEFAULT = LEFT;

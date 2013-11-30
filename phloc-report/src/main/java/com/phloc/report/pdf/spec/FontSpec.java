@@ -69,36 +69,67 @@ public class FontSpec
     m_aColor = aColor;
   }
 
+  /**
+   * @return The font to use. Never <code>null</code>.
+   */
   @Nonnull
   public PDFFont getFont ()
   {
     return m_aFont;
   }
 
+  /**
+   * @return The font size in points. Always &gt; 0.
+   */
   @Nonnegative
   public float getFontSize ()
   {
     return m_fFontSize;
   }
 
+  /**
+   * @return The line height of the font in the given font size.
+   */
   @Nonnegative
   public float getLineHeight ()
   {
     return m_fLineHeight;
   }
 
+  /**
+   * @return The text color to use.
+   */
   @Nonnull
   public Color getColor ()
   {
     return m_aColor;
   }
 
+  /**
+   * Get the width of a string
+   * 
+   * @param sText
+   *        The text to determine the width of. May not be <code>null</code>.
+   * @return The string width
+   * @throws IOException
+   */
   @Nonnegative
   public float getStringWidth (@Nonnull final String sText) throws IOException
   {
     return m_aFont.getStringWidth (sText, m_fFontSize);
   }
 
+  /**
+   * Split the passed text so that it fits into the specified width.
+   * 
+   * @param sText
+   *        The text to fit. Maybe <code>null</code>.
+   * @param fMaxWidth
+   *        The maximum width available. Must be &gt; 0.
+   * @return A list with all texts and widths that fit best. Never
+   *         <code>null</code>.
+   * @throws IOException
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <TextAndWidthSpec> getFitToWidth (@Nullable final String sText, @Nonnegative final float fMaxWidth) throws IOException

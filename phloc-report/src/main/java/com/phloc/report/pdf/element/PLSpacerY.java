@@ -25,18 +25,29 @@ import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
 
-public class PLSpacerVert extends AbstractPLElement <PLSpacerVert>
+/**
+ * A vertical spacer
+ * 
+ * @author Philip Helger
+ */
+public class PLSpacerY extends AbstractPLElement <PLSpacerY>
 {
   private final float m_fHeight;
 
-  public PLSpacerVert (final float fHeight)
+  public PLSpacerY (final float fHeight)
   {
     m_fHeight = fHeight;
+  }
+
+  public float getHeight ()
+  {
+    return m_fHeight;
   }
 
   @Override
   protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
   {
+    // Use the fixed height
     return new SizeSpec (aCtx.getAvailableWidth (), m_fHeight);
   }
 

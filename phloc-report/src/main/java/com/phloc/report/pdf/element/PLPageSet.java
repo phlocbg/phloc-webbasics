@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
@@ -111,8 +113,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     }
   }
 
-  private final SizeSpec m_aPageSize;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PLPageSet.class);
 
+  private final SizeSpec m_aPageSize;
   private AbstractPLElement <?> m_aPageHeader;
   private final List <AbstractPLElement <?>> m_aElements = new ArrayList <AbstractPLElement <?>> ();
   private AbstractPLElement <?> m_aPageFooter;
@@ -152,12 +155,22 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     return m_aPageSize.getHeight () - getMargin ().getYSum () - getPadding ().getYSum ();
   }
 
+  /**
+   * @return The global page header. May be <code>null</code>.
+   */
   @Nullable
   public AbstractPLElement <?> getPageHeader ()
   {
     return m_aPageHeader;
   }
 
+  /**
+   * Set the global page header
+   * 
+   * @param aPageHeader
+   *        The global page header. May be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public PLPageSet setPageHeader (@Nullable final AbstractPLElement <?> aPageHeader)
   {
@@ -180,12 +193,22 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     return this;
   }
 
+  /**
+   * @return The global page footer. May be <code>null</code>.
+   */
   @Nullable
   public AbstractPLElement <?> getPageFooter ()
   {
     return m_aPageFooter;
   }
 
+  /**
+   * Set the global page footer
+   * 
+   * @param aPageFooter
+   *        The global page footer. May be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public PLPageSet setPageFooter (@Nullable final AbstractPLElement <?> aPageFooter)
   {
@@ -193,6 +216,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     return this;
   }
 
+  /**
+   * @return The y-top of the page
+   */
   public float getYTop ()
   {
     return m_aPageSize.getHeight () - getMargin ().getTop () - getPadding ().getTop ();
@@ -246,16 +272,16 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       ret.setFooterHeight (m_aPageFooter.prepare (aRPC).getHeight ());
     }
 
-    // Start rendering
-
-    // Start at the top
-    final float fYTop = getYTop ();
-    final float fLeastY = getMargin ().getBottom () + getPadding ().getBottom ();
-
     // Split into page pieces
+
+    final float fYTop = getYTop ();
+    final float fYLeast = getMargin ().getBottom () + getPadding ().getBottom ();
+
     {
       List <AbstractPLElement <?>> aCurPageElements = new ArrayList <AbstractPLElement <?>> ();
       int nElementIndex = 0;
+
+      // Start at the top
       float fCurY = fYTop;
       for (final AbstractPLElement <?> aElement : m_aElements)
       {
@@ -263,25 +289,30 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         final float fThisHeightFull = fThisHeight +
                                       aElement.getPadding ().getYSum () +
                                       aElement.getMargin ().getYSum ();
-        if (fCurY - fThisHeightFull < fLeastY)
+        if (fCurY - fThisHeightFull < fYLeast)
         {
           // Next page
           if (aCurPageElements.isEmpty ())
           {
-            // FIXME one element too large
+            // one element too large for a page
+            s_aLogger.warn ("A single element does not fit onto a single page!");
           }
           else
           {
+            // We found elements fitting onto a page
             ret.addPerPageElements (aCurPageElements);
             aCurPageElements = new ArrayList <AbstractPLElement <?>> ();
             fCurY = fYTop;
           }
         }
+
+        // Add element to current page
         aCurPageElements.add (aElement);
         fCurY -= fThisHeightFull;
         nElementIndex++;
       }
 
+      // Add elements to last page
       if (!aCurPageElements.isEmpty ())
         ret.addPerPageElements (aCurPageElements);
     }
@@ -292,7 +323,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   /**
    * Render all pages of this layout to the specified PDDocument
    * 
-   * @param aPR
+   * @param aPrepareResult
    *        The preparation result. May not be <code>null</code>.
    * @param aDoc
    *        The PDDocument. May not be <code>null</code>.
@@ -304,7 +335,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
    *        Total page count. Always &ge; 0.
    * @throws IOException
    */
-  public void renderAllPages (@Nonnull final PageSetPrepareResult aPR,
+  public void renderAllPages (@Nonnull final PageSetPrepareResult aPrepareResult,
                               @Nonnull final PDDocument aDoc,
                               final boolean bDebug,
                               @Nonnegative final int nTotalPageIndex,
@@ -317,11 +348,11 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     final boolean bCompressPDF = !bDebug;
     int nPageIndex = 0;
     int nElementIndex = 0;
-    final int nPageCount = aPR.getPageCount ();
-    for (final List <AbstractPLElement <?>> aPerPage : aPR.directGetPerPageElements ())
+    final int nPageCount = aPrepareResult.getPageCount ();
+    for (final List <AbstractPLElement <?>> aPerPage : aPrepareResult.directGetPerPageElements ())
     {
       // Layout in memory
-      final PDPage aPage = new PDPage (new PDRectangle (m_aPageSize.getWidth (), m_aPageSize.getHeight ()));
+      final PDPage aPage = new PDPage (m_aPageSize.getAsRectangle ());
       aDoc.addPage (aPage);
       final PDPageContentStreamWithCache aContentStream = new PDPageContentStreamWithCache (aDoc,
                                                                                             aPage,
@@ -364,7 +395,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                              m_aPageSize.getWidth () -
                                                                  getMargin ().getXSum () -
                                                                  m_aPageHeader.getMargin ().getXSum (),
-                                                             aPR.getHeaderHeight () +
+                                                             aPrepareResult.getHeaderHeight () +
                                                                  m_aPageHeader.getPadding ().getYSum ());
           aRC.setOption (ERenderingOption.PAGESET_PAGENUM_CURRENT, nPageIndex + 1);
           aRC.setOption (ERenderingOption.PAGESET_PAGENUM_TOTAL, nPageCount);
@@ -377,7 +408,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         for (final AbstractPLElement <?> aElement : aPerPage)
         {
           // Get element height
-          final float fThisHeight = aPR.getContentHeight (nElementIndex);
+          final float fThisHeight = aPrepareResult.getContentHeight (nElementIndex);
           final float fThisHeightWithPadding = fThisHeight + aElement.getPadding ().getYSum ();
 
           final RenderingContext aRC = new RenderingContext (aContentStream,
@@ -409,7 +440,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                              m_aPageSize.getWidth () -
                                                                  getMargin ().getXSum () -
                                                                  m_aPageFooter.getMargin ().getXSum (),
-                                                             aPR.getFooterHeight () +
+                                                             aPrepareResult.getFooterHeight () +
                                                                  m_aPageFooter.getPadding ().getYSum ());
           aRC.setOption (ERenderingOption.PAGESET_PAGENUM_CURRENT, nPageIndex + 1);
           aRC.setOption (ERenderingOption.PAGESET_PAGENUM_TOTAL, nPageCount);

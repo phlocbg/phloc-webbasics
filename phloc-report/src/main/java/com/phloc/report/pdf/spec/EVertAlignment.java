@@ -24,8 +24,13 @@ package com.phloc.report.pdf.spec;
  */
 public enum EVertAlignment
 {
+  /** Align top */
   TOP,
+
+  /** Align middle */
   MIDDLE,
+
+  /** Align bottom */
   BOTTOM;
 
   public static final EVertAlignment DEFAULT = TOP;
