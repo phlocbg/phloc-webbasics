@@ -33,7 +33,7 @@ import com.phloc.commons.version.Version;
  * @author Philip Helger
  */
 @IsSPIImplementation
-public final class ThirdPartyModuleProvider_plugin_schedule implements IThirdPartyModuleProviderSPI
+public final class ThirdPartyModuleProvider_phloc_schedule implements IThirdPartyModuleProviderSPI
 {
   public static final IThirdPartyModule QUARTZ = new ThirdPartyModule ("Quartz",
                                                                        "Terracotta",
