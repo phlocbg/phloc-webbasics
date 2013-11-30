@@ -38,7 +38,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.WidthSpec;
 
 /**
- * Horizontal box - groups several columns
+ * Horizontal box - groups several columns.
  * 
  * @author Philip Helger
  */

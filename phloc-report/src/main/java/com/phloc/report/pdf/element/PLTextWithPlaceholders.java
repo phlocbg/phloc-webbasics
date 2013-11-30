@@ -28,6 +28,12 @@ import com.phloc.report.pdf.render.ERenderingOption;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.FontSpec;
 
+/**
+ * Render text but before that replace placeholders defined in
+ * {@link ERenderingOption}.
+ * 
+ * @author Philip Helger
+ */
 public class PLTextWithPlaceholders extends PLText
 {
   public PLTextWithPlaceholders (@Nonnull final String sText, @Nonnull final FontSpec aFont)
@@ -47,6 +53,7 @@ public class PLTextWithPlaceholders extends PLText
       if (sCtxValue != null)
         aReplacements.put (eOption.getPlaceholder (), sCtxValue);
     }
+
     // Replace all at once
     return StringHelper.replaceMultiple (sText, aReplacements);
   }

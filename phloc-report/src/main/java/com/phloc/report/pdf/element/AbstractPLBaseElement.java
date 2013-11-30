@@ -32,8 +32,8 @@ import com.phloc.report.pdf.spec.MarginSpec;
 import com.phloc.report.pdf.spec.PaddingSpec;
 
 /**
- * Abstract base class for a PDF layout (=PL) element that has margin, padding
- * and border.
+ * Abstract base class for a PDF layout (=PL) element that has margin, padding,
+ * border and a fill color. It does not directly support rendering.
  * 
  * @author Philip Helger
  * @param <IMPLTYPE>
@@ -309,11 +309,60 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     return m_aBorder;
   }
 
+  /**
+   * Set the element fill color.
+   * 
+   * @param aFillColor
+   *        The fill color to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public IMPLTYPE setFillColor (@Nullable final Color aFillColor)
+  {
+    m_aFillColor = aFillColor;
+    return thisAsT ();
+  }
+
+  /**
+   * @return The current fill color. May be <code>null</code>.
+   */
+  @Nullable
+  public Color getFillColor ()
+  {
+    return m_aFillColor;
+  }
+
+  /**
+   * Should a debug border be drawn? Only if no other border is present.
+   * 
+   * @param aBorder
+   *        The element border. May not be <code>null</code>.
+   * @param bDebug
+   *        <code>true</code> if debug mode is enabled
+   * @return <code>true</code> if a debug border should be drawn
+   */
   public static boolean shouldApplyDebugBorder (@Nonnull final BorderSpec aBorder, final boolean bDebug)
   {
     return !aBorder.hasAnyBorder () && bDebug;
   }
 
+  /**
+   * Render a single border
+   * 
+   * @param aContentStream
+   *        Content stream
+   * @param fLeft
+   *        Left position
+   * @param fTop
+   *        Top position
+   * @param fWidth
+   *        Width
+   * @param fHeight
+   *        Height
+   * @param aBorder
+   *        Border to use. May not be <code>null</code>.
+   * @throws IOException
+   */
   protected static void renderBorder (@Nonnull final PDPageContentStreamWithCache aContentStream,
                                       final float fLeft,
                                       final float fTop,
@@ -371,19 +420,6 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
         aContentStream.drawLine (fLeft, fBottom, fRight, fBottom);
       }
     }
-  }
-
-  @Nonnull
-  public IMPLTYPE setFillColor (@Nullable final Color aFillColor)
-  {
-    m_aFillColor = aFillColor;
-    return thisAsT ();
-  }
-
-  @Nullable
-  public Color getFillColor ()
-  {
-    return m_aFillColor;
   }
 
   @Override

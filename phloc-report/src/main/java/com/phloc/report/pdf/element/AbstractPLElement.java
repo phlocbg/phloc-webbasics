@@ -23,6 +23,10 @@ import java.io.IOException;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
@@ -32,7 +36,7 @@ import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
- * Abstract base class for a PDF layout (=PL) element.
+ * Abstract layout element that supports rendering.
  * 
  * @author Philip Helger
  * @param <IMPLTYPE>
@@ -40,6 +44,8 @@ import com.phloc.report.pdf.spec.SizeSpec;
  */
 public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMPLTYPE>> extends AbstractPLBaseElement <IMPLTYPE>
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractPLElement.class);
+
   private boolean m_bPrepared = false;
   private SizeSpec m_aPreparedSize;
 
@@ -94,10 +100,18 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   public final SizeSpec prepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
   {
     // Prepare only once!
-    if (!m_bPrepared)
+    if (m_bPrepared)
     {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Already prepared object " + CGStringHelper.getClassLocalName (getClass ()));
+    }
+    else
+    {
+      // Do prepare
       m_bPrepared = true;
       m_aPreparedSize = onPrepare (aCtx);
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Prepared object " + CGStringHelper.getClassLocalName (getClass ()));
     }
     return m_aPreparedSize;
   }
@@ -123,7 +137,9 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   public final void perform (@Nonnull final RenderingContext aCtx) throws IOException
   {
     if (!m_bPrepared)
-      throw new IllegalStateException ("Element was never prepared!");
+      throw new IllegalStateException ("Element " +
+                                       CGStringHelper.getClassLocalName (getClass ()) +
+                                       " was never prepared!");
 
     // Render border - debug: green
     {

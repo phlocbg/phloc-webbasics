@@ -37,7 +37,7 @@ import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
- * Vertical box - groups several rows
+ * Vertical box - groups several rows.
  * 
  * @author Philip Helger
  */

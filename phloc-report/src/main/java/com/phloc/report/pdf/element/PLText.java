@@ -31,6 +31,11 @@ import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
+/**
+ * Render text
+ * 
+ * @author Philip Helger
+ */
 public class PLText extends AbstractPLElement <PLText>
 {
   private final String m_sText;
