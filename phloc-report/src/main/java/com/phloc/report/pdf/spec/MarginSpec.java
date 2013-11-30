@@ -20,6 +20,9 @@ package com.phloc.report.pdf.spec;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -28,7 +31,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class MarginSpec
+@MustImplementEqualsAndHashcode
+public class MarginSpec
 {
   public static final MarginSpec MARGIN0 = new MarginSpec (0, 0, 0, 0);
 
@@ -36,6 +40,7 @@ public final class MarginSpec
   private final float m_fTop;
   private final float m_fRight;
   private final float m_fBottom;
+  // Helper vars
   private final float m_fXSum;
   private final float m_fYSum;
 
@@ -115,6 +120,30 @@ public final class MarginSpec
   public float getYSum ()
   {
     return m_fYSum;
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (this == o)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final MarginSpec rhs = (MarginSpec) o;
+    return EqualsUtils.equals (m_fLeft, rhs.m_fLeft) &&
+           EqualsUtils.equals (m_fTop, rhs.m_fTop) &&
+           EqualsUtils.equals (m_fRight, rhs.m_fRight) &&
+           EqualsUtils.equals (m_fBottom, rhs.m_fBottom);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_fLeft)
+                                       .append (m_fTop)
+                                       .append (m_fRight)
+                                       .append (m_fBottom)
+                                       .getHashCode ();
   }
 
   @Override

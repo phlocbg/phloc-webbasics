@@ -21,6 +21,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -36,7 +39,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class WidthSpec
+@MustImplementEqualsAndHashcode
+public class WidthSpec
 {
   public static enum EWidthType
   {
@@ -50,6 +54,8 @@ public final class WidthSpec
 
   private WidthSpec (@Nonnull final EWidthType eType, final float fValue)
   {
+    if (eType == null)
+      throw new NullPointerException ("type");
     m_eType = eType;
     m_fValue = fValue;
   }
@@ -105,9 +111,26 @@ public final class WidthSpec
   }
 
   @Override
+  public boolean equals (final Object o)
+  {
+    if (this == o)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final WidthSpec rhs = (WidthSpec) o;
+    return m_eType.equals (rhs.m_eType) && EqualsUtils.equals (m_fValue, rhs.m_fValue);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_eType).append (m_fValue).getHashCode ();
+  }
+
+  @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("value", m_fValue).append ("type", m_eType).toString ();
+    return new ToStringGenerator (this).append ("type", m_eType).append ("value", m_fValue).toString ();
   }
 
   /**

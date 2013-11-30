@@ -20,6 +20,7 @@ package com.phloc.report.pdf.spec;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -31,6 +32,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
+@MustImplementEqualsAndHashcode
 public class BorderSpec
 {
   /** Represents no border at all! */

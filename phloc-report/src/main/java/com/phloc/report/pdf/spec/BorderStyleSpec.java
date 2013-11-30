@@ -22,6 +22,7 @@ import java.awt.Color;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -32,6 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
+@MustImplementEqualsAndHashcode
 public class BorderStyleSpec
 {
   /** The default border color: black */

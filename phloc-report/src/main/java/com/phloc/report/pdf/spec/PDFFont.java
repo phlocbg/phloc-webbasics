@@ -24,12 +24,14 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -42,6 +44,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
+@Immutable
+@MustImplementEqualsAndHashcode
 public class PDFFont
 {
   public static final PDFFont REGULAR = new PDFFont (PDType1Font.HELVETICA);

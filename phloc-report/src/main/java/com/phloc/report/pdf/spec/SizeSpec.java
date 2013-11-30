@@ -23,6 +23,9 @@ import javax.annotation.concurrent.Immutable;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -31,7 +34,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class SizeSpec
+@MustImplementEqualsAndHashcode
+public class SizeSpec
 {
   public static final SizeSpec SIZE0 = new SizeSpec (0, 0);
 
@@ -57,6 +61,23 @@ public final class SizeSpec
   public float getHeight ()
   {
     return m_fHeight;
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (this == o)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final SizeSpec rhs = (SizeSpec) o;
+    return EqualsUtils.equals (m_fWidth, rhs.m_fWidth) && EqualsUtils.equals (m_fHeight, rhs.m_fHeight);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_fWidth).append (m_fHeight).getHashCode ();
   }
 
   @Override
