@@ -8,7 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-webscopes</artifactId>
-  <version>6.2.2-SNAPSHOT</version>
+  <version>6.2.2</version>
   <packaging>bundle</packaging>
   <name>phloc-webscopes</name>
   <url>http://repo.phloc.com/apidocs/phloc-webscopes/${project.version}</url>
@@ -22,9 +22,9 @@
   </licenses>
        
   <scm>
-    <url>http://code.google.com/p/phloc-webbasics/source/browse/</url>
-    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/trunk/phloc-webscopes</connection>
-    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/trunk/phloc-webscopes</developerConnection>
+    <url>http://code.google.com/p/phloc-webbasics/source/browse/tags/phloc-webscopes-6.2.2</url>
+    <connection>scm:svn:http://phloc-webbasics.googlecode.com/svn/tags/phloc-webscopes-6.2.2</connection>
+    <developerConnection>scm:svn:https://phloc-webbasics.googlecode.com/svn/tags/phloc-webscopes-6.2.2</developerConnection>
   </scm>
 
   <organization>
