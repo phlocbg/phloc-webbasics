@@ -28,6 +28,7 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.report.pdf.spec.FontSpec;
+import com.phloc.report.pdf.spec.LineDashPatternSpec;
 
 /**
  * A special version of PDPageContentStream with an intergated "cache" to avoid
@@ -41,6 +42,7 @@ public class PDPageContentStreamWithCache extends PDPageContentStream
   private FontSpec m_aLastUsedFont;
   private Color m_aLastUsedStrokingColor = Color.BLACK;
   private Color m_aLastUsedNonStrokingColor = Color.BLACK;
+  private LineDashPatternSpec m_aLastUsedLineDashPattern = LineDashPatternSpec.SOLID;
 
   public PDPageContentStreamWithCache (final PDDocument aDocument,
                                        final PDPage aSourcePage,
@@ -101,5 +103,23 @@ public class PDPageContentStreamWithCache extends PDPageContentStream
   public Color getLastUsedNonStrokingColor ()
   {
     return m_aLastUsedNonStrokingColor;
+  }
+
+  public void setLineDashPattern (@Nonnull final LineDashPatternSpec aLineDashPattern) throws IOException
+  {
+    if (aLineDashPattern == null)
+      throw new NullPointerException ("LineDashPattern");
+
+    if (!m_aLastUsedLineDashPattern.equals (aLineDashPattern))
+    {
+      super.setLineDashPattern (aLineDashPattern.getPattern (), aLineDashPattern.getPhase ());
+      m_aLastUsedLineDashPattern = aLineDashPattern;
+    }
+  }
+
+  @Nonnull
+  public LineDashPatternSpec getLastUsedLineDashPattern ()
+  {
+    return m_aLastUsedLineDashPattern;
   }
 }

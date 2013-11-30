@@ -330,31 +330,44 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     if (aBorder.hasAllBorders () && aBorder.areAllBordersEqual ())
     {
       // draw full rect
-      aContentStream.setStrokingColor (aBorder.getLeft ().getColor ());
+      final BorderStyleSpec aAll = aBorder.getLeft ();
+      aContentStream.setStrokingColor (aAll.getColor ());
+      aContentStream.setLineDashPattern (aAll.getLineDashPattern ());
       aContentStream.addRect (fLeft, fBottom, fWidth, fHeight);
       aContentStream.stroke ();
     }
     else
     {
       // partially
-      if (aBorder.getLeft () != null)
+      final BorderStyleSpec aLeft = aBorder.getLeft ();
+      if (aLeft != null)
       {
-        aContentStream.setStrokingColor (aBorder.getLeft ().getColor ());
+        aContentStream.setStrokingColor (aLeft.getColor ());
+        aContentStream.setLineDashPattern (aLeft.getLineDashPattern ());
         aContentStream.drawLine (fLeft, fTop, fLeft, fBottom);
       }
-      if (aBorder.getTop () != null)
+
+      final BorderStyleSpec aTop = aBorder.getTop ();
+      if (aTop != null)
       {
-        aContentStream.setStrokingColor (aBorder.getTop ().getColor ());
+        aContentStream.setStrokingColor (aTop.getColor ());
+        aContentStream.setLineDashPattern (aTop.getLineDashPattern ());
         aContentStream.drawLine (fLeft, fTop, fRight, fTop);
       }
-      if (aBorder.getRight () != null)
+
+      final BorderStyleSpec aRight = aBorder.getRight ();
+      if (aRight != null)
       {
-        aContentStream.setStrokingColor (aBorder.getRight ().getColor ());
+        aContentStream.setStrokingColor (aRight.getColor ());
+        aContentStream.setLineDashPattern (aRight.getLineDashPattern ());
         aContentStream.drawLine (fRight, fTop, fRight, fBottom);
       }
-      if (aBorder.getBottom () != null)
+
+      final BorderStyleSpec aBottom = aBorder.getBottom ();
+      if (aBottom != null)
       {
-        aContentStream.setStrokingColor (aBorder.getBottom ().getColor ());
+        aContentStream.setStrokingColor (aBottom.getColor ());
+        aContentStream.setLineDashPattern (aBottom.getLineDashPattern ());
         aContentStream.drawLine (fLeft, fBottom, fRight, fBottom);
       }
     }

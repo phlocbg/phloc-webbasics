@@ -27,8 +27,6 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import com.phloc.commons.mock.DebugModeTestRule;
-import com.phloc.report.pdf.PDFCreationException;
-import com.phloc.report.pdf.PageLayoutPDF;
 import com.phloc.report.pdf.element.PLHBox;
 import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLText;
@@ -39,6 +37,7 @@ import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
+import com.phloc.report.pdf.spec.LineDashPatternSpec;
 import com.phloc.report.pdf.spec.PDFFont;
 import com.phloc.report.pdf.spec.WidthSpec;
 
@@ -94,7 +93,8 @@ public class PageLayoutPDFTest
                                                                                                                  0,
                                                                                                                  0)
                                                                                                      .setPadding (5)
-                                                                                                     .setBorder (new BorderSpec (new BorderStyleSpec (Color.GREEN)))
+                                                                                                     .setBorder (new BorderSpec (new BorderStyleSpec (Color.GREEN,
+                                                                                                                                                      LineDashPatternSpec.DASHED_3)))
                                                                                                      .setHorzAlign (EHorzAlignment.RIGHT),
                        WidthSpec.star ());
       aHBox.addColumn (new PLText ("Spalte 4 mit Text Spalte 4 mit Text Spalte 4 mit Text Ende",
