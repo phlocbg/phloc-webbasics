@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webscopes">
+  <release date="2013-11-30" version="6.2.2" />
+  <entry date="2013-11-30" category="tech" action="add">
+    <change>
+      <text locale="en">Added new Servlet-Init-Parameters 'deniedRegExs' and 'allowedRegExs' to class AbstractObjectDeliveryServlet for maximum flexibility in allowance and denial</text>
+    </change>
+  </entry>
+  <entry date="2013-11-29" category="tech" action="add">
+    <change>
+      <text locale="en">Added new Servlet-Init-Parameter 'allowedFilenames' to class AbstractObjectDeliveryServlet to allow the delivery of certain filenames</text>
+    </change>
+  </entry>
   <release date="2013-11-28" version="6.2.1" />
   <entry date="2013-11-28" category="tech" action="add">
     <change>

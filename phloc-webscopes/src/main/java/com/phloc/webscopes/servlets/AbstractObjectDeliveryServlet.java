@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.random.VerySecureRandom;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.URLUtils;
@@ -62,8 +63,10 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
 
   private static final Set <String> s_aDeniedFilenames = new LinkedHashSet <String> ();
   private static final Set <String> s_aDeniedExtensions = new LinkedHashSet <String> ();
+  private static final Set <String> s_aDeniedRegExs = new LinkedHashSet <String> ();
   private static final Set <String> s_aAllowedFilenames = new LinkedHashSet <String> ();
   private static final Set <String> s_aAllowedExtensions = new LinkedHashSet <String> ();
+  private static final Set <String> s_aAllowedRegExs = new LinkedHashSet <String> ();
   private static boolean s_bDeniedAllExtensions = false;
   private static boolean s_bAllowedAllExtensions = false;
 
@@ -84,7 +87,7 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
    * @param bUnify
    *        To unify the found item by converting them all to lowercase. This
    *        makes only sense for file extensions but not for file names. This
-   *        unification is only relevant because of the incasesensitive file
+   *        unification is only relevant because of the case insensitive file
    *        system on Windows machines.
    */
   private static void _asSet (@Nonnull final Set <String> aSet, @Nullable final String sItemList, final boolean bUnify)
@@ -108,9 +111,12 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
   {
     _asSet (s_aDeniedFilenames, getInitParameter ("deniedFilenames"), false);
     _asSet (s_aDeniedExtensions, getInitParameter ("deniedExtensions"), true);
+    _asSet (s_aDeniedRegExs, getInitParameter ("deniedRegExs"), false);
+    s_bDeniedAllExtensions = s_aDeniedExtensions.contains ("*");
+
     _asSet (s_aAllowedFilenames, getInitParameter ("allowedFilenames"), false);
     _asSet (s_aAllowedExtensions, getInitParameter ("allowedExtensions"), true);
-    s_bDeniedAllExtensions = s_aDeniedExtensions.contains ("*");
+    _asSet (s_aAllowedRegExs, getInitParameter ("allowedRegExs"), false);
     s_bAllowedAllExtensions = s_aAllowedExtensions.contains ("*");
 
     if (s_aLogger.isDebugEnabled ())
@@ -119,17 +125,21 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
                        s_aDeniedFilenames +
                        "; deniedExtensions=" +
                        s_aDeniedExtensions +
+                       "; deniedRegExs=" +
+                       s_aDeniedRegExs +
                        "; allowedFilenames=" +
                        s_aAllowedFilenames +
                        "; allowedExtension=" +
-                       s_aAllowedExtensions);
+                       s_aAllowedExtensions +
+                       "; allowedRegExs=" +
+                       s_aAllowedRegExs);
     }
 
     // Short hint, as this may render the whole servlet senseless...
     if (s_bDeniedAllExtensions)
       s_aLogger.warn ("All extensions are denied. This means that this servlet will not deliver any resource!");
     else
-      if (s_aAllowedFilenames.isEmpty () && s_aAllowedExtensions.isEmpty ())
+      if (s_aAllowedFilenames.isEmpty () && s_aAllowedExtensions.isEmpty () && s_aAllowedRegExs.isEmpty ())
         s_aLogger.warn ("No allowance rules are defined. This means that this servlet will not deliver any resource!");
   }
 
@@ -153,6 +163,15 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
       return false;
     }
 
+    if (!s_aDeniedRegExs.isEmpty ())
+      for (final String sDeniedRegEx : s_aDeniedRegExs)
+        if (RegExHelper.stringMatchesPattern (sDeniedRegEx, sFilename))
+        {
+          if (s_aLogger.isDebugEnabled ())
+            s_aLogger.debug ("Denied object with name '" + sFilename + "' because it is in the denied regex list");
+          return false;
+        }
+
     // Allowance comes next
     if (s_aAllowedFilenames.contains (sFilename))
     {
@@ -167,6 +186,15 @@ public abstract class AbstractObjectDeliveryServlet extends AbstractUnifiedRespo
         s_aLogger.debug ("Allowed object with name '" + sFilename + "' because it is in the allowed extension list");
       return true;
     }
+
+    if (!s_aAllowedRegExs.isEmpty ())
+      for (final String sAllowedRegEx : s_aAllowedRegExs)
+        if (RegExHelper.stringMatchesPattern (sAllowedRegEx, sFilename))
+        {
+          if (s_aLogger.isDebugEnabled ())
+            s_aLogger.debug ("Allowed object with name '" + sFilename + "' because it is in the allowed regex list");
+          return true;
+        }
 
     // Neither denied nor allowed -> deny for the sake of security
     if (s_aLogger.isDebugEnabled ())
