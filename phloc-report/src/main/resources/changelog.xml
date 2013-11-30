@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-report">
+  <release date="2013-11-30" version="1.0.1" />
   <entry date="2013-11-30" category="api" action="add">
     <change>
       <text locale="en">Added support for line dash pattern in BorderStyleSpec and BorderSpec</text>

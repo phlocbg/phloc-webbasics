@@ -27,8 +27,6 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import com.phloc.commons.mock.DebugModeTestRule;
-import com.phloc.report.pdf.PDFCreationException;
-import com.phloc.report.pdf.PageLayoutPDF;
 import com.phloc.report.pdf.element.PLHBox;
 import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLText;
@@ -39,6 +37,7 @@ import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
+import com.phloc.report.pdf.spec.LineDashPatternSpec;
 import com.phloc.report.pdf.spec.PDFFont;
 import com.phloc.report.pdf.spec.WidthSpec;
 
@@ -89,7 +88,9 @@ public class PageLayoutPDFMarginPaddingTest
       if (false)
         v1.setBorder (new BorderStyleSpec (Color.RED)).setRowBorder (new BorderStyleSpec (Color.GREEN));
       v1.addRow (new PLText (sLIDShort, r10).setMargin (0).setPadding (10).setBorder (new BorderStyleSpec (Color.BLUE)));
-      v1.addRow (new PLText (sLIDShort, r10).setMargin (5).setPadding (5).setBorder (new BorderStyleSpec (Color.BLUE)));
+      v1.addRow (new PLText (sLIDShort, r10).setMargin (5)
+                                            .setPadding (5)
+                                            .setBorder (new BorderStyleSpec (Color.BLUE, LineDashPatternSpec.DASHED_2)));
       v1.addRow (new PLText (sLIDShort, r10).setMargin (10).setPadding (0).setBorder (new BorderStyleSpec (Color.BLUE)));
       h.addColumn (v1, WidthSpec.star ());
 
