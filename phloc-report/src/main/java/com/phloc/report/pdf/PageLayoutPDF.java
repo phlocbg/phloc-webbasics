@@ -46,7 +46,7 @@ public class PageLayoutPDF
 
   private String m_sDocumentTitle;
   private String m_sDocumentKeywords;
-
+  private String m_sDocumentSubject;
   private boolean m_bDebug = false;
   private final List <PLPageSet> m_aPageSets = new ArrayList <PLPageSet> ();
 
@@ -87,6 +87,17 @@ public class PageLayoutPDF
     m_sDocumentKeywords = sDocumentKeywords;
   }
 
+  @Nullable
+  public String getDocumentSubject ()
+  {
+    return m_sDocumentSubject;
+  }
+
+  public void setDocumentSubject (@Nullable final String sDocumentSubject)
+  {
+    m_sDocumentSubject = sDocumentSubject;
+  }
+
   @Nonnull
   public List <? extends PLPageSet> getAllPageSets ()
   {
@@ -115,13 +126,13 @@ public class PageLayoutPDF
         aProperties.setAuthor (VendorInfo.getVendorName () + " " + VendorInfo.getVendorURLWithoutProtocol ());
         aProperties.setCreationDate (Calendar.getInstance ());
         aProperties.setCreator (VendorInfo.getVendorName ());
+        if (StringHelper.hasText (m_sDocumentTitle))
+          aProperties.setTitle (m_sDocumentTitle);
         if (StringHelper.hasText (m_sDocumentKeywords))
           aProperties.setKeywords (m_sDocumentKeywords);
-        if (StringHelper.hasText (m_sDocumentTitle))
-        {
-          aProperties.setSubject (m_sDocumentTitle);
-          aProperties.setTitle (m_sDocumentTitle);
-        }
+        if (StringHelper.hasText (m_sDocumentSubject))
+          aProperties.setSubject (m_sDocumentSubject);
+        aProperties.setProducer ("phloc-report - https://code.google.com/p/phloc-webbasics/");
         // add the created properties
         aDoc.setDocumentInformation (aProperties);
       }
