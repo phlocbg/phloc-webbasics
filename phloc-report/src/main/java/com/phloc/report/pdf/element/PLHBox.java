@@ -25,6 +25,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ import com.phloc.report.pdf.spec.WidthSpec;
  */
 public class PLHBox extends AbstractPLElement <PLHBox>
 {
-  private static final class Column
+  protected static final class Column
   {
     private final AbstractPLElement <?> m_aElement;
     private final WidthSpec m_aWidth;
@@ -74,13 +75,13 @@ public class PLHBox extends AbstractPLElement <PLHBox>
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (PLHBox.class);
 
-  private final List <Column> m_aColumns = new ArrayList <Column> ();
+  protected final List <Column> m_aColumns = new ArrayList <Column> ();
   private int m_nStarWidthItems = 0;
   private BorderSpec m_aColumnBorder = BorderSpec.BORDER0;
   private Color m_aColumnFillColor = null;
   // prepare result (without padding and margin)
-  private float [] m_aWidth;
-  private float [] m_aHeight;
+  protected float [] m_aPreparedWidth;
+  protected float [] m_aPreparedHeight;
 
   public PLHBox ()
   {}
@@ -154,10 +155,11 @@ public class PLHBox extends AbstractPLElement <PLHBox>
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
   {
-    m_aWidth = new float [m_aColumns.size ()];
-    m_aHeight = new float [m_aColumns.size ()];
+    m_aPreparedWidth = new float [m_aColumns.size ()];
+    m_aPreparedHeight = new float [m_aColumns.size ()];
     final float fAvailableWidth = aCtx.getAvailableWidth ();
     final float fAvailableHeight = aCtx.getAvailableHeight ();
     float fUsedWidth = 0;
@@ -185,8 +187,8 @@ public class PLHBox extends AbstractPLElement <PLHBox>
         fRestWidth -= fItemWidthFull;
         fUsedHeight = Math.max (fUsedHeight, fItemHeightFull);
         // Remember width and height for element (without padding and margin)
-        m_aWidth[nIndex] = fItemWidth;
-        m_aHeight[nIndex] = fItemHeight;
+        m_aPreparedWidth[nIndex] = fItemWidth;
+        m_aPreparedHeight[nIndex] = fItemHeight;
       }
       ++nIndex;
     }
@@ -211,8 +213,8 @@ public class PLHBox extends AbstractPLElement <PLHBox>
         fUsedWidth += fItemWidthFull;
         fUsedHeight = Math.max (fUsedHeight, fItemHeightFull);
         // Remember width and height for element (without padding and margin)
-        m_aWidth[nIndex] = fItemWidth;
-        m_aHeight[nIndex] = fItemHeight;
+        m_aPreparedWidth[nIndex] = fItemWidth;
+        m_aPreparedHeight[nIndex] = fItemHeight;
       }
       ++nIndex;
     }
@@ -235,9 +237,9 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     for (final Column aColumn : m_aColumns)
     {
       final AbstractPLElement <?> aElement = aColumn.getElement ();
-      final float fItemWidth = m_aWidth[nIndex];
+      final float fItemWidth = m_aPreparedWidth[nIndex];
       final float fItemWidthWithPadding = fItemWidth + aElement.getPadding ().getXSum ();
-      final float fItemHeight = m_aHeight[nIndex];
+      final float fItemHeight = m_aPreparedHeight[nIndex];
       final float fItemHeightWithPadding = fItemHeight + aElement.getPadding ().getYSum ();
       final RenderingContext aItemCtx = new RenderingContext (aCtx,
                                                               fCurX + aElement.getMargin ().getLeft (),

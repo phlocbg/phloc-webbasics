@@ -25,6 +25,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
  */
 public class PLVBox extends AbstractPLElement <PLVBox>
 {
-  private static final class Row
+  protected static final class Row
   {
     private final AbstractPLElement <?> m_aElement;
 
@@ -63,12 +64,12 @@ public class PLVBox extends AbstractPLElement <PLVBox>
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (PLVBox.class);
 
-  private final List <Row> m_aRows = new ArrayList <Row> ();
+  protected final List <Row> m_aRows = new ArrayList <Row> ();
   private BorderSpec m_aRowBorder = BorderSpec.BORDER0;
   private Color m_aRowFillColor = null;
   // prepare result (without padding and margin)
-  private float [] m_aWidth;
-  private float [] m_aHeight;
+  protected float [] m_aPreparedWidth;
+  protected float [] m_aPreparedHeight;
 
   public PLVBox ()
   {}
@@ -139,10 +140,11 @@ public class PLVBox extends AbstractPLElement <PLVBox>
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
   {
-    m_aWidth = new float [m_aRows.size ()];
-    m_aHeight = new float [m_aRows.size ()];
+    m_aPreparedWidth = new float [m_aRows.size ()];
+    m_aPreparedHeight = new float [m_aRows.size ()];
     final float fAvailableWidth = aCtx.getAvailableWidth ();
     final float fAvailableHeight = aCtx.getAvailableHeight ();
     float fUsedWidth = 0;
@@ -163,8 +165,8 @@ public class PLVBox extends AbstractPLElement <PLVBox>
       fUsedWidth = Math.max (fUsedWidth, fItemWidthFull);
       fUsedHeight += fItemHeightFull;
       // Remember width and height for element (without padding and margin)
-      m_aWidth[nIndex] = fItemWidth;
-      m_aHeight[nIndex] = fItemHeight;
+      m_aPreparedWidth[nIndex] = fItemWidth;
+      m_aPreparedHeight[nIndex] = fItemHeight;
       ++nIndex;
     }
 
@@ -186,9 +188,9 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     for (final Row aRow : m_aRows)
     {
       final AbstractPLElement <?> aElement = aRow.getElement ();
-      final float fItemWidth = m_aWidth[nIndex];
+      final float fItemWidth = m_aPreparedWidth[nIndex];
       final float fItemWidthWithPadding = fItemWidth + aElement.getPadding ().getXSum ();
-      final float fItemHeight = m_aHeight[nIndex];
+      final float fItemHeight = m_aPreparedHeight[nIndex];
       final float fItemHeightWithPadding = fItemHeight + aElement.getPadding ().getYSum ();
       final RenderingContext aItemCtx = new RenderingContext (aCtx,
                                                               fCurX + aElement.getMargin ().getLeft (),
