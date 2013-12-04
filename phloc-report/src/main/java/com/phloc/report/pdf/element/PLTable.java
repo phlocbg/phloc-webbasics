@@ -101,6 +101,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     return this;
   }
 
+  @Nonnull
   public SplitResult splitElements (final float fAvailableHeight)
   {
     // TODO
