@@ -55,11 +55,13 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   {
     private final AbstractPLElement <?> m_aElement;
     private final SizeSpec m_aSize;
+    private final SizeSpec m_aSizeFull;
 
     ElementWithSize (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final SizeSpec aSize)
     {
       m_aElement = aElement;
       m_aSize = aSize;
+      m_aSizeFull = aSize.plus (aElement.getMarginPlusPaddingXSum (), aElement.getMarginPlusPaddingYSum ());
     }
 
     @Nonnull
@@ -77,6 +79,17 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     public float getHeight ()
     {
       return m_aSize.getHeight ();
+    }
+
+    @Nonnull
+    public SizeSpec getSizeFull ()
+    {
+      return m_aSizeFull;
+    }
+
+    public float getHeightFull ()
+    {
+      return m_aSizeFull.getHeight ();
     }
   }
 
