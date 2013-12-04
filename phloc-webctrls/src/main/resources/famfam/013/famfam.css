@@ -1,9 +1,6 @@
 .icon-famfam {   
   background: url(famfam.png) no-repeat top left; 
 }
-* > .icon-famfam {   
-  padding-left: 18px !important;
-}
 .famfam-accept{ background-position: 0 0; width: 16px; height: 16px; } 
 .famfam-add{ background-position: 0 -17px; width: 16px; height: 16px; } 
 .famfam-anchor{ background-position: 0 -34px; width: 16px; height: 16px; } 
