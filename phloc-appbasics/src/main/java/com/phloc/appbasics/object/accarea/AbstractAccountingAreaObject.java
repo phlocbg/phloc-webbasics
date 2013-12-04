@@ -59,6 +59,13 @@ public abstract class AbstractAccountingAreaObject extends AbstractBaseObject im
       throw new NullPointerException ("client");
     if (aAccountingArea == null)
       throw new NullPointerException ("accountingArea");
+    if (!aAccountingArea.getClientID ().equals (aClient.getID ()))
+      throw new IllegalArgumentException ("The passed accounting area '" +
+                                          aAccountingArea.getID () +
+                                          "' does not belong to the passed client '" +
+                                          aClient.getID () +
+                                          "'!");
+
     m_aClient = aClient;
     m_aAccountingArea = aAccountingArea;
   }
