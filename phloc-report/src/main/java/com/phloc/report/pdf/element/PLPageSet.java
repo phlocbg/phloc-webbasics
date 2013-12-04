@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.report.pdf.element.IPLSplittableElement.SplitResult;
 import com.phloc.report.pdf.render.ERenderingOption;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
@@ -50,17 +51,44 @@ import com.phloc.report.pdf.spec.SizeSpec;
  */
 public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 {
+  public static final class ElementWithSize
+  {
+    private final AbstractPLElement <?> m_aElement;
+    private final SizeSpec m_aSize;
+
+    ElementWithSize (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final SizeSpec aSize)
+    {
+      m_aElement = aElement;
+      m_aSize = aSize;
+    }
+
+    @Nonnull
+    public AbstractPLElement <?> getElement ()
+    {
+      return m_aElement;
+    }
+
+    @Nonnull
+    public SizeSpec getSize ()
+    {
+      return m_aSize;
+    }
+
+    public float getHeight ()
+    {
+      return m_aSize.getHeight ();
+    }
+  }
+
   public static final class PageSetPrepareResult
   {
     private float m_fHeaderHeight = Float.NaN;
-    private final float [] m_aContentHeight;
+    private final List <Float> m_aContentHeight = new ArrayList <Float> ();
     private float m_fFooterHeight = Float.NaN;
     private final List <List <AbstractPLElement <?>>> m_aPerPageElements = new ArrayList <List <AbstractPLElement <?>>> ();
 
-    PageSetPrepareResult (@Nonnegative final int nElementCount)
-    {
-      m_aContentHeight = new float [nElementCount];
-    }
+    PageSetPrepareResult ()
+    {}
 
     void setHeaderHeight (final float fHeaderHeight)
     {
@@ -72,14 +100,14 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       return m_fHeaderHeight;
     }
 
-    void setContentHeight (@Nonnegative final int nIndex, final float fContentHeight)
+    void addContentHeight (final float fContentHeight)
     {
-      m_aContentHeight[nIndex] = fContentHeight;
+      m_aContentHeight.add (Float.valueOf (fContentHeight));
     }
 
     public float getContentHeight (@Nonnegative final int nIndex)
     {
-      return m_aContentHeight[nIndex];
+      return m_aContentHeight.get (nIndex).floatValue ();
     }
 
     void setFooterHeight (final float fFooterHeight)
@@ -143,7 +171,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   @Nonnegative
   public float getAvailableWidth ()
   {
-    return m_aPageSize.getWidth () - getMargin ().getXSum () - getPadding ().getXSum ();
+    return m_aPageSize.getWidth () - getMarginPlusPaddingXSum ();
   }
 
   /**
@@ -152,7 +180,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   @Nonnegative
   public float getAvailableHeight ()
   {
-    return m_aPageSize.getHeight () - getMargin ().getYSum () - getPadding ().getYSum ();
+    return m_aPageSize.getHeight () - getMarginPlusPaddingYSum ();
   }
 
   /**
@@ -227,7 +255,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   @Nonnull
   public PageSetPrepareResult prepareAllPages () throws IOException
   {
-    final PageSetPrepareResult ret = new PageSetPrepareResult (m_aElements.size ());
+    // The result element
+    final PageSetPrepareResult ret = new PageSetPrepareResult ();
 
     // Prepare page header
     if (m_aPageHeader != null)
@@ -235,27 +264,21 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       // Page header does not care about page padding
       final RenderPreparationContext aRPC = new RenderPreparationContext (m_aPageSize.getWidth () -
                                                                               getMargin ().getXSum () -
-                                                                              m_aPageHeader.getMargin ().getXSum () -
-                                                                              m_aPageHeader.getPadding ().getXSum (),
+                                                                              m_aPageHeader.getMarginPlusPaddingXSum (),
                                                                           getMargin ().getTop () -
-                                                                              m_aPageHeader.getMargin ().getYSum () -
-                                                                              m_aPageHeader.getPadding ().getYSum ());
+                                                                              m_aPageHeader.getMarginPlusPaddingYSum ());
       ret.setHeaderHeight (m_aPageHeader.prepare (aRPC).getHeight ());
     }
 
     // Prepare content elements
-    int nIndex = 0;
     for (final AbstractPLElement <?> aElement : m_aElements)
     {
       final RenderPreparationContext aRPC = new RenderPreparationContext (getAvailableWidth () -
-                                                                              aElement.getMargin ().getXSum () -
-                                                                              aElement.getPadding ().getXSum (),
+                                                                              aElement.getMarginPlusPaddingXSum (),
                                                                           getAvailableHeight () -
-                                                                              aElement.getMargin ().getYSum () -
-                                                                              aElement.getPadding ().getYSum ());
-      final float fHeight = aElement.prepare (aRPC).getHeight ();
-      ret.setContentHeight (nIndex, fHeight);
-      nIndex++;
+                                                                              aElement.getMarginPlusPaddingYSum ());
+      final SizeSpec aElementSize = aElement.prepare (aRPC);
+      ret.addContentHeight (aElementSize.getHeight ());
     }
 
     // Prepare footer
@@ -264,38 +287,51 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       // Page footer does not care about page padding
       final RenderPreparationContext aRPC = new RenderPreparationContext (m_aPageSize.getWidth () -
                                                                               getMargin ().getXSum () -
-                                                                              m_aPageFooter.getMargin ().getXSum () -
-                                                                              m_aPageFooter.getPadding ().getXSum (),
+                                                                              m_aPageFooter.getMarginPlusPaddingXSum (),
                                                                           getMargin ().getBottom () -
-                                                                              m_aPageFooter.getMargin ().getYSum () -
-                                                                              m_aPageFooter.getPadding ().getYSum ());
+                                                                              m_aPageFooter.getMarginPlusPaddingYSum ());
       ret.setFooterHeight (m_aPageFooter.prepare (aRPC).getHeight ());
     }
 
     // Split into page pieces
-
     final float fYTop = getYTop ();
     final float fYLeast = getMargin ().getBottom () + getPadding ().getBottom ();
 
     {
       List <AbstractPLElement <?>> aCurPageElements = new ArrayList <AbstractPLElement <?>> ();
-      int nElementIndex = 0;
 
       // Start at the top
       float fCurY = fYTop;
-      for (final AbstractPLElement <?> aElement : m_aElements)
+
+      // Create a copy of the list, so that we can safely modify it in case of
+      // splitting
+      final List <AbstractPLElement <?>> aRealElements = ContainerHelper.newList (m_aElements);
+      int nRealElementIndex = 0;
+      while (!aRealElements.isEmpty ())
       {
-        final float fThisHeight = ret.getContentHeight (nElementIndex);
-        final float fThisHeightFull = fThisHeight +
-                                      aElement.getPadding ().getYSum () +
-                                      aElement.getMargin ().getYSum ();
+        // Use the first element
+        final AbstractPLElement <?> aElement = aRealElements.remove (0);
+        final float fThisHeight = ret.getContentHeight (nRealElementIndex);
+        final float fThisHeightFull = fThisHeight + aElement.getMarginPlusPaddingYSum ();
         if (fCurY - fThisHeightFull < fYLeast)
         {
           // Next page
           if (aCurPageElements.isEmpty ())
           {
             // one element too large for a page
-            s_aLogger.warn ("A single element does not fit onto a single page!");
+            if (aElement instanceof IPLSplittableElement)
+            {
+              // split elements
+              final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
+              final SplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
+
+              // Re-add them to the list and try again
+              aRealElements.add (0, aSplitResult.getFirstElement ());
+              aRealElements.add (1, aSplitResult.getSecondElement ());
+              continue;
+            }
+
+            s_aLogger.warn ("A single element does not fit onto a single page and is not splittable!");
           }
           else
           {
@@ -309,7 +345,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         // Add element to current page
         aCurPageElements.add (aElement);
         fCurY -= fThisHeightFull;
-        nElementIndex++;
+        nRealElementIndex++;
       }
 
       // Add elements to last page

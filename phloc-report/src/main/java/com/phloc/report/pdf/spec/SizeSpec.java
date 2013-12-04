@@ -85,6 +85,18 @@ public class SizeSpec
     return new PDRectangle (m_fWidth, m_fHeight);
   }
 
+  @Nonnull
+  public SizeSpec plus (final float fWidth, final float fHeight)
+  {
+    return new SizeSpec (m_fWidth + fWidth, m_fHeight + fHeight);
+  }
+
+  @Nonnull
+  public SizeSpec minus (final float fWidth, final float fHeight)
+  {
+    return new SizeSpec (m_fWidth - fWidth, m_fHeight - fHeight);
+  }
+
   @Override
   public boolean equals (final Object o)
   {

@@ -226,6 +226,36 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     return m_aPadding;
   }
 
+  public float getMarginPlusPaddingLeft ()
+  {
+    return m_aMargin.getLeft () + m_aPadding.getLeft ();
+  }
+
+  public float getMarginPlusPaddingTop ()
+  {
+    return m_aMargin.getTop () + m_aPadding.getTop ();
+  }
+
+  public float getMarginPlusPaddingRight ()
+  {
+    return m_aMargin.getRight () + m_aPadding.getRight ();
+  }
+
+  public float getMarginPlusPaddingBottom ()
+  {
+    return m_aMargin.getBottom () + m_aPadding.getBottom ();
+  }
+
+  public float getMarginPlusPaddingXSum ()
+  {
+    return m_aMargin.getXSum () + m_aPadding.getXSum ();
+  }
+
+  public float getMarginPlusPaddingYSum ()
+  {
+    return m_aMargin.getYSum () + m_aPadding.getYSum ();
+  }
+
   /**
    * Set all border values (left, top, right, bottom) to the same value. This
    * method may not be called after an element got prepared!

@@ -76,12 +76,22 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     return this;
   }
 
+  /**
+   * @return The number of header rows. By default 0. Always &ge; 0.
+   */
   @Nonnegative
   public int getHeaderRowCount ()
   {
     return m_nHeaderRowCount;
   }
 
+  /**
+   * Set the number of header rows in this table.
+   * 
+   * @param nHeaderRowCount
+   *        The number of header rows, to be repeated by page. Must be &ge; 0.
+   * @return this
+   */
   @Nonnull
   public PLTable setHeaderRowCount (@Nonnegative final int nHeaderRowCount)
   {
@@ -89,6 +99,12 @@ public class PLTable extends PLVBox implements IPLSplittableElement
       throw new IllegalArgumentException ("HeaderRowCount must be >= 0: " + nHeaderRowCount);
     m_nHeaderRowCount = nHeaderRowCount;
     return this;
+  }
+
+  public SplitResult splitElements (final float fAvailableHeight)
+  {
+    // TODO
+    return null;
   }
 
   @Nonnull

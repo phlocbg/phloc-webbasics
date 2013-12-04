@@ -156,11 +156,11 @@ public class PLVBox extends AbstractPLElement <PLVBox>
       // Full width of this element
       final float fItemWidthFull = fAvailableWidth;
       // Effective content width of this element
-      final float fItemWidth = fItemWidthFull - aElement.getMargin ().getXSum () - aElement.getPadding ().getXSum ();
+      final float fItemWidth = fItemWidthFull - aElement.getMarginPlusPaddingXSum ();
       // Prepare child element
       final float fItemHeight = aElement.prepare (new RenderPreparationContext (fItemWidth, fAvailableHeight))
                                         .getHeight ();
-      final float fItemHeightFull = fItemHeight + aElement.getMargin ().getYSum () + aElement.getPadding ().getYSum ();
+      final float fItemHeightFull = fItemHeight + aElement.getMarginPlusPaddingYSum ();
       // Update used width and height
       fUsedWidth = Math.max (fUsedWidth, fItemWidthFull);
       fUsedHeight += fItemHeightFull;
