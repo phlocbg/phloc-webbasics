@@ -30,6 +30,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
@@ -87,6 +88,13 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     final Row aItem = new Row (aElement);
     m_aRows.add (aItem);
     return this;
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getRowAtIndex (@Nonnegative final int nIndex)
+  {
+    final Row aRow = ContainerHelper.getSafe (m_aRows, nIndex);
+    return aRow == null ? null : aRow.getElement ();
   }
 
   @Nonnull
@@ -174,7 +182,8 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     if (fUsedWidth - fAvailableWidth > 0.01)
       s_aLogger.warn ("VBox uses more width (" + fUsedWidth + ") than available (" + fAvailableWidth + ")!");
     if (fUsedHeight - fAvailableHeight > 0.01)
-      s_aLogger.warn ("VBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
+      if (!(this instanceof IPLSplittableElement))
+        s_aLogger.warn ("VBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
     return new SizeSpec (fUsedWidth, fUsedHeight);
   }
 

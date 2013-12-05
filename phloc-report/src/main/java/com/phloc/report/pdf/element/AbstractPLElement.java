@@ -116,6 +116,16 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
     return m_aPreparedSize;
   }
 
+  protected final void markAsPrepared (@Nonnull final SizeSpec aPreparedSize)
+  {
+    if (m_bPrepared)
+      throw new IllegalStateException ("Already prepared!");
+    if (aPreparedSize == null)
+      throw new NullPointerException ("preparedSize");
+    m_bPrepared = true;
+    m_aPreparedSize = aPreparedSize;
+  }
+
   /**
    * Abstract method to be implemented by subclasses.
    * 

@@ -2,29 +2,30 @@ package com.phloc.report.pdf.element;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface IPLSplittableElement
 {
   public static final class SplitResult
   {
-    private final AbstractPLElement <?> m_aFirstElement;
-    private final AbstractPLElement <?> m_aSecondElement;
+    private final PLElementWithHeight m_aFirstElement;
+    private final PLElementWithHeight m_aSecondElement;
 
-    public SplitResult (@Nonnull final AbstractPLElement <?> aFirstElement,
-                        @Nonnull final AbstractPLElement <?> aSecondElement)
+    public SplitResult (@Nonnull final PLElementWithHeight aFirstElement,
+                        @Nonnull final PLElementWithHeight aSecondElement)
     {
       m_aFirstElement = aFirstElement;
       m_aSecondElement = aSecondElement;
     }
 
     @Nonnull
-    public AbstractPLElement <?> getFirstElement ()
+    public PLElementWithHeight getFirstElement ()
     {
       return m_aFirstElement;
     }
 
     @Nonnull
-    public AbstractPLElement <?> getSecondElement ()
+    public PLElementWithHeight getSecondElement ()
     {
       return m_aSecondElement;
     }
@@ -36,8 +37,8 @@ public interface IPLSplittableElement
    * @param fAvailableHeight
    *        The available height without y-padding and y-margin of this element.
    *        Must be &ge; 0.
-   * @return Never <code>null</code>.
+   * @return <code>null</code> if splitting makes no sense.
    */
-  @Nonnull
+  @Nullable
   SplitResult splitElements (@Nonnegative float fAvailableHeight);
 }

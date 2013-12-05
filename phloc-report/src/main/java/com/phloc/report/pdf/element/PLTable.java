@@ -11,6 +11,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.WidthSpec;
 
 /**
@@ -101,11 +102,86 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     return this;
   }
 
-  @Nonnull
+  @Nullable
   public SplitResult splitElements (final float fAvailableHeight)
   {
-    // TODO
-    return null;
+    final PLTable aTable1 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
+    final PLTable aTable2 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
+
+    float fTable1Width = 0;
+    float fTable1Height = 0;
+    for (int i = 0; i < m_nHeaderRowCount; ++i)
+    {
+      final AbstractPLElement <?> aHeaderRow = getRowAtIndex (i);
+      aTable1.addRow (aHeaderRow);
+      aTable2.addRow (aHeaderRow);
+
+      fTable1Width = Math.max (fTable1Width, m_aPreparedWidth[i] + aHeaderRow.getMarginPlusPaddingYSum ());
+      fTable1Height += m_aPreparedHeight[i] + aHeaderRow.getMarginPlusPaddingYSum ();
+    }
+    float fTable2Width = fTable1Width;
+    float fTable2Height = fTable1Height;
+
+    final int nMaxRows = getRowCount ();
+    boolean bOnTable1 = true;
+    for (int i = m_nHeaderRowCount; i < nMaxRows; ++i)
+    {
+      final AbstractPLElement <?> aRow = getRowAtIndex (i);
+      final float fRowHeightFull = m_aPreparedHeight[i] + aRow.getMarginPlusPaddingYSum ();
+      if (bOnTable1 && fTable1Height + fRowHeightFull <= fAvailableHeight)
+      {
+        aTable1.addRow (aRow);
+        fTable1Width = Math.max (fTable1Width, m_aPreparedWidth[i] + aRow.getMarginPlusPaddingYSum ());
+        fTable1Height += fRowHeightFull;
+      }
+      else
+      {
+        bOnTable1 = false;
+        aTable2.addRow (aRow);
+        fTable2Width = Math.max (fTable2Width, m_aPreparedWidth[i] + aRow.getMarginPlusPaddingYSum ());
+        fTable2Height += fRowHeightFull;
+      }
+    }
+
+    if (aTable1.getRowCount () == m_nHeaderRowCount)
+    {
+      // Splitting makes no sense!
+      return null;
+    }
+
+    // Including padding/margin
+    aTable1.markAsPrepared (new SizeSpec (fTable1Width, fTable1Height));
+    aTable2.markAsPrepared (new SizeSpec (fTable2Width, fTable2Height));
+
+    final float [] aWidth1 = new float [aTable1.getRowCount ()];
+    final float [] aHeight1 = new float [aTable1.getRowCount ()];
+    final float [] aWidth2 = new float [aTable2.getRowCount ()];
+    final float [] aHeight2 = new float [aTable2.getRowCount ()];
+    for (int i = 0; i < m_nHeaderRowCount; ++i)
+    {
+      aWidth1[i] = aWidth2[i] = m_aPreparedWidth[i];
+      aHeight1[i] = aHeight2[i] = m_aPreparedHeight[i];
+    }
+
+    for (int i = m_nHeaderRowCount; i < aTable1.getRowCount (); ++i)
+    {
+      aWidth1[i] = m_aPreparedWidth[i];
+      aHeight1[i] = m_aPreparedHeight[i];
+    }
+    aTable1.m_aPreparedWidth = aWidth1;
+    aTable1.m_aPreparedHeight = aHeight1;
+
+    final int nDelta = nMaxRows - aTable2.getRowCount () - m_nHeaderRowCount;
+    for (int i = m_nHeaderRowCount; i < aTable2.getRowCount (); ++i)
+    {
+      aWidth2[i] = m_aPreparedWidth[i + nDelta];
+      aHeight2[i] = m_aPreparedHeight[i + nDelta];
+    }
+    aTable2.m_aPreparedWidth = aWidth2;
+    aTable2.m_aPreparedHeight = aHeight2;
+
+    return new SplitResult (new PLElementWithHeight (aTable1, fTable1Height), new PLElementWithHeight (aTable2,
+                                                                                                       fTable2Height));
   }
 
   @Nonnull
