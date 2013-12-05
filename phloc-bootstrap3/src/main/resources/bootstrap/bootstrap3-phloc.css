@@ -9,7 +9,12 @@
 @-o-viewport        { width: device-width; }
 @viewport           { width: device-width; }
 
-label.form-label{
+form > label.form-label{
+  text-align: right;
+  display:inline-block;
+}
+
+table > label.form-label{
   text-align: right;
   display:inline-block;
   width:100%;

@@ -22,9 +22,8 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.HCEM;
 import com.phloc.html.hc.html.HCLabel;
-import com.phloc.html.hc.html.HCStrong;
+import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
@@ -38,10 +37,10 @@ public class HCFormLabel extends HCLabel implements IFormLabel
   {
     IHCNode ret;
     if (eType.equals (ELabelType.MANDATORY))
-      ret = new HCStrong ().addChild (aNode);
+      ret = new HCSpan ().addChild (aNode);
     else
       if (eType.equals (ELabelType.ALTERNATIVE))
-        ret = new HCEM ().addChild (aNode);
+        ret = new HCSpan ().addChild (aNode);
       else
         ret = aNode;
     return ret;

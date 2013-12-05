@@ -43,7 +43,6 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
 import com.phloc.html.hc.htmlext.HCUtils;
-import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
 
@@ -132,13 +131,27 @@ public class BootstrapForm extends HCForm
   }
 
   @Nonnull
-  public BootstrapForm addFormGroup (@Nullable final String sLabel, @Nonnull final IHCNode aCtrl)
+  public BootstrapForm addFormGroup (@Nullable final String sLabel, @Nonnull final IHCNode aCtrls)
   {
-    return addFormGroup (sLabel, aCtrl, (IErrorList) null);
+    return addFormGroup (sLabel, aCtrls, (IErrorList) null);
   }
 
   @Nonnull
   public BootstrapForm addFormGroup (@Nullable final String sLabel,
+                                     @Nonnull final IHCNode aCtrls,
+                                     @Nullable final IErrorList aErrorList)
+  {
+    return addFormGroup (StringHelper.hasNoText (sLabel) ? null : new HCLabel ().addChild (sLabel), aCtrls, aErrorList);
+  }
+
+  @Nonnull
+  public BootstrapForm addFormGroup (@Nullable final HCLabel aLabel, @Nonnull final IHCNode aCtrls)
+  {
+    return addFormGroup (aLabel, aCtrls, (IErrorList) null);
+  }
+
+  @Nonnull
+  public BootstrapForm addFormGroup (@Nullable final HCLabel aLabel,
                                      @Nonnull final IHCNode aCtrls,
                                      @Nullable final IErrorList aErrorList)
   {
@@ -167,10 +180,16 @@ public class BootstrapForm extends HCForm
     {
       // Check box
       final HCDiv aCheckboxDiv = new HCDiv ().addClass (CBootstrapCSS.CHECKBOX);
-      final HCLabel aLabel = aCheckboxDiv.addAndReturnChild (new HCLabel ());
-      aLabel.addChild (aCtrls);
-      if (StringHelper.hasText (sLabel))
-        aLabel.addChild (new HCTextNode (" " + sLabel));
+      if (aLabel == null || !aLabel.hasChildren ())
+      {
+        aCheckboxDiv.addChild (new HCLabel ().addChild (aCtrls));
+      }
+      else
+      {
+        aLabel.addChild (0, aCtrls);
+        aLabel.addChild (1, " ");
+        aCheckboxDiv.addChild (aLabel);
+      }
 
       if (m_eFormType == EBootstrapFormType.HORIZONTAL)
         aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
@@ -184,10 +203,16 @@ public class BootstrapForm extends HCForm
       {
         // Radio button
         final HCDiv aRadioDiv = new HCDiv ().addClass (CBootstrapCSS.RADIO);
-        final HCLabel aLabel = aRadioDiv.addAndReturnChild (new HCLabel ());
-        aLabel.addChild (aCtrls);
-        if (StringHelper.hasText (sLabel))
-          aLabel.addChild (new HCTextNode (" " + sLabel));
+        if (aLabel == null || !aLabel.hasChildren ())
+        {
+          aRadioDiv.addChild (new HCLabel ().addChild (aCtrls));
+        }
+        else
+        {
+          aLabel.addChild (0, aCtrls);
+          aLabel.addChild (1, " ");
+          aRadioDiv.addChild (aLabel);
+        }
 
         if (m_eFormType == EBootstrapFormType.HORIZONTAL)
           aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
@@ -201,10 +226,9 @@ public class BootstrapForm extends HCForm
         // Other control - add in form group
         aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP);
 
-        if (StringHelper.hasText (sLabel))
+        if (aLabel != null && aLabel.hasChildren ())
         {
           // We have a label
-          final HCLabel aLabel = HCLabel.create (sLabel);
 
           // Screen reader only....
           if (m_eFormType == EBootstrapFormType.INLINE)
@@ -223,7 +247,7 @@ public class BootstrapForm extends HCForm
             {
               final AbstractHCEdit <?> aEdit = (AbstractHCEdit <?>) aFirstControl;
               if (StringHelper.hasNoText (aEdit.getPlaceholder ()))
-                aEdit.setPlaceholder (sLabel);
+                aEdit.setPlaceholder (aLabel.getPlainText ());
             }
           }
 

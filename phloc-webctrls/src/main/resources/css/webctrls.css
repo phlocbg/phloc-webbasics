@@ -33,3 +33,15 @@ tr.force_colspan {
   line-height: 0px !important;
   display: none !important;
 }
+
+label.form-label-mandatory span {
+  font-weight:bold;
+}
+
+label.form-label-alternative span {
+  font-style: italic;
+}
+
+label.form-label-optional {
+  font-weight: normal;
+}
