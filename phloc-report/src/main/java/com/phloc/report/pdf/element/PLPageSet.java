@@ -38,6 +38,7 @@ import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.report.pdf.element.IPLSplittableElement.SplitResult;
+import com.phloc.report.pdf.render.ERenderingElementType;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.render.RenderPreparationContext;
@@ -421,7 +422,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         {
           // Page header does not care about page padding
           // header top-left
-          final RenderingContext aRC = new RenderingContext (aContentStream,
+          final RenderingContext aRC = new RenderingContext (ERenderingElementType.PAGE_HEADER,
+                                                             aContentStream,
                                                              bDebug,
                                                              getMargin ().getLeft () +
                                                                  m_aPageHeader.getMargin ().getLeft (),
@@ -444,7 +446,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           final float fThisHeight = aElementWithHeight.getHeight ();
           final float fThisHeightWithPadding = fThisHeight + aElement.getPadding ().getYSum ();
 
-          final RenderingContext aRC = new RenderingContext (aContentStream,
+          final RenderingContext aRC = new RenderingContext (ERenderingElementType.CONTENT_ELEMENT,
+                                                             aContentStream,
                                                              bDebug,
                                                              fXLeft + aElement.getMargin ().getLeft (),
                                                              fCurY - aElement.getMargin ().getTop (),
@@ -460,7 +463,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         {
           // Page footer does not care about page padding
           // footer top-left
-          final RenderingContext aRC = new RenderingContext (aContentStream,
+          final RenderingContext aRC = new RenderingContext (ERenderingElementType.PAGE_FOOTER,
+                                                             aContentStream,
                                                              bDebug,
                                                              getMargin ().getLeft () +
                                                                  m_aPageFooter.getMargin ().getLeft (),

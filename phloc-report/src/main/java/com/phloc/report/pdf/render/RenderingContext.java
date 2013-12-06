@@ -31,8 +31,9 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
 @NotThreadSafe
-public class RenderingContext
+public final class RenderingContext
 {
+  private final ERenderingElementType m_eElementType;
   private final PDPageContentStreamWithCache m_aCS;
   private final boolean m_bDebugMode;
   private final float m_fStartLeft;
@@ -63,13 +64,15 @@ public class RenderingContext
                            final float fWidth,
                            final float fHeight)
   {
-    this (aCtx.getContentStream (), aCtx.isDebugMode (), fStartLeft, fStartTop, fWidth, fHeight);
+    this (aCtx.getElementType (), aCtx.getContentStream (), aCtx.isDebugMode (), fStartLeft, fStartTop, fWidth, fHeight);
     m_aPlaceholders.putAll (aCtx.m_aPlaceholders);
   }
 
   /**
+   * @param eElementType
+   *        Element type. May not be <code>null</code>.
    * @param aCS
-   *        Page content stream
+   *        Page content stream. May not be <code>null</code>.
    * @param bDebugMode
    *        debug mode?
    * @param fStartLeft
@@ -85,19 +88,42 @@ public class RenderingContext
    *        width without margin but including padding of the surrounding
    *        element
    */
-  public RenderingContext (@Nonnull final PDPageContentStreamWithCache aCS,
+  public RenderingContext (@Nonnull final ERenderingElementType eElementType,
+                           @Nonnull final PDPageContentStreamWithCache aCS,
                            final boolean bDebugMode,
                            final float fStartLeft,
                            final float fStartTop,
                            final float fWidth,
                            final float fHeight)
   {
+    if (eElementType == null)
+      throw new NullPointerException ("ElementType");
+    if (aCS == null)
+      throw new NullPointerException ("ContentStream");
+    m_eElementType = eElementType;
     m_aCS = aCS;
     m_bDebugMode = bDebugMode;
     m_fStartLeft = fStartLeft;
     m_fStartTop = fStartTop;
     m_fWidth = fWidth;
     m_fHeight = fHeight;
+  }
+
+  @Nonnull
+  public ERenderingElementType getElementType ()
+  {
+    return m_eElementType;
+  }
+
+  @Nonnull
+  public PDPageContentStreamWithCache getContentStream ()
+  {
+    return m_aCS;
+  }
+
+  public boolean isDebugMode ()
+  {
+    return m_bDebugMode;
   }
 
   @Nullable
@@ -133,17 +159,6 @@ public class RenderingContext
       throw new NullPointerException ("value");
     m_aPlaceholders.put (sName, sValue);
     return this;
-  }
-
-  @Nonnull
-  public PDPageContentStreamWithCache getContentStream ()
-  {
-    return m_aCS;
-  }
-
-  public boolean isDebugMode ()
-  {
-    return m_bDebugMode;
   }
 
   /**
