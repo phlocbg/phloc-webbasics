@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-report">
+  <entry date="2013-12-06" category="api" action="add">
+    <change>
+      <text locale="en">Added interface IPDDocumentCustomizer for PDDocument customization</text>
+    </change>
+  </entry>
   <release date="2013-12-05" version="1.0.2" />
   <entry date="2013-11-30" category="api" action="add">
     <change>

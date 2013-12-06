@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 
-import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.slf4j.Logger;
@@ -104,6 +103,12 @@ public class PageLayoutPDF
     return ContainerHelper.newList (m_aPageSets);
   }
 
+  /**
+   * Add a new page set
+   * 
+   * @param aPageSet
+   *        The page set to be added. May not be <code>null</code>.
+   */
   public void addPageSet (@Nonnull final PLPageSet aPageSet)
   {
     if (aPageSet == null)
@@ -113,7 +118,24 @@ public class PageLayoutPDF
 
   public void renderTo (@Nonnull @WillClose final OutputStream aOS) throws PDFCreationException
   {
-    // create a new invoice pdf
+    renderTo ((IPDDocumentCustomizer) null, aOS);
+  }
+
+  /**
+   * Render this layout to an OutputStream.
+   * 
+   * @param aCustomizer
+   *        The customizer to be invoked before the document is written to the
+   *        stream. May be <code>null</code>.
+   * @param aOS
+   *        The output stream to write to. May not be <code>null</code>. Is
+   *        closed automatically.
+   * @throws PDFCreationException
+   *         In case of an error
+   */
+  public void renderTo (@Nullable final IPDDocumentCustomizer aCustomizer, @Nonnull @WillClose final OutputStream aOS) throws PDFCreationException
+  {
+    // create a new document
     PDDocument aDoc = null;
 
     try
@@ -159,6 +181,10 @@ public class PageLayoutPDF
         nTotalPageIndex += aPR.getPageCount ();
       }
 
+      // Customize the whole document
+      if (aCustomizer != null)
+        aCustomizer.customizeDocument (aDoc);
+
       // save document to output stream
       aDoc.save (aOS);
 
@@ -169,9 +195,9 @@ public class PageLayoutPDF
     {
       throw new PDFCreationException ("IO Error", ex);
     }
-    catch (final COSVisitorException ex)
+    catch (final Throwable t)
     {
-      throw new PDFCreationException ("Internal error", ex);
+      throw new PDFCreationException ("Internal error", t);
     }
     finally
     {
