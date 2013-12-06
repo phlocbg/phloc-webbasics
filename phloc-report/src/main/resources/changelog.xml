@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-report">
+  <release date="2013-12-06" version="1.0.3" />
+  <entry date="2013-12-06" category="api" action="add">
+    <change>
+      <text locale="en">Added new interface IRenderingContextCustomizer to provide custom placeholders.</text>
+    </change>
+  </entry>
   <entry date="2013-12-06" category="api" action="add">
     <change>
       <text locale="en">Made placeholder handling more flexible</text>
