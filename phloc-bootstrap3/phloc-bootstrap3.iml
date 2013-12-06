@@ -5,9 +5,9 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -19,21 +19,21 @@
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.3" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-scopes:6.1.4" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-web:5.3.2" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-webscopes:6.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-webscopes:6.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-appbasics:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-masterdata:3.3.4" level="project" />
     <orderEntry type="library" name="Maven: net.sf.trove4j:trove4j:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-validation:3.1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-json:2.5.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-json2:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.2.3" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.2.3" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.2.3" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-json:2.5.1" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-json2:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-css:3.6.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-html:3.13.0" level="project" />
+    <orderEntry type="module" module-name="phloc-html" />
     <orderEntry type="library" name="Maven: com.phloc:phloc-webbasics:2.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.5.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-webctrls:1.3.5" level="project" />
+    <orderEntry type="module" module-name="phloc-webctrls" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-simple:1.7.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />

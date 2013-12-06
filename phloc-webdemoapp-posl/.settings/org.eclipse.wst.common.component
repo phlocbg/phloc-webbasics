@@ -5,13 +5,10 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
-        <dependent-module archiveName="phloc-html-3.13.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-html/phloc-html">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="phloc-bootstrap3-1.0.8-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-bootstrap3/phloc-bootstrap3">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="phloc-webdemoapp"/>
         <property name="java-output-path" value="/phloc-webdemoapp/target/classes"/>
+        <property name="context-root" value="phloc-webdemoapp-posl"/>
     </wb-module>
 </project-modules>
