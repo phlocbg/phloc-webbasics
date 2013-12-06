@@ -23,7 +23,7 @@
   <release date="2013-12-05" version="1.0.2" />
   <entry date="2013-11-30" category="api" action="add">
     <change>
-      <text locale="en">Added PLTable which can split across muliple pages</text>
+      <text locale="en">Added PLTable which can split across multiple pages</text>
     </change>
   </entry>
   <release date="2013-11-30" version="1.0.1" />
