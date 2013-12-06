@@ -34,11 +34,11 @@ tr.force_colspan {
   display: none !important;
 }
 
-label.form-label-mandatory span {
+label.form-label-mandatory {
   font-weight:bold;
 }
 
-label.form-label-alternative span {
+label.form-label-alternative {
   font-style: italic;
 }
 

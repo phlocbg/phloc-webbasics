@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
-import com.phloc.html.hc.IHCElementWithChildren;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.webctrls.custom.ELabelType;
 
@@ -43,13 +43,20 @@ public final class HCFormLabelUtils
   {}
 
   @Nonnull
-  public static String getSuffix (@Nonnull final ELabelType eType, final boolean bAppendColon)
+  public static String getSuffixString (@Nonnull final ELabelType eType)
   {
     if (eType.equals (ELabelType.MANDATORY))
-      return SIGN_MANDATORY + (bAppendColon ? LABEL_END : "");
+      return SIGN_MANDATORY;
     if (eType.equals (ELabelType.ALTERNATIVE))
-      return SIGN_ALTERNATIVE + (bAppendColon ? LABEL_END : "");
-    return bAppendColon ? LABEL_END : "";
+      return SIGN_ALTERNATIVE;
+    return "";
+  }
+
+  @Nonnull
+  public static String getSuffix (@Nonnull final ELabelType eType, final boolean bAppendColon)
+  {
+    final String sSuffix = getSuffixString (eType);
+    return bAppendColon ? sSuffix + LABEL_END : sSuffix;
   }
 
   @Nonnull
@@ -69,8 +76,8 @@ public final class HCFormLabelUtils
   }
 
   @Nonnull
-  public static IHCElementWithChildren <?> getNodeWithState (@Nonnull final IHCElementWithChildren <?> aNode,
-                                                             @Nonnull final ELabelType eType)
+  public static <T extends IHCNodeWithChildren <?>> T getNodeWithState (@Nonnull final T aNode,
+                                                                        @Nonnull final ELabelType eType)
   {
     if (aNode == null)
       throw new NullPointerException ("node");
@@ -79,7 +86,21 @@ public final class HCFormLabelUtils
 
     // Only append the suffix, if at least one text child is present
     if (HCUtils.recursiveContainsAtLeastOneTextNode (aNode))
-      aNode.addChild (getSuffix (eType, true));
+    {
+      final String sPlainText = aNode.getPlainText ();
+      if (sPlainText.length () > 0)
+      {
+        final String sSuffixString = getSuffixString (eType);
+        if (StringHelper.hasText (sSuffixString) && StringHelper.endsWith (sPlainText, sSuffixString))
+        {
+          // Append only colon
+          aNode.addChild (LABEL_END);
+        }
+        else
+          if (!StringHelper.endsWith (sPlainText, LABEL_END))
+            aNode.addChild (getSuffix (eType, true));
+      }
+    }
     return aNode;
   }
 }

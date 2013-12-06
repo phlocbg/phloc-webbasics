@@ -21,9 +21,8 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.text.IPredefinedLocaleTextProvider;
 import com.phloc.html.hc.IHCElementWithChildren;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCLabel;
-import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.IFormLabel;
@@ -31,20 +30,6 @@ import com.phloc.webctrls.custom.IFormLabel;
 public class HCFormLabel extends HCLabel implements IFormLabel
 {
   private final ELabelType m_eType;
-
-  @Nonnull
-  private static IHCNode _modifyNode (@Nonnull final IHCNode aNode, @Nonnull final ELabelType eType)
-  {
-    IHCNode ret;
-    if (eType.equals (ELabelType.MANDATORY))
-      ret = new HCSpan ().addChild (aNode);
-    else
-      if (eType.equals (ELabelType.ALTERNATIVE))
-        ret = new HCSpan ().addChild (aNode);
-      else
-        ret = aNode;
-    return ret;
-  }
 
   @SuppressWarnings ("deprecation")
   private void _assignClasses (@Nonnull final ELabelType eType)
@@ -64,17 +49,17 @@ public class HCFormLabel extends HCLabel implements IFormLabel
     }
   }
 
-  protected HCFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
+  public HCFormLabel (@Nonnull final String sText, @Nonnull final ELabelType eType)
   {
     _assignClasses (eType);
-    addChild (_modifyNode (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType)), eType));
+    addChild (new HCTextNode (HCFormLabelUtils.getTextWithState (sText, eType)));
     m_eType = eType;
   }
 
-  protected HCFormLabel (@Nonnull final IHCElementWithChildren <?> aNode, @Nonnull final ELabelType eType)
+  public HCFormLabel (@Nonnull final IHCNodeWithChildren <?> aNode, @Nonnull final ELabelType eType)
   {
     _assignClasses (eType);
-    addChild (_modifyNode (HCFormLabelUtils.getNodeWithState (aNode, eType), eType));
+    addChild (HCFormLabelUtils.getNodeWithState (aNode, eType));
     m_eType = eType;
   }
 
