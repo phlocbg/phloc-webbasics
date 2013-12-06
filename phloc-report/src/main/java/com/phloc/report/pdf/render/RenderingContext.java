@@ -17,12 +17,15 @@
  */
 package com.phloc.report.pdf.render;
 
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 
 @NotThreadSafe
 public class RenderingContext
@@ -33,7 +36,7 @@ public class RenderingContext
   private final float m_fStartTop;
   private final float m_fWidth;
   private final float m_fHeight;
-  private final Map <ERenderingOption, String> m_aOptions = new EnumMap <ERenderingOption, String> (ERenderingOption.class);
+  private final Map <String, String> m_aOptions = new LinkedHashMap <String, String> ();
 
   /**
    * @param aCtx
@@ -105,9 +108,17 @@ public class RenderingContext
   {
     if (eOption == null)
       throw new NullPointerException ("option");
+    return setOption (eOption.getPlaceholder (), sValue);
+  }
+
+  @Nonnull
+  public RenderingContext setOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
+  {
+    if (StringHelper.hasNoText (sName))
+      throw new NullPointerException ("name");
     if (sValue == null)
       throw new NullPointerException ("value");
-    m_aOptions.put (eOption, sValue);
+    m_aOptions.put (sName, sValue);
     return this;
   }
 
@@ -116,7 +127,13 @@ public class RenderingContext
   {
     if (eOption == null)
       throw new NullPointerException ("option");
-    return m_aOptions.get (eOption);
+    return getOption (eOption.getPlaceholder ());
+  }
+
+  @Nullable
+  public String getOption (@Nullable final String sName)
+  {
+    return m_aOptions.get (sName);
   }
 
   @Nonnull

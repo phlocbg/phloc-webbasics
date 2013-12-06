@@ -116,6 +116,15 @@ public class PageLayoutPDF
     m_aPageSets.add (aPageSet);
   }
 
+  /**
+   * Render this layout to an OutputStream.
+   * 
+   * @param aOS
+   *        The output stream to write to. May not be <code>null</code>. Is
+   *        closed automatically.
+   * @throws PDFCreationException
+   *         In case of an error
+   */
   public void renderTo (@Nonnull @WillClose final OutputStream aOS) throws PDFCreationException
   {
     renderTo ((IPDDocumentCustomizer) null, aOS);
