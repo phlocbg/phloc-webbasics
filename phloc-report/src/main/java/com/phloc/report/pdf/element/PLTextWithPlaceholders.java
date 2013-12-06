@@ -17,20 +17,16 @@
  */
 package com.phloc.report.pdf.element;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.report.pdf.render.ERenderingOption;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.FontSpec;
 
 /**
- * Render text but before that replace placeholders defined in
- * {@link ERenderingOption}.
+ * Render text but before that replace all placeholders defined in the
+ * {@link RenderingContext}.
  * 
  * @author Philip Helger
  */
@@ -45,16 +41,7 @@ public class PLTextWithPlaceholders extends PLText
   @OverrideOnDemand
   protected String getTextToDraw (@Nonnull final String sText, @Nonnull final RenderingContext aCtx)
   {
-    final Map <String, String> aReplacements = new HashMap <String, String> ();
-    // Check if any of the ERenderingOption elements is contained in the text
-    for (final ERenderingOption eOption : ERenderingOption.values ())
-    {
-      final String sCtxValue = aCtx.getOption (eOption);
-      if (sCtxValue != null)
-        aReplacements.put (eOption.getPlaceholder (), sCtxValue);
-    }
-
     // Replace all at once
-    return StringHelper.replaceMultiple (sText, aReplacements);
+    return StringHelper.replaceMultiple (sText, aCtx.getAllPlaceholders ());
   }
 }

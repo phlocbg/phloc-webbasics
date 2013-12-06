@@ -38,8 +38,8 @@ import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.report.pdf.element.IPLSplittableElement.SplitResult;
-import com.phloc.report.pdf.render.ERenderingOption;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
+import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
@@ -356,7 +356,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
    *        The PDDocument. May not be <code>null</code>.
    * @param bDebug
    *        <code>true</code> for debug output
-   * @param nTotalPageIndex
+   * @param nPageSetIndex
+   *        Page set index. Always &ge; 0.
+   * @param nTotalPageStartIndex
    *        Total page index. Always &ge; 0.
    * @param nTotalPageCount
    *        Total page count. Always &ge; 0.
@@ -365,7 +367,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   public void renderAllPages (@Nonnull final PageSetPrepareResult aPrepareResult,
                               @Nonnull final PDDocument aDoc,
                               final boolean bDebug,
-                              @Nonnegative final int nTotalPageIndex,
+                              @Nonnegative final int nPageSetIndex,
+                              @Nonnegative final int nTotalPageStartIndex,
                               @Nonnegative final int nTotalPageCount) throws IOException
   {
     // Start at the left
@@ -377,6 +380,12 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     final int nPageCount = aPrepareResult.getPageCount ();
     for (final List <PLElementWithHeight> aPerPage : aPrepareResult.directGetPerPageElements ())
     {
+      final RenderPageIndex aPageIndex = new RenderPageIndex (nPageSetIndex,
+                                                              nPageIndex,
+                                                              nPageCount,
+                                                              nTotalPageStartIndex + nPageIndex,
+                                                              nTotalPageCount);
+
       // Layout in memory
       final PDPage aPage = new PDPage (m_aPageSize.getAsRectangle ());
       aDoc.addPage (aPage);
@@ -423,10 +432,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                                  m_aPageHeader.getMargin ().getXSum (),
                                                              aPrepareResult.getHeaderHeight () +
                                                                  m_aPageHeader.getPadding ().getYSum ());
-          aRC.setOption (ERenderingOption.PAGESET_PAGENUM_CURRENT, nPageIndex + 1);
-          aRC.setOption (ERenderingOption.PAGESET_PAGENUM_TOTAL, nPageCount);
-          aRC.setOption (ERenderingOption.TOTAL_PAGENUM_CURRENT, nTotalPageIndex + nPageIndex + 1);
-          aRC.setOption (ERenderingOption.TOTAL_PAGENUM_TOTAL, nTotalPageCount);
+          aPageIndex.setPlaceholdersInRenderingContext (aRC);
           m_aPageHeader.perform (aRC);
         }
 
@@ -444,10 +450,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                              fCurY - aElement.getMargin ().getTop (),
                                                              getAvailableWidth () - aElement.getMargin ().getXSum (),
                                                              fThisHeightWithPadding);
-          aRC.setOption (ERenderingOption.PAGESET_PAGENUM_CURRENT, nPageIndex + 1);
-          aRC.setOption (ERenderingOption.PAGESET_PAGENUM_TOTAL, nPageCount);
-          aRC.setOption (ERenderingOption.TOTAL_PAGENUM_CURRENT, nTotalPageIndex + nPageIndex + 1);
-          aRC.setOption (ERenderingOption.TOTAL_PAGENUM_TOTAL, nTotalPageCount);
+          aPageIndex.setPlaceholdersInRenderingContext (aRC);
           aElement.perform (aRC);
 
           fCurY -= fThisHeightWithPadding + aElement.getMargin ().getYSum ();
@@ -468,10 +471,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                                  m_aPageFooter.getMargin ().getXSum (),
                                                              aPrepareResult.getFooterHeight () +
                                                                  m_aPageFooter.getPadding ().getYSum ());
-          aRC.setOption (ERenderingOption.PAGESET_PAGENUM_CURRENT, nPageIndex + 1);
-          aRC.setOption (ERenderingOption.PAGESET_PAGENUM_TOTAL, nPageCount);
-          aRC.setOption (ERenderingOption.TOTAL_PAGENUM_CURRENT, nTotalPageIndex + nPageIndex + 1);
-          aRC.setOption (ERenderingOption.TOTAL_PAGENUM_TOTAL, nTotalPageCount);
+          aPageIndex.setPlaceholdersInRenderingContext (aRC);
           m_aPageFooter.perform (aRC);
         }
       }

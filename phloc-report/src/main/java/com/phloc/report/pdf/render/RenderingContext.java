@@ -25,7 +25,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 
 @NotThreadSafe
 public class RenderingContext
@@ -36,7 +39,7 @@ public class RenderingContext
   private final float m_fStartTop;
   private final float m_fWidth;
   private final float m_fHeight;
-  private final Map <String, String> m_aOptions = new LinkedHashMap <String, String> ();
+  private final Map <String, String> m_aPlaceholders = new LinkedHashMap <String, String> ();
 
   /**
    * @param aCtx
@@ -61,7 +64,7 @@ public class RenderingContext
                            final float fHeight)
   {
     this (aCtx.getContentStream (), aCtx.isDebugMode (), fStartLeft, fStartTop, fWidth, fHeight);
-    m_aOptions.putAll (aCtx.m_aOptions);
+    m_aPlaceholders.putAll (aCtx.m_aPlaceholders);
   }
 
   /**
@@ -97,43 +100,39 @@ public class RenderingContext
     m_fHeight = fHeight;
   }
 
-  @Nonnull
-  public RenderingContext setOption (@Nonnull final ERenderingOption eOption, final int nValue)
+  @Nullable
+  public String getPlaceholder (final String sName)
   {
-    return setOption (eOption, Integer.toString (nValue));
+    return m_aPlaceholders.get (sName);
+  }
+
+  public int getPlaceholderAsInt (@Nullable final String sName, final int nDefault)
+  {
+    return StringParser.parseInt (getPlaceholder (sName), nDefault);
   }
 
   @Nonnull
-  public RenderingContext setOption (@Nonnull final ERenderingOption eOption, @Nonnull final String sValue)
+  @ReturnsMutableCopy
+  public Map <String, String> getAllPlaceholders ()
   {
-    if (eOption == null)
-      throw new NullPointerException ("option");
-    return setOption (eOption.getPlaceholder (), sValue);
+    return ContainerHelper.newOrderedMap (m_aPlaceholders);
   }
 
   @Nonnull
-  public RenderingContext setOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
+  public RenderingContext setPlaceholder (@Nonnull @Nonempty final String sName, final int nValue)
+  {
+    return setPlaceholder (sName, Integer.toString (nValue));
+  }
+
+  @Nonnull
+  public RenderingContext setPlaceholder (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
   {
     if (StringHelper.hasNoText (sName))
       throw new NullPointerException ("name");
     if (sValue == null)
       throw new NullPointerException ("value");
-    m_aOptions.put (sName, sValue);
+    m_aPlaceholders.put (sName, sValue);
     return this;
-  }
-
-  @Nullable
-  public String getOption (@Nonnull final ERenderingOption eOption)
-  {
-    if (eOption == null)
-      throw new NullPointerException ("option");
-    return getOption (eOption.getPlaceholder ());
-  }
-
-  @Nullable
-  public String getOption (@Nullable final String sName)
-  {
-    return m_aOptions.get (sName);
   }
 
   @Nonnull

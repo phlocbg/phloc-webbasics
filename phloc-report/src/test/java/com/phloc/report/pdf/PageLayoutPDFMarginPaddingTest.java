@@ -32,7 +32,7 @@ import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLText;
 import com.phloc.report.pdf.element.PLTextWithPlaceholders;
 import com.phloc.report.pdf.element.PLVBox;
-import com.phloc.report.pdf.render.ERenderingOption;
+import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
@@ -65,16 +65,16 @@ public class PageLayoutPDFMarginPaddingTest
                                                     .setPadding (0, 4)
                                                     .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.setPageFooter (new PLTextWithPlaceholders ("Page " +
-                                                    ERenderingOption.TOTAL_PAGENUM_CURRENT.getPlaceholder () +
+                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_NUMBER +
                                                     " of " +
-                                                    ERenderingOption.TOTAL_PAGENUM_TOTAL.getPlaceholder (), r10).setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
-                                                                                                                .setMargin (0,
-                                                                                                                            10,
-                                                                                                                            0,
-                                                                                                                            0)
-                                                                                                                .setPadding (10,
-                                                                                                                             4)
-                                                                                                                .setHorzAlign (EHorzAlignment.RIGHT));
+                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
+                                                                                                      .setMargin (0,
+                                                                                                                  10,
+                                                                                                                  0,
+                                                                                                                  0)
+                                                                                                      .setPadding (10,
+                                                                                                                   4)
+                                                                                                      .setHorzAlign (EHorzAlignment.RIGHT));
     {
       final PLHBox h = new PLHBox ().setMargin (0, -20, -30, 10)
                                     .setPadding (5)

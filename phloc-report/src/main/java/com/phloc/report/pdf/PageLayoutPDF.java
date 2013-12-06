@@ -170,24 +170,26 @@ public class PageLayoutPDF
 
       // Prepare all page sets
       final PageSetPrepareResult [] aPRs = new PageSetPrepareResult [m_aPageSets.size ()];
-      int nIndex = 0;
+      int nPageSetIndex = 0;
       int nTotalPageCount = 0;
       for (final PLPageSet aPageSet : m_aPageSets)
       {
         final PageSetPrepareResult aPR = aPageSet.prepareAllPages ();
-        aPRs[nIndex++] = aPR;
+        aPRs[nPageSetIndex] = aPR;
         nTotalPageCount += aPR.getPageCount ();
+        nPageSetIndex++;
       }
 
       // Start applying content
-      nIndex = 0;
+      nPageSetIndex = 0;
       int nTotalPageIndex = 0;
       for (final PLPageSet aPageSet : m_aPageSets)
       {
-        final PageSetPrepareResult aPR = aPRs[nIndex++];
-        aPageSet.renderAllPages (aPR, aDoc, m_bDebug, nTotalPageIndex, nTotalPageCount);
+        final PageSetPrepareResult aPR = aPRs[nPageSetIndex];
+        aPageSet.renderAllPages (aPR, aDoc, m_bDebug, nPageSetIndex, nTotalPageIndex, nTotalPageCount);
         // Inc afterwards
         nTotalPageIndex += aPR.getPageCount ();
+        nPageSetIndex++;
       }
 
       // Customize the whole document
