@@ -28,11 +28,12 @@ import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.compare.AbstractComparator;
+import com.phloc.commons.compare.ComparatorStringLongestFirst;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTFromString;
@@ -79,6 +80,12 @@ public final class DateFormatBuilder implements IDateFormatBuilder
   }
 
   @Nonnull
+  public List <Object> getAllInternalObjects ()
+  {
+    return ContainerHelper.newList (m_aList);
+  }
+
+  @Nonnull
   public String getJSCalendarFormatString ()
   {
     final StringBuilder aSB = new StringBuilder ();
@@ -103,19 +110,25 @@ public final class DateFormatBuilder implements IDateFormatBuilder
   }
 
   @Nonnull
-  public LocalDate getDateFormatted (final String sDate)
+  public LocalDate getDateFormatted (@Nullable final String sDate)
   {
     return PDTFromString.getLocalDateFromString (sDate, getJavaFormatString ());
   }
 
   @Nonnull
-  public LocalTime getTimeFormatted (final String sTime)
+  public LocalTime getTimeFormatted (@Nullable final String sTime)
   {
     return PDTFromString.getLocalTimeFromString (sTime, getJavaFormatString ());
   }
 
   @Nonnull
-  public DateTime getDateTimeFormatted (final String sDateTime)
+  public LocalDateTime getLocalDateTimeFormatted (@Nullable final String sDateTime)
+  {
+    return PDTFromString.getLocalDateTimeFromString (sDateTime, getJavaFormatString ());
+  }
+
+  @Nonnull
+  public DateTime getDateTimeFormatted (@Nullable final String sDateTime)
   {
     return PDTFromString.getDateTimeFromString (sDateTime, getJavaFormatString ());
   }
@@ -124,15 +137,6 @@ public final class DateFormatBuilder implements IDateFormatBuilder
   public String toString ()
   {
     return new ToStringGenerator (this).append ("list", m_aList).toString ();
-  }
-
-  private static final class ComparatorStringLongestFirst extends AbstractComparator <String>
-  {
-    @Override
-    protected int mainCompare (final String aElement1, final String aElement2)
-    {
-      return aElement2.length () - aElement1.length ();
-    }
   }
 
   private static final class Searcher
@@ -168,9 +172,9 @@ public final class DateFormatBuilder implements IDateFormatBuilder
 
       Map.Entry <String, EDateTimeFormatToken> aEntry;
       if (m_aAllMatching.size () == 1)
-        aEntry = m_aAllMatching.entrySet ().iterator ().next ();
+        aEntry = ContainerHelper.getFirstElement (m_aAllMatching);
       else
-        aEntry = ContainerHelper.getSortedByKey (m_aAllMatching, m_aComp).entrySet ().iterator ().next ();
+        aEntry = ContainerHelper.getFirstElement (ContainerHelper.getSortedByKey (m_aAllMatching, m_aComp));
       m_sRest = m_sRest.substring (aEntry.getKey ().length ());
       return aEntry.getValue ();
     }

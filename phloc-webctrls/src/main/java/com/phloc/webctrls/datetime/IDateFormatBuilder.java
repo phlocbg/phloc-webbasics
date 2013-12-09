@@ -17,9 +17,40 @@
  */
 package com.phloc.webctrls.datetime;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+
 public interface IDateFormatBuilder
 {
+  /**
+   * @return A non-<code>null</code> list with {@link EDateTimeFormatToken} and
+   *         {@link Character} objects.
+   */
+  @Nonnull
+  List <Object> getAllInternalObjects ();
+
+  @Nonnull
   String getJSCalendarFormatString ();
 
+  @Nonnull
   String getJavaFormatString ();
+
+  @Nonnull
+  LocalDate getDateFormatted (@Nullable String sDate);
+
+  @Nonnull
+  LocalTime getTimeFormatted (@Nullable String sTime);
+
+  @Nonnull
+  LocalDateTime getLocalDateTimeFormatted (@Nullable String sDateTime);
+
+  @Nonnull
+  DateTime getDateTimeFormatted (@Nullable String sDateTime);
 }
