@@ -32,7 +32,9 @@ import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLText;
 import com.phloc.report.pdf.element.PLTextWithPlaceholders;
 import com.phloc.report.pdf.element.PLVBox;
+import com.phloc.report.pdf.render.IRenderingContextCustomizer;
 import com.phloc.report.pdf.render.RenderPageIndex;
+import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
@@ -155,6 +157,14 @@ public class PageLayoutPDFTest
     final PLPageSet aPS3 = new PLPageSet (PDPage.PAGE_SIZE_A4.getHeight (), PDPage.PAGE_SIZE_A4.getWidth ()).setMargin (30,
                                                                                                                         50)
                                                                                                             .setPadding (15);
+    aPS3.setRenderingContextCustomizer (new IRenderingContextCustomizer ()
+    {
+      public void customizeRenderingContext (final RenderingContext aRC)
+      {
+        final int nTotal = aRC.getPlaceholderAsInt (RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, -1);
+        aRC.setPlaceholder ("${pages-1}", nTotal - 1);
+      }
+    });
     aPS3.setPageHeader (new PLText ("Das ist die Kopfzeile3", r10).setBorder (new BorderSpec (null,
                                                                                               null,
                                                                                               null,
@@ -167,11 +177,12 @@ public class PageLayoutPDFTest
                                                     " bzw. " +
                                                     RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_NUMBER +
                                                     " von " +
-                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorder (new BorderSpec (null,
-                                                                                                                                  new BorderStyleSpec (Color.BLACK),
-                                                                                                                                  null,
-                                                                                                                                  null))
-                                                                                                      .setHorzAlign (EHorzAlignment.CENTER));
+                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT +
+                                                    "; my value: ${pages-1}", r10).setBorder (new BorderSpec (null,
+                                                                                                              new BorderStyleSpec (Color.BLACK),
+                                                                                                              null,
+                                                                                                              null))
+                                                                                  .setHorzAlign (EHorzAlignment.CENTER));
     aPS3.addElement (new PLText ("Zeile 1\n\nZeile 3", r10));
 
     final PageLayoutPDF aPageLayout = new PageLayoutPDF ().setDebug (false);
