@@ -19,12 +19,12 @@ package com.phloc.bootstrap3.config;
 
 import javax.annotation.Nullable;
 
+import com.phloc.bootstrap3.CBootstrap;
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.thirdparty.ELicense;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.IThirdPartyModuleProviderSPI;
 import com.phloc.commons.thirdparty.ThirdPartyModule;
-import com.phloc.commons.version.Version;
 
 /**
  * Implement this SPI interface if your JAR file contains external third party
@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_phloc_bootstrap3 implements IThirdPa
   public static final IThirdPartyModule BOOTSTRAP3 = new ThirdPartyModule ("Bootstrap",
                                                                            "Twitter",
                                                                            ELicense.APACHE2,
-                                                                           new Version (3, 0, 2),
+                                                                           CBootstrap.BOOTSTRAP_VERSION_303,
                                                                            "http://getbootstrap.com/");
 
   @Nullable

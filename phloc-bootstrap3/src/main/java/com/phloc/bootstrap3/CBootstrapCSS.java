@@ -79,7 +79,6 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider CHECKBOX_INLINE = DefaultCSSClassProvider.create ("checkbox-inline");
   public static final ICSSClassProvider CLEARFIX = DefaultCSSClassProvider.create ("clearfix");
   public static final ICSSClassProvider CLOSE = DefaultCSSClassProvider.create ("close");
-  public static final ICSSClassProvider COL = DefaultCSSClassProvider.create ("col");
   public static final ICSSClassProvider COL_LG_1 = DefaultCSSClassProvider.create ("col-lg-1");
   public static final ICSSClassProvider COL_LG_10 = DefaultCSSClassProvider.create ("col-lg-10");
   public static final ICSSClassProvider COL_LG_11 = DefaultCSSClassProvider.create ("col-lg-11");

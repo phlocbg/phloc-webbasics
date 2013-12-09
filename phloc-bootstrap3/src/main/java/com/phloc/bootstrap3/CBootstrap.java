@@ -32,6 +32,9 @@ public final class CBootstrap
   /** Bootstrap version 3.0.2 */
   public static final Version BOOTSTRAP_VERSION_302 = new Version (3, 0, 2);
 
+  /** Bootstrap version 3.0.3 */
+  public static final Version BOOTSTRAP_VERSION_303 = new Version (3, 0, 3);
+
   /** The maximum number of columns a grid system can be separated into */
   public static final int GRID_SYSTEM_MAX = 12;
 

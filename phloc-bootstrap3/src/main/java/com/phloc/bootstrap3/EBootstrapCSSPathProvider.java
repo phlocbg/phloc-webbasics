@@ -32,6 +32,8 @@ public enum EBootstrapCSSPathProvider implements ICSSPathProvider
 {
   BOOTSTRAP_3_0_2 ("bootstrap/3.0.2/css/bootstrap.css"),
   BOOTSTRAP_THEME_3_0_2 ("bootstrap/3.0.2/css/bootstrap-theme.css"),
+  BOOTSTRAP_3_0_3 ("bootstrap/3.0.3/css/bootstrap.css"),
+  BOOTSTRAP_THEME_3_0_3 ("bootstrap/3.0.3/css/bootstrap-theme.css"),
   BOOTSTRAP3_DATATABLES ("bootstrap/datatables/bootstrap3-datatables.css");
 
   private final String m_sPath;
