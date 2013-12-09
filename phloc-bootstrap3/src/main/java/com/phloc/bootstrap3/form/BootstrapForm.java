@@ -33,8 +33,8 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
-import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCControl;
+import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCEdit;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -43,6 +43,7 @@ import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
 import com.phloc.html.hc.htmlext.HCUtils;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
 
@@ -145,14 +146,32 @@ public class BootstrapForm extends HCForm
   }
 
   @Nonnull
-  public BootstrapForm addFormGroup (@Nullable final HCLabel aLabel, @Nonnull final IHCNode aCtrls)
+  public BootstrapForm addFormGroup (@Nullable final IHCElementWithChildren <?> aLabel, @Nonnull final IHCNode aCtrls)
   {
     return addFormGroup (aLabel, aCtrls, (IErrorList) null);
   }
 
   @Nonnull
-  public BootstrapForm addFormGroup (@Nullable final HCLabel aLabel,
+  public BootstrapForm addFormGroup (@Nullable final IHCElementWithChildren <?> aLabel,
                                      @Nonnull final IHCNode aCtrls,
+                                     @Nullable final IErrorList aErrorList)
+  {
+    return addFormGroup (aLabel, aCtrls, (IHCNode) null, aErrorList);
+  }
+
+  @Nonnull
+  public BootstrapForm addFormGroup (@Nullable final IHCElementWithChildren <?> aLabel,
+                                     @Nonnull final IHCNode aCtrls,
+                                     @Nullable final String sHelpText,
+                                     @Nullable final IErrorList aErrorList)
+  {
+    return addFormGroup (aLabel, aCtrls, HCTextNode.create (sHelpText), aErrorList);
+  }
+
+  @Nonnull
+  public BootstrapForm addFormGroup (@Nullable final IHCElementWithChildren <?> aLabel,
+                                     @Nonnull final IHCNode aCtrls,
+                                     @Nullable final IHCNode aHelpText,
                                      @Nullable final IErrorList aErrorList)
   {
     if (aCtrls == null)
@@ -162,17 +181,6 @@ public class BootstrapForm extends HCForm
 
     // Set CSS class to all contained controls
     BootstrapHelper.markAsFormControls (aAllCtrls);
-
-    // Check form errors
-    ICSSClassProvider aErrorCSS = null;
-    if (aErrorList != null)
-    {
-      if (aErrorList.containsAtLeastOneError ())
-        aErrorCSS = CBootstrapCSS.HAS_ERROR;
-      else
-        if (aErrorList.containsAtLeastOneFailure ())
-          aErrorCSS = CBootstrapCSS.HAS_WARNING;
-    }
 
     final IHCControl <?> aFirstControl = ContainerHelper.getFirstElement (aAllCtrls);
     HCDiv aFinalNode;
@@ -192,9 +200,11 @@ public class BootstrapForm extends HCForm
       }
 
       if (m_eFormType == EBootstrapFormType.HORIZONTAL)
+      {
         aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
                                  .addChild (new HCDiv ().addClasses (m_aLeft.getCSSClassOffset (), m_aRight)
                                                         .addChild (aCheckboxDiv));
+      }
       else
         aFinalNode = aCheckboxDiv;
     }
@@ -215,9 +225,11 @@ public class BootstrapForm extends HCForm
         }
 
         if (m_eFormType == EBootstrapFormType.HORIZONTAL)
+        {
           aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
                                    .addChild (new HCDiv ().addClasses (m_aLeft.getCSSClassOffset (), m_aRight)
                                                           .addChild (aRadioDiv));
+        }
         else
           aFinalNode = aRadioDiv;
       }
@@ -240,7 +252,8 @@ public class BootstrapForm extends HCForm
           if (aFirstControl != null)
           {
             // We have a label for a control
-            aLabel.setFor (aFirstControl);
+            if (aLabel instanceof HCLabel)
+              ((HCLabel) aLabel).setFor (aFirstControl);
 
             // Set the default placeholder (if none is present)
             if (aFirstControl instanceof AbstractHCEdit <?>)
@@ -266,9 +279,24 @@ public class BootstrapForm extends HCForm
         }
       }
 
-    // Add error highlighting
-    aFinalNode.addClass (aErrorCSS);
+    // Help text
+    if (aHelpText != null)
+    {
+      if (m_eFormType == EBootstrapFormType.HORIZONTAL)
+        ((HCDiv) aFinalNode.getLastChild ()).addChild (new BootstrapHelpBlock ().addChild (aHelpText));
+      else
+        aFinalNode.addChild (new BootstrapHelpBlock ().addClass (m_aLeft.getCSSClassOffset ()).addChild (aHelpText));
+    }
+
+    // Check form errors - highlighting
     if (aErrorList != null)
+    {
+      if (aErrorList.containsAtLeastOneError ())
+        aFinalNode.addClass (CBootstrapCSS.HAS_ERROR);
+      else
+        if (aErrorList.containsAtLeastOneFailure ())
+          aFinalNode.addClass (CBootstrapCSS.HAS_WARNING);
+
       for (final IError aError : aErrorList)
       {
         final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aError.getErrorText ());
@@ -276,6 +304,8 @@ public class BootstrapForm extends HCForm
           aHelpBlock.addClasses (m_aLeft.getCSSClassOffset (), m_aRight);
         aFinalNode.addChild (aHelpBlock);
       }
+    }
+
     addChild (aFinalNode);
     return this;
   }
