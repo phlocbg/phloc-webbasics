@@ -335,34 +335,36 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         final float fThisHeightFull = aElementWithHeight.getHeightFull ();
         if (fCurY - fThisHeightFull < fYLeast)
         {
+          // Element does not fit on page - try to split
+          if (aElement instanceof IPLSplittableElement)
+          {
+            // split elements
+            final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
+            final SplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
+            if (aSplitResult != null)
+            {
+              // Re-add them to the list and try again
+              aElementsWithHeight.add (0, aSplitResult.getFirstElement ());
+              aElementsWithHeight.add (1, aSplitResult.getSecondElement ());
+
+              if (s_aLogger.isDebugEnabled ())
+                s_aLogger.debug ("Split " +
+                                 CGStringHelper.getClassLocalName (aElement) +
+                                 " into pieces: " +
+                                 aSplitResult.getFirstElement ().getHeight () +
+                                 " and " +
+                                 aSplitResult.getSecondElement ().getHeight ());
+              continue;
+            }
+            if (s_aLogger.isDebugEnabled ())
+              s_aLogger.debug ("A single element does not fit onto a single page even though it is splittable!");
+          }
+
           // Next page
           if (aCurPageElements.isEmpty ())
           {
             // one element too large for a page
-            if (aElement instanceof IPLSplittableElement)
-            {
-              // split elements
-              final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
-              final SplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
-              if (aSplitResult != null)
-              {
-                // Re-add them to the list and try again
-                aElementsWithHeight.add (0, aSplitResult.getFirstElement ());
-                aElementsWithHeight.add (1, aSplitResult.getSecondElement ());
-
-                if (s_aLogger.isDebugEnabled ())
-                  s_aLogger.debug ("Split " +
-                                   CGStringHelper.getClassLocalName (aElement) +
-                                   " into pieces: " +
-                                   aSplitResult.getFirstElement ().getHeight () +
-                                   " and " +
-                                   aSplitResult.getSecondElement ().getHeight ());
-                continue;
-              }
-              s_aLogger.warn ("A single element does not fit onto a single page even though it is splittable!");
-            }
-            else
-              s_aLogger.warn ("A single element does not fit onto a single page and is not splittable!");
+            s_aLogger.warn ("A single element does not fit onto a single page and is not splittable!");
           }
           else
           {

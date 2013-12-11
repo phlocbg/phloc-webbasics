@@ -51,6 +51,7 @@ public class PageLayoutPDFTableTest
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30)
                                                               .setPadding (10)
                                                               .setFillColor (new Color (0xeeeeee));
+    aPS1.addElement (new PLText ("Erste Dummy Zeile", r10));
     final PLTable aTable = PLTable.createWithPercentage (10, 40, 25, 25).setHeaderRowCount (1);
     aTable.addTableRow (new PLText ("ID", r10),
                         new PLText ("Name", r10),
