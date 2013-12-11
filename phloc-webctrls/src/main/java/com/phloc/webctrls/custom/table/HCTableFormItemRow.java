@@ -80,17 +80,20 @@ public class HCTableFormItemRow extends HCRow
   }
 
   /**
-   * Called after the label cell was altered
+   * Called after the label cell was altered.
+   * 
+   * @param aLabel
+   *        The newly set label. May be <code>null</code>
    */
   @OverrideOnDemand
-  protected void onLabelModified ()
+  protected void onLabelModified (@Nullable final IFormLabel aLabel)
   {}
 
   @Nonnull
   public final HCTableFormItemRow setLabel (@Nullable final IFormLabel aLabel)
   {
     m_aLabelCell.removeAllChildren ().addChild (aLabel);
-    onLabelModified ();
+    onLabelModified (aLabel);
     return this;
   }
 
@@ -122,13 +125,21 @@ public class HCTableFormItemRow extends HCRow
 
   /**
    * Called after the controls cell was altered
+   * 
+   * @param aResolvedCtrls
+   *        The controls added to the cell. Never <code>null</code>.
+   * @param bHasErrors
+   *        <code>true</code> if this line contains errors
    */
   @OverrideOnDemand
-  protected void onCtrlsModified ()
+  protected void onCtrlsModified (@Nonnull final List <IHCNode> aResolvedCtrls, final boolean bHasErrors)
   {}
 
   private void _updateCtrlCell ()
   {
+    // Clear existing content
+    m_aCtrlCell.removeAllChildren ();
+
     final boolean bHasErrors = m_aErrorList != null && m_aErrorList.containsAtLeastOneError ();
 
     // Flatten all HCNodeLists away :)
@@ -138,14 +149,14 @@ public class HCTableFormItemRow extends HCRow
     modifyControls (aResolvedCtrls, bHasErrors);
 
     // Replace existing children with flattened list
-    m_aCtrlCell.removeAllChildren ().addChildren (aResolvedCtrls);
+    m_aCtrlCell.addChildren (aResolvedCtrls);
 
     // Create all potential error nodes
     if (m_aErrorList != null)
       for (final IError aError : m_aErrorList.getAllItems ())
         m_aCtrlCell.addChild (createErrorNode (aError));
 
-    onCtrlsModified ();
+    onCtrlsModified (aResolvedCtrls, bHasErrors);
   }
 
   @Nonnull
@@ -217,10 +228,13 @@ public class HCTableFormItemRow extends HCRow
   }
 
   /**
-   * Called after the note cell was altered
+   * Called after the note cell was altered.
+   * 
+   * @param aNote
+   *        The new note
    */
   @OverrideOnDemand
-  protected void onNoteModified ()
+  protected void onNoteModified (@Nullable final IHCNode aNote)
   {}
 
   @Nonnull
@@ -230,7 +244,7 @@ public class HCTableFormItemRow extends HCRow
       throw new IllegalStateException ("This table has no note column!");
 
     m_aNoteCell.removeAllChildren ().addChild (aNote);
-    onNoteModified ();
+    onNoteModified (aNote);
     return this;
   }
 

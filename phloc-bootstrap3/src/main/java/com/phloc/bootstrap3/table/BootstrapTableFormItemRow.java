@@ -18,14 +18,16 @@
 package com.phloc.bootstrap3.table;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.BootstrapHelper;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.form.BootstrapHelpBlock;
-import com.phloc.commons.error.EErrorLevel;
+import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.validation.error.IError;
+import com.phloc.webctrls.custom.IFormLabel;
 import com.phloc.webctrls.custom.table.HCTableFormItemRow;
 
 public class BootstrapTableFormItemRow extends HCTableFormItemRow
@@ -33,6 +35,13 @@ public class BootstrapTableFormItemRow extends HCTableFormItemRow
   public BootstrapTableFormItemRow (final boolean bHeader, final boolean bHasNoteColumn)
   {
     super (bHeader, bHasNoteColumn);
+  }
+
+  @Override
+  protected void onLabelModified (@Nullable final IFormLabel aLabel)
+  {
+    if (aLabel instanceof IHCElement <?>)
+      ((IHCElement <?>) aLabel).addClass (CBootstrapCSS.CONTROL_LABEL);
   }
 
   @Override
@@ -44,11 +53,13 @@ public class BootstrapTableFormItemRow extends HCTableFormItemRow
   @Override
   protected void modifyControls (@Nonnull final Iterable <? extends IHCNode> aCtrls, final boolean bHasErrors)
   {
+    // Add/remove a class from the table row
     if (bHasErrors)
-      addClass (CBootstrapCSS.getCSSClass (EErrorLevel.ERROR));
+      addClass (CBootstrapCSS.HAS_ERROR);
     else
-      removeClass (CBootstrapCSS.getCSSClass (EErrorLevel.ERROR));
+      removeClass (CBootstrapCSS.HAS_ERROR);
 
+    // Add form-control class
     BootstrapHelper.markAsFormControls (HCUtils.getAllHCControls (aCtrls));
   }
 }
