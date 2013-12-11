@@ -37,25 +37,36 @@ public final class RedirectListener implements ServletContextListener
   private static final Logger s_aLogger = LoggerFactory.getLogger (RedirectListener.class);
   private static URL s_aURL = null;
 
+  /**
+   * @return The target URL as specified in the "target" init-parameter. Never
+   *         <code>null</code>!
+   */
   public static URL getTargetURL ()
   {
+    if (s_aURL == null)
+      throw new IllegalStateException ("This ServletContextListener was never initialized. Please check your web.xml file!");
     return s_aURL;
   }
 
-  @Override
-  public void contextInitialized (final ServletContextEvent aSCE)
+  public static void initializeTargetURL (final String sTarget)
   {
-    final ServletContext aSC = aSCE.getServletContext ();
-    String sTarget = aSC.getInitParameter ("target");
     if (sTarget == null)
       throw new IllegalStateException ("ServletContext init-parameter 'target' is missing or empty!");
+
+    String sRealTarget;
     if (sTarget.endsWith ("/"))
-      sTarget = sTarget.substring (0, sTarget.length () - 1);
-    if (sTarget.length () == 0)
+    {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Cutting trailing slash from target URL '" + sTarget + "'");
+      sRealTarget = sTarget.substring (0, sTarget.length () - 1);
+    }
+    else
+      sRealTarget = sTarget;
+    if (sRealTarget.length () == 0)
       throw new IllegalStateException ("ServletContext init-parameter 'target' is empty!");
     try
     {
-      final URL aURL = new URL (sTarget);
+      final URL aURL = new URL (sRealTarget);
 
       // Save in static field :)
       s_aURL = aURL;
@@ -63,9 +74,17 @@ public final class RedirectListener implements ServletContextListener
     catch (final MalformedURLException ex)
     {
       throw new IllegalStateException ("Failed to convert ServletContext init-parameter 'target' to a URL: '" +
-                                       sTarget +
+                                       sRealTarget +
                                        "'");
     }
+  }
+
+  @Override
+  public void contextInitialized (final ServletContextEvent aSCE)
+  {
+    final ServletContext aSC = aSCE.getServletContext ();
+    final String sTarget = aSC.getInitParameter ("target");
+    initializeTargetURL (sTarget);
     s_aLogger.info ("Redirect servlet listener initialized: " + s_aURL.toExternalForm ());
   }
 

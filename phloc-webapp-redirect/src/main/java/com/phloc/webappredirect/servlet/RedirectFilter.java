@@ -54,6 +54,7 @@ public class RedirectFilter implements Filter
       if (sQueryString != null && sQueryString.length () > 0)
         sRelativeURI += '?' + sQueryString;
 
+      // Cut existing servlet context path
       final String sServletContextPath = aHttpRequest.getContextPath ();
       if (sServletContextPath != null && sServletContextPath.length () > 0)
         if (sRelativeURI.startsWith (sServletContextPath))
@@ -62,7 +63,7 @@ public class RedirectFilter implements Filter
       final String sTarget = RedirectListener.getTargetURL ().toExternalForm () + sRelativeURI;
       s_aLogger.info ("Redirecting to " + sTarget);
       aHttpResponse.setHeader ("Location", sTarget);
-      aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_TEMPORARILY);
+      aHttpResponse.setStatus (HttpServletResponse.SC_MOVED_PERMANENTLY);
     }
     else
       aChain.doFilter (aRequest, aResponse);

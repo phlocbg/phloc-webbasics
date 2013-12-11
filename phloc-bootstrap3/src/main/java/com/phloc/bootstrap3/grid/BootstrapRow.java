@@ -26,6 +26,11 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.AbstractHCDiv;
 import com.phloc.html.hc.html.HCDiv;
 
+/**
+ * Defines a Bootstrap row that contains columns.
+ * 
+ * @author Philip Helger
+ */
 public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
 {
   public BootstrapRow ()
@@ -34,12 +39,18 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   }
 
   @Nonnull
-  public HCDiv createColumn (@Nonnegative final int nParts)
+  public HCDiv createColumn (final int nParts)
   {
-    return createColumn (EBootstrapGridXS.getFromParts (nParts),
-                         EBootstrapGridSM.getFromParts (nParts),
-                         EBootstrapGridMD.getFromParts (nParts),
-                         EBootstrapGridLG.getFromParts (nParts));
+    return createColumn (nParts, nParts, nParts, nParts);
+  }
+
+  @Nonnull
+  public HCDiv createColumn (final int nPartsXS, final int nPartsSM, final int nPartsMD, final int nPartsLG)
+  {
+    return createColumn (nPartsXS <= 0 ? null : EBootstrapGridXS.getFromParts (nPartsXS),
+                         nPartsSM <= 0 ? null : EBootstrapGridSM.getFromParts (nPartsSM),
+                         nPartsMD <= 0 ? null : EBootstrapGridMD.getFromParts (nPartsMD),
+                         nPartsLG <= 0 ? null : EBootstrapGridLG.getFromParts (nPartsLG));
   }
 
   @Nonnull
@@ -81,6 +92,7 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   }
 
   @Nonnull
+  @Deprecated
   public BootstrapRow addColumns (@Nonnegative final int nParts0,
                                   @Nullable final IHCNode aPart0,
                                   @Nonnegative final int nParts1,
@@ -92,6 +104,7 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   }
 
   @Nonnull
+  @Deprecated
   public BootstrapRow addColumns (@Nonnegative final int nParts0,
                                   @Nullable final IHCNode aPart0,
                                   @Nonnegative final int nParts1,
@@ -105,6 +118,7 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   }
 
   @Nonnull
+  @Deprecated
   public BootstrapRow addColumns (@Nonnegative final int nParts0,
                                   @Nullable final IHCNode aPart0,
                                   @Nonnegative final int nParts1,
