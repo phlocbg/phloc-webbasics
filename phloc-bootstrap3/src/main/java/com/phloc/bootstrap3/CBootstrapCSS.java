@@ -677,6 +677,7 @@ public final class CBootstrapCSS
   {}
 
   @Nullable
+  @Deprecated
   public static ICSSClassProvider getCSSClass (@Nullable final EErrorLevel eErrorLevel)
   {
     if (eErrorLevel == null)
