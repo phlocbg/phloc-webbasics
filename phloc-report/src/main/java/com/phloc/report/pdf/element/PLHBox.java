@@ -30,6 +30,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
@@ -45,7 +46,7 @@ import com.phloc.report.pdf.spec.WidthSpec;
  */
 public class PLHBox extends AbstractPLElement <PLHBox>
 {
-  protected static final class Column
+  public static final class Column
   {
     private final AbstractPLElement <?> m_aElement;
     private final WidthSpec m_aWidth;
@@ -90,6 +91,45 @@ public class PLHBox extends AbstractPLElement <PLHBox>
   public int getColumnCount ()
   {
     return m_aColumns.size ();
+  }
+
+  @Nullable
+  public Column getColumnAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aColumns, nIndex);
+  }
+
+  @Nullable
+  public Column getFirstColumn ()
+  {
+    return ContainerHelper.getFirstElement (m_aColumns);
+  }
+
+  @Nullable
+  public Column getLastColumn ()
+  {
+    return ContainerHelper.getLastElement (m_aColumns);
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getColumnElementAtIndex (@Nonnegative final int nIndex)
+  {
+    final Column aColumn = getColumnAtIndex (nIndex);
+    return aColumn == null ? null : aColumn.getElement ();
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getFirstColumnElement ()
+  {
+    final Column aColumn = getFirstColumn ();
+    return aColumn == null ? null : aColumn.getElement ();
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getLastColumnElement ()
+  {
+    final Column aColumn = getLastColumn ();
+    return aColumn == null ? null : aColumn.getElement ();
   }
 
   @Nonnull

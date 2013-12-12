@@ -45,7 +45,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
  */
 public class PLVBox extends AbstractPLElement <PLVBox>
 {
-  protected static final class Row
+  public static final class Row
   {
     private final AbstractPLElement <?> m_aElement;
 
@@ -81,6 +81,45 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return m_aRows.size ();
   }
 
+  @Nullable
+  public Row getRowAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aRows, nIndex);
+  }
+
+  @Nullable
+  public Row getFirstRow ()
+  {
+    return ContainerHelper.getFirstElement (m_aRows);
+  }
+
+  @Nullable
+  public Row getLastRow ()
+  {
+    return ContainerHelper.getLastElement (m_aRows);
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getRowElementAtIndex (@Nonnegative final int nIndex)
+  {
+    final Row aRow = getRowAtIndex (nIndex);
+    return aRow == null ? null : aRow.getElement ();
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getFirstRowElement ()
+  {
+    final Row aRow = getFirstRow ();
+    return aRow == null ? null : aRow.getElement ();
+  }
+
+  @Nullable
+  public AbstractPLElement <?> getLastRowElement ()
+  {
+    final Row aRow = getLastRow ();
+    return aRow == null ? null : aRow.getElement ();
+  }
+
   @Nonnull
   public PLVBox addRow (@Nonnull final AbstractPLElement <?> aElement)
   {
@@ -88,13 +127,6 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     final Row aItem = new Row (aElement);
     m_aRows.add (aItem);
     return this;
-  }
-
-  @Nullable
-  public AbstractPLElement <?> getRowAtIndex (@Nonnegative final int nIndex)
-  {
-    final Row aRow = ContainerHelper.getSafe (m_aRows, nIndex);
-    return aRow == null ? null : aRow.getElement ();
   }
 
   @Nonnull

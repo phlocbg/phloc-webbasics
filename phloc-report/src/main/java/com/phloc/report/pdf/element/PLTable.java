@@ -129,7 +129,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     float fTable1Height = 0;
     for (int i = 0; i < m_nHeaderRowCount; ++i)
     {
-      final AbstractPLElement <?> aHeaderRow = getRowAtIndex (i);
+      final AbstractPLElement <?> aHeaderRow = getRowElementAtIndex (i);
       aTable1.addRow (aHeaderRow);
       aTable2.addRow (aHeaderRow);
 
@@ -143,7 +143,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     boolean bOnTable1 = true;
     for (int i = m_nHeaderRowCount; i < nMaxRows; ++i)
     {
-      final AbstractPLElement <?> aRow = getRowAtIndex (i);
+      final AbstractPLElement <?> aRow = getRowElementAtIndex (i);
       final float fRowHeightFull = m_aPreparedHeight[i] + aRow.getMarginPlusPaddingYSum ();
       if (bOnTable1 && fTable1Height + fRowHeightFull <= fAvailableHeight)
       {

@@ -332,8 +332,17 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         // Use the first element
         final PLElementWithHeight aElementWithHeight = aElementsWithHeight.remove (0);
         final AbstractPLElement <?> aElement = aElementWithHeight.getElement ();
+
+        boolean bIsPagebreakDesired = aElement instanceof PLPageBreak;
+        if (bIsPagebreakDesired && aCurPageElements.isEmpty () && !((PLPageBreak) aElement).isForcePageBreak ())
+        {
+          // a new page was just started and no forced break is present, so no
+          // page break is necessary
+          bIsPagebreakDesired = false;
+        }
+
         final float fThisHeightFull = aElementWithHeight.getHeightFull ();
-        if (fCurY - fThisHeightFull < fYLeast)
+        if (fCurY - fThisHeightFull < fYLeast || bIsPagebreakDesired)
         {
           // Element does not fit on page - try to split
           if (aElement instanceof IPLSplittableElement)
@@ -364,7 +373,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           if (aCurPageElements.isEmpty ())
           {
             // one element too large for a page
-            s_aLogger.warn ("A single element does not fit onto a single page and is not splittable!");
+            s_aLogger.warn ("A single element (" +
+                            CGStringHelper.getClassLocalName (aElement) +
+                            ") does not fit onto a single page and is not splittable!");
           }
           else
           {
