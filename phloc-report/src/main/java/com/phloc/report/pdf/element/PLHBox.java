@@ -30,6 +30,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
@@ -87,10 +88,23 @@ public class PLHBox extends AbstractPLElement <PLHBox>
   public PLHBox ()
   {}
 
+  /**
+   * @return The number of columns. Always &ge; 0.
+   */
   @Nonnegative
   public int getColumnCount ()
   {
     return m_aColumns.size ();
+  }
+
+  /**
+   * @return All columns. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Column> getAllColumns ()
+  {
+    return ContainerHelper.newList (m_aColumns);
   }
 
   @Nullable

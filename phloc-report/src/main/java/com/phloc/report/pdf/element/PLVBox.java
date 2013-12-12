@@ -30,6 +30,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
@@ -75,30 +76,63 @@ public class PLVBox extends AbstractPLElement <PLVBox>
   public PLVBox ()
   {}
 
+  /**
+   * @return The number of rows. Always &ge; 0.
+   */
   @Nonnegative
   public int getRowCount ()
   {
     return m_aRows.size ();
   }
 
+  /**
+   * @return All rows. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Row> getAllRows ()
+  {
+    return ContainerHelper.newList (m_aRows);
+  }
+
+  /**
+   * Get the row at the specified index.
+   * 
+   * @param nIndex
+   *        The index to use. Should be &ge; 0.
+   * @return <code>null</code> if an invalid index was provided.
+   */
   @Nullable
   public Row getRowAtIndex (@Nonnegative final int nIndex)
   {
     return ContainerHelper.getSafe (m_aRows, nIndex);
   }
 
+  /**
+   * @return The first row or <code>null</code> if no row is present.
+   */
   @Nullable
   public Row getFirstRow ()
   {
     return ContainerHelper.getFirstElement (m_aRows);
   }
 
+  /**
+   * @return The last row or <code>null</code> if no row is present.
+   */
   @Nullable
   public Row getLastRow ()
   {
     return ContainerHelper.getLastElement (m_aRows);
   }
 
+  /**
+   * Get the element in the row at the specified index.
+   * 
+   * @param nIndex
+   *        The index to use. Should be &ge; 0.
+   * @return <code>null</code> if an invalid index was provided.
+   */
   @Nullable
   public AbstractPLElement <?> getRowElementAtIndex (@Nonnegative final int nIndex)
   {
@@ -106,6 +140,10 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return aRow == null ? null : aRow.getElement ();
   }
 
+  /**
+   * @return The element in the first row or <code>null</code> if no row is
+   *         present.
+   */
   @Nullable
   public AbstractPLElement <?> getFirstRowElement ()
   {
@@ -113,6 +151,10 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return aRow == null ? null : aRow.getElement ();
   }
 
+  /**
+   * @return The element in the last row or <code>null</code> if no row is
+   *         present.
+   */
   @Nullable
   public AbstractPLElement <?> getLastRowElement ()
   {
@@ -120,6 +162,13 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return aRow == null ? null : aRow.getElement ();
   }
 
+  /**
+   * Add a row to this VBox.
+   * 
+   * @param aElement
+   *        The row to be added. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public PLVBox addRow (@Nonnull final AbstractPLElement <?> aElement)
   {
@@ -129,6 +178,13 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return this;
   }
 
+  /**
+   * Set the border around the whole row.
+   * 
+   * @param aBorder
+   *        The border style to use. May be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLVBox setRowBorder (@Nullable final BorderStyleSpec aBorder)
   {

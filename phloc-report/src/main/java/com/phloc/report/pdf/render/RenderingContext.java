@@ -30,6 +30,11 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 
+/**
+ * This class contains the context for rendering a single element onto the PDF.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public final class RenderingContext
 {
@@ -44,7 +49,7 @@ public final class RenderingContext
 
   /**
    * @param aCtx
-   *        Context to copy settings from
+   *        Context to copy settings from. May not be <code>null</code>.
    * @param fStartLeft
    *        Absolute page x-start position with element x-margin but without
    *        element x-padding
@@ -109,23 +114,41 @@ public final class RenderingContext
     m_fHeight = fHeight;
   }
 
+  /**
+   * @return The type of the element currently rendered. Never <code>null</code>
+   *         .
+   */
   @Nonnull
   public ERenderingElementType getElementType ()
   {
     return m_eElementType;
   }
 
+  /**
+   * @return The current content stream to write to. Never <code>null</code>.
+   */
   @Nonnull
   public PDPageContentStreamWithCache getContentStream ()
   {
     return m_aCS;
   }
 
+  /**
+   * @return <code>true</code> if debug output should be emitted into the PDF,
+   *         <code>false</code> otherwise.
+   */
   public boolean isDebugMode ()
   {
     return m_bDebugMode;
   }
 
+  /**
+   * Get the placeholder value with the specified name.
+   * 
+   * @param sName
+   *        The name to search. May be <code>null</code>.
+   * @return <code>null</code> if no such placeholder exists.
+   */
   @Nullable
   public String getPlaceholder (final String sName)
   {

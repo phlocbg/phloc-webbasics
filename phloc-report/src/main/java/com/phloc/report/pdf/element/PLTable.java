@@ -50,6 +50,10 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     m_aWidths = ContainerHelper.newList (aWidths);
   }
 
+  /**
+   * @return A copy of the list with all widths as specified in the constructor.
+   *         Neither <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   @ReturnsMutableCopy
@@ -58,25 +62,50 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     return ContainerHelper.newList (m_aWidths);
   }
 
+  /**
+   * @return The number of columns in the table. Always &ge; 0.
+   */
   @Nonnegative
   public int getColumnCount ()
   {
     return m_aWidths.size ();
   }
 
+  /**
+   * Add a new table row. All contained elements are added with the specified
+   * width in the constructor. <code>null</code> elements are represented as
+   * empty cells.
+   * 
+   * @param aElements
+   *        The elements to add. May be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public PLTable addTableRow (@Nullable final AbstractPLElement <?>... aElements)
   {
     return addTableRow (ContainerHelper.newList (aElements));
   }
 
+  /**
+   * Add a new table row. All contained elements are added with the specified
+   * width in the constructor. <code>null</code> elements are represented as
+   * empty cells.
+   * 
+   * @param aElements
+   *        The elements to add. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public PLTable addTableRow (@Nonnull final List <? extends AbstractPLElement <?>> aElements)
   {
     if (aElements == null)
       throw new NullPointerException ("elements");
     if (aElements.size () > m_aWidths.size ())
-      throw new IllegalArgumentException ("More elements in row than defined in the table!");
+      throw new IllegalArgumentException ("More elements in row (" +
+                                          aElements.size () +
+                                          ") than defined in the table (" +
+                                          m_aWidths.size () +
+                                          ")!");
 
     final PLHBox aHBox = new PLHBox ();
     for (int i = 0; i < aElements.size (); ++i)
