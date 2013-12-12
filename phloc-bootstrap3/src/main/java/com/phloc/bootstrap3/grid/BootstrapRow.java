@@ -17,6 +17,7 @@
  */
 package com.phloc.bootstrap3.grid;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -66,5 +67,23 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
     final HCDiv aDiv = addAndReturnChild (new HCDiv ());
     aGridSpec.applyTo (aDiv);
     return aDiv;
+  }
+
+  @Nullable
+  public HCDiv getFirstColumn ()
+  {
+    return (HCDiv) getFirstChild ();
+  }
+
+  @Nullable
+  public HCDiv getColumnAtIndex (@Nonnegative final int nIndex)
+  {
+    return (HCDiv) getChildAtIndex (nIndex);
+  }
+
+  @Nullable
+  public HCDiv getLastColumn ()
+  {
+    return (HCDiv) getLastChild ();
   }
 }
