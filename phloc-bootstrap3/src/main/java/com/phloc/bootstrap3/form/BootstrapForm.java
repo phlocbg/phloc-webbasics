@@ -27,8 +27,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.bootstrap3.BootstrapHelper;
 import com.phloc.bootstrap3.CBootstrap;
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.bootstrap3.grid.EBootstrapGridSM;
-import com.phloc.bootstrap3.grid.IBootstrapGridElementExtended;
+import com.phloc.bootstrap3.grid.BootstrapGripSpec;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -50,8 +49,8 @@ import com.phloc.validation.error.IErrorList;
 public class BootstrapForm extends HCForm
 {
   private final EBootstrapFormType m_eFormType;
-  private EBootstrapGridSM m_eLeft = EBootstrapGridSM.SM_2;
-  private EBootstrapGridSM m_eRight = EBootstrapGridSM.SM_10;
+  private BootstrapGripSpec m_aLeft = BootstrapGripSpec.create (2);
+  private BootstrapGripSpec m_aRight = BootstrapGripSpec.create (10);
 
   public BootstrapForm ()
   {
@@ -94,9 +93,9 @@ public class BootstrapForm extends HCForm
    * @return The left parts. Always &ge; 1 and &lt; 12. Never <code>null</code>.
    */
   @Nonnull
-  public final IBootstrapGridElementExtended getLeft ()
+  public final BootstrapGripSpec getLeft ()
   {
-    return m_eLeft;
+    return m_aLeft;
   }
 
   /**
@@ -104,13 +103,14 @@ public class BootstrapForm extends HCForm
    *         <code>null</code>.
    */
   @Nonnull
-  public final IBootstrapGridElementExtended getRight ()
+  public final BootstrapGripSpec getRight ()
   {
-    return m_eRight;
+    return m_aRight;
   }
 
   /**
-   * Set the left part of a horizontal form.
+   * Set the left part of a horizontal form. This implies setting the correct
+   * right parts (= 12 - left).
    * 
    * @param nLeftParts
    *        The left parts. Must be &ge; 1 and &lt; 12!
@@ -122,12 +122,30 @@ public class BootstrapForm extends HCForm
   {
     if (nLeftParts < 1 || nLeftParts >= CBootstrap.GRID_SYSTEM_MAX)
       throw new IllegalArgumentException ("Left parts must be >= 1 and < 12!");
-    final EBootstrapGridSM aNewLeft = EBootstrapGridSM.getFromParts (nLeftParts);
-    final EBootstrapGridSM aNewRight = EBootstrapGridSM.getFromParts (CBootstrap.GRID_SYSTEM_MAX - nLeftParts);
-    if (aNewLeft == null || aNewRight == null)
-      throw new IllegalStateException ("Unhandled error for " + nLeftParts);
-    m_eLeft = aNewLeft;
-    m_eRight = aNewRight;
+    final BootstrapGripSpec aNewLeft = BootstrapGripSpec.create (nLeftParts);
+    final BootstrapGripSpec aNewRight = BootstrapGripSpec.create (CBootstrap.GRID_SYSTEM_MAX - nLeftParts);
+    return setSplitting (aNewLeft, aNewRight);
+  }
+
+  /**
+   * Set the left part of a horizontal form.
+   * 
+   * @param aLeft
+   *        The left parts. Must not be <code>null</code>.
+   * @param aRight
+   *        The right parts. Must not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public BootstrapForm setSplitting (@Nonnull final BootstrapGripSpec aLeft, @Nonnull final BootstrapGripSpec aRight)
+  {
+    if (aLeft == null)
+      throw new NullPointerException ("left");
+    if (aRight == null)
+      throw new NullPointerException ("right");
+    m_aLeft = aLeft;
+    m_aRight = aRight;
     return this;
   }
 
@@ -185,13 +203,13 @@ public class BootstrapForm extends HCForm
                                   @Nullable final IHCNode aHelpText,
                                   @Nullable final IErrorList aErrorList)
   {
-    return createFormGroup (m_eFormType, m_eLeft, m_eRight, aLabel, aCtrls, aHelpText, aErrorList);
+    return createFormGroup (m_eFormType, m_aLeft, m_aRight, aLabel, aCtrls, aHelpText, aErrorList);
   }
 
   @Nonnull
   public static IHCNode createFormGroup (@Nonnull final EBootstrapFormType eFormType,
-                                         @Nullable final EBootstrapGridSM eLeft,
-                                         @Nullable final EBootstrapGridSM eRight,
+                                         @Nullable final BootstrapGripSpec aLeft,
+                                         @Nullable final BootstrapGripSpec aRight,
                                          @Nullable final IHCElementWithChildren <?> aLabel,
                                          @Nonnull final IHCNode aCtrls,
                                          @Nullable final IHCNode aHelpText,
@@ -224,9 +242,10 @@ public class BootstrapForm extends HCForm
 
       if (eFormType == EBootstrapFormType.HORIZONTAL)
       {
-        aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
-                                 .addChild (new HCDiv ().addClasses (eLeft.getCSSClassOffset (), eRight)
-                                                        .addChild (aCheckboxDiv));
+        final HCDiv aChild = new HCDiv ();
+        aLeft.applyOffsetTo (aChild);
+        aRight.applyTo (aChild);
+        aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP).addChild (aChild.addChild (aCheckboxDiv));
       }
       else
         aFinalNode = aCheckboxDiv;
@@ -249,9 +268,10 @@ public class BootstrapForm extends HCForm
 
         if (eFormType == EBootstrapFormType.HORIZONTAL)
         {
-          aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
-                                   .addChild (new HCDiv ().addClasses (eLeft.getCSSClassOffset (), eRight)
-                                                          .addChild (aRadioDiv));
+          final HCDiv aChild = new HCDiv ();
+          aLeft.applyOffsetTo (aChild);
+          aRight.applyTo (aChild);
+          aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP).addChild (aChild.addChild (aRadioDiv));
         }
         else
           aFinalNode = aRadioDiv;
@@ -270,7 +290,10 @@ public class BootstrapForm extends HCForm
             aLabel.addClass (CBootstrapCSS.SR_ONLY);
           else
             if (eFormType == EBootstrapFormType.HORIZONTAL)
-              aLabel.addClasses (CBootstrapCSS.CONTROL_LABEL, eLeft);
+            {
+              aLabel.addClass (CBootstrapCSS.CONTROL_LABEL);
+              aLeft.applyTo (aLabel);
+            }
 
           if (aFirstControl != null)
           {
@@ -288,7 +311,11 @@ public class BootstrapForm extends HCForm
           }
 
           if (eFormType == EBootstrapFormType.HORIZONTAL)
-            aFinalNode.addChildren (aLabel, new HCDiv ().addClass (eRight).addChild (aCtrls));
+          {
+            final HCDiv aChild = new HCDiv ();
+            aRight.applyTo (aChild);
+            aFinalNode.addChildren (aLabel, aChild.addChild (aCtrls));
+          }
           else
             aFinalNode.addChildren (aLabel, aCtrls);
         }
@@ -296,7 +323,12 @@ public class BootstrapForm extends HCForm
         {
           // No label - just add controls
           if (eFormType == EBootstrapFormType.HORIZONTAL)
-            aFinalNode.addChild (new HCDiv ().addClasses (eLeft.getCSSClassOffset (), eRight).addChild (aCtrls));
+          {
+            final HCDiv aChild = new HCDiv ();
+            aLeft.applyOffsetTo (aChild);
+            aRight.applyTo (aChild);
+            aFinalNode.addChild (aChild.addChild (aCtrls));
+          }
           else
             aFinalNode.addChild (aCtrls);
         }
@@ -305,10 +337,14 @@ public class BootstrapForm extends HCForm
     // Help text
     if (aHelpText != null)
     {
+      final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aHelpText);
       if (eFormType == EBootstrapFormType.HORIZONTAL)
-        ((HCDiv) aFinalNode.getLastChild ()).addChild (new BootstrapHelpBlock ().addChild (aHelpText));
+        ((HCDiv) aFinalNode.getLastChild ()).addChild (aHelpBlock);
       else
-        aFinalNode.addChild (new BootstrapHelpBlock ().addClass (eLeft.getCSSClassOffset ()).addChild (aHelpText));
+      {
+        aLeft.applyOffsetTo (aHelpBlock);
+        aFinalNode.addChild (aHelpBlock);
+      }
     }
 
     // Check form errors - highlighting
@@ -324,7 +360,10 @@ public class BootstrapForm extends HCForm
       {
         final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aError.getErrorText ());
         if (eFormType == EBootstrapFormType.HORIZONTAL)
-          aHelpBlock.addClasses (eLeft.getCSSClassOffset (), eRight);
+        {
+          aLeft.applyOffsetTo (aHelpBlock);
+          aRight.applyTo (aHelpBlock);
+        }
         aFinalNode.addChild (aHelpBlock);
       }
     }
