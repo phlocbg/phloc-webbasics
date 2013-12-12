@@ -126,6 +126,12 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       return m_fFooterHeight;
     }
 
+    /**
+     * Add a list of elements for a single page.
+     * 
+     * @param aCurPageElements
+     *        The list to use. May neither be <code>null</code> nor empty.
+     */
     void addPerPageElements (@Nonnull @Nonempty final List <PLElementWithHeight> aCurPageElements)
     {
       if (ContainerHelper.isEmpty (aCurPageElements))
@@ -315,7 +321,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       ret.setFooterHeight (aElementSize.getHeight ());
     }
 
-    // Split into page pieces
+    // Split into pieces that fit onto a page
     final float fYTop = getYTop ();
     final float fYLeast = getMargin ().getBottom () + getPadding ().getBottom ();
 
@@ -352,7 +358,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
             final SplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
             if (aSplitResult != null)
             {
-              // Re-add them to the list and try again
+              // Re-add them to the list and try again (they may be splitted
+              // recursively)
               aElementsWithHeight.add (0, aSplitResult.getFirstElement ());
               aElementsWithHeight.add (1, aSplitResult.getSecondElement ());
 
@@ -372,16 +379,21 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           // Next page
           if (aCurPageElements.isEmpty ())
           {
-            // one element too large for a page
-            s_aLogger.warn ("A single element (" +
-                            CGStringHelper.getClassLocalName (aElement) +
-                            ") does not fit onto a single page and is not splittable!");
+            if (!bIsPagebreakDesired)
+            {
+              // one element too large for a page
+              s_aLogger.warn ("A single element (" +
+                              CGStringHelper.getClassLocalName (aElement) +
+                              ") does not fit onto a single page and is not splittable!");
+            }
           }
           else
           {
-            // We found elements fitting onto a page
+            // We found elements fitting onto a page (at least one)
             ret.addPerPageElements (aCurPageElements);
             aCurPageElements = new ArrayList <PLElementWithHeight> ();
+
+            // Start new page
             fCurY = fYTop;
 
             // Re-add element and continue from start, so that splitting happens
@@ -390,7 +402,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           }
         }
 
-        // Add element to current page
+        // Add element to current page (may also be a page break)
         aCurPageElements.add (aElementWithHeight);
         fCurY -= fThisHeightFull;
       }
