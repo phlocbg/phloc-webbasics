@@ -230,6 +230,14 @@ public class PLTable extends PLVBox implements IPLSplittableElement
                                                                                                        fTable2Height));
   }
 
+  /**
+   * Create a new table with the specified percentages.
+   * 
+   * @param aPercentages
+   *        The array to use. The sum of all percentages should be &le; 100. May
+   *        neither be <code>null</code> nor empty.
+   * @return The created {@link PLTable} and never <code>null</code>.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public static PLTable createWithPercentage (@Nonnull @Nonempty final float... aPercentages)
@@ -239,6 +247,25 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     final List <WidthSpec> aWidths = new ArrayList <WidthSpec> (aPercentages.length);
     for (final float fPercentage : aPercentages)
       aWidths.add (WidthSpec.perc (fPercentage));
+    return new PLTable (aWidths);
+  }
+
+  /**
+   * Create a new table with evenly sized columns.
+   * 
+   * @param nColumnCount
+   *        The number of columns to use. Must be &gt; 0.
+   * @return The created {@link PLTable} and never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static PLTable createWithEvenlySizedColumns (@Nonnegative final int nColumnCount)
+  {
+    if (nColumnCount < 1)
+      throw new IllegalArgumentException ("Columns must be >= 1: " + nColumnCount);
+    final List <WidthSpec> aWidths = new ArrayList <WidthSpec> (nColumnCount);
+    for (int i = 0; i < nColumnCount; ++i)
+      aWidths.add (WidthSpec.star ());
     return new PLTable (aWidths);
   }
 }

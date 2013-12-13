@@ -63,15 +63,27 @@ public class PageLayoutPDFTableTest
                                                     .setPadding (0, 4)
                                                     .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.addElement (new PLText ("Erste Dummy Zeile", r10));
-    final PLTable aTable = PLTable.createWithPercentage (10, 40, 25, 25).setHeaderRowCount (1);
+
+    // Start table
+    final PLTable aTable = true ? PLTable.createWithEvenlySizedColumns (4) : PLTable.createWithPercentage (10,
+                                                                                                           40,
+                                                                                                           25,
+                                                                                                           25);
+    aTable.setHeaderRowCount (1);
+
+    // Add row
     final PLHBox aRow = aTable.addTableRow (new PLText ("ID", r14b).setPadding (aPadding),
                                             new PLText ("Name", r14b).setPadding (aPadding),
                                             new PLText ("Sum1", r14b).setPadding (aPadding)
                                                                      .setHorzAlign (EHorzAlignment.CENTER),
                                             new PLText ("Sum2", r14b).setPadding (aPadding)
                                                                      .setHorzAlign (EHorzAlignment.RIGHT));
-    aRow.setBorder (new BorderStyleSpec (Color.GRAY)).setFillColor (Color.WHITE);
+    aRow.setColumnBorder (new BorderStyleSpec (Color.GRAY)).setFillColor (Color.WHITE);
+
+    // Add content lines
     for (int i = 0; i < 185; ++i)
+    {
+      // Width is determined by the width passed to the creatin method
       aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),
                           new PLText ("Name " + i,
                                       r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED : Color.BLACK)).setPadding (aPadding),
@@ -79,12 +91,15 @@ public class PageLayoutPDFTableTest
                                                                     .setHorzAlign (EHorzAlignment.CENTER),
                           new PLText (Integer.toString (i + i), r10).setPadding (aPadding)
                                                                     .setHorzAlign (EHorzAlignment.RIGHT));
+    }
     aPS1.addElement (aTable);
 
+    // Start a new page
     aPS1.addElement (new PLPageBreak (false));
     aPS1.addElement (new PLText ("First line on new page", r10));
-    aPS1.addElement (new PLPageBreak (true));
-    // empty page
+    // Next page
+    aPS1.addElement (new PLPageBreak (false));
+    // empty page by using forced page break
     aPS1.addElement (new PLPageBreak (true));
     aPS1.addElement (new PLText ("First line on last page", r10));
 

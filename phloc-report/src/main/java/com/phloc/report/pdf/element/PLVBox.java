@@ -179,7 +179,7 @@ public class PLVBox extends AbstractPLElement <PLVBox>
   }
 
   /**
-   * Set the border around the whole row.
+   * Set the border around each contained row.
    * 
    * @param aBorder
    *        The border style to use. May be <code>null</code>.
@@ -191,12 +191,34 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return setRowBorder (new BorderSpec (aBorder));
   }
 
+  /**
+   * Set the border around each contained row.
+   * 
+   * @param aBorderX
+   *        The border to set for left and right. Maybe <code>null</code>.
+   * @param aBorderY
+   *        The border to set for top and bottom. Maybe <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLVBox setRowBorder (@Nullable final BorderStyleSpec aBorderX, @Nullable final BorderStyleSpec aBorderY)
   {
     return setRowBorder (new BorderSpec (aBorderX, aBorderY));
   }
 
+  /**
+   * Set the border around each contained row.
+   * 
+   * @param aBorderLeft
+   *        The border to set for left. Maybe <code>null</code>.
+   * @param aBorderTop
+   *        The border to set for top. Maybe <code>null</code>.
+   * @param aBorderRight
+   *        The border to set for right. Maybe <code>null</code>.
+   * @param aBorderBottom
+   *        The border to set for bottom. Maybe <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLVBox setRowBorder (@Nullable final BorderStyleSpec aBorderLeft,
                                     @Nullable final BorderStyleSpec aBorderTop,
@@ -206,6 +228,13 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return setRowBorder (new BorderSpec (aBorderLeft, aBorderTop, aBorderRight, aBorderBottom));
   }
 
+  /**
+   * Set the border around each contained row.
+   * 
+   * @param aBorder
+   *        The border to set. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLVBox setRowBorder (@Nonnull final BorderSpec aBorder)
   {
@@ -216,12 +245,27 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return this;
   }
 
+  /**
+   * Get the border around each contained row. By default
+   * {@link BorderSpec#BORDER0} which means no border is used.
+   * 
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   public final BorderSpec getRowBorder ()
   {
     return m_aRowBorder;
   }
 
+  /**
+   * Set the fill color to be used to fill the whole row. <code>null</code>
+   * means no fill color.
+   * 
+   * @param aRowFillColor
+   *        The fill color to use. May be <code>null</code> to indicate no fill
+   *        color (which is also the default).
+   * @return this
+   */
   @Nonnull
   public PLVBox setRowFillColor (@Nullable final Color aRowFillColor)
   {
@@ -229,6 +273,12 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     return this;
   }
 
+  /**
+   * Get the fill color to be used to fill the whole row. <code>null</code>
+   * means no fill color.
+   * 
+   * @return May be <code>null</code>.
+   */
   @Nullable
   public Color getRowFillColor ()
   {

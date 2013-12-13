@@ -157,12 +157,28 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     return this;
   }
 
+  /**
+   * Set the border around each contained column.
+   * 
+   * @param aBorder
+   *        The border style to use. May be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLHBox setColumnBorder (@Nullable final BorderStyleSpec aBorder)
   {
     return setColumnBorder (new BorderSpec (aBorder));
   }
 
+  /**
+   * Set the border around each contained column.
+   * 
+   * @param aBorderX
+   *        The border to set for left and right. Maybe <code>null</code>.
+   * @param aBorderY
+   *        The border to set for top and bottom. Maybe <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLHBox setColumnBorder (@Nullable final BorderStyleSpec aBorderX,
                                        @Nullable final BorderStyleSpec aBorderY)
@@ -170,6 +186,19 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     return setColumnBorder (new BorderSpec (aBorderX, aBorderY));
   }
 
+  /**
+   * Set the border around each contained column.
+   * 
+   * @param aBorderLeft
+   *        The border to set for left. Maybe <code>null</code>.
+   * @param aBorderTop
+   *        The border to set for top. Maybe <code>null</code>.
+   * @param aBorderRight
+   *        The border to set for right. Maybe <code>null</code>.
+   * @param aBorderBottom
+   *        The border to set for bottom. Maybe <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLHBox setColumnBorder (@Nullable final BorderStyleSpec aBorderLeft,
                                        @Nullable final BorderStyleSpec aBorderTop,
@@ -179,6 +208,13 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     return setColumnBorder (new BorderSpec (aBorderLeft, aBorderTop, aBorderRight, aBorderBottom));
   }
 
+  /**
+   * Set the border around each contained column.
+   * 
+   * @param aBorder
+   *        The border to set. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public final PLHBox setColumnBorder (@Nonnull final BorderSpec aBorder)
   {
@@ -189,12 +225,27 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     return this;
   }
 
+  /**
+   * Get the border around each contained column. By default
+   * {@link BorderSpec#BORDER0} which means no border is used.
+   * 
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   public final BorderSpec getColumnBorder ()
   {
     return m_aColumnBorder;
   }
 
+  /**
+   * Set the fill color to be used to fill the whole column. <code>null</code>
+   * means no fill color.
+   * 
+   * @param aColumnFillColor
+   *        The fill color to use. May be <code>null</code> to indicate no fill
+   *        color (which is also the default).
+   * @return this
+   */
   @Nonnull
   public PLHBox setColumnFillColor (@Nullable final Color aColumnFillColor)
   {
@@ -202,6 +253,12 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     return this;
   }
 
+  /**
+   * Get the fill color to be used to fill the whole column. <code>null</code>
+   * means no fill color.
+   * 
+   * @return May be <code>null</code>.
+   */
   @Nullable
   public Color getColumnFillColor ()
   {
