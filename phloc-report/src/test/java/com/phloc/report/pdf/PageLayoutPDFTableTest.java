@@ -72,25 +72,27 @@ public class PageLayoutPDFTableTest
     aTable.setHeaderRowCount (1);
 
     // Add row
-    final PLHBox aRow = aTable.addTableRow (new PLText ("ID", r14b).setPadding (aPadding),
-                                            new PLText ("Name", r14b).setPadding (aPadding),
-                                            new PLText ("Sum1", r14b).setPadding (aPadding)
-                                                                     .setHorzAlign (EHorzAlignment.CENTER),
-                                            new PLText ("Sum2", r14b).setPadding (aPadding)
-                                                                     .setHorzAlign (EHorzAlignment.RIGHT));
+    PLHBox aRow = aTable.addTableRow (new PLText ("ID", r14b).setPadding (aPadding),
+                                      new PLText ("Name", r14b).setPadding (aPadding),
+                                      new PLText ("Sum1", r14b).setPadding (aPadding)
+                                                               .setHorzAlign (EHorzAlignment.CENTER),
+                                      new PLText ("Sum2", r14b).setPadding (aPadding)
+                                                               .setHorzAlign (EHorzAlignment.RIGHT));
     aRow.setColumnBorder (new BorderStyleSpec (Color.GRAY)).setFillColor (Color.WHITE);
 
     // Add content lines
     for (int i = 0; i < 185; ++i)
     {
-      // Width is determined by the width passed to the creatin method
-      aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),
-                          new PLText ("Name " + i,
-                                      r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED : Color.BLACK)).setPadding (aPadding),
-                          new PLText (Integer.toString (i * i), r10).setPadding (aPadding)
-                                                                    .setHorzAlign (EHorzAlignment.CENTER),
-                          new PLText (Integer.toString (i + i), r10).setPadding (aPadding)
-                                                                    .setHorzAlign (EHorzAlignment.RIGHT));
+      // Width is determined by the width passed to the table creating method
+      aRow = aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),
+                                 new PLText ("Name " + i, r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED
+                                                                                                    : Color.BLACK)).setPadding (aPadding),
+                                 new PLText (Integer.toString (i * i), r10).setPadding (aPadding)
+                                                                           .setHorzAlign (EHorzAlignment.CENTER),
+                                 new PLText (Integer.toString (i + i), r10).setPadding (aPadding)
+                                                                           .setHorzAlign (EHorzAlignment.RIGHT));
+      if ((i % 4) == 0)
+        aRow.setColumnBorder (new BorderStyleSpec (Color.GREEN));
     }
     aPS1.addElement (aTable);
 
