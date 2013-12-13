@@ -26,7 +26,12 @@ import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
- * A page break that ensures a new page is started afterwards.
+ * A page break that ensures a new page is started afterwards. The difference
+ * between force pages breaks and normal page breaks is as follows: forced page
+ * breaks are always executed, whereas normal page breaks are not executed if a
+ * new page just started.<br>
+ * Important note: page breaks are only handled if they are directly contained
+ * in a page set. Page breaks are not handled when nested in VBoxes or HBoxes.
  * 
  * @author Philip Helger
  */
@@ -34,11 +39,22 @@ public class PLPageBreak extends AbstractPLElement <PLPageBreak>
 {
   private final boolean m_bForcePageBreak;
 
+  /**
+   * Constructor
+   * 
+   * @param bForcePageBreak
+   *        <code>true</code> if this is a forced page break, <code>false</code>
+   *        if it is a normal page break.
+   */
   public PLPageBreak (final boolean bForcePageBreak)
   {
     m_bForcePageBreak = bForcePageBreak;
   }
 
+  /**
+   * @return <code>true</code> if this is a forced page break,
+   *         <code>false</code> if it is a normal page break.
+   */
   public boolean isForcePageBreak ()
   {
     return m_bForcePageBreak;

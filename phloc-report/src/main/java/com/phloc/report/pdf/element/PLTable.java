@@ -78,10 +78,10 @@ public class PLTable extends PLVBox implements IPLSplittableElement
    * 
    * @param aElements
    *        The elements to add. May be <code>null</code>.
-   * @return this
+   * @return The added row and never <code>null</code>.
    */
   @Nonnull
-  public PLTable addTableRow (@Nullable final AbstractPLElement <?>... aElements)
+  public PLHBox addTableRow (@Nullable final AbstractPLElement <?>... aElements)
   {
     return addTableRow (ContainerHelper.newList (aElements));
   }
@@ -96,7 +96,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
    * @return this
    */
   @Nonnull
-  public PLTable addTableRow (@Nonnull final List <? extends AbstractPLElement <?>> aElements)
+  public PLHBox addTableRow (@Nonnull final List <? extends AbstractPLElement <?>> aElements)
   {
     if (aElements == null)
       throw new NullPointerException ("elements");
@@ -120,7 +120,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
       aHBox.addColumn (aElement, aWidth);
     }
     super.addRow (aHBox);
-    return this;
+    return aHBox;
   }
 
   /**

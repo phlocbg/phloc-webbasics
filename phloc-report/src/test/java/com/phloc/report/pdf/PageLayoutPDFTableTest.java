@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import com.phloc.commons.mock.DebugModeTestRule;
+import com.phloc.report.pdf.element.PLHBox;
 import com.phloc.report.pdf.element.PLPageBreak;
 import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLTable;
@@ -36,6 +37,7 @@ import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.PDFFont;
+import com.phloc.report.pdf.spec.PaddingSpec;
 
 /**
  * Test class for class {@link PageLayoutPDF}.
@@ -51,25 +53,32 @@ public class PageLayoutPDFTableTest
   public void testBasic () throws FileNotFoundException, PDFCreationException
   {
     final FontSpec r10 = new FontSpec (PDFFont.REGULAR, 10);
+    final FontSpec r14b = new FontSpec (PDFFont.REGULAR_BOLD, 14);
+    final PaddingSpec aPadding = new PaddingSpec (2);
+
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30)
-                                                              .setPadding (10)
-                                                              .setFillColor (new Color (0xeeeeee));
+                                                              .setPadding (10, 0, 20, 0)
+                                                              .setFillColor (new Color (0xddffff));
     aPS1.setPageHeader (new PLText ("Headline", r10).setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
                                                     .setPadding (0, 4)
                                                     .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.addElement (new PLText ("Erste Dummy Zeile", r10));
     final PLTable aTable = PLTable.createWithPercentage (10, 40, 25, 25).setHeaderRowCount (1);
-    aTable.addTableRow (new PLText ("ID", r10),
-                        new PLText ("Name", r10),
-                        new PLText ("Sum1", r10).setHorzAlign (EHorzAlignment.RIGHT),
-                        new PLText ("Sum2", r10).setHorzAlign (EHorzAlignment.RIGHT));
-    aTable.getLastRowElement ().setFillColor (Color.WHITE);
-    for (int i = 0; i < 200; ++i)
-      aTable.addTableRow (new PLText (Integer.toString (i), r10),
+    final PLHBox aRow = aTable.addTableRow (new PLText ("ID", r14b).setPadding (aPadding),
+                                            new PLText ("Name", r14b).setPadding (aPadding),
+                                            new PLText ("Sum1", r14b).setPadding (aPadding)
+                                                                     .setHorzAlign (EHorzAlignment.CENTER),
+                                            new PLText ("Sum2", r14b).setPadding (aPadding)
+                                                                     .setHorzAlign (EHorzAlignment.RIGHT));
+    aRow.setBorder (new BorderStyleSpec (Color.GRAY)).setFillColor (Color.WHITE);
+    for (int i = 0; i < 185; ++i)
+      aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),
                           new PLText ("Name " + i,
-                                      r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED : Color.BLACK)),
-                          new PLText (Integer.toString (i * i), r10).setHorzAlign (EHorzAlignment.RIGHT),
-                          new PLText (Integer.toString (i + i), r10).setHorzAlign (EHorzAlignment.RIGHT));
+                                      r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED : Color.BLACK)).setPadding (aPadding),
+                          new PLText (Integer.toString (i * i), r10).setPadding (aPadding)
+                                                                    .setHorzAlign (EHorzAlignment.CENTER),
+                          new PLText (Integer.toString (i + i), r10).setPadding (aPadding)
+                                                                    .setHorzAlign (EHorzAlignment.RIGHT));
     aPS1.addElement (aTable);
 
     aPS1.addElement (new PLPageBreak (false));
