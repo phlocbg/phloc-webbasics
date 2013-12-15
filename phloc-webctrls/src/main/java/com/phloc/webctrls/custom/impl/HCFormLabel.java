@@ -46,6 +46,8 @@ public class HCFormLabel extends HCLabel implements IFormLabel
       case ALTERNATIVE:
         addClass (HCFormLabelUtils.CSS_CLASS_FORM_LABEL_ALTERNATIVE);
         break;
+      default:
+        break;
     }
   }
 
