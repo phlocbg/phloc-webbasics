@@ -1,5 +1,7 @@
 package com.phloc.bootstrap3.grid;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -8,7 +10,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCElement;
 
 @Immutable
-public final class BootstrapGripSpec
+public final class BootstrapGripSpec implements Serializable
 {
   private final EBootstrapGridXS m_eXS;
   private final EBootstrapGridSM m_eSM;
