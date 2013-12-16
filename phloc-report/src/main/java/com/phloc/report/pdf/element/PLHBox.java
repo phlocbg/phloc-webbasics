@@ -30,6 +30,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
@@ -327,10 +328,15 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     }
 
     // Small consistency check (with rounding included)
-    if (fUsedWidth - fAvailableWidth > 0.01)
-      s_aLogger.warn ("HBox uses more width (" + fUsedWidth + ") than available (" + fAvailableWidth + ")!");
-    if (fUsedHeight - fAvailableHeight > 0.01)
-      s_aLogger.warn ("HBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
+    if (GlobalDebug.isDebugMode ())
+    {
+      if (fUsedWidth - fAvailableWidth > 0.01)
+        s_aLogger.warn ("HBox uses more width (" + fUsedWidth + ") than available (" + fAvailableWidth + ")!");
+      if (fUsedHeight - fAvailableHeight > 0.01)
+        if (!(this instanceof IPLSplittableElement))
+          s_aLogger.warn ("HBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
+    }
+
     return new SizeSpec (fUsedWidth, fUsedHeight);
   }
 
