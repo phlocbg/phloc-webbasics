@@ -2,6 +2,9 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>12/16/13</td><td colspan="4">_Release *1.0.6*_</td></tr>
+<tr><td>12/16/13</td><td>add</td><td>api</td><td></td><td>Fixed invalid break in PLText when no blank is contained in a long line.</td></tr>
+<tr><td>12/16/13</td><td>add</td><td>api</td><td></td><td>Extended PLText API to support bottom-up rendering instead of top-down rendering.</td></tr>
 <tr border="1"><td>12/12/13</td><td colspan="4">_Release *1.0.5*_</td></tr>
 <tr><td>12/12/13</td><td>add</td><td>api</td><td></td><td>Added a PLPageBreak element to create forced page breaks.</td></tr>
 <tr border="1"><td>12/11/13</td><td colspan="4">_Release *1.0.4*_</td></tr>
