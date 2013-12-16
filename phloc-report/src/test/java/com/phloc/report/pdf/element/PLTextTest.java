@@ -1,5 +1,6 @@
 package com.phloc.report.pdf.element;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -11,6 +12,7 @@ import org.junit.rules.TestRule;
 import com.phloc.commons.mock.DebugModeTestRule;
 import com.phloc.report.pdf.PDFCreationException;
 import com.phloc.report.pdf.PageLayoutPDF;
+import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.PDFFont;
 import com.phloc.report.pdf.spec.WidthSpec;
@@ -30,7 +32,7 @@ public class PLTextTest
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30);
     final PLTable aTable = PLTable.createWithPercentage (50, 50);
     final PLHBox aHBox = new PLHBox ();
-    aHBox.addColumn (new PLText (s, r10), WidthSpec.star ());
+    aHBox.addColumn (new PLText (s, r10).setBorder (new BorderStyleSpec (Color.RED)), WidthSpec.star ());
     aTable.addRow (aHBox);
     aPS1.addElement (aTable);
 
