@@ -201,16 +201,20 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     aTable1.markAsPrepared (new SizeSpec (fTable1Width, fTable1Height));
     aTable2.markAsPrepared (new SizeSpec (fTable2Width, fTable2Height));
 
+    // Reuse prepared width and height to avoid recalculation
     final float [] aWidth1 = new float [aTable1.getRowCount ()];
     final float [] aHeight1 = new float [aTable1.getRowCount ()];
     final float [] aWidth2 = new float [aTable2.getRowCount ()];
     final float [] aHeight2 = new float [aTable2.getRowCount ()];
+
+    // Header width and height are easy
     for (int i = 0; i < m_nHeaderRowCount; ++i)
     {
       aWidth1[i] = aWidth2[i] = m_aPreparedWidth[i];
       aHeight1[i] = aHeight2[i] = m_aPreparedHeight[i];
     }
 
+    // Copy width and height for first table
     for (int i = m_nHeaderRowCount; i < aTable1.getRowCount (); ++i)
     {
       aWidth1[i] = m_aPreparedWidth[i];
@@ -219,6 +223,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     aTable1.m_aPreparedWidth = aWidth1;
     aTable1.m_aPreparedHeight = aHeight1;
 
+    // Copy width and height for second table
     final int nDelta = nTotalRows - aTable2.getRowCount () - m_nHeaderRowCount + 1;
     for (int i = m_nHeaderRowCount; i < aTable2.getRowCount (); ++i)
     {
