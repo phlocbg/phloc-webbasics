@@ -154,6 +154,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     final PLTable aTable1 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
     final PLTable aTable2 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
 
+    // Copy all header rows
     float fTable1Width = 0;
     float fTable1Height = 0;
     for (int i = 0; i < m_nHeaderRowCount; ++i)
@@ -162,29 +163,30 @@ public class PLTable extends PLVBox implements IPLSplittableElement
       aTable1.addRow (aHeaderRow);
       aTable2.addRow (aHeaderRow);
 
-      fTable1Width = Math.max (fTable1Width, m_aPreparedWidth[i] + aHeaderRow.getMarginPlusPaddingYSum ());
+      fTable1Width = Math.max (fTable1Width, m_aPreparedWidth[i] + aHeaderRow.getMarginPlusPaddingXSum ());
       fTable1Height += m_aPreparedHeight[i] + aHeaderRow.getMarginPlusPaddingYSum ();
     }
     float fTable2Width = fTable1Width;
     float fTable2Height = fTable1Height;
 
-    final int nMaxRows = getRowCount ();
+    // Copy all content rows
+    final int nTotalRows = getRowCount ();
     boolean bOnTable1 = true;
-    for (int i = m_nHeaderRowCount; i < nMaxRows; ++i)
+    for (int i = m_nHeaderRowCount; i < nTotalRows; ++i)
     {
       final AbstractPLElement <?> aRow = getRowElementAtIndex (i);
       final float fRowHeightFull = m_aPreparedHeight[i] + aRow.getMarginPlusPaddingYSum ();
       if (bOnTable1 && fTable1Height + fRowHeightFull <= fAvailableHeight)
       {
         aTable1.addRow (aRow);
-        fTable1Width = Math.max (fTable1Width, m_aPreparedWidth[i] + aRow.getMarginPlusPaddingYSum ());
+        fTable1Width = Math.max (fTable1Width, m_aPreparedWidth[i] + aRow.getMarginPlusPaddingXSum ());
         fTable1Height += fRowHeightFull;
       }
       else
       {
         bOnTable1 = false;
         aTable2.addRow (aRow);
-        fTable2Width = Math.max (fTable2Width, m_aPreparedWidth[i] + aRow.getMarginPlusPaddingYSum ());
+        fTable2Width = Math.max (fTable2Width, m_aPreparedWidth[i] + aRow.getMarginPlusPaddingXSum ());
         fTable2Height += fRowHeightFull;
       }
     }
@@ -217,7 +219,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     aTable1.m_aPreparedWidth = aWidth1;
     aTable1.m_aPreparedHeight = aHeight1;
 
-    final int nDelta = nMaxRows - aTable2.getRowCount () - m_nHeaderRowCount;
+    final int nDelta = nTotalRows - aTable2.getRowCount () - m_nHeaderRowCount + 1;
     for (int i = m_nHeaderRowCount; i < aTable2.getRowCount (); ++i)
     {
       aWidth2[i] = m_aPreparedWidth[i + nDelta];
