@@ -128,7 +128,7 @@ public class PDFFont
       // Now split each source line into the best matching sub-lines
       String sCurLine = sLine;
       float fCurLineWidth;
-      while ((fCurLineWidth = getStringWidth (sCurLine, fFontSize)) > fMaxWidth)
+      outer: while ((fCurLineWidth = getStringWidth (sCurLine, fFontSize)) > fMaxWidth)
       {
         // Line is too long to fit
 
@@ -179,9 +179,11 @@ public class PDFFont
                 final String sWordPartToUse = sCurLine.substring (0, nIndex - 1);
                 ret.add (new TextAndWidthSpec (sWordPartToUse, fPrevWordPartLength));
 
-                // Skip the current word part and continue
+                // Remove the current word part
                 sCurLine = sCurLine.substring (nIndex - 1);
-                break;
+
+                // And check for the next whitespace
+                continue outer;
               }
             }
             else

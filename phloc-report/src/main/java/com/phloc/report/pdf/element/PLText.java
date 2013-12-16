@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
@@ -38,9 +39,13 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  */
 public class PLText extends AbstractPLElement <PLText>
 {
+  public static final boolean DEFAULT_TOP_DOWN = true;
+
   private final String m_sText;
   private final FontSpec m_aFont;
+  private final float m_fLineHeight;
   private EHorzAlignment m_eHorzAlign = EHorzAlignment.DEFAULT;
+  private boolean m_bTopDown = DEFAULT_TOP_DOWN;
 
   // prepare result
   private List <TextAndWidthSpec> m_aLines;
@@ -53,6 +58,25 @@ public class PLText extends AbstractPLElement <PLText>
       throw new NullPointerException ("font");
     m_sText = sText;
     m_aFont = aFont;
+    m_fLineHeight = m_aFont.getLineHeight ();
+  }
+
+  @Nonnull
+  public String getText ()
+  {
+    return m_sText;
+  }
+
+  @Nonnull
+  public FontSpec getFontSpec ()
+  {
+    return m_aFont;
+  }
+
+  @Nonnull
+  public EHorzAlignment getHorzAlign ()
+  {
+    return m_eHorzAlign;
   }
 
   @Nonnull
@@ -64,13 +88,31 @@ public class PLText extends AbstractPLElement <PLText>
     return this;
   }
 
+  public boolean isTopDown ()
+  {
+    return m_bTopDown;
+  }
+
+  @Nonnull
+  public PLText setTopDown (final boolean bTopDown)
+  {
+    m_bTopDown = bTopDown;
+    return this;
+  }
+
   @Override
   protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
   {
     // Split text into rows
     m_aLines = m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ());
 
-    return new SizeSpec (aCtx.getAvailableWidth (), m_aLines.size () * m_aFont.getLineHeight ());
+    if (!m_bTopDown)
+    {
+      // Reverse order only once
+      m_aLines = ContainerHelper.getReverseInlineList (m_aLines);
+    }
+
+    return new SizeSpec (aCtx.getAvailableWidth (), m_aLines.size () * m_fLineHeight);
   }
 
   /**
@@ -135,8 +177,7 @@ public class PLText extends AbstractPLElement <PLText>
         // Initial move - only partial line height!
         aContentStream.moveTextPositionByAmount (aCtx.getStartLeft () + fIndentX, aCtx.getStartTop () -
                                                                                   getPadding ().getTop () -
-                                                                                  m_aFont.getLineHeight () *
-                                                                                  0.75f);
+                                                                                  (m_fLineHeight * 0.75f));
       }
       else
         if (fIndentX != 0)
@@ -152,8 +193,16 @@ public class PLText extends AbstractPLElement <PLText>
       // Goto next line
       if (nIndex < nMax)
       {
-        // Outdent and one line down, except for last line
-        aContentStream.moveTextPositionByAmount (-fIndentX, -m_aFont.getLineHeight ());
+        if (m_bTopDown)
+        {
+          // Outdent and one line down, except for last line
+          aContentStream.moveTextPositionByAmount (-fIndentX, -m_fLineHeight);
+        }
+        else
+        {
+          // Outdent and one line up, except for last line
+          aContentStream.moveTextPositionByAmount (-fIndentX, m_fLineHeight);
+        }
       }
     }
     aContentStream.endText ();
