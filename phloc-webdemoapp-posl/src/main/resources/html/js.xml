@@ -25,5 +25,7 @@
   <js path="/stream/js/jquery-utils.js" />
   <js path="/stream/js/form.js" />
   <js path="/js/default.js" />
+  <js path="/stream/html5shiv/3.7.0/html5shiv.js" condcomment="if lt IE 9"/>
+  <js path="/stream/js/respond.js" condcomment="if lt IE 9"/>
   <js path="/stream/placeholder/placeholder-fix.js" condcomment="if lte IE 9"/>
 </items>
