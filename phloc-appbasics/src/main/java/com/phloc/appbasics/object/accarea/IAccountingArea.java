@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.misc.IHasUIText;
 import com.phloc.appbasics.object.client.IClientObject;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.masterdata.address.IReadonlyAddress;
 import com.phloc.masterdata.currency.ECurrency;
@@ -87,4 +88,12 @@ public interface IAccountingArea extends IClientObject, IHasDisplayName, IHasUIT
    */
   @Nonnull
   ECurrency getDefaultCurrency ();
+
+  /**
+   * @return The default currency ID in this client. May not be
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @Nonempty
+  String getDefaultCurrencyID ();
 }

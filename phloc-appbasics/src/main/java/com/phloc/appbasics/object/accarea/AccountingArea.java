@@ -305,6 +305,13 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
   }
 
   @Nonnull
+  @Nonempty
+  public String getDefaultCurrencyID ()
+  {
+    return m_eDefaultCurrency.getID ();
+  }
+
+  @Nonnull
   public EChange setDefaultCurrency (@Nonnull final ECurrency eDefaultCurrency)
   {
     if (eDefaultCurrency == null)
