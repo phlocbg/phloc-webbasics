@@ -26,8 +26,8 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-css:3.6.0" level="project" />
-    <orderEntry type="library" name="Maven: com.phloc:phloc-html:3.13.0" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-css:3.6.1" level="project" />
+    <orderEntry type="library" name="Maven: com.phloc:phloc-html:3.13.1" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.5.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.11" level="project" />
