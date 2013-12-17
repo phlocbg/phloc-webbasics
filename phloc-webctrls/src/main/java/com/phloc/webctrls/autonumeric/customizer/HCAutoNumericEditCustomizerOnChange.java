@@ -18,20 +18,31 @@
 package com.phloc.webctrls.autonumeric.customizer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.html.hc.html.HCEdit;
+import com.phloc.html.js.EJSEvent;
+import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.webctrls.autonumeric.IHCAutoNumericEditCustomizer;
 
 /**
- * A special {@link IHCAutoNumericEditCustomizer} that puts the edit in readonly
- * state.
+ * A special {@link IHCAutoNumericEditCustomizer} that sets an event handler
+ * onchange.
  * 
  * @author Philip Helger
  */
-public class EditCustomizerReadonly implements IHCAutoNumericEditCustomizer
+public class HCAutoNumericEditCustomizerOnChange implements IHCAutoNumericEditCustomizer
 {
+  private final IJSCodeProvider m_aOnChange;
+
+  public HCAutoNumericEditCustomizerOnChange (@Nullable final IJSCodeProvider aOnChange)
+  {
+    m_aOnChange = aOnChange;
+  }
+
   public void customize (@Nonnull final HCEdit aEdit)
   {
-    aEdit.setReadonly (true);
+    if (m_aOnChange != null)
+      aEdit.setEventHandler (EJSEvent.ONCHANGE, m_aOnChange);
   }
 }
