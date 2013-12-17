@@ -200,7 +200,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   @ReturnsMutableCopy
   public final List <IDTYPE> unlockAllObjectsOfCurrentUser ()
   {
-    return unlockAllObjectsOfCurrentUserExcept (null);
+    return unlockAllObjectsOfCurrentUserExcept ((Set <IDTYPE>) null);
   }
 
   @Nonnull
@@ -214,7 +214,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   @ReturnsMutableCopy
   public final List <IDTYPE> unlockAllObjectsOfUser (@Nullable final String sUserID)
   {
-    return unlockAllObjectsOfUserExcept (sUserID, null);
+    return unlockAllObjectsOfUserExcept (sUserID, (Set <IDTYPE>) null);
   }
 
   @Nonnull
@@ -222,7 +222,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   public final List <IDTYPE> unlockAllObjectsOfUserExcept (@Nullable final String sUserID,
                                                            @Nullable final Set <IDTYPE> aObjectsToKeepLocked)
   {
-    final List <IDTYPE> aObjectsToUnlock = new ArrayList <IDTYPE> ();
+    final List <IDTYPE> aUnlockedObjects = new ArrayList <IDTYPE> ();
     if (StringHelper.hasText (sUserID))
     {
       m_aRWLock.writeLock ().lock ();
@@ -237,28 +237,28 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
             // Object is locked by current user
             final IDTYPE aObjID = aEntry.getKey ();
             if (aObjectsToKeepLocked == null || !aObjectsToKeepLocked.contains (aObjID))
-              aObjectsToUnlock.add (aObjID);
+              aUnlockedObjects.add (aObjID);
           }
         }
 
         // remove locks
-        for (final IDTYPE aObjID : aObjectsToUnlock)
+        for (final IDTYPE aObjID : aUnlockedObjects)
           if (m_aLockedObjs.remove (aObjID) == null)
             throw new IllegalStateException ("Internal inconsistency: failed to unlock '" +
                                              aObjID +
                                              "' from " +
-                                             aObjectsToUnlock);
+                                             aUnlockedObjects);
       }
       finally
       {
         m_aRWLock.writeLock ().unlock ();
       }
 
-      if (!aObjectsToUnlock.isEmpty ())
+      if (!aUnlockedObjects.isEmpty ())
         if (s_aLogger.isInfoEnabled ())
-          s_aLogger.info ("Unlocked all objects of user '" + sUserID + "': " + aObjectsToUnlock);
+          s_aLogger.info ("Unlocked all objects of user '" + sUserID + "': " + aUnlockedObjects);
     }
-    return aObjectsToUnlock;
+    return aUnlockedObjects;
   }
 
   public final boolean isObjectLockedByCurrentUser (@Nullable final IDTYPE aObjID)
