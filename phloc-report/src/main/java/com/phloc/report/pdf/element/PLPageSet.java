@@ -37,12 +37,11 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
-import com.phloc.report.pdf.element.IPLSplittableElement.SplitResult;
 import com.phloc.report.pdf.render.ERenderingElementType;
 import com.phloc.report.pdf.render.IRenderingContextCustomizer;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPageIndex;
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
@@ -288,7 +287,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     if (m_aPageHeader != null)
     {
       // Page header does not care about page padding
-      final RenderPreparationContext aRPC = new RenderPreparationContext (m_aPageSize.getWidth () -
+      final PreparationContext aRPC = new PreparationContext (m_aPageSize.getWidth () -
                                                                               getMargin ().getXSum () -
                                                                               m_aPageHeader.getMarginPlusPaddingXSum (),
                                                                           getMargin ().getTop () -
@@ -300,7 +299,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     // Prepare content elements
     for (final AbstractPLElement <?> aElement : m_aElements)
     {
-      final RenderPreparationContext aRPC = new RenderPreparationContext (getAvailableWidth () -
+      final PreparationContext aRPC = new PreparationContext (getAvailableWidth () -
                                                                               aElement.getMarginPlusPaddingXSum (),
                                                                           getAvailableHeight () -
                                                                               aElement.getMarginPlusPaddingYSum ());
@@ -312,7 +311,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     if (m_aPageFooter != null)
     {
       // Page footer does not care about page padding
-      final RenderPreparationContext aRPC = new RenderPreparationContext (m_aPageSize.getWidth () -
+      final PreparationContext aRPC = new PreparationContext (m_aPageSize.getWidth () -
                                                                               getMargin ().getXSum () -
                                                                               m_aPageFooter.getMarginPlusPaddingXSum (),
                                                                           getMargin ().getBottom () -
@@ -355,7 +354,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           {
             // split elements
             final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
-            final SplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
+            final PLSplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
             if (aSplitResult != null)
             {
               // Re-add them to the list and try again (they may be splitted

@@ -33,8 +33,9 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
@@ -344,7 +345,7 @@ public class PLVBox extends AbstractPLElement <PLVBox>
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     m_aPreparedWidth = new float [m_aRows.size ()];
     m_aPreparedHeight = new float [m_aRows.size ()];
@@ -361,7 +362,7 @@ public class PLVBox extends AbstractPLElement <PLVBox>
       // Effective content width of this element
       final float fItemWidth = fItemWidthFull - aElement.getMarginPlusPaddingXSum ();
       // Prepare child element
-      final float fItemHeight = aElement.prepare (new RenderPreparationContext (fItemWidth, fAvailableHeight))
+      final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight))
                                         .getHeight ();
       final float fItemHeightFull = fItemHeight + aElement.getMarginPlusPaddingYSum ();
       // Update used width and height
@@ -435,5 +436,17 @@ public class PLVBox extends AbstractPLElement <PLVBox>
       fCurY -= fItemHeightWithPadding + aElement.getMargin ().getYSum ();
       ++nIndex;
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("rows", m_aRows)
+                            .append ("rowBorder", m_aRowBorder)
+                            .appendIfNotNull ("rowFillColor", m_aRowFillColor)
+                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+                            .toString ();
   }
 }

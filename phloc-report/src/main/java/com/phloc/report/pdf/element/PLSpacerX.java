@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
 
@@ -36,7 +36,7 @@ public class PLSpacerX extends AbstractPLElement <PLSpacerX>
   {}
 
   @Override
-  protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // No height required
     return new SizeSpec (aCtx.getAvailableWidth (), 0);

@@ -21,19 +21,29 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Wraps an {@link AbstractPLElement} and stores the height.
+ * 
+ * @author Philip Helger
+ */
 public final class PLElementWithHeight
 {
   private final AbstractPLElement <?> m_aElement;
   private final float m_fHeight;
   private final float m_fHeightFull;
 
-  PLElementWithHeight (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final float fHeight)
+  public PLElementWithHeight (@Nonnull final AbstractPLElement <?> aElement, final float fHeight)
   {
+    if (aElement == null)
+      throw new NullPointerException ("element");
     m_aElement = aElement;
     m_fHeight = fHeight;
     m_fHeightFull = fHeight + aElement.getMarginPlusPaddingYSum ();
   }
 
+  /**
+   * @return The contained element.
+   */
   @Nonnull
   public AbstractPLElement <?> getElement ()
   {

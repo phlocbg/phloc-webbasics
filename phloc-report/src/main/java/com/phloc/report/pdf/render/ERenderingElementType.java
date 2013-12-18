@@ -17,6 +17,11 @@
  */
 package com.phloc.report.pdf.render;
 
+/**
+ * Defines the type of a rendered element.
+ * 
+ * @author Philip Helger
+ */
 public enum ERenderingElementType
 {
   PAGE_HEADER,

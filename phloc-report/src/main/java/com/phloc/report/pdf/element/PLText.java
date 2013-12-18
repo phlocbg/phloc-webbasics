@@ -26,8 +26,9 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
@@ -101,7 +102,7 @@ public class PLText extends AbstractPLElement <PLText>
   }
 
   @Override
-  protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Split text into rows
     m_aLines = m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ());
@@ -206,5 +207,17 @@ public class PLText extends AbstractPLElement <PLText>
       }
     }
     aContentStream.endText ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("text", m_sText)
+                            .append ("font", m_aFont)
+                            .append ("lineHeight", m_fLineHeight)
+                            .append ("horzAlign", m_eHorzAlign)
+                            .append ("topDown", m_bTopDown)
+                            .toString ();
   }
 }

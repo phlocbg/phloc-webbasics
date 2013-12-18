@@ -24,10 +24,15 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * The current context for preparing an element.
+ * 
+ * @author Philip Helger
+ */
 @Immutable
-public final class RenderPreparationContext
+public final class PreparationContext
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (RenderPreparationContext.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PreparationContext.class);
 
   private final float m_fAvailableWidth;
   private final float m_fAvailableHeight;
@@ -42,7 +47,7 @@ public final class RenderPreparationContext
    *        The available height for an element, without the element's margin
    *        and padding. Should be &gt; 0.
    */
-  public RenderPreparationContext (final float fAvailableWidth, final float fAvailableHeight)
+  public PreparationContext (final float fAvailableWidth, final float fAvailableHeight)
   {
     if (fAvailableWidth <= 0)
       s_aLogger.warn ("RenderPreparationContext: available width is too small: " + fAvailableWidth);

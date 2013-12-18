@@ -28,6 +28,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.WidthSpec;
 
@@ -149,7 +150,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
   }
 
   @Nullable
-  public SplitResult splitElements (final float fAvailableHeight)
+  public PLSplitResult splitElements (final float fAvailableHeight)
   {
     final PLTable aTable1 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
     final PLTable aTable2 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
@@ -233,8 +234,17 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     aTable2.m_aPreparedWidth = aWidth2;
     aTable2.m_aPreparedHeight = aHeight2;
 
-    return new SplitResult (new PLElementWithHeight (aTable1, fTable1Height), new PLElementWithHeight (aTable2,
-                                                                                                       fTable2Height));
+    return new PLSplitResult (new PLElementWithHeight (aTable1, fTable1Height), new PLElementWithHeight (aTable2,
+                                                                                                         fTable2Height));
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("width", m_aWidths)
+                            .append ("headerRowCount", m_nHeaderRowCount)
+                            .toString ();
   }
 
   /**

@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
@@ -85,7 +85,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
    *         on error
    */
   @Nonnull
-  protected abstract SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException;
+  protected abstract SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException;
 
   /**
    * Prepare this element once for rendering.
@@ -97,7 +97,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
    * @throws IOException
    */
   @Nonnull
-  public final SizeSpec prepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  public final SizeSpec prepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Prepare only once!
     if (m_bPrepared)

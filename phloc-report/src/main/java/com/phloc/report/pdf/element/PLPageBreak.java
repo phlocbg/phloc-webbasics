@@ -21,7 +21,8 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
 
@@ -61,7 +62,7 @@ public class PLPageBreak extends AbstractPLElement <PLPageBreak>
   }
 
   @Override
-  protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Use the fixed size
     return SizeSpec.SIZE0;
@@ -70,4 +71,10 @@ public class PLPageBreak extends AbstractPLElement <PLPageBreak>
   @Override
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {}
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("forcePageBreak", m_bForcePageBreak).toString ();
+  }
 }

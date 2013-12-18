@@ -33,8 +33,9 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
@@ -324,7 +325,7 @@ public class PLHBox extends AbstractPLElement <PLHBox>
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     m_aPreparedWidth = new float [m_aColumns.size ()];
     m_aPreparedHeight = new float [m_aColumns.size ()];
@@ -345,7 +346,7 @@ public class PLHBox extends AbstractPLElement <PLHBox>
         // Effective content width of this element
         final float fItemWidth = fItemWidthFull - aElement.getMarginPlusPaddingXSum ();
         // Prepare child element
-        final float fItemHeight = aElement.prepare (new RenderPreparationContext (fItemWidth, fAvailableHeight))
+        final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight))
                                           .getHeight ();
         final float fItemHeightFull = fItemHeight + aElement.getMarginPlusPaddingYSum ();
         // Update used width and height
@@ -370,7 +371,7 @@ public class PLHBox extends AbstractPLElement <PLHBox>
         // Effective content width of this element
         final float fItemWidth = fItemWidthFull - aElement.getMarginPlusPaddingXSum ();
         // Prepare child element
-        final float fItemHeight = aElement.prepare (new RenderPreparationContext (fItemWidth, fAvailableHeight))
+        final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight))
                                           .getHeight ();
         final float fItemHeightFull = fItemHeight + aElement.getMarginPlusPaddingYSum ();
         // Update used width and height
@@ -445,5 +446,18 @@ public class PLHBox extends AbstractPLElement <PLHBox>
       fCurX += fItemWidthWithPadding + aElement.getMargin ().getXSum ();
       ++nIndex;
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("columns", m_aColumns)
+                            .append ("startWidthItems", m_nStarWidthItems)
+                            .append ("columnBorder", m_aColumnBorder)
+                            .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
+                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+                            .toString ();
   }
 }

@@ -226,7 +226,7 @@ public class PageLayoutPDF
         nPageSetIndex++;
       }
 
-      // Start applying content
+      // Start applying all page sets
       nPageSetIndex = 0;
       int nTotalPageIndex = 0;
       for (final PLPageSet aPageSet : m_aPageSets)
@@ -238,7 +238,7 @@ public class PageLayoutPDF
         nPageSetIndex++;
       }
 
-      // Customize the whole document
+      // Customize the whole document (optional)
       if (aCustomizer != null)
         aCustomizer.customizeDocument (aDoc);
 

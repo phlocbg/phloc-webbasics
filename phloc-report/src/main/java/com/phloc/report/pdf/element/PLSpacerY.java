@@ -21,7 +21,8 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.report.pdf.render.RenderPreparationContext;
+import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
 
@@ -45,7 +46,7 @@ public class PLSpacerY extends AbstractPLElement <PLSpacerY>
   }
 
   @Override
-  protected SizeSpec onPrepare (@Nonnull final RenderPreparationContext aCtx) throws IOException
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Use the fixed height
     return new SizeSpec (aCtx.getAvailableWidth (), m_fHeight);
@@ -54,4 +55,10 @@ public class PLSpacerY extends AbstractPLElement <PLSpacerY>
   @Override
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {}
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("height", m_fHeight).toString ();
+  }
 }
