@@ -59,18 +59,12 @@ public class PageLayoutPDFTest
     final FontSpec r10 = new FontSpec (PDFFont.REGULAR, 10);
     final FontSpec r12 = r10.getCloneWithDifferentFontSize (12);
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30, 50).setPadding (15);
-    aPS1.setPageHeader (new PLText ("Das ist die Kopfzeile", r10).setBorder (new BorderSpec (null,
-                                                                                             null,
-                                                                                             null,
-                                                                                             new BorderStyleSpec (Color.BLACK)))
+    aPS1.setPageHeader (new PLText ("Das ist die Kopfzeile", r10).setBorderBottom (new BorderStyleSpec (Color.BLACK))
                                                                  .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.setPageFooter (new PLTextWithPlaceholders ("Das ist die Fusszeile, Seite " +
                                                     RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_NUMBER +
                                                     " von " +
-                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorder (new BorderSpec (null,
-                                                                                                                                  new BorderStyleSpec (Color.BLACK),
-                                                                                                                                  null,
-                                                                                                                                  null))
+                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorderTop (new BorderStyleSpec (Color.BLACK))
                                                                                                       .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.addElement (new PLText ("Zeile 1", r10));
     {

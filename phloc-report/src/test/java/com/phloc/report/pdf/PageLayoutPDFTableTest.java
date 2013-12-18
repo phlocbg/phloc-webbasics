@@ -92,7 +92,7 @@ public class PageLayoutPDFTableTest
                                  new PLText (Integer.toString (i + i), r10).setPadding (aPadding)
                                                                            .setHorzAlign (EHorzAlignment.RIGHT));
       if ((i % 4) == 0)
-        aRow.setColumnBorder (new BorderStyleSpec (Color.GREEN));
+        aRow.setColumnBorder (new BorderStyleSpec (Color.GREEN)).setColumnBorderTop (null);
     }
     aPS1.addElement (aTable);
 

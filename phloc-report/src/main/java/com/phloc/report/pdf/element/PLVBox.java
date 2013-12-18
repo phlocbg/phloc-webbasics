@@ -247,6 +247,62 @@ public class PLVBox extends AbstractPLElement <PLVBox>
   }
 
   /**
+   * Set the left border value around each contained row. This method may not be
+   * called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLVBox setRowBorderLeft (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setRowBorder (m_aRowBorder.getCloneWithLeft (aBorder));
+  }
+
+  /**
+   * Set the top border value around each contained row. This method may not be
+   * called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLVBox setRowBorderTop (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setRowBorder (m_aRowBorder.getCloneWithTop (aBorder));
+  }
+
+  /**
+   * Set the right border value around each contained row. This method may not
+   * be called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLVBox setRowBorderRight (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setRowBorder (m_aRowBorder.getCloneWithRight (aBorder));
+  }
+
+  /**
+   * Set the bottom border value around each contained row. This method may not
+   * be called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLVBox setRowBorderBottom (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setRowBorder (m_aRowBorder.getCloneWithBottom (aBorder));
+  }
+
+  /**
    * Get the border around each contained row. By default
    * {@link BorderSpec#BORDER0} which means no border is used.
    * 

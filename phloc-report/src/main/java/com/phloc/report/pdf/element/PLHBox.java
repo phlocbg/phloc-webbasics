@@ -227,6 +227,62 @@ public class PLHBox extends AbstractPLElement <PLHBox>
   }
 
   /**
+   * Set the left border value around each contained column. This method may not
+   * be called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLHBox setColumnBorderLeft (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setColumnBorder (m_aColumnBorder.getCloneWithLeft (aBorder));
+  }
+
+  /**
+   * Set the top border value around each contained column. This method may not
+   * be called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLHBox setColumnBorderTop (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setColumnBorder (m_aColumnBorder.getCloneWithTop (aBorder));
+  }
+
+  /**
+   * Set the right border value around each contained column. This method may
+   * not be called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLHBox setColumnBorderRight (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setColumnBorder (m_aColumnBorder.getCloneWithRight (aBorder));
+  }
+
+  /**
+   * Set the bottom border value around each contained column. This method may
+   * not be called after an element got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final PLHBox setColumnBorderBottom (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setColumnBorder (m_aColumnBorder.getCloneWithBottom (aBorder));
+  }
+
+  /**
    * Get the border around each contained column. By default
    * {@link BorderSpec#BORDER0} which means no border is used.
    * 
