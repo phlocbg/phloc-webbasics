@@ -32,7 +32,6 @@ import com.phloc.report.pdf.element.PLPageBreak;
 import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLTable;
 import com.phloc.report.pdf.element.PLText;
-import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
@@ -59,7 +58,7 @@ public class PageLayoutPDFTableTest
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30)
                                                               .setPadding (10, 0, 20, 0)
                                                               .setFillColor (new Color (0xddffff));
-    aPS1.setPageHeader (new PLText ("Headline", r10).setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
+    aPS1.setPageHeader (new PLText ("Headline", r10).setBorder (new BorderStyleSpec (Color.BLACK))
                                                     .setPadding (0, 4)
                                                     .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.addElement (new PLText ("Erste Dummy Zeile", r10));

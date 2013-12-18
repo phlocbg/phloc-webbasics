@@ -33,7 +33,6 @@ import com.phloc.report.pdf.element.PLText;
 import com.phloc.report.pdf.element.PLTextWithPlaceholders;
 import com.phloc.report.pdf.element.PLVBox;
 import com.phloc.report.pdf.render.RenderPageIndex;
-import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
@@ -61,17 +60,14 @@ public class PageLayoutPDFMarginPaddingTest
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (10, 20, 30, 40)
                                                               .setPadding (10, 20, 30, 40)
                                                               .setFillColor (new Color (0xeeeeee));
-    aPS1.setPageHeader (new PLText ("Headline", r10).setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
+    aPS1.setPageHeader (new PLText ("Headline", r10).setBorder (new BorderStyleSpec (Color.BLACK))
                                                     .setPadding (0, 4)
                                                     .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.setPageFooter (new PLTextWithPlaceholders ("Page " +
                                                     RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_NUMBER +
                                                     " of " +
-                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
-                                                                                                      .setMargin (0,
-                                                                                                                  10,
-                                                                                                                  0,
-                                                                                                                  0)
+                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorder (new BorderStyleSpec (Color.BLACK))
+                                                                                                      .setMarginTop (10)
                                                                                                       .setPadding (10,
                                                                                                                    4)
                                                                                                       .setHorzAlign (EHorzAlignment.RIGHT));
@@ -104,17 +100,17 @@ public class PageLayoutPDFMarginPaddingTest
     if (true)
     {
       aPS1.addElement (new PLText (sLID, r10.getCloneWithDifferentColor (Color.WHITE)).setHorzAlign (EHorzAlignment.RIGHT)
-                                                                                      .setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
+                                                                                      .setBorder (new BorderStyleSpec (Color.BLACK))
                                                                                       .setFillColor (Color.RED)
                                                                                       .setMargin (0)
                                                                                       .setPadding (10));
       aPS1.addElement (new PLText (sLID, r10.getCloneWithDifferentColor (Color.RED)).setHorzAlign (EHorzAlignment.RIGHT)
-                                                                                    .setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
+                                                                                    .setBorder (new BorderStyleSpec (Color.BLACK))
                                                                                     .setFillColor (Color.GREEN)
                                                                                     .setMargin (5)
                                                                                     .setPadding (5));
       aPS1.addElement (new PLText (sLID, r10.getCloneWithDifferentColor (Color.WHITE)).setHorzAlign (EHorzAlignment.RIGHT)
-                                                                                      .setBorder (new BorderSpec (new BorderStyleSpec (Color.BLACK)))
+                                                                                      .setBorder (new BorderStyleSpec (Color.BLACK))
                                                                                       .setFillColor (Color.BLUE)
                                                                                       .setMargin (10)
                                                                                       .setPadding (0));
