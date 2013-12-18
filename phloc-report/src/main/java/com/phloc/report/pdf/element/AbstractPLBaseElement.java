@@ -138,6 +138,62 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   }
 
   /**
+   * Set the left margin value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fMargin
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setMarginLeft (final float fMargin)
+  {
+    return setMargin (m_aMargin.getCloneWithLeft (fMargin));
+  }
+
+  /**
+   * Set the top margin value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fMargin
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setMarginTop (final float fMargin)
+  {
+    return setMargin (m_aMargin.getCloneWithTop (fMargin));
+  }
+
+  /**
+   * Set the right margin value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fMargin
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setMarginRight (final float fMargin)
+  {
+    return setMargin (m_aMargin.getCloneWithRight (fMargin));
+  }
+
+  /**
+   * Set the bottom margin value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fMargin
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setMarginBottom (final float fMargin)
+  {
+    return setMargin (m_aMargin.getCloneWithBottom (fMargin));
+  }
+
+  /**
    * @return The current margin. Never <code>null</code>.
    */
   @Nonnull
@@ -215,6 +271,62 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     checkNotPrepared ();
     m_aPadding = aPadding;
     return thisAsT ();
+  }
+
+  /**
+   * Set the left padding value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fPadding
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setPaddingLeft (final float fPadding)
+  {
+    return setPadding (m_aPadding.getCloneWithLeft (fPadding));
+  }
+
+  /**
+   * Set the top padding value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fPadding
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setPaddingTop (final float fPadding)
+  {
+    return setPadding (m_aPadding.getCloneWithTop (fPadding));
+  }
+
+  /**
+   * Set the right padding value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param fPadding
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setPaddingRight (final float fPadding)
+  {
+    return setPadding (m_aPadding.getCloneWithRight (fPadding));
+  }
+
+  /**
+   * Set the bottom padding value. This method may not be called after an
+   * element got prepared!
+   * 
+   * @param fPadding
+   *        The value to use.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setPaddingBottom (final float fPadding)
+  {
+    return setPadding (m_aPadding.getCloneWithBottom (fPadding));
   }
 
   /**
@@ -328,6 +440,62 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     checkNotPrepared ();
     m_aBorder = aBorder;
     return thisAsT ();
+  }
+
+  /**
+   * Set the left border value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setBorderLeft (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setBorder (m_aBorder.getCloneWithLeft (aBorder));
+  }
+
+  /**
+   * Set the top border value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setBorderTop (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setBorder (m_aBorder.getCloneWithTop (aBorder));
+  }
+
+  /**
+   * Set the right border value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setBorderRight (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setBorder (m_aBorder.getCloneWithRight (aBorder));
+  }
+
+  /**
+   * Set the bottom border value. This method may not be called after an element
+   * got prepared!
+   * 
+   * @param aBorder
+   *        The value to use. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public final IMPLTYPE setBorderBottom (@Nullable final BorderStyleSpec aBorder)
+  {
+    return setBorder (m_aBorder.getCloneWithBottom (aBorder));
   }
 
   /**

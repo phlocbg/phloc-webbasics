@@ -17,6 +17,7 @@
  */
 package com.phloc.report.pdf.spec;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
@@ -155,6 +156,38 @@ public class BorderSpec
   public BorderStyleSpec getBottom ()
   {
     return m_aBottom;
+  }
+
+  @Nonnull
+  public BorderSpec getCloneWithLeft (@Nullable final BorderStyleSpec aLeft)
+  {
+    if (EqualsUtils.equals (aLeft, m_aLeft))
+      return this;
+    return new BorderSpec (aLeft, m_aTop, m_aRight, m_aBottom);
+  }
+
+  @Nonnull
+  public BorderSpec getCloneWithTop (@Nullable final BorderStyleSpec aTop)
+  {
+    if (EqualsUtils.equals (aTop, m_aTop))
+      return this;
+    return new BorderSpec (m_aLeft, aTop, m_aRight, m_aBottom);
+  }
+
+  @Nonnull
+  public BorderSpec getCloneWithRight (@Nullable final BorderStyleSpec aRight)
+  {
+    if (EqualsUtils.equals (aRight, m_aRight))
+      return this;
+    return new BorderSpec (m_aLeft, m_aTop, aRight, m_aBottom);
+  }
+
+  @Nonnull
+  public BorderSpec getCloneWithBottom (@Nullable final BorderStyleSpec aBottom)
+  {
+    if (EqualsUtils.equals (aBottom, m_aBottom))
+      return this;
+    return new BorderSpec (m_aLeft, m_aTop, m_aRight, aBottom);
   }
 
   @Override

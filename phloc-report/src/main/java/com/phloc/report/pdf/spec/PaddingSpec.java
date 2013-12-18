@@ -122,6 +122,38 @@ public class PaddingSpec
     return m_fYSum;
   }
 
+  @Nonnull
+  public PaddingSpec getCloneWithLeft (final float fLeft)
+  {
+    if (EqualsUtils.equals (fLeft, m_fLeft))
+      return this;
+    return new PaddingSpec (fLeft, m_fTop, m_fRight, m_fBottom);
+  }
+
+  @Nonnull
+  public PaddingSpec getCloneWithTop (final float fTop)
+  {
+    if (EqualsUtils.equals (fTop, m_fTop))
+      return this;
+    return new PaddingSpec (m_fLeft, fTop, m_fRight, m_fBottom);
+  }
+
+  @Nonnull
+  public PaddingSpec getCloneWithRight (final float fRight)
+  {
+    if (EqualsUtils.equals (fRight, m_fRight))
+      return this;
+    return new PaddingSpec (m_fLeft, m_fTop, fRight, m_fBottom);
+  }
+
+  @Nonnull
+  public PaddingSpec getCloneWithBottom (final float fBottom)
+  {
+    if (EqualsUtils.equals (fBottom, m_fBottom))
+      return this;
+    return new PaddingSpec (m_fLeft, m_fTop, m_fRight, fBottom);
+  }
+
   @Override
   public boolean equals (final Object o)
   {

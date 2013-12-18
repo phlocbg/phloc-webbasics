@@ -21,9 +21,11 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.RenderPreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
@@ -50,13 +52,11 @@ public class PLText extends AbstractPLElement <PLText>
   // prepare result
   private List <TextAndWidthSpec> m_aLines;
 
-  public PLText (@Nonnull final String sText, @Nonnull final FontSpec aFont)
+  public PLText (@Nullable final String sText, @Nonnull final FontSpec aFont)
   {
-    if (sText == null)
-      throw new NullPointerException ("text");
     if (aFont == null)
       throw new NullPointerException ("font");
-    m_sText = sText;
+    m_sText = StringHelper.getNotNull (sText);
     m_aFont = aFont;
     m_fLineHeight = m_aFont.getLineHeight ();
   }

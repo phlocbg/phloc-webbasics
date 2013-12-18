@@ -122,6 +122,38 @@ public class MarginSpec
     return m_fYSum;
   }
 
+  @Nonnull
+  public MarginSpec getCloneWithLeft (final float fLeft)
+  {
+    if (EqualsUtils.equals (fLeft, m_fLeft))
+      return this;
+    return new MarginSpec (fLeft, m_fTop, m_fRight, m_fBottom);
+  }
+
+  @Nonnull
+  public MarginSpec getCloneWithTop (final float fTop)
+  {
+    if (EqualsUtils.equals (fTop, m_fTop))
+      return this;
+    return new MarginSpec (m_fLeft, fTop, m_fRight, m_fBottom);
+  }
+
+  @Nonnull
+  public MarginSpec getCloneWithRight (final float fRight)
+  {
+    if (EqualsUtils.equals (fRight, m_fRight))
+      return this;
+    return new MarginSpec (m_fLeft, m_fTop, fRight, m_fBottom);
+  }
+
+  @Nonnull
+  public MarginSpec getCloneWithBottom (final float fBottom)
+  {
+    if (EqualsUtils.equals (fBottom, m_fBottom))
+      return this;
+    return new MarginSpec (m_fLeft, m_fTop, m_fRight, fBottom);
+  }
+
   @Override
   public boolean equals (final Object o)
   {
