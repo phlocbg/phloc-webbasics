@@ -346,8 +346,7 @@ public class PLHBox extends AbstractPLElement <PLHBox>
         // Effective content width of this element
         final float fItemWidth = fItemWidthFull - aElement.getMarginPlusPaddingXSum ();
         // Prepare child element
-        final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight))
-                                          .getHeight ();
+        final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight)).getHeight ();
         final float fItemHeightFull = fItemHeight + aElement.getMarginPlusPaddingYSum ();
         // Update used width and height
         fUsedWidth += fItemWidthFull;
@@ -371,8 +370,7 @@ public class PLHBox extends AbstractPLElement <PLHBox>
         // Effective content width of this element
         final float fItemWidth = fItemWidthFull - aElement.getMarginPlusPaddingXSum ();
         // Prepare child element
-        final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight))
-                                          .getHeight ();
+        final float fItemHeight = aElement.prepare (new PreparationContext (fItemWidth, fAvailableHeight)).getHeight ();
         final float fItemHeightFull = fItemHeight + aElement.getMarginPlusPaddingYSum ();
         // Update used width and height
         fUsedWidth += fItemWidthFull;

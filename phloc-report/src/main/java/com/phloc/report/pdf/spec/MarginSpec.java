@@ -185,6 +185,8 @@ public class MarginSpec
                                        .append ("marginTop", m_fTop)
                                        .append ("marginRight", m_fRight)
                                        .append ("marginBottom", m_fBottom)
+                                       .append ("XSum", m_fXSum)
+                                       .append ("YSum", m_fYSum)
                                        .toString ();
   }
 }

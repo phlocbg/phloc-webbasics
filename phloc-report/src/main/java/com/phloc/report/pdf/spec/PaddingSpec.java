@@ -185,6 +185,8 @@ public class PaddingSpec
                                        .append ("paddingTop", m_fTop)
                                        .append ("paddingRight", m_fRight)
                                        .append ("paddingBottom", m_fBottom)
+                                       .append ("XSum", m_fXSum)
+                                       .append ("YSum", m_fYSum)
                                        .toString ();
   }
 }
