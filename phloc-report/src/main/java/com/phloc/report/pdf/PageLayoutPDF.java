@@ -43,14 +43,24 @@ public class PageLayoutPDF
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PageLayoutPDF.class);
 
+  private String m_sDocumentAuthor;
+  private Calendar m_aDocumentCreationDate;
+  private String m_sDocumentCreator;
   private String m_sDocumentTitle;
   private String m_sDocumentKeywords;
   private String m_sDocumentSubject;
   private boolean m_bDebug = false;
   private final List <PLPageSet> m_aPageSets = new ArrayList <PLPageSet> ();
 
+  /**
+   * Constructor. Initializes Author, CreationDate and Creator.
+   */
   public PageLayoutPDF ()
-  {}
+  {
+    m_sDocumentAuthor = VendorInfo.getVendorName () + " " + VendorInfo.getVendorURLWithoutProtocol ();
+    m_aDocumentCreationDate = Calendar.getInstance ();
+    m_sDocumentCreator = VendorInfo.getVendorName ();
+  }
 
   public boolean isDebug ()
   {
@@ -62,6 +72,39 @@ public class PageLayoutPDF
   {
     m_bDebug = bDebug;
     return this;
+  }
+
+  @Nullable
+  public String getDocumentAuthor ()
+  {
+    return m_sDocumentAuthor;
+  }
+
+  public void setDocumentAuthor (@Nullable final String sDocumentAuthor)
+  {
+    m_sDocumentAuthor = sDocumentAuthor;
+  }
+
+  @Nullable
+  public Calendar getDocumentCreationDate ()
+  {
+    return m_aDocumentCreationDate;
+  }
+
+  public void setDocumentCreationDate (@Nullable final Calendar aDocumentCreationDate)
+  {
+    m_aDocumentCreationDate = aDocumentCreationDate;
+  }
+
+  @Nullable
+  public String getDocumentCreator ()
+  {
+    return m_sDocumentCreator;
+  }
+
+  public void setDocumentCreator (@Nullable final String sDocumentCreator)
+  {
+    m_sDocumentCreator = sDocumentCreator;
   }
 
   @Nullable
@@ -154,9 +197,12 @@ public class PageLayoutPDF
       // Set document properties
       {
         final PDDocumentInformation aProperties = new PDDocumentInformation ();
-        aProperties.setAuthor (VendorInfo.getVendorName () + " " + VendorInfo.getVendorURLWithoutProtocol ());
-        aProperties.setCreationDate (Calendar.getInstance ());
-        aProperties.setCreator (VendorInfo.getVendorName ());
+        if (StringHelper.hasText (m_sDocumentAuthor))
+          aProperties.setAuthor (m_sDocumentAuthor);
+        if (m_aDocumentCreationDate != null)
+          aProperties.setCreationDate (m_aDocumentCreationDate);
+        if (StringHelper.hasText (m_sDocumentCreator))
+          aProperties.setCreator (m_sDocumentCreator);
         if (StringHelper.hasText (m_sDocumentTitle))
           aProperties.setTitle (m_sDocumentTitle);
         if (StringHelper.hasText (m_sDocumentKeywords))
