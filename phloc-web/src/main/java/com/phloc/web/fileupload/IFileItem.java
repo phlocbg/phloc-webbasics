@@ -18,7 +18,6 @@
 package com.phloc.web.fileupload;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -65,10 +64,8 @@ public interface IFileItem extends Serializable, DataSource
    * 
    * @return An {@link java.io.InputStream InputStream} that can be used to
    *         retrieve the contents of the file.
-   * @throws IOException
-   *         if an error occurs.
    */
-  InputStream getInputStream () throws IOException;
+  InputStream getInputStream ();
 
   /**
    * Returns an {@link java.io.OutputStream OutputStream} that can be used for
@@ -76,10 +73,8 @@ public interface IFileItem extends Serializable, DataSource
    * 
    * @return An {@link java.io.OutputStream OutputStream} that can be used for
    *         storing the contensts of the file.
-   * @throws IOException
-   *         if an error occurs.
    */
-  OutputStream getOutputStream () throws IOException;
+  OutputStream getOutputStream ();
 
   /**
    * Returns the content type passed by the browser or <code>null</code> if not

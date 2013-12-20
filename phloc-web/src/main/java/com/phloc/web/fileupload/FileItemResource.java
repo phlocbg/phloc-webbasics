@@ -18,7 +18,6 @@
 package com.phloc.web.fileupload;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
@@ -71,15 +70,7 @@ public final class FileItemResource implements IReadableResource
   @Nullable
   public InputStream getInputStream ()
   {
-    try
-    {
-      return m_aFileItem.getInputStream ();
-    }
-    catch (final IOException ex)
-    {
-      s_aLogger.error ("Failed to open FileItem input stream on " + m_aFileItem.getName (), ex);
-      return null;
-    }
+    return m_aFileItem.getInputStream ();
   }
 
   @Nullable

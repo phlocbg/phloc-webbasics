@@ -210,7 +210,7 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
    *         if an error occurs.
    */
   @Nonnull
-  public InputStream getInputStream () throws IOException
+  public InputStream getInputStream ()
   {
     if (!isInMemory ())
       return FileUtils.getInputStream (m_aDfos.getFile ());
@@ -486,7 +486,7 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
    *         if an error occurs.
    */
   @Nonnull
-  public DeferredFileOutputStream getOutputStream () throws IOException
+  public DeferredFileOutputStream getOutputStream ()
   {
     if (m_aDfos == null)
     {
