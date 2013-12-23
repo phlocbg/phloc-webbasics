@@ -31,6 +31,7 @@ import com.phloc.report.pdf.element.PLHBox;
 import com.phloc.report.pdf.element.PLPageBreak;
 import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLTable;
+import com.phloc.report.pdf.element.PLTable.PLTableCell;
 import com.phloc.report.pdf.element.PLText;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
@@ -78,6 +79,19 @@ public class PageLayoutPDFTableTest
                                       new PLText ("Sum2", r14b).setPadding (aPadding)
                                                                .setHorzAlign (EHorzAlignment.RIGHT));
     aRow.setColumnBorder (new BorderStyleSpec (Color.GRAY)).setFillColor (Color.WHITE);
+
+    // Test colspan
+    aTable.addTableRowExt (new PLTableCell (new PLText ("Colspan 2a", r10), 2),
+                           new PLTableCell (new PLText ("Colspan 2b", r10), 2))
+          .setColumnBorder (new BorderStyleSpec (Color.BLACK));
+    aTable.addTableRowExt (new PLTableCell (new PLText ("Colspan 3a", r10), 3),
+                           new PLTableCell (new PLText ("Colspan 1b", r10), 1))
+          .setColumnBorder (new BorderStyleSpec (Color.BLACK));
+    aTable.addTableRowExt (new PLTableCell (new PLText ("Colspan 1a", r10), 1),
+                           new PLTableCell (new PLText ("Colspan 3b", r10), 3))
+          .setColumnBorder (new BorderStyleSpec (Color.BLACK));
+    aTable.addTableRowExt (new PLTableCell (new PLText ("Colspan 4", r10), 4))
+          .setColumnBorder (new BorderStyleSpec (Color.BLACK));
 
     // Add content lines
     for (int i = 0; i < 185; ++i)

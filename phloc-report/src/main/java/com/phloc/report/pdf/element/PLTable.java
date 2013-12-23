@@ -18,6 +18,7 @@
 package com.phloc.report.pdf.element;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
@@ -31,6 +32,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.WidthSpec;
+import com.phloc.report.pdf.spec.WidthSpec.EWidthType;
 
 /**
  * A special table with a repeating header
@@ -39,15 +41,59 @@ import com.phloc.report.pdf.spec.WidthSpec;
  */
 public class PLTable extends PLVBox implements IPLSplittableElement
 {
+  public static class PLTableCell
+  {
+    private final AbstractPLElement <?> m_aElement;
+    private final int m_nColSpan;
+
+    public PLTableCell (@Nonnull final AbstractPLElement <?> aElement, @Nonnegative final int nColSpan)
+    {
+      if (aElement == null)
+        throw new NullPointerException ("element");
+      if (nColSpan < 1)
+        throw new IllegalArgumentException ("Illegal colspan: " + nColSpan);
+      m_aElement = aElement;
+      m_nColSpan = nColSpan;
+    }
+
+    @Nonnull
+    public AbstractPLElement <?> getElement ()
+    {
+      return m_aElement;
+    }
+
+    @Nonnegative
+    public int getColSpan ()
+    {
+      return m_nColSpan;
+    }
+  }
+
   private final List <WidthSpec> m_aWidths;
   private int m_nHeaderRowCount = 0;
 
+  /**
+   * @param aWidths
+   *        Must all be of the same type!
+   */
   public PLTable (@Nonnull @Nonempty final Iterable <? extends WidthSpec> aWidths)
   {
     if (ContainerHelper.isEmpty (aWidths))
       throw new IllegalArgumentException ("Widths may not be empty");
     if (ContainerHelper.containsAnyNullElement (aWidths))
       throw new IllegalArgumentException ("Width may not contain null elements");
+
+    // Check that all width are of the same type
+    EWidthType eWidthType = null;
+    for (final WidthSpec aWidth : aWidths)
+      if (eWidthType == null)
+        eWidthType = aWidth.getType ();
+      else
+        if (aWidth.getType () != eWidthType)
+          throw new IllegalArgumentException ("All widths must be of the same type! Found " +
+                                              eWidthType +
+                                              " and " +
+                                              aWidth.getType ());
     m_aWidths = ContainerHelper.newList (aWidths);
   }
 
@@ -97,7 +143,7 @@ public class PLTable extends PLVBox implements IPLSplittableElement
    * @return this
    */
   @Nonnull
-  public PLHBox addTableRow (@Nonnull final List <? extends AbstractPLElement <?>> aElements)
+  public PLHBox addTableRow (@Nonnull final Collection <? extends AbstractPLElement <?>> aElements)
   {
     if (aElements == null)
       throw new NullPointerException ("elements");
@@ -109,16 +155,82 @@ public class PLTable extends PLVBox implements IPLSplittableElement
                                           ")!");
 
     final PLHBox aHBox = new PLHBox ();
-    for (int i = 0; i < aElements.size (); ++i)
+    int nWidthIndex = 0;
+    for (AbstractPLElement <?> aElement : aElements)
     {
-      AbstractPLElement <?> aElement = aElements.get (i);
       if (aElement == null)
       {
         // null elements end as a spacer
         aElement = new PLSpacerX ();
       }
-      final WidthSpec aWidth = m_aWidths.get (i);
+      final WidthSpec aWidth = m_aWidths.get (nWidthIndex);
       aHBox.addColumn (aElement, aWidth);
+      ++nWidthIndex;
+    }
+    super.addRow (aHBox);
+    return aHBox;
+  }
+
+  @Nonnull
+  public PLHBox addTableRowExt (@Nonnull final PLTableCell... aCells)
+  {
+    return addTableRowExt (ContainerHelper.newList (aCells));
+  }
+
+  /**
+   * Add a new table row. All contained elements are added with the specified
+   * width in the constructor. <code>null</code> elements are represented as
+   * empty cells.
+   * 
+   * @param aCells
+   *        The cells to add. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public PLHBox addTableRowExt (@Nonnull final Collection <? extends PLTableCell> aCells)
+  {
+    if (aCells == null)
+      throw new NullPointerException ("elements");
+    int nUsedCols = 0;
+    for (final PLTableCell aCell : aCells)
+      nUsedCols += aCell.getColSpan ();
+    if (nUsedCols > m_aWidths.size ())
+      throw new IllegalArgumentException ("More cells in row (" +
+                                          nUsedCols +
+                                          ") than defined in the table (" +
+                                          m_aWidths.size () +
+                                          ")!");
+
+    final PLHBox aHBox = new PLHBox ();
+    int nWidthIndex = 0;
+    for (final PLTableCell aCell : aCells)
+    {
+      final int nCols = aCell.getColSpan ();
+      if (nCols == 1)
+      {
+        aHBox.addColumn (aCell.getElement (), m_aWidths.get (nWidthIndex));
+      }
+      else
+      {
+        final List <WidthSpec> aWidths = m_aWidths.subList (nWidthIndex, nWidthIndex + nCols);
+        final EWidthType eWidthType = aWidths.get (0).getType ();
+        WidthSpec aRealWidth;
+        if (eWidthType == EWidthType.STAR)
+        {
+          // aggregate
+          aRealWidth = WidthSpec.perc (nCols * 100f / m_aWidths.size ());
+        }
+        else
+        {
+          // aggregate values
+          float fWidth = 0;
+          for (final WidthSpec aWidth : aWidths)
+            fWidth += aWidth.getValue ();
+          aRealWidth = new WidthSpec (eWidthType, fWidth);
+        }
+        aHBox.addColumn (aCell.getElement (), aRealWidth);
+      }
+      nWidthIndex += nCols;
     }
     super.addRow (aHBox);
     return aHBox;

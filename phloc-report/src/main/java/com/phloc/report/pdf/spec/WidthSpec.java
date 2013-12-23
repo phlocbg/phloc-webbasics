@@ -52,7 +52,7 @@ public class WidthSpec
   private final EWidthType m_eType;
   private final float m_fValue;
 
-  private WidthSpec (@Nonnull final EWidthType eType, final float fValue)
+  public WidthSpec (@Nonnull final EWidthType eType, final float fValue)
   {
     if (eType == null)
       throw new NullPointerException ("type");
@@ -159,7 +159,7 @@ public class WidthSpec
   public static WidthSpec perc (@Nonnegative final float fPerc)
   {
     if (fPerc <= 0)
-      throw new IllegalArgumentException ("Perc must be > 0!");
+      throw new IllegalArgumentException ("Perc must be > 0: " + fPerc);
     return new WidthSpec (EWidthType.PERCENTAGE, fPerc);
   }
 
