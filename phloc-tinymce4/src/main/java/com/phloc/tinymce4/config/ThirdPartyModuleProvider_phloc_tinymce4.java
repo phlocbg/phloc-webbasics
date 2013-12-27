@@ -24,7 +24,7 @@ import com.phloc.commons.thirdparty.ELicense;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.IThirdPartyModuleProviderSPI;
 import com.phloc.commons.thirdparty.ThirdPartyModule;
-import com.phloc.commons.version.Version;
+import com.phloc.tinymce4.CTinyMCE4;
 
 /**
  * Implement this SPI interface if your JAR file contains external third party
@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_phloc_tinymce4 implements IThirdPart
   public static final IThirdPartyModule TINYMCE4 = new ThirdPartyModule ("TinyMCE",
                                                                          "Moxiecode Systems AB",
                                                                          ELicense.LGPL21,
-                                                                         new Version (4, 0, 11),
+                                                                         CTinyMCE4.TINYMCE_VERSION_4_0_12,
                                                                          "http://www.tinymce.com");
 
   @Nullable

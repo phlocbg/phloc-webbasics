@@ -19,6 +19,7 @@ package com.phloc.tinymce4;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSInvocation;
@@ -31,6 +32,10 @@ import com.phloc.html.js.builder.JSRef;
  */
 public final class JSTinyMCE4
 {
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final JSTinyMCE4 s_aInstance = new JSTinyMCE4 ();
+
   private JSTinyMCE4 ()
   {}
 
