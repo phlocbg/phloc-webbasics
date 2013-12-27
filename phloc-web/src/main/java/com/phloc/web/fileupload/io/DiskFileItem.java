@@ -206,8 +206,6 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
    * 
    * @return An {@link java.io.InputStream InputStream} that can be used to
    *         retrieve the contents of the file.
-   * @throws IOException
-   *         if an error occurs.
    */
   @Nonnull
   public InputStream getInputStream ()
@@ -482,8 +480,6 @@ public class DiskFileItem implements IFileItem, IFileItemHeadersSupport
    * 
    * @return An {@link java.io.OutputStream OutputStream} that can be used for
    *         storing the contents of the file.
-   * @throws IOException
-   *         if an error occurs.
    */
   @Nonnull
   public DeferredFileOutputStream getOutputStream ()
