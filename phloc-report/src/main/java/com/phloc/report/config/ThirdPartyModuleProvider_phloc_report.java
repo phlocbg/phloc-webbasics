@@ -35,7 +35,7 @@ import com.phloc.commons.version.Version;
 @IsSPIImplementation
 public final class ThirdPartyModuleProvider_phloc_report implements IThirdPartyModuleProviderSPI
 {
-  public static final IThirdPartyModule PDFBOX = new ThirdPartyModule ("Apache PDFBoc",
+  public static final IThirdPartyModule PDFBOX = new ThirdPartyModule ("Apache PDFBox",
                                                                        "Apache",
                                                                        ELicense.APACHE2,
                                                                        new Version (1, 8, 3),
