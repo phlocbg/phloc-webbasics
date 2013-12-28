@@ -30,7 +30,8 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.commons.xml.XMLHelper;
+import com.phloc.commons.xml.EXMLCharMode;
+import com.phloc.commons.xml.serialize.XMLMaskHelper;
 import com.phloc.datetime.IHasLastModificationDateTime;
 import com.phloc.datetime.PDTUtils;
 import com.phloc.web.datetime.PDTWebDateUtils;
@@ -116,9 +117,10 @@ public final class XMLSitemapURL implements IHasLastModificationDateTime
 
     // <loc>
     ret += _getTagOutputLength (ELEMENT_LOC) +
-           XMLHelper.getMaskedXMLTextLength (CXMLSitemap.XML_WRITER_SETTINGS.getXMLVersion (),
-                                             CXMLSitemap.XML_WRITER_SETTINGS.getIncorrectCharacterHandling (),
-                                             m_sLocation);
+           XMLMaskHelper.getMaskedXMLTextLength (CXMLSitemap.XML_WRITER_SETTINGS.getXMLVersion (),
+                                                 EXMLCharMode.TEXT,
+                                                 CXMLSitemap.XML_WRITER_SETTINGS.getIncorrectCharacterHandling (),
+                                                 m_sLocation);
 
     if (m_aLastModification != null)
       ret += _getTagOutputLength (ELEMENT_LASTMOD) + 24;
