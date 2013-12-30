@@ -27,6 +27,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.charset.CCharset;
@@ -50,10 +53,15 @@ public class CharacterEncodingFilter implements Filter
   /** By default the encoding is not enforced. */
   public static final boolean DEFAULT_FORCE_ENCODING = false;
   private static final String REQUEST_ATTR = CharacterEncodingFilter.class.getName ();
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CharacterEncodingFilter.class);
 
   private String m_sEncoding = DEFAULT_ENCODING;
   private boolean m_bForceEncoding = DEFAULT_FORCE_ENCODING;
 
+  /**
+   * @return The encoding to be used by this filter. Neither <code>null</code>
+   *         nor empty.
+   */
   @OverrideOnDemand
   @Nonnull
   @Nonempty
@@ -89,12 +97,18 @@ public class CharacterEncodingFilter implements Filter
                         @Nonnull final ServletResponse aResponse,
                         @Nonnull final FilterChain aChain) throws IOException, ServletException
   {
+    // Avoid double filtering
     if (aRequest.getAttribute (REQUEST_ATTR) == null)
     {
       final String sEncoding = getEncoding ();
+      final String sOldRequestEncoding = aRequest.getCharacterEncoding ();
       // We need this for all form data etc.
-      if (aRequest.getCharacterEncoding () == null || isForceEncoding ())
+      if (sOldRequestEncoding == null || isForceEncoding ())
+      {
         aRequest.setCharacterEncoding (sEncoding);
+        if (sOldRequestEncoding != null && !sEncoding.equals (sOldRequestEncoding))
+          s_aLogger.info ("Changed request encoding from '" + sOldRequestEncoding + "' to '" + sEncoding + "'");
+      }
       aResponse.setCharacterEncoding (sEncoding);
       aRequest.setAttribute (REQUEST_ATTR, Boolean.TRUE);
     }
