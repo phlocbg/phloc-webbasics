@@ -5,6 +5,9 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
+        <dependent-module archiveName="phloc-commons-4.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-commons/phloc-commons">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="phloc-bootstrap3-1.0.8-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/phloc-bootstrap3/phloc-bootstrap3">
             <dependency-type>uses</dependency-type>
         </dependent-module>
