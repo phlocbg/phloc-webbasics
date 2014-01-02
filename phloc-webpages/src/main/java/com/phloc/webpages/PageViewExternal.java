@@ -27,6 +27,7 @@ import com.phloc.commons.microdom.IMicroDocument;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.microdom.serialize.MicroReader;
+import com.phloc.commons.xml.serialize.SAXReaderSettings;
 import com.phloc.html.entities.HTMLEntityResolver;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.impl.HCDOMWrapper;
@@ -59,7 +60,8 @@ public class PageViewExternal extends AbstractWebPageExt
                              "'>" +
                              sContent +
                              "</x>";
-    final IMicroDocument aDoc = MicroReader.readMicroXML (sParsable, HTMLEntityResolver.getInstance ());
+    final IMicroDocument aDoc = MicroReader.readMicroXML (sParsable,
+                                                          new SAXReaderSettings ().setEntityResolver (HTMLEntityResolver.getInstance ()));
     if (aDoc == null || aDoc.getDocumentElement () == null)
       throw new IllegalStateException ("Failed to parse code for page " + aRes.toString ());
     m_aDocElem = aDoc.getDocumentElement ();
