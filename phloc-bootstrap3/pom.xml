@@ -124,12 +124,12 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-html</artifactId>
-      <version>3.13.2-SNAPSHOT</version>
+      <version>3.13.2</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webbasics</artifactId>
-      <version>2.2.3-SNAPSHOT</version>
+      <version>2.2.3</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
