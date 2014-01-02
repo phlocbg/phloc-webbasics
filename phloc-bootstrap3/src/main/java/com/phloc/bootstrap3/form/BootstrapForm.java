@@ -183,7 +183,7 @@ public class BootstrapForm extends HCForm
                                      @Nullable final String sHelpText,
                                      @Nullable final IErrorList aErrorList)
   {
-    return addFormGroup (aLabel, aCtrls, HCTextNode.create (sHelpText), aErrorList);
+    return addFormGroup (aLabel, aCtrls, HCTextNode.createOnDemand (sHelpText), aErrorList);
   }
 
   @Nonnull

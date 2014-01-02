@@ -69,7 +69,7 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   @Nonnull
   public BootstrapInputGroup setPrefix (@Nullable final String sPrefix)
   {
-    return setPrefix (HCTextNode.create (sPrefix));
+    return setPrefix (HCTextNode.createOnDemand (sPrefix));
   }
 
   @Nonnull
@@ -94,7 +94,7 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   @Nonnull
   public BootstrapInputGroup setSuffix (@Nullable final String sSuffix)
   {
-    return setSuffix (HCTextNode.create (sSuffix));
+    return setSuffix (HCTextNode.createOnDemand (sSuffix));
   }
 
   @Nonnull
