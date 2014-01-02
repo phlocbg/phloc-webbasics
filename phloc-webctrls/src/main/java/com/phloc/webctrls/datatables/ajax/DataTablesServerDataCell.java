@@ -95,8 +95,7 @@ public final class DataTablesServerDataCell implements Serializable
 
   public void setContent (@Nonnull final HCNodeList aCellChildren)
   {
-    // FIXME enable in phloc-html > 3.9.3
-    // m_aSpecialNodes.clear();
+    m_aSpecialNodes.clear ();
 
     // Add the content without the out-of-band nodes (but no document.ready()
     // because this is invoked per AJAX)
