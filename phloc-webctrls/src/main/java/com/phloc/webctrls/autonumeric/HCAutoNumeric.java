@@ -122,7 +122,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   {
     // Because the default min value is 0 (in v1.8.2) and we want negative
     // values by default!
-    setMin (-999999999);
+    m_aMin = BigDecimal.valueOf (-999999999);
 
     m_aRF = aRF;
     m_sID = GlobalIDFactory.getNewStringID ();
@@ -439,6 +439,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   public static void registerExternalResources ()
   {
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_17);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_18);
   }
 }

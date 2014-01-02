@@ -2,7 +2,7 @@
 * autoNumeric.js
 * @author: Bob Knothe
 * @author: Sokolov Yura aka funny_falcon
-* @version: 1.9.17 - 2013-09-28 GMT 9:00 AM
+* @version: 1.9.18 - 2013-12-03 GMT 9:00 PM
 *
 * Created by Robert J. Knothe on 2010-10-25. Please report any bugs to https://github.com/BobKnothe/autoNumeric
 * Created by Sokolov Yura on 2010-11-07
@@ -1117,11 +1117,11 @@
                     return this;
                 }
                /** allows locale decimal separator to be a comma */
-                if (testValue === $this.attr('value')) {
+                if ((testValue === $this.attr('value') || testValue === $this.text()) && settings.runOnce === false) {
                     value = value.replace(',', '.');
                 }
                 /** routine to handle page re-load from back button */
-                if (testValue !== $this.attr('value') && settings.runOnce === false) {
+                if (testValue !== $this.attr('value') && $this.prop('tagName') === 'INPUT' && settings.runOnce === false) {
                     value = autoStrip(value, settings);
                 }
                 /** returns a empty string if the value being 'set' contains non-numeric characters and or more than decimal point (full stop) and will not be formatted */
