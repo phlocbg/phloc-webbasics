@@ -57,6 +57,8 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
    * Additional CSS files - only in case of success - contains a list of strings
    */
   public static final String PROPERTY_EXTERNAL_CSS = "externalcss";
+  /** Additional inline CSS - only in case of success - contains a string */
+  public static final String PROPERTY_INLINE_CSS = "inlinecss";
   /** Additional JS files - only in case of success - contains a list of strings */
   public static final String PROPERTY_EXTERNAL_JS = "externaljs";
   /** Additional inline JS - only in case of success - contains a string */
@@ -210,6 +212,8 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
         aAssocArray.add (PROPERTY_VALUE, m_aSuccessValue);
       if (hasExternalCSSs ())
         aAssocArray.add (PROPERTY_EXTERNAL_CSS, getAllExternalCSSs ());
+      if (hasInlineCSS ())
+        aAssocArray.add (PROPERTY_INLINE_CSS, getInlineCSS ());
       if (hasExternalJSs ())
         aAssocArray.add (PROPERTY_EXTERNAL_JS, getAllExternalJSs ());
       if (hasInlineJS ())
