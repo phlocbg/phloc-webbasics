@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 // Inspiration: http://www.devhands.com/2008/10/javascript-error-handling-and-general-best-practices/
 var g_sServerLogURI = null;
 var g_sServerLogKey = null;
