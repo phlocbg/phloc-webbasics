@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>1/2/14</td><td colspan="4">_Release *6.2.3*_</td></tr>
+<tr><td>1/2/14</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.1.0</td></tr>
 <tr border="1"><td>11/30/13</td><td colspan="4">_Release *6.2.2*_</td></tr>
 <tr><td>11/30/13</td><td>add</td><td>tech</td><td></td><td>Added new Servlet-Init-Parameters 'deniedRegExs' and 'allowedRegExs' to class AbstractObjectDeliveryServlet for maximum flexibility in allowance and denial</td></tr>
 <tr><td>11/29/13</td><td>add</td><td>tech</td><td></td><td>Added new Servlet-Init-Parameter 'allowedFilenames' to class AbstractObjectDeliveryServlet to allow the delivery of certain filenames</td></tr>
