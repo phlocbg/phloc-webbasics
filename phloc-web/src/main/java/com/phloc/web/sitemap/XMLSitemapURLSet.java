@@ -51,7 +51,7 @@ public final class XMLSitemapURLSet implements IHasLastModificationDateTime
   // 38: ?XML header
   // 60: <urlset xmlns...> element
   // 9: </urlset> element
-  private static final int XML_HEADER_LENGTH = 38 + CGlobal.LINE_SEPARATOR.length () + 60 + 9;
+  private static final int XML_HEADER_LENGTH = 38 + 60 + 9;
 
   private int m_nOutputLength = XML_HEADER_LENGTH;
   private final List <XMLSitemapURL> m_aURLs = new ArrayList <XMLSitemapURL> ();

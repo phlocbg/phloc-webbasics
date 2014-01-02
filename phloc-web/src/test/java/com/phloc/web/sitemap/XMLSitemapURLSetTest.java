@@ -43,24 +43,24 @@ public final class XMLSitemapURLSetTest
   {
     final XMLSitemapURLSet s = new XMLSitemapURLSet ();
     s.addURL (new XMLSitemapURL (new SimpleURL ("http://orf.at")));
-    assertEquals (s.getOutputLength (), s.getAsXMLString ().length ());
+    assertEquals ("error: " + s.getAsXMLString (), s.getOutputLength (), s.getAsXMLString ().length ());
     s.addURL (new XMLSitemapURL (new SimpleURL ("http://abc.at/dir")));
-    assertEquals (s.getOutputLength (), s.getAsXMLString ().length ());
+    assertEquals ("error: " + s.getAsXMLString (), s.getOutputLength (), s.getAsXMLString ().length ());
     s.addURL (new XMLSitemapURL (new SimpleURL ("http://abc.at/dir?param=value"),
                                  PDTFactory.getCurrentDateTime (),
                                  null,
                                  null));
-    assertEquals (s.getOutputLength (), s.getAsXMLString ().length ());
+    assertEquals ("error: " + s.getAsXMLString (), s.getOutputLength (), s.getAsXMLString ().length ());
     s.addURL (new XMLSitemapURL (new SimpleURL ("http://abc.at/dir?param=value&param2=value2"),
                                  PDTFactory.getCurrentDateTime (),
                                  EXMLSitemapChangeFequency.NEVER,
                                  null));
-    assertEquals (s.getOutputLength (), s.getAsXMLString ().length ());
+    assertEquals ("error: " + s.getAsXMLString (), s.getOutputLength (), s.getAsXMLString ().length ());
     s.addURL (new XMLSitemapURL (new SimpleURL ("http://abc.at"),
                                  PDTFactory.getCurrentDateTime (),
                                  EXMLSitemapChangeFequency.NEVER,
                                  Double.valueOf (1d / 9)));
-    assertEquals (s.getOutputLength (), s.getAsXMLString ().length ());
+    assertEquals ("error: " + s.getAsXMLString (), s.getOutputLength (), s.getAsXMLString ().length ());
 
     // Validate against the schema
     final IResourceErrorGroup aErrors = XMLSchemaValidationHelper.validate (new ClassPathResource (CXMLSitemap.SCHEMA_SITEMAP_0_9),
