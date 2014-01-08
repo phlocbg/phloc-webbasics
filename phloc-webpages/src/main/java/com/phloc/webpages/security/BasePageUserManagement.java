@@ -582,7 +582,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
     final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
-                                                                                           HCCol.star ()));
+                                                                                           HCCol.star (),
+                                                                                           new HCCol (20)));
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                       aSelectedObject.getDisplayName ())
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
@@ -626,15 +627,15 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabel (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
-            .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
-                                         SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+            .setCtrl (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword))
+            .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
             .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD));
 
       final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabel (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
-            .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
-                                         SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+            .setCtrl (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm))
+            .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
             .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
 
@@ -715,22 +716,23 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         final boolean bHasAnyPasswordConstraint = GlobalPasswordSettings.getPasswordConstraintList ().hasConstraints ();
         final HCForm aForm = aWPEC.getNodeList ().addAndReturnChild (createFormSelf ());
         final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (200),
-                                                                                               HCCol.star ()));
+                                                                                               HCCol.star (),
+                                                                                               new HCCol (20)));
         aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
                                                                                             aSelectedObject.getDisplayName ()));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()
               .setLabel (sPassword, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
-              .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword),
-                                           SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+              .setCtrl (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword))
+              .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
               .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD));
 
         final String sPasswordConfirm = EText.LABEL_PASSWORD_CONFIRM.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()
               .setLabel (sPasswordConfirm, bHasAnyPasswordConstraint ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
-              .setCtrl (HCNodeList.create (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm),
-                                           SecurityUI.createPasswordConstraintTip (aDisplayLocale)))
+              .setCtrl (new HCEditPassword (FIELD_PASSWORD_CONFIRM).setPlaceholder (sPasswordConfirm))
+              .setNote (SecurityUI.createPasswordConstraintTip (aDisplayLocale))
               .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
 
         final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
