@@ -219,8 +219,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   @Override
   protected final boolean isEditAllowed (@Nullable final IUser aUser)
   {
-    // Deleted users and the Administrator cannot be edited
-    return aUser != null && !aUser.isDeleted ();
+    return SecurityUIHelper.canBeEdited (aUser);
   }
 
   /**
@@ -228,13 +227,13 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
    * passwords of all not deleted users can be reset.
    * 
    * @param aUser
-   *        The user to check. May not be <code>null</code>.
+   *        The user to check. May be <code>null</code>.
    * @return <code>true</code> if the password can be reset, <code>false</code>
    *         if not.
    */
   protected final boolean canResetPassword (@Nonnull final IUser aUser)
   {
-    return !aUser.isDeleted ();
+    return SecurityUIHelper.canResetPassword (aUser);
   }
 
   /**

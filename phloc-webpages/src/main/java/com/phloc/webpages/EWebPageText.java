@@ -63,7 +63,8 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_SYSINFO_SYSPROPS ("Systemeinstellungen", "System properties"),
   PAGE_NAME_SYSINFO_THIRDPARTYLIBS ("Externe Module", "Thirdparty libraries"),
   PAGE_NAME_SYSINFO_THREADS ("Threads", "Threads"),
-  PAGE_NAME_SYSINFO_TIMEZONES ("Zeitzonen", "Time zones");
+  PAGE_NAME_SYSINFO_TIMEZONES ("Zeitzonen", "Time zones"),
+  PAGE_NAME_CHANGE_PASSWORD ("Passwort ändern", "Change password");
 
   private final ISimpleMultiLingualText m_aTP;
 
