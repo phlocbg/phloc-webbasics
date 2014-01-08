@@ -121,24 +121,28 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (sValue);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNodeBuilder aCtrlBuilder)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrlBuilder);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aCtrl)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrl);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNodeBuilder aCtrlBuilder,
                            @Nullable final IErrorList aFormErrors)
@@ -147,6 +151,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNode aCtrl,
                            @Nullable final IErrorList aFormErrors)
@@ -155,12 +160,14 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aCtrls)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrls);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
                            @Nullable final IErrorList aFormErrors)
@@ -169,6 +176,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
                                    @Nullable final IHCNode aNote)
@@ -177,6 +185,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
                                    @Nullable final IHCNode aNote,
@@ -186,6 +195,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
                                    @Nullable final IHCNode aNote)
@@ -194,6 +204,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
                                    @Nullable final IHCNode aNote)
@@ -202,6 +213,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
                                    @Nullable final IHCNode aNote)
@@ -210,6 +222,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
                                    @Nullable final IHCNode aNote,
@@ -219,6 +232,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
                                    @Nullable final IHCNode aNote,
@@ -228,6 +242,7 @@ public abstract class AbstractHCTableForm <IMPLTYPE extends AbstractHCTableForm 
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
                                    @Nullable final IHCNode aNote,
