@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.htmlext.HCUtils;
@@ -33,14 +34,39 @@ import com.phloc.webctrls.tiptip.TipTip;
 
 public final class SecurityUI
 {
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final SecurityUI s_aInstance = new SecurityUI ();
+
   private SecurityUI ()
   {}
 
   @Nullable
+  @Deprecated
   public static String getUserDisplayName (@Nullable final String sUserID)
   {
     if (StringHelper.hasNoText (sUserID))
       return "Gast";
+    final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
+    return aUser == null ? sUserID : aUser.getDisplayName ();
+  }
+
+  /**
+   * Get the display name of the user.
+   * 
+   * @param sUserID
+   *        User ID. May be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to be used.
+   * @return The "guest" text if no user ID was provided, the display name of
+   *         the user if a valid user ID was provided or the ID of the user if
+   *         an invalid user was provided.
+   */
+  @Nullable
+  public static String getUserDisplayName (@Nullable final String sUserID, @Nonnull final Locale aDisplayLocale)
+  {
+    if (StringHelper.hasNoText (sUserID))
+      return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
     final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
     return aUser == null ? sUserID : aUser.getDisplayName ();
   }
