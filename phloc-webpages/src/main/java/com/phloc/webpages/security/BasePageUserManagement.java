@@ -114,6 +114,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     LABEL_LAST_LOGIN ("Letzter Login", "Last login"),
     LABEL_LAST_LOGIN_NEVER ("noch nie", "never"),
     LABEL_LOGIN_COUNT ("Login-Anzahl", "Login count"),
+    LABEL_CONSECUTIVE_FAILED_LOGIN_COUNT ("Fehlgeschlagene Logins", "Failed logins"),
     LABEL_USERGROUPS_0 ("Benutzergruppen", "User groups"),
     LABEL_USERGROUPS_N ("Benutzergruppen ({0})", "User groups ({0})"),
     LABEL_ROLES_0 ("Rollen", "Roles"),
@@ -342,6 +343,9 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aTable.createItemRow ()
           .setLabel (EText.LABEL_LOGIN_COUNT.getDisplayText (aDisplayLocale))
           .setCtrl (Integer.toString (aSelectedObject.getLoginCount ()));
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_CONSECUTIVE_FAILED_LOGIN_COUNT.getDisplayText (aDisplayLocale))
+          .setCtrl (Integer.toString (aSelectedObject.getConsecutiveFailedLoginCount ()));
 
     // user groups
     final Collection <IUserGroup> aUserGroups = aMgr.getAllUserGroupsWithAssignedUser (aSelectedObject.getID ());
