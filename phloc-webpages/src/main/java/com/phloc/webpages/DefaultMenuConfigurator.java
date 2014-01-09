@@ -30,6 +30,7 @@ import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
+import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webpages.monitoring.BasePageAudit;
 import com.phloc.webpages.monitoring.BasePageLoginInfo;
 import com.phloc.webpages.monitoring.BasePageScopes;
@@ -37,6 +38,7 @@ import com.phloc.webpages.monitoring.BasePageSessions;
 import com.phloc.webpages.security.BasePageRoleManagement;
 import com.phloc.webpages.security.BasePageUserGroupManagement;
 import com.phloc.webpages.security.BasePageUserManagement;
+import com.phloc.webpages.settings.BasePageSettingsSMTP;
 import com.phloc.webpages.settings.BasePageSettingsGlobal;
 import com.phloc.webpages.sysinfo.BasePageSysInfoChangeLogs;
 import com.phloc.webpages.sysinfo.BasePageSysInfoEnvironmentVariables;
@@ -62,6 +64,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_MONITORING_SESSIONS = "admin_monitoring_sessions";
   public static final String MENU_ADMIN_SETTINGS = "admin_settings";
   public static final String MENU_ADMIN_SETTINGS_GLOBAL = "admin_settings_global";
+  public static final String MENU_ADMIN_SETTINGS_SMTP = "admin_settings_smtp";
   public static final String MENU_ADMIN_SYSINFO = "admin_sysinfo";
   public static final String MENU_ADMIN_SYSINFO_CHANGELOGS = "admin_sysinfo_changelog";
   public static final String MENU_ADMIN_SYSINFO_ENVVARS = "admin_sysinfo_envvars";
@@ -120,9 +123,19 @@ public final class DefaultMenuConfigurator
   }
 
   @Nonnull
+  @Deprecated
   public static IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
                                                 @Nonnull final IMenuItem aParent,
                                                 @Nullable final IFilter <IMenuObject> aDisplayFilter)
+  {
+    return addSettingsItems (aMenuTree, aParent, aDisplayFilter, (NamedSMTPSettingsManager) null);
+  }
+
+  @Nonnull
+  public static IMenuItemPage addSettingsItems (@Nonnull final IMenuTree aMenuTree,
+                                                @Nonnull final IMenuItem aParent,
+                                                @Nullable final IFilter <IMenuObject> aDisplayFilter,
+                                                @Nullable final NamedSMTPSettingsManager aNamedSMTPSettingsMgr)
   {
     final IMenuItemPage aAdminSettings = aMenuTree.createItem (aParent,
                                                                new PageShowChildren (MENU_ADMIN_SETTINGS,
@@ -131,6 +144,11 @@ public final class DefaultMenuConfigurator
                                                   .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSettings, new BasePageSettingsGlobal (MENU_ADMIN_SETTINGS_GLOBAL))
              .setDisplayFilter (aDisplayFilter);
+
+    if (aNamedSMTPSettingsMgr != null)
+      aMenuTree.createItem (aAdminSettings, new BasePageSettingsSMTP (aNamedSMTPSettingsMgr, MENU_ADMIN_SETTINGS_SMTP))
+               .setDisplayFilter (aDisplayFilter);
+
     return aAdminSettings;
   }
 

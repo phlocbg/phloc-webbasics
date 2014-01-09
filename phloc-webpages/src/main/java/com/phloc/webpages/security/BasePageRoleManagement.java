@@ -125,13 +125,13 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
 
   @Override
   @Nullable
-  protected IRole getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
+  protected IRole getSelectedObject (@Nonnull final WebPageExecutionContext aWPEC, @Nullable final String sID)
   {
     return AccessManager.getInstance ().getRoleOfID (sID);
   }
 
   @Override
-  protected final boolean isEditAllowed (@Nullable final IRole aLoginInfo)
+  protected final boolean isEditAllowed (@Nullable final IRole aRole)
   {
     return false;
   }
