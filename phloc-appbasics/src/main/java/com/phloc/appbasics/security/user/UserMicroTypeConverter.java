@@ -47,6 +47,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
   private static final String ATTR_DESIREDLOCALE = "desiredlocale";
   private static final String ATTR_LASTLOGINDT = "lastlogindt";
   private static final String ATTR_LOGINCOUNT = "logincount";
+  private static final String ATTR_CONSECUTIVEFAILEDLOGINCOUNT = "consecutivefailedlogincount";
   private static final String ELEMENT_LOGINNAME = "loginname";
   private static final String ELEMENT_EMAILADDRESS = "emailaddress";
   private static final String ELEMENT_PASSWORDHASH = "passwordhash";
@@ -82,6 +83,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     if (aUser.getLastLoginDateTime () != null)
       eUser.setAttributeWithConversion (ATTR_LASTLOGINDT, aUser.getLastLoginDateTime ());
     eUser.setAttribute (ATTR_LOGINCOUNT, aUser.getLoginCount ());
+    eUser.setAttribute (ATTR_CONSECUTIVEFAILEDLOGINCOUNT, aUser.getConsecutiveFailedLoginCount ());
     for (final Map.Entry <String, Object> aEntry : ContainerHelper.getSortedByKey (aUser.getAllAttributes ())
                                                                   .entrySet ())
     {
@@ -124,6 +126,8 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
     final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.getLocale (sDesiredLocale);
     final DateTime aLastLoginDT = eUser.getAttributeWithConversion (ATTR_LASTLOGINDT, DateTime.class);
     final int nLoginCount = StringParser.parseInt (eUser.getAttribute (ATTR_LOGINCOUNT), 0);
+    final int nConsecutiveFailedLoginCount = StringParser.parseInt (eUser.getAttribute (ATTR_CONSECUTIVEFAILEDLOGINCOUNT),
+                                                                    0);
     final Map <String, String> aCustomAttrs = new LinkedHashMap <String, String> ();
     for (final IMicroElement eCustom : eUser.getAllChildElements (ELEMENT_CUSTOM))
       aCustomAttrs.put (eCustom.getAttribute (ATTR_ID), eCustom.getTextContent ());
@@ -144,6 +148,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter
                      aDesiredLocale,
                      aLastLoginDT,
                      nLoginCount,
+                     nConsecutiveFailedLoginCount,
                      aCustomAttrs,
                      bDeleted,
                      bDisabled);

@@ -103,6 +103,13 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   int getLoginCount ();
 
   /**
+   * @return The number of consecutive failed logins of this user.
+   * @since 2.6.3
+   */
+  @Nonnegative
+  int getConsecutiveFailedLoginCount ();
+
+  /**
    * @return <code>true</code> if this user is deleted, <code>false</code> if it
    *         is active
    */

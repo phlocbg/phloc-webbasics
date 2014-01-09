@@ -55,6 +55,7 @@ public final class UserTest
                                  Locale.GERMANY,
                                  PDTFactory.getCurrentDateTime (),
                                  0,
+                                 0,
                                  null,
                                  false,
                                  false);
@@ -65,6 +66,7 @@ public final class UserTest
     assertEquals ("Helger", aUser.getLastName ());
     assertEquals (Locale.GERMANY, aUser.getDesiredLocale ());
     assertEquals (0, aUser.getLoginCount ());
+    assertEquals (0, aUser.getConsecutiveFailedLoginCount ());
     assertNotNull (aUser.getCreationDateTime ());
     assertNull (aUser.getLastModificationDateTime ());
     assertNull (aUser.getDeletionDateTime ());
@@ -87,6 +89,7 @@ public final class UserTest
                                  "Helger",
                                  Locale.GERMANY,
                                  PDTFactory.getCurrentDateTime (),
+                                 0,
                                  0,
                                  ContainerHelper.newMap ("locale", "de_DE"),
                                  false,

@@ -31,7 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.dao.impl.DAOException;
-import com.phloc.appbasics.security.login.IUserLoginCallback;
+import com.phloc.appbasics.security.login.DefaultUserLoginCallback;
+import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.appbasics.security.login.LoginInfo;
 import com.phloc.appbasics.security.role.IRole;
@@ -77,11 +78,22 @@ public final class AccessManager extends GlobalSingleton implements IAccessManag
     m_aUserGroupMgr = new UserGroupManager (DEFAULT_BASE_PATH + FILENAME_USERGROUPS_XML, m_aUserMgr, m_aRoleMgr);
 
     // Remember the last login date of the user
-    LoggedInUserManager.getInstance ().addUserLoginCallback (new IUserLoginCallback ()
+    LoggedInUserManager.getInstance ().addUserLoginCallback (new DefaultUserLoginCallback ()
     {
+      @Override
       public void onUserLogin (@Nonnull final LoginInfo aInfo)
       {
         m_aUserMgr.updateUserLastLogin (aInfo.getUserID ());
+      }
+
+      @Override
+      public void onUserLoginError (@Nonnull @Nonempty final String sUserID, @Nonnull final ELoginResult eLoginResult)
+      {
+        if (eLoginResult == ELoginResult.INVALID_PASSWORD)
+        {
+          // On invalid password, update consecutive failed login count
+          m_aUserMgr.updateUserLastFailedLogin (sUserID);
+        }
       }
     });
   }

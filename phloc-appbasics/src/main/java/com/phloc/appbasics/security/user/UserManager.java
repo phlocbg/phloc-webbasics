@@ -538,7 +538,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
     m_aRWLock.writeLock ().lock ();
     try
     {
-      aUser.updateLastLogin ();
+      aUser.onSuccessfulLogin ();
       markAsChanged ();
     }
     finally
@@ -546,6 +546,31 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
       m_aRWLock.writeLock ().unlock ();
     }
     AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USER, "update-last-login", sUserID);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public EChange updateUserLastFailedLogin (@Nullable final String sUserID)
+  {
+    // Resolve user
+    final User aUser = getUserOfID (sUserID);
+    if (aUser == null)
+    {
+      AuditUtils.onAuditModifyFailure (CSecurity.TYPE_USER, sUserID, "no-such-user-id", "update-last-failed-login");
+      return EChange.UNCHANGED;
+    }
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      aUser.onFailedLogin ();
+      markAsChanged ();
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    AuditUtils.onAuditModifySuccess (CSecurity.TYPE_USER, "update-last-failed-login", sUserID);
     return EChange.CHANGED;
   }
 
@@ -662,7 +687,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
 
     // Now compare the hashes
     final String sPasswordHashAlgorithm = aUser.getPasswordHash ().getAlgorithmName ();
-    final PasswordHash aPasswordHash = GlobalPasswordSettings.createUserPasswordHash (sPasswordHashAlgorithm, sPlainTextPassword);
+    final PasswordHash aPasswordHash = GlobalPasswordSettings.createUserPasswordHash (sPasswordHashAlgorithm,
+                                                                                      sPlainTextPassword);
     return aUser.getPasswordHash ().equals (aPasswordHash);
   }
 }

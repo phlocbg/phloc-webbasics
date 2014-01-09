@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
@@ -332,6 +333,27 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     return loginUser (aUser, sPlainTextPassword, aRequiredRoleIDs);
   }
 
+  @Nonnull
+  private ELoginResult _onLoginError (@Nonnull @Nonempty final String sUserID, @Nonnull final ELoginResult eLoginResult)
+  {
+    for (final IUserLoginCallback aUserLoginCallback : getAllUserLoginCallbacks ())
+      try
+      {
+        aUserLoginCallback.onUserLoginError (sUserID, eLoginResult);
+      }
+      catch (final Throwable t)
+      {
+        s_aLogger.error ("Failed to invoke onUserLoginError callback on " +
+                         aUserLoginCallback +
+                         "(" +
+                         sUserID +
+                         "," +
+                         eLoginResult +
+                         ")", t);
+      }
+    return eLoginResult;
+  }
+
   /**
    * Login the passed user and require a set of certain roles, the used needs to
    * have to login here.
@@ -359,14 +381,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     if (aUser.isDeleted ())
     {
       AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-is-deleted");
-      return ELoginResult.USER_IS_DELETED;
+      return _onLoginError (sUserID, ELoginResult.USER_IS_DELETED);
     }
 
     // Disabled user?
     if (aUser.isDisabled ())
     {
       AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-is-disabled");
-      return ELoginResult.USER_IS_DISABLED;
+      return _onLoginError (sUserID, ELoginResult.USER_IS_DISABLED);
     }
 
     final AccessManager aAM = AccessManager.getInstance ();
@@ -378,14 +400,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
                                         sUserID,
                                         "user-is-missing-required-roles",
                                         StringHelper.getToString (aRequiredRoleIDs));
-      return ELoginResult.USER_IS_MISSING_ROLE;
+      return _onLoginError (sUserID, ELoginResult.USER_IS_MISSING_ROLE);
     }
 
     // Check the password
     if (!aAM.areUserIDAndPasswordValid (sUserID, sPlainTextPassword))
     {
       AuditUtils.onAuditExecuteFailure ("login", sUserID, "invalid-password");
-      return ELoginResult.INVALID_PASSWORD;
+      return _onLoginError (sUserID, ELoginResult.INVALID_PASSWORD);
     }
 
     LoginInfo aInfo;
@@ -396,7 +418,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       {
         // The user is already logged in
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "user-already-logged-in");
-        return ELoginResult.USER_ALREADY_LOGGED_IN;
+        return _onLoginError (sUserID, ELoginResult.USER_ALREADY_LOGGED_IN);
       }
 
       aInfo = new LoginInfo (aUser);
@@ -407,7 +429,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         // Another user is already in the current session
         m_aLoggedInUsers.remove (sUserID);
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "session-already-has-user");
-        return ELoginResult.SESSION_ALREADY_HAS_USER;
+        return _onLoginError (sUserID, ELoginResult.SESSION_ALREADY_HAS_USER);
       }
     }
     finally
@@ -426,7 +448,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       }
       catch (final Throwable t)
       {
-        s_aLogger.error ("Failed to invoke onUserLogin callback on " + aUserLoginCallback, t);
+        s_aLogger.error ("Failed to invoke onUserLogin callback on " + aUserLoginCallback + "(" + aInfo + ")", t);
       }
 
     return ELoginResult.SUCCESS;

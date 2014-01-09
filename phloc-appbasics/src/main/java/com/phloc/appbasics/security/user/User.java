@@ -60,6 +60,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   private Locale m_aDesiredLocale;
   private DateTime m_aLastLoginDT;
   private int m_nLoginCount;
+  private int m_nConsecutiveFailedLoginCount;
   private boolean m_bDeleted;
   private boolean m_bDisabled;
 
@@ -105,6 +106,7 @@ public class User extends MapBasedAttributeContainer implements IUser
           aDesiredLocale,
           (DateTime) null,
           0,
+          0,
           aCustomAttrs,
           false,
           bDisabled);
@@ -132,6 +134,7 @@ public class User extends MapBasedAttributeContainer implements IUser
           sLastName,
           aDesiredLocale,
           (DateTime) null,
+          0,
           0,
           aCustomAttrs,
           false,
@@ -166,6 +169,8 @@ public class User extends MapBasedAttributeContainer implements IUser
    *        The date time when the user last logged in.
    * @param nLoginCount
    *        The number of times the user logged in. Must be &ge; 0.
+   * @param nConsecutiveFailedLoginCount
+   *        The number of consecutive failed logins. Must be &ge; 0.
    * @param aCustomAttrs
    *        Custom attributes. May be <code>null</code>.
    * @param bDeleted
@@ -185,6 +190,7 @@ public class User extends MapBasedAttributeContainer implements IUser
         @Nullable final Locale aDesiredLocale,
         @Nullable final DateTime aLastLoginDT,
         @Nonnegative final int nLoginCount,
+        @Nonnegative final int nConsecutiveFailedLoginCount,
         @Nullable final Map <String, ?> aCustomAttrs,
         final boolean bDeleted,
         final boolean bDisabled)
@@ -199,6 +205,8 @@ public class User extends MapBasedAttributeContainer implements IUser
       throw new IllegalArgumentException ("emailAddress");
     if (nLoginCount < 0)
       throw new IllegalArgumentException ("loginCount");
+    if (nConsecutiveFailedLoginCount < 0)
+      throw new IllegalArgumentException ("consecutiveFailedLoginCount");
     m_sID = sID;
     m_aCreationDT = aCreationDT;
     m_aLastModificationDT = aLastModificationDT;
@@ -211,6 +219,7 @@ public class User extends MapBasedAttributeContainer implements IUser
     m_aDesiredLocale = aDesiredLocale;
     m_aLastLoginDT = aLastLoginDT;
     m_nLoginCount = nLoginCount;
+    m_nConsecutiveFailedLoginCount = nConsecutiveFailedLoginCount;
     setAttributes (aCustomAttrs);
     m_bDeleted = bDeleted;
     m_bDisabled = bDisabled;
@@ -378,10 +387,22 @@ public class User extends MapBasedAttributeContainer implements IUser
     return m_nLoginCount;
   }
 
-  void updateLastLogin ()
+  @Nonnegative
+  public int getConsecutiveFailedLoginCount ()
+  {
+    return m_nConsecutiveFailedLoginCount;
+  }
+
+  void onSuccessfulLogin ()
   {
     m_aLastLoginDT = PDTFactory.getCurrentDateTime ();
     m_nLoginCount++;
+    m_nConsecutiveFailedLoginCount = 0;
+  }
+
+  void onFailedLogin ()
+  {
+    m_nConsecutiveFailedLoginCount++;
   }
 
   @Nonnull
@@ -461,6 +482,9 @@ public class User extends MapBasedAttributeContainer implements IUser
                             .appendIfNotNull ("firstName", m_sFirstName)
                             .appendIfNotNull ("lastName", m_sLastName)
                             .appendIfNotNull ("desiredLocale", m_aDesiredLocale)
+                            .appendIfNotNull ("lastLoginDT", m_aLastLoginDT)
+                            .append ("loginCount", m_nLoginCount)
+                            .append ("consecutiveFailedLoginCount", m_nConsecutiveFailedLoginCount)
                             .append ("deleted", m_bDeleted)
                             .append ("disabled", m_bDisabled)
                             .toString ();
