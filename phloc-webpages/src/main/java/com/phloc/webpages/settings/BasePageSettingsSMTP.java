@@ -38,15 +38,21 @@ import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCEdit;
+import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
+import com.phloc.web.CWeb;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
+import com.phloc.webctrls.autonumeric.HCAutoNumeric;
+import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
@@ -58,6 +64,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
+    BUTTON_CREATE_NEW ("Neue SMTP-Einstellungen anlegen", "Create new SMTP settings"),
     HEADER_NAME ("Name", "Name"),
     HEADER_HOST ("Host", "Host name"),
     HEADER_USERNAME ("Benutzername", "User name"),
@@ -74,6 +81,8 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     LABEL_SOCKET_TIMEOUT ("Sende-Timeout", "Socket timeout"),
     MSG_NO_PASSWORD_SET ("keines gesetzt", "none defined"),
     MSG_MILLISECONDS (" ms", " ms"),
+    TITLE_CREATE ("Neue SMTP-Einstellungen anlegen", "Create new SMTP settings"),
+    TITLE_EDIT ("SMTP-Einstellungen ''{0}'' bearbeiten", "Edit SMTP settings ''{0}''"),
     DELETE_QUERY ("Sollen die SMTP-Einstellungen ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the SMTP settings ''{0}''?"),
     DELETE_SUCCESS ("Die SMTP-Einstellungen ''{0}'' wurden erfolgreich gelöscht!", "The SMTP settings ''{0}'' were successfully deleted!"),
     DELETE_ERROR ("Fehler beim Löschen der SMTP-Einstellungen ''{0}''!", "Error deleting the SMTP settings ''{0}''!");
@@ -97,6 +106,17 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       return DefaultTextResolver.getTextWithArgs (this, m_aTP, aContentLocale, aArgs);
     }
   }
+
+  private static final String FIELD_NAME = "name";
+  private static final String FIELD_HOSTNAME = "hostname";
+  private static final String FIELD_PORT = "port";
+  private static final String FIELD_USERNAME = "username";
+  private static final String FIELD_PASSWORD = "password";
+  private static final String FIELD_CHARSET = "charset";
+  private static final String FIELD_SSL = "ssl";
+  private static final String FIELD_STARTTLS = "starttls";
+  private static final String FIELD_CONNECTION_TIMEOUT = "ctimeout";
+  private static final String FIELD_SOCKET_TIMEOUT = "stimeout";
 
   private final NamedSMTPSettingsManager m_aMgr;
 
@@ -213,7 +233,60 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
                                 final boolean bCopy,
                                 @Nonnull final FormErrors aFormErrors)
   {
-    throw new UnsupportedOperationException ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final ISMTPSettings aSettings = aSelectedObject == null ? null : aSelectedObject.getSMTPSettings ();
+
+    final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
+                                                                                           HCCol.star (),
+                                                                                           new HCCol (20)));
+    aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                      aSelectedObject.getName ())
+                                          : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
+
+    {
+      final String sName = EText.LABEL_NAME.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sName)
+            .setCtrl (new HCEdit (new RequestField (FIELD_NAME, aSelectedObject == null ? null
+                                                                                       : aSelectedObject.getName ())).setPlaceholder (sName))
+            .setErrorList (aFormErrors.getListOfField (FIELD_NAME));
+    }
+
+    {
+      final String sHostName = EText.LABEL_HOSTNAME.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sHostName)
+            .setCtrl (new HCEdit (new RequestField (FIELD_HOSTNAME, aSettings == null ? null : aSettings.getHostName ())).setPlaceholder (sHostName))
+            .setErrorList (aFormErrors.getListOfField (FIELD_HOSTNAME));
+    }
+
+    {
+      final String sPort = EText.LABEL_PORT.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sPort)
+            .setCtrl (new HCAutoNumeric (new RequestField (FIELD_PORT, aSettings == null ? CWeb.DEFAULT_PORT_SMTP
+                                                                                        : aSettings.getPort ())).setMin (0)
+                                                                                                                .setDecimalPlaces (0)
+                                                                                                                .setThousandSeparator (""))
+            .setErrorList (aFormErrors.getListOfField (FIELD_PORT));
+    }
+
+    {
+      final String sUserName = EText.LABEL_USERNAME.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sUserName)
+            .setCtrl (new HCEdit (new RequestField (FIELD_USERNAME, aSettings == null ? null : aSettings.getUserName ())).setPlaceholder (sUserName))
+            .setErrorList (aFormErrors.getListOfField (FIELD_USERNAME));
+    }
+
+    {
+      final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sPassword)
+            .setCtrl (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword))
+            .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD));
+    }
+
   }
 
   @Override
@@ -251,6 +324,10 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
+    // Toolbar on top
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
+    aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW.getDisplayText (aDisplayLocale), createCreateURL ());
+
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
                                                           new HCCol (200),
                                                           new HCCol (150),
@@ -269,6 +346,9 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       aRow.addCell (aCurObject.getSMTPSettings ().getUserName ());
 
       final IHCCell <?> aActionCell = aRow.addCell ();
+      aActionCell.addChild (createEditLink (aCurObject,
+                                            EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                             aCurObject.getName ())));
       aActionCell.addChild (createDeleteLink (aCurObject,
                                               EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                  aCurObject.getName ())));
