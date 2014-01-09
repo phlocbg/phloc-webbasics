@@ -37,6 +37,7 @@ import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
@@ -45,10 +46,13 @@ import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.web.CWeb;
+import com.phloc.web.CWebCharset;
+import com.phloc.web.smtp.EmailGlobalSettings;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
+import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webctrls.autonumeric.HCAutoNumeric;
@@ -58,6 +62,7 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
+import com.phloc.webpages.ui.HCCharsetSelect;
 
 public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings>
 {
@@ -75,12 +80,11 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     LABEL_USERNAME ("Benutzername", "User name"),
     LABEL_PASSWORD ("Passwort", "Password"),
     LABEL_CHARSET ("Zeichensatz", "Charset"),
-    LABEL_SSL ("SSL?", "SSL?"),
-    LABEL_STARTTLS ("STARTTLS?", "STARTTLS?"),
-    LABEL_CONNECTION_TIMEOUT ("Verbindungs-Timeout", "Connection timeout"),
-    LABEL_SOCKET_TIMEOUT ("Sende-Timeout", "Socket timeout"),
+    LABEL_SSL ("Verwende SSL?", "Use SSL?"),
+    LABEL_STARTTLS ("Verwende STARTTLS?", "Use STARTTLS?"),
+    LABEL_CONNECTION_TIMEOUT ("Verbindungs-Timeout (ms)", "Connection timeout (ms)"),
+    LABEL_SOCKET_TIMEOUT ("Sende-Timeout (ms)", "Socket timeout (ms)"),
     MSG_NO_PASSWORD_SET ("keines gesetzt", "none defined"),
-    MSG_MILLISECONDS (" ms", " ms"),
     TITLE_CREATE ("Neue SMTP-Einstellungen anlegen", "Create new SMTP settings"),
     TITLE_EDIT ("SMTP-Einstellungen ''{0}'' bearbeiten", "Edit SMTP settings ''{0}''"),
     DELETE_QUERY ("Sollen die SMTP-Einstellungen ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the SMTP settings ''{0}''?"),
@@ -117,6 +121,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
   private static final String FIELD_STARTTLS = "starttls";
   private static final String FIELD_CONNECTION_TIMEOUT = "ctimeout";
   private static final String FIELD_SOCKET_TIMEOUT = "stimeout";
+  private static final String DEFAULT_CHARSET = CWebCharset.CHARSET_SMTP;
 
   private final NamedSMTPSettingsManager m_aMgr;
 
@@ -184,36 +189,43 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     aTable.createItemRow ()
           .setLabel (EText.LABEL_NAME.getDisplayText (aDisplayLocale))
           .setCtrl (aSelectedObject.getName ());
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_HOSTNAME.getDisplayText (aDisplayLocale))
           .setCtrl (aSettings.getHostName ());
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_PORT.getDisplayText (aDisplayLocale))
           .setCtrl (Integer.toString (aSettings.getPort ()));
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_USERNAME.getDisplayText (aDisplayLocale))
           .setCtrl (aSettings.getUserName ());
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale))
           .setCtrl (StringHelper.hasText (aSettings.getPassword ()) ? "***"
                                                                    : EText.MSG_NO_PASSWORD_SET.getDisplayText (aDisplayLocale));
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_CHARSET.getDisplayText (aDisplayLocale))
           .setCtrl (aSettings.getCharset ());
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_SSL.getDisplayText (aDisplayLocale))
           .setCtrl (EWebBasicsText.getYesOrNo (aSettings.isSSLEnabled (), aDisplayLocale));
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_STARTTLS.getDisplayText (aDisplayLocale))
           .setCtrl (EWebBasicsText.getYesOrNo (aSettings.isSTARTTLSEnabled (), aDisplayLocale));
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_CONNECTION_TIMEOUT.getDisplayText (aDisplayLocale))
-          .setCtrl (Long.toString (aSettings.getConnectionTimeoutMilliSecs ()) +
-                    EText.MSG_MILLISECONDS.getDisplayText (aDisplayLocale));
+          .setCtrl (Long.toString (aSettings.getConnectionTimeoutMilliSecs ()));
+
     aTable.createItemRow ()
           .setLabel (EText.LABEL_SOCKET_TIMEOUT.getDisplayText (aDisplayLocale))
-          .setCtrl (Long.toString (aSettings.getTimeoutMilliSecs ()) +
-                    EText.MSG_MILLISECONDS.getDisplayText (aDisplayLocale));
+          .setCtrl (Long.toString (aSettings.getTimeoutMilliSecs ()));
   }
 
   @Override
@@ -274,7 +286,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     {
       final String sUserName = EText.LABEL_USERNAME.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
-            .setLabelMandatory (sUserName)
+            .setLabel (sUserName)
             .setCtrl (new HCEdit (new RequestField (FIELD_USERNAME, aSettings == null ? null : aSettings.getUserName ())).setPlaceholder (sUserName))
             .setErrorList (aFormErrors.getListOfField (FIELD_USERNAME));
     }
@@ -282,11 +294,60 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     {
       final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
-            .setLabelMandatory (sPassword)
+            .setLabel (sPassword)
             .setCtrl (new HCEditPassword (FIELD_PASSWORD).setPlaceholder (sPassword))
             .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD));
     }
 
+    {
+      final String sCharset = EText.LABEL_CHARSET.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sCharset)
+            .setCtrl (new HCCharsetSelect (new RequestField (FIELD_CHARSET, aSettings == null ? DEFAULT_CHARSET
+                                                                                             : aSettings.getCharset ()),
+                                           aDisplayLocale))
+            .setErrorList (aFormErrors.getListOfField (FIELD_CHARSET));
+    }
+
+    {
+      final String sSSL = EText.LABEL_SSL.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabel (sSSL)
+            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_SSL, EmailGlobalSettings.isUseSSL ())))
+            .setErrorList (aFormErrors.getListOfField (FIELD_SSL));
+    }
+
+    {
+      final String sSTARTTLS = EText.LABEL_STARTTLS.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabel (sSTARTTLS)
+            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_STARTTLS, EmailGlobalSettings.isUseSTARTTLS ())))
+            .setErrorList (aFormErrors.getListOfField (FIELD_STARTTLS));
+    }
+
+    {
+      final String sConnectionTimeout = EText.LABEL_CONNECTION_TIMEOUT.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sConnectionTimeout)
+            .setCtrl (new HCAutoNumeric (new RequestField (FIELD_CONNECTION_TIMEOUT,
+                                                           aSettings == null ? EmailGlobalSettings.getConnectionTimeoutMilliSecs ()
+                                                                            : aSettings.getConnectionTimeoutMilliSecs ())).setMin (0)
+                                                                                                                          .setDecimalPlaces (0)
+                                                                                                                          .setThousandSeparator (""))
+            .setErrorList (aFormErrors.getListOfField (FIELD_CONNECTION_TIMEOUT));
+    }
+
+    {
+      final String sSocketTimeout = EText.LABEL_SOCKET_TIMEOUT.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sSocketTimeout)
+            .setCtrl (new HCAutoNumeric (new RequestField (FIELD_SOCKET_TIMEOUT,
+                                                           aSettings == null ? EmailGlobalSettings.getTimeoutMilliSecs ()
+                                                                            : aSettings.getTimeoutMilliSecs ())).setMin (0)
+                                                                                                                .setDecimalPlaces (0)
+                                                                                                                .setThousandSeparator (""))
+            .setErrorList (aFormErrors.getListOfField (FIELD_SOCKET_TIMEOUT));
+    }
   }
 
   @Override
