@@ -17,26 +17,34 @@
  */
 package com.phloc.webpages.ui;
 
-import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.charset.CharsetManager;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.html.request.IHCRequestField;
+import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webctrls.custom.HCExtSelect;
 
-public class HCCharsetSelect extends HCExtSelect
+public class HCNamedSMTPSettingsSelect extends HCExtSelect
 {
-  public HCCharsetSelect (@Nonnull final IHCRequestField aRF,
-                          final boolean bOnlyRegistered,
-                          @Nonnull final Locale aDisplayLocale)
+  public HCNamedSMTPSettingsSelect (@Nonnull final IHCRequestField aRF,
+                                    @Nonnull final List <NamedSMTPSettings> aSettings,
+                                    @Nonnull final Locale aDisplayLocale)
   {
     super (aRF);
 
-    for (final Charset aCharset : CharsetManager.getAllCharsets ().values ())
-      if (aCharset.isRegistered () || !bOnlyRegistered)
-        addOption (aCharset.name (), aCharset.displayName (aDisplayLocale));
+    for (final NamedSMTPSettings aCurObject : aSettings)
+    {
+      final ISMTPSettings aSMTP = aCurObject.getSMTPSettings ();
+      String sUserName = "";
+      if (StringHelper.hasText (aSMTP.getUserName ()))
+        sUserName = aSMTP.getUserName () + "@";
+      addOption (aCurObject.getID (),
+                 aCurObject.getName () + " (" + sUserName + aSMTP.getHostName () + ":" + aSMTP.getPort () + ")");
+    }
 
     addOptionPleaseSelect (aDisplayLocale);
   }

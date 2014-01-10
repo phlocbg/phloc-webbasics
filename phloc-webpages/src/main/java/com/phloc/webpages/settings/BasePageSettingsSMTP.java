@@ -17,17 +17,21 @@
  */
 package com.phloc.webpages.settings;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
@@ -47,8 +51,10 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.web.CWeb;
 import com.phloc.web.CWebCharset;
+import com.phloc.web.port.CNetworkPort;
 import com.phloc.web.smtp.EmailGlobalSettings;
 import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
@@ -71,7 +77,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
   {
     BUTTON_CREATE_NEW ("Neue SMTP-Einstellungen anlegen", "Create new SMTP settings"),
     HEADER_NAME ("Name", "Name"),
-    HEADER_HOST ("Host", "Host name"),
+    HEADER_HOST ("Host-Name", "Host name"),
     HEADER_USERNAME ("Benutzername", "User name"),
     HEADER_DETAILS ("Details von SMTP-Einstellungen ''{0}''", "Details of SMTP settings ''{0}''"),
     LABEL_NAME ("Name", "Name"),
@@ -79,7 +85,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     LABEL_PORT ("Port", "Port"),
     LABEL_USERNAME ("Benutzername", "User name"),
     LABEL_PASSWORD ("Passwort", "Password"),
-    LABEL_CHARSET ("Zeichensatz", "Charset"),
+    LABEL_CHARSET ("Zeichensatz", "Character set"),
     LABEL_SSL ("Verwende SSL?", "Use SSL?"),
     LABEL_STARTTLS ("Verwende STARTTLS?", "Use STARTTLS?"),
     LABEL_CONNECTION_TIMEOUT ("Verbindungs-Timeout (ms)", "Connection timeout (ms)"),
@@ -87,6 +93,14 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     MSG_NO_PASSWORD_SET ("keines gesetzt", "none defined"),
     TITLE_CREATE ("Neue SMTP-Einstellungen anlegen", "Create new SMTP settings"),
     TITLE_EDIT ("SMTP-Einstellungen ''{0}'' bearbeiten", "Edit SMTP settings ''{0}''"),
+    ERROR_NAME_EMPTY ("Es muss ein Name für diese SMTP-Einstellungen angegeben werden!", "A name must be provided for these SMTP settings!"),
+    ERROR_HOSTNAME_EMPTY ("Es muss ein Host-Name oder eine IP-Adresse des SMTP-Servers angegeben werden!", "A name or IP address of the SMTP server must be provided!"),
+    ERROR_PORT_INVALID ("Der angegebene Port ist ungültig. Gültige Ports liegen zwischen {0} und {1}!", "The provided port is invalid. Valid ports must be between {0} and {1}!"),
+    ERROR_CHARSET_INVALID ("Der ausgewählte Zeichensatz ist ungültig!", "The selected character set is invalid!"),
+    ERROR_CONNECTION_TIMEOUT_INVALID ("Das Verbindungs-Timeout muss größer oder gleich 0 sein!", "The connection timeout must be greater or equal to 0!"),
+    ERROR_SOCKET_TIMEOUT_INVALID ("Das Verbindungs-Timeout muss größer oder gleich 0 sein!", "The connection timeout must be greater or equal to 0!"),
+    SUCCESS_CREATE ("Die neue SMTP-Einstellungen wurden erfolgreich angelegt!", "Successfully created the new SMTP settings!"),
+    SUCCESS_EDIT ("Die SMTP-Einstellungen wurde erfolgreich bearbeitet!", "Sucessfully edited the SMTP settings!"),
     DELETE_QUERY ("Sollen die SMTP-Einstellungen ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the SMTP settings ''{0}''?"),
     DELETE_SUCCESS ("Die SMTP-Einstellungen ''{0}'' wurden erfolgreich gelöscht!", "The SMTP settings ''{0}'' were successfully deleted!"),
     DELETE_ERROR ("Fehler beim Löschen der SMTP-Einstellungen ''{0}''!", "Error deleting the SMTP settings ''{0}''!");
@@ -234,7 +248,82 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
                                                  @Nonnull final FormErrors aFormErrors,
                                                  final boolean bEdit)
   {
-    throw new UnsupportedOperationException ();
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+
+    final String sName = aWPEC.getAttr (FIELD_NAME);
+    final String sHostName = aWPEC.getAttr (FIELD_HOSTNAME);
+    final String sPort = aWPEC.getAttr (FIELD_PORT);
+    final int nPort = StringParser.parseInt (sPort, CGlobal.ILLEGAL_UINT);
+    final String sUserName = aWPEC.getAttr (FIELD_USERNAME);
+    String sPassword = aWPEC.getAttr (FIELD_PASSWORD);
+    if (sPassword == null && aSelectedObject != null)
+    {
+      // Password is not changed
+      sPassword = aSelectedObject.getSMTPSettings ().getPassword ();
+    }
+    final String sCharset = aWPEC.getAttr (FIELD_CHARSET);
+    Charset aCharset = null;
+    try
+    {
+      aCharset = CharsetManager.getCharsetFromName (sCharset);
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+    final boolean bSSLEnabled = aWPEC.getCheckBoxAttr (FIELD_SSL, EmailGlobalSettings.isUseSSL ());
+    final boolean bSTARTTLSEnabled = aWPEC.getCheckBoxAttr (FIELD_STARTTLS, EmailGlobalSettings.isUseSTARTTLS ());
+    final long nConnectionTimeoutMS = aWPEC.getLongAttr (FIELD_CONNECTION_TIMEOUT, CGlobal.ILLEGAL_ULONG);
+    final long nSocketTimeoutMS = aWPEC.getLongAttr (FIELD_SOCKET_TIMEOUT, CGlobal.ILLEGAL_ULONG);
+
+    if (StringHelper.hasNoText (sName))
+      aFormErrors.addFieldError (FIELD_NAME, EText.ERROR_NAME_EMPTY.getDisplayText (aDisplayLocale));
+
+    if (StringHelper.hasNoText (sHostName))
+      aFormErrors.addFieldError (FIELD_HOSTNAME, EText.ERROR_HOSTNAME_EMPTY.getDisplayText (aDisplayLocale));
+
+    if (nPort < CNetworkPort.MINIMUM_PORT_NUMBER || nPort > CNetworkPort.MAXIMUM_PORT_NUMBER)
+      aFormErrors.addFieldError (FIELD_PORT,
+                                 EText.ERROR_PORT_INVALID.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                  Integer.toString (CNetworkPort.MINIMUM_PORT_NUMBER),
+                                                                                  Integer.toString (CNetworkPort.MAXIMUM_PORT_NUMBER)));
+
+    if (aCharset == null)
+      aFormErrors.addFieldError (FIELD_CHARSET, EText.ERROR_CHARSET_INVALID.getDisplayText (aDisplayLocale));
+
+    if (nConnectionTimeoutMS < 0)
+      aFormErrors.addFieldError (FIELD_CONNECTION_TIMEOUT,
+                                 EText.ERROR_CONNECTION_TIMEOUT_INVALID.getDisplayText (aDisplayLocale));
+
+    if (nSocketTimeoutMS < 0)
+      aFormErrors.addFieldError (FIELD_SOCKET_TIMEOUT,
+                                 EText.ERROR_CONNECTION_TIMEOUT_INVALID.getDisplayText (aDisplayLocale));
+
+    if (aFormErrors.isEmpty ())
+    {
+      // All fields are valid -> save
+      final ReadonlySMTPSettings aSMTPSettings = new ReadonlySMTPSettings (sHostName,
+                                                                           nPort,
+                                                                           sUserName,
+                                                                           sPassword,
+                                                                           sCharset,
+                                                                           bSSLEnabled,
+                                                                           bSTARTTLSEnabled,
+                                                                           nConnectionTimeoutMS,
+                                                                           nSocketTimeoutMS);
+
+      if (bEdit)
+      {
+        // We're editing an existing object
+        if (m_aMgr.updateSettings (aSelectedObject.getID (), sName, aSMTPSettings).isChanged ())
+          aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
+      }
+      else
+      {
+        // We're creating a new object
+        m_aMgr.addSettings (sName, aSMTPSettings);
+        aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_CREATE.getDisplayText (aDisplayLocale)));
+      }
+    }
   }
 
   @Override
@@ -277,7 +366,8 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       aTable.createItemRow ()
             .setLabelMandatory (sPort)
             .setCtrl (new HCAutoNumeric (new RequestField (FIELD_PORT, aSettings == null ? CWeb.DEFAULT_PORT_SMTP
-                                                                                        : aSettings.getPort ())).setMin (0)
+                                                                                        : aSettings.getPort ())).setMin (CNetworkPort.MINIMUM_PORT_NUMBER)
+                                                                                                                .setMax (CNetworkPort.MAXIMUM_PORT_NUMBER)
                                                                                                                 .setDecimalPlaces (0)
                                                                                                                 .setThousandSeparator (""))
             .setErrorList (aFormErrors.getListOfField (FIELD_PORT));
@@ -305,6 +395,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
             .setLabelMandatory (sCharset)
             .setCtrl (new HCCharsetSelect (new RequestField (FIELD_CHARSET, aSettings == null ? DEFAULT_CHARSET
                                                                                              : aSettings.getCharset ()),
+                                           true,
                                            aDisplayLocale))
             .setErrorList (aFormErrors.getListOfField (FIELD_CHARSET));
     }
@@ -313,7 +404,9 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       final String sSSL = EText.LABEL_SSL.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabel (sSSL)
-            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_SSL, EmailGlobalSettings.isUseSSL ())))
+            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_SSL,
+                                                               aSettings == null ? EmailGlobalSettings.isUseSSL ()
+                                                                                : aSettings.isSSLEnabled ())))
             .setErrorList (aFormErrors.getListOfField (FIELD_SSL));
     }
 
@@ -321,7 +414,9 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       final String sSTARTTLS = EText.LABEL_STARTTLS.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
             .setLabel (sSTARTTLS)
-            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_STARTTLS, EmailGlobalSettings.isUseSTARTTLS ())))
+            .setCtrl (new HCCheckBox (new RequestFieldBoolean (FIELD_STARTTLS,
+                                                               aSettings == null ? EmailGlobalSettings.isUseSTARTTLS ()
+                                                                                : aSettings.isSTARTTLSEnabled ())))
             .setErrorList (aFormErrors.getListOfField (FIELD_STARTTLS));
     }
 
@@ -399,12 +494,13 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
                                      EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
     for (final NamedSMTPSettings aCurObject : m_aMgr.getAllSettings ().values ())
     {
+      final ISMTPSettings aSettings = aCurObject.getSMTPSettings ();
       final ISimpleURL aViewLink = createViewURL (aCurObject);
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aCurObject.getName ()));
-      aRow.addCell (aCurObject.getSMTPSettings ().getHostName () + ":" + aCurObject.getSMTPSettings ().getPort ());
-      aRow.addCell (aCurObject.getSMTPSettings ().getUserName ());
+      aRow.addCell (aSettings.getHostName () + ":" + aSettings.getPort ());
+      aRow.addCell (aSettings.getUserName ());
 
       final IHCCell <?> aActionCell = aRow.addCell ();
       aActionCell.addChild (createEditLink (aCurObject,
