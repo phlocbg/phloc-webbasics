@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.smtp;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -29,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 
-public class NamedSMTPSettings implements IHasID <String>
+public class NamedSMTPSettings implements IHasID <String>, Serializable
 {
   private final String m_sID;
   private String m_sName;

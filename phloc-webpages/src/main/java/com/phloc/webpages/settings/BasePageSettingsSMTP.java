@@ -137,7 +137,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
   private static final String FIELD_SOCKET_TIMEOUT = "stimeout";
   private static final String DEFAULT_CHARSET = CWebCharset.CHARSET_SMTP;
 
-  private final NamedSMTPSettingsManager m_aMgr;
+  private final transient NamedSMTPSettingsManager m_aMgr;
 
   public BasePageSettingsSMTP (@Nonnull final NamedSMTPSettingsManager aMgr, @Nonnull @Nonempty final String sID)
   {

@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 
 import javax.annotation.CheckForSigned;
@@ -28,7 +29,7 @@ import javax.annotation.Nullable;
  * 
  * @author Philip Helger
  */
-public interface ISMTPSettings
+public interface ISMTPSettings extends Serializable
 {
   /**
    * @return The SMTP server host name
