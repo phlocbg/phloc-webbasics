@@ -84,7 +84,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-datetime</artifactId>
-      <version>3.1.0</version>
+      <version>3.1.1</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
@@ -189,7 +189,7 @@
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.18</version><!--$NO-MVN-MAN-VER$-->
+        <version>1.1.0</version><!--$NO-MVN-MAN-VER$-->
         <executions>
           <execution>
             <goals>
