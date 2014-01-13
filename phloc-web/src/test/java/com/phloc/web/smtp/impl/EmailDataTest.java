@@ -18,6 +18,7 @@
 package com.phloc.web.smtp.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -57,5 +58,17 @@ public final class EmailDataTest
     assertEquals (2, aEmailData.getAttributeCount ());
 
     PhlocTestUtils.testMicroTypeConversion (aEmailData);
+    PhlocTestUtils.testDefaultSerialization (aEmailData);
+
+    // Non serializable
+    aEmailData.setAttribute ("test3", new Object ());
+    try
+    {
+      PhlocTestUtils.testDefaultSerialization (aEmailData);
+      fail ();
+    }
+    catch (final IllegalStateException ex)
+    {}
+    aEmailData.removeAttribute ("test3");
   }
 }

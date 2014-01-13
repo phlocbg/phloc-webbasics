@@ -33,8 +33,8 @@ import com.phloc.commons.collections.attrs.IReadonlyAttributeContainer;
 import com.phloc.commons.email.IEmailAddress;
 
 /**
- * Contains all possible fields for mail sending in a read-only fashion. Note:
- * the attribute container may only contain String values!
+ * Contains all possible fields for mail sending in a read-only fashion.<br>
+ * Note: the attribute container may only contain String values!
  * 
  * @author Philip Helger
  */

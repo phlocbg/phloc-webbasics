@@ -28,8 +28,8 @@ import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.email.IEmailAddress;
 
 /**
- * Contains all possible fields for mail sending. Note: the attribute container
- * may only contain String values!
+ * Contains all possible fields for mail sending.<br>
+ * Note: the attribute container may only contain String values!
  * 
  * @author Philip Helger
  */
