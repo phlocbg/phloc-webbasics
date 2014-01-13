@@ -17,6 +17,9 @@
  */
 package com.phloc.web.smtp.impl;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
@@ -57,6 +60,32 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
   private boolean m_bSTARTTLSEnabled;
   private long m_nConnectionTimeoutMilliSecs;
   private long m_nTimeoutMilliSecs;
+
+  private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException
+  {
+    m_sHostName = aOIS.readUTF ();
+    m_nPort = aOIS.readInt ();
+    m_sUserName = aOIS.readUTF ();
+    m_sPassword = aOIS.readUTF ();
+    m_aCharset = CharsetManager.getCharsetFromName (aOIS.readUTF ());
+    m_bSSLEnabled = aOIS.readBoolean ();
+    m_bSTARTTLSEnabled = aOIS.readBoolean ();
+    m_nConnectionTimeoutMilliSecs = aOIS.readLong ();
+    m_nTimeoutMilliSecs = aOIS.readLong ();
+  }
+
+  private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
+  {
+    aOOS.writeUTF (m_sHostName);
+    aOOS.writeInt (m_nPort);
+    aOOS.writeUTF (m_sUserName);
+    aOOS.writeUTF (m_sPassword);
+    aOOS.writeUTF (m_aCharset.name ());
+    aOOS.writeBoolean (m_bSSLEnabled);
+    aOOS.writeBoolean (m_bSTARTTLSEnabled);
+    aOOS.writeLong (m_nConnectionTimeoutMilliSecs);
+    aOOS.writeLong (m_nTimeoutMilliSecs);
+  }
 
   /**
    * Constructor which copies settings from another object
