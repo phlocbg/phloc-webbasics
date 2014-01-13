@@ -40,6 +40,12 @@ public class HttpProxyAuthenticator extends Authenticator
     m_eProxyType = eProxyType;
   }
 
+  @Nonnull
+  public EHttpProxyType getProxyType ()
+  {
+    return m_eProxyType;
+  }
+
   @Override
   public PasswordAuthentication getPasswordAuthentication ()
   {

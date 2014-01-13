@@ -17,6 +17,7 @@
  */
 package com.phloc.web.http;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,9 +33,9 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  * @param <KEYTYPE>
- *        the key type for the map.
+ *        The key type for the map. Must implement Serializable.
  */
-public abstract class AbstractQValueList <KEYTYPE>
+public abstract class AbstractQValueList <KEYTYPE extends Serializable> implements Serializable
 {
   // Maps something to quality
   protected final Map <KEYTYPE, QValue> m_aMap = new LinkedHashMap <KEYTYPE, QValue> ();

@@ -17,6 +17,8 @@
  */
 package com.phloc.web.http.basicauth;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -35,7 +37,7 @@ import com.phloc.web.http.CHTTPHeader;
  * @author Philip Helger
  */
 @Immutable
-public final class BasicAuthClientCredentials
+public class BasicAuthClientCredentials implements Serializable
 {
   private final String m_sUserName;
   private final String m_sPassword;

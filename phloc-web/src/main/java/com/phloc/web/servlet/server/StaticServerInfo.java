@@ -17,6 +17,8 @@
  */
 package com.phloc.web.servlet.server;
 
+import java.io.Serializable;
+
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -37,7 +39,7 @@ import com.phloc.web.servlet.request.RequestHelper;
  * @author Philip Helger
  */
 @Immutable
-public final class StaticServerInfo
+public class StaticServerInfo implements Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (StaticServerInfo.class);
   private static volatile StaticServerInfo s_aDefault;

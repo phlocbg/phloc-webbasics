@@ -19,6 +19,8 @@ package com.phloc.web.port;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
+
 /**
  * Constants for network port handling.
  * 
@@ -36,6 +38,10 @@ public final class CNetworkPort
   public static final int MINIMUM_PORT_NUMBER = 0;
   /** Largest valid port number */
   public static final int MAXIMUM_PORT_NUMBER = 65535;
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final CNetworkPort s_aInstance = new CNetworkPort ();
 
   private CNetworkPort ()
   {}

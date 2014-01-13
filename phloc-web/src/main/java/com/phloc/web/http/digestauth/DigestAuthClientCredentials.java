@@ -17,6 +17,8 @@
  */
 package com.phloc.web.http.digestauth;
 
+import java.io.Serializable;
+
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +39,7 @@ import com.phloc.web.http.HTTPStringHelper;
  * @author Philip Helger
  */
 @Immutable
-public final class DigestAuthClientCredentials
+public class DigestAuthClientCredentials implements Serializable
 {
   private final String m_sUserName;
   private final String m_sRealm;

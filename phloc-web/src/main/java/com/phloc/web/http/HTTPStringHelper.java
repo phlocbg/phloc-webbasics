@@ -46,10 +46,6 @@ public final class HTTPStringHelper
   /** Quoted text end character */
   public static final char QUOTEDTEXT_END = '"';
 
-  @PresentForCodeCoverage
-  @SuppressWarnings ("unused")
-  private static final HTTPStringHelper s_aInstance = new HTTPStringHelper ();
-
   private static final int UALPHA = 0x00000001;
   private static final int LALPHA = 0x00000002;
   private static final int ALPHA = 0x00000004;
@@ -210,6 +206,10 @@ public final class HTTPStringHelper
     if (MAPPINGS.length != MAX_INDEX + 1)
       throw new InitializationException ("MAPPING array is invalid!");
   }
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final HTTPStringHelper s_aInstance = new HTTPStringHelper ();
 
   private HTTPStringHelper ()
   {}

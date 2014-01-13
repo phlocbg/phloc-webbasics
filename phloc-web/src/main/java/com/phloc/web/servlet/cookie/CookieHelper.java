@@ -40,7 +40,8 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class CookieHelper
 {
-  private static final int DEFAULT_MAX_AGE_SECONDS = 30 * CGlobal.SECONDS_PER_DAY;
+  public static final int DEFAULT_MAX_AGE_SECONDS = 30 * CGlobal.SECONDS_PER_DAY;
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final CookieHelper s_aInstance = new CookieHelper ();

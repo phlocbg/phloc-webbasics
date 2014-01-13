@@ -17,6 +17,7 @@
  */
 package com.phloc.web.http;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -46,7 +47,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, List <String>>>
+public class HTTPHeaderMap implements IHasSize, Iterable <Map.Entry <String, List <String>>>, Serializable
 {
   private final Map <String, List <String>> m_aHeaders = new LinkedHashMap <String, List <String>> ();
 

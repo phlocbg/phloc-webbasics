@@ -29,6 +29,7 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.StreamUtils;
 
@@ -36,6 +37,10 @@ import com.phloc.commons.io.streams.StreamUtils;
 public final class RhinoUtils
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (RhinoUtils.class);
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final RhinoUtils s_aInstance = new RhinoUtils ();
 
   private RhinoUtils ()
   {}

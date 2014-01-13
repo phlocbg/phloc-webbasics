@@ -17,6 +17,7 @@
  */
 package com.phloc.web.http.digestauth;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ import com.phloc.web.http.HTTPStringHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class DigestAuthServerBuilder
+public final class DigestAuthServerBuilder implements Serializable
 {
   private String m_sRealm;
   private final Set <String> m_aDomains = new LinkedHashSet <String> ();

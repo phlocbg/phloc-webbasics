@@ -17,6 +17,8 @@
  */
 package com.phloc.web.sitemap;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +44,7 @@ import com.phloc.web.datetime.PDTWebDateUtils;
  * @author Philip Helger
  */
 @Immutable
-public final class XMLSitemapURL implements IHasLastModificationDateTime
+public final class XMLSitemapURL implements IHasLastModificationDateTime, Serializable
 {
   /** Maximum length of a single URL */
   public static final int LOCATION_MAX_LENGTH = 2048;

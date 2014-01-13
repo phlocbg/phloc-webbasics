@@ -17,6 +17,8 @@
  */
 package com.phloc.web.http.basicauth;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -24,7 +26,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.web.http.HTTPStringHelper;
 
 @NotThreadSafe
-public final class BasicAuthServerBuilder
+public class BasicAuthServerBuilder implements Serializable
 {
   private String m_sRealm;
 

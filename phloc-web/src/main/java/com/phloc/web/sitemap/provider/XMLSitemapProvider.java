@@ -27,6 +27,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.lang.ServiceLoaderUtils;
 import com.phloc.commons.state.ESuccess;
@@ -50,6 +51,10 @@ public final class XMLSitemapProvider
   {
     s_aProviders = ServiceLoaderUtils.getAllSPIImplementations (IXMLSitemapProviderSPI.class);
   }
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final XMLSitemapProvider s_aInstance = new XMLSitemapProvider ();
 
   private XMLSitemapProvider ()
   {}

@@ -19,6 +19,7 @@ package com.phloc.web.sitemap;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
 import com.phloc.commons.xml.serialize.EXMLSerializeIndent;
 import com.phloc.commons.xml.serialize.IXMLWriterSettings;
@@ -47,6 +48,10 @@ public final class CXMLSitemap
   /** The XML writer settings to be used */
   public static final IXMLWriterSettings XML_WRITER_SETTINGS = new XMLWriterSettings ().setIndent (EXMLSerializeIndent.NONE)
                                                                                        .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING);
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CXMLSitemap s_aInstance = new CXMLSitemap ();
 
   private CXMLSitemap ()
   {}

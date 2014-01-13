@@ -24,6 +24,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
@@ -36,6 +37,10 @@ import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
 @Immutable
 public final class NetworkInterfaceUtils
 {
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final NetworkInterfaceUtils s_aInstance = new NetworkInterfaceUtils ();
+
   private NetworkInterfaceUtils ()
   {}
 

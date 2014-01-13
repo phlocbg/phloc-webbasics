@@ -24,6 +24,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.CodingStyleguideUnaware;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 
@@ -3905,6 +3906,10 @@ public final class DefaultNetworkPorts
     s_aPortList.add (aPort);
     return aPort;
   }
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final DefaultNetworkPorts s_aInstance = new DefaultNetworkPorts ();
 
   private DefaultNetworkPorts ()
   {}

@@ -20,6 +20,7 @@ package com.phloc.web.sitemap;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
@@ -57,7 +58,7 @@ import com.phloc.web.servlet.server.StaticServerInfo;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class XMLSitemapIndex
+public final class XMLSitemapIndex implements Serializable
 {
   public static final boolean DEFAULT_USE_GZIP = true;
   private static final String ELEMENT_SITEMAPINDEX = "sitemapindex";

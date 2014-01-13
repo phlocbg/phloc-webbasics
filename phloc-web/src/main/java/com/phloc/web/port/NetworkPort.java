@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class NetworkPort implements INetworkPort
+public class NetworkPort implements INetworkPort
 {
   private final int m_nPort;
   private final ENetworkProtocol m_eProtocol;

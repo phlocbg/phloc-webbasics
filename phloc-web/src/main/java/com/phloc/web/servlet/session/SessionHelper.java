@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.GenericReflection;
 import com.phloc.commons.state.EChange;
@@ -41,6 +42,10 @@ import com.phloc.commons.state.EChange;
 public final class SessionHelper
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SessionHelper.class);
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final SessionHelper s_aInstance = new SessionHelper ();
 
   private SessionHelper ()
   {}
