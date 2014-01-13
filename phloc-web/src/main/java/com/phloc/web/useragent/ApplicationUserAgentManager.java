@@ -22,11 +22,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.reader.XMLListHandler;
+import com.phloc.commons.string.StringHelper;
 
 @Immutable
 public final class ApplicationUserAgentManager
@@ -38,10 +42,14 @@ public final class ApplicationUserAgentManager
     _readListPhloc ("codelists/appuseragents-phloc.xml");
   }
 
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final ApplicationUserAgentManager s_aInstance = new ApplicationUserAgentManager ();
+
   private ApplicationUserAgentManager ()
   {}
 
-  private static void _readListPhloc (final String sPath)
+  private static void _readListPhloc (@Nonnull @Nonempty final String sPath)
   {
     final List <String> aList = new ArrayList <String> ();
     if (XMLListHandler.readList (new ClassPathResource (sPath), aList).isFailure ())
@@ -50,11 +58,12 @@ public final class ApplicationUserAgentManager
   }
 
   @Nullable
-  public static String getFromUserAgent (final String sFullUserAgent)
+  public static String getFromUserAgent (@Nullable final String sFullUserAgent)
   {
-    for (final String sUAPart : s_aSet)
-      if (sFullUserAgent.contains (sUAPart))
-        return sUAPart;
+    if (StringHelper.hasText (sFullUserAgent))
+      for (final String sUAPart : s_aSet)
+        if (sFullUserAgent.contains (sUAPart))
+          return sUAPart;
     return null;
   }
 }

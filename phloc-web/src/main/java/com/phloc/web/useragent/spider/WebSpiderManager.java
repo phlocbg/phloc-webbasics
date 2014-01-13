@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ import com.phloc.commons.microdom.utils.MicroUtils;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public final class WebSpiderManager
 {
   private static final class SingletonHolder

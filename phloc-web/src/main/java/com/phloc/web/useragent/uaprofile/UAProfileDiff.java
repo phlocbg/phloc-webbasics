@@ -17,6 +17,7 @@
  */
 package com.phloc.web.useragent.uaprofile;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.annotation.Nonnull;
@@ -46,7 +47,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public class UAProfileDiff
+public class UAProfileDiff implements Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfileDiff.class);
 

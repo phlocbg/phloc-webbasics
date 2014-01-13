@@ -17,6 +17,8 @@
  */
 package com.phloc.web.useragent.spider;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -32,7 +34,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-public final class WebSpiderInfo implements IHasID <String>
+public final class WebSpiderInfo implements IHasID <String>, Serializable
 {
   private final String m_sID;
   private String m_sName;

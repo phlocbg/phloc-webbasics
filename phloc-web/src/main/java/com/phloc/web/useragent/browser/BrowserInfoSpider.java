@@ -30,7 +30,7 @@ import com.phloc.web.useragent.spider.WebSpiderInfo;
  * 
  * @author Philip Helger
  */
-public final class BrowserInfoSpider extends BrowserInfo
+public class BrowserInfoSpider extends BrowserInfo
 {
   /** Is it not */
   @SuppressWarnings ("hiding")

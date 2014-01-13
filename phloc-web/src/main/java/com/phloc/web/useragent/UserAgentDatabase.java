@@ -24,12 +24,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.collections.ContainerHelper;
@@ -48,8 +50,14 @@ public final class UserAgentDatabase
   private static final String REQUEST_ATTR = UserAgentDatabase.class.getName ();
   private static final Logger s_aLogger = LoggerFactory.getLogger (UserAgentDatabase.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  @GuardedBy ("s_aRWLock")
   private static final Set <String> s_aUniqueUserAgents = new HashSet <String> ();
+  @GuardedBy ("s_aRWLock")
   private static INonThrowingRunnableWithParameter <IUserAgent> s_aNewUserAgentCallback;
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final UserAgentDatabase s_aInstance = new UserAgentDatabase ();
 
   private UserAgentDatabase ()
   {}

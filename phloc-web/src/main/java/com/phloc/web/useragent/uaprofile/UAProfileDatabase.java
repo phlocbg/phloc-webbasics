@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
@@ -78,6 +79,10 @@ public final class UAProfileDatabase
   private static final Set <UAProfile> s_aUniqueUAProfiles = new HashSet <UAProfile> ();
   @GuardedBy ("s_aRWLock")
   private static INonThrowingRunnableWithParameter <UAProfile> s_aNewUAProfileCallback;
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final UAProfileDatabase s_aInstance = new UAProfileDatabase ();
 
   private UAProfileDatabase ()
   {}

@@ -27,8 +27,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.microdom.reader.XMLListHandler;
+import com.phloc.commons.string.StringHelper;
 
 @Immutable
 public final class MobileBrowserManager
@@ -39,6 +41,10 @@ public final class MobileBrowserManager
   {
     _readListPhloc ("codelists/mobileuseragents-phloc.xml");
   }
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final MobileBrowserManager s_aInstance = new MobileBrowserManager ();
 
   private MobileBrowserManager ()
   {}
@@ -59,12 +65,15 @@ public final class MobileBrowserManager
   }
 
   @Nullable
-  public static String getFromUserAgent (@Nonnull final String sFullUserAgent)
+  public static String getFromUserAgent (@Nullable final String sFullUserAgent)
   {
-    final String sUnifiedUA = _unify (sFullUserAgent);
-    for (final String sUAPart : s_aMap)
-      if (sUnifiedUA.contains (sUAPart))
-        return sUAPart;
+    if (StringHelper.hasText (sFullUserAgent))
+    {
+      final String sUnifiedUA = _unify (sFullUserAgent);
+      for (final String sUAPart : s_aMap)
+        if (sUnifiedUA.contains (sUAPart))
+          return sUAPart;
+    }
     return null;
   }
 }

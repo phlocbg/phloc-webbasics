@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.pair.ReadonlyPair;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -40,6 +41,10 @@ import com.phloc.commons.url.URLProtocolRegistry;
 public final class UserAgentDecryptor
 {
   private static final String SKIP_PREFIX = "User-Agent: ";
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final UserAgentDecryptor s_aInstance = new UserAgentDecryptor ();
 
   private UserAgentDecryptor ()
   {}

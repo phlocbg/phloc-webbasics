@@ -29,7 +29,7 @@ import com.phloc.commons.version.Version;
  * 
  * @author Philip Helger
  */
-public final class BrowserInfoIE extends BrowserInfo
+public class BrowserInfoIE extends BrowserInfo
 {
   /** Is it not */
   @SuppressWarnings ("hiding")

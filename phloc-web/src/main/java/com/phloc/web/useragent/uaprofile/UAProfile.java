@@ -17,6 +17,7 @@
  */
 package com.phloc.web.useragent.uaprofile;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -40,7 +41,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public class UAProfile
+public class UAProfile implements Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UAProfile.class);
   public static final UAProfile EMPTY = new UAProfile ();
