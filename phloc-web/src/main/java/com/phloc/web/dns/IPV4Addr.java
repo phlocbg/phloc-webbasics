@@ -34,8 +34,13 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Representation of a single IP V4 address.
+ * 
+ * @author Philip Helger
+ */
 @Immutable
-public final class IPV4Addr implements IHasStringRepresentation
+public class IPV4Addr implements IHasStringRepresentation
 {
   private final int [] m_aIP = new int [4];
 

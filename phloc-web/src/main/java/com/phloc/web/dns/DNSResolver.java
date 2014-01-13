@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.xbill.DNS.Address;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.UsedViaReflection;
 
 /**
@@ -36,6 +37,10 @@ import com.phloc.commons.annotations.UsedViaReflection;
 @Immutable
 public final class DNSResolver
 {
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final DNSResolver s_aInstance = new DNSResolver ();
+
   private DNSResolver ()
   {}
 
