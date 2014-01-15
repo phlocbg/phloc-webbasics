@@ -68,6 +68,7 @@ public final class RunInJettyDEMOAPP
     aWebAppCtx.setContextPath ("/");
     aWebAppCtx.setTempDirectory (new File (SystemProperties.getTmpDir () + '/' + RunInJettyDEMOAPP.class.getName ()));
     aWebAppCtx.setParentLoaderPriority (true);
+    aWebAppCtx.setThrowUnavailableOnStartupException (true);
     aServer.setHandler (aWebAppCtx);
     final ServletContextHandler aCtx = aWebAppCtx;
 
