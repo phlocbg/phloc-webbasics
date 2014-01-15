@@ -420,6 +420,30 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     onShowSelectedObjectTableEnd (aTable, aSelectedObject, aDisplayLocale);
   }
 
+  /**
+   * Validate custom data of the input field.
+   * 
+   * @param aWPEC
+   *        Current web page execution context. Never <code>null</code>.
+   * @param aSelectedObject
+   *        The selected user. May be <code>null</code>.
+   * @param aFormErrors
+   *        The form errors to be filled. Never <code>null</code>.
+   * @param bEdit
+   *        <code>true</code> if we're in edit mode
+   * @return The custom parameter to be added to the used upon success. If an
+   *         error occurred, this map may be <code>null</code>.
+   */
+  @OverrideOnDemand
+  @Nullable
+  protected Map <String, String> validateCustomParameters (@Nonnull final WebPageExecutionContext aWPEC,
+                                                           @Nullable final IUser aSelectedObject,
+                                                           @Nonnull final FormErrors aFormErrors,
+                                                           final boolean bEdit)
+  {
+    return null;
+  }
+
   @Override
   @SuppressWarnings ("null")
   protected void validateAndSaveInputParameters (@Nonnull final WebPageExecutionContext aWPEC,
@@ -485,12 +509,19 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       if (!aAccessMgr.containsAllUserGroupsWithID (aUserGroupIDs))
         aFormErrors.addFieldError (FIELD_USERGROUPS, EText.ERROR_INVALID_USERGROUPS.getDisplayText (aDisplayLocale));
 
+    // Call custom method
+    final Map <String, String> aCustomAttrMap = validateCustomParameters (aWPEC, aSelectedObject, aFormErrors, bEdit);
+
     if (aFormErrors.isEmpty ())
     {
       // All fields are valid -> save
       if (bEdit)
       {
         final String sUserID = aSelectedObject.getID ();
+
+        final Map <String, Object> aAttrMap = aSelectedObject.getAllAttributes ();
+        if (aCustomAttrMap != null)
+          aAttrMap.putAll (aCustomAttrMap);
 
         // We're editing an existing object
         aAccessMgr.setUserData (sUserID,
@@ -499,7 +530,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                 sFirstName,
                                 sLastName,
                                 m_aDefaultUserLocale,
-                                aSelectedObject.getAllAttributes (),
+                                aAttrMap,
                                 !bEnabled);
         aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_EDIT.getDisplayText (aDisplayLocale)));
 
@@ -514,6 +545,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         final Set <String> aUserGroupsToBeUnassigned = ContainerHelper.getDifference (aPrevUserGroupIDs, aUserGroupIDs);
         for (final String sUserGroupID : aUserGroupsToBeUnassigned)
           aAccessMgr.unassignUserFromUserGroup (sUserGroupID, sUserID);
+
       }
       else
       {
@@ -524,7 +556,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                          sFirstName,
                                                          sLastName,
                                                          m_aDefaultUserLocale,
-                                                         null,
+                                                         aCustomAttrMap,
                                                          !bEnabled);
         if (aNewUser != null)
         {
@@ -539,6 +571,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       }
     }
   }
+
+  /**
+   * Modifiy the user group selector, e.g. for adding JS event handlers.
+   * 
+   * @param aSelect
+   *        The user group selector. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  protected void showInputFormModifyUserGroupSelect (@Nonnull final UserGroupForUserSelect aSelect)
+  {}
 
   /**
    * Add details after the regular show form.
@@ -582,6 +624,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     if (bEdit && !isEditAllowed (aSelectedObject))
       throw new IllegalStateException ("Won't work!");
 
+    final boolean bIsAdministrator = aSelectedObject != null && aSelectedObject.isAdministrator ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final AccessManager aMgr = AccessManager.getInstance ();
     final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
@@ -601,26 +644,32 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
             .setErrorList (aFormErrors.getListOfField (FIELD_LOGINNAME));
     }
 
-    final String sFirstName = EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale);
-    aTable.createItemRow ()
-          .setLabel (sFirstName)
-          .setCtrl (new HCEdit (new RequestField (FIELD_FIRSTNAME,
-                                                  aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName))
-          .setErrorList (aFormErrors.getListOfField (FIELD_FIRSTNAME));
+    {
+      final String sFirstName = EText.LABEL_FIRSTNAME.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabel (sFirstName)
+            .setCtrl (new HCEdit (new RequestField (FIELD_FIRSTNAME,
+                                                    aSelectedObject == null ? null : aSelectedObject.getFirstName ())).setPlaceholder (sFirstName))
+            .setErrorList (aFormErrors.getListOfField (FIELD_FIRSTNAME));
+    }
 
-    final String sLastName = EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale);
-    aTable.createItemRow ()
-          .setLabelMandatory (sLastName)
-          .setCtrl (new HCEdit (new RequestField (FIELD_LASTNAME,
-                                                  aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName))
-          .setErrorList (aFormErrors.getListOfField (FIELD_LASTNAME));
+    {
+      final String sLastName = EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sLastName)
+            .setCtrl (new HCEdit (new RequestField (FIELD_LASTNAME,
+                                                    aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName))
+            .setErrorList (aFormErrors.getListOfField (FIELD_LASTNAME));
+    }
 
-    final String sEmail = EText.LABEL_EMAIL.getDisplayText (aDisplayLocale);
-    aTable.createItemRow ()
-          .setLabelMandatory (sEmail)
-          .setCtrl (new HCEdit (new RequestField (FIELD_EMAILADDRESS,
-                                                  aSelectedObject == null ? null : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
-          .setErrorList (aFormErrors.getListOfField (FIELD_EMAILADDRESS));
+    {
+      final String sEmail = EText.LABEL_EMAIL.getDisplayText (aDisplayLocale);
+      aTable.createItemRow ()
+            .setLabelMandatory (sEmail)
+            .setCtrl (new HCEdit (new RequestField (FIELD_EMAILADDRESS,
+                                                    aSelectedObject == null ? null : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
+            .setErrorList (aFormErrors.getListOfField (FIELD_EMAILADDRESS));
+    }
 
     if (!bEdit)
     {
@@ -642,7 +691,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
             .setErrorList (aFormErrors.getListOfField (FIELD_PASSWORD_CONFIRM));
     }
 
-    if (aSelectedObject != null && aSelectedObject.isAdministrator ())
+    if (bIsAdministrator)
     {
       // Cannot edit enabled state of administrator
       aTable.createItemRow ()
@@ -659,19 +708,22 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
             .setErrorList (aFormErrors.getListOfField (FIELD_ENABLED));
     }
 
-    final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_USERGROUPS)
-                                                                     : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
-    final UserGroupForUserSelect aSelect = new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS),
-                                                                       aDisplayLocale,
-                                                                       aUserGroupIDs);
-    aTable.createItemRow ()
-          .setLabelMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale))
-          .setCtrl (aSelect)
-          .setErrorList (aFormErrors.getListOfField (FIELD_USERGROUPS));
-    if (aSelectedObject != null && aSelectedObject.isAdministrator ())
     {
-      // Cannot edit user groups of administrator
-      aSelect.setReadonly (true);
+      final Collection <String> aUserGroupIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_USERGROUPS)
+                                                                       : aMgr.getAllUserGroupIDsWithAssignedUser (aSelectedObject.getID ());
+      final UserGroupForUserSelect aSelect = new UserGroupForUserSelect (new RequestField (FIELD_USERGROUPS),
+                                                                         aDisplayLocale,
+                                                                         aUserGroupIDs);
+      aTable.createItemRow ()
+            .setLabelMandatory (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale))
+            .setCtrl (aSelect)
+            .setErrorList (aFormErrors.getListOfField (FIELD_USERGROUPS));
+      if (bIsAdministrator)
+      {
+        // Cannot edit user groups of administrator
+        aSelect.setReadonly (true);
+      }
+      showInputFormModifyUserGroupSelect (aSelect);
     }
 
     // Custom overridable
