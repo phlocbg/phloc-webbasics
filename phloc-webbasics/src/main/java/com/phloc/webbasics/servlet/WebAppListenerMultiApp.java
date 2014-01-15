@@ -23,6 +23,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.appbasics.app.ApplicationLocaleManager;
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.security.password.GlobalPasswordSettings;
@@ -49,6 +52,9 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistics
 {
+  public static final int DEFAULT_PASSWORD_MIN_LENGTH = 6;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (WebAppListenerMultiApp.class);
+
   @Nonnull
   @Nonempty
   protected abstract Map <String, IApplicationInitializer> getAllInitializers ();
@@ -68,7 +74,7 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
     UserDataManager.setServletContextIO (false);
 
     // Define the password constrains
-    GlobalPasswordSettings.setPasswordConstraintList (new PasswordConstraintList (new PasswordConstraintMinLength (6)));
+    GlobalPasswordSettings.setPasswordConstraintList (new PasswordConstraintList (new PasswordConstraintMinLength (DEFAULT_PASSWORD_MIN_LENGTH)));
 
     // Global JS formatting stuff :(
     JSPrinter.setGenerateComments (false);
@@ -83,10 +89,12 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
     // Global properties
     initGlobals ();
 
+    // Determine all initializers
     final Map <String, IApplicationInitializer> aIniter = getAllInitializers ();
     if (ContainerHelper.isEmpty (aIniter))
       throw new IllegalStateException ("No application initializers provided!");
 
+    // Invoke all initializers
     for (final Map.Entry <String, IApplicationInitializer> aEntry : aIniter.entrySet ())
     {
       final String sAppID = aEntry.getKey ();
@@ -114,6 +122,14 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
 
         // All other things come last
         aInitializer.initRest ();
+      }
+      catch (final RuntimeException ex)
+      {
+        // Log so that the failed application can easily be determined.
+        s_aLogger.error ("Failed to init application '" + sAppID + "': " + ex.getMessage ());
+
+        // re-throw
+        throw ex;
       }
       finally
       {

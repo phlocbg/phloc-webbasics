@@ -26,7 +26,8 @@ import com.phloc.webbasics.ajax.IAjaxInvoker;
 import com.phloc.webbasics.app.layout.ILayoutManager;
 
 /**
- * Base class without anything in it.
+ * Default implementation class of {@link IApplicationInitializer} doing
+ * nothing. Use this as the base class for your implementation.
  * 
  * @author Philip Helger
  */
