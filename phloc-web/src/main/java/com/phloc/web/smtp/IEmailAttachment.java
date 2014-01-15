@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 
 import javax.activation.DataSource;
@@ -32,7 +33,7 @@ import com.phloc.commons.io.IInputStreamProvider;
  * 
  * @author Philip Helger
  */
-public interface IEmailAttachment extends IInputStreamProvider
+public interface IEmailAttachment extends IInputStreamProvider, Serializable
 {
   /**
    * @return The filename of the attachment

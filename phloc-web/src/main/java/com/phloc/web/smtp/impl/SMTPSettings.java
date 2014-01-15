@@ -33,6 +33,7 @@ import com.phloc.commons.ICloneable;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.serialize.convert.SerializationConverter;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -61,30 +62,30 @@ public final class SMTPSettings implements ISMTPSettings, ICloneable <SMTPSettin
   private long m_nConnectionTimeoutMilliSecs;
   private long m_nTimeoutMilliSecs;
 
-  private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException
-  {
-    m_sHostName = aOIS.readUTF ();
-    m_nPort = aOIS.readInt ();
-    m_sUserName = aOIS.readUTF ();
-    m_sPassword = aOIS.readUTF ();
-    m_aCharset = CharsetManager.getCharsetFromName (aOIS.readUTF ());
-    m_bSSLEnabled = aOIS.readBoolean ();
-    m_bSTARTTLSEnabled = aOIS.readBoolean ();
-    m_nConnectionTimeoutMilliSecs = aOIS.readLong ();
-    m_nTimeoutMilliSecs = aOIS.readLong ();
-  }
-
   private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
   {
     aOOS.writeUTF (m_sHostName);
     aOOS.writeInt (m_nPort);
     aOOS.writeUTF (m_sUserName);
     aOOS.writeUTF (m_sPassword);
-    aOOS.writeUTF (m_aCharset.name ());
+    SerializationConverter.writeConvertedObject (m_aCharset, aOOS);
     aOOS.writeBoolean (m_bSSLEnabled);
     aOOS.writeBoolean (m_bSTARTTLSEnabled);
     aOOS.writeLong (m_nConnectionTimeoutMilliSecs);
     aOOS.writeLong (m_nTimeoutMilliSecs);
+  }
+
+  private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException
+  {
+    m_sHostName = aOIS.readUTF ();
+    m_nPort = aOIS.readInt ();
+    m_sUserName = aOIS.readUTF ();
+    m_sPassword = aOIS.readUTF ();
+    m_aCharset = SerializationConverter.readConvertedObject (aOIS, Charset.class);
+    m_bSSLEnabled = aOIS.readBoolean ();
+    m_bSTARTTLSEnabled = aOIS.readBoolean ();
+    m_nConnectionTimeoutMilliSecs = aOIS.readLong ();
+    m_nTimeoutMilliSecs = aOIS.readLong ();
   }
 
   /**

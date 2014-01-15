@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -30,7 +31,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * 
  * @author Philip Helger
  */
-public interface IReadonlyEmailAttachmentList extends IHasSize
+public interface IReadonlyEmailAttachmentList extends IHasSize, Serializable
 {
   /**
    * Check if an attachment for the passed file name is contained.

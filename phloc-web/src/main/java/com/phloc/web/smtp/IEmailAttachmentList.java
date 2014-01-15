@@ -17,6 +17,8 @@
  */
 package com.phloc.web.smtp;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -41,7 +43,7 @@ public interface IEmailAttachmentList extends IReadonlyEmailAttachmentList, ICle
    *        The {@link IInputStreamProvider} representing the data. May not be
    *        <code>null</code>.
    */
-  void addAttachment (@Nonnull String sFilename, @Nonnull IInputStreamProvider aISS);
+  <ISP extends IInputStreamProvider & Serializable> void addAttachment (@Nonnull String sFilename, @Nonnull ISP aISS);
 
   /**
    * Add an attachment.

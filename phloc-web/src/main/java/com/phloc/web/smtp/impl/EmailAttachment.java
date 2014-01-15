@@ -17,7 +17,11 @@
  */
 package com.phloc.web.smtp.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 
 import javax.activation.FileTypeMap;
@@ -29,6 +33,7 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
+import com.phloc.commons.serialize.convert.SerializationConverter;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.smtp.EEmailAttachmentDisposition;
@@ -43,11 +48,11 @@ public class EmailAttachment implements IEmailAttachment
 {
   public static final EEmailAttachmentDisposition DEFAULT_DISPOSITION = EEmailAttachmentDisposition.ATTACHMENT;
 
-  private final String m_sFilename;
-  private final IInputStreamProvider m_aInputStreamProvider;
-  private final Charset m_aCharset;
-  private final String m_sContentType;
-  private final EEmailAttachmentDisposition m_eDisposition;
+  private String m_sFilename;
+  private IInputStreamProvider m_aInputStreamProvider;
+  private Charset m_aCharset;
+  private String m_sContentType;
+  private EEmailAttachmentDisposition m_eDisposition;
 
   public EmailAttachment (@Nonnull @Nonempty final String sFilename, @Nonnull final byte [] aContent)
   {
@@ -69,23 +74,23 @@ public class EmailAttachment implements IEmailAttachment
     this (sFilename, new ByteArrayInputStreamProvider (aContent), aCharset, eDisposition);
   }
 
-  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
-                          @Nonnull final IInputStreamProvider aInputStreamProvider)
+  public <ISP extends IInputStreamProvider & Serializable> EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                                                                            @Nonnull final ISP aInputStreamProvider)
   {
     this (sFilename, aInputStreamProvider, (Charset) null);
   }
 
-  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
-                          @Nonnull final IInputStreamProvider aInputStreamProvider,
-                          @Nullable final Charset aCharset)
+  public <ISP extends IInputStreamProvider & Serializable> EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                                                                            @Nonnull final ISP aInputStreamProvider,
+                                                                            @Nullable final Charset aCharset)
   {
     this (sFilename, aInputStreamProvider, aCharset, DEFAULT_DISPOSITION);
   }
 
-  public EmailAttachment (@Nonnull @Nonempty final String sFilename,
-                          @Nonnull final IInputStreamProvider aInputStreamProvider,
-                          @Nullable final Charset aCharset,
-                          @Nonnull final EEmailAttachmentDisposition eDisposition)
+  public <ISP extends IInputStreamProvider & Serializable> EmailAttachment (@Nonnull @Nonempty final String sFilename,
+                                                                            @Nonnull final ISP aInputStreamProvider,
+                                                                            @Nullable final Charset aCharset,
+                                                                            @Nonnull final EEmailAttachmentDisposition eDisposition)
   {
     if (StringHelper.hasNoText (sFilename))
       throw new IllegalArgumentException ("filename");
@@ -98,6 +103,24 @@ public class EmailAttachment implements IEmailAttachment
     m_aCharset = aCharset;
     m_sContentType = FileTypeMap.getDefaultFileTypeMap ().getContentType (sFilename);
     m_eDisposition = eDisposition;
+  }
+
+  private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
+  {
+    aOOS.writeUTF (m_sFilename);
+    aOOS.writeObject (m_aInputStreamProvider);
+    SerializationConverter.writeConvertedObject (m_aCharset, aOOS);
+    aOOS.writeUTF (m_sContentType);
+    aOOS.writeObject (m_eDisposition);
+  }
+
+  private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException, ClassNotFoundException
+  {
+    m_sFilename = aOIS.readUTF ();
+    m_aInputStreamProvider = (IInputStreamProvider) aOIS.readObject ();
+    m_aCharset = SerializationConverter.readConvertedObject (aOIS, Charset.class);
+    m_sContentType = aOIS.readUTF ();
+    m_eDisposition = (EEmailAttachmentDisposition) aOIS.readObject ();
   }
 
   @Nonnull

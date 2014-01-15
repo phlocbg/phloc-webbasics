@@ -17,6 +17,7 @@
  */
 package com.phloc.web.smtp.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -69,7 +70,8 @@ public class EmailAttachmentList implements IEmailAttachmentList
     return m_aMap.isEmpty ();
   }
 
-  public void addAttachment (@Nonnull final String sFilename, @Nonnull final IInputStreamProvider aISS)
+  public <ISP extends IInputStreamProvider & Serializable> void addAttachment (@Nonnull final String sFilename,
+                                                                               @Nonnull final ISP aISS)
   {
     addAttachment (new EmailAttachment (sFilename, aISS));
   }
