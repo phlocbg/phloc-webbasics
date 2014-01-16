@@ -40,6 +40,7 @@ import com.phloc.commons.stats.StatisticsManager;
 import com.phloc.commons.timing.StopWatch;
 import com.phloc.schedule.longrun.ILongRunningJob;
 import com.phloc.scopes.mgr.ScopeManager;
+import com.phloc.web.mock.MockHttpServletRequest;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
 import com.phloc.webscopes.mgr.WebScopeManager;
@@ -183,8 +184,8 @@ public abstract class AbstractScopeAwareJob implements Job
    *        <code>true</code> if it is a long running job
    */
   protected static void triggerCustomExceptionHandler (@Nonnull final Throwable t,
-                                                        @Nullable final String sJobClassName,
-                                                        final boolean bIsLongRunning)
+                                                       @Nullable final String sJobClassName,
+                                                       final boolean bIsLongRunning)
   {
     final IJobExceptionHandler aCustomExceptionHandler = getCustomExceptionHandler ();
     if (aCustomExceptionHandler != null)
@@ -202,6 +203,28 @@ public abstract class AbstractScopeAwareJob implements Job
       }
   }
 
+  /**
+   * @return The dummy HTTP request to be used for executing this job. By
+   *         default an {@link OfflineHttpServletRequest} is created.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected MockHttpServletRequest createMockHttpServletRequest ()
+  {
+    return new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ().getServletContext (), false);
+  }
+
+  /**
+   * @return The dummy HTTP response to be used for executing this job. By
+   *         default a {@link MockHttpServletResponse} is created.
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected MockHttpServletResponse createMockHttpServletResponse ()
+  {
+    return new MockHttpServletResponse ();
+  }
+
   public final void execute (@Nonnull final JobExecutionContext aContext) throws JobExecutionException
   {
     // State variables
@@ -217,10 +240,9 @@ public abstract class AbstractScopeAwareJob implements Job
     try
     {
       // Scopes (ensure to create a new scope each time!)
-      WebScopeManager.onRequestBegin (sApplicationScopeID,
-                                      new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ()
-                                                                                    .getServletContext (), false),
-                                      new MockHttpServletResponse ());
+      final MockHttpServletRequest aHttpRequest = createMockHttpServletRequest ();
+      final MockHttpServletResponse aHttpResponse = createMockHttpServletResponse ();
+      WebScopeManager.onRequestBegin (sApplicationScopeID, aHttpRequest, aHttpResponse);
       final String sJobClassName = getClass ().getName ();
       try
       {
@@ -241,6 +263,9 @@ public abstract class AbstractScopeAwareJob implements Job
         // Increment statistics
         s_aStatsTimer.addTime (sJobClassName, aSW.stopAndGetMillis ());
         s_aStatsCounterSuccess.increment (sJobClassName);
+
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Successfully finished executing scheduled job " + sJobClassName);
       }
       catch (final Throwable t)
       {
@@ -252,7 +277,7 @@ public abstract class AbstractScopeAwareJob implements Job
 
         if (t instanceof JobExecutionException)
           throw (JobExecutionException) t;
-        throw new JobExecutionException ("Internal job execution error", t);
+        throw new JobExecutionException ("Internal job execution error of " + sJobClassName, t);
       }
       finally
       {
@@ -270,6 +295,7 @@ public abstract class AbstractScopeAwareJob implements Job
     }
     finally
     {
+      // Invoke callback
       afterExecute (aJobDataMap, eExecSuccess);
     }
   }

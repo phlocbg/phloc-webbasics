@@ -37,9 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.DevelopersNote;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.exceptions.LoggedRuntimeException;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.schedule.quartz.listener.StatisticsJobListener;
 import com.phloc.scopes.singleton.GlobalSingleton;
 
@@ -55,6 +57,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   private static final Logger s_aLogger = LoggerFactory.getLogger (GlobalQuartzScheduler.class);
 
   private final Scheduler m_aScheduler;
+  private String m_sGroupName = GROUP_NAME;
 
   @UsedViaReflection
   @DevelopersNote ("Used from derived classes")
@@ -71,6 +74,31 @@ public class GlobalQuartzScheduler extends GlobalSingleton
   public static final GlobalQuartzScheduler getInstance ()
   {
     return getGlobalSingleton (GlobalQuartzScheduler.class);
+  }
+
+  /**
+   * @return The Quartz internal group name to be used. Defaults to
+   *         {@link #GROUP_NAME}.
+   */
+  @Nonnull
+  @Nonempty
+  public String getGroupName ()
+  {
+    return m_sGroupName;
+  }
+
+  /**
+   * Set the Quartz internal group name.
+   * 
+   * @param sGroupName
+   *        The new group name to be used. May neither be <code>null</code> nor
+   *        empty.
+   */
+  public void setGroupName (@Nonnull @Nonempty final String sGroupName)
+  {
+    if (StringHelper.hasNoText (sGroupName))
+      throw new IllegalArgumentException ("GroupName");
+    m_sGroupName = sGroupName;
   }
 
   /**
@@ -140,9 +168,7 @@ public class GlobalQuartzScheduler extends GlobalSingleton
       throw new NullPointerException ("class");
 
     // what to do
-    final JobDetail aJobDetail = JobBuilder.newJob (aJobClass)
-                                           .withIdentity (sJobName, GlobalQuartzScheduler.GROUP_NAME)
-                                           .build ();
+    final JobDetail aJobDetail = JobBuilder.newJob (aJobClass).withIdentity (sJobName, m_sGroupName).build ();
 
     // add custom parameters
     final JobDataMap aJobDataMap = aJobDetail.getJobDataMap ();
