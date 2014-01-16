@@ -17,6 +17,7 @@
  */
 package com.phloc.webpages.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -34,6 +35,7 @@ import com.phloc.appbasics.security.usergroup.IUserGroup;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.email.EmailAddressUtils;
@@ -92,6 +94,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     TAB_DISABLED ("Deaktivierte Benutzer ({0})", "Disabled users ({0})"),
     TAB_DELETED ("Gelöschte Benutzer ({0})", "Deleted users ({0})"),
     HEADER_NAME ("Name", "Name"),
+    HEADER_LOGINNAME ("Benutzername", "User name"),
     HEADER_EMAIL ("E-Mail", "Email"),
     HEADER_USERGROUPS ("Benutzergruppen", "User groups"),
     HEADER_VALUE ("Wert", "Value"),
@@ -814,16 +817,24 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                      @Nonnull final Collection <? extends IUser> aUsers,
                                      @Nonnull @Nonempty final String sTableID)
   {
+    final boolean bSeparateLoginName = !useEmailAddressAsLoginName ();
     final AccessManager aMgr = AccessManager.getInstance ();
     // List existing
-    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (200),
-                                                          HCCol.star (),
-                                                          new HCCol (150),
-                                                          createActionCol (3)).setID (sTableID);
-    aTable.addHeaderRow ().addCells (EText.HEADER_NAME.getDisplayText (aDisplayLocale),
-                                     EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
-                                     EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),
-                                     EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
+    final List <HCCol> aCols = new ArrayList <HCCol> ();
+    aCols.add (new HCCol (200));
+    if (bSeparateLoginName)
+      aCols.add (new HCCol (200));
+    aCols.add (HCCol.star ());
+    aCols.add (new HCCol (150));
+    aCols.add (createActionCol (3));
+    final IHCTable <?> aTable = getStyler ().createTable (ArrayHelper.newArray (aCols, HCCol.class)).setID (sTableID);
+    final HCRow aHeaderRow = aTable.addHeaderRow ();
+    aHeaderRow.addCell (EText.HEADER_NAME.getDisplayText (aDisplayLocale));
+    if (bSeparateLoginName)
+      aHeaderRow.addCell (EText.HEADER_LOGINNAME.getDisplayText (aDisplayLocale));
+    aHeaderRow.addCells (EText.HEADER_EMAIL.getDisplayText (aDisplayLocale),
+                         EText.HEADER_USERGROUPS.getDisplayText (aDisplayLocale),
+                         EWebBasicsText.MSG_ACTIONS.getDisplayText (aDisplayLocale));
 
     for (final IUser aCurUser : aUsers)
     {
@@ -831,6 +842,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getDisplayName ()));
+      if (bSeparateLoginName)
+        aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getLoginName ()));
       aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getEmailAddress ()));
 
       // User groups
