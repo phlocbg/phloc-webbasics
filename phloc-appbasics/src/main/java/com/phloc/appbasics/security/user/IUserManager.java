@@ -42,7 +42,7 @@ public interface IUserManager
    *        Login name of the user. May neither be <code>null</code> nor
    *        empty.This login name must be unique over all existing users.
    * @param sEmailAddress
-   *        The email address. May neither be <code>null</code> nor empty.
+   *        The email address. May be <code>null</code>.
    * @param sPlainTextPassword
    *        The plain text password to be used. May neither be <code>null</code>
    *        nor empty.
@@ -61,7 +61,7 @@ public interface IUserManager
    */
   @Nullable
   IUser createNewUser (@Nonnull @Nonempty String sLoginName,
-                       @Nonnull @Nonempty String sEmailAddress,
+                       @Nullable String sEmailAddress,
                        @Nonnull String sPlainTextPassword,
                        @Nullable String sFirstName,
                        @Nullable String sLastName,
@@ -78,7 +78,7 @@ public interface IUserManager
    *        Login name of the user. May neither be <code>null</code> nor empty.
    *        This login name must be unique over all existing users.
    * @param sEmailAddress
-   *        The email address. May neither be <code>null</code> nor empty.
+   *        The email address. May be <code>null</code>.
    * @param sPlainTextPassword
    *        The plain text password to be used. May neither be <code>null</code>
    *        nor empty.
@@ -98,7 +98,7 @@ public interface IUserManager
   @Nullable
   IUser createPredefinedUser (@Nonnull @Nonempty String sID,
                               @Nonnull @Nonempty String sLoginName,
-                              @Nonnull @Nonempty String sEmailAddress,
+                              @Nullable String sEmailAddress,
                               @Nonnull String sPlainTextPassword,
                               @Nullable String sFirstName,
                               @Nullable String sLastName,
@@ -114,7 +114,7 @@ public interface IUserManager
    * @param sNewLoginName
    *        The new login name. May not be <code>null</code>.
    * @param sNewEmailAddress
-   *        The new email address. May not be <code>null</code>.
+   *        The new email address. May be <code>null</code>.
    * @param sNewFirstName
    *        The new first name. May be <code>null</code>.
    * @param sNewLastName
@@ -130,7 +130,7 @@ public interface IUserManager
   @Nonnull
   EChange setUserData (@Nullable String sUserID,
                        @Nonnull @Nonempty String sNewLoginName,
-                       @Nonnull @Nonempty String sNewEmailAddress,
+                       @Nullable String sNewEmailAddress,
                        @Nullable String sNewFirstName,
                        @Nullable String sNewLastName,
                        @Nullable Locale aNewDesiredLocale,

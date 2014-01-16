@@ -173,7 +173,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
 
   @Nullable
   public IUser createNewUser (@Nonnull @Nonempty final String sLoginName,
-                              @Nonnull @Nonempty final String sEmailAddress,
+                              @Nullable final String sEmailAddress,
                               @Nonnull final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
@@ -228,7 +228,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   @Nullable
   public IUser createPredefinedUser (@Nonnull @Nonempty final String sID,
                                      @Nonnull @Nonempty final String sLoginName,
-                                     @Nonnull @Nonempty final String sEmailAddress,
+                                     @Nullable final String sEmailAddress,
                                      @Nonnull final String sPlainTextPassword,
                                      @Nullable final String sFirstName,
                                      @Nullable final String sLastName,
@@ -446,7 +446,7 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
   @Nonnull
   public EChange setUserData (@Nullable final String sUserID,
                               @Nonnull @Nonempty final String sNewLoginName,
-                              @Nonnull @Nonempty final String sNewEmailAddress,
+                              @Nullable final String sNewEmailAddress,
                               @Nullable final String sNewFirstName,
                               @Nullable final String sNewLastName,
                               @Nullable final Locale aNewDesiredLocale,
