@@ -61,6 +61,7 @@ public class BasePageChangePassword extends AbstractWebPageExt
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
     ERROR_NO_USER_PRESENT ("Es ist kein Benutzer angemeldet, daher kann auch das Passwort nicht geändert werden.", "Since no user is logged in no password change is possible."),
+    TITLE ("Passwort von ''{0}'' ändern", "Change password of ''{0}''"),
     LABEL_PASSWORD ("Passwort", "Password"),
     LABEL_PASSWORD_CONFIRM ("Passwort (Bestätigung)", "Password (confirmation)"),
     ERROR_PASSWORDS_DONT_MATCH ("Die Passwörter stimmen nicht überein!", "Passwords don't match"),
@@ -156,6 +157,10 @@ public class BasePageChangePassword extends AbstractWebPageExt
         final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (200),
                                                                                                HCCol.star (),
                                                                                                new HCCol (20)));
+
+        // XXX use SecurityUI.getUserDisplayName in webctrls > 1.3.7
+        aTable.setSpanningHeaderContent (EText.TITLE.getDisplayTextWithArgs (aDisplayLocale,
+                                                                             aCurrentUser.getDisplayName ()));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()

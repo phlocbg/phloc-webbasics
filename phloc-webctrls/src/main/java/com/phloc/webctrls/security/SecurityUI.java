@@ -48,7 +48,7 @@ public final class SecurityUI
     if (StringHelper.hasNoText (sUserID))
       return "Gast";
     final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
-    return aUser == null ? sUserID : aUser.getDisplayName ();
+    return aUser == null ? sUserID : getUserDisplayName (aUser);
   }
 
   /**
@@ -68,7 +68,27 @@ public final class SecurityUI
     if (StringHelper.hasNoText (sUserID))
       return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
     final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
-    return aUser == null ? sUserID : aUser.getDisplayName ();
+    return aUser == null ? sUserID : getUserDisplayName (aUser);
+  }
+
+  /**
+   * Get the display name of the user. If no display name is present (because
+   * first name and last name are empty), the login name is returned.
+   * 
+   * @param aUser
+   *        User. May not be <code>null</code>.
+   * @return Never <code>null</code>. Either the display name or the login name
+   *         of the user.
+   */
+  @Nullable
+  public static String getUserDisplayName (@Nonnull final IUser aUser)
+  {
+    if (aUser == null)
+      throw new NullPointerException ("user");
+    String ret = aUser.getDisplayName ();
+    if (StringHelper.hasNoText (ret))
+      ret = aUser.getLoginName ();
+    return ret;
   }
 
   /**
