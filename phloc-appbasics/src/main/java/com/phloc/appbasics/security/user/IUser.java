@@ -58,10 +58,11 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   String getLoginName ();
 
   /**
-   * @return The email address of the user.
+   * The email address is optional since 2.6.3
+   * 
+   * @return The email address of the user. May be <code>null</code>.
    */
-  @Nonnull
-  @Nonempty
+  @Nullable
   String getEmailAddress ();
 
   /**
@@ -71,19 +72,19 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   PasswordHash getPasswordHash ();
 
   /**
-   * @return The first name of the user.
+   * @return The first name of the user. May be <code>null</code>.
    */
   @Nullable
   String getFirstName ();
 
   /**
-   * @return The last name of the user.
+   * @return The last name of the user. May be <code>null</code>.
    */
   @Nullable
   String getLastName ();
 
   /**
-   * @return The desired locale of the user.
+   * @return The desired locale of the user. May be <code>null</code>.
    */
   @Nullable
   Locale getDesiredLocale ();

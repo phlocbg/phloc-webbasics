@@ -70,8 +70,7 @@ public class User extends MapBasedAttributeContainer implements IUser
    * @param sLoginName
    *        Login name of the user. May neither be <code>null</code> nor empty.
    * @param sEmailAddress
-   *        Email address of the user. May neither be <code>null</code> nor
-   *        empty.
+   *        Email address of the user. May be <code>null</code>.
    * @param aPasswordHash
    *        Password hash of the user. May not be <code>null</code>.
    * @param sFirstName
@@ -86,7 +85,7 @@ public class User extends MapBasedAttributeContainer implements IUser
    *        <code>true</code> if the user is disabled
    */
   public User (@Nonnull @Nonempty final String sLoginName,
-               @Nonnull @Nonempty final String sEmailAddress,
+               @Nullable final String sEmailAddress,
                @Nonnull final PasswordHash aPasswordHash,
                @Nullable final String sFirstName,
                @Nullable final String sLastName,
@@ -115,7 +114,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   // Internal use only
   User (@Nonnull @Nonempty final String sID,
         @Nonnull @Nonempty final String sLoginName,
-        @Nonnull @Nonempty final String sEmailAddress,
+        @Nullable final String sEmailAddress,
         @Nonnull final PasswordHash aPasswordHash,
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
@@ -155,8 +154,7 @@ public class User extends MapBasedAttributeContainer implements IUser
    * @param sLoginName
    *        Login name of the user. May neither be <code>null</code> nor empty.
    * @param sEmailAddress
-   *        Email address of the user. May neither be <code>null</code> nor
-   *        empty.
+   *        Email address of the user. May be <code>null</code>.
    * @param aPasswordHash
    *        Password hash of the user. May not be <code>null</code>.
    * @param sFirstName
@@ -183,7 +181,7 @@ public class User extends MapBasedAttributeContainer implements IUser
         @Nullable final DateTime aLastModificationDT,
         @Nullable final DateTime aDeletionDT,
         @Nonnull @Nonempty final String sLoginName,
-        @Nonnull @Nonempty final String sEmailAddress,
+        @Nullable final String sEmailAddress,
         @Nonnull final PasswordHash aPasswordHash,
         @Nullable final String sFirstName,
         @Nullable final String sLastName,
@@ -201,8 +199,6 @@ public class User extends MapBasedAttributeContainer implements IUser
       throw new NullPointerException ("creationDT");
     if (StringHelper.hasNoText (sLoginName))
       throw new IllegalArgumentException ("loginName");
-    if (StringHelper.hasNoText (sEmailAddress))
-      throw new IllegalArgumentException ("emailAddress");
     if (nLoginCount < 0)
       throw new IllegalArgumentException ("loginCount");
     if (nConsecutiveFailedLoginCount < 0)
@@ -212,7 +208,7 @@ public class User extends MapBasedAttributeContainer implements IUser
     m_aLastModificationDT = aLastModificationDT;
     m_aDeletionDT = aDeletionDT;
     m_sLoginName = sLoginName;
-    m_sEmailAddress = sEmailAddress;
+    setEmailAddress (sEmailAddress);
     setPasswordHash (aPasswordHash);
     m_sFirstName = sFirstName;
     m_sLastName = sLastName;
@@ -292,8 +288,7 @@ public class User extends MapBasedAttributeContainer implements IUser
     return EChange.CHANGED;
   }
 
-  @Nonnull
-  @Nonempty
+  @Nullable
   public String getEmailAddress ()
   {
     return m_sEmailAddress;
@@ -302,10 +297,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   @Nonnull
   EChange setEmailAddress (@Nullable final String sEmailAddress)
   {
-    if (StringHelper.hasNoText (sEmailAddress))
-      throw new IllegalArgumentException ("emailAddress");
-
-    if (sEmailAddress.equals (m_sEmailAddress))
+    if (EqualsUtils.equals (sEmailAddress, m_sEmailAddress))
       return EChange.UNCHANGED;
     m_sEmailAddress = sEmailAddress;
     return EChange.CHANGED;
@@ -477,7 +469,7 @@ public class User extends MapBasedAttributeContainer implements IUser
                             .appendIfNotNull ("lastModificationDT", m_aLastModificationDT)
                             .appendIfNotNull ("deletionDT", m_aDeletionDT)
                             .append ("loginName", m_sLoginName)
-                            .append ("emailAddress", m_sEmailAddress)
+                            .appendIfNotNull ("emailAddress", m_sEmailAddress)
                             .append ("passwordHash", m_aPasswordHash)
                             .appendIfNotNull ("firstName", m_sFirstName)
                             .appendIfNotNull ("lastName", m_sLastName)

@@ -76,6 +76,50 @@ public final class UserTest
   }
 
   @Test
+  public void testBasic2 ()
+  {
+    final User aUser = new User ("id1",
+                                 PDTFactory.getCurrentDateTime (),
+                                 null,
+                                 null,
+                                 "MyName",
+                                 null,
+                                 GlobalPasswordSettings.createUserDefaultPasswordHash ("ABCDEF"),
+                                 null,
+                                 null,
+                                 Locale.GERMANY,
+                                 PDTFactory.getCurrentDateTime (),
+                                 0,
+                                 0,
+                                 null,
+                                 false,
+                                 false);
+    assertEquals ("id1", aUser.getID ());
+    assertNull (aUser.getEmailAddress ());
+    assertNotNull (aUser.getPasswordHash ());
+    assertNull (aUser.getFirstName ());
+    assertNull (aUser.getLastName ());
+    assertEquals (Locale.GERMANY, aUser.getDesiredLocale ());
+    assertEquals (0, aUser.getLoginCount ());
+    assertEquals (0, aUser.getConsecutiveFailedLoginCount ());
+    assertNotNull (aUser.getCreationDateTime ());
+    assertNull (aUser.getLastModificationDateTime ());
+    assertNull (aUser.getDeletionDateTime ());
+    assertFalse (aUser.isDeleted ());
+    assertFalse (aUser.isDisabled ());
+    assertTrue (aUser.isEnabled ());
+
+    // To XML
+    final IMicroElement aElement = MicroTypeConverter.convertToMicroElement (aUser, "user");
+    assertNotNull (aElement);
+
+    // From XML
+    final User aUser2 = MicroTypeConverter.convertToNative (aElement, User.class);
+    assertNotNull (aUser2);
+    assertEquals (aUser, aUser2);
+  }
+
+  @Test
   public void testMicroConversion ()
   {
     final User aUser = new User ("id1",
