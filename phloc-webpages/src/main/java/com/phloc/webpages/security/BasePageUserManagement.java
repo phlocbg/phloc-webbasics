@@ -213,6 +213,18 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     return true;
   }
 
+  @OverrideOnDemand
+  protected boolean isLastNameMandatory ()
+  {
+    return true;
+  }
+
+  @OverrideOnDemand
+  protected boolean isEmailMandatory ()
+  {
+    return true;
+  }
+
   @Override
   @Nullable
   protected IUser getSelectedObject (final WebPageExecutionContext aWPEC, @Nullable final String sID)
@@ -479,10 +491,16 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     }
 
     if (StringHelper.hasNoText (sLastName))
-      aFormErrors.addFieldError (FIELD_LASTNAME, EText.ERROR_LASTNAME_REQUIRED.getDisplayText (aDisplayLocale));
+    {
+      if (isLastNameMandatory ())
+        aFormErrors.addFieldError (FIELD_LASTNAME, EText.ERROR_LASTNAME_REQUIRED.getDisplayText (aDisplayLocale));
+    }
 
     if (StringHelper.hasNoText (sEmailAddress))
-      aFormErrors.addFieldError (FIELD_EMAILADDRESS, EText.ERROR_EMAIL_REQUIRED.getDisplayText (aDisplayLocale));
+    {
+      if (isEmailMandatory ())
+        aFormErrors.addFieldError (FIELD_EMAILADDRESS, EText.ERROR_EMAIL_REQUIRED.getDisplayText (aDisplayLocale));
+    }
     else
       if (!EmailAddressUtils.isValid (sEmailAddress))
         aFormErrors.addFieldError (FIELD_EMAILADDRESS, EText.ERROR_EMAIL_INVALID.getDisplayText (aDisplayLocale));
@@ -659,7 +677,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     {
       final String sLastName = EText.LABEL_LASTNAME.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
-            .setLabelMandatory (sLastName)
+            .setLabel (sLastName, isLastNameMandatory () ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
             .setCtrl (new HCEdit (new RequestField (FIELD_LASTNAME,
                                                     aSelectedObject == null ? null : aSelectedObject.getLastName ())).setPlaceholder (sLastName))
             .setErrorList (aFormErrors.getListOfField (FIELD_LASTNAME));
@@ -668,7 +686,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     {
       final String sEmail = EText.LABEL_EMAIL.getDisplayText (aDisplayLocale);
       aTable.createItemRow ()
-            .setLabelMandatory (sEmail)
+            .setLabel (sEmail, isEmailMandatory () ? ELabelType.MANDATORY : ELabelType.OPTIONAL)
             .setCtrl (new HCEdit (new RequestField (FIELD_EMAILADDRESS,
                                                     aSelectedObject == null ? null : aSelectedObject.getEmailAddress ())).setPlaceholder (sEmail))
             .setErrorList (aFormErrors.getListOfField (FIELD_EMAILADDRESS));
