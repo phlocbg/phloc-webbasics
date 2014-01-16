@@ -179,7 +179,6 @@ public class BasePageChangePassword extends AbstractWebPageExt
         final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
         aToolbar.addHiddenField (CHCParam.PARAM_ACTION, CHCParam.ACTION_PERFORM);
         aToolbar.addSubmitButtonSave (aDisplayLocale);
-        aToolbar.addButtonCancel (aDisplayLocale);
       }
     }
   }
