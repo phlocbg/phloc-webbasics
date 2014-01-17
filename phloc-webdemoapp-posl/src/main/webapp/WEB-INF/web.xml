@@ -158,11 +158,7 @@
     <servlet-class>com.phloc.webdemoapp.servlet.DemoAppStreamServlet</servlet-class>
     <init-param>
       <param-name>allowedExtensions</param-name>
-      <param-value>*</param-value>
-    </init-param>
-    <init-param>
-      <param-name>deniedExtensions</param-name>
-      <param-value>java,class,jar</param-value>
+      <param-value>js,css,png,jpg,jpeg,gif</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
@@ -175,11 +171,7 @@
     <servlet-class>com.phloc.webdemoapp.servlet.DemoAppUserStreamServlet</servlet-class>
     <init-param>
       <param-name>allowedExtensions</param-name>
-      <param-value>*</param-value>
-    </init-param>
-    <init-param>
-      <param-name>deniedExtensions</param-name>
-      <param-value>java,class,jar</param-value>
+      <param-value>js,css,png,jpg,jpeg,gif</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
