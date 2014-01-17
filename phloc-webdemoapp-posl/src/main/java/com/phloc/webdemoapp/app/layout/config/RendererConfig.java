@@ -55,6 +55,7 @@ import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.page.IWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.app.page.system.SystemPageNotFound;
+import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 
 /**
@@ -78,8 +79,8 @@ public final class RendererConfig implements ILayoutAreaContentProvider
 
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     aNavbar.addText (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT,
-                     HCP.create ("Logged in as ").addChild (HCStrong.create (aUser == null ? "guest"
-                                                                                          : aUser.getDisplayName ())));
+                     HCP.create ("Logged in as ")
+                        .addChild (HCStrong.create (SecurityUI.getUserDisplayName (aUser, aDisplayLocale))));
 
     final BootstrapNav aNav = new BootstrapNav ();
     aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale), LinkUtils.getURLWithContext ("/logout"));

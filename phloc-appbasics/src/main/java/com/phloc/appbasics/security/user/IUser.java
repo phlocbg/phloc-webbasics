@@ -84,6 +84,13 @@ public interface IUser extends ITypedObject <String>, IHasDisplayName, IHasCreat
   String getLastName ();
 
   /**
+   * @return The display name of the user. May be empty if both first and last
+   *         name are empty but never <code>null</code>.
+   */
+  @Nonnull
+  String getDisplayName ();
+
+  /**
    * @return The desired locale of the user. May be <code>null</code>.
    */
   @Nullable

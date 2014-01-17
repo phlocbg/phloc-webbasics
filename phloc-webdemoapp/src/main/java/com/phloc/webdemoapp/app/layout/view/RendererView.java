@@ -68,6 +68,7 @@ import com.phloc.webbasics.app.layout.ILayoutAreaContentProvider;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.page.IWebPage;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
+import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webdemoapp.app.menu.view.CDemoAppMenuView;
 import com.phloc.webdemoapp.ui.CDemoAppCSS;
 import com.phloc.webdemoapp.ui.DemoAppAccessUI;
@@ -109,7 +110,8 @@ public final class RendererView implements ILayoutAreaContentProvider
       aNavbar.addNav (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT, aNav);
 
       aNavbar.addText (EBootstrapNavbarPosition.COLLAPSIBLE_RIGHT,
-                       HCP.create ("Logged in as ").addChild (HCStrong.create (aUser.getDisplayName ())));
+                       HCP.create ("Logged in as ")
+                          .addChild (HCStrong.create (SecurityUI.getUserDisplayName (aUser, aDisplayLocale))));
     }
     else
     {

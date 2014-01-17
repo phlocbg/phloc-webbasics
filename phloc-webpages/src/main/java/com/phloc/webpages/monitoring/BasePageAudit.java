@@ -163,7 +163,7 @@ public class BasePageAudit extends AbstractWebPageExt
     {
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (PDTToString.getAsString (aItem.getDateTime (), aDisplayLocale));
-      aRow.addCell (SecurityUI.getUserDisplayName (aItem.getUserID ()));
+      aRow.addCell (SecurityUI.getUserDisplayName (aItem.getUserID (), aDisplayLocale));
       aRow.addCell (aItem.getType ().getID ());
       aRow.addCell (EWebBasicsText.getYesOrNo (aItem.getSuccess ().isSuccess (), aDisplayLocale));
       aRow.addCell (getActionString (aItem));

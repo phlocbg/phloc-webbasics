@@ -56,6 +56,7 @@ import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
+import com.phloc.webctrls.security.SecurityUI;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 
@@ -154,7 +155,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
           .setCtrl (aSelectedObject.getUserID ());
     aTable.createItemRow ()
           .setLabel (EText.MSG_USERNAME.getDisplayText (aDisplayLocale))
-          .setCtrl (aSelectedObject.getUser ().getDisplayName ());
+          .setCtrl (SecurityUI.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale));
     aTable.createItemRow ()
           .setLabel (EText.MSG_LOGINDT.getDisplayText (aDisplayLocale))
           .setCtrl (PDTToString.getAsString (aSelectedObject.getLoginDT (), aDisplayLocale));
@@ -238,18 +239,18 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       final ISimpleURL aViewLink = createViewURL (aLoginInfo);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (new HCA (aViewLink).addChild (aLoginInfo.getUser ().getDisplayName ()));
+      aRow.addCell (new HCA (aViewLink).addChild (SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale)));
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLoginDT (), aDisplayLocale));
       aRow.addCell (PDTToString.getAsString (aLoginInfo.getLastAccessDT (), aDisplayLocale));
 
       final IHCCell <?> aActionCell = aRow.addCell ();
       if (canLogoutUser (aLoginInfo.getUser ()))
       {
+        final String sUserName = SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale);
         aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
                                                 .add (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER)
                                                 .add (CHCParam.PARAM_OBJECT, aLoginInfo.getUserID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                                               aLoginInfo.getUser ()
-                                                                                                                                                                         .getDisplayName ()))
+                                                                                                                                                               sUserName))
                                                                                                       .addChild (getLogoutUserIcon ()));
       }
       else

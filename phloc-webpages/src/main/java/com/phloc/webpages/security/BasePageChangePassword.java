@@ -158,9 +158,9 @@ public class BasePageChangePassword extends AbstractWebPageExt
                                                                                                HCCol.star (),
                                                                                                new HCCol (20)));
 
-        // XXX use SecurityUI.getUserDisplayName in webctrls > 1.3.7
         aTable.setSpanningHeaderContent (EText.TITLE.getDisplayTextWithArgs (aDisplayLocale,
-                                                                             aCurrentUser.getDisplayName ()));
+                                                                             SecurityUI.getUserDisplayName (aCurrentUser,
+                                                                                                            aDisplayLocale)));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()

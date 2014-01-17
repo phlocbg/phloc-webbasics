@@ -48,7 +48,7 @@ public final class SecurityUI
     if (StringHelper.hasNoText (sUserID))
       return "Gast";
     final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
-    return aUser == null ? sUserID : getUserDisplayName (aUser);
+    return aUser == null ? sUserID : getUserDisplayName (aUser, Locale.getDefault ());
   }
 
   /**
@@ -68,7 +68,7 @@ public final class SecurityUI
     if (StringHelper.hasNoText (sUserID))
       return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
     final IUser aUser = AccessManager.getInstance ().getUserOfID (sUserID);
-    return aUser == null ? sUserID : getUserDisplayName (aUser);
+    return aUser == null ? sUserID : getUserDisplayName (aUser, aDisplayLocale);
   }
 
   /**
@@ -76,15 +76,21 @@ public final class SecurityUI
    * first name and last name are empty), the login name is returned.
    * 
    * @param aUser
-   *        User. May not be <code>null</code>.
+   *        User. May be <code>null</code>.
+   * @param aDisplayLocale
+   *        The display locale to be used to resolve the "Guest" text if the
+   *        passed user is <code>null</code>.
    * @return Never <code>null</code>. Either the display name or the login name
    *         of the user.
    */
   @Nullable
-  public static String getUserDisplayName (@Nonnull final IUser aUser)
+  public static String getUserDisplayName (@Nullable final IUser aUser, @Nonnull final Locale aDisplayLocale)
   {
+    if (aDisplayLocale == null)
+      throw new NullPointerException ("DisplayLocale");
     if (aUser == null)
-      throw new NullPointerException ("user");
+      return ESecurityUIText.GUEST.getDisplayText (aDisplayLocale);
+
     String ret = aUser.getDisplayName ();
     if (StringHelper.hasNoText (ret))
       ret = aUser.getLoginName ();

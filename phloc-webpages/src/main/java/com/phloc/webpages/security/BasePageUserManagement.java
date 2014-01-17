@@ -327,7 +327,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     final IHCTableFormView <?> aTable = aNodeList.addAndReturnChild (getStyler ().createTableFormView (new HCCol (170),
                                                                                                        HCCol.star ()));
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                  aSelectedObject.getDisplayName ()));
+                                                                                  SecurityUI.getUserDisplayName (aSelectedObject,
+                                                                                                                 aDisplayLocale)));
     onShowSelectedObjectTableStart (aTable, aSelectedObject, aDisplayLocale);
     if (!useEmailAddressAsLoginName ())
     {
@@ -652,7 +653,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                            HCCol.star (),
                                                                                            new HCCol (20)));
     aTable.setSpanningHeaderContent (bEdit ? EText.TITLE_EDIT.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                      aSelectedObject.getDisplayName ())
+                                                                                      SecurityUI.getUserDisplayName (aSelectedObject,
+                                                                                                                     aDisplayLocale))
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     if (!useEmailAddressAsLoginName ())
@@ -782,7 +784,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
           AccessManager.getInstance ().setUserPassword (aSelectedObject.getID (), sPlainTextPassword);
           aWPEC.getNodeList ()
                .addChild (getStyler ().createSuccessBox (EText.SUCCESS_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                              aSelectedObject.getDisplayName ())));
+                                                                                                              SecurityUI.getUserDisplayName (aSelectedObject,
+                                                                                                                                             aDisplayLocale))));
           return true;
         }
       }
@@ -795,7 +798,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                                                                                HCCol.star (),
                                                                                                new HCCol (20)));
         aTable.setSpanningHeaderContent (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                            aSelectedObject.getDisplayName ()));
+                                                                                            SecurityUI.getUserDisplayName (aSelectedObject,
+                                                                                                                           aDisplayLocale)));
 
         final String sPassword = EText.LABEL_PASSWORD.getDisplayText (aDisplayLocale);
         aTable.createItemRow ()
@@ -859,7 +863,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
       final ISimpleURL aViewLink = createViewURL (aCurUser);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getDisplayName ()));
+      aRow.addCell (new HCA (aViewLink).addChild (SecurityUI.getUserDisplayName (aCurUser, aDisplayLocale)));
       if (bSeparateLoginName)
         aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getLoginName ()));
       aRow.addCell (new HCA (aViewLink).addChild (aCurUser.getEmailAddress ()));
@@ -893,7 +897,8 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
         aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
                                                 .add (CHCParam.PARAM_ACTION, ACTION_RESET_PASSWORD)
                                                 .add (CHCParam.PARAM_OBJECT, aCurUser.getID ())).setTitle (EText.TITLE_RESET_PASSWORD.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                                              aCurUser.getDisplayName ()))
+                                                                                                                                                              SecurityUI.getUserDisplayName (aCurUser,
+                                                                                                                                                                                             aDisplayLocale)))
                                                                                                 .addChild (getResetPasswordIcon ()));
       }
       else
