@@ -114,24 +114,28 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (sValue);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNodeBuilder aCtrlBuilder)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrlBuilder);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aCtrl)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrl);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNodeBuilder aCtrlBuilder,
                            @Nullable final IErrorList aFormErrors)
@@ -140,6 +144,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final IHCNode aCtrl,
                            @Nullable final IErrorList aFormErrors)
@@ -148,12 +153,14 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aCtrls)
   {
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrls);
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRow (@Nullable final IFormLabel aLabel,
                            @Nullable final Iterable <? extends IHCNode> aCtrls,
                            @Nullable final IErrorList aFormErrors)
@@ -169,6 +176,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (sText).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
@@ -178,6 +186,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (sText).setErrorList (aFormErrors).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
@@ -186,6 +195,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrlBuilder).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
@@ -194,6 +204,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrl).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
@@ -202,6 +213,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrls).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNodeBuilder aCtrlBuilder,
@@ -211,6 +223,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrlBuilder).setErrorList (aFormErrors).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final IHCNode aCtrl,
@@ -220,6 +233,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
     return createItemRow ().setLabel (aLabel).setCtrl (aCtrl).setErrorList (aFormErrors).setNote (aNote);
   }
 
+  @Deprecated
   @Nonnull
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final Iterable <? extends IHCNode> aCtrls,
