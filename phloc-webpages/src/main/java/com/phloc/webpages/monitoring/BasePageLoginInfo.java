@@ -183,7 +183,9 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
       final DataTables aDataTables = getStyler ().createDefaultDataTables (aCustomAttrTable, aDisplayLocale);
       aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
 
-      aTable.addItemRow (EText.MSG_ATTRS.getDisplayText (aDisplayLocale), aCustomAttrTable, aDataTables.build ());
+      aTable.createItemRow ()
+            .setLabel (EText.MSG_ATTRS.getDisplayText (aDisplayLocale))
+            .setCtrl (aCustomAttrTable, aDataTables.build ());
     }
   }
 

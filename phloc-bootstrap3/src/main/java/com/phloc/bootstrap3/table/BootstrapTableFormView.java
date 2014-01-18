@@ -66,51 +66,61 @@ public class BootstrapTableFormView extends AbstractBootstrapTable <BootstrapTab
     return aRow;
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String sValue)
   {
     createItemRow ().setLabel (aLabel).setCtrl (sValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final String... aValues)
   {
     createItemRow ().setLabel (aLabel).setCtrl (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode aValue)
   {
     createItemRow ().setLabel (aLabel).setCtrl (aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final IHCNode... aValues)
   {
     createItemRow ().setLabel (aLabel).setCtrl (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nullable final IFormLabel aLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     createItemRow ().setLabel (aLabel).setCtrl (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final String sValue)
   {
     createItemRow ().setLabel (sLabel).setCtrl (sValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final String... aValue)
   {
     createItemRow ().setLabel (sLabel).setCtrl (aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode aValue)
   {
     createItemRow ().setLabel (sLabel).setCtrl (aValue);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final IHCNode... aValues)
   {
     createItemRow ().setLabel (sLabel).setCtrl (aValues);
   }
 
+  @Deprecated
   public void addItemRow (@Nonnull final String sLabel, @Nullable final Iterable <? extends IHCNode> aValues)
   {
     createItemRow ().setLabel (sLabel).setCtrl (aValues);

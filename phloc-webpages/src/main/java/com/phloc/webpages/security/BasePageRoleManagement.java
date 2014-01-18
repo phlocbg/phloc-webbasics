@@ -172,15 +172,18 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     aTable.setSpanningHeaderContent (EText.HEADER_DETAILS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                   aSelectedObject.getName ()));
 
-    aTable.addItemRow (EText.LABEL_NAME.getDisplayText (aDisplayLocale), aSelectedObject.getName ());
+    aTable.createItemRow ()
+          .setLabel (EText.LABEL_NAME.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getName ());
 
     // All user groups to which the role is assigned
     final Collection <IUserGroup> aAssignedUserGroups = AccessManager.getInstance ()
                                                                      .getAllUserGroupsWithAssignedRole (aSelectedObject.getID ());
     if (aAssignedUserGroups.isEmpty ())
     {
-      aTable.addItemRow (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale),
-                         HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_USERGROUPS_0.getDisplayText (aDisplayLocale))
+            .setCtrl (HCEM.create (EText.NONE_ASSIGNED.getDisplayText (aDisplayLocale)));
     }
     else
     {
@@ -188,9 +191,10 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
       for (final IUserGroup aUserGroup : ContainerHelper.getSorted (aAssignedUserGroups,
                                                                     new ComparatorHasName <IUserGroup> (aDisplayLocale)))
         aUserGroupUI.addChild (HCDiv.create (aUserGroup.getName ()));
-      aTable.addItemRow (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
-                                                                          Integer.toString (aAssignedUserGroups.size ())),
-                         aUserGroupUI);
+      aTable.createItemRow ()
+            .setLabel (EText.LABEL_USERGROUPS_N.getDisplayTextWithArgs (aDisplayLocale,
+                                                                        Integer.toString (aAssignedUserGroups.size ())))
+            .setCtrl (aUserGroupUI);
     }
 
     // custom attributes
@@ -220,7 +224,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
       // Maybe all custom attributes where handled in
       // showCustomAttrsOfSelectedObject
       if (aAttrTable.hasBodyRows ())
-        aTable.addItemRow (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale), aAttrTable);
+        aTable.createItemRow ().setLabel (EText.LABEL_ATTRIBUTES.getDisplayText (aDisplayLocale)).setCtrl (aAttrTable);
     }
   }
 

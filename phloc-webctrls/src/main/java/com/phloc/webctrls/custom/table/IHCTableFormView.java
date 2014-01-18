@@ -37,23 +37,33 @@ public interface IHCTableFormView <THISTYPE extends IHCTableFormView <THISTYPE>>
   @Nonnull
   HCTableFormViewItemRow createItemRow ();
 
+  @Deprecated
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable String sValue);
 
+  @Deprecated
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable String... aValues);
 
+  @Deprecated
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode aValue);
 
+  @Deprecated
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable IHCNode... aValues);
 
+  @Deprecated
   void addItemRow (@Nullable IFormLabel aLabel, @Nullable Iterable <? extends IHCNode> aValues);
 
+  @Deprecated
   void addItemRow (@Nonnull String sLabel, @Nullable String sValue);
 
+  @Deprecated
   void addItemRow (@Nonnull String sLabel, @Nullable String... aValue);
 
+  @Deprecated
   void addItemRow (@Nonnull String sLabel, @Nullable IHCNode aValue);
 
+  @Deprecated
   void addItemRow (@Nonnull String sLabel, @Nullable IHCNode... aValues);
 
+  @Deprecated
   void addItemRow (@Nonnull String sLabel, @Nullable Iterable <? extends IHCNode> aValues);
 }
