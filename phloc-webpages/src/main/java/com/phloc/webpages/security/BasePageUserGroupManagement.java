@@ -61,7 +61,6 @@ import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
-import com.phloc.webctrls.custom.impl.HCFormLabel;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -348,19 +347,21 @@ public class BasePageUserGroupManagement extends AbstractWebPageForm <IUserGroup
                                           : EText.TITLE_CREATE.getDisplayText (aDisplayLocale));
 
     final String sName = EText.LABEL_NAME.getDisplayText (aDisplayLocale);
-    aTable.addItemRow (HCFormLabel.createMandatory (sName),
-                       new HCEdit (new RequestField (FIELD_NAME, aSelectedObject == null ? null
-                                                                                        : aSelectedObject.getName ())).setPlaceholder (sName),
-                       aFormErrors.getListOfField (FIELD_NAME));
+    aTable.createItemRow ()
+          .setLabelMandatory (sName)
+          .setCtrl (new HCEdit (new RequestField (FIELD_NAME, aSelectedObject == null ? null
+                                                                                     : aSelectedObject.getName ())).setPlaceholder (sName))
+          .setErrorList (aFormErrors.getListOfField (FIELD_NAME));
 
     final Collection <String> aRoleIDs = aSelectedObject == null ? aWPEC.getAttrs (FIELD_ROLES)
                                                                 : aSelectedObject.getAllContainedRoleIDs ();
     final RoleForUserGroupSelect aSelect = new RoleForUserGroupSelect (new RequestField (FIELD_ROLES),
                                                                        aDisplayLocale,
                                                                        aRoleIDs);
-    aTable.addItemRow (HCFormLabel.createMandatory (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale)),
-                       aSelect,
-                       aFormErrors.getListOfField (FIELD_ROLES));
+    aTable.createItemRow ()
+          .setLabelMandatory (EText.LABEL_ROLES_0.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelect)
+          .setErrorList (aFormErrors.getListOfField (FIELD_ROLES));
   }
 
   protected static boolean canDeleteUserGroup (@Nonnull final IUserGroup aUserGroup)
