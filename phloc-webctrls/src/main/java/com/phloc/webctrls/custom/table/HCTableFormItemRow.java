@@ -79,6 +79,12 @@ public class HCTableFormItemRow extends HCRow
     return setLabel (sLabel == null ? null : HCFormLabel.createMandatory (sLabel));
   }
 
+  @Nonnull
+  public final HCTableFormItemRow setLabelAlternative (@Nullable final String sLabel)
+  {
+    return setLabel (sLabel == null ? null : HCFormLabel.createAlternative (sLabel));
+  }
+
   /**
    * Called after the label cell was altered.
    * 

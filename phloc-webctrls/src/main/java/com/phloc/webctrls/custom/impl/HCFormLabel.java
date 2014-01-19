@@ -125,4 +125,22 @@ public class HCFormLabel extends HCLabel implements IFormLabel
   {
     return new HCFormLabel (aNode, ELabelType.MANDATORY);
   }
+
+  @Nonnull
+  public static HCFormLabel createAlternative (@Nonnull final String sText)
+  {
+    return new HCFormLabel (sText, ELabelType.ALTERNATIVE);
+  }
+
+  @Nonnull
+  public static HCFormLabel createAlternative (@Nonnull final IPredefinedLocaleTextProvider aTextProvider)
+  {
+    return createAlternative (aTextProvider.getText ());
+  }
+
+  @Nonnull
+  public static HCFormLabel createAlternative (@Nonnull final IHCElementWithChildren <?> aNode)
+  {
+    return new HCFormLabel (aNode, ELabelType.ALTERNATIVE);
+  }
 }
