@@ -32,6 +32,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.cache.AbstractNotifyingCache;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorStringLongestFirst;
 import com.phloc.commons.string.StringHelper;
@@ -188,17 +189,19 @@ public final class DateFormatBuilder implements IDateFormatBuilder
     }
   }
 
-  private static final Map <String, DateFormatBuilder> s_aCache = new HashMap <String, DateFormatBuilder> ();
-
-  @Nonnull
-  public static IDateFormatBuilder fromJavaPattern (@Nonnull final String sJavaPattern)
+  private static final class PatternCache extends AbstractNotifyingCache <String, DateFormatBuilder>
   {
-    // Use cached value?
-    DateFormatBuilder aDFB = s_aCache.get (sJavaPattern);
-    if (aDFB == null)
+    public PatternCache ()
+    {
+      super ("DateFormatBuilder.PatternCache");
+    }
+
+    @Override
+    @Nonnull
+    protected DateFormatBuilder getValueToCache (@Nonnull final String sJavaPattern)
     {
       // Do parsing
-      aDFB = new DateFormatBuilder ();
+      final DateFormatBuilder aDFB = new DateFormatBuilder ();
       final Searcher aSearcher = new Searcher (sJavaPattern);
       while (aSearcher.hasMore ())
       {
@@ -211,8 +214,17 @@ public final class DateFormatBuilder implements IDateFormatBuilder
           aDFB.append (aSearcher.getNextChar ());
         }
       }
-      s_aCache.put (sJavaPattern, aDFB);
+      return aDFB;
     }
-    return aDFB;
+  }
+
+  private static final PatternCache s_aCache = new PatternCache ();
+
+  @Nonnull
+  public static IDateFormatBuilder fromJavaPattern (@Nonnull final String sJavaPattern)
+  {
+    if (StringHelper.hasNoText (sJavaPattern))
+      throw new IllegalArgumentException ("JavaPattern");
+    return s_aCache.getFromCache (sJavaPattern);
   }
 }

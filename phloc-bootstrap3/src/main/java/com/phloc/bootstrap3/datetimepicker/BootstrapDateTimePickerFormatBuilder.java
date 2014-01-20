@@ -34,6 +34,7 @@ import org.joda.time.LocalTime;
 import com.phloc.commons.cache.AbstractNotifyingCache;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorStringLongestFirst;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTFromString;
 
@@ -177,7 +178,7 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
 
     @Override
     @Nonnull
-    protected BootstrapDateTimePickerFormatBuilder getValueToCache (final String sJavaPattern)
+    protected BootstrapDateTimePickerFormatBuilder getValueToCache (@Nonnull final String sJavaPattern)
     {
       // Do parsing
       final BootstrapDateTimePickerFormatBuilder aDFB = new BootstrapDateTimePickerFormatBuilder ();
@@ -202,6 +203,8 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
   @Nonnull
   public static IDateFormatBuilder fromJavaPattern (@Nonnull final String sJavaPattern)
   {
+    if (StringHelper.hasNoText (sJavaPattern))
+      throw new IllegalArgumentException ("JavaPattern");
     return s_aCache.getFromCache (sJavaPattern);
   }
 }
