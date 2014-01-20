@@ -635,6 +635,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
                                    @Nonnull final IHCTableForm <?> aTable)
   {}
 
+  @SuppressWarnings ("null")
   @Override
   protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
                                 @Nullable final IUser aSelectedObject,

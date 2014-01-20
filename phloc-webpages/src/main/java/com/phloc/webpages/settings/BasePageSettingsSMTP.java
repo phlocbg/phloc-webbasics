@@ -326,6 +326,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     }
   }
 
+  @SuppressWarnings ("null")
   @Override
   protected void showInputForm (@Nonnull final WebPageExecutionContext aWPEC,
                                 @Nullable final NamedSMTPSettings aSelectedObject,
