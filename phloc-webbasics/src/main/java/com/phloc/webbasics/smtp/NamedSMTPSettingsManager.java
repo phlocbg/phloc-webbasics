@@ -40,7 +40,6 @@ import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.commons.type.ObjectType;
 import com.phloc.web.smtp.ISMTPSettings;
 
 /**
@@ -51,7 +50,6 @@ import com.phloc.web.smtp.ISMTPSettings;
 @ThreadSafe
 public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasSize
 {
-  public static final ObjectType OT_NAMED_SMTP_SETTINGS = new ObjectType ("named-smtp-settings");
   private static final String ELEMENT_NAMEDSMTPSETTINGSLIST = "namedsmtpsettingslist";
   private static final String ELEMENT_NAMEDSMTPSETTINGS = "namedsmtpsettings";
 
@@ -212,7 +210,7 @@ public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasS
       m_aRWLock.writeLock ().unlock ();
     }
 
-    AuditUtils.onAuditCreateSuccess (OT_NAMED_SMTP_SETTINGS,
+    AuditUtils.onAuditCreateSuccess (NamedSMTPSettings.OT_NAMED_SMTP_SETTINGS,
                                      aNamedSettings.getID (),
                                      aNamedSettings.getName (),
                                      aSettings.getHostName (),
@@ -246,7 +244,7 @@ public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasS
     final NamedSMTPSettings aNamedSettings = getSettings (sID);
     if (aNamedSettings == null)
     {
-      AuditUtils.onAuditModifyFailure (OT_NAMED_SMTP_SETTINGS, sID, "no-such-id");
+      AuditUtils.onAuditModifyFailure (NamedSMTPSettings.OT_NAMED_SMTP_SETTINGS, sID, "no-such-id");
       return EChange.UNCHANGED;
     }
 
@@ -264,7 +262,7 @@ public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasS
     {
       m_aRWLock.writeLock ().unlock ();
     }
-    AuditUtils.onAuditModifySuccess (OT_NAMED_SMTP_SETTINGS,
+    AuditUtils.onAuditModifySuccess (NamedSMTPSettings.OT_NAMED_SMTP_SETTINGS,
                                      aNamedSettings.getID (),
                                      aNamedSettings.getName (),
                                      aSettings.getHostName (),
@@ -300,9 +298,9 @@ public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasS
       m_aRWLock.writeLock ().unlock ();
     }
     if (eChange.isChanged ())
-      AuditUtils.onAuditDeleteSuccess (OT_NAMED_SMTP_SETTINGS, sID);
+      AuditUtils.onAuditDeleteSuccess (NamedSMTPSettings.OT_NAMED_SMTP_SETTINGS, sID);
     else
-      AuditUtils.onAuditDeleteFailure (OT_NAMED_SMTP_SETTINGS, sID, "no-such-id");
+      AuditUtils.onAuditDeleteFailure (NamedSMTPSettings.OT_NAMED_SMTP_SETTINGS, sID, "no-such-id");
     return eChange;
   }
 

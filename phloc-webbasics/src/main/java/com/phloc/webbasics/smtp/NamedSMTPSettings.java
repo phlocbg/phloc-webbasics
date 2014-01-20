@@ -23,16 +23,19 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.type.ITypedObject;
+import com.phloc.commons.type.ObjectType;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 
-public class NamedSMTPSettings implements IHasID <String>, Serializable
+public class NamedSMTPSettings implements ITypedObject <String>, Serializable
 {
+  public static final ObjectType OT_NAMED_SMTP_SETTINGS = new ObjectType ("named-smtp-settings");
+
   private final String m_sID;
   private String m_sName;
   private ReadonlySMTPSettings m_aSMTPSettings;
@@ -51,6 +54,12 @@ public class NamedSMTPSettings implements IHasID <String>, Serializable
     m_sID = sID;
     setName (sName);
     setSMTPSettings (aSMTPSettings);
+  }
+
+  @Nonnull
+  public ObjectType getTypeID ()
+  {
+    return OT_NAMED_SMTP_SETTINGS;
   }
 
   @Nonnull
