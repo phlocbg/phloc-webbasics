@@ -249,7 +249,7 @@ public enum EBootstrapIcon implements IIcon
   }
 
   @Nonnull
-  public IHCElement <?> getAsNode ()
+  public HCSpan getAsNode ()
   {
     return new HCSpan ().addClasses (CBootstrapCSS.GLYPHICON, m_aCSSClass);
   }

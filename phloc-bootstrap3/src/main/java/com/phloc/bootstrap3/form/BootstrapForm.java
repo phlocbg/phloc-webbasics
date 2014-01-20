@@ -305,7 +305,9 @@ public class BootstrapForm extends HCForm
             if (aFirstControl instanceof AbstractHCEdit <?>)
             {
               final AbstractHCEdit <?> aEdit = (AbstractHCEdit <?>) aFirstControl;
-              if (StringHelper.hasNoText (aEdit.getPlaceholder ()))
+              // Only check for null, so that empty string overrides this
+              // default behaviour
+              if (aEdit.getPlaceholder () == null)
                 aEdit.setPlaceholder (aLabel.getPlainText ());
             }
           }

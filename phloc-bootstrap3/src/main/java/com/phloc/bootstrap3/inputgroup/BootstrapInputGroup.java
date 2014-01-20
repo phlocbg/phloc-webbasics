@@ -17,11 +17,17 @@
  */
 package com.phloc.bootstrap3.inputgroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.button.BootstrapButton;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
@@ -31,9 +37,9 @@ import com.phloc.html.hc.impl.HCTextNode;
 public class BootstrapInputGroup implements IHCNodeBuilder
 {
   private final EBootstrapInputGroupSize m_eSize;
-  private IHCNode m_aPrefix;
+  private final List <IHCNode> m_aPrefixes = new ArrayList <IHCNode> ();
   private final IHCNode m_aInput;
-  private IHCNode m_aSuffix;
+  private final List <IHCNode> m_aSuffixes = new ArrayList <IHCNode> ();
 
   public BootstrapInputGroup (@Nonnull final IHCNodeBuilder aNodeBuilder)
   {
@@ -75,14 +81,36 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   @Nonnull
   public BootstrapInputGroup setPrefix (@Nullable final IHCNode aPrefix)
   {
-    m_aPrefix = aPrefix;
+    m_aPrefixes.clear ();
+    return addPrefix (aPrefix);
+  }
+
+  @Nonnull
+  public BootstrapInputGroup addPrefix (@Nullable final IHCNode aPrefix)
+  {
+    if (aPrefix != null)
+      m_aPrefixes.add (aPrefix);
     return this;
   }
 
   @Nullable
+  @Deprecated
   public IHCNode getPrefix ()
   {
-    return m_aPrefix;
+    return ContainerHelper.getFirstElement (m_aPrefixes);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IHCNode> getAllPrefixes ()
+  {
+    return ContainerHelper.newList (m_aPrefixes);
+  }
+
+  @Nonnegative
+  public int getPrefixCount ()
+  {
+    return m_aPrefixes.size ();
   }
 
   @Nonnull
@@ -100,38 +128,69 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   @Nonnull
   public BootstrapInputGroup setSuffix (@Nullable final IHCNode aSuffix)
   {
-    m_aSuffix = aSuffix;
+    m_aSuffixes.clear ();
+    return addSuffix (aSuffix);
+  }
+
+  @Nonnull
+  public BootstrapInputGroup addSuffix (@Nullable final String sSuffix)
+  {
+    return addSuffix (HCTextNode.createOnDemand (sSuffix));
+  }
+
+  @Nonnull
+  public BootstrapInputGroup addSuffix (@Nullable final IHCNode aSuffix)
+  {
+    if (aSuffix != null)
+      m_aSuffixes.add (aSuffix);
     return this;
   }
 
   @Nullable
+  @Deprecated
   public IHCNode getSuffix ()
   {
-    return m_aSuffix;
+    return ContainerHelper.getFirstElement (m_aSuffixes);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <IHCNode> getAllSuffixes ()
+  {
+    return ContainerHelper.newList (m_aSuffixes);
+  }
+
+  @Nonnegative
+  public int getSuffixCount ()
+  {
+    return m_aSuffixes.size ();
   }
 
   @Nullable
   public IHCNode build ()
   {
-    if (m_aPrefix == null && m_aSuffix == null)
+    if (m_aPrefixes.isEmpty () && m_aSuffixes.isEmpty ())
       return m_aInput;
 
-    final HCDiv aDiv = new HCDiv ().addClasses (CBootstrapCSS.INPUT_GROUP, m_eSize);
-    if (m_aPrefix != null)
+    final HCDiv aInputGroup = new HCDiv ().addClasses (CBootstrapCSS.INPUT_GROUP, m_eSize);
+
+    for (final IHCNode aPrefix : m_aPrefixes)
     {
-      if (m_aPrefix instanceof BootstrapButton)
-        aDiv.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_BTN).addChild (m_aPrefix));
+      if (aPrefix instanceof BootstrapButton)
+        aInputGroup.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_BTN).addChild (aPrefix));
       else
-        aDiv.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_ADDON).addChild (m_aPrefix));
+        aInputGroup.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_ADDON).addChild (aPrefix));
     }
-    aDiv.addChild (m_aInput);
-    if (m_aSuffix != null)
+
+    aInputGroup.addChild (m_aInput);
+
+    for (final IHCNode aSuffix : m_aSuffixes)
     {
-      if (m_aSuffix instanceof BootstrapButton)
-        aDiv.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_BTN).addChild (m_aSuffix));
+      if (aSuffix instanceof BootstrapButton)
+        aInputGroup.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_BTN).addChild (aSuffix));
       else
-        aDiv.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_ADDON).addChild (m_aSuffix));
+        aInputGroup.addChild (new HCSpan ().addClass (CBootstrapCSS.INPUT_GROUP_ADDON).addChild (aSuffix));
     }
-    return aDiv;
+    return aInputGroup;
   }
 }
