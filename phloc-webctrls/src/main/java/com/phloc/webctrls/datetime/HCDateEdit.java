@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCEdit;
@@ -44,6 +45,8 @@ import com.phloc.webbasics.form.RequestFieldDate;
 public class HCDateEdit implements IHCNodeBuilder
 {
   // dd.mm.yyyy
+  @Deprecated
+  @DevelopersNote ("Is only valid for German locale!")
   public static final int DATE_DEFAULT_MAX_LENGTH = 2 + 1 + 2 + 1 + 4;
 
   private final HCEdit m_aEdit;
