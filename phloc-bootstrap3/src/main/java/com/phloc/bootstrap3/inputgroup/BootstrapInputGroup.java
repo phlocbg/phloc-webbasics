@@ -86,6 +86,12 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   }
 
   @Nonnull
+  public BootstrapInputGroup addPrefix (@Nullable final String sPrefix)
+  {
+    return addPrefix (HCTextNode.createOnDemand (sPrefix));
+  }
+
+  @Nonnull
   public BootstrapInputGroup addPrefix (@Nullable final IHCNode aPrefix)
   {
     if (aPrefix != null)

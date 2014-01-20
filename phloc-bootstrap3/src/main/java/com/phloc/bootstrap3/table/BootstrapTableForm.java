@@ -169,6 +169,7 @@ public class BootstrapTableForm extends AbstractBootstrapTable <BootstrapTableFo
   }
 
   @Nonnull
+  @Deprecated
   public HCRow addItemRowWithNote (@Nullable final IFormLabel aLabel,
                                    @Nullable final String sText,
                                    @Nullable final IHCNode aNote)
