@@ -66,8 +66,11 @@ public final class RunInJettyDEMOAPP_POSL
     aWebAppCtx.setDescriptor (RESOURCE_PREFIX + "/WEB-INF/web.xml");
     aWebAppCtx.setResourceBase (RESOURCE_PREFIX);
     aWebAppCtx.setContextPath ("/");
-    aWebAppCtx.setTempDirectory (new File (SystemProperties.getTmpDir () + '/' + RunInJettyDEMOAPP_POSL.class.getName ()));
+    aWebAppCtx.setTempDirectory (new File (SystemProperties.getTmpDir () +
+                                           '/' +
+                                           RunInJettyDEMOAPP_POSL.class.getName ()));
     aWebAppCtx.setParentLoaderPriority (true);
+    aWebAppCtx.setThrowUnavailableOnStartupException (true);
     aServer.setHandler (aWebAppCtx);
     final ServletContextHandler aCtx = aWebAppCtx;
 
