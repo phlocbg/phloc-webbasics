@@ -43,7 +43,9 @@ import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
+import com.phloc.html.js.builder.JSOp;
 import com.phloc.html.js.builder.JSPackage;
+import com.phloc.html.js.builder.JSPrimitiveType;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
@@ -346,15 +348,17 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
-  public JSInvocation autoNumericGet ()
+  public IJSExpression autoNumericGet ()
   {
-    return invoke ().arg ("get");
+    // Must be casted to Number because it is a String
+    return JSPrimitiveType.NUMBER.casted (JSOp.inParantheses (invoke ().arg ("get")));
   }
 
   @Nonnull
-  public static JSInvocation autoNumericGet (@Nonnull final IJSExpression aAutoNumeric)
+  public static IJSExpression autoNumericGet (@Nonnull final IJSExpression aAutoNumeric)
   {
-    return invoke (aAutoNumeric).arg ("get");
+    // Must be casted to Number because it is a String
+    return JSPrimitiveType.NUMBER.casted (JSOp.inParantheses (invoke (aAutoNumeric).arg ("get")));
   }
 
   @Nonnull
