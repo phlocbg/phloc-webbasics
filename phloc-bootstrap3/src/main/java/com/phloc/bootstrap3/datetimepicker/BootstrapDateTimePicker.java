@@ -43,13 +43,13 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
-import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.JQuery;
+import com.phloc.html.js.builder.jquery.JQueryInvocation;
 import com.phloc.html.request.IHCRequestField;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -473,7 +473,13 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
   @Nonnull
   public JSInvocation invoke ()
   {
-    return JQuery.idRef (m_sContainerID).invoke ("datetimepicker");
+    return invoke (JQuery.idRef (m_sContainerID));
+  }
+
+  @Nonnull
+  public static JSInvocation invoke (@Nonnull final JQueryInvocation aJQueryInvocation)
+  {
+    return aJQueryInvocation.invoke ("datetimepicker");
   }
 
   @Nonnull
@@ -482,24 +488,13 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
     return invoke ().arg (aOptions);
   }
 
+  /**
+   * @return A {@link JSAssocArray} with all options for this Datetime Picker.
+   *         Never <code>null</code>.
+   */
   @Nonnull
-  public HCNodeList build ()
+  public JSAssocArray getJSOptions ()
   {
-    registerExternalResources (m_aDisplayLocale);
-
-    // Create control
-    final BootstrapInputGroup aBIG = new BootstrapInputGroup (m_aEdit);
-    for (final IHCNode aPrefix : m_aPrefixes)
-      aBIG.addPrefix (aPrefix);
-    for (final IHCNode aSuffix : m_aSuffixes)
-      aBIG.addSuffix (aSuffix);
-    if (m_bShowResetButton)
-      aBIG.addSuffix (EBootstrapIcon.REMOVE.getAsNode ());
-    // It's always a div, because at least one prefix is always present!
-    final HCDiv aCtrl = (HCDiv) aBIG.build ();
-    aCtrl.addClass (CSS_CLASS_DATE).setID (m_sContainerID);
-
-    // Create JS
     final JSAssocArray aOptions = new JSAssocArray ();
     if (StringHelper.hasText (m_sFormat))
       aOptions.add ("format", m_sFormat);
@@ -552,11 +547,30 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
       // Print ISO8601 formatted
       aOptions.add ("initialDate", m_aInitialDate.toString ());
     }
+    return aOptions;
+  }
+
+  @Nonnull
+  public HCNodeList build ()
+  {
+    registerExternalResources (m_aDisplayLocale);
+
+    // Create control
+    final BootstrapInputGroup aBIG = new BootstrapInputGroup (m_aEdit);
+    for (final IHCNode aPrefix : m_aPrefixes)
+      aBIG.addPrefix (aPrefix);
+    for (final IHCNode aSuffix : m_aSuffixes)
+      aBIG.addSuffix (aSuffix);
+    if (m_bShowResetButton)
+      aBIG.addSuffix (EBootstrapIcon.REMOVE.getAsNode ());
+    // It's always a div, because at least one prefix is always present!
+    final HCDiv aCtrl = (HCDiv) aBIG.build ();
+    aCtrl.addClass (CSS_CLASS_DATE).setID (m_sContainerID);
 
     // Assemble
     final HCNodeList ret = new HCNodeList ();
     ret.addChild (aCtrl);
-    ret.addChild (new HCScript (invoke (aOptions)));
+    ret.addChild (new BootstrapDateTimePickerJS (this));
     return ret;
   }
 
