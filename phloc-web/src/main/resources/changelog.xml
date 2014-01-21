@@ -20,9 +20,10 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2014-01-21" version="5.3.5" />
   <entry date="2014-01-21" category="tech" action="update" >
     <change>
-      <text locale="en">Fixed error in UnifiedResponse when using an HTTP error code (&ge;400) and having content - in this case the content was ignored.</text>
+      <text locale="en">Fixed error in UnifiedResponse when using an HTTP error code (&gt;=400) and having content - in this case the content was ignored.</text>
     </change>
   </entry>
   <release date="2014-01-15" version="5.3.4" />

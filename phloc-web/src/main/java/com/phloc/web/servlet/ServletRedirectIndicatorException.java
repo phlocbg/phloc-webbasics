@@ -33,7 +33,7 @@ public class ServletRedirectIndicatorException extends RuntimeException
 
   public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL)
   {
-    this (aURL, null);
+    this (aURL, (Map <String, Object>) null);
   }
 
   public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL,

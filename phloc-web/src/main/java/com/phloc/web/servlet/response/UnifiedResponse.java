@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,6 +77,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class UnifiedResponse
 {
   /** By default content is not allowed on redirect */
@@ -84,9 +86,10 @@ public class UnifiedResponse
   public static final boolean DEFAULT_ALLOW_CONTENT_ON_STATUS_CODE = false;
   /** Default content disposition type is Attachment */
   public static final EContentDispositionType DEFAULT_CONTENT_DISPOSITION_TYPE = EContentDispositionType.ATTACHMENT;
+  /** Maximum KB a CSS file might have in IE */
+  public static final int MAX_CSS_KB_FOR_IE = 288;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (UnifiedResponse.class);
-  private static final int MAX_CSS_KB_FOR_IE = 288;
   private static final AtomicInteger s_aRequestNum = new AtomicInteger (0);
 
   // Input fields

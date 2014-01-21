@@ -53,19 +53,23 @@ public final class ResponseHelperSettings
   /** The string representation of never expires date */
   public static final String EXPIRES_NEVER_STRING = PDTWebDateUtils.getAsStringRFC822 (EXPIRES_NEVER_DATETIME);
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ResponseHelperSettings.class);
-
   /**
    * Expires in at least 2 days (which is the minimum to be accepted for real
    * caching in Yahoo Guidelines).
    */
   public static final int DEFAULT_EXPIRATION_SECONDS = 7 * CGlobal.SECONDS_PER_DAY;
 
+  public static final boolean DEFAULT_RESPONSE_COMPRESSION_ENABLED = true;
+  public static final boolean DEFAULT_RESPONSE_GZIP_ENABLED = true;
+  public static final boolean DEFAULT_RESPONSE_DERFLATE_ENABLED = true;
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ResponseHelperSettings.class);
+
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static int s_nExpirationSeconds = DEFAULT_EXPIRATION_SECONDS;
-  private static boolean s_bResponseCompressionEnabled = true;
-  private static boolean s_bResponseGzipEnabled = true;
-  private static boolean s_bResponseDeflateEnabled = true;
+  private static boolean s_bResponseCompressionEnabled = DEFAULT_RESPONSE_COMPRESSION_ENABLED;
+  private static boolean s_bResponseGzipEnabled = DEFAULT_RESPONSE_GZIP_ENABLED;
+  private static boolean s_bResponseDeflateEnabled = DEFAULT_RESPONSE_DERFLATE_ENABLED;
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")

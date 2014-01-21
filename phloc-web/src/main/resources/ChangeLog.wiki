@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>1/21/14</td><td colspan="4">_Release *5.3.5*_</td></tr>
+<tr><td>1/21/14</td><td>update</td><td>tech</td><td></td><td>Fixed error in UnifiedResponse when using an HTTP error code (`>`=400) and having content - in this case the content was ignored.</td></tr>
 <tr border="1"><td>1/15/14</td><td colspan="4">_Release *5.3.4*_</td></tr>
 <tr><td>1/15/14</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.1.1</td></tr>
 <tr><td>1/14/14</td><td>update</td><td>tech</td><td></td><td>Made more classes serializable</td></tr>
