@@ -918,7 +918,8 @@ public class UnifiedResponse
                CHTTPHeader.WWW_AUTHENTICATE +
                " HTTP response header is set!");
 
-      if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST)
+      // Content may be present so, sendError is not an option here!
+      if (m_nStatusCode >= HttpServletResponse.SC_BAD_REQUEST && m_aContent == null)
       {
         // It's an error
         // Note: After using this method, the response should be considered
