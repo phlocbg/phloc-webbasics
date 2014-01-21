@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.html.annotations.OutOfBandNode;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSAssocArray;
@@ -21,6 +22,7 @@ import com.phloc.html.js.provider.CollectingJSCodeProvider;
  * 
  * @author Philip Helger
  */
+@OutOfBandNode
 public class BootstrapDateTimePickerJS extends HCScript
 {
   private final BootstrapDateTimePicker m_aDTP;
