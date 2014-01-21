@@ -28,6 +28,7 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.button.BootstrapButton;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.state.EChange;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
@@ -99,6 +100,42 @@ public class BootstrapInputGroup implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  public BootstrapInputGroup addPrefix (@Nonnegative final int nIndex, @Nullable final String sPrefix)
+  {
+    return addPrefix (nIndex, HCTextNode.createOnDemand (sPrefix));
+  }
+
+  @Nonnull
+  public BootstrapInputGroup addPrefix (@Nonnegative final int nIndex, @Nullable final IHCNode aPrefix)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+
+    if (aPrefix != null)
+      if (nIndex >= getPrefixCount ())
+        m_aPrefixes.add (aPrefix);
+      else
+        m_aPrefixes.add (nIndex, aPrefix);
+    return this;
+  }
+
+  @Nonnull
+  public EChange removePrefixAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex < 0 || nIndex >= m_aPrefixes.size ())
+      return EChange.UNCHANGED;
+    m_aPrefixes.remove (nIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public BootstrapInputGroup removeAllPrefixes ()
+  {
+    m_aPrefixes.clear ();
+    return this;
+  }
+
   @Nullable
   @Deprecated
   public IHCNode getPrefix ()
@@ -111,6 +148,11 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   public List <IHCNode> getAllPrefixes ()
   {
     return ContainerHelper.newList (m_aPrefixes);
+  }
+
+  public boolean hasPrefixes ()
+  {
+    return !m_aPrefixes.isEmpty ();
   }
 
   @Nonnegative
@@ -152,6 +194,42 @@ public class BootstrapInputGroup implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  public BootstrapInputGroup addSuffix (@Nonnegative final int nIndex, @Nullable final String sSuffix)
+  {
+    return addSuffix (nIndex, HCTextNode.createOnDemand (sSuffix));
+  }
+
+  @Nonnull
+  public BootstrapInputGroup addSuffix (@Nonnegative final int nIndex, @Nullable final IHCNode aSuffix)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+
+    if (aSuffix != null)
+      if (nIndex >= getSuffixCount ())
+        m_aSuffixes.add (aSuffix);
+      else
+        m_aSuffixes.add (nIndex, aSuffix);
+    return this;
+  }
+
+  @Nonnull
+  public EChange removeSuffixAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex < 0 || nIndex >= m_aSuffixes.size ())
+      return EChange.UNCHANGED;
+    m_aSuffixes.remove (nIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public BootstrapInputGroup removeAllSuffixes ()
+  {
+    m_aSuffixes.clear ();
+    return this;
+  }
+
   @Nullable
   @Deprecated
   public IHCNode getSuffix ()
@@ -164,6 +242,11 @@ public class BootstrapInputGroup implements IHCNodeBuilder
   public List <IHCNode> getAllSuffixes ()
   {
     return ContainerHelper.newList (m_aSuffixes);
+  }
+
+  public boolean hasSuffixes ()
+  {
+    return !m_aSuffixes.isEmpty ();
   }
 
   @Nonnegative

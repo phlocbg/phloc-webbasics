@@ -17,7 +17,9 @@
  */
 package com.phloc.bootstrap3.datetimepicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -29,6 +31,7 @@ import org.joda.time.LocalDate;
 
 import com.phloc.bootstrap3.EBootstrapIcon;
 import com.phloc.bootstrap3.inputgroup.BootstrapInputGroup;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -36,11 +39,13 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.datetime.format.PDTFormatPatterns;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSInvocation;
@@ -76,6 +81,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
   private final String m_sContainerID;
   private final HCEdit m_aEdit;
   private final Locale m_aDisplayLocale;
+
+  // Settings
   private String m_sFormat;
   private EDateTimePickerDayOfWeek m_eWeekStart;
   private LocalDate m_aStartDate;
@@ -95,6 +102,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
   private LocalDate m_aInitialDate;
 
   // UI options
+  private final List <IHCNode> m_aPrefixes = new ArrayList <IHCNode> ();
+  private final List <IHCNode> m_aSuffixes = new ArrayList <IHCNode> ();
   private boolean m_bShowResetButton = DEFAULT_SHOW_RESET_BUTTON;
 
   public BootstrapDateTimePicker (@Nonnull final RequestFieldDate aRFD)
@@ -118,14 +127,31 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
     m_aDisplayLocale = aDisplayLocale;
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
                                                                             .getFirstDayOfWeek ());
+    m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
   }
 
+  /**
+   * @return The ID used to identify the input group.
+   */
+  @Nonnull
+  @Nonempty
+  public String getContainerID ()
+  {
+    return m_sContainerID;
+  }
+
+  /**
+   * @return The contained edit. You may modify the styles.
+   */
   @Nonnull
   public HCEdit getEdit ()
   {
     return m_aEdit;
   }
 
+  /**
+   * @return The control date format string.
+   */
   @Nullable
   public String getFormat ()
   {
@@ -371,6 +397,74 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
     return this;
   }
 
+  @Nonnull
+  public BootstrapDateTimePicker addPrefix (@Nullable final String sPrefix)
+  {
+    return addPrefix (HCTextNode.createOnDemand (sPrefix));
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addPrefix (@Nullable final IHCNode aPrefix)
+  {
+    if (aPrefix != null)
+      m_aPrefixes.add (aPrefix);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addPrefix (@Nonnegative final int nIndex, @Nullable final String sPrefix)
+  {
+    return addPrefix (nIndex, HCTextNode.createOnDemand (sPrefix));
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addPrefix (@Nonnegative final int nIndex, @Nullable final IHCNode aPrefix)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+
+    if (aPrefix != null)
+      if (nIndex >= m_aPrefixes.size ())
+        m_aPrefixes.add (aPrefix);
+      else
+        m_aPrefixes.add (nIndex, aPrefix);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addSuffix (@Nullable final String sSuffix)
+  {
+    return addSuffix (HCTextNode.createOnDemand (sSuffix));
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addSuffix (@Nullable final IHCNode aSuffix)
+  {
+    if (aSuffix != null)
+      m_aSuffixes.add (aSuffix);
+    return this;
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addSuffix (@Nonnegative final int nIndex, @Nullable final String sSuffix)
+  {
+    return addSuffix (nIndex, HCTextNode.createOnDemand (sSuffix));
+  }
+
+  @Nonnull
+  public BootstrapDateTimePicker addSuffix (@Nonnegative final int nIndex, @Nullable final IHCNode aSuffix)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+
+    if (aSuffix != null)
+      if (nIndex >= m_aSuffixes.size ())
+        m_aSuffixes.add (aSuffix);
+      else
+        m_aSuffixes.add (nIndex, aSuffix);
+    return this;
+  }
+
   public boolean isShowTime ()
   {
     return m_eMinView == null || m_eMinView.isLessThan (EDateTimePickerViewType.MONTH);
@@ -394,9 +488,14 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder
     registerExternalResources (m_aDisplayLocale);
 
     // Create control
-    final BootstrapInputGroup aBIG = new BootstrapInputGroup (m_aEdit).addPrefix (EBootstrapIcon.CALENDAR.getAsNode ());
+    final BootstrapInputGroup aBIG = new BootstrapInputGroup (m_aEdit);
+    for (final IHCNode aPrefix : m_aPrefixes)
+      aBIG.addPrefix (aPrefix);
+    for (final IHCNode aSuffix : m_aSuffixes)
+      aBIG.addSuffix (aSuffix);
     if (m_bShowResetButton)
       aBIG.addSuffix (EBootstrapIcon.REMOVE.getAsNode ());
+    // It's always a div, because at least one prefix is always present!
     final HCDiv aCtrl = (HCDiv) aBIG.build ();
     aCtrl.addClass (CSS_CLASS_DATE).setID (m_sContainerID);
 
