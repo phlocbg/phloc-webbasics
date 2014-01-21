@@ -25,6 +25,7 @@ import com.phloc.commons.thirdparty.ELicense;
 import com.phloc.commons.thirdparty.IThirdPartyModule;
 import com.phloc.commons.thirdparty.IThirdPartyModuleProviderSPI;
 import com.phloc.commons.thirdparty.ThirdPartyModule;
+import com.phloc.commons.version.Version;
 
 /**
  * Implement this SPI interface if your JAR file contains external third party
@@ -41,9 +42,15 @@ public final class ThirdPartyModuleProvider_phloc_bootstrap3 implements IThirdPa
                                                                            CBootstrap.BOOTSTRAP_VERSION_303,
                                                                            "http://getbootstrap.com/");
 
+  public static final IThirdPartyModule BOOTSTRAP_DATETIME_PICKER = new ThirdPartyModule ("Bootstrap Datetime Picker",
+                                                                                          "Sebastian Malot",
+                                                                                          ELicense.APACHE2,
+                                                                                          new Version (2013, 12, 17),
+                                                                                          "http://www.malot.fr/bootstrap-datetimepicker/index.php");
+
   @Nullable
   public IThirdPartyModule [] getAllThirdPartyModules ()
   {
-    return new IThirdPartyModule [] { BOOTSTRAP3 };
+    return new IThirdPartyModule [] { BOOTSTRAP3, BOOTSTRAP_DATETIME_PICKER };
   }
 }
