@@ -27,7 +27,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.bootstrap3.BootstrapHelper;
 import com.phloc.bootstrap3.CBootstrap;
 import com.phloc.bootstrap3.CBootstrapCSS;
-import com.phloc.bootstrap3.grid.BootstrapGripSpec;
+import com.phloc.bootstrap3.grid.BootstrapGridSpec;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -49,8 +49,8 @@ import com.phloc.validation.error.IErrorList;
 public class BootstrapForm extends HCForm
 {
   private final EBootstrapFormType m_eFormType;
-  private BootstrapGripSpec m_aLeft = BootstrapGripSpec.create (2);
-  private BootstrapGripSpec m_aRight = BootstrapGripSpec.create (10);
+  private BootstrapGridSpec m_aLeft = BootstrapGridSpec.create (2);
+  private BootstrapGridSpec m_aRight = BootstrapGridSpec.create (10);
 
   public BootstrapForm ()
   {
@@ -93,7 +93,7 @@ public class BootstrapForm extends HCForm
    * @return The left parts. Always &ge; 1 and &lt; 12. Never <code>null</code>.
    */
   @Nonnull
-  public final BootstrapGripSpec getLeft ()
+  public final BootstrapGridSpec getLeft ()
   {
     return m_aLeft;
   }
@@ -103,7 +103,7 @@ public class BootstrapForm extends HCForm
    *         <code>null</code>.
    */
   @Nonnull
-  public final BootstrapGripSpec getRight ()
+  public final BootstrapGridSpec getRight ()
   {
     return m_aRight;
   }
@@ -122,8 +122,8 @@ public class BootstrapForm extends HCForm
   {
     if (nLeftParts < 1 || nLeftParts >= CBootstrap.GRID_SYSTEM_MAX)
       throw new IllegalArgumentException ("Left parts must be >= 1 and < 12!");
-    final BootstrapGripSpec aNewLeft = BootstrapGripSpec.create (nLeftParts);
-    final BootstrapGripSpec aNewRight = BootstrapGripSpec.create (CBootstrap.GRID_SYSTEM_MAX - nLeftParts);
+    final BootstrapGridSpec aNewLeft = BootstrapGridSpec.create (nLeftParts);
+    final BootstrapGridSpec aNewRight = BootstrapGridSpec.create (CBootstrap.GRID_SYSTEM_MAX - nLeftParts);
     return setSplitting (aNewLeft, aNewRight);
   }
 
@@ -138,7 +138,7 @@ public class BootstrapForm extends HCForm
    */
   @Nonnull
   @OverridingMethodsMustInvokeSuper
-  public BootstrapForm setSplitting (@Nonnull final BootstrapGripSpec aLeft, @Nonnull final BootstrapGripSpec aRight)
+  public BootstrapForm setSplitting (@Nonnull final BootstrapGridSpec aLeft, @Nonnull final BootstrapGridSpec aRight)
   {
     if (aLeft == null)
       throw new NullPointerException ("left");
@@ -208,8 +208,8 @@ public class BootstrapForm extends HCForm
 
   @Nonnull
   public static IHCNode createFormGroup (@Nonnull final EBootstrapFormType eFormType,
-                                         @Nullable final BootstrapGripSpec aLeft,
-                                         @Nullable final BootstrapGripSpec aRight,
+                                         @Nullable final BootstrapGridSpec aLeft,
+                                         @Nullable final BootstrapGridSpec aRight,
                                          @Nullable final IHCElementWithChildren <?> aLabel,
                                          @Nonnull final IHCNode aCtrls,
                                          @Nullable final IHCNode aHelpText,

@@ -27,14 +27,14 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.IHCElement;
 
 @Immutable
-public final class BootstrapGripSpec implements Serializable
+public final class BootstrapGridSpec implements Serializable
 {
   private final EBootstrapGridXS m_eXS;
   private final EBootstrapGridSM m_eSM;
   private final EBootstrapGridMD m_eMD;
   private final EBootstrapGridLG m_eLG;
 
-  public BootstrapGripSpec (@Nullable final EBootstrapGridXS eXS,
+  public BootstrapGridSpec (@Nullable final EBootstrapGridXS eXS,
                             @Nullable final EBootstrapGridSM eSM,
                             @Nullable final EBootstrapGridMD eMD,
                             @Nullable final EBootstrapGridLG eLG)
@@ -117,15 +117,15 @@ public final class BootstrapGripSpec implements Serializable
   }
 
   @Nonnull
-  public static BootstrapGripSpec create (final int nParts)
+  public static BootstrapGridSpec create (final int nParts)
   {
     return create (nParts, nParts, nParts, nParts);
   }
 
   @Nonnull
-  public static BootstrapGripSpec create (final int nPartsXS, final int nPartsSM, final int nPartsMD, final int nPartsLG)
+  public static BootstrapGridSpec create (final int nPartsXS, final int nPartsSM, final int nPartsMD, final int nPartsLG)
   {
-    return new BootstrapGripSpec (nPartsXS <= 0 ? null : EBootstrapGridXS.getFromParts (nPartsXS),
+    return new BootstrapGridSpec (nPartsXS <= 0 ? null : EBootstrapGridXS.getFromParts (nPartsXS),
                                   nPartsSM <= 0 ? null : EBootstrapGridSM.getFromParts (nPartsSM),
                                   nPartsMD <= 0 ? null : EBootstrapGridMD.getFromParts (nPartsMD),
                                   nPartsLG <= 0 ? null : EBootstrapGridLG.getFromParts (nPartsLG));

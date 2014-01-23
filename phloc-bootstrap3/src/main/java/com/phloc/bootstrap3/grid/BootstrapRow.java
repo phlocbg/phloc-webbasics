@@ -40,13 +40,13 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
   @Nonnull
   public HCDiv createColumn (final int nParts)
   {
-    return createColumn (BootstrapGripSpec.create (nParts));
+    return createColumn (BootstrapGridSpec.create (nParts));
   }
 
   @Nonnull
   public HCDiv createColumn (final int nPartsXS, final int nPartsSM, final int nPartsMD, final int nPartsLG)
   {
-    return createColumn (BootstrapGripSpec.create (nPartsXS, nPartsSM, nPartsMD, nPartsLG));
+    return createColumn (BootstrapGridSpec.create (nPartsXS, nPartsSM, nPartsMD, nPartsLG));
   }
 
   @Nonnull
@@ -55,11 +55,11 @@ public class BootstrapRow extends AbstractHCDiv <BootstrapRow>
                              @Nullable final EBootstrapGridMD eMD,
                              @Nullable final EBootstrapGridLG eLG)
   {
-    return createColumn (new BootstrapGripSpec (eXS, eSM, eMD, eLG));
+    return createColumn (new BootstrapGridSpec (eXS, eSM, eMD, eLG));
   }
 
   @Nonnull
-  public HCDiv createColumn (@Nonnull final BootstrapGripSpec aGridSpec)
+  public HCDiv createColumn (@Nonnull final BootstrapGridSpec aGridSpec)
   {
     if (aGridSpec == null)
       throw new NullPointerException ("GridSpec");
