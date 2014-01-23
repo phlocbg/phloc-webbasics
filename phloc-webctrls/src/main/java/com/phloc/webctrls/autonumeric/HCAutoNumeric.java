@@ -42,10 +42,9 @@ import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSGlobal;
 import com.phloc.html.js.builder.JSInvocation;
-import com.phloc.html.js.builder.JSOp;
 import com.phloc.html.js.builder.JSPackage;
-import com.phloc.html.js.builder.JSPrimitiveType;
 import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
@@ -348,17 +347,29 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
-  public IJSExpression autoNumericGet ()
+  public JSInvocation autoNumericGet ()
   {
-    // Must be casted to Number because it is a String
-    return JSPrimitiveType.NUMBER.casted (JSOp.inParantheses (invoke ().arg ("get")));
+    // Remember: the result is a String!!
+    return invoke ().arg ("get");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGetAsFloat ()
+  {
+    return JSGlobal.parseFloat (autoNumericGet ());
   }
 
   @Nonnull
   public static IJSExpression autoNumericGet (@Nonnull final IJSExpression aAutoNumeric)
   {
-    // Must be casted to Number because it is a String
-    return JSPrimitiveType.NUMBER.casted (JSOp.inParantheses (invoke (aAutoNumeric).arg ("get")));
+    // Remember: the result is a String!!
+    return invoke (aAutoNumeric).arg ("get");
+  }
+
+  @Nonnull
+  public static IJSExpression autoNumericGetAsFloat (@Nonnull final IJSExpression aAutoNumeric)
+  {
+    return JSGlobal.parseFloat (autoNumericGet (aAutoNumeric));
   }
 
   @Nonnull
