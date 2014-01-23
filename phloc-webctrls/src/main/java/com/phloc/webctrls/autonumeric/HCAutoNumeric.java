@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
@@ -149,6 +150,13 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       throw new IllegalArgumentException ("ID");
     m_sID = sID;
     return this;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getJSVarName ()
+  {
+    return "e" + m_sID;
   }
 
   @Nullable
@@ -406,24 +414,9 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
-  public IHCNode build ()
+  @ReturnsMutableCopy
+  public JSAssocArray getOptions ()
   {
-    if (m_aMin != null && m_aMax != null && m_aMin.doubleValue () > m_aMax.doubleValue ())
-      throw new IllegalArgumentException ("Min must be <= max!");
-    if (m_aMin != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMin) < 0)
-      throw new IllegalArgumentException ("Initial value must be >= min!");
-    if (m_aMax != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMax) > 0)
-      throw new IllegalArgumentException ("Initial value must be <= max!");
-
-    // build edit
-    if (m_aRF != null && m_aInitialValue != null)
-      s_aLogger.error ("InitialValue and RequestField cannot be used together - ignoring RequestField default value");
-    final HCEdit aEdit = m_aRF != null ? m_aInitialValue != null ? new HCEdit (m_aRF.getFieldName ())
-                                                                : new HCEdit (m_aRF) : new HCEdit ();
-    aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
-    customizeEdit (aEdit);
-
-    // build arguments
     final JSAssocArray aArgs = new JSAssocArray ();
 
     if (m_sThousandSeparator != null)
@@ -439,15 +432,39 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     if (m_eLeadingZero != null)
       aArgs.add ("lZero", m_eLeadingZero.getID ());
 
+    return aArgs;
+  }
+
+  @Nonnull
+  public IHCNode build ()
+  {
+    if (m_aMin != null && m_aMax != null && m_aMin.doubleValue () > m_aMax.doubleValue ())
+      throw new IllegalArgumentException ("Min must be <= max!");
+    if (m_aMin != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMin) < 0)
+      throw new IllegalArgumentException ("Initial value must be >= min!");
+    if (m_aMax != null && m_aInitialValue != null && m_aInitialValue.compareTo (m_aMax) > 0)
+      throw new IllegalArgumentException ("Initial value must be <= max!");
+
     registerExternalResources ();
+
+    // build edit
+    if (m_aRF != null && m_aInitialValue != null)
+      s_aLogger.error ("InitialValue and RequestField cannot be used together - ignoring RequestField default value");
+    final HCEdit aEdit = m_aRF != null ? m_aInitialValue != null ? new HCEdit (m_aRF.getFieldName ())
+                                                                : new HCEdit (m_aRF) : new HCEdit ();
+    aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
+    customizeEdit (aEdit);
+
+    // Build JS
     final JSPackage aPkg = new JSPackage ();
-    final JSVar e = aPkg.var ("e" + m_sID, JQuery.idRef (m_sID));
-    aPkg.add (invoke (e).arg ("init").arg (aArgs));
+    final JSVar aJSObj = aPkg.var (getJSVarName (), JQuery.idRef (m_sID));
+    aPkg.add (invoke (aJSObj).arg ("init").arg (getOptions ()));
     if (m_aInitialValue != null)
     {
       // Never locale specific!
-      aPkg.add (invoke (e).arg ("set").arg (m_aInitialValue.toString ()));
+      aPkg.add (invoke (aJSObj).arg ("set").arg (m_aInitialValue.toString ()));
     }
+
     return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
   }
 
