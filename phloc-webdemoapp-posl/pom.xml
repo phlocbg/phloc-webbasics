@@ -145,7 +145,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-bootstrap3</artifactId>
-      <version>1.0.8-SNAPSHOT</version>
+      <version>1.0.8</version>
     </dependency>
     
     <dependency>
