@@ -54,6 +54,7 @@ import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
+import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
@@ -79,7 +80,10 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     MSG_ATTRS ("Attribute", "Attributes"),
     MSG_NAME ("Name", "Wert"),
     MSG_VALUE ("Wert", "Value"),
-    MSG_LOGOUT_USER ("Benutzer {0} abmelden", "Log out user {0}");
+    MSG_LOGOUT_USER ("Benutzer {0} abmelden", "Log out user {0}"),
+    LOGOUT_QUESTION ("Sind Sie sicher, dass Sie den Benutzer ''{0}'' abmelden wollen?", "Are you sure you want to log out user ''{0}''?"),
+    LOGOUT_SUCCESS ("Benutzer ''{0}'' wurde erfolgreich abgemeldet.", "User ''{0}'' was successfully logged out."),
+    LOGOUT_ERROR ("Benutzer ''{0}'' konnte nicht abgemeldet werden, weil er nicht mehr angemeldet war.", "User ''{0}'' could not be logged out because he was not logged in.");
 
     private final ITextProvider m_aTP;
 
@@ -209,9 +213,9 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     throw new UnsupportedOperationException ();
   }
 
-  protected final boolean canLogoutUser (@Nonnull final IUser aUser)
+  protected final boolean canLogoutUser (@Nullable final IUser aUser)
   {
-    return aUser.isEnabled () && !aUser.isDeleted () && !aUser.isAdministrator ();
+    return aUser != null && aUser.isEnabled () && !aUser.isDeleted () && !aUser.isAdministrator ();
   }
 
   @Nullable
@@ -219,6 +223,47 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
   protected IHCNode getLogoutUserIcon ()
   {
     return EDefaultIcon.KEY.getIcon ().getAsNode ();
+  }
+
+  @Override
+  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nullable final LoginInfo aSelectedObject)
+  {
+    if (aWPEC.hasAction (ACTION_LOGOUT_USER) && aSelectedObject != null)
+    {
+      if (!canLogoutUser (aSelectedObject.getUser ()))
+        throw new IllegalStateException ("Won't work!");
+
+      final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+      final HCNodeList aNodeList = aWPEC.getNodeList ();
+      final String sUserName = SecurityUI.getUserDisplayName (aSelectedObject.getUser (), aDisplayLocale);
+
+      if (aWPEC.hasSubAction (ACTION_PERFORM))
+      {
+        if (LoggedInUserManager.getInstance ().logoutUser (aSelectedObject.getUserID ()).isChanged ())
+          aNodeList.addChild (getStyler ().createSuccessBox (EText.LOGOUT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                          sUserName)));
+        else
+          aNodeList.addChild (getStyler ().createErrorBox (EText.LOGOUT_ERROR.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                      sUserName)));
+      }
+      else
+      {
+        // Show question
+        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+        aForm.addChild (getStyler ().createSuccessBox (EText.LOGOUT_QUESTION.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                     sUserName)));
+
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+        aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER);
+        aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
+        aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
+        aToolbar.addSubmitButtonYes (aDisplayLocale);
+        aToolbar.addButtonNo (aDisplayLocale);
+      }
+      return false;
+    }
+    return true;
   }
 
   @Override
@@ -251,9 +296,9 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
         final String sUserName = SecurityUI.getUserDisplayName (aLoginInfo.getUser (), aDisplayLocale);
         aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
                                                 .add (CHCParam.PARAM_ACTION, ACTION_LOGOUT_USER)
-                                                .add (CHCParam.PARAM_OBJECT, aLoginInfo.getUserID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                                               sUserName))
-                                                                                                      .addChild (getLogoutUserIcon ()));
+                                                .add (CHCParam.PARAM_OBJECT, aLoginInfo.getID ())).setTitle (EText.MSG_LOGOUT_USER.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                                           sUserName))
+                                                                                                  .addChild (getLogoutUserIcon ()));
       }
       else
       {
