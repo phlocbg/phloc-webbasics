@@ -183,6 +183,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
    * @throws DAOException
    *         in case initialization or reading failed!
    */
+  @MustBeLocked (ELockType.WRITE)
   protected final void initialRead () throws DAOException
   {
     boolean bIsInitialization = false;
@@ -506,8 +507,9 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   }
 
   /**
-   * This method must be called everytime something changed in the DAO. This
-   * method must be called within a write-lock as it is not locked!
+   * This method must be called everytime something changed in the DAO. It
+   * triggers the writing to a file if auto-save is active. This method must be
+   * called within a write-lock as it is not locked!
    */
   @MustBeLocked (ELockType.WRITE)
   protected final void markAsChanged ()
