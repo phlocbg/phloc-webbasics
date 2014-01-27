@@ -36,21 +36,6 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 public interface IActionInvoker
 {
   /**
-   * Set a custom exception handler.
-   * 
-   * @param aExceptionHandler
-   *        The handler to be used. May be <code>null</code> to use none.
-   */
-  void setCustomExceptionHandler (@Nullable IActionExceptionHandler aExceptionHandler);
-
-  /**
-   * @return The current custom exception handler or <code>null</code> if none
-   *         is set.
-   */
-  @Nullable
-  IActionExceptionHandler getCustomExceptionHandler ();
-
-  /**
    * Register an action.
    * 
    * @param sAction
@@ -79,7 +64,7 @@ public interface IActionInvoker
   @Nonnull
   ESuccess executeAction (@Nullable String sActionName,
                           @Nonnull IRequestWebScopeWithoutResponse aRequestScope,
-                          @Nonnull UnifiedResponse aUnifiedResponse) throws Exception;
+                          @Nonnull UnifiedResponse aUnifiedResponse) throws Throwable;
 
   /**
    * @return A map from actionID to action executor. Never <code>null</code>.

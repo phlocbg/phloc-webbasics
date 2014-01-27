@@ -54,17 +54,6 @@ public final class ApplicationActionManager extends ApplicationSingleton impleme
     return getApplicationSingleton (ApplicationActionManager.class);
   }
 
-  public void setCustomExceptionHandler (@Nullable final IActionExceptionHandler aExceptionHandler)
-  {
-    m_aInvoker.setCustomExceptionHandler (aExceptionHandler);
-  }
-
-  @Nullable
-  public IActionExceptionHandler getCustomExceptionHandler ()
-  {
-    return m_aInvoker.getCustomExceptionHandler ();
-  }
-
   public void addAction (@Nonnull @Nonempty final String sAction, @Nonnull final IActionExecutor aCallback)
   {
     m_aInvoker.addAction (sAction, aCallback);
@@ -73,7 +62,7 @@ public final class ApplicationActionManager extends ApplicationSingleton impleme
   @Nonnull
   public ESuccess executeAction (@Nullable final String sAction,
                                  @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
+                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Throwable
   {
     return m_aInvoker.executeAction (sAction, aRequestScope, aUnifiedResponse);
   }

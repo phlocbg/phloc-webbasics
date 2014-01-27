@@ -115,10 +115,13 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
    * 
    * @param sAjaxFunctionName
    *        The AJAX function that was desired to be invoked.
+   * @param aRequestScope
+   *        The current request scope. Never <code>null</code>.
    * @return <code>true</code> if the AJAX function may be invoked.
    */
   @OverrideOnDemand
-  protected boolean isValidToInvokeActionFunction (@Nonnull final String sAjaxFunctionName)
+  protected boolean isValidToInvokeActionFunction (@Nonnull final String sAjaxFunctionName,
+                                                   @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     return true;
   }
@@ -150,7 +153,7 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
         aUnifiedResponse.setStatus (HttpServletResponse.SC_NOT_FOUND);
       }
       else
-        if (!isValidToInvokeActionFunction (sAjaxFunctionName))
+        if (!isValidToInvokeActionFunction (sAjaxFunctionName, aRequestScope))
         {
           // E.g. not valid for current p3 run-mode
           s_aLogger.warn ("Invoking the AJAX function '" + sAjaxFunctionName + "' is not valid in this context!");
@@ -189,7 +192,8 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
       else
       {
         s_aLogger.error ("Error invoking AJAX function '" + sAjaxFunctionName + "'", t);
-        RequestLogger.logRequestComplete (aRequestScope.getRequest ());
+        if (GlobalDebug.isDebugMode ())
+          RequestLogger.logRequestComplete (aRequestScope.getRequest ());
       }
 
       // Notify custom exception handler

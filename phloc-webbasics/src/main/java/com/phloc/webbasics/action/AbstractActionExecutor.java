@@ -34,7 +34,9 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 public abstract class AbstractActionExecutor implements IActionExecutor
 {
   public void initExecution (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
-  {}
+  {
+    // By default do nothing
+  }
 
   @Nullable
   public DateTime getLastModificationDateTime ()

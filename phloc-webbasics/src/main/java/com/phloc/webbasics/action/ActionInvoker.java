@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.stats.IStatisticsHandlerKeyedTimer;
 import com.phloc.commons.stats.StatisticsManager;
@@ -56,36 +55,7 @@ public class ActionInvoker implements IActionInvoker
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")
-  private IActionExceptionHandler m_aExceptionHandler;
-  @GuardedBy ("m_aRWLock")
   private final Map <String, IActionExecutor> m_aMap = new HashMap <String, IActionExecutor> ();
-
-  public void setCustomExceptionHandler (@Nullable final IActionExceptionHandler aExceptionHandler)
-  {
-    m_aRWLock.writeLock ().lock ();
-    try
-    {
-      m_aExceptionHandler = aExceptionHandler;
-    }
-    finally
-    {
-      m_aRWLock.writeLock ().unlock ();
-    }
-  }
-
-  @Nullable
-  public IActionExceptionHandler getCustomExceptionHandler ()
-  {
-    m_aRWLock.readLock ().lock ();
-    try
-    {
-      return m_aExceptionHandler;
-    }
-    finally
-    {
-      m_aRWLock.readLock ().unlock ();
-    }
-  }
 
   public void addAction (@Nonnull @Nonempty final String sAction, @Nonnull final IActionExecutor aActionExecutor)
   {
@@ -111,7 +81,7 @@ public class ActionInvoker implements IActionInvoker
   @Nonnull
   public ESuccess executeAction (@Nullable final String sActionName,
                                  @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception
+                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws Throwable
   {
     // Find the executor
     IActionExecutor aActionExecutor;
@@ -135,32 +105,10 @@ public class ActionInvoker implements IActionInvoker
     // For actions caching is not an option, because it is dynamic content
     aUnifiedResponse.disableCaching ();
 
-    try
-    {
-      final StopWatch aSW = new StopWatch (true);
-      aActionExecutor.execute (aRequestScope, aUnifiedResponse);
-      s_aTimer.addTime (sActionName, aSW.stopAndGetMillis ());
-      return ESuccess.SUCCESS;
-    }
-    catch (final Exception ex)
-    {
-      if (!StreamUtils.isKnownEOFException (ex))
-        s_aLogger.error ("Failed to execute action '" + sActionName + "'", ex);
-
-      // Invoke custom exception handler (if any)
-      final IActionExceptionHandler aCustomExceptionHandler = getCustomExceptionHandler ();
-      if (aCustomExceptionHandler != null)
-        try
-        {
-          aCustomExceptionHandler.onActionExecutionException (ex, sActionName, aRequestScope);
-        }
-        catch (final Throwable t2)
-        {
-          s_aLogger.error ("Error in custom exception handler for action '" + sActionName + "'", t2);
-        }
-
-      throw ex;
-    }
+    final StopWatch aSW = new StopWatch (true);
+    aActionExecutor.execute (aRequestScope, aUnifiedResponse);
+    s_aTimer.addTime (sActionName, aSW.stopAndGetMillis ());
+    return ESuccess.SUCCESS;
   }
 
   @Nonnull
@@ -208,8 +156,6 @@ public class ActionInvoker implements IActionInvoker
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("map", m_aMap)
-                                       .appendIfNotNull ("exceptionHandler", m_aExceptionHandler)
-                                       .toString ();
+    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
   }
 }

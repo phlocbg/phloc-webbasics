@@ -57,8 +57,8 @@ public interface IActionExecutor
    *        The request scope. Never <code>null</code>.
    * @param aUnifiedResponse
    *        The response to write to. Never <code>null</code>.
-   * @throws Exception
+   * @throws Throwable
    *         In case something goes wrong.
    */
-  void execute (@Nonnull IRequestWebScopeWithoutResponse aRequestScope, @Nonnull UnifiedResponse aUnifiedResponse) throws Exception;
+  void execute (@Nonnull IRequestWebScopeWithoutResponse aRequestScope, @Nonnull UnifiedResponse aUnifiedResponse) throws Throwable;
 }
