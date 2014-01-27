@@ -59,6 +59,7 @@ import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
+import com.phloc.webbasics.smtp.CNamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webctrls.autonumeric.HCAutoNumeric;
@@ -187,6 +188,11 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
                                                  @Nullable final String sID)
   {
     return m_aMgr.getSettings (sID);
+  }
+
+  private static boolean _canDelete (@Nonnull final NamedSMTPSettings aSettings)
+  {
+    return !aSettings.getID ().equals (CNamedSMTPSettings.NAMED_SMTP_SETTINGS_DEFAULT_ID);
   }
 
   @Override
@@ -452,6 +458,9 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
   protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
                                         @Nonnull final NamedSMTPSettings aSelectedObject)
   {
+    if (!_canDelete (aSelectedObject))
+      throw new IllegalStateException ("Cannot delete this object!");
+
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
@@ -509,9 +518,12 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       aActionCell.addChild (createEditLink (aCurObject,
                                             EWebPageText.OBJECT_EDIT.getDisplayTextWithArgs (aDisplayLocale,
                                                                                              aCurObject.getName ())));
-      aActionCell.addChild (createDeleteLink (aCurObject,
-                                              EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                 aCurObject.getName ())));
+      if (_canDelete (aCurObject))
+        aActionCell.addChild (createDeleteLink (aCurObject,
+                                                EWebPageText.OBJECT_DELETE.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                   aCurObject.getName ())));
+      else
+        aActionCell.addChild (createEmptyAction ());
     }
 
     aNodeList.addChild (aTable);
