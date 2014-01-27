@@ -33,7 +33,7 @@
   </entry>
   <entry date="2013-01-27" category="api" action="add">
     <change>
-      <text locale="en">Added possibility in ResponseHelper to set custom response headers in UnifiedResponse if necessary</text>
+      <text locale="en">Added possibility in UnifiedResponse to set custom response headers if necessary</text>
     </change>
   </entry>
   <release date="2014-01-21" version="5.3.5" />
