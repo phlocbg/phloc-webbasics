@@ -112,7 +112,8 @@ public class NamedSMTPSettingsManager extends AbstractSimpleDAO implements IHasS
       return EChange.UNCHANGED;
 
     // Create default item with as little data as possible
-    _addItem (new NamedSMTPSettings (CNamedSMTPSettings.NAMED_SMTP_SETTINGS_DEFAULT_NAME,
+    _addItem (new NamedSMTPSettings (CNamedSMTPSettings.NAMED_SMTP_SETTINGS_DEFAULT_ID,
+                                     CNamedSMTPSettings.NAMED_SMTP_SETTINGS_DEFAULT_NAME,
                                      new SMTPSettings (CNamedSMTPSettings.NAMED_SMTP_SETTINGS_DEFAULT_HOST)));
     return EChange.CHANGED;
   }

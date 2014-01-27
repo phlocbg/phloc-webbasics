@@ -33,6 +33,7 @@ public final class CNamedSMTPSettings
   public static final ObjectType OT_NAMED_SMTP_SETTINGS = new ObjectType ("named-smtp-settings");
 
   // Default named SMTP settings data
+  public static final String NAMED_SMTP_SETTINGS_DEFAULT_ID = "default";
   public static final String NAMED_SMTP_SETTINGS_DEFAULT_NAME = "default";
   public static final String NAMED_SMTP_SETTINGS_DEFAULT_HOST = "smtp.ebox.at";
 
