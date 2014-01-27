@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class UserNamePasswordCredentials implements IUserNamePasswordCredentials
+public class UserNamePasswordCredentials implements IUserNamePasswordCredentials
 {
   private final String m_sUserName;
   private final String m_sPassword;
@@ -42,13 +42,13 @@ public final class UserNamePasswordCredentials implements IUserNamePasswordCrede
   }
 
   @Nullable
-  public String getUserName ()
+  public final String getUserName ()
   {
     return m_sUserName;
   }
 
   @Nullable
-  public String getPassword ()
+  public final String getPassword ()
   {
     return m_sPassword;
   }
@@ -58,7 +58,7 @@ public final class UserNamePasswordCredentials implements IUserNamePasswordCrede
   {
     if (o == this)
       return true;
-    if (!(o instanceof UserNamePasswordCredentials))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final UserNamePasswordCredentials rhs = (UserNamePasswordCredentials) o;
     return EqualsUtils.equals (m_sUserName, rhs.m_sUserName) && EqualsUtils.equals (m_sPassword, rhs.m_sPassword);
