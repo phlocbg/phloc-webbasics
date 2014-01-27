@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.web.http.AcceptEncodingHandler;
 import com.phloc.web.http.AcceptEncodingList;
 import com.phloc.web.http.CHTTPHeader;
@@ -192,58 +191,5 @@ public final class ResponseHelper
       aHttpResponse.setContentLength ((int) nContentLength);
     else
       aHttpResponse.setHeader (CHTTPHeader.CONTENT_LENGTH, Long.toString (nContentLength));
-  }
-
-  /**
-   * Adds a response header to the passed unified response according to the
-   * passed name and value.<br/>
-   * <b>ATTENTION:</b> You should only use the APIs that {@link UnifiedResponse}
-   * directly offers. Use this method only in emergency and make sure you
-   * validate the header field and allowed value!
-   * 
-   * @param aResponse
-   * @param sName
-   * @param sValue
-   */
-  public static void addCustomResponseHeader (@Nonnull final UnifiedResponse aResponse,
-                                              final String sName,
-                                              final String sValue)
-  {
-    if (aResponse == null)
-    {
-      throw new NullPointerException ("aResponse must not be null!");
-    }
-    if (StringHelper.hasNoText (sName))
-    {
-      throw new IllegalArgumentException ("sName must not be null or empty!");
-    }
-    if (StringHelper.hasNoText (sValue))
-    {
-      throw new IllegalArgumentException ("sValue must not be null or empty!");
-    }
-    aResponse.getResponseHeaderMap ().addHeader (sName, sValue);
-  }
-
-  /**
-   * Removes the response headers matching the passed name from the passed
-   * unified response.<br/>
-   * <b>ATTENTION:</b> You should only use the APIs that {@link UnifiedResponse}
-   * directly offers. Use this method only in emergency and make sure you
-   * validate the header field and allowed value!
-   * 
-   * @param aResponse
-   * @param sName
-   */
-  public static void removeCustomResponseHeaders (@Nonnull final UnifiedResponse aResponse, final String sName)
-  {
-    if (aResponse == null)
-    {
-      throw new NullPointerException ("aResponse must not be null!");
-    }
-    if (StringHelper.hasNoText (sName))
-    {
-      throw new IllegalArgumentException ("sName must not be null or empty!");
-    }
-    aResponse.getResponseHeaderMap ().removeHeaders (sName);
   }
 }

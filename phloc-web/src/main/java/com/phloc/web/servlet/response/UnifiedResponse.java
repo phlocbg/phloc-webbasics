@@ -53,6 +53,7 @@ import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeTypeParser;
 import com.phloc.commons.mutable.MutableLong;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.PDTFactory;
@@ -792,14 +793,49 @@ public class UnifiedResponse
   public UnifiedResponse setAllowMimeSniffing (final boolean bAllow)
   {
     if (bAllow)
-    {
       m_aResponseHeaderMap.removeHeaders (CHTTPHeader.X_CONTENT_TYPE_OPTIONS);
-    }
     else
-    {
       m_aResponseHeaderMap.addHeader (CHTTPHeader.X_CONTENT_TYPE_OPTIONS, CHTTPHeader.VALUE_NOSNIFF);
-    }
     return this;
+  }
+
+  /**
+   * Adds a response header to the response according to the passed name and
+   * value.<br/>
+   * <b>ATTENTION:</b> You should only use the APIs that {@link UnifiedResponse}
+   * directly offers. Use this method only in emergency and make sure you
+   * validate the header field and allowed value!
+   * 
+   * @param sName
+   *        Name of the header. May neither be <code>null</code> nor empty.
+   * @param sValue
+   *        Value of the header. May neither be <code>null</code> nor empty.
+   */
+  public void addCustomResponseHeader (@Nonnull @Nonempty final String sName, @Nonnull @Nonempty final String sValue)
+  {
+    if (StringHelper.hasNoText (sName))
+      throw new IllegalArgumentException ("sName must not be null or empty!");
+    if (StringHelper.hasNoText (sValue))
+      throw new IllegalArgumentException ("sValue must not be null or empty!");
+    m_aResponseHeaderMap.addHeader (sName, sValue);
+  }
+
+  /**
+   * Removes the response headers matching the passed name from the response.<br/>
+   * <b>ATTENTION:</b> You should only use the APIs that {@link UnifiedResponse}
+   * directly offers. Use this method only in emergency and make sure you
+   * validate the header field and allowed value!
+   * 
+   * @param sName
+   *        Name of the header to be removed. May neither be <code>null</code>
+   *        nor empty.
+   */
+  @Nonnull
+  public EChange removeCustomResponseHeaders (@Nonnull @Nonempty final String sName)
+  {
+    if (StringHelper.hasNoText (sName))
+      throw new IllegalArgumentException ("sName must not be null or empty!");
+    return m_aResponseHeaderMap.removeHeaders (sName);
   }
 
   /**
@@ -1114,9 +1150,10 @@ public class UnifiedResponse
     _applyContent (aHttpResponse);
   }
 
+  @Nonnull
   protected HTTPHeaderMap getResponseHeaderMap ()
   {
-    return this.m_aResponseHeaderMap;
+    return m_aResponseHeaderMap;
   }
 
   private void _applyLengthChecks (final long nContentLength)

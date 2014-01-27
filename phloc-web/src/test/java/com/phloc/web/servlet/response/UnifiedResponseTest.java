@@ -1,5 +1,9 @@
 package com.phloc.web.servlet.response;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -43,5 +47,34 @@ public class UnifiedResponseTest
                                            .getHeaderValues (CHTTPHeader.X_CONTENT_TYPE_OPTIONS);
     Assert.assertEquals (1, aValues.size ());
     Assert.assertEquals (CHTTPHeader.VALUE_NOSNIFF, aValues.get (0));
+  }
+
+  @Test
+  public void testAddRemoveCustomResponseHeader ()
+  {
+    final String sName = "FOO";
+    final String sValue = "BAR";
+    final String sValue2 = "NARF";
+    final UnifiedResponse aResponse = new UnifiedResponse (new MockHttpServletRequest ());
+    assertFalse (aResponse.getResponseHeaderMap ().containsHeaders (sName));
+    {
+      aResponse.addCustomResponseHeader (sName, sValue);
+      assertTrue (aResponse.getResponseHeaderMap ().containsHeaders (sName));
+      final List <String> aValues = aResponse.getResponseHeaderMap ().getHeaderValues (sName);
+      assertEquals (1, aValues.size ());
+      assertEquals (sValue, aValues.get (0));
+    }
+    {
+      aResponse.addCustomResponseHeader (sName, sValue2);
+      assertTrue (aResponse.getResponseHeaderMap ().containsHeaders (sName));
+      final List <String> aValues = aResponse.getResponseHeaderMap ().getHeaderValues (sName);
+      assertEquals (2, aValues.size ());
+      assertEquals (sValue, aValues.get (0));
+      assertEquals (sValue2, aValues.get (1));
+    }
+    {
+      aResponse.removeCustomResponseHeaders (sName);
+      assertFalse (aResponse.getResponseHeaderMap ().containsHeaders (sName));
+    }
   }
 }
