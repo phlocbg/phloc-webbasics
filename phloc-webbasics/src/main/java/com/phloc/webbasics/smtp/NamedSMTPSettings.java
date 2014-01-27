@@ -34,8 +34,6 @@ import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 
 public class NamedSMTPSettings implements ITypedObject <String>, Serializable
 {
-  public static final ObjectType OT_NAMED_SMTP_SETTINGS = new ObjectType ("named-smtp-settings");
-
   private final String m_sID;
   private String m_sName;
   private ReadonlySMTPSettings m_aSMTPSettings;
@@ -59,7 +57,7 @@ public class NamedSMTPSettings implements ITypedObject <String>, Serializable
   @Nonnull
   public ObjectType getTypeID ()
   {
-    return OT_NAMED_SMTP_SETTINGS;
+    return CNamedSMTPSettings.OT_NAMED_SMTP_SETTINGS;
   }
 
   @Nonnull

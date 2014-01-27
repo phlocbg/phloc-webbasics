@@ -61,9 +61,19 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
      * @throws DAOException
      *         In case of error
      */
-    void internalInitialRead () throws DAOException
+    @MustBeLocked (ELockType.WRITE)
+    void myInitialRead () throws DAOException
     {
       initialRead ();
+    }
+
+    /**
+     * Mark as changed - just to make markAsChanged accessible
+     */
+    @MustBeLocked (ELockType.WRITE)
+    void myMarkChanged ()
+    {
+      super.markAsChanged ();
     }
 
     @Override
@@ -89,13 +99,6 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
         eRoot.appendChild (MicroTypeConverter.convertToMicroElement (aFMD, ELEMENT_FAILEDMAILDATA));
       return aDoc;
     }
-
-    // Change visibility to default
-    @MustBeLocked (ELockType.WRITE)
-    void markChanged ()
-    {
-      super.markAsChanged ();
-    }
   }
 
   private final FMQDAO m_aDAO;
@@ -105,8 +108,8 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
     try
     {
       m_aDAO = new FMQDAO (sFilename);
-      // Read here, so that the DAO can be used
-      m_aDAO.internalInitialRead ();
+      // Read outside FMQDAO constructor, so that the DAO can be used
+      m_aDAO.myInitialRead ();
     }
     catch (final DAOException ex)
     {
@@ -120,7 +123,7 @@ public class FailedMailQueueWithDAO extends FailedMailQueue
     try
     {
       // Must be called in a lock
-      m_aDAO.markChanged ();
+      m_aDAO.myMarkChanged ();
     }
     finally
     {
