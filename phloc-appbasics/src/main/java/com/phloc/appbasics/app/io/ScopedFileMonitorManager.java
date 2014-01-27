@@ -21,7 +21,10 @@ public class ScopedFileMonitorManager extends GlobalSingleton
   @Deprecated
   @UsedViaReflection
   public ScopedFileMonitorManager ()
-  {}
+  {
+    // Start monitoring files - spawn thread
+    m_aFMM.start ();
+  }
 
   @Nonnull
   public static ScopedFileMonitorManager getInstance ()
