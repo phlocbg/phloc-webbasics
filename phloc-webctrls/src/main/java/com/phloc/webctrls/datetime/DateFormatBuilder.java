@@ -39,6 +39,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTFromString;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public final class DateFormatBuilder implements IDateFormatBuilder
 {
   private final List <Object> m_aList = new ArrayList <Object> ();
@@ -198,8 +200,12 @@ public final class DateFormatBuilder implements IDateFormatBuilder
 
     @Override
     @Nonnull
-    protected DateFormatBuilder getValueToCache (@Nonnull final String sJavaPattern)
+    @SuppressFBWarnings ("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
+    protected DateFormatBuilder getValueToCache (@Nullable final String sJavaPattern)
     {
+      if (sJavaPattern == null)
+        throw new NullPointerException ("JavaPattern");
+
       // Do parsing
       final DateFormatBuilder aDFB = new DateFormatBuilder ();
       final Searcher aSearcher = new Searcher (sJavaPattern);

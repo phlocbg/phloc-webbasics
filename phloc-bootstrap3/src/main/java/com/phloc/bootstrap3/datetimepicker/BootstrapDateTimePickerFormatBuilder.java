@@ -38,6 +38,8 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.format.PDTFromString;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBuilder
 {
   private final List <Object> m_aList = new ArrayList <Object> ();
@@ -178,10 +180,12 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
 
     @Override
     @Nonnull
+    @SuppressFBWarnings ("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
     protected BootstrapDateTimePickerFormatBuilder getValueToCache (@Nullable final String sJavaPattern)
     {
       if (sJavaPattern == null)
         throw new NullPointerException ("JavaPattern");
+
       // Do parsing
       final BootstrapDateTimePickerFormatBuilder aDFB = new BootstrapDateTimePickerFormatBuilder ();
       final Searcher aSearcher = new Searcher (sJavaPattern);
