@@ -25,9 +25,12 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.compare.ESortOrder;
+import com.phloc.commons.email.EmailAddress;
+import com.phloc.commons.email.EmailAddressUtils;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.name.IHasDisplayTextWithArgs;
 import com.phloc.commons.string.StringHelper;
@@ -39,6 +42,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
+import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -47,15 +51,19 @@ import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
+import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.web.CWeb;
 import com.phloc.web.CWebCharset;
 import com.phloc.web.port.CNetworkPort;
+import com.phloc.web.smtp.EEmailType;
 import com.phloc.web.smtp.EmailGlobalSettings;
 import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.impl.EmailData;
 import com.phloc.web.smtp.impl.ReadonlySMTPSettings;
 import com.phloc.webbasics.EWebBasicsText;
+import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.RequestFieldBoolean;
@@ -67,9 +75,11 @@ import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
+import com.phloc.webctrls.famfam.EFamFamIcon;
 import com.phloc.webpages.AbstractWebPageForm;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.ui.HCCharsetSelect;
+import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings>
 {
@@ -104,7 +114,18 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     SUCCESS_EDIT ("Die SMTP-Einstellungen wurde erfolgreich bearbeitet!", "Sucessfully edited the SMTP settings!"),
     DELETE_QUERY ("Sollen die SMTP-Einstellungen ''{0}'' wirklich gelöscht werden?", "Are you sure to delete the SMTP settings ''{0}''?"),
     DELETE_SUCCESS ("Die SMTP-Einstellungen ''{0}'' wurden erfolgreich gelöscht!", "The SMTP settings ''{0}'' were successfully deleted!"),
-    DELETE_ERROR ("Fehler beim Löschen der SMTP-Einstellungen ''{0}''!", "Error deleting the SMTP settings ''{0}''!");
+    DELETE_ERROR ("Fehler beim Löschen der SMTP-Einstellungen ''{0}''!", "Error deleting the SMTP settings ''{0}''!"),
+    MSG_SEND_TEST_MAIL ("Test-E-Mail senden", "Send test mail"),
+    BUTTON_SEND_TEST_MAIL ("Test-E-Mail senden", "Send test mail"),
+    MSG_SENDER ("Absender", "Sender"),
+    MSG_RECEIVER ("Empfänger", "Receiver"),
+    MSG_SUBJECT ("Betreff", "Subject"),
+    MSG_BODY ("Inhalt", "Body"),
+    ERR_SENDER_INVALID ("Es muss eine gültige E-Mail-Adresse angegeben werden.", "A valid email address must be provided"),
+    ERR_RECEIVER_INVALID ("Es muss eine gültige E-Mail-Adresse angegeben werden.", "A valid email address must be provided"),
+    ERR_SUBJECT_INVALID ("Es muss Betreff angegeben werden.", "An email subject must be provided"),
+    ERR_BODY_INVALID ("Es muss eine gültige Nachricht angegeben werden.", "A valid email message must be provided"),
+    SUCCESS_TEST_MAIL ("Die Test-Nachricht wurde zum Versand übermittelt.", "The test email message was scheduled for sending.");
 
     private final ITextProvider m_aTP;
 
@@ -138,7 +159,14 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
   private static final String FIELD_STARTTLS = "starttls";
   private static final String FIELD_CONNECTION_TIMEOUT = "ctimeout";
   private static final String FIELD_SOCKET_TIMEOUT = "stimeout";
+
+  private static final String FIELD_TEST_SENDER = "tsender";
+  private static final String FIELD_TEST_RECEIVER = "treceiver";
+  private static final String FIELD_TEST_SUBJECT = "tsubject";
+  private static final String FIELD_TEST_BODY = "tbody";
+
   private static final String DEFAULT_CHARSET = CWebCharset.CHARSET_SMTP;
+  private static final String ACTION_TEST_MAIL = "testmail";
 
   private final transient NamedSMTPSettingsManager m_aMgr;
 
@@ -454,6 +482,13 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     }
   }
 
+  @Nullable
+  @OverrideOnDemand
+  protected IHCNode getTestMailIcon ()
+  {
+    return EFamFamIcon.EMAIL_GO.getAsNode ();
+  }
+
   @Override
   protected boolean handleDeleteAction (@Nonnull final WebPageExecutionContext aWPEC,
                                         @Nonnull final NamedSMTPSettings aSelectedObject)
@@ -484,6 +519,84 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     aToolbar.addSubmitButtonYes (aDisplayLocale);
     aToolbar.addButtonNo (aDisplayLocale);
     return false;
+  }
+
+  @Override
+  protected boolean handleCustomActions (@Nonnull final WebPageExecutionContext aWPEC,
+                                         @Nullable final NamedSMTPSettings aSelectedObject)
+  {
+    if (aWPEC.hasAction (ACTION_TEST_MAIL) && aSelectedObject != null)
+    {
+      final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+      final HCNodeList aNodeList = aWPEC.getNodeList ();
+      final FormErrors aFormErrors = new FormErrors ();
+      boolean bShowForm = true;
+
+      if (aWPEC.hasSubAction (ACTION_PERFORM))
+      {
+        final String sSender = aWPEC.getAttr (FIELD_TEST_SENDER);
+        final String sReceiver = aWPEC.getAttr (FIELD_TEST_RECEIVER);
+        final String sSubject = aWPEC.getAttr (FIELD_TEST_SUBJECT);
+        final String sBody = aWPEC.getAttr (FIELD_TEST_BODY);
+
+        if (!EmailAddressUtils.isValid (sSender))
+          aFormErrors.addFieldError (FIELD_TEST_SENDER, EText.ERR_SENDER_INVALID.getDisplayText (aDisplayLocale));
+        if (!EmailAddressUtils.isValid (sReceiver))
+          aFormErrors.addFieldError (FIELD_TEST_RECEIVER, EText.ERR_RECEIVER_INVALID.getDisplayText (aDisplayLocale));
+        if (StringHelper.hasNoText (sSubject))
+          aFormErrors.addFieldError (FIELD_TEST_SUBJECT, EText.ERR_SUBJECT_INVALID.getDisplayText (aDisplayLocale));
+        if (StringHelper.hasNoText (sBody))
+          aFormErrors.addFieldError (FIELD_TEST_BODY, EText.ERR_BODY_INVALID.getDisplayText (aDisplayLocale));
+
+        if (aFormErrors.isEmpty ())
+        {
+          final EmailData aMailData = new EmailData (EEmailType.TEXT);
+          aMailData.setFrom (new EmailAddress (sSender));
+          aMailData.setTo (new EmailAddress (sReceiver));
+          aMailData.setSubject (sSubject);
+          aMailData.setBody (sBody);
+          ScopedMailAPI.getInstance ().queueMail (aSelectedObject.getSMTPSettings (), aMailData);
+
+          aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_TEST_MAIL.getDisplayText (aDisplayLocale)));
+
+          bShowForm = false;
+        }
+      }
+
+      if (bShowForm)
+      {
+        // Show question
+        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+
+        final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
+                                                                                               HCCol.star ()));
+        aTable.createItemRow ()
+              .setLabelMandatory (EText.MSG_SENDER.getDisplayText (aDisplayLocale))
+              .setCtrl (new HCEdit (new RequestField (FIELD_TEST_SENDER)))
+              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SENDER));
+        aTable.createItemRow ()
+              .setLabelMandatory (EText.MSG_RECEIVER.getDisplayText (aDisplayLocale))
+              .setCtrl (new HCEdit (new RequestField (FIELD_TEST_RECEIVER)))
+              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_RECEIVER));
+        aTable.createItemRow ()
+              .setLabelMandatory (EText.MSG_SUBJECT.getDisplayText (aDisplayLocale))
+              .setCtrl (new HCEdit (new RequestField (FIELD_TEST_SUBJECT)))
+              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SUBJECT));
+        aTable.createItemRow ()
+              .setLabelMandatory (EText.MSG_BODY.getDisplayText (aDisplayLocale))
+              .setCtrl (new HCTextArea (new RequestField (FIELD_TEST_BODY)).setRows (5))
+              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_BODY));
+
+        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+        aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL);
+        aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
+        aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
+        aToolbar.addSubmitButton (EText.BUTTON_SEND_TEST_MAIL.getDisplayText (aDisplayLocale));
+        aToolbar.addButtonCancel (aDisplayLocale);
+      }
+      return false;
+    }
+    return true;
   }
 
   @Override
@@ -524,6 +637,11 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
                                                                                                    aCurObject.getName ())));
       else
         aActionCell.addChild (createEmptyAction ());
+
+      aActionCell.addChild (new HCA (LinkUtils.getSelfHref ()
+                                              .add (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL)
+                                              .add (CHCParam.PARAM_OBJECT, aCurObject.getID ())).setTitle (EText.MSG_SEND_TEST_MAIL.getDisplayText (aDisplayLocale))
+                                                                                                .addChild (getTestMailIcon ()));
     }
 
     aNodeList.addChild (aTable);
