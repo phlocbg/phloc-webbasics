@@ -17,6 +17,7 @@
  */
 package com.phloc.bootstrap3.datetimepicker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -64,7 +65,7 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * 
  * @author Philip Helger
  */
-public class BootstrapDateTimePicker implements IHCNodeBuilder
+public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
 {
   public static final ICSSClassProvider CSS_CLASS_DATE = DefaultCSSClassProvider.create ("date");
 

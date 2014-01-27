@@ -178,8 +178,10 @@ public final class BootstrapDateTimePickerFormatBuilder implements IDateFormatBu
 
     @Override
     @Nonnull
-    protected BootstrapDateTimePickerFormatBuilder getValueToCache (@Nonnull final String sJavaPattern)
+    protected BootstrapDateTimePickerFormatBuilder getValueToCache (@Nullable final String sJavaPattern)
     {
+      if (sJavaPattern == null)
+        throw new NullPointerException ("JavaPattern");
       // Do parsing
       final BootstrapDateTimePickerFormatBuilder aDFB = new BootstrapDateTimePickerFormatBuilder ();
       final Searcher aSearcher = new Searcher (sJavaPattern);
