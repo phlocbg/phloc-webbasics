@@ -48,7 +48,7 @@ public final class AuthIdentificationResult implements ISuccessIndicator
   }
 
   /**
-   * Constructor for succes.
+   * Constructor for success.
    * 
    * @param aAuthToken
    *        The auth token. May not be <code>null</code>.

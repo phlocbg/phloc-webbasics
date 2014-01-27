@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author Philip Helger
  */
-public final class CredentialValidationResult implements ISuccessIndicator
+public class CredentialValidationResult implements ISuccessIndicator
 {
   public static final CredentialValidationResult SUCCESS = new CredentialValidationResult ();
 

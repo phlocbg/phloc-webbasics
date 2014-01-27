@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.security.exchange;
+package com.phloc.appbasics.config;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +30,7 @@ import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistrarSPI;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistry;
 
 @IsSPIImplementation
-public final class WebBasicsMicroTypeConverterRegistrarSPI implements IMicroTypeConverterRegistrarSPI
+public final class AppBasicsMicroTypeConverterRegistrarSPI implements IMicroTypeConverterRegistrarSPI
 {
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry)
   {

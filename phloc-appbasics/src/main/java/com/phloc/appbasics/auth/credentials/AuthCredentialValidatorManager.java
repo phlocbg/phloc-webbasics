@@ -19,6 +19,7 @@ package com.phloc.appbasics.auth.credentials;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -43,7 +44,8 @@ public final class AuthCredentialValidatorManager
   {}
 
   @Nonnull
-  public static CredentialValidationResult validateCredentials (@Nonnull final IAuthCredentials aCredentials)
+  public static CredentialValidationResult validateCredentials (@Nonnull final Locale aDisplayLocale,
+                                                                @Nonnull final IAuthCredentials aCredentials)
   {
     // Collect all strings of all supporting credential validators
     final List <String> aFailedMessages = new ArrayList <String> ();
@@ -52,14 +54,14 @@ public final class AuthCredentialValidatorManager
     for (final IAuthCredentialValidatorSPI aHdl : s_aHdlList)
       if (aHdl.supportsCredentials (aCredentials))
       {
-        final CredentialValidationResult aResult = aHdl.validateCredentials (aCredentials);
+        final CredentialValidationResult aResult = aHdl.validateCredentials (aDisplayLocale, aCredentials);
         if (aResult == null)
-          throw new IllegalStateException ("validateCredentials returned a null object!");
+          throw new IllegalStateException ("validateCredentials returned a null object from " + aHdl);
         if (aResult.isSuccess ())
           return aResult;
         aFailedMessages.add (aResult.getErrorMessage ());
       }
 
-    return new CredentialValidationResult (StringHelper.getImploded ("\n", aFailedMessages));
+    return new CredentialValidationResult (StringHelper.getImplodedNonEmpty ('\n', aFailedMessages));
   }
 }

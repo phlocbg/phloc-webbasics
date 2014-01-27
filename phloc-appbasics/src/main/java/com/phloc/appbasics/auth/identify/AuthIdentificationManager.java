@@ -17,6 +17,8 @@
  */
 package com.phloc.appbasics.auth.identify;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -54,13 +56,15 @@ public final class AuthIdentificationManager
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static AuthIdentificationResult validateLoginCredentialsAndCreateToken (@Nonnull final IAuthCredentials aCredentials)
+  public static AuthIdentificationResult validateLoginCredentialsAndCreateToken (@Nonnull final Locale aDisplayLocale,
+                                                                                 @Nonnull final IAuthCredentials aCredentials)
   {
     if (aCredentials == null)
       throw new NullPointerException ("credentials");
 
     // validate credentials
-    final CredentialValidationResult aValidationResult = AuthCredentialValidatorManager.validateCredentials (aCredentials);
+    final CredentialValidationResult aValidationResult = AuthCredentialValidatorManager.validateCredentials (aDisplayLocale,
+                                                                                                             aCredentials);
     if (aValidationResult.isFailure ())
     {
       s_aLogger.warn ("Credentials have been rejected: " + aCredentials);

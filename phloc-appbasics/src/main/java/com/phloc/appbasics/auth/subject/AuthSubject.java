@@ -31,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class AuthSubject implements IAuthSubject
+public class AuthSubject implements IAuthSubject
 {
   private final String m_sName;
 
@@ -44,7 +44,7 @@ public final class AuthSubject implements IAuthSubject
 
   @Nonnull
   @Nonempty
-  public String getName ()
+  public final String getName ()
   {
     return m_sName;
   }
@@ -54,7 +54,7 @@ public final class AuthSubject implements IAuthSubject
   {
     if (o == this)
       return true;
-    if (!(o instanceof AuthSubject))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final AuthSubject rhs = (AuthSubject) o;
     return m_sName.equals (rhs.m_sName);
