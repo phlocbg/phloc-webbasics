@@ -53,7 +53,7 @@ public abstract class AbstractActionServlet extends AbstractUnifiedResponseServl
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected abstract IActionInvoker getActionInvoker (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope);
+  protected abstract IActionInvoker getActionInvoker (@Nonnull IRequestWebScopeWithoutResponse aRequestScope);
 
   @Override
   @OverrideOnDemand

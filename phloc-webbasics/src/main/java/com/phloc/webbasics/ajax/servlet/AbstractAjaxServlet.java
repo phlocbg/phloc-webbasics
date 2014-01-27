@@ -209,7 +209,7 @@ public abstract class AbstractAjaxServlet extends AbstractUnifiedResponseServlet
         throw (IOException) t;
       if (t instanceof ServletException)
         throw (ServletException) t;
-      throw new ServletException ("Error invoking AJAX function", t);
+      throw new ServletException ("Error invoking AJAX function '" + sAjaxFunctionName + "'", t);
     }
   }
 }

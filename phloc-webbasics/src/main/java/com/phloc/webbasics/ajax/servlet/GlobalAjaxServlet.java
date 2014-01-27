@@ -28,7 +28,6 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-@Deprecated
 public class GlobalAjaxServlet extends AbstractAjaxServlet
 {
   @Override
