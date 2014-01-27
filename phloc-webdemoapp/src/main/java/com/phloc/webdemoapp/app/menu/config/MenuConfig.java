@@ -27,9 +27,9 @@ import com.phloc.appbasics.app.menu.filter.AbstractMenuObjectFilter;
 import com.phloc.appbasics.app.menu.filter.MenuItemFilterUserAssignedToUserGroup;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webbasics.form.FormStateManager;
+import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webdemoapp.app.CDemoApp;
 import com.phloc.webdemoapp.app.CDemoAppSecurity;
-import com.phloc.webdemoapp.app.mgr.MetaManager;
 import com.phloc.webdemoapp.page.config.PageSavedStates;
 import com.phloc.webpages.DefaultMenuConfigurator;
 
@@ -53,9 +53,12 @@ public final class MenuConfig
                                             .setDisplayFilter (aFilterSuperUser);
 
       DefaultMenuConfigurator.addSecurityItems (aMenuTree, aAdmin, aFilterSuperUser, CDemoApp.DEFAULT_LOCALE);
-      DefaultMenuConfigurator.addMonitoringItems (aMenuTree, aAdmin, aFilterSuperUser, MetaManager.getAuditMgr ());
+      DefaultMenuConfigurator.addMonitoringItems (aMenuTree, aAdmin, aFilterSuperUser, MetaSystemManager.getAuditMgr ());
       DefaultMenuConfigurator.addSysInfoItems (aMenuTree, aAdmin, aFilterSuperUser);
-      DefaultMenuConfigurator.addSettingsItems (aMenuTree, aAdmin, aFilterSuperUser, null);
+      DefaultMenuConfigurator.addSettingsItems (aMenuTree,
+                                                aAdmin,
+                                                aFilterSuperUser,
+                                                MetaSystemManager.getSMTPSettingsMgr ());
     }
 
     // Saved states
