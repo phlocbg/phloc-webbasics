@@ -777,6 +777,56 @@ public class UnifiedResponse
     return this;
   }
 
+  /**
+   * When specifying <code>false</code>, this method uses a special response
+   * header to prevent certain browsers from MIME-sniffing a response away from
+   * the declared content-type. When passing <code>true</code>, that header is
+   * removed.
+   * 
+   * @param bAllow
+   *        Whether or not sniffing should be allowed (default is
+   *        <code>true</code>).
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setAllowMimeSniffing (final boolean bAllow)
+  {
+    if (bAllow)
+    {
+      m_aResponseHeaderMap.removeHeaders (CHTTPHeader.X_CONTENT_TYPE_OPTIONS);
+    }
+    else
+    {
+      m_aResponseHeaderMap.addHeader (CHTTPHeader.X_CONTENT_TYPE_OPTIONS, CHTTPHeader.VALUE_NOSNIFF);
+    }
+    return this;
+  }
+
+  /**
+   * When specifying <code>false</code>, this method uses a special response
+   * header to prevent certain browsers from MIME-sniffing a response away from
+   * the declared content-type. When passing <code>true</code>, that header is
+   * removed.
+   * 
+   * @param nMaxAgeSeconds
+   *        number of seconds, after the reception of the STS header field,
+   *        during which the UA regards the host (from whom the message was
+   *        received) as a Known HSTS Host.
+   * @param bIncludeSubdomains
+   *        if enabled, this signals the UA that the HSTS Policy applies to this
+   *        HSTS Host as well as any sub-domains of the host's domain name.
+   * @return this
+   */
+  @Nonnull
+  public UnifiedResponse setStrictTransportSecurity (final int nMaxAgeSeconds, final boolean bIncludeSubdomains)
+  {
+    m_aResponseHeaderMap.addHeader (CHTTPHeader.STRICT_TRANSPORT_SECURITY,
+                                    new CacheControlBuilder ().setMaxAgeSeconds (nMaxAgeSeconds)
+                                                              .getAsHTTPHeaderValue () +
+                                        (bIncludeSubdomains ? ";" + CHTTPHeader.VALUE_INCLUDE_SUBDMOAINS : ""));
+    return this;
+  }
+
   private void _verifyCachingIntegrity ()
   {
     final boolean bIsHttp11 = m_eHTTPVersion == EHTTPVersion.HTTP_11;
@@ -1062,6 +1112,11 @@ public class UnifiedResponse
 
     // Write the body to the response
     _applyContent (aHttpResponse);
+  }
+
+  protected HTTPHeaderMap getResponseHeaderMap ()
+  {
+    return this.m_aResponseHeaderMap;
   }
 
   private void _applyLengthChecks (final long nContentLength)

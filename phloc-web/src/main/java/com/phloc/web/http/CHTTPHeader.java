@@ -57,6 +57,16 @@ public final class CHTTPHeader
   public static final String AUTHORIZATION = "Authorization";
   public static final String PROXY_AUTHORIZATION = "Proxy-Authorization";
   public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+  /**
+   * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security<br/>
+   * e.g. "max-age=16070400; includeSubDomains"
+   */
+  public static final String STRICT_TRANSPORT_SECURITY = "Strict-Transport-Security";
+  /**
+   * https://www.owasp.org/index.php/List_of_useful_HTTP_headers<br/>
+   * e.g. X-Content-Type-Options: nosniff
+   */
+  public static final String X_CONTENT_TYPE_OPTIONS = "X-Content-Type-Options";
 
   /**
    * The Retry-After response-header field can be used with a 503 (Service
@@ -92,6 +102,9 @@ public final class CHTTPHeader
   public static final String ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method";
   public static final String ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
   public static final String ORIGIN = "Origin";
+
+  public static final String VALUE_NOSNIFF = "nosniff";
+  public static final String VALUE_INCLUDE_SUBDMOAINS = "includeSubDomains";
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")

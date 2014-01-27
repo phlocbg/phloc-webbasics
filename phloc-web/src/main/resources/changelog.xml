@@ -20,6 +20,22 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
+  <release date="2014-01-27" version="5.3.6" />
+  <entry date="2013-01-27" category="api" action="add">
+    <change>
+      <text locale="en">Added new API in UnifiedResponse for using the response header 'Strict-Transport-Security'</text>
+    </change>
+  </entry>
+  <entry date="2013-01-27" category="api" action="add">
+    <change>
+      <text locale="en">Added new API in UnifiedResponse for using the response header 'X-Content-Type-Options' (disallow mime sniffing)</text>
+    </change>
+  </entry>
+  <entry date="2013-01-27" category="api" action="add">
+    <change>
+      <text locale="en">Added possibility in ResponseHelper to set custom response headers in UnifiedResponse if necessary</text>
+    </change>
+  </entry>
   <release date="2014-01-21" version="5.3.5" />
   <entry date="2014-01-21" category="tech" action="update" >
     <change>
