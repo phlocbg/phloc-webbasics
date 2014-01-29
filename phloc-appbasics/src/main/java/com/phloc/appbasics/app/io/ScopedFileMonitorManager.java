@@ -40,6 +40,44 @@ public class ScopedFileMonitorManager extends GlobalSingleton
   }
 
   /**
+   * Starts monitoring the files
+   * 
+   * @throws IllegalStateException
+   *         if the monitoring is already running
+   * @see #isRunning()
+   * @see #stop()
+   */
+  @Nonnull
+  public EChange start ()
+  {
+    if (isRunning ())
+      return EChange.UNCHANGED;
+    m_aFMM.start ();
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Stops monitoring the files.
+   */
+  @Nonnull
+  public EChange stop ()
+  {
+    if (!isRunning ())
+      return EChange.UNCHANGED;
+    m_aFMM.stop ();
+    return EChange.CHANGED;
+  }
+
+  /**
+   * @return <code>true</code> if the monitoring thread is running,
+   *         <code>false</code> if not.
+   */
+  public boolean isRunning ()
+  {
+    return m_aFMM.isRunning ();
+  }
+
+  /**
    * Get the delay between runs.
    * 
    * @return The delay period in milliseconds.
