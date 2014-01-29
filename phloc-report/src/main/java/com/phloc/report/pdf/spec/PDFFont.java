@@ -110,6 +110,8 @@ public class PDFFont
     float fWidth = 0;
     for (int i = 0; i < aTextBytes.length; i++)
       fWidth += m_aFont.getFontWidth (aTextBytes, i, 1);
+
+    // The width is in 1000 unit of text space, ie 333 or 777
     return fWidth * fFontSize / 1000f;
   }
 
