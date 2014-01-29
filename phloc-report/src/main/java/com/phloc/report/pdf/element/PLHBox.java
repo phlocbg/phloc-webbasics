@@ -35,6 +35,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
+import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
@@ -393,6 +394,13 @@ public class PLHBox extends AbstractPLElement <PLHBox>
     }
 
     return new SizeSpec (fUsedWidth, fUsedHeight);
+  }
+
+  @Override
+  public void doPageSetup (@Nonnull final PageSetupContext aCtx)
+  {
+    for (final Column aColumn : m_aColumns)
+      aColumn.getElement ().doPageSetup (aCtx);
   }
 
   @Override

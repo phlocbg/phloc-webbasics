@@ -35,6 +35,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
+import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
@@ -384,6 +385,13 @@ public class PLVBox extends AbstractPLElement <PLVBox>
     }
 
     return new SizeSpec (fUsedWidth, fUsedHeight);
+  }
+
+  @Override
+  public void doPageSetup (@Nonnull final PageSetupContext aCtx)
+  {
+    for (final Row aRow : m_aRows)
+      aRow.getElement ().doPageSetup (aCtx);
   }
 
   @Override

@@ -29,6 +29,7 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
+import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.SizeSpec;
@@ -41,9 +42,12 @@ import com.phloc.report.pdf.spec.SizeSpec;
 public class PLImage extends AbstractPLElement <PLImage>
 {
   private final BufferedImage m_aImage;
-  private final IInputStreamProvider m_aJpeg;
+  private final IInputStreamProvider m_aIIS;
   private float m_fWidth;
   private float m_fHeight;
+
+  // Status var
+  private PDJpeg m_aJpeg;
 
   public PLImage (@Nonnull final BufferedImage aImage)
   {
@@ -60,7 +64,7 @@ public class PLImage extends AbstractPLElement <PLImage>
       throw new IllegalArgumentException ("Height invalid: " + fHeight);
 
     m_aImage = aImage;
-    m_aJpeg = null;
+    m_aIIS = null;
     m_fWidth = fWidth;
     m_fHeight = fHeight;
   }
@@ -71,7 +75,7 @@ public class PLImage extends AbstractPLElement <PLImage>
       throw new NullPointerException ("Image");
 
     m_aImage = null;
-    m_aJpeg = aJpeg;
+    m_aIIS = aJpeg;
     m_fWidth = -1;
     m_fHeight = -1;
   }
@@ -88,7 +92,7 @@ public class PLImage extends AbstractPLElement <PLImage>
       throw new IllegalArgumentException ("Height invalid: " + fHeight);
 
     m_aImage = null;
-    m_aJpeg = aImage;
+    m_aIIS = aImage;
     m_fWidth = fWidth;
     m_fHeight = fHeight;
   }
@@ -100,9 +104,9 @@ public class PLImage extends AbstractPLElement <PLImage>
   }
 
   @Nullable
-  public IInputStreamProvider getJpeg ()
+  public IInputStreamProvider getIIS ()
   {
-    return m_aJpeg;
+    return m_aIIS;
   }
 
   public float getWidth ()
@@ -122,26 +126,39 @@ public class PLImage extends AbstractPLElement <PLImage>
   }
 
   @Override
+  public void doPageSetup (@Nonnull final PageSetupContext aCtx)
+  {
+    // It is very important that the PDJpeg is created BEFORE the page content
+    // stream is created.
+    // http://stackoverflow.com/questions/8521290/cant-add-an-image-to-a-pdf-using-pdfbox
+    try
+    {
+      if (m_aIIS != null)
+      {
+        m_aJpeg = new PDJpeg (aCtx.getDocument (), m_aIIS.getInputStream ());
+      }
+      else
+      {
+        m_aJpeg = new PDJpeg (aCtx.getDocument (), m_aImage);
+      }
+    }
+    catch (final IOException ex)
+    {
+      throw new IllegalArgumentException ("Failed to create JPEG", ex);
+    }
+    if (m_fWidth < 0)
+      m_fWidth = m_aJpeg.getWidth ();
+    if (m_fHeight < 0)
+      m_fHeight = m_aJpeg.getHeight ();
+  }
+
+  @Override
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {
     final PDPageContentStreamWithCache aContentStream = aCtx.getContentStream ();
-    PDJpeg aImage;
-    if (m_aJpeg != null)
-    {
-      aImage = new PDJpeg (aCtx.getDocument (), m_aJpeg.getInputStream ());
-    }
-    else
-    {
-      aImage = new PDJpeg (aCtx.getDocument (), m_aImage);
-    }
-    if (m_fWidth < 0)
-    {
-      m_fWidth = aImage.getWidth ();
-      m_fHeight = aImage.getHeight ();
-    }
-    aContentStream.drawXObject (aImage,
+    aContentStream.drawXObject (m_aJpeg,
                                 aCtx.getStartLeft () + getPadding ().getLeft (),
-                                aCtx.getStartTop () - getPadding ().getTop (),
+                                aCtx.getStartTop () - getPadding ().getTop () - m_fHeight,
                                 m_fWidth,
                                 m_fHeight);
   }

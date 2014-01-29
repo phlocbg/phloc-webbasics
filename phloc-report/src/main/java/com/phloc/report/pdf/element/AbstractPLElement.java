@@ -26,9 +26,11 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
+import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
@@ -125,6 +127,16 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
     m_bPrepared = true;
     m_aPreparedSize = aPreparedSize;
   }
+
+  /**
+   * Called after the page was created but before the content stream is created.
+   * 
+   * @param aCtx
+   *        The current page setup context. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  public void doPageSetup (@Nonnull final PageSetupContext aCtx)
+  {}
 
   /**
    * Abstract method to be implemented by subclasses.

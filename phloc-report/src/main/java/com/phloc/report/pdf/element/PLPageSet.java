@@ -41,6 +41,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.ERenderingElementType;
 import com.phloc.report.pdf.render.IRenderingContextCustomizer;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
+import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.render.RenderingContext;
@@ -457,6 +458,17 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       // Layout in memory
       final PDPage aPage = new PDPage (m_aPageSize.getAsRectangle ());
       aDoc.addPage (aPage);
+
+      {
+        final PageSetupContext aCtx = new PageSetupContext (aDoc, aPage);
+        if (m_aPageHeader != null)
+          m_aPageHeader.doPageSetup (aCtx);
+        for (final PLElementWithHeight aElement : aPerPage)
+          aElement.getElement ().doPageSetup (aCtx);
+        if (m_aPageFooter != null)
+          m_aPageFooter.doPageSetup (aCtx);
+      }
+
       final PDPageContentStreamWithCache aContentStream = new PDPageContentStreamWithCache (aDoc,
                                                                                             aPage,
                                                                                             false,
