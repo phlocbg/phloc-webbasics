@@ -38,18 +38,35 @@ import com.phloc.report.pdf.spec.LineDashPatternSpec;
  */
 public class PDPageContentStreamWithCache extends PDPageContentStream
 {
+  private final PDDocument m_aDocument;
+  private final PDPage m_aPage;
+
   // Status cache
   private FontSpec m_aLastUsedFont;
   private Color m_aLastUsedStrokingColor = Color.BLACK;
   private Color m_aLastUsedNonStrokingColor = Color.BLACK;
   private LineDashPatternSpec m_aLastUsedLineDashPattern = LineDashPatternSpec.SOLID;
 
-  public PDPageContentStreamWithCache (final PDDocument aDocument,
-                                       final PDPage aSourcePage,
+  public PDPageContentStreamWithCache (@Nonnull final PDDocument aDocument,
+                                       @Nonnull final PDPage aSourcePage,
                                        final boolean bAppendContent,
                                        final boolean bCompress) throws IOException
   {
     super (aDocument, aSourcePage, bAppendContent, bCompress);
+    m_aDocument = aDocument;
+    m_aPage = aSourcePage;
+  }
+
+  @Nonnull
+  public PDDocument getDocument ()
+  {
+    return m_aDocument;
+  }
+
+  @Nonnull
+  public PDPage getPage ()
+  {
+    return m_aPage;
   }
 
   public void setFont (@Nonnull final FontSpec aFont) throws IOException

@@ -24,6 +24,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -131,6 +133,15 @@ public final class RenderingContext
   public PDPageContentStreamWithCache getContentStream ()
   {
     return m_aCS;
+  }
+
+  /**
+   * @return The underlying PDF document. Never <code>null</code>.
+   */
+  @Nonnull
+  public PDDocument getDocument ()
+  {
+    return m_aCS.getDocument ();
   }
 
   /**
