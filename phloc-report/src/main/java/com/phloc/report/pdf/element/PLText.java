@@ -108,17 +108,22 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
     return this;
   }
 
-  @Override
-  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
+  private void _setPreparedLines (@Nonnull final List <TextAndWidthSpec> aLines)
   {
-    // Split text into rows
-    m_aPreparedLines = m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ());
+    m_aPreparedLines = aLines;
 
     if (!m_bTopDown)
     {
       // Reverse order only once
       m_aPreparedLines = ContainerHelper.getReverseInlineList (m_aPreparedLines);
     }
+  }
+
+  @Override
+  protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
+  {
+    // Split text into rows
+    _setPreparedLines (m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ()));
 
     return new SizeSpec (aCtx.getAvailableWidth (), m_aPreparedLines.size () * m_fLineHeight);
   }
@@ -148,11 +153,13 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
                                                                                        .setHorzAlign (m_eHorzAlign)
                                                                                        .setTopDown (m_bTopDown)
                                                                                        .markAsPrepared (aSize1);
+    aNewText1._setPreparedLines (aLines1);
 
     final PLText aNewText2 = new PLText (TextAndWidthSpec.getAsText (aLines2), m_aFont).setBasicDataFrom (this)
                                                                                        .setHorzAlign (m_eHorzAlign)
                                                                                        .setTopDown (m_bTopDown)
                                                                                        .markAsPrepared (aSize2);
+    aNewText2._setPreparedLines (aLines2);
 
     return new PLSplitResult (new PLElementWithSize (aNewText1, aSize1), new PLElementWithSize (aNewText2, aSize2));
   }
