@@ -69,7 +69,7 @@ public class PDFFont
   // Helper
   private final float m_fBBHeight;
 
-  protected PDFFont (@Nonnull final PDFont aFont)
+  public PDFFont (@Nonnull final PDFont aFont)
   {
     if (aFont == null)
       throw new NullPointerException ("font");
