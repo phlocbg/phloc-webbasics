@@ -59,9 +59,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   public static final class PageSetPrepareResult
   {
     private float m_fHeaderHeight = Float.NaN;
-    private final List <PLElementWithHeight> m_aContentHeight = new ArrayList <PLElementWithHeight> ();
+    private final List <PLElementWithSize> m_aContentHeight = new ArrayList <PLElementWithSize> ();
     private float m_fFooterHeight = Float.NaN;
-    private final List <List <PLElementWithHeight>> m_aPerPageElements = new ArrayList <List <PLElementWithHeight>> ();
+    private final List <List <PLElementWithSize>> m_aPerPageElements = new ArrayList <List <PLElementWithSize>> ();
 
     PageSetPrepareResult ()
     {}
@@ -90,7 +90,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
      *        The element to be added. May not be <code>null</code>. The element
      *        height must be without padding or margin.
      */
-    void addElement (@Nonnull final PLElementWithHeight aElement)
+    void addElement (@Nonnull final PLElementWithSize aElement)
     {
       if (aElement == null)
         throw new NullPointerException ("element");
@@ -103,7 +103,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
      */
     @Nonnull
     @ReturnsMutableCopy
-    List <PLElementWithHeight> getAllElements ()
+    List <PLElementWithSize> getAllElements ()
     {
       return ContainerHelper.newList (m_aContentHeight);
     }
@@ -133,7 +133,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
      * @param aCurPageElements
      *        The list to use. May neither be <code>null</code> nor empty.
      */
-    void addPerPageElements (@Nonnull @Nonempty final List <PLElementWithHeight> aCurPageElements)
+    void addPerPageElements (@Nonnull @Nonempty final List <PLElementWithSize> aCurPageElements)
     {
       if (ContainerHelper.isEmpty (aCurPageElements))
         throw new IllegalArgumentException ("curPageElements");
@@ -148,7 +148,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     @Nonnull
     @ReturnsMutableObject (reason = "speed")
-    List <List <PLElementWithHeight>> directGetPerPageElements ()
+    List <List <PLElementWithSize>> directGetPerPageElements ()
     {
       return m_aPerPageElements;
     }
@@ -306,7 +306,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                               getAvailableHeight () -
                                                                   aElement.getMarginPlusPaddingYSum ());
       final SizeSpec aElementSize = aElement.prepare (aRPC);
-      ret.addElement (new PLElementWithHeight (aElement, aElementSize.getHeight ()));
+      ret.addElement (new PLElementWithSize (aElement, aElementSize));
     }
 
     // Prepare footer
@@ -327,18 +327,18 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     final float fYLeast = getMargin ().getBottom () + getPadding ().getBottom ();
 
     {
-      List <PLElementWithHeight> aCurPageElements = new ArrayList <PLElementWithHeight> ();
+      List <PLElementWithSize> aCurPageElements = new ArrayList <PLElementWithSize> ();
 
       // Start at the top
       float fCurY = fYTop;
 
       // Create a copy of the list, so that we can safely modify it
-      final List <PLElementWithHeight> aElementsWithHeight = ret.getAllElements ();
+      final List <PLElementWithSize> aElementsWithHeight = ret.getAllElements ();
       while (!aElementsWithHeight.isEmpty ())
       {
         // Use the first element
-        final PLElementWithHeight aElementWithHeight = aElementsWithHeight.remove (0);
-        final AbstractPLElement <?> aElement = aElementWithHeight.getElement ();
+        final PLElementWithSize aElementWithSize = aElementsWithHeight.remove (0);
+        final AbstractPLElement <?> aElement = aElementWithSize.getElement ();
 
         boolean bIsPagebreakDesired = aElement instanceof PLPageBreak;
         if (bIsPagebreakDesired && aCurPageElements.isEmpty () && !((PLPageBreak) aElement).isForcePageBreak ())
@@ -348,7 +348,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           bIsPagebreakDesired = false;
         }
 
-        final float fThisHeightFull = aElementWithHeight.getHeightFull ();
+        final float fThisHeightFull = aElementWithSize.getHeightFull ();
         if (fCurY - fThisHeightFull < fYLeast || bIsPagebreakDesired)
         {
           // Element does not fit on page - try to split
@@ -356,7 +356,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           {
             // split elements
             final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
-            final PLSplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fAvailableHeight);
+            final PLSplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (aElementWithSize.getWidth (),
+                                                                                                fAvailableHeight);
             if (aSplitResult != null)
             {
               // Re-add them to the list and try again (they may be splitted
@@ -392,19 +393,19 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           {
             // We found elements fitting onto a page (at least one)
             ret.addPerPageElements (aCurPageElements);
-            aCurPageElements = new ArrayList <PLElementWithHeight> ();
+            aCurPageElements = new ArrayList <PLElementWithSize> ();
 
             // Start new page
             fCurY = fYTop;
 
             // Re-add element and continue from start, so that splitting happens
-            aElementsWithHeight.add (0, aElementWithHeight);
+            aElementsWithHeight.add (0, aElementWithSize);
             continue;
           }
         }
 
         // Add element to current page (may also be a page break)
-        aCurPageElements.add (aElementWithHeight);
+        aCurPageElements.add (aElementWithSize);
         fCurY -= fThisHeightFull;
       }
 
@@ -447,7 +448,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     final boolean bCompressPDF = !bDebug;
     int nPageIndex = 0;
     final int nPageCount = aPrepareResult.getPageCount ();
-    for (final List <PLElementWithHeight> aPerPage : aPrepareResult.directGetPerPageElements ())
+    for (final List <PLElementWithSize> aPerPage : aPrepareResult.directGetPerPageElements ())
     {
       final RenderPageIndex aPageIndex = new RenderPageIndex (nPageSetIndex,
                                                               nPageIndex,
@@ -463,7 +464,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         final PageSetupContext aCtx = new PageSetupContext (aDoc, aPage);
         if (m_aPageHeader != null)
           m_aPageHeader.doPageSetup (aCtx);
-        for (final PLElementWithHeight aElement : aPerPage)
+        for (final PLElementWithSize aElement : aPerPage)
           aElement.getElement ().doPageSetup (aCtx);
         if (m_aPageFooter != null)
           m_aPageFooter.doPageSetup (aCtx);
@@ -520,7 +521,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         }
 
         float fCurY = fYTop;
-        for (final PLElementWithHeight aElementWithHeight : aPerPage)
+        for (final PLElementWithSize aElementWithHeight : aPerPage)
         {
           final AbstractPLElement <?> aElement = aElementWithHeight.getElement ();
           // Get element height

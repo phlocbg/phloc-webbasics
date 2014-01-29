@@ -39,7 +39,7 @@ import com.phloc.report.pdf.spec.WidthSpec.EWidthType;
  * 
  * @author Philip Helger
  */
-public class PLTable extends PLVBox implements IPLSplittableElement
+public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableElement
 {
   public static class PLTableCell
   {
@@ -262,10 +262,10 @@ public class PLTable extends PLVBox implements IPLSplittableElement
   }
 
   @Nullable
-  public PLSplitResult splitElements (final float fAvailableHeight)
+  public PLSplitResult splitElements (final float fElementWidth, final float fAvailableHeight)
   {
-    final PLTable aTable1 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
-    final PLTable aTable2 = new PLTable (m_aWidths).setHeaderRowCount (m_nHeaderRowCount);
+    final PLTable aTable1 = new PLTable (m_aWidths).setBasicDataFrom (this).setHeaderRowCount (m_nHeaderRowCount);
+    final PLTable aTable2 = new PLTable (m_aWidths).setBasicDataFrom (this).setHeaderRowCount (m_nHeaderRowCount);
 
     // Copy all header rows
     float fTable1Width = 0;
@@ -310,9 +310,9 @@ public class PLTable extends PLVBox implements IPLSplittableElement
       return null;
     }
 
-    // Including padding/margin
-    aTable1.markAsPrepared (new SizeSpec (fTable1Width, fTable1Height));
-    aTable2.markAsPrepared (new SizeSpec (fTable2Width, fTable2Height));
+    // Excluding padding/margin
+    aTable1.markAsPrepared (new SizeSpec (fElementWidth, fTable1Height));
+    aTable2.markAsPrepared (new SizeSpec (fElementWidth, fTable2Height));
 
     // Reuse prepared width and height to avoid recalculation
     final float [] aWidth1 = new float [aTable1.getRowCount ()];
@@ -346,8 +346,8 @@ public class PLTable extends PLVBox implements IPLSplittableElement
     aTable2.m_aPreparedWidth = aWidth2;
     aTable2.m_aPreparedHeight = aHeight2;
 
-    return new PLSplitResult (new PLElementWithHeight (aTable1, fTable1Height), new PLElementWithHeight (aTable2,
-                                                                                                         fTable2Height));
+    return new PLSplitResult (new PLElementWithSize (aTable1, new SizeSpec (fElementWidth, fTable1Height)),
+                              new PLElementWithSize (aTable2, new SizeSpec (fElementWidth, fTable2Height)));
   }
 
   @Override

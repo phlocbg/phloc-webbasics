@@ -20,6 +20,7 @@ package com.phloc.report.pdf.element;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,7 +41,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  * 
  * @author Philip Helger
  */
-public class PLText extends AbstractPLElement <PLText>
+public class PLText extends AbstractPLElement <PLText> implements IPLSplittableElement
 {
   public static final boolean DEFAULT_TOP_DOWN = true;
 
@@ -51,7 +52,7 @@ public class PLText extends AbstractPLElement <PLText>
   private boolean m_bTopDown = DEFAULT_TOP_DOWN;
 
   // prepare result
-  private List <TextAndWidthSpec> m_aLines;
+  private List <TextAndWidthSpec> m_aPreparedLines;
 
   public PLText (@Nullable final String sText, @Nonnull final FontSpec aFont)
   {
@@ -72,6 +73,12 @@ public class PLText extends AbstractPLElement <PLText>
   public FontSpec getFontSpec ()
   {
     return m_aFont;
+  }
+
+  @Nonnegative
+  public float getLineHeight ()
+  {
+    return m_fLineHeight;
   }
 
   @Nonnull
@@ -105,15 +112,49 @@ public class PLText extends AbstractPLElement <PLText>
   protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Split text into rows
-    m_aLines = m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ());
+    m_aPreparedLines = m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ());
 
     if (!m_bTopDown)
     {
       // Reverse order only once
-      m_aLines = ContainerHelper.getReverseInlineList (m_aLines);
+      m_aPreparedLines = ContainerHelper.getReverseInlineList (m_aPreparedLines);
     }
 
-    return new SizeSpec (aCtx.getAvailableWidth (), m_aLines.size () * m_fLineHeight);
+    return new SizeSpec (aCtx.getAvailableWidth (), m_aPreparedLines.size () * m_fLineHeight);
+  }
+
+  @Nullable
+  public PLSplitResult splitElements (final float fElementWidth, final float fAvailableHeight)
+  {
+    // Get the lines in the correct order from top to bottom
+    final List <TextAndWidthSpec> aLines = m_bTopDown ? m_aPreparedLines
+                                                     : ContainerHelper.getReverseList (m_aPreparedLines);
+
+    final int nLines1 = (int) (fAvailableHeight / m_fLineHeight);
+    if (nLines1 <= 0)
+    {
+      // Splitting makes no sense
+      return null;
+    }
+
+    final List <TextAndWidthSpec> aLines1 = ContainerHelper.newList (aLines.subList (0, nLines1));
+    final List <TextAndWidthSpec> aLines2 = ContainerHelper.newList (aLines.subList (nLines1, aLines.size ()));
+
+    // Excluding padding/margin
+    final SizeSpec aSize1 = new SizeSpec (fElementWidth, aLines1.size () * m_fLineHeight);
+    final SizeSpec aSize2 = new SizeSpec (fElementWidth, aLines2.size () * m_fLineHeight);
+
+    final PLText aNewText1 = new PLText (TextAndWidthSpec.getAsText (aLines1), m_aFont).setBasicDataFrom (this)
+                                                                                       .setHorzAlign (m_eHorzAlign)
+                                                                                       .setTopDown (m_bTopDown)
+                                                                                       .markAsPrepared (aSize1);
+
+    final PLText aNewText2 = new PLText (TextAndWidthSpec.getAsText (aLines2), m_aFont).setBasicDataFrom (this)
+                                                                                       .setHorzAlign (m_eHorzAlign)
+                                                                                       .setTopDown (m_bTopDown)
+                                                                                       .markAsPrepared (aSize2);
+
+    return new PLSplitResult (new PLElementWithSize (aNewText1, aSize1), new PLElementWithSize (aNewText2, aSize2));
   }
 
   /**
@@ -144,8 +185,8 @@ public class PLText extends AbstractPLElement <PLText>
     final float fLeft = getPadding ().getLeft ();
     final float fUsableWidth = aCtx.getWidth () - getPadding ().getXSum ();
     int nIndex = 0;
-    final int nMax = m_aLines.size ();
-    for (final TextAndWidthSpec aTW : m_aLines)
+    final int nMax = m_aPreparedLines.size ();
+    for (final TextAndWidthSpec aTW : m_aPreparedLines)
     {
       // Replace text (if any)
       float fWidth = aTW.getWidth ();

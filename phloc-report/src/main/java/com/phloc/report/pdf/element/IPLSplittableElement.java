@@ -29,12 +29,16 @@ public interface IPLSplittableElement
 {
   /**
    * Split this element into sub-elements according to the available height.
+   * Splitting is always done after preparation and must return prepared
+   * objects!
    * 
+   * @param fElementWidth
+   *        The element width without padding or margin of the element.
    * @param fAvailableHeight
    *        The available height without y-padding and y-margin of this element.
    *        Must be &ge; 0.
    * @return <code>null</code> if splitting makes no sense.
    */
   @Nullable
-  PLSplitResult splitElements (@Nonnegative float fAvailableHeight);
+  PLSplitResult splitElements (@Nonnegative float fElementWidth, @Nonnegative float fAvailableHeight);
 }

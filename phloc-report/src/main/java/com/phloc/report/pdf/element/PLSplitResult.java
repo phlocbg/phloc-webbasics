@@ -29,11 +29,11 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 public final class PLSplitResult
 {
-  private final PLElementWithHeight m_aFirstElement;
-  private final PLElementWithHeight m_aSecondElement;
+  private final PLElementWithSize m_aFirstElement;
+  private final PLElementWithSize m_aSecondElement;
 
-  public PLSplitResult (@Nonnull final PLElementWithHeight aFirstElement,
-                        @Nonnull final PLElementWithHeight aSecondElement)
+  public PLSplitResult (@Nonnull final PLElementWithSize aFirstElement,
+                        @Nonnull final PLElementWithSize aSecondElement)
   {
     if (aFirstElement == null)
       throw new NullPointerException ("firstElement");
@@ -44,13 +44,13 @@ public final class PLSplitResult
   }
 
   @Nonnull
-  public PLElementWithHeight getFirstElement ()
+  public PLElementWithSize getFirstElement ()
   {
     return m_aFirstElement;
   }
 
   @Nonnull
-  public PLElementWithHeight getSecondElement ()
+  public PLElementWithSize getSecondElement ()
   {
     return m_aSecondElement;
   }

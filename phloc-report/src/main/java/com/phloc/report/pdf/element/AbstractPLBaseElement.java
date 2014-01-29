@@ -56,6 +56,16 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     return (IMPLTYPE) this;
   }
 
+  @Nonnull
+  public IMPLTYPE setBasicDataFrom (@Nonnull final AbstractPLBaseElement <?> aSource)
+  {
+    setMargin (aSource.m_aMargin);
+    setPadding (aSource.m_aPadding);
+    setBorder (aSource.m_aBorder);
+    setFillColor (aSource.m_aFillColor);
+    return thisAsT ();
+  }
+
   /**
    * Throw an exception, if this object is already prepared.
    * 

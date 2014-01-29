@@ -82,7 +82,8 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
    * 
    * @param aCtx
    *        Preparation context. Never <code>null</code>.
-   * @return The size of the rendered element
+   * @return The size of the rendered element without padding or margin. May not
+   *         be <code>null</code>.
    * @throws IOException
    *         on error
    */
@@ -118,7 +119,13 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
     return m_aPreparedSize;
   }
 
-  protected final void markAsPrepared (@Nonnull final SizeSpec aPreparedSize)
+  /**
+   * @param aPreparedSize
+   *        The new prepared size without padding or margin.
+   * @return this
+   */
+  @Nonnull
+  protected final IMPLTYPE markAsPrepared (@Nonnull final SizeSpec aPreparedSize)
   {
     if (m_bPrepared)
       throw new IllegalStateException ("Already prepared!");
@@ -126,6 +133,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
       throw new NullPointerException ("preparedSize");
     m_bPrepared = true;
     m_aPreparedSize = aPreparedSize;
+    return thisAsT ();
   }
 
   /**

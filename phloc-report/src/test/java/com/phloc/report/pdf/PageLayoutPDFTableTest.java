@@ -94,7 +94,7 @@ public class PageLayoutPDFTableTest
           .setColumnBorder (new BorderStyleSpec (Color.BLACK));
 
     // Add content lines
-    for (int i = 0; i < 185; ++i)
+    for (int i = 0; i < 184; ++i)
     {
       // Width is determined by the width passed to the table creating method
       aRow = aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),

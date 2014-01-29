@@ -17,6 +17,8 @@
  */
 package com.phloc.report.pdf.spec;
 
+import java.util.Collection;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -79,5 +81,18 @@ public class TextAndWidthSpec
   public String toString ()
   {
     return new ToStringGenerator (this).append ("text", m_sText).append ("width", m_fWidth).toString ();
+  }
+
+  @Nonnull
+  public static String getAsText (@Nonnull final Collection <? extends TextAndWidthSpec> aTexts)
+  {
+    final StringBuilder aSB = new StringBuilder ();
+    for (final TextAndWidthSpec aLine : aTexts)
+    {
+      if (aSB.length () > 0)
+        aSB.append ('\n');
+      aSB.append (aLine.getText ());
+    }
+    return aSB.toString ();
   }
 }
