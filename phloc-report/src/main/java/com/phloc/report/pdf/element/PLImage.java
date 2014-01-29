@@ -43,8 +43,8 @@ public class PLImage extends AbstractPLElement <PLImage>
 {
   private final BufferedImage m_aImage;
   private final IInputStreamProvider m_aIIS;
-  private float m_fWidth;
-  private float m_fHeight;
+  private final float m_fWidth;
+  private final float m_fHeight;
 
   // Status var
   private PDJpeg m_aJpeg;
@@ -67,17 +67,6 @@ public class PLImage extends AbstractPLElement <PLImage>
     m_aIIS = null;
     m_fWidth = fWidth;
     m_fHeight = fHeight;
-  }
-
-  public PLImage (@Nonnull final IInputStreamProvider aJpeg)
-  {
-    if (aJpeg == null)
-      throw new NullPointerException ("Image");
-
-    m_aImage = null;
-    m_aIIS = aJpeg;
-    m_fWidth = -1;
-    m_fHeight = -1;
   }
 
   public PLImage (@Nonnull final IInputStreamProvider aImage,
@@ -135,6 +124,7 @@ public class PLImage extends AbstractPLElement <PLImage>
     {
       if (m_aIIS != null)
       {
+        // The input stream is closed automatically
         m_aJpeg = new PDJpeg (aCtx.getDocument (), m_aIIS.getInputStream ());
       }
       else
@@ -146,10 +136,6 @@ public class PLImage extends AbstractPLElement <PLImage>
     {
       throw new IllegalArgumentException ("Failed to create JPEG", ex);
     }
-    if (m_fWidth < 0)
-      m_fWidth = m_aJpeg.getWidth ();
-    if (m_fHeight < 0)
-      m_fHeight = m_aJpeg.getHeight ();
   }
 
   @Override

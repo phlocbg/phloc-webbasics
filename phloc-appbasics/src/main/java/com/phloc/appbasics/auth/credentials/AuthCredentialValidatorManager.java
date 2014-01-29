@@ -28,6 +28,8 @@ import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.lang.ServiceLoaderUtils;
 import com.phloc.commons.string.StringHelper;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 @Immutable
 public final class AuthCredentialValidatorManager
 {
@@ -44,6 +46,7 @@ public final class AuthCredentialValidatorManager
   {}
 
   @Nonnull
+  @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public static CredentialValidationResult validateCredentials (@Nonnull final Locale aDisplayLocale,
                                                                 @Nonnull final IAuthCredentials aCredentials)
   {
