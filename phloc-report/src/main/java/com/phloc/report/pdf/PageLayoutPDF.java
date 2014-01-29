@@ -193,6 +193,7 @@ public class PageLayoutPDF
     try
     {
       aDoc = new PDDocument ();
+      aDoc.getDocumentCatalog ().setVersion ("1.6");
 
       // Set document properties
       {

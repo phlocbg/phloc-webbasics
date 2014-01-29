@@ -18,6 +18,7 @@
 package com.phloc.report.pdf.element;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
@@ -25,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -46,6 +48,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
   public static final boolean DEFAULT_TOP_DOWN = true;
 
   private final String m_sText;
+  private final Charset m_aCharset;
   private final FontSpec m_aFont;
   private final float m_fLineHeight;
   private EHorzAlignment m_eHorzAlign = EHorzAlignment.DEFAULT;
@@ -56,9 +59,17 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
 
   public PLText (@Nullable final String sText, @Nonnull final FontSpec aFont)
   {
+    this (sText, CCharset.CHARSET_ISO_8859_1_OBJ, aFont);
+  }
+
+  public PLText (@Nullable final String sText, @Nonnull final Charset aCharset, @Nonnull final FontSpec aFont)
+  {
+    if (aCharset == null)
+      throw new NullPointerException ("Charset");
     if (aFont == null)
-      throw new NullPointerException ("font");
+      throw new NullPointerException ("Font");
     m_sText = StringHelper.getNotNull (sText);
+    m_aCharset = aCharset;
     m_aFont = aFont;
     m_fLineHeight = m_aFont.getLineHeight ();
   }
@@ -123,7 +134,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
   protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Split text into rows
-    _setPreparedLines (m_aFont.getFitToWidth (m_sText, aCtx.getAvailableWidth ()));
+    _setPreparedLines (m_aFont.getFitToWidth (m_sText, m_aCharset, aCtx.getAvailableWidth ()));
 
     return new SizeSpec (aCtx.getAvailableWidth (), m_aPreparedLines.size () * m_fLineHeight);
   }
@@ -202,7 +213,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
       if (!sOrigText.equals (sDrawText))
       {
         // Text changed - recalculate width!
-        fWidth = m_aFont.getStringWidth (sDrawText);
+        fWidth = m_aFont.getStringWidth (sDrawText, m_aCharset);
       }
 
       float fIndentX;

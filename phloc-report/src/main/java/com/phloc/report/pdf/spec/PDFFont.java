@@ -18,6 +18,7 @@
 package com.phloc.report.pdf.spec;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
@@ -100,10 +100,27 @@ public class PDFFont
   }
 
   @Nonnegative
-  public float getStringWidth (@Nonnull final String sText, @Nonnegative final float fFontSize) throws IOException
+  public float getStringWidth (@Nonnull final String sText,
+                               @Nonnull final Charset aCharset,
+                               @Nonnegative final float fFontSize) throws IOException
   {
+    if (false)
+    {
+      float fWidth = 0;
+      final int nMax = sText.length ();
+      for (int nIndex = 0; nIndex < nMax; ++nIndex)
+      {
+        final byte [] aCharBytes = CharsetManager.getAsBytes (sText.substring (nIndex, nIndex + 1), aCharset);
+        fWidth += m_aFont.getFontWidth (aCharBytes, 0, aCharBytes.length);
+        ++nIndex;
+      }
+
+      // The width is in 1000 unit of text space, ie 333 or 777
+      return fWidth * fFontSize / 1000f;
+    }
+
     // Should be quicker than m_aFont.getStringWidth (sText)
-    final byte [] aTextBytes = CharsetManager.getAsBytes (sText, CCharset.CHARSET_ISO_8859_1_OBJ);
+    final byte [] aTextBytes = CharsetManager.getAsBytes (sText, aCharset);
 
     // Need to it per byte, as getFontWidth (aTextBytes, 0, aTextBytes.length)
     // does not work
@@ -118,6 +135,7 @@ public class PDFFont
   @Nonnull
   @ReturnsMutableCopy
   public List <TextAndWidthSpec> getFitToWidth (@Nullable final String sText,
+                                                @Nonnull final Charset aCharset,
                                                 @Nonnegative final float fFontSize,
                                                 @Nonnegative final float fMaxWidth) throws IOException
   {
@@ -130,7 +148,7 @@ public class PDFFont
       // Now split each source line into the best matching sub-lines
       String sCurLine = sLine;
       float fCurLineWidth;
-      outer: while ((fCurLineWidth = getStringWidth (sCurLine, fFontSize)) > fMaxWidth)
+      outer: while ((fCurLineWidth = getStringWidth (sCurLine, aCharset, fFontSize)) > fMaxWidth)
       {
         // Line is too long to fit
 
@@ -141,7 +159,7 @@ public class PDFFont
           {
             // Whitespace found
             final String sLineStart = sCurLine.substring (0, i);
-            final float fLineStartWidth = getStringWidth (sLineStart, fFontSize);
+            final float fLineStartWidth = getStringWidth (sLineStart, aCharset, fFontSize);
             if (fLineStartWidth <= fMaxWidth)
             {
               // We found a line - continue with the rest of the line
@@ -163,7 +181,7 @@ public class PDFFont
           do
           {
             final String sWordPart = sCurLine.substring (0, nIndex);
-            final float fWordPartLength = getStringWidth (sWordPart, fFontSize);
+            final float fWordPartLength = getStringWidth (sWordPart, aCharset, fFontSize);
             if (fWordPartLength > fMaxWidth)
             {
               // We have an overflow - take everything except the last char
