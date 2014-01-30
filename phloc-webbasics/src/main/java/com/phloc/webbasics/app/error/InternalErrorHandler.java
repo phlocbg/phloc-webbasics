@@ -17,7 +17,9 @@
  */
 package com.phloc.webbasics.app.error;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -30,8 +32,15 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.concurrent.ComparatorThreadID;
+import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.lang.StackTraceHelper;
+import com.phloc.commons.mutable.MutableInt;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.timing.StopWatch;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.css.propertyvalue.CCSSValue;
@@ -40,8 +49,15 @@ import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.htmlext.HCUtils;
+import com.phloc.web.smtp.EEmailType;
+import com.phloc.web.smtp.IEmailAttachmentList;
+import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.ISMTPSettings;
+import com.phloc.web.smtp.impl.EmailData;
+import com.phloc.web.smtp.transport.MailAPI;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
  * A handler for internal errors that occur while building a UI page
@@ -53,10 +69,95 @@ public final class InternalErrorHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (InternalErrorHandler.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private static ISMTPSettings s_aSMTPSettings = null;
+  private static IEmailAddress s_aSenderAddress = null;
+  private static IEmailAddress s_aReceiverAddress = null;
   private static IInternalErrorCallback s_aCustomExceptionHandler;
+  private static final Map <String, MutableInt> s_aIntErrCache = new HashMap <String, MutableInt> ();
 
   private InternalErrorHandler ()
   {}
+
+  public static void setSMTPSettings (@Nullable final ISMTPSettings aSMTPSettings)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aSMTPSettings = aSMTPSettings;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public static ISMTPSettings getSMTPSettings ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aSMTPSettings;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setSMTPSenderAddress (@Nullable final IEmailAddress aSenderAddress)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aSenderAddress = aSenderAddress;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public static IEmailAddress getSMTPSenderAddress ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aSenderAddress;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  public static void setSMTPReceiverAddress (@Nullable final IEmailAddress aReceiverAddress)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aReceiverAddress = aReceiverAddress;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nullable
+  public static IEmailAddress getSMTPReceiverAddress ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aReceiverAddress;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
 
   /**
    * @return The current custom exception handler or <code>null</code> if none
@@ -127,6 +228,113 @@ public final class InternalErrorHandler
   public static String createNewInternalErrorID ()
   {
     return "internal-error-" + createNewErrorID ();
+  }
+
+  @Nonnull
+  @Nonempty
+  private static String _getAsString (@Nonnull final Throwable t)
+  {
+    return t.getMessage () + " -- " + t.getClass ().getName ();
+  }
+
+  @Nonnull
+  private static ThreadDescriptorList _getAllThreadDescriptors ()
+  {
+    // add dump of all threads
+    final StopWatch aSW = new StopWatch (true);
+    final ThreadDescriptorList ret = new ThreadDescriptorList ();
+    try
+    {
+      // Get all stack traces, sorted by thread ID
+      for (final Map.Entry <Thread, StackTraceElement []> aEntry : ContainerHelper.getSortedByKey (Thread.getAllStackTraces (),
+                                                                                                   new ComparatorThreadID ())
+                                                                                  .entrySet ())
+      {
+        final StackTraceElement [] aStackTrace = aEntry.getValue ();
+        final String sStackTrace = ArrayHelper.isEmpty (aStackTrace) ? "No stack trace available!\n"
+                                                                    : StackTraceHelper.getStackAsString (aStackTrace,
+                                                                                                         false);
+        ret.addDescriptor (new ThreadDescriptor (aEntry.getKey (), sStackTrace));
+      }
+    }
+    catch (final Throwable t)
+    {
+      s_aLogger.error ("Error collecting all thread descriptors", t);
+      ret.setError ("Error collecting all thread descriptors: " + _getAsString (t));
+    }
+    finally
+    {
+      final long nMillis = aSW.stopAndGetMillis ();
+      if (nMillis > 1000)
+        s_aLogger.warn ("Took " + nMillis + " ms to get all thread descriptors!");
+    }
+    return ret;
+  }
+
+  private static void _sendInternalErrorMailToVendor (@Nullable final String sErrorNumber,
+                                                      @Nonnull final InternalErrorData aMetaData,
+                                                      @Nonnull final ThreadDescriptor aCurrentDescriptor,
+                                                      @Nonnull final ThreadDescriptorList aOtherThreads,
+                                                      @Nullable final IEmailAttachmentList aEmailAttachments)
+  {
+    int nOccurranceCount = 1;
+    final String sThrowableStackTrace = aCurrentDescriptor.getStackTrace ();
+    if (StringHelper.hasText (sThrowableStackTrace))
+    {
+      // Check if an internal error was already sent for this stack trace
+      final MutableInt aMI = s_aIntErrCache.get (sThrowableStackTrace);
+      if (aMI != null)
+      {
+        // This stack trace was already found!
+        aMI.inc ();
+
+        // Send only every 100th invocation!
+        nOccurranceCount = aMI.intValue ();
+        if ((nOccurranceCount % 100) != 0)
+        {
+          s_aLogger.warn ("Not sending internal error mail, because this error occurred " + nOccurranceCount + " times");
+          return;
+        }
+      }
+      else
+        s_aIntErrCache.put (sThrowableStackTrace, new MutableInt (1));
+    }
+
+    final IEmailAddress aSender = getSMTPSenderAddress ();
+    final IEmailAddress aReceiver = getSMTPReceiverAddress ();
+    final ISMTPSettings aSMTPSettings = getSMTPSettings ();
+
+    if (aSender != null && aReceiver != null && aSMTPSettings != null)
+    {
+      final String sMailSubject = StringHelper.getConcatenatedOnDemand ("Internal error", ' ', sErrorNumber);
+
+      // Main error thread dump
+      final String sMailBody = aMetaData.getAsString () +
+                               "\n---------------------------------------------------------------\n" +
+                               aCurrentDescriptor.getAsString () +
+                               "\n---------------------------------------------------------------\n" +
+                               aOtherThreads.getAsString () +
+                               "\n---------------------------------------------------------------";
+
+      final IEmailData aEmailData = EmailData.createEmailData (EEmailType.TEXT,
+                                                               aSender,
+                                                               aReceiver,
+                                                               sMailSubject,
+                                                               sMailBody,
+                                                               aEmailAttachments);
+
+      try
+      {
+        // Try default error communication data
+        ScopedMailAPI.getInstance ().queueMail (aSMTPSettings, aEmailData);
+      }
+      catch (final Throwable t2)
+      {
+        // E.g. if no scopes are present
+        s_aLogger.warn ("Failed to send via scoped MailAPI: " + _getAsString (t2));
+        MailAPI.queueMail (aSMTPSettings, aEmailData);
+      }
+    }
   }
 
   /**
