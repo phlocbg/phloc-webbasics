@@ -46,8 +46,9 @@ public class InitializerConfig extends DefaultApplicationInitializer
   @Override
   public void initLocales (@Nonnull final ILocaleManager aLocaleMgr)
   {
-    aLocaleMgr.registerLocale (CDemoApp.DEFAULT_LOCALE);
-    aLocaleMgr.setDefaultLocale (CDemoApp.DEFAULT_LOCALE);
+    aLocaleMgr.registerLocale (CDemoApp.LOCALE_DE);
+    aLocaleMgr.registerLocale (CDemoApp.LOCALE_EN);
+    aLocaleMgr.setDefaultLocale (CDemoApp.LOCALE_DE);
   }
 
   @Override

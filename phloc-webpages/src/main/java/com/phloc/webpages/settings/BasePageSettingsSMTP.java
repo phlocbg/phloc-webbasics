@@ -530,7 +530,6 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
       final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
       final HCNodeList aNodeList = aWPEC.getNodeList ();
       final FormErrors aFormErrors = new FormErrors ();
-      boolean bShowForm = true;
 
       if (aWPEC.hasSubAction (ACTION_PERFORM))
       {
@@ -559,41 +558,38 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
 
           aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_TEST_MAIL.getDisplayText (aDisplayLocale)));
 
-          bShowForm = false;
+          return true;
         }
       }
 
-      if (bShowForm)
-      {
-        // Show question
-        final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
+      // Show question
+      final HCForm aForm = aNodeList.addAndReturnChild (createFormSelf ());
 
-        final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
-                                                                                               HCCol.star ()));
-        aTable.createItemRow ()
-              .setLabelMandatory (EText.MSG_SENDER.getDisplayText (aDisplayLocale))
-              .setCtrl (new HCEdit (new RequestField (FIELD_TEST_SENDER)))
-              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SENDER));
-        aTable.createItemRow ()
-              .setLabelMandatory (EText.MSG_RECEIVER.getDisplayText (aDisplayLocale))
-              .setCtrl (new HCEdit (new RequestField (FIELD_TEST_RECEIVER)))
-              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_RECEIVER));
-        aTable.createItemRow ()
-              .setLabelMandatory (EText.MSG_SUBJECT.getDisplayText (aDisplayLocale))
-              .setCtrl (new HCEdit (new RequestField (FIELD_TEST_SUBJECT)))
-              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SUBJECT));
-        aTable.createItemRow ()
-              .setLabelMandatory (EText.MSG_BODY.getDisplayText (aDisplayLocale))
-              .setCtrl (new HCTextArea (new RequestField (FIELD_TEST_BODY)).setRows (5))
-              .setErrorList (aFormErrors.getListOfField (FIELD_TEST_BODY));
+      final IHCTableForm <?> aTable = aForm.addAndReturnChild (getStyler ().createTableForm (new HCCol (170),
+                                                                                             HCCol.star ()));
+      aTable.createItemRow ()
+            .setLabelMandatory (EText.MSG_SENDER.getDisplayText (aDisplayLocale))
+            .setCtrl (new HCEdit (new RequestField (FIELD_TEST_SENDER)))
+            .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SENDER));
+      aTable.createItemRow ()
+            .setLabelMandatory (EText.MSG_RECEIVER.getDisplayText (aDisplayLocale))
+            .setCtrl (new HCEdit (new RequestField (FIELD_TEST_RECEIVER)))
+            .setErrorList (aFormErrors.getListOfField (FIELD_TEST_RECEIVER));
+      aTable.createItemRow ()
+            .setLabelMandatory (EText.MSG_SUBJECT.getDisplayText (aDisplayLocale))
+            .setCtrl (new HCEdit (new RequestField (FIELD_TEST_SUBJECT)))
+            .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SUBJECT));
+      aTable.createItemRow ()
+            .setLabelMandatory (EText.MSG_BODY.getDisplayText (aDisplayLocale))
+            .setCtrl (new HCTextArea (new RequestField (FIELD_TEST_BODY)).setRows (5))
+            .setErrorList (aFormErrors.getListOfField (FIELD_TEST_BODY));
 
-        final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
-        aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL);
-        aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
-        aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
-        aToolbar.addSubmitButton (EText.BUTTON_SEND_TEST_MAIL.getDisplayText (aDisplayLocale));
-        aToolbar.addButtonCancel (aDisplayLocale);
-      }
+      final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
+      aToolbar.addHiddenField (CHCParam.PARAM_ACTION, ACTION_TEST_MAIL);
+      aToolbar.addHiddenField (CHCParam.PARAM_OBJECT, aSelectedObject.getID ());
+      aToolbar.addHiddenField (CHCParam.PARAM_SUBACTION, ACTION_PERFORM);
+      aToolbar.addSubmitButton (EText.BUTTON_SEND_TEST_MAIL.getDisplayText (aDisplayLocale));
+      aToolbar.addButtonCancel (aDisplayLocale);
       return false;
     }
     return true;
