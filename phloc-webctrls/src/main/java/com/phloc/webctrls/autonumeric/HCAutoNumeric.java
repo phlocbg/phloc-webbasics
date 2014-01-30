@@ -67,33 +67,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
   private static final Logger s_aLogger = LoggerFactory.getLogger (HCAutoNumeric.class);
 
-  public static enum ELeadingZero
-  {
-    /**
-     * allows leading zero to be entered. They are removed on focusout event
-     * (default)
-     */
-    ALLOW ("allow"),
-    /** leading zeros not allowed. */
-    DENY ("deny"),
-    /** leading zeros allowed and will be retained on the focusout event */
-    KEEP ("keep");
-
-    private final String m_sID;
-
-    private ELeadingZero (@Nonnull @Nonempty final String sID)
-    {
-      m_sID = sID;
-    }
-
-    @Nonnull
-    @Nonempty
-    public String getID ()
-    {
-      return m_sID;
-    }
-  }
-
   private final RequestField m_aRF;
   private String m_sID;
   private BigDecimal m_aInitialValue;
@@ -102,7 +75,8 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   private Integer m_aDecimalPlaces;
   private BigDecimal m_aMin;
   private BigDecimal m_aMax;
-  private ELeadingZero m_eLeadingZero;
+  private EAutoNumericLeadingZero m_eLeadingZero;
+  private EAutoNumericRoundingMode m_eRoundingMode;
   private IHCAutoNumericEditCustomizer m_aEditCustomizer;
 
   public HCAutoNumeric ()
@@ -274,15 +248,28 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nullable
-  public ELeadingZero getLeadingZero ()
+  public EAutoNumericLeadingZero getLeadingZero ()
   {
     return m_eLeadingZero;
   }
 
   @Nonnull
-  public HCAutoNumeric setLeadingZero (@Nullable final ELeadingZero eLeadingZero)
+  public HCAutoNumeric setLeadingZero (@Nullable final EAutoNumericLeadingZero eLeadingZero)
   {
     m_eLeadingZero = eLeadingZero;
+    return this;
+  }
+
+  @Nullable
+  public EAutoNumericRoundingMode getRoundingMode ()
+  {
+    return m_eRoundingMode;
+  }
+
+  @Nonnull
+  public HCAutoNumeric setRoundingMode (@Nullable final EAutoNumericRoundingMode eRoundingMode)
+  {
+    m_eRoundingMode = eRoundingMode;
     return this;
   }
 
@@ -431,6 +418,8 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
       aArgs.add ("vMax", m_aMax.toString ());
     if (m_eLeadingZero != null)
       aArgs.add ("lZero", m_eLeadingZero.getID ());
+    if (m_eRoundingMode != null)
+      aArgs.add ("mRound", m_eRoundingMode.getID ());
 
     return aArgs;
   }
