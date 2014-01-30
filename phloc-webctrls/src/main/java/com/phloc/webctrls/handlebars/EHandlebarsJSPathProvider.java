@@ -31,7 +31,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 public enum EHandlebarsJSPathProvider implements IJSPathProvider
 {
   /** http://handlebarsjs.com/ */
-  HANDLEBARS_1_1_2 ("handlebars/1.1.2/handlebars-v1.1.2.js");
+  HANDLEBARS_1_3_0 ("handlebars/1.3.0/handlebars-v1.3.0.js");
 
   private final String m_sPath;
 
