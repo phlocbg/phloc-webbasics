@@ -57,6 +57,7 @@ public enum ETinyMCE4Language
   FI ("fi"),
   FO ("fo"),
   FR_FR ("fr_FR"),
+  GD ("gd"),
   GL ("gl"),
   /* Note: this is not a valid Java locale! */
   HE_IL ("he_IL"),
