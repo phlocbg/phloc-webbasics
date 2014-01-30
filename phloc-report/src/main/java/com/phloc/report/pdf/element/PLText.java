@@ -43,7 +43,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  * 
  * @author Philip Helger
  */
-public class PLText extends AbstractPLElement <PLText> implements IPLSplittableElement
+public class PLText extends AbstractPLElement <PLText>
 {
   public static final boolean DEFAULT_TOP_DOWN = true;
 
@@ -55,7 +55,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
   private boolean m_bTopDown = DEFAULT_TOP_DOWN;
 
   // prepare result
-  private List <TextAndWidthSpec> m_aPreparedLines;
+  protected List <TextAndWidthSpec> m_aPreparedLines;
 
   public PLText (@Nullable final String sText, @Nonnull final FontSpec aFont)
   {
@@ -119,7 +119,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
     return this;
   }
 
-  private void _setPreparedLines (@Nonnull final List <TextAndWidthSpec> aLines)
+  final void internalSetPreparedLines (@Nonnull final List <TextAndWidthSpec> aLines)
   {
     m_aPreparedLines = aLines;
 
@@ -134,45 +134,9 @@ public class PLText extends AbstractPLElement <PLText> implements IPLSplittableE
   protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Split text into rows
-    _setPreparedLines (m_aFont.getFitToWidth (m_sText, m_aCharset, aCtx.getAvailableWidth ()));
+    internalSetPreparedLines (m_aFont.getFitToWidth (m_sText, m_aCharset, aCtx.getAvailableWidth ()));
 
     return new SizeSpec (aCtx.getAvailableWidth (), m_aPreparedLines.size () * m_fLineHeight);
-  }
-
-  @Nullable
-  public PLSplitResult splitElements (final float fElementWidth, final float fAvailableHeight)
-  {
-    // Get the lines in the correct order from top to bottom
-    final List <TextAndWidthSpec> aLines = m_bTopDown ? m_aPreparedLines
-                                                     : ContainerHelper.getReverseList (m_aPreparedLines);
-
-    final int nLines1 = (int) (fAvailableHeight / m_fLineHeight);
-    if (nLines1 <= 0)
-    {
-      // Splitting makes no sense
-      return null;
-    }
-
-    final List <TextAndWidthSpec> aLines1 = ContainerHelper.newList (aLines.subList (0, nLines1));
-    final List <TextAndWidthSpec> aLines2 = ContainerHelper.newList (aLines.subList (nLines1, aLines.size ()));
-
-    // Excluding padding/margin
-    final SizeSpec aSize1 = new SizeSpec (fElementWidth, aLines1.size () * m_fLineHeight);
-    final SizeSpec aSize2 = new SizeSpec (fElementWidth, aLines2.size () * m_fLineHeight);
-
-    final PLText aNewText1 = new PLText (TextAndWidthSpec.getAsText (aLines1), m_aFont).setBasicDataFrom (this)
-                                                                                       .setHorzAlign (m_eHorzAlign)
-                                                                                       .setTopDown (m_bTopDown)
-                                                                                       .markAsPrepared (aSize1);
-    aNewText1._setPreparedLines (aLines1);
-
-    final PLText aNewText2 = new PLText (TextAndWidthSpec.getAsText (aLines2), m_aFont).setBasicDataFrom (this)
-                                                                                       .setHorzAlign (m_eHorzAlign)
-                                                                                       .setTopDown (m_bTopDown)
-                                                                                       .markAsPrepared (aSize2);
-    aNewText2._setPreparedLines (aLines2);
-
-    return new PLSplitResult (new PLElementWithSize (aNewText1, aSize1), new PLElementWithSize (aNewText2, aSize2));
   }
 
   /**

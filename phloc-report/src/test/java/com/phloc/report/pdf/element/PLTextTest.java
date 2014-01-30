@@ -76,7 +76,7 @@ public class PLTextTest
     final FontSpec r10 = new FontSpec (PDFFont.REGULAR, 10);
 
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30);
-    aPS1.addElement (new PLText (aSB.toString (), r10).setBorder (new BorderStyleSpec (Color.RED)));
+    aPS1.addElement (new PLTextSplittable (aSB.toString (), r10).setBorder (new BorderStyleSpec (Color.RED)));
 
     final PageLayoutPDF aPageLayout = new PageLayoutPDF ().setDebug (false);
     aPageLayout.addPageSet (aPS1);

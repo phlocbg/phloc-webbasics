@@ -20,10 +20,13 @@ package com.phloc.report.pdf.element;
 import java.awt.Color;
 import java.io.FileOutputStream;
 
+import org.apache.pdfbox.cos.COSArray;
+import org.apache.pdfbox.cos.COSDictionary;
+import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.encoding.DictionaryEncoding;
 import org.apache.pdfbox.encoding.Encoding;
-import org.apache.pdfbox.encoding.EncodingManager;
-import org.apache.pdfbox.encoding.PdfDocEncoding;
+import org.apache.pdfbox.encoding.WinAnsiEncoding;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
@@ -48,36 +51,52 @@ public class PDFFontTest
   @Test
   public void testEuroSign () throws Exception
   {
-    String s = "Test that costs 5€. Special chars: äöüÄÖÜßáàéèíìóòúùÁÀÈÍÌÓÒÚÙ - end.";
-
+    String s = "Test that costs 5€. Special chars: äöüÄÖÜß áàéèíìóòúù ÁÀÈÍÌÓÒÚÙ - end.";
+    s += s;
+    s += s;
     if (false)
-      s = PdfPageMgr.convertJavaStringToWinAnsi (s);
+      s = "€";
+
+    if (true)
+      s = FakeWinAnsiHelper.convertJavaStringToWinAnsi2 (s);
+
+    Encoding aEncoding = WinAnsiEncoding.INSTANCE;
 
     if (false)
     {
       final char [] cs = s.toCharArray ();
       final StringBuilder sencoded = new StringBuilder ();
-      final Encoding e = EncodingManager.INSTANCE.getEncoding (COSName.WIN_ANSI_ENCODING);
       for (final char c : cs)
       {
-        String sName = e.getNameFromCharacter (c);
+        String sName = aEncoding.getNameFromCharacter (c);
         if ("spacehackarabic".equals (sName))
           sName = "space";
-        sencoded.appendCodePoint (e.getCode (sName));
+        sencoded.appendCodePoint (aEncoding.getCode (sName));
       }
       s = sencoded.toString ();
     }
 
+    if (false)
+    {
+      final COSArray aDiff = new COSArray ();
+      aDiff.add (COSInteger.get (0x20ac));
+      aDiff.add (COSName.getPDFName ("Euro"));
+      final COSDictionary aFontDict = new COSDictionary ();
+      aFontDict.setItem (COSName.BASE_ENCODING, COSName.WIN_ANSI_ENCODING);
+      aFontDict.setItem (COSName.DIFFERENCES, aDiff);
+      aEncoding = new DictionaryEncoding (aFontDict);
+    }
+
     final PDTrueTypeFont aFont = PDTrueTypeFont.loadTTF (new PDDocument (),
-                                                         EFontResource.ANAHEIM_REGULAR.getInputStream ());
-    aFont.setFontEncoding (PdfDocEncoding.INSTANCE);
-    final FontSpec r10 = new FontSpec (new PDFFont (aFont), 10);
+                                                         EFontResource.ANAHEIM_REGULAR.getInputStream (),
+                                                         aEncoding);
+    final FontSpec r10 = new FontSpec (true ? PDFFont.REGULAR : new PDFFont (aFont), 10);
 
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30);
     final PLTable aTable = PLTable.createWithPercentage (50, 50);
     final PLHBox aHBox = new PLHBox ();
     aHBox.addColumn (new PLText (s, CCharset.CHARSET_UTF_16BE_OBJ, r10).setBorder (new BorderStyleSpec (Color.RED)),
-                     WidthSpec.perc (20));
+                     WidthSpec.abs (180));
     aTable.addRow (aHBox);
     aPS1.addElement (aTable);
 
