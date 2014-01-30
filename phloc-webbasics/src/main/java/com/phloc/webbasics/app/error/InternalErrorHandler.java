@@ -18,6 +18,7 @@
 package com.phloc.webbasics.app.error;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -30,28 +31,41 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.base64.Base64;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.concurrent.ComparatorThreadID;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.io.file.SimpleFileIO;
+import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.StackTraceHelper;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.impl.MicroDocument;
+import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.mutable.MutableInt;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
+import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.css.propertyvalue.CCSSValue;
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.io.PDTIOHelper;
 import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.htmlext.HCUtils;
 import com.phloc.web.smtp.EEmailType;
+import com.phloc.web.smtp.IEmailAttachmentDataSource;
 import com.phloc.web.smtp.IEmailAttachmentList;
 import com.phloc.web.smtp.IEmailData;
+import com.phloc.web.smtp.IReadonlyEmailAttachmentList;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.EmailData;
 import com.phloc.web.smtp.transport.MailAPI;
@@ -335,6 +349,53 @@ public final class InternalErrorHandler
         MailAPI.queueMail (aSMTPSettings, aEmailData);
       }
     }
+  }
+
+  private static void _saveInternalErrorToXML (@Nullable final String sErrorNumber,
+                                               @Nonnull final InternalErrorData aMetaData,
+                                               @Nonnull final ThreadDescriptor aCurrentDescriptor,
+                                               @Nonnull final ThreadDescriptorList aOtherThreads,
+                                               @Nullable final IReadonlyEmailAttachmentList aEmailAttachments)
+  {
+    final IMicroDocument aDoc = new MicroDocument ();
+    final IMicroElement eRoot = aDoc.appendElement ("internalError");
+    if (StringHelper.hasText (sErrorNumber))
+      eRoot.setAttribute ("errornumber", sErrorNumber);
+    eRoot.appendChild (aMetaData.getAsMicroNode ());
+    eRoot.appendChild (aCurrentDescriptor.getAsMicroNode ());
+    eRoot.appendChild (aOtherThreads.getAsMicroNode ());
+    if (aEmailAttachments != null)
+    {
+      // FIXME add a micro type converter for DataSource
+      final List <IEmailAttachmentDataSource> aAttachments = aEmailAttachments.getAsDataSourceList ();
+      if (ContainerHelper.isNotEmpty (aAttachments))
+      {
+        final IMicroElement eAttachments = eRoot.appendElement ("attachments");
+        for (final IEmailAttachmentDataSource aDS : aAttachments)
+        {
+          final IMicroElement eAttachment = eAttachments.appendElement ("attachment");
+          eAttachment.setAttribute ("name", aDS.getName ());
+          eAttachment.setAttribute ("contenttype", aDS.getContentType ());
+          try
+          {
+            eAttachment.appendText (Base64.encodeBytes (StreamUtils.getAllBytes (aDS.getInputStream ())));
+          }
+          catch (final Exception ex)
+          {
+            s_aLogger.error ("Failed to get content of attachment '" + aDS.getName () + "'", ex);
+            eAttachment.setAttribute ("contentsavefailure", "true");
+          }
+        }
+      }
+    }
+
+    // Start saving
+    final String sFilename = StringHelper.getConcatenatedOnDemand (PDTIOHelper.getCurrentDateTimeForFilename (),
+                                                                   "-",
+                                                                   sErrorNumber) + ".xml";
+    SimpleFileIO.writeFile (WebFileIO.getFile ("internal-errors/" + PDTFactory.getCurrentYear () + "/" + sFilename),
+                            MicroWriter.getXMLString (aDoc),
+                            XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
   }
 
   /**
