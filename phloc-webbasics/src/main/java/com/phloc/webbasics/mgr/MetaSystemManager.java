@@ -30,7 +30,6 @@ import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.scopes.singleton.GlobalSingleton;
-import com.phloc.web.smtp.failed.FailedMailQueue;
 import com.phloc.webbasics.smtp.FailedMailQueueWithDAO;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
@@ -76,11 +75,7 @@ public final class MetaSystemManager extends GlobalSingleton
   @Override
   protected void onDestroy ()
   {
-    if (m_aFailedMailQueue != null)
-    {
-      // Set to default queue
-      ScopedMailAPI.getInstance ().setFailedMailQueue (new FailedMailQueue ());
-    }
+    // Don't reset the FailedMailQueue, as no global scope is available anymore!
 
     if (m_aAuditMgr != null)
     {
