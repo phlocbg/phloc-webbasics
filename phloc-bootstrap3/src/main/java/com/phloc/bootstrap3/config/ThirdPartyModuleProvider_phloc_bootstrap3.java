@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_phloc_bootstrap3 implements IThirdPa
 {
   public static final IThirdPartyModule BOOTSTRAP3 = new ThirdPartyModule ("Bootstrap",
                                                                            "Twitter",
-                                                                           ELicense.APACHE2,
+                                                                           ELicense.MIT,
                                                                            CBootstrap.BOOTSTRAP_VERSION_310,
                                                                            "http://getbootstrap.com/");
 
