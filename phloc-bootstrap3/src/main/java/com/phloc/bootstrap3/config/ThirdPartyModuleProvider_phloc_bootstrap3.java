@@ -39,7 +39,7 @@ public final class ThirdPartyModuleProvider_phloc_bootstrap3 implements IThirdPa
   public static final IThirdPartyModule BOOTSTRAP3 = new ThirdPartyModule ("Bootstrap",
                                                                            "Twitter",
                                                                            ELicense.APACHE2,
-                                                                           CBootstrap.BOOTSTRAP_VERSION_303,
+                                                                           CBootstrap.BOOTSTRAP_VERSION_310,
                                                                            "http://getbootstrap.com/");
 
   public static final IThirdPartyModule BOOTSTRAP_DATETIME_PICKER = new ThirdPartyModule ("Bootstrap Datetime Picker",
