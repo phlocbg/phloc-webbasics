@@ -85,6 +85,16 @@ public final class PerRequestCSSIncludes
   }
 
   /**
+   * Unregister all existing CSS items from this request
+   */
+  public static void unregisterAllCSSIncludesFromThisRequest ()
+  {
+    final Set <ICSSPathProvider> aSet = _getPerRequestSet (false);
+    if (aSet != null)
+      aSet.clear ();
+  }
+
+  /**
    * @return A non-<code>null</code> set with all CSS paths to be included in
    *         this request. Order is ensured using LinkedHashSet.
    */

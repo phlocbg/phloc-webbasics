@@ -85,6 +85,16 @@ public final class PerRequestJSIncludes
   }
 
   /**
+   * Unregister all existing JS items from this request
+   */
+  public static void unregisterAllJSIncludesFromThisRequest ()
+  {
+    final Set <IJSPathProvider> aSet = _getPerRequestSet (false);
+    if (aSet != null)
+      aSet.clear ();
+  }
+
+  /**
    * @return A non-<code>null</code> set with all JS paths to be included in
    *         this request. Order is ensured using LinkedHashSet.
    */
