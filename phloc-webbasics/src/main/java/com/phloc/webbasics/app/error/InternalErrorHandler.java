@@ -360,7 +360,7 @@ public final class InternalErrorHandler
       }
     }
     else
-      s_aLogger.warn ("Not sending internal error mail, because required elements are not present!");
+      s_aLogger.warn ("Not sending internal error mail, because required fields are not set!");
   }
 
   private static void _saveInternalErrorToXML (@Nullable final String sErrorNumber,
