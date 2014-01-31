@@ -84,7 +84,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
- * A handler for internal errors that occur while building a UI page
+ * A handler for internal errors
  * 
  * @author Philip Helger
  */
@@ -409,19 +409,6 @@ public final class InternalErrorHandler
                             XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
   }
 
-  /**
-   * Send an internal error mail to the vendor
-   * 
-   * @param t
-   *        The Exception that occurred. May not be <code>null</code>.
-   * @param sErrorNumber
-   *        The error number to be used.
-   */
-  public static void sendInternalErrorMailToVendor (@Nullable final Throwable t, @Nullable final String sErrorNumber)
-  {
-    sendInternalErrorMailToVendor (t, sErrorNumber, null, null);
-  }
-
   @Nonnull
   public static InternalErrorData fillInternalErrorMetaData (@Nullable final String sErrorNumber,
                                                              @Nullable final String sCustomData)
@@ -590,36 +577,17 @@ public final class InternalErrorHandler
    * Default handling for an internal error
    * 
    * @param aParent
-   *        The parent list to append the nodes to
+   *        The parent list to append the nodes to. May be <code>null</code>.
    * @param t
    *        The exception that occurred. May not be <code>null</code>.
    * @param aRequestScope
    *        The request scope in which the error occurred. May not be
    *        <code>null</code>.
-   * @param aDisplayLocale
-   *        The display locale to use for the texts.
-   * @return The created unique error ID
-   */
-  @Nonnull
-  @Nonempty
-  public static String handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
-                                            @Nonnull final Throwable t,
-                                            @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                            @Nonnull final Locale aDisplayLocale)
-  {
-    return handleInternalError (aParent, t, aRequestScope, aDisplayLocale, true);
-  }
-
-  /**
-   * Default handling for an internal error
-   * 
-   * @param aParent
-   *        The parent list to append the nodes to
-   * @param t
-   *        The exception that occurred. May not be <code>null</code>.
-   * @param aRequestScope
-   *        The request scope in which the error occurred. May not be
+   * @param sCustomData
+   *        Custom data to be put into the mail content. May be
    *        <code>null</code>.
+   * @param aEmailAttachments
+   *        Email attachments to be added. May be <code>null</code>.
    * @param aDisplayLocale
    *        The display locale to use for the texts.
    * @param bInvokeCustomExceptionHandler
@@ -629,9 +597,11 @@ public final class InternalErrorHandler
    */
   @Nonnull
   @Nonempty
-  public static String handleInternalError (@Nonnull final IHCNodeWithChildren <?> aParent,
-                                            @Nonnull final Throwable t,
+  public static String handleInternalError (@Nullable final IHCNodeWithChildren <?> aParent,
+                                            @Nullable final Throwable t,
                                             @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                            @Nullable final String sCustomData,
+                                            @Nullable final IEmailAttachmentList aEmailAttachments,
                                             @Nonnull final Locale aDisplayLocale,
                                             final boolean bInvokeCustomExceptionHandler)
   {
@@ -640,30 +610,36 @@ public final class InternalErrorHandler
     // Log the error, to ensure the data is persisted!
     s_aLogger.error ("handleInternalError " + sErrorID, t);
 
-    aParent.addChild (new HCH1 ().addChild (EWebBasicsText.INTERNAL_ERROR_TITLE.getDisplayText (aDisplayLocale)));
-    aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList (EWebBasicsText.INTERNAL_ERROR_DESCRIPTION.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                                                     sErrorID))));
+    if (aParent != null)
+    {
+      aParent.addChild (new HCH1 ().addChild (EWebBasicsText.INTERNAL_ERROR_TITLE.getDisplayText (aDisplayLocale)));
+      aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList (EWebBasicsText.INTERNAL_ERROR_DESCRIPTION.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                                                       sErrorID))));
+    }
 
     if (GlobalDebug.isDebugMode ())
     {
-      // Get error stack trace
-      final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
+      if (aParent != null)
+      {
+        // Get error stack trace
+        final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
 
-      final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
-                                                                 .setRows (20)
-                                                                 .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (98)))
-                                                                 .addStyle (CCSSProperties.FONT_SIZE.newValue (ECSSUnit.pt (10)))
-                                                                 .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSSValue.FONT_MONOSPACE));
+        final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
+                                                                   .setRows (20)
+                                                                   .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (98)))
+                                                                   .addStyle (CCSSProperties.FONT_SIZE.newValue (ECSSUnit.pt (10)))
+                                                                   .addStyle (CCSSProperties.FONT_FAMILY.newValue (CCSSValue.FONT_MONOSPACE));
 
-      aParent.addChild (aStackTrace);
+        aParent.addChild (aStackTrace);
+      }
 
       // In case an unexpected error occurs in the UnitTest, make the test fail!
-      if (StackTraceHelper.containsUnitTestElement (t.getStackTrace ()))
+      if (t != null && StackTraceHelper.containsUnitTestElement (t.getStackTrace ()))
         throw new IllegalStateException ("Error executing unit test", t);
     }
     else
     {
-      sendInternalErrorMailToVendor (t, sErrorID);
+      sendInternalErrorMailToVendor (t, sErrorID, sCustomData, aEmailAttachments);
     }
 
     if (bInvokeCustomExceptionHandler)

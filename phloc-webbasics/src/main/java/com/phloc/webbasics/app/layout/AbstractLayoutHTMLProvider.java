@@ -34,6 +34,7 @@ import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCSpan;
+import com.phloc.web.smtp.IEmailAttachmentList;
 import com.phloc.webbasics.app.error.InternalErrorHandler;
 import com.phloc.webbasics.app.html.AbstractHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -161,7 +162,13 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
       catch (final Throwable t)
       {
         // send internal error mail here
-        InternalErrorHandler.handleInternalError (aBody, t, aRequestScope, aDisplayLocale);
+        InternalErrorHandler.handleInternalError (aBody,
+                                                  t,
+                                                  aRequestScope,
+                                                  (String) null,
+                                                  (IEmailAttachmentList) null,
+                                                  aDisplayLocale,
+                                                  true);
       }
     }
 

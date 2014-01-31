@@ -39,7 +39,7 @@ import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringHelper;
 
 @NotThreadSafe
-final class ThreadDescriptorList implements IHasStringRepresentation, IHasMicroNodeRepresentation
+public final class ThreadDescriptorList implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {
   private final List <ThreadDescriptor> m_aList = new ArrayList <ThreadDescriptor> ();
   private String m_sError;
@@ -54,9 +54,22 @@ final class ThreadDescriptorList implements IHasStringRepresentation, IHasMicroN
     m_aList.add (aDescriptor);
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <ThreadDescriptor> getAllDescriptors ()
+  {
+    return ContainerHelper.newList (m_aList);
+  }
+
   public void setError (@Nullable final String sError)
   {
     m_sError = sError;
+  }
+
+  @Nullable
+  public String getError ()
+  {
+    return m_sError;
   }
 
   @Nonnull

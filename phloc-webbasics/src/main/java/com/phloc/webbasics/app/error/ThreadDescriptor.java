@@ -39,7 +39,7 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringHelper;
 
-final class ThreadDescriptor implements IHasStringRepresentation, IHasMicroNodeRepresentation
+public final class ThreadDescriptor implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ThreadDescriptor.class);
   private static final ThreadMXBean THREAD_MX = ManagementFactory.getThreadMXBean ();
