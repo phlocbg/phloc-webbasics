@@ -27,11 +27,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.base64.Base64;
@@ -61,6 +64,8 @@ import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.htmlext.HCUtils;
+import com.phloc.web.datetime.PDTWebDateUtils;
+import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.web.smtp.EEmailType;
 import com.phloc.web.smtp.IEmailAttachmentDataSource;
 import com.phloc.web.smtp.IEmailAttachmentList;
@@ -69,8 +74,13 @@ import com.phloc.web.smtp.IReadonlyEmailAttachmentList;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.EmailData;
 import com.phloc.web.smtp.transport.MailAPI;
+import com.phloc.web.useragent.UserAgentDatabase;
+import com.phloc.web.useragent.uaprofile.UAProfile;
+import com.phloc.web.useragent.uaprofile.UAProfileDatabase;
 import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webscopes.domain.ISessionWebScope;
+import com.phloc.webscopes.mgr.WebScopeManager;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
 /**
@@ -349,6 +359,8 @@ public final class InternalErrorHandler
         MailAPI.queueMail (aSMTPSettings, aEmailData);
       }
     }
+    else
+      s_aLogger.warn ("Not sending internal error mail, because required elements are not present!");
   }
 
   private static void _saveInternalErrorToXML (@Nullable final String sErrorNumber,
@@ -358,7 +370,7 @@ public final class InternalErrorHandler
                                                @Nullable final IReadonlyEmailAttachmentList aEmailAttachments)
   {
     final IMicroDocument aDoc = new MicroDocument ();
-    final IMicroElement eRoot = aDoc.appendElement ("internalError");
+    final IMicroElement eRoot = aDoc.appendElement ("internalerror");
     if (StringHelper.hasText (sErrorNumber))
       eRoot.setAttribute ("errornumber", sErrorNumber);
     eRoot.appendChild (aMetaData.getAsMicroNode ());
@@ -366,7 +378,6 @@ public final class InternalErrorHandler
     eRoot.appendChild (aOtherThreads.getAsMicroNode ());
     if (aEmailAttachments != null)
     {
-      // FIXME add a micro type converter for DataSource
       final List <IEmailAttachmentDataSource> aAttachments = aEmailAttachments.getAsDataSourceList ();
       if (ContainerHelper.isNotEmpty (aAttachments))
       {
@@ -396,6 +407,183 @@ public final class InternalErrorHandler
     SimpleFileIO.writeFile (WebFileIO.getFile ("internal-errors/" + PDTFactory.getCurrentYear () + "/" + sFilename),
                             MicroWriter.getXMLString (aDoc),
                             XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+  }
+
+  /**
+   * Send an internal error mail to the vendor
+   * 
+   * @param t
+   *        The Exception that occurred. May not be <code>null</code>.
+   * @param sErrorNumber
+   *        The error number to be used.
+   */
+  public static void sendInternalErrorMailToVendor (@Nullable final Throwable t, @Nullable final String sErrorNumber)
+  {
+    sendInternalErrorMailToVendor (t, sErrorNumber, null, null);
+  }
+
+  @Nonnull
+  public static InternalErrorData fillInternalErrorMetaData (@Nullable final String sErrorNumber,
+                                                             @Nullable final String sCustomData)
+  {
+    final InternalErrorData aMetaData = new InternalErrorData ();
+
+    // Date and time
+    try
+    {
+      aMetaData.addField ("Time", PDTWebDateUtils.getAsStringXSD (PDTFactory.getCurrentDateTime ()));
+    }
+    catch (final Throwable t2)
+    {
+      aMetaData.addField ("Time", "System.currentTimeMillis=" + Long.toString (System.currentTimeMillis ()));
+    }
+
+    // Error number
+    if (sErrorNumber != null)
+      aMetaData.addField ("Error number", sErrorNumber);
+
+    IRequestWebScopeWithoutResponse aRequestScope = null;
+    try
+    {
+      aRequestScope = WebScopeManager.getRequestScope ();
+    }
+    catch (final Throwable t2)
+    {
+      // Happens if no scope is available (or what so ever)
+      s_aLogger.warn ("Failed to get request scope: " + _getAsString (t2));
+    }
+    if (aRequestScope != null)
+    {
+      if (!aRequestScope.isValid ())
+        aMetaData.addField ("Request scope", "!!!Present but invalid!!!");
+
+      try
+      {
+        aMetaData.addField ("Request URL", aRequestScope.getURL ());
+      }
+      catch (final Throwable t2)
+      {
+        // fall-through - happens in a weird case
+        aMetaData.addField ("Request URL", t2);
+      }
+
+      aMetaData.addField ("User agent", UserAgentDatabase.getUserAgent (aRequestScope.getRequest ()).getAsString ());
+
+      try
+      {
+        aMetaData.addField ("Remote IP address", aRequestScope.getRemoteAddr ());
+      }
+      catch (final Throwable t2)
+      {
+        // fall-through - happens in a weird case
+        aMetaData.addField ("Remote IP address", t2);
+      }
+
+      // Mobile browser?
+      final UAProfile aProfile = UAProfileDatabase.getUAProfile (aRequestScope.getRequest ());
+      if (!aProfile.equals (UAProfile.EMPTY))
+        aMetaData.addField ("UAProfile", aProfile.toString ());
+    }
+    else
+    {
+      aMetaData.addField ("Request scope", "!!!Not present!!!");
+    }
+
+    ISessionWebScope aSessionScope = null;
+    try
+    {
+      aSessionScope = WebScopeManager.getSessionScope (false);
+    }
+    catch (final Throwable t2)
+    {
+      // Happens if no scope is available (or what so ever)
+      s_aLogger.warn ("Failed to get request scope: " + _getAsString (t2));
+    }
+    if (aSessionScope != null)
+      aMetaData.addField ("SessionID", aSessionScope.getID ());
+
+    try
+    {
+      aMetaData.addField ("User", LoggedInUserManager.getInstance ().getCurrentUserID ());
+    }
+    catch (final Throwable t2)
+    {
+      // Happens if no scope is available (or what so ever)
+      aMetaData.addField ("User", t2);
+    }
+
+    // Custom data must always be the last field before the stack separator!
+    if (sCustomData != null)
+      aMetaData.addField ("Custom data", sCustomData);
+
+    if (aRequestScope != null)
+    {
+      final HttpServletRequest aHttpRequest = aRequestScope.getRequest ();
+      if (aHttpRequest != null)
+      {
+        try
+        {
+          for (final Map.Entry <String, String> aEntry : RequestLogger.getRequestFieldMap (aHttpRequest).entrySet ())
+            aMetaData.addRequestField (aEntry.getKey (), aEntry.getValue ());
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Failed to get request fields from " + aHttpRequest, t2);
+        }
+        try
+        {
+          for (final Map.Entry <String, String> aEntry : RequestLogger.getHTTPHeaderMap (aHttpRequest).entrySet ())
+            aMetaData.addRequestHeader (aEntry.getKey (), aEntry.getValue ());
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Failed to get request headers from " + aHttpRequest, t2);
+        }
+        try
+        {
+          for (final Map.Entry <String, String> aEntry : RequestLogger.getRequestParameterMap (aHttpRequest)
+                                                                      .entrySet ())
+            aMetaData.addRequestParameter (aEntry.getKey (), aEntry.getValue ());
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Failed to get request parameters from " + aHttpRequest, t2);
+        }
+        try
+        {
+          final Cookie [] aCookies = aHttpRequest.getCookies ();
+          if (aCookies != null)
+            for (final Cookie aCookie : aCookies)
+              aMetaData.addRequestCookie (aCookie.getName (), aCookie.getValue ());
+        }
+        catch (final Throwable t2)
+        {
+          s_aLogger.error ("Failed to get request cookies from " + aHttpRequest, t2);
+        }
+      }
+    }
+    return aMetaData;
+  }
+
+  public static void sendInternalErrorMailToVendor (@Nullable final Throwable t,
+                                                    @Nullable final String sErrorNumber,
+                                                    @Nullable final String sCustomData,
+                                                    @Nullable final IEmailAttachmentList aEmailAttachments)
+  {
+    final InternalErrorData aMetaData = fillInternalErrorMetaData (sErrorNumber, sCustomData);
+
+    // Get descriptor for crashed thread
+    final String sThrowableStackTrace = t == null ? null : StackTraceHelper.getStackAsString (t, false);
+    final ThreadDescriptor aCurrentDescriptor = new ThreadDescriptor (Thread.currentThread (), sThrowableStackTrace);
+
+    // Get all other thread descriptors
+    final ThreadDescriptorList aOtherThreads = _getAllThreadDescriptors ();
+
+    // Main mail sending
+    _sendInternalErrorMailToVendor (sErrorNumber, aMetaData, aCurrentDescriptor, aOtherThreads, aEmailAttachments);
+
+    // Save as XML too
+    _saveInternalErrorToXML (sErrorNumber, aMetaData, aCurrentDescriptor, aOtherThreads, aEmailAttachments);
   }
 
   /**
@@ -472,6 +660,10 @@ public final class InternalErrorHandler
       // In case an unexpected error occurs in the UnitTest, make the test fail!
       if (StackTraceHelper.containsUnitTestElement (t.getStackTrace ()))
         throw new IllegalStateException ("Error executing unit test", t);
+    }
+    else
+    {
+      sendInternalErrorMailToVendor (t, sErrorID);
     }
 
     if (bInvokeCustomExceptionHandler)

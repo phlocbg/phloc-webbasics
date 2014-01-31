@@ -221,6 +221,22 @@ public final class RequestLogger
   }
 
   @Nonnull
+  public static String getCookieValue (@Nonnull final Cookie aCookie)
+  {
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append (aCookie.getValue ());
+    if (StringHelper.hasText (aCookie.getDomain ()))
+      aSB.append (" [domain=").append (aCookie.getDomain ()).append (']');
+    aSB.append (" [maxage=").append (aCookie.getMaxAge ()).append (']');
+    if (StringHelper.hasText (aCookie.getPath ()))
+      aSB.append (" [path=").append (aCookie.getPath ()).append (']');
+    if (aCookie.getSecure ())
+      aSB.append (" [secure]");
+    aSB.append (" [version=").append (aCookie.getVersion ()).append (']');
+    return aSB.toString ();
+  }
+
+  @Nonnull
   public static StringBuilder getRequestCookies (@Nonnull final HttpServletRequest aHttpRequest)
   {
     final StringBuilder aSB = new StringBuilder ();
@@ -228,18 +244,7 @@ public final class RequestLogger
     final Cookie [] aCookies = aHttpRequest.getCookies ();
     if (aCookies != null)
       for (final Cookie aCookie : aCookies)
-      {
-        aSB.append ("  ").append (aCookie.getName ()).append (" = ").append (aCookie.getValue ());
-        if (StringHelper.hasText (aCookie.getDomain ()))
-          aSB.append (" [domain=").append (aCookie.getDomain ()).append (']');
-        aSB.append (" [maxage=").append (aCookie.getMaxAge ()).append (']');
-        if (StringHelper.hasText (aCookie.getPath ()))
-          aSB.append (" [path=").append (aCookie.getPath ()).append (']');
-        if (aCookie.getSecure ())
-          aSB.append (" [secure]");
-        aSB.append (" [version=").append (aCookie.getVersion ()).append (']');
-        aSB.append ('\n');
-      }
+        aSB.append ("  ").append (aCookie.getName ()).append (" = ").append (getCookieValue (aCookie)).append ('\n');
     return aSB;
   }
 

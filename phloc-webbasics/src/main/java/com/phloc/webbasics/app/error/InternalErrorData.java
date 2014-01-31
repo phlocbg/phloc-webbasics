@@ -71,6 +71,7 @@ public final class InternalErrorData
   private final List <Entry> m_aRequestFields = new ArrayList <Entry> ();
   private final List <Entry> m_aRequestHeaders = new ArrayList <Entry> ();
   private final List <Entry> m_aRequestParameters = new ArrayList <Entry> ();
+  private final List <Entry> m_aRequestCookies = new ArrayList <Entry> ();
 
   public InternalErrorData ()
   {}
@@ -102,6 +103,11 @@ public final class InternalErrorData
     m_aRequestParameters.add (new Entry (sKey, sValue));
   }
 
+  public void addRequestCookie (@Nonnull final String sKey, @Nullable final String sValue)
+  {
+    m_aRequestCookies.add (new Entry (sKey, sValue));
+  }
+
   @Nonnull
   public String getAsString ()
   {
@@ -127,6 +133,13 @@ public final class InternalErrorData
     {
       aSB.append ("Request parameters:\n");
       for (final Entry aEntry : m_aRequestParameters)
+        aSB.append ("  ").append (aEntry.getAsString ()).append ('\n');
+    }
+
+    if (!m_aRequestCookies.isEmpty ())
+    {
+      aSB.append ("Request cookies:\n");
+      for (final Entry aEntry : m_aRequestCookies)
         aSB.append ("  ").append (aEntry.getAsString ()).append ('\n');
     }
     return aSB.toString ();
@@ -162,6 +175,13 @@ public final class InternalErrorData
       final IMicroElement eRequestParameters = eMetaData.appendElement ("requestparameters");
       for (final Entry aEntry : m_aRequestParameters)
         eRequestParameters.appendChild (aEntry.getAsMicroNode ());
+    }
+
+    if (!m_aRequestCookies.isEmpty ())
+    {
+      final IMicroElement eRequestCookies = eMetaData.appendElement ("requestcookies");
+      for (final Entry aEntry : m_aRequestCookies)
+        eRequestCookies.appendChild (aEntry.getAsMicroNode ());
     }
     return eMetaData;
   }
