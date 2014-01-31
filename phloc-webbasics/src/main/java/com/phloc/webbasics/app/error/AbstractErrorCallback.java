@@ -17,12 +17,13 @@
  */
 package com.phloc.webbasics.app.error;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
+import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.webbasics.action.IActionExceptionHandler;
 import com.phloc.webbasics.ajax.IAjaxExceptionHandler;
@@ -34,7 +35,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractErrorCallback implements IInternalErrorCallback, IAjaxExceptionHandler, IActionExceptionHandler
+public abstract class AbstractErrorCallback implements IAjaxExceptionHandler, IActionExceptionHandler, IDAOReadExceptionHandler, IDAOWriteExceptionHandler
 {
   /**
    * Implement this method to handle all errors in a similar way.
@@ -52,14 +53,6 @@ public abstract class AbstractErrorCallback implements IInternalErrorCallback, I
                                    @Nonnull IRequestWebScopeWithoutResponse aRequestScope,
                                    @Nonnull @Nonempty String sErrorCode);
 
-  public void onInternalError (@Nonnull final Throwable t,
-                               @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                               @Nonnull @Nonempty final String sErrorID,
-                               @Nonnull final Locale aDisplayLocale)
-  {
-    onError (t, aRequestScope, sErrorID);
-  }
-
   public void onAjaxException (@Nonnull final Throwable t,
                                @Nullable final String sAjaxFunctionName,
                                @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
@@ -76,5 +69,19 @@ public abstract class AbstractErrorCallback implements IInternalErrorCallback, I
   {
     final String sErrorCode = "action-error-" + sActionName + "-" + InternalErrorHandler.createNewErrorID ();
     onError (t, aRequestScope, sErrorCode);
+  }
+
+  public void onDAOReadException (@Nonnull final Throwable t,
+                                  final boolean bInit,
+                                  @Nullable final IReadableResource aRes)
+  {
+    onError (t, null, "DAO " + (bInit ? "init" : "read") + " error" + (aRes == null ? "" : " for " + aRes.getPath ()));
+  }
+
+  public void onDAOWriteException (@Nonnull final Throwable t,
+                                   @Nonnull final IReadableResource aRes,
+                                   @Nonnull final CharSequence aFileContent)
+  {
+    onError (t, null, "DAO write error for " + aRes.getPath () + " with " + aFileContent.length () + " chars");
   }
 }

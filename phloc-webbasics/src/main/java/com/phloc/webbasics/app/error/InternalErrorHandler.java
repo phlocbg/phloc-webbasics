@@ -410,7 +410,8 @@ public final class InternalErrorHandler
   }
 
   @Nonnull
-  public static InternalErrorData fillInternalErrorMetaData (@Nullable final String sErrorNumber,
+  public static InternalErrorData fillInternalErrorMetaData (@Nullable final IRequestWebScopeWithoutResponse aProvidedRequestScope,
+                                                             @Nullable final String sErrorNumber,
                                                              @Nullable final String sCustomData)
   {
     final InternalErrorData aMetaData = new InternalErrorData ();
@@ -429,16 +430,17 @@ public final class InternalErrorHandler
     if (sErrorNumber != null)
       aMetaData.addField ("Error number", sErrorNumber);
 
-    IRequestWebScopeWithoutResponse aRequestScope = null;
-    try
-    {
-      aRequestScope = WebScopeManager.getRequestScope ();
-    }
-    catch (final Throwable t2)
-    {
-      // Happens if no scope is available (or what so ever)
-      s_aLogger.warn ("Failed to get request scope: " + _getAsString (t2));
-    }
+    IRequestWebScopeWithoutResponse aRequestScope = aProvidedRequestScope;
+    if (aRequestScope == null)
+      try
+      {
+        aRequestScope = WebScopeManager.getRequestScope ();
+      }
+      catch (final Throwable t2)
+      {
+        // Happens if no scope is available (or what so ever)
+        s_aLogger.warn ("Failed to get request scope: " + _getAsString (t2));
+      }
     if (aRequestScope != null)
     {
       if (!aRequestScope.isValid ())
@@ -536,6 +538,7 @@ public final class InternalErrorHandler
         {
           s_aLogger.error ("Failed to get request parameters from " + aHttpRequest, t2);
         }
+
         try
         {
           final Cookie [] aCookies = aHttpRequest.getCookies ();
@@ -553,11 +556,12 @@ public final class InternalErrorHandler
   }
 
   public static void sendInternalErrorMailToVendor (@Nullable final Throwable t,
+                                                    @Nullable final IRequestWebScopeWithoutResponse aRequestScope,
                                                     @Nullable final String sErrorNumber,
                                                     @Nullable final String sCustomData,
                                                     @Nullable final IEmailAttachmentList aEmailAttachments)
   {
-    final InternalErrorData aMetaData = fillInternalErrorMetaData (sErrorNumber, sCustomData);
+    final InternalErrorData aMetaData = fillInternalErrorMetaData (aRequestScope, sErrorNumber, sCustomData);
 
     // Get descriptor for crashed thread
     final String sThrowableStackTrace = t == null ? null : StackTraceHelper.getStackAsString (t, false);
@@ -579,9 +583,9 @@ public final class InternalErrorHandler
    * @param aParent
    *        The parent list to append the nodes to. May be <code>null</code>.
    * @param t
-   *        The exception that occurred. May not be <code>null</code>.
+   *        The exception that occurred. May be <code>null</code>.
    * @param aRequestScope
-   *        The request scope in which the error occurred. May not be
+   *        The request scope in which the error occurred. May be
    *        <code>null</code>.
    * @param sCustomData
    *        Custom data to be put into the mail content. May be
@@ -599,7 +603,7 @@ public final class InternalErrorHandler
   @Nonempty
   public static String handleInternalError (@Nullable final IHCNodeWithChildren <?> aParent,
                                             @Nullable final Throwable t,
-                                            @Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                            @Nullable final IRequestWebScopeWithoutResponse aRequestScope,
                                             @Nullable final String sCustomData,
                                             @Nullable final IEmailAttachmentList aEmailAttachments,
                                             @Nonnull final Locale aDisplayLocale,
@@ -639,7 +643,7 @@ public final class InternalErrorHandler
     }
     else
     {
-      sendInternalErrorMailToVendor (t, sErrorID, sCustomData, aEmailAttachments);
+      sendInternalErrorMailToVendor (t, aRequestScope, sErrorID, sCustomData, aEmailAttachments);
     }
 
     if (bInvokeCustomExceptionHandler)

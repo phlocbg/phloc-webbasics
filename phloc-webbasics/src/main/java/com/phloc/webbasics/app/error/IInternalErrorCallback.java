@@ -20,6 +20,7 @@ package com.phloc.webbasics.app.error;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -36,9 +37,9 @@ public interface IInternalErrorCallback
    * in here!
    * 
    * @param t
-   *        The exception. Never <code>null</code>.
+   *        The exception. May be <code>null</code>.
    * @param aRequestScope
-   *        The request scope in which the error occurred. Never
+   *        The request scope in which the error occurred. May be
    *        <code>null</code>.
    * @param sErrorID
    *        The created internal error ID. Neither <code>null</code> nor empty.
@@ -46,8 +47,8 @@ public interface IInternalErrorCallback
    *        The display locale for further handling if required. Never
    *        <code>null</code>.
    */
-  void onInternalError (@Nonnull Throwable t,
-                        @Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+  void onInternalError (@Nullable Throwable t,
+                        @Nullable IRequestWebScopeWithoutResponse aRequestScope,
                         @Nonnull @Nonempty String sErrorID,
                         @Nonnull Locale aDisplayLocale);
 }
