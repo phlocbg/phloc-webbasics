@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -618,7 +619,8 @@ public final class InternalErrorHandler
    * @param aEmailAttachments
    *        Email attachments to be added. May be <code>null</code>.
    * @param aDisplayLocale
-   *        The display locale to use for the texts.
+   *        The display locale to use for the texts. May be <code>null</code> in
+   *        which case it defaults to {@link CGlobal#DEFAULT_LOCALE}.
    * @param bInvokeCustomExceptionHandler
    *        <code>true</code> to invoke the custom exception handler (if any is
    *        present), <code>false</code> to not do so.
@@ -631,9 +633,11 @@ public final class InternalErrorHandler
                                             @Nullable final IRequestWebScopeWithoutResponse aRequestScope,
                                             @Nullable final String sCustomData,
                                             @Nullable final IEmailAttachmentList aEmailAttachments,
-                                            @Nonnull final Locale aDisplayLocale,
+                                            @Nullable final Locale aDisplayLocale,
                                             final boolean bInvokeCustomExceptionHandler)
   {
+    final Locale aRealDisplayLocale = aDisplayLocale != null ? aDisplayLocale : CGlobal.DEFAULT_LOCALE;
+
     final String sErrorID = createNewInternalErrorID ();
 
     // Log the error, to ensure the data is persisted!
@@ -641,8 +645,8 @@ public final class InternalErrorHandler
 
     if (aParent != null)
     {
-      aParent.addChild (new HCH1 ().addChild (EWebBasicsText.INTERNAL_ERROR_TITLE.getDisplayText (aDisplayLocale)));
-      aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList (EWebBasicsText.INTERNAL_ERROR_DESCRIPTION.getDisplayTextWithArgs (aDisplayLocale,
+      aParent.addChild (new HCH1 ().addChild (EWebBasicsText.INTERNAL_ERROR_TITLE.getDisplayText (aRealDisplayLocale)));
+      aParent.addChild (new HCDiv ().addChildren (HCUtils.nl2brList (EWebBasicsText.INTERNAL_ERROR_DESCRIPTION.getDisplayTextWithArgs (aRealDisplayLocale,
                                                                                                                                        sErrorID))));
     }
 
@@ -678,7 +682,7 @@ public final class InternalErrorHandler
       if (aCustomExceptionHandler != null)
         try
         {
-          aCustomExceptionHandler.onInternalError (t, aRequestScope, sErrorID, aDisplayLocale);
+          aCustomExceptionHandler.onInternalError (t, aRequestScope, sErrorID, aRealDisplayLocale);
         }
         catch (final Throwable t2)
         {
