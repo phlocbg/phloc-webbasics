@@ -37,6 +37,7 @@ import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
@@ -69,7 +70,6 @@ import com.phloc.web.servlet.request.RequestLogger;
 import com.phloc.web.smtp.EEmailType;
 import com.phloc.web.smtp.IEmailAttachmentDataSource;
 import com.phloc.web.smtp.IEmailAttachmentList;
-import com.phloc.web.smtp.IEmailData;
 import com.phloc.web.smtp.IReadonlyEmailAttachmentList;
 import com.phloc.web.smtp.ISMTPSettings;
 import com.phloc.web.smtp.impl.EmailData;
@@ -95,7 +95,7 @@ public final class InternalErrorHandler
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static ISMTPSettings s_aSMTPSettings = null;
   private static IEmailAddress s_aSenderAddress = null;
-  private static IEmailAddress s_aReceiverAddress = null;
+  private static List <IEmailAddress> s_aReceiverAddresses = null;
   private static IInternalErrorCallback s_aCustomExceptionHandler;
   private static final Map <String, MutableInt> s_aIntErrCache = new HashMap <String, MutableInt> ();
 
@@ -158,10 +158,18 @@ public final class InternalErrorHandler
 
   public static void setSMTPReceiverAddress (@Nullable final IEmailAddress aReceiverAddress)
   {
+    setSMTPReceiverAddresses (aReceiverAddress == null ? null : ContainerHelper.newList (aReceiverAddress));
+  }
+
+  public static void setSMTPReceiverAddresses (@Nullable final List <? extends IEmailAddress> aReceiverAddresses)
+  {
+    if (aReceiverAddresses != null && ContainerHelper.containsAnyNullElement (aReceiverAddresses))
+      throw new IllegalArgumentException ("The list of receiver addresses may not contain any null element!");
+
     s_aRWLock.writeLock ().lock ();
     try
     {
-      s_aReceiverAddress = aReceiverAddress;
+      s_aReceiverAddresses = ContainerHelper.newList (aReceiverAddresses);
     }
     finally
     {
@@ -169,13 +177,30 @@ public final class InternalErrorHandler
     }
   }
 
-  @Nullable
-  public static IEmailAddress getSMTPReceiverAddress ()
+  public static void setSMTPReceiverAddresses (@Nullable final IEmailAddress... aReceiverAddresses)
+  {
+    if (aReceiverAddresses != null && ArrayHelper.containsAnyNullElement (aReceiverAddresses))
+      throw new IllegalArgumentException ("The array of receiver addresses may not contain any null element!");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aReceiverAddresses = ContainerHelper.newList (aReceiverAddresses);
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public static List <IEmailAddress> getSMTPReceiverAddresses ()
   {
     s_aRWLock.readLock ().lock ();
     try
     {
-      return s_aReceiverAddress;
+      return ContainerHelper.newList (s_aReceiverAddresses);
     }
     finally
     {
@@ -325,10 +350,10 @@ public final class InternalErrorHandler
     }
 
     final IEmailAddress aSender = getSMTPSenderAddress ();
-    final IEmailAddress aReceiver = getSMTPReceiverAddress ();
+    final List <IEmailAddress> aReceiver = getSMTPReceiverAddresses ();
     final ISMTPSettings aSMTPSettings = getSMTPSettings ();
 
-    if (aSender != null && aReceiver != null && aSMTPSettings != null)
+    if (aSender != null && !aReceiver.isEmpty () && aSMTPSettings != null)
     {
       final String sMailSubject = StringHelper.getConcatenatedOnDemand ("Internal error", ' ', sErrorNumber);
 
@@ -340,12 +365,12 @@ public final class InternalErrorHandler
                                aOtherThreads.getAsString () +
                                "\n---------------------------------------------------------------";
 
-      final IEmailData aEmailData = EmailData.createEmailData (EEmailType.TEXT,
-                                                               aSender,
-                                                               aReceiver,
-                                                               sMailSubject,
-                                                               sMailBody,
-                                                               aEmailAttachments);
+      final EmailData aEmailData = new EmailData (EEmailType.TEXT);
+      aEmailData.setFrom (aSender);
+      aEmailData.setTo (aReceiver);
+      aEmailData.setSubject (sMailSubject);
+      aEmailData.setBody (sMailBody);
+      aEmailData.setAttachments (aEmailAttachments);
 
       try
       {
