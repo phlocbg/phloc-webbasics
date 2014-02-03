@@ -74,7 +74,7 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
   public static final EDateTimePickerTodayType DEFAULT_TODAY = EDateTimePickerTodayType.LINKED;
   public static final boolean DEFAULT_TODAY_HIGHLIGHT = true;
   public static final boolean DEFAULT_KEYBOARD_NAVIGATION = true;
-  public static final boolean DEFAULT_FORCE_PARSE = true;
+  public static final boolean DEFAULT_FORCE_PARSE = false;
   public static final int DEFAULT_MINUTE_STEP = 5;
   public static final boolean DEFAULT_SHOW_MERIDIAN = false;
   public static final boolean DEFAULT_SHOW_RESET_BUTTON = false;
