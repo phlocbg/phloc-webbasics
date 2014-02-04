@@ -35,6 +35,7 @@ import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCEdit;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCDiv;
@@ -161,6 +162,16 @@ public class BootstrapForm extends HCForm
                                      @Nullable final IErrorList aErrorList)
   {
     return addFormGroup (StringHelper.hasNoText (sLabel) ? null : new HCLabel ().addChild (sLabel), aCtrls, aErrorList);
+  }
+
+  @Nonnull
+  public BootstrapForm addFormGroup (@Nullable final String sLabel,
+                                     @Nonnull final IHCNodeBuilder aCtrl,
+                                     @Nullable final IErrorList aErrorList)
+  {
+    return addFormGroup (StringHelper.hasNoText (sLabel) ? null : new HCLabel ().addChild (sLabel),
+                         aCtrl.build (),
+                         aErrorList);
   }
 
   @Nonnull
