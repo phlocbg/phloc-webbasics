@@ -27,6 +27,7 @@ public enum EBootstrapJSPathProvider implements IJSPathProvider
 {
   BOOTSTRAP_3_0_2 ("bootstrap/3.0.2/js/bootstrap.js"),
   BOOTSTRAP_3_0_3 ("bootstrap/3.0.3/js/bootstrap.js"),
+  BOOTSTRAP_3_1_0 ("bootstrap/3.1.0/js/bootstrap.js"),
   BOOTSTRAP3_DATATABLES ("bootstrap/datatables/bootstrap3-datatables.js");
 
   private final String m_sPath;

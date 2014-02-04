@@ -15,34 +15,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.bootstrap3;
+package com.phloc.bootstrap3.modal;
 
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.phloc.commons.version.Version;
+import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.html.css.ICSSClassProvider;
 
 /**
- * Constants for usage with Bootstrap3
+ * Modal dialog size
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CBootstrap
+public enum EBootstrapModalSize implements ICSSClassProvider
 {
-  /** Bootstrap version 3.0.2 */
-  @Deprecated
-  public static final Version BOOTSTRAP_VERSION_302 = new Version (3, 0, 2);
+  SMALL (CBootstrapCSS.MODAL_SM),
+  NORMAL (null),
+  LARGE (CBootstrapCSS.MODAL_LG);
 
-  /** Bootstrap version 3.0.3 */
-  @Deprecated
-  public static final Version BOOTSTRAP_VERSION_303 = new Version (3, 0, 3);
+  public static final EBootstrapModalSize DEFAULT = NORMAL;
 
-  /** Bootstrap version 3.1.0 */
-  public static final Version BOOTSTRAP_VERSION_310 = new Version (3, 1, 0);
+  private final ICSSClassProvider m_aCSSClass;
 
-  /** The maximum number of columns a grid system can be separated into */
-  public static final int GRID_SYSTEM_MAX = 12;
+  private EBootstrapModalSize (@Nonnull final ICSSClassProvider aCSSClass)
+  {
+    m_aCSSClass = aCSSClass;
+  }
 
-  private CBootstrap ()
-  {}
+  @Nullable
+  public String getCSSClass ()
+  {
+    return m_aCSSClass == null ? null : m_aCSSClass.getCSSClass ();
+  }
 }

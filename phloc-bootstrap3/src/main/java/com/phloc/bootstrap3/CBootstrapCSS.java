@@ -32,7 +32,8 @@ import com.phloc.html.css.ICSSClassProvider;
 @Immutable
 public final class CBootstrapCSS
 {
-  // Note: all CSS classes were created via MainExtractBootstrap3CSSClasses
+  // Note: all CSS classes were created via MainExtractBootstrap3CSSClasses for
+  // 3.1.0
   public static final ICSSClassProvider ACTIVE = DefaultCSSClassProvider.create ("active");
   public static final ICSSClassProvider AFFIX = DefaultCSSClassProvider.create ("affix");
   public static final ICSSClassProvider ALERT = DefaultCSSClassProvider.create ("alert");
@@ -44,6 +45,12 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider ALERT_WARNING = DefaultCSSClassProvider.create ("alert-warning");
   public static final ICSSClassProvider ARROW = DefaultCSSClassProvider.create ("arrow");
   public static final ICSSClassProvider BADGE = DefaultCSSClassProvider.create ("badge");
+  public static final ICSSClassProvider BG_DANGER = DefaultCSSClassProvider.create ("bg-danger");
+  public static final ICSSClassProvider BG_INFO = DefaultCSSClassProvider.create ("bg-info");
+  public static final ICSSClassProvider BG_PRIMARY = DefaultCSSClassProvider.create ("bg-primary");
+  public static final ICSSClassProvider BG_SUCCESS = DefaultCSSClassProvider.create ("bg-success");
+  public static final ICSSClassProvider BG_WARNING = DefaultCSSClassProvider.create ("bg-warning");
+  public static final ICSSClassProvider BLOCKQUOTE_REVERSE = DefaultCSSClassProvider.create ("blockquote-reverse");
   public static final ICSSClassProvider BOTTOM = DefaultCSSClassProvider.create ("bottom");
   public static final ICSSClassProvider BOTTOM_LEFT = DefaultCSSClassProvider.create ("bottom-left");
   public static final ICSSClassProvider BOTTOM_RIGHT = DefaultCSSClassProvider.create ("bottom-right");
@@ -286,6 +293,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider COLLAPSE = DefaultCSSClassProvider.create ("collapse");
   public static final ICSSClassProvider COLLAPSING = DefaultCSSClassProvider.create ("collapsing");
   public static final ICSSClassProvider CONTAINER = DefaultCSSClassProvider.create ("container");
+  public static final ICSSClassProvider CONTAINER_FLUID = DefaultCSSClassProvider.create ("container-fluid");
   public static final ICSSClassProvider CONTROL_LABEL = DefaultCSSClassProvider.create ("control-label");
   public static final ICSSClassProvider DANGER = DefaultCSSClassProvider.create ("danger");
   public static final ICSSClassProvider DISABLED = DefaultCSSClassProvider.create ("disabled");
@@ -295,10 +303,13 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider DROPDOWN_BACKDROP = DefaultCSSClassProvider.create ("dropdown-backdrop");
   public static final ICSSClassProvider DROPDOWN_HEADER = DefaultCSSClassProvider.create ("dropdown-header");
   public static final ICSSClassProvider DROPDOWN_MENU = DefaultCSSClassProvider.create ("dropdown-menu");
+  public static final ICSSClassProvider DROPDOWN_MENU_LEFT = DefaultCSSClassProvider.create ("dropdown-menu-left");
+  public static final ICSSClassProvider DROPDOWN_MENU_RIGHT = DefaultCSSClassProvider.create ("dropdown-menu-right");
   public static final ICSSClassProvider DROPDOWN_TOGGLE = DefaultCSSClassProvider.create ("dropdown-toggle");
   public static final ICSSClassProvider DROPUP = DefaultCSSClassProvider.create ("dropup");
   public static final ICSSClassProvider FADE = DefaultCSSClassProvider.create ("fade");
   public static final ICSSClassProvider FORM_CONTROL = DefaultCSSClassProvider.create ("form-control");
+  public static final ICSSClassProvider FORM_CONTROL_FEEDBACK = DefaultCSSClassProvider.create ("form-control-feedback");
   public static final ICSSClassProvider FORM_CONTROL_STATIC = DefaultCSSClassProvider.create ("form-control-static");
   public static final ICSSClassProvider FORM_GROUP = DefaultCSSClassProvider.create ("form-group");
   public static final ICSSClassProvider FORM_HORIZONTAL = DefaultCSSClassProvider.create ("form-horizontal");
@@ -513,6 +524,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider H5 = DefaultCSSClassProvider.create ("h5");
   public static final ICSSClassProvider H6 = DefaultCSSClassProvider.create ("h6");
   public static final ICSSClassProvider HAS_ERROR = DefaultCSSClassProvider.create ("has-error");
+  public static final ICSSClassProvider HAS_FEEDBACK = DefaultCSSClassProvider.create ("has-feedback");
   public static final ICSSClassProvider HAS_SUCCESS = DefaultCSSClassProvider.create ("has-success");
   public static final ICSSClassProvider HAS_WARNING = DefaultCSSClassProvider.create ("has-warning");
   public static final ICSSClassProvider HELP_BLOCK = DefaultCSSClassProvider.create ("help-block");
@@ -531,6 +543,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider IMG_ROUNDED = DefaultCSSClassProvider.create ("img-rounded");
   public static final ICSSClassProvider IMG_THUMBNAIL = DefaultCSSClassProvider.create ("img-thumbnail");
   public static final ICSSClassProvider IN = DefaultCSSClassProvider.create ("in");
+  public static final ICSSClassProvider INFO = DefaultCSSClassProvider.create ("info");
   public static final ICSSClassProvider INITIALISM = DefaultCSSClassProvider.create ("initialism");
   public static final ICSSClassProvider INPUT_GROUP = DefaultCSSClassProvider.create ("input-group");
   public static final ICSSClassProvider INPUT_GROUP_ADDON = DefaultCSSClassProvider.create ("input-group-addon");
@@ -553,8 +566,12 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider LEFT = DefaultCSSClassProvider.create ("left");
   public static final ICSSClassProvider LIST_GROUP = DefaultCSSClassProvider.create ("list-group");
   public static final ICSSClassProvider LIST_GROUP_ITEM = DefaultCSSClassProvider.create ("list-group-item");
+  public static final ICSSClassProvider LIST_GROUP_ITEM_DANGER = DefaultCSSClassProvider.create ("list-group-item-danger");
   public static final ICSSClassProvider LIST_GROUP_ITEM_HEADING = DefaultCSSClassProvider.create ("list-group-item-heading");
+  public static final ICSSClassProvider LIST_GROUP_ITEM_INFO = DefaultCSSClassProvider.create ("list-group-item-info");
+  public static final ICSSClassProvider LIST_GROUP_ITEM_SUCCESS = DefaultCSSClassProvider.create ("list-group-item-success");
   public static final ICSSClassProvider LIST_GROUP_ITEM_TEXT = DefaultCSSClassProvider.create ("list-group-item-text");
+  public static final ICSSClassProvider LIST_GROUP_ITEM_WARNING = DefaultCSSClassProvider.create ("list-group-item-warning");
   public static final ICSSClassProvider LIST_INLINE = DefaultCSSClassProvider.create ("list-inline");
   public static final ICSSClassProvider LIST_UNSTYLED = DefaultCSSClassProvider.create ("list-unstyled");
   public static final ICSSClassProvider MEDIA = DefaultCSSClassProvider.create ("media");
@@ -569,7 +586,9 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider MODAL_DIALOG = DefaultCSSClassProvider.create ("modal-dialog");
   public static final ICSSClassProvider MODAL_FOOTER = DefaultCSSClassProvider.create ("modal-footer");
   public static final ICSSClassProvider MODAL_HEADER = DefaultCSSClassProvider.create ("modal-header");
+  public static final ICSSClassProvider MODAL_LG = DefaultCSSClassProvider.create ("modal-lg");
   public static final ICSSClassProvider MODAL_OPEN = DefaultCSSClassProvider.create ("modal-open");
+  public static final ICSSClassProvider MODAL_SM = DefaultCSSClassProvider.create ("modal-sm");
   public static final ICSSClassProvider MODAL_TITLE = DefaultCSSClassProvider.create ("modal-title");
   public static final ICSSClassProvider NAV = DefaultCSSClassProvider.create ("nav");
   public static final ICSSClassProvider NAV_DIVIDER = DefaultCSSClassProvider.create ("nav-divider");
@@ -650,6 +669,7 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider TEXT_DANGER = DefaultCSSClassProvider.create ("text-danger");
   public static final ICSSClassProvider TEXT_HIDE = DefaultCSSClassProvider.create ("text-hide");
   public static final ICSSClassProvider TEXT_INFO = DefaultCSSClassProvider.create ("text-info");
+  public static final ICSSClassProvider TEXT_JUSTIFY = DefaultCSSClassProvider.create ("text-justify");
   public static final ICSSClassProvider TEXT_LEFT = DefaultCSSClassProvider.create ("text-left");
   public static final ICSSClassProvider TEXT_MUTED = DefaultCSSClassProvider.create ("text-muted");
   public static final ICSSClassProvider TEXT_PRIMARY = DefaultCSSClassProvider.create ("text-primary");
