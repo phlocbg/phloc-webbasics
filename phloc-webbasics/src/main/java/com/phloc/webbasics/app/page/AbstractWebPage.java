@@ -156,7 +156,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A form that links to the current page.
    */
   @Nonnull
-  public static final HCForm createFormSelf ()
+  public HCForm createFormSelf ()
   {
     return new HCForm (LinkUtils.getSelfHref ());
   }
@@ -165,7 +165,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
    * @return A file upload form that links to the current page.
    */
   @Nonnull
-  public static final HCForm createFormFileUploadSelf ()
+  public HCForm createFormFileUploadSelf ()
   {
     final HCForm aForm = createFormSelf ();
     aForm.setCustomAttr (CHTMLAttributes.ENCTYPE, CMimeType.MULTIPART_FORMDATA.getAsString ());

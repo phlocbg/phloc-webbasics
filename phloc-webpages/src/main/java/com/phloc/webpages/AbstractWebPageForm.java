@@ -213,6 +213,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * 
    * @param aWPEC
    *        The web page execution context. Never <code>null</code>.
+   * @param aForm
+   *        The handled form. Never <code>null</code>.
    * @param aSelectedObject
    *        The selected object. Never <code>null</code>.
    * @return Never <code>null</code>.
@@ -220,6 +222,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @Nonnull
   @OverrideOnDemand
   protected IButtonToolbar <?> createEditToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                  @Nonnull final HCForm aForm,
                                                   @Nonnull final DATATYPE aSelectedObject)
   {
     final IButtonToolbar <?> aToolbar = createNewEditToolbar ();
@@ -278,6 +281,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    * 
    * @param aWPEC
    *        The web page execution context
+   * @param aForm
+   *        The handled form. Never <code>null</code>.
    * @param aSelectedObject
    *        Optional selected object. May be <code>null</code>.
    * @return Never <code>null</code>.
@@ -285,6 +290,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @Nonnull
   @OverrideOnDemand
   protected IButtonToolbar <?> createCreateToolbar (@Nonnull final WebPageExecutionContext aWPEC,
+                                                    @Nonnull final HCForm aForm,
                                                     @Nullable final DATATYPE aSelectedObject)
   {
     final IButtonToolbar <?> aToolbar = createNewCreateToolbar ();
@@ -538,12 +544,12 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           if (bEdit)
           {
             if (showEditToolbar (aWPEC, aSelectedObject))
-              aForm.addChild (createEditToolbar (aWPEC, aSelectedObject));
+              aForm.addChild (createEditToolbar (aWPEC, aForm, aSelectedObject));
           }
           else
           {
             if (showCreateToolbar (aWPEC, aSelectedObject))
-              aForm.addChild (createCreateToolbar (aWPEC, aSelectedObject));
+              aForm.addChild (createCreateToolbar (aWPEC, aForm, aSelectedObject));
           }
         }
       }
