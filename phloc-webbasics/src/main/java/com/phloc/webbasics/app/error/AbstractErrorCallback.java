@@ -43,14 +43,14 @@ public abstract class AbstractErrorCallback implements IAjaxExceptionHandler, IA
    * @param t
    *        The exception that occurred.
    * @param aRequestScope
-   *        The request scope in which the error occurred. Never
+   *        The request scope in which the error occurred. May be
    *        <code>null</code>.
    * @param sErrorCode
    *        The unique error code for this error. Neither <code>null</code> not
    *        empty.
    */
   protected abstract void onError (@Nonnull Throwable t,
-                                   @Nonnull IRequestWebScopeWithoutResponse aRequestScope,
+                                   @Nullable IRequestWebScopeWithoutResponse aRequestScope,
                                    @Nonnull @Nonempty String sErrorCode);
 
   public void onAjaxException (@Nonnull final Throwable t,
