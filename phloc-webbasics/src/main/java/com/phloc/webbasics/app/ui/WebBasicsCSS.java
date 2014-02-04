@@ -39,6 +39,9 @@ public final class WebBasicsCSS
   /** Align text right */
   public static final ICSSClassProvider CSS_CLASS_RIGHT = DefaultCSSClassProvider.create ("right");
 
+  /** Action column */
+  public static final ICSSClassProvider CSS_CLASS_ACTION_COL = DefaultCSSClassProvider.create ("actioncol");
+
   private WebBasicsCSS ()
   {}
 }

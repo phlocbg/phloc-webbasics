@@ -67,6 +67,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   protected static final ICSSClassProvider CSS_CLASS_LEFT = WebBasicsCSS.CSS_CLASS_LEFT;
   protected static final ICSSClassProvider CSS_CLASS_CENTER = WebBasicsCSS.CSS_CLASS_CENTER;
   protected static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
+  public static final ICSSClassProvider CSS_CLASS_ACTION_COL = WebBasicsCSS.CSS_CLASS_ACTION_COL;
 
   public AbstractWebPageExt (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
