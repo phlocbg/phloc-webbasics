@@ -32,6 +32,7 @@ import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
+import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
@@ -45,6 +46,7 @@ public class PLImage extends AbstractPLElement <PLImage>
   private final IInputStreamProvider m_aIIS;
   private final float m_fWidth;
   private final float m_fHeight;
+  private EHorzAlignment m_eHorzAlign = EHorzAlignment.DEFAULT;
 
   // Status var
   private PDJpeg m_aJpeg;
@@ -108,6 +110,21 @@ public class PLImage extends AbstractPLElement <PLImage>
     return m_fHeight;
   }
 
+  @Nonnull
+  public EHorzAlignment getHorzAlign ()
+  {
+    return m_eHorzAlign;
+  }
+
+  @Nonnull
+  public PLImage setHorzAlign (@Nonnull final EHorzAlignment eHorzAlign)
+  {
+    if (eHorzAlign == null)
+      throw new NullPointerException ("horzAlign");
+    m_eHorzAlign = eHorzAlign;
+    return this;
+  }
+
   @Override
   protected SizeSpec onPrepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
@@ -142,11 +159,28 @@ public class PLImage extends AbstractPLElement <PLImage>
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {
     final PDPageContentStreamWithCache aContentStream = aCtx.getContentStream ();
-    aContentStream.drawXObject (m_aJpeg,
-                                aCtx.getStartLeft () + getPadding ().getLeft (),
-                                aCtx.getStartTop () - getPadding ().getTop () - m_fHeight,
-                                m_fWidth,
-                                m_fHeight);
+
+    final float fLeft = getPadding ().getLeft ();
+    final float fUsableWidth = aCtx.getWidth () - getPadding ().getXSum ();
+    float fIndentX;
+    switch (m_eHorzAlign)
+    {
+      case LEFT:
+        fIndentX = fLeft;
+        break;
+      case CENTER:
+        fIndentX = fLeft + (fUsableWidth - m_fWidth) / 2;
+        break;
+      case RIGHT:
+        fIndentX = fLeft + fUsableWidth - m_fWidth;
+        break;
+      default:
+        throw new IllegalStateException ("Unsupported horizontal alignment " + m_eHorzAlign);
+    }
+
+    aContentStream.drawXObject (m_aJpeg, aCtx.getStartLeft () + fIndentX, aCtx.getStartTop () -
+                                                                          getPadding ().getTop () -
+                                                                          m_fHeight, m_fWidth, m_fHeight);
   }
 
   @Override

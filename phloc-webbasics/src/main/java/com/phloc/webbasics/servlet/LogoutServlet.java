@@ -59,8 +59,7 @@ public class LogoutServlet extends AbstractUnifiedResponseServlet
                                 @Nonnull final UnifiedResponse aUnifiedResponse) throws ServletException, IOException
   {
     // Get the redirect URL before the session is invalidated, in case the
-    // code
-    // requires the current session
+    // code requires the current session
     final ISimpleURL aRedirectURL = getRedirectURL ();
 
     // Don't create a session, if none is present

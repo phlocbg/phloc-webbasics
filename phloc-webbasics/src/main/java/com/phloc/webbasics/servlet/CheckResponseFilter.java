@@ -44,7 +44,7 @@ import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
 /**
  * This filter is used, to determine if some crucial information is missing in
  * some responses. Checked things are status code, character encoding, content
- * type and some headers.
+ * type and some headers. This is mainly for debugging purposes.
  * 
  * @author Philip Helger
  */
