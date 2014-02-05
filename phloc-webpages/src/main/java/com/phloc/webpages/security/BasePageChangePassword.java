@@ -147,6 +147,7 @@ public class BasePageChangePassword extends AbstractWebPageExt
         {
           AccessManager.getInstance ().setUserPassword (aCurrentUser.getID (), sPlainTextPassword);
           aNodeList.addChild (getStyler ().createSuccessBox (EText.SUCCESS_CHANGE_PW.getDisplayText (aDisplayLocale)));
+          // Always show form
         }
       }
       if (bShowForm)

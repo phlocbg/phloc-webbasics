@@ -315,6 +315,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     aDataTables.getOrCreateColumnOfTarget (2)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableDateTime (aDisplayLocale));
+    aDataTables.getOrCreateColumnOfTarget (3).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

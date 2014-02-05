@@ -643,7 +643,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getOrCreateColumnOfTarget (3).setSortable (false);
+    aDataTables.getOrCreateColumnOfTarget (3).setSortable (false).addClass (CSS_CLASS_ACTION_COL);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

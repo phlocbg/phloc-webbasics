@@ -49,7 +49,9 @@ import com.phloc.webctrls.styler.WebPageStylerManager;
 public abstract class AbstractWebPageExt extends AbstractWebPage
 {
   /** The width of a single action column in pixels */
-  public static final int ACTION_COL_WIDTH = 20;
+  public static final int DEFAULT_ACTION_COL_WIDTH = 20;
+  @Deprecated
+  public static final int ACTION_COL_WIDTH = DEFAULT_ACTION_COL_WIDTH;
   public static final String ACTION_CANCEL = "cancel";
   public static final String ACTION_COLLAPSE = CHCParam.ACTION_COLLAPSE;
   public static final String ACTION_COPY = "copy";
@@ -68,6 +70,8 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   protected static final ICSSClassProvider CSS_CLASS_CENTER = WebBasicsCSS.CSS_CLASS_CENTER;
   protected static final ICSSClassProvider CSS_CLASS_RIGHT = WebBasicsCSS.CSS_CLASS_RIGHT;
   protected static final ICSSClassProvider CSS_CLASS_ACTION_COL = WebBasicsCSS.CSS_CLASS_ACTION_COL;
+
+  private static int s_nActionColWidth = DEFAULT_ACTION_COL_WIDTH;
 
   public AbstractWebPageExt (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
@@ -94,15 +98,26 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
-  protected final IWebPageStyler getStyler ()
+  public static final IWebPageStyler getStyler ()
   {
     return WebPageStylerManager.getStyler ();
   }
 
+  @Nonnegative
+  public static int getActionColWidth ()
+  {
+    return s_nActionColWidth;
+  }
+
+  public static void setActionColWidth (@Nonnegative final int nActionColWidth)
+  {
+    s_nActionColWidth = nActionColWidth;
+  }
+
   /**
    * Create a HCCol (table column) for the specified number of actions. Each
-   * action represents a width of {@link #ACTION_COL_WIDTH} pixels. At least the
-   * width of 3 actions is displayed, so that the header text fits :)
+   * action represents a width of {@link #getActionColWidth()} pixels. At least
+   * the width of 3 actions is displayed, so that the header text fits :)
    * 
    * @param nActions
    *        Number of actions. Must be &ge; 0.
@@ -113,7 +128,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   {
     // Assume each action icon is 20 pixels (incl. margin) - at least 3 column
     // widths are required for the header
-    final int nWidth = ACTION_COL_WIDTH * Math.max (3, nActions);
+    final int nWidth = getActionColWidth () * Math.max (3, nActions);
     return new HCCol (nWidth);
   }
 

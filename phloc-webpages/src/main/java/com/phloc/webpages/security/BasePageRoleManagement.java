@@ -325,7 +325,7 @@ public class BasePageRoleManagement extends AbstractWebPageForm <IRole>
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
+    aDataTables.getOrCreateColumnOfTarget (2).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

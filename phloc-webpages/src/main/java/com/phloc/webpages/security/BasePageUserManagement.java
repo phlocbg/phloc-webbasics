@@ -910,7 +910,7 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getOrCreateColumnOfTarget (3).setSortable (false);
+    aDataTables.getOrCreateColumnOfTarget (3).addClass (CSS_CLASS_ACTION_COL).setSortable (false);
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
 
