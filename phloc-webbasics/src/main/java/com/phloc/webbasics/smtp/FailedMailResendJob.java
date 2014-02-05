@@ -10,6 +10,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.TriggerBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
@@ -26,6 +28,8 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
  */
 public class FailedMailResendJob extends AbstractScopeAwareJob
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (FailedMailResendJob.class);
+
   private static String s_sAppID;
 
   protected static void setApplicationScopeID (@Nonnull @Nonempty final String sApplicationID)
@@ -48,8 +52,12 @@ public class FailedMailResendJob extends AbstractScopeAwareJob
   protected void onExecute (final JobExecutionContext aContext) throws JobExecutionException
   {
     final List <FailedMailData> aFailedMails = MetaSystemManager.getFailedMailQueue ().removeAll ();
-    for (final FailedMailData aFailedMailData : aFailedMails)
-      ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
+    if (!aFailedMails.isEmpty ())
+    {
+      s_aLogger.info ("Trying to resend " + aFailedMails.size () + " failed mails!");
+      for (final FailedMailData aFailedMailData : aFailedMails)
+        ScopedMailAPI.getInstance ().queueMail (aFailedMailData.getSMTPSettings (), aFailedMailData.getEmailData ());
+    }
   }
 
   public static void scheduleMe (@Nonnull @Nonempty final String sApplicationID, @Nonnegative final int nPollingMinutes)
