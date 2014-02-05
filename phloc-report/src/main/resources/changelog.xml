@@ -21,6 +21,12 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-report">
   <release date="2014-02-05" version="1.0.8" />
+  <entry date="2014-02-05" category="tech" action="fix">
+    <change>
+      <text locale="en">Using default PDF version instead of manual 1.6</text>
+    </change>
+  </entry>
+  <release date="2014-02-05" version="1.0.8" />
   <entry date="2014-01-29" category="api" action="add">
     <change>
       <text locale="en">Added support for images in PDF via PLImage</text>
