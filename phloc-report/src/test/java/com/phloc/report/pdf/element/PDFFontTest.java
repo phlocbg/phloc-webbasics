@@ -87,9 +87,12 @@ public class PDFFontTest
       aEncoding = new DictionaryEncoding (aFontDict);
     }
 
-    final PDTrueTypeFont aFont = PDTrueTypeFont.loadTTF (new PDDocument (),
+    final PDDocument aDummy = new PDDocument ();
+    final PDTrueTypeFont aFont = PDTrueTypeFont.loadTTF (aDummy,
                                                          EFontResource.ANAHEIM_REGULAR.getInputStream (),
                                                          aEncoding);
+    aDummy.close ();
+
     final FontSpec r10 = new FontSpec (true ? PDFFont.REGULAR : new PDFFont (aFont), 10);
 
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30);

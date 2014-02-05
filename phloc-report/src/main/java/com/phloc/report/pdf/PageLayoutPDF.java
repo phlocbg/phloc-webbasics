@@ -193,7 +193,6 @@ public class PageLayoutPDF
     try
     {
       aDoc = new PDDocument ();
-      aDoc.getDocumentCatalog ().setVersion ("1.6");
 
       // Set document properties
       {
@@ -268,7 +267,7 @@ public class PageLayoutPDF
         }
         catch (final IOException ex)
         {
-          s_aLogger.error ("Failed to close PDF document", ex);
+          s_aLogger.error ("Failed to close PDF document " + aDoc, ex);
         }
       }
 

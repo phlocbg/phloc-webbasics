@@ -63,7 +63,7 @@ public class PLTextTest
   public void testWithTextExceedingPage () throws FileNotFoundException, PDFCreationException
   {
     final StringBuilder aSB = new StringBuilder (5 * CGlobal.BYTES_PER_MEGABYTE);
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
       if (aSB.length () > 0)
         aSB.append (" - ");
