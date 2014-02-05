@@ -17,7 +17,6 @@
  */
 package com.phloc.bootstrap3.modal;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.bootstrap3.CBootstrapCSS;
@@ -38,7 +37,7 @@ public enum EBootstrapModalSize implements ICSSClassProvider
 
   private final ICSSClassProvider m_aCSSClass;
 
-  private EBootstrapModalSize (@Nonnull final ICSSClassProvider aCSSClass)
+  private EBootstrapModalSize (@Nullable final ICSSClassProvider aCSSClass)
   {
     m_aCSSClass = aCSSClass;
   }
