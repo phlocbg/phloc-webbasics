@@ -215,7 +215,14 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
   protected final boolean canLogoutUser (@Nullable final IUser aUser)
   {
-    return aUser != null && aUser.isEnabled () && !aUser.isDeleted () && !aUser.isAdministrator ();
+    if (aUser == null)
+      return false;
+
+    // Cannot logout the admin and myself
+    return aUser.isEnabled () &&
+           !aUser.isDeleted () &&
+           !aUser.isAdministrator () &&
+           !aUser.equals (LoggedInUserManager.getInstance ().getCurrentUser ());
   }
 
   @Nullable
