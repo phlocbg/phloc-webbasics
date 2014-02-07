@@ -42,7 +42,6 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.concurrent.ComparatorThreadID;
 import com.phloc.commons.email.IEmailAddress;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.io.file.SimpleFileIO;
@@ -54,7 +53,6 @@ import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.mutable.MutableInt;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.timing.StopWatch;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
@@ -285,40 +283,6 @@ public final class InternalErrorHandler
   private static String _getAsString (@Nonnull final Throwable t)
   {
     return t.getMessage () + " -- " + t.getClass ().getName ();
-  }
-
-  @Nonnull
-  private static ThreadDescriptorList _getAllThreadDescriptors ()
-  {
-    // add dump of all threads
-    final StopWatch aSW = new StopWatch (true);
-    final ThreadDescriptorList ret = new ThreadDescriptorList ();
-    try
-    {
-      // Get all stack traces, sorted by thread ID
-      for (final Map.Entry <Thread, StackTraceElement []> aEntry : ContainerHelper.getSortedByKey (Thread.getAllStackTraces (),
-                                                                                                   new ComparatorThreadID ())
-                                                                                  .entrySet ())
-      {
-        final StackTraceElement [] aStackTrace = aEntry.getValue ();
-        final String sStackTrace = ArrayHelper.isEmpty (aStackTrace) ? "No stack trace available!\n"
-                                                                    : StackTraceHelper.getStackAsString (aStackTrace,
-                                                                                                         false);
-        ret.addDescriptor (new ThreadDescriptor (aEntry.getKey (), sStackTrace));
-      }
-    }
-    catch (final Throwable t)
-    {
-      s_aLogger.error ("Error collecting all thread descriptors", t);
-      ret.setError ("Error collecting all thread descriptors: " + _getAsString (t));
-    }
-    finally
-    {
-      final long nMillis = aSW.stopAndGetMillis ();
-      if (nMillis > 1000)
-        s_aLogger.warn ("Took " + nMillis + " ms to get all thread descriptors!");
-    }
-    return ret;
   }
 
   private static void _sendInternalErrorMailToVendor (@Nullable final String sErrorNumber,
@@ -590,11 +554,10 @@ public final class InternalErrorHandler
     final InternalErrorData aMetaData = fillInternalErrorMetaData (aRequestScope, sErrorNumber, sCustomData);
 
     // Get descriptor for crashed thread
-    final String sThrowableStackTrace = t == null ? null : StackTraceHelper.getStackAsString (t, false);
-    final ThreadDescriptor aCurrentDescriptor = new ThreadDescriptor (Thread.currentThread (), sThrowableStackTrace);
+    final ThreadDescriptor aCurrentDescriptor = ThreadDescriptor.createForCurrentThread (t);
 
     // Get all other thread descriptors
-    final ThreadDescriptorList aOtherThreads = _getAllThreadDescriptors ();
+    final ThreadDescriptorList aOtherThreads = ThreadDescriptorList.createWithAllThreads ();
 
     // Main mail sending
     _sendInternalErrorMailToVendor (sErrorNumber, aMetaData, aCurrentDescriptor, aOtherThreads, aEmailAttachments);

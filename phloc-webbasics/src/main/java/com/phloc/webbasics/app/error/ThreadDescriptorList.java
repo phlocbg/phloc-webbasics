@@ -29,18 +29,27 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.concurrent.ComparatorThreadID;
+import com.phloc.commons.lang.StackTraceHelper;
 import com.phloc.commons.microdom.IHasMicroNodeRepresentation;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.timing.StopWatch;
 
 @NotThreadSafe
-public final class ThreadDescriptorList implements IHasStringRepresentation, IHasMicroNodeRepresentation
+public class ThreadDescriptorList implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ThreadDescriptorList.class);
+
   private final List <ThreadDescriptor> m_aList = new ArrayList <ThreadDescriptor> ();
   private String m_sError;
 
@@ -151,5 +160,46 @@ public final class ThreadDescriptorList implements IHasStringRepresentation, IHa
     for (final ThreadDescriptor aDescriptor : m_aList)
       eRet.appendChild (aDescriptor.getAsMicroNode ());
     return eRet;
+  }
+
+  @Nonnull
+  @Nonempty
+  private static String _getAsString (@Nonnull final Throwable t)
+  {
+    return t.getMessage () + " -- " + t.getClass ().getName ();
+  }
+
+  @Nonnull
+  public static ThreadDescriptorList createWithAllThreads ()
+  {
+    // add dump of all threads
+    final StopWatch aSW = new StopWatch (true);
+    final ThreadDescriptorList ret = new ThreadDescriptorList ();
+    try
+    {
+      // Get all stack traces, sorted by thread ID
+      for (final Map.Entry <Thread, StackTraceElement []> aEntry : ContainerHelper.getSortedByKey (Thread.getAllStackTraces (),
+                                                                                                   new ComparatorThreadID ())
+                                                                                  .entrySet ())
+      {
+        final StackTraceElement [] aStackTrace = aEntry.getValue ();
+        final String sStackTrace = ArrayHelper.isEmpty (aStackTrace) ? "No stack trace available!\n"
+                                                                    : StackTraceHelper.getStackAsString (aStackTrace,
+                                                                                                         false);
+        ret.addDescriptor (new ThreadDescriptor (aEntry.getKey (), sStackTrace));
+      }
+    }
+    catch (final Throwable t)
+    {
+      s_aLogger.error ("Error collecting all thread descriptors", t);
+      ret.setError ("Error collecting all thread descriptors: " + _getAsString (t));
+    }
+    finally
+    {
+      final long nMillis = aSW.stopAndGetMillis ();
+      if (nMillis > 1000)
+        s_aLogger.warn ("Took " + nMillis + " ms to get all thread descriptors!");
+    }
+    return ret;
   }
 }
