@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -26,6 +27,7 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
  * 
  * @author Philip Helger
  */
+@DisallowConcurrentExecution
 public class FailedMailResendJob extends AbstractScopeAwareJob
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (FailedMailResendJob.class);
