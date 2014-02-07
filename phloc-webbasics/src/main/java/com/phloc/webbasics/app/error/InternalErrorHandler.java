@@ -17,6 +17,8 @@
  */
 package com.phloc.webbasics.app.error;
 
+import java.io.File;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -489,6 +491,24 @@ public final class InternalErrorHandler
     {
       // Happens if no scope is available (or what so ever)
       aMetaData.addField ("User", t2);
+    }
+
+    // Disk space info
+    final File aBasePath = WebFileIO.getBasePathFile ();
+    aMetaData.addField ("BaseDirectory", aBasePath.getAbsolutePath ());
+    aMetaData.addField ("Usable bytes", Long.toString (aBasePath.getUsableSpace ()));
+    aMetaData.addField ("Free bytes", Long.toString (aBasePath.getFreeSpace ()));
+
+    // Network info
+    try
+    {
+      final InetAddress aAddress = InetAddress.getLocalHost ();
+      aMetaData.addField ("My host name", aAddress.getHostName ());
+      aMetaData.addField ("My IP address", aAddress.getHostAddress ());
+    }
+    catch (final Exception ex)
+    {
+      // fall through
     }
 
     // Custom data must always be the last field before the stack separator!
