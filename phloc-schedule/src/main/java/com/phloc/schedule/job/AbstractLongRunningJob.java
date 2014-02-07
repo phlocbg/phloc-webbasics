@@ -31,13 +31,13 @@ import com.phloc.schedule.longrun.LongRunningJobManager;
 import com.phloc.schedule.longrun.LongRunningJobResult;
 
 /**
- * Abstract scope aware long running job.
+ * Abstract long running job.
  * 
  * @author Philip Helger
  */
-public abstract class AbstractScopeAwareLongRunningJob extends AbstractScopeAwareJob implements ILongRunningJob
+public abstract class AbstractLongRunningJob extends AbstractJob implements ILongRunningJob
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractScopeAwareLongRunningJob.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractLongRunningJob.class);
 
   /** Predefined key into the job data map */
   private static final String KEY_LONG_RUNNING_JOB_ID = "$phloc$longrunningjobid";
@@ -62,18 +62,20 @@ public abstract class AbstractScopeAwareLongRunningJob extends AbstractScopeAwar
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected void beforeExecuteInScope (@Nonnull final JobDataMap aJobDataMap)
+  protected void beforeExecute (@Nonnull final JobDataMap aJobDataMap)
   {
     final String sUserID = getCurrentUserID (aJobDataMap);
     final String sLongRunningJobID = getLongRunningJobManager ().startJob (this, sUserID);
 
     // Store in JobDataMap
     aJobDataMap.put (KEY_LONG_RUNNING_JOB_ID, sLongRunningJobID);
+
+    super.beforeExecute (aJobDataMap);
   }
 
   @Override
   @OverridingMethodsMustInvokeSuper
-  protected void afterExecuteInScope (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
+  protected void afterExecute (@Nonnull final JobDataMap aJobDataMap, @Nonnull final ESuccess eExecSuccess)
   {
     // End long running job before the request scope is closed
     try
@@ -96,5 +98,7 @@ public abstract class AbstractScopeAwareLongRunningJob extends AbstractScopeAwar
       // Notify custom exception handler
       triggerCustomExceptionHandler (t, getClass ().getName (), true);
     }
+
+    super.afterExecute (aJobDataMap, eExecSuccess);
   }
 }
