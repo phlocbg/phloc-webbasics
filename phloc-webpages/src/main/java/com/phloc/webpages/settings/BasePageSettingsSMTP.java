@@ -51,7 +51,6 @@ import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCRow;
-import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.web.CWeb;
@@ -71,6 +70,7 @@ import com.phloc.webbasics.smtp.CNamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettings;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
 import com.phloc.webctrls.autonumeric.HCAutoNumeric;
+import com.phloc.webctrls.autosize.HCTextAreaAutosize;
 import com.phloc.webctrls.custom.table.IHCTableForm;
 import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
@@ -581,7 +581,7 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
             .setErrorList (aFormErrors.getListOfField (FIELD_TEST_SUBJECT));
       aTable.createItemRow ()
             .setLabelMandatory (EText.MSG_BODY.getDisplayText (aDisplayLocale))
-            .setCtrl (new HCTextArea (new RequestField (FIELD_TEST_BODY)).setRows (5))
+            .setCtrl (new HCTextAreaAutosize (new RequestField (FIELD_TEST_BODY)).setRows (5))
             .setErrorList (aFormErrors.getListOfField (FIELD_TEST_BODY));
 
       final IButtonToolbar <?> aToolbar = aForm.addAndReturnChild (getStyler ().createToolbar ());
