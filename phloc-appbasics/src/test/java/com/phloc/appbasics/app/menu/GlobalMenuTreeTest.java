@@ -47,7 +47,7 @@ public final class GlobalMenuTreeTest
     final IPage aPage = new AbstractPage ("id1")
     {};
 
-    final IMenuTree aTree = GlobalMenuTree.getInstance ().getTree ();
+    final IMenuTree aTree = GlobalMenuTree.getTree ();
     final IMenuItemPage aRoot1 = aTree.createRootItem ("root1", aPage)
                                       .setDisplayFilter (FilterFalse.<IMenuObject> getInstance ());
     assertNotNull (aRoot1);

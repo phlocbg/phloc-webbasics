@@ -47,6 +47,7 @@ import com.phloc.html.hc.impl.HCTextNode;
  */
 public class BootstrapNavbar extends HCNav
 {
+  private final HCDiv m_aContainer;
   private final HCDiv m_aHeader;
   private final HCDiv m_aContent;
 
@@ -57,11 +58,11 @@ public class BootstrapNavbar extends HCNav
     addClasses (CBootstrapCSS.NAVBAR, CBootstrapCSS.NAVBAR_DEFAULT, eType);
     setRole (EHTMLRole.NAVIGATION);
 
-    final HCDiv aContainer = addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.CONTAINER));
-    m_aHeader = aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAVBAR_HEADER));
+    m_aContainer = addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.CONTAINER));
+    m_aHeader = m_aContainer.addAndReturnChild (new HCDiv ().addClass (CBootstrapCSS.NAVBAR_HEADER));
 
     // Create the main container
-    m_aContent = aContainer.addAndReturnChild (new HCDiv ());
+    m_aContent = m_aContainer.addAndReturnChild (new HCDiv ());
 
     if (bCollapsible)
     {
@@ -81,6 +82,24 @@ public class BootstrapNavbar extends HCNav
 
       m_aContent.addClasses (CBootstrapCSS.COLLAPSE, CBootstrapCSS.NAVBAR_COLLAPSE).setID (sCollapseTarget);
     }
+  }
+
+  @Nonnull
+  public final HCDiv getContainer ()
+  {
+    return m_aContainer;
+  }
+
+  @Nonnull
+  public final HCDiv getHeader ()
+  {
+    return m_aHeader;
+  }
+
+  @Nonnull
+  public final HCDiv getContent ()
+  {
+    return m_aContent;
   }
 
   @Nonnull

@@ -44,9 +44,9 @@ public final class ApplicationMenuTree extends ApplicationSingleton
   }
 
   @Nonnull
-  public IMenuTree getTree ()
+  public static IMenuTree getTree ()
   {
-    return m_aTree;
+    return getInstance ().m_aTree;
   }
 
   @Override
