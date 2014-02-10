@@ -45,6 +45,11 @@ import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.timing.StopWatch;
 
+/**
+ * This class contains a list of {@link ThreadDescriptor} objects.
+ * 
+ * @author Philip Helger
+ */
 @NotThreadSafe
 public class ThreadDescriptorList implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {

@@ -23,6 +23,8 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MonitorInfo;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,10 +41,22 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringHelper;
 
+/**
+ * This class contains the information of a single thread at a certain point of
+ * time.
+ * 
+ * @author Philip Helger
+ */
 public class ThreadDescriptor implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {
+  public static final boolean DEFAULT_ENABLE_THREAD_INFO = false;
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (ThreadDescriptor.class);
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static final ThreadMXBean THREAD_MX = ManagementFactory.getThreadMXBean ();
+
+  private static boolean s_bEnableThreadInfo = DEFAULT_ENABLE_THREAD_INFO;
+
   private final long m_nID;
   private final String m_sName;
   private final State m_eState;
@@ -50,6 +64,40 @@ public class ThreadDescriptor implements IHasStringRepresentation, IHasMicroNode
   private final String m_sThreadGroup;
   private final String m_sStackTrace;
   private final ThreadInfo m_aThreadInfo;
+
+  /**
+   * Enable the retrieval of {@link ThreadInfo} objects. Warning: this takes a
+   * lot of CPU, so enable this only when you are not running a performance
+   * critical application! The default is {@value #DEFAULT_ENABLE_THREAD_INFO}.
+   * 
+   * @param bEnableThreadInfo
+   *        <code>true</code> to enabled, <code>false</code> to disable.
+   */
+  public static void setEnableThreadInfo (final boolean bEnableThreadInfo)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bEnableThreadInfo = bEnableThreadInfo;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public static boolean isEnableThreadInfo ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bEnableThreadInfo;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
 
   public ThreadDescriptor (@Nonnull final Thread aThread, @Nullable final String sStackTrace)
   {
@@ -67,7 +115,7 @@ public class ThreadDescriptor implements IHasStringRepresentation, IHasMicroNode
     try
     {
       // This takes forever. Disabled as a performance improvement
-      if (false)
+      if (isEnableThreadInfo ())
         aThreadInfo = THREAD_MX.getThreadInfo (new long [] { m_nID }, true, true)[0];
     }
     catch (final Throwable t)
