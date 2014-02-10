@@ -139,7 +139,7 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   {
     return new HCSpan ().addClass (CSS_CLASS_EMPTY_ACTION)
                         .addStyle (CCSSProperties.DISPLAY_INLINE_BLOCK)
-                        .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.px (14)));
+                        .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.px (16)));
   }
 
   @Nonnull
