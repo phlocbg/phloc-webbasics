@@ -83,7 +83,7 @@ public final class SystemMonitorWebAppListener extends WebAppListener {
     CheckDeadlockJob.schedule ();
     FailedMailResendJob.scheduleMe (CSystemMonitor.APP_ID, 10);
 
-    if (true)
+    if (false)
       DummyDeadLock.triggerDummyDeadlock (5);
   }
 }
