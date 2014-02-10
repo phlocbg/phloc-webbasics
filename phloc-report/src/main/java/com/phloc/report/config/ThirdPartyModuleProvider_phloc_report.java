@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_phloc_report implements IThirdPartyM
   public static final IThirdPartyModule PDFBOX = new ThirdPartyModule ("Apache PDFBox",
                                                                        "Apache",
                                                                        ELicense.APACHE2,
-                                                                       new Version (1, 8, 3),
+                                                                       new Version (1, 8, 4),
                                                                        "http://pdfbox.apache.org/");
 
   @Nullable
