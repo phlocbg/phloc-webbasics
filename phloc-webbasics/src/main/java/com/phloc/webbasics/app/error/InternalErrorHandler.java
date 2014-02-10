@@ -92,12 +92,16 @@ import com.phloc.webscopes.smtp.ScopedMailAPI;
 @ThreadSafe
 public final class InternalErrorHandler
 {
+  public static final boolean DEFAULT_ENABLE_FULL_THREAD_DUMPS = false;
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (InternalErrorHandler.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
   private static ISMTPSettings s_aSMTPSettings = null;
   private static IEmailAddress s_aSenderAddress = null;
   private static List <IEmailAddress> s_aReceiverAddresses = null;
   private static IInternalErrorCallback s_aCustomExceptionHandler;
+  private static boolean s_bEnableFullThreadDumps = DEFAULT_ENABLE_FULL_THREAD_DUMPS;
+
   private static final Map <String, MutableInt> s_aIntErrCache = new HashMap <String, MutableInt> ();
 
   private InternalErrorHandler ()
@@ -210,6 +214,40 @@ public final class InternalErrorHandler
   }
 
   /**
+   * Enable the creation of a dump of all threads. Warning: this takes a lot of
+   * CPU, so enable this only when you are not running a performance critical
+   * application! The default is {@value #DEFAULT_ENABLE_FULL_THREAD_DUMPS}.
+   * 
+   * @param bEnableFullThreadDumps
+   *        <code>true</code> to enabled, <code>false</code> to disable.
+   */
+  public static void setEnableFullThreadDumps (final boolean bEnableFullThreadDumps)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_bEnableFullThreadDumps = bEnableFullThreadDumps;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  public static boolean isEnableFullThreadDumps ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_bEnableFullThreadDumps;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
    * @return The current custom exception handler or <code>null</code> if none
    *         is set.
    */
@@ -290,7 +328,7 @@ public final class InternalErrorHandler
   private static void _sendInternalErrorMailToVendor (@Nullable final String sErrorNumber,
                                                       @Nonnull final InternalErrorData aMetaData,
                                                       @Nonnull final ThreadDescriptor aCurrentDescriptor,
-                                                      @Nonnull final ThreadDescriptorList aOtherThreads,
+                                                      @Nullable final ThreadDescriptorList aAllThreads,
                                                       @Nullable final IEmailAttachmentList aEmailAttachments)
   {
     int nOccurranceCount = 1;
@@ -325,12 +363,12 @@ public final class InternalErrorHandler
       final String sMailSubject = StringHelper.getConcatenatedOnDemand ("Internal error", ' ', sErrorNumber);
 
       // Main error thread dump
-      final String sMailBody = aMetaData.getAsString () +
-                               "\n---------------------------------------------------------------\n" +
-                               aCurrentDescriptor.getAsString () +
-                               "\n---------------------------------------------------------------\n" +
-                               aOtherThreads.getAsString () +
-                               "\n---------------------------------------------------------------";
+      String sMailBody = aMetaData.getAsString () +
+                         "\n---------------------------------------------------------------\n" +
+                         aCurrentDescriptor.getAsString () +
+                         "\n---------------------------------------------------------------\n";
+      if (aAllThreads != null)
+        sMailBody += aAllThreads.getAsString () + "\n---------------------------------------------------------------";
 
       final EmailData aEmailData = new EmailData (EEmailType.TEXT);
       aEmailData.setFrom (aSender);
@@ -358,7 +396,7 @@ public final class InternalErrorHandler
   private static void _saveInternalErrorToXML (@Nullable final String sErrorNumber,
                                                @Nonnull final InternalErrorData aMetaData,
                                                @Nonnull final ThreadDescriptor aCurrentDescriptor,
-                                               @Nonnull final ThreadDescriptorList aOtherThreads,
+                                               @Nullable final ThreadDescriptorList aAllThreads,
                                                @Nullable final IReadonlyEmailAttachmentList aEmailAttachments)
   {
     final IMicroDocument aDoc = new MicroDocument ();
@@ -367,7 +405,8 @@ public final class InternalErrorHandler
       eRoot.setAttribute ("errornumber", sErrorNumber);
     eRoot.appendChild (aMetaData.getAsMicroNode ());
     eRoot.appendChild (aCurrentDescriptor.getAsMicroNode ());
-    eRoot.appendChild (aOtherThreads.getAsMicroNode ());
+    if (aAllThreads != null)
+      eRoot.appendChild (aAllThreads.getAsMicroNode ());
     if (aEmailAttachments != null)
     {
       final List <IEmailAttachmentDataSource> aAttachments = aEmailAttachments.getAsDataSourceList ();
@@ -576,14 +615,16 @@ public final class InternalErrorHandler
     // Get descriptor for crashed thread
     final ThreadDescriptor aCurrentDescriptor = ThreadDescriptor.createForCurrentThread (t);
 
-    // Get all other thread descriptors
-    final ThreadDescriptorList aOtherThreads = ThreadDescriptorList.createWithAllThreads ();
+    // Get all thread descriptors
+    ThreadDescriptorList aAllThreads = null;
+    if (isEnableFullThreadDumps ())
+      aAllThreads = ThreadDescriptorList.createWithAllThreads ();
 
     // Main mail sending
-    _sendInternalErrorMailToVendor (sErrorNumber, aMetaData, aCurrentDescriptor, aOtherThreads, aEmailAttachments);
+    _sendInternalErrorMailToVendor (sErrorNumber, aMetaData, aCurrentDescriptor, aAllThreads, aEmailAttachments);
 
     // Save as XML too
-    _saveInternalErrorToXML (sErrorNumber, aMetaData, aCurrentDescriptor, aOtherThreads, aEmailAttachments);
+    _saveInternalErrorToXML (sErrorNumber, aMetaData, aCurrentDescriptor, aAllThreads, aEmailAttachments);
   }
 
   /**
