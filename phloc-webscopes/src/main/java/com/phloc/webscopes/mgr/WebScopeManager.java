@@ -17,7 +17,11 @@
  */
 package com.phloc.webscopes.mgr;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,6 +63,9 @@ public final class WebScopeManager
   private static final String SESSION_ATTR_SESSION_SCOPE_ACTIVATOR = "$phloc.sessionwebscope.activator";
   private static final Logger s_aLogger = LoggerFactory.getLogger (WebScopeManager.class);
   private static final AtomicBoolean s_aSessionPassivationAllowed = new AtomicBoolean (DEFAULT_SESSION_PASSIVATION_ALLOWED);
+
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+  private static final Set <String> s_aSessionsInInvalidation = new HashSet <String> ();
 
   @SuppressWarnings ("unused")
   @PresentForCodeCoverage
@@ -407,7 +414,8 @@ public final class WebScopeManager
       throw new NullPointerException ("httpSession");
 
     final ScopeSessionManager aSSM = ScopeSessionManager.getInstance ();
-    final ISessionScope aSessionScope = aSSM.getSessionScopeOfID (aHttpSession.getId ());
+    final String sSessionID = aHttpSession.getId ();
+    final ISessionScope aSessionScope = aSSM.getSessionScopeOfID (sSessionID);
     if (aSessionScope != null)
     {
       // Regular scope end
@@ -419,14 +427,43 @@ public final class WebScopeManager
       // present.
       // Happens in Tomcat startup if sessions that where serialized in
       // a previous invocation are invalidated on Tomcat restart
-      s_aLogger.warn ("Found no session scope but invalidating session '" + aHttpSession.getId () + "' anyway");
+
+      // Ensure that session.invalidate can not be called recursively
+      boolean bCanInvalidateSession;
+      s_aRWLock.writeLock ().lock ();
       try
       {
-        aHttpSession.invalidate ();
+        bCanInvalidateSession = s_aSessionsInInvalidation.add (sSessionID);
       }
-      catch (final IllegalStateException ex)
+      finally
       {
-        // session already invalidated
+        s_aRWLock.writeLock ().unlock ();
+      }
+
+      if (bCanInvalidateSession)
+      {
+        s_aLogger.warn ("Found no session scope but invalidating session '" + sSessionID + "' anyway");
+        try
+        {
+          aHttpSession.invalidate ();
+        }
+        catch (final IllegalStateException ex)
+        {
+          // session already invalidated
+        }
+        finally
+        {
+          // Remove from "in invalidation" list
+          s_aRWLock.writeLock ().lock ();
+          try
+          {
+            s_aSessionsInInvalidation.remove (sSessionID);
+          }
+          finally
+          {
+            s_aRWLock.writeLock ().unlock ();
+          }
+        }
       }
     }
   }
