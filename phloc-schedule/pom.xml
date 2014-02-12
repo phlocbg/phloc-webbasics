@@ -106,7 +106,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-webscopes</artifactId>
-      <version>6.2.3</version>
+      <version>6.2.4</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
