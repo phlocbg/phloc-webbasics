@@ -22,8 +22,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.html.hc.IHCControl;
+import com.phloc.html.hc.IHCHasChildren;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCRadioButton;
@@ -49,7 +49,7 @@ public final class BootstrapHelper
           aCurCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
   }
 
-  public static void markChildrenAsFormControls (@Nullable final IHCNodeWithChildren <?> aNode)
+  public static void markChildrenAsFormControls (@Nullable final IHCHasChildren aNode)
   {
     if (aNode != null)
       for (final IHCNode aCell : aNode.getChildren ())
