@@ -20,7 +20,8 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-web">
-  <entry date="2013-02-12" category="tech" action="update">
+  <release date="2014-02-12" version="5.3.7" />
+  <entry date="2014-02-12" category="tech" action="update">
     <change>
       <text locale="en">Added support for UTF-8 encoded filenames in Content-Disposition of UnifiedResponse based on RFC 5987</text>
     </change>
