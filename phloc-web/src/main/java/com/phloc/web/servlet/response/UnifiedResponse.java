@@ -57,6 +57,7 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.datetime.PDTFactory;
+import com.phloc.web.encoding.RFC5987Encoder;
 import com.phloc.web.http.AcceptCharsetHandler;
 import com.phloc.web.http.AcceptCharsetList;
 import com.phloc.web.http.AcceptMimeTypeHandler;
@@ -533,11 +534,15 @@ public class UnifiedResponse
     if (!sFilename.equals (sFilenameToUse))
       _warn ("Content-Dispostion filename was internally modified from '" + sFilename + "' to '" + sFilenameToUse + "'");
 
-    // Check if encoding as ISO-8859-1 is possible
-    if (m_aContentDispositionEncoder == null)
-      m_aContentDispositionEncoder = CCharset.CHARSET_ISO_8859_1_OBJ.newEncoder ();
-    if (!m_aContentDispositionEncoder.canEncode (sFilenameToUse))
-      _error ("Content-Dispostion  filename '" + sFilenameToUse + "' cannot be encoded to ISO-8859-1!");
+    // Disabled because of the extended UTF-8 handling (RFC 5987)
+    if (false)
+    {
+      // Check if encoding as ISO-8859-1 is possible
+      if (m_aContentDispositionEncoder == null)
+        m_aContentDispositionEncoder = CCharset.CHARSET_ISO_8859_1_OBJ.newEncoder ();
+      if (!m_aContentDispositionEncoder.canEncode (sFilenameToUse))
+        _error ("Content-Dispostion filename '" + sFilenameToUse + "' cannot be encoded to ISO-8859-1!");
+    }
 
     // Are we overwriting?
     if (m_sContentDispositionFilename != null)
@@ -1043,10 +1048,19 @@ public class UnifiedResponse
     {
       // Filename needs to be surrounded with double quotes (single quotes
       // don't work).
-      aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, m_eContentDispositionType.getID () +
-                                                                "; filename=\"" +
-                                                                m_sContentDispositionFilename +
-                                                                "\"");
+      final StringBuilder aSB = new StringBuilder ();
+      aSB.append (m_eContentDispositionType.getID ())
+         .append ("; filename=\"")
+         .append (m_sContentDispositionFilename)
+         .append ("\"");
+
+      // Check if we need an UTF-8 filename
+      // http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http/6745788#6745788
+      final String sRFC5987Filename = RFC5987Encoder.getRFC5987EncodedUTF8 (m_sContentDispositionFilename);
+      if (!sRFC5987Filename.equals (m_sContentDispositionFilename))
+        aSB.append ("; filename*=UTF-8''").append (sRFC5987Filename);
+
+      aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, aSB.toString ());
       if (m_aMimeType == null)
       {
         _warn ("Content-Disposition is specified but no MimeType is set. Using the default download MimeType.");
