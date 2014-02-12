@@ -32,6 +32,7 @@ public enum ETypeaheadJSPathProvider implements IJSPathProvider
 {
   /** https://github.com/twitter/typeahead.js/ */
   TYPEAHEAD_0_9_3 ("typeahead/0.9.3/typeahead.js"),
+  TYPEAHEAD_0_10_1 ("typeahead/0.10.1/typeahead.js"),
   PHLOC_TYPEAHEAD ("typeahead/phloc-typeahead.js");
 
   private final String m_sPath;
