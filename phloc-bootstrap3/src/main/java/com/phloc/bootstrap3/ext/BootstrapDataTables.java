@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.bootstrap3.EBootstrapCSSPathProvider;
 import com.phloc.bootstrap3.EBootstrapJSPathProvider;
 import com.phloc.bootstrap3.table.AbstractBootstrapTable;
+import com.phloc.html.hc.IHCTable;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webctrls.datatables.DataTables;
@@ -31,11 +32,14 @@ public class BootstrapDataTables extends DataTables
 {
   public static final String DEFAULT_DOM = "<'row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>";
 
-  public BootstrapDataTables (@Nonnull final AbstractBootstrapTable <?> aTable)
+  public BootstrapDataTables (@Nonnull final IHCTable <?> aTable)
   {
     super (aTable);
-    aTable.setStriped (true);
-    aTable.setHover (true);
+    if (aTable instanceof AbstractBootstrapTable <?>)
+    {
+      ((AbstractBootstrapTable <?>) aTable).setStriped (true);
+      ((AbstractBootstrapTable <?>) aTable).setHover (true);
+    }
     setDom (DEFAULT_DOM);
     setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
     registerExternalResources ();
