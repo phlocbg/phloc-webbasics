@@ -56,6 +56,7 @@ import com.phloc.commons.mutable.MutableLong;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.URLUtils;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.web.encoding.RFC5987Encoder;
 import com.phloc.web.http.AcceptCharsetHandler;
@@ -70,6 +71,8 @@ import com.phloc.web.http.HTTPHeaderMap;
 import com.phloc.web.http.QValue;
 import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.servlet.request.RequestLogger;
+import com.phloc.web.useragent.browser.BrowserInfo;
+import com.phloc.web.useragent.browser.EBrowserType;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -100,6 +103,7 @@ public class UnifiedResponse
   private final HttpServletRequest m_aHttpRequest;
   private final AcceptCharsetList m_aAcceptCharsetList;
   private final AcceptMimeTypeList m_aAcceptMimeTypeList;
+  private BrowserInfo m_aRequestBrowserInfo;
 
   // Settings
   /**
@@ -242,6 +246,19 @@ public class UnifiedResponse
   public final EHTTPMethod getHTTPMethod ()
   {
     return m_eHTTPMethod;
+  }
+
+  @Nullable
+  public BrowserInfo getRequestBrowserInfo ()
+  {
+    return m_aRequestBrowserInfo;
+  }
+
+  @Nonnull
+  public UnifiedResponse setRequestBrowserInfo (@Nullable final BrowserInfo aRequestBrowserInfo)
+  {
+    m_aRequestBrowserInfo = aRequestBrowserInfo;
+    return this;
   }
 
   /**
@@ -1046,19 +1063,32 @@ public class UnifiedResponse
 
     if (m_sContentDispositionFilename != null)
     {
-      // Filename needs to be surrounded with double quotes (single quotes
-      // don't work).
       final StringBuilder aSB = new StringBuilder ();
-      aSB.append (m_eContentDispositionType.getID ())
-         .append ("; filename=\"")
-         .append (m_sContentDispositionFilename)
-         .append ("\"");
+      if (m_aRequestBrowserInfo != null &&
+          m_aRequestBrowserInfo.getBrowserType () == EBrowserType.IE &&
+          m_aRequestBrowserInfo.getVersion ().getMajor () <= 8)
+      {
+        // Special case for IE <= 8
+        final Charset aCharsetToUse = m_aCharset != null ? m_aCharset : CCharset.CHARSET_UTF_8_OBJ;
+        aSB.append (m_eContentDispositionType.getID ())
+           .append ("; filename=")
+           .append (URLUtils.urlEncode (m_sContentDispositionFilename, aCharsetToUse));
+      }
+      else
+      {
+        // Filename needs to be surrounded with double quotes (single quotes
+        // don't work).
+        aSB.append (m_eContentDispositionType.getID ())
+           .append ("; filename=\"")
+           .append (m_sContentDispositionFilename)
+           .append ("\"");
 
-      // Check if we need an UTF-8 filename
-      // http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http/6745788#6745788
-      final String sRFC5987Filename = RFC5987Encoder.getRFC5987EncodedUTF8 (m_sContentDispositionFilename);
-      if (!sRFC5987Filename.equals (m_sContentDispositionFilename))
-        aSB.append ("; filename*=UTF-8''").append (sRFC5987Filename);
+        // Check if we need an UTF-8 filename
+        // http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http/6745788#6745788
+        final String sRFC5987Filename = RFC5987Encoder.getRFC5987EncodedUTF8 (m_sContentDispositionFilename);
+        if (!sRFC5987Filename.equals (m_sContentDispositionFilename))
+          aSB.append ("; filename*=UTF-8''").append (sRFC5987Filename);
+      }
 
       aHttpResponse.setHeader (CHTTPHeader.CONTENT_DISPOSITION, aSB.toString ());
       if (m_aMimeType == null)
