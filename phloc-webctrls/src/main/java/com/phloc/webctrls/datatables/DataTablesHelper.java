@@ -40,7 +40,7 @@ public final class DataTablesHelper
     aDataTables.setScrollCollapse (true).setScrollY (sScrollHeight);
     // Activate the Scroller extra
     aDataTables.setDom (aDataTables.getDom () + "S");
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.EXTRAS_SCROLLER_110);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.EXTRAS_SCROLLER_110);
+    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.EXTRAS_SCROLLER_120);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.EXTRAS_SCROLLER_120);
   }
 }

@@ -26,7 +26,9 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 public enum EDataTablesJSPathProvider implements IJSPathProvider
 {
   DATATABLES_194 ("datatables/194/js/jquery.dataTables.js"),
-  EXTRAS_SCROLLER_110 ("datatables/Scroller-1.1.0/dataTables.scroller.js");
+  @Deprecated
+  EXTRAS_SCROLLER_110 ("datatables/Scroller-1.1.0/dataTables.scroller.js"),
+  EXTRAS_SCROLLER_120 ("datatables/Scroller-1.2.0/dataTables.scroller.js");
 
   private final String m_sPath;
 
