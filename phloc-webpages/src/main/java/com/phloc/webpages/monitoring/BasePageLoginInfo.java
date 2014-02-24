@@ -247,7 +247,13 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
 
       if (aWPEC.hasSubAction (ACTION_PERFORM))
       {
-        if (LoggedInUserManager.getInstance ().logoutUser (aSelectedObject.getUserID ()).isChanged ())
+        // FIXME this does not work!
+        // Determine the session of the user and invalidate this session
+        // instead!
+        final boolean bLoggedOut = LoggedInUserManager.getInstance ()
+                                                      .logoutUser (aSelectedObject.getUserID ())
+                                                      .isChanged ();
+        if (bLoggedOut)
           aNodeList.addChild (getStyler ().createSuccessBox (EText.LOGOUT_SUCCESS.getDisplayTextWithArgs (aDisplayLocale,
                                                                                                           sUserName)));
         else
