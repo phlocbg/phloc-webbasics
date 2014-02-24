@@ -59,24 +59,35 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
   @NotThreadSafe
   public static class Finder
   {
-    private final String [] m_aSearchTerms;
     private final Locale m_aSortLocale;
+    private String [] m_aSearchTerms;
 
     /**
-     * Constructor.
+     * Constructor
+     * 
+     * @param aSortLocale
+     *        The sort locale to use. May not be <code>null</code>.
+     */
+    protected Finder (@Nonnull final Locale aSortLocale)
+    {
+      if (aSortLocale == null)
+        throw new NullPointerException ("sortLocale");
+      m_aSortLocale = aSortLocale;
+    }
+
+    /**
+     * Initialization method.
      * 
      * @param sSearchTerms
      *        The search term string. It is internally separated into multiple
      *        tokens by using a "\s+" regular expression.
-     * @param aSortLocale
-     *        The sort locale to use. May not be <code>null</code>.
+     * @return this
      */
-    public Finder (@Nonnull @Nonempty final String sSearchTerms, @Nonnull final Locale aSortLocale)
+    @Nonnull
+    protected Finder initialize (@Nonnull @Nonempty final String sSearchTerms)
     {
       if (StringHelper.hasNoTextAfterTrim (sSearchTerms))
         throw new IllegalArgumentException ("SearchTerms");
-      if (aSortLocale == null)
-        throw new NullPointerException ("sortLocale");
 
       // Split search terms by white spaces
       m_aSearchTerms = RegExHelper.getSplitToArray (sSearchTerms.trim (), "\\s+");
@@ -85,7 +96,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
       for (final String sSearchTerm : m_aSearchTerms)
         if (sSearchTerm.length () == 0)
           throw new IllegalArgumentException ("Weird - empty search term present!");
-      m_aSortLocale = aSortLocale;
+      return this;
     }
 
     /**
@@ -188,6 +199,21 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
   }
 
   /**
+   * Get the provided query string from the parameter map. By default the value
+   * of parameter {@link #PARAM_QUERY} is used.
+   * 
+   * @param aParams
+   *        The request parameter map.
+   * @return <code>null</code> if no such request parameter is present.
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getQueryString (@Nonnull final MapBasedAttributeContainer aParams)
+  {
+    return aParams.getAttributeAsString (PARAM_QUERY);
+  }
+
+  /**
    * Create a new {@link Finder} object.
    * 
    * @param sOriginalQuery
@@ -200,7 +226,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
   @OverrideOnDemand
   protected Finder createFinder (@Nonnull final String sOriginalQuery, @Nonnull final Locale aSortLocale)
   {
-    return new Finder (sOriginalQuery, aSortLocale);
+    return new Finder (aSortLocale).initialize (sOriginalQuery);
   }
 
   /**
@@ -224,7 +250,7 @@ public abstract class AbstractAjaxHandlerTypeaheadFinder extends AbstractAjaxHan
   {
     final Locale aDisplayLocale = ApplicationRequestManager.getInstance ().getRequestDisplayLocale ();
 
-    final String sOriginalQuery = aParams.getAttributeAsString (PARAM_QUERY);
+    final String sOriginalQuery = getQueryString (aParams);
     if (StringHelper.hasNoTextAfterTrim (sOriginalQuery))
     {
       // May happen when the user enters "  " (only spaces)
