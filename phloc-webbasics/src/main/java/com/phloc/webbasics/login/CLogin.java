@@ -36,8 +36,16 @@ public final class CLogin
   public static final ICSSClassProvider CSS_CLASS_LOGIN_HEADER = DefaultCSSClassProvider.create ("login_appheader");
   public static final ICSSClassProvider CSS_CLASS_LOGIN_ERRORMSG = DefaultCSSClassProvider.create ("login_errormsg");
 
+  /** The name of the field that contains the user name for the login. */
   public static final String REQUEST_ATTR_USERID = "userid";
+  /** The name of the field that contains the password for the login. */
   public static final String REQUEST_ATTR_PASSWORD = "password";
+  /**
+   * The action value to be passed in a hidden field to ensure that user name
+   * and password are checked. The name of the field must be
+   * {@link com.phloc.html.hc.CHCParam#PARAM_ACTION}
+   */
+  public static final String ACTION_DO_LOGIN = "do-validate-login-credentials";
 
   private CLogin ()
   {}

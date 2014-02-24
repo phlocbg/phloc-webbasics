@@ -35,13 +35,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.hc.CHCParam;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.web.useragent.UserAgentDatabase;
 import com.phloc.webbasics.app.html.IHTMLProvider;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
-import com.phloc.webscopes.domain.ISessionWebScope;
-import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Handle the application login process. This class requires a separate UI.
@@ -89,7 +88,6 @@ public class LoginManager
   public static final String LOGIN_INFO_REQUEST_COUNT = "request-count";
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoginManager.class);
-  private static final String SESSION_ATTR_AUTHINPROGRESS = "$authinprogress";
 
   /**
    * Create the HTML code used to render the login screen
@@ -187,8 +185,7 @@ public class LoginManager
       boolean bLoginError = false;
       ELoginResult eLoginResult = ELoginResult.SUCCESS;
 
-      final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope ();
-      if (Boolean.TRUE.equals (aSessionScope.getAttributeObject (SESSION_ATTR_AUTHINPROGRESS)))
+      if (CLogin.ACTION_DO_LOGIN.equals (aRequestScope.getAttributeAsString (CHCParam.PARAM_ACTION)))
       {
         // Login screen was already shown
         // -> Check request parameters
@@ -202,7 +199,6 @@ public class LoginManager
         if (eLoginResult.isSuccess ())
         {
           // Credentials are valid
-          aSessionScope.removeAttribute (SESSION_ATTR_AUTHINPROGRESS);
           sSessionUserID = aUser.getID ();
           onUserLogin (sLoginName);
         }
@@ -222,7 +218,6 @@ public class LoginManager
       if (sSessionUserID == null)
       {
         // Show login screen
-        aSessionScope.setAttribute (SESSION_ATTR_AUTHINPROGRESS, Boolean.TRUE);
         final IHTMLProvider aLoginScreenProvider = createLoginScreen (bLoginError, eLoginResult);
         WebHTMLCreator.createHTMLResponse (aRequestScope, aUnifiedResponse, aLoginScreenProvider);
       }
