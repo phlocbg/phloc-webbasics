@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
@@ -154,7 +153,7 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
     final HCBody aBody = aHtml.getBody ();
     final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN));
     final HCCenter aCenter = aSpan.addAndReturnChild (new HCCenter ());
-    final HCForm aForm = aCenter.addAndReturnChild (new HCForm (new SimpleURL ()));
+    final HCForm aForm = aCenter.addAndReturnChild (new HCForm (aRequestScope.getURL ()));
     aForm.setSubmitPressingEnter (true);
 
     // The hidden field that triggers the validation

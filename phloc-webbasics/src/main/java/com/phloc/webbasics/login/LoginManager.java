@@ -179,6 +179,7 @@ public class LoginManager
   {
     final LoggedInUserManager aLUM = LoggedInUserManager.getInstance ();
     String sSessionUserID = aLUM.getCurrentUserID ();
+    boolean bLoggedInInThisRequest = false;
     if (sSessionUserID == null)
     {
       // No use currently logged in -> start login
@@ -201,6 +202,7 @@ public class LoginManager
           // Credentials are valid
           sSessionUserID = aUser.getID ();
           onUserLogin (sLoginName);
+          bLoggedInInThisRequest = true;
         }
 
         if (eLoginResult.isFailure ())
@@ -235,7 +237,15 @@ public class LoginManager
     }
     else
       if (sSessionUserID != null)
-        s_aLogger.warn ("Failed to resolve LoginInfo of '" + sSessionUserID + "'");
+        s_aLogger.error ("Failed to resolve LoginInfo of '" + sSessionUserID + "'");
+
+    if (bLoggedInInThisRequest)
+    {
+      // Avoid double submit by simply redirecting to the desired destination
+      // URL without the login parameters
+      aUnifiedResponse.setRedirect (aRequestScope.getURL ());
+      return EContinue.BREAK;
+    }
 
     // Continue only, if a valid user ID is present
     return EContinue.valueOf (sSessionUserID != null);
