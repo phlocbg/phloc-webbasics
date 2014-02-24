@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ContainerHelper;
@@ -45,14 +48,17 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  */
 public class PLText extends AbstractPLElement <PLText>
 {
+  public static final EHorzAlignment DEFAULT_HORZ_ALIGNMENT = EHorzAlignment.DEFAULT;
   public static final boolean DEFAULT_TOP_DOWN = true;
+  public static final int DEFAULT_MAX_ROWS = CGlobal.ILLEGAL_UINT;
 
   private final String m_sText;
   private final Charset m_aCharset;
   private final FontSpec m_aFont;
   private final float m_fLineHeight;
-  private EHorzAlignment m_eHorzAlign = EHorzAlignment.DEFAULT;
+  private EHorzAlignment m_eHorzAlign = DEFAULT_HORZ_ALIGNMENT;
   private boolean m_bTopDown = DEFAULT_TOP_DOWN;
+  private int m_nMaxRows = DEFAULT_MAX_ROWS;
 
   // prepare result
   protected List <TextAndWidthSpec> m_aPreparedLines;
@@ -93,11 +99,33 @@ public class PLText extends AbstractPLElement <PLText>
   }
 
   @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public PLText setBasicDataFrom (@Nonnull final PLText aSource)
+  {
+    super.setBasicDataFrom (aSource);
+    setHorzAlign (aSource.m_eHorzAlign);
+    setTopDown (aSource.m_bTopDown);
+    setMaxRows (m_nMaxRows);
+    return this;
+  }
+
+  /**
+   * @return The horizontal alignment of the text. By default it is
+   *         {@link #DEFAULT_HORZ_ALIGNMENT}. Never <code>null</code>.
+   */
+  @Nonnull
   public EHorzAlignment getHorzAlign ()
   {
     return m_eHorzAlign;
   }
 
+  /**
+   * Set the horizontal alignment of the text.
+   * 
+   * @param eHorzAlign
+   *        The new horizontal alignment. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public PLText setHorzAlign (@Nonnull final EHorzAlignment eHorzAlign)
   {
@@ -107,11 +135,24 @@ public class PLText extends AbstractPLElement <PLText>
     return this;
   }
 
+  /**
+   * @return <code>true</code> if the text is rendered from top to bottom, or
+   *         <code>false</code> if the text is rendered from bottom to top. The
+   *         default value is {@link #DEFAULT_TOP_DOWN}.
+   */
   public boolean isTopDown ()
   {
     return m_bTopDown;
   }
 
+  /**
+   * Set the rendering direction: top-down or bottom-up.
+   * 
+   * @param bTopDown
+   *        <code>true</code> to render top-down, <code>false</code> to render
+   *        bottom-up.
+   * @return this
+   */
   @Nonnull
   public PLText setTopDown (final boolean bTopDown)
   {
@@ -119,9 +160,52 @@ public class PLText extends AbstractPLElement <PLText>
     return this;
   }
 
+  /**
+   * @return The maximum number of rows to be rendered. If this value is &le; 0
+   *         than all rows are rendered. The default value is
+   *         {@link #DEFAULT_MAX_ROWS}.
+   */
+  @CheckForSigned
+  public int getMaxRows ()
+  {
+    return m_nMaxRows;
+  }
+
+  /**
+   * Set the maximum number of rows to render.
+   * 
+   * @param nMaxRows
+   *        Maximum number of rows. If &le; 0 than all lines are rendered.
+   * @return this
+   */
+  @Nonnull
+  public PLText setMaxRows (final int nMaxRows)
+  {
+    m_nMaxRows = nMaxRows;
+    return this;
+  }
+
   final void internalSetPreparedLines (@Nonnull final List <TextAndWidthSpec> aLines)
   {
-    m_aPreparedLines = aLines;
+    if (m_nMaxRows <= 0)
+    {
+      // Use all lines
+      m_aPreparedLines = aLines;
+    }
+    else
+    {
+      // Use only a certain maximum number of rows
+      if (aLines.size () <= m_nMaxRows)
+      {
+        // We have less lines than the maximum
+        m_aPreparedLines = aLines;
+      }
+      else
+      {
+        // Maximum number of lines exceeded
+        m_aPreparedLines = aLines.subList (0, m_nMaxRows);
+      }
+    }
 
     if (!m_bTopDown)
     {
@@ -136,19 +220,21 @@ public class PLText extends AbstractPLElement <PLText>
     // Split text into rows
     internalSetPreparedLines (m_aFont.getFitToWidth (m_sText, m_aCharset, aCtx.getAvailableWidth ()));
 
+    // Determine height by number of lines
     return new SizeSpec (aCtx.getAvailableWidth (), m_aPreparedLines.size () * m_fLineHeight);
   }
 
   /**
    * Get the text to draw, in case it is different from the stored text (e.g.
-   * for page numbers)
+   * for page numbers in {@link PLTextWithPlaceholders})
    * 
    * @param sText
-   *        Original text
+   *        Original text. Never <code>null</code>.
    * @param aCtx
-   *        The current rendering context
-   * @return The real text to draw
+   *        The current rendering context. Never <code>null</code>.
+   * @return The real text to draw. May not be <code>null</code>.
    */
+  @Nonnull
   @OverrideOnDemand
   protected String getTextToDraw (@Nonnull final String sText, @Nonnull final RenderingContext aCtx)
   {
@@ -173,6 +259,8 @@ public class PLText extends AbstractPLElement <PLText>
       // Replace text (if any)
       float fWidth = aTW.getWidth ();
       final String sOrigText = aTW.getText ();
+
+      // get the real text to draw
       final String sDrawText = getTextToDraw (sOrigText, aCtx);
       if (!sOrigText.equals (sDrawText))
       {

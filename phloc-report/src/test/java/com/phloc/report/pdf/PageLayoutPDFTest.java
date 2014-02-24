@@ -81,7 +81,8 @@ public class PageLayoutPDFTest
       // Remaining columns use each the same part of the space: WidthSpec.star()
       aHBox.addColumn (new PLText ("Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text Spalte 2 mit Text ",
                                    r10.getCloneWithDifferentColor (Color.BLUE)).setBorder (new BorderStyleSpec (Color.RED))
-                                                                               .setHorzAlign (EHorzAlignment.CENTER),
+                                                                               .setHorzAlign (EHorzAlignment.CENTER)
+                                                                               .setMaxRows (3),
                        WidthSpec.star ());
       aHBox.addColumn (new PLText ("Spalte 3 mit Text Spalte 3 mit Text Spalte 3 mit Text Ende", r10).setMarginTop (10)
                                                                                                      .setPadding (5)

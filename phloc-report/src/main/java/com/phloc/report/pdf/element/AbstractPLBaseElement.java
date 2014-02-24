@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.ToStringGenerator;
@@ -57,6 +58,7 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   }
 
   @Nonnull
+  @OverridingMethodsMustInvokeSuper
   public IMPLTYPE setBasicDataFrom (@Nonnull final AbstractPLBaseElement <?> aSource)
   {
     setMargin (aSource.m_aMargin);

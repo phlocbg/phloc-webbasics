@@ -70,13 +70,11 @@ public class PLTextSplittable extends PLText implements IPLSplittableElement
 
     // Text1 does not need to be splittable anymore
     final PLText aNewText1 = new PLTextSplittable (TextAndWidthSpec.getAsText (aLines1), getFontSpec ());
-    aNewText1.setBasicDataFrom (this).setHorzAlign (getHorzAlign ()).setTopDown (isTopDown ()).markAsPrepared (aSize1);
-    aNewText1.internalSetPreparedLines (aLines1);
+    aNewText1.setBasicDataFrom (this).markAsPrepared (aSize1).internalSetPreparedLines (aLines1);
 
     // Text2 needs to be splittable again
     final PLTextSplittable aNewText2 = new PLTextSplittable (TextAndWidthSpec.getAsText (aLines2), getFontSpec ());
-    aNewText2.setBasicDataFrom (this).setHorzAlign (getHorzAlign ()).setTopDown (isTopDown ()).markAsPrepared (aSize2);
-    aNewText2.internalSetPreparedLines (aLines2);
+    aNewText2.setBasicDataFrom (this).markAsPrepared (aSize2).internalSetPreparedLines (aLines2);
 
     return new PLSplitResult (new PLElementWithSize (aNewText1, aSize1), new PLElementWithSize (aNewText2, aSize2));
   }
