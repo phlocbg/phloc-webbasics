@@ -86,7 +86,7 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
    */
   public AccountingArea (@Nonnull final IClient aClient,
                          @Nonnull @Nonempty final String sDisplayName,
-                         @Nonnull @Nonempty final String sCompanyType,
+                         @Nullable final String sCompanyType,
                          @Nonnull @Nonempty final String sCompanyVATIN,
                          @Nonnull @Nonempty final String sCompanyNumber,
                          @Nonnull final IReadonlyAddress aAddress,
@@ -115,7 +115,7 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
   AccountingArea (@Nonnull final IClient aClient,
                   @Nonnull final StubObject aStubObject,
                   @Nonnull @Nonempty final String sDisplayName,
-                  @Nonnull @Nonempty final String sCompanyType,
+                  @Nullable final String sCompanyType,
                   @Nonnull @Nonempty final String sCompanyVATIN,
                   @Nonnull @Nonempty final String sCompanyNumber,
                   @Nonnull final IReadonlyAddress aAddress,
@@ -163,19 +163,16 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
     return EChange.CHANGED;
   }
 
-  @Nonnull
-  @Nonempty
+  @Nullable
   public String getCompanyType ()
   {
     return m_sCompanyType;
   }
 
   @Nonnull
-  public EChange setCompanyType (@Nonnull @Nonempty final String sCompanyType)
+  public EChange setCompanyType (@Nullable final String sCompanyType)
   {
-    if (StringHelper.hasNoText (sCompanyType))
-      throw new IllegalArgumentException ("CompanyType");
-    if (sCompanyType.equals (m_sCompanyType))
+    if (EqualsUtils.equals (sCompanyType, m_sCompanyType))
       return EChange.UNCHANGED;
     m_sCompanyType = sCompanyType;
     return EChange.CHANGED;

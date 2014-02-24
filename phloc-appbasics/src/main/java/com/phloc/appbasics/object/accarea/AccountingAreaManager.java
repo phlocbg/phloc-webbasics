@@ -96,7 +96,7 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
   @Nonnull
   public IAccountingArea createAccountingArea (@Nonnull final IClient aClient,
                                                @Nonnull @Nonempty final String sDisplayName,
-                                               @Nonnull @Nonempty final String sCompanyType,
+                                               @Nullable final String sCompanyType,
                                                @Nonnull @Nonempty final String sCompanyVATIN,
                                                @Nonnull @Nonempty final String sCompanyNumber,
                                                @Nonnull final IReadonlyAddress aAddress,
@@ -147,7 +147,7 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
   @Nonnull
   public EChange updateAccountingArea (@Nonnull @Nonempty final String sAccountingAreaID,
                                        @Nonnull @Nonempty final String sDisplayName,
-                                       @Nonnull @Nonempty final String sCompanyType,
+                                       @Nullable final String sCompanyType,
                                        @Nonnull @Nonempty final String sCompanyVATIN,
                                        @Nonnull @Nonempty final String sCompanyNumber,
                                        @Nonnull final IReadonlyAddress aAddress,
