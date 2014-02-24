@@ -515,8 +515,6 @@ public final class CBootstrapCSS
   public static final ICSSClassProvider GLYPHICON_WRENCH = DefaultCSSClassProvider.create ("glyphicon-wrench");
   public static final ICSSClassProvider GLYPHICON_ZOOM_IN = DefaultCSSClassProvider.create ("glyphicon-zoom-in");
   public static final ICSSClassProvider GLYPHICON_ZOOM_OUT = DefaultCSSClassProvider.create ("glyphicon-zoom-out");
-  public static final ICSSClassProvider GLYPHICONS_CHEVRON_LEFT = DefaultCSSClassProvider.create ("glyphicons-chevron-left");
-  public static final ICSSClassProvider GLYPHICONS_CHEVRON_RIGHT = DefaultCSSClassProvider.create ("glyphicons-chevron-right");
   public static final ICSSClassProvider H1 = DefaultCSSClassProvider.create ("h1");
   public static final ICSSClassProvider H2 = DefaultCSSClassProvider.create ("h2");
   public static final ICSSClassProvider H3 = DefaultCSSClassProvider.create ("h3");

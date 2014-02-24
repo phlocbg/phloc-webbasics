@@ -39,7 +39,7 @@ public class MainExtractBootstrap3CSSClasses
 {
   public static void main (final String [] args)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource (EBootstrapCSSPathProvider.BOOTSTRAP_3_1_0.getCSSItemPath (true)),
+    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource (EBootstrapCSSPathProvider.BOOTSTRAP_3_1_1.getCSSItemPath (true)),
                                                                CCharset.CHARSET_UTF_8_OBJ,
                                                                ECSSVersion.CSS30);
     final Set <String> aClasses = new TreeSet <String> ();

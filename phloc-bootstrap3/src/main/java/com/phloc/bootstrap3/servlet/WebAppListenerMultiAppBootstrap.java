@@ -43,7 +43,7 @@ public abstract class WebAppListenerMultiAppBootstrap extends WebAppListenerMult
   @OverrideOnDemand
   protected Version getBoostrapVersion ()
   {
-    return CBootstrap.BOOTSTRAP_VERSION_310;
+    return CBootstrap.BOOTSTRAP_VERSION_311;
   }
 
   @Override
