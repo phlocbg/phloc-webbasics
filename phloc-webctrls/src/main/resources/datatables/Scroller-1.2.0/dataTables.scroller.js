@@ -842,7 +842,7 @@ Scroller.prototype = /** @lends Scroller.prototype */{
 
 		// Want 3 rows in the sizing table so :first-child and :last-child
 		// CSS styles don't come into play - take the size of the middle row
-		$('tbody tr:lt(4)', nTable).clone().appendTo( tbody );
+		$('tbody tr:lt(4)', this.s.dt.nTable).clone().appendTo( tbody );
 		while( $('tr', tbody).length < 3 ) {
 			tbody.append( '<tr><td>&nbsp;</td></tr>' );
 		}
