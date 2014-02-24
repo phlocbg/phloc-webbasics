@@ -250,7 +250,7 @@ public class LayoutExecutionContext
    *        the default value to be returned, if no request attribute is present
    * @return The value of the passed request parameter
    */
-  public boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
+  public static boolean getCheckBoxAttr (@Nullable final String sName, final boolean bDefaultValue)
   {
     return StringHelper.hasNoText (sName) ? bDefaultValue : RequestFieldBoolean.getCheckBoxValue (sName, bDefaultValue);
   }
