@@ -32,12 +32,14 @@ import com.phloc.bootstrap2.CBootstrapCSS;
 import com.phloc.bootstrap2.EBootstrapSpan;
 import com.phloc.bootstrap2.derived.BootstrapErrorBox;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
 import com.phloc.html.hc.html.HCFieldSet;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCH2;
+import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCSpan;
@@ -73,6 +75,9 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
                            @Nonnull final Locale aDisplayLocale)
   {
     final HCForm aForm = new HCForm (aRequestScope.getURL ());
+
+    // The hidden field that triggers the validation
+    aForm.addChild (new HCHiddenField (CHCParam.PARAM_ACTION, CLogin.ACTION_DO_LOGIN));
 
     if (showLoginError ())
       aForm.addChild (BootstrapErrorBox.create (getTextErrorMessage (aDisplayLocale, getLoginResult ())));
