@@ -77,23 +77,6 @@ public abstract class SessionWebSingleton extends AbstractSingleton implements S
    *        The class to be checked. May not be <code>null</code>.
    * @return The singleton for the specified class is already instantiated,
    *         <code>null</code> otherwise.
-   * @deprecated Use {@link #getSessionSingletonIfInstantiated(Class)} instead
-   */
-  @Deprecated
-  @Nullable
-  public static final <T extends SessionWebSingleton> T getSingletonIfInstantiated (@Nonnull final Class <T> aClass)
-  {
-    return getSessionSingletonIfInstantiated (aClass);
-  }
-
-  /**
-   * Get the singleton object if it is already instantiated inside the current
-   * session web scope or <code>null</code> if it is not instantiated.
-   * 
-   * @param aClass
-   *        The class to be checked. May not be <code>null</code>.
-   * @return The singleton for the specified class is already instantiated,
-   *         <code>null</code> otherwise.
    */
   @Nullable
   public static final <T extends SessionWebSingleton> T getSessionSingletonIfInstantiated (@Nonnull final Class <T> aClass)
@@ -109,40 +92,10 @@ public abstract class SessionWebSingleton extends AbstractSingleton implements S
    *        The class to be checked. May not be <code>null</code>.
    * @return <code>true</code> if the singleton for the specified class is
    *         already instantiated, <code>false</code> otherwise.
-   * @deprecated Use {@link #isSessionSingletonInstantiated(Class)} instead
-   */
-  @Deprecated
-  public static final boolean isSingletonInstantiated (@Nonnull final Class <? extends SessionWebSingleton> aClass)
-  {
-    return isSessionSingletonInstantiated (aClass);
-  }
-
-  /**
-   * Check if a singleton is already instantiated inside the current session web
-   * scope
-   * 
-   * @param aClass
-   *        The class to be checked. May not be <code>null</code>.
-   * @return <code>true</code> if the singleton for the specified class is
-   *         already instantiated, <code>false</code> otherwise.
    */
   public static final boolean isSessionSingletonInstantiated (@Nonnull final Class <? extends SessionWebSingleton> aClass)
   {
     return isSingletonInstantiated (_getStaticScope (false), aClass);
-  }
-
-  /**
-   * Get all singleton objects registered in the current session web scope.
-   * 
-   * @return A non-<code>null</code> list with all instances of this class in
-   *         the current session web scope.
-   * @deprecated Use {@link #getAllSessionSingletons()} instead
-   */
-  @Deprecated
-  @Nonnull
-  public static final List <SessionWebSingleton> getAllSingletons ()
-  {
-    return getAllSessionSingletons ();
   }
 
   /**

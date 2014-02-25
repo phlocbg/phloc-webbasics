@@ -74,7 +74,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
   {
     out.writeObject (m_aSessionWebScope.getAllAttributes ());
     out.writeObject (m_aSessionWebScope.getAllSessionApplicationScopes ());
-    if (ScopeUtils.debugScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Wrote info on session web scope '" + m_aSessionWebScope.getID () + "'");
   }
 
@@ -83,7 +83,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
   {
     m_aAttrs = (Map <String, Object>) in.readObject ();
     m_aSessionApplicationScopes = (Map <String, ISessionApplicationScope>) in.readObject ();
-    if (ScopeUtils.debugScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Read info on session scope: " +
                       m_aAttrs.size () +
                       " attrs and " +
@@ -115,7 +115,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     // Remember for later passivation
     m_aSessionWebScope = aSessionWebScope;
 
-    if (ScopeUtils.debugScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Successfully activated session web scope '" + aSessionWebScope.getID () + "'");
   }
 }

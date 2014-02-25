@@ -76,23 +76,6 @@ public abstract class RequestWebSingleton extends AbstractSingleton
    *        The class to be checked. May not be <code>null</code>.
    * @return The singleton for the specified class is already instantiated,
    *         <code>null</code> otherwise.
-   * @deprecated Use {@link #getRequestSingletonIfInstantiated(Class)} instead
-   */
-  @Deprecated
-  @Nullable
-  public static final <T extends RequestWebSingleton> T getSingletonIfInstantiated (@Nonnull final Class <T> aClass)
-  {
-    return getRequestSingletonIfInstantiated (aClass);
-  }
-
-  /**
-   * Get the singleton object if it is already instantiated inside the current
-   * request web scope or <code>null</code> if it is not instantiated.
-   * 
-   * @param aClass
-   *        The class to be checked. May not be <code>null</code>.
-   * @return The singleton for the specified class is already instantiated,
-   *         <code>null</code> otherwise.
    */
   @Nullable
   public static final <T extends RequestWebSingleton> T getRequestSingletonIfInstantiated (@Nonnull final Class <T> aClass)
@@ -108,40 +91,10 @@ public abstract class RequestWebSingleton extends AbstractSingleton
    *        The class to be checked. May not be <code>null</code>.
    * @return <code>true</code> if the singleton for the specified class is
    *         already instantiated, <code>false</code> otherwise.
-   * @deprecated Use {@link #isRequestSingletonInstantiated(Class)} instead
-   */
-  @Deprecated
-  public static final boolean isSingletonInstantiated (@Nonnull final Class <? extends RequestWebSingleton> aClass)
-  {
-    return isRequestSingletonInstantiated (aClass);
-  }
-
-  /**
-   * Check if a singleton is already instantiated inside the current request web
-   * scope
-   * 
-   * @param aClass
-   *        The class to be checked. May not be <code>null</code>.
-   * @return <code>true</code> if the singleton for the specified class is
-   *         already instantiated, <code>false</code> otherwise.
    */
   public static final boolean isRequestSingletonInstantiated (@Nonnull final Class <? extends RequestWebSingleton> aClass)
   {
     return isSingletonInstantiated (_getStaticScope (false), aClass);
-  }
-
-  /**
-   * Get all singleton objects registered in the current request web scope.
-   * 
-   * @return A non-<code>null</code> list with all instances of this class in
-   *         the current request web scope.
-   * @deprecated Use {@link #getAllRequestSingletons()} instead
-   */
-  @Deprecated
-  @Nonnull
-  public static final List <RequestWebSingleton> getAllSingletons ()
-  {
-    return getAllRequestSingletons ();
   }
 
   /**

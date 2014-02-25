@@ -86,7 +86,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     m_aHttpResponse = aHttpResponse;
 
     // done initialization
-    if (ScopeUtils.debugScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Created request web scope '" + getID () + "'");
   }
 
@@ -136,14 +136,14 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     postAttributeInit ();
 
     // done initialization
-    if (ScopeUtils.debugScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Initialized request web scope '" + getID () + "'");
   }
 
   @Override
   protected void postDestroy ()
   {
-    if (ScopeUtils.debugScopeLifeCycle (s_aLogger))
+    if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Destroyed request web scope '" + getID () + "'");
   }
 
