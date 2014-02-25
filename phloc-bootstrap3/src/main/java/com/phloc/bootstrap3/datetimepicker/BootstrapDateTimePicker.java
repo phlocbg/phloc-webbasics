@@ -82,6 +82,7 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
   private final String m_sContainerID;
   private final HCEdit m_aEdit;
   private final Locale m_aDisplayLocale;
+  private final EDateTimePickerLanguage m_eLanguage;
 
   // Settings
   private String m_sFormat;
@@ -126,6 +127,7 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     m_sContainerID = GlobalIDFactory.getNewStringID ();
     m_aEdit = new HCEdit (sName, sValue).setPlaceholder ("");
     m_aDisplayLocale = aDisplayLocale;
+    m_eLanguage = EDateTimePickerLanguage.getFromLocaleOrNull (aDisplayLocale);
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
                                                                             .getFirstDayOfWeek ());
     m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
@@ -536,7 +538,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
       aOptions.add ("todayBtn", m_eTodayBtn.getJSValue ());
     aOptions.add ("todayHighlight", m_bTodayHighlight);
     aOptions.add ("keyboardNavigation", m_bKeyboardNavigation);
-    aOptions.add ("language", m_aDisplayLocale.getLanguage ());
+    if (m_eLanguage != null)
+      aOptions.add ("language", m_eLanguage.getLanguageID ());
     aOptions.add ("forceParse", m_bForceParse);
     if (m_nMinuteStep != DEFAULT_MINUTE_STEP)
       aOptions.add ("minuteStep", m_nMinuteStep);
@@ -554,7 +557,7 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
   @Nonnull
   public HCNodeList build ()
   {
-    registerExternalResources (m_aDisplayLocale);
+    registerExternalResources (m_eLanguage);
 
     // Create control
     final BootstrapInputGroup aBIG = new BootstrapInputGroup (m_aEdit);
@@ -575,11 +578,11 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     return ret;
   }
 
-  public static void registerExternalResources (@Nonnull final Locale aContentLocale)
+  public static void registerExternalResources (@Nonnull final EDateTimePickerLanguage eLanguage)
   {
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimePickerJSPathProvider.DATETIMEPICKER);
     // Locales must be after the main datetime picker
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimePickerJSPathProvider.DATETIMEPICKER_LOCALE.getInstance (aContentLocale.getLanguage ()));
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimePickerJSPathProvider.DATETIMEPICKER_LOCALE.getInstance (eLanguage.getLanguageID ()));
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDateTimePickerCSSPathProvider.DATETIMEPICKER);
   }
 }
