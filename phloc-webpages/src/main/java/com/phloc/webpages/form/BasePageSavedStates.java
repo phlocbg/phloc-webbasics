@@ -111,10 +111,10 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
   @OverrideOnDemand
   protected IMenuTree getMenuTree ()
   {
-    IMenuTree ret = ApplicationMenuTree.getInstance ().getTree ();
+    IMenuTree ret = ApplicationMenuTree.getTree ();
     // XXX hack alert :(
     if (!ret.getRootItem ().hasChildren ())
-      ret = GlobalMenuTree.getInstance ().getTree ();
+      ret = GlobalMenuTree.getTree ();
     return ret;
   }
 
