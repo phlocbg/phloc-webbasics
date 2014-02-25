@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-appbasics">
+  <release date="2014-02-25" version="2.6.6" />
   <release date="2014-01-29" version="2.6.5" />
   <release date="2014-01-27" version="2.6.4" />
   <entry date="2014-01-27" category="api" action="add">
