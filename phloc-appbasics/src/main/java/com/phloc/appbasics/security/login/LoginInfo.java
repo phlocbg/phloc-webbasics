@@ -141,6 +141,15 @@ public final class LoginInfo extends MapBasedAttributeContainer implements IHasI
     m_aLogoutDT = PDTFactory.getCurrentDateTime ();
   }
 
+  /**
+   * @return <code>true</code> if this LoginInfo refers to an already logged out
+   *         user.
+   */
+  public boolean isLogout ()
+  {
+    return m_aLogoutDT != null;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
