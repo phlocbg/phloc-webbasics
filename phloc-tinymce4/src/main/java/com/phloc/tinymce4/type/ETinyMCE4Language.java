@@ -36,9 +36,12 @@ import com.phloc.commons.string.StringHelper;
 public enum ETinyMCE4Language
 {
   AR ("ar"),
+  AR_SA ("ar_SA"),
   AZ ("az"),
   BE ("be"),
   BG_BG ("bg_BG"),
+  /* Note: this is not a valid Java locale! */
+  BN_BD ("bn_BD"),
   BS ("bs"),
   CA ("ca"),
   CS ("cs"),
@@ -78,8 +81,11 @@ public enum ETinyMCE4Language
   LB ("lb"),
   LT ("lt"),
   LV ("lv"),
+  ML ("ml"),
   /* Note: this is not a valid Java locale! */
   ML_IN ("ml_IN"),
+  /* Note: this is not a valid Java locale! */
+  MN_MN ("mn_MN"),
   /* Note: this is not a valid Java locale! */
   NB_NO ("nb_NO"),
   NL ("nl"),
@@ -100,6 +106,7 @@ public enum ETinyMCE4Language
   TG ("tg"),
   TH_TH ("th_TH"),
   TR_TR ("tr_TR"),
+  TT ("tt"),
   UG ("ug"),
   UK ("uk"),
   UK_UA ("uk_UA"),
