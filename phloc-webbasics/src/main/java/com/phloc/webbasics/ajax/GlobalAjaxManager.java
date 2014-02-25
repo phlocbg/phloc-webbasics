@@ -100,6 +100,6 @@ public final class GlobalAjaxManager extends GlobalWebSingleton implements IAjax
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("invoker", m_aInvoker).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("invoker", m_aInvoker).toString ();
   }
 }

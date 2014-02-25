@@ -145,7 +145,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     @Override
     public String toString ()
     {
-      return new ToStringGenerator (this).append ("userID", m_sUserID).toString ();
+      return ToStringGenerator.getDerived (super.toString ()).append ("userID", m_sUserID).toString ();
     }
   }
 
@@ -676,9 +676,10 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("loggedInUsers", m_aLoggedInUsers)
-                                       .append ("userLoginCallbacks", m_aUserLoginCallbacks)
-                                       .append ("userLogoutCallbacks", m_aUserLogoutCallbacks)
-                                       .toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("loggedInUsers", m_aLoggedInUsers)
+                            .append ("userLoginCallbacks", m_aUserLoginCallbacks)
+                            .append ("userLogoutCallbacks", m_aUserLogoutCallbacks)
+                            .toString ();
   }
 }

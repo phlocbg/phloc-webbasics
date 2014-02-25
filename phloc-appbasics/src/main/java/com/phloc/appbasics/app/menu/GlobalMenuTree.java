@@ -53,6 +53,6 @@ public final class GlobalMenuTree extends GlobalSingleton
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("tree", m_aTree).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("tree", m_aTree).toString ();
   }
 }

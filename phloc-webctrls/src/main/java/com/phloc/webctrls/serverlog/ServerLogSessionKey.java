@@ -92,6 +92,6 @@ public final class ServerLogSessionKey extends SessionWebSingleton
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("generatedKey", m_sGeneratedKey).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("generatedKey", m_sGeneratedKey).toString ();
   }
 }

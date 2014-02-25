@@ -257,6 +257,6 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("map", m_aMap).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("map", m_aMap).toString ();
   }
 }

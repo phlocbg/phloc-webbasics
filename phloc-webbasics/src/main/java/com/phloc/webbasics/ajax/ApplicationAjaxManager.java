@@ -100,6 +100,6 @@ public class ApplicationAjaxManager extends ApplicationWebSingleton implements I
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("invoker", m_aInvoker).toString ();
+    return ToStringGenerator.getDerived (super.toString ()).append ("invoker", m_aInvoker).toString ();
   }
 }

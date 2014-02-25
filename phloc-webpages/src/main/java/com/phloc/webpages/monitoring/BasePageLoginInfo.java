@@ -77,6 +77,7 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
     HEADER_DETAILS ("Details des angemeldeten Benutzers", "Details of logged in user"),
     MSG_USERID ("Benutzer-ID", "User ID"),
     MSG_LOGOUTDT ("Abmeldezeit", "Logout time"),
+    MSG_SESSION_ID ("Session-ID", "Session ID"),
     MSG_ATTRS ("Attribute", "Attributes"),
     MSG_NAME ("Name", "Wert"),
     MSG_VALUE ("Wert", "Value"),
@@ -172,6 +173,9 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
             .setLabel (EText.MSG_LOGOUTDT.getDisplayText (aDisplayLocale))
             .setCtrl (PDTToString.getAsString (aSelectedObject.getLogoutDT (), aDisplayLocale));
     }
+    aTable.createItemRow ()
+          .setLabel (EText.MSG_SESSION_ID.getDisplayText (aDisplayLocale))
+          .setCtrl (aSelectedObject.getSessionScope ().getID ());
 
     // Add custom attributes
     final Map <String, Object> aAttrs = aSelectedObject.getAllAttributes ();
