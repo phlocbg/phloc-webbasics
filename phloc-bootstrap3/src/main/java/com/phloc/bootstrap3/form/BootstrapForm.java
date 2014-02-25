@@ -37,9 +37,9 @@ import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.AbstractHCEdit;
+import com.phloc.html.hc.html.AbstractHCForm;
 import com.phloc.html.hc.html.HCCheckBox;
 import com.phloc.html.hc.html.HCDiv;
-import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.html.HCRadioButton;
 import com.phloc.html.hc.htmlext.HCUtils;
@@ -47,7 +47,7 @@ import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.validation.error.IError;
 import com.phloc.validation.error.IErrorList;
 
-public class BootstrapForm extends HCForm
+public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 {
   private final EBootstrapFormType m_eFormType;
   private BootstrapGridSpec m_aLeft = BootstrapGridSpec.create (2);

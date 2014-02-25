@@ -27,14 +27,14 @@ import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
+import com.phloc.html.hc.html.AbstractHCForm;
 import com.phloc.html.hc.html.HCDiv;
-import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCLabel;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webctrls.custom.ELabelType;
 import com.phloc.webctrls.custom.impl.HCFormLabelUtils;
 
-public class BootstrapForm extends HCForm
+public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 {
   public BootstrapForm (@Nonnull final ISimpleURL aAction)
   {
