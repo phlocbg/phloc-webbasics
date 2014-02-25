@@ -24,13 +24,14 @@ jQuery.placeholder = function() {
       }
     });
   });
+  
   // Clear input on refresh so that the placeholder class gets added back
   $(window).unload(function() {
     $('[placeholder]').val('');
   });
 };
 
-// If using AJAX, call this on all placeholders after submitting to
+// If using AJAX, call this on all placeholders after submitting to 
 // return placeholder
 jQuery.fn.addPlaceholder = function() {
   return this.each(function() {

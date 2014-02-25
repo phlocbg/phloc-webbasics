@@ -30,7 +30,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
  */
 public enum EColorBoxJSPathProvider implements IJSPathProvider
 {
-  COLORBOX_1_4_33 ("colorbox/1.4.33/jquery.colorbox.js");
+  COLORBOX_1_4_37 ("colorbox/1.4.37/jquery.colorbox.js");
 
   private final String m_sPath;
 
