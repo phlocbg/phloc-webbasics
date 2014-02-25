@@ -1,4 +1,4 @@
-// 4.0.14 (2014-01-30)
+// 4.0.16 (2014-01-31)
 
 /**
  * Compiled inline version. (Library mode)
@@ -605,7 +605,7 @@ define("tinymce/dom/EventUtils", [], function() {
 
 		// Use W3C method
 		if (doc.addEventListener) {
-			if (doc.readyState === "complete" || doc.readyState === "interactive") {
+			if (doc.readyState === "complete") {
 				readyHandler();
 			} else {
 				addEvent(win, 'DOMContentLoaded', readyHandler);
@@ -25623,7 +25623,7 @@ define("tinymce/EditorManager", [
 		 * @property minorVersion
 		 * @type String
 		 */
-		minorVersion : '0.14',
+		minorVersion : '0.16',
 
 		/**
 		 * Release date of TinyMCE build.
@@ -25631,7 +25631,7 @@ define("tinymce/EditorManager", [
 		 * @property releaseDate
 		 * @type String
 		 */
-		releaseDate: '2014-01-30',
+		releaseDate: '2014-01-31',
 
 		/**
 		 * Collection of editor instances.
