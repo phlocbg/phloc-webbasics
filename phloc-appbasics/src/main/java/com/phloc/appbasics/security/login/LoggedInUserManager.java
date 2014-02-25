@@ -46,6 +46,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.scopes.singleton.SessionSingleton;
 
@@ -96,33 +97,29 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       return getSessionSingletonIfInstantiated (SessionUserHolder.class);
     }
 
-    @Nonnull
-    EChange setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
+    boolean hasUser ()
     {
-      if (aUser == null)
-        throw new NullPointerException ("user");
-      if (aUser.isDeleted ())
-        throw new IllegalArgumentException ("Passed user is deleted: " + aUser);
+      return m_aUser != null;
+    }
 
+    @Nullable
+    String getUserID ()
+    {
+      return m_sUserID;
+    }
+
+    void setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
+    {
+      if (aOwningMgr == null)
+        throw new NullPointerException ("OwningMgr");
+      if (aUser == null)
+        throw new NullPointerException ("User");
       if (m_aUser != null)
-      {
-        s_aLogger.warn ("The session user holder already has the user ID '" +
-                        m_sUserID +
-                        "' so the new ID '" +
-                        aUser.getID () +
-                        "' will not be set!");
-        return EChange.UNCHANGED;
-      }
+        throw new IllegalStateException ("Session already has a user!");
+
       m_aOwningMgr = aOwningMgr;
       m_aUser = aUser;
       m_sUserID = aUser.getID ();
-      return EChange.CHANGED;
-    }
-
-    private void _reset ()
-    {
-      m_aUser = null;
-      m_sUserID = null;
     }
 
     @Override
@@ -130,11 +127,19 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     {
       // Called when the session is destroyed
       // -> Ensure the user is logged out!
-      if (m_aOwningMgr != null)
-      {
-        // This method triggers _reset :)
-        m_aOwningMgr._logoutUser (m_sUserID, this);
-      }
+
+      // Remember stuff
+      final LoggedInUserManager aOwningMgr = m_aOwningMgr;
+      final String sUserID = m_sUserID;
+
+      // Reset to avoid access while or after logout
+      m_aUser = null;
+      m_sUserID = null;
+      m_aOwningMgr = null;
+
+      // Finally logout the user
+      if (aOwningMgr != null)
+        aOwningMgr.logoutUser (sUserID);
     }
 
     @Override
@@ -348,7 +353,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
                          "(" +
                          sUserID +
                          "," +
-                         eLoginResult +
+                         eLoginResult.toString () +
                          ")", t);
       }
     return eLoginResult;
@@ -421,16 +426,22 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         return _onLoginError (sUserID, ELoginResult.USER_ALREADY_LOGGED_IN);
       }
 
-      aInfo = new LoginInfo (aUser);
-      m_aLoggedInUsers.put (sUserID, aInfo);
-
-      if (SessionUserHolder.getInstance ().setUser (this, aUser).isUnchanged ())
+      final SessionUserHolder aSUH = SessionUserHolder.getInstance ();
+      if (aSUH.hasUser ())
       {
-        // Another user is already in the current session
-        m_aLoggedInUsers.remove (sUserID);
+        // This session already has a user
+        s_aLogger.warn ("The session user holder already has the user ID '" +
+                        aSUH.getUserID () +
+                        "' so the new ID '" +
+                        sUserID +
+                        "' will not be set!");
         AuditUtils.onAuditExecuteFailure ("login", sUserID, "session-already-has-user");
         return _onLoginError (sUserID, ELoginResult.SESSION_ALREADY_HAS_USER);
       }
+
+      aInfo = new LoginInfo (aUser, ScopeManager.getSessionScope ());
+      m_aLoggedInUsers.put (sUserID, aInfo);
+      aSUH.setUser (this, aUser);
     }
     finally
     {
@@ -448,7 +459,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       }
       catch (final Throwable t)
       {
-        s_aLogger.error ("Failed to invoke onUserLogin callback on " + aUserLoginCallback + "(" + aInfo + ")", t);
+        s_aLogger.error ("Failed to invoke onUserLogin callback on " +
+                             aUserLoginCallback.toString () +
+                             "(" +
+                             aInfo.toString () +
+                             ")",
+                         t);
       }
 
     return ELoginResult.SUCCESS;
@@ -458,14 +474,11 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * Manually log out the specified user
    * 
    * @param sUserID
-   *        The user to log out. May be <code>null</code>.
-   * @param aSessionUserHolder
-   *        The session user holder to use - avoid instantiating a singleton
-   *        again.
+   *        The user ID to log out
    * @return {@link EChange} if something changed
    */
   @Nonnull
-  private EChange _logoutUser (@Nullable final String sUserID, @Nullable final SessionUserHolder aSessionUserHolder)
+  public EChange logoutUser (@Nullable final String sUserID)
   {
     m_aRWLock.writeLock ().lock ();
     LoginInfo aInfo;
@@ -477,10 +490,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
         return EChange.UNCHANGED;
       }
-      if (aSessionUserHolder != null)
-        aSessionUserHolder._reset ();
 
-      // Set logout time
+      // Set logout time - in case somebody has a strong reference to the
+      // LoginInfo object
       aInfo.setLogoutDTNow ();
     }
     finally
@@ -502,24 +514,15 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       }
       catch (final Throwable t)
       {
-        s_aLogger.error ("Failed to invoke onUserLogout callback on " + aUserLogoutCallback, t);
+        s_aLogger.error ("Failed to invoke onUserLogout callback on " +
+                             aUserLogoutCallback.toString () +
+                             "(" +
+                             aInfo.toString () +
+                             ")",
+                         t);
       }
 
     return EChange.CHANGED;
-  }
-
-  /**
-   * Manually log out the specified user
-   * 
-   * @param sUserID
-   *        The user ID to log out
-   * @return {@link EChange} if something changed
-   */
-  @Nonnull
-  public EChange logoutUser (@Nullable final String sUserID)
-  {
-    // FIXME use the SessionUserHolder instance of the correct session
-    return _logoutUser (sUserID, SessionUserHolder.getInstanceIfInstantiated ());
   }
 
   /**

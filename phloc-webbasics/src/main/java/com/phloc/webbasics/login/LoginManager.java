@@ -238,7 +238,7 @@ public class LoginManager
     }
     else
       if (sSessionUserID != null)
-        s_aLogger.error ("Failed to resolve LoginInfo of '" + sSessionUserID + "'");
+        s_aLogger.error ("Failed to resolve LoginInfo of user ID '" + sSessionUserID + "'");
 
     if (bLoggedInInThisRequest)
     {

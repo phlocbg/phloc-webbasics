@@ -31,6 +31,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
+import com.phloc.scopes.domain.ISessionScope;
 
 /**
  * Represents the information of a single logged in user.
@@ -41,15 +42,20 @@ import com.phloc.datetime.PDTFactory;
 public final class LoginInfo extends MapBasedAttributeContainer implements IHasID <String>
 {
   private final IUser m_aUser;
+  private final ISessionScope m_aSessionScope;
   private final DateTime m_aLoginDT;
   private DateTime m_aLastAccessDT;
   private DateTime m_aLogoutDT;
 
-  LoginInfo (@Nonnull final IUser aUser)
+  LoginInfo (@Nonnull final IUser aUser, @Nonnull final ISessionScope aSessionScope)
   {
     if (aUser == null)
-      throw new NullPointerException ("user");
+      throw new NullPointerException ("User");
+    if (aSessionScope == null)
+      throw new NullPointerException ("SessionScope");
+
     m_aUser = aUser;
+    m_aSessionScope = aSessionScope;
     m_aLoginDT = PDTFactory.getCurrentDateTime ();
     m_aLastAccessDT = m_aLoginDT;
   }
@@ -61,6 +67,16 @@ public final class LoginInfo extends MapBasedAttributeContainer implements IHasI
   public IUser getUser ()
   {
     return m_aUser;
+  }
+
+  /**
+   * @return The session scope to which this login info belongs. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public ISessionScope getSessionScope ()
+  {
+    return m_aSessionScope;
   }
 
   /**
@@ -134,6 +150,7 @@ public final class LoginInfo extends MapBasedAttributeContainer implements IHasI
       return false;
     final LoginInfo rhs = (LoginInfo) o;
     return m_aUser.equals (rhs.m_aUser) &&
+           m_aSessionScope.getID ().equals (rhs.m_aSessionScope.getID ()) &&
            m_aLoginDT.equals (rhs.m_aLoginDT) &&
            m_aLastAccessDT.equals (rhs.m_aLastAccessDT) &&
            EqualsUtils.equals (m_aLogoutDT, rhs.m_aLogoutDT);
@@ -144,6 +161,7 @@ public final class LoginInfo extends MapBasedAttributeContainer implements IHasI
   {
     return HashCodeGenerator.getDerived (super.hashCode ())
                             .append (m_aUser)
+                            .append (m_aSessionScope.getID ())
                             .append (m_aLoginDT)
                             .append (m_aLastAccessDT)
                             .append (m_aLogoutDT)
@@ -155,6 +173,7 @@ public final class LoginInfo extends MapBasedAttributeContainer implements IHasI
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("user", m_aUser)
+                            .append ("sessionScopeID", m_aSessionScope.getID ())
                             .append ("loginDT", m_aLoginDT)
                             .append ("lastAccessDT", m_aLastAccessDT)
                             .appendIfNotNull ("logoutDT", m_aLogoutDT)
