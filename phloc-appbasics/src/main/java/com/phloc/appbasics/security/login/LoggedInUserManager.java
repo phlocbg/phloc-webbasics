@@ -518,6 +518,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnull
   public EChange logoutUser (@Nullable final String sUserID)
   {
+    // FIXME use the SessionUserHolder instance of the correct session
     return _logoutUser (sUserID, SessionUserHolder.getInstanceIfInstantiated ());
   }
 

@@ -186,6 +186,7 @@ public class LoginManager
       boolean bLoginError = false;
       ELoginResult eLoginResult = ELoginResult.SUCCESS;
 
+      // Is the special login-check action present?
       if (CLogin.ACTION_DO_LOGIN.equals (aRequestScope.getAttributeAsString (CHCParam.PARAM_ACTION)))
       {
         // Login screen was already shown
