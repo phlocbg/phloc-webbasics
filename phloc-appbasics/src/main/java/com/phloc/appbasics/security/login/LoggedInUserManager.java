@@ -46,6 +46,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.scopes.singleton.SessionSingleton;
@@ -97,6 +98,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       return getSessionSingletonIfInstantiated (SessionUserHolder.class);
     }
 
+    @Nullable
+    static SessionUserHolder getInstanceIfInstantiatedOfScope (@Nullable final ISessionScope aScope)
+    {
+      return getSingletonIfInstantiated (aScope, SessionUserHolder.class);
+    }
+
     boolean hasUser ()
     {
       return m_aUser != null;
@@ -122,6 +129,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       m_sUserID = aUser.getID ();
     }
 
+    void _reset ()
+    {
+      // Reset to avoid access while or after logout
+      m_aUser = null;
+      m_sUserID = null;
+      m_aOwningMgr = null;
+    }
+
     @Override
     protected void onDestroy ()
     {
@@ -132,10 +147,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       final LoggedInUserManager aOwningMgr = m_aOwningMgr;
       final String sUserID = m_sUserID;
 
-      // Reset to avoid access while or after logout
-      m_aUser = null;
-      m_sUserID = null;
-      m_aOwningMgr = null;
+      _reset ();
 
       // Finally logout the user
       if (aOwningMgr != null)
@@ -490,6 +502,12 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
         AuditUtils.onAuditExecuteSuccess ("logout", sUserID, "user-not-logged-in");
         return EChange.UNCHANGED;
       }
+
+      // Ensure that the SessionUser is empty. This is only relevant if user is
+      // manually logged out without destructing the underlying session
+      final SessionUserHolder aSUH = SessionUserHolder.getInstanceIfInstantiatedOfScope (aInfo.getSessionScope ());
+      if (aSUH != null)
+        aSUH._reset ();
 
       // Set logout time - in case somebody has a strong reference to the
       // LoginInfo object

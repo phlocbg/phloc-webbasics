@@ -59,6 +59,7 @@ public final class LoggedInUserManagerTest
                   aUM.loginUser (CSecurity.USER_ADMINISTRATOR_LOGIN, CSecurity.USER_ADMINISTRATOR_PASSWORD));
     assertTrue (aUM.isUserLoggedIn (CSecurity.USER_ADMINISTRATOR_ID));
     assertEquals (1, aUM.getLoggedInUserCount ());
+    assertEquals (CSecurity.USER_ADMINISTRATOR_ID, aUM.getCurrentUserID ());
 
     // Try to login another user in the same session
     assertEquals (ELoginResult.SESSION_ALREADY_HAS_USER,
@@ -66,6 +67,7 @@ public final class LoggedInUserManagerTest
     assertTrue (aUM.isUserLoggedIn (CSecurity.USER_ADMINISTRATOR_ID));
     assertFalse (aUM.isUserLoggedIn (CSecurity.USER_USER_ID));
     assertEquals (1, aUM.getLoggedInUserCount ());
+    assertEquals (CSecurity.USER_ADMINISTRATOR_ID, aUM.getCurrentUserID ());
 
     // Check current user ID
     assertEquals (CSecurity.USER_ADMINISTRATOR_ID, aUM.getCurrentUserID ());
@@ -73,6 +75,7 @@ public final class LoggedInUserManagerTest
     // Logout non-logged in user
     assertTrue (aUM.logoutUser (CSecurity.USER_USER_ID).isUnchanged ());
     assertEquals (1, aUM.getLoggedInUserCount ());
+    assertEquals (CSecurity.USER_ADMINISTRATOR_ID, aUM.getCurrentUserID ());
 
     // Logout correct user
     assertTrue (aUM.logoutUser (aUM.getCurrentUserID ()).isChanged ());
