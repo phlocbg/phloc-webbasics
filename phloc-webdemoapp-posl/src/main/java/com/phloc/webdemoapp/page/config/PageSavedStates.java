@@ -35,6 +35,6 @@ public final class PageSavedStates extends BasePageSavedStates
   @Nonnull
   protected IMenuTree getMenuTree ()
   {
-    return ApplicationMenuTree.getInstance ().getTree ();
+    return ApplicationMenuTree.getTree ();
   }
 }

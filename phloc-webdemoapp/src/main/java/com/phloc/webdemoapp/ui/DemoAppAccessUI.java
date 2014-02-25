@@ -30,7 +30,6 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCEdit;
 import com.phloc.html.hc.html.HCEditPassword;
-import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
@@ -46,9 +45,9 @@ public final class DemoAppAccessUI
   {}
 
   @Nonnull
-  public static HCForm createViewLoginForm (@Nonnull final Locale aDisplayLocale,
-                                            @Nullable final String sPreselectedUserName,
-                                            final boolean bFullUI)
+  public static BootstrapForm createViewLoginForm (@Nonnull final Locale aDisplayLocale,
+                                                   @Nullable final String sPreselectedUserName,
+                                                   final boolean bFullUI)
   {
     // Use new IDs for both fields, in case the login stuff is displayed more
     // than once!
@@ -57,7 +56,7 @@ public final class DemoAppAccessUI
     final String sIDErrorField = GlobalIDFactory.getNewStringID ();
 
     final BootstrapForm aForm = new BootstrapForm (LinkUtils.getSelfHref (), bFullUI ? EBootstrapFormType.HORIZONTAL
-                                                                                      : EBootstrapFormType.DEFAULT);
+                                                                                    : EBootstrapFormType.DEFAULT);
 
     // User name field
     aForm.addFormGroup (EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale),

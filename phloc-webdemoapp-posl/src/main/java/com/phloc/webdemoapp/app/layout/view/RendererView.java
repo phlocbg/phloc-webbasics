@@ -77,23 +77,20 @@ public final class RendererView implements ILayoutAreaContentProvider
   public RendererView ()
   {
     m_aFooterObjects = new ArrayList <IMenuObject> ();
-    ApplicationMenuTree.getInstance ()
-                       .getTree ()
-                       .iterateAllMenuObjects (new INonThrowingRunnableWithParameter <IMenuObject> ()
-                       {
-                         public void run (@Nonnull final IMenuObject aCurrentObject)
-                         {
-                           if (aCurrentObject.containsFlag (CDemoAppMenuView.FLAG_FOOTER))
-                             m_aFooterObjects.add (aCurrentObject);
-                         }
-                       });
+    ApplicationMenuTree.getTree ().iterateAllMenuObjects (new INonThrowingRunnableWithParameter <IMenuObject> ()
+    {
+      public void run (@Nonnull final IMenuObject aCurrentObject)
+      {
+        if (aCurrentObject.containsFlag (CDemoAppMenuView.FLAG_FOOTER))
+          m_aFooterObjects.add (aCurrentObject);
+      }
+    });
   }
 
   @Nonnull
   private static BootstrapNavbar _getNavbar (final Locale aDisplayLocale)
   {
-    final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
-                                                                                        .getTree ()
+    final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getTree ()
                                                                                         .getDefaultMenuItemID ());
 
     final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
@@ -106,7 +103,7 @@ public final class RendererView implements ILayoutAreaContentProvider
   public static IHCNode getMenuContent (@Nonnull final Locale aDisplayLocale)
   {
     // Main menu
-    final IMenuTree aMenuTree = ApplicationMenuTree.getInstance ().getTree ();
+    final IMenuTree aMenuTree = ApplicationMenuTree.getTree ();
     final MenuItemDeterminatorCallback aCallback = new MenuItemDeterminatorCallback (aMenuTree)
     {
       @Override
@@ -173,8 +170,7 @@ public final class RendererView implements ILayoutAreaContentProvider
 
     // Breadcrumbs
     {
-      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance ()
-                                                                                                                   .getTree (),
+      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getTree (),
                                                                                                 aLEC.getDisplayLocale ());
       aBreadcrumbs.addClass (CBootstrapCSS.HIDDEN_XS);
       aOuterContainer.addChild (aBreadcrumbs);

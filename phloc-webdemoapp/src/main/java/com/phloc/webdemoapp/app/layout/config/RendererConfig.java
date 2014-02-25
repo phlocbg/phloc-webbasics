@@ -68,8 +68,7 @@ public final class RendererConfig implements ILayoutAreaContentProvider
   @Nonnull
   private static IHCNode _getHeaderContent (final Locale aDisplayLocale)
   {
-    final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getInstance ()
-                                                                                        .getTree ()
+    final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getTree ()
                                                                                         .getDefaultMenuItemID ());
 
     final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
@@ -91,8 +90,7 @@ public final class RendererConfig implements ILayoutAreaContentProvider
   @Nonnull
   public static IHCElement <?> getMenuContent (@Nonnull final Locale aDisplayLocale)
   {
-    final IHCElement <?> ret = BootstrapMenuItemRenderer.createSideBarMenu (ApplicationMenuTree.getInstance ()
-                                                                                               .getTree (),
+    final IHCElement <?> ret = BootstrapMenuItemRenderer.createSideBarMenu (ApplicationMenuTree.getTree (),
                                                                             aDisplayLocale);
     return ret;
   }
@@ -146,8 +144,7 @@ public final class RendererConfig implements ILayoutAreaContentProvider
 
     // Breadcrumbs
     {
-      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getInstance ()
-                                                                                                                   .getTree (),
+      final BootstrapBreadcrumbs aBreadcrumbs = BootstrapBreadcrumbsProvider.createBreadcrumbs (ApplicationMenuTree.getTree (),
                                                                                                 aLEC.getDisplayLocale ());
       aBreadcrumbs.addClass (CBootstrapCSS.HIDDEN_XS);
       aOuterContainer.addChild (aBreadcrumbs);
