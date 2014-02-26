@@ -31,13 +31,13 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.lang.DecimalFormatSymbolsFactory;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
@@ -84,11 +84,12 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_JQUERY_UI = false;
   public static final boolean DEFAULT_SCROLL_AUTO_CSS = true;
   public static final boolean DEFAULT_SCROLL_COLLAPSE = false;
-  public static final boolean DEFAULT_SCROLL_INFINITE = false;
   public static final boolean DEFAULT_USER_JQUERY_AJAX = false;
   public static final boolean DEFAULT_DEFER_RENDER = false;
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
   public static final int DEFAULT_DISPLAY_LENGTH = 10;
+
+  public static final boolean USE_V19 = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
   private static boolean s_bDefaultGenerateOnDocumentReady = DEFAULT_GENERATE_ON_DOCUMENT_READY;
@@ -108,7 +109,6 @@ public class DataTables implements IHCNodeBuilder
   private String m_sScrollY;
   private boolean m_bScrollAutoCSS = DEFAULT_SCROLL_AUTO_CSS;
   private boolean m_bScrollCollapse = DEFAULT_SCROLL_COLLAPSE;
-  private boolean m_bScrollInfinite = DEFAULT_SCROLL_INFINITE;
   private Map <Integer, String> m_aLengthMenu;
   private int m_nDisplayLength = DEFAULT_DISPLAY_LENGTH;
   private String m_sDom;
@@ -442,20 +442,6 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
-  public boolean isScrollInfinite ()
-  {
-    return m_bScrollInfinite;
-  }
-
-  @Nonnull
-  @Deprecated
-  @DevelopersNote ("According to https://www.datatables.net/forums/discussion/14532/duplicate-records-appended-to-datatables-on-redrawing-while-bscrollinfinite-property-is-used/p1  it may get deprecated in future releases!")
-  public DataTables setScrollInfinite (final boolean bScrollInfinite)
-  {
-    m_bScrollInfinite = bScrollInfinite;
-    return this;
-  }
-
   @Nullable
   public String getDom ()
   {
@@ -677,21 +663,23 @@ public class DataTables implements IHCNodeBuilder
                                           EDataTablesText.SORT_ASCENDING.getDisplayText (aDisplayLocale))
                                     .add ("sSortDescending",
                                           EDataTablesText.SORT_DESCENDING.getDisplayText (aDisplayLocale)));
-    aLanguage.add ("oPaginate",
-                   new JsonObject ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (aDisplayLocale))
-                                    .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (aDisplayLocale))
-                                    .add ("sNext", EDataTablesText.NEXT.getDisplayText (aDisplayLocale))
-                                    .add ("sLast", EDataTablesText.LAST.getDisplayText (aDisplayLocale)));
+    aLanguage.add ("sDecimal", DecimalFormatSymbolsFactory.getInstance (aDisplayLocale).getDecimalSeparator ());
     aLanguage.add ("sEmptyTable", EDataTablesText.EMPTY_TABLE.getDisplayText (aDisplayLocale));
     aLanguage.add ("sInfo", EDataTablesText.INFO.getDisplayText (aDisplayLocale));
     aLanguage.add ("sInfoEmpty", EDataTablesText.INFO_EMPTY.getDisplayText (aDisplayLocale));
     aLanguage.add ("sInfoFiltered", EDataTablesText.INFO_FILTERED.getDisplayText (aDisplayLocale));
     aLanguage.add ("sInfoPostFix", EDataTablesText.INFO_POSTFIX.getDisplayText (aDisplayLocale));
-    aLanguage.add ("sInfoThousands", EDataTablesText.INFO_THOUSANDS.getDisplayText (aDisplayLocale));
     aLanguage.add ("sLengthMenu", EDataTablesText.LENGTH_MENU.getDisplayText (aDisplayLocale));
     aLanguage.add ("sLoadingRecords", EDataTablesText.LOADING_RECORDS.getDisplayText (aDisplayLocale));
+    aLanguage.add ("oPaginate",
+                   new JsonObject ().add ("sFirst", EDataTablesText.FIRST.getDisplayText (aDisplayLocale))
+                                    .add ("sLast", EDataTablesText.LAST.getDisplayText (aDisplayLocale))
+                                    .add ("sNext", EDataTablesText.NEXT.getDisplayText (aDisplayLocale))
+                                    .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (aDisplayLocale)));
     aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (aDisplayLocale));
     aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (aDisplayLocale));
+    aLanguage.add (USE_V19 ? "sInfoThousands" : "sThousands",
+                   EDataTablesText.INFO_THOUSANDS.getDisplayText (aDisplayLocale));
     aLanguage.add ("sUrl", "");
     aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (aDisplayLocale));
     return aLanguage;
@@ -700,14 +688,6 @@ public class DataTables implements IHCNodeBuilder
   @Nullable
   public IHCNode build ()
   {
-    if (m_bScrollInfinite)
-    {
-      // When infinite scrolling is active, the length menu is not displayed and
-      // therefore the settings may not be present as well!
-      m_aLengthMenu = null;
-      m_nDisplayLength = -1;
-    }
-
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
     if (m_bAutoWidth != DEFAULT_AUTOWIDTH)
@@ -740,8 +720,6 @@ public class DataTables implements IHCNodeBuilder
       aParams.add ("bScrollAutoCss", m_bScrollAutoCSS);
     if (m_bScrollCollapse != DEFAULT_SCROLL_COLLAPSE)
       aParams.add ("bScrollCollapse", m_bScrollCollapse);
-    if (m_bScrollInfinite != DEFAULT_SCROLL_INFINITE)
-      aParams.add ("bScrollInfinite", m_bScrollInfinite);
     if (StringHelper.hasText (m_sDom))
       aParams.add ("sDom", m_sDom);
     if (m_aLengthMenu != null && !m_aLengthMenu.isEmpty ())
@@ -859,7 +837,7 @@ public class DataTables implements IHCNodeBuilder
         // Inline texts
         aLanguage = createLanguageJson (m_aDisplayLocale);
       }
-      aParams.add ("oLanguage", aLanguage);
+      aParams.add (USE_V19 ? "oLanguage" : "language", aLanguage);
     }
 
     modifyParams (aParams);
@@ -1035,7 +1013,15 @@ public class DataTables implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_194);
-    PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
+    if (USE_V19)
+    {
+      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_194);
+      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
+    }
+    else
+    {
+      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.DATATABLES_1_10_BETA2);
+      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.DATATABLES_1_10_BETA2);
+    }
   }
 }

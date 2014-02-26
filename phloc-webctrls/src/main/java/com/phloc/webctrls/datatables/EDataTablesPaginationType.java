@@ -22,6 +22,11 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
 
+/**
+ * DataTables pagination type
+ * 
+ * @author Philip Helger
+ */
 public enum EDataTablesPaginationType implements IHasName
 {
   TWO_BUTTON ("twobutton"),

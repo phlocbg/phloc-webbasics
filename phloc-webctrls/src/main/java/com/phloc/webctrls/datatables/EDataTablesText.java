@@ -28,6 +28,11 @@ import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 
+/**
+ * DataTables text array
+ * 
+ * @author Philip Helger
+ */
 @Translatable
 public enum EDataTablesText implements IHasDisplayText
 {

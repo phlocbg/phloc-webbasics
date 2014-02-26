@@ -35,6 +35,11 @@ import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.webctrls.datatables.comparator.AbstractComparatorTable;
 
+/**
+ * Contains all data for a single DataTables column
+ * 
+ * @author Philip Helger
+ */
 public class DataTablesColumn implements IHCHasCSSClasses <DataTablesColumn>
 {
   public static final boolean DEFAULT_SEARCHABLE = true;

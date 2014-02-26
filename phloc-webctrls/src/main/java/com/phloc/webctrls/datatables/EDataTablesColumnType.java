@@ -21,6 +21,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 
+/**
+ * DataTables column type
+ * 
+ * @author Philip Helger
+ */
 public enum EDataTablesColumnType implements IDataTablesColumnType
 {
   STRING ("string"),

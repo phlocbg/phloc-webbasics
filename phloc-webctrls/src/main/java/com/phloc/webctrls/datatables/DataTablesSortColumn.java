@@ -24,6 +24,11 @@ import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.js.builder.JSArray;
 
+/**
+ * Defines a DataTables sortable column
+ * 
+ * @author Philip Helger
+ */
 public final class DataTablesSortColumn
 {
   private final int m_nIndex;

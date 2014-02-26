@@ -18,7 +18,7 @@
 package com.phloc.webctrls.datatables;
 
 /**
- * Search type
+ * DataTables filter (search) type
  * 
  * @author Philip Helger
  */
