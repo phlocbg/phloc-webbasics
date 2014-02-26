@@ -17,6 +17,9 @@
  */
 package com.phloc.appbasics.security.login;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -102,6 +105,24 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     static SessionUserHolder getInstanceIfInstantiatedOfScope (@Nullable final ISessionScope aScope)
     {
       return getSingletonIfInstantiated (aScope, SessionUserHolder.class);
+    }
+
+    private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
+    {
+      aOOS.writeUTF (m_sUserID);
+    }
+
+    private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException
+    {
+      m_sUserID = aOIS.readUTF ();
+
+      // Resolve user ID
+      m_aUser = AccessManager.getInstance ().getUserOfID (m_sUserID);
+      if (m_aUser == null)
+        throw new IllegalStateException ("Failed to resolve user with ID '" + m_sUserID + "'");
+
+      // Resolve manager
+      m_aOwningMgr = LoggedInUserManager.getInstance ();
     }
 
     boolean hasUser ()
