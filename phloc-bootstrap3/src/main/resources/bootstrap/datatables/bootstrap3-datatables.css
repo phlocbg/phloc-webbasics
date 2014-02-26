@@ -1,5 +1,17 @@
 /** Source: https://github.com/DataTables/Plugins/tree/master/integration/bootstrap/3 */
 
+/** Start ph added */
+div.dataTables_paginate .paginate_button {
+  margin:0 !important;
+  padding:0 !important;
+}
+
+div.dataTables_paginate .paginate_button:hover {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+    border: 1px solid #ffffff !important;
+}
+/** End ph added */
+
 div.dataTables_length label {
   font-weight: normal;
   float: left;
@@ -29,30 +41,45 @@ div.dataTables_paginate {
 }
 
 div.dataTables_paginate ul.pagination {
-  margin: 2px;
+  margin: 2px 0;
+  white-space: nowrap;
 }
 
-table.table {
+table.dataTable,
+table.dataTable td,
+table.dataTable th {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+
+table.dataTable {
   clear: both;
   margin-top: 6px !important;
   margin-bottom: 6px !important;
   max-width: none !important;
 }
 
-table.table thead .sorting,
-table.table thead .sorting_asc,
-table.table thead .sorting_desc,
-table.table thead .sorting_asc_disabled,
-table.table thead .sorting_desc_disabled {
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
   cursor: pointer;
 }
 
-table.table thead .sorting { background: url('images/sort_both.png') no-repeat center right; }
-table.table thead .sorting_asc { background: url('images/sort_asc.png') no-repeat center right; }
-table.table thead .sorting_desc { background: url('images/sort_desc.png') no-repeat center right; }
+table.dataTable thead .sorting { background: url('../images/sort_both.png') no-repeat center right; }
+table.dataTable thead .sorting_asc { background: url('../images/sort_asc.png') no-repeat center right; }
+table.dataTable thead .sorting_desc { background: url('../images/sort_desc.png') no-repeat center right; }
 
-table.table thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
-table.table thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
+table.dataTable thead .sorting_asc_disabled { background: url('../images/sort_asc_disabled.png') no-repeat center right; }
+table.dataTable thead .sorting_desc_disabled { background: url('../images/sort_desc_disabled.png') no-repeat center right; }
+
+table.dataTable thead > tr > th {
+  padding-left: 18px;
+  padding-right: 18px;
+}
 
 table.dataTable th:active {
   outline: none;
@@ -83,6 +110,7 @@ div.dataTables_scrollBody tbody tr:first-child td {
 }
 
 div.dataTables_scrollFoot table {
+  margin-top: 0 !important;
   border-top: none;
 }
 
@@ -101,6 +129,10 @@ div.dataTables_scrollFoot table {
 .table tbody tr.active:hover td,
 .table tbody tr.active:hover th {
   background-color: #0075b0 !important;
+}
+
+.table tbody tr.active a {
+  color: white;
 }
 
 .table-striped tbody tr.active:nth-child(odd) td,
@@ -172,6 +204,7 @@ div.DTFC_RightHeadWrapper table,
 div.DTFC_RightFootWrapper table,
 table.DTFC_Cloned tr.even {
     background-color: white;
+    margin-bottom: 0;
 }
  
 div.DTFC_RightHeadWrapper table ,
@@ -207,4 +240,3 @@ div.DTFC_RightFootWrapper table,
 div.DTFC_LeftFootWrapper table {
     border-top: none;
 }
-

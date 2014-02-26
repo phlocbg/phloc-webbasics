@@ -41,7 +41,8 @@ public class BootstrapDataTables extends DataTables
       ((AbstractBootstrapTable <?>) aTable).setHover (true);
     }
     setDom (DEFAULT_DOM);
-    setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
+    if (DataTables.USE_V19)
+      setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
     registerExternalResources ();
   }
 

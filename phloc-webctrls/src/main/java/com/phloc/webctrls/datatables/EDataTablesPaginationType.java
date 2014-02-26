@@ -19,7 +19,9 @@ package com.phloc.webctrls.datatables;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.Since;
 import com.phloc.commons.name.IHasName;
 
 /**
@@ -29,9 +31,19 @@ import com.phloc.commons.name.IHasName;
  */
 public enum EDataTablesPaginationType implements IHasName
 {
+  @Deprecated
+  @DevelopersNote ("DataTables 1.9.4")
   TWO_BUTTON ("twobutton"),
+  @Since ("1.10")
+  SIMPLE ("simple"),
+  @Since ("1.10")
+  SIMPLE_NUMBERS ("simple_numbers"),
+  @Since ("1.10")
+  FULL ("full"),
   FULL_NUMBERS ("full_numbers"),
   /** Only available if the respective datatables plugin is present */
+  @Deprecated
+  @DevelopersNote ("DataTables 1.9.4")
   BOOTSTRAP ("bootstrap");
 
   private final String m_sName;

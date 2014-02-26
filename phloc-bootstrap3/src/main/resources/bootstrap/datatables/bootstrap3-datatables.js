@@ -83,6 +83,8 @@ if ( $.fn.dataTable.Api ) {
                  null
              } )
              .append( $('<a>', {
+                 /* ph added */
+                 'class': 'btn btn-default',
                  'href': '#'
                } )
                .html( btnDisplay )
@@ -98,6 +100,7 @@ if ( $.fn.dataTable.Api ) {
    };
   
    attach(
+     /** ph added btn-group */
      $(host).empty().html('<ul class="pagination"/>').children('ul'),
      buttons
    );
