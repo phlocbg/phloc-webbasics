@@ -7,18 +7,6 @@ $.extend( $.fn.dataTableExt.oStdClasses, {
   "sLengthSelect": "form-control input-sm"
 } );
 
-// added ph
-$.fn.dataTable.models.oSettings['aoInitComplete'].push( {
-  "fn": function(e,o){
-    // this is the <table> element
-     var wrapper = $(this).parent (); 
-     wrapper.find (".dataTables_filter input[type='text']").addClass ("form-control input-sm");
-     wrapper.find (".dataTables_length select").addClass ("form-control input-sm");
-   },
-  "sName": 'init-bootstrap3'
-} );
-
-
 //In 1.10 we use the pagination renderers to draw the Bootstrap paging,
 //rather than  custom plug-in
 if ( $.fn.dataTable.Api ) {
@@ -116,6 +104,17 @@ if ( $.fn.dataTable.Api ) {
   }
 }
 else {
+  //added ph - only required for 1.9
+  $.fn.dataTable.models.oSettings['aoInitComplete'].push( {
+    "fn": function(e,o){
+      // this is the <table> element
+       var wrapper = $(this).parents ("div.dataTables_wrapper"); 
+       wrapper.find (".dataTables_filter input[type='text']").addClass ("form-control input-sm");
+       wrapper.find (".dataTables_length select").addClass ("form-control input-sm");
+     },
+    "sName": 'init-bootstrap3'
+  } );
+
   // Integration for 1.9-
   $.fn.dataTable.defaults.sPaginationType = 'bootstrap';
   
