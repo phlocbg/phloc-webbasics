@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -58,6 +59,7 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSBlock;
 import com.phloc.html.js.builder.JSConditional;
 import com.phloc.html.js.builder.JSExpr;
+import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.JSRef;
 import com.phloc.html.js.builder.JSVar;
@@ -88,6 +90,7 @@ public class DataTables implements IHCNodeBuilder
   public static final boolean DEFAULT_DEFER_RENDER = false;
   public static final EDataTablesPaginationType DEFAULT_PAGINATION_TYPE = EDataTablesPaginationType.FULL_NUMBERS;
   public static final int DEFAULT_DISPLAY_LENGTH = 10;
+  public static final boolean DEFAULT_USE_FIXED_HEADER = false;
 
   public static final boolean USE_V19 = false;
 
@@ -124,6 +127,10 @@ public class DataTables implements IHCNodeBuilder
   private String m_sTextLoadingURLLocaleParameterName;
   private Map <String, String> m_aTextLoadingParams;
 
+  // FixedHeaderStuff
+  private boolean m_bUseFixedHeader = DEFAULT_USE_FIXED_HEADER;
+  private JSAssocArray m_aFixedHeaderOptions;
+
   public static boolean isDefaultGenerateOnDocumentReady ()
   {
     return s_bDefaultGenerateOnDocumentReady;
@@ -152,7 +159,6 @@ public class DataTables implements IHCNodeBuilder
       throw new IllegalArgumentException ("Table has no ID!");
 
     m_aTable = aTable;
-    registerExternalResources ();
   }
 
   /**
@@ -622,6 +628,32 @@ public class DataTables implements IHCNodeBuilder
     return this;
   }
 
+  public boolean isUseFixedHeader ()
+  {
+    return m_bUseFixedHeader;
+  }
+
+  @Nonnull
+  public DataTables setUseFixedHeader (final boolean bUseFixedHeader)
+  {
+    m_bUseFixedHeader = bUseFixedHeader;
+    return this;
+  }
+
+  @Nullable
+  @ReturnsMutableObject (reason = "design")
+  public JSAssocArray getFixedHeaderOptions ()
+  {
+    return m_aFixedHeaderOptions;
+  }
+
+  @Nonnull
+  public DataTables setFixedHeaderOptions (@Nullable final JSAssocArray aFixedHeaderOptions)
+  {
+    m_aFixedHeaderOptions = aFixedHeaderOptions;
+    return this;
+  }
+
   /**
    * modify parameter map
    * 
@@ -688,6 +720,13 @@ public class DataTables implements IHCNodeBuilder
   @Nullable
   public IHCNode build ()
   {
+    registerExternalResources ();
+    if (m_bUseFixedHeader)
+    {
+      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.EXTRAS_FIXED_HEADER_210);
+      PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.EXTRAS_FIXED_HEADER_210);
+    }
+
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();
     if (m_bAutoWidth != DEFAULT_AUTOWIDTH)
@@ -848,6 +887,13 @@ public class DataTables implements IHCNodeBuilder
     addCodeBeforeDataTables (aJSCode);
     final JSVar aJSTable = aJSCode.var (m_sGeneratedJSVariableName,
                                         JQuery.idRef (m_aTable).invoke ("dataTable").arg (aParams));
+    if (m_bUseFixedHeader)
+    {
+      final JSInvocation aJSFixedHeader = new JSInvocation ("new FixedHeader").arg (aJSTable);
+      if (m_aFixedHeaderOptions != null)
+        aJSFixedHeader.arg (m_aFixedHeaderOptions);
+      aJSCode.add (aJSFixedHeader);
+    }
     addCodeAfterDataTables (aJSCode, aJSTable);
 
     return getWrapped (aJSCode);
