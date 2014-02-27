@@ -132,8 +132,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     public void onSessionActivate (@Nonnull final ISessionWebScope aSessionScope)
     {
       // Finally remember that the user is logged in
-      final LoginInfo aInfo = new LoginInfo (m_aUser, aSessionScope);
-      m_aOwningMgr.m_aLoggedInUsers.put (m_sUserID, aInfo);
+      m_aOwningMgr.internalActivateUser (m_aUser, aSessionScope);
     }
 
     boolean hasUser ()
@@ -401,6 +400,25 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
                          ")", t);
       }
     return eLoginResult;
+  }
+
+  final void internalActivateUser (@Nonnull final IUser aUser, @Nonnull final ISessionScope aSessionScope)
+  {
+    if (aUser == null)
+      throw new NullPointerException ("User");
+    if (aSessionScope == null)
+      throw new NullPointerException ("SessionScope");
+
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      final LoginInfo aInfo = new LoginInfo (aUser, aSessionScope);
+      m_aLoggedInUsers.put (aUser.getID (), aInfo);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   /**
