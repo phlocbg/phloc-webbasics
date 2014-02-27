@@ -727,8 +727,12 @@ public class DataTables implements IHCNodeBuilder
     return aLanguage;
   }
 
+  @OverrideOnDemand
+  protected void onRegisterExternalResources ()
+  {}
+
   @Nullable
-  public IHCNode build ()
+  public final IHCNode build ()
   {
     registerExternalResources ();
     if (m_bUseFixedHeader)
@@ -736,6 +740,7 @@ public class DataTables implements IHCNodeBuilder
       PerRequestJSIncludes.registerJSIncludeForThisRequest (EDataTablesJSPathProvider.EXTRAS_FIXED_HEADER_210);
       PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDataTablesCSSPathProvider.EXTRAS_FIXED_HEADER_210);
     }
+    onRegisterExternalResources ();
 
     // init parameters
     final JSAssocArray aParams = new JSAssocArray ();

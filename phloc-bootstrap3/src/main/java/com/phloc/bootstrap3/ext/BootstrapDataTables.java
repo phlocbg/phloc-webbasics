@@ -44,6 +44,11 @@ public class BootstrapDataTables extends DataTables
     setDom (DEFAULT_DOM);
     if (DataTables.USE_V19)
       setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
+  }
+
+  @Override
+  protected void onRegisterExternalResources ()
+  {
     registerExternalResources ();
   }
 
