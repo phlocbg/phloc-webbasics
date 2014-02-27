@@ -116,6 +116,11 @@
       <artifactId>phloc-html</artifactId>
       <version>3.13.4</version>
     </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-webbasics</artifactId>
+      <version>2.2.7</version>
+    </dependency>
 
     <dependency>
       <groupId>javax.servlet</groupId>
