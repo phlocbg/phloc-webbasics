@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCBody;
@@ -157,7 +156,7 @@ public class LoginHTMLProvider extends AbstractHTMLProvider
     aForm.setSubmitPressingEnter (true);
 
     // The hidden field that triggers the validation
-    aForm.addChild (new HCHiddenField (CHCParam.PARAM_ACTION, CLogin.ACTION_DO_LOGIN));
+    aForm.addChild (new HCHiddenField (CLogin.REQUEST_PARAM_ACTION, CLogin.REQUEST_ACTION_VALIDATE_LOGIN_CREDENTIALS));
 
     aForm.addChild (new HCDiv ().addClass (CLogin.CSS_CLASS_LOGIN_APPLOGO));
     if (showHeaderText ())

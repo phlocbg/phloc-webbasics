@@ -35,7 +35,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.state.EContinue;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.CHCParam;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.web.useragent.UserAgentDatabase;
 import com.phloc.webbasics.app.html.IHTMLProvider;
@@ -187,7 +186,7 @@ public class LoginManager
       ELoginResult eLoginResult = ELoginResult.SUCCESS;
 
       // Is the special login-check action present?
-      if (CLogin.ACTION_DO_LOGIN.equals (aRequestScope.getAttributeAsString (CHCParam.PARAM_ACTION)))
+      if (CLogin.REQUEST_ACTION_VALIDATE_LOGIN_CREDENTIALS.equals (aRequestScope.getAttributeAsString (CLogin.REQUEST_PARAM_ACTION)))
       {
         // Login screen was already shown
         // -> Check request parameters

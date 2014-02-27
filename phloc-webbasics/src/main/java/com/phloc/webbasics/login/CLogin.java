@@ -40,12 +40,16 @@ public final class CLogin
   public static final String REQUEST_ATTR_USERID = "userid";
   /** The name of the field that contains the password for the login. */
   public static final String REQUEST_ATTR_PASSWORD = "password";
+  /** The name of the hidden field to be used in login. */
+  public static final String REQUEST_PARAM_ACTION = "login-action";
   /**
    * The action value to be passed in a hidden field to ensure that user name
    * and password are checked. The name of the field must be
-   * {@link com.phloc.html.hc.CHCParam#PARAM_ACTION}
+   * {@link #REQUEST_PARAM_ACTION}
    */
-  public static final String ACTION_DO_LOGIN = "do-validate-login-credentials";
+  public static final String REQUEST_ACTION_VALIDATE_LOGIN_CREDENTIALS = "validate-login-credentials";
+  @Deprecated
+  public static final String ACTION_DO_LOGIN = REQUEST_ACTION_VALIDATE_LOGIN_CREDENTIALS;
 
   private CLogin ()
   {}
