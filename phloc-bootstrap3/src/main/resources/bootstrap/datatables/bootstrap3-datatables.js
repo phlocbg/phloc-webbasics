@@ -4,7 +4,9 @@
 $.extend( $.fn.dataTableExt.oStdClasses, {
   "sWrapper": "dataTables_wrapper form-inline",
   "sFilterInput": "form-control input-sm",
-  "sLengthSelect": "form-control input-sm"
+  "sLengthSelect": "form-control input-sm",
+  /* [ph] added button class */
+  "sPageButton" : "btn"
 } );
 
 //In 1.10 we use the pagination renderers to draw the Bootstrap paging,
@@ -39,42 +41,45 @@ if ( $.fn.dataTable.Api ) {
          switch ( button ) {
            case 'ellipsis':
              btnDisplay = '&hellip;';
-             btnClass = 'disabled';
+             btnClass = 'btn-default disabled';
              break;
   
            case 'first':
              btnDisplay = lang.sFirst;
-             btnClass = button + (page > 0 ?
+             btnClass = button + ' btn-default' + (page > 0 ?
                '' : ' disabled');
              break;
   
            case 'previous':
              btnDisplay = lang.sPrevious;
-             btnClass = button + (page > 0 ?
+             btnClass = button + ' btn-default' + (page > 0 ?
                '' : ' disabled');
              break;
   
            case 'next':
              btnDisplay = lang.sNext;
-             btnClass = button + (page < pages-1 ?
+             btnClass = button + ' btn-default' + (page < pages-1 ?
                '' : ' disabled');
              break;
   
            case 'last':
              btnDisplay = lang.sLast;
-             btnClass = button + (page < pages-1 ?
+             btnClass = button + ' btn-default' + (page < pages-1 ?
                '' : ' disabled');
              break;
   
            default:
+             /** [ph] all buttons are btn-default except for the active one which is btn-primary */ 
              btnDisplay = button + 1;
              btnClass = page === button ?
-               'active' : '';
+               'btn-primary active' : 'btn-default';
              break;
          }
   
          if ( btnDisplay ) {
-           node = $('<li>', {
+           /** [ph] using only a single <a> element for a button */
+           node = $('<a>', {
+               'href': '#',
                'class': classes.sPageButton+' '+btnClass,
                'aria-controls': settings.sTableId,
                'tabindex': settings.iTabIndex,
@@ -82,13 +87,7 @@ if ( $.fn.dataTable.Api ) {
                  settings.sTableId +'_'+ button :
                  null
              } )
-             .append( $('<a>', {
-                 /* ph added */
-                 'class': 'btn btn-default',
-                 'href': '#'
-               } )
-               .html( btnDisplay )
-             )
+             .html( btnDisplay )
              .appendTo( container );
   
            settings.oApi._fnBindAction(
@@ -101,16 +100,16 @@ if ( $.fn.dataTable.Api ) {
   
    attach(
      /** ph added btn-group */
-     $(host).empty().html('<ul class="pagination"/>').children('ul'),
+     $(host).empty().html('<div class="pagination btn-group"/>').children('div'),
      buttons
    );
   }
 }
 else {
-  //added ph - only required for 1.9
+  // [ph] added - only required for 1.9
   $.fn.dataTable.models.oSettings['aoInitComplete'].push( {
     "fn": function(e,o){
-      // this is the <table> element
+       // this is the <table> element
        var wrapper = $(this).parents ("div.dataTables_wrapper"); 
        wrapper.find (".dataTables_filter input[type='text']").addClass ("form-control input-sm");
        wrapper.find (".dataTables_length select").addClass ("form-control input-sm");
