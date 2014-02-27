@@ -837,7 +837,7 @@ public class DataTables implements IHCNodeBuilder
         // Inline texts
         aLanguage = createLanguageJson (m_aDisplayLocale);
       }
-      aParams.add (USE_V19 ? "oLanguage" : "language", aLanguage);
+      aParams.add ("oLanguage", aLanguage);
     }
 
     modifyParams (aParams);
