@@ -15,12 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webscopes.impl;
+package com.phloc.webscopes.session;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -39,8 +40,6 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * This class is responsible for passivating and activating session web scopes.
- * The passivation itself is empty, because everything is done in the serialzing
- * code
  * 
  * @author Philip Helger
  */
@@ -72,8 +71,48 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
 
   private void writeObject (@Nonnull final ObjectOutputStream out) throws IOException
   {
-    out.writeObject (m_aSessionWebScope.getAllAttributes ());
-    out.writeObject (m_aSessionWebScope.getAllSessionApplicationScopes ());
+    {
+      // Determine all attributes to be passivated
+      final Map <String, Object> aRelevantObjects = new HashMap <String, Object> ();
+      for (final Map.Entry <String, Object> aEntry : m_aSessionWebScope.getAllAttributes ().entrySet ())
+      {
+        final Object aValue = aEntry.getValue ();
+        if (!(aValue instanceof ISessionWebScopeDontPassivate))
+          aRelevantObjects.put (aEntry.getKey (), aValue);
+      }
+      out.writeObject (aRelevantObjects);
+    }
+
+    // Write all session application scopes
+    {
+      final Map <String, ISessionApplicationScope> aSAScopes = m_aSessionWebScope.getAllSessionApplicationScopes ();
+      out.writeInt (aSAScopes.size ());
+      for (final Map.Entry <String, ISessionApplicationScope> aEntry : aSAScopes.entrySet ())
+      {
+        // Write scope ID
+        out.writeUTF (aEntry.getKey ());
+
+        final ISessionApplicationScope aScope = aEntry.getValue ();
+        // Remember all attributes
+        final Map <String, Object> aOrigAttrs = aScope.getAllAttributes ();
+        // Remove all attributes
+        aScope.clear ();
+
+        // Write the scope without attributes
+        out.writeObject (aScope);
+
+        // Determine all relevant attributes to passivate
+        final Map <String, Object> aRelevantObjects = new HashMap <String, Object> ();
+        for (final Map.Entry <String, Object> aEntry2 : aOrigAttrs.entrySet ())
+        {
+          final Object aValue = aEntry2.getValue ();
+          if (!(aValue instanceof ISessionWebScopeDontPassivate))
+            aRelevantObjects.put (aEntry2.getKey (), aValue);
+        }
+        out.writeObject (aRelevantObjects);
+      }
+    }
+
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Wrote info on session web scope '" + m_aSessionWebScope.getID () + "'");
   }
@@ -81,8 +120,22 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
   @SuppressWarnings ("unchecked")
   private void readObject (@Nonnull final ObjectInputStream in) throws IOException, ClassNotFoundException
   {
+    // Read session attributes
     m_aAttrs = (Map <String, Object>) in.readObject ();
-    m_aSessionApplicationScopes = (Map <String, ISessionApplicationScope>) in.readObject ();
+
+    // Read session application scopes
+    final int nSAScopes = in.readInt ();
+    final Map <String, ISessionApplicationScope> aSAS = new HashMap <String, ISessionApplicationScope> (nSAScopes);
+    for (int i = 0; i < nSAScopes; ++i)
+    {
+      final String sScopeID = in.readUTF ();
+      final ISessionApplicationScope aScope = (ISessionApplicationScope) in.readObject ();
+      final Map <String, Object> aScopeAttrs = (Map <String, Object>) in.readObject ();
+      aScope.setAttributes (aScopeAttrs);
+      aSAS.put (sScopeID, aScope);
+    }
+    m_aSessionApplicationScopes = aSAS;
+
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Read info on session scope: " +
                       m_aAttrs.size () +
@@ -108,6 +161,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     for (final Map.Entry <String, Object> aEntry : m_aAttrs.entrySet ())
       aSessionWebScope.setAttribute (aEntry.getKey (), aEntry.getValue ());
     m_aAttrs.clear ();
+
     for (final Map.Entry <String, ISessionApplicationScope> aEntry : m_aSessionApplicationScopes.entrySet ())
       aSessionWebScope.restoreSessionApplicationScope (aEntry.getKey (), aEntry.getValue ());
     m_aSessionApplicationScopes.clear ();

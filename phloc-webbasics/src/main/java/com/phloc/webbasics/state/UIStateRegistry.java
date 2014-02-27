@@ -41,6 +41,7 @@ import com.phloc.commons.type.ObjectType;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.scopes.IScopeRenewalAware;
+import com.phloc.webscopes.session.ISessionWebScopeDontPassivate;
 import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -51,7 +52,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class UIStateRegistry extends SessionWebSingleton implements IScopeRenewalAware
+public final class UIStateRegistry extends SessionWebSingleton implements IScopeRenewalAware, ISessionWebScopeDontPassivate
 {
   /** ObjectType */
   public static final ObjectType OT_HCNODE = new ObjectType ("hcnode");

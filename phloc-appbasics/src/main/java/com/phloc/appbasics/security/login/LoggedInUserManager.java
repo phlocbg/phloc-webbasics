@@ -123,6 +123,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
       // Resolve manager
       m_aOwningMgr = LoggedInUserManager.getInstance ();
+
+      // Finally remember that the user is logged in
     }
 
     boolean hasUser ()

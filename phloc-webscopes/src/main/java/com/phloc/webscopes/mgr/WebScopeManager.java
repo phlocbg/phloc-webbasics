@@ -48,7 +48,7 @@ import com.phloc.webscopes.domain.IGlobalWebScope;
 import com.phloc.webscopes.domain.IRequestWebScope;
 import com.phloc.webscopes.domain.ISessionApplicationWebScope;
 import com.phloc.webscopes.domain.ISessionWebScope;
-import com.phloc.webscopes.impl.SessionWebScopeActivator;
+import com.phloc.webscopes.session.SessionWebScopeActivator;
 
 /**
  * This is the main manager class for web scope handling.
