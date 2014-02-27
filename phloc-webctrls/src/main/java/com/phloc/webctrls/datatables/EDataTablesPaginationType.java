@@ -41,7 +41,10 @@ public enum EDataTablesPaginationType implements IHasName
   @Since ("1.10")
   FULL ("full"),
   FULL_NUMBERS ("full_numbers"),
-  /** Only available if the respective datatables plugin is present */
+  /**
+   * Only available if the respective datatables plugin is present and only for
+   * Bootstrap 1.9 - not for 1.10!
+   */
   @Deprecated
   @DevelopersNote ("DataTables 1.9.4")
   BOOTSTRAP ("bootstrap");
