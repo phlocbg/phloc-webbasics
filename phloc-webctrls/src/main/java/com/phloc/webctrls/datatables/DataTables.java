@@ -353,6 +353,16 @@ public class DataTables implements IHCNodeBuilder
     return false;
   }
 
+  @Nonnegative
+  public int getVisibleColumnCount ()
+  {
+    int ret = 0;
+    for (final DataTablesColumn aColumn : m_aColumns)
+      if (aColumn.isVisible ())
+        ++ret;
+    return ret;
+  }
+
   @Nullable
   public DataTablesSorting getInitialSorting ()
   {
@@ -802,6 +812,13 @@ public class DataTables implements IHCNodeBuilder
       {
         // Remove all columns as this breaks the rendering
         m_aTable.removeAllColumns ();
+        if (false)
+        {
+          // Just a small test
+          final int nVisibleColumnCount = getVisibleColumnCount ();
+          for (int i = 0; i < nVisibleColumnCount; ++i)
+            m_aTable.addColumn (new HCCol ());
+        }
       }
       else
       {
