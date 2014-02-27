@@ -169,6 +169,18 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     // Remember for later passivation
     m_aSessionWebScope = aSessionWebScope;
 
+    // Invoke callbacks on all attributes
+    {
+      for (final Object aValue : aSessionWebScope.getAllAttributeValues ())
+        if (aValue instanceof ISessionWebScopeActivationHandler)
+          ((ISessionWebScopeActivationHandler) aValue).onSessionActivate (aSessionWebScope);
+
+      for (final ISessionApplicationScope aScope : aSessionWebScope.getAllSessionApplicationScopes ().values ())
+        for (final Object aValue : aScope.getAllAttributeValues ())
+          if (aValue instanceof ISessionWebScopeActivationHandler)
+            ((ISessionWebScopeActivationHandler) aValue).onSessionActivate (aSessionWebScope);
+    }
+
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Successfully activated session web scope '" + aSessionWebScope.getID () + "'");
   }

@@ -179,6 +179,7 @@ public class LoginManager
     final LoggedInUserManager aLUM = LoggedInUserManager.getInstance ();
     String sSessionUserID = aLUM.getCurrentUserID ();
     boolean bLoggedInInThisRequest = false;
+
     if (sSessionUserID == null)
     {
       // No use currently logged in -> start login

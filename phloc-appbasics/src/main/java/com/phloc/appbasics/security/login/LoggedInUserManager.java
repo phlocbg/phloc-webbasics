@@ -53,6 +53,8 @@ import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.scopes.singleton.GlobalSingleton;
 import com.phloc.scopes.singleton.SessionSingleton;
+import com.phloc.webscopes.domain.ISessionWebScope;
+import com.phloc.webscopes.session.ISessionWebScopeActivationHandler;
 
 /**
  * This class manages all logged-in users.
@@ -68,11 +70,11 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * 
    * @author Philip Helger
    */
-  public static final class SessionUserHolder extends SessionSingleton
+  public static final class SessionUserHolder extends SessionSingleton implements ISessionWebScopeActivationHandler
   {
     private static final long serialVersionUID = 2322897734799334L;
 
-    private IUser m_aUser;
+    private transient IUser m_aUser;
     private String m_sUserID;
     private transient LoggedInUserManager m_aOwningMgr;
 
@@ -109,12 +111,14 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
     private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
     {
-      aOOS.writeUTF (m_sUserID);
+      writeAbstractSingletonFields (aOOS);
+      aOOS.defaultWriteObject ();
     }
 
-    private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException
+    private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException, ClassNotFoundException
     {
-      m_sUserID = aOIS.readUTF ();
+      readAbstractSingletonFields (aOIS);
+      aOIS.defaultReadObject ();
 
       // Resolve user ID
       m_aUser = AccessManager.getInstance ().getUserOfID (m_sUserID);
@@ -123,8 +127,13 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
       // Resolve manager
       m_aOwningMgr = LoggedInUserManager.getInstance ();
+    }
 
+    public void onSessionActivate (@Nonnull final ISessionWebScope aSessionScope)
+    {
       // Finally remember that the user is logged in
+      final LoginInfo aInfo = new LoginInfo (m_aUser, aSessionScope);
+      m_aOwningMgr.m_aLoggedInUsers.put (m_sUserID, aInfo);
     }
 
     boolean hasUser ()
