@@ -213,12 +213,12 @@ FixedHeader.prototype = {
 		} );
 
 		$(s.nTable)
-			.on('column-reorder', function () {
+			.on('column-reorder.dt', function () {
 				FixedHeader.fnMeasure();
 				that._fnUpdateClones( true );
 				that._fnUpdatePositions();
 			} )
-			.on('column-visibility', function () {
+			.on('column-visibility.dt', function () {
 				FixedHeader.fnMeasure();
 				that._fnUpdateClones( true );
 				that._fnUpdatePositions();
