@@ -351,13 +351,12 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
     if (aHelpText != null)
     {
       final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aHelpText);
+      if (eFormType == EBootstrapFormType.INLINE)
+        aHelpBlock.addClass (CBootstrapCSS.SR_ONLY);
       if (eFormType == EBootstrapFormType.HORIZONTAL)
         ((HCDiv) aFinalNode.getLastChild ()).addChild (aHelpBlock);
       else
-      {
-        aLeft.applyOffsetTo (aHelpBlock);
         aFinalNode.addChild (aHelpBlock);
-      }
     }
 
     // Check form errors - highlighting
