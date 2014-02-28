@@ -19,7 +19,6 @@ package com.phloc.appbasics.security.login;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -109,25 +108,23 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
       return getSingletonIfInstantiated (aScope, SessionUserHolder.class);
     }
 
-    private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
-    {
-      aOOS.defaultWriteObject ();
-    }
-
     private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException, ClassNotFoundException
     {
       aOIS.defaultReadObject ();
 
       // Resolve user ID
-      m_aUser = AccessManager.getInstance ().getUserOfID (m_sUserID);
-      if (m_aUser == null)
-        throw new IllegalStateException ("Failed to resolve user with ID '" + m_sUserID + "'");
+      if (m_sUserID != null)
+      {
+        m_aUser = AccessManager.getInstance ().getUserOfID (m_sUserID);
+        if (m_aUser == null)
+          throw new IllegalStateException ("Failed to resolve user with ID '" + m_sUserID + "'");
+      }
 
       // Resolve manager
       m_aOwningMgr = LoggedInUserManager.getInstance ();
     }
 
-    public void onSessionActivate (@Nonnull final ISessionWebScope aSessionScope)
+    public void onSessionDidActivate (@Nonnull final ISessionWebScope aSessionScope)
     {
       // Finally remember that the user is logged in
       m_aOwningMgr.internalActivateUser (m_aUser, aSessionScope);

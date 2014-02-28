@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-appbasics">
+  <release date="2014-02-28" version="2.6.8" />
+  <entry date="2014-02-28" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-webscopes 6.2.7 with improved activation/passivation</text>
+    </change>
+  </entry>
   <release date="2014-02-28" version="2.6.7" />
   <entry date="2014-02-27" category="tech" action="update">
     <change>
