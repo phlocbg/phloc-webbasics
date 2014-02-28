@@ -111,13 +111,11 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
     private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
     {
-      writeAbstractSingletonFields (aOOS);
       aOOS.defaultWriteObject ();
     }
 
     private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException, ClassNotFoundException
     {
-      readAbstractSingletonFields (aOIS);
       aOIS.defaultReadObject ();
 
       // Resolve user ID

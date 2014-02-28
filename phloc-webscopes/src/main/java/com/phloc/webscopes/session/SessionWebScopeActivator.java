@@ -162,12 +162,12 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     {
       for (final Object aValue : m_aSessionWebScope.getAllAttributeValues ())
         if (aValue instanceof ISessionWebScopePassivationHandler)
-          ((ISessionWebScopePassivationHandler) aValue).onSessionPassivate (m_aSessionWebScope);
+          ((ISessionWebScopePassivationHandler) aValue).onSessionWillPassivate (m_aSessionWebScope);
 
       for (final ISessionApplicationScope aScope : m_aSessionWebScope.getAllSessionApplicationScopes ().values ())
         for (final Object aValue : aScope.getAllAttributeValues ())
           if (aValue instanceof ISessionWebScopePassivationHandler)
-            ((ISessionWebScopePassivationHandler) aValue).onSessionPassivate (m_aSessionWebScope);
+            ((ISessionWebScopePassivationHandler) aValue).onSessionWillPassivate (m_aSessionWebScope);
     }
 
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
@@ -197,12 +197,12 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     {
       for (final Object aValue : aSessionWebScope.getAllAttributeValues ())
         if (aValue instanceof ISessionWebScopeActivationHandler)
-          ((ISessionWebScopeActivationHandler) aValue).onSessionActivate (aSessionWebScope);
+          ((ISessionWebScopeActivationHandler) aValue).onSessionDidActivate (aSessionWebScope);
 
       for (final ISessionApplicationScope aScope : aSessionWebScope.getAllSessionApplicationScopes ().values ())
         for (final Object aValue : aScope.getAllAttributeValues ())
           if (aValue instanceof ISessionWebScopeActivationHandler)
-            ((ISessionWebScopeActivationHandler) aValue).onSessionActivate (aSessionWebScope);
+            ((ISessionWebScopeActivationHandler) aValue).onSessionDidActivate (aSessionWebScope);
     }
 
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))

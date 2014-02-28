@@ -69,7 +69,7 @@ public abstract class AbstractRequestManager implements IRequestManager
       if (aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
       {
         final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
-        aSessionScope.setAttribute (getSessionAttrMenuItem (), aMenuObject);
+        aSessionScope.setAttribute (getSessionAttrMenuItem (), aMenuObject.getID ());
       }
     }
 
@@ -95,7 +95,17 @@ public abstract class AbstractRequestManager implements IRequestManager
   public IMenuItemPage getSessionMenuItem ()
   {
     final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
-    return aSessionScope == null ? null : aSessionScope.<IMenuItemPage> getCastedAttribute (getSessionAttrMenuItem ());
+    if (aSessionScope != null)
+    {
+      final String sMenuItemID = aSessionScope.getAttributeAsString (getSessionAttrMenuItem ());
+      if (sMenuItemID != null)
+      {
+        final IMenuObject aMenuObj = getMenuTree ().getMenuObjectOfID (sMenuItemID);
+        if (aMenuObj instanceof IMenuItemPage)
+          return (IMenuItemPage) aMenuObj;
+      }
+    }
+    return null;
   }
 
   @Nonnull

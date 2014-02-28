@@ -34,5 +34,5 @@ public interface ISessionWebScopeActivationHandler
    * @param aSessionScope
    *        The activated session scope. Never <code>null</code>.
    */
-  void onSessionActivate (@Nonnull ISessionWebScope aSessionScope);
+  void onSessionDidActivate (@Nonnull ISessionWebScope aSessionScope);
 }

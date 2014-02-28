@@ -30,10 +30,10 @@ import com.phloc.webscopes.domain.ISessionWebScope;
 public interface ISessionWebScopePassivationHandler
 {
   /**
-   * Invoked after the session was passivated.
+   * Invoked before the session will be passivated.
    * 
    * @param aSessionScope
    *        The passivated session scope. Never <code>null</code>.
    */
-  void onSessionPassivate (@Nonnull ISessionWebScope aSessionScope);
+  void onSessionWillPassivate (@Nonnull ISessionWebScope aSessionScope);
 }
