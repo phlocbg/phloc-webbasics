@@ -92,7 +92,7 @@ public class DataTables implements IHCNodeBuilder
   public static final int DEFAULT_DISPLAY_LENGTH = 10;
   public static final boolean DEFAULT_USE_FIXED_HEADER = false;
 
-  public static final boolean USE_V19 = false;
+  public static boolean USE_V19 = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);
   private static boolean s_bDefaultGenerateOnDocumentReady = DEFAULT_GENERATE_ON_DOCUMENT_READY;
@@ -720,8 +720,7 @@ public class DataTables implements IHCNodeBuilder
                                     .add ("sPrevious", EDataTablesText.PREVIOUS.getDisplayText (aDisplayLocale)));
     aLanguage.add ("sProcessing", EDataTablesText.PROCESSING.getDisplayText (aDisplayLocale));
     aLanguage.add ("sSearch", EDataTablesText.SEARCH.getDisplayText (aDisplayLocale));
-    aLanguage.add (USE_V19 ? "sInfoThousands" : "sThousands",
-                   EDataTablesText.INFO_THOUSANDS.getDisplayText (aDisplayLocale));
+    aLanguage.add ("sInfoThousands", EDataTablesText.INFO_THOUSANDS.getDisplayText (aDisplayLocale));
     aLanguage.add ("sUrl", "");
     aLanguage.add ("sZeroRecords", EDataTablesText.ZERO_RECORDS.getDisplayText (aDisplayLocale));
     return aLanguage;
