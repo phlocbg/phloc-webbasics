@@ -25,6 +25,7 @@ import com.phloc.bootstrap3.base.BootstrapCloseIcon;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.html.CHTMLAttributes;
 import com.phloc.html.EHTMLRole;
 import com.phloc.html.hc.IHCNode;
@@ -33,11 +34,20 @@ import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCH4;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.hc.impl.HCTextNode;
+import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSInvocation;
+import com.phloc.html.js.builder.jquery.JQuery;
 
 public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
 {
   public static final boolean DEFAULT_FADE = true;
   public static final boolean DEFAULT_SHOW_CLOSE = true;
+
+  public static final String JS_EVENT_SHOW = "show.bs.modal";
+  public static final String JS_EVENT_SHOWN = "shown.bs.modal";
+  public static final String JS_EVENT_HIDE = "hide.bs.modal";
+  public static final String JS_EVENT_HIDDEN = "hidden.bs.modal";
+  public static final String JS_EVENT_LOADED = "loaded.bs.moda";
 
   private final String m_sID;
   private final EBootstrapModalSize m_eSize;
@@ -155,7 +165,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nullable
-  public IHCNode build ()
+  public HCDiv build ()
   {
     final HCDiv ret = new HCDiv ().addClass (CBootstrapCSS.MODAL)
                                   .setRole (EHTMLRole.DIALOG)
@@ -180,5 +190,84 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
     if (m_aFooter != null)
       aContent.addChild (new HCDiv ().addClass (CBootstrapCSS.MODAL_FOOTER).addChild (m_aFooter));
     return ret;
+  }
+
+  /**
+   * @return JS invocation to open this modal dialog.
+   */
+  @Nonnull
+  public JSInvocation jsModal ()
+  {
+    return JQuery.idRef (m_sID).invoke ("modal");
+  }
+
+  /**
+   * Activates your content as a modal. Accepts an optional options object.
+   * 
+   * @param aBackdrop
+   *        Includes a modal-backdrop element. Alternatively, specify static for
+   *        a backdrop which doesn't close the modal on click.
+   * @param aKeyboard
+   *        Closes the modal when escape key is pressed
+   * @param aShow
+   *        Shows the modal when initialized.
+   * @param sRemotePath
+   *        If a remote URL is provided, content will be loaded one time via
+   *        jQuery's load method and injected into the .modal-content div.
+   * @return JS invocation to open this modal dialog with the specified options.
+   */
+  @Nonnull
+  public JSInvocation openModal (@Nullable final EBootstrapModalOptionBackdrop aBackdrop,
+                                 @Nullable final Boolean aKeyboard,
+                                 @Nullable final Boolean aShow,
+                                 @Nullable final String sRemotePath)
+  {
+    final JSAssocArray aOptions = new JSAssocArray ();
+    if (aBackdrop != null)
+      aOptions.add ("backdrop", aBackdrop.getJSExpression ());
+    if (aKeyboard != null)
+      aOptions.add ("keyboard", aKeyboard.booleanValue ());
+    if (aShow != null)
+      aOptions.add ("show", aShow.booleanValue ());
+    if (StringHelper.hasText (sRemotePath))
+      aOptions.add ("remote", sRemotePath);
+    return jsModal ().arg (aOptions);
+  }
+
+  /**
+   * Manually toggles a modal. Returns to the caller before the modal has
+   * actually been shown or hidden (i.e. before the shown.bs.modal or
+   * hidden.bs.modal event occurs).
+   * 
+   * @return JS invocation
+   */
+  @Nonnull
+  public JSInvocation jsModalToggle ()
+  {
+    return jsModal ().arg ("toggle");
+  }
+
+  /**
+   * Manually opens a modal. Returns to the caller before the modal has actually
+   * been shown (i.e. before the shown.bs.modal event occurs).
+   * 
+   * @return JS invocation
+   */
+  @Nonnull
+  public JSInvocation jsModalShow ()
+  {
+    return jsModal ().arg ("show");
+  }
+
+  /**
+   * Manually hides a modal. Returns to the caller before the modal has actually
+   * been hidden (i.e. before the hidden.bs.modal event occurs).
+   * 
+   * @return JS invocation
+   */
+  @Nonnull
+  public JSInvocation jsModalHide ()
+  {
+    return jsModal ().arg ("hide");
   }
 }
