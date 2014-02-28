@@ -17,6 +17,9 @@
  */
 package com.phloc.webscopes.singleton;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,6 +42,16 @@ public abstract class SessionApplicationWebSingleton extends AbstractSingleton i
   protected SessionApplicationWebSingleton ()
   {
     super ("getSessionApplicationSingleton");
+  }
+
+  private void writeObject (@Nonnull final ObjectOutputStream aOOS) throws IOException
+  {
+    writeAbstractSingletonFields (aOOS);
+  }
+
+  private void readObject (@Nonnull final ObjectInputStream aOIS) throws IOException
+  {
+    readAbstractSingletonFields (aOIS);
   }
 
   /**

@@ -40,10 +40,11 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * This class is responsible for passivating and activating session web scopes.
+ * Important: this object itself may NOT be passivated!
  * 
  * @author Philip Helger
  */
-public final class SessionWebScopeActivator implements Serializable, HttpSessionActivationListener
+public final class SessionWebScopeActivator implements Serializable, HttpSessionActivationListener, ISessionWebScopeDontPassivate
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SessionWebScopeActivator.class);
   private ISessionWebScope m_aSessionWebScope;
@@ -71,6 +72,9 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
 
   private void writeObject (@Nonnull final ObjectOutputStream out) throws IOException
   {
+    if (m_aSessionWebScope == null)
+      throw new IllegalStateException ("No SessionWebScope is present!");
+
     {
       // Determine all attributes to be passivated
       final Map <String, Object> aRelevantObjects = new HashMap <String, Object> ();
@@ -101,6 +105,9 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
         // Write the scope without attributes
         out.writeObject (aScope);
 
+        // restore the original attributes after serialization
+        aScope.setAttributes (aOrigAttrs);
+
         // Determine all relevant attributes to passivate
         final Map <String, Object> aRelevantObjects = new HashMap <String, Object> ();
         for (final Map.Entry <String, Object> aEntry2 : aOrigAttrs.entrySet ())
@@ -120,6 +127,9 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
   @SuppressWarnings ("unchecked")
   private void readObject (@Nonnull final ObjectInputStream in) throws IOException, ClassNotFoundException
   {
+    if (m_aSessionWebScope != null)
+      throw new IllegalStateException ("Another SessionWebScope is already present: " + m_aSessionWebScope.toString ());
+
     // Read session attributes
     m_aAttrs = (Map <String, Object>) in.readObject ();
 
@@ -146,8 +156,22 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
 
   public void sessionWillPassivate (@Nonnull final HttpSessionEvent aEvent)
   {
-    // nothing to do here
-    // All handled in the writeObject method
+    // Writing is all handled in the writeObject method
+
+    // Invoke callbacks on all attributes
+    {
+      for (final Object aValue : m_aSessionWebScope.getAllAttributeValues ())
+        if (aValue instanceof ISessionWebScopePassivationHandler)
+          ((ISessionWebScopePassivationHandler) aValue).onSessionPassivate (m_aSessionWebScope);
+
+      for (final ISessionApplicationScope aScope : m_aSessionWebScope.getAllSessionApplicationScopes ().values ())
+        for (final Object aValue : aScope.getAllAttributeValues ())
+          if (aValue instanceof ISessionWebScopePassivationHandler)
+            ((ISessionWebScopePassivationHandler) aValue).onSessionPassivate (m_aSessionWebScope);
+    }
+
+    if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
+      s_aLogger.info ("Successfully passivated session web scope '" + m_aSessionWebScope.getID () + "'");
   }
 
   public void sessionDidActivate (@Nonnull final HttpSessionEvent aEvent)
@@ -157,7 +181,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     // Create a new session web scope
     final ISessionWebScope aSessionWebScope = WebScopeManager.internalGetOrCreateSessionScope (aHttpSession, true, true);
 
-    // Restore the values into the scope
+    // Restore the read values into the scope
     for (final Map.Entry <String, Object> aEntry : m_aAttrs.entrySet ())
       aSessionWebScope.setAttribute (aEntry.getKey (), aEntry.getValue ());
     m_aAttrs.clear ();
