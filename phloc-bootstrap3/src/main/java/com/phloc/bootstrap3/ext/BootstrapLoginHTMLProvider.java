@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.appbasics.security.login.ELoginResult;
 import com.phloc.bootstrap3.alert.BootstrapErrorBox;
@@ -29,6 +30,7 @@ import com.phloc.bootstrap3.button.BootstrapSubmitButton;
 import com.phloc.bootstrap3.form.BootstrapForm;
 import com.phloc.bootstrap3.grid.BootstrapRow;
 import com.phloc.bootstrap3.pageheader.BootstrapPageHeader;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCDiv;
@@ -43,6 +45,11 @@ import com.phloc.webbasics.login.CLogin;
 import com.phloc.webbasics.login.LoginHTMLProvider;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
+/**
+ * A special {@link LoginHTMLProvider} with Bootstrap UI.
+ * 
+ * @author Philip Helger
+ */
 public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 {
   private final String m_sPageTitle;
@@ -56,6 +63,7 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected void fillHead (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                            @Nonnull final HCHtml aHtml,
                            @Nonnull final Locale aDisplayLocale)
@@ -64,7 +72,24 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     aHtml.getHead ().setPageTitle (m_sPageTitle);
   }
 
+  /**
+   * Customize the created form
+   * 
+   * @param aRequestScope
+   *        Current request.
+   * @param aForm
+   *        The pre-filled form.
+   * @param aDisplayLocale
+   *        The display locale.
+   */
+  @OverrideOnDemand
+  protected void onAfterForm (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                              @Nonnull final BootstrapForm aForm,
+                              @Nonnull final Locale aDisplayLocale)
+  {}
+
   @Override
+  @OverridingMethodsMustInvokeSuper
   protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                            @Nonnull final HCHtml aHtml,
                            @Nonnull final Locale aDisplayLocale)
@@ -87,19 +112,21 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
     // Submit button
     aForm.addChild (new BootstrapSubmitButton ().addChild (EWebBasicsText.LOGIN_BUTTON_SUBMIT.getDisplayText (aDisplayLocale)));
 
-    // Layout
+    // Customize
+    onAfterForm (aRequestScope, aForm, aDisplayLocale);
+
+    // Layout the form
     final BootstrapContainer aContentLayout = new BootstrapContainer ();
     final BootstrapRow aRow = aContentLayout.addAndReturnChild (new BootstrapRow ());
-    aRow.createColumn (3);
-    final HCDiv aCol2 = aRow.createColumn (6);
-    aRow.createColumn (3);
+    aRow.createColumn (0, 2, 3, 3);
+    final HCDiv aCol2 = aRow.createColumn (12, 8, 6, 6);
     if (StringHelper.hasText (m_sPageTitle))
       aCol2.addChild (new BootstrapPageHeader ().addChild (HCH2.create (m_sPageTitle)));
     aCol2.addChild (aForm);
+    aRow.createColumn (0, 2, 3, 3);
 
     // Build body
     final HCBody aBody = aHtml.getBody ();
-    final HCSpan aSpan = aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN));
-    aSpan.addChild (aContentLayout);
+    aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN).addChild (aContentLayout));
   }
 }
