@@ -680,7 +680,6 @@ public final class InternalErrorHandler
       {
         // Get error stack trace
         final String sStackTrace = StackTraceHelper.getStackAsString (t, false);
-
         final HCTextArea aStackTrace = new HCTextArea ("callstack").setValue (sStackTrace)
                                                                    .setRows (20)
                                                                    .addStyle (CCSSProperties.WIDTH.newValue (ECSSUnit.perc (98)))
@@ -689,6 +688,11 @@ public final class InternalErrorHandler
 
         aParent.addChild (aStackTrace);
       }
+
+      if (t != null)
+        s_aLogger.error ("The error stack trace", t);
+      if (StringHelper.hasText (sCustomData))
+        s_aLogger.error ("Custom data: " + sCustomData);
 
       // In case an unexpected error occurs in the UnitTest, make the test fail!
       if (t != null && StackTraceHelper.containsUnitTestElement (t.getStackTrace ()))

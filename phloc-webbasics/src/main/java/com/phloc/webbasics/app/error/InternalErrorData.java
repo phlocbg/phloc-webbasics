@@ -22,20 +22,24 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.microdom.IHasMicroNodeRepresentation;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.string.StringHelper;
 
-public final class InternalErrorData
+public final class InternalErrorData implements IHasStringRepresentation, IHasMicroNodeRepresentation
 {
-  private static final class Entry implements IHasStringRepresentation, IHasMicroNodeRepresentation
+  @Immutable
+  public static final class Entry implements IHasStringRepresentation, IHasMicroNodeRepresentation
   {
     private final String m_sKey;
     private final String m_sValue;
@@ -46,6 +50,19 @@ public final class InternalErrorData
         throw new IllegalArgumentException ("key");
       m_sKey = sKey;
       m_sValue = sValue;
+    }
+
+    @Nonnull
+    @Nonempty
+    public String getKey ()
+    {
+      return m_sKey;
+    }
+
+    @Nullable
+    public String getValue ()
+    {
+      return m_sValue;
     }
 
     @Nonnull
@@ -88,9 +105,23 @@ public final class InternalErrorData
     addField (sKey, sValue);
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Entry> getAllFields ()
+  {
+    return ContainerHelper.newList (m_aFields);
+  }
+
   public void addRequestField (@Nonnull final String sKey, @Nullable final String sValue)
   {
     m_aRequestFields.add (new Entry (sKey, sValue));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Entry> getAllRequestFields ()
+  {
+    return ContainerHelper.newList (m_aRequestFields);
   }
 
   public void addRequestHeader (@Nonnull final String sKey, @Nullable final String sValue)
@@ -98,14 +129,35 @@ public final class InternalErrorData
     m_aRequestHeaders.add (new Entry (sKey, sValue));
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Entry> getAllRequestHeaders ()
+  {
+    return ContainerHelper.newList (m_aRequestHeaders);
+  }
+
   public void addRequestParameter (@Nonnull final String sKey, @Nullable final String sValue)
   {
     m_aRequestParameters.add (new Entry (sKey, sValue));
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Entry> getAllRequestParameters ()
+  {
+    return ContainerHelper.newList (m_aRequestParameters);
+  }
+
   public void addRequestCookie (@Nonnull final String sKey, @Nullable final String sValue)
   {
     m_aRequestCookies.add (new Entry (sKey, sValue));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Entry> getAllRequestCookies ()
+  {
+    return ContainerHelper.newList (m_aRequestCookies);
   }
 
   @Nonnull
