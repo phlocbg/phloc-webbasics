@@ -22,44 +22,28 @@ import javax.annotation.Nonnull;
 import com.phloc.bootstrap2.AbstractBootstrapTable;
 import com.phloc.bootstrap2.EBootstrapCSSPathProvider;
 import com.phloc.bootstrap2.EBootstrapJSPathProvider;
-import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.html.js.builder.JSPackage;
-import com.phloc.html.js.builder.jquery.JQuery;
-import com.phloc.html.js.builder.jquery.JQueryProperty;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 import com.phloc.webctrls.datatables.DataTables;
-import com.phloc.webctrls.datatables.EDataTablesCSSPathProvider;
 import com.phloc.webctrls.datatables.EDataTablesPaginationType;
 
 public class BootstrapDataTables extends DataTables
 {
   public static final String DEFAULT_DOM = "<<'span6'l><'span6'f>r>t<<'span6'i><'span6'p>>";
 
+  @SuppressWarnings ("deprecation")
   public BootstrapDataTables (@Nonnull final AbstractBootstrapTable <?> aTable)
   {
     super (aTable);
     aTable.setStriped (true).setHover (true);
     setDom (DEFAULT_DOM);
-    setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
+    if (DataTables.USE_V19)
+      setPaginationType (EDataTablesPaginationType.BOOTSTRAP);
     registerExternalResources ();
-  }
-
-  @Override
-  protected void addCodeBeforeDataTables (final JSPackage aPackage)
-  {
-    if (false)
-      aPackage.add (JQuery.extend ()
-                          .arg (JQueryProperty.fn ().ref ("dataTableExt").ref ("oStdClasses"))
-                          .arg (new JSAssocArray ().add ("sSortAsc", "icon icon-arrow-down")
-                                                   .add ("sSortDesc", "icon icon-arrow-up")
-                                                   .add ("sSortable", "header")));
   }
 
   public static void registerExternalResources ()
   {
-    if (false)
-      PerRequestCSSIncludes.unregisterCSSIncludeFromThisRequest (EDataTablesCSSPathProvider.DATATABLES_194);
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EBootstrapJSPathProvider.BOOTSTRAP_DATATABLES);
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EBootstrapCSSPathProvider.BOOTSTRAP_DATATABLES);
   }

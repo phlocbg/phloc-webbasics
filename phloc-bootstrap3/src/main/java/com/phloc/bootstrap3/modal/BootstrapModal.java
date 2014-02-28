@@ -47,7 +47,7 @@ public class BootstrapModal implements IHCNodeBuilder, IHasID <String>
   public static final String JS_EVENT_SHOWN = "shown.bs.modal";
   public static final String JS_EVENT_HIDE = "hide.bs.modal";
   public static final String JS_EVENT_HIDDEN = "hidden.bs.modal";
-  public static final String JS_EVENT_LOADED = "loaded.bs.moda";
+  public static final String JS_EVENT_LOADED = "loaded.bs.modal";
 
   private final String m_sID;
   private final EBootstrapModalSize m_eSize;
