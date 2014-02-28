@@ -35,7 +35,6 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * @author Philip Helger
  */
 @NotThreadSafe
-@Deprecated
 public final class GlobalLocaleManager extends GlobalSingleton implements ILocaleManager
 {
   private final LocaleManager m_aProxy = new LocaleManager ();
