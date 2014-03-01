@@ -77,6 +77,8 @@ import com.phloc.webbasics.state.UIStateRegistry;
 import com.phloc.webctrls.datatables.ajax.DataTablesServerData;
 import com.phloc.webctrls.js.JSJQueryUtils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class DataTables implements IHCNodeBuilder
 {
   public static final boolean DEFAULT_GENERATE_ON_DOCUMENT_READY = false;
@@ -92,6 +94,7 @@ public class DataTables implements IHCNodeBuilder
   public static final int DEFAULT_DISPLAY_LENGTH = 10;
   public static final boolean DEFAULT_USE_FIXED_HEADER = false;
 
+  @SuppressFBWarnings ("MS_SHOULD_BE_FINAL")
   public static boolean USE_V19 = false;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (DataTables.class);

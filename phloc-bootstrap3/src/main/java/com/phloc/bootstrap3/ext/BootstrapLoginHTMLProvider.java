@@ -127,6 +127,6 @@ public class BootstrapLoginHTMLProvider extends LoginHTMLProvider
 
     // Build body
     final HCBody aBody = aHtml.getBody ();
-    aBody.addAndReturnChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN).addChild (aContentLayout));
+    aBody.addChild (new HCSpan ().setID (CLogin.LAYOUT_AREAID_LOGIN).addChild (aContentLayout));
   }
 }
