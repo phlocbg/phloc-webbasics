@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.bootstrap3.EBootstrapIcon;
 import com.phloc.bootstrap3.inputgroup.BootstrapInputGroup;
@@ -79,6 +81,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
   public static final boolean DEFAULT_SHOW_MERIDIAN = false;
   public static final boolean DEFAULT_SHOW_RESET_BUTTON = false;
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (BootstrapDateTimePicker.class);
+
   private final String m_sContainerID;
   private final HCEdit m_aEdit;
   private final Locale m_aDisplayLocale;
@@ -128,6 +132,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     m_aEdit = new HCEdit (sName, sValue).setPlaceholder ("");
     m_aDisplayLocale = aDisplayLocale;
     m_eLanguage = EDateTimePickerLanguage.getFromLocaleOrNull (aDisplayLocale);
+    if (m_eLanguage == null)
+      s_aLogger.warn ("Unsupported EDateTimePickerLanguage provided: " + aDisplayLocale);
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
                                                                             .getFirstDayOfWeek ());
     m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
@@ -150,6 +156,15 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
   public HCEdit getEdit ()
   {
     return m_aEdit;
+  }
+
+  /**
+   * @return The datetime picker language to use. May be <code>null</code>.
+   */
+  @Nullable
+  public EDateTimePickerLanguage getLanguage ()
+  {
+    return m_eLanguage;
   }
 
   /**
@@ -578,11 +593,14 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     return ret;
   }
 
-  public static void registerExternalResources (@Nonnull final EDateTimePickerLanguage eLanguage)
+  public static void registerExternalResources (@Nullable final EDateTimePickerLanguage eLanguage)
   {
     PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimePickerJSPathProvider.DATETIMEPICKER);
-    // Locales must be after the main datetime picker
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimePickerJSPathProvider.DATETIMEPICKER_LOCALE.getInstance (eLanguage.getLanguageID ()));
+    if (eLanguage != null)
+    {
+      // Locales must be after the main datetime picker
+      PerRequestJSIncludes.registerJSIncludeForThisRequest (EDateTimePickerJSPathProvider.DATETIMEPICKER_LOCALE.getInstance (eLanguage.getLanguageID ()));
+    }
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EDateTimePickerCSSPathProvider.DATETIMEPICKER);
   }
 }
