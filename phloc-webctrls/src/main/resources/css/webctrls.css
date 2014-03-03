@@ -45,3 +45,7 @@ label.form-label-alternative {
 label.form-label-optional {
   font-weight: normal;
 }
+
+option.phloc-select-option-special {
+  color:#aaa;
+}
