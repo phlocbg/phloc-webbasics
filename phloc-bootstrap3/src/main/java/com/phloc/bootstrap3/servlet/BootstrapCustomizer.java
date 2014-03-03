@@ -41,7 +41,7 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
   }
 
   @Nonnull
-  protected Version getBootstrapVersion ()
+  public final Version getBootstrapVersion ()
   {
     return m_aBootstrapVersion;
   }

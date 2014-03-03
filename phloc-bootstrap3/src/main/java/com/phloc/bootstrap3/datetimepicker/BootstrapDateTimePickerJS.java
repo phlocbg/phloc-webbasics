@@ -101,7 +101,7 @@ public class BootstrapDateTimePickerJS extends HCScript
         for (final BootstrapDateTimePickerJS aSameOption : aSameOptions)
           aJQI = aJQI.multiple (JQuerySelector.id (aSameOption.getDateTimePicker ().getContainerID ()));
         // And apply once
-        ret.append (BootstrapDateTimePicker.invoke (aJQI.invoke ()).arg (aCurrentJSOptions));
+        ret.append (BootstrapDateTimePicker.invoke (aJQI.invoke (), aCurrentJSOptions));
       }
     }
     return ret;
