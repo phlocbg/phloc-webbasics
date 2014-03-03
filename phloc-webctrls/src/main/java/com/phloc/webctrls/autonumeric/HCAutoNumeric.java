@@ -39,14 +39,12 @@ import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeBuilder;
 import com.phloc.html.hc.html.HCEdit;
-import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.html.js.builder.IJSExpression;
 import com.phloc.html.js.builder.JSAssocArray;
+import com.phloc.html.js.builder.JSExpr;
 import com.phloc.html.js.builder.JSGlobal;
 import com.phloc.html.js.builder.JSInvocation;
-import com.phloc.html.js.builder.JSPackage;
-import com.phloc.html.js.builder.JSVar;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.app.html.PerRequestCSSIncludes;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
@@ -299,9 +297,28 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public static JSInvocation autoNumericInit (@Nonnull final IJSExpression aAutoNumeric)
+  {
+    return invoke (aAutoNumeric).arg ("init");
+  }
+
+  @Nonnull
+  public static JSInvocation autoNumericInit (@Nonnull final IJSExpression aAutoNumeric,
+                                              @Nonnull final JSAssocArray aOptions)
+  {
+    return autoNumericInit (aAutoNumeric).arg (aOptions);
+  }
+
+  @Nonnull
   public JSInvocation autoNumericInit ()
   {
     return invoke ().arg ("init");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericInit (@Nonnull final JSAssocArray aOptions)
+  {
+    return autoNumericInit ().arg (aOptions);
   }
 
   @Nonnull
@@ -317,6 +334,26 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public static JSInvocation autoNumericSet (@Nonnull final IJSExpression aAutoNumeric,
+                                             @Nonnull final IJSExpression aValueToSet)
+  {
+    return invoke (aAutoNumeric).arg ("set").arg (aValueToSet);
+  }
+
+  @Nonnull
+  public static JSInvocation autoNumericSet (@Nonnull final IJSExpression aAutoNumeric, final int nValueToSet)
+  {
+    return autoNumericSet (aAutoNumeric, JSExpr.lit (nValueToSet));
+  }
+
+  @Nonnull
+  public static JSInvocation autoNumericSet (@Nonnull final IJSExpression aAutoNumeric,
+                                             @Nonnull final BigDecimal aValueToSet)
+  {
+    return autoNumericSet (aAutoNumeric, JSExpr.lit (aValueToSet));
+  }
+
+  @Nonnull
   public JSInvocation autoNumericSet ()
   {
     return invoke ().arg ("set");
@@ -329,29 +366,15 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   }
 
   @Nonnull
+  public JSInvocation autoNumericSet (@Nonnull final BigDecimal aValueToSet)
+  {
+    return autoNumericSet ().arg (aValueToSet);
+  }
+
+  @Nonnull
   public JSInvocation autoNumericSet (@Nonnull final IJSExpression aExpr)
   {
     return autoNumericSet ().arg (aExpr);
-  }
-
-  @Nonnull
-  public static JSInvocation autoNumericSet (@Nonnull final IJSExpression aAutoNumeric,
-                                             @Nonnull final IJSExpression aValueToSet)
-  {
-    return invoke (aAutoNumeric).arg ("set").arg (aValueToSet);
-  }
-
-  @Nonnull
-  public JSInvocation autoNumericGet ()
-  {
-    // Remember: the result is a String!!
-    return invoke ().arg ("get");
-  }
-
-  @Nonnull
-  public JSInvocation autoNumericGetAsFloat ()
-  {
-    return JSGlobal.parseFloat (autoNumericGet ());
   }
 
   @Nonnull
@@ -365,6 +388,19 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
   public static IJSExpression autoNumericGetAsFloat (@Nonnull final IJSExpression aAutoNumeric)
   {
     return JSGlobal.parseFloat (autoNumericGet (aAutoNumeric));
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGet ()
+  {
+    // Remember: the result is a String!!
+    return invoke ().arg ("get");
+  }
+
+  @Nonnull
+  public JSInvocation autoNumericGetAsFloat ()
+  {
+    return JSGlobal.parseFloat (autoNumericGet ());
   }
 
   @Nonnull
@@ -402,7 +438,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
 
   @Nonnull
   @ReturnsMutableCopy
-  public JSAssocArray getOptions ()
+  public JSAssocArray getJSOptions ()
   {
     final JSAssocArray aArgs = new JSAssocArray ();
 
@@ -444,17 +480,8 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
     aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
     customizeEdit (aEdit);
 
-    // Build JS
-    final JSPackage aPkg = new JSPackage ();
-    final JSVar aJSObj = aPkg.var (getJSVarName (), JQuery.idRef (m_sID));
-    aPkg.add (invoke (aJSObj).arg ("init").arg (getOptions ()));
-    if (m_aInitialValue != null)
-    {
-      // Never locale specific!
-      aPkg.add (invoke (aJSObj).arg ("set").arg (m_aInitialValue.toString ()));
-    }
-
-    return HCNodeList.create (aEdit, new HCScriptOnDocumentReady (aPkg));
+    // Assemble
+    return new HCNodeList ().addChild (aEdit).addChild (new HCAutoNumericJS (this));
   }
 
   public static void registerExternalResources ()

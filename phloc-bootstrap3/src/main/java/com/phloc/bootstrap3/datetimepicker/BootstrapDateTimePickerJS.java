@@ -75,6 +75,7 @@ public class BootstrapDateTimePickerJS extends HCScript
       final BootstrapDateTimePickerJS aCurrent = aRest.remove (0);
       final JSAssocArray aCurrentJSOptions = aCurrent.getDateTimePicker ().getJSOptions ();
 
+      // Find all other datetime pickers with the same options
       final List <BootstrapDateTimePickerJS> aSameOptions = new ArrayList <BootstrapDateTimePickerJS> ();
       final Iterator <BootstrapDateTimePickerJS> itRest = aRest.iterator ();
       while (itRest.hasNext ())

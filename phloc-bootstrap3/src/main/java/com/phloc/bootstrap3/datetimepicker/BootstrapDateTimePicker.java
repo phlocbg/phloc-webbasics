@@ -489,15 +489,22 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
   }
 
   @Nonnull
+  public static JSInvocation invoke (@Nonnull final JQueryInvocation aJQueryInvocation)
+  {
+    return aJQueryInvocation.invoke ("datetimepicker");
+  }
+
+  @Nonnull
   public JSInvocation invoke ()
   {
     return invoke (JQuery.idRef (m_sContainerID));
   }
 
   @Nonnull
-  public static JSInvocation invoke (@Nonnull final JQueryInvocation aJQueryInvocation)
+  public static JSInvocation invoke (@Nonnull final JQueryInvocation aJQueryInvocation,
+                                     @Nonnull final JSAssocArray aOptions)
   {
-    return aJQueryInvocation.invoke ("datetimepicker");
+    return invoke (aJQueryInvocation).arg (aOptions);
   }
 
   @Nonnull
@@ -582,15 +589,13 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
       aBIG.addSuffix (aSuffix);
     if (m_bShowResetButton)
       aBIG.addSuffix (EBootstrapIcon.REMOVE.getAsNode ());
+
     // It's always a div, because at least one prefix is always present!
     final HCDiv aCtrl = (HCDiv) aBIG.build ();
-    aCtrl.addClass (CSS_CLASS_DATE).setID (m_sContainerID);
+    aCtrl.setID (m_sContainerID).addClass (CSS_CLASS_DATE);
 
     // Assemble
-    final HCNodeList ret = new HCNodeList ();
-    ret.addChild (aCtrl);
-    ret.addChild (new BootstrapDateTimePickerJS (this));
-    return ret;
+    return new HCNodeList ().addChild (aCtrl).addChild (new BootstrapDateTimePickerJS (this));
   }
 
   public static void registerExternalResources (@Nullable final EDateTimePickerLanguage eLanguage)
