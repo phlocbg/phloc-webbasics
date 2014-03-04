@@ -17,6 +17,8 @@
  */
 package com.phloc.webctrls.autonumeric;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.html.hc.html.HCEdit;
@@ -27,7 +29,7 @@ import com.phloc.html.hc.html.HCEdit;
  * 
  * @author Philip Helger
  */
-public interface IHCAutoNumericEditCustomizer
+public interface IHCAutoNumericEditCustomizer extends Serializable
 {
   /**
    * Customize the specified edit.

@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.autonumeric;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -59,7 +60,7 @@ import com.phloc.webbasics.form.RequestField;
  * 
  * @author Philip Helger
  */
-public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>
+public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializable
 {
   /** The special CSS class to use for numeric inputs */
   public static final ICSSClassProvider CSS_CLASS_AUTO_NUMERIC_EDIT = DefaultCSSClassProvider.create ("auto-numeric-edit");
