@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.html.hc.IHCNode;
+import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCLI;
@@ -41,7 +41,7 @@ public class BootstrapTabBox extends AbstractTabBox <BootstrapTabBox>
   {}
 
   @Nullable
-  public IHCNode build ()
+  public IHCNodeWithChildren <?> build ()
   {
     if (m_aTabs.isEmpty ())
       return null;
