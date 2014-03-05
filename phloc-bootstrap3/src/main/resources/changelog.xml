@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-bootstrap3">
+  <release date="2014-03-05" version="1.1.0" />
+  <entry date="2014-03-05" category="tech" action="remove">
+    <change>
+      <text locale="en">Removed Bootstrap 3.0.2, 3.0.3 and 3.1.0</text>
+    </change>
+  </entry>
   <release date="2014-02-25" version="1.0.9" />
   <entry date="2014-02-24" category="tech" action="update">
     <change>
