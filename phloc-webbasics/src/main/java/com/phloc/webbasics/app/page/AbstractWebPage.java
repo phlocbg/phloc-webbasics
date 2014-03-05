@@ -25,13 +25,11 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.app.page.AbstractPage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
-import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.state.EValidity;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.ReadonlySimpleURL;
-import com.phloc.html.CHTMLAttributes;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCNode;
@@ -168,7 +166,7 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   public HCForm createFormFileUploadSelf ()
   {
     final HCForm aForm = createFormSelf ();
-    aForm.setCustomAttr (CHTMLAttributes.ENCTYPE, CMimeType.MULTIPART_FORMDATA.getAsString ());
+    aForm.setFileUploadEncType ();
     return aForm;
   }
 
