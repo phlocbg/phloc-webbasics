@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_phloc_tinymce4 implements IThirdPart
   public static final IThirdPartyModule TINYMCE4 = new ThirdPartyModule ("TinyMCE",
                                                                          "Moxiecode Systems AB",
                                                                          ELicense.LGPL21,
-                                                                         CTinyMCE4.TINYMCE_VERSION_4_0_17,
+                                                                         CTinyMCE4.TINYMCE_VERSION_4_0_18,
                                                                          "http://www.tinymce.com");
 
   @Nullable

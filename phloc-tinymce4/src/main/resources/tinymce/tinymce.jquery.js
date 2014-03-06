@@ -1,4 +1,4 @@
-// 4.0.17 (2014-02-26)
+// 4.0.18 (2014-02-27)
 
 /**
  * Compiled inline version. (Library mode)
@@ -21631,7 +21631,7 @@ define("tinymce/WindowManager", [
 		 * @option {Number} height Height in pixels.
 		 * @option {Boolean} resizable Specifies whether the popup window is resizable or not.
 		 * @option {Boolean} maximizable Specifies whether the popup window has a "maximize" button and can get maximized or not.
-		 * @option {String/bool} scrollbars Specifies whether the popup window can have scrollbars if required (i.e. content
+		 * @option {String/Boolean} scrollbars Specifies whether the popup window can have scrollbars if required (i.e. content
 		 * larger than the popup size specified).
 		 */
 		self.open = function(args, params) {
@@ -25428,7 +25428,7 @@ define("tinymce/util/I18n", [], function() {
 		 * Property gets set to true if a RTL language pack was loaded.
 		 *
 		 * @property rtl
-		 * @type {Boolean}
+		 * @type Boolean
 		 */
 		rtl: false,
 
@@ -25770,7 +25770,7 @@ define("tinymce/EditorManager", [
 		 * @property minorVersion
 		 * @type String
 		 */
-		minorVersion : '0.17',
+		minorVersion : '0.18',
 
 		/**
 		 * Release date of TinyMCE build.
@@ -25778,7 +25778,7 @@ define("tinymce/EditorManager", [
 		 * @property releaseDate
 		 * @type String
 		 */
-		releaseDate: '2014-02-26',
+		releaseDate: '2014-02-27',
 
 		/**
 		 * Collection of editor instances.
@@ -30737,7 +30737,14 @@ define("tinymce/ui/ListBox", [
 					if (selected) {
 						selectedText = selectedText || values[i].text;
 						self._value = values[i].value;
+						break;
 					}
+				}
+
+				// Default with first item
+				if (!selected && values.length > 0) {
+					selectedText = values[0].text;
+					self._value = values[0].value;
 				}
 
 				settings.menu = values;
