@@ -17,6 +17,7 @@
  */
 package com.phloc.tinymce4;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -30,6 +31,7 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ETriState;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -179,10 +181,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param sAutoFocus
    *        Editor ID
+   * @return this
    */
-  public void setAutoFocus (@Nullable final String sAutoFocus)
+  @Nonnull
+  public HCTinyMCE4 setAutoFocus (@Nullable final String sAutoFocus)
   {
     m_sAutoFocus = sAutoFocus;
+    return this;
   }
 
   @Nullable
@@ -201,10 +206,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param eDirectionality
    *        direction
+   * @return this
    */
-  public void setDirectionality (@Nullable final EHCTextDirection eDirectionality)
+  @Nonnull
+  public HCTinyMCE4 setDirectionality (@Nullable final EHCTextDirection eDirectionality)
   {
     m_eDirectionality = eDirectionality;
+    return this;
   }
 
   public boolean isBrowserSpellcheck ()
@@ -218,10 +226,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bBrowserSpellcheck
    *        <code>true</code> to enabled, <code>false</code> to disable
+   * @return this
    */
-  public void setBrowserSpellcheck (final boolean bBrowserSpellcheck)
+  @Nonnull
+  public HCTinyMCE4 setBrowserSpellcheck (final boolean bBrowserSpellcheck)
   {
     m_eBrowserSpellcheck = ETriState.valueOf (bBrowserSpellcheck);
+    return this;
   }
 
   /**
@@ -231,10 +242,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aBrowserSpellcheck
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setBrowserSpellcheck (@Nullable final Boolean aBrowserSpellcheck)
+  @Nonnull
+  public HCTinyMCE4 setBrowserSpellcheck (@Nullable final Boolean aBrowserSpellcheck)
   {
     m_eBrowserSpellcheck = ETriState.valueOf (aBrowserSpellcheck);
+    return this;
   }
 
   @Nullable
@@ -248,10 +262,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param eLanguage
    *        The language to use. <code>null</code> means English
+   * @return this
    */
-  public void setLanguage (@Nullable final ETinyMCE4Language eLanguage)
+  @Nonnull
+  public HCTinyMCE4 setLanguage (@Nullable final ETinyMCE4Language eLanguage)
   {
     m_eLanguage = eLanguage;
+    return this;
   }
 
   @Nullable
@@ -266,10 +283,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param aLanguageURL
    *        The language URL to use.
+   * @return this
    */
-  public void setLanguageURL (@Nullable final ISimpleURL aLanguageURL)
+  @Nonnull
+  public HCTinyMCE4 setLanguageURL (@Nullable final ISimpleURL aLanguageURL)
   {
     m_aLanguageURL = aLanguageURL;
+    return this;
   }
 
   public boolean isNoWrap ()
@@ -283,10 +303,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bNoWrap
    *        <code>true</code> to enabled, <code>false</code> to disable
+   * @return this
    */
-  public void setNoWrap (final boolean bNoWrap)
+  @Nonnull
+  public HCTinyMCE4 setNoWrap (final boolean bNoWrap)
   {
     m_eNoWrap = ETriState.valueOf (bNoWrap);
+    return this;
   }
 
   /**
@@ -296,10 +319,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aNoWrap
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setNoWrap (@Nullable final Boolean aNoWrap)
+  @Nonnull
+  public HCTinyMCE4 setNoWrap (@Nullable final Boolean aNoWrap)
   {
     m_eNoWrap = ETriState.valueOf (aNoWrap);
+    return this;
   }
 
   public boolean isObjectResizing ()
@@ -313,10 +339,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bObjectResizing
    *        <code>true</code> to enabled, <code>false</code> to disable
+   * @return this
    */
-  public void setObjectResizing (final boolean bObjectResizing)
+  @Nonnull
+  public HCTinyMCE4 setObjectResizing (final boolean bObjectResizing)
   {
     m_eObjectResizing = ETriState.valueOf (bObjectResizing);
+    return this;
   }
 
   /**
@@ -326,10 +355,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aObjectResizing
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setObjectResizing (@Nullable final Boolean aObjectResizing)
+  @Nonnull
+  public HCTinyMCE4 setObjectResizing (@Nullable final Boolean aObjectResizing)
   {
     m_eObjectResizing = ETriState.valueOf (aObjectResizing);
+    return this;
   }
 
   @Nonnull
@@ -339,51 +371,120 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     return ContainerHelper.newOrderedSet (m_aPlugins);
   }
 
-  public void addPlugin (@Nonnull final ETinyMCE4Plugin ePlugin)
+  @Nonnegative
+  public int getPluginCount ()
+  {
+    return m_aPlugins.size ();
+  }
+
+  /**
+   * Add a TinyMCE plugin to use.
+   * 
+   * @param ePlugin
+   *        The plugin to add. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addPlugin (@Nonnull final ETinyMCE4Plugin ePlugin)
   {
     if (ePlugin == null)
       throw new NullPointerException ("plugin");
     m_aPlugins.add (ePlugin);
+    return this;
   }
 
-  public void addPlugins (@Nullable final ETinyMCE4Plugin... aPlugins)
+  /**
+   * Add multiple TinyMCE plugins at once.
+   * 
+   * @param aPlugins
+   *        The plugins to add. The array may be <code>null</code> but the
+   *        contained elements may not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addPlugins (@Nullable final ETinyMCE4Plugin... aPlugins)
   {
     if (aPlugins != null)
       for (final ETinyMCE4Plugin ePlugin : aPlugins)
         addPlugin (ePlugin);
+    return this;
   }
 
-  public void addPlugins (@Nullable final Iterable <ETinyMCE4Plugin> aPlugins)
+  /**
+   * Add multiple TinyMCE plugins at once.
+   * 
+   * @param aPlugins
+   *        The plugins to add. The array may be <code>null</code> but the
+   *        contained elements may not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addPlugins (@Nullable final Iterable <ETinyMCE4Plugin> aPlugins)
   {
     if (aPlugins != null)
       for (final ETinyMCE4Plugin ePlugin : aPlugins)
         addPlugin (ePlugin);
+    return this;
   }
 
-  public void addAllPlugins ()
+  /**
+   * Add all available plugins there are.
+   * 
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addAllPlugins ()
   {
-    for (final ETinyMCE4Plugin ePlugin : ETinyMCE4Plugin.values ())
-      m_aPlugins.add (ePlugin);
+    return addPlugins (ETinyMCE4Plugin.values ());
   }
 
-  public void removePlugin (@Nullable final ETinyMCE4Plugin ePlugin)
+  /**
+   * Remove the specified plugin.
+   * 
+   * @param ePlugin
+   *        The plugin to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} if the plugin was successfully removed.
+   */
+  @Nonnull
+  public EChange removePlugin (@Nullable final ETinyMCE4Plugin ePlugin)
   {
-    if (ePlugin != null)
-      m_aPlugins.remove (ePlugin);
+    return EChange.valueOf (ePlugin != null && m_aPlugins.remove (ePlugin));
   }
 
-  public void removePlugins (@Nullable final ETinyMCE4Plugin... aPlugins)
+  /**
+   * Remove the specified TinyMCE plugins.
+   * 
+   * @param aPlugins
+   *        The plugins to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} it at least one plugin was removed
+   *         successfully.
+   */
+  @Nonnull
+  public EChange removePlugins (@Nullable final ETinyMCE4Plugin... aPlugins)
   {
+    EChange ret = EChange.UNCHANGED;
     if (aPlugins != null)
       for (final ETinyMCE4Plugin ePlugin : aPlugins)
-        removePlugin (ePlugin);
+        ret = ret.or (removePlugin (ePlugin));
+    return ret;
   }
 
-  public void removePlugins (@Nullable final Iterable <ETinyMCE4Plugin> aPlugins)
+  /**
+   * Remove the specified TinyMCE plugins.
+   * 
+   * @param aPlugins
+   *        The plugins to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} it at least one plugin was removed
+   *         successfully.
+   */
+  @Nonnull
+  public EChange removePlugins (@Nullable final Iterable <ETinyMCE4Plugin> aPlugins)
   {
+    EChange ret = EChange.UNCHANGED;
     if (aPlugins != null)
       for (final ETinyMCE4Plugin ePlugin : aPlugins)
-        removePlugin (ePlugin);
+        ret = ret.or (removePlugin (ePlugin));
+    return ret;
   }
 
   @Nonnull
@@ -393,47 +494,115 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     return ContainerHelper.newOrderedSet (m_aExternalPlugins);
   }
 
-  public void addExternalPlugin (@Nonnull final TinyMCE4ExternalPlugin eExternalPlugin)
+  @Nonnegative
+  public int getExternalPluginCount ()
   {
-    if (eExternalPlugin == null)
+    return m_aExternalPlugins.size ();
+  }
+
+  /**
+   * Add an external plugin to the editor.
+   * 
+   * @param aExternalPlugin
+   *        The plugin to be added. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addExternalPlugin (@Nonnull final TinyMCE4ExternalPlugin aExternalPlugin)
+  {
+    if (aExternalPlugin == null)
       throw new NullPointerException ("plugin");
-    m_aExternalPlugins.add (eExternalPlugin);
+    m_aExternalPlugins.add (aExternalPlugin);
+    return this;
   }
 
-  public void addExternalPlugins (@Nullable final TinyMCE4ExternalPlugin... aExternalPlugins)
+  /**
+   * Add multiple external plugins at once.
+   * 
+   * @param aExternalPlugins
+   *        The plugins to be added. May be <code>null</code> but no contained
+   *        plugin may be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addExternalPlugins (@Nullable final TinyMCE4ExternalPlugin... aExternalPlugins)
   {
     if (aExternalPlugins != null)
       for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
         addExternalPlugin (aExternalPlugin);
+    return this;
   }
 
-  public void addExternalPlugins (@Nullable final Iterable <? extends TinyMCE4ExternalPlugin> aExternalPlugins)
+  /**
+   * Add multiple external plugins at once.
+   * 
+   * @param aExternalPlugins
+   *        The plugins to be added. May be <code>null</code> but no contained
+   *        plugin may be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 addExternalPlugins (@Nullable final Iterable <? extends TinyMCE4ExternalPlugin> aExternalPlugins)
   {
     if (aExternalPlugins != null)
       for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
         addExternalPlugin (aExternalPlugin);
+    return this;
   }
 
-  public void removeExternalPlugin (@Nullable final TinyMCE4ExternalPlugin eExternalPlugin)
+  /**
+   * Remove the specified external plugin.
+   * 
+   * @param aExternalPlugin
+   *        The plugin to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} if the plugin was removed successfully.
+   */
+  @Nonnull
+  public EChange removeExternalPlugin (@Nullable final TinyMCE4ExternalPlugin aExternalPlugin)
   {
-    if (eExternalPlugin != null)
-      m_aExternalPlugins.remove (eExternalPlugin);
+    return EChange.valueOf (aExternalPlugin != null && m_aExternalPlugins.remove (aExternalPlugin));
   }
 
-  public void removeExternalPlugins (@Nullable final TinyMCE4ExternalPlugin... aExternalPlugins)
+  /**
+   * Remove the specified external plugins.
+   * 
+   * @param aExternalPlugins
+   *        The plugins to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} it at least one plugin was removed
+   *         successfully.
+   */
+  @Nonnull
+  public EChange removeExternalPlugins (@Nullable final TinyMCE4ExternalPlugin... aExternalPlugins)
   {
+    EChange ret = EChange.UNCHANGED;
     if (aExternalPlugins != null)
       for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
-        removeExternalPlugin (aExternalPlugin);
+        ret = ret.or (removeExternalPlugin (aExternalPlugin));
+    return ret;
   }
 
-  public void removeExternalPlugins (@Nullable final Iterable <? extends TinyMCE4ExternalPlugin> aExternalPlugins)
+  /**
+   * Remove the specified external plugins.
+   * 
+   * @param aExternalPlugins
+   *        The plugins to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} it at least one plugin was removed
+   *         successfully.
+   */
+  @Nonnull
+  public EChange removeExternalPlugins (@Nullable final Iterable <? extends TinyMCE4ExternalPlugin> aExternalPlugins)
   {
+    EChange ret = EChange.UNCHANGED;
     if (aExternalPlugins != null)
       for (final TinyMCE4ExternalPlugin aExternalPlugin : aExternalPlugins)
-        removeExternalPlugin (aExternalPlugin);
+        ret = ret.or (removeExternalPlugin (aExternalPlugin));
+    return ret;
   }
 
+  /**
+   * @return The jQuery selector to be used to convert nodes to TinyMCE
+   *         elements.
+   */
   @Nonnull
   @Nonempty
   public String getSelector ()
@@ -455,13 +624,16 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * </pre>
    * 
    * @param sSelector
-   *        selector
+   *        The selector to use. May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setSelector (@Nonnull @Nonempty final String sSelector)
+  @Nonnull
+  public HCTinyMCE4 setSelector (@Nonnull @Nonempty final String sSelector)
   {
     if (StringHelper.hasNoText (sSelector))
       throw new IllegalArgumentException ("selector");
     m_sSelector = sSelector;
+    return this;
   }
 
   @Nullable
@@ -474,11 +646,14 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * Select what skin to use, this should match the foldername of the skin.
    * 
    * @param eSkin
-   *        Skin to use.
+   *        Skin to use. May be <code>null</code>.
+   * @return this
    */
-  public void setSkin (@Nullable final ETinyMCE4Skin eSkin)
+  @Nonnull
+  public HCTinyMCE4 setSkin (@Nullable final ETinyMCE4Skin eSkin)
   {
     m_eSkin = eSkin;
+    return this;
   }
 
   @Nullable
@@ -494,10 +669,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param aSkinURL
    *        The skin URL to use.
+   * @return this
    */
-  public void setSkinURL (@Nullable final ISimpleURL aSkinURL)
+  @Nonnull
+  public HCTinyMCE4 setSkinURL (@Nullable final ISimpleURL aSkinURL)
   {
     m_aSkinURL = aSkinURL;
+    return this;
   }
 
   @Nullable
@@ -511,10 +689,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param eTheme
    *        Theme to use.
+   * @return this
    */
-  public void setTheme (@Nullable final ETinyMCE4Theme eTheme)
+  @Nonnull
+  public HCTinyMCE4 setTheme (@Nullable final ETinyMCE4Theme eTheme)
   {
     m_eTheme = eTheme;
+    return this;
   }
 
   @Nullable
@@ -530,10 +711,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param aThemeURL
    *        The theme URL to use.
+   * @return this
    */
-  public void setThemeURL (@Nullable final ISimpleURL aThemeURL)
+  @Nonnull
+  public HCTinyMCE4 setThemeURL (@Nullable final ISimpleURL aThemeURL)
   {
     m_aThemeURL = aThemeURL;
+    return this;
   }
 
   public boolean isInline ()
@@ -547,10 +731,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bInline
    *        <code>true</code> to enabled, <code>false</code> to disable
+   * @return this
    */
-  public void setInline (final boolean bInline)
+  @Nonnull
+  public HCTinyMCE4 setInline (final boolean bInline)
   {
     m_eInline = ETriState.valueOf (bInline);
+    return this;
   }
 
   /**
@@ -560,10 +747,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aInline
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setInline (@Nullable final Boolean aInline)
+  @Nonnull
+  public HCTinyMCE4 setInline (@Nullable final Boolean aInline)
   {
     m_eInline = ETriState.valueOf (aInline);
+    return this;
   }
 
   public boolean isHiddenInput ()
@@ -580,10 +770,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bHiddenInput
    *        <code>true</code> to enabled, <code>false</code> to disable
+   * @return this
    */
-  public void setHiddenInput (final boolean bHiddenInput)
+  @Nonnull
+  public HCTinyMCE4 setHiddenInput (final boolean bHiddenInput)
   {
     m_eHiddenInput = ETriState.valueOf (bHiddenInput);
+    return this;
   }
 
   /**
@@ -596,10 +789,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aHiddenInput
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setHiddenInput (@Nullable final Boolean aHiddenInput)
+  @Nonnull
+  public HCTinyMCE4 setHiddenInput (@Nullable final Boolean aHiddenInput)
   {
     m_eHiddenInput = ETriState.valueOf (aHiddenInput);
+    return this;
   }
 
   // --- Cleanup/Output ---
@@ -617,10 +813,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bConvertFontsToSpans
    *        <code>true</code> to enabled, <code>false</code> to disable
+   * @return this
    */
-  public void setConvertFontsToSpans (final boolean bConvertFontsToSpans)
+  @Nonnull
+  public HCTinyMCE4 setConvertFontsToSpans (final boolean bConvertFontsToSpans)
   {
     m_eConvertFontsToSpans = ETriState.valueOf (bConvertFontsToSpans);
+    return this;
   }
 
   /**
@@ -632,10 +831,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aConvertFontsToSpans
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setConvertFontsToSpans (@Nullable final Boolean aConvertFontsToSpans)
+  @Nonnull
+  public HCTinyMCE4 setConvertFontsToSpans (@Nullable final Boolean aConvertFontsToSpans)
   {
     m_eConvertFontsToSpans = ETriState.valueOf (aConvertFontsToSpans);
+    return this;
   }
 
   // --- Content style ---
@@ -656,10 +858,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bStatusbar
    *        <code>true</code> to show, <code>false</code> to hide
+   * @return this
    */
-  public void setStatusbar (final boolean bStatusbar)
+  @Nonnull
+  public HCTinyMCE4 setStatusbar (final boolean bStatusbar)
   {
     m_eStatusbar = ETriState.valueOf (bStatusbar);
+    return this;
   }
 
   /**
@@ -668,10 +873,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aStatusbar
    *        <code>true</code> to show, <code>false</code> to hide and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setStatusbar (@Nullable final Boolean aStatusbar)
+  @Nonnull
+  public HCTinyMCE4 setStatusbar (@Nullable final Boolean aStatusbar)
   {
     m_eStatusbar = ETriState.valueOf (aStatusbar);
+    return this;
   }
 
   @Nullable
@@ -680,9 +888,11 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     return m_eResize;
   }
 
-  public void setResize (@Nullable final ETinyMCE4Resize eResize)
+  @Nonnull
+  public HCTinyMCE4 setResize (@Nullable final ETinyMCE4Resize eResize)
   {
     m_eResize = eResize;
+    return this;
   }
 
   public int getWidth ()
@@ -695,10 +905,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param nWidth
    *        New width. Only values >= 0 are considered!
+   * @return this
    */
-  public void setWidth (final int nWidth)
+  @Nonnull
+  public HCTinyMCE4 setWidth (final int nWidth)
   {
     m_nWidth = nWidth;
+    return this;
   }
 
   public int getHeight ()
@@ -711,10 +924,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param nHeight
    *        New height. Only values >= 0 are considered!
+   * @return this
    */
-  public void setHeight (final int nHeight)
+  @Nonnull
+  public HCTinyMCE4 setHeight (final int nHeight)
   {
     m_nHeight = nHeight;
+    return this;
   }
 
   public boolean isPreviewStyles ()
@@ -728,10 +944,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param bPreviewStyles
    *        <code>true</code> to show, <code>false</code> to hide
+   * @return this
    */
-  public void setPreviewStyles (final boolean bPreviewStyles)
+  @Nonnull
+  public HCTinyMCE4 setPreviewStyles (final boolean bPreviewStyles)
   {
     m_ePreviewStyles = ETriState.valueOf (bPreviewStyles);
+    return this;
   }
 
   /**
@@ -741,10 +960,13 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * @param aPreviewStyles
    *        <code>true</code> to show, <code>false</code> to hide and
    *        <code>null</code> for default value.
+   * @return this
    */
-  public void setPreviewStyles (@Nullable final Boolean aPreviewStyles)
+  @Nonnull
+  public HCTinyMCE4 setPreviewStyles (@Nullable final Boolean aPreviewStyles)
   {
     m_ePreviewStyles = ETriState.valueOf (aPreviewStyles);
+    return this;
   }
 
   // --- URL ---
@@ -774,36 +996,56 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * 
    * @param aFileBrowserCallback
    *        Callback function
+   * @return this
    */
-  public void setFileBrowserCallback (@Nullable final JSAnonymousFunction aFileBrowserCallback)
+  @Nonnull
+  public HCTinyMCE4 setFileBrowserCallback (@Nullable final JSAnonymousFunction aFileBrowserCallback)
   {
     m_aFileBrowserCallback = aFileBrowserCallback;
+    return this;
   }
 
   // --- custom options ---
 
-  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final boolean bValue)
+  @Nonnull
+  public HCTinyMCE4 addCustomOption (@Nonnull @Nonempty final String sName, final boolean bValue)
   {
-    addCustomOption (sName, JSExpr.lit (bValue));
+    return addCustomOption (sName, JSExpr.lit (bValue));
   }
 
-  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final int nValue)
+  @Nonnull
+  public HCTinyMCE4 addCustomOption (@Nonnull @Nonempty final String sName, final int nValue)
   {
-    addCustomOption (sName, JSExpr.lit (nValue));
+    return addCustomOption (sName, JSExpr.lit (nValue));
   }
 
-  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
+  @Nonnull
+  public HCTinyMCE4 addCustomOption (@Nonnull @Nonempty final String sName, final double dValue)
   {
-    addCustomOption (sName, JSExpr.lit (sValue));
+    return addCustomOption (sName, JSExpr.lit (dValue));
   }
 
-  public void addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final IJSExpression aValue)
+  @Nonnull
+  public HCTinyMCE4 addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final BigDecimal aValue)
+  {
+    return addCustomOption (sName, JSExpr.lit (aValue));
+  }
+
+  @Nonnull
+  public HCTinyMCE4 addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final String sValue)
+  {
+    return addCustomOption (sName, JSExpr.lit (sValue));
+  }
+
+  @Nonnull
+  public HCTinyMCE4 addCustomOption (@Nonnull @Nonempty final String sName, @Nonnull final IJSExpression aValue)
   {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (aValue == null)
       throw new NullPointerException ("value");
     m_aCustom.put (sName, aValue);
+    return this;
   }
 
   @Nullable
@@ -926,6 +1168,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * @return The JSInvocation with the tinymce.init code and all options
+   *         specified for this instance.
    */
   @Nonnull
   public JSInvocation getJSInvocation ()
