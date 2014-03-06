@@ -158,7 +158,7 @@
     <servlet-class>com.phloc.webdemoapp.servlet.DemoAppStreamServlet</servlet-class>
     <init-param>
       <param-name>allowedExtensions</param-name>
-      <param-value>js,css,png,jpg,jpeg,gif,eot,svg,ttf,woff</param-value>
+      <param-value>js,css,png,jpg,jpeg,gif,eot,svg,ttf,woff,map</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
