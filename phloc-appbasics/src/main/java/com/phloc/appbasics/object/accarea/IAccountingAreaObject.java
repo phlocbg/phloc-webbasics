@@ -17,7 +17,6 @@
  */
 package com.phloc.appbasics.object.accarea;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.object.client.IClientObject;
@@ -49,10 +48,21 @@ public interface IAccountingAreaObject extends IClientObject, IHasAccountingArea
    * Check if the passed object has the same client ID and the same accounting
    * area ID as this object
    * 
-   * @param aAccountingAreaObject
-   *        The object to check. May not be <code>null</code>.
+   * @param aAccountingArea
+   *        The object to check. May be <code>null</code>.
    * @return <code>true</code> if this object and the passed object have the
    *         same client ID <b>and</b> the same accounting area ID
    */
-  boolean hasSameClientAndAccountingAreaID (@Nonnull IAccountingAreaObject aAccountingAreaObject);
+  boolean hasSameClientAndAccountingAreaID (@Nullable IAccountingArea aAccountingArea);
+
+  /**
+   * Check if the passed object has the same client ID and the same accounting
+   * area ID as this object
+   * 
+   * @param aAccountingAreaObject
+   *        The object to check. May be <code>null</code>.
+   * @return <code>true</code> if this object and the passed object have the
+   *         same client ID <b>and</b> the same accounting area ID
+   */
+  boolean hasSameClientAndAccountingAreaID (@Nullable IAccountingAreaObject aAccountingAreaObject);
 }

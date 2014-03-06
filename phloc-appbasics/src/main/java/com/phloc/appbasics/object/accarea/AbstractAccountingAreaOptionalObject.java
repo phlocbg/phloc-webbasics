@@ -149,9 +149,17 @@ public abstract class AbstractAccountingAreaOptionalObject extends AbstractBaseO
     return m_aAccountingArea;
   }
 
-  public final boolean hasSameClientAndAccountingAreaID (@Nonnull final IAccountingAreaObject aAccountingAreaObject)
+  public final boolean hasSameClientAndAccountingAreaID (@Nullable final IAccountingArea aAccountingArea)
   {
-    return hasSameClientID (aAccountingAreaObject) &&
+    return aAccountingArea != null &&
+           hasSameClientID (aAccountingArea) &&
+           (m_aAccountingArea == null || m_aAccountingArea.getID ().equals (aAccountingArea.getID ()));
+  }
+
+  public final boolean hasSameClientAndAccountingAreaID (@Nullable final IAccountingAreaObject aAccountingAreaObject)
+  {
+    return aAccountingAreaObject != null &&
+           hasSameClientID (aAccountingAreaObject) &&
            (m_aAccountingArea == null || m_aAccountingArea.getID ()
                                                           .equals (aAccountingAreaObject.getAccountingAreaID ()));
   }
