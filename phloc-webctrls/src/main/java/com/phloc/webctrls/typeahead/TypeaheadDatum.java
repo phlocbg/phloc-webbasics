@@ -44,7 +44,7 @@ import com.phloc.json2.impl.JsonObject;
  * @author Philip Helger
  */
 @Immutable
-public class TypeaheadDatum implements IJsonProvider
+public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum>
 {
   public static final String JSON_VALUE = "value";
   public static final String JSON_TOKENS = "tokens";
@@ -150,5 +150,10 @@ public class TypeaheadDatum implements IJsonProvider
   public static String [] getTokensFromValue (@Nonnull final String sValue)
   {
     return RegExHelper.getSplitToArray (StringHelper.trim (sValue), "\\W+");
+  }
+
+  public int compareTo (@Nonnull final TypeaheadDatum aOther)
+  {
+    return m_sValue.compareTo (aOther.m_sValue);
   }
 }

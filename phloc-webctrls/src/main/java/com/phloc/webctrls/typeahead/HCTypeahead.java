@@ -90,6 +90,18 @@ public class HCTypeahead implements IHCNodeBuilder
     return m_aDatasets.size ();
   }
 
+  @Nullable
+  public TypeaheadDataset getFirstDataset ()
+  {
+    return ContainerHelper.getFirstElement (m_aDatasets);
+  }
+
+  @Nullable
+  public TypeaheadDataset getDatasetAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aDatasets, nIndex);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <TypeaheadDataset> getAllDatasets ()
