@@ -29,18 +29,6 @@ import com.phloc.commons.version.Version;
 @Immutable
 public final class CBootstrap
 {
-  /** Bootstrap version 3.0.2 */
-  @Deprecated
-  public static final Version BOOTSTRAP_VERSION_302 = new Version (3, 0, 2);
-
-  /** Bootstrap version 3.0.3 */
-  @Deprecated
-  public static final Version BOOTSTRAP_VERSION_303 = new Version (3, 0, 3);
-
-  /** Bootstrap version 3.1.0 */
-  @Deprecated
-  public static final Version BOOTSTRAP_VERSION_310 = new Version (3, 1, 0);
-
   /** Bootstrap version 3.1.1 */
   public static final Version BOOTSTRAP_VERSION_311 = new Version (3, 1, 1);
 
