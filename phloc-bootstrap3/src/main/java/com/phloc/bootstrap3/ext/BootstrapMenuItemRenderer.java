@@ -36,7 +36,6 @@ import com.phloc.commons.factory.FactoryNewInstance;
 import com.phloc.html.hc.IHCElement;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
-import com.phloc.html.hc.html.HCA_Target;
 import com.phloc.html.hc.html.HCLI;
 import com.phloc.html.hc.html.HCUL;
 import com.phloc.html.hc.impl.HCTextNode;
@@ -131,7 +130,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
                                          final boolean bIsExpanded)
   {
     final HCA aLink = new HCA (aMenuItem.getURL ());
-    aLink.setTarget (HCA_Target.BLANK);
+    aLink.setTargetBlank ();
     aLink.addChild (getMenuItemExternalLabel (aMenuItem, bHasChildren, bIsSelected, bIsExpanded));
     if (bHasChildren && !bIsExpanded)
       aLink.addChildren (new HCTextNode (" "), EBootstrapIcon.CHEVRON_RIGHT.getAsNode ());
