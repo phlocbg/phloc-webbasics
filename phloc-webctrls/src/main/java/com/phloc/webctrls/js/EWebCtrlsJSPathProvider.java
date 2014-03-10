@@ -33,7 +33,16 @@ public enum EWebCtrlsJSPathProvider implements IJSPathProvider
    */
   RESPOND ("js/respond.js", false),
   /** Insert in &lt;head> element (after or before your CSS) for IE &lt; 9 */
-  HTML5SHIV_3_7_0 ("html5shiv/3.7.0/html5shiv.js", false);
+  HTML5SHIV_3_7_0 ("html5shiv/3.7.0/html5shiv.js", false),
+  /** Edit placeholder fix for IE < 10 */
+  PLACEHOLDER_FIX ("placeholder/placeholder-fix.js", false),
+  JQUERY_1_7 ("jquery/jquery-1.7.2.js", true),
+  JQUERY_1_8 ("jquery/jquery-1.8.3.js", true),
+  JQUERY_1_9 ("jquery/jquery-1.9.1.js", true),
+  JQUERY_1_10 ("jquery/jquery-1.10.2.js", true),
+  JQUERY_1_11 ("jquery/jquery-1.11.0.js", true),
+  JQUERY_2_0 ("jquery/jquery-2.0.3.js", true),
+  JQUERY_2_1 ("jquery/jquery-2.1.0.js", true);
 
   private final String m_sPath;
   private final boolean m_bCanBeBundled;
