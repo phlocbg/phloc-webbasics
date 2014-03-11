@@ -28,6 +28,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -51,6 +52,18 @@ public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum
 
   private final String m_sValue;
   private final List <String> m_aTokens;
+
+  /**
+   * Constructor using {@link #getTokensFromValue(String)} to tokenize the
+   * string.
+   * 
+   * @param sValue
+   *        Value to display. Must not be <code>null</code>.
+   */
+  public TypeaheadDatum (@Nonnull final String sValue)
+  {
+    this (sValue, getTokensFromValue (sValue));
+  }
 
   /**
    * Constructor
@@ -98,7 +111,7 @@ public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum
   }
 
   /**
-   * @return A list of all tokesn. Never <code>null</code> but maybe empty.
+   * @return A list of all tokens. Never <code>null</code> but maybe empty.
    */
   @Nonnull
   @ReturnsMutableCopy
@@ -133,6 +146,28 @@ public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum
     return new JSAssocArray ().add (JSON_VALUE, m_sValue).add (JSON_TOKENS, new JSArray ().addAll (m_aTokens));
   }
 
+  public int compareTo (@Nonnull final TypeaheadDatum aOther)
+  {
+    return m_sValue.compareTo (aOther.m_sValue);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final TypeaheadDatum rhs = (TypeaheadDatum) o;
+    return m_sValue.equals (rhs.m_sValue) && m_aTokens.equals (rhs.m_aTokens);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_sValue).append (m_aTokens).getHashCode ();
+  }
+
   @Override
   public String toString ()
   {
@@ -150,10 +185,5 @@ public class TypeaheadDatum implements IJsonProvider, Comparable <TypeaheadDatum
   public static String [] getTokensFromValue (@Nonnull final String sValue)
   {
     return RegExHelper.getSplitToArray (StringHelper.trim (sValue), "\\W+");
-  }
-
-  public int compareTo (@Nonnull final TypeaheadDatum aOther)
-  {
-    return m_sValue.compareTo (aOther.m_sValue);
   }
 }
