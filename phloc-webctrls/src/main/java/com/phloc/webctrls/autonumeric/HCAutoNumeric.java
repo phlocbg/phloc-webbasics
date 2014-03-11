@@ -125,13 +125,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
     return this;
   }
 
-  @Nonnull
-  @Nonempty
-  public String getJSVarName ()
-  {
-    return "e" + m_sID;
-  }
-
   @Nullable
   public BigDecimal getInitialValue ()
   {

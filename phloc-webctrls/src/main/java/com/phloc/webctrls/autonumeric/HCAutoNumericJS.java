@@ -55,7 +55,7 @@ public class HCAutoNumericJS extends HCScriptOnDocumentReady
                                                   @Nonnull final HCAutoNumeric aAutoNumeric)
   {
     final JSPackage aPkg = new JSPackage ();
-    final JSVar aJSObj = aPkg.var (aAutoNumeric.getJSVarName (),
+    final JSVar aJSObj = aPkg.var ("e" + aAutoNumeric.getID (),
                                    aExplicitAutoNumeric != null ? aExplicitAutoNumeric
                                                                : JQuery.idRef (aAutoNumeric.getID ()));
     aPkg.add (HCAutoNumeric.autoNumericInit (aJSObj, aAutoNumeric.getJSOptions ()));
