@@ -92,6 +92,8 @@
  * Contributing: http://www.tinymce.com/contributing
  */
 
+/*eslint no-labels:0, no-constant-condition: 0 */
+
 /**
  * This class logic for filtering text and matching words.
  *
@@ -625,6 +627,7 @@ define("tinymce/spellcheckerplugin/Plugin", [
 
 		function isEmpty(obj) {
 			/*jshint unused:false*/
+			/*eslint no-unused-vars:0 */
 			for (var name in obj) {
 				return false;
 			}

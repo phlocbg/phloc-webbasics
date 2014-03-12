@@ -1185,6 +1185,6 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETinyMCE4JSPathProvider.TINYMCE_4_0_18);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETinyMCE4JSPathProvider.TINYMCE_4_0_19);
   }
 }

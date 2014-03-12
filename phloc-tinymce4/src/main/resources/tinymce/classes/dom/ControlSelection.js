@@ -67,19 +67,21 @@ define("tinymce/dom/ControlSelection", [
 		);
 
 		function isResizable(elm) {
-			if (editor.settings.object_resizing === false) {
+			var selector = editor.settings.object_resizing;
+
+			if (selector === false || Env.iOS) {
 				return false;
 			}
 
-			if (!/TABLE|IMG|DIV/.test(elm.nodeName)) {
-				return false;
+			if (typeof selector != 'string') {
+				selector = 'table,img,div';
 			}
 
 			if (elm.getAttribute('data-mce-resize') === 'false') {
 				return false;
 			}
 
-			return true;
+			return editor.dom.is(elm, selector);
 		}
 
 		function resizeGhostElement(e) {
@@ -449,6 +451,14 @@ define("tinymce/dom/ControlSelection", [
 					editor.dom.bind(editor.getBody(), 'mscontrolselect', function(e) {
 						if (/^(TABLE|IMG|HR)$/.test(e.target.nodeName)) {
 							e.preventDefault();
+
+							// This moves the selection from being a control selection to a text like selection like in WebKit #6753
+							// TODO: Fix this the day IE works like other browsers without this nasty native ugly control selections.
+							if (e.target.tagName == 'IMG') {
+								window.setTimeout(function() {
+									editor.selection.select(e.target);
+								}, 0);
+							}
 						}
 					});
 				}

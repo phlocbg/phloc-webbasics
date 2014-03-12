@@ -88,7 +88,7 @@ define("tinymce/util/Quirks", [
 		 * fix seemed like a huge task. I hope we can remove this before the year 2030. 
 		 */
 		function cleanupStylesWhenDeleting() {
-			var doc = editor.getDoc();
+			var doc = editor.getDoc(), urlPrefix = 'data:text/mce-internal,';
 
 			if (!window.MutationObserver) {
 				return;
@@ -203,14 +203,20 @@ define("tinymce/util/Quirks", [
 			});
 
 			editor.on('dragstart', function(e) {
-				e.dataTransfer.setData('mce-internal', editor.selection.getContent());
+				// Safari doesn't support custom dataTransfer items so we can only use URL and Text
+				e.dataTransfer.setData('URL', 'data:text/mce-internal,' + escape(editor.selection.getContent()));
 			});
 
 			editor.on('drop', function(e) {
 				if (!isDefaultPrevented(e)) {
-					var internalContent = e.dataTransfer.getData('mce-internal');
+					var internalContent = e.dataTransfer.getData('URL');
 
-					if (internalContent && doc.caretRangeFromPoint) {
+					if (!internalContent || internalContent.indexOf(urlPrefix) == -1 || !doc.caretRangeFromPoint) {
+						return;
+					}
+
+					internalContent = unescape(internalContent.substr(urlPrefix.length));
+					if (doc.caretRangeFromPoint) {
 						e.preventDefault();
 						customDelete();
 						editor.selection.setRng(doc.caretRangeFromPoint(e.x, e.y));
@@ -996,16 +1002,20 @@ define("tinymce/util/Quirks", [
 
 		/**
 		 * IE 11 has a fantastic bug where it will produce two trailing BR elements to iframe bodies when
-		 * the iframe is hidden by display: none. This workaround solves this by switching
-		 * on designMode on the whole document.
+		 * the iframe is hidden by display: none on a parent container. The DOM is actually out of sync
+		 * with innerHTML in this case. It's like IE adds shadow DOM BR elements that appears on innerHTML
+		 * but not as the lastChild of the body. However is we add a BR element to the body then remove it
+		 * it doesn't seem to add these BR elements makes sence right?!
 		 *
-		 * Example this: <body>text</body> becomes <body>text<br><br></body>
+		 * Example of what happens: <body>text</body> becomes <body>text<br><br></body>
 		 */
 		function doubleTrailingBrElements() {
 			if (!editor.inline) {
-				editor.on('init', function() {
-					editor.getDoc().designMode = 'on';
-				});
+				editor.on('focus blur', function() {
+					var br = editor.dom.create('br');
+					editor.getBody().appendChild(br);
+					br.parentNode.removeChild(br);
+				}, true);
 			}
 		}
 
