@@ -19,20 +19,17 @@ package com.phloc.bootstrap3.servlet;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.bootstrap3.CBootstrapCSS;
+import com.phloc.bootstrap3.BootstrapHelper;
 import com.phloc.commons.gfx.ScalableSize;
 import com.phloc.commons.version.Version;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.CCSSProperties;
 import com.phloc.html.EHTMLVersion;
+import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.IHCNodeWithChildren;
 import com.phloc.html.hc.customize.HCEmptyCustomizer;
-import com.phloc.html.hc.html.HCCheckBox;
-import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCImg;
-import com.phloc.html.hc.html.HCRadioButton;
-import com.phloc.html.hc.impl.AbstractHCControl;
 
 public class BootstrapCustomizer extends HCEmptyCustomizer
 {
@@ -69,14 +66,9 @@ public class BootstrapCustomizer extends HCEmptyCustomizer
       }
     }
     else
-      if (aNode instanceof AbstractHCControl <?> &&
-          !(aNode instanceof HCCheckBox) &&
-          !(aNode instanceof HCRadioButton) &&
-          !(aNode instanceof HCHiddenField))
+      if (aNode instanceof IHCControl <?>)
       {
-        // For input, select and textarea
-        final AbstractHCControl <?> aCtrl = (AbstractHCControl <?>) aNode;
-        aCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
+        BootstrapHelper.markAsFormControl ((IHCControl <?>) aNode);
       }
   }
 }

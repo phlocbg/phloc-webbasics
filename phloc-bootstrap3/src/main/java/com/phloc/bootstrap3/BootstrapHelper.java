@@ -39,20 +39,30 @@ public final class BootstrapHelper
   private BootstrapHelper ()
   {}
 
+  public static void markAsFormControl (@Nullable final IHCControl <?> aCtrl)
+  {
+    if (aCtrl != null &&
+        !(aCtrl instanceof HCCheckBox) &&
+        !(aCtrl instanceof HCRadioButton) &&
+        !(aCtrl instanceof HCHiddenField))
+    {
+      // input, select and textarea except for checkbox, radio button and hidden
+      // field
+      aCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
+    }
+  }
+
   public static void markAsFormControls (@Nullable final Iterable <? extends IHCControl <?>> aCtrls)
   {
     if (aCtrls != null)
       for (final IHCControl <?> aCurCtrl : aCtrls)
-        if (!(aCurCtrl instanceof HCCheckBox) &&
-            !(aCurCtrl instanceof HCRadioButton) &&
-            !(aCurCtrl instanceof HCHiddenField))
-          aCurCtrl.addClass (CBootstrapCSS.FORM_CONTROL);
+        markAsFormControl (aCurCtrl);
   }
 
-  public static void markChildrenAsFormControls (@Nullable final IHCHasChildren aNode)
+  public static void markChildrenAsFormControls (@Nullable final IHCHasChildren aParent)
   {
-    if (aNode != null)
-      for (final IHCNode aCell : aNode.getChildren ())
-        markAsFormControls (HCUtils.getAllHCControls (aCell));
+    if (aParent != null)
+      for (final IHCNode aChild : aParent.getChildren ())
+        markAsFormControls (HCUtils.getAllHCControls (aChild));
   }
 }
