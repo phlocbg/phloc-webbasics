@@ -27,17 +27,20 @@ import org.joda.time.DateTime;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
-import com.phloc.commons.id.IHasID;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.type.ITypedObject;
+import com.phloc.commons.type.ObjectType;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.html.js.builder.JSArray;
 import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.json2.impl.JsonObject;
 
 @Immutable
-public class FormState implements IHasID <String>, Serializable
+public class FormState implements ITypedObject <String>, Serializable
 {
+  public static final ObjectType OT_FORM_STATE = new ObjectType ("formstate");
+
   private final String m_sPageID;
   private final DateTime m_aDT;
   private final String m_sFlowID;
@@ -57,6 +60,12 @@ public class FormState implements IHasID <String>, Serializable
     m_aDT = PDTFactory.getCurrentDateTime ();
     m_sFlowID = sFlowID;
     m_aAttrs = aAttrs;
+  }
+
+  @Nonnull
+  public ObjectType getTypeID ()
+  {
+    return OT_FORM_STATE;
   }
 
   @Nonnull
