@@ -184,7 +184,9 @@ public class AjaxInvoker implements IAjaxInvoker
     // execute request
     final IAjaxResponse aReturnValue = aHandlerObj.handleRequest (aRequestWebScope);
     if (aReturnValue.isFailure ())
-      s_aLogger.warn ("Invoked AJAX function '" + sFunctionName + "' returned a failure!");
+    {
+      s_aLogger.warn ("Invoked AJAX function '" + sFunctionName + "' returned a failure: " + aReturnValue.toString ());
+    }
 
     // Increment statistics after successful call
     s_aStatsFunctionInvoke.increment (sFunctionName);

@@ -254,8 +254,8 @@ public class AjaxDefaultResponse extends AbstractHCSpecialNodes <AjaxDefaultResp
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("success", m_bSuccess)
-                            .append ("errorMsg", m_sErrorMessage)
-                            .append ("successValue", m_aSuccessValue)
+                            .appendIfNotNull ("errorMsg", m_sErrorMessage)
+                            .appendIfNotNull ("successValue", m_aSuccessValue)
                             .toString ();
   }
 
