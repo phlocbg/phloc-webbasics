@@ -122,7 +122,7 @@ public final class PerRequestJSIncludes
    */
   @Nonnull
   @ReturnsMutableCopy
-  public static List <ISimpleURL> getAllRegisteredJSIncludeURLsForThisRequest (@Nonnull final IURIToURLConverter aConverter,
+  public static List <ISimpleURL> getAllRegisteredJSIncludeURLsForThisRequest (@Nonnull final com.phloc.commons.url.IURIToURLConverter aConverter,
                                                                                final boolean bRegularVersion)
   {
     if (aConverter == null)

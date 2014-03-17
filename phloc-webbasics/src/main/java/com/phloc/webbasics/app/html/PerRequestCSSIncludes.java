@@ -122,7 +122,7 @@ public final class PerRequestCSSIncludes
    */
   @Nonnull
   @ReturnsMutableCopy
-  public static List <ISimpleURL> getAllRegisteredCSSIncludeURLsForThisRequest (@Nonnull final IURIToURLConverter aConverter,
+  public static List <ISimpleURL> getAllRegisteredCSSIncludeURLsForThisRequest (@Nonnull final com.phloc.commons.url.IURIToURLConverter aConverter,
                                                                                 final boolean bRegularVersion)
   {
     if (aConverter == null)

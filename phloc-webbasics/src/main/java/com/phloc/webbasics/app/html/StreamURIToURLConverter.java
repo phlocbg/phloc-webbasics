@@ -34,7 +34,7 @@ import com.phloc.webbasics.app.LinkUtils;
  * @author Philip Helger
  */
 @Immutable
-public final class StreamURIToURLConverter implements IURIToURLConverter
+public final class StreamURIToURLConverter implements com.phloc.commons.url.IURIToURLConverter
 {
   private static final StreamURIToURLConverter s_aInstance = new StreamURIToURLConverter ();
 
