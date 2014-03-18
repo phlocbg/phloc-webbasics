@@ -38,6 +38,8 @@ import com.phloc.web.http.CHTTPHeader;
 import com.phloc.web.servlet.response.ResponseHelper;
 import com.phloc.web.servlet.response.StatusAwareHttpResponseWrapper;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Abstract output stream switching
  * {@link javax.servlet.http.HttpServletResponseWrapper}
@@ -340,7 +342,7 @@ public abstract class AbstractCompressedResponseWrapper extends StatusAwareHttpR
     return m_aCompressedOS;
   }
 
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ({ "DM_DEFAULT_ENCODING" })
+  @SuppressFBWarnings ({ "DM_DEFAULT_ENCODING" })
   @Override
   @Nonnull
   public final PrintWriter getWriter () throws IOException

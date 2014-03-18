@@ -22,6 +22,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.commons.url.IURIToURLConverter;
 import com.phloc.webbasics.app.LinkUtils;
 
 /**
@@ -34,7 +35,7 @@ import com.phloc.webbasics.app.LinkUtils;
  * @author Philip Helger
  */
 @Immutable
-public final class StreamURIToURLConverter implements com.phloc.commons.url.IURIToURLConverter
+public final class StreamURIToURLConverter implements IURIToURLConverter
 {
   private static final StreamURIToURLConverter s_aInstance = new StreamURIToURLConverter ();
 
