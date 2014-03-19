@@ -103,6 +103,37 @@ public interface ILockManager <IDTYPE>
   ELocked lockObject (@Nonnull IDTYPE aObjID, @Nullable String sUserID);
 
   /**
+   * Lock the object with the given ID and unlock all other objects. If the
+   * passed object is already locked by this user, this method has no effect.
+   * This is an atomic action.
+   * 
+   * @param aObjID
+   *        The object ID to lock. May not be <code>null</code>.
+   * @return {@link ELocked#LOCKED} if the object is locked by the current user
+   *         after the call to this method, {@link ELocked#NOT_LOCKED} if the
+   *         object was already locked by another user.
+   */
+  @Nonnull
+  ELocked lockObjectAndUnlockAllOthers (@Nonnull IDTYPE aObjID);
+
+  /**
+   * Lock the object with the given ID and unlock all other objects. If the
+   * passed object is already locked by this user, this method has no effect.
+   * This is an atomic action.
+   * 
+   * @param aObjID
+   *        The object ID to lock. May not be <code>null</code>.
+   * @param sUserID
+   *        The id of the user who locked the object. May be <code>null</code>.
+   * @return {@link ELocked#LOCKED} if the object is locked by the specified
+   *         user after the call to this method, {@link ELocked#NOT_LOCKED} if
+   *         the object was already locked by another user or no user ID was
+   *         provided.
+   */
+  @Nonnull
+  ELocked lockObjectAndUnlockAllOthers (@Nonnull IDTYPE aObjID, @Nullable String sUserID);
+
+  /**
    * Unlock the object with the given ID. Unlocking is only possible, if the
    * current session user locked the object.
    * 

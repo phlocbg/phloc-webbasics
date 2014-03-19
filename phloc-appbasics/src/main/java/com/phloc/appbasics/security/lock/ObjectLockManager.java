@@ -84,6 +84,18 @@ public final class ObjectLockManager extends GlobalSingleton implements ILockMan
   }
 
   @Nonnull
+  public ELocked lockObjectAndUnlockAllOthers (@Nonnull final String sObjID)
+  {
+    return m_aMgr.lockObjectAndUnlockAllOthers (sObjID);
+  }
+
+  @Nonnull
+  public ELocked lockObjectAndUnlockAllOthers (@Nonnull final String sObjID, @Nullable final String sUserID)
+  {
+    return m_aMgr.lockObjectAndUnlockAllOthers (sObjID, sUserID);
+  }
+
+  @Nonnull
   public EChange unlockObject (@Nonnull final String sObjID)
   {
     return m_aMgr.unlockObject (sObjID);
