@@ -244,10 +244,29 @@ public interface ILockManager <IDTYPE>
   boolean isObjectLockedByAnyUser (@Nullable IDTYPE aObjID);
 
   /**
-   * @return A non-<code>null</code> set of all locked objects. Never
-   *         <code>null</code> but maybe empty.
+   * @return A non-<code>null</code> set of all locked objects of all users.
+   *         Never <code>null</code> but maybe empty.
    */
   @Nonnull
   @ReturnsMutableCopy
   Set <IDTYPE> getAllLockedObjects ();
+
+  /**
+   * @return A non-<code>null</code> set of all locked objects of the current
+   *         user. Never <code>null</code> but maybe empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Set <IDTYPE> getAllLockedObjectsOfCurrentUser ();
+
+  /**
+   * @param sUserID
+   *        The user ID to be queried for all locked objects. May be
+   *        <code>null</code>.
+   * @return A non-<code>null</code> set of all locked objects of the passed
+   *         user. Never <code>null</code> but maybe empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Set <IDTYPE> getAllLockedObjectsOfUser (@Nullable String sUserID);
 }

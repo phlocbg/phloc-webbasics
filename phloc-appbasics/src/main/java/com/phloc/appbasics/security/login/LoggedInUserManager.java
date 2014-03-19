@@ -103,7 +103,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
     }
 
     @Nullable
-    static SessionUserHolder getInstanceIfInstantiatedOfScope (@Nullable final ISessionScope aScope)
+    static SessionUserHolder getInstanceIfInstantiatedInScope (@Nullable final ISessionScope aScope)
     {
       return getSingletonIfInstantiated (aScope, SessionUserHolder.class);
     }
@@ -550,7 +550,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
       // Ensure that the SessionUser is empty. This is only relevant if user is
       // manually logged out without destructing the underlying session
-      final SessionUserHolder aSUH = SessionUserHolder.getInstanceIfInstantiatedOfScope (aInfo.getSessionScope ());
+      final SessionUserHolder aSUH = SessionUserHolder.getInstanceIfInstantiatedInScope (aInfo.getSessionScope ());
       if (aSUH != null)
         aSUH._reset ();
 

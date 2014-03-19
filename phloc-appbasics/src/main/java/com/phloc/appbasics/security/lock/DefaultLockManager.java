@@ -19,6 +19,7 @@ package com.phloc.appbasics.security.lock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -151,7 +152,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
     if (s_aLogger.isInfoEnabled ())
     {
       if (ContainerHelper.isNotEmpty (aUnlockedObjects))
-        s_aLogger.info ("Unlocked all objects of user '" +
+        s_aLogger.info ("Before locking, unlocked all objects of user '" +
                         sUserID +
                         "': " +
                         aUnlockedObjects +
@@ -372,6 +373,36 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
     {
       m_aRWLock.readLock ().unlock ();
     }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <IDTYPE> getAllLockedObjectsOfCurrentUser ()
+  {
+    final String sCurrentUserID = m_aCurrentUserIDProvider.getCurrentUserID ();
+    return getAllLockedObjectsOfUser (sCurrentUserID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <IDTYPE> getAllLockedObjectsOfUser (@Nullable final String sUserID)
+  {
+    final Set <IDTYPE> ret = new HashSet <IDTYPE> ();
+    if (StringHelper.hasText (sUserID))
+    {
+      m_aRWLock.readLock ().lock ();
+      try
+      {
+        for (final Map.Entry <IDTYPE, ILockInfo> aEntry : m_aLockedObjs.entrySet ())
+          if (aEntry.getValue ().getLockUserID ().equals (sUserID))
+            ret.add (aEntry.getKey ());
+      }
+      finally
+      {
+        m_aRWLock.readLock ().unlock ();
+      }
+    }
+    return ret;
   }
 
   @Override

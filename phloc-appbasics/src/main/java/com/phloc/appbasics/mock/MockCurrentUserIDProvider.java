@@ -27,13 +27,13 @@ import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
  * 
  * @author Philip Helger
  */
-public final class MockCurrentUserIDProvider implements ICurrentUserIDProvider
+public class MockCurrentUserIDProvider implements ICurrentUserIDProvider
 {
   private static final MockCurrentUserIDProvider s_aInstance = new MockCurrentUserIDProvider ();
 
   private final String m_sUserID;
 
-  private MockCurrentUserIDProvider ()
+  protected MockCurrentUserIDProvider ()
   {
     this ("unittest");
   }

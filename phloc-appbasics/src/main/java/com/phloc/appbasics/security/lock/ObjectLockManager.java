@@ -157,4 +157,18 @@ public final class ObjectLockManager extends GlobalSingleton implements ILockMan
   {
     return m_aMgr.getAllLockedObjects ();
   }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllLockedObjectsOfCurrentUser ()
+  {
+    return m_aMgr.getAllLockedObjectsOfCurrentUser ();
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllLockedObjectsOfUser (@Nullable final String sUserID)
+  {
+    return m_aMgr.getAllLockedObjectsOfUser (sUserID);
+  }
 }
