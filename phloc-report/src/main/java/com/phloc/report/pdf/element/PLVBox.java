@@ -17,7 +17,6 @@
  */
 package com.phloc.report.pdf.element;
 
-
 /**
  * Vertical box - groups several rows.
  * 

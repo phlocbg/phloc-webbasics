@@ -17,7 +17,6 @@
  */
 package com.phloc.report.pdf.element;
 
-
 /**
  * Horizontal box - groups several columns.
  * 

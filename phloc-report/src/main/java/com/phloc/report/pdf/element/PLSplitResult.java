@@ -32,8 +32,7 @@ public final class PLSplitResult
   private final PLElementWithSize m_aFirstElement;
   private final PLElementWithSize m_aSecondElement;
 
-  public PLSplitResult (@Nonnull final PLElementWithSize aFirstElement,
-                        @Nonnull final PLElementWithSize aSecondElement)
+  public PLSplitResult (@Nonnull final PLElementWithSize aFirstElement, @Nonnull final PLElementWithSize aSecondElement)
   {
     if (aFirstElement == null)
       throw new NullPointerException ("firstElement");

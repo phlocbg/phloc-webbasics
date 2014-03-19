@@ -352,7 +352,10 @@ public class PLText extends AbstractPLElement <PLText>
   {
     ValueEnforcer.notEmpty (aLines, "Lines");
 
+    // Create a copy to be independent!
     final List <TextAndWidthSpec> aLineCopy = ContainerHelper.newList (aLines);
+
+    // What is our line height?
     final float fLineHeight = getLineHeight ();
 
     // Excluding padding/margin

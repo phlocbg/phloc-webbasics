@@ -464,13 +464,13 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-        .append ("columns", m_aColumns)
-        .append ("startWidthItems", m_nStarWidthItems)
-        .append ("columnBorder", m_aColumnBorder)
-        .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
-        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-        .toString ();
+                            .append ("columns", m_aColumns)
+                            .append ("startWidthItems", m_nStarWidthItems)
+                            .append ("columnBorder", m_aColumnBorder)
+                            .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
+                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+                            .toString ();
   }
 
   // XXX
