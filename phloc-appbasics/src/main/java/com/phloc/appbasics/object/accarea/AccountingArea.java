@@ -27,10 +27,10 @@ import com.phloc.appbasics.object.CObject;
 import com.phloc.appbasics.object.StubObject;
 import com.phloc.appbasics.object.client.AbstractClientObject;
 import com.phloc.appbasics.object.client.IClient;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
 import com.phloc.masterdata.address.Address;
@@ -87,14 +87,14 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
   public AccountingArea (@Nonnull final IClient aClient,
                          @Nonnull @Nonempty final String sDisplayName,
                          @Nullable final String sCompanyType,
-                         @Nonnull @Nonempty final String sCompanyVATIN,
-                         @Nonnull @Nonempty final String sCompanyNumber,
+                         @Nullable final String sCompanyVATIN,
+                         @Nullable final String sCompanyNumber,
                          @Nonnull final IReadonlyAddress aAddress,
-                         @Nonnull final String sTelephone,
+                         @Nullable final String sTelephone,
                          @Nullable final String sFax,
                          @Nullable final String sEmailAddress,
                          @Nullable final String sWebSite,
-                         @Nonnull final ECurrency eDefaultCurrency,
+                         @Nullable final ECurrency eDefaultCurrency,
                          @Nonnull final Locale aDisplayLocale)
   {
     this (aClient,
@@ -116,14 +116,14 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
                   @Nonnull final StubObject aStubObject,
                   @Nonnull @Nonempty final String sDisplayName,
                   @Nullable final String sCompanyType,
-                  @Nonnull @Nonempty final String sCompanyVATIN,
-                  @Nonnull @Nonempty final String sCompanyNumber,
+                  @Nullable final String sCompanyVATIN,
+                  @Nullable final String sCompanyNumber,
                   @Nonnull final IReadonlyAddress aAddress,
-                  @Nonnull final String sTelephone,
+                  @Nullable final String sTelephone,
                   @Nullable final String sFax,
                   @Nullable final String sEmailAddress,
                   @Nullable final String sWebSite,
-                  @Nonnull final ECurrency eDefaultCurrency,
+                  @Nullable final ECurrency eDefaultCurrency,
                   @Nonnull final Locale aDisplayLocale)
   {
     super (aClient, aStubObject);
@@ -155,8 +155,8 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
   @Nonnull
   public EChange setDisplayName (@Nonnull @Nonempty final String sDisplayName)
   {
-    if (StringHelper.hasNoText (sDisplayName))
-      throw new IllegalArgumentException ("DisplayName");
+    ValueEnforcer.notEmpty (sDisplayName, "DisplayName");
+
     if (sDisplayName.equals (m_sDisplayName))
       return EChange.UNCHANGED;
     m_sDisplayName = sDisplayName;
@@ -178,37 +178,31 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
     return EChange.CHANGED;
   }
 
-  @Nonnull
-  @Nonempty
+  @Nullable
   public String getCompanyVATIN ()
   {
     return m_sCompanyVATIN;
   }
 
   @Nonnull
-  public EChange setCompanyVATIN (@Nonnull @Nonempty final String sCompanyVATIN)
+  public EChange setCompanyVATIN (@Nullable final String sCompanyVATIN)
   {
-    if (StringHelper.hasNoText (sCompanyVATIN))
-      throw new IllegalArgumentException ("CompanyVATIN");
-    if (sCompanyVATIN.equals (m_sCompanyVATIN))
+    if (EqualsUtils.equals (sCompanyVATIN, m_sCompanyVATIN))
       return EChange.UNCHANGED;
     m_sCompanyVATIN = sCompanyVATIN;
     return EChange.CHANGED;
   }
 
-  @Nonnull
-  @Nonempty
+  @Nullable
   public String getCompanyNumber ()
   {
     return m_sCompanyNumber;
   }
 
   @Nonnull
-  public EChange setCompanyNumber (@Nonnull @Nonempty final String sCompanyNumber)
+  public EChange setCompanyNumber (@Nullable final String sCompanyNumber)
   {
-    if (StringHelper.hasNoText (sCompanyNumber))
-      throw new IllegalArgumentException ("CompanyNumber");
-    if (sCompanyNumber.equals (m_sCompanyNumber))
+    if (EqualsUtils.equals (sCompanyNumber, m_sCompanyNumber))
       return EChange.UNCHANGED;
     m_sCompanyNumber = sCompanyNumber;
     return EChange.CHANGED;
@@ -223,8 +217,7 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
   @Nonnull
   public EChange setAddress (@Nonnull final IReadonlyAddress aAddress, @Nonnull final Locale aDisplayLocale)
   {
-    if (aAddress == null)
-      throw new NullPointerException ("address");
+    ValueEnforcer.notNull (aAddress, "Address");
 
     final Address aNewAddress = new Address (aAddress, aDisplayLocale);
     if (aNewAddress.equals (m_aAddress))
@@ -233,18 +226,16 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
     return EChange.CHANGED;
   }
 
-  @Nonnull
+  @Nullable
   public String getTelephone ()
   {
     return m_sTelephone;
   }
 
   @Nonnull
-  public EChange setTelephone (@Nonnull @Nonempty final String sTelephone)
+  public EChange setTelephone (@Nullable final String sTelephone)
   {
-    if (StringHelper.hasNoText (sTelephone))
-      throw new IllegalArgumentException ("Telephone");
-    if (sTelephone.equals (m_sTelephone))
+    if (EqualsUtils.equals (sTelephone, m_sTelephone))
       return EChange.UNCHANGED;
     m_sTelephone = sTelephone;
     return EChange.CHANGED;
@@ -295,26 +286,22 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
     return EChange.CHANGED;
   }
 
-  @Nonnull
+  @Nullable
   public ECurrency getDefaultCurrency ()
   {
     return m_eDefaultCurrency;
   }
 
-  @Nonnull
-  @Nonempty
+  @Nullable
   public String getDefaultCurrencyID ()
   {
-    return m_eDefaultCurrency.getID ();
+    return m_eDefaultCurrency == null ? null : m_eDefaultCurrency.getID ();
   }
 
   @Nonnull
-  public EChange setDefaultCurrency (@Nonnull final ECurrency eDefaultCurrency)
+  public EChange setDefaultCurrency (@Nullable final ECurrency eDefaultCurrency)
   {
-    if (eDefaultCurrency == null)
-      throw new NullPointerException ("defaultCurrency");
-
-    if (eDefaultCurrency.equals (m_eDefaultCurrency))
+    if (EqualsUtils.equals (eDefaultCurrency, m_eDefaultCurrency))
       return EChange.UNCHANGED;
     m_eDefaultCurrency = eDefaultCurrency;
     return EChange.CHANGED;
@@ -332,9 +319,9 @@ public final class AccountingArea extends AbstractClientObject implements IAccou
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("displayName", m_sDisplayName)
-                            .append ("companyType", m_sCompanyType)
-                            .append ("companyVATIN", m_sCompanyVATIN)
-                            .append ("companyNumber", m_sCompanyNumber)
+                            .appendIfNotNull ("companyType", m_sCompanyType)
+                            .appendIfNotNull ("companyVATIN", m_sCompanyVATIN)
+                            .appendIfNotNull ("companyNumber", m_sCompanyNumber)
                             .append ("address", m_aAddress)
                             .appendIfNotNull ("telephone", m_sTelephone)
                             .appendIfNotNull ("fax", m_sFax)

@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.misc.IHasUIText;
 import com.phloc.appbasics.object.client.IClientObject;
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.masterdata.address.IReadonlyAddress;
 import com.phloc.masterdata.currency.ECurrency;
@@ -37,20 +36,20 @@ public interface IAccountingArea extends IClientObject, IHasDisplayName, IHasUIT
   /**
    * @return The company type. E.g. "KEG"
    */
-  @Nonnull
+  @Nullable
   String getCompanyType ();
 
   /**
    * @return The company UID.
    */
-  @Nonnull
+  @Nullable
   String getCompanyVATIN ();
 
   /**
    * @return The company number (Interne Betriebsnummer). May not be
    *         <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   String getCompanyNumber ();
 
   /**
@@ -62,7 +61,7 @@ public interface IAccountingArea extends IClientObject, IHasDisplayName, IHasUIT
   /**
    * @return The telephone number. May be <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   String getTelephone ();
 
   /**
@@ -84,16 +83,14 @@ public interface IAccountingArea extends IClientObject, IHasDisplayName, IHasUIT
   String getWebSite ();
 
   /**
-   * @return The default currency in this client. May not be <code>null</code>.
+   * @return The default currency in this client. May be <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   ECurrency getDefaultCurrency ();
 
   /**
-   * @return The default currency ID in this client. May not be
-   *         <code>null</code>.
+   * @return The default currency ID in this client. May be <code>null</code>.
    */
-  @Nonnull
-  @Nonempty
+  @Nullable
   String getDefaultCurrencyID ();
 }
