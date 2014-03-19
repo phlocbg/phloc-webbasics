@@ -43,6 +43,8 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   OBJECT_DELETE ("Lösche ''{0}''", "Delete ''{0}''"),
   OBJECT_EDIT ("Bearbeite ''{0}''", "Edit ''{0}''"),
   IMAGE_NONE ("keines", "none"),
+  LOCKING_FAILED ("Das Objekt{0} konnte nicht gesperrt werden, da es derzeit von {1} gesperrt ist.", "Failed to lock object{0} because it is currently locked by {1}!"),
+  LOCKING_OTHER_USER ("einem anderen Benutzer", "another user"),
   PAGE_NAME_MONITORING ("Überwachung", "Monitoring"),
   PAGE_NAME_MONITORING_AUDIT ("Audit-Einträge", "Audit items"),
   PAGE_NAME_MONITORING_LOGIN_INFO ("Angemeldete Benutzer", "Logged in users"),

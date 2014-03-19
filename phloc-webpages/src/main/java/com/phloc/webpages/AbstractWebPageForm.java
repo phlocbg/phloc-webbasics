@@ -22,11 +22,16 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.security.AccessManager;
+import com.phloc.appbasics.security.lock.LockResult;
+import com.phloc.appbasics.security.lock.ObjectLockManager;
+import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EContinue;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCForm;
@@ -39,6 +44,7 @@ import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
+import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.js.JSFormHelper;
 
@@ -105,6 +111,20 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final String getSelectedObjectID (@Nonnull final WebPageExecutionContext aWPEC)
   {
     return aWPEC.getAttr (CHCParam.PARAM_OBJECT);
+  }
+
+  /**
+   * Get the display name of the passed object.
+   * 
+   * @param aSelectedObject
+   *        The object to get the display name from. Never <code>null</code>.
+   * @return <code>null</code> to indicate that no display name is available
+   */
+  @Nullable
+  @OverrideOnDemand
+  protected String getObjectDisplayName (@Nonnull final DATATYPE aSelectedObject)
+  {
+    return null;
   }
 
   /**
@@ -374,7 +394,37 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                            @Nullable final DATATYPE aSelectedObject,
                                            @Nullable final EWebPageFormAction eFormAction)
   {
-    // MetaSystemManager.getLockManager ().lockObject (sObjID)
+    final ObjectLockManager aOLM = MetaSystemManager.getLockManager ();
+    // Lock EDIT and DELETE if an object is present
+    if ((eFormAction == EWebPageFormAction.EDIT || eFormAction == EWebPageFormAction.DELETE) && aSelectedObject != null)
+    {
+      // Try to lock object
+      final String sObjectID = aSelectedObject.getID ();
+      final LockResult <String> aLockResult = aOLM.lockObjectAndUnlockAllOthers (sObjectID);
+      if (aLockResult.isNotLocked ())
+      {
+        // Failed to lock object
+        final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+        final HCNodeList aNodeList = aWPEC.getNodeList ();
+
+        final String sLockUserID = aOLM.getLockUserID (sObjectID);
+        final IUser aLockUser = AccessManager.getInstance ().getUserOfID (sLockUserID);
+        final String sObjectName = getObjectDisplayName (aSelectedObject);
+        final String sDisplayObjectName = StringHelper.hasText (sObjectName) ? " '" + sObjectName + "'" : "";
+        final String sDisplayUserName = aLockUser != null ? "'" + aLockUser.getDisplayName () + "'"
+                                                         : EWebPageText.LOCKING_OTHER_USER.getDisplayText (aDisplayLocale);
+        aNodeList.addChild (getStyler ().createErrorBox (EWebPageText.LOCKING_FAILED.getDisplayTextWithArgs (aDisplayLocale,
+                                                                                                             sDisplayObjectName,
+                                                                                                             sDisplayUserName)));
+        return EContinue.BREAK;
+      }
+    }
+    else
+    {
+      // No lock action required - unlock all
+      aOLM.unlockAllObjectsOfCurrentUser ();
+    }
+
     return EContinue.CONTINUE;
   }
 
@@ -591,8 +641,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
             // errors a n-th time
             bShowList = false;
             final HCForm aForm = isFileUploadForm () ? createFormFileUploadSelf () : createFormSelf ();
-            aNodeList.addChild (aForm);
             aForm.setID (INPUT_FORM_ID);
+            aNodeList.addChild (aForm);
 
             // The unique form ID, that allows to identify on "transaction"
             // -> Used only for "form state remembering"
