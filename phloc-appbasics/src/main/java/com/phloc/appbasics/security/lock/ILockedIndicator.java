@@ -17,37 +17,20 @@
  */
 package com.phloc.appbasics.security.lock;
 
-import javax.annotation.Nonnull;
-
 /**
- * Locked enumeration
+ * Very simple interface for an object that has locked/not locked indication.
  * 
  * @author Philip Helger
  */
-public enum ELocked implements ILockedIndicator
+public interface ILockedIndicator
 {
-  LOCKED,
-  NOT_LOCKED;
+  /**
+   * @return <code>true</code> if locked and <code>false</code> if not locked.
+   */
+  boolean isLocked ();
 
-  public boolean isLocked ()
-  {
-    return this == LOCKED;
-  }
-
-  public boolean isNotLocked ()
-  {
-    return this == NOT_LOCKED;
-  }
-
-  @Nonnull
-  public static ELocked valueOf (final boolean bLocked)
-  {
-    return bLocked ? LOCKED : NOT_LOCKED;
-  }
-
-  @Nonnull
-  public static ELocked valueOf (@Nonnull final ILockedIndicator eLockingIndicator)
-  {
-    return valueOf (eLockingIndicator.isLocked ());
-  }
+  /**
+   * @return <code>true</code> if not locked and <code>false</code> if locked.
+   */
+  boolean isNotLocked ();
 }

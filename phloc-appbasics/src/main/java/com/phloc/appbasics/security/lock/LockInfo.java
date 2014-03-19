@@ -22,9 +22,9 @@ import javax.annotation.concurrent.Immutable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 
@@ -41,9 +41,7 @@ public final class LockInfo implements ILockInfo
 
   public LockInfo (@Nonnull @Nonempty final String sUserID)
   {
-    if (StringHelper.hasNoText (sUserID))
-      throw new IllegalArgumentException ("userID");
-    m_sUserID = sUserID;
+    m_sUserID = ValueEnforcer.notEmpty (sUserID, "UserID");
     m_aLockTime = PDTFactory.getCurrentDateTime ();
   }
 

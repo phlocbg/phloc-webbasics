@@ -109,12 +109,14 @@ public interface ILockManager <IDTYPE>
    * 
    * @param aObjID
    *        The object ID to lock. May not be <code>null</code>.
-   * @return {@link ELocked#LOCKED} if the object is locked by the current user
-   *         after the call to this method, {@link ELocked#NOT_LOCKED} if the
+   * @return The locking result and never <code>null</code>. If
+   *         {@link ILockedIndicator#isLocked()} is <code>true</code>, the
+   *         object is locked by the current user after the call to this method.
+   *         If {@link ILockedIndicator#isNotLocked()} is <code>true</code> the
    *         object was already locked by another user.
    */
   @Nonnull
-  ELocked lockObjectAndUnlockAllOthers (@Nonnull IDTYPE aObjID);
+  LockResult <IDTYPE> lockObjectAndUnlockAllOthers (@Nonnull IDTYPE aObjID);
 
   /**
    * Lock the object with the given ID and unlock all other objects. If the
@@ -131,7 +133,7 @@ public interface ILockManager <IDTYPE>
    *         provided.
    */
   @Nonnull
-  ELocked lockObjectAndUnlockAllOthers (@Nonnull IDTYPE aObjID, @Nullable String sUserID);
+  LockResult <IDTYPE> lockObjectAndUnlockAllOthers (@Nonnull IDTYPE aObjID, @Nullable String sUserID);
 
   /**
    * Unlock the object with the given ID. Unlocking is only possible, if the

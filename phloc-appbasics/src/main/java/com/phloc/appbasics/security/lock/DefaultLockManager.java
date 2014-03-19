@@ -106,16 +106,16 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   }
 
   @Nonnull
-  private ELocked _lockObjectAndUnlockOthers (@Nonnull final IDTYPE aObjID,
-                                              @Nullable final String sUserID,
-                                              final boolean bUnlockOtherObjects)
+  private LockResult <IDTYPE> _lockObjectAndUnlockOthers (@Nonnull final IDTYPE aObjID,
+                                                          @Nullable final String sUserID,
+                                                          final boolean bUnlockOtherObjects)
   {
     if (StringHelper.hasNoText (sUserID))
-      return ELocked.NOT_LOCKED;
+      return LockResult.createFailure (aObjID);
 
-    List <IDTYPE> aUnlockedObjects = null;
     ELocked eLocked;
     boolean bIsNewLock = false;
+    List <IDTYPE> aUnlockedObjects = null;
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -124,6 +124,7 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
       {
         // Unlock other objects first
         aUnlockedObjects = new ArrayList <IDTYPE> ();
+        // Unlock all except the object to be locked
         _unlockAllObjects (sUserID, ContainerHelper.newSet (aObjID), aUnlockedObjects);
       }
 
@@ -150,12 +151,18 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
     if (s_aLogger.isInfoEnabled ())
     {
       if (ContainerHelper.isNotEmpty (aUnlockedObjects))
-        s_aLogger.info ("Unlocked all objects of user '" + sUserID + "': " + aUnlockedObjects + " except " + aObjID);
+        s_aLogger.info ("Unlocked all objects of user '" +
+                        sUserID +
+                        "': " +
+                        aUnlockedObjects +
+                        " except '" +
+                        aObjID +
+                        "'");
       if (bIsNewLock)
         s_aLogger.info ("User '" + sUserID + "' locked object '" + aObjID + "'");
     }
 
-    return eLocked;
+    return new LockResult <IDTYPE> (aObjID, eLocked, bIsNewLock, aUnlockedObjects);
   }
 
   @Nonnull
@@ -164,11 +171,12 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
     ValueEnforcer.notNull (aObjID, "ObjectID");
 
     // Don't unlock other objects
-    return _lockObjectAndUnlockOthers (aObjID, sUserID, false);
+    final LockResult <IDTYPE> aLockResult = _lockObjectAndUnlockOthers (aObjID, sUserID, false);
+    return ELocked.valueOf (aLockResult);
   }
 
   @Nonnull
-  public final ELocked lockObjectAndUnlockAllOthers (@Nonnull final IDTYPE aObjID)
+  public final LockResult <IDTYPE> lockObjectAndUnlockAllOthers (@Nonnull final IDTYPE aObjID)
   {
     ValueEnforcer.notNull (aObjID, "ObjectID");
 
@@ -177,7 +185,8 @@ public class DefaultLockManager <IDTYPE> implements ILockManager <IDTYPE>
   }
 
   @Nonnull
-  public final ELocked lockObjectAndUnlockAllOthers (@Nonnull final IDTYPE aObjID, @Nullable final String sUserID)
+  public final LockResult <IDTYPE> lockObjectAndUnlockAllOthers (@Nonnull final IDTYPE aObjID,
+                                                                 @Nullable final String sUserID)
   {
     ValueEnforcer.notNull (aObjID, "ObjectID");
 
