@@ -17,6 +17,8 @@
  */
 package com.phloc.webpages;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -24,11 +26,13 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.state.EContinue;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCForm;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
+import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.validation.error.FormErrors;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webbasics.form.FormState;
@@ -38,6 +42,14 @@ import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.js.JSFormHelper;
 
+/**
+ * Abstract base class for a web page that has the common form handling, with a
+ * list view, details view, create and edit + binding.
+ * 
+ * @author Philip Helger
+ * @param <DATATYPE>
+ *        The data type of the object to be handled.
+ */
 public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> extends AbstractWebPageExt
 {
   // all internal IDs starting with "$" to prevent accidental overwrite with
@@ -82,6 +94,13 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     return false;
   }
 
+  /**
+   * Get the ID of the selected object from the passed execution context.
+   * 
+   * @param aWPEC
+   *        The current web page execution context. Never <code>null</code>.
+   * @return <code>null</code> if no selected object is present.
+   */
   @Nullable
   protected final String getSelectedObjectID (@Nonnull final WebPageExecutionContext aWPEC)
   {
@@ -90,7 +109,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
 
   /**
    * @return A newly created toolbar. May be overridden to create other types of
-   *         toolbars :). May not be <code>null</code>.
+   *         toolbars. May not be <code>null</code>.
    */
   @Nonnull
   @OverrideOnDemand
@@ -333,6 +352,32 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected abstract DATATYPE getSelectedObject (@Nonnull WebPageExecutionContext aWPEC, @Nullable String sID);
 
   /**
+   * Try to lock the specified object. When overring the method make sure to
+   * emit all error messages on your own, when e.g. an object is locked. If
+   * {@link EContinue#BREAK} is returned, no further UI stuff is performed.
+   * 
+   * @param aWPEC
+   *        The current web page execution context. Never <code>null</code>.
+   * @param aSelectedObject
+   *        The currently selected object. May be <code>null</code> if no object
+   *        is selected.
+   * @param eFormAction
+   *        The current form action. May be <code>null</code> if a non-standard
+   *        action is handled.
+   * @return {@link EContinue#CONTINUE} if normal execution can continue or
+   *         {@link EContinue#BREAK} if execution cannot continue (e.g. because
+   *         object is already locked).
+   */
+  @Nonnull
+  @OverrideOnDemand
+  protected EContinue handleObjectLocking (@Nonnull final WebPageExecutionContext aWPEC,
+                                           @Nullable final DATATYPE aSelectedObject,
+                                           @Nullable final EWebPageFormAction eFormAction)
+  {
+    return EContinue.CONTINUE;
+  }
+
+  /**
    * @param aWPEC
    *        The web page execution context
    * @param aSelectedObject
@@ -470,104 +515,134 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   @Override
   protected final void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
+    final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
+    final HCNodeList aNodeList = aWPEC.getNodeList ();
+
     final DATATYPE aSelectedObject = getSelectedObject (aWPEC, getSelectedObjectID (aWPEC));
+
     final boolean bIsEditAllowed = isEditAllowed (aSelectedObject);
     boolean bShowList = true;
-
-    if (aWPEC.hasAction (ACTION_VIEW) && aSelectedObject != null)
-    {
-      // Valid object found - show details
-      handleViewObject (aWPEC, aSelectedObject, bIsEditAllowed);
-
-      bShowList = false;
-    }
+    final String sAction = aWPEC.getAction ();
+    EWebPageFormAction eAction = null;
+    if (ACTION_VIEW.equals (sAction) && aSelectedObject != null)
+      eAction = EWebPageFormAction.VIEW;
     else
-      if (aWPEC.hasAction (ACTION_CREATE) ||
-          (aWPEC.hasAction (ACTION_EDIT) && aSelectedObject != null && bIsEditAllowed) ||
-          (aWPEC.hasAction (ACTION_COPY) && aSelectedObject != null))
-      {
-        // Create or edit a client
-        final boolean bEdit = aWPEC.hasAction (ACTION_EDIT);
-        final boolean bCopy = aWPEC.hasAction (ACTION_COPY);
-        final FormErrors aFormErrors = new FormErrors ();
-        boolean bShowInputForm = true;
-
-        if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
-        {
-          // try to save
-          validateAndSaveInputParameters (aWPEC, aSelectedObject, aFormErrors, bEdit);
-          if (aFormErrors.isEmpty ())
-          {
-            // Save successful
-            bShowInputForm = false;
-
-            // Remove an optionally stored state
-            FormStateManager.getInstance ().deleteFormState (aWPEC.getAttr (FIELD_FLOW_ID));
-          }
+      if (ACTION_CREATE.equals (sAction))
+        eAction = EWebPageFormAction.CREATE;
+      else
+        if (ACTION_EDIT.equals (sAction) && bIsEditAllowed && aSelectedObject != null)
+          eAction = EWebPageFormAction.EDIT;
+        else
+          if (ACTION_COPY.equals (sAction) && aSelectedObject != null)
+            eAction = EWebPageFormAction.COPY;
           else
-          {
-            // Show: changes could not be saved...
-            aWPEC.getNodeList ().addChild (getStyler ().createIncorrectInputBox (aWPEC.getDisplayLocale ()));
-          }
-        }
+            if (ACTION_DELETE.equals (sAction) && aSelectedObject != null)
+              eAction = EWebPageFormAction.DELETE;
+            else
+              if (ACTION_UNDELETE.equals (sAction) && aSelectedObject != null)
+                eAction = EWebPageFormAction.UNDELETE;
 
-        if (bShowInputForm)
+    // Try to lock object
+    if (handleObjectLocking (aWPEC, aSelectedObject, eAction).isContinue ())
+    {
+      if (eAction == EWebPageFormAction.VIEW)
+      {
+        // Valid object found - show details
+        handleViewObject (aWPEC, aSelectedObject, bIsEditAllowed);
+
+        bShowList = false;
+      }
+      else
+      {
+        if (eAction == EWebPageFormAction.CREATE ||
+            eAction == EWebPageFormAction.EDIT ||
+            eAction == EWebPageFormAction.COPY)
         {
-          // Show the input form. Either for the first time or because of form
-          // errors a n-th time
-          bShowList = false;
-          final HCForm aForm = isFileUploadForm () ? createFormFileUploadSelf () : createFormSelf ();
-          aWPEC.getNodeList ().addChild (aForm);
-          aForm.setID (INPUT_FORM_ID);
+          final boolean bIsEdit = eAction == EWebPageFormAction.EDIT;
+          final boolean bIsCopy = eAction == EWebPageFormAction.COPY;
 
-          // The unique form ID, that allows to identify on "transaction"
-          // -> Used only for "form state remembering"
-          aForm.addChild (new HCHiddenField (new RequestField (FIELD_FLOW_ID, GlobalIDFactory.getNewStringID ())));
+          // Create or edit a client
+          final FormErrors aFormErrors = new FormErrors ();
+          boolean bShowInputForm = true;
 
-          modifyFormBeforeShowInputForm (aForm);
-
-          // Is there as saved state to use?
-          final String sRestoreFlowID = aWPEC.getAttr (FIELD_RESTORE_FLOW_ID);
-          if (sRestoreFlowID != null)
+          if (aWPEC.hasSubAction (CHCParam.ACTION_SAVE))
           {
-            final FormState aSavedState = FormStateManager.getInstance ().getFormStateOfID (sRestoreFlowID);
-            if (aSavedState != null)
+            // try to save
+            validateAndSaveInputParameters (aWPEC, aSelectedObject, aFormErrors, bIsEdit);
+            if (aFormErrors.isEmpty ())
             {
-              aForm.addChild (new HCScriptOnDocumentReady (JSFormHelper.setAllFormValues (INPUT_FORM_ID,
-                                                                                          aSavedState.getAsAssocArray ())));
+              // Save successful
+              bShowInputForm = false;
+
+              // Remove an optionally stored state
+              FormStateManager.getInstance ().deleteFormState (aWPEC.getAttr (FIELD_FLOW_ID));
+            }
+            else
+            {
+              // Show: changes could not be saved...
+              aNodeList.addChild (getStyler ().createIncorrectInputBox (aDisplayLocale));
             }
           }
 
-          showInputForm (aWPEC, aSelectedObject, aForm, bEdit, bCopy, aFormErrors);
+          if (bShowInputForm)
+          {
+            // Show the input form. Either for the first time or because of form
+            // errors a n-th time
+            bShowList = false;
+            final HCForm aForm = isFileUploadForm () ? createFormFileUploadSelf () : createFormSelf ();
+            aNodeList.addChild (aForm);
+            aForm.setID (INPUT_FORM_ID);
 
-          // Toolbar on bottom
-          if (bEdit)
-          {
-            if (showEditToolbar (aWPEC, aSelectedObject))
-              aForm.addChild (createEditToolbar (aWPEC, aForm, aSelectedObject));
+            // The unique form ID, that allows to identify on "transaction"
+            // -> Used only for "form state remembering"
+            aForm.addChild (new HCHiddenField (new RequestField (FIELD_FLOW_ID, GlobalIDFactory.getNewStringID ())));
+
+            modifyFormBeforeShowInputForm (aForm);
+
+            // Is there as saved state to use?
+            final String sRestoreFlowID = aWPEC.getAttr (FIELD_RESTORE_FLOW_ID);
+            if (sRestoreFlowID != null)
+            {
+              final FormState aSavedState = FormStateManager.getInstance ().getFormStateOfID (sRestoreFlowID);
+              if (aSavedState != null)
+              {
+                aForm.addChild (new HCScriptOnDocumentReady (JSFormHelper.setAllFormValues (INPUT_FORM_ID,
+                                                                                            aSavedState.getAsAssocArray ())));
+              }
+            }
+
+            showInputForm (aWPEC, aSelectedObject, aForm, bIsEdit, bIsCopy, aFormErrors);
+
+            // Toolbar on bottom
+            if (bIsEdit)
+            {
+              if (showEditToolbar (aWPEC, aSelectedObject))
+                aForm.addChild (createEditToolbar (aWPEC, aForm, aSelectedObject));
+            }
+            else
+            {
+              if (showCreateToolbar (aWPEC, aSelectedObject))
+                aForm.addChild (createCreateToolbar (aWPEC, aForm, aSelectedObject));
+            }
           }
-          else
-          {
-            if (showCreateToolbar (aWPEC, aSelectedObject))
-              aForm.addChild (createCreateToolbar (aWPEC, aForm, aSelectedObject));
-          }
-        }
-      }
-      else
-        if (aWPEC.hasAction (ACTION_DELETE) && aSelectedObject != null)
-        {
-          bShowList = handleDeleteAction (aWPEC, aSelectedObject);
         }
         else
-          if (aWPEC.hasAction (ACTION_UNDELETE) && aSelectedObject != null)
+          if (eAction == EWebPageFormAction.DELETE)
           {
-            bShowList = handleUndeleteAction (aWPEC, aSelectedObject);
+            bShowList = handleDeleteAction (aWPEC, aSelectedObject);
           }
           else
-          {
-            // Other proprietary actions
-            bShowList = handleCustomActions (aWPEC, aSelectedObject);
-          }
+            if (eAction == EWebPageFormAction.UNDELETE)
+            {
+              bShowList = handleUndeleteAction (aWPEC, aSelectedObject);
+            }
+            else
+            {
+              // Other proprietary actions
+              bShowList = handleCustomActions (aWPEC, aSelectedObject);
+            }
+      }
+    }
 
     if (bShowList)
     {
