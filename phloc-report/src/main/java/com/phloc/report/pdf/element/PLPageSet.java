@@ -51,7 +51,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Represents a single page layout as element
- * 
+ *
  * @author Philip Helger
  */
 public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
@@ -68,7 +68,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     /**
      * Set the page header height.
-     * 
+     *
      * @param fHeaderHeight
      *        Height without padding or margin.
      */
@@ -110,7 +110,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     /**
      * Set the page footer height.
-     * 
+     *
      * @param fFooterHeight
      *        Height without padding or margin.
      */
@@ -129,7 +129,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
     /**
      * Add a list of elements for a single page.
-     * 
+     *
      * @param aCurPageElements
      *        The list to use. May neither be <code>null</code> nor empty.
      */
@@ -221,7 +221,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   /**
    * Set the global page header
-   * 
+   *
    * @param aPageHeader
    *        The global page header. May be <code>null</code>.
    * @return this
@@ -259,7 +259,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   /**
    * Set the global page footer
-   * 
+   *
    * @param aPageFooter
    *        The global page footer. May be <code>null</code>.
    * @return this
@@ -333,11 +333,11 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       float fCurY = fYTop;
 
       // Create a copy of the list, so that we can safely modify it
-      final List <PLElementWithSize> aElementsWithHeight = ret.getAllElements ();
-      while (!aElementsWithHeight.isEmpty ())
+      final List <PLElementWithSize> aElementsWithSize = ret.getAllElements ();
+      while (!aElementsWithSize.isEmpty ())
       {
         // Use the first element
-        final PLElementWithSize aElementWithSize = aElementsWithHeight.remove (0);
+        final PLElementWithSize aElementWithSize = aElementsWithSize.remove (0);
         final AbstractPLElement <?> aElement = aElementWithSize.getElement ();
 
         boolean bIsPagebreakDesired = aElement instanceof PLPageBreak;
@@ -362,8 +362,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
             {
               // Re-add them to the list and try again (they may be splitted
               // recursively)
-              aElementsWithHeight.add (0, aSplitResult.getFirstElement ());
-              aElementsWithHeight.add (1, aSplitResult.getSecondElement ());
+              aElementsWithSize.add (0, aSplitResult.getFirstElement ());
+              aElementsWithSize.add (1, aSplitResult.getSecondElement ());
 
               if (s_aLogger.isDebugEnabled ())
                 s_aLogger.debug ("Split " +
@@ -383,6 +383,87 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           {
             if (!bIsPagebreakDesired)
             {
+              // // XXX use max line count here
+              // final int maxLineCount = 40;
+              //
+              // if (aElement instanceof PLTable)
+              // {
+              // final PLTable aTable = (PLTable) aElement;
+              // boolean bSplittedTable = false;
+              //
+              // int currentRowNumber = 0;
+              // for (Row aRow : aTable.getAllRows ())
+              // {
+              // if (aRow.getElement () instanceof PLHBox)
+              // {
+              // // For all cells in row
+              // PLHBox aHBox = (PLHBox) aRow.getElement ();
+              //
+              // boolean bRowNeedsSplitting = false;
+              // for (Column aCell : aHBox.getAllColumns ())
+              // if (aCell.getElement () instanceof PLText &&
+              // ((PLText) aCell.getElement ()).getPreparedLineCountUnmodified
+              // () > maxLineCount)
+              // {
+              // bRowNeedsSplitting = true;
+              // bSplittedTable = true;
+              // break;
+              // }
+              //
+              // if (bRowNeedsSplitting)
+              // {
+              // final PLHBox aNewHBox = new PLHBox ();
+              // currentRowNumber++;
+              // aTable.addRow (currentRowNumber, aNewHBox);
+              //
+              // for (int i = 0; i < aHBox.getColumnCount (); i++)
+              // {
+              // final Column aCell = aHBox.getColumnAtIndex (i);
+              //
+              // if (aCell.getElement () instanceof PLText &&
+              // ((PLText) aCell.getElement ()).getPreparedLineCountUnmodified
+              // () > maxLineCount)
+              // {
+              // final PLText aOldText = (PLText) aCell.getElement ();
+              // final List <TextAndWidthSpec> aOldLines =
+              // aOldText.getAllPreparedLinesUnmodified ();
+              //
+              // // cut text in current column
+              // aCell.setElement (aOldText.getCopy (aElementWithSize.getWidth
+              // (),
+              // aOldLines.subList (0, maxLineCount),
+              // false).getElement ());
+              //
+              // // Add text to the new column
+              // aNewHBox.addColumn (aOldText.getCopy (aElementWithSize.getWidth
+              // (),
+              // aOldLines.subList (maxLineCount, aOldLines.size ()),
+              // false).getElement (),
+              // aCell.getWidth ());
+              //
+              // }
+              // else
+              // aNewHBox.addColumn (new PLSpacerX (), aCell.getWidth ());
+              // }
+              // }
+              // }
+              // currentRowNumber++;
+              // }
+              //
+              // if (bSplittedTable)
+              // {
+              // // Go to start
+              // final PreparationContext aRPC = new PreparationContext
+              // (getAvailableWidth () -
+              // aElement.getMarginPlusPaddingXSum (),
+              // getAvailableHeight () -
+              // aElement.getMarginPlusPaddingYSum ());
+              // aTable.prepare (aRPC);
+              // aElementsWithSize.add (0, aElementWithSize);
+              // continue;
+              // }
+              // }
+
               // one element too large for a page
               s_aLogger.warn ("A single element (" +
                               CGStringHelper.getClassLocalName (aElement) +
@@ -399,7 +480,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
             fCurY = fYTop;
 
             // Re-add element and continue from start, so that splitting happens
-            aElementsWithHeight.add (0, aElementWithSize);
+            aElementsWithSize.add (0, aElementWithSize);
             continue;
           }
         }
@@ -419,7 +500,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   /**
    * Render all pages of this layout to the specified PDDocument
-   * 
+   *
    * @param aPrepareResult
    *        The preparation result. May not be <code>null</code>.
    * @param aDoc
