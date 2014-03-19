@@ -26,11 +26,13 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -45,30 +47,34 @@ import com.phloc.report.pdf.spec.WidthSpec;
 
 /**
  * Horizontal box - groups several columns.
- * 
+ *
  * @author Philip Helger
  */
 public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends AbstractPLElement <IMPLTYPE>
 {
+  @NotThreadSafe
   public static final class Column
   {
-    private final AbstractPLElement <?> m_aElement;
+    private AbstractPLElement <?> m_aElement;
     private final WidthSpec m_aWidth;
 
     public Column (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final WidthSpec aWidth)
     {
-      if (aElement == null)
-        throw new NullPointerException ("element");
-      if (aWidth == null)
-        throw new NullPointerException ("width");
-      m_aElement = aElement;
-      m_aWidth = aWidth;
+      setElement (aElement);
+      m_aWidth = ValueEnforcer.notNull (aWidth, "Width");
     }
 
     @Nonnull
     public AbstractPLElement <?> getElement ()
     {
       return m_aElement;
+    }
+
+    @Nonnull
+    public Column setElement (@Nonnull final AbstractPLElement <?> aElement)
+    {
+      m_aElement = ValueEnforcer.notNull (aElement, "Element");
+      return this;
     }
 
     @Nonnull
@@ -162,7 +168,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   * 
+   *
    * @param aBorder
    *        The border style to use. May be <code>null</code>.
    * @return this
@@ -175,7 +181,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   * 
+   *
    * @param aBorderX
    *        The border to set for left and right. Maybe <code>null</code>.
    * @param aBorderY
@@ -191,7 +197,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   * 
+   *
    * @param aBorderLeft
    *        The border to set for left. Maybe <code>null</code>.
    * @param aBorderTop
@@ -213,7 +219,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
 
   /**
    * Set the border around each contained column.
-   * 
+   *
    * @param aBorder
    *        The border to set. May not be <code>null</code>.
    * @return this
@@ -231,7 +237,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the left border value around each contained column. This method may not
    * be called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -245,7 +251,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the top border value around each contained column. This method may not
    * be called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -259,7 +265,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the right border value around each contained column. This method may
    * not be called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -273,7 +279,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the bottom border value around each contained column. This method may
    * not be called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -287,7 +293,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Get the border around each contained column. By default
    * {@link BorderSpec#BORDER0} which means no border is used.
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -299,7 +305,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Set the fill color to be used to fill the whole column. <code>null</code>
    * means no fill color.
-   * 
+   *
    * @param aColumnFillColor
    *        The fill color to use. May be <code>null</code> to indicate no fill
    *        color (which is also the default).
@@ -315,7 +321,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   /**
    * Get the fill color to be used to fill the whole column. <code>null</code>
    * means no fill color.
-   * 
+   *
    * @return May be <code>null</code>.
    */
   @Nullable
@@ -458,12 +464,18 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("columns", m_aColumns)
-                            .append ("startWidthItems", m_nStarWidthItems)
-                            .append ("columnBorder", m_aColumnBorder)
-                            .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
-                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-                            .toString ();
+        .append ("columns", m_aColumns)
+        .append ("startWidthItems", m_nStarWidthItems)
+        .append ("columnBorder", m_aColumnBorder)
+        .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
+        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+        .toString ();
+  }
+
+  // XXX
+  public float [] getPreparedWidth ()
+  {
+    return m_aPreparedWidth;
   }
 }

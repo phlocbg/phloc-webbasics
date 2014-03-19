@@ -26,11 +26,13 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -44,26 +46,32 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Vertical box - groups several rows.
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>> extends AbstractPLElement <IMPLTYPE>
 {
+  @NotThreadSafe
   public static final class Row
   {
-    private final AbstractPLElement <?> m_aElement;
+    private AbstractPLElement <?> m_aElement;
 
     public Row (@Nonnull final AbstractPLElement <?> aElement)
     {
-      if (aElement == null)
-        throw new NullPointerException ("element");
-      m_aElement = aElement;
+      setElement (aElement);
     }
 
     @Nonnull
     public AbstractPLElement <?> getElement ()
     {
       return m_aElement;
+    }
+
+    @Nonnull
+    public Row setElement (@Nonnull final AbstractPLElement <?> aElement)
+    {
+      m_aElement = ValueEnforcer.notNull (aElement, "Element");
+      return this;
     }
   }
 
@@ -100,7 +108,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
 
   /**
    * Get the row at the specified index.
-   * 
+   *
    * @param nIndex
    *        The index to use. Should be &ge; 0.
    * @return <code>null</code> if an invalid index was provided.
@@ -131,7 +139,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
 
   /**
    * Get the element in the row at the specified index.
-   * 
+   *
    * @param nIndex
    *        The index to use. Should be &ge; 0.
    * @return <code>null</code> if an invalid index was provided.
@@ -167,7 +175,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
 
   /**
    * Add a row to this VBox.
-   * 
+   *
    * @param aElement
    *        The row to be added. May not be <code>null</code>.
    * @return this
@@ -182,8 +190,28 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   }
 
   /**
+   * Add a row to this VBox.
+   *
+   * @param aElement
+   *        The row to be added. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public IMPLTYPE addRow (@Nonnegative final int nIndex, @Nonnull final AbstractPLElement <?> aElement)
+  {
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    checkNotPrepared ();
+    final Row aItem = new Row (aElement);
+    if (nIndex >= m_aRows.size ())
+      m_aRows.add (aItem);
+    else
+      m_aRows.add (nIndex, aItem);
+    return thisAsT ();
+  }
+
+  /**
    * Set the border around each contained row.
-   * 
+   *
    * @param aBorder
    *        The border style to use. May be <code>null</code>.
    * @return this
@@ -196,7 +224,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
 
   /**
    * Set the border around each contained row.
-   * 
+   *
    * @param aBorderX
    *        The border to set for left and right. Maybe <code>null</code>.
    * @param aBorderY
@@ -211,7 +239,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
 
   /**
    * Set the border around each contained row.
-   * 
+   *
    * @param aBorderLeft
    *        The border to set for left. Maybe <code>null</code>.
    * @param aBorderTop
@@ -233,7 +261,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
 
   /**
    * Set the border around each contained row.
-   * 
+   *
    * @param aBorder
    *        The border to set. May not be <code>null</code>.
    * @return this
@@ -251,7 +279,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Set the left border value around each contained row. This method may not be
    * called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -265,7 +293,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Set the top border value around each contained row. This method may not be
    * called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -279,7 +307,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Set the right border value around each contained row. This method may not
    * be called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -293,7 +321,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Set the bottom border value around each contained row. This method may not
    * be called after an element got prepared!
-   * 
+   *
    * @param aBorder
    *        The value to use. May be <code>null</code>.
    * @return this
@@ -307,7 +335,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Get the border around each contained row. By default
    * {@link BorderSpec#BORDER0} which means no border is used.
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -319,7 +347,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Set the fill color to be used to fill the whole row. <code>null</code>
    * means no fill color.
-   * 
+   *
    * @param aRowFillColor
    *        The fill color to use. May be <code>null</code> to indicate no fill
    *        color (which is also the default).
@@ -335,7 +363,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   /**
    * Get the fill color to be used to fill the whole row. <code>null</code>
    * means no fill color.
-   * 
+   *
    * @return May be <code>null</code>.
    */
   @Nullable
@@ -449,11 +477,11 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("rows", m_aRows)
-                            .append ("rowBorder", m_aRowBorder)
-                            .appendIfNotNull ("rowFillColor", m_aRowFillColor)
-                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-                            .toString ();
+        .append ("rows", m_aRows)
+        .append ("rowBorder", m_aRowBorder)
+        .appendIfNotNull ("rowFillColor", m_aRowFillColor)
+        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+        .toString ();
   }
 }

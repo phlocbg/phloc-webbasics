@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.report.pdf.spec.FontSpec;
-import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
 /**
@@ -61,21 +60,10 @@ public class PLTextSplittable extends PLText implements IPLSplittableElement
       return null;
     }
 
-    final List <TextAndWidthSpec> aLines1 = ContainerHelper.newList (aLines.subList (0, nLines1));
-    final List <TextAndWidthSpec> aLines2 = ContainerHelper.newList (aLines.subList (nLines1, aLines.size ()));
-
-    // Excluding padding/margin
-    final SizeSpec aSize1 = new SizeSpec (fElementWidth, aLines1.size () * fLineHeight);
-    final SizeSpec aSize2 = new SizeSpec (fElementWidth, aLines2.size () * fLineHeight);
-
-    // Text1 does not need to be splittable anymore
-    final PLText aNewText1 = new PLTextSplittable (TextAndWidthSpec.getAsText (aLines1), getFontSpec ());
-    aNewText1.setBasicDataFrom (this).markAsPrepared (aSize1).internalSetPreparedLines (aLines1);
-
-    // Text2 needs to be splittable again
-    final PLTextSplittable aNewText2 = new PLTextSplittable (TextAndWidthSpec.getAsText (aLines2), getFontSpec ());
-    aNewText2.setBasicDataFrom (this).markAsPrepared (aSize2).internalSetPreparedLines (aLines2);
-
-    return new PLSplitResult (new PLElementWithSize (aNewText1, aSize1), new PLElementWithSize (aNewText2, aSize2));
+    // First elements does not need to be splittable anymore
+    final PLElementWithSize aText1 = getCopy (fElementWidth, aLines.subList (0, nLines1), false);
+    // Second element may need additional splitting
+    final PLElementWithSize aText2 = getCopy (fElementWidth, aLines.subList (nLines1, aLines.size ()), true);
+    return new PLSplitResult (aText1, aText2);
   }
 }

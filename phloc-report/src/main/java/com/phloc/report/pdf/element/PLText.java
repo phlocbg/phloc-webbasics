@@ -28,7 +28,10 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
@@ -43,7 +46,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
 /**
  * Render text
- * 
+ *
  * @author Philip Helger
  */
 public class PLText extends AbstractPLElement <PLText>
@@ -61,6 +64,8 @@ public class PLText extends AbstractPLElement <PLText>
   private int m_nMaxRows = DEFAULT_MAX_ROWS;
 
   // prepare result
+  protected int m_nPreparedLineCountUnmodified = CGlobal.ILLEGAL_UINT;
+  protected List <TextAndWidthSpec> m_aPreparedLinesUnmodified;
   protected List <TextAndWidthSpec> m_aPreparedLines;
 
   public PLText (@Nullable final String sText, @Nonnull final FontSpec aFont)
@@ -70,13 +75,9 @@ public class PLText extends AbstractPLElement <PLText>
 
   public PLText (@Nullable final String sText, @Nonnull final Charset aCharset, @Nonnull final FontSpec aFont)
   {
-    if (aCharset == null)
-      throw new NullPointerException ("Charset");
-    if (aFont == null)
-      throw new NullPointerException ("Font");
     m_sText = StringHelper.getNotNull (sText);
-    m_aCharset = aCharset;
-    m_aFont = aFont;
+    m_aCharset = ValueEnforcer.notNull (aCharset, "Charset");
+    m_aFont = ValueEnforcer.notNull (aFont, "Font");
     m_fLineHeight = m_aFont.getLineHeight ();
   }
 
@@ -121,7 +122,7 @@ public class PLText extends AbstractPLElement <PLText>
 
   /**
    * Set the horizontal alignment of the text.
-   * 
+   *
    * @param eHorzAlign
    *        The new horizontal alignment. May not be <code>null</code>.
    * @return this
@@ -147,7 +148,7 @@ public class PLText extends AbstractPLElement <PLText>
 
   /**
    * Set the rendering direction: top-down or bottom-up.
-   * 
+   *
    * @param bTopDown
    *        <code>true</code> to render top-down, <code>false</code> to render
    *        bottom-up.
@@ -173,7 +174,7 @@ public class PLText extends AbstractPLElement <PLText>
 
   /**
    * Set the maximum number of rows to render.
-   * 
+   *
    * @param nMaxRows
    *        Maximum number of rows. If &le; 0 than all lines are rendered.
    * @return this
@@ -187,6 +188,9 @@ public class PLText extends AbstractPLElement <PLText>
 
   final void internalSetPreparedLines (@Nonnull final List <TextAndWidthSpec> aLines)
   {
+    final int nLines = aLines.size ();
+    m_nPreparedLineCountUnmodified = nLines;
+    m_aPreparedLinesUnmodified = aLines;
     if (m_nMaxRows <= 0)
     {
       // Use all lines
@@ -195,7 +199,7 @@ public class PLText extends AbstractPLElement <PLText>
     else
     {
       // Use only a certain maximum number of rows
-      if (aLines.size () <= m_nMaxRows)
+      if (nLines <= m_nMaxRows)
       {
         // We have less lines than the maximum
         m_aPreparedLines = aLines;
@@ -225,9 +229,30 @@ public class PLText extends AbstractPLElement <PLText>
   }
 
   /**
+   * @return The total number of prepared lines, not taking the maxRows into
+   *         consideration. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getPreparedLineCountUnmodified ()
+  {
+    if (m_nPreparedLineCountUnmodified == CGlobal.ILLEGAL_UINT)
+      throw new IllegalStateException ("Preparation is not yet done");
+    return m_nPreparedLineCountUnmodified;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <TextAndWidthSpec> getAllPreparedLinesUnmodified ()
+  {
+    if (m_aPreparedLinesUnmodified == null)
+      throw new IllegalStateException ("Preparation is not yet done");
+    return ContainerHelper.newList (m_aPreparedLinesUnmodified);
+  }
+
+  /**
    * Get the text to draw, in case it is different from the stored text (e.g.
    * for page numbers in {@link PLTextWithPlaceholders})
-   * 
+   *
    * @param sText
    *        Original text. Never <code>null</code>.
    * @param aCtx
@@ -318,6 +343,27 @@ public class PLText extends AbstractPLElement <PLText>
       }
     }
     aContentStream.endText ();
+  }
+
+  @Nonnull
+  public PLElementWithSize getCopy (final float fElementWidth,
+                                    @Nonnull @Nonempty final List <TextAndWidthSpec> aLines,
+                                    final boolean bSplittableCopy)
+  {
+    ValueEnforcer.notEmpty (aLines, "Lines");
+
+    final List <TextAndWidthSpec> aLineCopy = ContainerHelper.newList (aLines);
+    final float fLineHeight = getLineHeight ();
+
+    // Excluding padding/margin
+    final SizeSpec aSize = new SizeSpec (fElementWidth, aLineCopy.size () * fLineHeight);
+
+    final String sTextContent = TextAndWidthSpec.getAsText (aLineCopy);
+    final PLText aNewText = bSplittableCopy ? new PLTextSplittable (sTextContent, getFontSpec ())
+                                           : new PLText (sTextContent, getFontSpec ());
+    aNewText.setBasicDataFrom (this).markAsPrepared (aSize).internalSetPreparedLines (aLineCopy);
+
+    return new PLElementWithSize (aNewText, aSize);
   }
 
   @Override
