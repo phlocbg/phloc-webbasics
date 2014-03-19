@@ -352,7 +352,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected abstract DATATYPE getSelectedObject (@Nonnull WebPageExecutionContext aWPEC, @Nullable String sID);
 
   /**
-   * Try to lock the specified object. When overring the method make sure to
+   * Try to lock the specified object. When overriding the method make sure to
    * emit all error messages on your own, when e.g. an object is locked. If
    * {@link EContinue#BREAK} is returned, no further UI stuff is performed.
    * 
@@ -374,6 +374,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
                                            @Nullable final DATATYPE aSelectedObject,
                                            @Nullable final EWebPageFormAction eFormAction)
   {
+    // MetaSystemManager.getLockManager ().lockObject (sObjID)
     return EContinue.CONTINUE;
   }
 
