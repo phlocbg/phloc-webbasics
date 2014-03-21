@@ -76,12 +76,12 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.famfam.EFamFamIcon;
-import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 import com.phloc.webpages.ui.HCCharsetSelect;
 import com.phloc.webscopes.smtp.ScopedMailAPI;
 
-public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings>
+public class BasePageSettingsSMTP extends AbstractWebPageFormExt <NamedSMTPSettings>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -208,6 +208,13 @@ public class BasePageSettingsSMTP extends AbstractWebPageForm <NamedSMTPSettings
     if (aMgr == null)
       throw new NullPointerException ("NamedSMTPSettingsManager");
     m_aMgr = aMgr;
+  }
+
+  @Override
+  @Nullable
+  protected String getObjectDisplayName (@Nonnull final NamedSMTPSettings aSelectedObject)
+  {
+    return aSelectedObject.getName ();
   }
 
   @Override

@@ -22,16 +22,11 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.appbasics.security.AccessManager;
-import com.phloc.appbasics.security.lock.LockResult;
-import com.phloc.appbasics.security.lock.ObjectLockManager;
-import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EContinue;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.html.HCForm;
@@ -44,7 +39,6 @@ import com.phloc.webbasics.form.FormState;
 import com.phloc.webbasics.form.FormStateManager;
 import com.phloc.webbasics.form.RequestField;
 import com.phloc.webbasics.form.ajax.AjaxHandlerSaveFormState;
-import com.phloc.webbasics.mgr.MetaSystemManager;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.js.JSFormHelper;
 
@@ -111,20 +105,6 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected final String getSelectedObjectID (@Nonnull final WebPageExecutionContext aWPEC)
   {
     return aWPEC.getAttr (CHCParam.PARAM_OBJECT);
-  }
-
-  /**
-   * Get the display name of the passed object.
-   * 
-   * @param aSelectedObject
-   *        The object to get the display name from. Never <code>null</code>.
-   * @return <code>null</code> to indicate that no display name is available
-   */
-  @Nullable
-  @OverrideOnDemand
-  protected String getObjectDisplayName (@Nonnull final DATATYPE aSelectedObject)
-  {
-    return null;
   }
 
   /**
@@ -372,9 +352,11 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
   protected abstract DATATYPE getSelectedObject (@Nonnull WebPageExecutionContext aWPEC, @Nullable String sID);
 
   /**
-   * Try to lock the specified object. When overriding the method make sure to
-   * emit all error messages on your own, when e.g. an object is locked. If
-   * {@link EContinue#BREAK} is returned, no further UI stuff is performed.
+   * This method is called before the main processing starts. It can e.g. be
+   * used to try to lock the specified object. When overriding the method make
+   * sure to emit all error messages on your own, when e.g. an object is locked.
+   * If {@link EContinue#BREAK} is returned, the list of objects is shown by
+   * default.
    * 
    * @param aWPEC
    *        The current web page execution context. Never <code>null</code>.
@@ -390,43 +372,30 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
    */
   @Nonnull
   @OverrideOnDemand
-  protected EContinue handleObjectLocking (@Nonnull final WebPageExecutionContext aWPEC,
-                                           @Nullable final DATATYPE aSelectedObject,
-                                           @Nullable final EWebPageFormAction eFormAction)
+  protected EContinue beforeProcessing (@Nonnull final WebPageExecutionContext aWPEC,
+                                        @Nullable final DATATYPE aSelectedObject,
+                                        @Nullable final EWebPageFormAction eFormAction)
   {
-    final ObjectLockManager aOLM = MetaSystemManager.getLockManager ();
-    // Lock EDIT and DELETE if an object is present
-    if ((eFormAction == EWebPageFormAction.EDIT || eFormAction == EWebPageFormAction.DELETE) && aSelectedObject != null)
-    {
-      // Try to lock object
-      final String sObjectID = aSelectedObject.getID ();
-      final LockResult <String> aLockResult = aOLM.lockObjectAndUnlockAllOthers (sObjectID);
-      if (aLockResult.isNotLocked ())
-      {
-        // Failed to lock object
-        final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
-        final HCNodeList aNodeList = aWPEC.getNodeList ();
-
-        final String sLockUserID = aOLM.getLockUserID (sObjectID);
-        final IUser aLockUser = AccessManager.getInstance ().getUserOfID (sLockUserID);
-        final String sObjectName = getObjectDisplayName (aSelectedObject);
-        final String sDisplayObjectName = StringHelper.hasText (sObjectName) ? " '" + sObjectName + "'" : "";
-        final String sDisplayUserName = aLockUser != null ? "'" + aLockUser.getDisplayName () + "'"
-                                                         : EWebPageText.LOCKING_OTHER_USER.getDisplayText (aDisplayLocale);
-        aNodeList.addChild (getStyler ().createErrorBox (EWebPageText.LOCKING_FAILED.getDisplayTextWithArgs (aDisplayLocale,
-                                                                                                             sDisplayObjectName,
-                                                                                                             sDisplayUserName)));
-        return EContinue.BREAK;
-      }
-    }
-    else
-    {
-      // No lock action required - unlock all
-      aOLM.unlockAllObjectsOfCurrentUser ();
-    }
-
     return EContinue.CONTINUE;
   }
+
+  /**
+   * This method is called after the processing as the last action.
+   * 
+   * @param aWPEC
+   *        The current web page execution context. Never <code>null</code>.
+   * @param aSelectedObject
+   *        The currently selected object. May be <code>null</code> if no object
+   *        is selected.
+   * @param eFormAction
+   *        The current form action. May be <code>null</code> if a non-standard
+   *        action is handled.
+   */
+  @OverrideOnDemand
+  protected void afterProcessing (@Nonnull final WebPageExecutionContext aWPEC,
+                                  @Nullable final DATATYPE aSelectedObject,
+                                  @Nullable final EWebPageFormAction eFormAction)
+  {}
 
   /**
    * @param aWPEC
@@ -574,29 +543,29 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     final boolean bIsEditAllowed = isEditAllowed (aSelectedObject);
     boolean bShowList = true;
     final String sAction = aWPEC.getAction ();
-    EWebPageFormAction eAction = null;
+    EWebPageFormAction eFormAction = null;
     if (ACTION_VIEW.equals (sAction) && aSelectedObject != null)
-      eAction = EWebPageFormAction.VIEW;
+      eFormAction = EWebPageFormAction.VIEW;
     else
       if (ACTION_CREATE.equals (sAction))
-        eAction = EWebPageFormAction.CREATE;
+        eFormAction = EWebPageFormAction.CREATE;
       else
         if (ACTION_EDIT.equals (sAction) && bIsEditAllowed && aSelectedObject != null)
-          eAction = EWebPageFormAction.EDIT;
+          eFormAction = EWebPageFormAction.EDIT;
         else
           if (ACTION_COPY.equals (sAction) && aSelectedObject != null)
-            eAction = EWebPageFormAction.COPY;
+            eFormAction = EWebPageFormAction.COPY;
           else
             if (ACTION_DELETE.equals (sAction) && aSelectedObject != null)
-              eAction = EWebPageFormAction.DELETE;
+              eFormAction = EWebPageFormAction.DELETE;
             else
               if (ACTION_UNDELETE.equals (sAction) && aSelectedObject != null)
-                eAction = EWebPageFormAction.UNDELETE;
+                eFormAction = EWebPageFormAction.UNDELETE;
 
     // Try to lock object
-    if (handleObjectLocking (aWPEC, aSelectedObject, eAction).isContinue ())
+    if (beforeProcessing (aWPEC, aSelectedObject, eFormAction).isContinue ())
     {
-      if (eAction == EWebPageFormAction.VIEW)
+      if (eFormAction == EWebPageFormAction.VIEW)
       {
         // Valid object found - show details
         handleViewObject (aWPEC, aSelectedObject, bIsEditAllowed);
@@ -605,12 +574,12 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
       }
       else
       {
-        if (eAction == EWebPageFormAction.CREATE ||
-            eAction == EWebPageFormAction.EDIT ||
-            eAction == EWebPageFormAction.COPY)
+        if (eFormAction == EWebPageFormAction.CREATE ||
+            eFormAction == EWebPageFormAction.EDIT ||
+            eFormAction == EWebPageFormAction.COPY)
         {
-          final boolean bIsEdit = eAction == EWebPageFormAction.EDIT;
-          final boolean bIsCopy = eAction == EWebPageFormAction.COPY;
+          final boolean bIsEdit = eFormAction == EWebPageFormAction.EDIT;
+          final boolean bIsCopy = eFormAction == EWebPageFormAction.COPY;
 
           // Create or edit a client
           final FormErrors aFormErrors = new FormErrors ();
@@ -678,12 +647,12 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
           }
         }
         else
-          if (eAction == EWebPageFormAction.DELETE)
+          if (eFormAction == EWebPageFormAction.DELETE)
           {
             bShowList = handleDeleteAction (aWPEC, aSelectedObject);
           }
           else
-            if (eAction == EWebPageFormAction.UNDELETE)
+            if (eFormAction == EWebPageFormAction.UNDELETE)
             {
               bShowList = handleUndeleteAction (aWPEC, aSelectedObject);
             }
@@ -699,5 +668,8 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     {
       showListOfExistingObjects (aWPEC);
     }
+
+    // Call after everything
+    afterProcessing (aWPEC, aSelectedObject, eFormAction);
   }
 }

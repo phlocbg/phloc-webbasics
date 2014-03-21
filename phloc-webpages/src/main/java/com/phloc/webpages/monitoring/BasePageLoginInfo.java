@@ -58,7 +58,7 @@ import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableDateTime;
 import com.phloc.webctrls.security.SecurityUI;
-import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 
 /**
@@ -66,7 +66,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
+public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -130,6 +130,13 @@ public class BasePageLoginInfo extends AbstractWebPageForm <LoginInfo>
                             @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
+  }
+
+  @Override
+  @Nullable
+  protected String getObjectDisplayName (@Nonnull final LoginInfo aSelectedObject)
+  {
+    return aSelectedObject.getUser ().getDisplayName ();
   }
 
   @Override

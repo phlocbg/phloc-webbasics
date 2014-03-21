@@ -79,12 +79,12 @@ import com.phloc.webctrls.custom.table.IHCTableFormView;
 import com.phloc.webctrls.custom.toolbar.IButtonToolbar;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.security.SecurityUI;
-import com.phloc.webpages.AbstractWebPageForm;
+import com.phloc.webpages.AbstractWebPageFormExt;
 import com.phloc.webpages.EWebPageText;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class BasePageUserManagement extends AbstractWebPageForm <IUser>
+public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 {
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
@@ -223,6 +223,13 @@ public class BasePageUserManagement extends AbstractWebPageForm <IUser>
   protected boolean isEmailMandatory ()
   {
     return true;
+  }
+
+  @Override
+  @Nullable
+  protected String getObjectDisplayName (@Nonnull final IUser aSelectedObject)
+  {
+    return aSelectedObject.getDisplayName ();
   }
 
   @Override
