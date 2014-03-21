@@ -47,7 +47,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Callbacks for the application server
- * 
+ *
  * @author Philip Helger
  */
 public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistics
@@ -80,7 +80,6 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
     JSPrinter.setGenerateComments (false);
     JSPrinter.setGenerateTypeNames (false);
     JSPrinter.setIndentAndAlign (GlobalDebug.isDebugMode ());
-    JSPrinter.setMinimumCodeSize (!GlobalDebug.isDebugMode ());
   }
 
   @Override
