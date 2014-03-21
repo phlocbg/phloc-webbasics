@@ -64,7 +64,7 @@ import com.phloc.webbasics.form.RequestFieldDate;
  * By default it is a date selector only. If you want to have times as well, you
  * call {@link #setMinView(EDateTimePickerViewType)} with the type
  * {@link EDateTimePickerViewType#HOUR}.
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
@@ -132,10 +132,10 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     m_aEdit = new HCEdit (sName, sValue).setPlaceholder ("");
     m_aDisplayLocale = aDisplayLocale;
     m_eLanguage = EDateTimePickerLanguage.getFromLocaleOrNull (aDisplayLocale);
-    if (m_eLanguage == null)
+    if (m_eLanguage == null && !"en".equals (aDisplayLocale.getLanguage ()))
       s_aLogger.warn ("Unsupported EDateTimePickerLanguage provided: " + aDisplayLocale);
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
-                                                                            .getFirstDayOfWeek ());
+                                                                    .getFirstDayOfWeek ());
     m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
   }
 
@@ -526,8 +526,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     else
     {
       final String sDefaultFormat = BootstrapDateTimePickerFormatBuilder.fromJavaPattern (isShowTime () ? PDTFormatPatterns.getDefaultPatternDateTime (m_aDisplayLocale)
-                                                                                                       : PDTFormatPatterns.getDefaultPatternDate (m_aDisplayLocale))
-                                                                        .getJSFormatString ();
+                                                                                                        : PDTFormatPatterns.getDefaultPatternDate (m_aDisplayLocale))
+                                                                                                        .getJSFormatString ();
       aOptions.add ("format", sDefaultFormat);
     }
     if (m_eWeekStart != null)

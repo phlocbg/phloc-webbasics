@@ -28,7 +28,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * All locales available in the Bootstrap DateTimePicker
- * 
+ *
  * @author Philip Helger
  */
 public enum EDateTimePickerLanguage
@@ -121,6 +121,11 @@ public enum EDateTimePickerLanguage
   {
     if (aLocale != null)
     {
+      // Shortcut for English, because no locale files are present as English is
+      // the default
+      if ("en".equals (aLocale.getLanguage ()))
+        return eDefault;
+
       // Check for direct match
       for (final EDateTimePickerLanguage e : values ())
         if (aLocale.equals (e.m_aLocale))
