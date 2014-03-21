@@ -25,8 +25,8 @@ import com.phloc.bootstrap3.EBootstrapIcon;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.version.Version;
 import com.phloc.html.EHTMLVersion;
+import com.phloc.html.hc.conversion.HCConversionSettings;
 import com.phloc.html.hc.conversion.HCSettings;
-import com.phloc.html.hc.customize.HCDefaultCustomizer;
 import com.phloc.html.hc.customize.HCMultiCustomizer;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.servlet.WebAppListenerMultiApp;
@@ -58,7 +58,7 @@ public abstract class WebAppListenerMultiAppBootstrap extends WebAppListenerMult
 
     // Special Bootstrap customizer
     HCSettings.getConversionSettingsProvider ()
-              .setCustomizer (new HCMultiCustomizer (new HCDefaultCustomizer (),
+              .setCustomizer (new HCMultiCustomizer (HCConversionSettings.createDefaultCustomizer (),
                                                      new BootstrapCustomizer (getBoostrapVersion ())));
 
     // Using Bootstrap icon set by default
