@@ -32,6 +32,7 @@ import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSPrinter;
 import com.phloc.web.servlet.response.UnifiedResponse;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
@@ -76,6 +77,11 @@ public final class WebHTMLCreator
     {
       // Update the HCSettings
       final HCConversionSettingsProvider aCSP = new HCConversionSettingsProvider (eHTMLVersion);
+      if (eHTMLVersion.isAtLeastHTML5 ())
+      {
+        // No need to put anything in a comment
+        HCScript.setDefaultMode (HCScript.EMode.PLAIN_TEXT_NO_ESCAPE);
+      }
       HCSettings.setConversionSettingsProvider (aCSP);
     }
   }
