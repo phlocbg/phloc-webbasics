@@ -17,12 +17,9 @@
  */
 package com.phloc.webbasics.app.html;
 
-import java.nio.charset.Charset;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
@@ -30,7 +27,6 @@ import com.phloc.commons.mime.MimeType;
 import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
 import com.phloc.html.hc.conversion.HCSettings;
-import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.hc.html.HCScript;
 import com.phloc.html.js.builder.JSPrinter;
@@ -89,9 +85,10 @@ public final class WebHTMLCreator
   /**
    * @return <code>true</code> if the HTML output should be indented and aligned
    */
+  @Deprecated
   public static boolean isIndentAndAlign ()
   {
-    return GlobalDebug.isDebugMode ();
+    return HCSettings.isDefaultPrettyPrint ();
   }
 
   /**
@@ -105,43 +102,27 @@ public final class WebHTMLCreator
   public static IMimeType getMimeType (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     // Add the charset to the MIME type
-    return new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET, getCharset ().name ());
-  }
-
-  /**
-   * Get the Charset that is used to emit the HTML code
-   *
-   * @return Never <code>null</code>.
-   */
-  @Nonnull
-  public static Charset getCharset ()
-  {
-    return HCSettings.getHTMLCharset (false);
+    return new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
+                                                            HCSettings.getHTMLCharset ().name ());
   }
 
   public static void createHTMLResponse (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                          @Nonnull final UnifiedResponse aUnifiedResponse,
                                          @Nonnull final IHTMLProvider aHTMLProvider)
   {
-    final boolean bIndentAndAlign = isIndentAndAlign ();
-
-    // Build the HC conversion settings to use
-    final IHCConversionSettings aCS = HCSettings.getConversionSettings (bIndentAndAlign)
-                                                .getCloneIfNecessary (getHTMLVersion ());
-
     // Setup JavaScript printer
-    JSPrinter.setIndentAndAlign (bIndentAndAlign);
+    JSPrinter.setIndentAndAlign (HCSettings.isDefaultPrettyPrint ());
 
     // Build the main HC tree
     final HCHtml aHtml = aHTMLProvider.createHTML (aRequestScope);
 
     // Convert HTML to String
-    final String sXMLCode = HCSettings.getAsHTMLString (aHtml, aCS);
+    final String sXMLCode = HCSettings.getAsHTMLString (aHtml);
 
     // Write to response
     final IMimeType aMimeType = getMimeType (aRequestScope);
     aUnifiedResponse.setMimeType (aMimeType)
-    .setContentAndCharset (sXMLCode, aCS.getXMLWriterSettings ().getCharsetObj ())
-    .disableCaching ();
+                    .setContentAndCharset (sXMLCode, HCSettings.getHTMLCharset ())
+                    .disableCaching ();
   }
 }
