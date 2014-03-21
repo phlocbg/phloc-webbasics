@@ -17,51 +17,72 @@
  */
 package com.phloc.webbasics.app.html;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
-import com.phloc.commons.xml.EXMLIncorrectCharacterHandling;
-import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
-import com.phloc.commons.xml.serialize.XMLWriterSettings;
-import com.phloc.css.ECSSVersion;
-import com.phloc.css.writer.CSSWriterSettings;
-import com.phloc.html.CHTMLCharset;
+import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.conversion.IHCConversionSettings;
 import com.phloc.html.hc.html.HCHtml;
 import com.phloc.html.js.builder.JSPrinter;
 import com.phloc.web.servlet.response.UnifiedResponse;
-import com.phloc.webbasics.app.ApplicationWebSettings;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * A utility class that handles a request, based on a
  * {@link IRequestWebScopeWithoutResponse}, a {@link UnifiedResponse} and an
  * {@link IHTMLProvider}.
- * 
+ *
  * @author Philip Helger
  */
-@Immutable
+@NotThreadSafe
 public final class WebHTMLCreator
 {
-  static
-  {
-    final HCConversionSettingsProvider aCSP = ((HCConversionSettingsProvider) HCSettings.getConversionSettingsProvider ());
-    aCSP.setXMLWriterSettings (new XMLWriterSettings ().setFormat (EXMLSerializeFormat.XHTML)
-                                                       .setIncorrectCharacterHandling (EXMLIncorrectCharacterHandling.DO_NOT_WRITE_LOG_WARNING)
-                                                       .setCharset (CHTMLCharset.CHARSET_HTML_OBJ));
-    aCSP.setCSSWriterSettings (new CSSWriterSettings (ECSSVersion.CSS30));
-    aCSP.setConsistencyChecksEnabled (GlobalDebug.isDebugMode ());
-  }
+  private static EHTMLVersion s_eHTMLVersion = EHTMLVersion.DEFAULT;
 
   private WebHTMLCreator ()
   {}
 
+  /**
+   * @return The HTML version to use. Never <code>null</code>.
+   */
+  @Nonnull
+  public static EHTMLVersion getHTMLVersion ()
+  {
+    return s_eHTMLVersion;
+  }
+
+  /**
+   * Set the default HTML version to use. This implicitly creates a new
+   * {@link HCConversionSettingsProvider} that will be used in
+   * {@link HCSettings}. So if you are customizing the settings ensure that this
+   * is done after setting the HTML version!
+   *
+   * @param eHTMLVersion
+   *        The HTML version. May not be <code>null</code>.
+   */
+  public static void setHTMLVersion (@Nonnull final EHTMLVersion eHTMLVersion)
+  {
+    ValueEnforcer.notNull (eHTMLVersion, "HTMLVersion");
+    if (eHTMLVersion != s_eHTMLVersion)
+    {
+      // Update the HCSettings
+      final HCConversionSettingsProvider aCSP = new HCConversionSettingsProvider (eHTMLVersion);
+      HCSettings.setConversionSettingsProvider (aCSP);
+    }
+  }
+
+  /**
+   * @return <code>true</code> if the HTML output should be indented and aligned
+   */
   public static boolean isIndentAndAlign ()
   {
     return GlobalDebug.isDebugMode ();
@@ -69,7 +90,7 @@ public final class WebHTMLCreator
 
   /**
    * Get the HTML MIME type to use
-   * 
+   *
    * @param aRequestScope
    *        The request scope
    * @return Never <code>null</code>.
@@ -78,7 +99,18 @@ public final class WebHTMLCreator
   public static IMimeType getMimeType (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     // Add the charset to the MIME type
-    return new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET, CHTMLCharset.CHARSET_HTML);
+    return new MimeType (CMimeType.TEXT_HTML).addParameter (CMimeType.PARAMETER_NAME_CHARSET, getCharset ().name ());
+  }
+
+  /**
+   * Get the Charset that is used to emit the HTML code
+   *
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public static Charset getCharset ()
+  {
+    return HCSettings.getHTMLCharset (false);
   }
 
   public static void createHTMLResponse (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
@@ -89,7 +121,7 @@ public final class WebHTMLCreator
 
     // Build the HC conversion settings to use
     final IHCConversionSettings aCS = HCSettings.getConversionSettings (bIndentAndAlign)
-                                                .getCloneIfNecessary (ApplicationWebSettings.getHTMLVersion ());
+                                                .getCloneIfNecessary (getHTMLVersion ());
 
     // Setup JavaScript printer
     JSPrinter.setIndentAndAlign (bIndentAndAlign);
@@ -103,7 +135,7 @@ public final class WebHTMLCreator
     // Write to response
     final IMimeType aMimeType = getMimeType (aRequestScope);
     aUnifiedResponse.setMimeType (aMimeType)
-                    .setContentAndCharset (sXMLCode, aCS.getXMLWriterSettings ().getCharsetObj ())
-                    .disableCaching ();
+    .setContentAndCharset (sXMLCode, aCS.getXMLWriterSettings ().getCharsetObj ())
+    .disableCaching ();
   }
 }

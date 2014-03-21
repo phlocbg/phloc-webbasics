@@ -21,17 +21,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.html.EHTMLVersion;
+import com.phloc.webbasics.app.html.WebHTMLCreator;
 
 /**
  * Contains settings for the HTML output.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
+@Deprecated
 public final class ApplicationWebSettings
 {
-  private static EHTMLVersion s_eHTMLVersion = EHTMLVersion.DEFAULT;
-
   private ApplicationWebSettings ()
   {}
 
@@ -41,19 +41,17 @@ public final class ApplicationWebSettings
   @Nonnull
   public static EHTMLVersion getHTMLVersion ()
   {
-    return s_eHTMLVersion;
+    return WebHTMLCreator.getHTMLVersion ();
   }
 
   /**
    * Set the default HTML version to use.
-   * 
+   *
    * @param eHTMLVersion
    *        The HTML version. May not be <code>null</code>.
    */
   public static void setHTMLVersion (@Nonnull final EHTMLVersion eHTMLVersion)
   {
-    if (eHTMLVersion == null)
-      throw new NullPointerException ("version");
-    s_eHTMLVersion = eHTMLVersion;
+    WebHTMLCreator.setHTMLVersion (eHTMLVersion);
   }
 }
