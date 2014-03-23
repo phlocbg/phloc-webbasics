@@ -20,6 +20,8 @@ package com.phloc.webbasics.app.page;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 
@@ -37,10 +39,8 @@ public class WebPageExecutionContext extends LayoutExecutionContext
 
   public WebPageExecutionContext (@Nonnull final LayoutExecutionContext aLEC, @Nonnull final IWebPage aWebPage)
   {
-    super (aLEC.getRequestScope (), aLEC.getDisplayLocale ());
-    if (aWebPage == null)
-      throw new NullPointerException ("webPage");
-    m_aWebPage = aWebPage;
+    super (aLEC.getRequestScope (), aLEC.getDisplayLocale (), aLEC.getSelectedMenuItemID ());
+    m_aWebPage = ValueEnforcer.notNull (aWebPage, "WebPage");
   }
 
   /**
@@ -59,5 +59,14 @@ public class WebPageExecutionContext extends LayoutExecutionContext
   public HCNodeList getNodeList ()
   {
     return m_aNodeList;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("webPage", m_aWebPage)
+                            .append ("nodeList", m_aNodeList)
+                            .toString ();
   }
 }

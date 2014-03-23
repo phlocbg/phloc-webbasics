@@ -41,6 +41,7 @@ import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.app.page.AbstractWebPage;
 import com.phloc.webbasics.app.ui.WebBasicsCSS;
 import com.phloc.webctrls.custom.EDefaultIcon;
@@ -149,9 +150,16 @@ public abstract class AbstractWebPageExt extends AbstractWebPage
   }
 
   @Nonnull
+  @Deprecated
   public static SimpleURL createCreateURL ()
   {
     return LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_CREATE));
+  }
+
+  @Nonnull
+  public static SimpleURL createCreateURL (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    return aLEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_CREATE);
   }
 
   @Nonnull

@@ -23,6 +23,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -56,8 +58,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
 
   public AbstractLayoutHTMLProvider (@Nonnull @Nonempty final List <String> aLayoutAreaIDs)
   {
-    if (ContainerHelper.isEmpty (aLayoutAreaIDs))
-      throw new IllegalArgumentException ("LayoutAreaIDs may not be empty");
+    ValueEnforcer.notEmpty (aLayoutAreaIDs, "LayoutAreaIDs");
 
     m_aLayoutAreaIDs = ContainerHelper.newList (aLayoutAreaIDs);
   }
@@ -109,16 +110,6 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
   {}
 
   /**
-   * Overridable method that is called after the content areas are rendered
-   * 
-   * @param aHtml
-   *        HTML element
-   */
-  @OverrideOnDemand
-  protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
-  {}
-
-  /**
    * Determine the content of a single area.
    * 
    * @param aLEC
@@ -131,6 +122,16 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
   @Nullable
   protected abstract IHCNode getContentOfArea (@Nonnull LayoutExecutionContext aLEC, @Nonnull String sAreaID);
 
+  /**
+   * Overridable method that is called after the content areas are rendered
+   * 
+   * @param aHtml
+   *        HTML element
+   */
+  @OverrideOnDemand
+  protected void prepareBodyAfterAreas (@Nonnull final HCHtml aHtml)
+  {}
+
   @Override
   protected void fillBody (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                            @Nonnull final HCHtml aHtml,
@@ -139,9 +140,11 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
     // create the default layout and fill the areas
     final HCBody aBody = aHtml.getBody ();
 
+    // Before callback
     prepareBodyBeforeAreas (aHtml);
 
-    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aRequestScope, aDisplayLocale);
+    final String sSelectedMenuItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
+    final LayoutExecutionContext aLEC = new LayoutExecutionContext (aRequestScope, aDisplayLocale, sSelectedMenuItemID);
 
     // For all layout areas
     for (final String sAreaID : m_aLayoutAreaIDs)
@@ -151,6 +154,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
         final IHCNode aContent = getContentOfArea (aLEC, sAreaID);
         if (m_bCreateLayoutAreaSpan)
         {
+          // Create a span around the context
           final HCSpan aSpan = new HCSpan ().addClass (CSS_CLASS_LAYOUT_AREA).setID (sAreaID);
           aSpan.addChild (aContent);
           // Append to body if no error occurred
@@ -172,6 +176,7 @@ public abstract class AbstractLayoutHTMLProvider extends AbstractHTMLProvider
       }
     }
 
+    // After callback
     prepareBodyAfterAreas (aHtml);
   }
 

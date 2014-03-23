@@ -935,7 +935,7 @@ public class BasePageUserManagement extends AbstractWebPageFormExt <IUser>
 
     // Toolbar on top
     final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
-    aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL ());
+    aToolbar.addButtonNew (EText.BUTTON_CREATE_NEW_USER.getDisplayText (aDisplayLocale), createCreateURL (aWPEC));
 
     final ITabBox <?> aTabBox = getStyler ().createTabBox ();
 

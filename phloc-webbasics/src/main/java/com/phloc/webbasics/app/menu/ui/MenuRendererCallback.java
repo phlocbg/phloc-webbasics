@@ -29,6 +29,7 @@ import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.app.menu.IMenuSeparator;
 import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.appbasics.app.menu.MenuItemDeterminatorCallback;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.commons.factory.IFactory;
 import com.phloc.commons.hierarchy.DefaultHierarchyWalkerDynamicCallback;
@@ -60,12 +61,9 @@ public class MenuRendererCallback <T extends AbstractHCList <?>> extends Default
                                   @Nonnull final IMenuItemRenderer <T> aRenderer,
                                   @Nonnull final Map <String, Boolean> aDisplayMenuItemIDs)
   {
-    if (aMenuListStack == null)
-      throw new NullPointerException ("nodeStack");
-    if (aRenderer == null)
-      throw new NullPointerException ("renderer");
-    if (aDisplayMenuItemIDs == null)
-      throw new NullPointerException ("displayMenuItemIDs");
+    ValueEnforcer.notNull (aMenuListStack, "MenuListStack");
+    ValueEnforcer.notNull (aRenderer, "Renderer");
+    ValueEnforcer.notNull (aDisplayMenuItemIDs, "DisplayMenuItemIDs");
 
     m_aFactory = aFactory;
     m_aMenuListStack = aMenuListStack;

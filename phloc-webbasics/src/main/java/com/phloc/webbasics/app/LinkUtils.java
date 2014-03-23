@@ -40,11 +40,12 @@ import com.phloc.commons.url.ReadonlySimpleURL;
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.url.URLProtocolRegistry;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Misc utilities to create link URLs.
- *
+ * 
  * @author Philip Helger
  */
 @ThreadSafe
@@ -61,7 +62,7 @@ public final class LinkUtils
   /**
    * The default path to the stream servlet. If this is different in you
    * application you may not use the methods that refer to this path!
-   *
+   * 
    * @deprecated Use {@link #getStreamServletPath()} instead
    */
   @Deprecated
@@ -82,9 +83,9 @@ public final class LinkUtils
       throw new IllegalArgumentException ("StreamServletName");
     if (!RegExHelper.stringMatchesPattern (STREAM_SERVLET_NAME_REGEX, sStreamServletName))
       throw new IllegalArgumentException ("Invalid StreamServletName '" +
-          sStreamServletName +
-          "' passed. It must match the following rexg: " +
-          STREAM_SERVLET_NAME_REGEX);
+                                          sStreamServletName +
+                                          "' passed. It must match the following rexg: " +
+                                          STREAM_SERVLET_NAME_REGEX);
 
     s_aRWLock.writeLock ().lock ();
     try
@@ -147,7 +148,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -170,7 +171,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -186,7 +187,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @param aParams
@@ -204,7 +205,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -224,7 +225,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
@@ -240,7 +241,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   *
+   * 
    * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
@@ -256,7 +257,7 @@ public final class LinkUtils
 
   /**
    * Get a link to the specified menu item.
-   *
+   * 
    * @param sMenuItemID
    *        The ID of the menu item to link to. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -293,7 +294,7 @@ public final class LinkUtils
 
   /**
    * Get the URL to the current page with the provided set of parameter.
-   *
+   * 
    * @param aParams
    *        The optional request parameters to be used. May be <code>null</code>
    *        or empty.
@@ -304,7 +305,8 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
   {
-    final String sSelectedMenuItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
+    final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
+    final String sSelectedMenuItemID = aARM.getRequestMenuItemID ();
     return getLinkToMenuItem (sSelectedMenuItemID).addAll (aParams);
   }
 
@@ -317,17 +319,30 @@ public final class LinkUtils
   @ReturnsMutableCopy
   public static SMap getDefaultParams ()
   {
-    return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM,
-                            ApplicationRequestManager.getInstance ().getRequestMenuItemID ())
-                            .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
-                                  ApplicationRequestManager.getInstance ().getRequestDisplayLocale ().toString ());
+    final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
+    return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, aARM.getRequestMenuItemID ())
+                      .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
+                            aARM.getRequestDisplayLocale ().toString ());
+  }
+
+  /**
+   * @return A map with the default parameters handled by the application
+   *         framework. This currently consists of the selected menu item ID and
+   *         the current display locale. Never <code>null</code> nor empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static SMap getDefaultParams (@Nonnull final LayoutExecutionContext aLEC)
+  {
+    return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, aLEC.getSelectedMenuItemID ())
+                      .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE, aLEC.getDisplayLocale ().toString ());
   }
 
   /**
    * Get the default URL to stream the passed URL. It is assumed that the
    * servlet is located under the path "/stream". Because of the logic of the
    * stream servlet, no parameter are assumed.
-   *
+   * 
    * @param sURL
    *        The URL to be streamed. If it does not start with a slash ("/") one
    *        is prepended automatically. If the URL already has a protocol, it is

@@ -19,18 +19,21 @@ package com.phloc.webbasics.app.layout;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.attrs.IAttributeContainer;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.commons.url.SimpleURL;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.servlet.request.IRequestParamMap;
@@ -38,6 +41,7 @@ import com.phloc.web.servlet.request.RequestHelper;
 import com.phloc.web.useragent.IUserAgent;
 import com.phloc.web.useragent.UserAgentDatabase;
 import com.phloc.web.useragent.browser.BrowserInfo;
+import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.form.RequestFieldBoolean;
 import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
@@ -52,13 +56,16 @@ public class LayoutExecutionContext
 {
   private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final Locale m_aDisplayLocale;
+  private final String m_sSelectedMenuItemID;
   private final MapBasedAttributeContainer m_aCustomAttrs;
 
   public LayoutExecutionContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
-                                 @Nonnull final Locale aDisplayLocale)
+                                 @Nonnull final Locale aDisplayLocale,
+                                 @Nonnull final String sSelectedMenuItemID)
   {
     m_aRequestScope = ValueEnforcer.notNull (aRequestScope, "RequestScope");
     m_aDisplayLocale = ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
+    m_sSelectedMenuItemID = ValueEnforcer.notEmpty (sSelectedMenuItemID, "SelectedMenuItemID");
     m_aCustomAttrs = new MapBasedAttributeContainer ();
   }
 
@@ -72,6 +79,13 @@ public class LayoutExecutionContext
   public Locale getDisplayLocale ()
   {
     return m_aDisplayLocale;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getSelectedMenuItemID ()
+  {
+    return m_sSelectedMenuItemID;
   }
 
   /**
@@ -331,11 +345,39 @@ public class LayoutExecutionContext
     return m_aCustomAttrs;
   }
 
+  /**
+   * Get the URL to the current page.
+   * 
+   * @return The non-<code>null</code> URL to the current page (selected menu
+   *         item) with the passed parameters.
+   */
+  @Nonnull
+  public SimpleURL getSelfHref ()
+  {
+    return LinkUtils.getLinkToMenuItem (m_sSelectedMenuItemID);
+  }
+
+  /**
+   * Get the URL to the current page with the provided set of parameters.
+   * 
+   * @param aParams
+   *        The optional request parameters to be used. May be <code>null</code>
+   *        or empty.
+   * @return The non-<code>null</code> URL to the current page (selected menu
+   *         item) with the passed parameters.
+   */
+  @Nonnull
+  public SimpleURL getSelfHref (@Nullable final Map <String, String> aParams)
+  {
+    return LinkUtils.getLinkToMenuItem (m_sSelectedMenuItemID).addAll (aParams);
+  }
+
   @Override
   public String toString ()
   {
     return new ToStringGenerator (this).append ("requestURL", RequestHelper.getURI (m_aRequestScope.getRequest ()))
                                        .append ("displayLocale", m_aDisplayLocale)
+                                       .append ("selectedMenuItemID", m_sSelectedMenuItemID)
                                        .append ("customAttrs", m_aCustomAttrs)
                                        .toString ();
   }

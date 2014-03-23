@@ -35,7 +35,6 @@ import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.commons.url.SMap;
 import com.phloc.datetime.format.PDTToString;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.IHCCell;
@@ -219,7 +218,7 @@ public class BasePageSavedStates extends AbstractWebPageForm <FormState>
     {
       final IButtonToolbar <?> aToolbar = getStyler ().createToolbar ();
       aToolbar.addButton (EText.BUTTON_DELETE.getDisplayText (aDisplayLocale),
-                          LinkUtils.getSelfHref (new SMap (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL)),
+                          aWPEC.getSelfHref ().add (CHCParam.PARAM_ACTION, ACTION_DELETE_ALL),
                           EDefaultIcon.DELETE);
       aNodeList.addChild (aToolbar);
 
