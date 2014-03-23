@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-webbasics">
+  <entry date="2014-03-23" category="api" action="add">
+    <change>
+      <text locale="en">Added support for custom attributes in LayoutExecutionContext and WebPageExecutionContext</text>
+    </change>
+  </entry>
   <release date="2014-02-28" version="2.2.8" />
   <release date="2014-02-25" version="2.2.7" />
   <release date="2014-02-12" version="2.2.6" />

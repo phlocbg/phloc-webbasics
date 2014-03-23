@@ -24,6 +24,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.ReturnsMutableObject;
+import com.phloc.commons.collections.attrs.IAttributeContainer;
+import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -48,16 +52,14 @@ public class LayoutExecutionContext
 {
   private final IRequestWebScopeWithoutResponse m_aRequestScope;
   private final Locale m_aDisplayLocale;
+  private final MapBasedAttributeContainer m_aCustomAttrs;
 
   public LayoutExecutionContext (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
                                  @Nonnull final Locale aDisplayLocale)
   {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("displayLocale");
-    m_aRequestScope = aRequestScope;
-    m_aDisplayLocale = aDisplayLocale;
+    m_aRequestScope = ValueEnforcer.notNull (aRequestScope, "RequestScope");
+    m_aDisplayLocale = ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
+    m_aCustomAttrs = new MapBasedAttributeContainer ();
   }
 
   @Nonnull
@@ -318,11 +320,23 @@ public class LayoutExecutionContext
     return getUserAgent ().getBrowserInfo ();
   }
 
+  /**
+   * @return The custom attributes for this execution context. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableObject (reason = "Design")
+  public IAttributeContainer getCustomAttrs ()
+  {
+    return m_aCustomAttrs;
+  }
+
   @Override
   public String toString ()
   {
     return new ToStringGenerator (this).append ("requestURL", RequestHelper.getURI (m_aRequestScope.getRequest ()))
                                        .append ("displayLocale", m_aDisplayLocale)
+                                       .append ("customAttrs", m_aCustomAttrs)
                                        .toString ();
   }
 }
