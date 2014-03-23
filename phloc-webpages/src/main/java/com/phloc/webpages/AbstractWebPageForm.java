@@ -538,6 +538,7 @@ public abstract class AbstractWebPageForm <DATATYPE extends IHasID <String>> ext
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
 
+    // Get the selected object
     final DATATYPE aSelectedObject = getSelectedObject (aWPEC, getSelectedObjectID (aWPEC));
 
     final boolean bIsEditAllowed = isEditAllowed (aSelectedObject);

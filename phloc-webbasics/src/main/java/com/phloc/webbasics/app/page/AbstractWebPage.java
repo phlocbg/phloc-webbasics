@@ -171,7 +171,8 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
   }
 
   /**
-   * Check some pre-requisites
+   * Check some pre-requisites. This is called as the very first action on each
+   * page view.
    * 
    * @param aWPEC
    *        The web page execution context
