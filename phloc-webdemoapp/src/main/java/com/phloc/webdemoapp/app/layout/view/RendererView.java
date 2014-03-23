@@ -97,11 +97,13 @@ public final class RendererView implements ILayoutAreaContentProvider
     });
   }
 
-  private static void _addLoginLogout (@Nonnull final BootstrapNavbar aNavbar, @Nonnull final Locale aDisplayLocale)
+  private static void _addLoginLogout (@Nonnull final LayoutExecutionContext aLEC,
+                                       @Nonnull final BootstrapNavbar aNavbar)
   {
     final IUser aUser = LoggedInUserManager.getInstance ().getCurrentUser ();
     if (aUser != null)
     {
+      final Locale aDisplayLocale = aLEC.getDisplayLocale ();
       final BootstrapNav aNav = new BootstrapNav ();
       aNav.addItem (EWebBasicsText.LOGIN_LOGOUT.getDisplayText (aDisplayLocale),
                     LinkUtils.getURLWithContext ("/logout"));
@@ -118,8 +120,7 @@ public final class RendererView implements ILayoutAreaContentProvider
       {
         final HCDiv aDiv = new HCDiv ().addStyle (CCSSProperties.PADDING.newValue ("10px"))
                                        .addStyle (CCSSProperties.WIDTH.newValue ("250px"));
-        aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aDisplayLocale, null, false)
-                                      .addClass (CBootstrapCSS.NAVBAR_FORM));
+        aDiv.addChild (DemoAppAccessUI.createViewLoginForm (aLEC, null, false).addClass (CBootstrapCSS.NAVBAR_FORM));
         aDropDown.addItem (aDiv);
       }
       aNavbar.addNav (EBootstrapNavbarPosition.FIXED, aNav);
@@ -127,15 +128,16 @@ public final class RendererView implements ILayoutAreaContentProvider
   }
 
   @Nonnull
-  private static BootstrapNavbar _getNavbar (final Locale aDisplayLocale)
+  private static BootstrapNavbar _getNavbar (final LayoutExecutionContext aLEC)
   {
+    final Locale aDisplayLocale = aLEC.getDisplayLocale ();
     final ISimpleURL aLinkToStartPage = LinkUtils.getLinkToMenuItem (ApplicationMenuTree.getTree ()
                                                                                         .getDefaultMenuItemID ());
 
     final BootstrapNavbar aNavbar = new BootstrapNavbar (EBootstrapNavbarType.STATIC_TOP, true, aDisplayLocale);
     aNavbar.addBrand (HCSpan.create ("DemoApp").addClass (CDemoAppCSS.CSS_CLASS_LOGO1), aLinkToStartPage);
 
-    _addLoginLogout (aNavbar, aDisplayLocale);
+    _addLoginLogout (aLEC, aNavbar);
     return aNavbar;
   }
 
@@ -205,7 +207,7 @@ public final class RendererView implements ILayoutAreaContentProvider
 
     // Header
     {
-      aOuterContainer.addChild (_getNavbar (aLEC.getDisplayLocale ()));
+      aOuterContainer.addChild (_getNavbar (aLEC));
     }
 
     // Breadcrumbs

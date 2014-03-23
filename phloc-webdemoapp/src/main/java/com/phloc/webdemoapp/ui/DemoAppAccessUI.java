@@ -34,7 +34,7 @@ import com.phloc.html.js.builder.JSAssocArray;
 import com.phloc.html.js.builder.JSPackage;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.webbasics.EWebBasicsText;
-import com.phloc.webbasics.app.LinkUtils;
+import com.phloc.webbasics.app.layout.LayoutExecutionContext;
 import com.phloc.webbasics.login.CLogin;
 import com.phloc.webdemoapp.app.ajax.view.CDemoAppAjaxView;
 
@@ -45,18 +45,20 @@ public final class DemoAppAccessUI
   {}
 
   @Nonnull
-  public static BootstrapForm createViewLoginForm (@Nonnull final Locale aDisplayLocale,
+  public static BootstrapForm createViewLoginForm (@Nonnull final LayoutExecutionContext aLEC,
                                                    @Nullable final String sPreselectedUserName,
                                                    final boolean bFullUI)
   {
+    final Locale aDisplayLocale = aLEC.getDisplayLocale ();
+
     // Use new IDs for both fields, in case the login stuff is displayed more
     // than once!
     final String sIDUserName = GlobalIDFactory.getNewStringID ();
     final String sIDPassword = GlobalIDFactory.getNewStringID ();
     final String sIDErrorField = GlobalIDFactory.getNewStringID ();
 
-    final BootstrapForm aForm = new BootstrapForm (LinkUtils.getSelfHref (), bFullUI ? EBootstrapFormType.HORIZONTAL
-                                                                                    : EBootstrapFormType.DEFAULT);
+    final BootstrapForm aForm = new BootstrapForm (aLEC.getSelfHref (), bFullUI ? EBootstrapFormType.HORIZONTAL
+                                                                                : EBootstrapFormType.DEFAULT);
 
     // User name field
     aForm.addFormGroup (EWebBasicsText.EMAIL_ADDRESS.getDisplayText (aDisplayLocale),
