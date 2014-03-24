@@ -17,7 +17,6 @@
  */
 package com.phloc.appbasics.app.menu.filter;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,9 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 
 /**
@@ -38,20 +37,18 @@ import com.phloc.commons.collections.ContainerHelper;
  */
 public final class MenuItemFilterListAll extends AbstractMenuObjectFilter
 {
-  private List <AbstractMenuObjectFilter> m_aFilters = new ArrayList <AbstractMenuObjectFilter> ();
+  private final List <AbstractMenuObjectFilter> m_aFilters;
 
   public MenuItemFilterListAll (@Nonnull @Nonempty final Collection <? extends AbstractMenuObjectFilter> aFilters)
   {
-    if (ContainerHelper.isEmpty (aFilters))
-      throw new IllegalArgumentException ("filters");
-    m_aFilters = ContainerHelper.newList (m_aFilters);
+    ValueEnforcer.notEmpty (aFilters, "Filters");
+    m_aFilters = ContainerHelper.newList (aFilters);
   }
 
   public MenuItemFilterListAll (@Nonnull @Nonempty final AbstractMenuObjectFilter... aFilters)
   {
-    if (ArrayHelper.isEmpty (aFilters))
-      throw new IllegalArgumentException ("filters");
-    m_aFilters = ContainerHelper.newList (m_aFilters);
+    ValueEnforcer.notEmpty (aFilters, "Filters");
+    m_aFilters = ContainerHelper.newList (aFilters);
   }
 
   @Nonnull
