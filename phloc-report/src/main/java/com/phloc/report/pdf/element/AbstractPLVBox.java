@@ -80,12 +80,23 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   protected final List <Row> m_aRows = new ArrayList <Row> ();
   private BorderSpec m_aRowBorder = BorderSpec.BORDER0;
   private Color m_aRowFillColor = null;
-  // prepare result (without padding and margin)
+  /** prepare width (without padding and margin) */
   protected float [] m_aPreparedWidth;
+  /** prepare height (without padding and margin) */
   protected float [] m_aPreparedHeight;
 
   public AbstractPLVBox ()
   {}
+
+  @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public IMPLTYPE setBasicDataFrom (@Nonnull final AbstractPLVBox <?> aSource)
+  {
+    super.setBasicDataFrom (aSource);
+    setRowBorder (aSource.m_aRowBorder);
+    setRowFillColor (aSource.m_aRowFillColor);
+    return thisAsT ();
+  }
 
   /**
    * @return The number of rows. Always &ge; 0.

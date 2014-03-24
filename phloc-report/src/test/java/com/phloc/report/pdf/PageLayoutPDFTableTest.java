@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import com.phloc.commons.mock.DebugModeTestRule;
-import com.phloc.report.pdf.element.PLHBox;
+import com.phloc.report.pdf.element.PLHBoxSplittable;
 import com.phloc.report.pdf.element.PLPageBreak;
 import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLTable;
@@ -72,12 +72,12 @@ public class PageLayoutPDFTableTest
     aTable.setHeaderRowCount (1);
 
     // Add row
-    PLHBox aRow = aTable.addTableRow (new PLText ("ID", r14b).setPadding (aPadding),
-                                      new PLText ("Name", r14b).setPadding (aPadding),
-                                      new PLText ("Sum1", r14b).setPadding (aPadding)
-                                                               .setHorzAlign (EHorzAlignment.CENTER),
-                                      new PLText ("Sum2", r14b).setPadding (aPadding)
-                                                               .setHorzAlign (EHorzAlignment.RIGHT));
+    PLHBoxSplittable aRow = aTable.addTableRow (new PLText ("ID", r14b).setPadding (aPadding),
+                                                new PLText ("Name", r14b).setPadding (aPadding),
+                                                new PLText ("Sum1", r14b).setPadding (aPadding)
+                                                                         .setHorzAlign (EHorzAlignment.CENTER),
+                                                new PLText ("Sum2", r14b).setPadding (aPadding)
+                                                                         .setHorzAlign (EHorzAlignment.RIGHT));
     aRow.setColumnBorder (new BorderStyleSpec (Color.GRAY)).setFillColor (Color.WHITE);
 
     // Test colspan

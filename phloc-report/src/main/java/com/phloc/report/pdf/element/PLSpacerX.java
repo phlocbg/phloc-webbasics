@@ -45,4 +45,12 @@ public class PLSpacerX extends AbstractPLElement <PLSpacerX>
   @Override
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {}
+
+  @Nonnull
+  public static PLSpacerX createPreparedSpacer (float fWidth)
+  {
+    PLSpacerX ret = new PLSpacerX ();
+    ret.markAsPrepared (new SizeSpec (fWidth, 0));
+    return ret;
+  }
 }

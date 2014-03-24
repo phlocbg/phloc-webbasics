@@ -90,12 +90,23 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   private int m_nStarWidthItems = 0;
   private BorderSpec m_aColumnBorder = BorderSpec.BORDER0;
   private Color m_aColumnFillColor = null;
-  // prepare result (without padding and margin)
+  /** prepare width (without padding and margin) */
   protected float [] m_aPreparedWidth;
+  /** prepare height (without padding and margin) */
   protected float [] m_aPreparedHeight;
 
   public AbstractPLHBox ()
   {}
+
+  @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public IMPLTYPE setBasicDataFrom (@Nonnull final AbstractPLHBox <?> aSource)
+  {
+    super.setBasicDataFrom (aSource);
+    setColumnBorder (aSource.m_aColumnBorder);
+    setColumnFillColor (aSource.m_aColumnFillColor);
+    return thisAsT ();
+  }
 
   /**
    * @return The number of columns. Always &ge; 0.
@@ -464,18 +475,12 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("columns", m_aColumns)
-                            .append ("startWidthItems", m_nStarWidthItems)
-                            .append ("columnBorder", m_aColumnBorder)
-                            .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
-                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-                            .toString ();
-  }
-
-  // XXX
-  public float [] getPreparedWidth ()
-  {
-    return m_aPreparedWidth;
+        .append ("columns", m_aColumns)
+        .append ("startWidthItems", m_nStarWidthItems)
+        .append ("columnBorder", m_aColumnBorder)
+        .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
+        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+        .toString ();
   }
 }

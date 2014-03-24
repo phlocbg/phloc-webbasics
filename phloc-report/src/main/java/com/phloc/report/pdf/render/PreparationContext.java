@@ -49,9 +49,9 @@ public final class PreparationContext
    */
   public PreparationContext (final float fAvailableWidth, final float fAvailableHeight)
   {
-    if (fAvailableWidth <= 0)
+    if (fAvailableWidth < 0)
       s_aLogger.warn ("RenderPreparationContext: available width is too small: " + fAvailableWidth);
-    if (fAvailableHeight <= 0)
+    if (fAvailableHeight < 0)
       s_aLogger.warn ("RenderPreparationContext: available height is too small: " + fAvailableHeight);
     m_fAvailableWidth = fAvailableWidth;
     m_fAvailableHeight = fAvailableHeight;

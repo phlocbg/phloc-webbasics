@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -103,19 +104,14 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   public final SizeSpec prepare (@Nonnull final PreparationContext aCtx) throws IOException
   {
     // Prepare only once!
-    if (m_bPrepared)
-    {
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Already prepared object " + CGStringHelper.getClassLocalName (getClass ()));
-    }
-    else
-    {
-      // Do prepare
-      m_bPrepared = true;
-      m_aPreparedSize = onPrepare (aCtx);
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug ("Prepared object " + CGStringHelper.getClassLocalName (getClass ()));
-    }
+    checkNotPrepared ();
+
+    // Do prepare
+    m_bPrepared = true;
+    m_aPreparedSize = onPrepare (aCtx);
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Prepared object " + CGStringHelper.getClassLocalName (getClass ()));
+
     return m_aPreparedSize;
   }
 
@@ -127,12 +123,11 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   @Nonnull
   protected final IMPLTYPE markAsPrepared (@Nonnull final SizeSpec aPreparedSize)
   {
-    if (m_bPrepared)
-      throw new IllegalStateException ("Already prepared!");
-    if (aPreparedSize == null)
-      throw new NullPointerException ("preparedSize");
+    // Prepare only once!
+    checkNotPrepared ();
+
+    m_aPreparedSize = ValueEnforcer.notNull (aPreparedSize, "PreparedSize");
     m_bPrepared = true;
-    m_aPreparedSize = aPreparedSize;
     return thisAsT ();
   }
 

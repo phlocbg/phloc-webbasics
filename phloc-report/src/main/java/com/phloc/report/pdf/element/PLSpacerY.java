@@ -20,6 +20,7 @@ package com.phloc.report.pdf.element;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PreparationContext;
@@ -28,16 +29,32 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * A vertical spacer
- * 
+ *
  * @author Philip Helger
  */
 public class PLSpacerY extends AbstractPLElement <PLSpacerY>
 {
-  private final float m_fHeight;
+  private float m_fHeight;
 
   public PLSpacerY (final float fHeight)
   {
+    setHeight (fHeight);
+  }
+
+  @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public PLSpacerY setBasicDataFrom (@Nonnull final PLSpacerY aSource)
+  {
+    super.setBasicDataFrom (aSource);
+    setHeight (aSource.m_fHeight);
+    return thisAsT ();
+  }
+
+  @Nonnull
+  public PLSpacerY setHeight (final float fHeight)
+  {
     m_fHeight = fHeight;
+    return this;
   }
 
   public float getHeight ()
@@ -60,5 +77,13 @@ public class PLSpacerY extends AbstractPLElement <PLSpacerY>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ()).append ("height", m_fHeight).toString ();
+  }
+
+  @Nonnull
+  public static PLSpacerY createPrepared (final float fWidth, final float fHeight)
+  {
+    final PLSpacerY ret = new PLSpacerY (fHeight);
+    ret.markAsPrepared (new SizeSpec (fWidth, fHeight));
+    return ret;
   }
 }

@@ -77,4 +77,12 @@ public class PLPageBreak extends AbstractPLElement <PLPageBreak>
   {
     return ToStringGenerator.getDerived (super.toString ()).append ("forcePageBreak", m_bForcePageBreak).toString ();
   }
+
+  @Nonnull
+  public static PLPageBreak createPreparedPageBreak ()
+  {
+    PLPageBreak ret = new PLPageBreak (false);
+    ret.markAsPrepared (SizeSpec.SIZE0);
+    return ret;
+  }
 }
