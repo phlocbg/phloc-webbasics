@@ -79,8 +79,6 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
       return null;
     }
 
-    s_aLogger.info ("Trying to split HBox");
-
     final PLHBoxSplittable aHBox1 = new PLHBoxSplittable ();
     aHBox1.setBasicDataFrom (this);
     final PLHBoxSplittable aHBox2 = new PLHBoxSplittable ();
@@ -90,8 +88,9 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
     for (int i = 0; i < nCols; ++i)
     {
       final Column aColumn = getColumnAtIndex (i);
-      aHBox1.addColumn (PLSpacerX.createPreparedSpacer (m_aPreparedWidth[i]), aColumn.getWidth ());
-      aHBox2.addColumn (PLSpacerX.createPreparedSpacer (m_aPreparedWidth[i]), aColumn.getWidth ());
+      final AbstractPLElement <?> aEmptyElement = PLSpacerX.createPreparedSpacer (m_aPreparedWidth[i]);
+      aHBox1.addColumn (aEmptyElement, aColumn.getWidth ());
+      aHBox2.addColumn (aEmptyElement, aColumn.getWidth ());
     }
 
     float fHBox1MaxHeight = 0;
