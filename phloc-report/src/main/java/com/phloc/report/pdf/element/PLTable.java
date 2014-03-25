@@ -366,7 +366,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
             final float fWidth = Math.max (fTable1Width, fRowWidth);
             final float fWidthFull = Math.max (fTable1WidthFull, fRowWidthFull);
             final PLSplitResult aSplitResult = ((IPLSplittableElement) aRow).splitElements (fWidth, fAvailableHeight -
-                                                                                            fTable1HeightFull);
+                                                                                                    fTable1HeightFull);
 
             if (aSplitResult != null)
             {

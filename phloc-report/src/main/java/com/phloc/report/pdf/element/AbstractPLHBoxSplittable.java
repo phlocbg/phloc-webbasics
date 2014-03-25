@@ -112,7 +112,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
       {
         final PLSplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fColumnWidth,
                                                                                             fAvailableHeight -
-                                                                                            aElement.getMarginPlusPaddingYSum ());
+                                                                                                aElement.getMarginPlusPaddingYSum ());
 
         if (aSplitResult != null)
         {
@@ -125,11 +125,11 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
 
           if (s_aLogger.isInfoEnabled ())
             s_aLogger.info ("Split " +
-                CGStringHelper.getClassLocalName (aElement) +
-                " into pieces: " +
-                aSplitResult.getFirstElement ().getHeight () +
-                " and " +
-                aSplitResult.getSecondElement ().getHeight ());
+                            CGStringHelper.getClassLocalName (aElement) +
+                            " into pieces: " +
+                            aSplitResult.getFirstElement ().getHeight () +
+                            " and " +
+                            aSplitResult.getSecondElement ().getHeight ());
         }
       }
 
@@ -145,26 +145,26 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
           if (bIsSplittable)
           {
             s_aLogger.warn ("Column " +
-                i +
-                " of HBox contains splittable element of type " +
-                CGStringHelper.getClassLocalName (aElement) +
-                " which creates an overflow by " +
-                (fColumnHeight - fAvailableHeight) +
-                " for max height " +
-                fAvailableHeight +
-                "!");
+                            i +
+                            " of HBox contains splittable element of type " +
+                            CGStringHelper.getClassLocalName (aElement) +
+                            " which creates an overflow by " +
+                            (fColumnHeight - fAvailableHeight) +
+                            " for max height " +
+                            fAvailableHeight +
+                            "!");
           }
           else
           {
             s_aLogger.warn ("Column " +
-                i +
-                " of HBox contains non splittable element of type " +
-                CGStringHelper.getClassLocalName (aElement) +
-                " which creates an overflow by " +
-                (fColumnHeight - fAvailableHeight) +
-                " for max height " +
-                fAvailableHeight +
-                "!");
+                            i +
+                            " of HBox contains non splittable element of type " +
+                            CGStringHelper.getClassLocalName (aElement) +
+                            " which creates an overflow by " +
+                            (fColumnHeight - fAvailableHeight) +
+                            " for max height " +
+                            fAvailableHeight +
+                            "!");
           }
       }
 

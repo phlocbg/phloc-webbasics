@@ -494,11 +494,11 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-        .append ("rows", m_aRows)
-        .append ("rowBorder", m_aRowBorder)
-        .appendIfNotNull ("rowFillColor", m_aRowFillColor)
-        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-        .toString ();
+                            .append ("rows", m_aRows)
+                            .append ("rowBorder", m_aRowBorder)
+                            .appendIfNotNull ("rowFillColor", m_aRowFillColor)
+                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+                            .toString ();
   }
 }
