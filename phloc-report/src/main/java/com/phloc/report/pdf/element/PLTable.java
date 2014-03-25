@@ -98,9 +98,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       else
         if (aWidth.getType () != eWidthType)
           throw new IllegalArgumentException ("All widths must be of the same type! Found " +
-              eWidthType +
-              " and " +
-              aWidth.getType ());
+                                              eWidthType +
+                                              " and " +
+                                              aWidth.getType ());
     m_aWidths = ContainerHelper.newList (aWidths);
   }
 
@@ -165,10 +165,10 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       throw new NullPointerException ("elements");
     if (aElements.size () > m_aWidths.size ())
       throw new IllegalArgumentException ("More elements in row (" +
-          aElements.size () +
-          ") than defined in the table (" +
-          m_aWidths.size () +
-          ")!");
+                                          aElements.size () +
+                                          ") than defined in the table (" +
+                                          m_aWidths.size () +
+                                          ")!");
 
     final PLHBoxSplittable aHBox = new PLHBoxSplittable ();
     int nWidthIndex = 0;
@@ -212,10 +212,10 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       nUsedCols += aCell.getColSpan ();
     if (nUsedCols > m_aWidths.size ())
       throw new IllegalArgumentException ("More cells in row (" +
-          nUsedCols +
-          ") than defined in the table (" +
-          m_aWidths.size () +
-          ")!");
+                                          nUsedCols +
+                                          ") than defined in the table (" +
+                                          m_aWidths.size () +
+                                          ")!");
 
     final PLHBoxSplittable aHBox = new PLHBoxSplittable ();
     int nWidthIndex = 0;
@@ -366,7 +366,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
             final float fWidth = Math.max (fTable1Width, fRowWidth);
             final float fWidthFull = Math.max (fTable1WidthFull, fRowWidthFull);
             final PLSplitResult aSplitResult = ((IPLSplittableElement) aRow).splitElements (fWidth, fAvailableHeight -
-                                                                                                    fTable1HeightFull);
+                                                                                            fTable1HeightFull);
 
             if (aSplitResult != null)
             {
@@ -392,11 +392,11 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
 
               if (s_aLogger.isInfoEnabled ())
                 s_aLogger.info ("Split " +
-                    CGStringHelper.getClassLocalName (aRow) +
-                    " into pieces: " +
-                    aSplitResult.getFirstElement ().getHeight () +
-                    " and " +
-                    aSplitResult.getSecondElement ().getHeight ());
+                                CGStringHelper.getClassLocalName (aRow) +
+                                " into pieces: " +
+                                aSplitResult.getFirstElement ().getHeight () +
+                                " and " +
+                                aSplitResult.getSecondElement ().getHeight ());
               bSplittedRow = true;
             }
           }
@@ -407,6 +407,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
             aTable2.addRow (aRow);
             fTable2Width = Math.max (fTable2Width, fRowWidth);
             fTable2WidthFull = Math.max (fTable2WidthFull, fRowWidthFull);
+            fTable2Height += fRowHeight;
             fTable2HeightFull += fRowHeightFull;
             aTable2RowWidth.add (Float.valueOf (fRowWidth));
             aTable2RowHeight.add (Float.valueOf (fRowHeight));
@@ -419,6 +420,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
         aTable2.addRow (aRow);
         fTable2Width = Math.max (fTable2Width, fRowWidth);
         fTable2WidthFull = Math.max (fTable2WidthFull, fRowWidthFull);
+        fTable2Height += fRowHeight;
         fTable2HeightFull += fRowHeightFull;
         aTable2RowWidth.add (Float.valueOf (fRowWidth));
         aTable2RowHeight.add (Float.valueOf (fRowHeight));
@@ -454,9 +456,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-        .append ("width", m_aWidths)
-        .append ("headerRowCount", m_nHeaderRowCount)
-        .toString ();
+                            .append ("width", m_aWidths)
+                            .append ("headerRowCount", m_nHeaderRowCount)
+                            .toString ();
   }
 
   /**

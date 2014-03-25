@@ -33,6 +33,8 @@ import com.phloc.report.pdf.element.PLPageSet;
 import com.phloc.report.pdf.element.PLTable;
 import com.phloc.report.pdf.element.PLTable.PLTableCell;
 import com.phloc.report.pdf.element.PLText;
+import com.phloc.report.pdf.element.PLTextWithPlaceholders;
+import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
@@ -41,7 +43,7 @@ import com.phloc.report.pdf.spec.PaddingSpec;
 
 /**
  * Test class for class {@link PageLayoutPDF}.
- * 
+ *
  * @author Philip Helger
  */
 public class PageLayoutPDFTableTest
@@ -62,6 +64,12 @@ public class PageLayoutPDFTableTest
     aPS1.setPageHeader (new PLText ("Headline", r10).setBorder (new BorderStyleSpec (Color.BLACK))
                                                     .setPadding (0, 4)
                                                     .setHorzAlign (EHorzAlignment.CENTER));
+    aPS1.setPageFooter (new PLTextWithPlaceholders ("Page " +
+                                                    RenderPageIndex.PLACEHOLDER_PAGESET_PAGE_NUMBER +
+                                                    "/" +
+                                                    RenderPageIndex.PLACEHOLDER_TOTAL_PAGE_COUNT, r10).setBorder (new BorderStyleSpec (Color.RED))
+                                                                                                      .setPadding (0, 4)
+                                                                                                      .setHorzAlign (EHorzAlignment.CENTER));
     aPS1.addElement (new PLText ("Erste Dummy Zeile", r10));
 
     // Start table
@@ -116,7 +124,7 @@ public class PageLayoutPDFTableTest
     aPS1.addElement (new PLPageBreak (false));
     // empty page by using forced page break
     aPS1.addElement (new PLPageBreak (true));
-    aPS1.addElement (new PLText ("First line on last page", r10));
+    aPS1.addElement (new PLText ("First line on last page after one empty page", r10));
 
     final PageLayoutPDF aPageLayout = new PageLayoutPDF ().setDebug (false);
     aPageLayout.addPageSet (aPS1);
