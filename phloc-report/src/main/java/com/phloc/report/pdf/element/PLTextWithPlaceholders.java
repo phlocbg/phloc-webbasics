@@ -27,7 +27,7 @@ import com.phloc.report.pdf.spec.FontSpec;
 /**
  * Render text but before that replace all placeholders defined in the
  * {@link RenderingContext}.
- * 
+ *
  * @author Philip Helger
  */
 public class PLTextWithPlaceholders extends PLText

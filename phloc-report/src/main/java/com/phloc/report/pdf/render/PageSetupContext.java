@@ -25,7 +25,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 
 /**
  * This class contains the context for setting a new page in the PDF.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe

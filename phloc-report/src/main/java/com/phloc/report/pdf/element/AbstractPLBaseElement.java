@@ -69,6 +69,17 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
     return thisAsT ();
   }
 
+  public final boolean isSplittable ()
+  {
+    return this instanceof IPLSplittableElement;
+  }
+
+  @Nonnull
+  public final IPLSplittableElement getAsSplittable ()
+  {
+    return (IPLSplittableElement) this;
+  }
+
   /**
    * Throw an exception, if this object is already prepared.
    *

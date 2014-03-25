@@ -33,7 +33,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
  * new page just started.<br>
  * Important note: page breaks are only handled if they are directly contained
  * in a page set. Page breaks are not handled when nested in VBoxes or HBoxes.
- * 
+ *
  * @author Philip Helger
  */
 public class PLPageBreak extends AbstractPLElement <PLPageBreak>
@@ -42,7 +42,7 @@ public class PLPageBreak extends AbstractPLElement <PLPageBreak>
 
   /**
    * Constructor
-   * 
+   *
    * @param bForcePageBreak
    *        <code>true</code> if this is a forced page break, <code>false</code>
    *        if it is a normal page break.
@@ -81,7 +81,7 @@ public class PLPageBreak extends AbstractPLElement <PLPageBreak>
   @Nonnull
   public static PLPageBreak createPreparedPageBreak ()
   {
-    PLPageBreak ret = new PLPageBreak (false);
+    final PLPageBreak ret = new PLPageBreak (false);
     ret.markAsPrepared (SizeSpec.SIZE0);
     return ret;
   }

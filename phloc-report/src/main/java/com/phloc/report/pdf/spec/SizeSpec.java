@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class defines a size.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -44,7 +44,7 @@ public class SizeSpec
 
   /**
    * Constructor
-   * 
+   *
    * @param fWidth
    *        Width. Must be &ge; 0.
    * @param fHeight

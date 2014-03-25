@@ -27,7 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Defines a rectangular padding.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable

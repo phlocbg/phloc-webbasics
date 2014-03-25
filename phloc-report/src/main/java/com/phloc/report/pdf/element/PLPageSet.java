@@ -352,13 +352,13 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
         if (fCurY - fElementHeightFull < fYLeast || bIsPagebreakDesired)
         {
           // Element does not fit on page - try to split
-          final boolean bIsSplittable = aElement instanceof IPLSplittableElement;
+          final boolean bIsSplittable = aElement.isSplittable ();
           if (bIsSplittable)
           {
             // split elements
             final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
-            final PLSplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (aElementWithSize.getWidth (),
-                                                                                                fAvailableHeight);
+            final PLSplitResult aSplitResult = aElement.getAsSplittable ().splitElements (aElementWithSize.getWidth (),
+                                                                                          fAvailableHeight);
             if (aSplitResult != null)
             {
               // Re-add them to the list and try again (they may be splitted

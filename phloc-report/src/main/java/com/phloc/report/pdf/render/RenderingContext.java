@@ -34,7 +34,7 @@ import com.phloc.commons.string.StringParser;
 
 /**
  * This class contains the context for rendering a single element onto the PDF.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -155,7 +155,7 @@ public final class RenderingContext
 
   /**
    * Get the placeholder value with the specified name.
-   * 
+   *
    * @param sName
    *        The name to search. May be <code>null</code>.
    * @return <code>null</code> if no such placeholder exists.

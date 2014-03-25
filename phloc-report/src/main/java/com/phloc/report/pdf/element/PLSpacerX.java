@@ -27,7 +27,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * A horizontal spacer
- * 
+ *
  * @author Philip Helger
  */
 public class PLSpacerX extends AbstractPLElement <PLSpacerX>
@@ -47,9 +47,9 @@ public class PLSpacerX extends AbstractPLElement <PLSpacerX>
   {}
 
   @Nonnull
-  public static PLSpacerX createPreparedSpacer (float fWidth)
+  public static PLSpacerX createPrepared (final float fWidth)
   {
-    PLSpacerX ret = new PLSpacerX ();
+    final PLSpacerX ret = new PLSpacerX ();
     ret.markAsPrepared (new SizeSpec (fWidth, 0));
     return ret;
   }

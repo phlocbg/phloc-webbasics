@@ -31,7 +31,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Different dashed line times
- * 
+ *
  * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode

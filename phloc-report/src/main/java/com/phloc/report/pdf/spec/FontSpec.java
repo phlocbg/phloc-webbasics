@@ -36,7 +36,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Defines a text font specification containing the font, the font size and the
  * text color.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -108,7 +108,7 @@ public class FontSpec
 
   /**
    * Get the width of a string
-   * 
+   *
    * @param sText
    *        The text to determine the width of. May not be <code>null</code>.
    * @return The string width
@@ -122,7 +122,7 @@ public class FontSpec
 
   /**
    * Split the passed text so that it fits into the specified width.
-   * 
+   *
    * @param sText
    *        The text to fit. Maybe <code>null</code>.
    * @param fMaxWidth
@@ -142,7 +142,7 @@ public class FontSpec
 
   /**
    * Return a clone of this object but with a different font.
-   * 
+   *
    * @param aNewFont
    *        The new font to use. Must not be <code>null</code>.
    * @return this if the fonts are equal - a new object otherwise.
@@ -159,7 +159,7 @@ public class FontSpec
 
   /**
    * Return a clone of this object but with a different font size.
-   * 
+   *
    * @param fNewFontSize
    *        The new font size to use. Must be &gt; 0.
    * @return this if the font sizes are equal - a new object otherwise.
@@ -176,7 +176,7 @@ public class FontSpec
 
   /**
    * Return a clone of this object but with a different color.
-   * 
+   *
    * @param aNewColor
    *        The new color to use. May not be <code>null</code>.
    * @return this if the colors are equal - a new object otherwise.

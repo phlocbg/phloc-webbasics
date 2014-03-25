@@ -41,7 +41,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class wraps PDF Fonts and offers some sanity methods.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable

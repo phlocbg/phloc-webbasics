@@ -40,7 +40,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Abstract layout element that supports rendering.
- * 
+ *
  * @author Philip Helger
  * @param <IMPLTYPE>
  *        The implementation type of this class.
@@ -57,7 +57,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Throw an exception, if this object is already prepared.
-   * 
+   *
    * @throws IllegalStateException
    *         if already prepared
    */
@@ -80,7 +80,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   /**
    * The abstract method that must be implemented by all subclasses. It is
    * ensured that this method is called only once per instance!
-   * 
+   *
    * @param aCtx
    *        Preparation context. Never <code>null</code>.
    * @return The size of the rendered element without padding or margin. May not
@@ -93,7 +93,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Prepare this element once for rendering.
-   * 
+   *
    * @param aCtx
    *        The preparation context
    * @return The net size of the rendered object without padding or margin. May
@@ -133,7 +133,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Called after the page was created but before the content stream is created.
-   * 
+   *
    * @param aCtx
    *        The current page setup context. Never <code>null</code>.
    */
@@ -143,7 +143,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Abstract method to be implemented by subclasses.
-   * 
+   *
    * @param aCtx
    *        Rendering context
    * @throws IOException
@@ -153,7 +153,7 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
 
   /**
    * Second step: perform.
-   * 
+   *
    * @param aCtx
    *        Rendering context
    * @throws IOException

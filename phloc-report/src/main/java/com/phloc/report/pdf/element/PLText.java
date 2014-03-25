@@ -314,8 +314,8 @@ public class PLText extends AbstractPLElement <PLText>
       {
         // Initial move - only partial line height!
         aContentStream.moveTextPositionByAmount (aCtx.getStartLeft () + fIndentX, aCtx.getStartTop () -
-                                                 fTop -
-                                                 (m_fLineHeight * 0.75f));
+                                                                                  fTop -
+                                                                                  (m_fLineHeight * 0.75f));
       }
       else
         if (fIndentX != 0)
@@ -368,7 +368,7 @@ public class PLText extends AbstractPLElement <PLText>
 
     final String sTextContent = TextAndWidthSpec.getAsText (aLineCopy);
     final PLText aNewText = bSplittableCopy ? new PLTextSplittable (sTextContent, getFontSpec ())
-    : new PLText (sTextContent, getFontSpec ());
+                                           : new PLText (sTextContent, getFontSpec ());
     aNewText.setBasicDataFrom (this).markAsPrepared (aSize).internalSetPreparedLines (aLineCopy);
 
     return new PLElementWithSize (aNewText, aSize);
@@ -378,11 +378,11 @@ public class PLText extends AbstractPLElement <PLText>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-        .append ("text", m_sText)
-        .append ("font", m_aFont)
-        .append ("lineHeight", m_fLineHeight)
-        .append ("horzAlign", m_eHorzAlign)
-        .append ("topDown", m_bTopDown)
-        .toString ();
+                            .append ("text", m_sText)
+                            .append ("font", m_aFont)
+                            .append ("lineHeight", m_fLineHeight)
+                            .append ("horzAlign", m_eHorzAlign)
+                            .append ("topDown", m_bTopDown)
+                            .toString ();
   }
 }

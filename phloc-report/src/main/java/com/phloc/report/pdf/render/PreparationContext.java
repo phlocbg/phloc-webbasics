@@ -26,7 +26,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * The current context for preparing an element.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -39,7 +39,7 @@ public final class PreparationContext
 
   /**
    * Constructor
-   * 
+   *
    * @param fAvailableWidth
    *        The available width for an element, without the element's margin and
    *        padding. Should be &gt; 0.

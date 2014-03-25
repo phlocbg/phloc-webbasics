@@ -358,13 +358,13 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
           bOnTable1 = false;
           // try to split the row
           boolean bSplittedRow = false;
-          if (aRow instanceof IPLSplittableElement)
+          if (aRow.isSplittable ())
           {
             // don't override fTable1Width
             final float fWidth = Math.max (fTable1Width, fRowWidth);
             final float fWidthFull = Math.max (fTable1WidthFull, fRowWidthFull);
-            final PLSplitResult aSplitResult = ((IPLSplittableElement) aRow).splitElements (fWidth, fAvailableHeight -
-                                                                                                    fTable1Height);
+            final PLSplitResult aSplitResult = aRow.getAsSplittable ().splitElements (fWidth,
+                                                                                      fAvailableHeight - fTable1Height);
 
             if (aSplitResult != null)
             {

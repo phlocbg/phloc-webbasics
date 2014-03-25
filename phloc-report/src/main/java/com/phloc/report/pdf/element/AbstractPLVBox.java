@@ -424,9 +424,8 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
     {
       if (fUsedWidth - fAvailableWidth > 0.01)
         s_aLogger.warn ("VBox uses more width (" + fUsedWidth + ") than available (" + fAvailableWidth + ")!");
-      if (fUsedHeight - fAvailableHeight > 0.01)
-        if (!(this instanceof IPLSplittableElement))
-          s_aLogger.warn ("VBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
+      if (fUsedHeight - fAvailableHeight > 0.01 && !isSplittable ())
+        s_aLogger.warn ("VBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
     }
 
     return new SizeSpec (fUsedWidth, fUsedHeight);

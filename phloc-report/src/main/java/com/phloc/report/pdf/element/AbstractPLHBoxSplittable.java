@@ -42,7 +42,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
   public boolean containsAnySplittableElement ()
   {
     for (final Column aColumn : m_aColumns)
-      if (aColumn.getElement () instanceof IPLSplittableElement)
+      if (aColumn.getElement ().isSplittable ())
         return true;
     return false;
   }
@@ -67,7 +67,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
     for (int i = 0; i < nCols; ++i)
     {
       // Is the current element higher and splittable?
-      if (m_aPreparedHeight[i] > fAvailableHeight && m_aColumns.get (i).getElement () instanceof IPLSplittableElement)
+      if (m_aPreparedHeight[i] > fAvailableHeight && getColumnElementAtIndex (i).isSplittable ())
       {
         bAnySplittingPossible = true;
         break;
@@ -112,7 +112,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
     for (int i = 0; i < nCols; i++)
     {
       final AbstractPLElement <?> aElement = getColumnElementAtIndex (i);
-      final boolean bIsSplittable = aElement instanceof IPLSplittableElement;
+      final boolean bIsSplittable = aElement.isSplittable ();
       final float fColumnHeight = m_aPreparedHeight[i] + aElement.getMarginPlusPaddingYSum ();
       final float fColumnWidth = m_aPreparedWidth[i] + aElement.getMarginPlusPaddingXSum ();
 
@@ -120,9 +120,10 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
       boolean bDidSplit = false;
       if (fColumnHeight > fAvailableHeight && bIsSplittable)
       {
-        final PLSplitResult aSplitResult = ((IPLSplittableElement) aElement).splitElements (fColumnWidth,
-                                                                                            fAvailableHeight -
-                                                                                                aElement.getMarginPlusPaddingYSum ());
+        final PLSplitResult aSplitResult = aElement.getAsSplittable ()
+                                                   .splitElements (fColumnWidth,
+                                                                   fAvailableHeight -
+                                                                       aElement.getMarginPlusPaddingYSum ());
 
         if (aSplitResult != null)
         {

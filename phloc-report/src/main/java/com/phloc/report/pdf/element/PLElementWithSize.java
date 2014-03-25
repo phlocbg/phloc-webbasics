@@ -24,7 +24,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
  * Wraps an {@link AbstractPLElement} and stores the height.
- * 
+ *
  * @author Philip Helger
  */
 public final class PLElementWithSize
@@ -35,7 +35,7 @@ public final class PLElementWithSize
 
   /**
    * Constructor
-   * 
+   *
    * @param aElement
    *        Element itself.
    * @param aSize

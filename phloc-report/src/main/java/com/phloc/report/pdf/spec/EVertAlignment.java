@@ -19,7 +19,7 @@ package com.phloc.report.pdf.spec;
 
 /**
  * Represents the possible vertical alignments.
- * 
+ *
  * @author Philip Helger
  */
 public enum EVertAlignment

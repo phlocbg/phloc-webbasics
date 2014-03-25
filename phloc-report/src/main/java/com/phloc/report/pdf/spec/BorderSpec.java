@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class represents a border around a single element. Each side can be
  * styled separately.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -46,7 +46,7 @@ public class BorderSpec
 
   /**
    * Constructor.
-   * 
+   *
    * @param aBorder
    *        The border to set for all sides (left, top, right, bottom). Maybe
    *        <code>null</code>.
@@ -58,7 +58,7 @@ public class BorderSpec
 
   /**
    * Constructor.
-   * 
+   *
    * @param aBorderX
    *        The border to set for left and right. Maybe <code>null</code>.
    * @param aBorderY
@@ -71,7 +71,7 @@ public class BorderSpec
 
   /**
    * Constructor.
-   * 
+   *
    * @param aBorderLeft
    *        The border to set for left. Maybe <code>null</code>.
    * @param aBorderTop

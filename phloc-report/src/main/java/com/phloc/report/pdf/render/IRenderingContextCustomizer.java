@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Interface for customizing rendering contexts.
- * 
+ *
  * @author Philip Helger
  */
 public interface IRenderingContextCustomizer
@@ -29,7 +29,7 @@ public interface IRenderingContextCustomizer
   /**
    * Customize the passed rendering context. This can e.g. be used to add
    * placeholders.
-   * 
+   *
    * @param aRC
    *        The rendering context to be modified.
    */

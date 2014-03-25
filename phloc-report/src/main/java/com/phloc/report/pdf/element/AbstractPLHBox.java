@@ -244,8 +244,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   @Nonnull
   public final IMPLTYPE setColumnBorder (@Nonnull final BorderSpec aBorder)
   {
-    if (aBorder == null)
-      throw new NullPointerException ("ColumnBorder");
+    ValueEnforcer.notNull (aBorder, "ColumnBorder");
     checkNotPrepared ();
     m_aColumnBorder = aBorder;
     return thisAsT ();
@@ -412,7 +411,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
       if (fUsedWidth - fAvailableWidth > 0.01)
         s_aLogger.warn ("HBox uses more width (" + fUsedWidth + ") than available (" + fAvailableWidth + ")!");
       if (fUsedHeight - fAvailableHeight > 0.01)
-        if (!(this instanceof IPLSplittableElement))
+        if (!isSplittable ())
           s_aLogger.warn ("HBox uses more height (" + fUsedHeight + ") than available (" + fAvailableHeight + ")!");
     }
 
