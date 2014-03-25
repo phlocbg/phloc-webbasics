@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
@@ -142,8 +143,7 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   @Nonnull
   public final IMPLTYPE setMargin (@Nonnull final MarginSpec aMargin)
   {
-    if (aMargin == null)
-      throw new NullPointerException ("Margin");
+    ValueEnforcer.notNull (aMargin, "Mergin");
     checkNotPrepared ();
     m_aMargin = aMargin;
     return thisAsT ();
@@ -278,8 +278,7 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   @Nonnull
   public final IMPLTYPE setPadding (@Nonnull final PaddingSpec aPadding)
   {
-    if (aPadding == null)
-      throw new NullPointerException ("Padding");
+    ValueEnforcer.notNull (aPadding, "Padding");
     checkNotPrepared ();
     m_aPadding = aPadding;
     return thisAsT ();
@@ -447,8 +446,7 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   @Nonnull
   public final IMPLTYPE setBorder (@Nonnull final BorderSpec aBorder)
   {
-    if (aBorder == null)
-      throw new NullPointerException ("Border");
+    ValueEnforcer.notNull (aBorder, "Border");
     checkNotPrepared ();
     m_aBorder = aBorder;
     return thisAsT ();

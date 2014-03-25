@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.report.pdf.spec.SizeSpec;
+import com.phloc.report.pdf.spec.WidthSpec;
 
 /**
  * Horizontal box - groups several columns.
@@ -88,9 +89,18 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
     for (int i = 0; i < nCols; ++i)
     {
       final Column aColumn = getColumnAtIndex (i);
-      final AbstractPLElement <?> aEmptyElement = PLSpacerX.createPreparedSpacer (m_aPreparedWidth[i]);
-      aHBox1.addColumn (aEmptyElement, aColumn.getWidth ());
-      aHBox2.addColumn (aEmptyElement, aColumn.getWidth ());
+      final WidthSpec aColumnWidth = aColumn.getWidth ();
+      final AbstractPLElement <?> aColumnElement = aColumn.getElement ();
+
+      // Create empty element with the same padding and margin as the original
+      // element
+      final PLSpacerX aEmptyElement = new PLSpacerX ();
+      aEmptyElement.setPadding (aColumnElement.getPadding ());
+      aEmptyElement.setMargin (aColumnElement.getMargin ());
+      aEmptyElement.markAsPrepared (new SizeSpec (m_aPreparedWidth[i], 0));
+
+      aHBox1.addColumn (aEmptyElement, aColumnWidth);
+      aHBox2.addColumn (aEmptyElement, aColumnWidth);
     }
 
     float fHBox1MaxHeight = 0;

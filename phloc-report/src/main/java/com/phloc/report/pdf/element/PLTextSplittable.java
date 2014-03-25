@@ -29,7 +29,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
 /**
  * Render text
- * 
+ *
  * @author Philip Helger
  */
 public class PLTextSplittable extends PLText implements IPLSplittableElement
@@ -51,19 +51,32 @@ public class PLTextSplittable extends PLText implements IPLSplittableElement
 
     // Get the lines in the correct order from top to bottom
     final List <TextAndWidthSpec> aLines = isTopDown () ? m_aPreparedLines
-                                                       : ContainerHelper.getReverseList (m_aPreparedLines);
+                                                        : ContainerHelper.getReverseList (m_aPreparedLines);
 
-    final int nLines1 = (int) (fAvailableHeight / fLineHeight);
-    if (nLines1 <= 0)
+    int nLines = (int) (fAvailableHeight / fLineHeight);
+    if (nLines <= 0)
     {
       // Splitting makes no sense
       return null;
     }
 
+    // Calc estimated height (required because an offset is added)
+    final float fExpectedHeight = getDisplayHeightOfLines (nLines);
+    if (fExpectedHeight > fAvailableHeight)
+    {
+      // Show one line less
+      --nLines;
+      if (nLines <= 0)
+      {
+        // Splitting makes no sense
+        return null;
+      }
+    }
+
     // First elements does not need to be splittable anymore
-    final PLElementWithSize aText1 = getCopy (fElementWidth, aLines.subList (0, nLines1), false);
+    final PLElementWithSize aText1 = getCopy (fElementWidth, aLines.subList (0, nLines), false);
     // Second element may need additional splitting
-    final PLElementWithSize aText2 = getCopy (fElementWidth, aLines.subList (nLines1, aLines.size ()), true);
+    final PLElementWithSize aText2 = getCopy (fElementWidth, aLines.subList (nLines, aLines.size ()), true);
     return new PLSplitResult (aText1, aText2);
   }
 }

@@ -277,6 +277,7 @@ public class PLText extends AbstractPLElement <PLText>
 
     final float fLeft = getPadding ().getLeft ();
     final float fUsableWidth = aCtx.getWidth () - getPadding ().getXSum ();
+    final float fTop = getPadding ().getTop ();
     int nIndex = 0;
     final int nMax = m_aPreparedLines.size ();
     for (final TextAndWidthSpec aTW : m_aPreparedLines)
@@ -313,8 +314,8 @@ public class PLText extends AbstractPLElement <PLText>
       {
         // Initial move - only partial line height!
         aContentStream.moveTextPositionByAmount (aCtx.getStartLeft () + fIndentX, aCtx.getStartTop () -
-                                                                                  getPadding ().getTop () -
-                                                                                  (m_fLineHeight * 0.75f));
+                                                 fTop -
+                                                 (m_fLineHeight * 0.75f));
       }
       else
         if (fIndentX != 0)
@@ -345,6 +346,13 @@ public class PLText extends AbstractPLElement <PLText>
     aContentStream.endText ();
   }
 
+  protected final float getDisplayHeightOfLines (@Nonnegative final int nLineCount)
+  {
+    // Note: when drawing the text, only 0.75*lineHeight is subtracted so now we
+    // need to add 0.25*lineHeight so that it looks good.
+    return (nLineCount + 0.25f) * getLineHeight ();
+  }
+
   @Nonnull
   public PLElementWithSize getCopy (final float fElementWidth,
                                     @Nonnull @Nonempty final List <TextAndWidthSpec> aLines,
@@ -355,15 +363,12 @@ public class PLText extends AbstractPLElement <PLText>
     // Create a copy to be independent!
     final List <TextAndWidthSpec> aLineCopy = ContainerHelper.newList (aLines);
 
-    // What is our line height?
-    final float fLineHeight = getLineHeight ();
-
     // Excluding padding/margin
-    final SizeSpec aSize = new SizeSpec (fElementWidth, aLineCopy.size () * fLineHeight);
+    final SizeSpec aSize = new SizeSpec (fElementWidth, getDisplayHeightOfLines (aLineCopy.size ()));
 
     final String sTextContent = TextAndWidthSpec.getAsText (aLineCopy);
     final PLText aNewText = bSplittableCopy ? new PLTextSplittable (sTextContent, getFontSpec ())
-                                           : new PLText (sTextContent, getFontSpec ());
+    : new PLText (sTextContent, getFontSpec ());
     aNewText.setBasicDataFrom (this).markAsPrepared (aSize).internalSetPreparedLines (aLineCopy);
 
     return new PLElementWithSize (aNewText, aSize);
@@ -373,11 +378,11 @@ public class PLText extends AbstractPLElement <PLText>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("text", m_sText)
-                            .append ("font", m_aFont)
-                            .append ("lineHeight", m_fLineHeight)
-                            .append ("horzAlign", m_eHorzAlign)
-                            .append ("topDown", m_bTopDown)
-                            .toString ();
+        .append ("text", m_sText)
+        .append ("font", m_aFont)
+        .append ("lineHeight", m_fLineHeight)
+        .append ("horzAlign", m_eHorzAlign)
+        .append ("topDown", m_bTopDown)
+        .toString ();
   }
 }
