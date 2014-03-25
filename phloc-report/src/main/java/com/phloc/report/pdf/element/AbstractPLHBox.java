@@ -82,6 +82,12 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
     {
       return m_aWidth;
     }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("element", m_aElement).append ("width", m_aWidth).toString ();
+    }
   }
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractPLHBox.class);
@@ -475,12 +481,12 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-        .append ("columns", m_aColumns)
-        .append ("startWidthItems", m_nStarWidthItems)
-        .append ("columnBorder", m_aColumnBorder)
-        .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
-        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-        .toString ();
+                            .append ("columns", m_aColumns)
+                            .append ("startWidthItems", m_nStarWidthItems)
+                            .append ("columnBorder", m_aColumnBorder)
+                            .appendIfNotNull ("columnFillColor", m_aColumnFillColor)
+                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+                            .toString ();
   }
 }

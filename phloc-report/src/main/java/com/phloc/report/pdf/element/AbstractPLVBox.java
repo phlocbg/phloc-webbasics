@@ -73,6 +73,12 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
       m_aElement = ValueEnforcer.notNull (aElement, "Element");
       return this;
     }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("element", m_aElement).toString ();
+    }
   }
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractPLVBox.class);
@@ -488,11 +494,11 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("rows", m_aRows)
-                            .append ("rowBorder", m_aRowBorder)
-                            .appendIfNotNull ("rowFillColor", m_aRowFillColor)
-                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-                            .toString ();
+        .append ("rows", m_aRows)
+        .append ("rowBorder", m_aRowBorder)
+        .appendIfNotNull ("rowFillColor", m_aRowFillColor)
+        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+        .toString ();
   }
 }
