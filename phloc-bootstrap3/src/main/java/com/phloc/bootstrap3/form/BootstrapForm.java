@@ -50,8 +50,8 @@ import com.phloc.validation.error.IErrorList;
 public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 {
   private final EBootstrapFormType m_eFormType;
-  private BootstrapGridSpec m_aLeft = BootstrapGridSpec.create (2);
-  private BootstrapGridSpec m_aRight = BootstrapGridSpec.create (10);
+  private BootstrapGridSpec m_aLeftGrid = BootstrapGridSpec.create (2);
+  private BootstrapGridSpec m_aRightGrid = BootstrapGridSpec.create (10);
 
   public BootstrapForm ()
   {
@@ -96,7 +96,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @Nonnull
   public final BootstrapGridSpec getLeft ()
   {
-    return m_aLeft;
+    return m_aLeftGrid;
   }
 
   /**
@@ -106,13 +106,13 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @Nonnull
   public final BootstrapGridSpec getRight ()
   {
-    return m_aRight;
+    return m_aRightGrid;
   }
 
   /**
    * Set the left part of a horizontal form. This implies setting the correct
    * right parts (= 12 - left).
-   * 
+   *
    * @param nLeftParts
    *        The left parts. Must be &ge; 1 and &lt; 12!
    * @return this
@@ -130,7 +130,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 
   /**
    * Set the left part of a horizontal form.
-   * 
+   *
    * @param aLeft
    *        The left parts. Must not be <code>null</code>.
    * @param aRight
@@ -145,8 +145,8 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
       throw new NullPointerException ("left");
     if (aRight == null)
       throw new NullPointerException ("right");
-    m_aLeft = aLeft;
-    m_aRight = aRight;
+    m_aLeftGrid = aLeft;
+    m_aRightGrid = aRight;
     return this;
   }
 
@@ -203,28 +203,28 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
                                      @Nullable final IHCNode aHelpText,
                                      @Nullable final IErrorList aErrorList)
   {
-    final IHCNode aFormGroup = createFormGroup (aLabel, aCtrls, aHelpText, aErrorList);
+    final HCDiv aFormGroup = createFormGroup (aLabel, aCtrls, aHelpText, aErrorList);
     addChild (aFormGroup);
     return this;
   }
 
   @Nonnull
-  public IHCNode createFormGroup (@Nullable final IHCElementWithChildren <?> aLabel,
-                                  @Nonnull final IHCNode aCtrls,
-                                  @Nullable final IHCNode aHelpText,
-                                  @Nullable final IErrorList aErrorList)
+  public HCDiv createFormGroup (@Nullable final IHCElementWithChildren <?> aLabel,
+                                @Nonnull final IHCNode aCtrls,
+                                @Nullable final IHCNode aHelpText,
+                                @Nullable final IErrorList aErrorList)
   {
-    return createFormGroup (m_eFormType, m_aLeft, m_aRight, aLabel, aCtrls, aHelpText, aErrorList);
+    return createFormGroup (m_eFormType, m_aLeftGrid, m_aRightGrid, aLabel, aCtrls, aHelpText, aErrorList);
   }
 
   @Nonnull
-  public static IHCNode createFormGroup (@Nonnull final EBootstrapFormType eFormType,
-                                         @Nullable final BootstrapGridSpec aLeft,
-                                         @Nullable final BootstrapGridSpec aRight,
-                                         @Nullable final IHCElementWithChildren <?> aLabel,
-                                         @Nonnull final IHCNode aCtrls,
-                                         @Nullable final IHCNode aHelpText,
-                                         @Nullable final IErrorList aErrorList)
+  public static HCDiv createFormGroup (@Nonnull final EBootstrapFormType eFormType,
+                                       @Nullable final BootstrapGridSpec aLeftGrid,
+                                       @Nullable final BootstrapGridSpec aRightGrid,
+                                       @Nullable final IHCElementWithChildren <?> aLabel,
+                                       @Nonnull final IHCNode aCtrls,
+                                       @Nullable final IHCNode aHelpText,
+                                       @Nullable final IErrorList aErrorList)
   {
     if (aCtrls == null)
       throw new NullPointerException ("ctrl");
@@ -253,10 +253,11 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 
       if (eFormType == EBootstrapFormType.HORIZONTAL)
       {
-        final HCDiv aChild = new HCDiv ();
-        aLeft.applyOffsetTo (aChild);
-        aRight.applyTo (aChild);
-        aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP).addChild (aChild.addChild (aCheckboxDiv));
+        final HCDiv aCheckboxParent = new HCDiv ();
+        aLeftGrid.applyOffsetTo (aCheckboxParent);
+        aRightGrid.applyTo (aCheckboxParent);
+        aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP)
+                                 .addChild (aCheckboxParent.addChild (aCheckboxDiv));
       }
       else
         aFinalNode = aCheckboxDiv;
@@ -279,10 +280,10 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 
         if (eFormType == EBootstrapFormType.HORIZONTAL)
         {
-          final HCDiv aChild = new HCDiv ();
-          aLeft.applyOffsetTo (aChild);
-          aRight.applyTo (aChild);
-          aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP).addChild (aChild.addChild (aRadioDiv));
+          final HCDiv aRadioParent = new HCDiv ();
+          aLeftGrid.applyOffsetTo (aRadioParent);
+          aRightGrid.applyTo (aRadioParent);
+          aFinalNode = new HCDiv ().addClass (CBootstrapCSS.FORM_GROUP).addChild (aRadioParent.addChild (aRadioDiv));
         }
         else
           aFinalNode = aRadioDiv;
@@ -303,7 +304,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
             if (eFormType == EBootstrapFormType.HORIZONTAL)
             {
               aLabel.addClass (CBootstrapCSS.CONTROL_LABEL);
-              aLeft.applyTo (aLabel);
+              aLeftGrid.applyTo (aLabel);
             }
 
           if (aFirstControl != null)
@@ -325,9 +326,9 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 
           if (eFormType == EBootstrapFormType.HORIZONTAL)
           {
-            final HCDiv aChild = new HCDiv ();
-            aRight.applyTo (aChild);
-            aFinalNode.addChildren (aLabel, aChild.addChild (aCtrls));
+            final HCDiv aCtrlParent = new HCDiv ();
+            aRightGrid.applyTo (aCtrlParent);
+            aFinalNode.addChildren (aLabel, aCtrlParent.addChild (aCtrls));
           }
           else
             aFinalNode.addChildren (aLabel, aCtrls);
@@ -337,10 +338,10 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
           // No label - just add controls
           if (eFormType == EBootstrapFormType.HORIZONTAL)
           {
-            final HCDiv aChild = new HCDiv ();
-            aLeft.applyOffsetTo (aChild);
-            aRight.applyTo (aChild);
-            aFinalNode.addChild (aChild.addChild (aCtrls));
+            final HCDiv aCtrlParent = new HCDiv ();
+            aLeftGrid.applyOffsetTo (aCtrlParent);
+            aRightGrid.applyTo (aCtrlParent);
+            aFinalNode.addChild (aCtrlParent.addChild (aCtrls));
           }
           else
             aFinalNode.addChild (aCtrls);
@@ -373,8 +374,8 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
         final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aError.getErrorText ());
         if (eFormType == EBootstrapFormType.HORIZONTAL)
         {
-          aLeft.applyOffsetTo (aHelpBlock);
-          aRight.applyTo (aHelpBlock);
+          aLeftGrid.applyOffsetTo (aHelpBlock);
+          aRightGrid.applyTo (aHelpBlock);
         }
         aFinalNode.addChild (aHelpBlock);
       }
