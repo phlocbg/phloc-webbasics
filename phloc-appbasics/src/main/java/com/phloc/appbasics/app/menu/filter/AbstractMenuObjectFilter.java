@@ -21,13 +21,18 @@ import java.io.Serializable;
 
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.commons.filter.IFilter;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Abstract base class for a menu object filter.
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractMenuObjectFilter implements IFilter <IMenuObject>, Serializable
 {
-  /* empty */
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
+  }
 }

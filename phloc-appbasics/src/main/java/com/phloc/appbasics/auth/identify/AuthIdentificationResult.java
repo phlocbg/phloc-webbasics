@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.auth.credentials.CredentialValidationResult;
 import com.phloc.appbasics.auth.token.IAuthToken;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -32,15 +33,14 @@ public final class AuthIdentificationResult implements ISuccessIndicator
 
   /**
    * Constructor for a failure.
-   * 
+   *
    * @param aCredentialValidationResult
    *        The validation result. May not be <code>null</code> and must be a
    *        failure!
    */
   public AuthIdentificationResult (@Nonnull final CredentialValidationResult aCredentialValidationResult)
   {
-    if (aCredentialValidationResult == null)
-      throw new NullPointerException ("credentialValidationResult");
+    ValueEnforcer.notNull (aCredentialValidationResult, "CredentialValidationResult");
     if (aCredentialValidationResult.isSuccess ())
       throw new IllegalStateException ("Don't call this method for successfuly credential validation!");
     m_aCredentialValidationResult = aCredentialValidationResult;
@@ -49,14 +49,13 @@ public final class AuthIdentificationResult implements ISuccessIndicator
 
   /**
    * Constructor for success.
-   * 
+   *
    * @param aAuthToken
    *        The auth token. May not be <code>null</code>.
    */
   public AuthIdentificationResult (@Nonnull final IAuthToken aAuthToken)
   {
-    if (aAuthToken == null)
-      throw new NullPointerException ("authToken");
+    ValueEnforcer.notNull (aAuthToken, "AuthToken");
     m_aCredentialValidationResult = null;
     m_aAuthToken = aAuthToken;
   }

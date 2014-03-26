@@ -28,11 +28,12 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This filter wraps a set of several filters and ensures that all contained
  * filters are matching.
- * 
+ *
  * @author Philip Helger
  */
 public final class MenuItemFilterListAll extends AbstractMenuObjectFilter
@@ -64,5 +65,11 @@ public final class MenuItemFilterListAll extends AbstractMenuObjectFilter
       if (!aFilter.matchesFilter (aValue))
         return false;
     return true;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("filters", m_aFilters).toString ();
   }
 }

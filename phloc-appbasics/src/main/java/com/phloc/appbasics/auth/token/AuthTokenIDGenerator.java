@@ -17,6 +17,7 @@
  */
 package com.phloc.appbasics.auth.token;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -25,19 +26,27 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * Create authentication token IDs.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
 final class AuthTokenIDGenerator
 {
+  public static final int DEFAULT_TOKEN_BYTES = 16;
+
   private AuthTokenIDGenerator ()
   {}
 
   @Nonnull
   public static String generateNewTokenID ()
   {
-    final byte [] aID = new byte [16];
+    return generateNewTokenID (DEFAULT_TOKEN_BYTES);
+  }
+
+  @Nonnull
+  public static String generateNewTokenID (@Nonnegative final int nBytes)
+  {
+    final byte [] aID = new byte [nBytes];
     VerySecureRandom.getInstance ().nextBytes (aID);
     return StringHelper.getHexEncoded (aID);
   }

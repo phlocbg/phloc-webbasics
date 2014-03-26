@@ -32,10 +32,11 @@ import com.phloc.appbasics.auth.subject.AuthCredentialToSubjectResolverManager;
 import com.phloc.appbasics.auth.subject.IAuthSubject;
 import com.phloc.appbasics.auth.token.AuthTokenRegistry;
 import com.phloc.appbasics.auth.token.IAuthToken;
+import com.phloc.commons.ValueEnforcer;
 
 /**
  * This is the main class for creating an {@link IAuthToken} from credentials.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -49,7 +50,7 @@ public final class AuthIdentificationManager
   /**
    * Validate the login credentials, try to resolve the subject and create a
    * token upon success.
-   * 
+   *
    * @param aCredentials
    *        The credentials to validate. If <code>null</code> it is treated as
    *        error.
@@ -59,8 +60,7 @@ public final class AuthIdentificationManager
   public static AuthIdentificationResult validateLoginCredentialsAndCreateToken (@Nonnull final Locale aDisplayLocale,
                                                                                  @Nonnull final IAuthCredentials aCredentials)
   {
-    if (aCredentials == null)
-      throw new NullPointerException ("credentials");
+    ValueEnforcer.notNull (aCredentials, "Credentials");
 
     // validate credentials
     final CredentialValidationResult aValidationResult = AuthCredentialValidatorManager.validateCredentials (aDisplayLocale,

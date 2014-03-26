@@ -20,14 +20,14 @@ package com.phloc.appbasics.auth.credentials;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.ISuccessIndicator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class represents the result of a credential validation.
- * 
+ *
  * @author Philip Helger
  */
 public class CredentialValidationResult implements ISuccessIndicator
@@ -46,15 +46,13 @@ public class CredentialValidationResult implements ISuccessIndicator
 
   /**
    * Constructor with an error message
-   * 
+   *
    * @param sErrorMsg
    *        The error message. May neither be <code>null</code> nor empty.
    */
   public CredentialValidationResult (@Nonnull @Nonempty final String sErrorMsg)
   {
-    if (StringHelper.hasNoText (sErrorMsg))
-      throw new IllegalArgumentException ("errorMsg");
-    m_sErrorMsg = sErrorMsg;
+    m_sErrorMsg = ValueEnforcer.notEmpty (sErrorMsg, "ErrorMessage");
   }
 
   public boolean isSuccess ()

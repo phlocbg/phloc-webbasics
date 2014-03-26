@@ -23,17 +23,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.impl.ReadonlyMultiLingualText;
 
 /**
  * Abstract base implementation for {@link IPage}.
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractPage implements IPage
@@ -53,20 +53,18 @@ public abstract class AbstractPage implements IPage
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    */
   public AbstractPage (@Nonnull @Nonempty final String sID)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    m_sID = sID;
+    m_sID = ValueEnforcer.notEmpty (sID, "ID");
   }
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param sName
@@ -80,7 +78,7 @@ public abstract class AbstractPage implements IPage
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param sName
@@ -99,7 +97,7 @@ public abstract class AbstractPage implements IPage
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param aName
@@ -112,7 +110,7 @@ public abstract class AbstractPage implements IPage
 
   /**
    * Constructor
-   * 
+   *
    * @param sID
    *        The unique page ID. May not be <code>null</code>.
    * @param aName
@@ -141,15 +139,13 @@ public abstract class AbstractPage implements IPage
 
   /**
    * Set the name of the page.
-   * 
+   *
    * @param aName
    *        The multilingual name of the page. May not be <code>null</code>.
    */
   public final void setName (@Nonnull final IReadonlyMultiLingualText aName)
   {
-    if (aName == null)
-      throw new NullPointerException ("name");
-    m_aName = aName;
+    m_aName = ValueEnforcer.notNull (aName, "Name");
   }
 
   /**
@@ -173,7 +169,7 @@ public abstract class AbstractPage implements IPage
 
   /**
    * Set the description of the page.
-   * 
+   *
    * @param aDescription
    *        The multilingual description of the page. May be <code>null</code>.
    */

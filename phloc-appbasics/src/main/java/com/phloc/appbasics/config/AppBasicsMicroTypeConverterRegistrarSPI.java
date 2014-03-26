@@ -29,6 +29,11 @@ import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistrarSPI;
 import com.phloc.commons.microdom.convert.IMicroTypeConverterRegistry;
 
+/**
+ * Special micro type converter for this project.
+ * 
+ * @author Philip Helger
+ */
 @IsSPIImplementation
 public final class AppBasicsMicroTypeConverterRegistrarSPI implements IMicroTypeConverterRegistrarSPI
 {

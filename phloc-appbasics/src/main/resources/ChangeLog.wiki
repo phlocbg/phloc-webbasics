@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>3/26/14</td><td colspan="4">_Release *2.6.10*_</td></tr>
+<tr><td>3/24/14</td><td>fix</td><td>tech</td><td></td><td>Fixed error in MenuItemFilterListOne and MenuItemFilterListAll</td></tr>
 <tr border="1"><td>3/19/14</td><td colspan="4">_Release *2.6.9*_</td></tr>
 <tr><td>3/19/14</td><td>add</td><td>api</td><td></td><td>Extended ILockManager with new methods: lockObjectAndUnlockAllOthers, getAllLockedObjectsOfCurrentUser and getAllLockedObjectsOfUser</td></tr>
 <tr border="1"><td>2/28/14</td><td colspan="4">_Release *2.6.8*_</td></tr>

@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
 import com.phloc.appbasics.auth.identify.IAuthIdentification;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -32,7 +33,7 @@ import com.phloc.datetime.PDTFactory;
 
 /**
  * Default implementation of the {@link IAuthToken} interface.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -47,10 +48,8 @@ public final class AuthToken implements IAuthToken
 
   public AuthToken (@Nonnull final IAuthIdentification aIdentification, @Nonnegative final int nExpirationSeconds)
   {
-    if (aIdentification == null)
-      throw new NullPointerException ("identification");
-    if (nExpirationSeconds < 0)
-      throw new IllegalArgumentException ("The token cannot expire in " + nExpirationSeconds + " seconds");
+    ValueEnforcer.notNull (aIdentification, "Identification");
+    ValueEnforcer.isGE0 (nExpirationSeconds, "ExpirationSeconds");
 
     // create new ID
     m_sID = AuthTokenIDGenerator.generateNewTokenID ();

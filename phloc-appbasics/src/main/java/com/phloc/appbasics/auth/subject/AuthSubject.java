@@ -20,14 +20,14 @@ package com.phloc.appbasics.auth.subject;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Default implementation of the {@link IAuthSubject} interface.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -37,9 +37,7 @@ public class AuthSubject implements IAuthSubject
 
   public AuthSubject (@Nonnull @Nonempty final String sName)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("No valid name specified");
-    m_sName = sName;
+    m_sName = ValueEnforcer.notEmpty (sName, "Name");
   }
 
   @Nonnull

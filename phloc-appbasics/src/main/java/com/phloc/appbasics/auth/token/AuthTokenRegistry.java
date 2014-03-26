@@ -31,11 +31,12 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.auth.identify.IAuthIdentification;
 import com.phloc.appbasics.auth.subject.IAuthSubject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.state.ESuccess;
 
 /**
  * This class manages all the currently available authentications tokens.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -138,8 +139,7 @@ public final class AuthTokenRegistry
   @Nonnull
   public static List <IAuthToken> getAllTokensOfSubject (@Nonnull final IAuthSubject aSubject)
   {
-    if (aSubject == null)
-      throw new NullPointerException ("subject");
+    ValueEnforcer.notNull (aSubject, "Subject");
 
     s_aRWLock.readLock ().lock ();
     try
@@ -158,7 +158,7 @@ public final class AuthTokenRegistry
 
   /**
    * Remove all tokens of the given subject
-   * 
+   *
    * @param aSubject
    *        The subject for which the tokens should be removed.
    * @return The number of removed tokens. Always &ge; 0.
@@ -166,8 +166,7 @@ public final class AuthTokenRegistry
   @Nonnegative
   public static int removeAllTokensOfSubject (@Nonnull final IAuthSubject aSubject)
   {
-    if (aSubject == null)
-      throw new NullPointerException ("subject");
+    ValueEnforcer.notNull (aSubject, "Subject");
 
     // get all token IDs matching a given subject
     // Note: required IAuthSubject to implement equals!

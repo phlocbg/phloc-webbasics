@@ -22,8 +22,9 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.security.util.SecurityUtils;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 public final class MenuItemFilterUserHasRole extends AbstractMenuObjectFilter
 {
@@ -31,13 +32,24 @@ public final class MenuItemFilterUserHasRole extends AbstractMenuObjectFilter
 
   public MenuItemFilterUserHasRole (@Nonnull @Nonempty final String sRoleID)
   {
-    if (StringHelper.isEmpty (sRoleID))
-      throw new IllegalArgumentException ("roleID");
-    m_sRoleID = sRoleID;
+    m_sRoleID = ValueEnforcer.notEmpty (sRoleID, "RoleID");
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getRoleID ()
+  {
+    return m_sRoleID;
   }
 
   public boolean matchesFilter (@Nullable final IMenuObject aValue)
   {
     return SecurityUtils.hasCurrentUserRole (m_sRoleID);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("roleID", m_sRoleID).toString ();
   }
 }

@@ -22,13 +22,14 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuObject;
 import com.phloc.appbasics.security.util.SecurityUtils;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This filter matches any menu item if a user is logged in and if the user is
  * assigned to the specified user group ID.
- * 
+ *
  * @author Philip Helger
  */
 public final class MenuItemFilterUserAssignedToUserGroup extends AbstractMenuObjectFilter
@@ -37,9 +38,7 @@ public final class MenuItemFilterUserAssignedToUserGroup extends AbstractMenuObj
 
   public MenuItemFilterUserAssignedToUserGroup (@Nonnull @Nonempty final String sUserGroupID)
   {
-    if (StringHelper.isEmpty (sUserGroupID))
-      throw new IllegalArgumentException ("UserGroupID");
-    m_sUserGroupID = sUserGroupID;
+    m_sUserGroupID = ValueEnforcer.notEmpty (sUserGroupID, "UserGroupID");
   }
 
   @Nonnull
@@ -52,5 +51,11 @@ public final class MenuItemFilterUserAssignedToUserGroup extends AbstractMenuObj
   public boolean matchesFilter (@Nullable final IMenuObject aValue)
   {
     return SecurityUtils.isCurrentUserAssignedToUserGroup (m_sUserGroupID);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("userGroupID", m_sUserGroupID).toString ();
   }
 }
