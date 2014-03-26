@@ -53,11 +53,11 @@ import com.phloc.webbasics.form.RequestField;
 
 /**
  * jQuery autoNumeric plugin from
- * 
+ *
  * <pre>
  * http://www.decorplanit.com/plugin/
  * </pre>
- * 
+ *
  * @author Philip Helger
  */
 public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializable
@@ -418,7 +418,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
   /**
    * Customize the edit. By default the edit customizer from
    * {@link #getEditCustomizer()} is used.
-   * 
+   *
    * @param aEdit
    *        The edit to be customized
    */
@@ -470,7 +470,7 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
     if (m_aRF != null && m_aInitialValue != null)
       s_aLogger.error ("InitialValue and RequestField cannot be used together - ignoring RequestField default value");
     final HCEdit aEdit = m_aRF != null ? m_aInitialValue != null ? new HCEdit (m_aRF.getFieldName ())
-                                                                : new HCEdit (m_aRF) : new HCEdit ();
+    : new HCEdit (m_aRF) : new HCEdit ();
     aEdit.setID (m_sID).addClass (CSS_CLASS_AUTO_NUMERIC_EDIT);
     customizeEdit (aEdit);
 
@@ -481,6 +481,6 @@ public class HCAutoNumeric implements IHCNodeBuilder, IHasID <String>, Serializa
   public static void registerExternalResources ()
   {
     PerRequestCSSIncludes.registerCSSIncludeForThisRequest (EAutoNumericCSSPathProvider.AUTONUMERIC);
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_18);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (EAutoNumericJSPathProvider.AUTONUMERIC_1_9_19);
   }
 }
