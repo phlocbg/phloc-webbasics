@@ -25,16 +25,16 @@ import com.phloc.bootstrap2.EBootstrapIcon;
 import com.phloc.bootstrap2.ext.BootstrapCustomizer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.version.Version;
-import com.phloc.html.hc.conversion.HCConversionSettingsProvider;
+import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.customize.HCDefaultCustomizer;
 import com.phloc.html.hc.customize.HCMultiCustomizer;
-import com.phloc.webbasics.app.ApplicationWebSettings;
+import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.servlet.WebAppListenerMultiApp;
 
 /**
  * Bootstrap specific initialization listener
- * 
+ *
  * @author Philip Helger
  */
 public abstract class WebAppListenerMultiAppBootstrap extends WebAppListenerMultiApp
@@ -54,11 +54,13 @@ public abstract class WebAppListenerMultiAppBootstrap extends WebAppListenerMult
 
     // UI stuff:
 
+    // Always use HTML5 for Bootstrap2
+    WebHTMLCreator.setHTMLVersion (EHTMLVersion.HTML5);
+
     // Special Bootstrap customizer
-    final HCConversionSettingsProvider aCSP = new HCConversionSettingsProvider (ApplicationWebSettings.getHTMLVersion ());
-    aCSP.setCustomizer (new HCMultiCustomizer (new HCDefaultCustomizer (),
-                                               new BootstrapCustomizer (getBoostrapVersion ())));
-    HCSettings.setConversionSettingsProvider (aCSP);
+    HCSettings.getConversionSettingsProvider ()
+              .setCustomizer (new HCMultiCustomizer (new HCDefaultCustomizer (),
+                                                     new BootstrapCustomizer (getBoostrapVersion ())));
 
     // Using Bootstrap icon set by default
     EBootstrapIcon.setAsDefault ();

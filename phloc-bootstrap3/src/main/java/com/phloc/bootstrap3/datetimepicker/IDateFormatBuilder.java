@@ -30,8 +30,8 @@ import org.joda.time.LocalTime;
 public interface IDateFormatBuilder
 {
   /**
-   * @return A non-<code>null</code> list with {@link EDateTimePickerFormatToken} and
-   *         {@link Character} objects.
+   * @return A non-<code>null</code> list with
+   *         {@link EDateTimePickerFormatToken} and {@link Character} objects.
    */
   @Nonnull
   List <Object> getAllInternalObjects ();

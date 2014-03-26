@@ -135,7 +135,7 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     if (m_eLanguage == null && !"en".equals (aDisplayLocale.getLanguage ()))
       s_aLogger.warn ("Unsupported EDateTimePickerLanguage provided: " + aDisplayLocale);
     m_eWeekStart = EDateTimePickerDayOfWeek.getFromJavaValueOrNull (Calendar.getInstance (aDisplayLocale)
-                                                                    .getFirstDayOfWeek ());
+                                                                            .getFirstDayOfWeek ());
     m_aPrefixes.add (EBootstrapIcon.CALENDAR.getAsNode ());
   }
 
@@ -526,8 +526,8 @@ public class BootstrapDateTimePicker implements IHCNodeBuilder, Serializable
     else
     {
       final String sDefaultFormat = BootstrapDateTimePickerFormatBuilder.fromJavaPattern (isShowTime () ? PDTFormatPatterns.getDefaultPatternDateTime (m_aDisplayLocale)
-                                                                                                        : PDTFormatPatterns.getDefaultPatternDate (m_aDisplayLocale))
-                                                                                                        .getJSFormatString ();
+                                                                                                       : PDTFormatPatterns.getDefaultPatternDate (m_aDisplayLocale))
+                                                                        .getJSFormatString ();
       aOptions.add ("format", sDefaultFormat);
     }
     if (m_eWeekStart != null)

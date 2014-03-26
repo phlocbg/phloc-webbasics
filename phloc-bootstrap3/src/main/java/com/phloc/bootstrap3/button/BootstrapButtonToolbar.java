@@ -39,8 +39,8 @@ public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButt
 
   @Nonnull
   public final BootstrapButtonToolbar addButton (@Nullable final String sCaption,
-                                                  @Nonnull final IJSCodeProvider aJSCode,
-                                                  @Nullable final IIcon aIcon)
+                                                 @Nonnull final IJSCodeProvider aJSCode,
+                                                 @Nullable final IIcon aIcon)
   {
     addChild (new BootstrapButton ().setIcon (aIcon).addChild (sCaption).setOnClick (aJSCode));
     return this;
@@ -48,8 +48,8 @@ public class BootstrapButtonToolbar extends AbstractButtonToolbar <BootstrapButt
 
   @Nonnull
   public final BootstrapButtonToolbar addSubmitButton (@Nullable final String sCaption,
-                                                        @Nullable final IJSCodeProvider aOnClick,
-                                                        @Nullable final IIcon aIcon)
+                                                       @Nullable final IJSCodeProvider aOnClick,
+                                                       @Nullable final IIcon aIcon)
   {
     addChild (new BootstrapSubmitButton ().setIcon (aIcon).setOnClick (aOnClick).addChild (sCaption));
     return this;

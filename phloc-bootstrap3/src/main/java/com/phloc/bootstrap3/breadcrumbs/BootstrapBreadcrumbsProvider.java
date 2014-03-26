@@ -39,7 +39,7 @@ public final class BootstrapBreadcrumbsProvider
 
   @Nonnull
   public static BootstrapBreadcrumbs createBreadcrumbs (@Nonnull final IMenuTree aMenuTree,
-                                                         @Nonnull final Locale aDisplayLocale)
+                                                        @Nonnull final Locale aDisplayLocale)
   {
     final BootstrapBreadcrumbs aBreadcrumb = new BootstrapBreadcrumbs ();
     final List <IMenuItem> aItems = new ArrayList <IMenuItem> ();
