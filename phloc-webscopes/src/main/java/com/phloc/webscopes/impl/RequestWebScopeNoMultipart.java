@@ -46,12 +46,14 @@ import com.phloc.scopes.ScopeUtils;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
+import com.phloc.web.servlet.request.IRequestParamMap;
 import com.phloc.web.servlet.request.RequestHelper;
+import com.phloc.web.servlet.request.RequestParamMap;
 import com.phloc.webscopes.domain.IRequestWebScope;
 
 /**
  * A request web scopes that does not parse multipart requests.
- * 
+ *
  * @author Philip Helger
  */
 public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements IRequestWebScope
@@ -61,6 +63,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestWebScopeNoMultipart.class);
   private static final String REQUEST_ATTR_SCOPE_INITED = "$request.scope.inited";
+  private static final String REQUEST_ATTR_REQUESTPARAMMAP = "$request.scope.requestparammap";
 
   protected final transient HttpServletRequest m_aHttpRequest;
   protected final transient HttpServletResponse m_aHttpResponse;
@@ -245,6 +248,23 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return aObject instanceof IFileItem ? (IFileItem) aObject : null;
   }
 
+  @Nonnull
+  public IRequestParamMap getRequestParamMap ()
+  {
+    // Check if a value is cached in the scope
+    IRequestParamMap aValue = getCastedAttribute (REQUEST_ATTR_REQUESTPARAMMAP);
+    if (aValue == null)
+    {
+      // Use all attributes except the internal ones
+      final Map <String, Object> aAttrs = getAllAttributes ();
+      aAttrs.remove (REQUEST_ATTR_SCOPE_INITED);
+      // Request the map and put it in scope
+      aValue = RequestParamMap.create (aAttrs);
+      setAttribute (REQUEST_ATTR_REQUESTPARAMMAP, aValue);
+    }
+    return aValue;
+  }
+
   public String getScheme ()
   {
     return m_aHttpRequest.getScheme ();
@@ -396,7 +416,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    * This is a heuristic method to determine whether a request is for a file
    * (e.g. x.jsp) or for a servlet. It is assumed that regular servlets don't
    * have a '.' in their name!
-   * 
+   *
    * @param sServletPath
    *        The non-<code>null</code> servlet path to check
    * @return <code>true</code> if it is assumed that the request is file based,

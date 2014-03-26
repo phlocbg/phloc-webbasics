@@ -30,12 +30,13 @@ import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.http.EHTTPMethod;
 import com.phloc.web.http.EHTTPVersion;
+import com.phloc.web.servlet.request.IRequestParamMap;
 import com.phloc.webscopes.IWebScope;
 
 /**
  * Interface for a single web request scope object that does not offer access to
  * the HTTP response.
- * 
+ *
  * @author Philip Helger
  */
 public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScope
@@ -62,7 +63,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Get the request attribute denoted by the specified attribute name as an
    * uploaded file item. In case the specified parameter is present but not a
    * file item, the method returns <code>null</code>.
-   * 
+   *
    * @param sAttrName
    *        The attribute name to resolved. May be <code>null</code>.
    * @return <code>null</code> if no such attribute is present, or if the
@@ -72,10 +73,16 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   IFileItem getAttributeAsFileItem (@Nullable String sAttrName);
 
   /**
+   * @return A cached request param map for this request.
+   */
+  @Nonnull
+  IRequestParamMap getRequestParamMap ();
+
+  /**
    * Returns the name of the scheme used to make this request, for example,
    * <code>http</code>, <code>https</code>, or <code>ftp</code>. Different
    * schemes have different rules for constructing URLs, as noted in RFC 1738.
-   * 
+   *
    * @return a <code>String</code> containing the name of the scheme used to
    *         make this request
    */
@@ -85,7 +92,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the host name of the server to which the request was sent. It is
    * the value of the part before ":" in the <code>Host</code> header value, if
    * any, or the resolved server name, or the server IP address.
-   * 
+   *
    * @return a <code>String</code> containing the name of the server
    */
 
@@ -96,7 +103,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <i>protocol/majorVersion.minorVersion</i>, for example, HTTP/1.1. For HTTP
    * servlets, the value returned is the same as the value of the CGI variable
    * <code>SERVER_PROTOCOL</code>.
-   * 
+   *
    * @return a <code>String</code> containing the protocol name and version
    *         number
    * @deprecated Use {@link #getProtocol()} instead
@@ -109,7 +116,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <i>protocol/majorVersion.minorVersion</i>, for example, HTTP/1.1. For HTTP
    * servlets, the value returned is the same as the value of the CGI variable
    * <code>SERVER_PROTOCOL</code>.
-   * 
+   *
    * @return a <code>String</code> containing the protocol name and version
    *         number
    */
@@ -125,7 +132,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the port number to which the request was sent. It is the value of
    * the part after ":" in the <code>Host</code> header value, if any, or the
    * server port where the client connection was accepted on.
-   * 
+   *
    * @return an integer specifying the port number
    */
   int getServerPort ();
@@ -134,7 +141,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the name of the HTTP method with which this request was made, for
    * example, GET, POST, or PUT. Same as the value of the CGI variable
    * REQUEST_METHOD.
-   * 
+   *
    * @return a <code>String</code> specifying the name of the method with which
    *         this request was made
    */
@@ -155,7 +162,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * information.
    * <p>
    * Same as the value of the CGI variable PATH_INFO.
-   * 
+   *
    * @return a <code>String</code>, decoded by the web container, specifying
    *         extra path information that comes after the servlet path but before
    *         the query string in the request URL; or <code>null</code> if the
@@ -165,7 +172,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
 
   /**
    * Return the URI of the request within the servlet context.
-   * 
+   *
    * @return the path within the web application and never <code>null</code>. By
    *         default "/" is returned is an empty request URI is determined.
    */
@@ -184,7 +191,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
    * <p>
    * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
-   * 
+   *
    * @return the path within the servlet mapping, or ""
    */
   @Nonnull
@@ -199,7 +206,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <code>null</code> or the servlet container cannot translate the virtual
    * path to a real path for any reason (such as when the web application is
    * executed from an archive). The web container does not decode this string.
-   * 
+   *
    * @return a <code>String</code> specifying the real path, or
    *         <code>null</code> if the URL does not have any extra path
    *         information
@@ -210,7 +217,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the query string that is contained in the request URL after the
    * path. This method returns <code>null</code> if the URL does not have a
    * query string. Same as the value of the CGI variable QUERY_STRING.
-   * 
+   *
    * @return a <code>String</code> containing the query string or
    *         <code>null</code> if the URL contains no query string. The value is
    *         not decoded by the container.
@@ -223,7 +230,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * (to improve performance), this method returns the dotted-string form of the
    * IP address. For HTTP servlets, same as the value of the CGI variable
    * <code>REMOTE_HOST</code>.
-   * 
+   *
    * @return a <code>String</code> containing the fully qualified name of the
    *         client
    */
@@ -233,7 +240,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the Internet Protocol (IP) address of the client or last proxy that
    * sent the request. For HTTP servlets, same as the value of the CGI variable
    * <code>REMOTE_ADDR</code>.
-   * 
+   *
    * @return a <code>String</code> containing the IP address of the client that
    *         sent the request
    */
@@ -246,7 +253,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * servlet is not authenticated <code>null</code> is returned.
    * <p>
    * Same as the value of the CGI variable AUTH_TYPE.
-   * 
+   *
    * @return one of the static members BASIC_AUTH, FORM_AUTH, CLIENT_CERT_AUTH,
    *         DIGEST_AUTH (suitable for == comparison) or the container-specific
    *         string indicating the authentication scheme, or <code>null</code>
@@ -260,7 +267,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Whether the user name is sent with each subsequent request depends on the
    * browser and type of authentication. Same as the value of the CGI variable
    * REMOTE_USER.
-   * 
+   *
    * @return a <code>String</code> specifying the login of the user making this
    *         request, or <code>null</code> if the user login is not known
    */
@@ -270,7 +277,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the MIME type of the body of the request, or <code>null</code> if
    * the type is not known. For HTTP servlets, same as the value of the CGI
    * variable CONTENT_TYPE.
-   * 
+   *
    * @return a <code>String</code> containing the name of the MIME type of the
    *         request, or null if the type is not known
    */
@@ -280,7 +287,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * Returns the length, in bytes, of the request body and made available by the
    * input stream, or -1 if the length is not known. For HTTP servlets, same as
    * the value of the CGI variable CONTENT_LENGTH.
-   * 
+   *
    * @return an integer containing the length of the request body or -1 if the
    *         length is not known
    */
@@ -308,7 +315,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <td>/xyz</td>
    * </tr>
    * </table>
-   * 
+   *
    * @return a <code>String</code> containing the part of the URL from the
    *         protocol name up to the query string
    */
@@ -322,7 +329,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <p>
    * This method will return an empty string ("") if the servlet used to process
    * this request was matched using the "/*" pattern.
-   * 
+   *
    * @return a <code>String</code> containing the name or path of the servlet
    *         being called, as specified in the request URL, decoded, or an empty
    *         string if the servlet used to process the request is matched using
@@ -344,7 +351,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * before the response is committed. If the container is using cookies to
    * maintain session integrity and is asked to create a new session when the
    * response is committed, an IllegalStateException is thrown.
-   * 
+   *
    * @param bCreateIfNotExisting
    *        <code>true</code> to create a new session for this request if
    *        necessary; <code>false</code> to return <code>null</code> if there's
@@ -402,7 +409,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   /**
    * Get the full URL (incl. protocol) and parameters of the current request.<br>
    * <code>http://hostname.com:81/context/servlet/path/a/b?c=123&amp;d=789</code>
-   * 
+   *
    * @return The full URL of the current request.
    */
   String getURL ();
@@ -417,7 +424,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * For robust session tracking, all URLs emitted by a servlet should be run
    * through this method. Otherwise, URL rewriting cannot be used with browsers
    * which do not support cookies.
-   * 
+   *
    * @param sURL
    *        the url to be encoded.
    * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
@@ -437,7 +444,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * All URLs sent to the <code>HttpServletResponse.sendRedirect</code> method
    * should be run through this method. Otherwise, URL rewriting cannot be used
    * with browsers which do not support cookies.
-   * 
+   *
    * @param sURL
    *        the url to be encoded.
    * @return the encoded URL if encoding is needed; the unchanged URL otherwise.
@@ -449,7 +456,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
   /**
    * Check if this request uses a Cookie based session handling (meaning cookies
    * are enabled) or whether the session ID needs to be appended to a URL.
-   * 
+   *
    * @return <code>true</code> if the session ID is passed via cookies.
    */
   boolean areCookiesEnabled ();
@@ -460,7 +467,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * returns <code>null</code>. If there are multiple headers with the same
    * name, this method returns the first head in the request. The header name is
    * case insensitive. You can use this method with any request header.
-   * 
+   *
    * @param sName
    *        a <code>String</code> specifying the header name
    * @return a <code>String</code> containing the value of the requested header,
@@ -481,7 +488,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * If the request did not include any headers of the specified name, this
    * method returns an empty <code>Enumeration</code>. The header name is case
    * insensitive. You can use this method with any request header.
-   * 
+   *
    * @param sName
    *        a <code>String</code> specifying the header name
    * @return an <code>Enumeration</code> containing the values of the requested
@@ -498,7 +505,7 @@ public interface IRequestWebScopeWithoutResponse extends IRequestScope, IWebScop
    * <p>
    * Some servlet containers do not allow servlets to access headers using this
    * method, in which case this method returns <code>null</code>
-   * 
+   *
    * @return an enumeration of all the header names sent with this request; if
    *         the request has no headers, an empty enumeration; if the servlet
    *         container does not allow servlets to use this method,
