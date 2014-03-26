@@ -25,23 +25,31 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EWebCtrlsJSPathProvider implements IJSPathProvider
 {
+  FORM ("js/form.js", true),
   JQUERY_UTILS ("js/jquery-utils.js", true),
-  STACKTRACE ("js/stacktrace.js", true),
   /**
    * Source: https://github.com/scottjehl/Respond - only for IE6-8 so use it
    * only in a conditional comment!
    */
   RESPOND ("js/respond.js", false),
+  STACKTRACE ("js/stacktrace.js", true),
   /** Insert in &lt;head> element (after or before your CSS) for IE &lt; 9 */
   HTML5SHIV_3_7_0 ("html5shiv/3.7.0/html5shiv.js", false),
   /** Edit placeholder fix for IE < 10 */
   PLACEHOLDER_FIX ("placeholder/placeholder-fix.js", false),
+  /** JQuery 1.7 */
   JQUERY_1_7 ("jquery/jquery-1.7.2.js", true),
+  /** JQuery 1.8 */
   JQUERY_1_8 ("jquery/jquery-1.8.3.js", true),
+  /** JQuery 1.9 */
   JQUERY_1_9 ("jquery/jquery-1.9.1.js", true),
+  /** JQuery 1.10 */
   JQUERY_1_10 ("jquery/jquery-1.10.2.js", true),
+  /** JQuery 1.11 */
   JQUERY_1_11 ("jquery/jquery-1.11.0.js", true),
+  /** JQuery 2.0 */
   JQUERY_2_0 ("jquery/jquery-2.0.3.js", true),
+  /** JQuery 2.1 */
   JQUERY_2_1 ("jquery/jquery-2.1.0.js", true);
 
   private final String m_sPath;
