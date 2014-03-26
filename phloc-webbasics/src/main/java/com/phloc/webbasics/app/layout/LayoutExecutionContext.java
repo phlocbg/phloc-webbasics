@@ -48,7 +48,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 /**
  * This page is instantiated per page view, so that the thread safety of the
  * execution parameters is more clear.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -91,7 +91,7 @@ public class LayoutExecutionContext
   /**
    * Check if the request parameter with the given name is present (independent
    * of the value).
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @return <code>true</code> of the attribute is present, <code>false</code>
@@ -104,7 +104,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the request parameter with the given name.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @return The value of the passed request parameter
@@ -117,7 +117,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the request parameter with the given name.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @param sDefault
@@ -133,7 +133,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value list of the request parameter with the given name.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @return The value list of the passed request parameter
@@ -146,7 +146,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the request parameter with the given name as a boolean.
-   * 
+   *
    * @param sName
    *        The attribute values.
    * @param bDefault
@@ -163,7 +163,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the request parameter with the given name as an integer.
-   * 
+   *
    * @param sName
    *        The attribute values.
    * @param nDefault
@@ -180,7 +180,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the request parameter with the given name as a long.
-   * 
+   *
    * @param sName
    *        The attribute values.
    * @param nDefault
@@ -197,7 +197,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the request parameter with the given name as a double.
-   * 
+   *
    * @param sName
    *        The attribute values.
    * @param dDefault
@@ -215,7 +215,7 @@ public class LayoutExecutionContext
   /**
    * Get the value of the request parameter with the given name casted to the
    * specified data type.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @return The value of the passed request parameter
@@ -229,7 +229,7 @@ public class LayoutExecutionContext
   /**
    * Get the value of the request parameter with the given name casted to the
    * specified data type.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @param aDefault
@@ -244,7 +244,7 @@ public class LayoutExecutionContext
 
   /**
    * Check if a request parameter with the given value is present.
-   * 
+   *
    * @param sName
    *        The name of the request parameter.
    * @param sValue
@@ -259,7 +259,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the checkbox of the request parameter with the given name.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @param bDefaultValue
@@ -273,7 +273,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the value of the checkbox of the request parameter with the given name.
-   * 
+   *
    * @param sName
    *        Request parameter name
    * @param bDefaultValue
@@ -287,7 +287,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the uploaded file with the specified request parameter.
-   * 
+   *
    * @param sName
    *        The parameter name.
    * @return <code>null</code> if no such uploaded file is present.
@@ -297,13 +297,13 @@ public class LayoutExecutionContext
   @Nullable
   public IFileItem getFileItem (@Nullable final String sName)
   {
-    return m_aRequestScope.getCastedAttribute (sName);
+    return m_aRequestScope.getAttributeAsFileItem (sName);
   }
 
   @Nonnull
   public IRequestParamMap getRequestParamMap ()
   {
-    return RequestHelper.getRequestParamMap (m_aRequestScope.getRequest ());
+    return m_aRequestScope.getRequestParamMap ();
   }
 
   @Nullable
@@ -347,7 +347,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the URL to the current page.
-   * 
+   *
    * @return The non-<code>null</code> URL to the current page (selected menu
    *         item) with the passed parameters.
    */
@@ -359,7 +359,7 @@ public class LayoutExecutionContext
 
   /**
    * Get the URL to the current page with the provided set of parameters.
-   * 
+   *
    * @param aParams
    *        The optional request parameters to be used. May be <code>null</code>
    *        or empty.
@@ -376,9 +376,9 @@ public class LayoutExecutionContext
   public String toString ()
   {
     return new ToStringGenerator (this).append ("requestURL", RequestHelper.getURI (m_aRequestScope.getRequest ()))
-                                       .append ("displayLocale", m_aDisplayLocale)
-                                       .append ("selectedMenuItemID", m_sSelectedMenuItemID)
-                                       .append ("customAttrs", m_aCustomAttrs)
-                                       .toString ();
+        .append ("displayLocale", m_aDisplayLocale)
+        .append ("selectedMenuItemID", m_sSelectedMenuItemID)
+        .append ("customAttrs", m_aCustomAttrs)
+        .toString ();
   }
 }
