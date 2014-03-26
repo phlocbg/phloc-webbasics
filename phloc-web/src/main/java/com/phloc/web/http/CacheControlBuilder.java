@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.ICloneable;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -36,7 +37,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * This class is used to build the response HTTP header field Cache-Control
  * value in a structured way. This header field is only applicable for HTTP/1.1
- * 
+ *
  * @author Philip Helger
  */
 public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
@@ -57,8 +58,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 
   public CacheControlBuilder (@Nonnull final CacheControlBuilder aBase)
   {
-    if (aBase == null)
-      throw new NullPointerException ("base");
+    ValueEnforcer.notNull (aBase, "Base");
 
     m_aMaxAgeSeconds = aBase.m_aMaxAgeSeconds;
     m_aSharedMaxAgeSeconds = aBase.m_aSharedMaxAgeSeconds;
@@ -74,7 +74,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 
   /**
    * Set the maximum age relative to the request time
-   * 
+   *
    * @param eTimeUnit
    *        {@link TimeUnit} to use
    * @param nDuration
@@ -89,7 +89,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 
   /**
    * Set the maximum age in days relative to the request time
-   * 
+   *
    * @param nDays
    *        Days to keep it
    * @return this
@@ -102,7 +102,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 
   /**
    * Set the maximum age in hours relative to the request time
-   * 
+   *
    * @param nHours
    *        Hours to keep it
    * @return this
@@ -115,7 +115,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
 
   /**
    * Set the maximum age in minutes relative to the request time
-   * 
+   *
    * @param nMinutes
    *        Minutes to keep it
    * @return this
@@ -132,7 +132,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Similar to Expires, this directive is relative to the time of the request,
    * rather than absolute. [seconds] is the number of seconds from the time of
    * the request you wish the representation to be fresh for.
-   * 
+   *
    * @param nSeconds
    *        Seconds to keep it
    * @return this
@@ -140,8 +140,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   @Nonnull
   public CacheControlBuilder setMaxAgeSeconds (@Nonnegative final long nSeconds)
   {
-    if (nSeconds < 0)
-      throw new IllegalArgumentException ("Negative seconds are not allowed!");
+    ValueEnforcer.isGE0 (nSeconds, "Seconds");
     m_aMaxAgeSeconds = Long.valueOf (nSeconds);
     return this;
   }
@@ -160,7 +159,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   /**
    * Set the maximum age for shared caches relative to the request time. Similar
    * to max-age, except that it only applies to shared (e.g., proxy) caches.
-   * 
+   *
    * @param eTimeUnit
    *        {@link TimeUnit} to use
    * @param nDuration
@@ -177,7 +176,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Set the maximum age for shared caches in days relative to the request time.
    * Similar to max-age, except that it only applies to shared (e.g., proxy)
    * caches.
-   * 
+   *
    * @param nDays
    *        Days to keep it
    * @return this
@@ -192,7 +191,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Set the maximum age for shared caches in hours relative to the request
    * time. Similar to max-age, except that it only applies to shared (e.g.,
    * proxy) caches.
-   * 
+   *
    * @param nHours
    *        Hours to keep it
    * @return this
@@ -207,7 +206,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Set the maximum age for shared caches in minutes relative to the request
    * time. Similar to max-age, except that it only applies to shared (e.g.,
    * proxy) caches.
-   * 
+   *
    * @param nMinutes
    *        Minutes to keep it
    * @return this
@@ -222,7 +221,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Set the maximum age for shared caches in seconds relative to the request
    * time. Similar to max-age, except that it only applies to shared (e.g.,
    * proxy) caches.
-   * 
+   *
    * @param nSeconds
    *        Seconds to keep it
    * @return this
@@ -230,8 +229,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   @Nonnull
   public CacheControlBuilder setSharedMaxAgeSeconds (@Nonnegative final long nSeconds)
   {
-    if (nSeconds < 0)
-      throw new IllegalArgumentException ("Negative seconds are not allowed!");
+    ValueEnforcer.isGE0 (nSeconds, "Seconds");
     m_aSharedMaxAgeSeconds = Long.valueOf (nSeconds);
     return this;
   }
@@ -251,7 +249,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Set the <b>public</b> value. marks authenticated responses as cacheable;
    * normally, if HTTP authentication is required, responses are automatically
    * private.
-   * 
+   *
    * @param bPublic
    *        <code>true</code> to enable public
    * @return this
@@ -272,7 +270,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * Set the <b>private</b> value. allows caches that are specific to one user
    * (e.g., in a browser) to store the response; shared caches (e.g., in a
    * proxy) may not.
-   * 
+   *
    * @param bPrivate
    *        <code>true</code> to enable private
    * @return this
@@ -295,7 +293,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * This is useful to assure that authentication is respected (in combination
    * with public), or to maintain rigid freshness, without sacrificing all of
    * the benefits of caching.
-   * 
+   *
    * @param bNoCache
    *        <code>true</code> to enable no-cache
    * @return this
@@ -315,7 +313,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   /**
    * Set the <b>no-store</b> value. Instructs caches not to keep a copy of the
    * representation under any conditions.
-   * 
+   *
    * @param bNoStore
    *        <code>true</code> to enable no-store
    * @return this
@@ -343,7 +341,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * implies that the cache or proxy MUST NOT change any aspect of the
    * entity-body that is specified by these headers, including the value of the
    * entity-body itself.
-   * 
+   *
    * @param bNoTransform
    *        <code>true</code> to enable no-transform
    * @return this
@@ -366,7 +364,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
    * caches to serve stale representations under special conditions; by
    * specifying this header, you’re telling the cache that you want it to
    * strictly follow your rules.
-   * 
+   *
    * @param bMustRevalidate
    *        <code>true</code> to enable must-revalidate
    * @return this
@@ -386,7 +384,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   /**
    * Set the <b>proxy-revalidate</b> value. Similar to must-revalidate, except
    * that it only applies to proxy caches.
-   * 
+   *
    * @param bProxyRevalidate
    *        <code>true</code> to enable proxy-revalidate
    * @return this
@@ -406,8 +404,7 @@ public class CacheControlBuilder implements ICloneable <CacheControlBuilder>
   @Nonnull
   public CacheControlBuilder addExtension (@Nonnull @Nonempty final String sExtension)
   {
-    if (StringHelper.hasNoText (sExtension))
-      throw new IllegalArgumentException ("extension is empty");
+    ValueEnforcer.notEmpty (sExtension, "Extension");
     if (sExtension.indexOf (',') >= 0)
       throw new IllegalArgumentException ("Each extension must be added separately: '" + sExtension + "'");
     m_aExtensions.add (sExtension);

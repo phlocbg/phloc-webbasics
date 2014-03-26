@@ -22,11 +22,11 @@ import java.util.Locale;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.ValueEnforcer;
 
 /**
  * Represents a list of Accept-Language values as specified in the HTTP header
- * 
+ *
  * @author Philip Helger
  */
 public final class AcceptLanguageList extends AbstractQValueList <String>
@@ -42,14 +42,13 @@ public final class AcceptLanguageList extends AbstractQValueList <String>
 
   public void addLanguage (@Nonnull final String sLanguage, @Nonnegative final double dQuality)
   {
-    if (StringHelper.hasNoText (sLanguage))
-      throw new IllegalArgumentException ("language name is empty");
+    ValueEnforcer.notEmpty (sLanguage, "Language");
     m_aMap.put (_unify (sLanguage), new QValue (dQuality));
   }
 
   /**
    * Return the associated quality of the given language.
-   * 
+   *
    * @param sLanguage
    *        The language name to query. May not be <code>null</code>.
    * @return The associated {@link QValue}. Never <code>null</code>.
@@ -57,8 +56,7 @@ public final class AcceptLanguageList extends AbstractQValueList <String>
   @Nonnull
   public QValue getQValueOfLanguage (@Nonnull final String sLanguage)
   {
-    if (sLanguage == null)
-      throw new NullPointerException ("language");
+    ValueEnforcer.notNull (sLanguage, "Language");
 
     // Find language direct
     QValue aQuality = m_aMap.get (_unify (sLanguage));
@@ -78,7 +76,7 @@ public final class AcceptLanguageList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given language.
-   * 
+   *
    * @param sLanguage
    *        The language name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.
@@ -95,8 +93,7 @@ public final class AcceptLanguageList extends AbstractQValueList <String>
 
   public boolean explicitlySupportsLanguage (@Nonnull final String sLanguage)
   {
-    if (sLanguage == null)
-      throw new NullPointerException ("language");
+    ValueEnforcer.notNull (sLanguage, "Language");
 
     final QValue aQuality = m_aMap.get (_unify (sLanguage));
     return aQuality != null && aQuality.isAboveMinimumQuality ();

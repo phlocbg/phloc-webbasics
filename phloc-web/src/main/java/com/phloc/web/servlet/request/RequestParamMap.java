@@ -30,6 +30,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
@@ -56,7 +57,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * problem with JS expressions, {@link #setSeparators(char, char)} and
  * {@link #setSeparators(String, String)} offer the possibility to set different
  * separator separators that are not special.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -81,15 +82,13 @@ public final class RequestParamMap implements IRequestParamMap
   /**
    * This constructor is private, because it does not call the
    * {@link #put(String, Object)} method which does the main string parsing!
-   * 
+   *
    * @param aMap
    *        The map to use. May not be <code>null</code>.
    */
   private RequestParamMap (@Nonnull final Map <String, Object> aMap)
   {
-    if (aMap == null)
-      throw new NullPointerException ("map");
-    m_aMap = aMap;
+    m_aMap = ValueEnforcer.notNull (aMap, "Map");
   }
 
   private void _recursiveAddItem (@Nonnull final Map <String, Object> aMap,
@@ -151,7 +150,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   /**
    * Iterate the root map down to the map specified by the passed path.
-   * 
+   *
    * @param aPath
    *        The path to iterate. May neither be <code>null</code> nor empty.
    * @return The map. May be <code>null</code> if the path did not find such a
@@ -302,7 +301,7 @@ public final class RequestParamMap implements IRequestParamMap
   /**
    * This method doesn't make sense but it should stay, so that it's easy to
    * spot usage of this invalid method.
-   * 
+   *
    * @param sBaseName
    *        Base name
    * @return Base name as is.
@@ -354,7 +353,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   /**
    * Set the separator chars to use.
-   * 
+   *
    * @param cOpen
    *        Open char
    * @param cClose
@@ -370,7 +369,7 @@ public final class RequestParamMap implements IRequestParamMap
 
   /**
    * Set the separators to use.
-   * 
+   *
    * @param sOpen
    *        Open string. May neither be <code>null</code> nor empty.
    * @param sClose

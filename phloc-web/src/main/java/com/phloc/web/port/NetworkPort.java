@@ -21,12 +21,13 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Represents a single network port.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -44,16 +45,10 @@ public class NetworkPort implements INetworkPort
   {
     if (!DefaultNetworkPorts.isValidPort (nPort))
       throw new IllegalArgumentException ("Port is illegal: " + nPort);
-    if (eProtocol == null)
-      throw new NullPointerException ("protocol");
-    if (sName == null)
-      throw new NullPointerException ("name");
-    if (sDescription == null)
-      throw new NullPointerException ("description");
     m_nPort = nPort;
-    m_eProtocol = eProtocol;
-    m_sName = sName;
-    m_sDescription = sDescription;
+    m_eProtocol = ValueEnforcer.notNull (eProtocol, "Protocol");
+    m_sName = ValueEnforcer.notNull (sName, "Name");
+    m_sDescription = ValueEnforcer.notNull (sDescription, "Description");
   }
 
   @Nonnegative

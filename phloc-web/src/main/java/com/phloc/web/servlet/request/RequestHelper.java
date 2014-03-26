@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -48,7 +49,7 @@ import com.phloc.web.port.DefaultNetworkPorts;
 
 /**
  * Misc. helper method on {@link HttpServletRequest} objects.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -59,7 +60,6 @@ public final class RequestHelper
   public static final String SERVLET_ATTR_CLIENT_CERTIFICATE = "javax.servlet.request.X509Certificate";
 
   private static final String SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP = "$requesthelp.requestparammap";
-
   private static final Logger s_aLogger = LoggerFactory.getLogger (RequestHelper.class);
 
   @PresentForCodeCoverage
@@ -72,7 +72,7 @@ public final class RequestHelper
   /**
    * Get the passed string without an eventually contained session ID like in
    * "test.html;JSESSIONID=1234".
-   * 
+   *
    * @param sValue
    *        The value to strip the session ID from
    * @return The value without a session ID or the original string.
@@ -80,8 +80,7 @@ public final class RequestHelper
   @Nullable
   public static String getWithoutSessionID (@Nonnull final String sValue)
   {
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notNull (sValue, "Value");
 
     // Strip session ID parameter
     final int nIndex = sValue.indexOf (';');
@@ -108,7 +107,7 @@ public final class RequestHelper
    * <td>/xyz</td>
    * </tr>
    * </table>
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request
    * @return The request URI without the optional session ID
@@ -116,8 +115,7 @@ public final class RequestHelper
   @Nullable
   public static String getRequestURI (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sRequestURI = aHttpRequest.getRequestURI ();
     if (StringHelper.hasNoText (sRequestURI))
@@ -129,7 +127,7 @@ public final class RequestHelper
   /**
    * Get the request path info without an eventually appended session
    * (";jsessionid=...")
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request
    * @return Returns any extra path information associated with the URL the
@@ -140,8 +138,7 @@ public final class RequestHelper
   @Nullable
   public static String getPathInfo (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sPathInfo = aHttpRequest.getPathInfo ();
     if (StringHelper.hasNoText (sPathInfo))
@@ -152,7 +149,7 @@ public final class RequestHelper
 
   /**
    * Return the URI of the request within the servlet context.
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request. May not be <code>null</code>.
    * @return the path within the web application and never <code>null</code>. By
@@ -161,8 +158,7 @@ public final class RequestHelper
   @Nonnull
   public static String getPathWithinServletContext (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sRequestURI = getRequestURI (aHttpRequest);
     if (StringHelper.hasNoText (sRequestURI))
@@ -193,7 +189,7 @@ public final class RequestHelper
    * E.g.: servlet mapping = "/test"; request URI = "/test" -> "".
    * <p>
    * E.g.: servlet mapping = "/*.test"; request URI = "/a.test" -> "".
-   * 
+   *
    * @param aHttpRequest
    *        current HTTP request
    * @return the path within the servlet mapping, or ""
@@ -201,8 +197,7 @@ public final class RequestHelper
   @Nonnull
   public static String getPathWithinServlet (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sPathWithinApp = getPathWithinServletContext (aHttpRequest);
     final String sServletPath = aHttpRequest.getServletPath ();
@@ -217,11 +212,11 @@ public final class RequestHelper
 
   /**
    * Get the full URL (incl. protocol) and parameters of the passed request.<br>
-   * 
+   *
    * <pre>
    * http://hostname.com/mywebapp/servlet/MyServlet/a/b;c=123?d=789
    * </pre>
-   * 
+   *
    * @param aHttpRequest
    *        The request to use. May not be <code>null</code>.
    * @return The full URL.
@@ -230,8 +225,7 @@ public final class RequestHelper
   @Nonempty
   public static String getURL (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final StringBuffer aReqUrl = aHttpRequest.getRequestURL ();
     final String sQueryString = aHttpRequest.getQueryString (); // d=789
@@ -243,11 +237,11 @@ public final class RequestHelper
   /**
    * Get the full URI (excl. protocol) and parameters of the passed request.<br>
    * Example:
-   * 
+   *
    * <pre>
    * /mywebapp/servlet/MyServlet/a/b;c=123?d=789
    * </pre>
-   * 
+   *
    * @param aHttpRequest
    *        The request to use. May not be <code>null</code>.
    * @return The full URI.
@@ -256,8 +250,7 @@ public final class RequestHelper
   @Nonempty
   public static String getURI (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sReqUrl = getRequestURI (aHttpRequest);
     final String sQueryString = aHttpRequest.getQueryString (); // d=789&x=y
@@ -291,10 +284,8 @@ public final class RequestHelper
                                                  @Nonnull final String sServerName,
                                                  final int nServerPort)
   {
-    if (sScheme == null)
-      throw new NullPointerException ("scheme");
-    if (sServerName == null)
-      throw new NullPointerException ("serverName");
+    ValueEnforcer.notNull (sScheme, "Scheme");
+    ValueEnforcer.notNull (sServerName, "ServerName");
 
     // Reconstruct URL
     final StringBuilder aSB = new StringBuilder (sScheme).append ("://").append (sServerName);
@@ -326,15 +317,14 @@ public final class RequestHelper
   @Nullable
   public static String getHttpReferer (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     return aHttpRequest.getHeader (CHTTPHeader.REFERER);
   }
 
   /**
    * Get the HTTP version associated with the given HTTP request
-   * 
+   *
    * @param aHttpRequest
    *        The http request to query. May not be <code>null</code>.
    * @return <code>null</code> if no supported HTTP version is contained
@@ -342,8 +332,7 @@ public final class RequestHelper
   @Nullable
   public static EHTTPVersion getHttpVersion (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sProtocol = aHttpRequest.getProtocol ();
     return EHTTPVersion.getFromNameOrNull (sProtocol);
@@ -351,7 +340,7 @@ public final class RequestHelper
 
   /**
    * Get the HTTP method associated with the given HTTP request
-   * 
+   *
    * @param aHttpRequest
    *        The http request to query. May not be <code>null</code>.
    * @return <code>null</code> if no supported HTTP method is contained
@@ -359,8 +348,7 @@ public final class RequestHelper
   @Nullable
   public static EHTTPMethod getHttpMethod (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sMethod = aHttpRequest.getMethod ();
     return EHTTPMethod.getFromNameOrNull (sMethod);
@@ -368,7 +356,7 @@ public final class RequestHelper
 
   /**
    * Get a complete request header map as a copy.
-   * 
+   *
    * @param aHttpRequest
    *        The source HTTP request. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -377,8 +365,7 @@ public final class RequestHelper
   @ReturnsMutableCopy
   public static HTTPHeaderMap getRequestHeaderMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final HTTPHeaderMap ret = new HTTPHeaderMap ();
     final Enumeration <?> eHeaders = aHttpRequest.getHeaderNames ();
@@ -398,7 +385,7 @@ public final class RequestHelper
   /**
    * This is a utility method which avoids that all map values are enclosed in
    * an array. Jetty seems to create String arrays out of simple string values
-   * 
+   *
    * @param aHttpRequest
    *        The source HTTP request. May not be <code>null</code>.
    * @return A Map containing pure strings instead of string arrays with one
@@ -408,8 +395,7 @@ public final class RequestHelper
   @ReturnsMutableCopy
   public static Map <String, Object> getParameterMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final Map <String, Object> aResult = new HashMap <String, Object> ();
     @SuppressWarnings ("unchecked")
@@ -447,8 +433,7 @@ public final class RequestHelper
   @Nonnull
   public static IRequestParamMap getRequestParamMap (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     // Check if a value is cached in the HTTP request
     IRequestParamMap aValue = (IRequestParamMap) aHttpRequest.getAttribute (SCOPE_ATTR_REQUESTHELP_REQUESTPARAMMAP);
@@ -464,7 +449,7 @@ public final class RequestHelper
    * Get the content length of the passed request. This is not done using
    * <code>request.getContentLength()</code> but instead parsing the HTTP header
    * field {@link CHTTPHeader#CONTENT_LENGTH} manually!
-   * 
+   *
    * @param aHttpRequest
    *        Source HTTP request. May not be <code>null</code>.
    * @return -1 if no or an invalid content length is set in the header
@@ -472,8 +457,7 @@ public final class RequestHelper
   @CheckForSigned
   public static long getContentLength (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     if (false)
     {
@@ -488,7 +472,7 @@ public final class RequestHelper
   /**
    * Get all request headers of the passed request in a correctly typed
    * {@link Enumeration}.
-   * 
+   *
    * @param aHttpRequest
    *        Source HTTP request. May not be <code>null</code>.
    * @param sName
@@ -498,17 +482,16 @@ public final class RequestHelper
   @Nullable
   public static Enumeration <String> getRequestHeaders (@Nonnull final HttpServletRequest aHttpRequest,
                                                         @Nullable final String sName)
-  {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+                                                        {
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aHttpRequest.getHeaders (sName));
-  }
+                                                        }
 
   /**
    * Get all all request header names of the passed request in a correctly typed
    * {@link Enumeration}.
-   * 
+   *
    * @param aHttpRequest
    *        Source HTTP request. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -516,8 +499,7 @@ public final class RequestHelper
   @Nullable
   public static Enumeration <String> getRequestHeaderNames (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     return GenericReflection.<Enumeration <?>, Enumeration <String>> uncheckedCast (aHttpRequest.getHeaderNames ());
   }
@@ -527,8 +509,7 @@ public final class RequestHelper
                                         @Nonnull @Nonempty final String sAttrName,
                                         @Nonnull final Class <T> aDstClass)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final Object aValue = aHttpRequest.getAttribute (sAttrName);
     if (aValue == null)
@@ -541,11 +522,11 @@ public final class RequestHelper
     if (!aDstClass.isAssignableFrom (aValue.getClass ()))
     {
       s_aLogger.error ("Request attribute " +
-                       sAttrName +
-                       " is not of type " +
-                       aDstClass.getName () +
-                       " but of type " +
-                       aValue.getClass ().getName ());
+          sAttrName +
+          " is not of type " +
+          aDstClass.getName () +
+          " but of type " +
+          aValue.getClass ().getName ());
       return null;
     }
 
@@ -581,7 +562,7 @@ public final class RequestHelper
 
   /**
    * Get the client certificates provided by a HTTP servlet request.
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP servlet request to extract the information from. May not be
    *        <code>null</code>.

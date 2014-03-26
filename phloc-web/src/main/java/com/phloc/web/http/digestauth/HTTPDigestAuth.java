@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
@@ -42,7 +43,7 @@ import com.phloc.web.http.HTTPStringHelper;
 
 /**
  * Handling for HTTP Digest Authentication
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -72,7 +73,7 @@ public final class HTTPDigestAuth
   /**
    * Get the parameters of a Digest authentication string. It may be used for
    * both client and server handling.
-   * 
+   *
    * @param sAuthHeader
    *        The HTTP header value to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed value cannot be parsed as a HTTP
@@ -221,7 +222,7 @@ public final class HTTPDigestAuth
   /**
    * Get the Digest authentication credentials from the passed HTTP servlet
    * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed request does not contain a valid
@@ -230,8 +231,7 @@ public final class HTTPDigestAuth
   @Nullable
   public static DigestAuthClientCredentials getDigestAuthClientCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
     return getDigestAuthClientCredentials (sHeaderValue);
@@ -240,7 +240,7 @@ public final class HTTPDigestAuth
   /**
    * Get the Digest authentication credentials from the passed HTTP header
    * value.
-   * 
+   *
    * @param sAuthHeader
    *        The HTTP header value to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed value is not a correct HTTP Digest
@@ -318,7 +318,7 @@ public final class HTTPDigestAuth
 
   /**
    * Create HTTP Digest auth credentials for a client
-   * 
+   *
    * @param eMethod
    *        The HTTP method of the request. May not be <code>null</code>.
    * @param sDigestURI
@@ -394,18 +394,12 @@ public final class HTTPDigestAuth
                                                                                @Nullable final String sMessageQOP,
                                                                                @CheckForSigned final int nNonceCount)
   {
-    if (eMethod == null)
-      throw new NullPointerException ("method");
-    if (StringHelper.hasNoText (sDigestURI))
-      throw new IllegalArgumentException ("DigestURI");
-    if (StringHelper.hasNoText (sUserName))
-      throw new IllegalArgumentException ("UserName");
-    if (sPassword == null)
-      throw new NullPointerException ("Password");
-    if (StringHelper.hasNoText (sRealm))
-      throw new IllegalArgumentException ("Realm");
-    if (StringHelper.hasNoText (sServerNonce))
-      throw new IllegalArgumentException ("ServerNonce");
+    ValueEnforcer.notNull (eMethod, "Method");
+    ValueEnforcer.notEmpty (sDigestURI, "DigestURI");
+    ValueEnforcer.notEmpty (sUserName, "UserName");
+    ValueEnforcer.notNull (sPassword, "Password");
+    ValueEnforcer.notEmpty (sRealm, "Realm");
+    ValueEnforcer.notEmpty (sServerNonce, "ServerNonce");
     if (sMessageQOP != null && StringHelper.hasNoText (sClientNonce))
       throw new IllegalArgumentException ("If a QOP is defined, client nonce must be set!");
     if (sMessageQOP != null && nNonceCount <= 0)

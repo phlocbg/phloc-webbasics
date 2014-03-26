@@ -28,13 +28,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.WorkInProgress;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.web.CWeb;
 
 /**
  * This class is not yet working!
- * 
+ *
  * @author Philip Helger
  */
 @WorkInProgress
@@ -56,8 +57,7 @@ public class MyProxySelector extends ProxySelector
   @Override
   public List <Proxy> select (@Nonnull final URI aURI)
   {
-    if (aURI == null)
-      throw new NullPointerException ("URI");
+    ValueEnforcer.notNull (aURI, "URI");
 
     final String sScheme = aURI.getScheme ();
     if (CWeb.SCHEME_HTTP.equalsIgnoreCase (sScheme) || CWeb.SCHEME_HTTPS.equalsIgnoreCase (sScheme))
@@ -80,12 +80,9 @@ public class MyProxySelector extends ProxySelector
                              @Nonnull final SocketAddress aSocketAddress,
                              @Nonnull final IOException aException)
   {
-    if (aURI == null)
-      throw new NullPointerException ("uri");
-    if (aSocketAddress == null)
-      throw new NullPointerException ("socketAddress");
-    if (aException == null)
-      throw new NullPointerException ("exception");
+    ValueEnforcer.notNull (aURI, "Uri");
+    ValueEnforcer.notNull (aSocketAddress, "SocketAddress");
+    ValueEnforcer.notNull (aException, "Exception");
 
     if (m_aWrappedProxySelector != null)
       m_aWrappedProxySelector.connectFailed (aURI, aSocketAddress, aException);

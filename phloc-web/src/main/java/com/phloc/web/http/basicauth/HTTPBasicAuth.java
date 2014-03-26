@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
@@ -37,7 +38,7 @@ import com.phloc.web.http.digestauth.HTTPDigestAuth;
 
 /**
  * Handling for HTTP Basic Authentication
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -58,7 +59,7 @@ public final class HTTPBasicAuth
   /**
    * Get the Basic authentication credentials from the passed HTTP servlet
    * request from the HTTP header {@link CHTTPHeader#AUTHORIZATION}.
-   * 
+   *
    * @param aHttpRequest
    *        The HTTP request to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed request does not contain a valid
@@ -67,8 +68,7 @@ public final class HTTPBasicAuth
   @Nullable
   public static BasicAuthClientCredentials getBasicAuthClientCredentials (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sHeaderValue = aHttpRequest.getHeader (CHTTPHeader.AUTHORIZATION);
     return getBasicAuthClientCredentials (sHeaderValue);
@@ -76,7 +76,7 @@ public final class HTTPBasicAuth
 
   /**
    * Get the Basic authentication credentials from the passed HTTP header value.
-   * 
+   *
    * @param sAuthHeader
    *        The HTTP header value to be interpreted. May be <code>null</code>.
    * @return <code>null</code> if the passed value is not a correct HTTP Basic

@@ -29,6 +29,7 @@ import org.mozilla.javascript.ScriptableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
@@ -77,18 +78,14 @@ public final class ProxyAutoConfigHelper
 
   public ProxyAutoConfigHelper (@Nonnull final IReadableResource aPACRes)
   {
-    if (aPACRes == null)
-      throw new NullPointerException ("PAC resource");
-    m_aPACRes = aPACRes;
+    m_aPACRes = ValueEnforcer.notNull (aPACRes, "PACResource");
     m_sPACCode = null;
   }
 
   public ProxyAutoConfigHelper (@Nonnull final String sPACCode)
   {
-    if (sPACCode == null)
-      throw new NullPointerException ("PAC code");
     m_aPACRes = null;
-    m_sPACCode = sPACCode;
+    m_sPACCode = ValueEnforcer.notNull (sPACCode, "PACCode");
   }
 
   @Nonnull

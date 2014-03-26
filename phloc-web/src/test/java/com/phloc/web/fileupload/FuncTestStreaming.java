@@ -164,7 +164,7 @@ public final class FuncTestStreaming
       }
 
       @Override
-      public int read (final byte b[], final int off, final int len) throws IOException
+      public int read (final byte b [], final int off, final int len) throws IOException
       {
         return bais.read (b, off, Math.min (len, 3));
       }

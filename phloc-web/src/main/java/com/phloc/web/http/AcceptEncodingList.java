@@ -24,11 +24,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.ValueEnforcer;
 
 /**
  * Contains a list of Accept-Encoding values as specified by the HTTP header
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -45,14 +45,13 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
 
   public void addEncoding (@Nonnull final String sEncoding, @Nonnegative final double dQuality)
   {
-    if (StringHelper.hasNoText (sEncoding))
-      throw new IllegalArgumentException ("encoding is empty");
+    ValueEnforcer.notEmpty (sEncoding, "Encoding");
     m_aMap.put (_unify (sEncoding), new QValue (dQuality));
   }
 
   /**
    * Return the associated quality of the given encoding.
-   * 
+   *
    * @param sEncoding
    *        The encoding name to query. May not be <code>null</code>.
    * @return The matching {@link QValue} and never <code>null</code>.
@@ -60,8 +59,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
   @Nonnull
   public QValue getQValueOfEncoding (@Nonnull final String sEncoding)
   {
-    if (sEncoding == null)
-      throw new NullPointerException ("encoding");
+    ValueEnforcer.notNull (sEncoding, "Encoding");
 
     // Direct search encoding
     QValue aQuality = m_aMap.get (_unify (sEncoding));
@@ -81,7 +79,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
 
   /**
    * Return the associated quality of the given encoding.
-   * 
+   *
    * @param sEncoding
    *        The encoding name to query. May not be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted.
@@ -94,7 +92,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
   /**
    * Check if the passed encoding is supported. Supported means the quality is
    * &gt; 0.
-   * 
+   *
    * @param sEncoding
    *        The encoding to be checked. May not be <code>null</code>.
    * @return <code>true</code> if the encoding is supported, <code>false</code>
@@ -107,8 +105,7 @@ public final class AcceptEncodingList extends AbstractQValueList <String>
 
   public boolean explicitlySupportsEncoding (@Nonnull final String sEncoding)
   {
-    if (sEncoding == null)
-      throw new NullPointerException ("encoding");
+    ValueEnforcer.notNull (sEncoding, "Encoding");
 
     final QValue aQuality = m_aMap.get (_unify (sEncoding));
     return aQuality != null && aQuality.isAboveMinimumQuality ();

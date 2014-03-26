@@ -29,6 +29,7 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -77,6 +78,9 @@ public final class RhinoUtils
                                  @Nonnull final Context aCtx,
                                  @Nonnull final String sJSCode)
   {
+    ValueEnforcer.notNull (aScope, "Scope");
+    ValueEnforcer.notNull (aCtx, "Ctx");
+    ValueEnforcer.notNull (sJSCode, "JSCode");
     aCtx.evaluateString (aScope, sJSCode, "code", 1, null);
   }
 }

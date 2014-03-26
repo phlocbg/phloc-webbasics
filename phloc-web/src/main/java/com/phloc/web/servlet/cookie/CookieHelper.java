@@ -28,13 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 
 /**
  * Misc. helper methods on HTTP cookies.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -53,8 +54,7 @@ public final class CookieHelper
   @ReturnsMutableCopy
   public static Map <String, Cookie> getAllCookies (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("request");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final Map <String, Cookie> ret = new LinkedHashMap <String, Cookie> ();
     final Cookie [] aCookies = aHttpRequest.getCookies ();
@@ -67,10 +67,8 @@ public final class CookieHelper
   @Nullable
   public static Cookie getCookie (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final String sCookieName)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("request");
-    if (sCookieName == null)
-      throw new NullPointerException ("cookieName");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
+    ValueEnforcer.notNull (sCookieName, "CookieName");
 
     final Cookie [] aCookies = aHttpRequest.getCookies ();
     if (aCookies != null)
@@ -89,7 +87,7 @@ public final class CookieHelper
   /**
    * Create a cookie that is bound on a certain path within the local web
    * server.
-   * 
+   *
    * @param sName
    *        The cookie name.
    * @param sValue
@@ -119,8 +117,7 @@ public final class CookieHelper
                                             @Nullable final String sValue,
                                             final boolean bExpireWhenBrowserIsClosed)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("request");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     final String sContextPath = aHttpRequest.getContextPath ();
     return createCookie (sName,
@@ -131,7 +128,7 @@ public final class CookieHelper
 
   /**
    * Remove a cookie by setting the max age to 0.
-   * 
+   *
    * @param aHttpResponse
    *        The HTTP response. May not be <code>null</code>.
    * @param aCookie
@@ -139,10 +136,8 @@ public final class CookieHelper
    */
   public static void removeCookie (@Nonnull final HttpServletResponse aHttpResponse, @Nonnull final Cookie aCookie)
   {
-    if (aHttpResponse == null)
-      throw new NullPointerException ("httpResponse");
-    if (aCookie == null)
-      throw new NullPointerException ("cookie");
+    ValueEnforcer.notNull (aHttpResponse, "HttpResponse");
+    ValueEnforcer.notNull (aCookie, "aCookie");
 
     // expire the cookie!
     aCookie.setMaxAge (0);

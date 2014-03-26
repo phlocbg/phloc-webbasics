@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.http.HTTPStringHelper;
 
 @NotThreadSafe
@@ -35,7 +36,7 @@ public class BasicAuthServerBuilder implements Serializable
 
   /**
    * Set the realm to be used.
-   * 
+   *
    * @param sRealm
    *        The realm to be used. May not be <code>null</code> and should not be
    *        empty.
@@ -66,5 +67,11 @@ public class BasicAuthServerBuilder implements Serializable
     if (m_sRealm != null)
       ret.append (" realm=").append (HTTPStringHelper.getQuotedTextString (m_sRealm));
     return ret.toString ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("realm", m_sRealm).toString ();
   }
 }

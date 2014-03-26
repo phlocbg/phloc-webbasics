@@ -604,7 +604,7 @@ public class MockHttpServletResponse implements HttpServletResponse, IHasLocale
     }
 
     @Override
-    public void write (final char aBuf[], final int nOff, final int nLen)
+    public void write (final char aBuf [], final int nOff, final int nLen)
     {
       super.write (aBuf, nOff, nLen);
       super.flush ();

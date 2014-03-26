@@ -23,13 +23,13 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * JSch logger implementation on top of SLF4J.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -44,8 +44,7 @@ public class JSchLoggerSLF4J implements com.jcraft.jsch.Logger
 
   public JSchLoggerSLF4J (@Nonnull @Nonempty final String sLoggerName)
   {
-    if (StringHelper.hasNoText (sLoggerName))
-      throw new IllegalArgumentException ("loggerName");
+    ValueEnforcer.notEmpty (sLoggerName, "LoggerName");
     m_aLogger = LoggerFactory.getLogger (sLoggerName);
   }
 

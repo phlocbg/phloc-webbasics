@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.equals.EqualsUtils;
@@ -33,7 +34,7 @@ import com.phloc.web.http.CHTTPHeader;
 
 /**
  * Credentials for HTTP basic authentication
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -44,7 +45,7 @@ public class BasicAuthClientCredentials implements Serializable
 
   /**
    * Create credentials with a user name only and no password.
-   * 
+   *
    * @param sUserName
    *        The user name to use. May neither be <code>null</code> nor empty.
    */
@@ -55,7 +56,7 @@ public class BasicAuthClientCredentials implements Serializable
 
   /**
    * Create credentials with a user name and a password.
-   * 
+   *
    * @param sUserName
    *        The user name to use. May neither be <code>null</code> nor empty.
    * @param sPassword
@@ -64,9 +65,7 @@ public class BasicAuthClientCredentials implements Serializable
    */
   public BasicAuthClientCredentials (@Nonnull @Nonempty final String sUserName, @Nullable final String sPassword)
   {
-    if (StringHelper.hasNoText (sUserName))
-      throw new IllegalArgumentException ("UserName may not be empty!");
-    m_sUserName = sUserName;
+    m_sUserName = ValueEnforcer.notEmpty (sUserName, "UserName");
     // No difference between null and empty string
     m_sPassword = StringHelper.hasNoText (sPassword) ? null : sPassword;
   }
@@ -102,7 +101,7 @@ public class BasicAuthClientCredentials implements Serializable
   /**
    * Create the request HTTP header value for use with the
    * {@link CHTTPHeader#AUTHORIZATION} header name.
-   * 
+   *
    * @return The HTTP header value to use. Neither <code>null</code> nor empty.
    */
   @Nonnull

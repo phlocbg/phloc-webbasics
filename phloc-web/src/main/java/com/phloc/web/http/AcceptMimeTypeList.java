@@ -22,11 +22,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.mime.IMimeType;
 
 /**
  * Represents a list of Accept HTTP header values
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -37,8 +38,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
 
   public void addMimeType (@Nonnull final IMimeType aMimeType, @Nonnegative final double dQuality)
   {
-    if (aMimeType == null)
-      throw new NullPointerException ("charset name is empty");
+    ValueEnforcer.notNull (aMimeType, "MimeType");
     if (aMimeType.hasAnyParameters ())
       throw new IllegalArgumentException ("MimeTypes used here may not contain any parameter!");
 
@@ -48,7 +48,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   /**
    * Return the associated quality of the given MIME type using the fallback
    * mechanism.
-   * 
+   *
    * @param aMimeType
    *        The charset name to query. May not be <code>null</code>.
    * @return The {@link QValue} of the mime type
@@ -56,8 +56,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   @Nonnull
   public QValue getQValueOfMimeType (@Nonnull final IMimeType aMimeType)
   {
-    if (aMimeType == null)
-      throw new NullPointerException ("mimeType");
+    ValueEnforcer.notNull (aMimeType, "MimeType");
 
     // Extract only the real MIME type, without any parameters!
     final IMimeType aRealMimeType = aMimeType.getCopyWithoutParameters ();
@@ -84,7 +83,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   /**
    * Return the associated quality of the given MIME type using the fallback
    * mechanism.
-   * 
+   *
    * @param sMimeType
    *        The MIME type name to query. May be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted. If the passed MIME
@@ -98,7 +97,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   /**
    * Return the associated quality of the given MIME type using the fallback
    * mechanism.
-   * 
+   *
    * @param aMimeType
    *        The MIME type to query. May be <code>null</code>.
    * @return 0 means not accepted, 1 means fully accepted. If the passed MIME
@@ -113,7 +112,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
 
   /**
    * Check if the passed MIME type is supported, incl. fallback handling
-   * 
+   *
    * @param sMimeType
    *        The MIME type to check
    * @return <code>true</code> if it is supported, <code>false</code> if not
@@ -125,7 +124,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
 
   /**
    * Check if the passed MIME type is supported, incl. fallback handling
-   * 
+   *
    * @param aMimeType
    *        The MIME type to check. May be <code>null</code>.
    * @return <code>true</code> if it is supported, <code>false</code> if not
@@ -140,7 +139,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   /**
    * Check if the passed MIME type is supported, without considering fallback
    * MIME types (xxx/*)
-   * 
+   *
    * @param sMimeType
    *        The MIME type to check
    * @return <code>true</code> if it is supported, <code>false</code> if not
@@ -153,7 +152,7 @@ public final class AcceptMimeTypeList extends AbstractQValueList <IMimeType>
   /**
    * Check if the passed MIME type is supported, without considering fallback
    * MIME types (xxx/*)
-   * 
+   *
    * @param aMimeType
    *        The MIME type to check. May be <code>null</code>.
    * @return <code>true</code> if it is supported, <code>false</code> if not

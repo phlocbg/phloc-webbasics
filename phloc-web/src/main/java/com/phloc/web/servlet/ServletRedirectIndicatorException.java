@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -39,9 +40,7 @@ public class ServletRedirectIndicatorException extends RuntimeException
   public ServletRedirectIndicatorException (@Nonnull final ISimpleURL aURL,
                                             @Nullable final Map <String, Object> aRequestParams)
   {
-    if (aURL == null)
-      throw new NullPointerException ("URL");
-    m_aURL = aURL;
+    m_aURL = ValueEnforcer.notNull (aURL, "URL");
     m_aRequestParams = aRequestParams;
   }
 
