@@ -48,7 +48,8 @@ public abstract class AbstractWebScopeAwareCallable <DATATYPE> implements INonTh
     this (WebScopeManager.getGlobalScope ().getServletContext (), WebScopeManager.getApplicationScope ().getID ());
   }
 
-  public AbstractWebScopeAwareCallable (@Nonnull final ServletContext aSC, @Nonnull @Nonempty final String sApplicationID)
+  public AbstractWebScopeAwareCallable (@Nonnull final ServletContext aSC,
+                                        @Nonnull @Nonempty final String sApplicationID)
   {
     if (aSC == null)
       throw new NullPointerException ("servletContext");

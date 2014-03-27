@@ -52,7 +52,7 @@ import com.phloc.webscopes.session.SessionWebScopeActivator;
 
 /**
  * This is the main manager class for web scope handling.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -87,7 +87,7 @@ public final class WebScopeManager
 
   /**
    * Allow or disallow session passivation
-   * 
+   *
    * @param bSessionPassivationAllowed
    *        <code>true</code> to enable session passivation, <code>false</code>
    *        to disable it
@@ -127,7 +127,7 @@ public final class WebScopeManager
    * To be called, when the global web scope is initialized. Most commonly this
    * is called from within
    * {@link javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)}
-   * 
+   *
    * @param aServletContext
    *        The source servlet context to be used to retrieve the scope ID. May
    *        not be <code>null</code>
@@ -198,7 +198,7 @@ public final class WebScopeManager
   /**
    * Get or create the current application scope using the application ID
    * present in the request scope.
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -210,7 +210,7 @@ public final class WebScopeManager
   /**
    * Get or create the current application scope using the application ID
    * present in the request scope.
-   * 
+   *
    * @param bCreateIfNotExisting
    *        if <code>false</code> an no application scope is present, none will
    *        be created
@@ -225,7 +225,7 @@ public final class WebScopeManager
 
   /**
    * Get or create an application scope.
-   * 
+   *
    * @param sApplicationID
    *        The ID of the application scope be retrieved or created. May neither
    *        be <code>null</code> nor empty.
@@ -239,7 +239,7 @@ public final class WebScopeManager
 
   /**
    * Get or create an application scope.
-   * 
+   *
    * @param sApplicationID
    *        The ID of the application scope be retrieved or created. May neither
    *        be <code>null</code> nor empty.
@@ -262,7 +262,7 @@ public final class WebScopeManager
    * To be called, when a session web scope is initialized. Most commonly this
    * is called from within
    * {@link javax.servlet.http.HttpSessionListener#sessionCreated(javax.servlet.http.HttpSessionEvent)}
-   * 
+   *
    * @param aHttpSession
    *        The source session to base the scope on. May not be
    *        <code>null</code>
@@ -284,7 +284,7 @@ public final class WebScopeManager
 
   /**
    * Internal method which does the main logic for session web scope creation
-   * 
+   *
    * @param aHttpSession
    *        The underlying HTTP session
    * @param bCreateIfNotExisting
@@ -332,7 +332,8 @@ public final class WebScopeManager
     }
     catch (final ClassCastException ex)
     {
-      throw new IllegalStateException ("Session scope object is not a web scope!");
+      throw new IllegalStateException ("Session scope object is not a web scope but: " + aSessionWebScope.toString (),
+                                       ex);
     }
   }
 
@@ -340,7 +341,7 @@ public final class WebScopeManager
    * Get or create a session scope based on the current request scope. This is
    * the same as calling
    * <code>getSessionScope({@link ScopeManager#DEFAULT_CREATE_SCOPE})</code>
-   * 
+   *
    * @return Never <code>null</code>.
    */
   @Nonnull
@@ -351,7 +352,7 @@ public final class WebScopeManager
 
   /**
    * Get the session scope from the current request scope.
-   * 
+   *
    * @param bCreateIfNotExisting
    *        if <code>true</code> a new session scope (and a new HTTP session if
    *        required) is created if none is existing so far.
@@ -366,7 +367,7 @@ public final class WebScopeManager
 
   /**
    * Get the session scope from the current request scope.
-   * 
+   *
    * @param bCreateIfNotExisting
    *        if <code>true</code> a new session scope (and a new HTTP session if
    *        required) is created if none is existing so far.
@@ -403,7 +404,7 @@ public final class WebScopeManager
    * To be called, when a session web scope is destroyed. Most commonly this is
    * called from within
    * {@link javax.servlet.http.HttpSessionListener#sessionDestroyed(javax.servlet.http.HttpSessionEvent)}
-   * 
+   *
    * @param aHttpSession
    *        The source session to destroy the matching scope. May not be
    *        <code>null</code>

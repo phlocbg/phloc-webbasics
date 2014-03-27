@@ -43,7 +43,8 @@ public abstract class AbstractWebScopeAwareRunnable implements INonThrowingRunna
     this (WebScopeManager.getGlobalScope ().getServletContext (), WebScopeManager.getApplicationScope ().getID ());
   }
 
-  public AbstractWebScopeAwareRunnable (@Nonnull final ServletContext aSC, @Nonnull @Nonempty final String sApplicationID)
+  public AbstractWebScopeAwareRunnable (@Nonnull final ServletContext aSC,
+                                        @Nonnull @Nonempty final String sApplicationID)
   {
     if (aSC == null)
       throw new NullPointerException ("servletContext");
