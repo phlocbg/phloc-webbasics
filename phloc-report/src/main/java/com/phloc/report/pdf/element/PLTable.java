@@ -363,8 +363,8 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
             // don't override fTable1Width
             final float fWidth = Math.max (fTable1Width, fRowWidth);
             final float fWidthFull = Math.max (fTable1WidthFull, fRowWidthFull);
-            final PLSplitResult aSplitResult = aRow.getAsSplittable ().splitElements (fWidth,
-                                                                                      fAvailableHeight - fTable1Height);
+            final float fRemainingHeight = fAvailableHeight - fTable1Height;
+            final PLSplitResult aSplitResult = aRow.getAsSplittable ().splitElements (fWidth, fRemainingHeight);
 
             if (aSplitResult != null)
             {
@@ -395,6 +395,11 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
                                 aSplitResult.getSecondElement ().getHeight ());
               bSplittedRow = true;
             }
+            else
+              s_aLogger.info ("Failed to split " +
+                              CGStringHelper.getClassLocalName (aRow) +
+                              " into pieces for remaining height " +
+                              fRemainingHeight);
           }
 
           if (!bSplittedRow)

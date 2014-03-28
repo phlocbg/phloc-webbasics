@@ -146,6 +146,12 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       return m_aPerPageElements.size ();
     }
 
+    @Nonnegative
+    public int getPageNumber ()
+    {
+      return getPageCount () + 1;
+    }
+
     @Nonnull
     @ReturnsMutableObject (reason = "speed")
     List <List <PLElementWithSize>> directGetPerPageElements ()
@@ -388,12 +394,14 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
               s_aLogger.warn ("A single element (" +
                               CGStringHelper.getClassLocalName (aElement) +
                               ") does not fit onto a single page" +
-                              (bIsSplittable ? "" : " and is not splittable!"));
+                              (bIsSplittable ? " even though it is splittable!" : " and is not splittable!"));
             }
           }
           else
           {
             // We found elements fitting onto a page (at least one)
+            s_aLogger.info ("Adding " + aCurPageElements.size () + " elements to page " + ret.getPageNumber ());
+
             ret.addPerPageElements (aCurPageElements);
             aCurPageElements = new ArrayList <PLElementWithSize> ();
 
@@ -402,6 +410,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
             // Re-add element and continue from start, so that splitting happens
             aElementsWithSize.add (0, aElementWithSize);
+
+            // Continue with next element
             continue;
           }
         }
@@ -413,7 +423,10 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
       // Add elements to last page
       if (!aCurPageElements.isEmpty ())
+      {
+        s_aLogger.info ("Finally adding " + aCurPageElements.size () + " elements to page " + ret.getPageNumber ());
         ret.addPerPageElements (aCurPageElements);
+      }
     }
 
     return ret;
