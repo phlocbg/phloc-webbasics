@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -36,6 +37,7 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecord;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordField;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.iterate.IterableIterator;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -51,18 +53,24 @@ import com.phloc.poi.excel.style.ExcelStyle;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class ExporterExcel implements IExporterFile
 {
   private static final ExcelStyle STYLE_DATE = new ExcelStyle ().setDataFormat ("dd.mm.yyyy");
   private static final ExcelStyle STYLE_TIME = new ExcelStyle ().setDataFormat ("hh:mm:ss");
   private static final ExcelStyle STYLE_DATETIME = new ExcelStyle ().setDataFormat ("dd.mm.yyyy hh:mm:ss");
+
   private final EExcelVersion m_eVersion;
 
   public ExporterExcel (@Nonnull final EExcelVersion eVersion)
   {
-    if (eVersion == null)
-      throw new NullPointerException ("version");
-    m_eVersion = eVersion;
+    m_eVersion = ValueEnforcer.notNull (eVersion, "Version");
+  }
+
+  @Nonnull
+  public EExcelVersion getExcelVersion ()
+  {
+    return m_eVersion;
   }
 
   /**
@@ -112,6 +120,8 @@ public class ExporterExcel implements IExporterFile
   {
     final int nRowIndex = aWBCH.getRowCount ();
     final Row aRow = aWBCH.addRow ();
+
+    // Callback
     onAddRow (aWBCH, eRecordType, aRow, nRowIndex);
 
     for (final IExportRecordField aField : aRecord.getAllFields ())
@@ -161,6 +171,8 @@ public class ExporterExcel implements IExporterFile
           default:
             throw new IllegalArgumentException ("The type " + aField.getFieldType () + " cannot be written to Excel!");
         }
+
+        // Callback
         onAddCell (aWBCH, eRecordType, aCell, nCellIndex, aField.getFieldType ());
       }
     }
@@ -170,15 +182,14 @@ public class ExporterExcel implements IExporterFile
   public final ESuccess exportRecords (@Nonnull final IExportRecordProvider aProvider,
                                        @Nonnull @WillClose final OutputStream aOS)
   {
+    ValueEnforcer.notNull (aProvider, "Provider");
+    ValueEnforcer.notNull (aOS, "OutputStream");
+
     try
     {
-      if (aProvider == null)
-        throw new NullPointerException ("provider");
-      if (aOS == null)
-        throw new NullPointerException ("outputStream");
-
       final WorkbookCreationHelper aWBCH = new WorkbookCreationHelper (m_eVersion);
       aWBCH.createNewSheet ();
+      // TODO add sheet
 
       // Header
       final IExportRecord aHeaderRecord = aProvider.getHeader ();
