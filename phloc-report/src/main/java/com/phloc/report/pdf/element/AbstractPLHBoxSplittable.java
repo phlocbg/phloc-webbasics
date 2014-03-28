@@ -109,6 +109,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
     final float [] fHBox2Heights = new float [m_aPreparedHeight.length];
 
     // Start splitting columns
+    boolean bDidSplitAnyColumn = false;
     for (int i = 0; i < nCols; i++)
     {
       final AbstractPLElement <?> aElement = getColumnElementAtIndex (i);
@@ -121,9 +122,9 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
       if (fColumnHeight > fAvailableHeight && bIsSplittable)
       {
         final PLSplitResult aSplitResult = aElement.getAsSplittable ()
-                                                   .splitElements (fColumnWidth,
-                                                                   fAvailableHeight -
-                                                                       aElement.getMarginPlusPaddingYSum ());
+            .splitElements (fColumnWidth,
+                            fAvailableHeight -
+                            aElement.getMarginPlusPaddingYSum ());
 
         if (aSplitResult != null)
         {
@@ -133,14 +134,15 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
           fHBox1Heights[i] = aSplitResult.getFirstElement ().getHeight ();
           fHBox2Heights[i] = aSplitResult.getSecondElement ().getHeight ();
           bDidSplit = true;
+          bDidSplitAnyColumn = true;
 
           if (s_aLogger.isInfoEnabled ())
             s_aLogger.info ("Split " +
-                            CGStringHelper.getClassLocalName (aElement) +
-                            " into pieces: " +
-                            aSplitResult.getFirstElement ().getHeight () +
-                            " and " +
-                            aSplitResult.getSecondElement ().getHeight ());
+                CGStringHelper.getClassLocalName (aElement) +
+                " into pieces: " +
+                aSplitResult.getFirstElement ().getHeight () +
+                " and " +
+                aSplitResult.getSecondElement ().getHeight ());
         }
       }
 
@@ -156,32 +158,42 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
           if (bIsSplittable)
           {
             s_aLogger.warn ("Column " +
-                            i +
-                            " of HBox contains splittable element of type " +
-                            CGStringHelper.getClassLocalName (aElement) +
-                            " which creates an overflow by " +
-                            (fColumnHeight - fAvailableHeight) +
-                            " for max height " +
-                            fAvailableHeight +
-                            "!");
+                i +
+                " of " +
+                CGStringHelper.getClassLocalName (this) +
+                " contains splittable element of type " +
+                CGStringHelper.getClassLocalName (aElement) +
+                " which creates an overflow by " +
+                (fColumnHeight - fAvailableHeight) +
+                " for max height " +
+                fAvailableHeight +
+                "!");
           }
           else
           {
             s_aLogger.warn ("Column " +
-                            i +
-                            " of HBox contains non splittable element of type " +
-                            CGStringHelper.getClassLocalName (aElement) +
-                            " which creates an overflow by " +
-                            (fColumnHeight - fAvailableHeight) +
-                            " for max height " +
-                            fAvailableHeight +
-                            "!");
+                i +
+                " of " +
+                CGStringHelper.getClassLocalName (this) +
+                " contains non splittable element of type " +
+                CGStringHelper.getClassLocalName (aElement) +
+                " which creates an overflow by " +
+                (fColumnHeight - fAvailableHeight) +
+                " for max height " +
+                fAvailableHeight +
+                "!");
           }
       }
 
       // calculate max column height
       fHBox1MaxHeight = Math.max (fHBox1MaxHeight, fHBox1Heights[i]);
       fHBox2MaxHeight = Math.max (fHBox2MaxHeight, fHBox2Heights[i]);
+    }
+
+    if (!bDidSplitAnyColumn)
+    {
+      // Nothing was splitted
+      return null;
     }
 
     // mark new hboxes as prepared
