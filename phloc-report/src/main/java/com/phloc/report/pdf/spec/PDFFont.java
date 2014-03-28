@@ -162,7 +162,7 @@ public class PDFFont
                                                 @Nonnull final Charset aCharset,
                                                 @Nonnegative final float fFontSize,
                                                 @Nonnegative final float fMaxWidth) throws IOException
-                                                {
+  {
     final List <TextAndWidthSpec> ret = new ArrayList <TextAndWidthSpec> ();
 
     // First split by the contained line breaks
@@ -248,7 +248,7 @@ public class PDFFont
     }
 
     return ret;
-                                                }
+  }
 
   @Override
   public boolean equals (final Object o)

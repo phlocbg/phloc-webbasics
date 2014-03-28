@@ -94,7 +94,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-fonts</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>

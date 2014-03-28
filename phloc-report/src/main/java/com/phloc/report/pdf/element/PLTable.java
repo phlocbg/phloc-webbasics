@@ -94,9 +94,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       else
         if (aWidth.getType () != eWidthType)
           throw new IllegalArgumentException ("All widths must be of the same type! Found " +
-              eWidthType +
-              " and " +
-              aWidth.getType ());
+                                              eWidthType +
+                                              " and " +
+                                              aWidth.getType ());
     m_aWidths = ContainerHelper.newList (aWidths);
   }
 
@@ -161,10 +161,10 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       throw new NullPointerException ("elements");
     if (aElements.size () > m_aWidths.size ())
       throw new IllegalArgumentException ("More elements in row (" +
-          aElements.size () +
-          ") than defined in the table (" +
-          m_aWidths.size () +
-          ")!");
+                                          aElements.size () +
+                                          ") than defined in the table (" +
+                                          m_aWidths.size () +
+                                          ")!");
 
     final PLHBoxSplittable aHBox = new PLHBoxSplittable ();
     int nWidthIndex = 0;
@@ -208,10 +208,10 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       nUsedCols += aCell.getColSpan ();
     if (nUsedCols > m_aWidths.size ())
       throw new IllegalArgumentException ("More cells in row (" +
-          nUsedCols +
-          ") than defined in the table (" +
-          m_aWidths.size () +
-          ")!");
+                                          nUsedCols +
+                                          ") than defined in the table (" +
+                                          m_aWidths.size () +
+                                          ")!");
 
     final PLHBoxSplittable aHBox = new PLHBoxSplittable ();
     int nWidthIndex = 0;
@@ -459,9 +459,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-        .append ("width", m_aWidths)
-        .append ("headerRowCount", m_nHeaderRowCount)
-        .toString ();
+                            .append ("width", m_aWidths)
+                            .append ("headerRowCount", m_nHeaderRowCount)
+                            .toString ();
   }
 
   /**
