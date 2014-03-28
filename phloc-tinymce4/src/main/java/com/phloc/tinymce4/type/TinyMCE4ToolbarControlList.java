@@ -36,7 +36,7 @@ public class TinyMCE4ToolbarControlList implements ICloneable <TinyMCE4ToolbarCo
 
   /**
    * Constructor
-   * 
+   *
    * @param aList
    *        Separators are denoted by <code>null</code> elements.
    */
@@ -48,7 +48,7 @@ public class TinyMCE4ToolbarControlList implements ICloneable <TinyMCE4ToolbarCo
 
   /**
    * Other
-   * 
+   *
    * @param aOther
    *        Source object to copy from. May not be <code>null</code>.
    */
@@ -118,6 +118,15 @@ public class TinyMCE4ToolbarControlList implements ICloneable <TinyMCE4ToolbarCo
   public EChange removeAtIndex (@Nonnegative final int nIndex)
   {
     return ContainerHelper.removeElementAtIndex (m_aList, nIndex);
+  }
+
+  @Nonnull
+  public EChange removeAll ()
+  {
+    if (m_aList.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aList.clear ();
+    return EChange.CHANGED;
   }
 
   @Nonnull
