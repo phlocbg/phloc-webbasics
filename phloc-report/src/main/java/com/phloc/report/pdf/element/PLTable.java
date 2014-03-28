@@ -26,15 +26,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.report.pdf.PLDebug;
 import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.WidthSpec;
 import com.phloc.report.pdf.spec.WidthSpec.EWidthType;
@@ -74,8 +72,6 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
     }
   }
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (PLTable.class);
-
   private final List <WidthSpec> m_aWidths;
   private int m_nHeaderRowCount = 0;
 
@@ -98,9 +94,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       else
         if (aWidth.getType () != eWidthType)
           throw new IllegalArgumentException ("All widths must be of the same type! Found " +
-                                              eWidthType +
-                                              " and " +
-                                              aWidth.getType ());
+              eWidthType +
+              " and " +
+              aWidth.getType ());
     m_aWidths = ContainerHelper.newList (aWidths);
   }
 
@@ -165,10 +161,10 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       throw new NullPointerException ("elements");
     if (aElements.size () > m_aWidths.size ())
       throw new IllegalArgumentException ("More elements in row (" +
-                                          aElements.size () +
-                                          ") than defined in the table (" +
-                                          m_aWidths.size () +
-                                          ")!");
+          aElements.size () +
+          ") than defined in the table (" +
+          m_aWidths.size () +
+          ")!");
 
     final PLHBoxSplittable aHBox = new PLHBoxSplittable ();
     int nWidthIndex = 0;
@@ -212,10 +208,10 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
       nUsedCols += aCell.getColSpan ();
     if (nUsedCols > m_aWidths.size ())
       throw new IllegalArgumentException ("More cells in row (" +
-                                          nUsedCols +
-                                          ") than defined in the table (" +
-                                          m_aWidths.size () +
-                                          ")!");
+          nUsedCols +
+          ") than defined in the table (" +
+          m_aWidths.size () +
+          ")!");
 
     final PLHBoxSplittable aHBox = new PLHBoxSplittable ();
     int nWidthIndex = 0;
@@ -291,6 +287,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
   @Nullable
   public PLSplitResult splitElements (final float fElementWidth, final float fAvailableHeight)
   {
+    if (fAvailableHeight <= 0)
+      return null;
+
     final PLTable aTable1 = new PLTable (m_aWidths).setBasicDataFrom (this);
     final PLTable aTable2 = new PLTable (m_aWidths).setBasicDataFrom (this);
 
@@ -386,20 +385,23 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
               aTable2RowWidth.add (Float.valueOf (fWidth));
               aTable2RowHeight.add (Float.valueOf (fTable2RowHeight));
 
-              if (s_aLogger.isInfoEnabled ())
-                s_aLogger.info ("Split " +
-                                CGStringHelper.getClassLocalName (aRow) +
-                                " into pieces: " +
-                                aSplitResult.getFirstElement ().getHeight () +
-                                " and " +
-                                aSplitResult.getSecondElement ().getHeight ());
+              if (PLDebug.isDebugSplit ())
+                PLDebug.debugSplit ("Split " +
+                                    CGStringHelper.getClassLocalName (aRow) +
+                                    " into pieces: " +
+                                    aSplitResult.getFirstElement ().getHeight () +
+                                    " and " +
+                                    aSplitResult.getSecondElement ().getHeight ());
               bSplittedRow = true;
             }
             else
-              s_aLogger.info ("Failed to split " +
-                              CGStringHelper.getClassLocalName (aRow) +
-                              " into pieces for remaining height " +
-                              fRemainingHeight);
+            {
+              if (PLDebug.isDebugSplit ())
+                PLDebug.debugSplit ("Failed to split " +
+                                    CGStringHelper.getClassLocalName (aRow) +
+                                    " into pieces for remaining height " +
+                                    fRemainingHeight);
+            }
           }
 
           if (!bSplittedRow)
@@ -427,13 +429,17 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
     if (aTable1.getRowCount () == m_nHeaderRowCount)
     {
       // Splitting makes no sense!
+      if (PLDebug.isDebugSplit ())
+        PLDebug.debugSplit ("Splitting makes no sense, because only the header row would be in table 1");
       return null;
     }
 
-    if (false)
+    if (aTable2.getRowCount () == m_nHeaderRowCount)
     {
-      System.out.println (aTable1.getRowCount () + " - " + aTable1RowWidth.size () + " - " + aTable1RowHeight.size ());
-      System.out.println (aTable2.getRowCount () + " - " + aTable2RowWidth.size () + " - " + aTable2RowHeight.size ());
+      // Splitting makes no sense!
+      if (PLDebug.isDebugSplit ())
+        PLDebug.debugSplit ("Splitting makes no sense, because only the header row would be in table 2 and this means the whole table 1 would match");
+      return null;
     }
 
     // Excluding padding/margin
@@ -453,9 +459,9 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("width", m_aWidths)
-                            .append ("headerRowCount", m_nHeaderRowCount)
-                            .toString ();
+        .append ("width", m_aWidths)
+        .append ("headerRowCount", m_nHeaderRowCount)
+        .toString ();
   }
 
   /**

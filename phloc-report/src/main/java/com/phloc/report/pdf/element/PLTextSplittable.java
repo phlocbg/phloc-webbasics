@@ -23,11 +23,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.report.pdf.PLDebug;
 import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
@@ -38,8 +36,6 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  */
 public class PLTextSplittable extends PLText implements IPLSplittableElement
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (PLTextSplittable.class);
-
   public PLTextSplittable (@Nullable final String sText, @Nonnull final FontSpec aFont)
   {
     super (sText, aFont);
@@ -53,22 +49,26 @@ public class PLTextSplittable extends PLText implements IPLSplittableElement
   @Nullable
   public PLSplitResult splitElements (final float fElementWidth, final float fAvailableHeight)
   {
+    if (fAvailableHeight <= 0)
+      return null;
+
     final float fLineHeight = getLineHeight ();
 
     // Get the lines in the correct order from top to bottom
     final List <TextAndWidthSpec> aLines = isTopDown () ? m_aPreparedLines
-                                                       : ContainerHelper.getReverseList (m_aPreparedLines);
+                                                        : ContainerHelper.getReverseList (m_aPreparedLines);
 
     int nLines = (int) (fAvailableHeight / fLineHeight);
     if (nLines <= 0)
     {
       // Splitting makes no sense
-      s_aLogger.info ("Failed to split " +
-                      CGStringHelper.getClassLocalName (this) +
-                      " because the result would be " +
-                      nLines +
-                      " lines for available height " +
-                      fAvailableHeight);
+      if (PLDebug.isDebugSplit ())
+        PLDebug.debugSplit ("Failed to split " +
+                            CGStringHelper.getClassLocalName (this) +
+                            " because the result would be " +
+                            nLines +
+                            " lines for available height " +
+                            fAvailableHeight);
       return null;
     }
 
@@ -81,14 +81,15 @@ public class PLTextSplittable extends PLText implements IPLSplittableElement
       if (nLines <= 0)
       {
         // Splitting makes no sense
-        s_aLogger.info ("Failed to split " +
-                        CGStringHelper.getClassLocalName (this) +
-                        " because the result would be " +
-                        nLines +
-                        " lines for available height " +
-                        fAvailableHeight +
-                        " and expected height " +
-                        fExpectedHeight);
+        if (PLDebug.isDebugSplit ())
+          PLDebug.debugSplit ("Failed to split " +
+                              CGStringHelper.getClassLocalName (this) +
+                              " because the result would be " +
+                              nLines +
+                              " lines for available height " +
+                              fAvailableHeight +
+                              " and expected height " +
+                              fExpectedHeight);
         return null;
       }
     }

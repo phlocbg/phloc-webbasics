@@ -38,6 +38,7 @@ import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.report.pdf.PLDebug;
 import com.phloc.report.pdf.render.ERenderingElementType;
 import com.phloc.report.pdf.render.IRenderingContextCustomizer;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
@@ -241,9 +242,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
   @Nonnull
   public List <? extends AbstractPLElement <?>> getAllElements ()
-  {
+               {
     return ContainerHelper.newList (m_aElements);
-  }
+               }
 
   @Nonnull
   public PLPageSet addElement (@Nonnull final AbstractPLElement <?> aElement)
@@ -296,10 +297,10 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     {
       // Page header does not care about page padding
       final PreparationContext aRPC = new PreparationContext (m_aPageSize.getWidth () -
-                                                                  getMargin ().getXSum () -
-                                                                  m_aPageHeader.getMarginPlusPaddingXSum (),
+                                                              getMargin ().getXSum () -
+                                                              m_aPageHeader.getMarginPlusPaddingXSum (),
                                                               getMargin ().getTop () -
-                                                                  m_aPageHeader.getMarginPlusPaddingYSum ());
+                                                              m_aPageHeader.getMarginPlusPaddingYSum ());
       final SizeSpec aElementSize = m_aPageHeader.prepare (aRPC);
       ret.setHeaderHeight (aElementSize.getHeight ());
     }
@@ -308,9 +309,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     for (final AbstractPLElement <?> aElement : m_aElements)
     {
       final PreparationContext aRPC = new PreparationContext (getAvailableWidth () -
-                                                                  aElement.getMarginPlusPaddingXSum (),
+                                                              aElement.getMarginPlusPaddingXSum (),
                                                               getAvailableHeight () -
-                                                                  aElement.getMarginPlusPaddingYSum ());
+                                                              aElement.getMarginPlusPaddingYSum ());
       final SizeSpec aElementSize = aElement.prepare (aRPC);
       ret.addElement (new PLElementWithSize (aElement, aElementSize));
     }
@@ -320,10 +321,10 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     {
       // Page footer does not care about page padding
       final PreparationContext aRPC = new PreparationContext (m_aPageSize.getWidth () -
-                                                                  getMargin ().getXSum () -
-                                                                  m_aPageFooter.getMarginPlusPaddingXSum (),
+                                                              getMargin ().getXSum () -
+                                                              m_aPageFooter.getMarginPlusPaddingXSum (),
                                                               getMargin ().getBottom () -
-                                                                  m_aPageFooter.getMarginPlusPaddingYSum ());
+                                                              m_aPageFooter.getMarginPlusPaddingYSum ());
       final SizeSpec aElementSize = m_aPageFooter.prepare (aRPC);
       ret.setFooterHeight (aElementSize.getHeight ());
     }
@@ -372,17 +373,17 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
               aElementsWithSize.add (0, aSplitResult.getFirstElement ());
               aElementsWithSize.add (1, aSplitResult.getSecondElement ());
 
-              if (s_aLogger.isInfoEnabled ())
-                s_aLogger.info ("Split " +
-                                CGStringHelper.getClassLocalName (aElement) +
-                                " into pieces: " +
-                                aSplitResult.getFirstElement ().getHeight () +
-                                " and " +
-                                aSplitResult.getSecondElement ().getHeight ());
+              if (PLDebug.isDebugSplit ())
+                PLDebug.debugSplit ("Split " +
+                                    CGStringHelper.getClassLocalName (aElement) +
+                                    " into pieces: " +
+                                    aSplitResult.getFirstElement ().getHeight () +
+                                    " and " +
+                                    aSplitResult.getSecondElement ().getHeight ());
               continue;
             }
-            if (s_aLogger.isDebugEnabled ())
-              s_aLogger.debug ("A single element does not fit onto a single page even though it is splittable!");
+            if (PLDebug.isDebugSplit ())
+              PLDebug.debugSplit ("A single element does not fit onto a single page even though it is splittable!");
           }
 
           // Next page
@@ -392,15 +393,16 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
             {
               // one element too large for a page
               s_aLogger.warn ("A single element (" +
-                              CGStringHelper.getClassLocalName (aElement) +
-                              ") does not fit onto a single page" +
-                              (bIsSplittable ? " even though it is splittable!" : " and is not splittable!"));
+                  CGStringHelper.getClassLocalName (aElement) +
+                  ") does not fit onto a single page" +
+                  (bIsSplittable ? " even though it is splittable!" : " and is not splittable!"));
             }
           }
           else
           {
             // We found elements fitting onto a page (at least one)
-            s_aLogger.info ("Adding " + aCurPageElements.size () + " elements to page " + ret.getPageNumber ());
+            if (s_aLogger.isDebugEnabled ())
+              s_aLogger.debug ("Adding " + aCurPageElements.size () + " elements to page " + ret.getPageNumber ());
 
             ret.addPerPageElements (aCurPageElements);
             aCurPageElements = new ArrayList <PLElementWithSize> ();
@@ -424,7 +426,8 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       // Add elements to last page
       if (!aCurPageElements.isEmpty ())
       {
-        s_aLogger.info ("Finally adding " + aCurPageElements.size () + " elements to page " + ret.getPageNumber ());
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Finally adding " + aCurPageElements.size () + " elements to page " + ret.getPageNumber ());
         ret.addPerPageElements (aCurPageElements);
       }
     }
@@ -521,14 +524,14 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                              aContentStream,
                                                              bDebug,
                                                              getMargin ().getLeft () +
-                                                                 m_aPageHeader.getMargin ().getLeft (),
+                                                             m_aPageHeader.getMargin ().getLeft (),
                                                              m_aPageSize.getHeight () -
-                                                                 m_aPageHeader.getMargin ().getTop (),
+                                                             m_aPageHeader.getMargin ().getTop (),
                                                              m_aPageSize.getWidth () -
-                                                                 getMargin ().getXSum () -
-                                                                 m_aPageHeader.getMargin ().getXSum (),
+                                                             getMargin ().getXSum () -
+                                                             m_aPageHeader.getMargin ().getXSum (),
                                                              aPrepareResult.getHeaderHeight () +
-                                                                 m_aPageHeader.getPadding ().getYSum ());
+                                                             m_aPageHeader.getPadding ().getYSum ());
           aPageIndex.setPlaceholdersInRenderingContext (aRC);
           if (m_aRCCustomizer != null)
             m_aRCCustomizer.customizeRenderingContext (aRC);
@@ -566,14 +569,14 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
                                                              aContentStream,
                                                              bDebug,
                                                              getMargin ().getLeft () +
-                                                                 m_aPageFooter.getMargin ().getLeft (),
+                                                             m_aPageFooter.getMargin ().getLeft (),
                                                              getMargin ().getBottom () -
-                                                                 m_aPageFooter.getMargin ().getTop (),
+                                                             m_aPageFooter.getMargin ().getTop (),
                                                              m_aPageSize.getWidth () -
-                                                                 getMargin ().getXSum () -
-                                                                 m_aPageFooter.getMargin ().getXSum (),
+                                                             getMargin ().getXSum () -
+                                                             m_aPageFooter.getMargin ().getXSum (),
                                                              aPrepareResult.getFooterHeight () +
-                                                                 m_aPageFooter.getPadding ().getYSum ());
+                                                             m_aPageFooter.getPadding ().getYSum ());
           aPageIndex.setPlaceholdersInRenderingContext (aRC);
           if (m_aRCCustomizer != null)
             m_aRCCustomizer.customizeRenderingContext (aRC);
@@ -592,11 +595,11 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("pageSize", m_aPageSize)
-                            .appendIfNotNull ("pageHeader", m_aPageHeader)
-                            .append ("elements", m_aElements)
-                            .appendIfNotNull ("pageFooter", m_aPageFooter)
-                            .appendIfNotNull ("RCCustomizer", m_aRCCustomizer)
-                            .toString ();
+        .append ("pageSize", m_aPageSize)
+        .appendIfNotNull ("pageHeader", m_aPageHeader)
+        .append ("elements", m_aElements)
+        .appendIfNotNull ("pageFooter", m_aPageFooter)
+        .appendIfNotNull ("RCCustomizer", m_aRCCustomizer)
+        .toString ();
   }
 }
