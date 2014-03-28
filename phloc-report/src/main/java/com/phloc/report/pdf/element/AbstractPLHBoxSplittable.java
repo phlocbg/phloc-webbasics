@@ -118,7 +118,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
       final float fColumnWidth = m_aPreparedWidth[i] + aElement.getMarginPlusPaddingXSum ();
 
       // add the column to the first hbox
-      boolean bDidSplit = false;
+      boolean bDidSplitColumn = false;
       if (fColumnHeight > fAvailableHeight && bIsSplittable)
       {
         final PLSplitResult aSplitResult = aElement.getAsSplittable ()
@@ -133,7 +133,7 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
 
           fHBox1Heights[i] = aSplitResult.getFirstElement ().getHeight ();
           fHBox2Heights[i] = aSplitResult.getSecondElement ().getHeight ();
-          bDidSplit = true;
+          bDidSplitColumn = true;
           bDidSplitAnyColumn = true;
 
           if (s_aLogger.isInfoEnabled ())
@@ -146,43 +146,20 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
         }
       }
 
-      if (!bDidSplit)
+      if (!bDidSplitColumn)
       {
+        if (fColumnHeight > fAvailableHeight)
+        {
+          // One column of the row is too large and cannot be split -> the whole
+          // row cannot be split!
+          return null;
+        }
+
         // Cell fits totally in available height
         aHBox1.getColumnAtIndex (i).setElement (aElement);
 
         fHBox1Heights[i] = Math.min (fColumnHeight, fAvailableHeight);
         fHBox2Heights[i] = 0;
-
-        if (fColumnHeight > fAvailableHeight)
-          if (bIsSplittable)
-          {
-            s_aLogger.warn ("Column " +
-                i +
-                " of " +
-                CGStringHelper.getClassLocalName (this) +
-                " contains splittable element of type " +
-                CGStringHelper.getClassLocalName (aElement) +
-                " which creates an overflow by " +
-                (fColumnHeight - fAvailableHeight) +
-                " for max height " +
-                fAvailableHeight +
-                "!");
-          }
-          else
-          {
-            s_aLogger.warn ("Column " +
-                i +
-                " of " +
-                CGStringHelper.getClassLocalName (this) +
-                " contains non splittable element of type " +
-                CGStringHelper.getClassLocalName (aElement) +
-                " which creates an overflow by " +
-                (fColumnHeight - fAvailableHeight) +
-                " for max height " +
-                fAvailableHeight +
-                "!");
-          }
       }
 
       // calculate max column height
