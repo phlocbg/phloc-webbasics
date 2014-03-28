@@ -212,7 +212,7 @@ public class PDFFontTest
   public void testEuroSign () throws Exception
   {
     String s = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n"
-        + "™↓↑αΠΦ";
+               + "™↓↑αΠΦ€";
 
     if (false)
       s = FakeWinAnsiHelper.convertJavaStringToWinAnsi2 (s);
@@ -256,31 +256,31 @@ public class PDFFontTest
     final PDTrueTypeFont aFont = PDTrueTypeFont.loadTTF (fontStream, aEncoding);
     {
       final String sCID = "/CIDInit /ProcSet findresource begin\n"
-          + "12 dict begin\n"
-          + "begincmap\n"
-          + "/CIDSystemInfo\n"
-          + "<< /Registry (Adobe)\n"
-          + "/Ordering (UCS)\n"
-          + "/Supplement 0\n"
-          + ">> def\n"
-          + "/CMapName /Adobe-Identity-UCS def\n"
-          + "/CMapType 2 def\n"
-          + "1 begincodespacerange\n"
-          + "<0000> <FFFF>\n"
-          + "endcodespacerange\n"
-          + "1 beginbfchar\n"
-          + "<008C> <2122>\n"
-          + "endbfchar\n"
-          + "1 beginbfrange\n"
-          + "<012D> <012E> [<03A6> <03B1>]\n"
-          + "endbfrange\n"
-          + "1 beginbfchar\n"
-          + "<01B4> <03A0>\n"
-          + "endbfchar\n"
-          + "endcmap\n"
-          + "CMapName currentdict /CMap defineresource pop\n"
-          + "end\n"
-          + "end";
+                          + "12 dict begin\n"
+                          + "begincmap\n"
+                          + "/CIDSystemInfo\n"
+                          + "<< /Registry (Adobe)\n"
+                          + "/Ordering (UCS)\n"
+                          + "/Supplement 0\n"
+                          + ">> def\n"
+                          + "/CMapName /Adobe-Identity-UCS def\n"
+                          + "/CMapType 2 def\n"
+                          + "1 begincodespacerange\n"
+                          + "<0000> <FFFF>\n"
+                          + "endcodespacerange\n"
+                          + "1 beginbfchar\n"
+                          + "<008C> <2122>\n"
+                          + "endbfchar\n"
+                          + "1 beginbfrange\n"
+                          + "<012D> <012E> [<03A6> <03B1>]\n"
+                          + "endbfrange\n"
+                          + "1 beginbfchar\n"
+                          + "<01B4> <03A0>\n"
+                          + "endbfchar\n"
+                          + "endcmap\n"
+                          + "CMapName currentdict /CMap defineresource pop\n"
+                          + "end\n"
+                          + "end";
       final COSStream aToUnicode = new COSStream (new RandomAccessBuffer ());
       final OutputStream out = aToUnicode.createUnfilteredStream ();
       out.write (sCID.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
