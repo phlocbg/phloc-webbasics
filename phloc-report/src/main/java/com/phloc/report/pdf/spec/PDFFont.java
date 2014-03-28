@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
@@ -68,6 +69,7 @@ public class PDFFont
   private final PDFont m_aFont;
   // Helper
   private final float m_fBBHeight;
+  private float [] m_aIso88591WidthCache;
 
   public PDFFont (@Nonnull final PDFont aFont)
   {
@@ -119,14 +121,36 @@ public class PDFFont
       return fWidth * fFontSize / 1000f;
     }
 
-    // Should be quicker than m_aFont.getStringWidth (sText)
-    final byte [] aTextBytes = CharsetManager.getAsBytes (sText, aCharset);
-
-    // Need to it per byte, as getFontWidth (aTextBytes, 0, aTextBytes.length)
-    // does not work
     float fWidth = 0;
-    for (int i = 0; i < aTextBytes.length; i++)
-      fWidth += m_aFont.getFontWidth (aTextBytes, i, 1);
+    if (aCharset.equals (CCharset.CHARSET_ISO_8859_1_OBJ))
+    {
+      // Performance improvement, because each char is always the same width
+      if (m_aIso88591WidthCache == null)
+      {
+        m_aIso88591WidthCache = new float [256];
+        for (int i = 0; i < 256; ++i)
+          m_aIso88591WidthCache[i] = m_aFont.getFontWidth (new byte [] { (byte) i }, 0, 1);
+      }
+
+      for (final char c : sText.toCharArray ())
+        if (c > 255)
+        {
+          // Character not in iso-8859-1 range
+          fWidth += m_aIso88591WidthCache['?'];
+        }
+        else
+          fWidth += m_aIso88591WidthCache[c];
+    }
+    else
+    {
+      // Should be quicker than m_aFont.getStringWidth (sText)
+      final byte [] aTextBytes = CharsetManager.getAsBytes (sText, aCharset);
+
+      // Need to it per byte, as getFontWidth (aTextBytes, 0, aTextBytes.length)
+      // does not work
+      for (int i = 0; i < aTextBytes.length; i++)
+        fWidth += m_aFont.getFontWidth (aTextBytes, i, 1);
+    }
 
     // The width is in 1000 unit of text space, ie 333 or 777
     return fWidth * fFontSize / 1000f;
@@ -138,7 +162,7 @@ public class PDFFont
                                                 @Nonnull final Charset aCharset,
                                                 @Nonnegative final float fFontSize,
                                                 @Nonnegative final float fMaxWidth) throws IOException
-  {
+                                                {
     final List <TextAndWidthSpec> ret = new ArrayList <TextAndWidthSpec> ();
 
     // First split by the contained line breaks
@@ -224,7 +248,7 @@ public class PDFFont
     }
 
     return ret;
-  }
+                                                }
 
   @Override
   public boolean equals (final Object o)
