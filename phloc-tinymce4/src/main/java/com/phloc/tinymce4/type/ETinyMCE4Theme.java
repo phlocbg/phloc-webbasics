@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -31,13 +32,37 @@ import com.phloc.commons.string.StringHelper;
  */
 public enum ETinyMCE4Theme
 {
-  MODERN ("modern");
+  MODERN ("modern", new TinyMCE4ToolbarControlList (ETinyMCE4ToolbarControl.UNDO,
+                                                    ETinyMCE4ToolbarControl.REDO,
+                                                    null,
+                                                    ETinyMCE4ToolbarControl.STYLESELECT,
+                                                    null,
+                                                    ETinyMCE4ToolbarControl.BOLD,
+                                                    ETinyMCE4ToolbarControl.ITALIC,
+                                                    null,
+                                                    ETinyMCE4ToolbarControl.ALIGNLEFT,
+                                                    ETinyMCE4ToolbarControl.ALIGNCENTER,
+                                                    ETinyMCE4ToolbarControl.ALIGNRIGHT,
+                                                    ETinyMCE4ToolbarControl.ALIGNJUSTIFY,
+                                                    null,
+                                                    ETinyMCE4ToolbarControl.BULLIST,
+                                                    ETinyMCE4ToolbarControl.NUMLIST,
+                                                    ETinyMCE4ToolbarControl.OUTDENT,
+                                                    ETinyMCE4ToolbarControl.INDENT,
+                                                    null,
+                                                    ETinyMCE4ToolbarControl.LINK,
+                                                    ETinyMCE4ToolbarControl.IMAGE));
+
+  public static final ETinyMCE4Theme DEFAULT = MODERN;
 
   private final String m_sValue;
+  private final TinyMCE4ToolbarControlList m_aDefaultToolbar;
 
-  private ETinyMCE4Theme (@Nonnull @Nonempty final String sValue)
+  private ETinyMCE4Theme (@Nonnull @Nonempty final String sValue,
+                          @Nonnull final TinyMCE4ToolbarControlList aDefaultToolbar)
   {
     m_sValue = sValue;
+    m_aDefaultToolbar = aDefaultToolbar;
   }
 
   @Nonnull
@@ -45,6 +70,16 @@ public enum ETinyMCE4Theme
   public String getValue ()
   {
     return m_sValue;
+  }
+
+  /**
+   * @return The default toolbar. See the respective theme.js file.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public TinyMCE4ToolbarControlList getDefaultToolbar ()
+  {
+    return m_aDefaultToolbar.getClone ();
   }
 
   @Nullable
