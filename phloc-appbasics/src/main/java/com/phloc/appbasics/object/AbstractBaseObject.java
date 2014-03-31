@@ -22,13 +22,16 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import com.phloc.appbasics.security.login.LoggedInUserManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.PDTUtils;
 
 /**
  * Abstract base implementation of {@link IObject} that handles everything
@@ -196,6 +199,18 @@ public abstract class AbstractBaseObject implements IObject
   public final boolean isDeleted ()
   {
     return m_aDeletionDT != null;
+  }
+
+  public final boolean isDeleted (@Nonnull final DateTime aDT)
+  {
+    ValueEnforcer.notNull (aDT, "DateTime");
+    return m_aDeletionDT != null && PDTUtils.isLessOrEqual (m_aDeletionDT, aDT);
+  }
+
+  public final boolean isDeleted (@Nonnull final LocalDateTime aDT)
+  {
+    ValueEnforcer.notNull (aDT, "DateTime");
+    return isDeleted (PDTFactory.createDateTime (aDT));
   }
 
   @Override
