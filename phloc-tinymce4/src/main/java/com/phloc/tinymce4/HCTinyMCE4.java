@@ -58,7 +58,7 @@ import com.phloc.webbasics.app.html.PerRequestJSIncludes;
  * default value {@link #DEFAULT_SELECTOR} is used automatically.<br>
  * Note: all options that are not explicitly wrapped can be set by
  * {@link #addCustomOption(String, IJSExpression)}
- * 
+ *
  * @author Philip Helger
  */
 public class HCTinyMCE4 implements IHCNodeBuilder
@@ -178,7 +178,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * This option enables you to auto focus an editor instance. The value of this
    * option should be an editor instance id. The editor instance id is the id
    * for the original textarea or div element that got replaced.
-   * 
+   *
    * @param sAutoFocus
    *        Editor ID
    * @return this
@@ -203,7 +203,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * - ltr
    *  - rtl
    * </pre>
-   * 
+   *
    * @param eDirectionality
    *        direction
    * @return this
@@ -223,7 +223,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This is a true/false value if the usage of the browsers internal
    * spellchecker should be used. Default value is false.
-   * 
+   *
    * @param bBrowserSpellcheck
    *        <code>true</code> to enabled, <code>false</code> to disable
    * @return this
@@ -238,7 +238,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This is a true/false value if the usage of the browsers internal
    * spellchecker should be used. Default value is false.
-   * 
+   *
    * @param aBrowserSpellcheck
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
@@ -259,7 +259,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Set the language of the UI texts
-   * 
+   *
    * @param eLanguage
    *        The language to use. <code>null</code> means English
    * @return this
@@ -280,7 +280,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * A simple URL to where the language file to use. We recommend using a site
    * absolute URL.
-   * 
+   *
    * @param aLanguageURL
    *        The language URL to use.
    * @return this
@@ -300,7 +300,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This option will make the editable are behave like very much like a
    * &lt;pre> tag, and add a scroll instead of wrapping text.
-   * 
+   *
    * @param bNoWrap
    *        <code>true</code> to enabled, <code>false</code> to disable
    * @return this
@@ -315,7 +315,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This option will make the editable are behave like very much like a
    * &lt;pre> tag, and add a scroll instead of wrapping text.
-   * 
+   *
    * @param aNoWrap
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
@@ -336,7 +336,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This options allows you to turn on/off the resizing handles on images,
    * tables or media objects.
-   * 
+   *
    * @param bObjectResizing
    *        <code>true</code> to enabled, <code>false</code> to disable
    * @return this
@@ -351,7 +351,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This options allows you to turn on/off the resizing handles on images,
    * tables or media objects.
-   * 
+   *
    * @param aObjectResizing
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
@@ -379,7 +379,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add a TinyMCE plugin to use.
-   * 
+   *
    * @param ePlugin
    *        The plugin to add. May not be <code>null</code>.
    * @return this
@@ -395,7 +395,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add multiple TinyMCE plugins at once.
-   * 
+   *
    * @param aPlugins
    *        The plugins to add. The array may be <code>null</code> but the
    *        contained elements may not be <code>null</code>.
@@ -412,7 +412,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add multiple TinyMCE plugins at once.
-   * 
+   *
    * @param aPlugins
    *        The plugins to add. The array may be <code>null</code> but the
    *        contained elements may not be <code>null</code>.
@@ -429,7 +429,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add all available plugins there are.
-   * 
+   *
    * @return this
    */
   @Nonnull
@@ -440,7 +440,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Remove the specified plugin.
-   * 
+   *
    * @param ePlugin
    *        The plugin to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} if the plugin was successfully removed.
@@ -453,7 +453,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Remove the specified TinyMCE plugins.
-   * 
+   *
    * @param aPlugins
    *        The plugins to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} it at least one plugin was removed
@@ -471,7 +471,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Remove the specified TinyMCE plugins.
-   * 
+   *
    * @param aPlugins
    *        The plugins to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} it at least one plugin was removed
@@ -502,7 +502,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add an external plugin to the editor.
-   * 
+   *
    * @param aExternalPlugin
    *        The plugin to be added. May not be <code>null</code>.
    * @return this
@@ -518,7 +518,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add multiple external plugins at once.
-   * 
+   *
    * @param aExternalPlugins
    *        The plugins to be added. May be <code>null</code> but no contained
    *        plugin may be <code>null</code>.
@@ -535,7 +535,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Add multiple external plugins at once.
-   * 
+   *
    * @param aExternalPlugins
    *        The plugins to be added. May be <code>null</code> but no contained
    *        plugin may be <code>null</code>.
@@ -552,7 +552,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Remove the specified external plugin.
-   * 
+   *
    * @param aExternalPlugin
    *        The plugin to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} if the plugin was removed successfully.
@@ -565,7 +565,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Remove the specified external plugins.
-   * 
+   *
    * @param aExternalPlugins
    *        The plugins to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} it at least one plugin was removed
@@ -583,7 +583,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Remove the specified external plugins.
-   * 
+   *
    * @param aExternalPlugins
    *        The plugins to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} it at least one plugin was removed
@@ -622,7 +622,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * selector: "h1.editme",
    * selector: "div.editme",
    * </pre>
-   * 
+   *
    * @param sSelector
    *        The selector to use. May neither be <code>null</code> nor empty.
    * @return this
@@ -644,7 +644,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Select what skin to use, this should match the foldername of the skin.
-   * 
+   *
    * @param eSkin
    *        Skin to use. May be <code>null</code>.
    * @return this
@@ -666,7 +666,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * This option enables you to specify location of the current skin. Enables
    * you to load TinyMCE from one URL for example a CDN then load a local skin
    * on the current server.
-   * 
+   *
    * @param aSkinURL
    *        The skin URL to use.
    * @return this
@@ -686,7 +686,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Set the theme of TinyMCE.
-   * 
+   *
    * @param eTheme
    *        Theme to use.
    * @return this
@@ -708,7 +708,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * This option enables you to specify location of the current theme. Enables
    * you to load TinyMCE from one URL for example a CDN then load a local theme
    * on the current server.
-   * 
+   *
    * @param aThemeURL
    *        The theme URL to use.
    * @return this
@@ -728,7 +728,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This option changes the behaviour of the editor to allow the usage of
    * inline elements instead of a textarea.
-   * 
+   *
    * @param bInline
    *        <code>true</code> to enabled, <code>false</code> to disable
    * @return this
@@ -743,7 +743,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * This option changes the behaviour of the editor to allow the usage of
    * inline elements instead of a textarea.
-   * 
+   *
    * @param aInline
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
@@ -767,7 +767,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * gets an hidden input element that contents gets saved to when you do
    * editor.save() or tinymce.triggerSave(); this can be disabled if you don't
    * need these controls.
-   * 
+   *
    * @param bHiddenInput
    *        <code>true</code> to enabled, <code>false</code> to disable
    * @return this
@@ -785,7 +785,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * gets an hidden input element that contents gets saved to when you do
    * editor.save() or tinymce.triggerSave(); this can be disabled if you don't
    * need these controls.
-   * 
+   *
    * @param aHiddenInput
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
@@ -810,7 +810,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * span elements and generate span elements instead of font elements. This
    * option should be used in order to get more W3C compatible code, since font
    * elements are deprecated.
-   * 
+   *
    * @param bConvertFontsToSpans
    *        <code>true</code> to enabled, <code>false</code> to disable
    * @return this
@@ -827,7 +827,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * span elements and generate span elements instead of font elements. This
    * option should be used in order to get more W3C compatible code, since font
    * elements are deprecated.
-   * 
+   *
    * @param aConvertFontsToSpans
    *        <code>true</code> to enabled, <code>false</code> to disable and
    *        <code>null</code> for default value.
@@ -855,7 +855,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Show or hide the statusbar.
-   * 
+   *
    * @param bStatusbar
    *        <code>true</code> to show, <code>false</code> to hide
    * @return this
@@ -869,7 +869,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Show or hide the statusbar.
-   * 
+   *
    * @param aStatusbar
    *        <code>true</code> to show, <code>false</code> to hide and
    *        <code>null</code> for default value.
@@ -902,7 +902,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Set the width of the editor.
-   * 
+   *
    * @param nWidth
    *        New width. Only values >= 0 are considered!
    * @return this
@@ -921,7 +921,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   /**
    * Set the height of the editor.
-   * 
+   *
    * @param nHeight
    *        New height. Only values >= 0 are considered!
    * @return this
@@ -941,7 +941,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * The enables you to turn of the preview of styles in format/style listboxes.
    * It's turned on by default.
-   * 
+   *
    * @param bPreviewStyles
    *        <code>true</code> to show, <code>false</code> to hide
    * @return this
@@ -956,7 +956,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   /**
    * The enables you to turn of the preview of styles in format/style listboxes.
    * It's turned on by default.
-   * 
+   *
    * @param aPreviewStyles
    *        <code>true</code> to show, <code>false</code> to hide and
    *        <code>null</code> for default value.
@@ -993,7 +993,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
    * type of browser to present; this value can be file, image or flash
    * depending on what dialogue is calling the function. The win parameter
    * contains a reference to the dialog/window that executes the function.
-   * 
+   *
    * @param aFileBrowserCallback
    *        Callback function
    * @return this
@@ -1185,6 +1185,6 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   public static void registerExternalResources ()
   {
-    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETinyMCE4JSPathProvider.TINYMCE_4_0_19);
+    PerRequestJSIncludes.registerJSIncludeForThisRequest (ETinyMCE4JSPathProvider.TINYMCE_4_0_20);
   }
 }

@@ -1,4 +1,4 @@
-// 4.0.19 (2014-03-11)
+// 4.0.20 (2014-03-18)
 
 /**
  * Compiled inline version. (Library mode)
@@ -487,10 +487,13 @@ define("tinymce/dom/EventUtils", [], function() {
 								while (ci--) {
 									if (callbackList[ci].func === callback) {
 										var nativeHandler = callbackList.nativeHandler;
+										var fakeName = callbackList.fakeName, capture = callbackList.capture;
 
 										// Clone callbackList since unbind inside a callback would otherwise break the handlers loop
 										callbackList = callbackList.slice(0, ci).concat(callbackList.slice(ci + 1));
 										callbackList.nativeHandler = nativeHandler;
+										callbackList.fakeName = fakeName;
+										callbackList.capture = capture;
 
 										eventMap[name] = callbackList;
 									}
@@ -6028,7 +6031,8 @@ define("tinymce/dom/DOMUtils", [
 				return false;
 			}
 
-			return Sizzle.matches(selector, elm.nodeType ? [elm] : elm).length > 0;
+			var elms = elm.nodeType ? [elm] : elm;
+			return Sizzle(selector, elms[0].ownerDocument || elms[0], null, elms).length > 0;
 		},
 
 		// #endif
@@ -9245,6 +9249,9 @@ define("tinymce/html/Schema", [
 			var customElementRegExp = /^(~)?(.+)$/;
 
 			if (custom_elements) {
+				// Flush cached items since we are altering the default maps
+				mapCache.text_block_elements = mapCache.block_elements = null;
+
 				each(split(custom_elements, ','), function(rule) {
 					var matches = customElementRegExp.exec(rule),
 						inline = matches[1] === '~',
@@ -9272,8 +9279,9 @@ define("tinymce/html/Schema", [
 					}
 
 					// Add custom elements at span/div positions
-					each(children, function(element) {
+					each(children, function(element, elmName) {
 						if (element[cloneName]) {
+							children[elmName] = element = extend({}, children[elmName]);
 							element[name] = element[cloneName];
 						}
 					});
@@ -9303,6 +9311,10 @@ define("tinymce/html/Schema", [
 
 						each(split(matches[3], '|'), function(child) {
 							if (prefix === '-') {
+								// Clone the element before we delete
+								// things in it to not mess up default schemas
+								children[matches[2]] = parent = extend({}, children[matches[2]]);
+
 								delete parent[child];
 							} else {
 								parent[child] = {};
@@ -12271,6 +12283,8 @@ define("tinymce/dom/ControlSelection", [
 		function showResizeRect(targetElm, mouseDownHandleName, mouseDownEvent) {
 			var position, targetWidth, targetHeight, e, rect, offsetParent = editor.getBody();
 
+			unbindResizeHandleEvents();
+
 			// Get position and size of target
 			position = dom.getPos(targetElm, offsetParent);
 			selectedElmX = position.x;
@@ -12350,14 +12364,18 @@ define("tinymce/dom/ControlSelection", [
 						if (Env.ie) {
 							handleElm.contentEditable = false;
 						}
+					} else {
+						dom.show(handleElm);
+					}
 
+					if (!handle.elm) {
 						dom.bind(handleElm, 'mousedown', function(e) {
 							e.stopImmediatePropagation();
 							e.preventDefault();
 							startDrag(e);
 						});
-					} else {
-						dom.show(handleElm);
+
+						handle.elm = handleElm;
 					}
 
 					/*
@@ -12386,6 +12404,8 @@ define("tinymce/dom/ControlSelection", [
 
 		function hideResizeRect() {
 			var name, handleElm;
+
+			unbindResizeHandleEvents();
 
 			if (selectedElm) {
 				selectedElm.removeAttribute('data-mce-selected');
@@ -12496,6 +12516,17 @@ define("tinymce/dom/ControlSelection", [
 			detachEvent(selectedElm, 'resizestart', resizeNativeStart);
 		}
 
+		function unbindResizeHandleEvents() {
+			for (var name in resizeHandles) {
+				var handle = resizeHandles[name];
+
+				if (handle.elm) {
+					dom.unbind(handle.elm);
+					delete handle.elm;
+				}
+			}
+		}
+
 		function disableGeckoResize() {
 			try {
 				// Disable object resizing on Gecko
@@ -12580,6 +12611,8 @@ define("tinymce/dom/ControlSelection", [
 			// Hide rect on focusout since it would float on top of windows otherwise
 			//editor.on('focusout', hideResizeRect);
 		});
+
+		editor.on('remove', unbindResizeHandleEvents);
 
 		function destroy() {
 			selectedElm = selectedElmGhost = null;
@@ -24324,7 +24357,6 @@ define("tinymce/WindowManager", [
 				args.buttons = [
 					{text: 'Ok', subtype: 'primary', onclick: function() {
 						win.find('form')[0].submit();
-						win.close();
 					}},
 
 					{text: 'Cancel', onclick: function() {
@@ -24548,9 +24580,44 @@ define("tinymce/util/Quirks", [
 		 */
 		function cleanupStylesWhenDeleting() {
 			var doc = editor.getDoc(), urlPrefix = 'data:text/mce-internal,';
+			var MutationObserver = window.MutationObserver, olderWebKit;
 
-			if (!window.MutationObserver) {
-				return;
+			// Add mini polyfill for older WebKits
+			// TODO: Remove this when old Safari versions gets updated
+			if (!MutationObserver) {
+				olderWebKit = true;
+
+				MutationObserver = function() {
+					var records = [], target;
+
+					function nodeInsert(e) {
+						var target = e.relatedNode || e.target;
+						records.push({target: target, addedNodes: [target]});
+					}
+
+					function attrModified(e) {
+						var target = e.relatedNode || e.target;
+						records.push({target: target, attributeName: e.attrName});
+					}
+
+					this.observe = function(node) {
+						target = node;
+						target.addEventListener('DOMSubtreeModified', nodeInsert, false);
+						target.addEventListener('DOMNodeInsertedIntoDocument', nodeInsert, false);
+						target.addEventListener('DOMNodeInserted', nodeInsert, false);
+						target.addEventListener('DOMAttrModified', attrModified, false);
+					};
+
+					this.disconnect = function() {
+						target.removeEventListener('DOMNodeInserted', nodeInsert);
+						target.removeEventListener('DOMAttrModified', attrModified);
+						target.removeEventListener('DOMSubtreeModified', nodeInsert, false);
+					};
+
+					this.takeRecords = function() {
+						return records;
+					};
+				};
 			}
 
 			function customDelete(isForward) {
@@ -24660,6 +24727,11 @@ define("tinymce/util/Quirks", [
 			editor.addCommand('ForwardDelete', function() {
 				customDelete(true);
 			});
+
+			// Older WebKits doesn't properly handle the clipboard so we can't add the rest
+			if (olderWebKit) {
+				return;
+			}
 
 			editor.on('dragstart', function(e) {
 				// Safari doesn't support custom dataTransfer items so we can only use URL and Text
@@ -24961,6 +25033,10 @@ define("tinymce/util/Quirks", [
 				}
 
 				selectionTimer = window.setTimeout(function() {
+					if (editor.removed) {
+						return;
+					}
+
 					var rng = selection.getRng();
 
 					// Compare the ranges to see if it was a real change or not
@@ -25373,16 +25449,16 @@ define("tinymce/util/Quirks", [
 		}
 
 		/**
-		 * Fixes selection issues on Gecko where the caret can be placed between two inline elements like <b>a</b>|<b>b</b>
+		 * Fixes selection issues where the caret can be placed between two inline elements like <b>a</b>|<b>b</b>
 		 * this fix will lean the caret right into the closest inline element.
 		 */
 		function normalizeSelection() {
 			// Normalize selection for example <b>a</b><i>|a</i> becomes <b>a|</b><i>a</i> except for Ctrl+A since it selects everything
-			editor.on('keyup focusin', function(e) {
+			editor.on('keyup focusin mouseup', function(e) {
 				if (e.keyCode != 65 || !VK.metaKeyPressed(e)) {
 					selection.normalize();
 				}
-			});
+			}, true);
 		}
 
 		/**
@@ -25478,6 +25554,21 @@ define("tinymce/util/Quirks", [
 			}
 		}
 
+		/**
+		 * iOS 7.1 introduced two new bugs:
+		 * 1) It's possible to open links within a contentEditable area by clicking on them.
+		 * 2) If you hold down the finger it will display the link/image touch callout menu.
+		 */
+		function tapLinksAndImages() {
+			editor.on('click', function(e) {
+				if (e.target.tagName === 'A') {
+					e.preventDefault();
+				}
+			});
+
+			editor.contentStyles.push('.mce-content-body {-webkit-touch-callout: none}');
+		}
+
 		// All browsers
 		disableBackspaceIntoATable();
 		removeBlockQuoteOnBackSpace();
@@ -25496,6 +25587,7 @@ define("tinymce/util/Quirks", [
 				selectionChangeNodeChanged();
 				restoreFocusOnKeyDown();
 				bodyHeight();
+				tapLinksAndImages();
 			} else {
 				selectAll();
 			}
@@ -27114,9 +27206,7 @@ define("tinymce/Editor", [
 		},
 
 		/**
-		 * Adds a button that later gets created by the ControlManager. This is a shorter and easier method
-		 * of adding buttons without the need to deal with the ControlManager directly. But it's also less
-		 * powerfull if you need more control use the ControlManagers factory methods instead.
+		 * Adds a button that later gets created by the theme in the editors toolbars.
 		 *
 		 * @method addButton
 		 * @param {String} name Button name to add.
@@ -27158,7 +27248,9 @@ define("tinymce/Editor", [
 		},
 
 		/**
-		 * Adds a menu item to be used in the menus of the modern theme.
+		 * Adds a menu item to be used in the menus of the theme. There might be multiple instances
+		 * of this menu item for example it might be used in the main menus of the theme but also in
+		 * the context menu so make sure that it's self contained and supports multiple instances.
 		 *
 		 * @method addMenuItem
 		 * @param {String} name Menu item name to add.
@@ -27919,6 +28011,7 @@ define("tinymce/Editor", [
 			var self = this;
 
 			if (!self.removed) {
+				self.save();
 				self.fire('remove');
 				self.off();
 				self.removed = 1; // Cancels post remove event execution
@@ -27927,9 +28020,6 @@ define("tinymce/Editor", [
 				if (self.hasHiddenInput) {
 					DOM.remove(self.getElement().nextSibling);
 				}
-
-				// We must save before we hide so Safari doesn't crash
-				self.save();
 
 				DOM.setStyle(self.id, 'display', self.orgDisplay);
 
@@ -28253,28 +28343,8 @@ define("tinymce/FocusManager", [
 			var editor = e.editor;
 
 			editor.on('init', function() {
-				// On IE take selection snapshot onbeforedeactivate
-				if ("onbeforedeactivate" in document && Env.ie < 11) {
-					// Gets fired when the editor is about to be blurred but also when the selection
-					// is moved into a table cell so we need to add the range as a pending range then
-					// use that pending range on the blur event of the editor body
-					editor.dom.bind(editor.getBody(), 'beforedeactivate', function() {
-						try {
-							editor.pendingRng = editor.selection.getRng();
-						} catch (ex) {
-							// IE throws "Unexcpected call to method or property access" some times so lets ignore it
-						}
-					});
-
-					// Set the pending range as the current last range if the blur event occurs
-					editor.dom.bind(editor.getBody(), 'blur', function() {
-						if (editor.pendingRng) {
-							editor.lastRng = editor.pendingRng;
-							editor.selection.lastFocusBookmark = createBookmark(editor.lastRng);
-							editor.pendingRng = null;
-						}
-					});
-				} else if (editor.inline || Env.ie > 10) {
+				// Gecko/WebKit has ghost selections in iframes and IE only has one selection per browser tab
+				if (editor.inline || Env.ie) {
 					// On other browsers take snapshot on nodechange in inline mode since they have Ghost selections for iframes
 					editor.on('nodechange keyup', function() {
 						var node = document.activeElement;
@@ -28382,7 +28452,11 @@ define("tinymce/FocusManager", [
 			}
 		}
 
-		function unregisterDocumentEvents() {
+		function unregisterDocumentEvents(e) {
+			if (editorManager.focusedEditor == e.editor) {
+				editorManager.focusedEditor = null;
+			}
+
 			if (!editorManager.activeEditor) {
 				DOM.unbind(document, 'selectionchange', selectionChangeHandler);
 				DOM.unbind(document, 'focusin', documentFocusInHandler);
@@ -28402,7 +28476,8 @@ define("tinymce/FocusManager", [
 	 * @return {Boolean} True/false state if the element is part of the UI or not.
 	 */
 	FocusManager.isEditorUIElement = function(elm) {
-		return elm.className.indexOf('mce-') !== -1;
+		// Needs to be converted to string since svg can have focus: #6776
+		return elm.className.toString().indexOf('mce-') !== -1;
 	};
 
 	return FocusManager;
@@ -28459,7 +28534,7 @@ define("tinymce/EditorManager", [
 		 * @property minorVersion
 		 * @type String
 		 */
-		minorVersion : '0.19',
+		minorVersion : '0.20',
 
 		/**
 		 * Release date of TinyMCE build.
@@ -28467,7 +28542,7 @@ define("tinymce/EditorManager", [
 		 * @property releaseDate
 		 * @type String
 		 */
-		releaseDate: '2014-03-11',
+		releaseDate: '2014-03-18',
 
 		/**
 		 * Collection of editor instances.

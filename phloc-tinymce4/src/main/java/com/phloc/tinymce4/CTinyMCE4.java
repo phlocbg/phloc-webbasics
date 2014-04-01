@@ -23,14 +23,14 @@ import com.phloc.commons.version.Version;
 
 /**
  * Constants for usage with TinyMCE
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
 public final class CTinyMCE4
 {
   /** Edit version */
-  public static final Version TINYMCE_VERSION_4_0_19 = new Version (4, 0, 19);
+  public static final Version TINYMCE_VERSION_4_0_20 = new Version (4, 0, 20);
 
   private CTinyMCE4 ()
   {}
