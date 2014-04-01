@@ -157,46 +157,11 @@
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>src/main/resources/tinymce/**</exclude>
+            <exclude>src/main/resources/tinymce-dev/**</exclude>
+            <exclude>src/main/resources/tinymce-min/**</exclude>
           </excludes>
         </configuration>
       </plugin>
-      <!--
-      <plugin>
-        <groupId>com.phloc.maven</groupId>
-        <artifactId>closure-maven-plugin</artifactId>
-        <version>1.0.9</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compressjs</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <forceCreation>false</forceCreation>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.phloc.maven</groupId>
-        <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.1.0</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>csscompress</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <forceCompress>false</forceCompress>
-          <removeUnnecessaryCode>true</removeUnnecessaryCode>
-          <quoteURLs>true</quoteURLs>
-          <verbose>true</verbose>
-          <sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
-        </configuration>
-      </plugin>
-      -->
     </plugins>
   </build>
 </project>

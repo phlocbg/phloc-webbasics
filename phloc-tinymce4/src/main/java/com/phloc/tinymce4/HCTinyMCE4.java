@@ -51,6 +51,7 @@ import com.phloc.tinymce4.type.ETinyMCE4Resize;
 import com.phloc.tinymce4.type.ETinyMCE4Skin;
 import com.phloc.tinymce4.type.ETinyMCE4Theme;
 import com.phloc.tinymce4.type.TinyMCE4ExternalPlugin;
+import com.phloc.tinymce4.type.TinyMCE4MenubarItemList;
 import com.phloc.tinymce4.type.TinyMCE4ToolbarControlList;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
@@ -84,6 +85,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   // User interface
   public static final boolean DEFAULT_TOOLBAR_DISABLED = false;
+  public static final boolean DEFAULT_MENUBAR_DISABLED = false;
   public static final boolean DEFAULT_STATUSBAR = true;
   public static final boolean DEFAULT_PREVIEW_STYLES = true;
 
@@ -151,6 +153,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   private TinyMCE4ToolbarControlList m_aToolbar;
   private boolean m_bToolbarDisabled = DEFAULT_TOOLBAR_DISABLED;
   // TODO toolbar<N>
+  private TinyMCE4MenubarItemList m_aMenubar;
+  private boolean m_bMenubarDisabled = DEFAULT_MENUBAR_DISABLED;
   // TODO menubar
   // TODO menu
   private ETriState m_eStatusbar = ETriState.UNDEFINED;
@@ -893,6 +897,48 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     return this;
   }
 
+  @Nullable
+  @ReturnsMutableObject (reason = "Design")
+  public TinyMCE4MenubarItemList getMenubar ()
+  {
+    return m_aMenubar;
+  }
+
+  /**
+   * This option allows you to configure the menus you want to appear in the
+   * menu bar.
+   *
+   * @param aMenubar
+   *        The menu bar to be set. May be <code>null</code>. If not
+   *        <code>null</code> a clone of the object is stored.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 setMenubar (@Nullable final TinyMCE4MenubarItemList aMenubar)
+  {
+    m_aMenubar = aMenubar == null ? null : aMenubar.getClone ();
+    return this;
+  }
+
+  public boolean isMenubarDisabled ()
+  {
+    return m_bMenubarDisabled;
+  }
+
+  /**
+   * Manually enable or disable the toolbar.
+   *
+   * @param bMenubarDisabled
+   *        <code>true</code> to disable it
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 setMenubarDisabled (final boolean bMenubarDisabled)
+  {
+    m_bMenubarDisabled = bMenubarDisabled;
+    return this;
+  }
+
   public boolean isStatusbar ()
   {
     return m_eStatusbar.getAsBooleanValue (DEFAULT_STATUSBAR);
@@ -1192,6 +1238,11 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     else
       if (m_aToolbar != null)
         aOptions.add ("toolbar", m_aToolbar.getAsOptionString ());
+    if (m_bMenubarDisabled)
+      aOptions.add ("menubar", JSExpr.FALSE);
+    else
+      if (m_aMenubar != null)
+        aOptions.add ("menubar", m_aMenubar.getAsOptionString ());
     if (m_eStatusbar.isDefined ())
       aOptions.add ("statusbar", isStatusbar ());
     if (m_eResize != null)

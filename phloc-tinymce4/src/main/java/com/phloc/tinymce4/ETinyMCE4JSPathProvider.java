@@ -25,22 +25,32 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum ETinyMCE4JSPathProvider implements IJSPathProvider
 {
-  TINYMCE_4_0_20 ("tinymce/tinymce.jquery.js");
+  TINYMCE_4_0_20 ("tinymce-dev/tinymce.jquery.js", "tinymce-min/tinymce.min.js");
 
-  private final String m_sPath;
+  private final String m_sRegularPath;
+  private final String m_sMinPath;
 
-  private ETinyMCE4JSPathProvider (@Nonnull @Nonempty final String sPath)
+  private ETinyMCE4JSPathProvider (@Nonnull @Nonempty final String sRegularPath)
   {
-    if (!JSFilenameHelper.isJSFilename (sPath))
-      throw new IllegalArgumentException ("path");
-    m_sPath = sPath;
+    this (sRegularPath, JSFilenameHelper.getMinifiedJSPath (sRegularPath));
+  }
+
+  private ETinyMCE4JSPathProvider (@Nonnull @Nonempty final String sRegularPath,
+                                   @Nonnull @Nonempty final String sMinPath)
+  {
+    if (!JSFilenameHelper.isJSFilename (sRegularPath))
+      throw new IllegalArgumentException ("RegularPath");
+    if (!JSFilenameHelper.isJSFilename (sMinPath))
+      throw new IllegalArgumentException ("MinPath");
+    m_sRegularPath = sRegularPath;
+    m_sMinPath = sMinPath;
   }
 
   @Nonnull
   @Nonempty
   public String getJSItemPath (final boolean bRegular)
   {
-    return bRegular ? m_sPath : JSFilenameHelper.getMinifiedJSPath (m_sPath);
+    return bRegular ? m_sRegularPath : m_sMinPath;
   }
 
   public boolean canBeBundled ()
