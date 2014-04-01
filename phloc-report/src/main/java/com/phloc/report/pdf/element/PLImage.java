@@ -24,7 +24,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.string.ToStringGenerator;
@@ -49,7 +50,7 @@ public class PLImage extends AbstractPLElement <PLImage>
   private EHorzAlignment m_eHorzAlign = EHorzAlignment.DEFAULT;
 
   // Status var
-  private PDJpeg m_aJpeg;
+  private PDImageXObject m_aJpeg;
 
   public PLImage (@Nonnull final BufferedImage aImage)
   {
@@ -142,11 +143,11 @@ public class PLImage extends AbstractPLElement <PLImage>
       if (m_aIIS != null)
       {
         // The input stream is closed automatically
-        m_aJpeg = new PDJpeg (aCtx.getDocument (), m_aIIS.getInputStream ());
+        m_aJpeg = JPEGFactory.createFromStream (aCtx.getDocument (), m_aIIS.getInputStream ());
       }
       else
       {
-        m_aJpeg = new PDJpeg (aCtx.getDocument (), m_aImage);
+        m_aJpeg = JPEGFactory.createFromImage (aCtx.getDocument (), m_aImage);
       }
     }
     catch (final IOException ex)
@@ -179,17 +180,17 @@ public class PLImage extends AbstractPLElement <PLImage>
     }
 
     aContentStream.drawXObject (m_aJpeg, aCtx.getStartLeft () + fIndentX, aCtx.getStartTop () -
-                                                                          getPadding ().getTop () -
-                                                                          m_fHeight, m_fWidth, m_fHeight);
+                                getPadding ().getTop () -
+                                m_fHeight, m_fWidth, m_fHeight);
   }
 
   @Override
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("image", m_aImage)
-                            .append ("width", m_fWidth)
-                            .append ("height", m_fHeight)
-                            .toString ();
+        .append ("image", m_aImage)
+        .append ("width", m_fWidth)
+        .append ("height", m_fHeight)
+        .toString ();
   }
 }

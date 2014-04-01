@@ -28,10 +28,13 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDFontDescriptor;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
@@ -73,10 +76,21 @@ public class PDFFont
 
   public PDFFont (@Nonnull final PDFont aFont)
   {
-    if (aFont == null)
-      throw new NullPointerException ("font");
-    m_aFont = aFont;
-    m_fBBHeight = aFont.getFontDescriptor ().getFontBoundingBox ().getHeight ();
+    m_aFont = ValueEnforcer.notNull (aFont, "Font");
+    PDFontDescriptor aFD = aFont.getFontDescriptor ();
+    if (aFD == null)
+    {
+      if (aFont instanceof PDType0Font)
+      {
+        final PDFont aDescendantFont = ((PDType0Font) aFont).getDescendantFont ();
+        if (aDescendantFont != null)
+          aFD = aDescendantFont.getFontDescriptor ();
+      }
+    }
+    if (aFD == null)
+      throw new IllegalArgumentException ("Failed to determined FontDescriptor from specified font " + aFont);
+
+    m_fBBHeight = aFD.getFontBoundingBox ().getHeight ();
   }
 
   /**

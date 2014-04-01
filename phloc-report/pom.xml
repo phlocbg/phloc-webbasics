@@ -74,6 +74,10 @@
       <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
     </repository>
   </distributionManagement>
+  
+  <properties>
+    <pdfbox.version>2.0.0-SNAPSHOT</pdfbox.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -84,7 +88,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>1.8.4</version>
+      <version>${pdfbox.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -105,7 +109,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox-examples</artifactId>
-      <version>1.8.4</version>
+      <version>${pdfbox.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

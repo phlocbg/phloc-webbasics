@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.StringTokenizer;
 
-import org.apache.fontbox.ttf.TTFSubFont;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -45,6 +44,8 @@ import org.apache.pdfbox.io.RandomAccessBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDStream;
+import org.apache.pdfbox.pdmodel.font.PDFontDescriptorDictionary;
+import org.apache.pdfbox.pdmodel.font.PDFontFactory;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
 import org.apache.pdfbox.util.ResourceLoader;
 import org.junit.Rule;
@@ -54,10 +55,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mock.DebugModeTestRule;
-import com.phloc.fonts.EFontResource;
 import com.phloc.report.pdf.PageLayoutPDF;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.FontSpec;
@@ -208,6 +210,14 @@ public class PDFFontTest
     }
   }
 
+  private static final class EncodingIdentityH extends Encoding
+  {
+    public COSBase getCOSObject ()
+    {
+      return COSName.IDENTITY_H;
+    }
+  }
+
   @Test
   public void testEuroSign () throws Exception
   {
@@ -217,26 +227,7 @@ public class PDFFontTest
     if (false)
       s = FakeWinAnsiHelper.convertJavaStringToWinAnsi2 (s);
 
-    Encoding aEncoding = false ? new E () : WinAnsiEncoding.INSTANCE;
-
-    if (false)
-    {
-      for (final char c : s.toCharArray ())
-        System.out.print (aEncoding.getNameFromCharacter (c) + "[" + Integer.toHexString (c) + "] ");
-      System.out.println ();
-    }
-
-    if (false)
-    {
-      final char [] cs = s.toCharArray ();
-      final StringBuilder sencoded = new StringBuilder ();
-      for (final char c : cs)
-      {
-        final String sName = aEncoding.getNameFromCharacter (c);
-        sencoded.appendCodePoint (aEncoding.getCode (sName));
-      }
-      s = sencoded.toString ();
-    }
+    Encoding aEncoding = WinAnsiEncoding.INSTANCE;
 
     if (false)
     {
@@ -250,48 +241,69 @@ public class PDFFontTest
     }
 
     final PDDocument aDummy = new PDDocument ();
-    final PDStream fontStream = new PDStream (aDummy, EFontResource.LATO2_NORMAL.getInputStream (), false);
+    final PDStream fontStream = new PDStream (aDummy, FileSystemResource.getInputStream (new File ("arial.ttf")), false);
     fontStream.getStream ().setInt (COSName.LENGTH1, fontStream.getByteArray ().length);
     fontStream.addCompression ();
     final PDTrueTypeFont aFont = PDTrueTypeFont.loadTTF (fontStream, aEncoding);
-    {
-      final String sCID = "/CIDInit /ProcSet findresource begin\n"
-                          + "12 dict begin\n"
-                          + "begincmap\n"
-                          + "/CIDSystemInfo\n"
-                          + "<< /Registry (Adobe)\n"
-                          + "/Ordering (UCS)\n"
-                          + "/Supplement 0\n"
-                          + ">> def\n"
-                          + "/CMapName /Adobe-Identity-UCS def\n"
-                          + "/CMapType 2 def\n"
-                          + "1 begincodespacerange\n"
-                          + "<0000> <FFFF>\n"
-                          + "endcodespacerange\n"
-                          + "1 beginbfchar\n"
-                          + "<008C> <2122>\n"
-                          + "endbfchar\n"
-                          + "1 beginbfrange\n"
-                          + "<012D> <012E> [<03A6> <03B1>]\n"
-                          + "endbfrange\n"
-                          + "1 beginbfchar\n"
-                          + "<01B4> <03A0>\n"
-                          + "endbfchar\n"
-                          + "endcmap\n"
-                          + "CMapName currentdict /CMap defineresource pop\n"
-                          + "end\n"
-                          + "end";
-      final COSStream aToUnicode = new COSStream (new RandomAccessBuffer ());
-      final OutputStream out = aToUnicode.createUnfilteredStream ();
-      out.write (sCID.getBytes (CCharset.CHARSET_ISO_8859_1_OBJ));
-      out.close ();
+
+    final COSDictionary aCIDSystemInfo = new COSDictionary ();
+    aCIDSystemInfo.setString (COSName.ORDERING, "Identity");
+    aCIDSystemInfo.setString (COSName.REGISTRY, "Adobe");
+    aCIDSystemInfo.setInt (COSName.SUPPLEMENT, 0);
+
+    final COSArray aW = new COSArray ();
+    aW.add (COSInteger.get (aFont.getFirstChar ()));
+    aW.add (((COSDictionary) aFont.getCOSObject ()).getItem (COSName.WIDTHS));
+
+    final COSDictionary aCIDFont = new COSDictionary ();
+    aCIDFont.setItem (COSName.TYPE, COSName.FONT);
+    aCIDFont.setName (COSName.BASE_FONT, aFont.getBaseFont ());
+    aCIDFont.setItem (COSName.SUBTYPE, COSName.CID_FONT_TYPE2);
+    aCIDFont.setItem (COSName.CID_TO_GID_MAP, COSName.IDENTITY);
+    aCIDFont.setInt (COSName.DW, 1000);
+    aCIDFont.setItem (COSName.CIDSYSTEMINFO, aCIDSystemInfo);
+    aCIDFont.setItem (COSName.FONT_DESC, ((PDFontDescriptorDictionary) aFont.getFontDescriptor ()).getCOSDictionary ());
+    aCIDFont.setItem (COSName.W, aW);
+
+    final String sCID = "/CIDInit /ProcSet findresource begin\n"
+                        + "12 dict begin\n"
+                        + "begincmap\n"
+                        + "/CIDSystemInfo\n"
+                        + "<< /Registry (Adobe)\n"
+                        + "/Ordering (UCS)\n"
+                        + "/Supplement 0\n"
+                        + ">> def\n"
+                        + "/CMapName /Adobe-Identity-UCS def\n"
+                        + "/CMapType 2 def\n"
+                        + "1 begincodespacerange\n"
+                        + "<0000> <FFFF>\n"
+                        + "endcodespacerange\n"
+                        + "endcmap\n"
+                        + "CMapName currentdict /CMap defineresource pop\n"
+                        + "end\n"
+                        + "end";
+    final byte [] aBytes = CharsetManager.getAsBytes (sCID, CCharset.CHARSET_ISO_8859_1_OBJ);
+    final COSStream aToUnicode = new COSStream (new RandomAccessBuffer ());
+    final OutputStream out = aToUnicode.createUnfilteredStream ();
+    out.write (aBytes);
+    out.close ();
+    if (false)
       aToUnicode.setFilters (COSName.FLATE_DECODE);
-      aFont.setToUnicode (aToUnicode);
-      final TTFSubFont t;
-    }
+
+    final COSArray aDescendant = new COSArray ();
+    aDescendant.add (aCIDFont);
+
+    final COSDictionary a0Font = new COSDictionary ();
+    a0Font.setItem (COSName.TYPE, COSName.FONT);
+    a0Font.setItem (COSName.SUBTYPE, COSName.TYPE0);
+    a0Font.setName (COSName.BASE_FONT, aFont.getBaseFont ());
+    a0Font.setItem (COSName.ENCODING, COSName.IDENTITY_H);
+    a0Font.setItem (COSName.DESCENDANT_FONTS, aDescendant);
+    a0Font.setItem (COSName.TO_UNICODE, aToUnicode);
+
     aDummy.close ();
 
-    final FontSpec r10 = new FontSpec (false ? PDFFont.REGULAR : new PDFFont (aFont), 10);
+    final FontSpec r10 = new FontSpec (new PDFFont (PDFontFactory.createFont (a0Font)), 10);
 
     final PLPageSet aPS1 = new PLPageSet (PDPage.PAGE_SIZE_A4).setMargin (30);
     final PLTable aTable = PLTable.createWithPercentage (50, 50);
