@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.state.ETriState;
@@ -50,6 +51,7 @@ import com.phloc.tinymce4.type.ETinyMCE4Resize;
 import com.phloc.tinymce4.type.ETinyMCE4Skin;
 import com.phloc.tinymce4.type.ETinyMCE4Theme;
 import com.phloc.tinymce4.type.TinyMCE4ExternalPlugin;
+import com.phloc.tinymce4.type.TinyMCE4ToolbarControlList;
 import com.phloc.webbasics.app.html.PerRequestJSIncludes;
 
 /**
@@ -81,6 +83,7 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   // Undo/Redo
 
   // User interface
+  public static final boolean DEFAULT_TOOLBAR_DISABLED = false;
   public static final boolean DEFAULT_STATUSBAR = true;
   public static final boolean DEFAULT_PREVIEW_STYLES = true;
 
@@ -145,7 +148,8 @@ public class HCTinyMCE4 implements IHCNodeBuilder
   // TODO custom_undo_redo_levels
 
   // User interface
-  // TODO toolbar
+  private TinyMCE4ToolbarControlList m_aToolbar;
+  private boolean m_bToolbarDisabled = DEFAULT_TOOLBAR_DISABLED;
   // TODO toolbar<N>
   // TODO menubar
   // TODO menu
@@ -848,6 +852,47 @@ public class HCTinyMCE4 implements IHCNodeBuilder
 
   // --- User interface ---
 
+  @Nullable
+  @ReturnsMutableObject (reason = "Design")
+  public TinyMCE4ToolbarControlList getToolbar ()
+  {
+    return m_aToolbar;
+  }
+
+  /**
+   * This controls what buttons you want show up in the toolbar.
+   *
+   * @param aToolbar
+   *        The toolbar to be set. May be <code>null</code>. If not
+   *        <code>null</code> a clone of the object is stored.
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 setToolbar (@Nullable final TinyMCE4ToolbarControlList aToolbar)
+  {
+    m_aToolbar = aToolbar == null ? null : aToolbar.getClone ();
+    return this;
+  }
+
+  public boolean isToolbarDisabled ()
+  {
+    return m_bToolbarDisabled;
+  }
+
+  /**
+   * Manually enable or disable the toolbar.
+   *
+   * @param bToolbarDisabled
+   *        <code>true</code> to disable it
+   * @return this
+   */
+  @Nonnull
+  public HCTinyMCE4 setToolbarDisabled (final boolean bToolbarDisabled)
+  {
+    m_bToolbarDisabled = bToolbarDisabled;
+    return this;
+  }
+
   public boolean isStatusbar ()
   {
     return m_eStatusbar.getAsBooleanValue (DEFAULT_STATUSBAR);
@@ -1142,6 +1187,11 @@ public class HCTinyMCE4 implements IHCNodeBuilder
     // Undo/Redo
 
     // User interface
+    if (m_bToolbarDisabled)
+      aOptions.add ("toolbar", JSExpr.FALSE);
+    else
+      if (m_aToolbar != null)
+        aOptions.add ("toolbar", m_aToolbar.getAsOptionString ());
     if (m_eStatusbar.isDefined ())
       aOptions.add ("statusbar", isStatusbar ());
     if (m_eResize != null)

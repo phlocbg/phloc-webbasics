@@ -20,15 +20,15 @@ package com.phloc.tinymce4.type;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.url.ISimpleURL;
 
 /**
  * This class represents a single TinyMCE4 external plugin
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -39,7 +39,7 @@ public class TinyMCE4ExternalPlugin
 
   /**
    * Constructor
-   * 
+   *
    * @param sPluginName
    *        Name of the plugin. May neither be <code>null</code> nor empty.
    * @param aPluginURL
@@ -47,10 +47,8 @@ public class TinyMCE4ExternalPlugin
    */
   public TinyMCE4ExternalPlugin (@Nonnull @Nonempty final String sPluginName, @Nonnull final ISimpleURL aPluginURL)
   {
-    if (StringHelper.hasNoText (sPluginName))
-      throw new IllegalArgumentException ("PluginName");
-    if (aPluginURL == null)
-      throw new NullPointerException ("pluginURL");
+    ValueEnforcer.notEmpty (sPluginName, "PluginName");
+    ValueEnforcer.notNull (aPluginURL, "PluginURL");
     m_sPluginName = sPluginName;
     m_aPluginURL = aPluginURL;
   }
@@ -89,7 +87,7 @@ public class TinyMCE4ExternalPlugin
   public String toString ()
   {
     return new ToStringGenerator (this).append ("pluginName", m_sPluginName)
-                                       .append ("pluginURL", m_aPluginURL)
-                                       .toString ();
+        .append ("pluginURL", m_aPluginURL)
+        .toString ();
   }
 }

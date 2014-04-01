@@ -17,6 +17,7 @@
  */
 package com.phloc.tinymce4.type;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.CheckForSigned;
@@ -36,11 +37,31 @@ public class TinyMCE4ToolbarControlList implements ICloneable <TinyMCE4ToolbarCo
 
   /**
    * Constructor
+   */
+  public TinyMCE4ToolbarControlList ()
+  {
+    m_aList = new ArrayList <ETinyMCE4ToolbarControl> ();
+  }
+
+  /**
+   * Constructor
    *
    * @param aList
    *        Separators are denoted by <code>null</code> elements.
    */
   public TinyMCE4ToolbarControlList (@Nonnull final ETinyMCE4ToolbarControl... aList)
+  {
+    ValueEnforcer.notNull (aList, "List");
+    m_aList = ContainerHelper.newList (aList);
+  }
+
+  /**
+   * Constructor
+   *
+   * @param aList
+   *        Separators are denoted by <code>null</code> elements.
+   */
+  public TinyMCE4ToolbarControlList (@Nonnull final List <ETinyMCE4ToolbarControl> aList)
   {
     ValueEnforcer.notNull (aList, "List");
     m_aList = ContainerHelper.newList (aList);
