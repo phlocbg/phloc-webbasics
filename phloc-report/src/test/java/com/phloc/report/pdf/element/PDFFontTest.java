@@ -18,18 +18,21 @@
 package com.phloc.report.pdf.element;
 
 import java.awt.Color;
-import java.io.BufferedReader;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.StringTokenizer;
+import java.util.TreeMap;
 
+import org.apache.fontbox.cmap.CMap;
+import org.apache.fontbox.cmap.CMapParser;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -47,19 +50,22 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDFontDescriptorDictionary;
 import org.apache.pdfbox.pdmodel.font.PDFontFactory;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
-import org.apache.pdfbox.util.ResourceLoader;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.util.ImageIOUtil;
+import org.apache.tools.ant.filters.StringInputStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.mock.DebugModeTestRule;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.report.pdf.PageLayoutPDF;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.FontSpec;
@@ -71,103 +77,12 @@ public class PDFFontTest
   @Rule
   public TestRule m_aRule = new DebugModeTestRule ();
 
-  private static final class E extends Encoding
+  public static final class E extends Encoding
   {
-    private static final Logger s_aLogger = LoggerFactory.getLogger (E.class);
-    private static final Map <String, String> NAME_TO_CHARACTER = new HashMap <String, String> ();
-    private static final Map <String, String> CHARACTER_TO_NAME = new HashMap <String, String> ();
-
-    private static void _loadGlyphList (final String location)
-    {
-      BufferedReader glyphStream = null;
-      try
-      {
-        final InputStream resource = ResourceLoader.loadResource (location);
-        if (resource == null)
-        {
-          throw new MissingResourceException ("Glyphlist not found: " + location, Encoding.class.getName (), location);
-        }
-        glyphStream = new BufferedReader (new InputStreamReader (resource));
-        String sLine = null;
-        while ((sLine = glyphStream.readLine ()) != null)
-        {
-          sLine = sLine.trim ();
-          // lines starting with # are comments which we can ignore.
-          if (!sLine.startsWith ("#"))
-          {
-            final int nSemicolonIndex = sLine.indexOf (';');
-            if (nSemicolonIndex >= 0)
-            {
-              String sUnicodeValue = null;
-              try
-              {
-                final String sCharacterName = sLine.substring (0, nSemicolonIndex);
-                sUnicodeValue = sLine.substring (nSemicolonIndex + 1);
-                final StringTokenizer tokenizer = new StringTokenizer (sUnicodeValue, " ", false);
-                final StringBuilder aValue = new StringBuilder ();
-                while (tokenizer.hasMoreTokens ())
-                {
-                  final int nCharacterCode = Integer.parseInt (tokenizer.nextToken (), 16);
-                  aValue.append ((char) nCharacterCode);
-                }
-                if (NAME_TO_CHARACTER.containsKey (sCharacterName))
-                {
-                  s_aLogger.warn ("duplicate value for characterName=" + sCharacterName + "," + aValue);
-                }
-                else
-                {
-                  NAME_TO_CHARACTER.put (sCharacterName, aValue.toString ());
-                }
-              }
-              catch (final NumberFormatException nfe)
-              {
-                s_aLogger.error ("Ealformed unicode value " + sUnicodeValue, nfe);
-              }
-            }
-          }
-        }
-      }
-      catch (final IOException io)
-      {
-        s_aLogger.error ("Error while reading the glyph list from '" + location + "'.", io);
-      }
-      finally
-      {
-        StreamUtils.close (glyphStream);
-      }
-    }
-
-    static
-    {
-      // Loads the official Adobe Glyph List
-      _loadGlyphList ("org/apache/pdfbox/resources/glyphlist.txt");
-      // Loads some additional glyph mappings
-      _loadGlyphList ("org/apache/pdfbox/resources/additional_glyphlist.txt");
-
-      // Load an external glyph list file that user can give as JVM property
-      final String location = System.getProperty ("glyphlist_ext");
-      if (location != null)
-      {
-        final File external = new File (location);
-        if (external.exists ())
-          _loadGlyphList (location);
-      }
-
-      NAME_TO_CHARACTER.put (NOTDEF, "");
-      NAME_TO_CHARACTER.put ("fi", "fi");
-      NAME_TO_CHARACTER.put ("fl", "fl");
-      NAME_TO_CHARACTER.put ("ffi", "ffi");
-      NAME_TO_CHARACTER.put ("ff", "ff");
-      NAME_TO_CHARACTER.put ("pi", "pi");
-
-      for (final Map.Entry <String, String> aEntry : NAME_TO_CHARACTER.entrySet ())
-        CHARACTER_TO_NAME.put (aEntry.getValue (), aEntry.getKey ());
-    }
-
     public E ()
     {
       // Map all single char entries
-      for (final Map.Entry <String, String> aEntry : CHARACTER_TO_NAME.entrySet ())
+      for (final Map.Entry <String, String> aEntry : getCharacterToNameMap ().entrySet ())
       {
         final String sChars = aEntry.getKey ();
         final String sName = aEntry.getValue ();
@@ -221,13 +136,13 @@ public class PDFFontTest
   @Test
   public void testEuroSign () throws Exception
   {
-    String s = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n"
-        + "™↓↑αΠΦ€";
+    String s = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n";
+    s = "ABC™↓↑αΠΦ€DEF";
 
     if (false)
       s = FakeWinAnsiHelper.convertJavaStringToWinAnsi2 (s);
 
-    Encoding aEncoding = WinAnsiEncoding.INSTANCE;
+    Encoding aEncoding = true ? new EncodingIdentityH () : WinAnsiEncoding.INSTANCE;
 
     if (false)
     {
@@ -248,43 +163,174 @@ public class PDFFontTest
 
     final COSDictionary aCIDSystemInfo = new COSDictionary ();
     aCIDSystemInfo.setString (COSName.REGISTRY, "Adobe");
-    aCIDSystemInfo.setString (COSName.ORDERING, true ? "UCS" : "Identity");
+    aCIDSystemInfo.setString (COSName.ORDERING, "Identity");
     aCIDSystemInfo.setInt (COSName.SUPPLEMENT, 0);
 
     final COSArray aW = new COSArray ();
-    aW.add (COSInteger.get (aFont.getFirstChar ()));
-    aW.add (((COSDictionary) aFont.getCOSObject ()).getItem (COSName.WIDTHS));
+    {
+      // Build condensed
+      final int nDefaultWidth = aFont.getDefaultWidth ();
+      final int nFirst = aFont.getFirstChar ();
+      final int nLast = aFont.getLastChar ();
+      final List <Integer> aWidths = aFont.getWidths ();
+      COSArray aNestedArray = null;
+      for (int ch = nFirst; ch <= nLast; ++ch)
+      {
+        final int nWidth = aWidths.get (ch - nFirst).intValue ();
+        if (nWidth != nDefaultWidth)
+        {
+          if (aNestedArray == null)
+          {
+            // Start index
+            aW.add (COSInteger.get (ch));
+            aNestedArray = new COSArray ();
+            aW.add (aNestedArray);
+          }
+
+          // Add to existing nested array
+          aNestedArray.add (COSInteger.get (nWidth));
+        }
+        else
+        {
+          // Start a new array on the next non-default width
+          aNestedArray = null;
+        }
+      }
+    }
 
     final COSDictionary aCIDFont = new COSDictionary ();
     aCIDFont.setItem (COSName.TYPE, COSName.FONT);
     aCIDFont.setName (COSName.BASE_FONT, aFont.getBaseFont ());
     aCIDFont.setItem (COSName.SUBTYPE, COSName.CID_FONT_TYPE2);
     aCIDFont.setItem (COSName.CID_TO_GID_MAP, COSName.IDENTITY);
-    aCIDFont.setInt (COSName.DW, 1000);
+    aCIDFont.setInt (COSName.DW, aFont.getDefaultWidth ());
     aCIDFont.setItem (COSName.CIDSYSTEMINFO, aCIDSystemInfo);
     aCIDFont.setItem (COSName.FONT_DESC, ((PDFontDescriptorDictionary) aFont.getFontDescriptor ()).getCOSDictionary ());
     aCIDFont.setItem (COSName.W, aW);
 
-    final String sCID = "/CIDInit /ProcSet findresource begin\n"
-        + "12 dict begin\n"
-        + "begincmap\n"
-        + "/CIDSystemInfo\n"
-        + "<< /Registry (Adobe)\n"
-        + "/Ordering (UCS)\n"
-        + "/Supplement 0\n"
-        + ">> def\n"
-        + "/CMapName /Adobe-Identity-UCS def\n"
-        + "/CMapType 2 def\n"
-        + "1 begincodespacerange\n"
-        + "<0000> <FFFF>\n"
-        + "endcodespacerange\n"
-        + "1 beginbfrange\n"
-        + "<0000> <FFFF> <0000>\n"
-        + "endbfrange\n"
-        + "endcmap\n"
-        + "CMapName currentdict /CMap defineresource pop\n"
-        + "end\n"
-        + "end";
+    String sCID = "/CIDInit /ProcSet findresource begin\n"
+                  + "12 dict begin\n"
+                  + "begincmap\n"
+                  + "/CIDSystemInfo\n"
+                  + "<< /Registry (Adobe)\n"
+                  + "/Ordering (UCS)\n"
+                  + "/Supplement 0\n"
+                  + ">> def\n"
+                  + "/CMapName /Adobe-Identity-UCS def\n"
+                  + "/CMapType 2 def\n";
+
+    final TreeMap <Integer, Integer> aG2CMap = new TreeMap <Integer, Integer> ();
+    {
+      final int [] aG2C = aFont.getUnicodeMap ().getGlyphIdToCharacterCode ();
+      int nGID = 0;
+      for (final int nCID : aG2C)
+      {
+        if (nCID != 0)
+          aG2CMap.put (Integer.valueOf (nGID), Integer.valueOf (nCID));
+        ++nGID;
+      }
+    }
+    final boolean bUseC2GMap = !aG2CMap.isEmpty ();
+    if (bUseC2GMap)
+    {
+      if (false)
+      {
+        final List <String> aRanges = new ArrayList <String> ();
+        int nLastStart = -1;
+        int nLastValue = -1;
+        for (final Integer aKey : aG2CMap.values ())
+        {
+          final int nKey = aKey.intValue ();
+          if (nLastStart == -1)
+          {
+            nLastStart = nKey;
+            nLastValue = nKey;
+          }
+          else
+            if (nKey == nLastValue + 1)
+            {
+              nLastValue = nKey;
+            }
+            else
+            {
+              final String sRange = "<" +
+                                    StringHelper.getHexStringLeadingZero (nLastStart, 4) +
+                                    "> <" +
+                                    StringHelper.getHexStringLeadingZero (nLastValue, 4) +
+                                    ">\n";
+              aRanges.add (sRange);
+              nLastStart = nKey;
+              nLastValue = nKey;
+            }
+        }
+
+        if (nLastStart > -1)
+        {
+          final String sRange = "<" +
+                                StringHelper.getHexStringLeadingZero (nLastStart, 4) +
+                                "> <" +
+                                StringHelper.getHexStringLeadingZero (nLastValue, 4) +
+                                ">\n";
+          aRanges.add (sRange);
+        }
+
+        sCID += aRanges.size () + " begincodespacerange\n";
+        for (final String sRange : aRanges)
+          sCID += sRange;
+        sCID += "endcodespacerange\n";
+      }
+      else
+      {
+        final int nFirstChar = Collections.min (aG2CMap.values ()).intValue ();
+        final int nLastChar = Collections.max (aG2CMap.values ()).intValue ();
+        sCID += "1 begincodespacerange\n" +
+                "<" +
+                StringHelper.getHexStringLeadingZero (nFirstChar, 4) +
+                "> <" +
+                StringHelper.getHexStringLeadingZero (nLastChar, 4) +
+                ">\n" +
+                "endcodespacerange\n";
+      }
+    }
+    else
+    {
+      // Identity mapping
+      sCID += "1 begincodespacerange\n" + "<0000> <FFFF>\n" + "endcodespacerange\n";
+    }
+
+    if (bUseC2GMap)
+    {
+      sCID += aG2CMap.size () + " beginbfchar\n";
+      for (final Map.Entry <Integer, Integer> aEntry : aG2CMap.entrySet ())
+      {
+        final int nGID = aEntry.getKey ().intValue ();
+        final int nCID = aEntry.getValue ().intValue ();
+        sCID += "<" +
+                StringHelper.getHexStringLeadingZero (nGID, 4) +
+                "> <" +
+                StringHelper.getHexStringLeadingZero (nCID, 4) +
+                ">\n";
+      }
+      sCID += "endbfchar\n";
+    }
+    else
+    {
+      // Identity mapping
+      sCID += "2 beginbfrange\n" + "<00> <FF> <00>\n" + "<0100> <FFFF> <0100>\n" + "endbfrange\n";
+    }
+
+    sCID += "endcmap\n" + "CMapName currentdict /CMap defineresource pop\n" + "end\n" + "end";
+
+    if (false)
+      sCID = StreamUtils.getAllBytesAsString (new ClassPathResource ("/org/apache/pdfbox/resources/cmap/Identity-H"),
+                                              CCharset.CHARSET_ISO_8859_1_OBJ);
+
+    if (false)
+    {
+      final CMap aMap = new CMapParser ().parse ("Inline", new StringInputStream (sCID));
+      System.out.println (aMap);
+    }
+
     final byte [] aBytes = CharsetManager.getAsBytes (sCID, CCharset.CHARSET_ISO_8859_1_OBJ);
     final COSStream aToUnicode = new COSStream (new RandomAccessBuffer ());
     final OutputStream out = aToUnicode.createUnfilteredStream ();
@@ -317,6 +363,30 @@ public class PDFFontTest
 
     final PageLayoutPDF aPageLayout = new PageLayoutPDF ().setDebug (true);
     aPageLayout.addPageSet (aPS1);
-    aPageLayout.renderTo (new FileOutputStream ("pdf/test-font.pdf"));
+
+    final File aFile = new File ("pdf/test-font.pdf");
+    aPageLayout.renderTo (new FileOutputStream (aFile));
+
+    // render the pages
+    final PDDocument x = PDDocument.load (aFile);
+    final int numPages = x.getNumberOfPages ();
+    final PDFRenderer renderer = new PDFRenderer (x);
+    int dpi;
+    try
+    {
+      dpi = Toolkit.getDefaultToolkit ().getScreenResolution ();
+    }
+    catch (final HeadlessException e)
+    {
+      dpi = 96;
+    }
+    for (int i = 0; i < numPages; i++)
+    {
+      final BufferedImage image = renderer.renderImageWithDPI (i, dpi, ImageType.RGB);
+      final String fileName = "pdf/image-" + (i + 1) + ".png";
+      ImageIOUtil.writeImage (image, fileName, dpi);
+    }
+    x.close ();
+    System.out.println ("Done");
   }
 }
