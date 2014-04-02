@@ -222,7 +222,7 @@ public class PDFFontTest
   public void testEuroSign () throws Exception
   {
     String s = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n"
-               + "™↓↑αΠΦ€";
+        + "™↓↑αΠΦ€";
 
     if (false)
       s = FakeWinAnsiHelper.convertJavaStringToWinAnsi2 (s);
@@ -247,8 +247,8 @@ public class PDFFontTest
     final PDTrueTypeFont aFont = PDTrueTypeFont.loadTTF (fontStream, aEncoding);
 
     final COSDictionary aCIDSystemInfo = new COSDictionary ();
-    aCIDSystemInfo.setString (COSName.ORDERING, "Identity");
     aCIDSystemInfo.setString (COSName.REGISTRY, "Adobe");
+    aCIDSystemInfo.setString (COSName.ORDERING, true ? "UCS" : "Identity");
     aCIDSystemInfo.setInt (COSName.SUPPLEMENT, 0);
 
     final COSArray aW = new COSArray ();
@@ -266,22 +266,25 @@ public class PDFFontTest
     aCIDFont.setItem (COSName.W, aW);
 
     final String sCID = "/CIDInit /ProcSet findresource begin\n"
-                        + "12 dict begin\n"
-                        + "begincmap\n"
-                        + "/CIDSystemInfo\n"
-                        + "<< /Registry (Adobe)\n"
-                        + "/Ordering (UCS)\n"
-                        + "/Supplement 0\n"
-                        + ">> def\n"
-                        + "/CMapName /Adobe-Identity-UCS def\n"
-                        + "/CMapType 2 def\n"
-                        + "1 begincodespacerange\n"
-                        + "<0000> <FFFF>\n"
-                        + "endcodespacerange\n"
-                        + "endcmap\n"
-                        + "CMapName currentdict /CMap defineresource pop\n"
-                        + "end\n"
-                        + "end";
+        + "12 dict begin\n"
+        + "begincmap\n"
+        + "/CIDSystemInfo\n"
+        + "<< /Registry (Adobe)\n"
+        + "/Ordering (UCS)\n"
+        + "/Supplement 0\n"
+        + ">> def\n"
+        + "/CMapName /Adobe-Identity-UCS def\n"
+        + "/CMapType 2 def\n"
+        + "1 begincodespacerange\n"
+        + "<0000> <FFFF>\n"
+        + "endcodespacerange\n"
+        + "1 beginbfrange\n"
+        + "<0000> <FFFF> <0000>\n"
+        + "endbfrange\n"
+        + "endcmap\n"
+        + "CMapName currentdict /CMap defineresource pop\n"
+        + "end\n"
+        + "end";
     final byte [] aBytes = CharsetManager.getAsBytes (sCID, CCharset.CHARSET_ISO_8859_1_OBJ);
     final COSStream aToUnicode = new COSStream (new RandomAccessBuffer ());
     final OutputStream out = aToUnicode.createUnfilteredStream ();
