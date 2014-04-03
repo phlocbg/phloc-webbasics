@@ -25,7 +25,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum ETinyMCE4JSPathProvider implements IJSPathProvider
 {
-  TINYMCE_4_0_20 ("tinymce-dev/tinymce.jquery.js", "tinymce-min/tinymce.min.js");
+  TINYMCE_4 ("tinymce-dev/tinymce.jquery.js", "tinymce-min/tinymce.min.js");
 
   private final String m_sRegularPath;
   private final String m_sMinPath;
