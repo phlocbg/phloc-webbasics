@@ -11,10 +11,26 @@ import com.phloc.commons.GlobalDebug;
 public final class PLDebug
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (PLDebug.class);
+  private static boolean s_bDebugText = GlobalDebug.isDebugMode ();
   private static boolean s_bDebugSplit = GlobalDebug.isDebugMode ();
 
   private PLDebug ()
   {}
+
+  public static boolean isDebugText ()
+  {
+    return s_bDebugText;
+  }
+
+  public static void setDebugText (final boolean bDebugText)
+  {
+    s_bDebugText = bDebugText;
+  }
+
+  public static void debugText (final String sMsg)
+  {
+    s_aLogger.info ("Text: " + sMsg);
+  }
 
   public static boolean isDebugSplit ()
   {

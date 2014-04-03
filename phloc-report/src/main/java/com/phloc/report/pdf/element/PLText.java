@@ -36,6 +36,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.report.pdf.PLDebug;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
@@ -79,6 +80,28 @@ public class PLText extends AbstractPLElement <PLText>
     m_aCharset = ValueEnforcer.notNull (aCharset, "Charset");
     m_aFont = ValueEnforcer.notNull (aFont, "Font");
     m_fLineHeight = m_aFont.getLineHeight ();
+
+    if (PLDebug.isDebugText ())
+    {
+      int nIndex = 0;
+      for (final char c : m_sText.toCharArray ())
+      {
+        if (c > 255)
+          PLDebug.debugText ("Character at index " +
+                             nIndex +
+                             " is Unicode (" +
+                             c +
+                             " == " +
+                             (int) c +
+                             " == 0x" +
+                             StringHelper.getHexStringLeadingZero (c, 4) +
+                             "; as part of '" +
+                             sText.substring (Math.max (nIndex - 5, 0), Math.min (nIndex + 5, sText.length ())) +
+                             "') and will most likely lead to display errors! String=" +
+                             sText);
+        ++nIndex;
+      }
+    }
   }
 
   @Nonnull
