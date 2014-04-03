@@ -20,15 +20,15 @@ package com.phloc.appbasics.object.client;
 import javax.annotation.Nullable;
 
 /**
- * Base interface for objects that have a client.
+ * Base interface for objects that have a client ID.
  * 
  * @author Philip Helger
  */
-public interface IHasClient extends IHasClientID
+public interface IHasClientID
 {
   /**
-   * @return The client or <code>null</code>.
+   * @return The client ID or <code>null</code>.
    */
   @Nullable
-  IClient getClient ();
+  String getClientID ();
 }

@@ -24,17 +24,11 @@ import javax.annotation.Nullable;
  * 
  * @author Philip Helger
  */
-public interface IHasAccountingArea
+public interface IHasAccountingArea extends IHasAccountingAreaID
 {
   /**
    * @return The accounting area or <code>null</code>.
    */
   @Nullable
   IAccountingArea getAccountingArea ();
-
-  /**
-   * @return The accounting area ID or <code>null</code>.
-   */
-  @Nullable
-  String getAccountingAreaID ();
 }

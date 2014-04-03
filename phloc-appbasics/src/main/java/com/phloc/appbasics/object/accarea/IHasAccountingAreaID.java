@@ -15,20 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.appbasics.object.client;
+package com.phloc.appbasics.object.accarea;
 
 import javax.annotation.Nullable;
 
 /**
- * Base interface for objects that have a client.
+ * Base interface for objects that have an accounting area ID.
  * 
  * @author Philip Helger
  */
-public interface IHasClient extends IHasClientID
+public interface IHasAccountingAreaID
 {
   /**
-   * @return The client or <code>null</code>.
+   * @return The accounting area ID or <code>null</code>.
    */
   @Nullable
-  IClient getClient ();
+  String getAccountingAreaID ();
 }
