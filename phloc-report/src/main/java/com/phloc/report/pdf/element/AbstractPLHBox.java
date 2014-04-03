@@ -173,13 +173,20 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   }
 
   @Nonnull
-  public IMPLTYPE addColumn (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final WidthSpec aWidth)
+  public Column addAndReturnColumn (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final WidthSpec aWidth)
   {
     checkNotPrepared ();
     final Column aItem = new Column (aElement, aWidth);
     m_aColumns.add (aItem);
     if (aWidth.isStar ())
       m_nStarWidthItems++;
+    return aItem;
+  }
+
+  @Nonnull
+  public IMPLTYPE addColumn (@Nonnull final AbstractPLElement <?> aElement, @Nonnull final WidthSpec aWidth)
+  {
+    addAndReturnColumn (aElement, aWidth);
     return thisAsT ();
   }
 

@@ -195,15 +195,49 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
    *
    * @param aElement
    *        The row to be added. May not be <code>null</code>.
+   * @return the created row
+   */
+  @Nonnull
+  public Row addAndReturnRow (@Nonnull final AbstractPLElement <?> aElement)
+  {
+    checkNotPrepared ();
+    final Row aItem = new Row (aElement);
+    m_aRows.add (aItem);
+    return aItem;
+  }
+
+  /**
+   * Add a row to this VBox.
+   *
+   * @param aElement
+   *        The row to be added. May not be <code>null</code>.
    * @return this
    */
   @Nonnull
   public IMPLTYPE addRow (@Nonnull final AbstractPLElement <?> aElement)
   {
+    addAndReturnRow (aElement);
+    return thisAsT ();
+  }
+
+  /**
+   * Add a row to this VBox.
+   *
+   * @param aElement
+   *        The row to be added. May not be <code>null</code>.
+   * @return the created row
+   */
+  @Nonnull
+  public Row addAndReturnRow (@Nonnegative final int nIndex, @Nonnull final AbstractPLElement <?> aElement)
+  {
+    ValueEnforcer.isGE0 (nIndex, "Index");
     checkNotPrepared ();
     final Row aItem = new Row (aElement);
-    m_aRows.add (aItem);
-    return thisAsT ();
+    if (nIndex >= m_aRows.size ())
+      m_aRows.add (aItem);
+    else
+      m_aRows.add (nIndex, aItem);
+    return aItem;
   }
 
   /**
@@ -216,13 +250,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   @Nonnull
   public IMPLTYPE addRow (@Nonnegative final int nIndex, @Nonnull final AbstractPLElement <?> aElement)
   {
-    ValueEnforcer.isGE0 (nIndex, "Index");
-    checkNotPrepared ();
-    final Row aItem = new Row (aElement);
-    if (nIndex >= m_aRows.size ())
-      m_aRows.add (aItem);
-    else
-      m_aRows.add (nIndex, aItem);
+    addAndReturnRow (nIndex, aElement);
     return thisAsT ();
   }
 
@@ -493,11 +521,11 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   public String toString ()
   {
     return ToStringGenerator.getDerived (super.toString ())
-                            .append ("rows", m_aRows)
-                            .append ("rowBorder", m_aRowBorder)
-                            .appendIfNotNull ("rowFillColor", m_aRowFillColor)
-                            .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
-                            .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
-                            .toString ();
+        .append ("rows", m_aRows)
+        .append ("rowBorder", m_aRowBorder)
+        .appendIfNotNull ("rowFillColor", m_aRowFillColor)
+        .appendIfNotNull ("preparedWidth", m_aPreparedWidth)
+        .appendIfNotNull ("preparedHeight", m_aPreparedHeight)
+        .toString ();
   }
 }

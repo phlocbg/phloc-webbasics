@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
@@ -157,8 +158,7 @@ public class PLTable extends AbstractPLVBox <PLTable> implements IPLSplittableEl
   @Nonnull
   public PLHBoxSplittable addTableRow (@Nonnull final Collection <? extends AbstractPLElement <?>> aElements)
   {
-    if (aElements == null)
-      throw new NullPointerException ("elements");
+    ValueEnforcer.notNull (aElements, "Elements");
     if (aElements.size () > m_aWidths.size ())
       throw new IllegalArgumentException ("More elements in row (" +
                                           aElements.size () +
