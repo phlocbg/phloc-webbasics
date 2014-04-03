@@ -29,7 +29,7 @@ import com.phloc.commons.version.Version;
 /**
  * Implement this SPI interface if your JAR file contains external third party
  * modules.
- * 
+ *
  * @author Philip Helger
  */
 @IsSPIImplementation
@@ -59,7 +59,7 @@ public final class ThirdPartyModuleProvider_phloc_web implements IThirdPartyModu
   public static final IThirdPartyModule JSCH = new ThirdPartyModule ("JSch",
                                                                      "JCraft Inc.",
                                                                      ELicense.BSD,
-                                                                     new Version (0, 1, 50),
+                                                                     new Version (0, 1, 51),
                                                                      "http://www.jcraft.com/jsch/",
                                                                      true);
 
