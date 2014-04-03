@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.report.pdf.element;
+package com.phloc.report.pdf.util;
 
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -53,7 +53,7 @@ public class FakeWinAnsiHelper
   // It has a lot in common with ISO-8859-1, but it defines some additional
   // characters such as
   // the Euro symbol.
-  private static final Map <Character, String> utf16ToWinAnsi;
+  private static final Map <Character, String> UTF16_TO_WINANSI;
   static
   {
     final Map <Character, String> aTempMap = new HashMap <Character, String> ();
@@ -64,13 +64,13 @@ public class FakeWinAnsiHelper
     // itself, meaning that Unicode and WinAnsii are the same in that range.
 
     // Unicode characters with exact WinAnsi equivalents
-    // OE
+    // OE - LATIN CAPITAL LIGATURE OE
     aTempMap.put (Character.valueOf ('\u0152'), new String (new byte [] { 0, (byte) 140 }, ISO_8859_1));
-    // oe
+    // oe - LATIN SMALL LIGATURE OE
     aTempMap.put (Character.valueOf ('\u0153'), new String (new byte [] { 0, (byte) 156 }, ISO_8859_1));
-    // S Acron
+    // S Acron - LATIN CAPITAL LETTER S WITH CARON
     aTempMap.put (Character.valueOf ('\u0160'), new String (new byte [] { 0, (byte) 138 }, ISO_8859_1));
-    // s acron
+    // s acron - LATIN SMALL LETTER S WITH CARON
     aTempMap.put (Character.valueOf ('\u0161'), new String (new byte [] { 0, (byte) 154 }, ISO_8859_1));
     // Y Diaeresis
     aTempMap.put (Character.valueOf ('\u0178'), new String (new byte [] { 0, (byte) 159 }, ISO_8859_1));
@@ -394,7 +394,7 @@ public class FakeWinAnsiHelper
     // Trademark symbol
     aTempMap.put (Character.valueOf ('\u2122'), new String (new byte [] { 0, (byte) 153 }, ISO_8859_1));
 
-    utf16ToWinAnsi = Collections.unmodifiableMap (aTempMap);
+    UTF16_TO_WINANSI = Collections.unmodifiableMap (aTempMap);
   }
 
   @Nullable
@@ -403,7 +403,7 @@ public class FakeWinAnsiHelper
     if (StringHelper.hasNoText (sIn))
       return sIn;
 
-    final StringBuilder aSB = new StringBuilder ();
+    final StringBuilder aSB = new StringBuilder (sIn.length ());
     for (final char c : sIn.toCharArray ())
     {
       if (c >= 0 && c <= 255)
@@ -412,13 +412,13 @@ public class FakeWinAnsiHelper
       }
       else
       {
-        String s = utf16ToWinAnsi.get (Character.valueOf (c));
+        String s = UTF16_TO_WINANSI.get (Character.valueOf (c));
 
         // "In WinAnsiEncoding, all unused codes greater than 40 map to the bullet character."
         // source: PDF spec, Annex D.3 PDFDocEncoding Character Set p. 656
         // footnote about WinAnsiEncoding.
         if (s == null)
-          s = utf16ToWinAnsi.get (UNICODE_BULLET);
+          s = UTF16_TO_WINANSI.get (UNICODE_BULLET);
 
         aSB.append (s);
       }

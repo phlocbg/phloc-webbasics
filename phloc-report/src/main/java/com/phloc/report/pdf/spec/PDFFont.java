@@ -29,7 +29,6 @@ import javax.annotation.concurrent.Immutable;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDFontDescriptor;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,16 +76,18 @@ public class PDFFont
   public PDFFont (@Nonnull final PDFont aFont)
   {
     m_aFont = ValueEnforcer.notNull (aFont, "Font");
-    PDFontDescriptor aFD = aFont.getFontDescriptor ();
-    if (aFD == null)
-    {
-      if (aFont instanceof PDType0Font)
-      {
-        final PDFont aDescendantFont = ((PDType0Font) aFont).getDescendantFont ();
-        if (aDescendantFont != null)
-          aFD = aDescendantFont.getFontDescriptor ();
-      }
-    }
+    final PDFontDescriptor aFD = aFont.getFontDescriptor ();
+    // 2.0.0 code. Does not work with 1.8.4
+    // if (aFD == null)
+    // {
+    // if (aFont instanceof PDType0Font)
+    // {
+    // final PDFont aDescendantFont = ((PDType0Font) aFont).getDescendantFont
+    // ();
+    // if (aDescendantFont != null)
+    // aFD = aDescendantFont.getFontDescriptor ();
+    // }
+    // }
     if (aFD == null)
       throw new IllegalArgumentException ("Failed to determined FontDescriptor from specified font " + aFont);
 
@@ -176,7 +177,7 @@ public class PDFFont
                                                 @Nonnull final Charset aCharset,
                                                 @Nonnegative final float fFontSize,
                                                 @Nonnegative final float fMaxWidth) throws IOException
-  {
+                                                {
     final List <TextAndWidthSpec> ret = new ArrayList <TextAndWidthSpec> ();
 
     // First split by the contained line breaks
@@ -262,7 +263,7 @@ public class PDFFont
     }
 
     return ret;
-  }
+                                                }
 
   @Override
   public boolean equals (final Object o)
