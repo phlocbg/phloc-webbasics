@@ -25,7 +25,7 @@ import com.phloc.commons.url.ISimpleURL;
 
 /**
  * Base interface for a single menu item referencing an arbitrary URL.
- * 
+ *
  * @author Philip Helger
  */
 public interface IMenuItemExternal extends IMenuItem
@@ -41,4 +41,30 @@ public interface IMenuItemExternal extends IMenuItem
    */
   @Nonnull
   ISimpleURL getURL ();
+
+  /**
+   * @return The (HTML) target of the link
+   */
+  @Nullable
+  String getTarget ();
+
+  /**
+   * Set the (HTML) target of the link.
+   *
+   * @param eTarget
+   *        The target window. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  MenuItemExternal setTarget (@Nullable EMenuItemExternalTarget eTarget);
+
+  /**
+   * Set the (HTML) target of the link.
+   *
+   * @param sTarget
+   *        The name of the target window. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  IMenuItemExternal setTarget (@Nullable String sTarget);
 }

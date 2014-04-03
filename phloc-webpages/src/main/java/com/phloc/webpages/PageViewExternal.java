@@ -19,6 +19,7 @@ package com.phloc.webpages;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
@@ -44,7 +45,7 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
 public class PageViewExternal extends AbstractWebPageExt
 {
   private final IReadableResource m_aRes;
-  private boolean m_bReadEveryTime = false;
+  private boolean m_bReadEveryTime = GlobalDebug.isDebugMode ();
   private final IMicroElement m_aDocElem;
 
   @Nonnull

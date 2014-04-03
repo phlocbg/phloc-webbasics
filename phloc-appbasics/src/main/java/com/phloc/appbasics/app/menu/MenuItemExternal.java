@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.name.IHasDisplayText;
@@ -31,7 +32,7 @@ import com.phloc.commons.url.ISimpleURL;
 
 /**
  * Default implementation of the {@link IMenuItemExternal} interface.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -39,18 +40,15 @@ public final class MenuItemExternal extends AbstractMenuObject <MenuItemExternal
 {
   private final ISimpleURL m_aURL;
   private final IHasDisplayText m_aDisplayText;
+  private String m_sTarget;
 
   public MenuItemExternal (@Nonnull @Nonempty final String sItemID,
                            @Nonnull final ISimpleURL aURL,
                            @Nonnull final IHasDisplayText aDisplayText)
   {
     super (sItemID);
-    if (aURL == null)
-      throw new NullPointerException ("URL");
-    if (aDisplayText == null)
-      throw new NullPointerException ("displayText");
-    m_aURL = aURL;
-    m_aDisplayText = aDisplayText;
+    m_aURL = ValueEnforcer.notNull (aURL, "URL");
+    m_aDisplayText = ValueEnforcer.notNull (aDisplayText, "DisplayText");
   }
 
   @Nonnull
@@ -63,6 +61,25 @@ public final class MenuItemExternal extends AbstractMenuObject <MenuItemExternal
   public String getDisplayText (@Nonnull final Locale aDisplayLocale)
   {
     return m_aDisplayText.getDisplayText (aDisplayLocale);
+  }
+
+  @Nullable
+  public String getTarget ()
+  {
+    return m_sTarget;
+  }
+
+  @Nonnull
+  public MenuItemExternal setTarget (@Nullable final EMenuItemExternalTarget eTarget)
+  {
+    return setTarget (eTarget == null ? null : eTarget.getName ());
+  }
+
+  @Nonnull
+  public MenuItemExternal setTarget (@Nullable final String sTarget)
+  {
+    m_sTarget = sTarget;
+    return this;
   }
 
   @Override
