@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -45,18 +46,30 @@ public class PageViewExternal extends AbstractWebPageExt
   private boolean m_bReadEveryTime = GlobalDebug.isDebugMode ();
   private final IMicroNode m_aContent;
 
+  /**
+   * This callback is called after the HTML content was successfully read
+   * 
+   * @param aCont
+   *        The micro container containing all HTML elements contained in the
+   *        resource specified in the constructor. Never <code>null</code>.
+   */
+  @OverrideOnDemand
+  protected void afterPageRead (@Nonnull final IMicroContainer aCont)
+  {}
+
   @Nonnull
-  private static IMicroNode _readPage (@Nonnull final IReadableResource aResource)
+  private IMicroNode _readPage (@Nonnull final IReadableResource aResource)
   {
     // Read content once
     final String sContent = StreamUtils.getAllBytesAsString (aResource, CCharset.CHARSET_UTF_8_OBJ);
     if (sContent == null)
-      throw new IllegalStateException ("Failed to read " + aResource.toString ());
+      throw new IllegalStateException ("Failed to read resource " + aResource.toString ());
 
     // Parse content
     final IMicroContainer ret = XHTMLParser.unescapeXHTML (WebHTMLCreator.getHTMLVersion (), sContent);
     if (ret == null)
-      throw new IllegalStateException ("Failed to parse code for page " + aResource.toString ());
+      throw new IllegalStateException ("Failed to parse HTML code of resource " + aResource.toString ());
+    afterPageRead (ret);
     return ret;
   }
 
