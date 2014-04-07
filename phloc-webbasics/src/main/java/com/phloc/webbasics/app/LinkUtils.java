@@ -260,8 +260,8 @@ public final class LinkUtils
   /**
    * Get a link to the specified menu item.
    *
-   * @param aMenuItem
-   *        The menu item to link to. May not be <code>null</code>.
+   * @param aMenuObject
+   *        The menu object to link to. May not be <code>null</code>.
    * @return Never <code>null</code>.
    */
   @Nonnull
