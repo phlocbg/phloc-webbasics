@@ -30,14 +30,14 @@ import com.phloc.scopes.domain.IRequestScope;
 
 public interface IRequestManager
 {
-  /** The name of the parameter selecting the current menu item */
+  /** The default name of the parameter selecting the current menu item */
   String DEFAULT_REQUEST_PARAMETER_MENUITEM = "menuitem";
 
   /** The name of the parameter selecting the current menu item */
   @Deprecated
   String REQUEST_PARAMETER_MENUITEM = DEFAULT_REQUEST_PARAMETER_MENUITEM;
 
-  /** The name of the parameter selecting the current display locale */
+  /** The default name of the parameter selecting the current display locale */
   String DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
 
   /** The name of the parameter selecting the current display locale */
@@ -113,4 +113,12 @@ public interface IRequestManager
    */
   @Nonnull
   Locale getRequestDisplayCountry ();
+
+  /**
+   * @return The language name from the current request display locale. Never
+   *         <code>null</code>.
+   * @see #getRequestDisplayLocale()
+   */
+  @Nonnull
+  String getRequestDisplayLanguage ();
 }

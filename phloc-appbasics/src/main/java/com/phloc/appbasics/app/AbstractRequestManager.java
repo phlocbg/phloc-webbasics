@@ -184,9 +184,10 @@ public abstract class AbstractRequestManager implements IRequestManager
     }
 
     // Nothing specified - use application default locale
-    final Locale aDefaultLocale = getLocaleManager ().getDefaultLocale ();
+    final ILocaleManager aLocaleManager = getLocaleManager ();
+    final Locale aDefaultLocale = aLocaleManager.getDefaultLocale ();
     if (aDefaultLocale == null)
-      throw new IllegalStateException ("No application default locale is specified!");
+      throw new IllegalStateException ("No default locale is specified in " + aLocaleManager);
     return aDefaultLocale;
   }
 
@@ -194,5 +195,11 @@ public abstract class AbstractRequestManager implements IRequestManager
   public Locale getRequestDisplayCountry ()
   {
     return CountryCache.getCountry (getRequestDisplayLocale ());
+  }
+
+  @Nonnull
+  public String getRequestDisplayLanguage ()
+  {
+    return getRequestDisplayLocale ().getLanguage ();
   }
 }

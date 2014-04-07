@@ -177,4 +177,10 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
   {
     return m_aRM.getRequestDisplayCountry ();
   }
+
+  @Nonnull
+  public String getRequestDisplayLanguage ()
+  {
+    return m_aRM.getRequestDisplayLanguage ();
+  }
 }
