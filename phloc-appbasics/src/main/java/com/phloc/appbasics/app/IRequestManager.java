@@ -46,15 +46,15 @@ public interface IRequestManager
 
   @Nonnull
   @Nonempty
-  String getRequestParamMenuItem ();
+  String getRequestParamNameMenuItem ();
 
-  void setRequestParamMenuItem (@Nonnull @Nonempty String sRequestParamMenuItem);
+  void setRequestParamNameMenuItem (@Nonnull @Nonempty String sRequestParamMenuItem);
 
   @Nonnull
   @Nonempty
-  String getRequestParamDisplayLocale ();
+  String getRequestParamNameLocale ();
 
-  void setRequestParamDisplayLocale (@Nonnull @Nonempty String sRequestParamDisplayLocale);
+  void setRequestParamNameLocale (@Nonnull @Nonempty String sRequestParamDisplayLocale);
 
   /**
    * To be called upon the beginning of each request. Checks for the content of

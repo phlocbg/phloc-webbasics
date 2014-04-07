@@ -25,14 +25,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.StreamUtils;
-import com.phloc.commons.microdom.IMicroDocument;
-import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.IMicroContainer;
 import com.phloc.commons.microdom.IMicroNode;
-import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.commons.xml.serialize.SAXReaderSettings;
-import com.phloc.html.entities.HTMLEntityResolver;
 import com.phloc.html.hc.impl.HCDOMWrapper;
+import com.phloc.html.parser.XHTMLParser;
 import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
@@ -44,29 +41,23 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  */
 public class PageViewExternal extends AbstractWebPageExt
 {
-  private final IReadableResource m_aRes;
+  private final IReadableResource m_aResource;
   private boolean m_bReadEveryTime = GlobalDebug.isDebugMode ();
-  private final IMicroElement m_aDocElem;
+  private final IMicroNode m_aContent;
 
   @Nonnull
-  private static IMicroElement _readPage (@Nonnull final IReadableResource aResource)
+  private static IMicroNode _readPage (@Nonnull final IReadableResource aResource)
   {
     // Read content once
     final String sContent = StreamUtils.getAllBytesAsString (aResource, CCharset.CHARSET_UTF_8_OBJ);
     if (sContent == null)
       throw new IllegalStateException ("Failed to read " + aResource.toString ());
 
-    // Parse content once
-    final String sParsable = "<x xmlns='" +
-                             WebHTMLCreator.getHTMLVersion ().getNamespaceURI () +
-                             "'>" +
-                             sContent +
-                             "</x>";
-    final IMicroDocument aDoc = MicroReader.readMicroXML (sParsable,
-                                                          new SAXReaderSettings ().setEntityResolver (HTMLEntityResolver.getInstance ()));
-    if (aDoc == null || aDoc.getDocumentElement () == null)
+    // Parse content
+    final IMicroContainer ret = XHTMLParser.unescapeXHTML (WebHTMLCreator.getHTMLVersion (), sContent);
+    if (ret == null)
       throw new IllegalStateException ("Failed to parse code for page " + aResource.toString ());
-    return aDoc.getDocumentElement ();
+    return ret;
   }
 
   public PageViewExternal (@Nonnull @Nonempty final String sID,
@@ -74,10 +65,10 @@ public class PageViewExternal extends AbstractWebPageExt
                            @Nonnull final IReadableResource aResource)
   {
     super (sID, sName);
-    m_aRes = ValueEnforcer.notNull (aResource, "Resource");
+    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
 
     // Read once anyway to check if the resource is readable
-    m_aDocElem = _readPage (aResource);
+    m_aContent = _readPage (aResource);
   }
 
   public PageViewExternal (@Nonnull @Nonempty final String sID,
@@ -85,16 +76,16 @@ public class PageViewExternal extends AbstractWebPageExt
                            @Nonnull final IReadableResource aResource)
   {
     super (sID, aName);
-    m_aRes = ValueEnforcer.notNull (aResource, "Resource");
+    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
 
     // Read once anyway to check if the resource is readable
-    m_aDocElem = _readPage (aResource);
+    m_aContent = _readPage (aResource);
   }
 
   @Nonnull
   public IReadableResource getResource ()
   {
-    return m_aRes;
+    return m_aResource;
   }
 
   public boolean isReadEveryTime ()
@@ -112,10 +103,7 @@ public class PageViewExternal extends AbstractWebPageExt
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IMicroElement aElement = m_bReadEveryTime ? _readPage (m_aRes) : m_aDocElem;
-
-    if (aElement.hasChildren ())
-      for (final IMicroNode aChild : aElement.getChildren ())
-        aWPEC.getNodeList ().addChild (new HCDOMWrapper (aChild));
+    final IMicroNode aElement = m_bReadEveryTime ? _readPage (m_aResource) : m_aContent;
+    aWPEC.getNodeList ().addChild (new HCDOMWrapper (aElement));
   }
 }

@@ -30,7 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
-import com.phloc.appbasics.app.IRequestManager;
+import com.phloc.appbasics.app.menu.IMenuItemExternal;
+import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.regex.RegExHelper;
@@ -45,7 +47,7 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * Misc utilities to create link URLs.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -62,7 +64,7 @@ public final class LinkUtils
   /**
    * The default path to the stream servlet. If this is different in you
    * application you may not use the methods that refer to this path!
-   * 
+   *
    * @deprecated Use {@link #getStreamServletPath()} instead
    */
   @Deprecated
@@ -148,7 +150,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   * 
+   *
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -171,7 +173,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   * 
+   *
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -187,7 +189,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the relative context path in case the passed
    * href has no protocol yet.
-   * 
+   *
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @param aParams
@@ -205,7 +207,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   * 
+   *
    * @param sHRef
    *        The href to be extended. May not be <code>null</code>.
    * @return Either the original href if already absolute or
@@ -225,7 +227,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   * 
+   *
    * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
@@ -241,7 +243,7 @@ public final class LinkUtils
   /**
    * Prefix the passed href with the absolute server + context path in case the
    * passed href has no protocol yet.
-   * 
+   *
    * @param sHRef
    *        The href to be extended.
    * @return Either the original href if already absolute or
@@ -257,7 +259,25 @@ public final class LinkUtils
 
   /**
    * Get a link to the specified menu item.
-   * 
+   *
+   * @param aMenuItem
+   *        The menu item to link to. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public static SimpleURL getLinkToMenuItem (@Nonnull final IMenuObject aMenuObject)
+  {
+    ValueEnforcer.notNull (aMenuObject, "MenuObject");
+
+    if (aMenuObject instanceof IMenuItemExternal)
+      return new SimpleURL (((IMenuItemExternal) aMenuObject).getURL ());
+
+    return getLinkToMenuItem (aMenuObject.getID ());
+  }
+
+  /**
+   * Get a link to the specified menu item.
+   *
    * @param sMenuItemID
    *        The ID of the menu item to link to. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -265,10 +285,9 @@ public final class LinkUtils
   @Nonnull
   public static SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
   {
-    if (sMenuItemID == null)
-      throw new NullPointerException ("menu item id");
-
-    return new SimpleURL ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, sMenuItemID);
+    ValueEnforcer.notNull (sMenuItemID, "MenuItemID");
+    final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
+    return new SimpleURL ().add (aARM.getRequestParamNameMenuItem (), sMenuItemID);
   }
 
   /**
@@ -294,7 +313,7 @@ public final class LinkUtils
 
   /**
    * Get the URL to the current page with the provided set of parameter.
-   * 
+   *
    * @param aParams
    *        The optional request parameters to be used. May be <code>null</code>
    *        or empty.
@@ -320,9 +339,8 @@ public final class LinkUtils
   public static SMap getDefaultParams ()
   {
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
-    return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, aARM.getRequestMenuItemID ())
-                      .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE,
-                            aARM.getRequestDisplayLocale ().toString ());
+    return new SMap ().add (aARM.getRequestParamNameMenuItem (), aARM.getRequestMenuItemID ())
+                      .add (aARM.getRequestParamNameLocale (), aARM.getRequestDisplayLocale ().toString ());
   }
 
   /**
@@ -334,15 +352,16 @@ public final class LinkUtils
   @ReturnsMutableCopy
   public static SMap getDefaultParams (@Nonnull final LayoutExecutionContext aLEC)
   {
-    return new SMap ().add (IRequestManager.REQUEST_PARAMETER_MENUITEM, aLEC.getSelectedMenuItemID ())
-                      .add (IRequestManager.REQUEST_PARAMETER_DISPLAY_LOCALE, aLEC.getDisplayLocale ().toString ());
+    final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
+    return new SMap ().add (aARM.getRequestParamNameMenuItem (), aLEC.getSelectedMenuItemID ())
+                      .add (aARM.getRequestParamNameLocale (), aLEC.getDisplayLocale ().toString ());
   }
 
   /**
    * Get the default URL to stream the passed URL. It is assumed that the
    * servlet is located under the path "/stream". Because of the logic of the
    * stream servlet, no parameter are assumed.
-   * 
+   *
    * @param sURL
    *        The URL to be streamed. If it does not start with a slash ("/") one
    *        is prepended automatically. If the URL already has a protocol, it is

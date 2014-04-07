@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.appbasics.app.menu.IMenuTree;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.locale.LocaleCache;
@@ -46,33 +47,33 @@ import com.phloc.scopes.mgr.ScopeManager;
 public abstract class AbstractRequestManager implements IRequestManager
 {
   private String m_sRequestParamMenuItem = DEFAULT_REQUEST_PARAMETER_MENUITEM;
-  private String m_sRequestParamDisplayLocale = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
+  private String m_sRequestParamNameLocale = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
 
   public AbstractRequestManager ()
   {}
 
   @Nonnull
   @Nonempty
-  public final String getRequestParamMenuItem ()
+  public final String getRequestParamNameMenuItem ()
   {
     return m_sRequestParamMenuItem;
   }
 
-  public final void setRequestParamMenuItem (@Nonnull @Nonempty final String sRequestParamMenuItem)
+  public final void setRequestParamNameMenuItem (@Nonnull @Nonempty final String sRequestParamNameMenuItem)
   {
-    m_sRequestParamMenuItem = ValueEnforcer.notEmpty (sRequestParamMenuItem, "RequestParamMenuItem");
+    m_sRequestParamMenuItem = ValueEnforcer.notEmpty (sRequestParamNameMenuItem, "RequestParamNameMenuItem");
   }
 
   @Nonnull
   @Nonempty
-  public final String getRequestParamDisplayLocale ()
+  public final String getRequestParamNameLocale ()
   {
-    return m_sRequestParamDisplayLocale;
+    return m_sRequestParamNameLocale;
   }
 
-  public final void setRequestParamDisplayLocale (@Nonnull @Nonempty final String sRequestParamDisplayLocale)
+  public final void setRequestParamNameLocale (@Nonnull @Nonempty final String sRequestParamNameLocale)
   {
-    m_sRequestParamDisplayLocale = ValueEnforcer.notEmpty (sRequestParamDisplayLocale, "RequestParamDisplayLocale");
+    m_sRequestParamNameLocale = ValueEnforcer.notEmpty (sRequestParamNameLocale, "RequestParamNameLocale");
   }
 
   @Nonnull
@@ -102,7 +103,7 @@ public abstract class AbstractRequestManager implements IRequestManager
     }
 
     // determine locale from request and store in session
-    final String sDisplayLocale = aRequestScope.getAttributeAsString (m_sRequestParamDisplayLocale);
+    final String sDisplayLocale = aRequestScope.getAttributeAsString (m_sRequestParamNameLocale);
     if (sDisplayLocale != null)
     {
       final Locale aDisplayLocale = LocaleCache.getLocale (sDisplayLocale);
@@ -145,12 +146,13 @@ public abstract class AbstractRequestManager implements IRequestManager
       return aSelectedMenuItem;
 
     // Use default menu item
-    final IMenuItemPage aDefaultMenuItem = getMenuTree ().getDefaultMenuItem ();
+    final IMenuTree aMenuTree = getMenuTree ();
+    final IMenuItemPage aDefaultMenuItem = aMenuTree.getDefaultMenuItem ();
     if (aDefaultMenuItem != null && aDefaultMenuItem.matchesDisplayFilter ())
       return aDefaultMenuItem;
 
     // Last fallback: use the first menu item
-    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = getMenuTree ().getRootItem ();
+    final DefaultTreeItemWithID <String, IMenuObject> aRootItem = aMenuTree.getRootItem ();
     if (aRootItem != null && aRootItem.hasChildren ())
       for (final DefaultTreeItemWithID <String, IMenuObject> aItem : aRootItem.getChildren ())
         if (aItem.getData () instanceof IMenuItemPage)

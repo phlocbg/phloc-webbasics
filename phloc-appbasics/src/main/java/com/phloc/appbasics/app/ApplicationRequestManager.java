@@ -120,26 +120,26 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
 
   @Nonnull
   @Nonempty
-  public final String getRequestParamMenuItem ()
+  public final String getRequestParamNameMenuItem ()
   {
-    return m_aRM.getRequestMenuItemID ();
+    return m_aRM.getRequestParamNameMenuItem ();
   }
 
-  public final void setRequestParamMenuItem (@Nonnull @Nonempty final String sRequestParamMenuItem)
+  public final void setRequestParamNameMenuItem (@Nonnull @Nonempty final String sRequestParamNameMenuItem)
   {
-    m_aRM.setRequestParamMenuItem (sRequestParamMenuItem);
+    m_aRM.setRequestParamNameMenuItem (sRequestParamNameMenuItem);
   }
 
   @Nonnull
   @Nonempty
-  public final String getRequestParamDisplayLocale ()
+  public final String getRequestParamNameLocale ()
   {
-    return m_aRM.getRequestParamDisplayLocale ();
+    return m_aRM.getRequestParamNameLocale ();
   }
 
-  public final void setRequestParamDisplayLocale (@Nonnull @Nonempty final String sRequestParamDisplayLocale)
+  public final void setRequestParamNameLocale (@Nonnull @Nonempty final String sRequestParamNameLocale)
   {
-    m_aRM.setRequestParamDisplayLocale (sRequestParamDisplayLocale);
+    m_aRM.setRequestParamNameLocale (sRequestParamNameLocale);
   }
 
   @Nullable

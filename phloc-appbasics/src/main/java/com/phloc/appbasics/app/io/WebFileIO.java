@@ -34,6 +34,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.file.FileOperationManager;
@@ -43,7 +44,7 @@ import com.phloc.commons.state.ISuccessIndicator;
 
 /**
  * Abstract for accessing files inside the web application.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -64,7 +65,7 @@ public final class WebFileIO
 
   /**
    * Set the global file operation manager to be used.
-   * 
+   *
    * @param aFileOpMgr
    *        The file operation manager. May not be <code>null</code>.
    */
@@ -105,10 +106,8 @@ public final class WebFileIO
                                 @Nonnull final File aServletContextPath,
                                 final boolean bCheckFileAccess)
   {
-    if (aDataPath == null)
-      throw new NullPointerException ("dataPath");
-    if (aServletContextPath == null)
-      throw new NullPointerException ("servletContextPath");
+    ValueEnforcer.notNull (aDataPath, "DataPath");
+    ValueEnforcer.notNull (aServletContextPath, "ServletContextPath");
 
     s_aRWLock.writeLock ().lock ();
     try
@@ -124,7 +123,7 @@ public final class WebFileIO
       s_aLogger.info ("Using '" + aServletContextPath + "' as the servlet context path");
       // Don't check access rights again, if it equals the data path
       s_aServletContextPath = new PathRelativeFileIO (aServletContextPath, bCheckFileAccess &&
-                                                                           !aServletContextPath.equals (aDataPath));
+                                                      !aServletContextPath.equals (aDataPath));
     }
     finally
     {
@@ -244,7 +243,7 @@ public final class WebFileIO
 
   /**
    * Get a {@link File} relative to the base path.
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @return The "absolute" {@link File} and never <code>null</code>.
@@ -260,7 +259,7 @@ public final class WebFileIO
 
   /**
    * Check if a file relative to the base path exists
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @return <code>true</code> if the {@link File} is a file and exists,
@@ -276,7 +275,7 @@ public final class WebFileIO
 
   /**
    * Check if a directory relative to the base path exists
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @return <code>true</code> if the {@link File} is a directory and exists,
@@ -292,7 +291,7 @@ public final class WebFileIO
 
   /**
    * Get the file system resource relative to the base path
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @return The "absolute" {@link FileSystemResource} and never
@@ -309,7 +308,7 @@ public final class WebFileIO
 
   /**
    * Get the {@link InputStream} relative to the base path
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @return <code>null</code> if the path does not exist
@@ -325,7 +324,7 @@ public final class WebFileIO
 
   /**
    * Get the {@link Reader} relative to the base path
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @param aCharset
@@ -343,7 +342,7 @@ public final class WebFileIO
 
   /**
    * Get the {@link OutputStream} relative to the base path
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @param eAppend
@@ -359,7 +358,7 @@ public final class WebFileIO
 
   /**
    * Get the {@link Writer} relative to the base path
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @param aCharset
@@ -379,7 +378,7 @@ public final class WebFileIO
 
   /**
    * Create the appropriate directory if it is not existing
-   * 
+   *
    * @param sRelativePath
    *        the relative path
    * @param bRecursive
@@ -395,7 +394,7 @@ public final class WebFileIO
 
   /**
    * Get the relative file name for the passed absolute file.
-   * 
+   *
    * @param aAbsoluteFile
    *        The non-<code>null</code> absolute file to make relative.
    * @return <code>null</code> if the passed file is not a child of the data
