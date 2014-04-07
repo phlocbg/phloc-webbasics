@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuObject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
@@ -39,13 +40,40 @@ import com.phloc.scopes.mgr.ScopeManager;
  * <li>Menu item to show</li>
  * <li>Display locale</li>
  * </ul>
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractRequestManager implements IRequestManager
 {
+  private String m_sRequestParamMenuItem = DEFAULT_REQUEST_PARAMETER_MENUITEM;
+  private String m_sRequestParamDisplayLocale = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
+
   public AbstractRequestManager ()
   {}
+
+  @Nonnull
+  @Nonempty
+  public final String getRequestParamMenuItem ()
+  {
+    return m_sRequestParamMenuItem;
+  }
+
+  public final void setRequestParamMenuItem (@Nonnull @Nonempty final String sRequestParamMenuItem)
+  {
+    m_sRequestParamMenuItem = ValueEnforcer.notEmpty (sRequestParamMenuItem, "RequestParamMenuItem");
+  }
+
+  @Nonnull
+  @Nonempty
+  public final String getRequestParamDisplayLocale ()
+  {
+    return m_sRequestParamDisplayLocale;
+  }
+
+  public final void setRequestParamDisplayLocale (@Nonnull @Nonempty final String sRequestParamDisplayLocale)
+  {
+    m_sRequestParamDisplayLocale = ValueEnforcer.notEmpty (sRequestParamDisplayLocale, "RequestParamDisplayLocale");
+  }
 
   @Nonnull
   protected abstract ILocaleManager getLocaleManager ();
@@ -61,7 +89,7 @@ public abstract class AbstractRequestManager implements IRequestManager
   public void onRequestBegin (@Nonnull final IRequestScope aRequestScope)
   {
     // determine page from request and store in request
-    final String sMenuItemID = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_MENUITEM);
+    final String sMenuItemID = aRequestScope.getAttributeAsString (m_sRequestParamMenuItem);
     if (sMenuItemID != null)
     {
       // Validate the menu item ID and check the display filter!
@@ -74,7 +102,7 @@ public abstract class AbstractRequestManager implements IRequestManager
     }
 
     // determine locale from request and store in session
-    final String sDisplayLocale = aRequestScope.getAttributeAsString (REQUEST_PARAMETER_DISPLAY_LOCALE);
+    final String sDisplayLocale = aRequestScope.getAttributeAsString (m_sRequestParamDisplayLocale);
     if (sDisplayLocale != null)
     {
       final Locale aDisplayLocale = LocaleCache.getLocale (sDisplayLocale);

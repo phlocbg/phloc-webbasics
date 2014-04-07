@@ -18,9 +18,13 @@
 package com.phloc.appbasics.app;
 
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.menu.ApplicationMenuTree;
 import com.phloc.appbasics.app.menu.GlobalMenuTree;
@@ -38,7 +42,7 @@ import com.phloc.scopes.singleton.GlobalSingleton;
  * <li>Menu item to show</li>
  * <li>Display locale</li>
  * </ul>
- * 
+ *
  * @author Philip Helger
  */
 @SuppressWarnings ("deprecation")
@@ -46,6 +50,10 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
 {
   private static final class RequestManagerImpl extends AbstractRequestManager
   {
+    private static final Logger s_aLogger = LoggerFactory.getLogger (RequestManagerImpl.class);
+    private static final AtomicBoolean s_bIssuedWarningMenu = new AtomicBoolean (false);
+    private static final AtomicBoolean s_bIssuedWarningLocale = new AtomicBoolean (false);
+
     @Override
     @Nonnull
     public IMenuTree getMenuTree ()
@@ -55,6 +63,8 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
       if (!ret.getRootItem ().hasChildren ())
       {
         ret = GlobalMenuTree.getTree ();
+        if (s_bIssuedWarningMenu.compareAndSet (false, true))
+          s_aLogger.warn ("Please use the ApplicationMenuTree and not the GlobalMenuTree!");
       }
       return ret;
     }
@@ -66,7 +76,11 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
       ILocaleManager ret = ApplicationLocaleManager.getInstance ();
       // XXX hack alert :(
       if (!ret.hasLocales ())
+      {
         ret = GlobalLocaleManager.getInstance ();
+        if (s_bIssuedWarningLocale.compareAndSet (false, true))
+          s_aLogger.warn ("Please use the ApplicationLocaleManager and not the GlobalLocaleManager!");
+      }
       return ret;
     }
 
@@ -102,6 +116,30 @@ public final class ApplicationRequestManager extends GlobalSingleton implements 
   public void onRequestBegin (@Nonnull final IRequestScope aRequestScope)
   {
     m_aRM.onRequestBegin (aRequestScope);
+  }
+
+  @Nonnull
+  @Nonempty
+  public final String getRequestParamMenuItem ()
+  {
+    return m_aRM.getRequestMenuItemID ();
+  }
+
+  public final void setRequestParamMenuItem (@Nonnull @Nonempty final String sRequestParamMenuItem)
+  {
+    m_aRM.setRequestParamMenuItem (sRequestParamMenuItem);
+  }
+
+  @Nonnull
+  @Nonempty
+  public final String getRequestParamDisplayLocale ()
+  {
+    return m_aRM.getRequestParamDisplayLocale ();
+  }
+
+  public final void setRequestParamDisplayLocale (@Nonnull @Nonempty final String sRequestParamDisplayLocale)
+  {
+    m_aRM.setRequestParamDisplayLocale (sRequestParamDisplayLocale);
   }
 
   @Nullable

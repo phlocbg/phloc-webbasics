@@ -25,14 +25,36 @@ import javax.annotation.Nullable;
 import com.phloc.appbasics.app.menu.IMenuItem;
 import com.phloc.appbasics.app.menu.IMenuItemPage;
 import com.phloc.appbasics.app.menu.IMenuTree;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.scopes.domain.IRequestScope;
 
 public interface IRequestManager
 {
   /** The name of the parameter selecting the current menu item */
-  String REQUEST_PARAMETER_MENUITEM = "menuitem";
+  String DEFAULT_REQUEST_PARAMETER_MENUITEM = "menuitem";
+
+  /** The name of the parameter selecting the current menu item */
+  @Deprecated
+  String REQUEST_PARAMETER_MENUITEM = DEFAULT_REQUEST_PARAMETER_MENUITEM;
+
   /** The name of the parameter selecting the current display locale */
-  String REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
+  String DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE = "locale";
+
+  /** The name of the parameter selecting the current display locale */
+  @Deprecated
+  String REQUEST_PARAMETER_DISPLAY_LOCALE = DEFAULT_REQUEST_PARAMETER_DISPLAY_LOCALE;
+
+  @Nonnull
+  @Nonempty
+  String getRequestParamMenuItem ();
+
+  void setRequestParamMenuItem (@Nonnull @Nonempty String sRequestParamMenuItem);
+
+  @Nonnull
+  @Nonempty
+  String getRequestParamDisplayLocale ();
+
+  void setRequestParamDisplayLocale (@Nonnull @Nonempty String sRequestParamDisplayLocale);
 
   /**
    * To be called upon the beginning of each request. Checks for the content of
@@ -40,7 +62,7 @@ public interface IRequestManager
    * selected menu item. Checks for the content of the request parameter
    * {@value #REQUEST_PARAMETER_DISPLAY_LOCALE} to determine any changes in the
    * display locale.
-   * 
+   *
    * @param aRequestScope
    *        The request scope that just begun
    */
@@ -62,7 +84,7 @@ public interface IRequestManager
   /**
    * Resolve the request parameter for the menu item to an {@link IMenuItem}
    * object. If no parameter is present, return the default menu item.
-   * 
+   *
    * @return The resolved menu item object from the request parameter. Never
    *         <code>null</code>.
    */
@@ -79,7 +101,7 @@ public interface IRequestManager
   /**
    * Get the locale to be used for this request. If no parameter is present, the
    * one from the session is used.
-   * 
+   *
    * @return The locale to be used for the current request.
    */
   @Nonnull
