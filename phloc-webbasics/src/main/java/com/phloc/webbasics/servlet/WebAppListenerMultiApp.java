@@ -104,6 +104,9 @@ public abstract class WebAppListenerMultiApp extends WebAppListenerWithStatistic
       {
         final IApplicationInitializer aInitializer = aEntry.getValue ();
 
+        // Set per-application settings
+        aInitializer.initApplicationSettings ();
+
         // Register application locales
         aInitializer.initLocales (ApplicationLocaleManager.getInstance ());
 

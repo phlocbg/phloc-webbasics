@@ -28,14 +28,20 @@ import com.phloc.webbasics.app.layout.ILayoutManager;
 /**
  * Base interface for an application-specific initializer. The methods are
  * called in the correct order they are required for dependencies.
- * 
+ *
  * @author Philip Helger
  */
 public interface IApplicationInitializer
 {
   /**
+   * Init all application specific settings. This method is called before all
+   * named methods afterwards.
+   */
+  void initApplicationSettings ();
+
+  /**
    * Init all application locales
-   * 
+   *
    * @param aLocaleMgr
    *        Locale manager to use
    */
@@ -43,7 +49,7 @@ public interface IApplicationInitializer
 
   /**
    * Register all layout handler
-   * 
+   *
    * @param aLayoutMgr
    *        The layout manager to use
    */
@@ -51,7 +57,7 @@ public interface IApplicationInitializer
 
   /**
    * Create all menu items
-   * 
+   *
    * @param aMenuTree
    *        The menu tree to init
    */
@@ -59,7 +65,7 @@ public interface IApplicationInitializer
 
   /**
    * Register all ajax functions
-   * 
+   *
    * @param aAjaxInvoker
    *        The ajax invoker to use
    */
@@ -67,14 +73,15 @@ public interface IApplicationInitializer
 
   /**
    * Register all actions
-   * 
+   *
    * @param aActionInvoker
    *        The action invoker to use
    */
   void initActions (@Nonnull IActionInvoker aActionInvoker);
 
   /**
-   * Init all things for which no special method is present
+   * Init all things for which no special method is present after the predefined
+   * methods.
    */
   void initRest ();
 }

@@ -46,9 +46,7 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
  * 
  * @author Philip Helger
  */
-public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecutor implements
-                                                                                   IHasID <String>,
-                                                                                   IHasDisplayText
+public abstract class AbstractNewsfeedActionExecutor extends AbstractActionExecutor implements IHasID <String>, IHasDisplayText
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractNewsfeedActionExecutor.class);
   private static final IStatisticsHandlerKeyedCounter s_aStatsHdlExecute = StatisticsManager.getKeyedCounterHandler (AbstractNewsfeedActionExecutor.class.getName () +

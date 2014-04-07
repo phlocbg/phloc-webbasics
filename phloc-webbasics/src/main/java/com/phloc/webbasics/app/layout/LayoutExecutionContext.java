@@ -376,9 +376,9 @@ public class LayoutExecutionContext
   public String toString ()
   {
     return new ToStringGenerator (this).append ("requestURL", RequestHelper.getURI (m_aRequestScope.getRequest ()))
-        .append ("displayLocale", m_aDisplayLocale)
-        .append ("selectedMenuItemID", m_sSelectedMenuItemID)
-        .append ("customAttrs", m_aCustomAttrs)
-        .toString ();
+                                       .append ("displayLocale", m_aDisplayLocale)
+                                       .append ("selectedMenuItemID", m_sSelectedMenuItemID)
+                                       .append ("customAttrs", m_aCustomAttrs)
+                                       .toString ();
   }
 }

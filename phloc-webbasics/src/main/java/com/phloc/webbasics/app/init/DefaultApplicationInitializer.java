@@ -28,11 +28,14 @@ import com.phloc.webbasics.app.layout.ILayoutManager;
 /**
  * Default implementation class of {@link IApplicationInitializer} doing
  * nothing. Use this as the base class for your implementation.
- * 
+ *
  * @author Philip Helger
  */
 public class DefaultApplicationInitializer implements IApplicationInitializer
 {
+  public void initApplicationSettings ()
+  {}
+
   public void initLocales (@Nonnull final ILocaleManager aLocaleMgr)
   {}
 
