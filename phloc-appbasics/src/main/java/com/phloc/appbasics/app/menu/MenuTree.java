@@ -27,8 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -43,7 +45,7 @@ import com.phloc.commons.url.ISimpleURL;
 
 /**
  * Represents a single menu tree
- * 
+ *
  * @author Philip Helger
  */
 public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject> implements IMenuTree
@@ -84,8 +86,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   @Nonnull
   public IMenuSeparator createSeparator (@Nonnull final IMenuItem aParent)
   {
-    if (aParent == null)
-      throw new NullPointerException ("parent");
+    ValueEnforcer.notNull (aParent, "Parent");
 
     return createSeparator (aParent.getID ());
   }
@@ -99,8 +100,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   @Nonnull
   public IMenuItemPage createRootItem (@Nonnull final IPage aPage)
   {
-    if (aPage == null)
-      throw new NullPointerException ("page");
+    ValueEnforcer.notNull (aPage, "Page");
 
     return createRootItem (aPage.getID (), aPage);
   }
@@ -119,8 +119,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final String sParentID, @Nonnull final IPage aPage)
   {
-    if (aPage == null)
-      throw new NullPointerException ("page");
+    ValueEnforcer.notNull (aPage, "Page");
 
     return createItem (sParentID, aPage.getID (), aPage);
   }
@@ -148,8 +147,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
                                        @Nonnull final ISimpleURL aURL,
                                        @Nonnull final IHasDisplayText aName)
   {
-    if (aParent == null)
-      throw new NullPointerException ("parent");
+    ValueEnforcer.notNull (aParent, "Parent");
 
     return createItem (aParent.getID (), sItemID, aURL, aName);
   }
@@ -173,12 +171,14 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
 
   public void setDefaultMenuItemIDs (@Nullable final String... aDefaultMenuItemIDs)
   {
-    m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
+    m_aDefaultMenuItemIDs = ArrayHelper.isEmpty (aDefaultMenuItemIDs) ? null
+                                                                     : ContainerHelper.newList (aDefaultMenuItemIDs);
   }
 
   public void setDefaultMenuItemIDs (@Nullable final List <String> aDefaultMenuItemIDs)
   {
-    m_aDefaultMenuItemIDs = aDefaultMenuItemIDs == null ? null : ContainerHelper.newList (aDefaultMenuItemIDs);
+    m_aDefaultMenuItemIDs = ContainerHelper.isEmpty (aDefaultMenuItemIDs) ? null
+                                                                         : ContainerHelper.newList (aDefaultMenuItemIDs);
   }
 
   @Nullable
@@ -246,8 +246,8 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
 
   public void iterateAllMenuObjects (@Nonnull final INonThrowingRunnableWithParameter <IMenuObject> aCallback)
   {
-    if (aCallback == null)
-      throw new NullPointerException ("Callback");
+    ValueEnforcer.notNull (aCallback, "Callback");
+
     TreeWalker.walkTree (this, new DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>> ()
     {
       @Override
@@ -261,8 +261,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   @Nullable
   public IMenuItemPage replaceMenuItem (@Nonnull final IPage aNewPage)
   {
-    if (aNewPage == null)
-      throw new NullPointerException ("newPage");
+    ValueEnforcer.notNull (aNewPage, "NewPage");
 
     final String sID = aNewPage.getID ();
     final DefaultTreeItemWithID <String, IMenuObject> aItem = getItemWithID (sID);
