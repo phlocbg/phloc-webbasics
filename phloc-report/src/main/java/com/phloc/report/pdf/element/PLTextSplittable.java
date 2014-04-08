@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.report.pdf.PLDebug;
+import com.phloc.report.pdf.spec.EVertAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.TextAndWidthSpec;
 
@@ -98,6 +99,11 @@ public class PLTextSplittable extends PLText implements IPLSplittableElement
     final PLElementWithSize aText1 = getCopy (fElementWidth, aLines.subList (0, nLines), false);
     // Second element may need additional splitting
     final PLElementWithSize aText2 = getCopy (fElementWidth, aLines.subList (nLines, aLines.size ()), true);
+
+    // Important: vertical alignment is in case of splitting always "TOP"
+    ((PLText) aText1.getElement ()).setVertAlign (EVertAlignment.TOP);
+    ((PLText) aText2.getElement ()).setVertAlign (EVertAlignment.TOP);
+
     return new PLSplitResult (aText1, aText2);
   }
 }
