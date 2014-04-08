@@ -41,6 +41,7 @@ import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.EHorzAlignment;
+import com.phloc.report.pdf.spec.EVertAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.TextAndWidthSpec;
@@ -50,9 +51,10 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  *
  * @author Philip Helger
  */
-public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizontalAlignment <PLText>
+public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizontalAlignment <PLText>, IPLHasVerticalAlignment <PLText>
 {
   public static final EHorzAlignment DEFAULT_HORZ_ALIGNMENT = EHorzAlignment.DEFAULT;
+  public static final EVertAlignment DEFAULT_VERT_ALIGNMENT = EVertAlignment.DEFAULT;
   public static final boolean DEFAULT_TOP_DOWN = true;
   public static final int DEFAULT_MAX_ROWS = CGlobal.ILLEGAL_UINT;
 
@@ -61,6 +63,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
   private final FontSpec m_aFont;
   private final float m_fLineHeight;
   private EHorzAlignment m_eHorzAlign = DEFAULT_HORZ_ALIGNMENT;
+  private EVertAlignment m_eVertAlign = DEFAULT_VERT_ALIGNMENT;
   private boolean m_bTopDown = DEFAULT_TOP_DOWN;
   private int m_nMaxRows = DEFAULT_MAX_ROWS;
 
@@ -128,6 +131,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
   {
     super.setBasicDataFrom (aSource);
     setHorzAlign (aSource.m_eHorzAlign);
+    setVertAlign (aSource.m_eVertAlign);
     setTopDown (aSource.m_bTopDown);
     setMaxRows (m_nMaxRows);
     return this;
@@ -143,6 +147,19 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
   public PLText setHorzAlign (@Nonnull final EHorzAlignment eHorzAlign)
   {
     m_eHorzAlign = ValueEnforcer.notNull (eHorzAlign, "HorzAlign");
+    return this;
+  }
+
+  @Nonnull
+  public EVertAlignment getVertAlign ()
+  {
+    return m_eVertAlign;
+  }
+
+  @Nonnull
+  public PLText setVertAlign (@Nonnull final EVertAlignment eVertAlign)
+  {
+    m_eVertAlign = ValueEnforcer.notNull (eVertAlign, "VertAlign");
     return this;
   }
 
@@ -285,9 +302,9 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
     // Set font if changed
     aContentStream.setFont (m_aFont);
 
-    final float fLeft = getPadding ().getLeft ();
-    final float fUsableWidth = aCtx.getWidth () - getPadding ().getXSum ();
-    final float fTop = getPadding ().getTop ();
+    final float fLeft = getPaddingLeft ();
+    final float fUsableWidth = aCtx.getWidth () - getPaddingXSum ();
+    final float fTop = getPaddingTop ();
     int nIndex = 0;
     final int nMax = m_aPreparedLines.size ();
     for (final TextAndWidthSpec aTW : m_aPreparedLines)
@@ -392,6 +409,7 @@ public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizont
                             .append ("font", m_aFont)
                             .append ("lineHeight", m_fLineHeight)
                             .append ("horzAlign", m_eHorzAlign)
+                            .append ("vertAlign", m_eVertAlign)
                             .append ("topDown", m_bTopDown)
                             .toString ();
   }

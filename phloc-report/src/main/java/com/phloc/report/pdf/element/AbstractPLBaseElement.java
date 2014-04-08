@@ -226,6 +226,54 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   }
 
   /**
+   * @return The current left margin.
+   */
+  public final float getMarginLeft ()
+  {
+    return m_aMargin.getLeft ();
+  }
+
+  /**
+   * @return The current top margin.
+   */
+  public final float getMarginTop ()
+  {
+    return m_aMargin.getTop ();
+  }
+
+  /**
+   * @return The current right margin.
+   */
+  public final float getMarginRight ()
+  {
+    return m_aMargin.getRight ();
+  }
+
+  /**
+   * @return The current bottom margin.
+   */
+  public final float getMarginBottom ()
+  {
+    return m_aMargin.getBottom ();
+  }
+
+  /**
+   * @return The sum of left and right margin.
+   */
+  public final float getMarginXSum ()
+  {
+    return m_aMargin.getXSum ();
+  }
+
+  /**
+   * @return The sum of top and bottom margin.
+   */
+  public final float getMarginYSum ()
+  {
+    return m_aMargin.getYSum ();
+  }
+
+  /**
    * Set all padding values (left, top, right, bottom) to the same value. This
    * method may not be called after an element got prepared!
    *
@@ -358,6 +406,54 @@ public abstract class AbstractPLBaseElement <IMPLTYPE extends AbstractPLBaseElem
   public final PaddingSpec getPadding ()
   {
     return m_aPadding;
+  }
+
+  /**
+   * @return The current left padding.
+   */
+  public final float getPaddingLeft ()
+  {
+    return m_aPadding.getLeft ();
+  }
+
+  /**
+   * @return The current top padding.
+   */
+  public final float getPaddingTop ()
+  {
+    return m_aPadding.getTop ();
+  }
+
+  /**
+   * @return The current right padding.
+   */
+  public final float getPaddingRight ()
+  {
+    return m_aPadding.getRight ();
+  }
+
+  /**
+   * @return The current bottom padding.
+   */
+  public final float getPaddingBottom ()
+  {
+    return m_aPadding.getBottom ();
+  }
+
+  /**
+   * @return The sum of left and right padding.
+   */
+  public final float getPaddingXSum ()
+  {
+    return m_aPadding.getXSum ();
+  }
+
+  /**
+   * @return The sum of top and bottom padding.
+   */
+  public final float getPaddingYSum ()
+  {
+    return m_aPadding.getYSum ();
   }
 
   public float getMarginPlusPaddingLeft ()

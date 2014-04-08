@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 
@@ -34,6 +35,7 @@ import com.phloc.report.pdf.render.PageSetupContext;
 import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.EHorzAlignment;
+import com.phloc.report.pdf.spec.EVertAlignment;
 import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
@@ -41,13 +43,17 @@ import com.phloc.report.pdf.spec.SizeSpec;
  *
  * @author Philip Helger
  */
-public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizontalAlignment <PLImage>
+public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizontalAlignment <PLImage>, IPLHasVerticalAlignment <PLImage>
 {
+  public static final EHorzAlignment DEFAULT_HORZ_ALIGNMENT = EHorzAlignment.DEFAULT;
+  public static final EVertAlignment DEFAULT_VERT_ALIGNMENT = EVertAlignment.DEFAULT;
+
   private final BufferedImage m_aImage;
   private final IInputStreamProvider m_aIIS;
   private final float m_fWidth;
   private final float m_fHeight;
-  private EHorzAlignment m_eHorzAlign = EHorzAlignment.DEFAULT;
+  private EHorzAlignment m_eHorzAlign = DEFAULT_HORZ_ALIGNMENT;
+  private EVertAlignment m_eVertAlign = DEFAULT_VERT_ALIGNMENT;
 
   // Status var
   private PDJpeg m_aJpeg;
@@ -106,6 +112,16 @@ public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizo
   }
 
   @Nonnull
+  @OverridingMethodsMustInvokeSuper
+  public PLImage setBasicDataFrom (@Nonnull final PLImage aSource)
+  {
+    super.setBasicDataFrom (aSource);
+    setHorzAlign (aSource.m_eHorzAlign);
+    setVertAlign (aSource.m_eVertAlign);
+    return this;
+  }
+
+  @Nonnull
   public EHorzAlignment getHorzAlign ()
   {
     return m_eHorzAlign;
@@ -115,6 +131,19 @@ public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizo
   public PLImage setHorzAlign (@Nonnull final EHorzAlignment eHorzAlign)
   {
     m_eHorzAlign = ValueEnforcer.notNull (eHorzAlign, "HorzAlign");
+    return this;
+  }
+
+  @Nonnull
+  public EVertAlignment getVertAlign ()
+  {
+    return m_eVertAlign;
+  }
+
+  @Nonnull
+  public PLImage setVertAlign (@Nonnull final EVertAlignment eVertAlign)
+  {
+    m_eVertAlign = ValueEnforcer.notNull (eVertAlign, "VertAlign");
     return this;
   }
 
@@ -153,8 +182,8 @@ public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizo
   {
     final PDPageContentStreamWithCache aContentStream = aCtx.getContentStream ();
 
-    final float fLeft = getPadding ().getLeft ();
-    final float fUsableWidth = aCtx.getWidth () - getPadding ().getXSum ();
+    final float fLeft = getPaddingLeft ();
+    final float fUsableWidth = aCtx.getWidth () - getPaddingXSum ();
     float fIndentX;
     switch (m_eHorzAlign)
     {
@@ -172,7 +201,7 @@ public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizo
     }
 
     aContentStream.drawXObject (m_aJpeg, aCtx.getStartLeft () + fIndentX, aCtx.getStartTop () -
-                                                                          getPadding ().getTop () -
+                                                                          getPaddingTop () -
                                                                           m_fHeight, m_fWidth, m_fHeight);
   }
 
@@ -183,6 +212,8 @@ public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizo
                             .append ("image", m_aImage)
                             .append ("width", m_fWidth)
                             .append ("height", m_fHeight)
+                            .append ("horzAlign", m_eHorzAlign)
+                            .append ("vertAlign", m_eVertAlign)
                             .toString ();
   }
 }

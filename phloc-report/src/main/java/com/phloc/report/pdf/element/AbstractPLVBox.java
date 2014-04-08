@@ -470,19 +470,19 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {
     final PDPageContentStreamWithCache aContentStream = aCtx.getContentStream ();
-    final float fCurX = aCtx.getStartLeft () + getPadding ().getLeft ();
-    float fCurY = aCtx.getStartTop () - getPadding ().getTop ();
+    final float fCurX = aCtx.getStartLeft () + getPaddingLeft ();
+    float fCurY = aCtx.getStartTop () - getPaddingTop ();
     int nIndex = 0;
     for (final Row aRow : m_aRows)
     {
       final AbstractPLElement <?> aElement = aRow.getElement ();
       final float fItemWidth = m_aPreparedWidth[nIndex];
-      final float fItemWidthWithPadding = fItemWidth + aElement.getPadding ().getXSum ();
+      final float fItemWidthWithPadding = fItemWidth + aElement.getPaddingXSum ();
       final float fItemHeight = m_aPreparedHeight[nIndex];
-      final float fItemHeightWithPadding = fItemHeight + aElement.getPadding ().getYSum ();
+      final float fItemHeightWithPadding = fItemHeight + aElement.getPaddingYSum ();
       final RenderingContext aItemCtx = new RenderingContext (aCtx,
-                                                              fCurX + aElement.getMargin ().getLeft (),
-                                                              fCurY - aElement.getMargin ().getTop (),
+                                                              fCurX + aElement.getMarginLeft (),
+                                                              fCurY - aElement.getMarginTop (),
                                                               fItemWidthWithPadding,
                                                               fItemHeightWithPadding);
 
@@ -491,8 +491,8 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
         // Disregard the padding of this VBox!!!
         final float fLeft = fCurX;
         final float fTop = fCurY;
-        final float fWidth = aCtx.getWidth () - getPadding ().getXSum ();
-        final float fHeight = fItemHeightWithPadding + aElement.getMargin ().getYSum ();
+        final float fWidth = aCtx.getWidth () - getPaddingXSum ();
+        final float fHeight = fItemHeightWithPadding + aElement.getMarginYSum ();
 
         // Fill before border
         if (m_aRowFillColor != null)
@@ -512,7 +512,7 @@ public abstract class AbstractPLVBox <IMPLTYPE extends AbstractPLVBox <IMPLTYPE>
       aElement.perform (aItemCtx);
 
       // Update Y-pos
-      fCurY -= fItemHeightWithPadding + aElement.getMargin ().getYSum ();
+      fCurY -= fItemHeightWithPadding + aElement.getMarginYSum ();
       ++nIndex;
     }
   }

@@ -42,6 +42,7 @@ import com.phloc.report.pdf.render.PreparationContext;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
+import com.phloc.report.pdf.spec.EVertAlignment;
 import com.phloc.report.pdf.spec.SizeSpec;
 import com.phloc.report.pdf.spec.WidthSpec;
 
@@ -413,6 +414,34 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
       ++nIndex;
     }
 
+    // Apply vertical alignment
+    nIndex = 0;
+    for (final Column aColumn : m_aColumns)
+    {
+      final AbstractPLElement <?> aElement = aColumn.getElement ();
+      if (aElement instanceof IPLHasVerticalAlignment <?>)
+      {
+        final EVertAlignment eVertAlignment = ((IPLHasVerticalAlignment <?>) aElement).getVertAlign ();
+        float fPaddingTop;
+        switch (eVertAlignment)
+        {
+          case TOP:
+            fPaddingTop = 0;
+            break;
+          case MIDDLE:
+            fPaddingTop = (fUsedHeight - m_aPreparedHeight[nIndex]) / 2;
+            break;
+          case BOTTOM:
+            fPaddingTop = fUsedHeight - m_aPreparedHeight[nIndex];
+            break;
+          default:
+            throw new IllegalStateException ("Unsupported vertical alignment: " + eVertAlignment);
+        }
+        aElement.setPaddingTop (aElement.getPaddingTop () + fPaddingTop);
+      }
+      ++nIndex;
+    }
+
     // Small consistency check (with rounding included)
     if (GlobalDebug.isDebugMode ())
     {
@@ -437,19 +466,19 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   protected void onPerform (@Nonnull final RenderingContext aCtx) throws IOException
   {
     final PDPageContentStreamWithCache aContentStream = aCtx.getContentStream ();
-    float fCurX = aCtx.getStartLeft () + getPadding ().getLeft ();
-    final float fCurY = aCtx.getStartTop () - getPadding ().getTop ();
+    float fCurX = aCtx.getStartLeft () + getPaddingLeft ();
+    final float fCurY = aCtx.getStartTop () - getPaddingTop ();
     int nIndex = 0;
     for (final Column aColumn : m_aColumns)
     {
       final AbstractPLElement <?> aElement = aColumn.getElement ();
       final float fItemWidth = m_aPreparedWidth[nIndex];
-      final float fItemWidthWithPadding = fItemWidth + aElement.getPadding ().getXSum ();
+      final float fItemWidthWithPadding = fItemWidth + aElement.getPaddingXSum ();
       final float fItemHeight = m_aPreparedHeight[nIndex];
-      final float fItemHeightWithPadding = fItemHeight + aElement.getPadding ().getYSum ();
+      final float fItemHeightWithPadding = fItemHeight + aElement.getPaddingYSum ();
       final RenderingContext aItemCtx = new RenderingContext (aCtx,
-                                                              fCurX + aElement.getMargin ().getLeft (),
-                                                              fCurY - aElement.getMargin ().getTop (),
+                                                              fCurX + aElement.getMarginLeft (),
+                                                              fCurY - aElement.getMarginTop (),
                                                               fItemWidthWithPadding,
                                                               fItemHeightWithPadding);
 
@@ -458,8 +487,8 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
         // Disregard the padding of this HBox!!!
         final float fLeft = fCurX;
         final float fTop = fCurY;
-        final float fWidth = fItemWidthWithPadding + aElement.getMargin ().getXSum ();
-        final float fHeight = aCtx.getHeight () - getPadding ().getYSum ();
+        final float fWidth = fItemWidthWithPadding + aElement.getMarginXSum ();
+        final float fHeight = aCtx.getHeight () - getPaddingYSum ();
 
         // Fill before border
         if (m_aColumnFillColor != null)
@@ -479,7 +508,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
       aElement.perform (aItemCtx);
 
       // Update X-pos
-      fCurX += fItemWidthWithPadding + aElement.getMargin ().getXSum ();
+      fCurX += fItemWidthWithPadding + aElement.getMarginXSum ();
       ++nIndex;
     }
   }

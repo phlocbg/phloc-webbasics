@@ -171,8 +171,8 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
       final PDPageContentStreamWithCache aContentStream = aCtx.getContentStream ();
       final float fLeft = aCtx.getStartLeft ();
       final float fTop = aCtx.getStartTop ();
-      final float fWidth = m_aPreparedSize.getWidth () + getPadding ().getXSum ();
-      final float fHeight = m_aPreparedSize.getHeight () + getPadding ().getYSum ();
+      final float fWidth = m_aPreparedSize.getWidth () + getPaddingXSum ();
+      final float fHeight = m_aPreparedSize.getHeight () + getPaddingYSum ();
 
       // Fill before border
       if (getFillColor () != null)
