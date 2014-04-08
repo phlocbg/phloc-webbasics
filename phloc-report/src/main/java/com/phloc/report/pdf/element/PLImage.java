@@ -41,7 +41,7 @@ import com.phloc.report.pdf.spec.SizeSpec;
  *
  * @author Philip Helger
  */
-public class PLImage extends AbstractPLElement <PLImage>
+public class PLImage extends AbstractPLElement <PLImage> implements IPLHasHorizontalAlignment <PLImage>
 {
   private final BufferedImage m_aImage;
   private final IInputStreamProvider m_aIIS;
@@ -114,9 +114,7 @@ public class PLImage extends AbstractPLElement <PLImage>
   @Nonnull
   public PLImage setHorzAlign (@Nonnull final EHorzAlignment eHorzAlign)
   {
-    if (eHorzAlign == null)
-      throw new NullPointerException ("horzAlign");
-    m_eHorzAlign = eHorzAlign;
+    m_eHorzAlign = ValueEnforcer.notNull (eHorzAlign, "HorzAlign");
     return this;
   }
 

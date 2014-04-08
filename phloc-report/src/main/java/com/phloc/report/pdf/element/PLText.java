@@ -50,7 +50,7 @@ import com.phloc.report.pdf.spec.TextAndWidthSpec;
  *
  * @author Philip Helger
  */
-public class PLText extends AbstractPLElement <PLText>
+public class PLText extends AbstractPLElement <PLText> implements IPLHasHorizontalAlignment <PLText>
 {
   public static final EHorzAlignment DEFAULT_HORZ_ALIGNMENT = EHorzAlignment.DEFAULT;
   public static final boolean DEFAULT_TOP_DOWN = true;
@@ -133,29 +133,16 @@ public class PLText extends AbstractPLElement <PLText>
     return this;
   }
 
-  /**
-   * @return The horizontal alignment of the text. By default it is
-   *         {@link #DEFAULT_HORZ_ALIGNMENT}. Never <code>null</code>.
-   */
   @Nonnull
   public EHorzAlignment getHorzAlign ()
   {
     return m_eHorzAlign;
   }
 
-  /**
-   * Set the horizontal alignment of the text.
-   *
-   * @param eHorzAlign
-   *        The new horizontal alignment. May not be <code>null</code>.
-   * @return this
-   */
   @Nonnull
   public PLText setHorzAlign (@Nonnull final EHorzAlignment eHorzAlign)
   {
-    if (eHorzAlign == null)
-      throw new NullPointerException ("horzAlign");
-    m_eHorzAlign = eHorzAlign;
+    m_eHorzAlign = ValueEnforcer.notNull (eHorzAlign, "HorzAlign");
     return this;
   }
 
