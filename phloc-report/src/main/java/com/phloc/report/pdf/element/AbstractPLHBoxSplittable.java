@@ -83,7 +83,9 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
       if (PLDebug.isDebugSplit ())
         PLDebug.debugSplit ("No need to split " +
                             CGStringHelper.getClassLocalName (this) +
-                            " because all elements easily fit into the available height");
+                            " because all splittable elements easily fit into the available height (" +
+                            fAvailableHeight +
+                            ")");
       return null;
     }
 
@@ -117,12 +119,12 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
 
     // Start splitting columns
     boolean bDidSplitAnyColumn = false;
-    for (int i = 0; i < nCols; i++)
+    for (int nCol = 0; nCol < nCols; nCol++)
     {
-      final AbstractPLElement <?> aElement = getColumnElementAtIndex (i);
+      final AbstractPLElement <?> aElement = getColumnElementAtIndex (nCol);
       final boolean bIsSplittable = aElement.isSplittable ();
-      final float fColumnWidthFull = m_aPreparedWidth[i] + aElement.getMarginPlusPaddingXSum ();
-      final float fColumnHeight = m_aPreparedHeight[i];
+      final float fColumnWidthFull = m_aPreparedWidth[nCol] + aElement.getMarginPlusPaddingXSum ();
+      final float fColumnHeight = m_aPreparedHeight[nCol];
       final float fColumnHeightFull = fColumnHeight + aElement.getMarginPlusPaddingYSum ();
 
       boolean bDidSplitColumn = false;
@@ -134,20 +136,20 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
 
         if (aSplitResult != null)
         {
-          aHBox1.getColumnAtIndex (i).setElement (aSplitResult.getFirstElement ().getElement ());
-          aHBox2.getColumnAtIndex (i).setElement (aSplitResult.getSecondElement ().getElement ());
+          aHBox1.getColumnAtIndex (nCol).setElement (aSplitResult.getFirstElement ().getElement ());
+          aHBox2.getColumnAtIndex (nCol).setElement (aSplitResult.getSecondElement ().getElement ());
 
-          fHBox1Heights[i] = aSplitResult.getFirstElement ().getHeight ();
-          fHBox2Heights[i] = aSplitResult.getSecondElement ().getHeight ();
+          fHBox1Heights[nCol] = aSplitResult.getFirstElement ().getHeight ();
+          fHBox2Heights[nCol] = aSplitResult.getSecondElement ().getHeight ();
           bDidSplitColumn = true;
           bDidSplitAnyColumn = true;
 
           if (PLDebug.isDebugSplit ())
             PLDebug.debugSplit ("Split " +
                                 CGStringHelper.getClassLocalName (aElement) +
-                                " Column[" +
-                                i +
-                                "] into pieces: " +
+                                " (Column " +
+                                nCol +
+                                ") into pieces: " +
                                 aSplitResult.getFirstElement ().getHeight () +
                                 " and " +
                                 aSplitResult.getSecondElement ().getHeight ());
@@ -157,9 +159,9 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
           if (PLDebug.isDebugSplit ())
             PLDebug.debugSplit ("Failed to split " +
                                 CGStringHelper.getClassLocalName (aElement) +
-                                " Column[" +
-                                i +
-                                "] into pieces for remaining height " +
+                                " (Column " +
+                                nCol +
+                                ") into pieces for remaining height " +
                                 fRemainingHeight);
         }
       }
@@ -172,9 +174,9 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
           if (bIsSplittable)
           {
             if (PLDebug.isDebugSplit ())
-              PLDebug.debugSplit ("Column[" +
-                                  i +
-                                  "] of " +
+              PLDebug.debugSplit ("Column " +
+                                  nCol +
+                                  " of " +
                                   CGStringHelper.getClassLocalName (this) +
                                   " contains splittable element of type " +
                                   CGStringHelper.getClassLocalName (aElement) +
@@ -187,9 +189,9 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
           else
           {
             if (PLDebug.isDebugSplit ())
-              PLDebug.debugSplit ("Column[" +
-                                  i +
-                                  "] of " +
+              PLDebug.debugSplit ("Column " +
+                                  nCol +
+                                  " of " +
                                   CGStringHelper.getClassLocalName (this) +
                                   " contains non splittable element of type " +
                                   CGStringHelper.getClassLocalName (aElement) +
@@ -206,15 +208,15 @@ public abstract class AbstractPLHBoxSplittable <IMPLTYPE extends AbstractPLHBoxS
         }
 
         // No splitting and cell fits totally in available height
-        aHBox1.getColumnAtIndex (i).setElement (aElement);
+        aHBox1.getColumnAtIndex (nCol).setElement (aElement);
 
-        fHBox1Heights[i] = Math.min (fColumnHeight, fAvailableHeight);
-        fHBox2Heights[i] = 0;
+        fHBox1Heights[nCol] = Math.min (fColumnHeight, fAvailableHeight);
+        fHBox2Heights[nCol] = 0;
       }
 
       // calculate max column height
-      fHBox1MaxHeight = Math.max (fHBox1MaxHeight, fHBox1Heights[i]);
-      fHBox2MaxHeight = Math.max (fHBox2MaxHeight, fHBox2Heights[i]);
+      fHBox1MaxHeight = Math.max (fHBox1MaxHeight, fHBox1Heights[nCol]);
+      fHBox2MaxHeight = Math.max (fHBox2MaxHeight, fHBox2Heights[nCol]);
     }
 
     if (!bDidSplitAnyColumn)
