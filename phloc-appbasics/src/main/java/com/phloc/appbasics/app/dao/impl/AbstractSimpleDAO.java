@@ -193,7 +193,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     if (sFilename == null)
     {
       // required for testing
-      s_aLogger.error ("This DAO of class " + getClass ().getName () + " will not be able to read from a file");
+      s_aLogger.warn ("This DAO of class " + getClass ().getName () + " will not be able to read from a file");
 
       // do not return - run initialization anyway
     }
@@ -206,6 +206,14 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     m_aRWLock.writeLock ().lock ();
     try
     {
+      // Check for read-rights
+      if (aFile != null && aFile.exists () && !FileUtils.canRead (aFile))
+        throw new DAOException ("The DAO of class " +
+                                getClass ().getName () +
+                                " has not access rights to read from '" +
+                                aFile.getAbsolutePath () +
+                                "'");
+
       ESuccess eWriteSuccess = ESuccess.SUCCESS;
       bIsInitialization = aFile == null || !aFile.exists ();
       if (bIsInitialization)
@@ -410,7 +418,7 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     if (sFilename == null)
     {
       // We're not operating on a file! Required for testing
-      s_aLogger.error ("The DAO of class " + getClass ().getName () + " cannot write to a file");
+      s_aLogger.warn ("The DAO of class " + getClass ().getName () + " cannot write to a file");
       return ESuccess.FAILURE;
     }
 
@@ -424,31 +432,22 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     if (GlobalDebug.isDebugMode ())
       s_aLogger.info ("Trying to write DAO file '" + sFilename + "'");
 
-    // Get the file handle
     File aFile = null;
-    try
-    {
-      aFile = getSafeFile (sFilename);
-    }
-    catch (final DAOException ex)
-    {
-      s_aLogger.error ("The DAO of class " + getClass ().getName () + " cannot write to '" + sFilename + "'", ex);
-      return ESuccess.FAILURE;
-    }
-
     IMicroDocument aDoc = null;
     try
     {
+      // Get the file handle
+      aFile = getSafeFile (sFilename);
+      if (aFile.exists () && !FileUtils.canWrite (aFile))
+        throw new DAOException ("Missing access rights to write to file");
+
       s_aStatsCounterWriteTotal.increment ();
       final StopWatch aSW = new StopWatch (true);
 
       // Create XML document to write
       aDoc = createWriteData ();
       if (aDoc == null)
-      {
-        s_aLogger.error ("Failed to create data to write to '" + aFile + "'!");
-        return ESuccess.FAILURE;
-      }
+        throw new DAOException ("Failed to create data to write to file");
 
       // Generic modification
       modifyWriteData (aDoc);
@@ -463,16 +462,13 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       {
         // Happens, when another application has the file open!
         // Logger warning already emitted
-        return ESuccess.FAILURE;
+        throw new DAOException ("Failed to open output stream");
       }
 
       // Write to file (closes the OS)
       final IXMLWriterSettings aXWS = getXMLWriterSettings ();
       if (MicroWriter.writeToStream (aDoc, aOS, aXWS).isFailure ())
-      {
-        s_aLogger.error ("Failed to write DAO XML data to '" + aFile + "'");
-        return ESuccess.FAILURE;
-      }
+        throw new DAOException ("Failed to write DAO XML data to file");
 
       s_aStatsCounterWriteTimer.addTime (aSW.stopAndGetMillis ());
       s_aStatsCounterWriteSuccess.increment ();
@@ -482,13 +478,19 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
     }
     catch (final Throwable t)
     {
-      s_aLogger.error ("Failed to write the DAO data to  '" + aFile + "'", t);
+      final String sErrorFilename = aFile != null ? aFile.getAbsolutePath () : sFilename;
+
+      s_aLogger.error ("The DAO of class " +
+                       getClass ().getName () +
+                       " failed to write the DAO data to '" +
+                       sErrorFilename +
+                       "'", t);
 
       // Check if a custom exception handler is present
       final IDAOWriteExceptionHandler aExceptionHandlerWrite = getCustomExceptionHandlerWrite ();
       if (aExceptionHandlerWrite != null)
       {
-        final IReadableResource aRes = new FileSystemResource (aFile);
+        final IReadableResource aRes = new FileSystemResource (sErrorFilename);
         try
         {
           aExceptionHandlerWrite.onDAOWriteException (t,
@@ -522,9 +524,11 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
       if (_writeToFile ().isSuccess ())
         internalSetPendingChanges (false);
       else
+      {
         s_aLogger.error ("The DAO of class " +
                          getClass ().getName () +
                          " still has pending changes after markAsChanged!");
+      }
     }
   }
 

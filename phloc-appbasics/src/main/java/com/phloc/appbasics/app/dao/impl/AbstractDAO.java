@@ -29,6 +29,7 @@ import com.phloc.appbasics.app.dao.IDAO;
 import com.phloc.appbasics.app.dao.IDAOIO;
 import com.phloc.appbasics.app.dao.IDAOReadExceptionHandler;
 import com.phloc.appbasics.app.dao.IDAOWriteExceptionHandler;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustBeLocked;
 import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
@@ -66,9 +67,7 @@ public abstract class AbstractDAO implements IDAO
 
   protected AbstractDAO (@Nonnull final IDAOIO aDAOIO)
   {
-    if (aDAOIO == null)
-      throw new NullPointerException ("No data IO passed");
-    m_aIO = aDAOIO;
+    m_aIO = ValueEnforcer.notNull (aDAOIO, "DataIO");
   }
 
   /**
