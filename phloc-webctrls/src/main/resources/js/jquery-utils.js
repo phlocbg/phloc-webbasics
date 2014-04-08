@@ -67,7 +67,7 @@
       $(this).prop('checked', bChecked);
     });
   };
-})(jQuery)
+})(jQuery);
 
 // Set a default AJAX error handler
 $(document).ajaxError (function(event, jqXHR, ajaxSettings, thrownError) {
