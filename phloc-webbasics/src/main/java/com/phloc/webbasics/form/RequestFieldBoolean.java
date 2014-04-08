@@ -44,12 +44,19 @@ public final class RequestFieldBoolean extends RequestField implements IHCReques
 
   public RequestFieldBoolean (@Nonnull final RequestField aRF)
   {
-    this (aRF.getFieldName (), CHCParam.VALUE_CHECKED.equals (aRF.getDefaultValue ()));
+    this (aRF.getFieldName (), aRF.getRequestValue (), CHCParam.VALUE_CHECKED.equals (aRF.getDefaultValue ()));
   }
 
   public RequestFieldBoolean (@Nonnull @Nonempty final String sFieldName, final boolean bDefaultValue)
   {
-    super (sFieldName, getStringValue (bDefaultValue));
+    this (sFieldName, getStringValue (bDefaultValue), bDefaultValue);
+  }
+
+  public RequestFieldBoolean (@Nonnull @Nonempty final String sFieldName,
+                              @Nullable final String sFieldValue,
+                              final boolean bDefaultValue)
+  {
+    super (sFieldName, sFieldValue);
 
     // The default value is immutable
     m_bDefaultValue = bDefaultValue;
