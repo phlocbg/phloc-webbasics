@@ -97,14 +97,15 @@ public final class AuditManager extends AbstractSimpleDAO implements IAuditManag
     }
   }
 
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AuditManager.class);
-  private static final String ELEMENT_ITEMS = "items";
-  private static final String ELEMENT_ITEM = "item";
-  private static final String ATTR_DT = "dt";
-  private static final String ATTR_USER = "user";
-  private static final String ATTR_TYPE = "type";
+  public static final String ELEMENT_ITEMS = "items";
+  public static final String ELEMENT_ITEM = "item";
+  public static final String ATTR_DT = "dt";
+  public static final String ATTR_USER = "user";
+  public static final String ATTR_TYPE = "type";
   /* initially was called "succes" by error */
-  private static final String ATTR_SUCCESS = "success";
+  public static final String ATTR_SUCCESS = "success";
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AuditManager.class);
 
   private final AuditItemList m_aItems = new AuditItemList ();
   private final AsynchronousAuditor m_aAuditor;
