@@ -85,8 +85,26 @@ public class BootstrapButtonGroup extends AbstractHCDiv <BootstrapButtonGroup>
     // Add caret to button
     BootstrapDropdownMenu.makeDropdownToggle (aButton);
 
-    final BootstrapButtonGroup aNestedGroup = addAndReturnChild (new BootstrapButtonGroup ());
-    aNestedGroup.addChild (aButton);
-    return aNestedGroup.addAndReturnChild (addDropDownMenu ());
+    addChild (aButton);
+    return addDropDownMenu ();
+  }
+
+  /**
+   * Add a button and convert it to a dropdown menu
+   * 
+   * @param aButton
+   *        The button to be added. May not be <code>null</code>.
+   * @return The created drop down button
+   */
+  @Nonnull
+  public BootstrapDropdownMenu addButtonAsDropDownMenuWithSeparateCaret (@Nonnull final BootstrapButton aButton)
+  {
+    addChild (aButton);
+
+    final BootstrapButton aCaret = new BootstrapButton (aButton.getButtonType (), aButton.getButtonSize ());
+    BootstrapDropdownMenu.makeDropdownToggle (aCaret);
+    addChild (aCaret);
+
+    return addDropDownMenu ();
   }
 }
