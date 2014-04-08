@@ -31,8 +31,7 @@ import com.phloc.html.annotations.OutOfBandNode;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.js.IJSCodeProvider;
 import com.phloc.html.js.builder.JSAssocArray;
-import com.phloc.html.js.builder.JSPackage;
-import com.phloc.html.js.builder.JSVar;
+import com.phloc.html.js.builder.JSInvocation;
 import com.phloc.html.js.builder.jquery.IJQuerySelector;
 import com.phloc.html.js.builder.jquery.JQuery;
 import com.phloc.html.js.builder.jquery.JQueryInvocation;
@@ -42,7 +41,7 @@ import com.phloc.html.js.provider.CollectingJSCodeProvider;
 /**
  * A special script that initializes the auto numeric. It is a separate class,
  * so that potentially identical options can be merged to a single invocation.
- * 
+ *
  * @author Philip Helger
  */
 @OutOfBandNode
@@ -54,17 +53,16 @@ public class HCAutoNumericJS extends HCScriptOnDocumentReady
   private static IJSCodeProvider _createInitCode (@Nullable final JQueryInvocation aExplicitAutoNumeric,
                                                   @Nonnull final HCAutoNumeric aAutoNumeric)
   {
-    final JSPackage aPkg = new JSPackage ();
-    final JSVar aJSObj = aPkg.var ("e" + aAutoNumeric.getID (),
-                                   aExplicitAutoNumeric != null ? aExplicitAutoNumeric
-                                                               : JQuery.idRef (aAutoNumeric.getID ()));
-    aPkg.add (HCAutoNumeric.autoNumericInit (aJSObj, aAutoNumeric.getJSOptions ()));
+    final JQueryInvocation aInvocation = aExplicitAutoNumeric != null ? aExplicitAutoNumeric
+                                                                     : JQuery.idRef (aAutoNumeric.getID ());
+
+    JSInvocation ret = HCAutoNumeric.autoNumericInit (aInvocation, aAutoNumeric.getJSOptions ());
     if (aAutoNumeric.getInitialValue () != null)
     {
       // Never locale specific!
-      aPkg.add (HCAutoNumeric.autoNumericSet (aJSObj, aAutoNumeric.getInitialValue ()));
+      ret = HCAutoNumeric.autoNumericSet (ret, aAutoNumeric.getInitialValue ());
     }
-    return aPkg;
+    return ret;
   }
 
   public HCAutoNumericJS (@Nonnull final HCAutoNumeric aAutoNumeric)
