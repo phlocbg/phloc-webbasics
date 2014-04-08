@@ -37,6 +37,7 @@ import com.phloc.report.pdf.element.PLTextWithPlaceholders;
 import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
 import com.phloc.report.pdf.spec.EHorzAlignment;
+import com.phloc.report.pdf.spec.EVertAlignment;
 import com.phloc.report.pdf.spec.FontSpec;
 import com.phloc.report.pdf.spec.PDFFont;
 import com.phloc.report.pdf.spec.PaddingSpec;
@@ -105,7 +106,8 @@ public class PageLayoutPDFTableTest
     for (int i = 0; i < 184; ++i)
     {
       // Width is determined by the width passed to the table creating method
-      aRow = aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),
+      aRow = aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding)
+                                 .setVertAlign (EVertAlignment.BOTTOM),
                                  new PLText ("Name " +
                                                  i +
                                                  (i == 2 ? " this is extra text for row 2 that makes this line longer"
@@ -122,7 +124,7 @@ public class PageLayoutPDFTableTest
 
     // Start a new page
     aPS1.addElement (new PLPageBreak (false));
-    aPS1.addElement (new PLText ("First line on new page", r10));
+    aPS1.addElement (new PLText ("First line on new page", r10).setVertAlign (EVertAlignment.BOTTOM));
     // Next page
     aPS1.addElement (new PLPageBreak (false));
     // empty page by using forced page break

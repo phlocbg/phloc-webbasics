@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,8 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   protected final void checkNotPrepared ()
   {
     if (isPrepared ())
-      throw new IllegalStateException ("This object was already prepared and can therefore not be modified!");
+      throw new IllegalStateException ("This object was already prepared and can therefore not be modified: " +
+                                       toString ());
   }
 
   /**
@@ -75,6 +77,16 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
   protected final boolean isPrepared ()
   {
     return m_bPrepared;
+  }
+
+  /**
+   * @return The prepared size or <code>null</code> if this object was not yet
+   *         prepared.
+   */
+  @Nullable
+  protected final SizeSpec getPreparedSize ()
+  {
+    return m_aPreparedSize;
   }
 
   /**
@@ -113,6 +125,12 @@ public abstract class AbstractPLElement <IMPLTYPE extends AbstractPLElement <IMP
       s_aLogger.debug ("Prepared object " + CGStringHelper.getClassLocalName (getClass ()));
 
     return m_aPreparedSize;
+  }
+
+  protected final void markAsNotPrepared ()
+  {
+    m_aPreparedSize = null;
+    m_bPrepared = false;
   }
 
   /**

@@ -415,31 +415,38 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
     }
 
     // Apply vertical alignment
-    nIndex = 0;
-    for (final Column aColumn : m_aColumns)
     {
-      final AbstractPLElement <?> aElement = aColumn.getElement ();
-      if (aElement instanceof IPLHasVerticalAlignment <?>)
+      nIndex = 0;
+      for (final Column aColumn : m_aColumns)
       {
-        final EVertAlignment eVertAlignment = ((IPLHasVerticalAlignment <?>) aElement).getVertAlign ();
-        float fPaddingTop;
-        switch (eVertAlignment)
+        final AbstractPLElement <?> aElement = aColumn.getElement ();
+        if (aElement instanceof IPLHasVerticalAlignment <?>)
         {
-          case TOP:
-            fPaddingTop = 0;
-            break;
-          case MIDDLE:
-            fPaddingTop = (fUsedHeight - m_aPreparedHeight[nIndex]) / 2;
-            break;
-          case BOTTOM:
-            fPaddingTop = fUsedHeight - m_aPreparedHeight[nIndex];
-            break;
-          default:
-            throw new IllegalStateException ("Unsupported vertical alignment: " + eVertAlignment);
+          final EVertAlignment eVertAlignment = ((IPLHasVerticalAlignment <?>) aElement).getVertAlign ();
+          float fPaddingTop;
+          switch (eVertAlignment)
+          {
+            case TOP:
+              fPaddingTop = 0f;
+              break;
+            case MIDDLE:
+              fPaddingTop = (fUsedHeight - aElement.getMarginPlusPaddingYSum () - m_aPreparedHeight[nIndex]) / 2;
+              break;
+            case BOTTOM:
+              fPaddingTop = fUsedHeight - aElement.getMarginPlusPaddingYSum () - m_aPreparedHeight[nIndex];
+              break;
+            default:
+              throw new IllegalStateException ("Unsupported vertical alignment: " + eVertAlignment);
+          }
+          if (fPaddingTop != 0f)
+          {
+            aElement.markAsNotPrepared ();
+            aElement.setPaddingTop (aElement.getPaddingTop () + fPaddingTop);
+            aElement.markAsPrepared (new SizeSpec (m_aPreparedWidth[nIndex], m_aPreparedHeight[nIndex] + fPaddingTop));
+          }
         }
-        aElement.setPaddingTop (aElement.getPaddingTop () + fPaddingTop);
+        ++nIndex;
       }
-      ++nIndex;
     }
 
     // Small consistency check (with rounding included)

@@ -48,6 +48,7 @@ import com.phloc.report.pdf.render.RenderPageIndex;
 import com.phloc.report.pdf.render.RenderingContext;
 import com.phloc.report.pdf.spec.BorderSpec;
 import com.phloc.report.pdf.spec.BorderStyleSpec;
+import com.phloc.report.pdf.spec.EVertAlignment;
 import com.phloc.report.pdf.spec.SizeSpec;
 
 /**
@@ -344,10 +345,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
     // adopted!
     for (final AbstractPLElement <?> aElement : m_aElements)
     {
-      final PreparationContext aRPC = new PreparationContext (getAvailableWidth () -
-                                                                  aElement.getMarginPlusPaddingXSum (),
-                                                              getAvailableHeight () -
-                                                                  aElement.getMarginPlusPaddingYSum ());
+      final float fAvailableWidth = getAvailableWidth () - aElement.getMarginPlusPaddingXSum ();
+      final float fAvailableHeight = getAvailableHeight () - aElement.getMarginPlusPaddingYSum ();
+      final PreparationContext aRPC = new PreparationContext (fAvailableWidth, fAvailableHeight);
       final SizeSpec aElementSize = aElement.prepare (aRPC);
       ret.addElement (new PLElementWithSize (aElement, aElementSize));
     }
@@ -367,7 +367,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
       while (!aElementsWithSize.isEmpty ())
       {
         // Use the first element
-        final PLElementWithSize aElementWithSize = aElementsWithSize.remove (0);
+        PLElementWithSize aElementWithSize = aElementsWithSize.remove (0);
         final AbstractPLElement <?> aElement = aElementWithSize.getElement ();
 
         boolean bIsPagebreakDesired = aElement instanceof PLPageBreak;
@@ -378,7 +378,9 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           bIsPagebreakDesired = false;
         }
 
+        final float fElementWidth = aElementWithSize.getWidth ();
         final float fElementHeightFull = aElementWithSize.getHeightFull ();
+        final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
         if (fCurY - fElementHeightFull < fYLeast || bIsPagebreakDesired)
         {
           // Element does not fit on page - try to split
@@ -386,8 +388,7 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
           if (bIsSplittable)
           {
             // split elements
-            final float fAvailableHeight = fCurY - fYLeast - aElement.getMarginPlusPaddingYSum ();
-            final PLSplitResult aSplitResult = aElement.getAsSplittable ().splitElements (aElementWithSize.getWidth (),
+            final PLSplitResult aSplitResult = aElement.getAsSplittable ().splitElements (fElementWidth,
                                                                                           fAvailableHeight);
             if (aSplitResult != null)
             {
@@ -438,6 +439,36 @@ public class PLPageSet extends AbstractPLBaseElement <PLPageSet>
 
             // Continue with next element
             continue;
+          }
+        }
+
+        // Handle vertical alignment of top-level elements
+        if (aElement instanceof IPLHasVerticalAlignment <?>)
+        {
+          final EVertAlignment eVertAlignment = ((IPLHasVerticalAlignment <?>) aElement).getVertAlign ();
+          float fPaddingTop;
+          switch (eVertAlignment)
+          {
+            case TOP:
+              fPaddingTop = 0f;
+              break;
+            case MIDDLE:
+              fPaddingTop = (fAvailableHeight - fElementHeightFull) / 2;
+              break;
+            case BOTTOM:
+              fPaddingTop = fAvailableHeight - fElementHeightFull;
+              break;
+            default:
+              throw new IllegalStateException ("Unsupported vertical alignment: " + eVertAlignment);
+          }
+          if (fPaddingTop != 0f)
+          {
+            final SizeSpec aOldSize = aElement.getPreparedSize ();
+            aElement.markAsNotPrepared ();
+            aElement.setPaddingTop (aElement.getPaddingTop () + fPaddingTop);
+            final SizeSpec aNewSize = new SizeSpec (aOldSize.getWidth (), aOldSize.getHeight () + fPaddingTop);
+            aElement.markAsPrepared (aNewSize);
+            aElementWithSize = new PLElementWithSize (aElement, aNewSize);
           }
         }
 
