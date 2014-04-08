@@ -40,11 +40,11 @@ public class AnalyzeTTF
     {
       if (cid != 0)
         System.out.println ("Glyph " +
-            StringHelper.getHexStringLeadingZero (gid, 4) +
-            " -> char " +
-            StringHelper.getHexStringLeadingZero (cid, 4) +
-            " = " +
-            (char) cid);
+                            StringHelper.getHexStringLeadingZero (gid, 4) +
+                            " -> char " +
+                            StringHelper.getHexStringLeadingZero (cid, 4) +
+                            " = " +
+                            (char) cid);
       ++gid;
     }
   }

@@ -106,8 +106,11 @@ public class PageLayoutPDFTableTest
     {
       // Width is determined by the width passed to the table creating method
       aRow = aTable.addTableRow (new PLText (Integer.toString (i), r10).setPadding (aPadding),
-                                 new PLText ("Name " + i, r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED
-                                                                                                    : Color.BLACK)).setPadding (aPadding),
+                                 new PLText ("Name " +
+                                                 i +
+                                                 (i == 2 ? " this is extra text for row 2 that makes this line longer"
+                                                        : ""),
+                                             r10.getCloneWithDifferentColor (i % 3 == 0 ? Color.RED : Color.BLACK)).setPadding (aPadding),
                                  new PLText (Integer.toString (i * i), r10).setPadding (aPadding)
                                                                            .setHorzAlign (EHorzAlignment.CENTER),
                                  new PLText (Integer.toString (i + i), r10).setPadding (aPadding)

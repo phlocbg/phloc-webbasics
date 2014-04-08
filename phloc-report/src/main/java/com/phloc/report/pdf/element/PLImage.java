@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.report.pdf.render.PDPageContentStreamWithCache;
@@ -58,12 +59,9 @@ public class PLImage extends AbstractPLElement <PLImage>
 
   public PLImage (@Nonnull final BufferedImage aImage, @Nonnegative final float fWidth, @Nonnegative final float fHeight)
   {
-    if (aImage == null)
-      throw new NullPointerException ("Image");
-    if (fWidth <= 0)
-      throw new IllegalArgumentException ("Width invalid: " + fWidth);
-    if (fHeight <= 0)
-      throw new IllegalArgumentException ("Height invalid: " + fHeight);
+    ValueEnforcer.notNull (aImage, "Image");
+    ValueEnforcer.isGT0 (fWidth, "Width");
+    ValueEnforcer.isGT0 (fHeight, "Height");
 
     m_aImage = aImage;
     m_aIIS = null;
@@ -75,12 +73,9 @@ public class PLImage extends AbstractPLElement <PLImage>
                   @Nonnegative final float fWidth,
                   @Nonnegative final float fHeight)
   {
-    if (aImage == null)
-      throw new NullPointerException ("Image");
-    if (fWidth <= 0)
-      throw new IllegalArgumentException ("Width invalid: " + fWidth);
-    if (fHeight <= 0)
-      throw new IllegalArgumentException ("Height invalid: " + fHeight);
+    ValueEnforcer.notNull (aImage, "Image");
+    ValueEnforcer.isGT0 (fWidth, "Width");
+    ValueEnforcer.isGT0 (fHeight, "Height");
 
     m_aImage = null;
     m_aIIS = aImage;

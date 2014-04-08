@@ -96,6 +96,7 @@ public class AbstractPLHBox <IMPLTYPE extends AbstractPLHBox <IMPLTYPE>> extends
   private int m_nStarWidthItems = 0;
   private BorderSpec m_aColumnBorder = BorderSpec.BORDER0;
   private Color m_aColumnFillColor = null;
+
   /** prepare width (without padding and margin) */
   protected float [] m_aPreparedWidth;
   /** prepare height (without padding and margin) */
