@@ -2,6 +2,7 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>4/3/14</td><td>update</td><td>tech</td><td></td><td>Updated to JSch 0.1.51</td></tr>
 <tr border="1"><td>2/12/14</td><td colspan="4">_Release *5.3.7*_</td></tr>
 <tr><td>2/12/14</td><td>update</td><td>tech</td><td></td><td>Added support for UTF-8 encoded filenames in Content-Disposition of UnifiedResponse based on RFC 5987</td></tr>
 <tr border="1"><td>1/27/14</td><td colspan="4">_Release *5.3.6*_</td></tr>
