@@ -31,6 +31,12 @@ import com.phloc.html.hc.IHCNode;
 public interface IWebPage extends IPage
 {
   /**
+   * @return The icon for the web page. May be <code>null</code>.
+   */
+  @Nullable
+  IWebPageIcon getIcon ();
+
+  /**
    * Get the headline of the page. By default it is equal to the page name.
    * 
    * @param aWPEC

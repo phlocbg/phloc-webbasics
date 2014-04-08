@@ -51,7 +51,9 @@ import com.phloc.webscopes.mgr.WebScopeManager;
 public abstract class AbstractWebPage extends AbstractPage implements IWebPage
 {
   /** The CSS class to be applied to the help div */
-  private static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
+  public static final ICSSClassProvider CSS_PAGE_HELP_ICON = DefaultCSSClassProvider.create ("page_help_icon");
+
+  private IWebPageIcon m_aIcon;
 
   /**
    * Constructor
@@ -125,6 +127,19 @@ public abstract class AbstractWebPage extends AbstractPage implements IWebPage
                           @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
+  }
+
+  @Nullable
+  public IWebPageIcon getIcon ()
+  {
+    return m_aIcon;
+  }
+
+  @Nonnull
+  public AbstractWebPage setIcon (@Nullable final IWebPageIcon aIcon)
+  {
+    m_aIcon = aIcon;
+    return this;
   }
 
   @Nullable
