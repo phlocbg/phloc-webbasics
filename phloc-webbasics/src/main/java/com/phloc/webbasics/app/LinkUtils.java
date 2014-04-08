@@ -283,11 +283,25 @@ public final class LinkUtils
    * @return Never <code>null</code>.
    */
   @Nonnull
+  private static SimpleURL _getLinkToMenuItem (@Nonnull final ApplicationRequestManager aARM,
+                                               @Nonnull final String sMenuItemID)
+  {
+    return new SimpleURL ().add (aARM.getRequestParamNameMenuItem (), sMenuItemID);
+  }
+
+  /**
+   * Get a link to the specified menu item.
+   *
+   * @param sMenuItemID
+   *        The ID of the menu item to link to. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
   public static SimpleURL getLinkToMenuItem (@Nonnull final String sMenuItemID)
   {
     ValueEnforcer.notNull (sMenuItemID, "MenuItemID");
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
-    return new SimpleURL ().add (aARM.getRequestParamNameMenuItem (), sMenuItemID);
+    return _getLinkToMenuItem (aARM, sMenuItemID);
   }
 
   /**
@@ -326,7 +340,7 @@ public final class LinkUtils
   {
     final ApplicationRequestManager aARM = ApplicationRequestManager.getInstance ();
     final String sSelectedMenuItemID = aARM.getRequestMenuItemID ();
-    return getLinkToMenuItem (sSelectedMenuItemID).addAll (aParams);
+    return _getLinkToMenuItem (aARM, sSelectedMenuItemID).addAll (aParams);
   }
 
   /**
