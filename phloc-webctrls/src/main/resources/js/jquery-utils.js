@@ -69,16 +69,14 @@
   };
 })(jQuery)
 
-// Set default AJAX settings
-$.ajaxSetup ({
-  // Disable jQuery AJAX caching - not always useful!
-  // cache:false,
-  // Set a default error handler
-  error: function (jqXHR, textStatus, errorThrown) {
-    if (!window.ajaxSetupErrorShown) {
-      window.ajaxSetupErrorShown=true;
-      alert('AJAX error!\nStatus=' + textStatus+(errorThrown ? "\nError thrown="+errorThrown : ""));
-    }
+// Set a default AJAX error handler
+$(document).ajaxError (function(event, jqXHR, ajaxSettings, thrownError) {
+  if (!window.ajaxSetupErrorShown) {
+    window.ajaxSetupErrorShown=true;
+    
+    alert('AJAX error invoking '+ajaxSettings.url+
+          '\nStatus=' + jqXHR.statusText+' ('+jqXHR.status+')'+
+          (thrownError ? '\nError thrown='+thrownError : ''));
   }
 });
 
