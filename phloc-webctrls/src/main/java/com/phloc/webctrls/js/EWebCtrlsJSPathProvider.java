@@ -25,6 +25,8 @@ import com.phloc.html.resource.js.JSFilenameHelper;
 
 public enum EWebCtrlsJSPathProvider implements IJSPathProvider
 {
+  /** BigDecimal support for JS */
+  BIG_DECIMAL ("js/big.js", true),
   FORM ("js/form.js", true),
   JQUERY_UTILS ("js/jquery-utils.js", true),
   /**
