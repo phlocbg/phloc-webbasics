@@ -25,12 +25,12 @@ import com.phloc.html.resource.css.ICSSPathProvider;
 
 /**
  * Contains default CSS paths for this package.
- * 
+ *
  * @author Philip Helger
  */
 public enum EColorBoxCSSPathProvider implements ICSSPathProvider
 {
-  COLORBOX ("colorbox/1.4.37/colorbox.css");
+  COLORBOX ("colorbox/1.5.6/colorbox.css");
 
   private final String m_sPath;
 
