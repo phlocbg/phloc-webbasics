@@ -23,11 +23,12 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.webctrls.famfam.EFamFamIcon;
 
 /**
  * This class maintains the actual icon objects to the different default icons.
- * 
+ *
  * @author Philip Helger
  */
 public final class DefaultIcons
@@ -51,8 +52,7 @@ public final class DefaultIcons
 
   public static void set (@Nonnull final EDefaultIcon eIcon, @Nullable final IIcon aIcon)
   {
-    if (eIcon == null)
-      throw new NullPointerException ("default");
+    ValueEnforcer.notNull (eIcon, "DefaultIcon");
     s_aMap.put (eIcon, aIcon);
   }
 }

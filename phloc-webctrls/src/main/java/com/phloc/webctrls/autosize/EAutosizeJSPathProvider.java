@@ -30,7 +30,7 @@ import com.phloc.html.resource.js.JSFilenameHelper;
  */
 public enum EAutosizeJSPathProvider implements IJSPathProvider
 {
-  AUTOSIZE_1_18_4 ("autosize/1.18.4/jquery.autosize.js"),
+  AUTOSIZE ("autosize/1.18.4/jquery.autosize.js"),
   AUTOSIZE_ALL ("autosize/autosize-all.js");
 
   private final String m_sPath;

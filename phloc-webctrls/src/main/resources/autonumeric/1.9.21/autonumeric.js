@@ -1,8 +1,8 @@
 /**
 * autoNumeric.js
 * @author: Bob Knothe
-* @author: Sokolov Yura aka funny_falcon
-* @version: 1.9.19 - 2014-03-23 GMT 2:00 PM
+* @author: Sokolov Yura
+* @version: 1.9.21 - 2014-04-01 GMT 9:00 AM
 *
 * Created by Robert J. Knothe on 2010-10-25. Please report any bugs to https://github.com/BobKnothe/autoNumeric
 * Created by Sokolov Yura on 2010-11-07
@@ -110,7 +110,8 @@
             vmin = (!settings.vMin && settings.vMin !== 0) ? [] : settings.vMin.toString().split('.');
         convertKeyToNumber(settings, 'vMax');
         convertKeyToNumber(settings, 'vMin');
-        convertKeyToNumber(settings, 'mDec'); /** set mDec if not defained by user */
+        convertKeyToNumber(settings, 'mDec'); /** set mDec if not defined by user */
+        settings.mDec = (settings.mRound === 'CHF') ? '2' : settings.mDec;
         settings.allowLeading = true;
         settings.aNeg = settings.vMin < 0 ? '-' : '';
         vmax[0] = vmax[0].replace('-', '');
@@ -233,9 +234,8 @@
      * function to handle numbers less than 0 that are stored in Exponential notation ex: .0000001 stored as 1e-7
      */
     function checkValue(value, settings) {
-        var decimal = value.indexOf('.'),
-            checkSmall = +value;
-        if (decimal !== -1) {
+        if (value) {
+            var checkSmall = +value;
             if (checkSmall < 0.000001 && checkSmall > -1) {
                 value = +value;
                 if (value < 0.000001 && value > 0) {
@@ -889,7 +889,7 @@
                          * value must be enclosed in quotes and use the period for the decimal point
                          * value must be larger than vMin
                          */
-                        vMax: '999999999.99',
+                        vMax: '9999999999999.99',
                         /** minimum possible value
                          * value must be enclosed in quotes and use the period for the decimal point
                          * value must be smaller than vMax
