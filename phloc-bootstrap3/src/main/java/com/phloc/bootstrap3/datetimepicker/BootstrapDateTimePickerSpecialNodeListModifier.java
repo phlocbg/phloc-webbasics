@@ -36,13 +36,13 @@ public final class BootstrapDateTimePickerSpecialNodeListModifier implements IHC
 {
   public List <? extends IHCNode> modifySpecialNodes (@Nonnull final List <? extends IHCNode> aNodes)
   {
-    final List <IHCNode> aNonDTPs = new ArrayList <IHCNode> ();
+    final List <IHCNode> ret = new ArrayList <IHCNode> ();
     final List <BootstrapDateTimePickerJS> aDTPs = new ArrayList <BootstrapDateTimePickerJS> ();
     for (final IHCNode aNode : aNodes)
       if (aNode instanceof BootstrapDateTimePickerJS)
         aDTPs.add ((BootstrapDateTimePickerJS) aNode);
       else
-        aNonDTPs.add (aNode);
+        ret.add (aNode);
 
     if (aDTPs.size () <= 1)
     {
@@ -50,7 +50,7 @@ public final class BootstrapDateTimePickerSpecialNodeListModifier implements IHC
       return aNodes;
     }
 
-    final CollectingJSCodeProvider ret = new CollectingJSCodeProvider ();
+    final CollectingJSCodeProvider aMergedJS = new CollectingJSCodeProvider ();
     final List <BootstrapDateTimePickerJS> aRest = ContainerHelper.newList (aDTPs);
     while (!aRest.isEmpty ())
     {
@@ -73,7 +73,7 @@ public final class BootstrapDateTimePickerSpecialNodeListModifier implements IHC
       if (aSameOptions.isEmpty ())
       {
         // No other object has the same options
-        ret.append (aCurrent.getJSCodeProvider ());
+        aMergedJS.append (aCurrent.getJSCodeProvider ());
       }
       else
       {
@@ -83,10 +83,10 @@ public final class BootstrapDateTimePickerSpecialNodeListModifier implements IHC
         for (final BootstrapDateTimePickerJS aSameOption : aSameOptions)
           aJQI = aJQI.multiple (JQuerySelector.id (aSameOption.getDateTimePicker ().getContainerID ()));
         // And apply once
-        ret.append (BootstrapDateTimePicker.invoke (aJQI.invoke (), aCurrentJSOptions));
+        aMergedJS.append (BootstrapDateTimePicker.invoke (aJQI.invoke (), aCurrentJSOptions));
       }
     }
-    aNonDTPs.add (new HCScript (ret));
-    return aNonDTPs;
+    ret.add (new HCScript (aMergedJS));
+    return ret;
   }
 }
