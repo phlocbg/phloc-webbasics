@@ -38,11 +38,20 @@ public final class BootstrapDateTimePickerSpecialNodeListModifier implements IHC
   {
     final List <IHCNode> ret = new ArrayList <IHCNode> ();
     final List <BootstrapDateTimePickerJS> aDTPs = new ArrayList <BootstrapDateTimePickerJS> ();
+    int nFirstIndex = -1;
+    int nIndex = 0;
     for (final IHCNode aNode : aNodes)
+    {
       if (aNode instanceof BootstrapDateTimePickerJS)
+      {
         aDTPs.add ((BootstrapDateTimePickerJS) aNode);
+        if (nFirstIndex < 0)
+          nFirstIndex = nIndex;
+      }
       else
         ret.add (aNode);
+      nIndex++;
+    }
 
     if (aDTPs.size () <= 1)
     {
@@ -86,7 +95,9 @@ public final class BootstrapDateTimePickerSpecialNodeListModifier implements IHC
         aMergedJS.append (BootstrapDateTimePicker.invoke (aJQI.invoke (), aCurrentJSOptions));
       }
     }
-    ret.add (new HCScript (aMergedJS));
+
+    // Add at the first index, where it was in the source list
+    ret.add (nFirstIndex, new HCScript (aMergedJS));
     return ret;
   }
 }
