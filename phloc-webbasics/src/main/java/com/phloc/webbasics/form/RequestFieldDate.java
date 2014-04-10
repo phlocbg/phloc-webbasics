@@ -27,6 +27,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -35,10 +36,10 @@ import com.phloc.datetime.xml.PDTXMLConverter;
 
 /**
  * Special request field specially for dates.
- * 
+ *
  * @author Philip Helger
  */
-public final class RequestFieldDate extends RequestField
+public class RequestFieldDate extends RequestField
 {
   private final Locale m_aDisplayLocale;
 
@@ -47,9 +48,7 @@ public final class RequestFieldDate extends RequestField
                             @Nonnull final Locale aDisplayLocale)
   {
     super (sFieldName, sDefaultValue);
-    if (aDisplayLocale == null)
-      throw new NullPointerException ("displayLocale");
-    m_aDisplayLocale = aDisplayLocale;
+    m_aDisplayLocale = ValueEnforcer.notNull (aDisplayLocale, "DisplayLocale");
   }
 
   public RequestFieldDate (@Nonnull @Nonempty final String sFieldName, @Nonnull final Locale aDisplayLocale)

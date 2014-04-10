@@ -35,10 +35,10 @@ import com.phloc.webscopes.domain.IRequestWebScopeWithoutResponse;
 
 /**
  * Special request field specially for check boxes with a fixed value.
- * 
+ *
  * @author Philip Helger
  */
-public final class RequestFieldBoolean extends RequestField implements IHCRequestFieldBoolean
+public class RequestFieldBoolean extends RequestField implements IHCRequestFieldBoolean
 {
   private final boolean m_bDefaultValue;
 
