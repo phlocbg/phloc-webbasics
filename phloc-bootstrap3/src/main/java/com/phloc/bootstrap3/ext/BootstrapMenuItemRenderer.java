@@ -46,7 +46,7 @@ import com.phloc.webbasics.app.menu.ui.MenuRendererCallback;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
- * 
+ *
  * @author Philip Helger
  */
 public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
@@ -64,7 +64,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   /**
    * Get the label to display.
-   * 
+   *
    * @param aMenuItem
    *        Menu item. Never <code>null</code>.
    * @param bHasChildren
@@ -101,7 +101,7 @@ public class BootstrapMenuItemRenderer extends AbstractMenuItemRenderer <HCUL>
 
   /**
    * Get the label to display.
-   * 
+   *
    * @param aMenuItem
    *        Menu item. Never <code>null</code>.
    * @param bHasChildren

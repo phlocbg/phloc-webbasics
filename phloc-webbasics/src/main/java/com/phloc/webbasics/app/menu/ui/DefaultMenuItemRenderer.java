@@ -36,7 +36,7 @@ import com.phloc.webbasics.app.LinkUtils;
 
 /**
  * Default implementation of {@link IMenuItemRenderer}
- * 
+ *
  * @author Philip Helger
  */
 public class DefaultMenuItemRenderer <T extends AbstractHCList <?>> extends AbstractMenuItemRenderer <T>

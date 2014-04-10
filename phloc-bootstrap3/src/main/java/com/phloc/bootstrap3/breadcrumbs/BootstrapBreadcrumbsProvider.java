@@ -60,7 +60,7 @@ public final class BootstrapBreadcrumbsProvider
 
         // Create link on all but the last item
         if (i < nItems - 1)
-          aBreadcrumb.addLink (LinkUtils.getLinkToMenuItem (aItem.getID ()), aItem.getDisplayText (aDisplayLocale));
+          aBreadcrumb.addLink (LinkUtils.getLinkToMenuItem (aItem), aItem.getDisplayText (aDisplayLocale));
         else
           aBreadcrumb.addActive (aItem.getDisplayText (aDisplayLocale));
       }
