@@ -18,23 +18,17 @@
 package com.phloc.webpages;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
-import com.phloc.commons.GlobalDebug;
-import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroContainer;
 import com.phloc.commons.microdom.IMicroNode;
-import com.phloc.commons.microdom.utils.MicroWalker;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
-import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.impl.HCDOMWrapper;
-import com.phloc.html.parser.XHTMLParser;
-import com.phloc.webbasics.app.html.WebHTMLCreator;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 
 /**
@@ -43,10 +37,10 @@ import com.phloc.webbasics.app.page.WebPageExecutionContext;
  *
  * @author Philip Helger
  */
-public class PageViewExternal extends AbstractWebPageExt
+@ThreadSafe
+public class PageViewExternal extends AbstractPageViewExternal
 {
-  private final IReadableResource m_aResource;
-  private boolean m_bReadEveryTime = GlobalDebug.isDebugMode ();
+  @GuardedBy ("m_aRWLock")
   private IMicroContainer m_aParsedContent;
 
   /**
@@ -61,21 +55,9 @@ public class PageViewExternal extends AbstractWebPageExt
   {}
 
   @Nonnull
-  private IMicroContainer _readPage (@Nonnull final IReadableResource aResource)
+  private IMicroContainer _readFromResource (@Nonnull final IReadableResource aResource)
   {
-    // Read content once
-    final String sContent = StreamUtils.getAllBytesAsString (aResource, CCharset.CHARSET_UTF_8_OBJ);
-    if (sContent == null)
-      throw new IllegalStateException ("Failed to read resource " + aResource.toString ());
-
-    // Parse content
-    final EHTMLVersion eHTMLVersion = WebHTMLCreator.getHTMLVersion ();
-    final IMicroContainer ret = XHTMLParser.unescapeXHTML (eHTMLVersion, sContent);
-    if (ret == null)
-      throw new IllegalStateException ("Failed to parse HTML code of resource " + aResource.toString ());
-
-    // Do standard cleansing
-    MicroWalker.walkNode (ret, new PageViewExternalHTMLCleanser (eHTMLVersion));
+    final IMicroContainer ret = readHTMLPageFragment (aResource);
 
     // Perform callback
     afterPageRead (ret);
@@ -86,32 +68,20 @@ public class PageViewExternal extends AbstractWebPageExt
                            @Nonnull final String sName,
                            @Nonnull final IReadableResource aResource)
   {
-    super (sID, sName);
-    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
+    super (sID, sName, aResource);
 
     // Read once anyway to check if the resource is readable
-    m_aParsedContent = _readPage (aResource);
+    m_aParsedContent = _readFromResource (aResource);
   }
 
   public PageViewExternal (@Nonnull @Nonempty final String sID,
                            @Nonnull final IReadonlyMultiLingualText aName,
                            @Nonnull final IReadableResource aResource)
   {
-    super (sID, aName);
-    m_aResource = ValueEnforcer.notNull (aResource, "Resource");
+    super (sID, aName, aResource);
 
     // Read once anyway to check if the resource is readable
-    m_aParsedContent = _readPage (aResource);
-  }
-
-  /**
-   * @return The resource to be read as specified in the constructor. Never
-   *         <code>null</code>.
-   */
-  @Nonnull
-  public IReadableResource getResource ()
-  {
-    return m_aResource;
+    m_aParsedContent = _readFromResource (aResource);
   }
 
   /**
@@ -121,33 +91,15 @@ public class PageViewExternal extends AbstractWebPageExt
   @ReturnsMutableCopy
   public IMicroContainer getParsedContent ()
   {
-    return m_aParsedContent.getClone ();
-  }
-
-  /**
-   * @return <code>true</code> if the underlying resource should be read each
-   *         time {@link #fillContent(WebPageExecutionContext)} is invoked or
-   *         <code>false</code> if the resource is read once in the constructor
-   *         and re-used over and over.
-   */
-  public boolean isReadEveryTime ()
-  {
-    return m_bReadEveryTime;
-  }
-
-  /**
-   * @param bReadEveryTime
-   *        <code>true</code> if the underlying resource should be read each
-   *        time {@link #fillContent(WebPageExecutionContext)} is invoked or
-   *        <code>false</code> if the resource should be read once in the
-   *        constructor and re-used over and over.
-   * @return this
-   */
-  @Nonnull
-  public PageViewExternal setReadEveryTime (final boolean bReadEveryTime)
-  {
-    m_bReadEveryTime = bReadEveryTime;
-    return this;
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aParsedContent.getClone ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**
@@ -157,15 +109,36 @@ public class PageViewExternal extends AbstractWebPageExt
    * @see #isReadEveryTime()
    * @see #setReadEveryTime(boolean)
    */
+  @Override
   public void updateFromResource ()
   {
-    m_aParsedContent = _readPage (m_aResource);
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aParsedContent = _readFromResource (m_aResource);
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
-    final IMicroNode aElement = m_bReadEveryTime ? _readPage (m_aResource) : m_aParsedContent;
+    final boolean bReadFromResource = isReadEveryTime ();
+
+    final IMicroNode aElement;
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      aElement = bReadFromResource ? _readFromResource (m_aResource) : m_aParsedContent;
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
+
     aWPEC.getNodeList ().addChild (new HCDOMWrapper (aElement));
   }
 }
