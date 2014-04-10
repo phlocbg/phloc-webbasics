@@ -29,6 +29,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -47,8 +48,8 @@ import com.phloc.webscopes.singleton.SessionWebSingleton;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * Global registry for UI control state data.
- * 
+ * Per session registry for UI control state data.
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -75,7 +76,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   /**
    * Get the state with the passed ID for the current session. In case the state
    * is a {@link UIStateWrapper} instance, it is returned as is.
-   * 
+   *
    * @param sStateID
    *        The state ID to be searched
    * @return the {@link IHasUIState} for the specified control ID, if already
@@ -122,7 +123,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   /**
    * Get the state object in the specified type. If the saved state is a
    * {@link UIStateWrapper} instance, the contained value is returned!
-   * 
+   *
    * @param aOT
    *        The ObjectType to be resolved. May be <code>null</code>.
    * @param sStateID
@@ -146,7 +147,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
 
   /**
    * Registers a new control for the passed tree ID
-   * 
+   *
    * @param sStateID
    *        the ID of the state in register. May neither be <code>null</code>
    *        nor empty.
@@ -160,10 +161,8 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   @SuppressFBWarnings ("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
   public EChange registerState (@Nonnull @Nonempty final String sStateID, @Nonnull final IHasUIState aNewState)
   {
-    if (StringHelper.hasNoText (sStateID))
-      throw new IllegalArgumentException ("stateID may not be empty");
-    if (aNewState == null)
-      throw new NullPointerException ("newState");
+    ValueEnforcer.notEmpty (sStateID, "StateID");
+    ValueEnforcer.notNull (aNewState, "NewState");
 
     final ObjectType aOT = aNewState.getTypeID ();
     if (aOT == null)
@@ -194,7 +193,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   /**
    * Register a state for the passed HC element, using the internal ID of the
    * element.
-   * 
+   *
    * @param aNewElement
    *        The element to be added to the registry. May not be
    *        <code>null</code>.
@@ -203,17 +202,15 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   @Nonnull
   public EChange registerState (@Nonnull final IHCElement <?> aNewElement)
   {
-    if (aNewElement == null)
-      throw new NullPointerException ("newElement");
+    ValueEnforcer.notNull (aNewElement, "NewElement");
 
-    return registerState (aNewElement.getID (), aNewElement);
+    return registerState (aNewElement.ensureID ().getID (), aNewElement);
   }
 
   @Nonnull
   public EChange registerState (@Nonnull @Nonempty final String sStateID, @Nonnull final IHCNode aNewNode)
   {
-    if (aNewNode == null)
-      throw new NullPointerException ("newNode");
+    ValueEnforcer.notNull (aNewNode, "NewNode");
 
     return registerState (sStateID, UIStateWrapper.create (OT_HCNODE, aNewNode));
   }
@@ -221,8 +218,7 @@ public final class UIStateRegistry extends SessionWebSingleton implements IScope
   @Nonnull
   public EChange removeState (@Nullable final ObjectType aObjectType, @Nonnull @Nonempty final String sStateID)
   {
-    if (StringHelper.hasNoText (sStateID))
-      throw new IllegalArgumentException ("stateID may not be empty");
+    ValueEnforcer.notEmpty (sStateID, "StateID");
 
     m_aRWLock.writeLock ().lock ();
     try
