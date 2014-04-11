@@ -25,9 +25,9 @@ import javax.annotation.concurrent.Immutable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ITypedObject;
 import com.phloc.commons.type.ObjectType;
@@ -50,12 +50,10 @@ public class FormState implements ITypedObject <String>, Serializable
                     @Nonnull @Nonempty final String sFlowID,
                     @Nonnull final MapBasedAttributeContainer aAttrs)
   {
-    if (StringHelper.hasNoText (sPageID))
-      throw new IllegalArgumentException ("pageID");
-    if (StringHelper.hasNoText (sFlowID))
-      throw new IllegalArgumentException ("flowID");
-    if (aAttrs == null)
-      throw new NullPointerException ("attrs");
+    ValueEnforcer.notEmpty (sPageID, "PageID");
+    ValueEnforcer.notEmpty (sFlowID, "FlowID");
+    ValueEnforcer.notNull (aAttrs, "Attrs");
+
     m_sPageID = sPageID;
     m_aDT = PDTFactory.getCurrentDateTime ();
     m_sFlowID = sFlowID;
