@@ -32,6 +32,8 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.html.EHTMLRole;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.IHCControl;
 import com.phloc.html.hc.IHCElementWithChildren;
 import com.phloc.html.hc.IHCNode;
@@ -49,6 +51,8 @@ import com.phloc.validation.error.IErrorList;
 
 public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 {
+  public static final ICSSClassProvider CSS_CLASS_FORM_GROUP_HELP_TEXT = DefaultCSSClassProvider.create ("form-group-help-text");
+
   private final EBootstrapFormType m_eFormType;
   private BootstrapGridSpec m_aLeftGrid = BootstrapGridSpec.create (2);
   private BootstrapGridSpec m_aRightGrid = BootstrapGridSpec.create (10);
@@ -112,7 +116,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   /**
    * Set the left part of a horizontal form. This implies setting the correct
    * right parts (= 12 - left).
-   *
+   * 
    * @param nLeftParts
    *        The left parts. Must be &ge; 1 and &lt; 12!
    * @return this
@@ -130,7 +134,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 
   /**
    * Set the left part of a horizontal form.
-   *
+   * 
    * @param aLeft
    *        The left parts. Must not be <code>null</code>.
    * @param aRight
@@ -351,7 +355,8 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
     // Help text
     if (aHelpText != null)
     {
-      final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aHelpText);
+      final BootstrapHelpBlock aHelpBlock = new BootstrapHelpBlock ().addChild (aHelpText)
+                                                                     .addClass (CSS_CLASS_FORM_GROUP_HELP_TEXT);
       if (eFormType == EBootstrapFormType.INLINE)
         aHelpBlock.addClass (CBootstrapCSS.SR_ONLY);
       if (eFormType == EBootstrapFormType.HORIZONTAL)
