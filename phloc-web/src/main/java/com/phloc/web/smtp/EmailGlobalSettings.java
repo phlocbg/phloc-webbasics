@@ -37,9 +37,11 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.state.EChange;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Global settings for the mail transport.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -87,7 +89,7 @@ public final class EmailGlobalSettings
   /**
    * Set mail queue settings. Changing these settings has no effect on existing
    * mail queues!
-   * 
+   *
    * @param nMaxMailQueueLen
    *        The maximum number of mails that can be queued. Must be &gt; 0.
    * @param nMaxMailSendCount
@@ -162,7 +164,7 @@ public final class EmailGlobalSettings
 
   /**
    * Use SSL by default?
-   * 
+   *
    * @param bUseSSL
    *        <code>true</code> to use it by default, <code>false</code> if not.
    * @return {@link EChange}
@@ -202,7 +204,7 @@ public final class EmailGlobalSettings
 
   /**
    * Use STARTTLS by default?
-   * 
+   *
    * @param bUseSTARTTLS
    *        <code>true</code> to use it by default, <code>false</code> if not.
    * @return {@link EChange}
@@ -244,7 +246,7 @@ public final class EmailGlobalSettings
    * Set the connection timeout in milliseconds. Values &le; 0 are interpreted
    * as indefinite timeout which is not recommended! Changing these settings has
    * no effect on existing mail queues!
-   * 
+   *
    * @param nMilliSecs
    *        The milliseconds timeout
    * @return {@link EChange}
@@ -270,7 +272,7 @@ public final class EmailGlobalSettings
 
   /**
    * Get the connection timeout in milliseconds.
-   * 
+   *
    * @return If the value is &le; 0 than there should be no connection timeout.
    */
   @CheckForSigned
@@ -291,7 +293,7 @@ public final class EmailGlobalSettings
    * Set the socket timeout in milliseconds. Values &le; 0 are interpreted as
    * indefinite timeout which is not recommended! Changing these settings has no
    * effect on existing mail queues!
-   * 
+   *
    * @param nMilliSecs
    *        The milliseconds timeout
    * @return {@link EChange}
@@ -317,7 +319,7 @@ public final class EmailGlobalSettings
 
   /**
    * Get the socket timeout in milliseconds.
-   * 
+   *
    * @return If the value is &le; 0 than there should be no connection timeout.
    */
   @CheckForSigned
@@ -337,7 +339,7 @@ public final class EmailGlobalSettings
   /**
    * Set a new mail connection listener. Changing these settings has no effect
    * on existing mail queues!
-   * 
+   *
    * @param aConnectionListener
    *        The new connection listener to set. May be <code>null</code>.
    */
@@ -374,7 +376,7 @@ public final class EmailGlobalSettings
   /**
    * Set a new mail transport listener. Changing these settings has no effect on
    * existing mail queues!
-   * 
+   *
    * @param aTransportListener
    *        The new transport listener to set. May be <code>null</code>.
    */
@@ -411,7 +413,7 @@ public final class EmailGlobalSettings
   /**
    * Set a new mail transport listener. Changing these settings has no effect on
    * existing mail queues!
-   * 
+   *
    * @param aEmailDataTransportListener
    *        The new transport listener to set. May be <code>null</code>.
    */
@@ -447,11 +449,12 @@ public final class EmailGlobalSettings
 
   /**
    * Enable or disable javax.mail debugging. By default debugging is disabled.
-   * 
+   *
    * @param bDebug
    *        <code>true</code> to enabled debugging, <code>false</code> to
    *        disable it.
    */
+  @SuppressFBWarnings ("LG_LOST_LOGGER_DUE_TO_WEAK_REFERENCE")
   public static void enableJavaxMailDebugging (final boolean bDebug)
   {
     java.util.logging.Logger.getLogger ("com.sun.mail.smtp").setLevel (bDebug ? Level.FINEST : Level.INFO);
