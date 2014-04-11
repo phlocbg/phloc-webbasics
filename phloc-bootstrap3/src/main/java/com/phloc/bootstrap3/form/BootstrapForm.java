@@ -28,6 +28,7 @@ import com.phloc.bootstrap3.BootstrapHelper;
 import com.phloc.bootstrap3.CBootstrap;
 import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.bootstrap3.grid.BootstrapGridSpec;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
@@ -52,10 +53,12 @@ import com.phloc.validation.error.IErrorList;
 public class BootstrapForm extends AbstractHCForm <BootstrapForm>
 {
   public static final ICSSClassProvider CSS_CLASS_FORM_GROUP_HELP_TEXT = DefaultCSSClassProvider.create ("form-group-help-text");
+  public static final int DEFAULT_LEFT_PART = 2;
+  public static final int DEFAULT_RIGHT_PART = 10;
 
   private final EBootstrapFormType m_eFormType;
-  private BootstrapGridSpec m_aLeftGrid = BootstrapGridSpec.create (2);
-  private BootstrapGridSpec m_aRightGrid = BootstrapGridSpec.create (10);
+  private BootstrapGridSpec m_aLeftGrid = BootstrapGridSpec.create (DEFAULT_LEFT_PART);
+  private BootstrapGridSpec m_aRightGrid = BootstrapGridSpec.create (DEFAULT_RIGHT_PART);
 
   public BootstrapForm ()
   {
@@ -85,8 +88,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   public BootstrapForm (@Nullable final String sAction, @Nonnull final EBootstrapFormType eFormType)
   {
     super ();
-    if (eFormType == null)
-      throw new NullPointerException ("FormType");
+    ValueEnforcer.notNull (eFormType, "FormType");
     if (sAction != null)
       setAction (sAction);
     m_eFormType = eFormType;
@@ -125,8 +127,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @OverridingMethodsMustInvokeSuper
   public BootstrapForm setLeft (@Nonnegative final int nLeftParts)
   {
-    if (nLeftParts < 1 || nLeftParts >= CBootstrap.GRID_SYSTEM_MAX)
-      throw new IllegalArgumentException ("Left parts must be >= 1 and < 12!");
+    ValueEnforcer.isBetweenInclusive (nLeftParts, "LeftParts", 1, CBootstrap.GRID_SYSTEM_MAX - 1);
     final BootstrapGridSpec aNewLeft = BootstrapGridSpec.create (nLeftParts);
     final BootstrapGridSpec aNewRight = BootstrapGridSpec.create (CBootstrap.GRID_SYSTEM_MAX - nLeftParts);
     return setSplitting (aNewLeft, aNewRight);
@@ -145,10 +146,8 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   @OverridingMethodsMustInvokeSuper
   public BootstrapForm setSplitting (@Nonnull final BootstrapGridSpec aLeft, @Nonnull final BootstrapGridSpec aRight)
   {
-    if (aLeft == null)
-      throw new NullPointerException ("left");
-    if (aRight == null)
-      throw new NullPointerException ("right");
+    ValueEnforcer.notNull (aLeft, "Left");
+    ValueEnforcer.notNull (aRight, "Right");
     m_aLeftGrid = aLeft;
     m_aRightGrid = aRight;
     return this;
