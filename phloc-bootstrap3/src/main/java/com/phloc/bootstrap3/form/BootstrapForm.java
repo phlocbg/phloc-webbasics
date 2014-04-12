@@ -19,7 +19,6 @@ package com.phloc.bootstrap3.form;
 
 import java.util.List;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -222,8 +221,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   }
 
   @Nonnull
-  @CheckReturnValue
-  public HCDiv addAndReturnFormGroup (@Nullable final BootstrapFormGroup aFormGroup)
+  public HCDiv addAndReturnFormGroup (@Nonnull final BootstrapFormGroup aFormGroup)
   {
     final HCDiv aFormGroupDiv = createFormGroup (aFormGroup);
     addChild (aFormGroupDiv);
@@ -231,7 +229,7 @@ public class BootstrapForm extends AbstractHCForm <BootstrapForm>
   }
 
   @Nonnull
-  public BootstrapForm addFormGroup (@Nullable final BootstrapFormGroup aFormGroup)
+  public BootstrapForm addFormGroup (@Nonnull final BootstrapFormGroup aFormGroup)
   {
     addAndReturnFormGroup (aFormGroup);
     return this;
