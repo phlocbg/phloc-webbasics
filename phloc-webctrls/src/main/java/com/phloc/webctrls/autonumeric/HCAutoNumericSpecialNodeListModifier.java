@@ -17,6 +17,7 @@
  */
 package com.phloc.webctrls.autonumeric;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCScriptOnDocumentReady;
 import com.phloc.html.hc.utils.IHCSpecialNodeListModifier;
@@ -64,7 +66,9 @@ public final class HCAutoNumericSpecialNodeListModifier implements IHCSpecialNod
     while (!aRest.isEmpty ())
     {
       final HCAutoNumericJS aCurrent = aRest.remove (0);
-      final JSAssocArray aCurrentJSOptions = aCurrent.getAutoNumeric ().getJSOptions ();
+      final HCAutoNumeric aCurrentAutoNumeric = aCurrent.getAutoNumeric ();
+      final JSAssocArray aCurrentJSOptions = aCurrentAutoNumeric.getJSOptions ();
+      final BigDecimal aCurrentInitValue = aCurrentAutoNumeric.getInitialValue ();
 
       // Find all other auto numerics with the same options
       final List <HCAutoNumericJS> aSameOptions = new ArrayList <HCAutoNumericJS> ();
@@ -72,7 +76,9 @@ public final class HCAutoNumericSpecialNodeListModifier implements IHCSpecialNod
       while (itRest.hasNext ())
       {
         final HCAutoNumericJS aCurrentRest = itRest.next ();
-        if (aCurrentRest.getAutoNumeric ().getJSOptions ().equals (aCurrentJSOptions))
+        final HCAutoNumeric aCurrentRestAutoNumeric = aCurrentRest.getAutoNumeric ();
+        if (aCurrentRestAutoNumeric.getJSOptions ().equals (aCurrentJSOptions) &&
+            EqualsUtils.equals (aCurrentRestAutoNumeric.getInitialValue (), aCurrentInitValue))
         {
           aSameOptions.add (aCurrentRest);
           itRest.remove ();
@@ -88,11 +94,11 @@ public final class HCAutoNumericSpecialNodeListModifier implements IHCSpecialNod
       {
         // We have multiple objects with the same options
         // Create a common selector
-        IJQuerySelector aJQI = JQuerySelector.id (aCurrent.getAutoNumeric ().getID ());
+        IJQuerySelector aJQI = JQuerySelector.id (aCurrentAutoNumeric.getID ());
         for (final HCAutoNumericJS aSameOption : aSameOptions)
           aJQI = aJQI.multiple (JQuerySelector.id (aSameOption.getAutoNumeric ().getID ()));
         // And apply once
-        aMergedJS.append (HCAutoNumericJS.createInitCode (aJQI.invoke (), aCurrent.getAutoNumeric ()));
+        aMergedJS.append (HCAutoNumericJS.createInitCode (aJQI.invoke (), aCurrentAutoNumeric));
       }
     }
 
