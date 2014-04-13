@@ -22,6 +22,7 @@ import java.util.Arrays;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
@@ -31,7 +32,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Different dashed line times
- *
+ * 
  * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
@@ -73,14 +74,13 @@ public class LineDashPatternSpec
    */
   public LineDashPatternSpec (@Nonnull final float [] aPattern, final float fPhase)
   {
-    if (aPattern == null)
-      throw new NullPointerException ("pattern");
+    ValueEnforcer.notNull (aPattern, "Pattern");
     if (aPattern.length > 2)
       throw new IllegalArgumentException ();
     for (final float fPatternValue : aPattern)
       if (fPatternValue <= 0)
         throw new IllegalArgumentException ("At least one pattern value is negative: " + Arrays.toString (aPattern));
-    m_aPattern = aPattern;
+    m_aPattern = ArrayHelper.getCopy (aPattern);
     m_fPhase = fPhase;
   }
 
