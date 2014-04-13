@@ -134,7 +134,7 @@ public class BootstrapFormGroup
   @Nonnull
   public final BootstrapFormGroup setCtrl (@Nullable final IHCNode... aCtrls)
   {
-    return setCtrl (aCtrls);
+    return setCtrl (HCNodeList.create (aCtrls));
   }
 
   @Nonnull
