@@ -30,10 +30,10 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
-import com.phloc.scopes.IScope;
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.scopes.domain.ISessionScope;
-import com.phloc.scopes.mgr.ScopeManager;
+import com.phloc.webscopes.domain.ISessionWebScope;
+import com.phloc.webscopes.mgr.WebScopeManager;
 
 /**
  * This class holds the per-request configuration settings.
@@ -41,7 +41,7 @@ import com.phloc.scopes.mgr.ScopeManager;
  * <li>Menu item to show</li>
  * <li>Display locale</li>
  * </ul>
- *
+ * 
  * @author Philip Helger
  */
 public abstract class AbstractRequestManager implements IRequestManager
@@ -97,7 +97,7 @@ public abstract class AbstractRequestManager implements IRequestManager
       final IMenuObject aMenuObject = getMenuTree ().getMenuObjectOfID (sMenuItemID);
       if (aMenuObject instanceof IMenuItemPage && aMenuObject.matchesDisplayFilter ())
       {
-        final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
+        final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope (true);
         aSessionScope.setAttribute (getSessionAttrMenuItem (), aMenuObject.getID ());
       }
     }
@@ -113,7 +113,7 @@ public abstract class AbstractRequestManager implements IRequestManager
         if (getLocaleManager ().isSupportedLocale (aDisplayLocale))
         {
           // A valid locale was provided
-          final ISessionScope aSessionScope = ScopeManager.getSessionScope (true);
+          final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope (true);
           aSessionScope.setAttribute (getSessionAttrLocale (), aDisplayLocale);
         }
       }
@@ -123,7 +123,7 @@ public abstract class AbstractRequestManager implements IRequestManager
   @Nullable
   public IMenuItemPage getSessionMenuItem ()
   {
-    final ISessionScope aSessionScope = ScopeManager.getSessionScope (false);
+    final ISessionWebScope aSessionScope = WebScopeManager.getSessionScope (false);
     if (aSessionScope != null)
     {
       final String sMenuItemID = aSessionScope.getAttributeAsString (getSessionAttrMenuItem ());
@@ -175,7 +175,7 @@ public abstract class AbstractRequestManager implements IRequestManager
   public Locale getRequestDisplayLocale ()
   {
     // Was a request locale set in session scope?
-    final IScope aSessionScope = ScopeManager.getSessionScope (false);
+    final ISessionScope aSessionScope = WebScopeManager.getSessionScope (false);
     if (aSessionScope != null)
     {
       final Locale aSessionDisplayLocale = aSessionScope.getCastedAttribute (getSessionAttrLocale ());
