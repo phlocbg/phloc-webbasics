@@ -18,6 +18,7 @@
 package com.phloc.appbasics.app.io;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.io.monitor.FileMonitor;
@@ -169,9 +170,8 @@ public class ScopedFileMonitorManager extends GlobalSingleton
    *        The monitor to be remove. May be <code>null</code>.
    * @return {@link EChange}
    */
-  // TODO make param @Nullable in phloc-commons > 4.1.2
   @Nonnull
-  public EChange removeFileMonitor (@Nonnull final FileMonitor aMonitor)
+  public EChange removeFileMonitor (@Nullable final FileMonitor aMonitor)
   {
     return m_aFMM.removeFileMonitor (aMonitor);
   }
