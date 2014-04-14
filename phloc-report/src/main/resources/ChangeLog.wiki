@@ -2,6 +2,9 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>4/8/14</td><td>add</td><td>api</td><td></td><td>Added splittable VBox</td></tr>
+<tr><td>4/8/14</td><td>add</td><td>api</td><td></td><td>Added vertical alignment support for text and images</td></tr>
+<tr><td>3/25/14</td><td>add</td><td>api</td><td></td><td>Added splittable HBox</td></tr>
 <tr border="1"><td>2/5/14</td><td colspan="4">_Release *1.0.10*_</td></tr>
 <tr><td>2/24/14</td><td>add</td><td>api</td><td></td><td>PLText now supports limiting the text to a certain number of printable lines</td></tr>
 <tr><td>2/10/14</td><td>update</td><td>tech</td><td></td><td>Updated to PDFBox 1.8.4</td></tr>
