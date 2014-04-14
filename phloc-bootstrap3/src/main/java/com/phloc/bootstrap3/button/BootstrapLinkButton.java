@@ -25,39 +25,39 @@ import com.phloc.bootstrap3.CBootstrapCSS;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.html.hc.conversion.IHCConversionSettingsToNode;
-import com.phloc.html.hc.html.AbstractHCButton;
+import com.phloc.html.hc.html.HCA;
 import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webctrls.custom.EDefaultIcon;
 import com.phloc.webctrls.custom.IIcon;
 
 /**
- * Bootstrap button based on an &lt;button&gt;
+ * Bootstrap button based on an &lt;a&gt;
  * 
  * @author Philip Helger
  */
-public class BootstrapButton extends AbstractHCButton <BootstrapButton>
+public class BootstrapLinkButton extends HCA
 {
   private EBootstrapButtonType m_eButtonType = EBootstrapButtonType.DEFAULT;
   private EBootstrapButtonSize m_eButtonSize = EBootstrapButtonSize.DEFAULT;
   private IIcon m_aIcon;
 
-  public BootstrapButton ()
+  public BootstrapLinkButton ()
   {
     this (EBootstrapButtonType.DEFAULT, EBootstrapButtonSize.DEFAULT);
   }
 
-  public BootstrapButton (@Nonnull final EBootstrapButtonType eButtonType)
+  public BootstrapLinkButton (@Nonnull final EBootstrapButtonType eButtonType)
   {
     this (eButtonType, EBootstrapButtonSize.DEFAULT);
   }
 
-  public BootstrapButton (@Nonnull final EBootstrapButtonSize eButtonSize)
+  public BootstrapLinkButton (@Nonnull final EBootstrapButtonSize eButtonSize)
   {
     this (EBootstrapButtonType.DEFAULT, eButtonSize);
   }
 
-  public BootstrapButton (@Nonnull final EBootstrapButtonType eButtonType,
-                          @Nonnull final EBootstrapButtonSize eButtonSize)
+  public BootstrapLinkButton (@Nonnull final EBootstrapButtonType eButtonType,
+                              @Nonnull final EBootstrapButtonSize eButtonSize)
   {
     addClass (CBootstrapCSS.BTN);
     setButtonType (eButtonType);
@@ -71,7 +71,7 @@ public class BootstrapButton extends AbstractHCButton <BootstrapButton>
   }
 
   @Nonnull
-  public BootstrapButton setButtonType (@Nonnull final EBootstrapButtonType eButtonType)
+  public BootstrapLinkButton setButtonType (@Nonnull final EBootstrapButtonType eButtonType)
   {
     m_eButtonType = ValueEnforcer.notNull (eButtonType, "ButtonType");
     return this;
@@ -84,7 +84,7 @@ public class BootstrapButton extends AbstractHCButton <BootstrapButton>
   }
 
   @Nonnull
-  public BootstrapButton setButtonSize (@Nonnull final EBootstrapButtonSize eButtonSize)
+  public BootstrapLinkButton setButtonSize (@Nonnull final EBootstrapButtonSize eButtonSize)
   {
     m_eButtonSize = ValueEnforcer.notNull (eButtonSize, "ButtonSize");
     return this;
@@ -97,13 +97,13 @@ public class BootstrapButton extends AbstractHCButton <BootstrapButton>
   }
 
   @Nonnull
-  public BootstrapButton setIcon (@Nullable final EDefaultIcon eIcon)
+  public BootstrapLinkButton setIcon (@Nullable final EDefaultIcon eIcon)
   {
     return setIcon (eIcon == null ? null : eIcon.getIcon ());
   }
 
   @Nonnull
-  public BootstrapButton setIcon (@Nullable final IIcon aIcon)
+  public BootstrapLinkButton setIcon (@Nullable final IIcon aIcon)
   {
     m_aIcon = aIcon;
     return this;
