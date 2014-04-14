@@ -42,6 +42,7 @@ import com.phloc.commons.collections.multimap.IMultiMapListBased;
 import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.lang.ServiceLoaderUtils;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.fileupload.FileUploadException;
 import com.phloc.web.fileupload.IFileItem;
 import com.phloc.web.fileupload.IFileItemFactory;
@@ -108,6 +109,12 @@ public class RequestWebScope extends RequestWebScopeNoMultipart
     public List <File> getAllTemporaryFiles ()
     {
       return m_aFactory.getAllTemporaryFiles ();
+    }
+
+    @Override
+    public String toString ()
+    {
+      return ToStringGenerator.getDerived (super.toString ()).append ("factory", m_aFactory).toString ();
     }
   }
 
@@ -178,7 +185,7 @@ public class RequestWebScope extends RequestWebScopeNoMultipart
           s_aLogger.error ("Failed to set request character encoding to '" + CCharset.CHARSET_UTF_8 + "'", ex);
         }
 
-        // Parse and write to temporary directory
+        // Group all items with the same name together
         final IMultiMapListBased <String, String> aFormFields = new MultiHashMapArrayListBased <String, String> ();
         final IMultiMapListBased <String, IFileItem> aFormFiles = new MultiHashMapArrayListBased <String, IFileItem> ();
         for (final IFileItem aFileItem : aUpload.parseRequest (m_aHttpRequest))
@@ -203,7 +210,8 @@ public class RequestWebScope extends RequestWebScopeNoMultipart
           setAttribute (aEntry.getKey (), aValue);
         }
 
-        // set all form files
+        // set all form files (potentially overwriting form fields with the same
+        // name)
         for (final Map.Entry <String, List <IFileItem>> aEntry : aFormFiles.entrySet ())
         {
           // Convert list of String to value (String or array of String)

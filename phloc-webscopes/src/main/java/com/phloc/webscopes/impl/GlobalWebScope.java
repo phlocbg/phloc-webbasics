@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletContext;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -82,11 +83,9 @@ public final class GlobalWebScope extends GlobalScope implements IGlobalWebScope
                          @Nonnull final IContextPathProvider aContextPathProvider)
   {
     super (_createScopeID (aServletContext));
-    if (aContextPathProvider == null)
-      throw new NullPointerException ("contextPathProvider");
 
     m_aSC = aServletContext;
-    m_aContextPathProvider = aContextPathProvider;
+    m_aContextPathProvider = ValueEnforcer.notNull (aContextPathProvider, "ContextPathProvider");
   }
 
   @Override
@@ -142,7 +141,7 @@ public final class GlobalWebScope extends GlobalScope implements IGlobalWebScope
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("servletContext", m_aSC)
-                            .append ("contextPath", getContextPath ())
+                            .append ("contextPathProvider", m_aContextPathProvider)
                             .toString ();
   }
 }

@@ -34,9 +34,11 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.scopes.domain.IApplicationScope;
 import com.phloc.scopes.domain.IGlobalScope;
 import com.phloc.scopes.domain.IRequestScope;
 import com.phloc.scopes.domain.ISessionScope;
@@ -164,7 +166,7 @@ public final class WebScopeManager
     }
     catch (final ClassCastException ex)
     {
-      s_aLogger.warn ("Gobal scope object is not a global web scope: " + aGlobalScope);
+      s_aLogger.warn ("Gobal scope object is not a global web scope: " + String.valueOf (aGlobalScope), ex);
       return null;
     }
   }
@@ -204,7 +206,10 @@ public final class WebScopeManager
   @Nonnull
   public static IApplicationWebScope getApplicationScope ()
   {
-    return (IApplicationWebScope) ScopeManager.getApplicationScope ();
+    final IApplicationWebScope aAppScope = getApplicationScope (true);
+    if (aAppScope == null)
+      throw new IllegalStateException ("No application web scope object has been set!");
+    return aAppScope;
   }
 
   /**
@@ -220,7 +225,16 @@ public final class WebScopeManager
   @Nullable
   public static IApplicationWebScope getApplicationScope (final boolean bCreateIfNotExisting)
   {
-    return (IApplicationWebScope) ScopeManager.getApplicationScope (bCreateIfNotExisting);
+    final IApplicationScope aAppScope = ScopeManager.getApplicationScope (bCreateIfNotExisting);
+    try
+    {
+      return (IApplicationWebScope) aAppScope;
+    }
+    catch (final ClassCastException ex)
+    {
+      s_aLogger.warn ("Application scope object is not an application web scope: " + String.valueOf (aAppScope), ex);
+      return null;
+    }
   }
 
   /**
@@ -234,7 +248,12 @@ public final class WebScopeManager
   @Nonnull
   public static IApplicationWebScope getApplicationScope (@Nonnull @Nonempty final String sApplicationID)
   {
-    return (IApplicationWebScope) ScopeManager.getApplicationScope (sApplicationID);
+    final IApplicationWebScope aAppScope = getApplicationScope (sApplicationID, true);
+    if (aAppScope == null)
+      throw new IllegalStateException ("No application web scope object for application ID '" +
+                                       sApplicationID +
+                                       "' is present!");
+    return aAppScope;
   }
 
   /**
@@ -253,7 +272,16 @@ public final class WebScopeManager
   public static IApplicationWebScope getApplicationScope (@Nonnull @Nonempty final String sApplicationID,
                                                           final boolean bCreateIfNotExisting)
   {
-    return (IApplicationWebScope) ScopeManager.getApplicationScope (sApplicationID, bCreateIfNotExisting);
+    final IApplicationScope aAppScope = ScopeManager.getApplicationScope (sApplicationID, bCreateIfNotExisting);
+    try
+    {
+      return (IApplicationWebScope) aAppScope;
+    }
+    catch (final ClassCastException ex)
+    {
+      s_aLogger.warn ("Application scope object is not an application web scope: " + String.valueOf (aAppScope), ex);
+      return null;
+    }
   }
 
   // --- session scope ---
@@ -303,8 +331,7 @@ public final class WebScopeManager
                                                                   final boolean bCreateIfNotExisting,
                                                                   final boolean bItsOkayToCreateANewScope)
   {
-    if (aHttpSession == null)
-      throw new NullPointerException ("httpSession");
+    ValueEnforcer.notNull (aHttpSession, "HttpSession");
 
     // Do we already have a session web scope for the session?
     final String sSessionID = aHttpSession.getId ();
@@ -411,8 +438,7 @@ public final class WebScopeManager
    */
   public static void onSessionEnd (@Nonnull final HttpSession aHttpSession)
   {
-    if (aHttpSession == null)
-      throw new NullPointerException ("httpSession");
+    ValueEnforcer.notNull (aHttpSession, "HttpSession");
 
     final ScopeSessionManager aSSM = ScopeSessionManager.getInstance ();
     final String sSessionID = aHttpSession.getId ();
@@ -443,10 +469,10 @@ public final class WebScopeManager
 
       if (bCanInvalidateSession)
       {
-        s_aLogger.warn ("Found no session scope but invalidating session '" + sSessionID + "' anyway");
         try
         {
           aHttpSession.invalidate ();
+          s_aLogger.warn ("Found no session scope but invalidated session '" + sSessionID + "' anyway");
         }
         catch (final IllegalStateException ex)
         {
@@ -521,7 +547,7 @@ public final class WebScopeManager
     }
     catch (final ClassCastException ex)
     {
-      s_aLogger.warn ("Request scope object is not a request web scope: " + aRequestScope);
+      s_aLogger.warn ("Request scope object is not a request web scope: " + String.valueOf (aRequestScope), ex);
       return null;
     }
   }

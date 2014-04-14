@@ -29,7 +29,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.webscopes.domain.IApplicationWebScope;
 import com.phloc.webscopes.domain.IGlobalWebScope;
 import com.phloc.webscopes.domain.IRequestWebScope;
@@ -62,15 +64,19 @@ public class DefaultWebScopeFactory implements IWebScopeFactory
     public ConstantContextPathProvider (@Nonnull final String sContextPath)
     {
       // May not be null, but maybe an empty String!
-      if (sContextPath == null)
-        throw new NullPointerException ("contextPath may not be null!");
-      m_sContextPath = sContextPath;
+      m_sContextPath = ValueEnforcer.notNull (sContextPath, "ContextPath");
     }
 
     @Nonnull
     public String getContextPath ()
     {
       return m_sContextPath;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("contextPath", m_sContextPath).toString ();
     }
   }
 
@@ -90,6 +96,12 @@ public class DefaultWebScopeFactory implements IWebScopeFactory
         m_sContextPath = WebScopeManager.getRequestScope ().getRequest ().getContextPath ();
       }
       return m_sContextPath;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return new ToStringGenerator (this).append ("contextPath", m_sContextPath).toString ();
     }
   }
 

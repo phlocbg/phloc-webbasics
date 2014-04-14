@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.lang.ServiceLoaderUtils;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.fileupload.IProgressListener;
 import com.phloc.web.fileupload.IProgressListenerProvider;
 import com.phloc.webscopes.singleton.GlobalWebSingleton;
@@ -38,15 +39,15 @@ public final class ProgressListenerProvider extends GlobalWebSingleton
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (ProgressListenerProvider.class);
 
-  private final IProgressListenerProvider m_aListernerProvider;
+  private final IProgressListenerProvider m_aProgressListenerProvider;
 
   @Deprecated
   @UsedViaReflection
   public ProgressListenerProvider ()
   {
-    m_aListernerProvider = ServiceLoaderUtils.getFirstSPIImplementation (IProgressListenerProvider.class);
-    if (m_aListernerProvider != null)
-      s_aLogger.info ("Using progress listener provider: " + m_aListernerProvider.getClass ().getName ());
+    m_aProgressListenerProvider = ServiceLoaderUtils.getFirstSPIImplementation (IProgressListenerProvider.class);
+    if (m_aProgressListenerProvider != null)
+      s_aLogger.info ("Using progress listener provider: " + m_aProgressListenerProvider.getClass ().getName ());
   }
 
   @Nonnull
@@ -58,6 +59,14 @@ public final class ProgressListenerProvider extends GlobalWebSingleton
   @Nullable
   public IProgressListener getProgressListener ()
   {
-    return m_aListernerProvider == null ? null : m_aListernerProvider.getProgressListener ();
+    return m_aProgressListenerProvider == null ? null : m_aProgressListenerProvider.getProgressListener ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("progressListenerProvider", m_aProgressListenerProvider)
+                            .toString ();
   }
 }

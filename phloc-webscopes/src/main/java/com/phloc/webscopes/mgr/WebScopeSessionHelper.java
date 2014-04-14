@@ -59,7 +59,10 @@ public final class WebScopeSessionHelper
   @ReturnsMutableCopy
   private static Map <String, Map <String, IScopeRenewalAware>> _getSessionApplicationScopeValues (@Nonnull final ISessionWebScope aOldSessionScope)
   {
+    // Map from <application ID> to <map from <field name> to <field value>>
     final Map <String, Map <String, IScopeRenewalAware>> aSessionApplicationScopeValues = new HashMap <String, Map <String, IScopeRenewalAware>> ();
+
+    // For all session application scope values
     final Map <String, ISessionApplicationScope> aAllSessionApplicationScopes = aOldSessionScope.getAllSessionApplicationScopes ();
     if (!aAllSessionApplicationScopes.isEmpty ())
     {

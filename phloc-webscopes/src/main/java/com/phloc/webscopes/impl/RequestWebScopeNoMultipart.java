@@ -34,12 +34,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.AbstractMapBasedScope;
 import com.phloc.scopes.ScopeUtils;
@@ -53,7 +56,7 @@ import com.phloc.webscopes.domain.IRequestWebScope;
 
 /**
  * A request web scopes that does not parse multipart requests.
- *
+ * 
  * @author Philip Helger
  */
 public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements IRequestWebScope
@@ -72,8 +75,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
   @Nonempty
   private static String _createScopeID (@Nonnull final HttpServletRequest aHttpRequest)
   {
-    if (aHttpRequest == null)
-      throw new NullPointerException ("httpRequest");
+    ValueEnforcer.notNull (aHttpRequest, "HttpRequest");
 
     return GlobalIDFactory.getNewIntID () + "@" + aHttpRequest.getRequestURI ();
   }
@@ -82,15 +84,16 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
                                      @Nonnull final HttpServletResponse aHttpResponse)
   {
     super (_createScopeID (aHttpRequest));
-    if (aHttpResponse == null)
-      throw new NullPointerException ("httpResponse");
 
     m_aHttpRequest = aHttpRequest;
-    m_aHttpResponse = aHttpResponse;
+    m_aHttpResponse = ValueEnforcer.notNull (aHttpResponse, "HttpResponse");
 
     // done initialization
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Created request web scope '" + getID () + "'");
+      s_aLogger.info ("Created request web scope '" +
+                      getID () +
+                      "' of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 
   @OverrideOnDemand
@@ -140,14 +143,20 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
 
     // done initialization
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Initialized request web scope '" + getID () + "'");
+      s_aLogger.info ("Initialized request web scope '" +
+                      getID () +
+                      "' of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 
   @Override
   protected void postDestroy ()
   {
     if (ScopeUtils.debugRequestScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Destroyed request web scope '" + getID () + "'");
+      s_aLogger.info ("Destroyed request web scope '" +
+                      getID () +
+                      "' of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 
   @Nonnull
@@ -184,6 +193,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       // single value passed in the request
       return ContainerHelper.newList ((String) aValue);
     }
+    // E.g. for file items
     return aDefault;
   }
 
@@ -200,6 +210,16 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
     return sValue == null ? bDefault : EqualsUtils.equals (sValue, sDesiredValue);
   }
 
+  /**
+   * Returns the name of the character encoding used in the body of this
+   * request. This method returns <code>null</code> if the request does not
+   * specify a character encoding
+   * 
+   * @return a <code>String</code> containing the name of the character
+   *         encoding, or <code>null</code> if the request does not specify a
+   *         character encoding
+   */
+  @Nullable
   public String getCharacterEncoding ()
   {
     return m_aHttpRequest.getCharacterEncoding ();
@@ -217,6 +237,25 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
       final Object aAttrValue = getAttributeObject (sAttrName);
       if (aAttrValue instanceof IFileItem)
         ret.put (sAttrName, (IFileItem) aAttrValue);
+    }
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Map <String, IFileItem []> getAllUploadedFileItemsComplete ()
+  {
+    final Map <String, IFileItem []> ret = new HashMap <String, IFileItem []> ();
+    final Enumeration <String> aEnum = getAttributeNames ();
+    while (aEnum.hasMoreElements ())
+    {
+      final String sAttrName = aEnum.nextElement ();
+      final Object aAttrValue = getAttributeObject (sAttrName);
+      if (aAttrValue instanceof IFileItem)
+        ret.put (sAttrName, new IFileItem [] { (IFileItem) aAttrValue });
+      else
+        if (aAttrValue instanceof IFileItem [])
+          ret.put (sAttrName, ArrayHelper.getCopy ((IFileItem []) aAttrValue));
     }
     return ret;
   }
@@ -416,7 +455,7 @@ public class RequestWebScopeNoMultipart extends AbstractMapBasedScope implements
    * This is a heuristic method to determine whether a request is for a file
    * (e.g. x.jsp) or for a servlet. It is assumed that regular servlets don't
    * have a '.' in their name!
-   *
+   * 
    * @param sServletPath
    *        The non-<code>null</code> servlet path to check
    * @return <code>true</code> if it is assumed that the request is file based,

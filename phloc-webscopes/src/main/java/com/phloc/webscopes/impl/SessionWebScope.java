@@ -128,14 +128,24 @@ public class SessionWebScope extends SessionScope implements ISessionWebScope
     return m_aHttpSession;
   }
 
-  public boolean isNew ()
+  public long getCreationTime ()
   {
-    return m_aHttpSession.isNew ();
+    return m_aHttpSession.getCreationTime ();
+  }
+
+  public long getLastAccessedTime ()
+  {
+    return m_aHttpSession.getLastAccessedTime ();
   }
 
   public long getMaxInactiveInterval ()
   {
     return m_aHttpSession.getMaxInactiveInterval ();
+  }
+
+  public boolean isNew ()
+  {
+    return m_aHttpSession.isNew ();
   }
 
   @Override

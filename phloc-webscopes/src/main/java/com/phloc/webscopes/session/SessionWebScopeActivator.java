@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.DevelopersNote;
+import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.scopes.ScopeUtils;
 import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.webscopes.domain.ISessionWebScope;
@@ -121,7 +122,10 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     }
 
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Wrote info on session web scope '" + m_aSessionWebScope.getID () + "'");
+      s_aLogger.info ("Wrote info on session web scope '" +
+                      m_aSessionWebScope.getID () +
+                      "' of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 
   @SuppressWarnings ("unchecked")
@@ -151,7 +155,8 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
                       m_aAttrs.size () +
                       " attrs and " +
                       m_aSessionApplicationScopes.size () +
-                      " SAScopes");
+                      " SAScopes of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 
   public void sessionWillPassivate (@Nonnull final HttpSessionEvent aEvent)
@@ -171,7 +176,10 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     }
 
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Successfully passivated session web scope '" + m_aSessionWebScope.getID () + "'");
+      s_aLogger.info ("Successfully passivated session web scope '" +
+                      m_aSessionWebScope.getID () +
+                      "' of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 
   public void sessionDidActivate (@Nonnull final HttpSessionEvent aEvent)
@@ -206,6 +214,9 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
     }
 
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
-      s_aLogger.info ("Successfully activated session web scope '" + aSessionWebScope.getID () + "'");
+      s_aLogger.info ("Successfully activated session web scope '" +
+                      aSessionWebScope.getID () +
+                      "' of class " +
+                      CGStringHelper.getClassLocalName (this));
   }
 }

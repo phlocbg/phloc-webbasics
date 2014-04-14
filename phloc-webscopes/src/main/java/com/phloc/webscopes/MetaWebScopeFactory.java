@@ -20,6 +20,7 @@ package com.phloc.webscopes;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.webscopes.factory.DefaultWebScopeFactory;
 import com.phloc.webscopes.factory.IWebScopeFactory;
@@ -50,8 +51,7 @@ public final class MetaWebScopeFactory
    */
   public static void setWebScopeFactory (@Nonnull final IWebScopeFactory aWebScopeFactory)
   {
-    if (aWebScopeFactory == null)
-      throw new NullPointerException ("webScopeFactory");
+    ValueEnforcer.notNull (aWebScopeFactory, "WebScopeFactory");
     s_aWebScopeFactory = aWebScopeFactory;
   }
 
