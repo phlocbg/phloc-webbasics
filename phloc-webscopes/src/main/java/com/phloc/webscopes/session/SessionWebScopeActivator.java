@@ -123,7 +123,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
       s_aLogger.info ("Wrote info on session web scope '" +
                       m_aSessionWebScope.getID () +
                       "' of class " +
-                      CGStringHelper.getClassLocalName (this));
+                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
   }
 
   @SuppressWarnings ("unchecked")
@@ -150,11 +150,12 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
 
     if (ScopeUtils.debugSessionScopeLifeCycle (s_aLogger))
       s_aLogger.info ("Read info on session scope: " +
-                      m_aAttrs.size () +
-                      " attrs and " +
-                      m_aSessionApplicationScopes.size () +
-                      " SAScopes of class " +
-                      CGStringHelper.getClassLocalName (this));
+                          m_aAttrs.size () +
+                          " attrs and " +
+                          m_aSessionApplicationScopes.size () +
+                          " SAScopes of class " +
+                          CGStringHelper.getClassLocalName (this),
+                      ScopeUtils.getDebugStackTrace ());
   }
 
   public void sessionWillPassivate (@Nonnull final HttpSessionEvent aEvent)
@@ -177,7 +178,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
       s_aLogger.info ("Successfully passivated session web scope '" +
                       m_aSessionWebScope.getID () +
                       "' of class " +
-                      CGStringHelper.getClassLocalName (this));
+                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
   }
 
   public void sessionDidActivate (@Nonnull final HttpSessionEvent aEvent)
@@ -215,6 +216,6 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
       s_aLogger.info ("Successfully activated session web scope '" +
                       aSessionWebScope.getID () +
                       "' of class " +
-                      CGStringHelper.getClassLocalName (this));
+                      CGStringHelper.getClassLocalName (this), ScopeUtils.getDebugStackTrace ());
   }
 }
