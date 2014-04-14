@@ -28,10 +28,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.IScopeRenewalAware;
 import com.phloc.scopes.domain.ISessionApplicationScope;
 import com.phloc.scopes.mgr.ScopeSessionManager;
@@ -66,8 +66,6 @@ public final class WebScopeSessionHelper
     final Map <String, ISessionApplicationScope> aAllSessionApplicationScopes = aOldSessionScope.getAllSessionApplicationScopes ();
     if (!aAllSessionApplicationScopes.isEmpty ())
     {
-      final String sPrefixToSkip = aOldSessionScope.getID () + '.';
-
       // For all existing session application scopes in the session scope
       for (final Map.Entry <String, ISessionApplicationScope> aEntry : aAllSessionApplicationScopes.entrySet ())
       {
@@ -75,8 +73,8 @@ public final class WebScopeSessionHelper
         final Map <String, IScopeRenewalAware> aSurviving = aEntry.getValue ().getAllScopeRenewalAwareAttributes ();
         if (!aSurviving.isEmpty ())
         {
-          // Remove the leading session ID
-          final String sScopeApplicationID = StringHelper.trimStart (aEntry.getKey (), sPrefixToSkip);
+          // Extract the application ID
+          final String sScopeApplicationID = aOldSessionScope.getApplicationIDFromApplicationScopeID (aEntry.getKey ());
           aSessionApplicationScopeValues.put (sScopeApplicationID, aSurviving);
         }
       }
@@ -164,8 +162,7 @@ public final class WebScopeSessionHelper
   @Nullable
   public static ISessionWebScope renewSessionScope (@Nonnull final HttpSession aHttpSession)
   {
-    if (aHttpSession == null)
-      throw new NullPointerException ("httpSession");
+    ValueEnforcer.notNull (aHttpSession, "HttpSession");
 
     // Get the old session scope
     final ISessionWebScope aOldSessionScope = WebScopeManager.internalGetOrCreateSessionScope (aHttpSession,

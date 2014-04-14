@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ContainerHelper;
@@ -79,9 +80,7 @@ public class RequestFieldData
    */
   public RequestFieldData (@Nonnull @Nonempty final String sFieldName, @Nullable final String sDefaultValue)
   {
-    if (StringHelper.hasNoText (sFieldName))
-      throw new IllegalArgumentException ("fieldName");
-    m_sFieldName = sFieldName;
+    m_sFieldName = ValueEnforcer.notEmpty (sFieldName, "FieldName");
     m_sDefaultValue = sDefaultValue == null ? "" : sDefaultValue;
   }
 
@@ -215,8 +214,7 @@ public class RequestFieldData
    */
   public final boolean hasRequestValue (@Nonnull final String sExpectedValue)
   {
-    if (sExpectedValue == null)
-      throw new IllegalArgumentException ("expectedValue");
+    ValueEnforcer.notNull (sExpectedValue, "ExpectedValue");
 
     return sExpectedValue.equals (getRequestValue ());
   }

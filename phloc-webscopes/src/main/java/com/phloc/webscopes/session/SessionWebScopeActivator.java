@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSessionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.scopes.ScopeUtils;
@@ -65,10 +66,7 @@ public final class SessionWebScopeActivator implements Serializable, HttpSession
    */
   public SessionWebScopeActivator (@Nonnull final ISessionWebScope aSessionWebScope)
   {
-    if (aSessionWebScope == null)
-      throw new NullPointerException ("sessionWebScope");
-
-    m_aSessionWebScope = aSessionWebScope;
+    m_aSessionWebScope = ValueEnforcer.notNull (aSessionWebScope, "SessionWebScope");
   }
 
   private void writeObject (@Nonnull final ObjectOutputStream out) throws IOException

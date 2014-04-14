@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.webscopes.domain.IRequestWebScope;
 import com.phloc.webscopes.mgr.WebScopeManager;
@@ -55,9 +55,7 @@ public final class RequestScopeInitializer
    */
   private RequestScopeInitializer (@Nonnull final IRequestWebScope aRequestScope, final boolean bCreatedIt)
   {
-    if (aRequestScope == null)
-      throw new NullPointerException ("requestScope");
-    m_aRequestScope = aRequestScope;
+    m_aRequestScope = ValueEnforcer.notNull (aRequestScope, "RequestScope");
     m_bCreatedIt = bCreatedIt;
   }
 
@@ -88,8 +86,7 @@ public final class RequestScopeInitializer
                                                 @Nonnull final HttpServletRequest aHttpRequest,
                                                 @Nonnull final HttpServletResponse aHttpResponse)
   {
-    if (StringHelper.hasNoText (sApplicationID))
-      throw new IllegalArgumentException ("No application ID present!");
+    ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
 
     // Check if a request scope is already present
     final IRequestWebScope aExistingRequestScope = WebScopeManager.getRequestScopeOrNull ();

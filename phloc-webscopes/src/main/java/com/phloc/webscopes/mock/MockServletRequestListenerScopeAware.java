@@ -22,8 +22,8 @@ import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.mock.ScopeAwareTestSetup;
 import com.phloc.web.mock.MockServletRequestListener;
 import com.phloc.webscopes.mgr.WebScopeManager;
@@ -48,9 +48,7 @@ public class MockServletRequestListenerScopeAware extends MockServletRequestList
 
   public MockServletRequestListenerScopeAware (@Nonnull @Nonempty final String sApplicationID)
   {
-    if (StringHelper.hasNoText (sApplicationID))
-      throw new IllegalArgumentException ("applicationID");
-    m_sApplicationID = sApplicationID;
+    m_sApplicationID = ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
   }
 
   @Nonnull

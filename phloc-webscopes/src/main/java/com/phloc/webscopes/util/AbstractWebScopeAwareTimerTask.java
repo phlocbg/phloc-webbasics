@@ -21,8 +21,8 @@ import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
 import com.phloc.webscopes.mgr.WebScopeManager;
@@ -35,13 +35,18 @@ import com.phloc.webscopes.mgr.WebScopeManager;
  */
 public abstract class AbstractWebScopeAwareTimerTask extends TimerTask
 {
-  private final String m_sAppID;
+  private final String m_sApplicationID;
 
-  public AbstractWebScopeAwareTimerTask (@Nonnull @Nonempty final String sAppID)
+  public AbstractWebScopeAwareTimerTask (@Nonnull @Nonempty final String sApplicationID)
   {
-    if (StringHelper.hasNoText (sAppID))
-      throw new IllegalArgumentException ("AppID");
-    m_sAppID = sAppID;
+    m_sApplicationID = ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getApplicationID ()
+  {
+    return m_sApplicationID;
   }
 
   /**
@@ -54,9 +59,10 @@ public abstract class AbstractWebScopeAwareTimerTask extends TimerTask
   public final void run ()
   {
     // Create the scope
-    WebScopeManager.onRequestBegin (m_sAppID, new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ()
-                                                                                            .getServletContext (),
-                                                                             false), new MockHttpServletResponse ());
+    WebScopeManager.onRequestBegin (m_sApplicationID,
+                                    new OfflineHttpServletRequest (WebScopeManager.getGlobalScope ()
+                                                                                  .getServletContext (), false),
+                                    new MockHttpServletResponse ());
     try
     {
       onRunTask ();

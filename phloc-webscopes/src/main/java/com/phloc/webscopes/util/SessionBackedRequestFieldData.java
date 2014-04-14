@@ -53,7 +53,7 @@ public class SessionBackedRequestFieldData extends RequestFieldData
 
   @Nonnull
   @Nonempty
-  private String _getSessionFieldName ()
+  public String getSessionFieldName ()
   {
     return "$phloc.$requestfield." + getFieldName ();
   }
@@ -64,7 +64,7 @@ public class SessionBackedRequestFieldData extends RequestFieldData
     final String sRequestValue = super.getRequestValueWithoutDefault ();
     // Allow empty values!
     if (sRequestValue != null)
-      WebScopeManager.getSessionScope (true).setAttribute (_getSessionFieldName (), sRequestValue);
+      WebScopeManager.getSessionScope (true).setAttribute (getSessionFieldName (), sRequestValue);
   }
 
   @Override
@@ -72,7 +72,7 @@ public class SessionBackedRequestFieldData extends RequestFieldData
   {
     final String sSuperDefaultValue = super.getDefaultValue ();
     final IScope aSessionScope = WebScopeManager.getSessionScope (false);
-    return aSessionScope == null ? sSuperDefaultValue : aSessionScope.getAttributeAsString (_getSessionFieldName (),
+    return aSessionScope == null ? sSuperDefaultValue : aSessionScope.getAttributeAsString (getSessionFieldName (),
                                                                                             sSuperDefaultValue);
   }
 }

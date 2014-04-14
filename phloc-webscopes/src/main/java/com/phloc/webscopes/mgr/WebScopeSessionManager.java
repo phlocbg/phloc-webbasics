@@ -69,7 +69,7 @@ public final class WebScopeSessionManager
       return null;
     if (!(aSessionScope instanceof ISessionWebScope))
     {
-      s_aLogger.warn ("The passed scope ID '" + sScopeID + "' is not a session web scope!");
+      s_aLogger.warn ("The passed scope ID '" + sScopeID + "' is not a session web scope: " + aSessionScope.toString ());
       return null;
     }
     return (ISessionWebScope) aSessionScope;

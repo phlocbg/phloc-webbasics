@@ -23,9 +23,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.callback.INonThrowingCallable;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.web.mock.MockHttpServletResponse;
 import com.phloc.web.mock.OfflineHttpServletRequest;
@@ -51,13 +51,21 @@ public abstract class AbstractWebScopeAwareCallable <DATATYPE> implements INonTh
   public AbstractWebScopeAwareCallable (@Nonnull final ServletContext aSC,
                                         @Nonnull @Nonempty final String sApplicationID)
   {
-    if (aSC == null)
-      throw new NullPointerException ("servletContext");
-    if (StringHelper.hasNoText (sApplicationID))
-      throw new IllegalArgumentException ("applicationID");
+    m_aSC = ValueEnforcer.notNull (aSC, "ServletContext");
+    m_sApplicationID = ValueEnforcer.notEmpty (sApplicationID, "ApplicationID");
+  }
 
-    m_aSC = aSC;
-    m_sApplicationID = sApplicationID;
+  @Nonnull
+  public ServletContext getServletContext ()
+  {
+    return m_aSC;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getApplicationID ()
+  {
+    return m_sApplicationID;
   }
 
   /**
