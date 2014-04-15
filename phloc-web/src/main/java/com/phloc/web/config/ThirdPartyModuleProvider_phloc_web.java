@@ -29,7 +29,7 @@ import com.phloc.commons.version.Version;
 /**
  * Implement this SPI interface if your JAR file contains external third party
  * modules.
- *
+ * 
  * @author Philip Helger
  */
 @IsSPIImplementation
@@ -38,7 +38,7 @@ public final class ThirdPartyModuleProvider_phloc_web implements IThirdPartyModu
   public static final IThirdPartyModule DNSJAVA = new ThirdPartyModule ("dnsjava",
                                                                         "Brian Wellington",
                                                                         ELicense.BSD,
-                                                                        new Version (2, 1, 1),
+                                                                        new Version (2, 1, 6),
                                                                         "http://www.xbill.org/dnsjava/",
                                                                         true);
 
