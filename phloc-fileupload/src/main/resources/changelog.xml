@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-fileupload">
+  <release date="2014-04-15" version="1.0.1" />
+  <entry date="2014-04-15" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-html 4.0.4</text>
+    </change>
+  </entry>
   <release date="2014-03-13" version="1.0.0" />
   <entry date="2014-03-13" category="feature" action="update">
     <change>
