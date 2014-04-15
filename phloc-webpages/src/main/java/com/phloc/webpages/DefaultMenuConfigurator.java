@@ -38,9 +38,10 @@ import com.phloc.webpages.monitoring.BasePageSessions;
 import com.phloc.webpages.security.BasePageRoleManagement;
 import com.phloc.webpages.security.BasePageUserGroupManagement;
 import com.phloc.webpages.security.BasePageUserManagement;
-import com.phloc.webpages.settings.BasePageSettingsSMTP;
 import com.phloc.webpages.settings.BasePageSettingsGlobal;
+import com.phloc.webpages.settings.BasePageSettingsSMTP;
 import com.phloc.webpages.sysinfo.BasePageSysInfoChangeLogs;
+import com.phloc.webpages.sysinfo.BasePageSysInfoCurrencies;
 import com.phloc.webpages.sysinfo.BasePageSysInfoEnvironmentVariables;
 import com.phloc.webpages.sysinfo.BasePageSysInfoLanguages;
 import com.phloc.webpages.sysinfo.BasePageSysInfoNetwork;
@@ -67,6 +68,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_SETTINGS_SMTP = "admin_settings_smtp";
   public static final String MENU_ADMIN_SYSINFO = "admin_sysinfo";
   public static final String MENU_ADMIN_SYSINFO_CHANGELOGS = "admin_sysinfo_changelog";
+  public static final String MENU_ADMIN_SYSINFO_CURRENCIES = "admin_sysinfo_currencies";
   public static final String MENU_ADMIN_SYSINFO_ENVVARS = "admin_sysinfo_envvars";
   public static final String MENU_ADMIN_SYSINFO_LANGUAGES = "admin_sysinfo_languages";
   public static final String MENU_ADMIN_SYSINFO_NETWORK = "admin_sysinfo_network";
@@ -163,6 +165,8 @@ public final class DefaultMenuConfigurator
                                                                                     aMenuTree))
                                                  .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoChangeLogs (MENU_ADMIN_SYSINFO_CHANGELOGS))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoCurrencies (MENU_ADMIN_SYSINFO_CURRENCIES))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoEnvironmentVariables (MENU_ADMIN_SYSINFO_ENVVARS))
              .setDisplayFilter (aDisplayFilter);

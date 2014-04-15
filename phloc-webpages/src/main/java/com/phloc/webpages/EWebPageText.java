@@ -59,6 +59,7 @@ public enum EWebPageText implements IHasDisplayText, IHasDisplayTextWithArgs
   PAGE_NAME_SETTINGS_SMTP ("SMTP-Einstellungen", "SMTP settings"),
   PAGE_NAME_SYSINFO ("System Informationen", "System information"),
   PAGE_NAME_SYSINFO_CHANGELOGS ("Änderungshistorie", "Change logs"),
+  PAGE_NAME_SYSINFO_CURRENCIES ("Währungen", "Currencies"),
   PAGE_NAME_SYSINFO_ENV_VARS ("Umgebungsvariablen", "Environment variables"),
   PAGE_NAME_SYSINFO_LANGUAGES ("Sprachen", "Languages"),
   PAGE_NAME_SYSINFO_NETWORK ("Netzwerk", "Network"),
