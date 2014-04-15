@@ -41,7 +41,6 @@ import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.masterdata.currency.ECurrency;
-import com.phloc.webbasics.EWebBasicsText;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
@@ -60,10 +59,10 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
   {
     MSG_LOCALE ("Locale", "Locale"),
     MSG_CODE ("Code", "Code"),
+    MSG_NAME ("Name", "Name"),
     MSG_SYMBOL ("Symbol", "Symbol"),
     MSG_DEFAULT_FRACTION_DIGITS ("Nachkommastellen", "Fraction digits"),
-    MSG_EXAMPLE ("Beispiel", "Example"),
-    MSG_ECURRENCY ("Enum?", "Enum?");
+    MSG_EXAMPLE ("Beispiel", "Example");
 
     private final ITextProvider m_aTP;
 
@@ -139,29 +138,29 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
                                                           HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_LOCALE.getDisplayText (aDisplayLocale),
                                      EText.MSG_CODE.getDisplayText (aDisplayLocale),
+                                     EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_SYMBOL.getDisplayText (aDisplayLocale),
                                      EText.MSG_DEFAULT_FRACTION_DIGITS.getDisplayText (aDisplayLocale),
-                                     EText.MSG_EXAMPLE.getDisplayText (aDisplayLocale),
-                                     EText.MSG_ECURRENCY.getDisplayText (aDisplayLocale));
+                                     EText.MSG_EXAMPLE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <Locale, Currency> aEntry : _getAllCurrencies ().entrySet ())
     {
       final Locale aLocale = aEntry.getKey ();
       final Currency aCurrency = aEntry.getValue ();
+      final ECurrency eCurrency = ECurrency.getFromIDOrNull (aCurrency.getCurrencyCode ());
 
       final HCRow aRow = aTable.addBodyRow ();
       aRow.addCell (aLocale.toString ());
       aRow.addCell (aCurrency.getCurrencyCode ());
+      aRow.addCell (eCurrency == null ? null : eCurrency.getDisplayText (aDisplayLocale));
       aRow.addCell (aCurrency.getSymbol (aDisplayLocale));
       aRow.addCell (Integer.toString (aCurrency.getDefaultFractionDigits ()));
       aRow.addCell (NumberFormat.getCurrencyInstance (aLocale).format (12.3456));
-      aRow.addCell (EWebBasicsText.getYesOrNo (ECurrency.getFromIDOrNull (aCurrency.getCurrencyCode ()) != null,
-                                               aDisplayLocale));
     }
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
     aDataTables.getOrCreateColumnOfTarget (1).setDataSort (1, 0);
-    aDataTables.getOrCreateColumnOfTarget (3)
+    aDataTables.getOrCreateColumnOfTarget (4)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableInteger (aDisplayLocale));
     aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
