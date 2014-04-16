@@ -71,6 +71,7 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   @Translatable
   protected static enum EText implements IHasDisplayText, IHasDisplayTextWithArgs
   {
+    MSG_UPDATE ("Aktualisieren", "Update"),
     MSG_USERNAME ("Benutzername", "User name"),
     MSG_LOGINDT ("Anmeldezeit", "Login time"),
     MSG_LASTACCESSDT ("Letzter Zugriff", "Last access"),
@@ -293,6 +294,9 @@ public class BasePageLoginInfo extends AbstractWebPageFormExt <LoginInfo>
   {
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
     final HCNodeList aNodeList = aWPEC.getNodeList ();
+
+    final IButtonToolbar <?> aToolbar = aNodeList.addAndReturnChild (getStyler ().createToolbar ());
+    aToolbar.addButton (EText.MSG_UPDATE.getDisplayText (aDisplayLocale), aWPEC.getSelfHref ());
 
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (),
                                                           new HCCol (190),
