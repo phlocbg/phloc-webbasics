@@ -19,7 +19,6 @@ package com.phloc.webpages.sysinfo;
 
 import java.text.NumberFormat;
 import java.util.Currency;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,10 +26,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.compare.ESortOrder;
-import com.phloc.commons.locale.LocaleCache;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
@@ -40,7 +37,10 @@ import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.masterdata.currency.CurrencyUtils;
 import com.phloc.masterdata.currency.ECurrency;
+import com.phloc.masterdata.locale.ContinentUtils;
+import com.phloc.masterdata.locale.EContinent;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
@@ -102,28 +102,6 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
     super (sID, aName, aDescription);
   }
 
-  @Nonnull
-  @ReturnsMutableCopy
-  private static Map <Locale, Currency> _getAllCurrencies ()
-  {
-    final Map <Locale, Currency> ret = new HashMap <Locale, Currency> ();
-    for (final Locale aLocale : LocaleCache.getAllLocales ())
-    {
-      try
-      {
-        final Currency aCurrency = Currency.getInstance (aLocale);
-        if (aCurrency != null)
-          ret.put (aLocale, aCurrency);
-      }
-      catch (final Exception exc)
-      {
-        // Locale not found
-      }
-    }
-
-    return ret;
-  }
-
   @Override
   protected void fillContent (@Nonnull final WebPageExecutionContext aWPEC)
   {
@@ -135,21 +113,25 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
                                                           HCCol.star (),
                                                           HCCol.star (),
                                                           HCCol.star (),
+                                                          HCCol.star (),
                                                           HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_LOCALE.getDisplayText (aDisplayLocale),
+    aTable.addHeaderRow ().addCells ("Kontinent",
+                                     EText.MSG_LOCALE.getDisplayText (aDisplayLocale),
                                      EText.MSG_CODE.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_SYMBOL.getDisplayText (aDisplayLocale),
                                      EText.MSG_DEFAULT_FRACTION_DIGITS.getDisplayText (aDisplayLocale),
                                      EText.MSG_EXAMPLE.getDisplayText (aDisplayLocale));
-    for (final Map.Entry <Locale, Currency> aEntry : _getAllCurrencies ().entrySet ())
+    for (final Map.Entry <Locale, Currency> aEntry : CurrencyUtils.getLocaleToCurrencyMap ().entrySet ())
     {
       final Locale aLocale = aEntry.getKey ();
       final Currency aCurrency = aEntry.getValue ();
       final ECurrency eCurrency = ECurrency.getFromIDOrNull (aCurrency.getCurrencyCode ());
+      final EContinent eContinent = ContinentUtils.getContinentOfCountry (aLocale);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (aLocale.toString ());
+      aRow.addCell (eContinent == null ? null : eContinent.getDisplayText (aDisplayLocale));
+      aRow.addCell (aLocale.getDisplayName (aDisplayLocale) + " (" + aLocale.toString () + ")");
       aRow.addCell (aCurrency.getCurrencyCode ());
       aRow.addCell (eCurrency == null ? null : eCurrency.getDisplayText (aDisplayLocale));
       aRow.addCell (aCurrency.getSymbol (aDisplayLocale));
@@ -159,11 +141,11 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getOrCreateColumnOfTarget (1).setDataSort (1, 0);
-    aDataTables.getOrCreateColumnOfTarget (4)
+    aDataTables.getOrCreateColumnOfTarget (2).setDataSort (2, 1);
+    aDataTables.getOrCreateColumnOfTarget (5)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableInteger (aDisplayLocale));
-    aDataTables.setInitialSorting (1, ESortOrder.ASCENDING);
+    aDataTables.setInitialSorting (2, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
 }
