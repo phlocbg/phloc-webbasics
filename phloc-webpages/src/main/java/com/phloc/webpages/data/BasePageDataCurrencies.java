@@ -60,13 +60,13 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
-    MSG_CONTINENTS ("Kontinente", "Continents"),
-    MSG_LOCALE ("Locale", "Locale"),
     MSG_CODE ("Code", "Code"),
     MSG_NAME ("Name", "Name"),
     MSG_SYMBOL ("Symbol", "Symbol"),
     MSG_DEFAULT_FRACTION_DIGITS ("Nachkommastellen", "Fraction digits"),
-    MSG_EXAMPLE ("Beispiel", "Example");
+    MSG_EXAMPLE ("Beispiel", "Example"),
+    MSG_CONTINENTS ("Kontinente", "Continents"),
+    MSG_LOCALE ("Locale", "Locale");
 
     private final ITextProvider m_aTP;
 
@@ -119,13 +119,13 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
                                                           HCCol.star (),
                                                           HCCol.star (),
                                                           HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_CONTINENTS.getDisplayText (aDisplayLocale),
-                                     EText.MSG_LOCALE.getDisplayText (aDisplayLocale),
-                                     EText.MSG_CODE.getDisplayText (aDisplayLocale),
+    aTable.addHeaderRow ().addCells (EText.MSG_CODE.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
                                      EText.MSG_SYMBOL.getDisplayText (aDisplayLocale),
                                      EText.MSG_DEFAULT_FRACTION_DIGITS.getDisplayText (aDisplayLocale),
-                                     EText.MSG_EXAMPLE.getDisplayText (aDisplayLocale));
+                                     EText.MSG_EXAMPLE.getDisplayText (aDisplayLocale),
+                                     EText.MSG_CONTINENTS.getDisplayText (aDisplayLocale),
+                                     EText.MSG_LOCALE.getDisplayText (aDisplayLocale));
     for (final Map.Entry <Locale, Currency> aEntry : CurrencyUtils.getLocaleToCurrencyMap ().entrySet ())
     {
       final Locale aLocale = aEntry.getKey ();
@@ -133,6 +133,12 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
       final ECurrency eCurrency = ECurrency.getFromIDOrNull (aCurrency.getCurrencyCode ());
 
       final HCRow aRow = aTable.addBodyRow ();
+
+      aRow.addCell (aCurrency.getCurrencyCode ());
+      aRow.addCell (eCurrency == null ? null : eCurrency.getDisplayText (aDisplayLocale));
+      aRow.addCell (aCurrency.getSymbol (aDisplayLocale));
+      aRow.addCell (Integer.toString (aCurrency.getDefaultFractionDigits ()));
+      aRow.addCell (NumberFormat.getCurrencyInstance (aLocale).format (12.3456));
 
       // Continents
       final Set <EContinent> aContinents = ContinentUtils.getContinentsOfCountry (aLocale);
@@ -155,23 +161,18 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
         aDiv.addChild (eIcon.getAsNode ());
         aDiv.addChild (" ");
       }
-      aDiv.addChild (aLocale.getDisplayName (aDisplayLocale) + " (" + aLocale.toString () + ")");
+      aDiv.addChild (aLocale.getDisplayName (aDisplayLocale) + " [" + aLocale.toString () + "]");
       aRow.addCell (aDiv);
-
-      aRow.addCell (aCurrency.getCurrencyCode ());
-      aRow.addCell (eCurrency == null ? null : eCurrency.getDisplayText (aDisplayLocale));
-      aRow.addCell (aCurrency.getSymbol (aDisplayLocale));
-      aRow.addCell (Integer.toString (aCurrency.getDefaultFractionDigits ()));
-      aRow.addCell (NumberFormat.getCurrencyInstance (aLocale).format (12.3456));
     }
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getOrCreateColumnOfTarget (2).setDataSort (2, 1);
-    aDataTables.getOrCreateColumnOfTarget (5)
+    aDataTables.getOrCreateColumnOfTarget (0).setDataSort (0, 6);
+    aDataTables.getOrCreateColumnOfTarget (1).setDataSort (1, 6);
+    aDataTables.getOrCreateColumnOfTarget (3)
                .addClass (CSS_CLASS_RIGHT)
                .setComparator (new ComparatorTableInteger (aDisplayLocale));
-    aDataTables.setInitialSorting (2, ESortOrder.ASCENDING);
+    aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }
 }
