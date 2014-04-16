@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +58,7 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
-    MSG_CONTINENT ("Kontinent", "Continent"),
+    MSG_CONTINENTS ("Kontinente", "Continents"),
     MSG_LOCALE ("Locale", "Locale"),
     MSG_CODE ("Code", "Code"),
     MSG_NAME ("Name", "Name"),
@@ -116,7 +117,7 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
                                                           HCCol.star (),
                                                           HCCol.star (),
                                                           HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells (EText.MSG_CONTINENT.getDisplayText (aDisplayLocale),
+    aTable.addHeaderRow ().addCells (EText.MSG_CONTINENTS.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOCALE.getDisplayText (aDisplayLocale),
                                      EText.MSG_CODE.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
@@ -128,10 +129,22 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
       final Locale aLocale = aEntry.getKey ();
       final Currency aCurrency = aEntry.getValue ();
       final ECurrency eCurrency = ECurrency.getFromIDOrNull (aCurrency.getCurrencyCode ());
-      final EContinent eContinent = ContinentUtils.getContinentOfCountry (aLocale);
 
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (eContinent == null ? null : eContinent.getDisplayText (aDisplayLocale));
+
+      // Continents
+      final Set <EContinent> aContinents = ContinentUtils.getContinentsOfCountry (aLocale);
+      final StringBuilder aSB = new StringBuilder ();
+      if (aContinents != null)
+        for (final EContinent eContinent : aContinents)
+          if (eContinent != null)
+          {
+            if (aSB.length () > 0)
+              aSB.append (", ");
+            aSB.append (eContinent.getDisplayText (aDisplayLocale));
+          }
+      aRow.addCell (aSB.toString ());
+
       aRow.addCell (aLocale.getDisplayName (aDisplayLocale) + " (" + aLocale.toString () + ")");
       aRow.addCell (aCurrency.getCurrencyCode ());
       aRow.addCell (eCurrency == null ? null : eCurrency.getDisplayText (aDisplayLocale));

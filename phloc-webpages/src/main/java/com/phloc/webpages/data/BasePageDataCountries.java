@@ -18,6 +18,7 @@
 package com.phloc.webpages.data;
 
 import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +57,7 @@ public class BasePageDataCountries extends AbstractWebPageExt
   {
     MSG_ID ("ID", "ID"),
     MSG_NAME ("Name", "Name"),
-    MSG_CONTINENT ("Kontinent", "Continent");
+    MSG_CONTINENTS ("Kontinente", "Continents");
 
     private final ITextProvider m_aTP;
 
@@ -105,7 +106,7 @@ public class BasePageDataCountries extends AbstractWebPageExt
     final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), HCCol.star (), HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_CONTINENT.getDisplayText (aDisplayLocale));
+                                     EText.MSG_CONTINENTS.getDisplayText (aDisplayLocale));
 
     // For all countries
     for (final Locale aCountry : CountryCache.getAllCountryLocales ())
@@ -126,9 +127,18 @@ public class BasePageDataCountries extends AbstractWebPageExt
       aDiv.addChild (aCountry.getDisplayCountry (aDisplayLocale));
       aRow.addCell (aDiv);
 
-      // Continent
-      final EContinent eContinent = ContinentUtils.getContinentOfCountry (aCountry);
-      aRow.addCell (eContinent == null ? null : eContinent.getDisplayText (aDisplayLocale));
+      // Continents
+      final Set <EContinent> aContinents = ContinentUtils.getContinentsOfCountry (aCountry);
+      final StringBuilder aSB = new StringBuilder ();
+      if (aContinents != null)
+        for (final EContinent eContinent : aContinents)
+          if (eContinent != null)
+          {
+            if (aSB.length () > 0)
+              aSB.append (", ");
+            aSB.append (eContinent.getDisplayText (aDisplayLocale));
+          }
+      aRow.addCell (aSB.toString ());
     }
     aNodeList.addChild (aTable);
 
