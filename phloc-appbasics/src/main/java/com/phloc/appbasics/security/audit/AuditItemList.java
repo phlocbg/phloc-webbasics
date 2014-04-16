@@ -24,6 +24,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -53,10 +54,15 @@ final class AuditItemList
 
   void internalAddItem (@Nonnull final IAuditItem aItem)
   {
-    if (aItem == null)
-      throw new NullPointerException ("item");
+    ValueEnforcer.notNull (aItem, "Item");
 
     m_aItems.add (aItem);
+  }
+
+  @Nonnegative
+  public int getItemCount ()
+  {
+    return m_aItems.size ();
   }
 
   @Nonnull

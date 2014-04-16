@@ -32,6 +32,7 @@ import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.callback.IThrowingRunnableWithParameter;
 import com.phloc.commons.equals.EqualsUtils;
@@ -110,11 +111,22 @@ public final class AuditManager extends AbstractSimpleDAO implements IAuditManag
   private final AuditItemList m_aItems = new AuditItemList ();
   private final AsynchronousAuditor m_aAuditor;
 
+  /**
+   * Constructor
+   * 
+   * @param sBaseDir
+   *        The base directory, relative to the {@link WebFileIO#getDataIO()}
+   *        base directory. May be <code>null</code> to indicate an in-memory
+   *        auditor only.
+   * @param aUserIDProvider
+   *        The current user ID provider. May not be <code>null</code>.
+   * @throws DAOException
+   *         In case reading failed
+   */
   public AuditManager (@Nullable final String sBaseDir, @Nonnull final ICurrentUserIDProvider aUserIDProvider) throws DAOException
   {
     super (new AuditHasFilename (sBaseDir));
-    if (aUserIDProvider == null)
-      throw new NullPointerException ("userIDProvider");
+    ValueEnforcer.notNull (aUserIDProvider, "UserIDProvider");
 
     // Ensure base path is present
     if (StringHelper.hasText (sBaseDir))
@@ -146,7 +158,7 @@ public final class AuditManager extends AbstractSimpleDAO implements IAuditManag
   }
 
   @Nonnull
-  public IAuditor getAuditor ()
+  public AsynchronousAuditor getAuditor ()
   {
     return m_aAuditor;
   }
@@ -216,7 +228,26 @@ public final class AuditManager extends AbstractSimpleDAO implements IAuditManag
   protected void onFilenameChange (@Nullable final String sPreviousFilename, @Nonnull final String sNewFilename)
   {
     // Called within a write lock
-    m_aItems.internalKeepOnlyLast ();
+    if (sPreviousFilename != null)
+    {
+      // Don't update for the first read, as this would remove all previously
+      // read items
+      m_aItems.internalKeepOnlyLast ();
+    }
+  }
+
+  @Nonnegative
+  public int getAuditItemCount ()
+  {
+    m_aRWLock.readLock ().lock ();
+    try
+    {
+      return m_aItems.getItemCount ();
+    }
+    finally
+    {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nonnull
@@ -261,6 +292,9 @@ public final class AuditManager extends AbstractSimpleDAO implements IAuditManag
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("items", m_aItems).toString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("items", m_aItems)
+                            .append ("auditor", m_aAuditor)
+                            .toString ();
   }
 }

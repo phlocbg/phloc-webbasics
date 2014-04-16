@@ -33,6 +33,8 @@ import com.phloc.commons.annotations.OverrideOnDemand;
  */
 public class LoggingAuditor extends AbstractAuditor
 {
+  public static final String VALUE_SUCCESS = "success";
+  public static final String VALUE_FAILURE = "failure";
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingAuditor.class);
 
   public LoggingAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
@@ -42,7 +44,7 @@ public class LoggingAuditor extends AbstractAuditor
 
   @Nonnull
   @OverrideOnDemand
-  protected String getAuditItemString (@Nonnull final IAuditItem aAuditItem)
+  public static String getDefaultAuditItemString (@Nonnull final IAuditItem aAuditItem)
   {
     return ISODateTimeFormat.basicDateTime ().print (aAuditItem.getDateTime ()) +
            " " +
@@ -50,9 +52,16 @@ public class LoggingAuditor extends AbstractAuditor
            " " +
            aAuditItem.getType ().getID () +
            " " +
-           (aAuditItem.isSuccess () ? "success" : "failure") +
+           (aAuditItem.isSuccess () ? VALUE_SUCCESS : VALUE_FAILURE) +
            " " +
            aAuditItem.getAction ();
+  }
+
+  @Nonnull
+  @OverrideOnDemand
+  protected String getAuditItemString (@Nonnull final IAuditItem aAuditItem)
+  {
+    return getDefaultAuditItemString (aAuditItem);
   }
 
   @Override

@@ -23,9 +23,9 @@ import javax.annotation.concurrent.Immutable;
 
 import org.joda.time.DateTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.ESuccess;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 
@@ -57,21 +57,11 @@ final class AuditItem implements IAuditItem
              @Nonnull final ESuccess eSuccess,
              @Nonnull final String sAction)
   {
-    if (aDateTime == null)
-      throw new NullPointerException ("dateTime");
-    if (StringHelper.hasNoText (sUserID))
-      throw new IllegalArgumentException ("userID");
-    if (eType == null)
-      throw new NullPointerException ("type");
-    if (eSuccess == null)
-      throw new NullPointerException ("success");
-    if (sAction == null)
-      throw new NullPointerException ("action");
-    m_aDateTime = aDateTime;
-    m_sUserID = sUserID;
-    m_eType = eType;
-    m_eSuccess = eSuccess;
-    m_sAction = sAction;
+    m_aDateTime = ValueEnforcer.notNull (aDateTime, "DateTime");
+    m_sUserID = ValueEnforcer.notEmpty (sUserID, "UserID");
+    m_eType = ValueEnforcer.notNull (eType, "Type");
+    m_eSuccess = ValueEnforcer.notNull (eSuccess, "Success");
+    m_sAction = ValueEnforcer.notNull (sAction, "Action");
   }
 
   @Nonnull

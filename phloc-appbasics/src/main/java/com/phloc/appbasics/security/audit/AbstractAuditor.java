@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.state.ESuccess;
@@ -39,9 +40,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public AbstractAuditor (@Nonnull final ICurrentUserIDProvider aUserIDProvider)
   {
-    if (aUserIDProvider == null)
-      throw new NullPointerException ("userIDProvider");
-    m_aUserIDProvider = aUserIDProvider;
+    m_aUserIDProvider = ValueEnforcer.notNull (aUserIDProvider, "UserIDProvider");
   }
 
   /**
@@ -91,8 +90,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onCreateSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.CREATE,
                       ESuccess.SUCCESS,
@@ -101,8 +99,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onCreateFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.CREATE,
                       ESuccess.FAILURE,
@@ -113,8 +110,7 @@ public abstract class AbstractAuditor implements IAuditor
                                final String sWhat,
                                @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.MODIFY,
                       ESuccess.SUCCESS,
@@ -125,8 +121,7 @@ public abstract class AbstractAuditor implements IAuditor
                                final String sWhat,
                                @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.MODIFY,
                       ESuccess.FAILURE,
@@ -135,8 +130,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onDeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.DELETE,
                       ESuccess.SUCCESS,
@@ -145,8 +139,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onDeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.DELETE,
                       ESuccess.FAILURE,
@@ -155,8 +148,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onUndeleteSuccess (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.UNDELETE,
                       ESuccess.SUCCESS,
@@ -165,8 +157,7 @@ public abstract class AbstractAuditor implements IAuditor
 
   public void onUndeleteFailure (@Nonnull final ObjectType aObjectType, @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.UNDELETE,
                       ESuccess.FAILURE,
@@ -187,8 +178,7 @@ public abstract class AbstractAuditor implements IAuditor
                                 @Nonnull final String sWhat,
                                 @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.EXECUTE,
                       ESuccess.SUCCESS,
@@ -199,8 +189,7 @@ public abstract class AbstractAuditor implements IAuditor
                                 @Nonnull final String sWhat,
                                 @Nullable final String... aArgs)
   {
-    if (aObjectType == null)
-      throw new NullPointerException ("objectType");
+    ValueEnforcer.notNull (aObjectType, "ObjectType");
 
     _createAuditItem (EAuditActionType.EXECUTE,
                       ESuccess.FAILURE,

@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.security.login.ICurrentUserIDProvider;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.callback.IThrowingRunnableWithParameter;
 import com.phloc.commons.concurrent.ExtendedDefaultThreadFactory;
 import com.phloc.commons.concurrent.collector.ConcurrentCollectorMultiple;
@@ -58,8 +59,7 @@ public class AsynchronousAuditor extends AbstractAuditor
                               @Nonnull final IThrowingRunnableWithParameter <List <IAuditItem>> aPerformer)
   {
     super (aUserIDProvider);
-    if (aPerformer == null)
-      throw new NullPointerException ("performer");
+    ValueEnforcer.notNull (aPerformer, "Performer");
 
     m_aCollector = new ConcurrentCollectorMultiple <IAuditItem> (aPerformer);
     m_aSenderThreadPool = Executors.newSingleThreadExecutor (s_aThreadFactory);
@@ -69,6 +69,8 @@ public class AsynchronousAuditor extends AbstractAuditor
   @Override
   protected void handleAuditItem (@Nonnull final IAuditItem aAuditItem)
   {
+    ValueEnforcer.notNull (aAuditItem, "AuditItem");
+
     m_aRWLock.writeLock ().lock ();
     try
     {

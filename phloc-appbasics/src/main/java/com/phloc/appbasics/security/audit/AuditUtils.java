@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.mock.MockCurrentUserIDProvider;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.type.ObjectType;
 
@@ -76,8 +77,7 @@ public final class AuditUtils
    */
   public static void setAuditor (@Nonnull final IAuditor aAuditor)
   {
-    if (aAuditor == null)
-      throw new NullPointerException ("auditor");
+    ValueEnforcer.notNull (aAuditor, "Auditor");
 
     s_aRWLock.writeLock ().lock ();
     try
