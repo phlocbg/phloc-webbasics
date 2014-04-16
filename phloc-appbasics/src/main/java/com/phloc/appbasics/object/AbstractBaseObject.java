@@ -28,7 +28,6 @@ import com.phloc.appbasics.security.login.LoggedInUserManager;
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.PDTUtils;
@@ -69,10 +68,7 @@ public abstract class AbstractBaseObject implements IObject
                              @Nullable final DateTime aDeletionDT,
                              @Nullable final String sDeletionUserID)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-
-    m_sID = sID;
+    m_sID = ValueEnforcer.notEmpty (sID, "ID");
     m_aCreationDT = aCreationDT;
     m_sCreationUserID = sCreationUserID;
     m_aLastModificationDT = aLastModificationDT;
@@ -120,10 +116,8 @@ public abstract class AbstractBaseObject implements IObject
   public final void setLastModification (@Nonnull final DateTime aLastModificationDT,
                                          @Nonnull @Nonempty final String sLastModificationUserID)
   {
-    if (aLastModificationDT == null)
-      throw new NullPointerException ("lastModificationDT");
-    if (StringHelper.hasNoText (sLastModificationUserID))
-      throw new IllegalArgumentException ("lastModificationUserID");
+    ValueEnforcer.notNull (aLastModificationDT, "LastModificationDT");
+    ValueEnforcer.notEmpty (sLastModificationUserID, "LastModificationUserID");
 
     if (isDeleted ())
       throw new IllegalStateException ("Object is deleted and can therefore not be modified!");
@@ -153,10 +147,8 @@ public abstract class AbstractBaseObject implements IObject
   @Nonnull
   public final EChange setDeletion (@Nonnull final DateTime aDeletionDT, @Nonnull @Nonempty final String sDeletionUserID)
   {
-    if (aDeletionDT == null)
-      throw new NullPointerException ("deletionDT");
-    if (StringHelper.hasNoText (sDeletionUserID))
-      throw new IllegalArgumentException ("deletionUserID");
+    ValueEnforcer.notNull (aDeletionDT, "DeletionDT");
+    ValueEnforcer.notEmpty (sDeletionUserID, "DeletionUserID");
 
     if (m_aDeletionDT != null)
     {
@@ -179,10 +171,8 @@ public abstract class AbstractBaseObject implements IObject
   public final EChange setUndeletion (@Nonnull final DateTime aUndeletionDT,
                                       @Nonnull @Nonempty final String sUndeletionUserID)
   {
-    if (aUndeletionDT == null)
-      throw new NullPointerException ("undeletionDT");
-    if (StringHelper.hasNoText (sUndeletionUserID))
-      throw new IllegalArgumentException ("undeletionUserID");
+    ValueEnforcer.notNull (aUndeletionDT, "UndeletionDT");
+    ValueEnforcer.notEmpty (sUndeletionUserID, "UndeletionUserID");
 
     if (m_aDeletionDT == null)
     {

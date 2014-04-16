@@ -243,6 +243,28 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
 
   @Nonnull
   @ReturnsMutableCopy
+  public Collection <? extends IAccountingArea> getAllAccountingAreasOfClient (@Nullable final IClient aClient)
+  {
+    final List <IAccountingArea> ret = new ArrayList <IAccountingArea> ();
+    if (aClient != null)
+    {
+      m_aRWLock.readLock ().lock ();
+      try
+      {
+        for (final IAccountingArea aAccountingArea : m_aMap.values ())
+          if (aAccountingArea.hasSameClient (aClient))
+            ret.add (aAccountingArea);
+      }
+      finally
+      {
+        m_aRWLock.readLock ().unlock ();
+      }
+    }
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public Collection <String> getAllAccountingAreaIDsOfClient (@Nullable final String sClientID)
   {
     final List <String> ret = new ArrayList <String> ();
@@ -263,9 +285,34 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
     return ret;
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <String> getAllAccountingAreaIDsOfClient (@Nullable final IClient aClient)
+  {
+    final List <String> ret = new ArrayList <String> ();
+    if (aClient != null)
+    {
+      m_aRWLock.readLock ().lock ();
+      try
+      {
+        for (final IAccountingArea aAccountingArea : m_aMap.values ())
+          if (aAccountingArea.hasSameClient (aClient))
+            ret.add (aAccountingArea.getID ());
+      }
+      finally
+      {
+        m_aRWLock.readLock ().unlock ();
+      }
+    }
+    return ret;
+  }
+
   @Nullable
   public IAccountingArea getAccountingAreaOfID (@Nullable final String sID)
   {
+    if (StringHelper.hasNoText (sID))
+      return null;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -278,14 +325,24 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
   }
 
   @Nullable
+  @Deprecated
   public IAccountingArea getAccountingAreaOfClientOfID (@Nullable final String sClientID, @Nullable final String sID)
   {
     final IAccountingArea aAccountingArea = getAccountingAreaOfID (sID);
     return aAccountingArea == null || !aAccountingArea.getClientID ().equals (sClientID) ? null : aAccountingArea;
   }
 
+  public IAccountingArea getAccountingAreaOfID (@Nullable final String sID, @Nullable final IClient aClient)
+  {
+    final IAccountingArea aAccountingArea = getAccountingAreaOfID (sID);
+    return aAccountingArea != null && aAccountingArea.hasSameClient (aClient) ? aAccountingArea : null;
+  }
+
   public boolean containsAccountingAreaWithID (@Nullable final String sID)
   {
+    if (StringHelper.hasNoText (sID))
+      return false;
+
     m_aRWLock.readLock ().lock ();
     try
     {
@@ -297,13 +354,20 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
     }
   }
 
+  @Deprecated
   public boolean containsAccountingAreaWithIDInClient (@Nullable final String sClientID, @Nullable final String sID)
   {
     final IAccountingArea aAccountingArea = getAccountingAreaOfID (sID);
     return aAccountingArea != null && aAccountingArea.getClientID ().equals (sClientID);
   }
 
+  public boolean containsAccountingAreaWithID (@Nullable final String sID, @Nullable final IClient aClient)
+  {
+    return getAccountingAreaOfID (sID, aClient) != null;
+  }
+
   @Nullable
+  @Deprecated
   public IAccountingArea getAccountingAreaOfName (@Nullable final String sClientID, @Nullable final String sName)
   {
     if (StringHelper.hasText (sClientID) && StringHelper.hasText (sName))
@@ -313,6 +377,26 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
       {
         for (final IAccountingArea aAccountingArea : m_aMap.values ())
           if (aAccountingArea.getClientID ().equals (sClientID) && aAccountingArea.getDisplayName ().equals (sName))
+            return aAccountingArea;
+      }
+      finally
+      {
+        m_aRWLock.readLock ().unlock ();
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public IAccountingArea getAccountingAreaOfName (@Nullable final String sName, @Nullable final IClient aClient)
+  {
+    if (StringHelper.hasText (sName) && aClient != null)
+    {
+      m_aRWLock.readLock ().lock ();
+      try
+      {
+        for (final IAccountingArea aAccountingArea : m_aMap.values ())
+          if (aAccountingArea.hasSameClient (aClient) && aAccountingArea.getDisplayName ().equals (sName))
             return aAccountingArea;
       }
       finally

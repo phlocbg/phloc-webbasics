@@ -30,6 +30,7 @@ import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.object.CObject;
 import com.phloc.appbasics.security.audit.AuditUtils;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -88,8 +89,7 @@ public class ClientManager extends AbstractSimpleDAO implements IClientResolver
 
   private void _addClient (@Nonnull final Client aClient)
   {
-    if (aClient == null)
-      throw new NullPointerException ("client");
+    ValueEnforcer.notNull (aClient, "Client");
 
     final String sClientID = aClient.getID ();
     if (m_aMap.containsKey (sClientID))

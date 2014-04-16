@@ -23,9 +23,9 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.appbasics.object.AbstractObject;
 import com.phloc.appbasics.object.CObject;
 import com.phloc.appbasics.object.StubObject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
 
@@ -79,8 +79,8 @@ public final class Client extends AbstractObject implements IClient
   @Nonnull
   public EChange setDisplayName (@Nonnull @Nonempty final String sDisplayName)
   {
-    if (StringHelper.hasNoText (sDisplayName))
-      throw new IllegalArgumentException ("DisplayName");
+    ValueEnforcer.notEmpty (sDisplayName, "DisplayName");
+
     if (sDisplayName.equals (m_sDisplayName))
       return EChange.UNCHANGED;
     m_sDisplayName = sDisplayName;

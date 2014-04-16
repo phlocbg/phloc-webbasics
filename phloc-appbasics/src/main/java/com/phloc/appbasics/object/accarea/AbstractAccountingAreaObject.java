@@ -27,6 +27,7 @@ import com.phloc.appbasics.object.AbstractBaseObject;
 import com.phloc.appbasics.object.StubObject;
 import com.phloc.appbasics.object.client.IClient;
 import com.phloc.appbasics.object.client.IClientObject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -55,11 +56,9 @@ public abstract class AbstractAccountingAreaObject extends AbstractBaseObject im
                                        @Nonnull final StubObject aObject)
   {
     super (aObject);
-    if (aClient == null)
-      throw new NullPointerException ("client");
-    if (aAccountingArea == null)
-      throw new NullPointerException ("accountingArea");
-    if (!aAccountingArea.getClientID ().equals (aClient.getID ()))
+    ValueEnforcer.notNull (aClient, "Client");
+    ValueEnforcer.notNull (aAccountingArea, "AccountingArea");
+    if (!aAccountingArea.hasSameClient (aClient))
       throw new IllegalArgumentException ("The passed accounting area '" +
                                           aAccountingArea.getID () +
                                           "' does not belong to the passed client '" +
@@ -87,11 +86,9 @@ public abstract class AbstractAccountingAreaObject extends AbstractBaseObject im
            sLastModificationUserID,
            aDeletionDT,
            sDeletionUserID);
-    if (aClient == null)
-      throw new NullPointerException ("client");
-    if (aAccountingArea == null)
-      throw new NullPointerException ("accountingArea");
-    if (!aAccountingArea.getClientID ().equals (aClient.getID ()))
+    ValueEnforcer.notNull (aClient, "Client");
+    ValueEnforcer.notNull (aAccountingArea, "AccountingArea");
+    if (!aAccountingArea.hasSameClient (aClient))
       throw new IllegalArgumentException ("The passed accounting area '" +
                                           aAccountingArea.getID () +
                                           "' does not belong to the passed client '" +
@@ -117,8 +114,7 @@ public abstract class AbstractAccountingAreaObject extends AbstractBaseObject im
 
   public final boolean hasSameClientID (@Nonnull final IClientObject aClientObject)
   {
-    if (aClientObject == null)
-      throw new NullPointerException ("clientObject");
+    ValueEnforcer.notNull (aClientObject, "ClientObject");
 
     return hasSameClientID (aClientObject.getClientID ());
   }
