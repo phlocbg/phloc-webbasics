@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webpages.sysinfo;
+package com.phloc.webpages.data;
 
 import java.util.List;
 import java.util.Locale;
@@ -54,7 +54,7 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoLanguages extends AbstractWebPageExt
+public class BasePageDataLanguages extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
@@ -77,26 +77,26 @@ public class BasePageSysInfoLanguages extends AbstractWebPageExt
     }
   }
 
-  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID)
+  public BasePageDataLanguages (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYSINFO_LANGUAGES.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_DATA_LANGUAGES.getAsMLT ());
   }
 
-  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageDataLanguages (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID,
-                                   @Nonnull final String sName,
-                                   @Nullable final String sDescription)
+  public BasePageDataLanguages (@Nonnull @Nonempty final String sID,
+                                @Nonnull final String sName,
+                                @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageSysInfoLanguages (@Nonnull @Nonempty final String sID,
-                                   @Nonnull final IReadonlyMultiLingualText aName,
-                                   @Nullable final IReadonlyMultiLingualText aDescription)
+  public BasePageDataLanguages (@Nonnull @Nonempty final String sID,
+                                @Nonnull final IReadonlyMultiLingualText aName,
+                                @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }

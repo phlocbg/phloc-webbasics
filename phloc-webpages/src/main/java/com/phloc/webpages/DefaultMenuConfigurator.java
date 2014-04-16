@@ -31,6 +31,9 @@ import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
+import com.phloc.webpages.data.BasePageDataCurrencies;
+import com.phloc.webpages.data.BasePageDataLanguages;
+import com.phloc.webpages.data.BasePageDataTimeZones;
 import com.phloc.webpages.monitoring.BasePageAudit;
 import com.phloc.webpages.monitoring.BasePageLoginInfo;
 import com.phloc.webpages.monitoring.BasePageScopes;
@@ -41,15 +44,12 @@ import com.phloc.webpages.security.BasePageUserManagement;
 import com.phloc.webpages.settings.BasePageSettingsGlobal;
 import com.phloc.webpages.settings.BasePageSettingsSMTP;
 import com.phloc.webpages.sysinfo.BasePageSysInfoChangeLogs;
-import com.phloc.webpages.sysinfo.BasePageSysInfoCurrencies;
 import com.phloc.webpages.sysinfo.BasePageSysInfoEnvironmentVariables;
-import com.phloc.webpages.sysinfo.BasePageSysInfoLanguages;
 import com.phloc.webpages.sysinfo.BasePageSysInfoNetwork;
 import com.phloc.webpages.sysinfo.BasePageSysInfoRequest;
 import com.phloc.webpages.sysinfo.BasePageSysInfoSystemProperties;
 import com.phloc.webpages.sysinfo.BasePageSysInfoThirdPartyLibraries;
 import com.phloc.webpages.sysinfo.BasePageSysInfoThreads;
-import com.phloc.webpages.sysinfo.BasePageSysInfoTimeZones;
 
 @Immutable
 public final class DefaultMenuConfigurator
@@ -68,15 +68,16 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_SETTINGS_SMTP = "admin_settings_smtp";
   public static final String MENU_ADMIN_SYSINFO = "admin_sysinfo";
   public static final String MENU_ADMIN_SYSINFO_CHANGELOGS = "admin_sysinfo_changelog";
-  public static final String MENU_ADMIN_SYSINFO_CURRENCIES = "admin_sysinfo_currencies";
   public static final String MENU_ADMIN_SYSINFO_ENVVARS = "admin_sysinfo_envvars";
-  public static final String MENU_ADMIN_SYSINFO_LANGUAGES = "admin_sysinfo_languages";
   public static final String MENU_ADMIN_SYSINFO_NETWORK = "admin_sysinfo_network";
   public static final String MENU_ADMIN_SYSINFO_REQUEST = "admin_sysinfo_request";
   public static final String MENU_ADMIN_SYSINFO_SYSPROPS = "admin_sysinfo_sysprops";
   public static final String MENU_ADMIN_SYSINFO_THIRDPARTYLIBS = "admin_sysinfo_thirdpartylibs";
   public static final String MENU_ADMIN_SYSINFO_THREADS = "admin_sysinfo_threads";
-  public static final String MENU_ADMIN_SYSINFO_TIMEZONES = "admin_sysinfo_timezones";
+  public static final String MENU_ADMIN_DATA = "admin_data";
+  public static final String MENU_ADMIN_DATA_CURRENCIES = "admin_data_currencies";
+  public static final String MENU_ADMIN_DATA_LANGUAGES = "admin_data_languages";
+  public static final String MENU_ADMIN_DATA_TIMEZONES = "admin_data_timezones";
 
   private DefaultMenuConfigurator ()
   {}
@@ -166,11 +167,7 @@ public final class DefaultMenuConfigurator
                                                  .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoChangeLogs (MENU_ADMIN_SYSINFO_CHANGELOGS))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoCurrencies (MENU_ADMIN_SYSINFO_CURRENCIES))
-             .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoEnvironmentVariables (MENU_ADMIN_SYSINFO_ENVVARS))
-             .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoLanguages (MENU_ADMIN_SYSINFO_LANGUAGES))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoNetwork (MENU_ADMIN_SYSINFO_NETWORK))
              .setDisplayFilter (aDisplayFilter);
@@ -182,8 +179,25 @@ public final class DefaultMenuConfigurator
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoThreads (MENU_ADMIN_SYSINFO_THREADS))
              .setDisplayFilter (aDisplayFilter);
-    aMenuTree.createItem (aAdminSysInfo, new BasePageSysInfoTimeZones (MENU_ADMIN_SYSINFO_TIMEZONES))
-             .setDisplayFilter (aDisplayFilter);
     return aAdminSysInfo;
+  }
+
+  @Nonnull
+  public static IMenuItemPage addDataItems (@Nonnull final IMenuTree aMenuTree,
+                                            @Nonnull final IMenuItem aParent,
+                                            @Nullable final IFilter <IMenuObject> aDisplayFilter)
+  {
+    final IMenuItemPage aAdminData = aMenuTree.createItem (aParent,
+                                                           new PageShowChildren (MENU_ADMIN_DATA,
+                                                                                 EWebPageText.PAGE_NAME_DATA.getAsMLT (),
+                                                                                 aMenuTree))
+                                              .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminData, new BasePageDataCurrencies (MENU_ADMIN_DATA_CURRENCIES))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminData, new BasePageDataLanguages (MENU_ADMIN_DATA_LANGUAGES))
+             .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminData, new BasePageDataTimeZones (MENU_ADMIN_DATA_TIMEZONES))
+             .setDisplayFilter (aDisplayFilter);
+    return aAdminData;
   }
 }

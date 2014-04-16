@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.webpages.sysinfo;
+package com.phloc.webpages.data;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -52,11 +52,12 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageSysInfoCurrencies extends AbstractWebPageExt
+public class BasePageDataCurrencies extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
+    MSG_CONTINENT ("Kontinent", "Continent"),
     MSG_LOCALE ("Locale", "Locale"),
     MSG_CODE ("Code", "Code"),
     MSG_NAME ("Name", "Name"),
@@ -78,26 +79,26 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
     }
   }
 
-  public BasePageSysInfoCurrencies (@Nonnull @Nonempty final String sID)
+  public BasePageDataCurrencies (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_SYSINFO_CURRENCIES.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_DATA_CURRENCIES.getAsMLT ());
   }
 
-  public BasePageSysInfoCurrencies (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
+  public BasePageDataCurrencies (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageSysInfoCurrencies (@Nonnull @Nonempty final String sID,
-                                    @Nonnull final String sName,
-                                    @Nullable final String sDescription)
+  public BasePageDataCurrencies (@Nonnull @Nonempty final String sID,
+                                 @Nonnull final String sName,
+                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageSysInfoCurrencies (@Nonnull @Nonempty final String sID,
-                                    @Nonnull final IReadonlyMultiLingualText aName,
-                                    @Nullable final IReadonlyMultiLingualText aDescription)
+  public BasePageDataCurrencies (@Nonnull @Nonempty final String sID,
+                                 @Nonnull final IReadonlyMultiLingualText aName,
+                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
     super (sID, aName, aDescription);
   }
@@ -115,7 +116,7 @@ public class BasePageSysInfoCurrencies extends AbstractWebPageExt
                                                           HCCol.star (),
                                                           HCCol.star (),
                                                           HCCol.star ()).setID (getID ());
-    aTable.addHeaderRow ().addCells ("Kontinent",
+    aTable.addHeaderRow ().addCells (EText.MSG_CONTINENT.getDisplayText (aDisplayLocale),
                                      EText.MSG_LOCALE.getDisplayText (aDisplayLocale),
                                      EText.MSG_CODE.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
