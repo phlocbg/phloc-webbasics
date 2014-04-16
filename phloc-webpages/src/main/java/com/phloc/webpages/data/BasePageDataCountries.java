@@ -17,32 +17,27 @@
  */
 package com.phloc.webpages.data;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.Translatable;
-import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.collections.multimap.IMultiMapListBased;
-import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;
 import com.phloc.commons.compare.ESortOrder;
-import com.phloc.commons.locale.ComparatorLocale;
-import com.phloc.commons.locale.LocaleCache;
+import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.name.IHasDisplayText;
 import com.phloc.commons.text.IReadonlyMultiLingualText;
 import com.phloc.commons.text.ITextProvider;
 import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
-import com.phloc.html.hc.IHCCell;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
 import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.masterdata.locale.ContinentUtils;
+import com.phloc.masterdata.locale.EContinent;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.famfam.EFamFamFlagIcon;
@@ -54,14 +49,14 @@ import com.phloc.webpages.EWebPageText;
  * 
  * @author Philip Helger
  */
-public class BasePageDataLanguages extends AbstractWebPageExt
+public class BasePageDataCountries extends AbstractWebPageExt
 {
   @Translatable
   protected static enum EText implements IHasDisplayText
   {
     MSG_ID ("ID", "ID"),
     MSG_NAME ("Name", "Name"),
-    MSG_LOCALES ("Locales", "Locales");
+    MSG_CONTINENT ("Kontinent", "Continent");
 
     private final ITextProvider m_aTP;
 
@@ -77,24 +72,24 @@ public class BasePageDataLanguages extends AbstractWebPageExt
     }
   }
 
-  public BasePageDataLanguages (@Nonnull @Nonempty final String sID)
+  public BasePageDataCountries (@Nonnull @Nonempty final String sID)
   {
-    super (sID, EWebPageText.PAGE_NAME_DATA_LANGUAGES.getAsMLT ());
+    super (sID, EWebPageText.PAGE_NAME_DATA_COUNTRIES.getAsMLT ());
   }
 
-  public BasePageDataLanguages (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
+  public BasePageDataCountries (@Nonnull @Nonempty final String sID, @Nonnull final String sName)
   {
     super (sID, sName);
   }
 
-  public BasePageDataLanguages (@Nonnull @Nonempty final String sID,
+  public BasePageDataCountries (@Nonnull @Nonempty final String sID,
                                 @Nonnull final String sName,
                                 @Nullable final String sDescription)
   {
     super (sID, sName, sDescription);
   }
 
-  public BasePageDataLanguages (@Nonnull @Nonempty final String sID,
+  public BasePageDataCountries (@Nonnull @Nonempty final String sID,
                                 @Nonnull final IReadonlyMultiLingualText aName,
                                 @Nullable final IReadonlyMultiLingualText aDescription)
   {
@@ -107,47 +102,37 @@ public class BasePageDataLanguages extends AbstractWebPageExt
     final HCNodeList aNodeList = aWPEC.getNodeList ();
     final Locale aDisplayLocale = aWPEC.getDisplayLocale ();
 
-    final IMultiMapListBased <String, Locale> aMapLanguageToLocale = new MultiHashMapArrayListBased <String, Locale> ();
-    for (final Locale aLocale : LocaleCache.getAllLocales ())
-    {
-      final String sLanguage = aLocale.getLanguage ();
-      if (sLanguage.length () > 0)
-        aMapLanguageToLocale.putSingle (sLanguage, aLocale);
-    }
-
-    final IHCTable <?> aTable = getStyler ().createTable (new HCCol (100), new HCCol (200), HCCol.star ())
-                                            .setID (getID ());
+    final IHCTable <?> aTable = getStyler ().createTable (HCCol.star (), HCCol.star (), HCCol.star ()).setID (getID ());
     aTable.addHeaderRow ().addCells (EText.MSG_ID.getDisplayText (aDisplayLocale),
                                      EText.MSG_NAME.getDisplayText (aDisplayLocale),
-                                     EText.MSG_LOCALES.getDisplayText (aDisplayLocale));
+                                     EText.MSG_CONTINENT.getDisplayText (aDisplayLocale));
 
-    // For all languages
-    for (final Map.Entry <String, List <Locale>> aEntry : aMapLanguageToLocale.entrySet ())
+    // For all countries
+    for (final Locale aCountry : CountryCache.getAllCountryLocales ())
     {
       final HCRow aRow = aTable.addBodyRow ();
-      aRow.addCell (aEntry.getKey ());
-      aRow.addCell (ContainerHelper.getFirstElement (aEntry.getValue ()).getDisplayLanguage (aDisplayLocale));
 
-      final IHCCell <?> aCell = aRow.addCell ();
-      for (final Locale aLocale : ContainerHelper.getSorted (aEntry.getValue (), new ComparatorLocale ()))
+      // ID
+      aRow.addCell (aCountry.getCountry ());
+
+      // Flag and name
+      final HCDiv aDiv = new HCDiv ();
+      final EFamFamFlagIcon eIcon = EFamFamFlagIcon.getFromIDOrNull (aCountry.getCountry ());
+      if (eIcon != null)
       {
-        final HCDiv aDiv = new HCDiv ();
-        final EFamFamFlagIcon eIcon = EFamFamFlagIcon.getFromIDOrNull (aLocale.getCountry ());
-        if (eIcon != null)
-        {
-          aDiv.addChild (eIcon.getAsNode ());
-          aDiv.addChild (" ");
-        }
-        aDiv.addChild (aLocale.toString ());
-        if (aLocale.getCountry ().length () > 0)
-          aDiv.addChild (" (" + aLocale.getDisplayCountry (aDisplayLocale) + ")");
-        aCell.addChild (aDiv);
+        aDiv.addChild (eIcon.getAsNode ());
+        aDiv.addChild (" ");
       }
+      aDiv.addChild (aCountry.getDisplayCountry (aDisplayLocale));
+      aRow.addCell (aDiv);
+
+      // Continent
+      final EContinent eContinent = ContinentUtils.getContinentOfCountry (aCountry);
+      aRow.addCell (eContinent == null ? null : eContinent.getDisplayText (aDisplayLocale));
     }
     aNodeList.addChild (aTable);
 
     final DataTables aDataTables = getStyler ().createDefaultDataTables (aTable, aDisplayLocale);
-    aDataTables.getOrCreateColumnOfTarget (2).setSortable (false);
     aDataTables.setInitialSorting (0, ESortOrder.ASCENDING);
     aNodeList.addChild (aDataTables);
   }

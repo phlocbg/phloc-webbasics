@@ -31,6 +31,7 @@ import com.phloc.appbasics.security.audit.IAuditManager;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.webbasics.app.page.system.PageShowChildren;
 import com.phloc.webbasics.smtp.NamedSMTPSettingsManager;
+import com.phloc.webpages.data.BasePageDataCountries;
 import com.phloc.webpages.data.BasePageDataCurrencies;
 import com.phloc.webpages.data.BasePageDataLanguages;
 import com.phloc.webpages.data.BasePageDataTimeZones;
@@ -75,6 +76,7 @@ public final class DefaultMenuConfigurator
   public static final String MENU_ADMIN_SYSINFO_THIRDPARTYLIBS = "admin_sysinfo_thirdpartylibs";
   public static final String MENU_ADMIN_SYSINFO_THREADS = "admin_sysinfo_threads";
   public static final String MENU_ADMIN_DATA = "admin_data";
+  public static final String MENU_ADMIN_DATA_COUNTRIES = "admin_data_countries";
   public static final String MENU_ADMIN_DATA_CURRENCIES = "admin_data_currencies";
   public static final String MENU_ADMIN_DATA_LANGUAGES = "admin_data_languages";
   public static final String MENU_ADMIN_DATA_TIMEZONES = "admin_data_timezones";
@@ -192,6 +194,8 @@ public final class DefaultMenuConfigurator
                                                                                  EWebPageText.PAGE_NAME_DATA.getAsMLT (),
                                                                                  aMenuTree))
                                               .setDisplayFilter (aDisplayFilter);
+    aMenuTree.createItem (aAdminData, new BasePageDataCountries (MENU_ADMIN_DATA_COUNTRIES))
+             .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminData, new BasePageDataCurrencies (MENU_ADMIN_DATA_CURRENCIES))
              .setDisplayFilter (aDisplayFilter);
     aMenuTree.createItem (aAdminData, new BasePageDataLanguages (MENU_ADMIN_DATA_LANGUAGES))
