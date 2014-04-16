@@ -36,6 +36,7 @@ import com.phloc.commons.text.impl.TextProvider;
 import com.phloc.commons.text.resolve.DefaultTextResolver;
 import com.phloc.html.hc.IHCTable;
 import com.phloc.html.hc.html.HCCol;
+import com.phloc.html.hc.html.HCDiv;
 import com.phloc.html.hc.html.HCRow;
 import com.phloc.html.hc.impl.HCNodeList;
 import com.phloc.masterdata.currency.CurrencyUtils;
@@ -45,6 +46,7 @@ import com.phloc.masterdata.locale.EContinent;
 import com.phloc.webbasics.app.page.WebPageExecutionContext;
 import com.phloc.webctrls.datatables.DataTables;
 import com.phloc.webctrls.datatables.comparator.ComparatorTableInteger;
+import com.phloc.webctrls.famfam.EFamFamFlagIcon;
 import com.phloc.webpages.AbstractWebPageExt;
 import com.phloc.webpages.EWebPageText;
 
@@ -145,7 +147,17 @@ public class BasePageDataCurrencies extends AbstractWebPageExt
           }
       aRow.addCell (aSB.toString ());
 
-      aRow.addCell (aLocale.getDisplayName (aDisplayLocale) + " (" + aLocale.toString () + ")");
+      // Locale name and flag
+      final HCDiv aDiv = new HCDiv ();
+      final EFamFamFlagIcon eIcon = EFamFamFlagIcon.getFromIDOrNull (aLocale.getCountry ());
+      if (eIcon != null)
+      {
+        aDiv.addChild (eIcon.getAsNode ());
+        aDiv.addChild (" ");
+      }
+      aDiv.addChild (aLocale.getDisplayName (aDisplayLocale) + " (" + aLocale.toString () + ")");
+      aRow.addCell (aDiv);
+
       aRow.addCell (aCurrency.getCurrencyCode ());
       aRow.addCell (eCurrency == null ? null : eCurrency.getDisplayText (aDisplayLocale));
       aRow.addCell (aCurrency.getSymbol (aDisplayLocale));
