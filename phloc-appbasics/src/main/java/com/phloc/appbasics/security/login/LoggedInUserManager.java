@@ -51,9 +51,9 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.scopes.domain.ISessionScope;
 import com.phloc.scopes.mgr.ScopeManager;
 import com.phloc.scopes.singleton.GlobalSingleton;
-import com.phloc.scopes.singleton.SessionSingleton;
 import com.phloc.webscopes.domain.ISessionWebScope;
 import com.phloc.webscopes.session.ISessionWebScopeActivationHandler;
+import com.phloc.webscopes.singleton.SessionWebSingleton;
 
 /**
  * This class manages all logged-in users.
@@ -69,7 +69,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    * 
    * @author Philip Helger
    */
-  public static final class SessionUserHolder extends SessionSingleton implements ISessionWebScopeActivationHandler
+  public static final class SessionUserHolder extends SessionWebSingleton implements ISessionWebScopeActivationHandler
   {
     private static final long serialVersionUID = 2322897734799334L;
 
