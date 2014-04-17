@@ -23,13 +23,14 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.scopes.mock.ScopeTestRule;
+import com.phloc.webscopes.mock.WebScopeTestRule;
 
 /**
- * Non-web scope aware test rule, with a defined storage root directory
+ * Web scope aware test rule, with a defined storage root directory
  * 
  * @author Philip Helger
  */
-public class AppBasicTestRule extends ScopeTestRule
+public class AppBasicWebTestRule extends WebScopeTestRule
 {
   private final File m_aDataPath;
   private final File m_aServletContextPath;
@@ -37,7 +38,7 @@ public class AppBasicTestRule extends ScopeTestRule
   /**
    * Ctor using the default storage path from {@link ScopeTestRule}
    */
-  public AppBasicTestRule ()
+  public AppBasicWebTestRule ()
   {
     this (ScopeTestRule.STORAGE_PATH, ScopeTestRule.STORAGE_PATH);
   }
@@ -50,7 +51,7 @@ public class AppBasicTestRule extends ScopeTestRule
    * @param aServletContextPath
    *        The servlet context path to be used. May not be <code>null</code>.
    */
-  public AppBasicTestRule (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
+  public AppBasicWebTestRule (@Nonnull final File aDataPath, @Nonnull final File aServletContextPath)
   {
     ValueEnforcer.notNull (aDataPath, "DataPath");
     ValueEnforcer.notNull (aServletContextPath, "ServletContextPath");

@@ -26,7 +26,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
-import com.phloc.appbasics.mock.AppBasicTestRule;
+import com.phloc.appbasics.mock.AppBasicWebTestRule;
 import com.phloc.appbasics.security.CSecurity;
 
 /**
@@ -37,7 +37,7 @@ import com.phloc.appbasics.security.CSecurity;
 public final class LoggedInUserManagerTest
 {
   @Rule
-  public final TestRule m_aRule = new AppBasicTestRule ();
+  public final TestRule m_aRule = new AppBasicWebTestRule ();
 
   @Test
   public void testInit ()
