@@ -20,10 +20,10 @@ package com.phloc.appbasics.data.select;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.compare.ESortOrder;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -47,12 +47,8 @@ public final class SelectOrderBy
    */
   public SelectOrderBy (@Nonnull @Nonempty final String sColumn, @Nonnull final ESortOrder eSortOrder)
   {
-    if (StringHelper.hasNoText (sColumn))
-      throw new IllegalArgumentException ("column name may not be empty");
-    if (eSortOrder == null)
-      throw new NullPointerException ("sortOrder");
-    m_sColumn = sColumn;
-    m_eSortOrder = eSortOrder;
+    m_sColumn = ValueEnforcer.notEmpty (sColumn, "Column");
+    m_eSortOrder = ValueEnforcer.notNull (eSortOrder, "SortOrder");
   }
 
   /**

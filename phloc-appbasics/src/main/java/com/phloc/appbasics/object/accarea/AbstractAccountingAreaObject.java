@@ -112,11 +112,9 @@ public abstract class AbstractAccountingAreaObject extends AbstractBaseObject im
     return m_aClient;
   }
 
-  public final boolean hasSameClientID (@Nonnull final IClientObject aClientObject)
+  public final boolean hasSameClientID (@Nullable final IClientObject aClientObject)
   {
-    ValueEnforcer.notNull (aClientObject, "ClientObject");
-
-    return hasSameClientID (aClientObject.getClientID ());
+    return aClientObject != null && hasSameClientID (aClientObject.getClientID ());
   }
 
   public final boolean hasSameClientID (@Nullable final String sClientID)

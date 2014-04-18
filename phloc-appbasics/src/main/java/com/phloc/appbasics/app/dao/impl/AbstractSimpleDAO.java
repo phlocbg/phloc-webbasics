@@ -36,6 +36,7 @@ import com.phloc.appbasics.app.io.ConstantHasFilename;
 import com.phloc.appbasics.app.io.IHasFilename;
 import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.MustBeLocked;
 import com.phloc.commons.annotations.MustBeLocked.ELockType;
 import com.phloc.commons.annotations.OverrideOnDemand;
@@ -109,16 +110,14 @@ public abstract class AbstractSimpleDAO extends AbstractDAO
   protected AbstractSimpleDAO (@Nonnull final IHasFilename aFilenameProvider)
   {
     super (DAOWebFileIO.getInstance ());
-    if (aFilenameProvider == null)
-      throw new NullPointerException ("FilenameProvider");
-    m_aFilenameProvider = aFilenameProvider;
+    m_aFilenameProvider = ValueEnforcer.notNull (aFilenameProvider, "FilenameProvider");
   }
 
   /**
-   * @return The filename provider used internally.
+   * @return The filename provider used internally. Never <code>null</code>.
    */
   @Nonnull
-  protected final IHasFilename getFilenameProvider ()
+  public final IHasFilename getFilenameProvider ()
   {
     return m_aFilenameProvider;
   }

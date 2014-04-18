@@ -34,6 +34,7 @@ import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.password.GlobalPasswordSettings;
 import com.phloc.appbasics.security.password.hash.PasswordHash;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -50,7 +51,7 @@ import com.phloc.commons.string.StringHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class UserManager extends AbstractSimpleDAO implements IUserManager, IReloadableDAO
+public class UserManager extends AbstractSimpleDAO implements IUserManager, IReloadableDAO
 {
   private static boolean s_bCreateDefaults = true;
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
@@ -181,10 +182,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                               @Nullable final Map <String, ?> aCustomAttrs,
                               final boolean bDisabled)
   {
-    if (StringHelper.hasNoText (sLoginName))
-      throw new IllegalArgumentException ("loginName");
-    if (sPlainTextPassword == null)
-      throw new IllegalArgumentException ("plainTextPassword");
+    ValueEnforcer.notEmpty (sLoginName, "LoginName");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     if (getUserOfLoginName (sLoginName) != null)
     {
@@ -236,10 +235,8 @@ public final class UserManager extends AbstractSimpleDAO implements IUserManager
                                      @Nullable final Map <String, ?> aCustomAttrs,
                                      final boolean bDisabled)
   {
-    if (StringHelper.hasNoText (sLoginName))
-      throw new IllegalArgumentException ("loginName");
-    if (sPlainTextPassword == null)
-      throw new IllegalArgumentException ("plainTextPassword");
+    ValueEnforcer.notEmpty (sLoginName, "LoginName");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     if (getUserOfLoginName (sLoginName) != null)
     {

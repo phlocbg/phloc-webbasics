@@ -38,6 +38,7 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecord;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordField;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.EUnicodeBOM;
 import com.phloc.commons.collections.iterate.IterableIterator;
@@ -107,10 +108,8 @@ public final class ExporterCSV implements IExporterFile
   {
     try
     {
-      if (aProvider == null)
-        throw new NullPointerException ("provider");
-      if (aOS == null)
-        throw new NullPointerException ("outputStream");
+      ValueEnforcer.notNull (aProvider, "Provider");
+      ValueEnforcer.notNull (aOS, "OutputStream");
 
       final List <String []> aRecords = new ArrayList <String []> ();
 

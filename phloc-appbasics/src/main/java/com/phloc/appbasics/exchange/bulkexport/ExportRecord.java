@@ -31,6 +31,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -51,8 +52,7 @@ public final class ExportRecord implements IExportRecord
 
   public ExportRecord (@Nonnull final IExportRecordField... aFields)
   {
-    if (aFields == null)
-      throw new NullPointerException ("fields");
+    ValueEnforcer.notNull (aFields, "Fields");
 
     for (final IExportRecordField aField : aFields)
       addField (aField);
@@ -60,8 +60,7 @@ public final class ExportRecord implements IExportRecord
 
   public ExportRecord (@Nonnull final Iterable <? extends IExportRecordField> aFields)
   {
-    if (aFields == null)
-      throw new NullPointerException ("fields");
+    ValueEnforcer.notNull (aFields, "Fields");
 
     for (final IExportRecordField aField : aFields)
       addField (aField);
@@ -70,17 +69,13 @@ public final class ExportRecord implements IExportRecord
   @Nonnull
   public EChange removeFieldAtIndex (@Nonnegative final int nIndex)
   {
-    if (nIndex < 0 || nIndex >= m_aFields.size ())
-      return EChange.UNCHANGED;
-    m_aFields.remove (nIndex);
-    return EChange.CHANGED;
+    return ContainerHelper.removeElementAtIndex (m_aFields, nIndex);
   }
 
   @Nonnull
   public ExportRecord addField (@Nonnull final IExportRecordField aField)
   {
-    if (aField == null)
-      throw new NullPointerException ("field");
+    ValueEnforcer.notNull (aField, "Field");
     m_aFields.add (aField);
     return this;
   }

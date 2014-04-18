@@ -19,6 +19,7 @@ package com.phloc.appbasics.security.password.hash;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
@@ -43,8 +44,7 @@ public final class PasswordHashCreatorDefault extends AbstractPasswordHashCreato
   @Nonnull
   public String createPasswordHash (final String sPlainTextPassword)
   {
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (USER_PASSWORD_ALGO,
                                                                     sPlainTextPassword,

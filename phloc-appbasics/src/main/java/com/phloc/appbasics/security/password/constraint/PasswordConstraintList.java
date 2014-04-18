@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
@@ -46,8 +47,7 @@ public class PasswordConstraintList implements IPasswordConstraintList
 
   public PasswordConstraintList (@Nonnull final IPasswordConstraintList aOther)
   {
-    if (aOther == null)
-      throw new NullPointerException ("other");
+    ValueEnforcer.notNull (aOther, "Other");
     m_aConstraints.addAll (aOther.getAllPasswordConstraints ());
   }
 
@@ -93,8 +93,7 @@ public class PasswordConstraintList implements IPasswordConstraintList
   @Nonnull
   public PasswordConstraintList addConstraint (@Nonnull final IPasswordConstraint aPasswordConstraint)
   {
-    if (aPasswordConstraint == null)
-      throw new NullPointerException ("passwordConstraint");
+    ValueEnforcer.notNull (aPasswordConstraint, "PasswordConstraint");
     m_aConstraints.add (aPasswordConstraint);
     return this;
   }
@@ -109,6 +108,8 @@ public class PasswordConstraintList implements IPasswordConstraintList
   @Nonnull
   public EChange removeConstraint (@Nullable final IPasswordConstraint aPasswordConstraint)
   {
+    if (aPasswordConstraint == null)
+      return EChange.UNCHANGED;
     return EChange.valueOf (m_aConstraints.remove (aPasswordConstraint));
   }
 

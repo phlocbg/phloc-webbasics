@@ -29,6 +29,7 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecord;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordField;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.iterate.IterableIterator;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.microdom.IMicroDocument;
@@ -63,9 +64,7 @@ public final class ExporterXML implements IExporterFile
   @Nonnull
   public ExporterXML setCharset (@Nonnull final Charset aCharset)
   {
-    if (aCharset == null)
-      throw new NullPointerException ("charset");
-    m_aCharset = aCharset;
+    m_aCharset = ValueEnforcer.notNull (aCharset, "Charset");
     return this;
   }
 
@@ -98,8 +97,7 @@ public final class ExporterXML implements IExporterFile
   @Nullable
   public IMicroDocument convertRecords (@Nonnull final IExportRecordProvider aProvider)
   {
-    if (aProvider == null)
-      throw new NullPointerException ("provider");
+    ValueEnforcer.notNull (aProvider, "Provider");
 
     final IMicroDocument aDoc = new MicroDocument ();
     final IMicroElement eRoot = aDoc.appendElement (ELEMENT_ROOT);

@@ -26,6 +26,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.phloc.appbasics.app.dao.IDAO;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.callback.AdapterRunnableToCallable;
 import com.phloc.commons.callback.INonThrowingCallable;
 import com.phloc.commons.callback.INonThrowingRunnable;
@@ -92,6 +93,8 @@ public abstract class AbstractDAOContainer implements IDAOContainer
   @Nullable
   public <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
+    ValueEnforcer.notNull (aCallable, "Callable");
+
     beginWithoutAutoSave ();
     try
     {

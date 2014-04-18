@@ -35,6 +35,7 @@ import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.role.IRoleManager;
 import com.phloc.appbasics.security.user.IUserManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -51,7 +52,7 @@ import com.phloc.commons.string.StringHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager, IReloadableDAO
+public class UserGroupManager extends AbstractSimpleDAO implements IUserGroupManager, IReloadableDAO
 {
   @GuardedBy ("s_aRWLock")
   private static boolean s_bCreateDefaults = true;
@@ -92,13 +93,21 @@ public final class UserGroupManager extends AbstractSimpleDAO implements IUserGr
                            @Nonnull final IRoleManager aRoleMgr) throws DAOException
   {
     super (sFilename);
-    if (aUserMgr == null)
-      throw new NullPointerException ("UserMgr");
-    if (aRoleMgr == null)
-      throw new NullPointerException ("RoleMgr");
-    m_aUserMgr = aUserMgr;
-    m_aRoleMgr = aRoleMgr;
+    m_aUserMgr = ValueEnforcer.notNull (aUserMgr, "UserManager");
+    m_aRoleMgr = ValueEnforcer.notNull (aRoleMgr, "RoleManager");
     initialRead ();
+  }
+
+  @Nonnull
+  public final IUserManager getUserManager ()
+  {
+    return m_aUserMgr;
+  }
+
+  @Nonnull
+  public final IRoleManager getRoleManager ()
+  {
+    return m_aRoleMgr;
   }
 
   public void reload () throws DAOException

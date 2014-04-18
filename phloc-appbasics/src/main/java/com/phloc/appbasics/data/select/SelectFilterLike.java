@@ -21,10 +21,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
@@ -41,11 +41,8 @@ public class SelectFilterLike implements ISelectFilterLike
    */
   public SelectFilterLike (@Nonnull @Nonempty final String sColumn, @Nonnull final String sFilterValue)
   {
-    if (StringHelper.hasNoText (sColumn))
-      throw new IllegalArgumentException ("column name may not be empty");
-    if (sFilterValue == null)
-      throw new NullPointerException ("filterValue");
-    m_sColumn = sColumn;
+    ValueEnforcer.notNull (sFilterValue, "FilterValue");
+    m_sColumn = ValueEnforcer.notNull (sColumn, "Column");
     m_sFilterValue = sFilterValue.length () == 0 ? null : sFilterValue;
   }
 

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
@@ -81,8 +82,7 @@ public final class LoggedInUserStorage
    */
   public static void setBaseDirectory (@Nonnull final String sBaseDirectory)
   {
-    if (sBaseDirectory == null)
-      throw new NullPointerException ("baseDirectory");
+    ValueEnforcer.notNull (sBaseDirectory, "BaseDirectory");
 
     s_aRWLock.writeLock ().lock ();
     try
@@ -96,12 +96,13 @@ public final class LoggedInUserStorage
   }
 
   /**
-   * @return The base directory for all user-related data
+   * @return The base directory for all user-related data of the current user
    */
   @Nonnull
   public static File getUserdataDirectory ()
   {
-    return getUserdataDirectory (LoggedInUserManager.getInstance ().getCurrentUserID ());
+    final String sCurrentUserID = LoggedInUserManager.getInstance ().getCurrentUserID ();
+    return getUserdataDirectory (sCurrentUserID);
   }
 
   /**
@@ -113,8 +114,7 @@ public final class LoggedInUserStorage
   @Nonnull
   public static File getUserdataDirectory (@Nonnull @Nonempty final String sUserID)
   {
-    if (StringHelper.hasNoText (sUserID))
-      throw new IllegalArgumentException ("userID may not be empty!");
+    ValueEnforcer.notEmpty (sUserID, "UserID");
 
     // Ensure user ID is valid as a filename!
     final String sRealUserID = FilenameHelper.getAsSecureValidASCIIFilename (sUserID);

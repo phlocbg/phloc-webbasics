@@ -45,7 +45,7 @@ import com.phloc.commons.url.ISimpleURL;
 
 /**
  * Represents a single menu tree
- *
+ * 
  * @author Philip Helger
  */
 public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject> implements IMenuTree
@@ -127,8 +127,7 @@ public class MenuTree extends DefaultTreeWithGlobalUniqueID <String, IMenuObject
   @Nonnull
   public IMenuItemPage createItem (@Nonnull final IMenuItem aParent, @Nonnull final IPage aPage)
   {
-    if (aParent == null)
-      throw new NullPointerException ("parent");
+    ValueEnforcer.notNull (aParent, "Parent");
 
     return createItem (aParent.getID (), aPage);
   }

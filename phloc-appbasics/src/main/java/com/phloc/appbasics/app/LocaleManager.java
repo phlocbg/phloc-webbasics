@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
@@ -48,9 +49,7 @@ public class LocaleManager implements ILocaleManager
   @Nonnull
   public EChange registerLocale (@Nonnull final Locale aLocale)
   {
-    if (aLocale == null)
-      throw new NullPointerException ("locale");
-
+    ValueEnforcer.notNull (aLocale, "Locale");
     if (!m_aLocales.add (aLocale))
       return EChange.UNCHANGED;
 
@@ -66,12 +65,11 @@ public class LocaleManager implements ILocaleManager
   @Nonnull
   public EChange setDefaultLocale (@Nonnull final Locale aDefaultLocale)
   {
-    if (aDefaultLocale == null)
-      throw new NullPointerException ("defaultLocale");
+    ValueEnforcer.notNull (aDefaultLocale, "DefaultLocale");
     if (!m_aLocales.contains (aDefaultLocale))
       throw new IllegalArgumentException ("The supposed default locale " +
                                           aDefaultLocale +
-                                          " is not a valid application locale!");
+                                          " is not a valid application locale! It needs to be registered before it can be set as a default.");
     if (aDefaultLocale.equals (m_aDefaultLocale))
       return EChange.UNCHANGED;
     m_aDefaultLocale = aDefaultLocale;

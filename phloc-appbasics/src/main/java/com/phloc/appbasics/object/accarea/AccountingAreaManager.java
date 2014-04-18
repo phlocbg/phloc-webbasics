@@ -32,6 +32,7 @@ import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.object.CObject;
 import com.phloc.appbasics.object.client.IClient;
 import com.phloc.appbasics.security.audit.AuditUtils;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -84,8 +85,7 @@ public final class AccountingAreaManager extends AbstractSimpleDAO implements IA
 
   private void _addAccountingArea (@Nonnull final AccountingArea aAccountingArea)
   {
-    if (aAccountingArea == null)
-      throw new NullPointerException ("accountingArea");
+    ValueEnforcer.notNull (aAccountingArea, "AccountingArea");
 
     final String sAccountingAreaID = aAccountingArea.getID ();
     if (m_aMap.containsKey (sAccountingAreaID))

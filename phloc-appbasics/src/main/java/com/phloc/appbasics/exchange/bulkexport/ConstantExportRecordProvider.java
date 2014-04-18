@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
 
 /**
@@ -55,8 +56,7 @@ public class ConstantExportRecordProvider implements IExportRecordProvider
                                        @Nonnull final Collection <? extends IExportRecord> aBody,
                                        @Nullable final IExportRecord aFooter)
   {
-    if (aBody == null)
-      throw new NullPointerException ("body");
+    ValueEnforcer.notNull (aBody, "Body");
     m_aHeader = aHeader;
     m_aBody = ContainerHelper.newList (aBody);
     m_aFooter = aFooter;

@@ -20,6 +20,7 @@ package com.phloc.appbasics.data.select;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -71,9 +72,7 @@ public final class SelectConstraints implements IHasOrderAndLimit
   @Nonnull
   public SelectConstraints setLimit (@Nonnull final SelectLimit aLimit)
   {
-    if (aLimit == null)
-      throw new NullPointerException ("limit");
-    m_aLimit = aLimit;
+    m_aLimit = ValueEnforcer.notNull (aLimit, "Limit");
     return this;
   }
 

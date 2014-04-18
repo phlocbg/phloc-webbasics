@@ -34,6 +34,7 @@ import com.phloc.appbasics.security.password.hash.IPasswordHashCreatorRegistrarS
 import com.phloc.appbasics.security.password.hash.PasswordHash;
 import com.phloc.appbasics.security.password.hash.PasswordHashCreatorDefault;
 import com.phloc.appbasics.security.password.hash.PasswordHashCreatorManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -100,8 +101,7 @@ public final class GlobalPasswordSettings
    */
   public static void setPasswordConstraintList (@Nonnull final IPasswordConstraintList aPasswordConstraintList)
   {
-    if (aPasswordConstraintList == null)
-      throw new NullPointerException ("passwordConstraintList");
+    ValueEnforcer.notNull (aPasswordConstraintList, "PasswordConstraintList");
 
     // Create a copy
     final IPasswordConstraintList aRealPasswordConstraints = aPasswordConstraintList.getClone ();
@@ -146,8 +146,7 @@ public final class GlobalPasswordSettings
   @Nonnull
   public static PasswordHash createUserDefaultPasswordHash (@Nonnull final String sPlainTextPassword)
   {
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     final IPasswordHashCreator aPHC = s_aPHCMgr.getDefaultPasswordHashCreator ();
     final String sPasswordHash = aPHC.createPasswordHash (sPlainTextPassword);
@@ -169,8 +168,8 @@ public final class GlobalPasswordSettings
   public static PasswordHash createUserPasswordHash (@Nonnull @Nonempty final String sAlgorithmName,
                                                      @Nonnull final String sPlainTextPassword)
   {
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
+    ValueEnforcer.notEmpty (sAlgorithmName, "AlgorithmName");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     final IPasswordHashCreator aPHC = s_aPHCMgr.getPasswordHashCreatorOfAlgorithm (sAlgorithmName);
     if (aPHC == null)

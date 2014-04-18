@@ -23,19 +23,30 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.app.dao.IDAO;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 
+/**
+ * The default implementation of {@link IDAOContainer} using a list of DAOs
+ * provider in the constructor.
+ * 
+ * @author Philip Helger
+ */
 public class DefaultDAOContainer extends AbstractDAOContainer
 {
   private final List <IDAO> m_aDAOs;
 
   public DefaultDAOContainer (@Nonnull @Nonempty final IDAO... aDAOs)
   {
-    if (ArrayHelper.isEmpty (aDAOs))
-      throw new IllegalArgumentException ("DAOs");
+    ValueEnforcer.notEmptyNoNullValue (aDAOs, "DAOs");
+    m_aDAOs = ContainerHelper.newUnmodifiableList (aDAOs);
+  }
+
+  public DefaultDAOContainer (@Nonnull @Nonempty final Iterable <? extends IDAO> aDAOs)
+  {
+    ValueEnforcer.notEmptyNoNullValue (aDAOs, "DAOs");
     m_aDAOs = ContainerHelper.newUnmodifiableList (aDAOs);
   }
 

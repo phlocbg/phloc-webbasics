@@ -50,11 +50,11 @@ public interface IClientObject extends IObject, IHasClient
    * Check if the passed object has the same client ID as this object
    * 
    * @param aClientObject
-   *        The object to check. May not be <code>null</code>.
-   * @return <code>true</code> if this object and the passed object have the
-   *         same client ID
+   *        The object to check. May be <code>null</code>.
+   * @return <code>true</code> if this object and the passed object (if not
+   *         <code>null</code>) have the same client ID
    */
-  boolean hasSameClientID (@Nonnull IClientObject aClientObject);
+  boolean hasSameClientID (@Nullable IClientObject aClientObject);
 
   /**
    * Check if the passed client ID has the same ID as this object

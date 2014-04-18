@@ -29,6 +29,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -47,9 +48,7 @@ public final class ExportRecordField implements IExportRecordField
 
   private ExportRecordField (@Nonnull final EBaseType eFieldType, @Nullable final Object aValue)
   {
-    if (eFieldType == null)
-      throw new NullPointerException ("fieldType");
-    m_eFieldType = eFieldType;
+    m_eFieldType = ValueEnforcer.notNull (eFieldType, "FieldType");
     m_aValue = aValue;
   }
 

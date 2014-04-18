@@ -31,6 +31,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.exceptions.InitializationException;
@@ -60,8 +61,7 @@ public final class PathRelativeFileIO
 
   public PathRelativeFileIO (@Nonnull final File aBasePath, final boolean bCheckAccessRights)
   {
-    if (aBasePath == null)
-      throw new NullPointerException ("basePath");
+    ValueEnforcer.notNull (aBasePath, "BasePath");
 
     // Ensure the directory is present
     WebFileIO.getFileOpMgr ().createDirRecursiveIfNotExisting (aBasePath);

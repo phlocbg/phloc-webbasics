@@ -39,7 +39,8 @@ public enum EPasswordConstraintText implements IHasDisplayText, IHasDisplayTextW
 {
   DESC_MIN_LENGTH ("Das Passwort muss mindestens {0} Zeichen haben.", "The password must have at least {0} character(s)."),
   DESC_MAX_LENGTH ("Das Passwort darf maximal {0} Zeichen haben.", "The password must have at last {0} character(s)."),
-  DESC_MUST_CONTAIN_NUMBERS ("Das Passwort muss mindestens {0} Zahl(en) enthalten.", "The password must contain at least {0} digit(s).");
+  DESC_MUST_CONTAIN_DIGITS ("Das Passwort muss mindestens {0} Zahl(en) enthalten.", "The password must contain at least {0} digit(s)."),
+  DESC_MUST_CONTAIN_LETTERS ("Das Passwort muss mindestens {0} Zeichen enthalten.", "The password must contain at least {0} letter(s).");
 
   private final ITextProvider m_aTP;
 

@@ -262,8 +262,7 @@ public abstract class AbstractDAO implements IDAO
   @Nullable
   public final <RETURNTYPE> RETURNTYPE performWithoutAutoSave (@Nonnull final INonThrowingCallable <RETURNTYPE> aCallable)
   {
-    if (aCallable == null)
-      throw new NullPointerException ("callable");
+    ValueEnforcer.notNull (aCallable, "Callable");
 
     beginWithoutAutoSave ();
     try

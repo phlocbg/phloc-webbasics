@@ -24,6 +24,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.joda.time.DateTime;
 
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
@@ -49,13 +50,8 @@ public final class LoginInfo extends MapBasedAttributeContainer implements IHasI
 
   LoginInfo (@Nonnull final IUser aUser, @Nonnull final ISessionScope aSessionScope)
   {
-    if (aUser == null)
-      throw new NullPointerException ("User");
-    if (aSessionScope == null)
-      throw new NullPointerException ("SessionScope");
-
-    m_aUser = aUser;
-    m_aSessionScope = aSessionScope;
+    m_aUser = ValueEnforcer.notNull (aUser, "User");
+    m_aSessionScope = ValueEnforcer.notNull (aSessionScope, "SessionScope");
     m_aLoginDT = PDTFactory.getCurrentDateTime ();
     m_aLastAccessDT = m_aLoginDT;
   }

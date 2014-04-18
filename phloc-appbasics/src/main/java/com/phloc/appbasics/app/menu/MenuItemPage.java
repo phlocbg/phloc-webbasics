@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.app.page.IPage;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.name.IHasDisplayText;
@@ -50,12 +51,8 @@ public final class MenuItemPage extends AbstractMenuObject <MenuItemPage> implem
                        @Nonnull final IHasDisplayText aDisplayText)
   {
     super (sItemID);
-    if (aPage == null)
-      throw new NullPointerException ("page");
-    if (aDisplayText == null)
-      throw new NullPointerException ("displayText");
-    m_aPage = aPage;
-    m_aDisplayText = aDisplayText;
+    m_aPage = ValueEnforcer.notNull (aPage, "Page");
+    m_aDisplayText = ValueEnforcer.notNull (aDisplayText, "DisplayText");
   }
 
   @Nonnull

@@ -32,6 +32,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -67,8 +68,7 @@ public class PasswordHashCreatorManager
    */
   public void registerPasswordHashCreator (@Nonnull final IPasswordHashCreator aPasswordHashCreator)
   {
-    if (aPasswordHashCreator == null)
-      throw new NullPointerException ("PasswordHashCreator");
+    ValueEnforcer.notNull (aPasswordHashCreator, "PasswordHashCreator");
 
     final String sAlgorithmName = aPasswordHashCreator.getAlgorithmName ();
     if (StringHelper.hasNoText (sAlgorithmName))
@@ -233,8 +233,7 @@ public class PasswordHashCreatorManager
   @Nonnull
   public PasswordHash createUserDefaultPasswordHash (@Nonnull final String sPlainTextPassword)
   {
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     final IPasswordHashCreator aPHC = getDefaultPasswordHashCreator ();
     final String sPasswordHash = aPHC.createPasswordHash (sPlainTextPassword);
@@ -257,8 +256,7 @@ public class PasswordHashCreatorManager
   public PasswordHash createUserPasswordHash (@Nonnull @Nonempty final String sAlgorithmName,
                                               @Nonnull final String sPlainTextPassword)
   {
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
+    ValueEnforcer.notNull (sPlainTextPassword, "PlainTextPassword");
 
     final IPasswordHashCreator aPHC = getPasswordHashCreatorOfAlgorithm (sAlgorithmName);
     if (aPHC == null)

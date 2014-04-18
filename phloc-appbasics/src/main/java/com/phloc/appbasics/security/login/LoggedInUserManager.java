@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.audit.AuditUtils;
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.annotations.UsedViaReflection;
@@ -143,10 +144,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
     void setUser (@Nonnull final LoggedInUserManager aOwningMgr, @Nonnull final IUser aUser)
     {
-      if (aOwningMgr == null)
-        throw new NullPointerException ("OwningMgr");
-      if (aUser == null)
-        throw new NullPointerException ("User");
+      ValueEnforcer.notNull (aOwningMgr, "OwningMgr");
+      ValueEnforcer.notNull (aUser, "User");
       if (m_aUser != null)
         throw new IllegalStateException ("Session already has a user!");
 
@@ -238,8 +237,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    */
   public void addUserLoginCallback (@Nonnull final IUserLoginCallback aUserLoginCallback)
   {
-    if (aUserLoginCallback == null)
-      throw new NullPointerException ("UserLoginCallback");
+    ValueEnforcer.notNull (aUserLoginCallback, "UserLoginCallback");
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -262,6 +260,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnull
   public EChange removeUserLoginCallback (@Nullable final IUserLoginCallback aUserLoginCallback)
   {
+    if (aUserLoginCallback == null)
+      return EChange.UNCHANGED;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -299,8 +300,7 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
    */
   public void addUserLogoutCallback (@Nonnull final IUserLogoutCallback aUserLogoutCallback)
   {
-    if (aUserLogoutCallback == null)
-      throw new NullPointerException ("UserLogoutCallback");
+    ValueEnforcer.notNull (aUserLogoutCallback, "UserLogoutCallback");
 
     m_aRWLock.writeLock ().lock ();
     try
@@ -322,6 +322,9 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
   @Nonnull
   public EChange removeUserLogoutCallback (@Nullable final IUserLogoutCallback aUserLogoutCallback)
   {
+    if (aUserLogoutCallback == null)
+      return EChange.UNCHANGED;
+
     m_aRWLock.writeLock ().lock ();
     try
     {
@@ -399,10 +402,8 @@ public final class LoggedInUserManager extends GlobalSingleton implements ICurre
 
   final void internalActivateUser (@Nonnull final IUser aUser, @Nonnull final ISessionScope aSessionScope)
   {
-    if (aUser == null)
-      throw new NullPointerException ("User");
-    if (aSessionScope == null)
-      throw new NullPointerException ("SessionScope");
+    ValueEnforcer.notNull (aUser, "User");
+    ValueEnforcer.notNull (aSessionScope, "SessionScope");
 
     m_aRWLock.writeLock ().lock ();
     try

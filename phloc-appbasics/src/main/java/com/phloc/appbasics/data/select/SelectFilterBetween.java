@@ -20,10 +20,10 @@ package com.phloc.appbasics.data.select;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
@@ -37,15 +37,9 @@ public final class SelectFilterBetween implements ISelectFilter
                               @Nonnull final Object aFilterValueFrom,
                               @Nonnull final Object aFilterValueTo)
   {
-    if (StringHelper.hasNoText (sColumn))
-      throw new IllegalArgumentException ("column name may not be empty");
-    if (aFilterValueFrom == null)
-      throw new NullPointerException ("filterValueFrom");
-    if (aFilterValueTo == null)
-      throw new NullPointerException ("filterValueTo");
-    m_sColumn = sColumn;
-    m_aFilterValueFrom = aFilterValueFrom;
-    m_aFilterValueTo = aFilterValueTo;
+    m_sColumn = ValueEnforcer.notEmpty (sColumn, "Column");
+    m_aFilterValueFrom = ValueEnforcer.notNull (aFilterValueFrom, "FilterValueFrom");
+    m_aFilterValueTo = ValueEnforcer.notNull (aFilterValueTo, "FilterValueTo");
   }
 
   @Nonnull

@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.appbasics.object.AbstractBaseObject;
 import com.phloc.appbasics.object.StubObject;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -46,9 +47,7 @@ public abstract class AbstractClientObject extends AbstractBaseObject implements
   public AbstractClientObject (@Nonnull final IClient aClient, @Nonnull final StubObject aObject)
   {
     super (aObject);
-    if (aClient == null)
-      throw new NullPointerException ("client");
-    m_aClient = aClient;
+    m_aClient = ValueEnforcer.notNull (aClient, "Client");
   }
 
   public AbstractClientObject (@Nonnull final IClient aClient,
@@ -67,9 +66,7 @@ public abstract class AbstractClientObject extends AbstractBaseObject implements
            sLastModificationUserID,
            aDeletionDT,
            sDeletionUserID);
-    if (aClient == null)
-      throw new NullPointerException ("client");
-    m_aClient = aClient;
+    m_aClient = ValueEnforcer.notNull (aClient, "Client");
   }
 
   @Nonnull
@@ -85,12 +82,9 @@ public abstract class AbstractClientObject extends AbstractBaseObject implements
     return m_aClient;
   }
 
-  public final boolean hasSameClientID (@Nonnull final IClientObject aClientObject)
+  public final boolean hasSameClientID (@Nullable final IClientObject aClientObject)
   {
-    if (aClientObject == null)
-      throw new NullPointerException ("clientObject");
-
-    return hasSameClientID (aClientObject.getClientID ());
+    return aClientObject != null && hasSameClientID (aClientObject.getClientID ());
   }
 
   public final boolean hasSameClientID (@Nullable final String sClientID)

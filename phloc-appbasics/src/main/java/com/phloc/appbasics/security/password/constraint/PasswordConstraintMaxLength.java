@@ -23,6 +23,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -40,9 +41,7 @@ public class PasswordConstraintMaxLength implements IPasswordConstraint
 
   public PasswordConstraintMaxLength (@Nonnegative final int nMaxLength)
   {
-    if (nMaxLength < 1)
-      throw new IllegalArgumentException ("MaxLength is too small: " + nMaxLength);
-    m_nMaxLength = nMaxLength;
+    m_nMaxLength = ValueEnforcer.isGT0 (nMaxLength, "MaxLength");
   }
 
   @Nonnegative

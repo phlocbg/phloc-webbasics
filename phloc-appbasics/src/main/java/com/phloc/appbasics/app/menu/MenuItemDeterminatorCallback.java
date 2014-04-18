@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.appbasics.app.ApplicationRequestManager;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -47,9 +48,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
 
   public MenuItemDeterminatorCallback (@Nonnull final IMenuTree aMenuTree)
   {
-    if (aMenuTree == null)
-      throw new NullPointerException ("menuTree");
-    m_aMenuTree = aMenuTree;
+    m_aMenuTree = ValueEnforcer.notNull (aMenuTree, "MenuTree");
     m_sSelectedItemID = ApplicationRequestManager.getInstance ().getRequestMenuItemID ();
     m_aSelectedItem = m_aMenuTree.getItemWithID (m_sSelectedItemID);
     // The selected item may be null if an invalid menu item ID was passed
@@ -163,8 +162,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
   @ReturnsMutableCopy
   public static Map <String, Boolean> getAllDisplayMenuItemIDs (@Nonnull final MenuItemDeterminatorCallback aDeterminator)
   {
-    if (aDeterminator == null)
-      throw new NullPointerException ("determinator");
+    ValueEnforcer.notNull (aDeterminator, "Determinator");
 
     TreeWalker.walkTree (aDeterminator.m_aMenuTree, aDeterminator);
     return aDeterminator.getAllItemIDs ();
@@ -182,8 +180,7 @@ public class MenuItemDeterminatorCallback extends DefaultHierarchyWalkerCallback
   @ReturnsMutableCopy
   public static Map <String, Boolean> getAllMenuItemIDs (@Nonnull final IMenuTree aMenuTree)
   {
-    if (aMenuTree == null)
-      throw new NullPointerException ("MenuTree");
+    ValueEnforcer.notNull (aMenuTree, "MenuTree");
 
     final Map <String, Boolean> ret = new HashMap <String, Boolean> ();
     TreeWalker.walkTree (aMenuTree, new DefaultHierarchyWalkerCallback <DefaultTreeItemWithID <String, IMenuObject>> ()

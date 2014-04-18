@@ -30,6 +30,7 @@ import com.phloc.appbasics.app.dao.impl.AbstractSimpleDAO;
 import com.phloc.appbasics.app.dao.impl.DAOException;
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.audit.AuditUtils;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -136,8 +137,7 @@ public final class RoleManager extends AbstractSimpleDAO implements IRoleManager
 
   private void _addRole (@Nonnull final Role aRole)
   {
-    if (aRole == null)
-      throw new NullPointerException ("Role");
+    ValueEnforcer.notNull (aRole, "Role");
 
     final String sRoleID = aRole.getID ();
     if (m_aRoles.containsKey (sRoleID))

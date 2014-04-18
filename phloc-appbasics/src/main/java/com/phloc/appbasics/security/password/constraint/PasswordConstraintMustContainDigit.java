@@ -28,63 +28,61 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Password constraint defining that at least a certain amount of numbers must
- * be contained
+ * Password constraint defining that at least a certain amount of digits must be
+ * contained
  * 
  * @author Philip Helger
- * @since 2.4.2
- * @deprecated Use {@link PasswordConstraintMustContainDigit} instead
+ * @since 2.7.4
  */
-@Deprecated
-public class PasswordConstraintMustContainNumber implements IPasswordConstraint
+public class PasswordConstraintMustContainDigit implements IPasswordConstraint
 {
-  private static final String ATTR_MIN_NUMBERS = "minnumbers";
+  private static final String ATTR_MIN_DIGITS = "mindigits";
 
-  private final int m_nMinNumbers;
+  private final int m_nMinDigits;
 
   /**
    * Ctor
    * 
-   * @param nMinNumbers
+   * @param nMinDigits
    *        The minimum number of digits that must occur in a password. Must be
    *        &gt; 0.
    */
-  public PasswordConstraintMustContainNumber (@Nonnegative final int nMinNumbers)
+  public PasswordConstraintMustContainDigit (@Nonnegative final int nMinDigits)
   {
-    m_nMinNumbers = ValueEnforcer.isGT0 (nMinNumbers, "MinNumbers");
+    m_nMinDigits = ValueEnforcer.isGT0 (nMinDigits, "MinNumbers");
   }
 
   @Nonnegative
-  public int getMinNumbers ()
+  public int getMinDigits ()
   {
-    return m_nMinNumbers;
+    return m_nMinDigits;
   }
 
   public boolean isPasswordValid (@Nullable final String sPlainTextPassword)
   {
-    int nNumbers = 0;
+    int nDigits = 0;
     if (sPlainTextPassword != null)
       for (final char c : sPlainTextPassword.toCharArray ())
         if (Character.isDigit (c))
-          ++nNumbers;
-    return nNumbers >= m_nMinNumbers;
+          ++nDigits;
+    return nDigits >= m_nMinDigits;
   }
 
   @Nullable
   public String getDescription (@Nonnull final Locale aContentLocale)
   {
     return EPasswordConstraintText.DESC_MUST_CONTAIN_DIGITS.getDisplayTextWithArgs (aContentLocale,
-                                                                                     Integer.valueOf (m_nMinNumbers));
+                                                                                    Integer.valueOf (m_nMinDigits));
   }
 
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
-    aElement.setAttribute (ATTR_MIN_NUMBERS, m_nMinNumbers);
+    aElement.setAttribute (ATTR_MIN_DIGITS, m_nMinDigits);
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("minNumbers", m_nMinNumbers).toString ();
+    return new ToStringGenerator (this).append ("minDigits", m_nMinDigits).toString ();
   }
 }

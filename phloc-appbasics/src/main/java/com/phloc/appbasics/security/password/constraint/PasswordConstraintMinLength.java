@@ -23,6 +23,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -38,11 +39,16 @@ public class PasswordConstraintMinLength implements IPasswordConstraint
 
   private final int m_nMinLength;
 
+  /**
+   * Ctor
+   * 
+   * @param nMinLength
+   *        The minimum length to use. Must be &gt; 0. If 0 should be allowed,
+   *        simply don't use the constraint!
+   */
   public PasswordConstraintMinLength (@Nonnegative final int nMinLength)
   {
-    if (nMinLength < 1)
-      throw new IllegalArgumentException ("MinLength is too small: " + nMinLength);
-    m_nMinLength = nMinLength;
+    m_nMinLength = ValueEnforcer.isGT0 (nMinLength, "MinLength");
   }
 
   @Nonnegative

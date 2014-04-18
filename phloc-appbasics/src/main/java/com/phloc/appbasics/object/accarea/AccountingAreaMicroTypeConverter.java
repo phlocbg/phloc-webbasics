@@ -85,7 +85,7 @@ public final class AccountingAreaMicroTypeConverter extends AbstractObjectMicroT
     final String sClientID = aElement.getAttribute (ATTR_CLIENTID);
     final IClient aClient = m_aClientResolver.getClientOfID (sClientID);
     if (aClient == null)
-      throw new NullPointerException ("Failed to resolve client ID '" + sClientID + "'");
+      throw new IllegalStateException ("Failed to resolve client ID '" + sClientID + "'");
     final String sDisplayName = aElement.getAttribute (ATTR_DISPLAYNAME);
     final String sCompanyType = aElement.getAttribute (ATTR_COMPANYTYPE);
     final String sCompanyVATIN = aElement.getAttribute (ATTR_COMPANYVATIN);
@@ -98,6 +98,7 @@ public final class AccountingAreaMicroTypeConverter extends AbstractObjectMicroT
     final String sWebSite = aElement.getAttribute (ATTR_WEBSITE);
     final String sDefaultCurrency = aElement.getAttribute (ATTR_DEFAULTCURRENCY);
     final ECurrency eDefaultCurrency = ECurrency.getFromIDOrNull (sDefaultCurrency);
+
     return new AccountingArea (aClient,
                                getStubObject (aElement),
                                sDisplayName,

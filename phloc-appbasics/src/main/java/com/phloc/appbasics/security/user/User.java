@@ -29,6 +29,7 @@ import org.joda.time.DateTime;
 
 import com.phloc.appbasics.security.CSecurity;
 import com.phloc.appbasics.security.password.hash.PasswordHash;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.equals.EqualsUtils;
@@ -193,16 +194,11 @@ public class User extends MapBasedAttributeContainer implements IUser
         final boolean bDeleted,
         final boolean bDisabled)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    if (aCreationDT == null)
-      throw new NullPointerException ("creationDT");
-    if (StringHelper.hasNoText (sLoginName))
-      throw new IllegalArgumentException ("loginName");
-    if (nLoginCount < 0)
-      throw new IllegalArgumentException ("loginCount");
-    if (nConsecutiveFailedLoginCount < 0)
-      throw new IllegalArgumentException ("consecutiveFailedLoginCount");
+    ValueEnforcer.notEmpty (sID, "ID");
+    ValueEnforcer.notNull (aCreationDT, "CreationDT");
+    ValueEnforcer.notEmpty (sLoginName, "LoginName");
+    ValueEnforcer.isGE0 (nLoginCount, "LoginCount");
+    ValueEnforcer.isGE0 (nConsecutiveFailedLoginCount, "ConsecutiveFailedLoginCount");
     m_sID = sID;
     m_aCreationDT = aCreationDT;
     m_aLastModificationDT = aLastModificationDT;
@@ -279,8 +275,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   @Nonnull
   EChange setLoginName (@Nullable final String sLoginName)
   {
-    if (StringHelper.hasNoText (sLoginName))
-      throw new IllegalArgumentException ("loginName");
+    ValueEnforcer.notEmpty (sLoginName, "loginName");
 
     if (sLoginName.equals (m_sLoginName))
       return EChange.UNCHANGED;
@@ -313,8 +308,7 @@ public class User extends MapBasedAttributeContainer implements IUser
   @Nonnull
   EChange setPasswordHash (@Nonnull final PasswordHash aPasswordHash)
   {
-    if (aPasswordHash == null)
-      throw new NullPointerException ("passwordHash");
+    ValueEnforcer.notNull (aPasswordHash, "PasswordHash");
 
     if (aPasswordHash.equals (m_aPasswordHash))
       return EChange.UNCHANGED;
