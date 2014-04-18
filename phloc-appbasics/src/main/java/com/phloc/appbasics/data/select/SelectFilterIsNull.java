@@ -20,10 +20,10 @@ package com.phloc.appbasics.data.select;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 @Immutable
@@ -33,9 +33,7 @@ public final class SelectFilterIsNull implements ISelectFilter
 
   public SelectFilterIsNull (@Nonnull @Nonempty final String sColumn)
   {
-    if (StringHelper.hasNoText (sColumn))
-      throw new IllegalArgumentException ("column name may not be empty");
-    m_sColumn = sColumn;
+    m_sColumn = ValueEnforcer.notEmpty (sColumn, "Column");
   }
 
   @Nonnull

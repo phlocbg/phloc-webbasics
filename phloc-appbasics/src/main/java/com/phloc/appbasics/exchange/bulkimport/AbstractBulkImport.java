@@ -26,9 +26,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.appbasics.exchange.EExchangeFileType;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.name.IHasDisplayText;
 
@@ -47,12 +47,9 @@ public abstract class AbstractBulkImport implements IBulkImport
                                 @Nonnull @Nonempty final List <IHasDisplayText> aColumnNames,
                                 @Nonnull @Nonempty final EExchangeFileType... aFileTypes)
   {
-    if (nHeaderRowsToSkip < 0)
-      throw new IllegalArgumentException ();
-    if (ContainerHelper.isEmpty (aColumnNames))
-      throw new IllegalArgumentException ("columns");
-    if (ArrayHelper.isEmpty (aFileTypes))
-      throw new IllegalArgumentException ("fileTypes");
+    ValueEnforcer.isGE0 (nHeaderRowsToSkip, "HeaderRowsToSkip");
+    ValueEnforcer.notEmptyNoNullValue (aColumnNames, "ColumnNames");
+    ValueEnforcer.notEmptyNoNullValue (aFileTypes, "FileTypes");
     m_nHeaderRowsToSkip = nHeaderRowsToSkip;
     m_aColumnNames = aColumnNames;
     m_aFileTypes = ContainerHelper.newOrderedSet (aFileTypes);

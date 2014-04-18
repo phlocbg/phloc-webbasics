@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 @MustImplementEqualsAndHashcode
 public interface ISelectFilterChain extends ISelectFilterable
@@ -33,6 +34,7 @@ public interface ISelectFilterChain extends ISelectFilterable
 
   @Nonnull
   @Nonempty
+  @ReturnsMutableCopy
   List <ISelectFilterable> getFilters ();
 
   @Nonnull

@@ -22,9 +22,9 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -41,12 +41,8 @@ public final class PasswordHash implements Serializable
   public PasswordHash (@Nonnull @Nonempty final String sAlgorithmName,
                        @Nonnull @Nonempty final String sPasswordHashValue)
   {
-    if (StringHelper.hasNoText (sAlgorithmName))
-      throw new IllegalArgumentException ("algorithmName");
-    if (StringHelper.hasNoText (sPasswordHashValue))
-      throw new IllegalArgumentException ("passwordHashValue");
-    m_sAlgorithmName = sAlgorithmName;
-    m_sPasswordHashValue = sPasswordHashValue;
+    m_sAlgorithmName = ValueEnforcer.notEmpty (sAlgorithmName, "AlgorithmName");
+    m_sPasswordHashValue = ValueEnforcer.notEmpty (sPasswordHashValue, "PasswordHashValue");
   }
 
   @Nonnull

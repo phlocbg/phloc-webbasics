@@ -19,8 +19,8 @@ package com.phloc.appbasics.security.password.hash;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -34,9 +34,7 @@ public abstract class AbstractPasswordHashCreator implements IPasswordHashCreato
 
   public AbstractPasswordHashCreator (@Nonnull @Nonempty final String sAlgorithm)
   {
-    if (StringHelper.hasNoText (sAlgorithm))
-      throw new IllegalArgumentException ("algorithm");
-    m_sAlgorithm = sAlgorithm;
+    m_sAlgorithm = ValueEnforcer.notEmpty (sAlgorithm, "Algorithm");
   }
 
   @Nonnull

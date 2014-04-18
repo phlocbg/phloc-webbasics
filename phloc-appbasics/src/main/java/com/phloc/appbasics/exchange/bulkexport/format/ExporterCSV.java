@@ -39,7 +39,6 @@ import com.phloc.appbasics.exchange.bulkexport.IExportRecordField;
 import com.phloc.appbasics.exchange.bulkexport.IExportRecordProvider;
 import com.phloc.appbasics.exchange.bulkexport.IExporterFile;
 import com.phloc.commons.ValueEnforcer;
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.EUnicodeBOM;
 import com.phloc.commons.collections.iterate.IterableIterator;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -65,11 +64,15 @@ public final class ExporterCSV implements IExporterFile
     this (SystemHelper.getSystemCharset ());
   }
 
-  public ExporterCSV (@Nonnull @Nonempty final Charset aCharset)
+  public ExporterCSV (@Nonnull final Charset aCharset)
   {
-    if (aCharset == null)
-      throw new IllegalArgumentException ("charset");
-    m_aCharset = aCharset;
+    m_aCharset = ValueEnforcer.notNull (aCharset, "Charset");
+  }
+
+  @Nonnull
+  public Charset getCharset ()
+  {
+    return m_aCharset;
   }
 
   @Nonnull
@@ -79,11 +82,22 @@ public final class ExporterCSV implements IExporterFile
     return this;
   }
 
+  public char getSeparator ()
+  {
+    return m_cSeparator;
+  }
+
   @Nonnull
   public ExporterCSV setUnicodeBOM (@Nullable final EUnicodeBOM eBOM)
   {
     m_eBOM = eBOM;
     return this;
+  }
+
+  @Nullable
+  public EUnicodeBOM getUnicodeBOM ()
+  {
+    return m_eBOM;
   }
 
   private static void _emitRecord (final List <String []> aRecords, final IExportRecord aRecord)

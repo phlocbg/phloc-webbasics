@@ -22,6 +22,8 @@ import java.util.Set;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+
 /**
  * Base read-only interface for objects containing users.
  * 
@@ -46,6 +48,7 @@ public interface IUserContainer
    *         IDs.
    */
   @Nonnull
+  @ReturnsMutableCopy
   Set <String> getAllContainedUserIDs ();
 
   /**

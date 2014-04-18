@@ -27,14 +27,14 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
 
@@ -70,12 +70,8 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
              @Nonnull @Nonempty final String sName,
              @Nullable final Map <String, ?> aCustomAttrs)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    m_sID = sID;
-    m_sName = sName;
+    m_sID = ValueEnforcer.notEmpty (sID, "ID");
+    setName (sName);
     setAttributes (aCustomAttrs);
   }
 
@@ -102,8 +98,8 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
   @Nonnull
   EChange setName (@Nonnull @Nonempty final String sName)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
+    ValueEnforcer.notEmpty (sName, "Name");
+
     if (sName.equals (m_sName))
       return EChange.UNCHANGED;
     m_sName = sName;
@@ -122,10 +118,10 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Set <String> getAllContainedUserIDs ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aUserIDs);
+    return ContainerHelper.newSet (m_aUserIDs);
   }
 
   public boolean containsUserID (final String sUserID)
@@ -136,8 +132,7 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
   @Nonnull
   EChange assignUser (@Nonnull final String sUserID)
   {
-    if (StringHelper.hasNoText (sUserID))
-      throw new IllegalArgumentException ("userID");
+    ValueEnforcer.notEmpty (sUserID, "UserID");
 
     return EChange.valueOf (m_aUserIDs.add (sUserID));
   }
@@ -160,10 +155,10 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Set <String> getAllContainedRoleIDs ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aRoleIDs);
+    return ContainerHelper.newSet (m_aRoleIDs);
   }
 
   public boolean containsRoleID (final String sRoleID)
@@ -174,8 +169,7 @@ public final class UserGroup extends MapBasedAttributeContainer implements IUser
   @Nonnull
   EChange assignRole (@Nonnull final String sRoleID)
   {
-    if (StringHelper.hasNoText (sRoleID))
-      throw new IllegalArgumentException ("userID");
+    ValueEnforcer.notEmpty (sRoleID, "RoleID");
 
     return EChange.valueOf (m_aRoleIDs.add (sRoleID));
   }

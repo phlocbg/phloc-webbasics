@@ -173,8 +173,7 @@ public class PasswordHashCreatorManager
    */
   public void setDefaultPasswordHashCreatorAlgorithm (@Nonnull @Nonempty final String sAlgorithm)
   {
-    if (StringHelper.hasNoText (sAlgorithm))
-      throw new IllegalArgumentException ("algorithm");
+    ValueEnforcer.notEmpty (sAlgorithm, "Algorithm");
 
     m_aRWLock.writeLock ().lock ();
     try

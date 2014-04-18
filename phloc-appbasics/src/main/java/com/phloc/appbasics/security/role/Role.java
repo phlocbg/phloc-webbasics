@@ -24,12 +24,12 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.appbasics.security.CSecurity;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.attrs.MapBasedAttributeContainer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.type.ObjectType;
 
@@ -63,12 +63,8 @@ public final class Role extends MapBasedAttributeContainer implements IRole
         @Nonnull @Nonempty final String sName,
         @Nullable final Map <String, ?> aCustomAttrs)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
-    m_sID = sID;
-    m_sName = sName;
+    m_sID = ValueEnforcer.notEmpty (sID, "ID");
+    setName (sName);
     setAttributes (aCustomAttrs);
   }
 
@@ -95,8 +91,8 @@ public final class Role extends MapBasedAttributeContainer implements IRole
   @Nonnull
   EChange setName (@Nonnull @Nonempty final String sName)
   {
-    if (StringHelper.hasNoText (sName))
-      throw new IllegalArgumentException ("name");
+    ValueEnforcer.notEmpty (sName, "Name");
+
     if (sName.equals (m_sName))
       return EChange.UNCHANGED;
     m_sName = sName;

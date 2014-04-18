@@ -21,11 +21,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.flags.FlagContainer;
 import com.phloc.commons.filter.IFilter;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -41,9 +41,7 @@ public abstract class AbstractMenuObject <IMPLTYPE extends AbstractMenuObject <I
 
   public AbstractMenuObject (@Nonnull @Nonempty final String sID)
   {
-    if (StringHelper.hasNoText (sID))
-      throw new IllegalArgumentException ("ID");
-    m_sID = sID;
+    m_sID = ValueEnforcer.notEmpty (sID, "ID");
   }
 
   @Nonnull

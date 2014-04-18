@@ -23,9 +23,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
-import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -37,20 +37,14 @@ public final class SelectFilterChainAND implements ISelectFilterChain
 
   public SelectFilterChainAND (@Nonnull @Nonempty final List <ISelectFilterable> aFilters)
   {
-    if (ContainerHelper.isEmpty (aFilters))
-      throw new IllegalArgumentException ("filters may not be empty");
-    if (ContainerHelper.containsAnyNullElement (aFilters))
-      throw new IllegalArgumentException ("filters may not contain null elements");
-    m_aFilters = ContainerHelper.makeUnmodifiable (aFilters);
+    ValueEnforcer.notEmptyNoNullValue (aFilters, "Filters");
+    m_aFilters = ContainerHelper.newList (aFilters);
   }
 
   public SelectFilterChainAND (@Nonnull @Nonempty final ISelectFilterable... aFilters)
   {
-    if (ArrayHelper.isEmpty (aFilters))
-      throw new IllegalArgumentException ("filters may not be empty");
-    if (ArrayHelper.containsAnyNullElement (aFilters))
-      throw new IllegalArgumentException ("filters may not contain null elements");
-    m_aFilters = ContainerHelper.newUnmodifiableList (aFilters);
+    ValueEnforcer.notEmptyNoNullValue (aFilters, "Filters");
+    m_aFilters = ContainerHelper.newList (aFilters);
   }
 
   @Nonnegative
@@ -60,11 +54,11 @@ public final class SelectFilterChainAND implements ISelectFilterChain
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @Nonempty
+  @ReturnsMutableCopy
   public List <ISelectFilterable> getFilters ()
   {
-    // ESCA-JAVA0259:
-    return m_aFilters;
+    return ContainerHelper.newList (m_aFilters);
   }
 
   @Nonnull

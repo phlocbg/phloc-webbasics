@@ -20,6 +20,7 @@ package com.phloc.appbasics.data.select;
 import javax.annotation.Nonnegative;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -31,12 +32,8 @@ public final class SelectLimit
 
   public SelectLimit (@Nonnegative final int nStartIndex, @Nonnegative final int nResultCount)
   {
-    if (nStartIndex < 0)
-      throw new IllegalArgumentException ("Start index invalid: " + nStartIndex);
-    if (nResultCount <= 0)
-      throw new IllegalArgumentException ("Result count: " + nResultCount);
-    m_nStartIndex = nStartIndex;
-    m_nResultCount = nResultCount;
+    m_nStartIndex = ValueEnforcer.isGE0 (nStartIndex, "StartIndex");
+    m_nResultCount = ValueEnforcer.isGT0 (nResultCount, "ResultCount");
   }
 
   @Nonnegative
