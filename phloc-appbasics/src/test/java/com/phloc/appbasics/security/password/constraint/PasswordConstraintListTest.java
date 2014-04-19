@@ -65,5 +65,29 @@ public final class PasswordConstraintListTest
     assertFalse (aPCL.isPasswordValid ("123456789"));
     assertFalse (aPCL.isPasswordValid ("abcdiekatzeliefimschnee"));
     assertTrue (aPCL.isPasswordValid ("abcdiekatzelief2014nochimmerimschnee"));
+
+    aPCL = new PasswordConstraintList (new PasswordConstraintMinLength (3),
+                                       new PasswordConstraintMustContainDigit (1),
+                                       new PasswordConstraintMustContainLetterLowerCase (1));
+    PhlocTestUtils.testGetClone (aPCL);
+    assertTrue (aPCL.hasConstraints ());
+    assertEquals (3, aPCL.getConstraintCount ());
+    assertFalse (aPCL.isPasswordValid (""));
+    assertFalse (aPCL.isPasswordValid ("abc"));
+    assertFalse (aPCL.isPasswordValid ("123456789"));
+    assertFalse (aPCL.isPasswordValid ("abcdiekatzeliefimschnee"));
+    assertTrue (aPCL.isPasswordValid ("abcdiekatzelief2014nochimmerimschnee"));
+
+    aPCL = new PasswordConstraintList (new PasswordConstraintMinLength (3),
+                                       new PasswordConstraintMustContainDigit (1),
+                                       new PasswordConstraintMustContainLetterUpperCase (1));
+    PhlocTestUtils.testGetClone (aPCL);
+    assertTrue (aPCL.hasConstraints ());
+    assertEquals (3, aPCL.getConstraintCount ());
+    assertFalse (aPCL.isPasswordValid (""));
+    assertFalse (aPCL.isPasswordValid ("abc"));
+    assertFalse (aPCL.isPasswordValid ("123456789"));
+    assertFalse (aPCL.isPasswordValid ("abcdiekatzeliefimschnee"));
+    assertFalse (aPCL.isPasswordValid ("abcdiekatzelief2014nochimmerimschnee"));
   }
 }

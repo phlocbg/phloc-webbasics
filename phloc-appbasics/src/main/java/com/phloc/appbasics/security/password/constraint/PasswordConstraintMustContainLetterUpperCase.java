@@ -29,15 +29,15 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Password constraint defining that at least a certain amount of letters must
- * be contained
+ * Password constraint defining that at least a certain amount of uppercase
+ * letters must be contained
  * 
  * @author Philip Helger
  * @since 2.7.4
  */
-public class PasswordConstraintMustContainLetter implements IPasswordConstraint
+public class PasswordConstraintMustContainLetterUpperCase implements IPasswordConstraint
 {
-  private static final String ATTR_MIN_LETTERS = "minletters";
+  private static final String ATTR_MIN_LETTERS_UPPERCASE = "minletters_uppercase";
 
   private final int m_nMinLetters;
 
@@ -48,7 +48,7 @@ public class PasswordConstraintMustContainLetter implements IPasswordConstraint
    *        The minimum number of letters that must occur in a password. Must be
    *        &gt; 0.
    */
-  public PasswordConstraintMustContainLetter (@Nonnegative final int nMinLetters)
+  public PasswordConstraintMustContainLetterUpperCase (@Nonnegative final int nMinLetters)
   {
     m_nMinLetters = ValueEnforcer.isGT0 (nMinLetters, "MinLetters");
   }
@@ -64,7 +64,7 @@ public class PasswordConstraintMustContainLetter implements IPasswordConstraint
     int nLetters = 0;
     if (sPlainTextPassword != null)
       for (final char c : sPlainTextPassword.toCharArray ())
-        if (Character.isLetter (c))
+        if (Character.isLetter (c) && Character.isUpperCase (c))
           ++nLetters;
     return nLetters >= m_nMinLetters;
   }
@@ -72,13 +72,13 @@ public class PasswordConstraintMustContainLetter implements IPasswordConstraint
   @Nullable
   public String getDescription (@Nonnull final Locale aContentLocale)
   {
-    return EPasswordConstraintText.DESC_MUST_CONTAIN_LETTERS.getDisplayTextWithArgs (aContentLocale,
-                                                                                     Integer.valueOf (m_nMinLetters));
+    return EPasswordConstraintText.DESC_MUST_CONTAIN_LETTERS_UPPERCASE.getDisplayTextWithArgs (aContentLocale,
+                                                                                               Integer.valueOf (m_nMinLetters));
   }
 
   public void fillMicroElement (@Nonnull final IMicroElement aElement)
   {
-    aElement.setAttribute (ATTR_MIN_LETTERS, m_nMinLetters);
+    aElement.setAttribute (ATTR_MIN_LETTERS_UPPERCASE, m_nMinLetters);
   }
 
   @Override
@@ -88,7 +88,7 @@ public class PasswordConstraintMustContainLetter implements IPasswordConstraint
       return true;
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final PasswordConstraintMustContainLetter rhs = (PasswordConstraintMustContainLetter) o;
+    final PasswordConstraintMustContainLetterUpperCase rhs = (PasswordConstraintMustContainLetterUpperCase) o;
     return m_nMinLetters == rhs.m_nMinLetters;
   }
 
